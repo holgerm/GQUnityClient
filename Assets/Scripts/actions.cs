@@ -27,6 +27,7 @@ public class actions : MonoBehaviour
 
 
 	public List<QuestRuntimeAsset> photos;
+	public List<QuestRuntimeAsset> audioclips;
 
 		void Start ()
 		{
@@ -35,6 +36,8 @@ public class actions : MonoBehaviour
 				variables = new List<QuestVariable> ();
 				questaudiosources = new List<questaudio> ();
 		photos = new List<QuestRuntimeAsset> ();
+		audioclips = new List<QuestRuntimeAsset> ();
+
 		}
 
 
@@ -773,6 +776,36 @@ public class actions : MonoBehaviour
 		void PlayAudio (QuestAction action)
 		{
 
+
+
+
+		if(action.getAttribute("file").StartsWith("@_")){
+
+			foreach(QuestRuntimeAsset qra in  audioclips){
+
+
+
+
+
+				if(qra.key == action.getAttribute("file")){
+
+					questaudio nqa1 = (questaudio)Instantiate (audio_prefab, transform.position, Quaternion.identity);
+					nqa1.setAudio(qra.clip);
+					nqa1.Play();
+
+
+
+
+
+				}
+
+			}
+
+
+
+
+
+		} else 
 		if (!action.getAttribute ("file").EndsWith ("mp3")) {
 
 						questdb.debug ("Audio-Datei muss im <b>MP3-Format</b> vorliegen.");
@@ -978,6 +1011,7 @@ public class QuestVariable
 public class QuestRuntimeAsset{
 
 	public Texture2D texture;
+	public AudioClip clip;
 	public string key;
 
 	public QuestRuntimeAsset(string k, Texture2D t2d){
@@ -985,7 +1019,10 @@ public class QuestRuntimeAsset{
 		texture = t2d;
 	}
 
-
+	public QuestRuntimeAsset(string k, AudioClip aclip){
+		key = k;
+		clip = aclip;
+	}
 
 
 

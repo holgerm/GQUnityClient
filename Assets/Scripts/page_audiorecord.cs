@@ -41,6 +41,7 @@ public class page_audiorecord : MonoBehaviour {
 	private bool playing = false;
 
 	private float length = 0f;
+	private float playlength = 0f;
 	
 	// Use this for initialization
 	IEnumerator Start()
@@ -109,15 +110,16 @@ public class page_audiorecord : MonoBehaviour {
 
 
 	void Update(){
-		if (!Microphone.IsRecording (null)) { 
+		if (Microphone.IsRecording (null)) { 
 
 			length += Time.deltaTime;
 
 				}
 		if (playing) {
-
+			playlength += Time.deltaTime;
 
 			if(!goAudioSource.isPlaying){
+				Debug.Log("playlength:"+playlength);
 
 				playbutton.GetComponentInChildren<Text>().text = "Abspielen";
 				
@@ -137,7 +139,7 @@ public class page_audiorecord : MonoBehaviour {
 
 
 		if (goAudioSource.isPlaying) {
-
+			playlength = 0f;
 						goAudioSource.Stop ();
 			playbutton.GetComponentInChildren<Text>().text = "Abspielen";
 
@@ -161,6 +163,7 @@ public class page_audiorecord : MonoBehaviour {
 						playbutton.GetComponent<Image> ().enabled = false;
 
 			length = 0f;
+
 						retrybutton.enabled = false;
 						retrybutton.GetComponentInChildren<Text> ().enabled = false;
 						retrybutton.GetComponent<Image> ().enabled = false;
@@ -175,10 +178,10 @@ public class page_audiorecord : MonoBehaviour {
 		if (micConnected) {  
 
 			//If the audio from any microphone isn't being captured  
-			if(!Microphone.IsRecording(null))  
+			if(!Microphone.IsRecording(null) && !savedaudio)  
 			{  
 
-				goAudioSource.clip = Microphone.Start(null, true, 20, maxFreq);  
+				goAudioSource.clip = Microphone.Start(null, true, 60, maxFreq);  
 				recordbutton.GetComponentInChildren<Text>().text = "Aufnahme stoppen";
 
 
@@ -201,23 +204,33 @@ public class page_audiorecord : MonoBehaviour {
 				savedaudio = true;
 
 				AudioClip ac = goAudioSource.clip;
+
+			
+
 				float lengthL = ac.length;
-				float samplesL = ac.samples;
-				float samplesPerSec = (float)samplesL/lengthL;
+				float samplesL = (float)ac.samples;
+				float samplesPerSec = samplesL/lengthL;
+				Debug.Log(lengthL +","+length+","+samplesPerSec+","+samplesL);
 				float[] samples = new float[(int)(samplesPerSec * length)];
 				ac.GetData(samples,0);
-				
-				goAudioSource.clip = AudioClip.Create("RecordedSound",(int)(length*samplesPerSec),1,44100,false,false);
-				
+				goAudioSource.clip = AudioClip.Create("RecordedSound",(int)(length*samplesPerSec),1,(int)samplesPerSec,false,false);
+				//Debug.Log("samples new:"+(length*samplesPerSec));
 				goAudioSource.clip.SetData(samples,0);
+				//Debug.Log ((goAudioSource.clip.samples)/(goAudioSource.clip.length));
 
 
-			} else {
+
+		} else {
 
 				// save to var
 
+				if(audiorecord.hasAttribute("file")){
+					
+					QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + audiorecord.getAttribute ("file"), goAudioSource.clip);
+					
+					actioncontroller.audioclips.Add (qra);
 
-
+				}
 				onEnd ();
 
 
@@ -231,41 +244,6 @@ public class page_audiorecord : MonoBehaviour {
 
 				}
 
-	}
-	void OnGUI()   
-	{  
-		//If there is a microphone  
-		if(micConnected)  
-		{  
-			//If the audio from any microphone isn't being captured  
-			if(!Microphone.IsRecording(null))  
-			{  
-				//Case the 'Record' button gets pressed  
-				if(GUI.Button(new Rect(Screen.width/2-100, Screen.height/2-25, 200, 50), "Record"))  
-				{  
-					//Start recording and store the audio captured from the microphone at the AudioClip in the AudioSource  
-					goAudioSource.clip = Microphone.Start(null, true, 20, maxFreq);  
-				}  
-			}  
-			else //Recording is in progress  
-			{  
-				//Case the 'Stop and Play' button gets pressed  
-				if(GUI.Button(new Rect(Screen.width/2-100, Screen.height/2-25, 200, 50), "Stop and Play!"))  
-				{  
-					Microphone.End(null); //Stop the audio recording  
-					goAudioSource.Play(); //Playback the recorded audio  
-				}  
-				
-				GUI.Label(new Rect(Screen.width/2-100, Screen.height/2+25, 200, 50), "Recording in progress...");  
-			}  
-		}  
-		else // No microphone  
-		{  
-			//Print a red "Microphone not connected!" message at the center of the screen  
-			GUI.contentColor = Color.red;  
-			GUI.Label(new Rect(Screen.width/2-100, Screen.height/2-25, 200, 50), "Microphone not connected!");  
-		}  
-		
 	}
 
 
