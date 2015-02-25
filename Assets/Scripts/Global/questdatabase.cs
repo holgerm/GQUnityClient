@@ -25,9 +25,9 @@ public class questdatabase : MonoBehaviour
 		public Image publicquestslist;
 		public actions actioncontroller;
 		public QuestMessage message_prefab;
-		
+		public List<QuestRuntimeHotspot> hotspots;
 		public Image questmilllogo;
-	public Text webloadingmessage;
+		public Text webloadingmessage;
 
 		public string webxml;
 		void Start ()
@@ -54,6 +54,35 @@ public class questdatabase : MonoBehaviour
 		}
 
 
+
+	public void testMap(){
+
+		Application.LoadLevel (9);
+
+	}
+
+
+
+
+	
+	public List<QuestRuntimeHotspot> getActiveHotspots(){
+		List<QuestRuntimeHotspot> activehs = new List<QuestRuntimeHotspot> ();
+		
+		foreach (QuestRuntimeHotspot qrh in hotspots) {
+
+
+
+			if(qrh.active){
+
+				activehs.Add(qrh);
+			}
+
+
+				}
+
+
+		return activehs;
+		        }
 
 
 	void Update(){
@@ -306,6 +335,39 @@ public class questdatabase : MonoBehaviour
 
 				}
 
+		hotspots = new List<QuestRuntimeHotspot> ();
+		foreach(QuestHotspot qh in currentquest.hotspots){
+
+
+
+
+			bool a = false;
+			if(qh.hasAttribute("initialActivity")){
+
+				if(qh.getAttribute("initialActivity") == "true"){
+					a = true;
+				}
+
+			}
+
+			bool v = false;
+			if(qh.hasAttribute("initialVisibility")){
+				
+				if(qh.getAttribute("initialVisibility") == "true"){
+					v = true;
+				}
+				
+			}
+
+			hotspots.Add(new QuestRuntimeHotspot(qh,a,v,qh.latlon));
+		
+
+		}
+
+
+
+
+
 
 				if (canPlayQuest (currentquest)) {
 
@@ -334,7 +396,8 @@ public class questdatabase : MonoBehaviour
 								qp.type != "TagScanner" && 
 								qp.type != "ImageCapture" && 
 			   					 qp.type != "AudioRecord" && 
-								qp.type != "TextQuestion") {
+			    qp.type != "TextQuestion" && 
+			    qp.type != "MapOSM") {
 
 								playable = false;
 						}
@@ -425,6 +488,8 @@ public class questdatabase : MonoBehaviour
 										Application.LoadLevel (7);
 								} else if (qp.type == "AudioRecord") {
 									Application.LoadLevel (8);
+								} else if (qp.type == "MapOSM") {
+									Application.LoadLevel (9);
 								}
 				
 				
@@ -645,6 +710,14 @@ public class QuestPage
 		[XmlElement("answer")]
 		public List<QuestContent>
 				contents_answers;
+	[XmlElement("question")]
+	public QuestContent
+		contents_question;
+
+	[XmlElement("answers")]
+	public List<QuestContent>
+		contents_answersgroup;
+
 		[XmlElement("onEnd")]
 		public QuestTrigger
 				onEnd;
@@ -729,6 +802,15 @@ public class QuestPage
 						qcdi.deserializeAttributes ();
 				}
 
+		if (contents_question != null) {
+						contents_question.deserializeAttributes ();
+				}
+				foreach (QuestContent qcdi in contents_answersgroup) {
+					qcdi.deserializeAttributes ();
+				}
+
+
+			
 			
 
 				foreach (QuestContent qcdi in contents_expectedcode) {
@@ -788,7 +870,40 @@ public class QuestHotspot
 		[XmlElement("onTap")]
 		public QuestTrigger
 				onTap;
+	public string getAttribute (string k)
+	{
+		
+		foreach (QuestAttribute qa in attributes) {
+			
+			
+			if (qa.key.Equals (k)) {
+				return qa.value;
+			}
+			
+		}
+		
+		
+		return "";
+		
+	}
 	
+	public bool hasAttribute (string k)
+	{
+		
+		bool h = false;
+		foreach (QuestAttribute qa in attributes) {
+			
+			
+			if (qa.key.Equals (k)) {
+				h = true;
+			}
+			
+		}
+		
+		
+		return h;
+		
+	}
 		public void deserializeAttributes ()
 		{
 		
@@ -841,6 +956,15 @@ public class QuestContent
 				help_attributes;
 		public List<QuestAttribute> attributes;
 
+	[XmlElement("questiontext")]
+	public QuestContent questiontext;
+
+	[XmlElement("answer")]
+	public List<QuestContent> answers;
+
+
+
+
 		public string getAttribute (string k)
 		{
 		
@@ -854,6 +978,15 @@ public class QuestContent
 
 		public void deserializeAttributes ()
 		{
+
+		foreach (QuestContent qcdi in answers) {
+			qcdi.deserializeAttributes ();
+		}
+
+
+		if (questiontext != null) {
+						questiontext.deserializeAttributes ();
+				}
 		
 				attributes = new List<QuestAttribute> ();
 		
@@ -866,6 +999,9 @@ public class QuestContent
 				
 						}
 				}
+
+
+
 		
 		
 		}
@@ -1596,6 +1732,65 @@ public class QuestTrigger
 	}
 
 
+	
+}
+
+[System.Serializable]
+public class QuestRuntimeHotspot{
+	
+	
+	public QuestHotspot hotspot;
+	public bool active;
+	public bool visible;
+	public float lon;
+	public float lat;
+	
+	
+	public QuestRuntimeHotspot(QuestHotspot hp, bool a, bool v,string ll){
+		
+		hotspot = hp;
+		active = a;
+		visible = v;
+
+
+		if (ll.Contains (",")) {
+			
+			
+			
+						char[] splitter = ",".ToCharArray ();
+			
+						string[] splitted = ll.Split (splitter);
+
+						foreach (string x in splitted) {
+
+								if (lon == null || lon == 0.0f) {
+
+										lon = float.Parse (x);
+
+
+								} else {
+
+										lat = float.Parse (x);
+
+								}
+
+
+
+						}
+
+
+				} else {
+
+			lon = 0.0f;
+			lat = 0.0f;
+
+				}
+
+
+		
+	}
+	
+	
 	
 }
 

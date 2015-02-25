@@ -194,18 +194,18 @@ public class page_npctalk : MonoBehaviour {
 				} else {
 
 
+			Debug.Log(dialogitem_state-1);
 
+			if(questactions.npcaudio != null){
 
-			if(npctalk.contents_dialogitems [dialogitem_state-1].getAttribute ("blocking") == "true" && !questactions.npcaudio.GetComponent<AudioSource>().isPlaying){
+			if((npctalk.contents_dialogitems [dialogitem_state-1].getAttribute ("blocking") == "true" && !questactions.npcaudio.GetComponent<AudioSource>().isPlaying)){
+								nextbutton.interactable = true;
+			}
+			} else {
 
 				nextbutton.interactable = true;
 
-			
-
-
 			}
-
-
 
 				}
 		

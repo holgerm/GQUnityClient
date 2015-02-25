@@ -35,22 +35,37 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 
 
-		questiontext.text = multiplechoicequestion.getAttribute ("question");
 
-		foreach (QuestContent qc in multiplechoicequestion.contents_answers) {
+		if (multiplechoicequestion.contents_question != null) {
 
 
-			multiplechoiceanswerbutton btn = (multiplechoiceanswerbutton) Instantiate(answerbuttonprefab,transform.position,Quaternion.identity);
-			btn.transform.SetParent(list.transform);
-			btn.transform.localScale = new Vector3(1f,1f,1f);
-			btn.setText(qc.content);
+			//multiplechoicequestion.contents_question.questiontext.
 
-			if(qc.getAttribute("correct") == "1"){
-				btn.correct = true; 
-			} else {
-				btn.correct = false;
 
-			}
+
+				} else {
+
+
+
+						questiontext.text = multiplechoicequestion.getAttribute ("question");
+
+						foreach (QuestContent qc in multiplechoicequestion.contents_answers) {
+
+
+								multiplechoiceanswerbutton btn = (multiplechoiceanswerbutton)Instantiate (answerbuttonprefab, transform.position, Quaternion.identity);
+								btn.transform.SetParent (list.transform);
+								btn.transform.localScale = new Vector3 (1f, 1f, 1f);
+								btn.setText (qc.content);
+
+								if (qc.getAttribute ("correct") == "1") {
+										btn.correct = true; 
+								} else {
+										btn.correct = false;
+
+								}
+						}
+
+
 				}
 	}
 	

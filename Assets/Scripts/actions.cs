@@ -132,6 +132,13 @@ public class actions : MonoBehaviour
 		
 		}
 
+
+
+
+
+
+
+
 		public void addtoscore (QuestAction action)
 		{
 
@@ -567,6 +574,7 @@ public class actions : MonoBehaviour
 						} else {
 
 								QuestVariable qv = getVariable (s);
+				if(qv != null){
 								if (qv.num_value != null && qv.num_value.Count > 0) {
 										if (needsstartvalue) {
 
@@ -593,7 +601,7 @@ public class actions : MonoBehaviour
 
 								}
 						}
-
+			}
 
 
 				}
@@ -660,10 +668,11 @@ public class actions : MonoBehaviour
 			
 			
 			
-				} else if (k.StartsWith ("$_mission_")) {
+		} else if (k.StartsWith ("$_mission_") || k.StartsWith ("$_")) {
 
 
 						k = k.Replace ("$_mission_", "");
+						k = k.Replace ("$_", "");
 
 						if (k.EndsWith (".result")) {
 

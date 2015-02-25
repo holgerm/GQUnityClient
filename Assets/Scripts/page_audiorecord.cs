@@ -72,8 +72,7 @@ public class page_audiorecord : MonoBehaviour {
 	
 		
 		// init microphone;
-		if (Application.platform == RuntimePlatform.OSXWebPlayer ||
-		    Application.platform == RuntimePlatform.WindowsWebPlayer)
+		if (Application.isWebPlayer)
 		{
 			yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
 		}
