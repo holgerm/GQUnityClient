@@ -11,7 +11,7 @@ PlayerSettings:
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: QuestMill
-  productName: NGeoQuest
+  productName: GeoQuest
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   defaultScreenWidth: 480
@@ -67,7 +67,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  iPhoneBundleIdentifier: com.QuestMill.NGeoQuest
+  iPhoneBundleIdentifier: com.QuestMill.GeoQuest
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: c2b2669b3813a4b21860482a3f8c3f38
