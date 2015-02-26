@@ -30,7 +30,7 @@ public class circletests : MonoBehaviour {
 						lineRenderer = gameObject.AddComponent<LineRenderer> ();
 				}
 
-		lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+		//lineRenderer.material = new Material(Shader.Find("Default"));
 		lineRenderer.SetColors(Color.blue, Color.blue);
 		lineRenderer.SetWidth(0.001F, 0.001F);
 		lineRenderer.SetVertexCount(0);
