@@ -740,7 +740,7 @@ public class Map : MonoBehaviour
 					heading = UnityEngine.Input.compass.trueHeading;
                 break ;
             case ScreenOrientation.Portrait: // FIXME: not tested, likely wrong, legacy code
-				heading = -UnityEngine.Input.compass.trueHeading;
+				heading = UnityEngine.Input.compass.trueHeading;
                 break ;
             }
 

@@ -56,6 +56,7 @@ public class locationcontrol : MonoBehaviour {
 
 
 
+
 			transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y - Time.deltaTime * 100f,transform.eulerAngles.z);
 
 		}

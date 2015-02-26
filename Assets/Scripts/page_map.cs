@@ -87,6 +87,7 @@ public class page_map : MonoBehaviour
 
 
 
+
 		if (questdb.getActiveHotspots ().Count > 0) {
 
 						QuestRuntimeHotspot first = questdb.getActiveHotspots () [0];
@@ -96,6 +97,7 @@ public class page_map : MonoBehaviour
 
 
 				} else {
+
 
 			map.CurrentZoom = 18.0f;
 
@@ -110,6 +112,7 @@ public class page_map : MonoBehaviour
 
 		map.MaxZoom = 22.0f;
 		map.MinZoom = 13.0f;
+
 
 
 		map.InputsEnabled = true;

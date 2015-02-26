@@ -19,6 +19,7 @@ public class circletests : MonoBehaviour {
 
 
 
+
 		float theta_scale = 0.1f;             //Set lower to add more points
 		int size = (int)((2.0f * Mathf.PI) / theta_scale); //Total number of points in circle.
 
@@ -30,11 +31,13 @@ public class circletests : MonoBehaviour {
 						lineRenderer = gameObject.AddComponent<LineRenderer> ();
 				}
 
+
 		//lineRenderer.material = new Material(Shader.Find("Default"));
 		lineRenderer.SetColors(Color.blue, Color.blue);
 		lineRenderer.SetWidth(0.001F, 0.001F);
 		lineRenderer.SetVertexCount(0);
 		lineRenderer.SetVertexCount(size+1);
+
 
 		int i = 0;
 		for(float theta = 0f; theta < (2f * Mathf.PI); theta += 0.1f) {
