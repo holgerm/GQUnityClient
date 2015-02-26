@@ -106,7 +106,7 @@ public abstract class TileLayer : Layer
 	
 	public override void UpdateContent()
 	{
-		if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
+			if (tileTemplate != null && tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
 			tileTemplate.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
 
         if (Map.CurrentCamera != null && isReadyToBeQueried)

@@ -1744,7 +1744,8 @@ public class QuestRuntimeHotspot{
 	public bool visible;
 	public float lon;
 	public float lat;
-	
+
+	public bool entered = false;
 	
 	public QuestRuntimeHotspot(QuestHotspot hp, bool a, bool v,string ll){
 		

@@ -101,7 +101,7 @@ public class Marker : MonoBehaviour
 	{
 		double[] offsetEPSG900913 = new double[2] { coordinatesEPSG900913[0] - Map.CenterEPSG900913[0], coordinatesEPSG900913[1] - Map.CenterEPSG900913[1] };
 		
-
+		
 
 
 
@@ -117,9 +117,9 @@ public class Marker : MonoBehaviour
 		*/
 		
 		this.gameObject.transform.position = new Vector3(
-			offsetEPSG900913[0] == 0.0 ? 0.0f : (float)offsetEPSG900913[0] * Map.ScaleMultiplier,
+			(float)offsetEPSG900913[0] * Map.ScaleMultiplier,
 			this.gameObject.transform.position.y,
-			offsetEPSG900913[1] == 0.0 ? 0.0f : (float)offsetEPSG900913[1] * Map.ScaleMultiplier);
+			(float)offsetEPSG900913[1] * Map.ScaleMultiplier);
 	}
 	
 	#endregion

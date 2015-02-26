@@ -41,7 +41,7 @@ public class page_map : MonoBehaviour
 	public LocationMarker location;
 
 
-
+	public Transform radiusprefab;
 	private bool zoomin = false;
 	private bool zoomout = false;
 	
@@ -103,7 +103,7 @@ public class page_map : MonoBehaviour
 				}
 
 		map.UseLocation = true;
-		//map.CenterOnLocation ();
+		map.CenterOnLocation ();
 		map.UpdateCenterWithLocation = true;
 		map.UseOrientation = true;
 
@@ -178,6 +178,21 @@ public class page_map : MonoBehaviour
 		}
 
 
+
+
+
+
+		//TODO: calculate a position close but outside of the radius of all active hotspots
+
+
+		double a = map.CenterWGS84 [0] - 0.0008f;
+		double b = map.CenterWGS84 [1] - 0.0008f;
+
+
+
+
+
+
 		
 		// create the location marker
 		var posi = Tile.CreateTileTemplate ().gameObject;
@@ -186,9 +201,16 @@ public class page_map : MonoBehaviour
 		posi.transform.localScale /= 8.0f;
 		
 		GameObject markerPosi = Instantiate(posi) as GameObject;
-		location = map.SetLocationMarker<LocationMarker>(markerPosi);
+		location = map.SetLocationMarker<LocationMarker>(markerPosi,a,b);
 		location.OrientationMarker = location.transform;
 		location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
+
+
+		location.gameObject.AddComponent ("locationcontrol");
+		locationcontrol lc = location.GetComponent<locationcontrol> ();
+		lc.mapcontroller = this;
+		lc.map = map;
+		lc.location = location;
 
 		DestroyImmediate(posi);
 
@@ -206,6 +228,47 @@ public class page_map : MonoBehaviour
 
 	}
 
+	private double deg2rad(double deg) {
+		
+		return (deg * Math.PI / 180.0);
+		
+	}
+	private double rad2deg(double rad) {
+		
+		return (rad / Math.PI * 180.0);
+		
+	}
+	
+	
+	public double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+		
+		double theta = lon1 - lon2;
+		
+		double dist = Math.Sin(deg2rad(lat1)) * Math.Sin(deg2rad(lat2)) + Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) * Math.Cos(deg2rad(theta));
+		
+		dist = Math.Acos(dist);
+		
+		dist = rad2deg(dist);
+		
+		dist = dist * 60 * 1.1515;
+		
+		if (unit == 'K') {
+			
+			dist = dist * 1.609344;
+			
+		} else if (unit == 'N') {
+			
+			dist = dist * 0.8684;
+			
+		} else if (unit == 'M') {
+			
+			dist = dist * 1609;
+			
+		}
+		
+		return (dist);
+		
+	}
 
 
 
@@ -248,8 +311,14 @@ public class page_map : MonoBehaviour
 		
 			go.AddComponent("onTapMarker");
 			go.GetComponent<onTapMarker>().hotspot = qrh;
-			
+
+
+
+			go.AddComponent("circletests");
 	
+			if(qrh.hotspot.hasAttribute("radius")){
+				go.GetComponent<circletests>().radius = int.Parse(qrh.hotspot.getAttribute("radius"));
+			}
 			go.GetComponent<BoxCollider>().center = new Vector3(0f,0f,0.5f);
 			go.GetComponent<BoxCollider>().size = new Vector3(1f,0.1f,1f);
 
@@ -261,9 +330,12 @@ public class page_map : MonoBehaviour
 			markerGO = Instantiate(go) as GameObject;
 			
 			// CreateMarker(Name,longlat,prefab)
-			map.CreateMarker<Marker>(qrh.hotspot.getAttribute("name"), new double[2] {qrh.lat,qrh.lon }, markerGO);
-			Debug.Log(qrh.lon+","+qrh.lat);
-			
+			Marker m = map.CreateMarker<Marker>(qrh.hotspot.getAttribute("name"), new double[2] {qrh.lat,qrh.lon }, markerGO);
+		
+
+
+
+
 			// Destroy Prefab
 			DestroyImmediate(go);
 

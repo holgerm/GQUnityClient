@@ -776,10 +776,15 @@ public class Map : MonoBehaviour
 			}
 				
 			if (locationMarker != null
-				&& locationMarker.OrientationMarker != null)
+				&& locationMarker.OrientationMarker != null
+				    && UnityEngine.Input.location.status == LocationServiceStatus.Running)
 			{
 	            //Debug.Log("DEBUG: " + heading);
+
+
 				locationMarker.OrientationMarker.rotation = Quaternion.AngleAxis(heading, Vector3.up);
+
+
 			}
 		}
 		
@@ -874,12 +879,12 @@ public class Map : MonoBehaviour
 	// <summary>
 	// Sets the the marker for the device's location and orientation using a GameObject for display.
 	// </summary>
-	public T SetLocationMarker<T>(GameObject locationGo) where T : LocationMarker
+						public T SetLocationMarker<T>(GameObject locationGo,double lon,double lat) where T : LocationMarker
 	{
-		return SetLocationMarker<T>(locationGo, null);
+		return SetLocationMarker<T>(locationGo, null,lon,lat);
 	}
 	
-	public T SetLocationMarker<T>(GameObject locationGo, GameObject orientationGo) where T : LocationMarker
+	public T SetLocationMarker<T>(GameObject locationGo, GameObject orientationGo,double lon,double lat) where T : LocationMarker
 	{
 		// create a GameObject and add the templated Marker component to it
         GameObject markerObject = new GameObject("[location marker]");
@@ -901,7 +906,7 @@ public class Map : MonoBehaviour
 			&& UnityEngine.Input.location.status == LocationServiceStatus.Running)
 			marker.CoordinatesWGS84 = new double[2] { UnityEngine.Input.location.lastData.longitude, UnityEngine.Input.location.lastData.latitude };
 		else
-		marker.CoordinatesWGS84 = new double[2] { 7d, 50d };
+		marker.CoordinatesWGS84 = new double[2] { lon,lat };
 
 							
 		// set the location marker

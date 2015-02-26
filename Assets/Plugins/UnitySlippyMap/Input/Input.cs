@@ -183,16 +183,7 @@ namespace UnitySlippyMap.Input
 	    			{
 	    				zoomingStopped = true;
 	    			}
-	    			if (UnityEngine.Input.GetKey(KeyCode.S))
-	    			{
-	    				zooming = true;
-	    				zoomFactor = -1.0f;
-	    				lastZoomFactor = 0.0f;
-	    			}
-	    			else if (UnityEngine.Input.GetKeyUp(KeyCode.S))
-	    			{
-	    				zoomingStopped = true;
-	    			}
+	    		
 				}
     		}
 			

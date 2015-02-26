@@ -194,7 +194,7 @@ public class TestMap : MonoBehaviour
 		go.transform.localScale /= 27.0f;
 		
 		markerGO = Instantiate(go) as GameObject;
-		map.SetLocationMarker<LocationMarker>(markerGO);
+		//map.SetLocationMarker<LocationMarker>(markerGO);
 
 		DestroyImmediate(go);
 	}
