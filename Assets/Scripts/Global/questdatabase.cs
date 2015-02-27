@@ -515,6 +515,30 @@ public class questdatabase : MonoBehaviour
 		
 		}
 
+	public QuestRuntimeHotspot getHotspot (string str)
+	{
+
+		QuestRuntimeHotspot qh = null;
+	
+		foreach (QuestRuntimeHotspot qrh in hotspots) {
+
+
+
+			if(qrh.hotspot.id == int.Parse(str)){
+
+				qh = qrh;
+
+
+			}
+
+
+
+				}
+
+		return qh;
+
+	}
+
 		IEnumerator DownloadFinished (Quest q)
 		{
 				downloadmsg.enabled = true;
@@ -1744,7 +1768,7 @@ public class QuestRuntimeHotspot{
 	public bool visible;
 	public float lon;
 	public float lat;
-
+	public MeshRenderer renderer;
 	public bool entered = false;
 	
 	public QuestRuntimeHotspot(QuestHotspot hp, bool a, bool v,string ll){

@@ -72,16 +72,16 @@ public class locationcontrol : MonoBehaviour {
 		if (Input.GetKey (KeyCode.W)) {
 
 			location.CoordinatesEPSG900913 = new double[]{
-				location.CoordinatesEPSG900913[0] - (transform.forward.x* Time.deltaTime *50f ),
-				location.CoordinatesEPSG900913[1] - (transform.forward.z* Time.deltaTime *50f )
+				location.CoordinatesEPSG900913[0] + (transform.forward.x* Time.deltaTime *50f ),
+				location.CoordinatesEPSG900913[1] + (transform.forward.z* Time.deltaTime *50f )
 			};
 
 
 		} else 	if (Input.GetKey (KeyCode.S)) {
 			
 			location.CoordinatesEPSG900913 = new double[]{
-				location.CoordinatesEPSG900913[0] + (transform.forward.x* Time.deltaTime *50f ),
-				location.CoordinatesEPSG900913[1] + (transform.forward.z* Time.deltaTime *50f )
+				location.CoordinatesEPSG900913[0] - (transform.forward.x* Time.deltaTime *50f ),
+				location.CoordinatesEPSG900913[1] - (transform.forward.z* Time.deltaTime *50f )
 			};
 			
 			

@@ -127,6 +127,8 @@ public class actions : MonoBehaviour
 						sendVartoWeb();
 				} else if (action.type == "ShowMessage") {
 						showmessage (action);
+				} else if (action.type == "SetHotspotState") {
+					sethotspotstate (action);
 				}
 		
 		
@@ -135,7 +137,137 @@ public class actions : MonoBehaviour
 
 
 
+	public void sethotspotstate(QuestAction action){
 
+		bool needshotspot = false;
+
+		if (action.hasAttribute ("applyToAll")) {
+
+			if(action.getAttribute("applyToAll") == "1"){
+
+
+				// all Hotspots
+
+
+			} else {
+
+				// needs Hotspot
+				needshotspot = true;
+
+
+			}
+
+
+				} else {
+
+
+			// needs Hotspot
+			needshotspot = true;
+
+
+
+				}
+
+
+
+		if (needshotspot) {
+
+
+
+			// get Hotspot
+			if(action.hasAttribute("hotspot")){
+
+
+
+				QuestRuntimeHotspot qh = questdb.getHotspot(action.getAttribute("hotspot"));
+
+				if(qh != null){
+
+
+					if(action.hasAttribute("activity")){
+
+
+						if(action.getAttribute("activity") == "inaktiv"){
+
+
+							qh.active = false;
+
+						} else if(action.getAttribute("activity") == "aktiv"){
+							
+							qh.active = true;
+
+							
+						} 
+
+
+					}
+
+
+					if(action.hasAttribute("visibility")){
+						
+						
+						if(action.getAttribute("visibility") == "unsichtbar"){
+							
+						
+							qh.visible = false;
+
+
+							if(qh.renderer != null){
+
+								qh.renderer.enabled = false;
+
+
+							} 
+							
+						} else if(action.getAttribute("visibility") == "sichtbar"){
+							
+							qh.visible = true;
+
+							if(qh.renderer != null){
+								
+								qh.renderer.enabled = true;
+
+								
+							} 
+							
+						} 
+						
+						
+					}
+
+
+
+				} else {
+
+					questdb.debug("Hotspot not found");
+
+				}
+
+
+			} else {
+
+
+				questdb.debug("no Hotspot specified");
+ 
+			}
+
+
+
+
+
+
+				}
+
+
+
+
+
+
+
+
+
+
+		}
 
 
 

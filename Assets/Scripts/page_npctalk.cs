@@ -66,46 +66,45 @@ public class page_npctalk : MonoBehaviour {
 				}
 		savedtickertime = tickertime;
 
-
-		if (npctalk.getAttribute ("image").StartsWith ("@_")) {
+		if (npctalk.getAttribute ("image") != "") {
+						if (npctalk.getAttribute ("image").StartsWith ("@_")) {
 			
 			
-						www = new WWW (pre + "" + questactions.getVariable (npctalk.getAttribute ("image")).string_value [0]);
+								www = new WWW (pre + "" + questactions.getVariable (npctalk.getAttribute ("image")).string_value [0]);
 			
 			
-				} else {
+						} else {
 		
 
 
 
-			string url = npctalk.getAttribute ("image");
-			if(!url.StartsWith("http:") && !url.StartsWith("https:")){
-				url = pre + "" + quest.filepath + npctalk.getAttribute ("image");
-			}
+								string url = npctalk.getAttribute ("image");
+								if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
+										url = pre + "" + quest.filepath + npctalk.getAttribute ("image");
+								}
 			
-			Debug.Log(url);
+								Debug.Log ("myfile:"+url);
 
 
-			if(url.StartsWith("http:") || url.StartsWith("https:")) {
-							Debug.Log("webimage");
+								if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
+										Debug.Log ("webimage");
 
-							www = new WWW (url);
-							StartCoroutine (waitforImage ());
-
-
-			} else if(File.Exists (quest.filepath + npctalk.getAttribute ("image"))){
-				www = new WWW (url);
-								StartCoroutine (waitforImage ());
-						} else {
+										www = new WWW (url);
+										StartCoroutine (waitforImage ());
 
 
-								image.enabled = false;
+								} else if (File.Exists (quest.filepath + npctalk.getAttribute ("image"))) {
 
-								image.GetComponentInParent<Image> ().enabled = false;
+										Debug.Log("File Exists");
+										www = new WWW (url);
+										StartCoroutine (waitforImage ());
+								}
 
 						}
 
 				}
+
+		Debug.Log ("after npc talk image");
 		text.text = "";
 
 
@@ -194,7 +193,7 @@ public class page_npctalk : MonoBehaviour {
 				} else {
 
 
-			Debug.Log(dialogitem_state-1);
+			//Debug.Log(dialogitem_state-1);
 
 			if(questactions.npcaudio != null){
 

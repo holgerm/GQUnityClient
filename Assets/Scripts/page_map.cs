@@ -105,9 +105,11 @@ public class page_map : MonoBehaviour
 				}
 
 		map.UseLocation = true;
-		map.CenterOnLocation ();
 		map.UpdateCenterWithLocation = true;
+	
 		map.UseOrientation = true;
+		map.CameraFollowsOrientation = true;
+		map.CenterOnLocation ();
 
 
 		map.MaxZoom = 22.0f;
@@ -137,7 +139,7 @@ public class page_map : MonoBehaviour
 		foreach(QuestRuntimeHotspot qrh in questdb.hotspots){
 
 
-			if(qrh.visible){
+
 		
 			WWW www = null;
 		
@@ -176,7 +178,7 @@ public class page_map : MonoBehaviour
 				
 			}
 
-			}
+
 
 		}
 
@@ -185,17 +187,59 @@ public class page_map : MonoBehaviour
 
 
 
-		//TODO: calculate a position close but outside of the radius of all active hotspots
 
 
-		double a = map.CenterWGS84 [0] - 0.0008f;
-		double b = map.CenterWGS84 [1] - 0.0008f;
+		QuestRuntimeHotspot minhotspot = null;
+		double[] minhotspotposition = null;
+
+		foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
+
+			if(minhotspot == null){
+
+				minhotspot = qrh;
+				
+				double[] xy = new double[] {qrh.lon, qrh.lat };
+				double lon = (0 / 20037508.34) * 180;                        
+				double lat = (((-1)*((double.Parse(qrh.hotspot.getAttribute("radius"))*2d)+5d)) / 20037508.34) * 180;
+				lat = 180 / Math.PI * (2 * Math.Atan(Math.Exp(lat * Math.PI / 180)) - Math.PI / 2);                        
+				double[] xy1 = new double[] { xy[0] + lon, xy[1] + lat };
+				minhotspotposition = xy1;
+
+				
+			} else {
+
+				// Lon/Lat offset by (x// 20037508.34) * 180;
+				// i only use lat right now.
+
+				double[] xy = new double[] {qrh.lon, qrh.lat };
+				double lon = (0 / 20037508.34) * 180;                        
+				double lat = (((-1)*((double.Parse(qrh.hotspot.getAttribute("radius"))*2d)+5d)) / 20037508.34) * 180;
+
+				lat = 180 / Math.PI * (2 * Math.Atan(Math.Exp(lat * Math.PI / 180)) - Math.PI / 2);                        
+				double[] xy1 = new double[] { xy[0] + lon, xy[1] + lat };
 
 
+				
+				
+				if(xy1[1] < minhotspotposition[1]){
+					minhotspot = qrh;
+					minhotspotposition = xy1;
+				}
 
 
+			}
+
+				}
 
 
+		Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
+		
+		double a = minhotspotposition [1];
+		double b = minhotspotposition[0];
+		map.CenterWGS84 = new double[2] { a	, b };
+
+		
+		
 		
 		// create the location marker
 		var posi = Tile.CreateTileTemplate ().gameObject;
@@ -293,14 +337,13 @@ public class page_map : MonoBehaviour
 
 
 
-			
 			int height = go.renderer.material.mainTexture.height;
 			int width = go.renderer.material.mainTexture.width;
 			
 
 			if(height > width){
 				
-				Debug.Log(width+"/"+height+"="+width/height);
+				//Debug.Log(width+"/"+height+"="+width/height);
 				go.transform.localScale = new Vector3(((float)width)/((float)height), 1.0f, 1.0f);
 				
 			} else {
@@ -331,7 +374,16 @@ public class page_map : MonoBehaviour
 			// Instantiate
 			GameObject markerGO;
 			markerGO = Instantiate(go) as GameObject;
-			
+
+
+
+			qrh.renderer = markerGO.GetComponent<MeshRenderer>();
+
+
+
+
+
+
 			// CreateMarker(Name,longlat,prefab)
 			Marker m = map.CreateMarker<Marker>(qrh.hotspot.getAttribute("name"), new double[2] {qrh.lat,qrh.lon }, markerGO);
 		
@@ -343,7 +395,12 @@ public class page_map : MonoBehaviour
 			DestroyImmediate(go);
 
 
+			if(!qrh.visible){
+				
+				qrh.renderer.enabled = false;
 
+				
+			}
 
 
 
@@ -398,7 +455,7 @@ public class page_map : MonoBehaviour
 
 		if (zoomin) {
 
-			Debug.Log(map.CurrentZoom);
+//			Debug.Log(map.CurrentZoom);
 			map.Zoom(1.0f);
 
 			
