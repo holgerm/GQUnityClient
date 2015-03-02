@@ -336,7 +336,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: version 0.1.k
+  m_Text: version 0.1.L
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2765,7 +2765,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3034,6 +3034,7 @@ GameObject:
   - 114: {fileID: 1756337058}
   - 114: {fileID: 1756337060}
   - 114: {fileID: 1756337061}
+  - 114: {fileID: 1756337062}
   m_Layer: 0
   m_Name: QuestDatabase
   m_TagString: Untagged
@@ -3176,6 +3177,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cec45d68f47841aeb032872dedd219b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1756337062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1756337057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ddaceb764644163b33041f4d3f51d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoordinatesWGS84: []
 --- !u!1 &1919532221
 GameObject:
   m_ObjectHideFlags: 0

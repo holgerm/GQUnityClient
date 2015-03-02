@@ -23,11 +23,11 @@ public class page_npctalk : MonoBehaviour {
 
 
 
-	private int dialogitem_state = 0;
+	public int dialogitem_state = 0;
 
 
 
-	private string texttoticker;
+	public string texttoticker;
 
 	public float tickertime;
 
@@ -212,6 +212,7 @@ public class page_npctalk : MonoBehaviour {
 	}
 
 	void nextdialogitem(){
+		Debug.Log ("nextdialogitem()");
 
 		if (npctalk.contents_dialogitems.Count > 0) {
 
@@ -285,6 +286,8 @@ public class page_npctalk : MonoBehaviour {
 
 	public void nextButton(){
 
+
+		Debug.Log ("nextButton()");
 		if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 
 						onEnd ();

@@ -627,32 +627,33 @@ public class actions : MonoBehaviour
 
 				string key = action.getAttribute ("var");
 
+		if (action.value != null) {
 
+						if (key == "score" && action.value.num_value != null && action.value.num_value.Count > 0) {
 
-				if (key == "score" && action.value.num_value != null && action.value.num_value.Count > 0) {
+								score = (int)action.value.num_value [0];
 
-						score = (int)action.value.num_value [0];
+						} else if (action.value.bool_value != null && action.value.bool_value.Count > 0) {
+								Debug.Log (key + " has bool value");
+								variables.Add (new QuestVariable (key, action.value.bool_value [0]));
+						} else if (action.value.num_value != null && action.value.num_value.Count > 0) {
+								variables.Add (new QuestVariable (key, action.value.num_value [0]));
+						} else if (action.value.string_value != null && action.value.string_value.Count > 0) {
+								variables.Add (new QuestVariable (key, action.value.string_value [0]));
+						} else if (action.value.var_value != null && action.value.var_value.Count > 0) {
 
-				} else if (action.value.bool_value != null && action.value.bool_value.Count > 0) {
-						Debug.Log (key + " has bool value");
-						variables.Add (new QuestVariable (key, action.value.bool_value [0]));
-				} else if (action.value.num_value != null && action.value.num_value.Count > 0) {
-						variables.Add (new QuestVariable (key, action.value.num_value [0]));
-				} else if (action.value.string_value != null && action.value.string_value.Count > 0) {
-						variables.Add (new QuestVariable (key, action.value.string_value [0]));
-				} else if (action.value.var_value != null && action.value.var_value.Count > 0) {
+								if (getVariable (action.value.var_value [0]) != null) {
 
-						if (getVariable (action.value.var_value [0]) != null) {
+										setVariable (key, getVariable (action.value.var_value [0]));
 
-								setVariable (key, getVariable (action.value.var_value [0]));
-
-			} else
-			          {
+								} else {
 				
-								variables.Add (new QuestVariable (key, mathVariable (action.value.var_value [0])));
+										variables.Add (new QuestVariable (key, mathVariable (action.value.var_value [0])));
 
 
+								}
 						}
+
 				}
 		}
 

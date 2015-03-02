@@ -20,6 +20,8 @@ public class page_map : MonoBehaviour
 	public Quest quest;
 	public QuestPage mappage;
 	public actions questactions;
+	public GPSPosition gpsdata;
+
 
 	public Texture	LocationTexture;
 	public Texture	MarkerTexture;
@@ -44,7 +46,8 @@ public class page_map : MonoBehaviour
 	public Transform radiusprefab;
 	private bool zoomin = false;
 	private bool zoomout = false;
-	
+
+	public bool fixedonposition = true;
 	private
 		
 		void
@@ -56,6 +59,7 @@ public class page_map : MonoBehaviour
 
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+		gpsdata = questdb.GetComponent<GPSPosition> ();
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 		mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 		questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
@@ -185,62 +189,73 @@ public class page_map : MonoBehaviour
 
 
 
+		double a = 0;
+		double b = 0;
+		if (gpsdata.CoordinatesWGS84.Length > 1) {
+
+
+			a = gpsdata.CoordinatesWGS84[0];
+			b = gpsdata.CoordinatesWGS84[1];
 
 
 
+				} else {
 
-		QuestRuntimeHotspot minhotspot = null;
-		double[] minhotspotposition = null;
 
-		foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
+						QuestRuntimeHotspot minhotspot = null;
+						double[] minhotspotposition = null;
 
-			if(minhotspot == null){
+						foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
 
-				minhotspot = qrh;
+								if (minhotspot == null) {
+
+										minhotspot = qrh;
 				
-				double[] xy = new double[] {qrh.lon, qrh.lat };
-				double lon = (0 / 20037508.34) * 180;                        
-				double lat = (((-1)*((double.Parse(qrh.hotspot.getAttribute("radius"))*2d)+5d)) / 20037508.34) * 180;
-				lat = 180 / Math.PI * (2 * Math.Atan(Math.Exp(lat * Math.PI / 180)) - Math.PI / 2);                        
-				double[] xy1 = new double[] { xy[0] + lon, xy[1] + lat };
-				minhotspotposition = xy1;
-
-				
-			} else {
-
-				// Lon/Lat offset by (x// 20037508.34) * 180;
-				// i only use lat right now.
-
-				double[] xy = new double[] {qrh.lon, qrh.lat };
-				double lon = (0 / 20037508.34) * 180;                        
-				double lat = (((-1)*((double.Parse(qrh.hotspot.getAttribute("radius"))*2d)+5d)) / 20037508.34) * 180;
-
-				lat = 180 / Math.PI * (2 * Math.Atan(Math.Exp(lat * Math.PI / 180)) - Math.PI / 2);                        
-				double[] xy1 = new double[] { xy[0] + lon, xy[1] + lat };
-
+										double[] xy = new double[] {qrh.lon, qrh.lat };
+										double lon = (0 / 20037508.34) * 180;                        
+										double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
+										lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
+										double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
+										minhotspotposition = xy1;
 
 				
+								} else {
+
+										// Lon/Lat offset by (x// 20037508.34) * 180;
+										// i only use lat right now.
+
+										double[] xy = new double[] {qrh.lon, qrh.lat };
+										double lon = (0 / 20037508.34) * 180;                        
+										double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
+
+										lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
+										double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
+
+
 				
-				if(xy1[1] < minhotspotposition[1]){
-					minhotspot = qrh;
-					minhotspotposition = xy1;
-				}
+				
+										if (xy1 [1] < minhotspotposition [1]) {
+												minhotspot = qrh;
+												minhotspotposition = xy1;
+										}
 
 
-			}
+								}
 
-				}
+						}
 
 
-		Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
+						Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
 		
-		double a = minhotspotposition [1];
-		double b = minhotspotposition[0];
+						 a = minhotspotposition [1];
+						 b = minhotspotposition [0];
+
+
+				}
+		
 		map.CenterWGS84 = new double[2] { a	, b };
 
-		
-		
-		
+
 		// create the location marker
 		var posi = Tile.CreateTileTemplate ().gameObject;
 		posi.renderer.material.mainTexture = LocationTexture;
@@ -438,7 +453,11 @@ public class page_map : MonoBehaviour
 	}
 
 
+	public void setFixedPosition(bool b){
 
+		fixedonposition = b;
+
+		}
 
 	void OnApplicationQuit()
 	{
@@ -449,7 +468,13 @@ public class page_map : MonoBehaviour
 	{
 
 
+if (fixedonposition) {
 
+			map.CenterWGS84 = gpsdata.CoordinatesWGS84;
+
+
+
+				}
 
 
 

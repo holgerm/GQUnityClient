@@ -17,11 +17,20 @@ public class locationcontrol : MonoBehaviour {
 	public Map map;
 	public LocationMarker location;
 
+	public GPSPosition gpsdata;
 
-	
+
+
+
+
+	void Start(){
+
+		gpsdata = mapcontroller.questdb.GetComponent<GPSPosition> ();
+
+	}
 	// Update is called once per frame
 	void Update () {
-	
+
 
 		foreach(QuestRuntimeHotspot qrh in mapcontroller.questdb.getActiveHotspots()){
 
@@ -75,7 +84,7 @@ public class locationcontrol : MonoBehaviour {
 				location.CoordinatesEPSG900913[0] + (transform.forward.x* Time.deltaTime *50f ),
 				location.CoordinatesEPSG900913[1] + (transform.forward.z* Time.deltaTime *50f )
 			};
-
+			gpsdata.CoordinatesWGS84 = location.CoordinatesWGS84;
 
 		} else 	if (Input.GetKey (KeyCode.S)) {
 			
@@ -83,7 +92,8 @@ public class locationcontrol : MonoBehaviour {
 				location.CoordinatesEPSG900913[0] - (transform.forward.x* Time.deltaTime *50f ),
 				location.CoordinatesEPSG900913[1] - (transform.forward.z* Time.deltaTime *50f )
 			};
-			
+			gpsdata.CoordinatesWGS84 = location.CoordinatesWGS84;
+
 			
 		}
 

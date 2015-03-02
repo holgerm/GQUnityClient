@@ -8,7 +8,8 @@ public class page_textquestion : MonoBehaviour {
 
 	
 	
-	
+	public questdatabase questdb;
+
 	public Quest quest;
 	public QuestPage textquestion;
 
@@ -20,6 +21,8 @@ public class page_textquestion : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 		textquestion = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 		
@@ -57,6 +60,9 @@ public class page_textquestion : MonoBehaviour {
 
 
 			foreach(QuestContent y in textquestion.contents_answers){
+
+
+				questdb.debug("REGEXP "+x+" MATCH "+y.content+" -> "+Regex.IsMatch(x, y.content, RegexOptions.IgnoreCase));
 
 				if(y.content == x || Regex.IsMatch(x, y.content, RegexOptions.IgnoreCase)){
 					b = true;

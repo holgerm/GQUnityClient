@@ -541,7 +541,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1953851291}
   onClick: 1
-  onDoubleClick: 0
 --- !u!1 &1234740411
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +973,8 @@ MonoBehaviour:
   text: {fileID: 1531027272}
   nextbutton: {fileID: 763440325}
   buttontext: {fileID: 328853095}
+  dialogitem_state: 0
+  texttoticker: 
   tickertime: .0500000007
 --- !u!4 &1953851292
 Transform:
