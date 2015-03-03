@@ -465,7 +465,9 @@ public class questdatabase : MonoBehaviour
 
 				if (canPlayQuest (currentquest)) {
 
-						changePage (currentquest.currentpage.id);
+
+			StartCoroutine(waitforquestassets(currentquest.currentpage.id));
+						
 
 				} else {
 
@@ -475,6 +477,38 @@ public class questdatabase : MonoBehaviour
 				}
 
 		}
+
+	IEnumerator waitforquestassets (int pageid)
+	{
+
+		yield return new WaitForSeconds (0.5f);
+		bool done = true;
+
+		if (filedownloads != null) {
+						foreach (WWW www in filedownloads) {
+
+								if (!www.isDone) {
+			
+										done = false;
+
+								}
+
+						}
+				}
+
+
+
+		if (done) {
+
+						changePage (pageid);
+				} else {
+
+			StartCoroutine(waitforquestassets(pageid));
+
+
+
+				}
+	}
 
 		public bool canPlayQuest (Quest q)
 		{

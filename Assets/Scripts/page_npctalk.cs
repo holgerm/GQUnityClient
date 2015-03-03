@@ -212,7 +212,7 @@ public class page_npctalk : MonoBehaviour {
 	}
 
 	void nextdialogitem(){
-		Debug.Log ("nextdialogitem()");
+//		Debug.Log ("nextdialogitem()");
 
 		if (npctalk.contents_dialogitems.Count > 0) {
 
@@ -287,7 +287,7 @@ public class page_npctalk : MonoBehaviour {
 	public void nextButton(){
 
 
-		Debug.Log ("nextButton()");
+//		Debug.Log ("nextButton()");
 		if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 
 						onEnd ();
@@ -314,7 +314,7 @@ public class page_npctalk : MonoBehaviour {
 						npctalk.onEnd.Invoke ();
 
 				} else {
-			Debug.Log ("ending");
+			//Debug.Log ("ending");
 			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest();
 
 				}
