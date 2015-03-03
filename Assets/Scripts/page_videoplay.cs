@@ -34,7 +34,7 @@ public class page_videoplay : MonoBehaviour {
 		string url = npctalk.getAttribute ("file");
 
 		if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-						 url = "quests/" + quest.id + "/" + npctalk.getAttribute ("file");
+						 url =  npctalk.getAttribute ("file");
 				}
 
 
