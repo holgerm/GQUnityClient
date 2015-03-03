@@ -328,6 +328,7 @@ public class questdatabase : MonoBehaviour
 		public List<Quest> GetLocalQuests ()
 		{
 
+#if !UNITY_WEBPLAYER
 			if (!Application.isWebPlayer) {
 
 						localquests.Clear ();
@@ -367,6 +368,8 @@ public class questdatabase : MonoBehaviour
 
 				}
 
+#endif
+
 		return localquests;
 
 		}
@@ -391,7 +394,8 @@ public class questdatabase : MonoBehaviour
 			
 			
 			
-				
+			#if !UNITY_WEBPLAYER
+
 						if (!Application.isWebPlayer && (!Directory.Exists (exportLocation) || reload)) {
 
 
@@ -412,6 +416,7 @@ public class questdatabase : MonoBehaviour
 
 				
 						}
+#endif
 				}
 
 				
