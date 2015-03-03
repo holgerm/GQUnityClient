@@ -162,20 +162,20 @@ public class page_map : MonoBehaviour
 				
 				string url = qrh.hotspot.getAttribute ("img");
 				if(!url.StartsWith("http:") && !url.StartsWith("https:")){
-					url = pre + "" + quest.filepath + qrh.hotspot.getAttribute ("img");
+					url = pre + "" +  qrh.hotspot.getAttribute ("img");
 				}
 				
-				Debug.Log(url);
+//				Debug.Log(url);
 				
 				
 				if(url.StartsWith("http:") || url.StartsWith("https:")) {
-					Debug.Log("webimage");
+					//Debug.Log("webimage");
 					
 					www = new WWW (url);
 					StartCoroutine (createMarkerAfterImageLoaded(www,qrh));
 					
 					
-				} else if(File.Exists (quest.filepath + qrh.hotspot.getAttribute ("img"))){
+				} else if(File.Exists (qrh.hotspot.getAttribute ("img"))){
 					www = new WWW (url);
 					StartCoroutine (createMarkerAfterImageLoaded(www,qrh));
 				}
@@ -245,7 +245,7 @@ public class page_map : MonoBehaviour
 						}
 
 
-						Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
+//						Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
 		
 						 a = minhotspotposition [1];
 						 b = minhotspotposition [0];

@@ -905,7 +905,7 @@ public class actions : MonoBehaviour
 
 		string url = path;
 		if(!url.StartsWith("http:") && !url.StartsWith("https:")){
-			url = pre + "" + quest.filepath + path;
+			url = pre + ""  + path;
 		}
 		
 		www = new WWW (url);
@@ -1001,7 +1001,7 @@ public class actions : MonoBehaviour
 
 		string url = action.getAttribute ("file");
 		if(!url.StartsWith("http:") && !url.StartsWith("https:")){
-			url = pre + "" + quest.filepath + action.getAttribute ("file");
+			url = pre + "" + action.getAttribute ("file");
 		}
 		
 		www = new WWW (url);
