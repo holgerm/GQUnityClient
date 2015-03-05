@@ -39,13 +39,13 @@ public class page_videoplay : MonoBehaviour {
 
 
 
-		if (url.EndsWith ("ogg")) {
+		if (url.EndsWith ("ogg") || url.EndsWith("ogv")) {
 						video.Video = url;
 						video.Play = true;
 
 				} else {
 
-			questdb.debug("Video muss im OGG-Format vorliegen");
+			questdb.debug("Video muss im OGV-Theora-Format vorliegen");
 
 				}
 	

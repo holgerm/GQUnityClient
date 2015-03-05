@@ -53,12 +53,7 @@ public class questdatabase : MonoBehaviour
 
 		}
 
-		public void testMap ()
-		{
 
-				Application.LoadLevel (9);
-
-		}
 	
 		public List<QuestRuntimeHotspot> getActiveHotspots ()
 		{

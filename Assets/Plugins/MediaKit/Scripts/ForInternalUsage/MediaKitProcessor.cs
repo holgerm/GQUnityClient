@@ -305,20 +305,17 @@ public class MediaKitProcessor : MonoBehaviour {
 				{
 					s.RefCount ++;
 
-					if(s.Preload)
-					{
-
 
 
 						#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-						string path = "file://" + Application.persistentDataPath + "/" + s.Path; 
+						string path = "file://" + s.Path; 
 						#elif UNITY_WEBPLAYER
-						string path = Application.persistentDataPath + s.Path;
-						#elif UNITY_IPHONE
-						string path = Application.persistentDataPath + s.Path;
-						#else
-						string path = Application.persistentDataPath + s.Path;
-						#endif		
+					string path = "file://" + s.Path; 
+					#elif UNITY_IPHONE
+					string path = "file://" + s.Path; 
+					#else
+					string path = "file://" + s.Path; 
+					#endif		
 
 						if(s.Path.StartsWith("http:") || s.Path.StartsWith("https:")){
 							path= s.Path;
@@ -338,111 +335,10 @@ public class MediaKitProcessor : MonoBehaviour {
 							s.Initializing = false;
 							s.Ready = true;
 						}
-					}
-					else
-					{
-						/* not supported yet
-						string path = Application.persistentDataPath + "/MediaKit/" + s.Path;
-						Directory.CreateDirectory(Path.GetDirectoryName(path));
-						if(!File.Exists(path))
-						{
-							string assetpath = Application.streamingAssetsPath + "/" + s.Path;
-							WWW www = new WWW(assetpath);
-							yield return www;
-							File.WriteAllBytes(path,www.bytes);
-						}*/
-
-						#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-						string path = Application.streamingAssetsPath + "/" + s.Path; 
-						#elif UNITY_WEBPLAYER
+				
+						#if UNITY_WEBPLAYER
 						string path = "StreamingAssets/" + s.Path;
-						#elif UNITY_IPHONE
-						string path = Application.dataPath + "/Raw/" + s.Path;
-						#elif UNITY_ANDROID
-						string path = Application.persistentDataPath + "/MediaKitCache/Assets";
-
-						Directory.CreateDirectory(path);
-
-						//	"/jar:file:/data/app/..../....apk!/assets"
-
-						Match match = Regex.Match(Application.streamingAssetsPath, @"(?<path>/data/app/.+)!/(?<assets>.+)", RegexOptions.IgnoreCase);
 						
-						if (match.Success)
-						{
-							// Finally, we get the Group value and display it.
-							string zpath = match.Groups[@"path"].Value;
-							string assets = match.Groups[@"assets"].Value;
-                            
-
-							ZipFile zf = null;
-							try {
-								FileStream fs = File.OpenRead(zpath);
-								zf = new ZipFile(fs);
-								ZipEntry zipEntry = zf.GetEntry(assets+'/'+s.Path);
-								if (zipEntry != null && zipEntry.IsFile) {
-
-									path += "/" + s.Path + "_" + zipEntry.Crc;
-									
-									
-									if( File.Exists(path) )
-									{
-										FileInfo f = new FileInfo(path);
-										if( zipEntry.Size != f.Length )
-										{
-											File.Delete(path);
-										}
-									}
-									
-									if( !File.Exists(path) )
-									{
-										var delMask = Application.persistentDataPath + "/MediaKitCache/Assets/" + s.Path;
-										
-										var assetDir = Path.GetDirectoryName(delMask);
-										
-										Directory.CreateDirectory(assetDir);
-										
-										foreach(FileInfo f in new DirectoryInfo(assetDir).GetFiles(Path.GetFileName(s.Path)+"_*")) {
-                                            f.Delete();
-                                        }
-
-										byte[] buffer = new byte[4096];     // 4K is optimum
-										Stream zipStream = zf.GetInputStream(zipEntry);
-										
-		                                // Unzip file in buffered chunks. This is just as fast as unpacking to a buffer the full size
-		                                // of the file, but does not waste memory.
-		                                // The "using" will close the stream even if an exception occurs.
-										using (FileStream streamWriter = File.Create(path)) {
-											StreamUtils.Copy(zipStream, streamWriter, buffer);
-		                                }
-									}
-	                            }
-								else
-								{
-									s.Error = "Can't find: " + s.Path;
-									Debug.LogError(s.Error);
-								}
-	                        } finally {
-	                            if (zf != null) {
-	                                zf.IsStreamOwner = true; // Makes close also shut the underlying stream
-	                                zf.Close(); // Ensure we release resources
-	                            }
-							}
-
-							if(s.Error != null)
-							{
-                            	yield break;
-							}
-                            
-						}
-						else
-						{
-							s.Error = "Unknown error";
-							Debug.LogError(s.Error + ": " + Application.streamingAssetsPath);
-							yield break;
-						}
-
-						#else
-						string path = Application.streamingAssetsPath + "/" + s.Path;
 						#endif		
 
 						s.InFile = new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
@@ -456,7 +352,7 @@ public class MediaKitProcessor : MonoBehaviour {
 
 			yield return 0;
 		}
-	}
+
 
 
 	void AddNewVideo()
