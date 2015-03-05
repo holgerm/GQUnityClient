@@ -80,10 +80,10 @@ public class page_npctalk : MonoBehaviour {
 
 								string url = npctalk.getAttribute ("image");
 								if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-										url = pre + "" + quest.filepath + npctalk.getAttribute ("image");
+										url = pre + "" + npctalk.getAttribute ("image");
 								}
 			
-								Debug.Log ("myfile:"+url);
+				Debug.Log ("myfile:"+url+" ("+npctalk.getAttribute ("image")+")");
 
 
 								if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
@@ -93,7 +93,7 @@ public class page_npctalk : MonoBehaviour {
 										StartCoroutine (waitforImage ());
 
 
-								} else if (File.Exists (quest.filepath + npctalk.getAttribute ("image"))) {
+								} else if (File.Exists (npctalk.getAttribute ("image"))) {
 
 										Debug.Log("File Exists");
 										www = new WWW (url);
@@ -104,7 +104,7 @@ public class page_npctalk : MonoBehaviour {
 
 				}
 
-		Debug.Log ("after npc talk image");
+//		Debug.Log ("after npc talk image");
 		text.text = "";
 
 
@@ -212,7 +212,7 @@ public class page_npctalk : MonoBehaviour {
 	}
 
 	void nextdialogitem(){
-		Debug.Log ("nextdialogitem()");
+//		Debug.Log ("nextdialogitem()");
 
 		if (npctalk.contents_dialogitems.Count > 0) {
 
@@ -287,7 +287,7 @@ public class page_npctalk : MonoBehaviour {
 	public void nextButton(){
 
 
-		Debug.Log ("nextButton()");
+//		Debug.Log ("nextButton()");
 		if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 
 						onEnd ();
@@ -314,7 +314,7 @@ public class page_npctalk : MonoBehaviour {
 						npctalk.onEnd.Invoke ();
 
 				} else {
-			Debug.Log ("ending");
+			//Debug.Log ("ending");
 			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest();
 
 				}

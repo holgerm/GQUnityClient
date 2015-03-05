@@ -418,6 +418,12 @@ MonoBehaviour:
       contents_dialogitems: []
       contents_expectedcode: []
       contents_answers: []
+      contents_question:
+        id: 0
+        content: 
+        attributes: []
+        answers: []
+      contents_answersgroup: []
       onEnd:
         actions: []
       onStart:
@@ -438,6 +444,12 @@ MonoBehaviour:
     contents_dialogitems: []
     contents_expectedcode: []
     contents_answers: []
+    contents_question:
+      id: 0
+      content: 
+      attributes: []
+      answers: []
+    contents_answersgroup: []
     onEnd:
       actions: []
     onStart:

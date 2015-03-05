@@ -79,7 +79,7 @@ public class page_fullscreenimage : MonoBehaviour
 
 						string url = fullscreenimage.getAttribute ("image");
 						if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-								url = pre + "" + quest.filepath + fullscreenimage.getAttribute ("image");
+								url = pre + "" + fullscreenimage.getAttribute ("image");
 						}
 
 						www = new WWW (url);
