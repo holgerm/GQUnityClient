@@ -336,7 +336,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: version 0.1.N
+  m_Text: version 0.1.L
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3053,7 +3053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9550d02c2d244fc9034bcabbc47c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newxml: 1
   currentquest:
     name: 
     id: 0
@@ -3099,7 +3098,6 @@ MonoBehaviour:
   hotspots: []
   questmilllogo: {fileID: 950268824}
   webloadingmessage: {fileID: 238289913}
-  loadedfiles: []
   webxml: 
 --- !u!4 &1756337059
 Transform:
