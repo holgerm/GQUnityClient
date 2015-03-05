@@ -164,7 +164,7 @@ public class questdatabase : MonoBehaviour
 						//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 
-						installQuest (currentquest, false);
+						installQuest (currentquest, false,false);
 
 				} else {
 						debug (www.error);
@@ -188,7 +188,7 @@ public class questdatabase : MonoBehaviour
 						downloadQuest (q);
 				} else {
 
-						installQuest (q, false);
+						installQuest (q, true,true);
 				}
 
 
@@ -288,19 +288,19 @@ public class questdatabase : MonoBehaviour
 				}
 				filedownloads.Add (wwwfile);
 
-				StartCoroutine (downloadAssetFinished (wwwfile, filename));
+				StartCoroutine (downloadAssetFinished (wwwfile, filename,0f));
 
 
 
 		}
 
-		public IEnumerator downloadAssetFinished (WWW wwwfile, string filename)
+		public IEnumerator downloadAssetFinished (WWW wwwfile, string filename,float timeout)
 		{
 
-				yield return wwwfile;
+			yield return new WaitForSeconds (0.3f);
+		timeout += 0.3f;
 
-
-				if (wwwfile.error == null) {
+				if (wwwfile.isDone) {
 
 
 
@@ -314,12 +314,80 @@ public class questdatabase : MonoBehaviour
 						FileStream fs = File.Create (filename);
 						fs.Write (wwwfile.bytes, 0, wwwfile.size);
 						fs.Close ();
-						Debug.Log ("file saved: " + filename);
+					Debug.Log ("file saved: " + filename);
 
 
 				} else {
 
-						Debug.Log ("File Download Error");
+			if(wwwfile.error == null){
+
+				//Debug.Log(timeout+" - "+wwwfile.progress);
+
+				if(wwwfile.progress <0.1f && timeout > 5f){
+
+					Debug.Log("Error: "+www.url+" - "+timeout);
+
+
+
+
+					
+					Debug.Log("redoing www");
+					
+					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+					
+					questdb.filedownloads.Remove(wwwfile);
+					
+					
+					questdb.downloadAsset (wwwfile.url, filename);
+					
+					wwwfile.Dispose();
+
+
+
+
+
+
+
+
+				} else {
+
+				StartCoroutine(downloadAssetFinished(wwwfile,filename,timeout));
+
+				}
+
+
+			} else {
+
+
+				//TODO: Handle WWW Error -> REDO?
+
+				Debug.Log("Error: "+www.url+" - "+www.error);
+				if(www.error.Contains("peer")){
+					
+					
+					
+					Debug.Log("redoing www");
+					
+					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+					
+					questdb.filedownloads.Remove(wwwfile);
+					
+					
+					questdb.downloadAsset (wwwfile.url, filename);
+					
+					wwwfile.Dispose();
+					
+					
+
+
+
+				}
+
+			}
+
+
+
+
 
 				}
 
@@ -357,7 +425,7 @@ public class questdatabase : MonoBehaviour
 //			Debug.Log("folder found:"+splitted[splitted.Length - 1]);
 
 										n.filepath = folder.ToString () + "/";
-										n = n.LoadFromText (int.Parse (splitted [splitted.Length - 1]));
+										n = n.LoadFromText (int.Parse (splitted [splitted.Length - 1]),true);
 										//n.deserializeAttributes();
 										localquests.Add (n);
 										//Debug.Log(folder.ToString());
@@ -374,20 +442,39 @@ public class questdatabase : MonoBehaviour
 
 		}
 
-		public void installQuest (Quest q, bool reload)
+		public void installQuest (Quest q, bool reload, bool localload)
 		{
+
+
+		if (filedownloads != null) {
+						filedownloads.Clear ();
+				}
+		if (loadedfiles != null) {
+						loadedfiles.Clear ();
+				}
+
+
+
+
+		bool x = false;
+
+
+		if (localload) {
+			Debug.Log("LOCAL");
+						x = true;
+				}
 
 
 
 //				Debug.Log ("installing..."+reload);
-				currentquest = q.LoadFromText (q.id);
+				currentquest = q.LoadFromText (q.id,x);
 
 				//q.deserializeAttributes ();
 //		Debug.Log ("done installing...");
 
 
 
-				if (newxml) {
+				if (newxml && !localload) {
 
 						// resave xml
 						string exportLocation = Application.persistentDataPath + "/quests/" + currentquest.id + "/";
@@ -408,13 +495,29 @@ public class questdatabase : MonoBehaviour
 								Directory.CreateDirectory (exportLocation);
 
 
-
-								var serializer = new XmlSerializer (typeof(Quest));
+			
 								var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
-								serializer.Serialize (stream, currentquest);
+										// WRITE FILES TO XML -> NOT WORKING ON IOS
+										//var serializer = new XmlSerializer (typeof(Quest));
+										//serializer.Serialize (stream, currentquest);
 								stream.Close ();
+				var stream2 = new StreamWriter(exportLocation + "game.xml");
 
-				
+
+
+
+				stream2.Write(q.xmlcontent);
+
+				stream2.Close();
+
+				Debug.Log("WRITING XML FILE: "+exportLocation + "game.xml");
+				if(File.Exists(exportLocation + "game.xml")){
+					Debug.Log("...exists");
+
+				}
+
+
+
 						}
 #endif
 				}
@@ -470,8 +573,10 @@ public class questdatabase : MonoBehaviour
 
 				if (canPlayQuest (currentquest)) {
 
+					Debug.Log("WAITING FOR QUEST ASSETS");
+				downloadmsg.text = "Downloading Quest Assets ... 0 %";
 
-			StartCoroutine(waitforquestassets(currentquest.currentpage.id));
+					StartCoroutine(waitforquestassets(currentquest.currentpage.id,0f));
 						
 
 				} else {
@@ -483,24 +588,38 @@ public class questdatabase : MonoBehaviour
 
 		}
 
-	IEnumerator waitforquestassets (int pageid)
+	IEnumerator waitforquestassets (int pageid,float timeout)
 	{
+		downloadmsg.text = "Downloading Quest Assets ... ? %";
 
+
+		timeout += 0.5f;
 		yield return new WaitForSeconds (0.5f);
 		bool done = true;
+
+		int percent = 100;
+		int downloadsundone = 0;
+
+
 
 		if (filedownloads != null) {
 						foreach (WWW www in filedownloads) {
 
 								if (!www.isDone) {
-			
 										done = false;
-
+										downloadsundone += 1;
 								}
 
 						}
-				}
 
+
+
+
+			percent = 100-(downloadsundone*100/filedownloads.Count);
+
+		}
+
+						downloadmsg.text = "Downloading Quest Assets ... " + percent + " %";
 
 
 		if (done) {
@@ -508,9 +627,7 @@ public class questdatabase : MonoBehaviour
 						changePage (pageid);
 				} else {
 
-			StartCoroutine(waitforquestassets(pageid));
-
-
+			StartCoroutine(waitforquestassets(pageid,timeout));
 
 				}
 	}
@@ -709,7 +826,7 @@ public class questdatabase : MonoBehaviour
 
 //				Debug.Log(q.id+","+b);
 
-								installQuest (currentquest, b);
+								installQuest (currentquest, b,false);
 
 				
 						} else {
@@ -758,7 +875,7 @@ public class questdatabase : MonoBehaviour
 												b = true;
 										}
 								}
-								installQuest (q, b);
+								installQuest (q, b,false);
 
 
 						}
@@ -822,7 +939,7 @@ public class Quest  : IComparable<Quest>
 
 		}
 
-		public  Quest LoadFromText (int id)
+		public  Quest LoadFromText (int id,bool redo)
 		{
 	
 				string fp = filepath;
@@ -871,19 +988,19 @@ public class Quest  : IComparable<Quest>
 	
 				q.id = id;
 //		Debug.Log ("my id is " + id + " -> " + q.id);
-				q.deserializeAttributes ();
+				q.deserializeAttributes (redo);
 
 
 				return q;
 		}
 
-		public void deserializeAttributes ()
+		public void deserializeAttributes (bool redo)
 		{
 
 
 				if (pages != null) {
 						foreach (QuestPage qp in pages) {
-								qp.deserializeAttributes (id);
+								qp.deserializeAttributes (id,redo);
 						}
 				} else {
 
@@ -892,7 +1009,7 @@ public class Quest  : IComparable<Quest>
 				if (hotspots != null) {
 
 						foreach (QuestHotspot qh in hotspots) {
-								qh.deserializeAttributes ();
+								qh.deserializeAttributes (id,redo);
 						}
 				}
 
@@ -991,7 +1108,7 @@ public class QuestPage
 		
 		}
 	
-		public void deserializeAttributes (int id)
+	public void deserializeAttributes (int id,bool redo)
 		{
 
 				attributes = new List<QuestAttribute> ();
@@ -1029,8 +1146,9 @@ public class QuestPage
 
 					
 				
-												questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
-												if (splitted.Length > 3) {
+						if(!redo){
+							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						}												if (splitted.Length > 3) {
 							
 														xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 							
@@ -1048,18 +1166,18 @@ public class QuestPage
 
 
 				foreach (QuestContent qcdi in contents_dialogitems) {
-						qcdi.deserializeAttributes (id);
+						qcdi.deserializeAttributes (id,redo);
 				}
 
 				foreach (QuestContent qcdi in contents_answers) {
-						qcdi.deserializeAttributes (id);
+						qcdi.deserializeAttributes (id,redo);
 				}
 
 				if (contents_question != null) {
-						contents_question.deserializeAttributes (id);
+						contents_question.deserializeAttributes (id,redo);
 				}
 				foreach (QuestContent qcdi in contents_answersgroup) {
-						qcdi.deserializeAttributes (id);
+						qcdi.deserializeAttributes (id,redo);
 				}
 
 
@@ -1067,32 +1185,32 @@ public class QuestPage
 			
 
 				foreach (QuestContent qcdi in contents_expectedcode) {
-						qcdi.deserializeAttributes (id);
+						qcdi.deserializeAttributes (id,redo);
 				}
 
 				if (onEnd != null) {
 						foreach (QuestAction qa in onEnd.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 				if (onStart != null) {
 						foreach (QuestAction qa in onStart.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 				if (onTap != null) {
 						foreach (QuestAction qa in onTap.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 				if (onSuccess != null) {
 						foreach (QuestAction qa in onSuccess.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 				if (onFailure != null) {
 						foreach (QuestAction qa in onFailure.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 		}
@@ -1159,7 +1277,7 @@ public class QuestHotspot
 		
 		}
 
-		public void deserializeAttributes ()
+	public void deserializeAttributes (int id,bool redo)
 		{
 		
 				attributes = new List<QuestAttribute> ();
@@ -1194,8 +1312,9 @@ public class QuestHotspot
 									
 									
 									
-									questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
-									if (splitted.Length > 3) {
+						if(!redo){
+							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						}									if (splitted.Length > 3) {
 										
 										xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 										
@@ -1212,18 +1331,18 @@ public class QuestHotspot
 				}
 				if (onEnter != null) {
 						foreach (QuestAction qa in onEnter.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 				if (onLeave != null) {
 						foreach (QuestAction qa in onLeave.actions) {
-								qa.deserializeAttributes (id);
+								qa.deserializeAttributes (id,redo);
 						}
 				}
 				if (onTap != null) {
 						foreach (QuestAction qa in onTap.actions) {
-								qa.deserializeAttributes (id);
-						}
+								qa.deserializeAttributes (id,redo);
+			}
 				}
 		
 		
@@ -1265,16 +1384,16 @@ public class QuestContent
 				return "";
 		}
 
-		public void deserializeAttributes (int id)
+	public void deserializeAttributes (int id, bool redo)
 		{
 
 				foreach (QuestContent qcdi in answers) {
-						qcdi.deserializeAttributes (id);
+						qcdi.deserializeAttributes (id,redo);
 				}
 
 
 				if (questiontext != null) {
-						questiontext.deserializeAttributes (id);
+						questiontext.deserializeAttributes (id,redo);
 				}
 		
 				attributes = new List<QuestAttribute> ();
@@ -1310,8 +1429,10 @@ public class QuestContent
 									if (!Application.isWebPlayer) {
 										
 										
-										
+
+										if(!redo){
 										questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+										}
 										if (splitted.Length > 3) {
 											
 											xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
@@ -1494,7 +1615,7 @@ public class QuestAction
 		
 		}
 
-		public void deserializeAttributes (int id)
+	public void deserializeAttributes (int id, bool redo)
 		{
 
 				attributes = new List<QuestAttribute> ();
@@ -1530,8 +1651,9 @@ public class QuestAction
 										
 										
 										
-										questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
-										if (splitted.Length > 3) {
+						if(!redo){
+							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						}										if (splitted.Length > 3) {
 											
 											xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 											
@@ -1550,12 +1672,12 @@ public class QuestAction
 
 
 				foreach (QuestAction qa in thenactions) {
-						qa.deserializeAttributes (id);
-				}
+			qa.deserializeAttributes (id,redo);
+		}
 
 				foreach (QuestAction qa in elseactions) {
-						qa.deserializeAttributes (id);
-				}
+			qa.deserializeAttributes (id,redo);
+		}
 
 		}
 	
