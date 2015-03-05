@@ -14,14 +14,13 @@ public class questdatabase : MonoBehaviour
 {
 
 
-		public bool newxml = true;
+
 		public Quest currentquest;
 		public Transform questdataprefab;
 		public Transform currentquestdata;
 		public List<Quest> allquests;
 		public List<Quest> localquests;
 		private WWW www;
-		public List<WWW> filedownloads;
 		public Text downloadmsg;
 		public Image publicquestslist;
 		public actions actioncontroller;
@@ -29,9 +28,8 @@ public class questdatabase : MonoBehaviour
 		public List<QuestRuntimeHotspot> hotspots;
 		public Image questmilllogo;
 		public Text webloadingmessage;
-		public List<String> loadedfiles;
-		public string webxml;
 
+		public string webxml;
 		void Start ()
 		{
 
@@ -43,116 +41,123 @@ public class questdatabase : MonoBehaviour
 						Debug.Log (Application.persistentDataPath);
 				}
 
+		if (Application.isWebPlayer) {
+			webloadingmessage.enabled = true;
+			questmilllogo.enabled = true;
 
-				if (Application.isWebPlayer) {
-						webloadingmessage.enabled = true;
-						questmilllogo.enabled = true;
+
+
 				}
 
 
 
 		}
 
-		public void testMap ()
-		{
 
-				Application.LoadLevel (9);
 
-		}
+	public void testMap(){
+
+		Application.LoadLevel (9);
+
+	}
+
+
+
+
 	
-		public List<QuestRuntimeHotspot> getActiveHotspots ()
-		{
-				List<QuestRuntimeHotspot> activehs = new List<QuestRuntimeHotspot> ();
+	public List<QuestRuntimeHotspot> getActiveHotspots(){
+		List<QuestRuntimeHotspot> activehs = new List<QuestRuntimeHotspot> ();
 		
-				foreach (QuestRuntimeHotspot qrh in hotspots) {
+		foreach (QuestRuntimeHotspot qrh in hotspots) {
 
 
 
-						if (qrh.active) {
+			if(qrh.active){
 
-								activehs.Add (qrh);
-						}
+				activehs.Add(qrh);
+			}
 
 
 				}
 
 
-				return activehs;
-		}
-
-		void Update ()
-		{
+		return activehs;
+		        }
 
 
+	void Update(){
 
-				if (Input.GetKey (KeyCode.G) && Input.GetKey (KeyCode.E) && Input.GetKey (KeyCode.O) && Input.GetKey (KeyCode.Q)) {
-						Debug.Log ("Destroying GameObject");
 
-						Destroy (gameObject);
-						endQuest ();
+
+		if (Input.GetKey (KeyCode.G) && Input.GetKey (KeyCode.E) && Input.GetKey (KeyCode.O) && Input.GetKey(KeyCode.Q)) {
+			Debug.Log ("Destroying GameObject");
+
+			Destroy(gameObject);
+			endQuest();
 		
 
 				}
 
-		}
+	}
 
-		public void debug (string s)
-		{
+
+
+	public void debug(string s){
 		
-				Debug.Log (s);
-				if (Application.isWebPlayer) {
+		Debug.Log (s);
+		if (Application.isWebPlayer) {
 			
 
 				
-						Application.ExternalCall ("unitydebug", s + "<br/><br/>");
+			Application.ExternalCall ("unitydebug", s+"<br/><br/>");
 				
 
-				}
-		
 		}
+		
+	}
 
-		public void passWebXml (string x)
-		{
+
+	public void passWebXml(string x){
 
 
-				if (currentquestdata != null) {
+		if (currentquestdata != null) {
 
 						Destroy (currentquestdata.gameObject);
 						
 					
 				
-				} 
+		} 
 
-				actioncontroller.reset ();
-				actioncontroller.sendVartoWeb ();
+		actioncontroller.reset ();
+		actioncontroller.sendVartoWeb ();
 		
-				if (webloadingmessage != null) {
+		if (webloadingmessage != null) {
 						webloadingmessage.text = "Loading...";
 						webloadingmessage.enabled = true;
 						
 				}
 
-				www = new WWW (x);
-				StartCoroutine (waitForWebXml ());
+						www = new WWW (x);
+						StartCoroutine (waitForWebXml ());
 				
 		}
 
-		public void resetPlayer (string x)
-		{
-				Debug.Log ("Destroying GameObject");
-				Destroy (gameObject);
-				Application.LoadLevel (0);
+
+
+	public void resetPlayer(string x){
+		Debug.Log ("Destroying GameObject");
+		Destroy(gameObject);
+		Application.LoadLevel(0);
 
 	
 		
-		}
+	}
 
-		IEnumerator waitForWebXml ()
-		{
+	IEnumerator waitForWebXml(){
 
-				yield return www;
+		yield return www;
 
-				if (www.error == null) {
+		if (www.error == null) {
 
 						currentquest = new Quest ();
 
@@ -160,14 +165,18 @@ public class questdatabase : MonoBehaviour
 		
 						currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 
-						currentquest.xmlcontent = UTF8Encoding.UTF8.GetString (www.bytes); 
-						//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
+			currentquest.xmlcontent = UTF8Encoding.UTF8.GetString(www.bytes); 
+			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 
+<<<<<<< HEAD
 						installQuest (currentquest, false,false);
+=======
+						installQuest (currentquest);
+>>>>>>> origin/master
 
 				} else {
-						debug (www.error);
+			debug (www.error);
 
 				}
 		}
@@ -183,12 +192,13 @@ public class questdatabase : MonoBehaviour
 
 
 
-				if (!localquests.Contains (q)) {
+			 if (!localquests.Contains (q)) {
 
 						downloadQuest (q);
 				} else {
 
 						installQuest (q, true,true);
+
 				}
 
 
@@ -201,11 +211,11 @@ public class questdatabase : MonoBehaviour
 				if (localquests.Contains (q)) {
 
 						
-						#if UNITY_WEBPLAYER
+			#if UNITY_WEBPLAYER
 
 			Debug.Log("cannot remove on web");
 
-						# else 
+			# else 
 						if (Directory.Exists (Application.persistentDataPath + "/quests/" + q.id)) {
 								Directory.Delete (Application.persistentDataPath + "/quests/" + q.id, true);
 
@@ -236,14 +246,14 @@ public class questdatabase : MonoBehaviour
 		{
 
 //		Debug.Log ("what?");
-				debug ("Quest beendet");
+		debug ("Quest beendet");
 
-				if (currentquestdata != null) {
+		if (currentquestdata != null) {
 						Destroy (currentquestdata.gameObject);
 				}
-				Debug.Log ("Destroying GameObject");
-				Destroy (actioncontroller.msgcanvas.gameObject);
-				Destroy (gameObject);
+		Debug.Log ("Destroying GameObject");
+		Destroy (actioncontroller.msgcanvas.gameObject);
+		Destroy (gameObject);
 
 				Application.LoadLevel (0);
 
@@ -253,27 +263,21 @@ public class questdatabase : MonoBehaviour
 		public void downloadQuest (Quest q)
 		{
 
-				if (newxml) {
-						string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
-						www = new WWW (url);
-						downloadmsg.enabled = true;
-						downloadmsg.text = "Getting Quest-Definition ... ";
-						StartCoroutine (DownloadFinished (q));
-			
-				} else {
-						string url = "http://www.qeevee.org:9091/game/download/" + q.id;
+
+				string url = "http://www.qeevee.org:9091/game/download/" + q.id;
 		
-						www = new WWW (url);
-						//Debug.Log (url);
+				www = new WWW (url);
+				//Debug.Log (url);
 		
 
-						downloadmsg.enabled = true;
-						downloadmsg.text = "Downloading ... " + (www.progress * 100) + " %";
+				downloadmsg.enabled = true;
+				downloadmsg.text = "Downloading ... " + (www.progress * 100) + " %";
 
 		
-						StartCoroutine (DownloadPercentage ());
-						StartCoroutine (DownloadFinished (q));
+				StartCoroutine (DownloadPercentage ());
+				StartCoroutine (DownloadFinished (q));
 
+<<<<<<< HEAD
 				}
 		}
 
@@ -390,40 +394,30 @@ public class questdatabase : MonoBehaviour
 
 
 				}
+=======
+>>>>>>> origin/master
 
 		}
 
 		public List<Quest> GetLocalQuests ()
 		{
 
-#if !UNITY_WEBPLAYER
-			if (!Application.isWebPlayer) {
+		#if UNITY_WEBPLAYER
+		
+		Debug.Log("cannot get local files on web");
 
-						localquests.Clear ();
+		return new List<Quest>();
+		
+		# else 
 
-
-
-						DirectoryInfo info = new DirectoryInfo (Application.persistentDataPath + "/quests/");
-						var fileInfo = info.GetDirectories ();
-
-
-
-
-						foreach (DirectoryInfo folder in fileInfo) { 
-						
-
-
-								if (File.Exists (folder.ToString () + "/game.xml")) {
-
-										Quest n = new Quest ();
+				localquests.Clear ();
 
 
 
-										string[] splitted = folder.ToString ().Split ('/');
+				DirectoryInfo info = new DirectoryInfo (Application.persistentDataPath + "/quests/");
+				var fileInfo = info.GetDirectories ();
 
-										n.id = int.Parse (splitted [splitted.Length - 1]);
-//			Debug.Log("folder found:"+splitted[splitted.Length - 1]);
-
+<<<<<<< HEAD
 										n.filepath = folder.ToString () + "/";
 										n = n.LoadFromText (int.Parse (splitted [splitted.Length - 1]),true);
 										//n.deserializeAttributes();
@@ -431,18 +425,33 @@ public class questdatabase : MonoBehaviour
 										//Debug.Log(folder.ToString());
 								}
 						}
+=======
+>>>>>>> origin/master
 
 
 
+				foreach (DirectoryInfo folder in fileInfo) { 
+						/*Quest n = new Quest ();
+			n.id = folder.ToString();
+			n.name = folder.ToString();
+			localquests.Add(n); */
+						//Debug.Log(folder.ToString()+"/");
+						Quest n = new Quest ();
+						n.filepath = folder.ToString () + "/";
+						n = n.LoadFromText ();
+						localquests.Add (n);
+						//Debug.Log(folder.ToString());
+		
 				}
 
+				return localquests;
+
+
 #endif
-
-		return localquests;
-
 		}
 
 		public void installQuest (Quest q, bool reload, bool localload)
+
 		{
 
 
@@ -466,6 +475,7 @@ public class questdatabase : MonoBehaviour
 
 
 
+<<<<<<< HEAD
 //				Debug.Log ("installing..."+reload);
 				currentquest = q.LoadFromText (q.id,x);
 
@@ -525,6 +535,10 @@ public class questdatabase : MonoBehaviour
 				
 
 
+=======
+				//Debug.Log ("installing");
+				currentquest = q.LoadFromText ();
+>>>>>>> origin/master
 
 
 				bool did = false;
@@ -537,34 +551,34 @@ public class questdatabase : MonoBehaviour
 
 				}
 
-				hotspots = new List<QuestRuntimeHotspot> ();
-				foreach (QuestHotspot qh in currentquest.hotspots) {
+		hotspots = new List<QuestRuntimeHotspot> ();
+		foreach(QuestHotspot qh in currentquest.hotspots){
 
 
 
 
-						bool a = false;
-						if (qh.hasAttribute ("initialActivity")) {
+			bool a = false;
+			if(qh.hasAttribute("initialActivity")){
 
-								if (qh.getAttribute ("initialActivity") == "true") {
-										a = true;
-								}
+				if(qh.getAttribute("initialActivity") == "true"){
+					a = true;
+				}
 
-						}
+			}
 
-						bool v = false;
-						if (qh.hasAttribute ("initialVisibility")) {
+			bool v = false;
+			if(qh.hasAttribute("initialVisibility")){
 				
-								if (qh.getAttribute ("initialVisibility") == "true") {
-										v = true;
-								}
+				if(qh.getAttribute("initialVisibility") == "true"){
+					v = true;
+				}
 				
-						}
+			}
 
-						hotspots.Add (new QuestRuntimeHotspot (qh, a, v, qh.latlon));
+			hotspots.Add(new QuestRuntimeHotspot(qh,a,v,qh.latlon));
 		
 
-				}
+		}
 
 
 
@@ -573,11 +587,15 @@ public class questdatabase : MonoBehaviour
 
 				if (canPlayQuest (currentquest)) {
 
+<<<<<<< HEAD
 					Debug.Log("WAITING FOR QUEST ASSETS");
 				downloadmsg.text = "Downloading Quest Assets ... 0 %";
 
 					StartCoroutine(waitforquestassets(currentquest.currentpage.id,0f));
 						
+=======
+						changePage (currentquest.currentpage.id);
+>>>>>>> origin/master
 
 				} else {
 
@@ -588,6 +606,7 @@ public class questdatabase : MonoBehaviour
 
 		}
 
+<<<<<<< HEAD
 	IEnumerator waitforquestassets (int pageid,float timeout)
 	{
 		downloadmsg.text = "Downloading Quest Assets ... ? %";
@@ -632,6 +651,8 @@ public class questdatabase : MonoBehaviour
 				}
 	}
 
+=======
+>>>>>>> origin/master
 		public bool canPlayQuest (Quest q)
 		{
 
@@ -645,9 +666,9 @@ public class questdatabase : MonoBehaviour
 								qp.type != "VideoPlay" && 
 								qp.type != "TagScanner" && 
 								qp.type != "ImageCapture" && 
-								qp.type != "AudioRecord" && 
-								qp.type != "TextQuestion" && 
-								qp.type != "MapOSM") {
+			   					 qp.type != "AudioRecord" && 
+			    qp.type != "TextQuestion" && 
+			    qp.type != "MapOSM") {
 
 								playable = false;
 						}
@@ -737,14 +758,14 @@ public class questdatabase : MonoBehaviour
 								} else if (qp.type == "TextQuestion") {
 										Application.LoadLevel (7);
 								} else if (qp.type == "AudioRecord") {
-										Application.LoadLevel (8);
+									Application.LoadLevel (8);
 								} else if (qp.type == "MapOSM") {
-										Application.LoadLevel (9);
+									Application.LoadLevel (9);
 								}
 				
 				
 				
-						}
+			}
 		
 				}
 		
@@ -765,29 +786,29 @@ public class questdatabase : MonoBehaviour
 		
 		}
 
-		public QuestRuntimeHotspot getHotspot (string str)
-		{
+	public QuestRuntimeHotspot getHotspot (string str)
+	{
 
-				QuestRuntimeHotspot qh = null;
+		QuestRuntimeHotspot qh = null;
 	
-				foreach (QuestRuntimeHotspot qrh in hotspots) {
+		foreach (QuestRuntimeHotspot qrh in hotspots) {
 
 
 
-						if (qrh.hotspot.id == int.Parse (str)) {
+			if(qrh.hotspot.id == int.Parse(str)){
 
-								qh = qrh;
+				qh = qrh;
 
 
-						}
+			}
 
 
 
 				}
 
-				return qh;
+		return qh;
 
-		}
+	}
 
 		IEnumerator DownloadFinished (Quest q)
 		{
@@ -796,6 +817,7 @@ public class questdatabase : MonoBehaviour
 				localquests.Add (q);
 				yield return www;
 				if (www.error == null) {
+<<<<<<< HEAD
 
 
 
@@ -832,40 +854,45 @@ public class questdatabase : MonoBehaviour
 						} else {
 								//Debug.Log("WWW Finished");
 								downloadmsg.text = "Installing Quest...";
+=======
+						//Debug.Log("WWW Finished");
+						downloadmsg.text = "Installing Quest...";
+>>>>>>> origin/master
 
 	
-								string fileName = Application.temporaryCachePath + "/quest" + q.id + ".zip";
-								FileStream zip = File.Create (fileName);
-								zip.Write (www.bytes, 0, www.size);
+						string fileName = Application.temporaryCachePath + "/quest" + q.id + ".zip";
+						FileStream zip = File.Create (fileName);
+						zip.Write (www.bytes, 0, www.size);
 
-								zip.Close ();
-
-
-
-
-								string exportLocation = Application.persistentDataPath + "/quests/" + q.id + "/";
+						zip.Close ();
 
 
 
-								if (Directory.Exists (exportLocation)) {
 
-										#if UNITY_WEBPLAYER
+						string exportLocation = Application.persistentDataPath + "/quests/" + q.id + "/";
+
+
+
+						if (Directory.Exists (exportLocation)) {
+
+				#if UNITY_WEBPLAYER
 				
 				Debug.Log("cannot delete local files on web");
 
 				
-										# else 
-										Directory.Delete (exportLocation, true);
+				# else 
+								Directory.Delete (exportLocation, true);
 
 #endif
-								}
-								ZipUtil.Unzip (fileName, exportLocation);
+						}
+						ZipUtil.Unzip (fileName, exportLocation);
 
 
 
-								q.filepath = exportLocation;
+						q.filepath = exportLocation;
+						installQuest (q);
 
-
+<<<<<<< HEAD
 								bool b = false;
 				
 				
@@ -876,9 +903,10 @@ public class questdatabase : MonoBehaviour
 										}
 								}
 								installQuest (q, b,false);
+=======
+>>>>>>> origin/master
 
 
-						}
 			
 				} else {
 						Debug.Log ("WWW Error: " + www.error);
@@ -917,6 +945,8 @@ public class Quest  : IComparable<Quest>
 				hotspots;
 		public bool hasData = false;
 		public QuestPage currentpage;
+
+
 		public string xmlcontent;
 
 		public Quest ()
@@ -939,53 +969,59 @@ public class Quest  : IComparable<Quest>
 
 		}
 
+<<<<<<< HEAD
 		public  Quest LoadFromText (int id,bool redo)
+=======
+		public  Quest LoadFromText ()
+>>>>>>> origin/master
 		{
 	
 				string fp = filepath;
-				string xmlfilepath = filepath;
-				string xmlcontent_copy = xmlcontent;
-				if (filepath == null) {
-						xmlfilepath = " ";
+		string xmlfilepath = filepath;
+		string xmlcontent_copy = xmlcontent;
+		if (filepath == null) {
+			xmlfilepath = " ";
 
 				}
 
-				if (xmlcontent_copy == null) {
+		if (xmlcontent_copy == null) {
 
-						xmlcontent_copy = " ";
+			xmlcontent_copy = " ";
 				}
 
-				if (!xmlfilepath.EndsWith (".xml")) {
+		if (!xmlfilepath.EndsWith (".xml")) {
 						xmlfilepath = filepath + "game.xml";
 				}
 
 
-				Encoding enc = System.Text.Encoding.UTF8;
+		Encoding enc = System.Text.Encoding.UTF8;
 
 		
-				TextReader txr = new StringReader (xmlcontent_copy);
+		TextReader txr = new StringReader (xmlcontent_copy);
 
 
 
-				if (xmlfilepath != null && xmlfilepath.Length > 9) {
+		if (xmlfilepath != null && xmlfilepath.Length > 9) {
 
 
 
 
 
-						txr = new StreamReader (xmlfilepath, enc);
+			txr = new StreamReader(xmlfilepath, enc);
 
 				}
-				XmlSerializer serializer = new XmlSerializer (typeof(Quest));
+						XmlSerializer serializer = new XmlSerializer (typeof(Quest));
 
-				Quest q = serializer.Deserialize (txr) as Quest; 
+						Quest q = serializer.Deserialize (txr) as Quest; 
 	
-	
+				
+
 
 
 				q.filepath = fp;
 				q.hasData = true;
 	
+<<<<<<< HEAD
 				q.id = id;
 //		Debug.Log ("my id is " + id + " -> " + q.id);
 				q.deserializeAttributes (redo);
@@ -1003,17 +1039,28 @@ public class Quest  : IComparable<Quest>
 								qp.deserializeAttributes (id,redo);
 						}
 				} else {
+=======
+>>>>>>> origin/master
 
-						Debug.Log ("no pages");
+				foreach (QuestPage qp in q.pages) {
+						qp.deserializeAttributes ();
 				}
+<<<<<<< HEAD
 				if (hotspots != null) {
 
 						foreach (QuestHotspot qh in hotspots) {
 								qh.deserializeAttributes (id,redo);
 						}
+=======
+				foreach (QuestHotspot qh in q.hotspots) {
+						qh.deserializeAttributes ();
+>>>>>>> origin/master
 				}
 
+
+				return q;
 		}
+	
 	
 	
 }
@@ -1042,12 +1089,14 @@ public class QuestPage
 		[XmlElement("answer")]
 		public List<QuestContent>
 				contents_answers;
-		[XmlElement("question")]
-		public QuestContent
-				contents_question;
-		[XmlElement("answers")]
-		public List<QuestContent>
-				contents_answersgroup;
+	[XmlElement("question")]
+	public QuestContent
+		contents_question;
+
+	[XmlElement("answers")]
+	public List<QuestContent>
+		contents_answersgroup;
+
 		[XmlElement("onEnd")]
 		public QuestTrigger
 				onEnd;
@@ -1108,13 +1157,18 @@ public class QuestPage
 		
 		}
 	
+<<<<<<< HEAD
 	public void deserializeAttributes (int id,bool redo)
+=======
+		public void deserializeAttributes ()
+>>>>>>> origin/master
 		{
 
 				attributes = new List<QuestAttribute> ();
 
 				if (help_attributes != null) {
 						foreach (XmlAttribute xmla in help_attributes) {
+<<<<<<< HEAD
 
 
 
@@ -1158,6 +1212,10 @@ public class QuestPage
 
 								}	
 								
+=======
+			
+			
+>>>>>>> origin/master
 								attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 
 			
@@ -1166,6 +1224,7 @@ public class QuestPage
 
 
 				foreach (QuestContent qcdi in contents_dialogitems) {
+<<<<<<< HEAD
 						qcdi.deserializeAttributes (id,redo);
 				}
 
@@ -1178,6 +1237,20 @@ public class QuestPage
 				}
 				foreach (QuestContent qcdi in contents_answersgroup) {
 						qcdi.deserializeAttributes (id,redo);
+=======
+						qcdi.deserializeAttributes ();
+				}
+
+				foreach (QuestContent qcdi in contents_answers) {
+						qcdi.deserializeAttributes ();
+				}
+
+		if (contents_question != null) {
+						contents_question.deserializeAttributes ();
+				}
+				foreach (QuestContent qcdi in contents_answersgroup) {
+					qcdi.deserializeAttributes ();
+>>>>>>> origin/master
 				}
 
 
@@ -1185,32 +1258,56 @@ public class QuestPage
 			
 
 				foreach (QuestContent qcdi in contents_expectedcode) {
+<<<<<<< HEAD
 						qcdi.deserializeAttributes (id,redo);
+=======
+						qcdi.deserializeAttributes ();
+>>>>>>> origin/master
 				}
 
 				if (onEnd != null) {
 						foreach (QuestAction qa in onEnd.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 				if (onStart != null) {
 						foreach (QuestAction qa in onStart.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 				if (onTap != null) {
 						foreach (QuestAction qa in onTap.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 				if (onSuccess != null) {
 						foreach (QuestAction qa in onSuccess.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 				if (onFailure != null) {
 						foreach (QuestAction qa in onFailure.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 		}
@@ -1241,43 +1338,47 @@ public class QuestHotspot
 		[XmlElement("onTap")]
 		public QuestTrigger
 				onTap;
-
-		public string getAttribute (string k)
-		{
+	public string getAttribute (string k)
+	{
 		
-				foreach (QuestAttribute qa in attributes) {
+		foreach (QuestAttribute qa in attributes) {
 			
 			
-						if (qa.key.Equals (k)) {
-								return qa.value;
-						}
+			if (qa.key.Equals (k)) {
+				return qa.value;
+			}
 			
-				}
-		
-		
-				return "";
-		
 		}
+		
+		
+		return "";
+		
+	}
 	
-		public bool hasAttribute (string k)
-		{
+	public bool hasAttribute (string k)
+	{
 		
-				bool h = false;
-				foreach (QuestAttribute qa in attributes) {
+		bool h = false;
+		foreach (QuestAttribute qa in attributes) {
 			
 			
-						if (qa.key.Equals (k)) {
-								h = true;
-						}
+			if (qa.key.Equals (k)) {
+				h = true;
+			}
 			
-				}
+		}
 		
 		
-				return h;
+		return h;
 		
+<<<<<<< HEAD
 		}
 
 	public void deserializeAttributes (int id,bool redo)
+=======
+	}
+		public void deserializeAttributes ()
+>>>>>>> origin/master
 		{
 		
 				attributes = new List<QuestAttribute> ();
@@ -1285,6 +1386,7 @@ public class QuestHotspot
 				if (help_attributes != null) {
 						foreach (XmlAttribute xmla in help_attributes) {
 				
+<<<<<<< HEAD
 							if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
 								
 								
@@ -1324,6 +1426,9 @@ public class QuestHotspot
 								
 							}
 
+=======
+				
+>>>>>>> origin/master
 								attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 				
 				
@@ -1331,18 +1436,31 @@ public class QuestHotspot
 				}
 				if (onEnter != null) {
 						foreach (QuestAction qa in onEnter.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 				if (onLeave != null) {
 						foreach (QuestAction qa in onLeave.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
+=======
+								qa.deserializeAttributes ();
+>>>>>>> origin/master
 						}
 				}
 				if (onTap != null) {
 						foreach (QuestAction qa in onTap.actions) {
+<<<<<<< HEAD
 								qa.deserializeAttributes (id,redo);
 			}
+=======
+								qa.deserializeAttributes ();
+						}
+>>>>>>> origin/master
 				}
 		
 		
@@ -1366,12 +1484,15 @@ public class QuestContent
 		public XmlAttribute[]
 				help_attributes;
 		public List<QuestAttribute> attributes;
-		[XmlElement("questiontext")]
-		public QuestContent
-				questiontext;
-		[XmlElement("answer")]
-		public List<QuestContent>
-				answers;
+
+	[XmlElement("questiontext")]
+	public QuestContent questiontext;
+
+	[XmlElement("answer")]
+	public List<QuestContent> answers;
+
+
+
 
 		public string getAttribute (string k)
 		{
@@ -1384,6 +1505,7 @@ public class QuestContent
 				return "";
 		}
 
+<<<<<<< HEAD
 	public void deserializeAttributes (int id, bool redo)
 		{
 
@@ -1394,12 +1516,25 @@ public class QuestContent
 
 				if (questiontext != null) {
 						questiontext.deserializeAttributes (id,redo);
+=======
+		public void deserializeAttributes ()
+		{
+
+		foreach (QuestContent qcdi in answers) {
+			qcdi.deserializeAttributes ();
+		}
+
+
+		if (questiontext != null) {
+						questiontext.deserializeAttributes ();
+>>>>>>> origin/master
 				}
 		
 				attributes = new List<QuestAttribute> ();
 		
 				if (help_attributes != null) {
 						foreach (XmlAttribute xmla in help_attributes) {
+<<<<<<< HEAD
 
 
 
@@ -1442,6 +1577,9 @@ public class QuestContent
 									
 									
 								}
+=======
+				
+>>>>>>> origin/master
 				
 								attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 				
@@ -1493,8 +1631,7 @@ public class QuestAction
 
 
 		[XmlAttribute("type")]
-		public string
-				type;
+		public string type;
 		[XmlElement("value")]
 		public QuestVariableValue
 				value;
@@ -1529,34 +1666,35 @@ public class QuestAction
 		
 		}
 
-		public bool hasMissionAction ()
-		{
-
-				bool b = false;
 
 
+	public bool hasMissionAction(){
 
-				if (type == "StartMission") {
+		bool b = false;
+
+
+
+			if(type == "StartMission"){
+				b = true;
+			} else if(thenactions.Count > 0 || elseactions.Count > 0){
+
+
+				foreach(QuestAction qa in thenactions){
+					if(qa.hasMissionAction()){
 						b = true;
-				} else if (thenactions.Count > 0 || elseactions.Count > 0) {
-
-
-						foreach (QuestAction qa in thenactions) {
-								if (qa.hasMissionAction ()) {
-										b = true;
-								} 
-						}
-						foreach (QuestAction qa in elseactions) {
-								if (qa.hasMissionAction ()) {
-										b = true;
-								} 
-						}
-
+					} 
 				}
+				foreach(QuestAction qa in elseactions){
+					if(qa.hasMissionAction()){
+						b = true;
+					} 
+				}
+
+			}
 
 				
 
-				return b;
+		return b;
 		}
 
 		public bool hasAttribute (string k)
@@ -1615,7 +1753,11 @@ public class QuestAction
 		
 		}
 
+<<<<<<< HEAD
 	public void deserializeAttributes (int id, bool redo)
+=======
+		public void deserializeAttributes ()
+>>>>>>> origin/master
 		{
 
 				attributes = new List<QuestAttribute> ();
@@ -1623,6 +1765,7 @@ public class QuestAction
 				if (help_attributes != null) {
 						foreach (XmlAttribute xmla in help_attributes) {
 				
+<<<<<<< HEAD
 
 								if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
 									
@@ -1663,6 +1806,9 @@ public class QuestAction
 									
 								}
 
+=======
+				
+>>>>>>> origin/master
 								attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 				
 				
@@ -1672,12 +1818,21 @@ public class QuestAction
 
 
 				foreach (QuestAction qa in thenactions) {
+<<<<<<< HEAD
 			qa.deserializeAttributes (id,redo);
 		}
 
 				foreach (QuestAction qa in elseactions) {
 			qa.deserializeAttributes (id,redo);
 		}
+=======
+						qa.deserializeAttributes ();
+				}
+
+				foreach (QuestAction qa in elseactions) {
+						qa.deserializeAttributes ();
+				}
+>>>>>>> origin/master
 
 		}
 	
@@ -2009,40 +2164,40 @@ public class QuestConditionComparer
 						}
 
 
-				} else  if (type == "geq") {
+		} else  if (type == "geq") {
 			
 			
 			
 			
-						if (intcomponents ().Count > 1) {
+			if (intcomponents ().Count > 1) {
 				
-								bool greaterthan = true;
-								int last = int.MaxValue;
+				bool greaterthan = true;
+				int last = int.MaxValue;
 				
 				
-								foreach (int i in intcomponents()) {
+				foreach (int i in intcomponents()) {
 					
 					
-										if (last < i) {
-												greaterthan = false;
-										}
+					if (last < i) {
+						greaterthan = false;
+					}
 					
 					
 					
 					
-										last = i;
+					last = i;
 					
-								}
+				}
 				
 				
-								return greaterthan;
+				return greaterthan;
 				
 				
-						} else {
+			} else {
 				
-								return false;
+				return false;
 				
-						}
+			}
 			
 
 				
@@ -2200,51 +2355,49 @@ public class QuestTrigger
 
 		}
 
-		public bool hasMissionAction ()
-		{
+
+	public bool hasMissionAction(){
 		
-				bool b = false;
-				foreach (QuestAction a in actions) {
+		bool b = false;
+		foreach (QuestAction a in actions) {
 
 
-						if (a.hasMissionAction ()) {
+			if(a.hasMissionAction()){
 
-								b = true;
+				b = true;
 
-						}
-
-				}
-
-				return b;
+			}
 
 		}
+
+		return b;
+
+	}
 
 
 	
 }
 
 [System.Serializable]
-public class QuestRuntimeHotspot
-{
+public class QuestRuntimeHotspot{
 	
 	
-		public QuestHotspot hotspot;
-		public bool active;
-		public bool visible;
-		public float lon;
-		public float lat;
-		public MeshRenderer renderer;
-		public bool entered = false;
+	public QuestHotspot hotspot;
+	public bool active;
+	public bool visible;
+	public float lon;
+	public float lat;
+	public MeshRenderer renderer;
+	public bool entered = false;
 	
-		public QuestRuntimeHotspot (QuestHotspot hp, bool a, bool v, string ll)
-		{
+	public QuestRuntimeHotspot(QuestHotspot hp, bool a, bool v,string ll){
 		
-				hotspot = hp;
-				active = a;
-				visible = v;
+		hotspot = hp;
+		active = a;
+		visible = v;
 
 
-				if (ll.Contains (",")) {
+		if (ll.Contains (",")) {
 			
 			
 			
@@ -2272,14 +2425,14 @@ public class QuestRuntimeHotspot
 
 				} else {
 
-						lon = 0.0f;
-						lat = 0.0f;
+			lon = 0.0f;
+			lat = 0.0f;
 
 				}
 
 
 		
-		}
+	}
 	
 	
 	

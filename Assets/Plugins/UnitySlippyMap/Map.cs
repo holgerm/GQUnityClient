@@ -178,12 +178,10 @@ public class Map : MonoBehaviour
 				return ;
 			}
 
-				try{
 			double[] newCenterESPG900913 = wgs84ToEPSG900913Transform.Transform(value);
 
 			centerEPSG900913 = ComputeCenterEPSG900913(newCenterESPG900913);
 
-			
 			if (value[0] > 180.0)
 				value[0] -= 360.0;
 			else if (value[0] < -180.0)
@@ -193,13 +191,6 @@ public class Map : MonoBehaviour
 
 			FitVerticalBorder();
 			IsDirty = true;
-
-				}catch (IndexOutOfRangeException e){
-					
-					//					Debug.Log("can't compute degrees to meters");
-					
-				}
-
 		}
 	}
 	
