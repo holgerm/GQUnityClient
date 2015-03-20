@@ -321,6 +321,7 @@ public class MediaKitProcessor : MonoBehaviour {
 							path= s.Path;
 							
 						} 
+					#if UNITY_WEBPLAYER || UNITY_EDITOR
 						WWW www = new WWW(path);
 						yield return www;
 
@@ -336,14 +337,16 @@ public class MediaKitProcessor : MonoBehaviour {
 							s.Ready = true;
 						}
 				
-						#if UNITY_WEBPLAYER
-						string path = "StreamingAssets/" + s.Path;
 						
-						#endif		
+					s.InFile = new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
+					s.Initializing = false;
+					s.Ready = true;
 
-						s.InFile = new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
-						s.Initializing = false;
-						s.Ready = true;
+					#endif		
+
+
+				
+						
 
 					}
 					s.RefCount --;

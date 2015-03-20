@@ -75,7 +75,7 @@ public abstract class TileLayer : Layer
 		{
 			tileTemplate = Tile.CreateTileTemplate();
 			tileTemplate.hideFlags = HideFlags.HideAndDontSave;
-			tileTemplate.renderer.enabled = false;
+			tileTemplate.GetComponent<Renderer>().enabled = false;
 		}
 		++tileTemplateUseCount;
 	}
@@ -156,7 +156,7 @@ public abstract class TileLayer : Layer
 		if (!tiles.ContainsKey(key))
 			return true; // the tile is out of the frustum
 		Tile tile = tiles[key];
-		Renderer r = tile.renderer;
+		Renderer r = tile.GetComponent<Renderer>();
 		return r.enabled && r.material.mainTexture != null && !tile.Showing;
 	}
 
@@ -199,7 +199,7 @@ public abstract class TileLayer : Layer
 			int tileY = Int32.Parse(tileAddressTokens[2]);
 
 			int roundedZoomDif = tileRoundedZoom - roundedZoom;
-			bool inFrustum = GeometryUtility.TestPlanesAABB(frustum, tile.collider.bounds);
+			bool inFrustum = GeometryUtility.TestPlanesAABB(frustum, tile.GetComponent<Collider>().bounds);
 
 			if (!inFrustum || roundedZoomDif != 0)
 			{
@@ -218,7 +218,7 @@ public abstract class TileLayer : Layer
 		{
 			Tile tile = tiles[tileAddress];
 
-			Renderer renderer = tile.renderer;
+			Renderer renderer = tile.GetComponent<Renderer>();
 			if (renderer != null)
 			{
 				GameObject.DestroyImmediate(renderer.material.mainTexture);
@@ -257,7 +257,7 @@ public abstract class TileLayer : Layer
 	void GrowTiles(Plane[] frustum, int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
 	{
 		tileTemplate.transform.position = new Vector3(offsetX, tileTemplate.transform.position.y, offsetZ);
-		if (GeometryUtility.TestPlanesAABB(frustum, tileTemplate.collider.bounds) == true)
+		if (GeometryUtility.TestPlanesAABB(frustum, tileTemplate.GetComponent<Collider>().bounds) == true)
 		{
 			if (tileX < 0)
 				tileX += tileCountOnX;

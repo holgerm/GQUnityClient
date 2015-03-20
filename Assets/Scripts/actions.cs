@@ -511,7 +511,7 @@ public class actions : MonoBehaviour
 
 						if(x2 == "score"){
 
-
+							k+= score.ToString();
 
 						} else 
 						if(getVariable(x2) != null){

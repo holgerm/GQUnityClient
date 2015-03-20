@@ -67,13 +67,33 @@ public class page_npctalk : MonoBehaviour {
 		savedtickertime = tickertime;
 
 		if (npctalk.getAttribute ("image") != "") {
-						if (npctalk.getAttribute ("image").StartsWith ("@_")) {
-			
-			
-								www = new WWW (pre + "" + questactions.getVariable (npctalk.getAttribute ("image")).string_value [0]);
-			
-			
-						} else {
+			if (npctalk.getAttribute ("image").StartsWith ("@_")) {
+				
+				
+
+
+				foreach(QuestRuntimeAsset qra in	questactions.photos){
+					
+					
+					
+					if(qra.key == npctalk.getAttribute ("image")){
+						
+						
+						Sprite s =  Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
+						
+
+							image.sprite = s;
+							image.enabled = true;
+							
+
+					}
+				}
+				
+				
+				
+				
+				
+			} else {
 		
 
 
@@ -173,10 +193,17 @@ public class page_npctalk : MonoBehaviour {
 						} else {
 
 					if (npctalk.contents_dialogitems [dialogitem_state-1].getAttribute ("blocking") == "true") {
-										if (!questactions.npcaudio.GetComponent<AudioSource> ().isPlaying) {
+
+
+						if(questactions.npcaudio != null){
+						if (questactions.npcaudio.GetComponent<AudioSource> () != null && !questactions.npcaudio.GetComponent<AudioSource> ().isPlaying) {
 
 												nextbutton.interactable = true;
 										}
+
+						}
+
+
 								} else {
 										nextbutton.interactable = true;
 

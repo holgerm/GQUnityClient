@@ -255,11 +255,11 @@ public class Tile : MonoBehaviour
 		};
 		*/
 		
-		material = this.gameObject.renderer.material;
+		material = this.gameObject.GetComponent<Renderer>().material;
 		material.mainTexture = texture;
 		material.mainTexture.wrapMode = TextureWrapMode.Clamp;
 		material.mainTexture.filterMode = FilterMode.Trilinear;
-		this.renderer.enabled = true;
+		this.GetComponent<Renderer>().enabled = true;
 		this.Show();
 	}
 

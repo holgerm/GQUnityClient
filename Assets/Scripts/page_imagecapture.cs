@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_ANDROID
 
+using CameraShot;
+#endif
 using System.Collections;
 using System.IO;
 public class page_imagecapture : MonoBehaviour {
@@ -27,6 +30,20 @@ public class page_imagecapture : MonoBehaviour {
 	GameObject plane;
 	
 
+	void Awake(){
+
+		
+		#if UNITY_ANDROID
+		CameraShotEventListener.onImageLoad += OnImageLoad;
+		CameraShotEventListener.onError += OnError;
+		CameraShotEventListener.onFailed += OnFailed;
+		CameraShotEventListener.onCancel += OnCancel;
+		
+		AndroidCameraShot.LaunchCameraForImageCapture();
+		
+#endif
+
+	}
 	
 	// Use this for initialization
 	IEnumerator Start()
@@ -53,7 +70,10 @@ public class page_imagecapture : MonoBehaviour {
 			textbg.enabled = false;
 			
 		}
-		
+
+
+
+
 		// get render target;
 		plane = GameObject.Find("Plane");
 		cameraMat = plane.GetComponent<MeshRenderer>().material;
@@ -75,12 +95,62 @@ public class page_imagecapture : MonoBehaviour {
 		cameraMat.mainTexture = cameraTexture;
 		
 
-		
 	}
-	
-	
 
 
+	#if UNITY_ANDROID
+
+
+	void OnImageLoad(string imgPath, Texture2D tex)
+	{
+		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), tex);
+		
+		actioncontroller.photos.Add (qra);
+		
+		cameraMat.mainTexture = tex;
+		
+		StartCoroutine(onEnd ());
+
+	}
+
+	void OnError(string errorMsg)
+	{
+		Debug.Log ("Error : "+errorMsg);
+		//AndroidCameraShot.LaunchCameraForImageCapture();
+		text.text = errorMsg;
+	}
+	void OnFailed()
+	{
+		Debug.Log ("Failed");
+		//AndroidCameraShot.LaunchCameraForImageCapture();
+		text.text = "Failed";
+	}
+	void OnCancel()
+	{
+		Debug.Log ("Error");
+		AndroidCameraShot.LaunchCameraForImageCapture();
+	}
+
+	
+	IEnumerator waitForAndroidPhoto(WWW www){
+
+		yield return www;
+		if (www.error == null) {
+
+
+			Texture2D t2 = www.texture as Texture2D;
+
+		
+
+
+				}
+
+
+
+
+		}
+
+#endif
 
 	public void TakeSnapshot()
 	{
@@ -138,6 +208,15 @@ public class page_imagecapture : MonoBehaviour {
 
 	
 	IEnumerator onEnd(){
+
+
+		#if UNITY_ANDROID
+
+		CameraShotEventListener.onImageLoad -= OnImageLoad;
+		CameraShotEventListener.onError -= OnError;
+		CameraShotEventListener.onFailed -= OnFailed;
+		CameraShotEventListener.onCancel -= OnCancel;
+#endif
 
 		yield return new WaitForSeconds (1f);
 			imagecapture.state = "succeeded";

@@ -10,7 +10,7 @@ public class MeshVideoRenderer : MonoBehaviour {
 
 	void Start()
 	{
-		renderer_ = renderer;
+		renderer_ = GetComponent<Renderer>();
 		meshFilter_ = GetComponent<MeshFilter>();
 	}
 

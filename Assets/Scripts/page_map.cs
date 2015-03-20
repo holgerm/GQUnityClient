@@ -258,8 +258,8 @@ public class page_map : MonoBehaviour
 
 		// create the location marker
 		var posi = Tile.CreateTileTemplate ().gameObject;
-		posi.renderer.material.mainTexture = LocationTexture;
-		posi.renderer.material.renderQueue = 4000;
+		posi.GetComponent<Renderer>().material.mainTexture = LocationTexture;
+		posi.GetComponent<Renderer>().material.renderQueue = 4000;
 		posi.transform.localScale /= 8.0f;
 		
 		GameObject markerPosi = Instantiate(posi) as GameObject;
@@ -268,7 +268,7 @@ public class page_map : MonoBehaviour
 		location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
 
 
-		location.gameObject.AddComponent ("locationcontrol");
+		location.gameObject.AddComponent <locationcontrol>();
 		locationcontrol lc = location.GetComponent<locationcontrol> ();
 		lc.mapcontroller = this;
 		lc.map = map;
@@ -347,13 +347,13 @@ public class page_map : MonoBehaviour
 			GameObject go = Tile.CreateTileTemplate(Tile.AnchorPoint.BottomCenter).gameObject;
 			
 		
-			go.renderer.material.mainTexture = www.texture;
-			go.renderer.material.renderQueue = 4001;
+			go.GetComponent<Renderer>().material.mainTexture = www.texture;
+			go.GetComponent<Renderer>().material.renderQueue = 4001;
 
 
 
-			int height = go.renderer.material.mainTexture.height;
-			int width = go.renderer.material.mainTexture.width;
+			int height = go.GetComponent<Renderer>().material.mainTexture.height;
+			int width = go.GetComponent<Renderer>().material.mainTexture.width;
 			
 
 			if(height > width){
@@ -370,12 +370,12 @@ public class page_map : MonoBehaviour
 			go.transform.localScale /= 7.0f;
 
 		
-			go.AddComponent("onTapMarker");
+			go.AddComponent<onTapMarker>();
 			go.GetComponent<onTapMarker>().hotspot = qrh;
 
 
 
-			go.AddComponent("circletests");
+			go.AddComponent<circletests>();
 	
 			if(qrh.hotspot.hasAttribute("radius")){
 				go.GetComponent<circletests>().radius = int.Parse(qrh.hotspot.getAttribute("radius"));

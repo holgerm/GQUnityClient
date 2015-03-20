@@ -26,7 +26,7 @@ public class AudioTransmitter: MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// just cashed it.
-		audio_ = audio;
+		audio_ = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame

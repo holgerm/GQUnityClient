@@ -32,8 +32,11 @@ public class questdatabase : MonoBehaviour
 		public List<String> loadedfiles;
 		public string webxml;
 
+	ScreenOrientation originalOrientation = ScreenOrientation.Portrait;
+
 		void Start ()
 		{
+		//AllowAutoRotation (false);
 
 
 				if (GameObject.Find ("QuestDatabase") != gameObject) {
@@ -437,6 +440,35 @@ public class questdatabase : MonoBehaviour
 
 		}
 
+
+	public void AllowAutoRotation( bool status )
+	{
+		if ( status == true)
+		{
+			Screen.autorotateToLandscapeLeft = true;
+			Screen.autorotateToLandscapeRight = true;
+			originalOrientation = Screen.orientation;
+			Screen.orientation = ScreenOrientation.AutoRotation;
+		}
+		else
+		{
+
+			Debug.Log("rotatin' 1");
+			if(originalOrientation != null){
+				Debug.Log("rotatin' 1.5");
+
+				Screen.orientation = originalOrientation;
+			}
+			Debug.Log("rotatin' 2");
+
+			Screen.autorotateToLandscapeLeft = false;
+			Screen.autorotateToLandscapeRight = false;
+			Debug.Log("rotatin' 3");
+
+
+		}
+	}
+
 		public void installQuest (Quest q, bool reload, bool localload)
 		{
 
@@ -585,7 +617,7 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator waitforquestassets (int pageid,float timeout)
 	{
-		downloadmsg.text = "Downloading Quest Assets ... ? %";
+		//downloadmsg.text = "Downloading Quest Assets ... 0 %";
 
 
 		timeout += 0.5f;
@@ -613,6 +645,7 @@ public class questdatabase : MonoBehaviour
 			percent = 100-(downloadsundone*100/filedownloads.Count);
 
 		}
+		Debug.Log ("percent done: "+percent);
 
 						downloadmsg.text = "Downloading Quest Assets ... " + percent + " %";
 
@@ -644,6 +677,9 @@ public class questdatabase : MonoBehaviour
 								qp.type != "TextQuestion" && 
 								qp.type != "MapOSM") {
 
+
+
+				Debug.Log("Can't play because it includes mission of type "+qp.type);
 								playable = false;
 						}
 
@@ -854,7 +890,7 @@ public class questdatabase : MonoBehaviour
 
 #endif
 								}
-								ZipUtil.Unzip (fileName, exportLocation);
+							//	ZipUtil.Unzip (fileName, exportLocation);
 
 
 
