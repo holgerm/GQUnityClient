@@ -32,6 +32,9 @@ public class questdatabase : MonoBehaviour
 		public List<String> loadedfiles;
 		public string webxml;
 
+
+	public bool fixedposition = true;
+
 	ScreenOrientation originalOrientation = ScreenOrientation.Portrait;
 
 		void Start ()

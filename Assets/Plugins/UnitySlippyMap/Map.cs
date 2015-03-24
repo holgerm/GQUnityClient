@@ -483,6 +483,10 @@ public class Map : MonoBehaviour
 		set 
 		{
 			cameraFollowsOrientation = value;
+
+				if(!value){
+				currentCamera.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+				}
 			lastCameraOrientation = 0.0f;
 		}
 	}

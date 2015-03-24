@@ -151,7 +151,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: version 0.1.R
+  m_Text: version 0.1.S
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -934,7 +934,7 @@ MonoBehaviour:
   filteredOfflineList: []
   header: {fileID: 339095130}
   sortbyname: 0
-  portal_id: 1
+  portal_id: 141
   namefilter: 
 --- !u!1 &950268821
 GameObject:
@@ -1849,7 +1849,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: version 0.1.R
+  m_Text: version 0.1.S
 --- !u!222 &1583482457
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1930,7 +1930,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2195,6 +2195,7 @@ MonoBehaviour:
   webloadingmessage: {fileID: 238289913}
   loadedfiles: []
   webxml: 
+  fixedposition: 1
 --- !u!4 &1756337059
 Transform:
   m_ObjectHideFlags: 0

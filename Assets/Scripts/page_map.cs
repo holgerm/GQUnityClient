@@ -109,7 +109,11 @@ public class page_map : MonoBehaviour
 				}
 
 		map.UseLocation = true;
-		map.UpdateCenterWithLocation = true;
+
+
+
+
+		map.UpdateCenterWithLocation = questdb.fixedposition;
 	
 		map.UseOrientation = true;
 		map.CameraFollowsOrientation = true;
@@ -455,7 +459,22 @@ public class page_map : MonoBehaviour
 
 	public void setFixedPosition(bool b){
 
+
+
+
+		if (b == false) {
+						map.CameraFollowsOrientation = false;
+			map.CenterWGS84 = new double[]{8.403653,49.006890};
+			
+						map.CurrentZoom = 14.0f;
+			map.Zoom(1.0f);
+				} else {
+
+			map.CameraFollowsOrientation = true;
+
+		}
 		fixedonposition = b;
+				
 
 		}
 
@@ -470,11 +489,10 @@ public class page_map : MonoBehaviour
 
 if (fixedonposition) {
 
-			map.CenterWGS84 = gpsdata.CoordinatesWGS84;
+						map.CenterWGS84 = gpsdata.CoordinatesWGS84;
 
 
-
-				}
+				} 
 
 
 
