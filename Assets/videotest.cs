@@ -16,14 +16,6 @@ public class videotest : MonoBehaviour
 		string dpath = "testvideo.mp4";
 		StartCoroutine(PlayStreamingVideo(dpath));
 
-
-
-
-		if (System.IO.File.Exists (dpath))
-			Debug.LogWarning ("File exists");
-		else
-			Debug.LogWarning ("File Not found");
-
 		Handheld.PlayFullScreenMovie (dpath);
 
 #endif                      
