@@ -5,13 +5,12 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.IO;
 
-public class page_npctalk : MonoBehaviour {
+public class page_npctalk : MonoBehaviour
+{
 
 	
 	
 	private WWW www;
-	
-
 	public questdatabase questdb;
 	public Quest quest;
 	public QuestPage npctalk;
@@ -21,21 +20,13 @@ public class page_npctalk : MonoBehaviour {
 	public Text text;
 	public Button nextbutton;
 	public Text buttontext;
-
-
-
 	public int dialogitem_state = 0;
-
-
-
 	public string texttoticker;
-
 	public float tickertime;
-
 	private float savedtickertime;
 
-
-	void Start () { 
+	void Start ()
+	{ 
 
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
@@ -45,9 +36,9 @@ public class page_npctalk : MonoBehaviour {
 
 		string pre = "file: /";
 
-		if(npctalk.onStart != null){
+		if (npctalk.onStart != null) {
 			
-			npctalk.onStart.Invoke();
+			npctalk.onStart.Invoke ();
 		}
 
 
@@ -57,14 +48,14 @@ public class page_npctalk : MonoBehaviour {
 		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
 
 			pre = "file:";
-				}
+		}
 
 
 		if (npctalk.getAttribute ("tickerspeed").Length > 0) {
 
-			tickertime = float.Parse(npctalk.getAttribute ("tickerspeed"))/1000;
+			tickertime = float.Parse (npctalk.getAttribute ("tickerspeed")) / 1000;
 
-				}
+		}
 		savedtickertime = tickertime;
 
 		if (npctalk.getAttribute ("image") != "") {
@@ -73,20 +64,20 @@ public class page_npctalk : MonoBehaviour {
 				
 
 
-				foreach(QuestRuntimeAsset qra in	questactions.photos){
+				foreach (QuestRuntimeAsset qra in	questactions.photos) {
 					
 					
 					
-					if(qra.key == npctalk.getAttribute ("image")){
+					if (qra.key == npctalk.getAttribute ("image")) {
 						
 						
-						Sprite s =  Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
+						Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
 						
 
 							
 							
-						Debug.Log(qra.texture.height+","+qra.texture.width);
-						if(qra.texture.height > qra.texture.width){
+						Debug.Log (qra.texture.height + "," + qra.texture.width);
+						if (qra.texture.height > qra.texture.width) {
 
 							image_hochkant.sprite = s;
 							image_hochkant.enabled = true;
@@ -113,31 +104,31 @@ public class page_npctalk : MonoBehaviour {
 
 
 
-								string url = npctalk.getAttribute ("image");
-								if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-										url = pre + "" + npctalk.getAttribute ("image");
-								}
-			
-				Debug.Log ("myfile:"+url+" ("+npctalk.getAttribute ("image")+")");
-
-
-								if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
-										Debug.Log ("webimage");
-
-										www = new WWW (url);
-										StartCoroutine (waitforImage ());
-
-
-								} else if (File.Exists (npctalk.getAttribute ("image"))) {
-
-										Debug.Log("File Exists");
-										www = new WWW (url);
-										StartCoroutine (waitforImage ());
-								}
-
-						}
-
+				string url = npctalk.getAttribute ("image");
+				if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
+					url = pre + "" + npctalk.getAttribute ("image");
 				}
+			
+				Debug.Log ("myfile:" + url + " (" + npctalk.getAttribute ("image") + ")");
+
+
+				if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
+					Debug.Log ("webimage");
+
+					www = new WWW (url);
+					StartCoroutine (waitforImage ());
+
+
+				} else if (File.Exists (npctalk.getAttribute ("image"))) {
+
+					Debug.Log ("File Exists");
+					www = new WWW (url);
+					StartCoroutine (waitforImage ());
+				}
+
+			}
+
+		}
 
 //		Debug.Log ("after npc talk image");
 		text.text = "";
@@ -145,7 +136,7 @@ public class page_npctalk : MonoBehaviour {
 
 	
 
-		string resultString = Regex.Match(npctalk.getAttribute("textsize"), @"\d+").Value;
+		string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
 		int size = int.Parse (resultString);
 		text.fontSize = size * 3;
 
@@ -153,20 +144,20 @@ public class page_npctalk : MonoBehaviour {
 
 
 		if (npctalk.hasAttribute ("text")) {
-			text.text += npctalk.getAttribute("text");
+			text.text += npctalk.getAttribute ("text");
 			nextbutton.interactable = true;
 			buttontext.text = npctalk.getAttribute ("endbuttontext");
 
 
-				} else {
-						nextdialogitem ();
-				}
+		} else {
+			nextdialogitem ();
+		}
 
 
 	}
 
-
-	void Update(){
+	void Update ()
+	{
 		
 		
 		
@@ -174,7 +165,7 @@ public class page_npctalk : MonoBehaviour {
 
 
 
-			if(npctalk.getAttribute("skipwordticker") == "true" && Input.GetMouseButtonDown(0)){
+			if (npctalk.getAttribute ("skipwordticker") == "true" && Input.GetMouseButtonDown (0)) {
 
 
 				tickertime = savedtickertime;
@@ -185,131 +176,133 @@ public class page_npctalk : MonoBehaviour {
 			} else {
 			
 			
-						if (tickertime > 0f) {
+				if (tickertime > 0f) {
 
-								tickertime -= Time.deltaTime;
-						} else if (texttoticker.Length > 0) {
-
-
-
-								tickertime = savedtickertime;
-								char[] tickeringtext = texttoticker.ToCharArray ();
-								text.text += tickeringtext [0];
+					tickertime -= Time.deltaTime;
+				} else if (texttoticker.Length > 0) {
 
 
-								if (tickeringtext.Length > 0) {
-										texttoticker = new string (tickeringtext, 1, tickeringtext.Length - 1);
+
+					tickertime = savedtickertime;
+					char[] tickeringtext = texttoticker.ToCharArray ();
+					text.text += tickeringtext [0];
+
+
+					if (tickeringtext.Length > 0) {
+						texttoticker = new string (tickeringtext, 1, tickeringtext.Length - 1);
 			
-								}
+					}
 
 
 
 				
-						} else {
+				} else {
 
-					if (npctalk.contents_dialogitems [dialogitem_state-1].getAttribute ("blocking") == "true") {
-
-
-						if(questactions.npcaudio != null){
-						if (questactions.npcaudio.GetComponent<AudioSource> () != null && !questactions.npcaudio.GetComponent<AudioSource> ().isPlaying) {
-
-												nextbutton.interactable = true;
-										}
-
-						}
+					if (npctalk.contents_dialogitems [dialogitem_state - 1].getAttribute ("blocking") == "true") {
 
 
-								} else {
-										nextbutton.interactable = true;
+						if (questactions.npcaudio != null) {
+							if (questactions.npcaudio.GetComponent<AudioSource> () != null && !questactions.npcaudio.GetComponent<AudioSource> ().isPlaying) {
 
-								}
-
-								texttoticker = null;
+								nextbutton.interactable = true;
+							}
 
 						}
+
+
+					} else {
+						nextbutton.interactable = true;
+
+					}
+
+					texttoticker = null;
+
+				}
 
 			
 			}
 			
 			
-				} else {
+		} else {
 
 
 			//Debug.Log(dialogitem_state-1);
 
-			if(questactions.npcaudio != null){
+			if (questactions.npcaudio != null) {
 
-			if((npctalk.contents_dialogitems [dialogitem_state-1].getAttribute ("blocking") == "true" && !questactions.npcaudio.GetComponent<AudioSource>().isPlaying)){
-								nextbutton.interactable = true;
-			}
+				if ((npctalk.contents_dialogitems [dialogitem_state - 1].getAttribute ("blocking") == "true" && !questactions.npcaudio.GetComponent<AudioSource> ().isPlaying)) {
+					nextbutton.interactable = true;
+				}
 			} else {
 
 				nextbutton.interactable = true;
 
 			}
 
-				}
+		}
 		
 		
 	}
 
-	void nextdialogitem(){
+	void nextdialogitem ()
+	{
 //		Debug.Log ("nextdialogitem()");
 
 		if (npctalk.contents_dialogitems.Count > 0) {
 
-						if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("sound") != "") {
+			if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("sound") != "") {
 
 
-								questdb.GetComponent<actions> ().PlayNPCAudio (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("sound"));
+				questdb.GetComponent<actions> ().PlayNPCAudio (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("sound"));
 
 
-						}
+			}
 
 
-						if (npctalk.getAttribute ("mode") == "Wordticker") {
+			if (npctalk.getAttribute ("mode") == "Wordticker") {
 
-				if(npctalk.contents_dialogitems [dialogitem_state].getAttribute("speaker").Length > 0){
+				if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker").Length > 0) {
 
-					text.text += "<b>"+npctalk.contents_dialogitems [dialogitem_state].getAttribute("speaker")+"</b>: ";
+					text.text += "<b>" + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker") + "</b>: ";
 				}
 
-								texttoticker = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
-								nextbutton.interactable = false;
+				texttoticker = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
+				nextbutton.interactable = false;
 
-						} else {
+			} else {
 
-				if(npctalk.contents_dialogitems [dialogitem_state].getAttribute("speaker").Length > 0){
+				if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker").Length > 0) {
 					
-					text.text += "<b>"+npctalk.contents_dialogitems [dialogitem_state].getAttribute("speaker")+"</b>: ";
+					text.text += "<b>" + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker") + "</b>: ";
 				}
 				text.text += questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
 								
 
 
-				questdb.debug("Dialog Item is Blocking? -> "+npctalk.contents_dialogitems [dialogitem_state].getAttribute ("blocking"));
+				questdb.debug ("Dialog Item is Blocking? -> " + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("blocking"));
 
-				if(npctalk.contents_dialogitems [dialogitem_state].getAttribute("blocking") != "true"){
-				nextbutton.interactable = true;
+				if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("blocking") != "true") {
+					nextbutton.interactable = true;
 				}
-						}
-						dialogitem_state++;
+			}
+			dialogitem_state++;
 
-						if (npctalk.contents_dialogitems.Count == dialogitem_state) {
-								buttontext.text = npctalk.getAttribute ("endbuttontext");
+			if (npctalk.contents_dialogitems.Count == dialogitem_state) {
+				buttontext.text = npctalk.getAttribute ("endbuttontext");
 			
-						} else {
-								buttontext.text = npctalk.getAttribute ("nextdialogbuttontext");
-						}
+			} else {
+				buttontext.text = npctalk.getAttribute ("nextdialogbuttontext");
+			}
 
-				} else {
+		} else {
 
-					buttontext.text = npctalk.getAttribute ("endbuttontext");
+			buttontext.text = npctalk.getAttribute ("endbuttontext");
 
-				}
+		}
 	}
 	
-	IEnumerator waitforImage(){
+	IEnumerator waitforImage ()
+	{
 		
 		yield return www;
 
@@ -317,8 +310,8 @@ public class page_npctalk : MonoBehaviour {
 			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 		
 		
-			Debug.Log(www.texture.height+","+www.texture.width);
-			if(www.texture.height > www.texture.width){
+			Debug.Log (www.texture.height + "," + www.texture.width);
+			if (www.texture.height > www.texture.width) {
 				
 				image_hochkant.sprite = s;
 				image_hochkant.enabled = true;
@@ -340,50 +333,48 @@ public class page_npctalk : MonoBehaviour {
 		
 		
 		} else {
-			Debug.Log(www.error);
+			Debug.Log (www.error);
 
 			image.enabled = false;
 		}
 		
 	}
 
-
-
-
-	public void nextButton(){
+	public void nextButton ()
+	{
 
 
 //		Debug.Log ("nextButton()");
 		if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 
-						onEnd ();
+			onEnd ();
 
-				} else {
+		} else {
 
 						
-			nextdialogitem();
-
-				}
-
-
-
+			nextdialogitem ();
 
 		}
 
 
-	public void onEnd(){
+
+
+	}
+
+	public void onEnd ()
+	{
 
 		npctalk.state = "succeeded";
 
 		if (npctalk.onEnd != null && npctalk.onEnd.actions != null && npctalk.onEnd.actions.Count > 0) {
 
-						npctalk.onEnd.Invoke ();
+			npctalk.onEnd.Invoke ();
 
-				} else {
+		} else {
 			//Debug.Log ("ending");
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest();
+			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
 
-				}
+		}
 
 
 	}
