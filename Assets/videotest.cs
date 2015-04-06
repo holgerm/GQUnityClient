@@ -16,8 +16,6 @@ public class videotest : MonoBehaviour
 		string dpath = "testvideo.mp4";
 		StartCoroutine(PlayStreamingVideo(dpath));
 
-		Handheld.PlayFullScreenMovie (dpath);
-
 #endif                      
 	
 
@@ -25,12 +23,9 @@ public class videotest : MonoBehaviour
 	
 	private IEnumerator PlayStreamingVideo(string url)
 	{
-		Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
-//		yield return new WaitForEndOfFrame();
-//		yield return new WaitForEndOfFrame();
+//		Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
 		yield return new WaitForSeconds(1.0f);
 		Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
-		//		Debug.Log("Video playback completed.");
 	}
 
 
