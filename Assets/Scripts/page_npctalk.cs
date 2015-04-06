@@ -17,6 +17,7 @@ public class page_npctalk : MonoBehaviour {
 	public QuestPage npctalk;
 	public actions 	questactions;
 	public Image image;
+	public Image image_hochkant;
 	public Text text;
 	public Button nextbutton;
 	public Text buttontext;
@@ -82,9 +83,23 @@ public class page_npctalk : MonoBehaviour {
 						Sprite s =  Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
 						
 
+							
+							
+						Debug.Log(qra.texture.height+","+qra.texture.width);
+						if(qra.texture.height > qra.texture.width){
+
+							image_hochkant.sprite = s;
+							image_hochkant.enabled = true;
+							image.enabled = false;
+
+
+						} else {
+
 							image.sprite = s;
 							image.enabled = true;
-							
+
+
+						}
 
 					}
 				}
@@ -299,7 +314,31 @@ public class page_npctalk : MonoBehaviour {
 		yield return www;
 
 		if (www.error == null) {
-			image.sprite = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
+			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
+		
+		
+			Debug.Log(www.texture.height+","+www.texture.width);
+			if(www.texture.height > www.texture.width){
+				
+				image_hochkant.sprite = s;
+				image_hochkant.enabled = true;
+				image.enabled = false;
+				
+				
+			} else {
+				
+				image.sprite = s;
+				image.enabled = true;
+				
+				
+			}
+		
+		
+		
+		
+		
+		
+		
 		} else {
 			Debug.Log(www.error);
 

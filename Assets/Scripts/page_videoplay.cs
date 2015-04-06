@@ -2,73 +2,94 @@
 using System.Collections;
 using System.IO;
 
-public class page_videoplay : MonoBehaviour
-{
+public class page_videoplay : MonoBehaviour {
 	
 	
 	private WWW www;
+	
+	
 	public questdatabase questdb;
 	public Quest quest;
 	public QuestPage npctalk;
 	public YoutubeVideo youtube;
 	private bool videoplayed = false;
 	// Use this for initialization
-	void Start ()
-	{
+	void Start () {
 
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		npctalk = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+				questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+				quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+				npctalk = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 
-		string pre = "file: /";
+		string pre = "file:";
 
-		
-		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-			
-			pre = "file:";
-		}
-		
+
+		#if !UNITY_WEBPLAYER
+
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 
 		
 		
-		if (npctalk.onStart != null) {
+				if (npctalk.onStart != null) {
 			
-			npctalk.onStart.Invoke ();
-		}
+						npctalk.onStart.Invoke ();
+				}
 
 
 
-		string url = npctalk.getAttribute ("file");
+				string url = npctalk.getAttribute ("file");
 
-		if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-
-
-
-
-			if (File.Exists (npctalk.getAttribute ("file"))) {
-				url = npctalk.getAttribute ("file");
-
-
-				//TODO: put into Streaming Assets -> iOS: Application.dataPath + "/Raw" + "/"+filename
-				// Android: Application.dataPath + "!/assets/" 
+				if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
 
 
 
+			if(Application.platform != RuntimePlatform.Android){
 
-				#if !UNITY_WEBPLAYER
+			url = url.Replace("@streamingassets@",Application.streamingAssetsPath+"/");
 
 
-				StartCoroutine (youtube.LoadVideo (url));
 
-				#endif
-				
+				url = 	"file:/"+url;
+
 			} else {
 
-				Debug.Log ("file doesn't exist");
+				url = url.Replace("@streamingassets@","");
 
+				
 			}
-		}
+			 
+
+			//	url = "file://"+Application.streamingAssetsPath+"/1_Code_7_-_Trailer_(1080p).mp4";
+
+				Debug.Log("video url:"+url);
+
+				StartCoroutine(PlayStreamingVideo(url));
+
+
+
+
+
+								
+				
+				} else {
+
+
+			// YOUTUBE OR URL
+
+
+			/*
+
+			#if !UNITY_WEBPLAYER
+			
+			
+			StartCoroutine (youtube.LoadVideo (url));
+			
+			#endif
+
+
+			*/
+
+
+				}
 
 
 		/*
@@ -97,47 +118,67 @@ public class page_videoplay : MonoBehaviour
 
 
 		
+#else
+
+
+		questdb.Debug("Video Playback can't be simulated in web-preview right now");
+
+		StartCoroutine(onEnd());
+
+
+#endif
 
 
 
 
+		}
 
+
+
+	private IEnumerator PlayStreamingVideo(string url)
+	{
+		//        Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
+		yield return new WaitForSeconds(1.0f);
+		Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
+		StartCoroutine(onEnd ());
 	}
 
-	void Update ()
-	{
+	void Update(){
 
 
 		if (videoplayed) {
 
 
-			StartCoroutine (onEnd ());
+			StartCoroutine(onEnd());
 
-		}
+				}
 
 	}
+	
 		
-	public void playMovie (string x)
-	{
+	public void playMovie(string x){
 
-		StartCoroutine (playMovieFullscreen (x));
+		StartCoroutine(playMovieFullscreen (x));
 		//onEnd();
 		videoplayed = true;
 		
 	}
 
-	public IEnumerator playMovieFullscreen (string x)
-	{
+
+	public IEnumerator playMovieFullscreen (string x){
 
 #if !UNITY_WEBPLAYER
-		yield return new WaitForSeconds(1.0f);
-		Handheld.PlayFullScreenMovie (x, Color.black, FullScreenMovieControlMode.Full);
+		Handheld.PlayFullScreenMovie(x,Color.black,FullScreenMovieControlMode.Full);
 #endif
 		yield return 0;
 	}
 
-	public IEnumerator onEnd ()
-	{
+
+
+
+	public IEnumerator onEnd(){
 		yield return new WaitForSeconds (0.1f);
 		Screen.orientation = ScreenOrientation.Portrait;
 		yield return new WaitForSeconds (0.1f);
@@ -152,7 +193,7 @@ public class page_videoplay : MonoBehaviour
 			npctalk.onEnd.Invoke ();
 		} else {
 			
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
+			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest();
 			
 		}
 

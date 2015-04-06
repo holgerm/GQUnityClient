@@ -10,6 +10,7 @@ GameObject:
   - 224: {fileID: 22425730}
   - 222: {fileID: 22225730}
   - 114: {fileID: 11425728}
+  - 114: {fileID: 11429004}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -90,8 +91,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5202c5e49c05144a0881c086d691ca05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  title: 
   label: {fileID: 11425728}
+--- !u!114 &11429004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 125730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aafac337e5fe47b5a9bb767661a90a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applications:
+  - title: font
+    color: 
+    canvasimage: {fileID: 0}
+    canvastext: {fileID: 11425728}
+  questdb: {fileID: 0}
 --- !u!222 &22225730
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -150,4 +168,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 125732}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

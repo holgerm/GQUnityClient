@@ -48,6 +48,7 @@ GameObject:
   - 114: {fileID: 11466818}
   - 114: {fileID: 11466822}
   - 114: {fileID: 11496444}
+  - 114: {fileID: 11454774}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -167,6 +168,31 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11454774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aafac337e5fe47b5a9bb767661a90a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applications:
+  - title: ButtonBg
+    color: DarkOrBright
+    canvasimage: {fileID: 11466816}
+    canvastext: {fileID: 0}
+  - title: ButtonText
+    color: font
+    canvasimage: {fileID: 0}
+    canvastext: {fileID: 11466820}
+  - title: DeleteIcon
+    color: comp1
+    canvasimage: {fileID: 11408022}
+    canvastext: {fileID: 0}
+  questdb: {fileID: 0}
 --- !u!114 &11466816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -310,7 +336,14 @@ MonoBehaviour:
       type: 
       attributes: []
       contents_dialogitems: []
+      contents_expectedcode: []
       contents_answers: []
+      contents_question:
+        id: 0
+        content: 
+        attributes: []
+        answers: []
+      contents_answersgroup: []
       onEnd:
         actions: []
       onStart:
@@ -322,6 +355,8 @@ MonoBehaviour:
       onFailure:
         actions: []
       state: 
+      result: 
+    xmlcontent: 
   onClick: 1
   onDoubleClick: 0
   removeButton: {fileID: 11408020}
@@ -431,4 +466,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 166820}
   m_IsPrefabParent: 1
-  m_IsExploded: 1
