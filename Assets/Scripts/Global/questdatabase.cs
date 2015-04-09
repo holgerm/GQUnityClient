@@ -12,10 +12,6 @@ using System.Text;
 
 public class questdatabase : MonoBehaviour
 {
-
-
-
-
 	public int startingQuest;
 	public bool newxml = true;
 	public Quest currentquest;
@@ -23,6 +19,7 @@ public class questdatabase : MonoBehaviour
 	public Transform currentquestdata;
 	public List<Quest> allquests;
 	public List<Quest> localquests;
+	private List<int> predeployedQuests;
 	private WWW www;
 	public List<WWW> filedownloads;
 	public Text downloadmsg;
@@ -35,7 +32,9 @@ public class questdatabase : MonoBehaviour
 	public List<String> loadedfiles;
 	public string webxml;
 	public bool fixedposition = true;
+
 	ScreenOrientation originalOrientation = ScreenOrientation.Portrait;
+
 
 	void Start ()
 	{
@@ -55,24 +54,47 @@ public class questdatabase : MonoBehaviour
 			questmilllogo.enabled = true;
 		}
 
+		// collect local quests in list
+		localquests = GetLocalQuests ();
 
+		// TODO: filter predeployed but missing quests and copy them to the right place (emulate loading them)
+		InitPredeployedQuests ();
 
 		if (startingQuest != 0) {
-			webloadingmessage.enabled = true;
-			questmilllogo.enabled = true;
-
-			bool connected = CheckConnection ();
-
-			if (connected) {
-				webloadingmessage.text = "Downloading content ...";
-				downloadQuest (startingQuest);
-			} else {
-				webloadingmessage.text = "You need to be connected to the internet!";
-			}
-
-//			downloadQuest (startingQuest);
+			StartQuest ();
 		}
 
+		// TODO: if no starting quest is given show foyer lists
+
+
+	}
+
+	void InitPredeployedQuests ()
+	{
+		// TODO: get path to folder where predeployed quests are stored
+
+		// TODO: find all predeployed quest ids
+
+		// TODO: for each predeployed quest check if it is not already initialized
+		//		 if not initialize it, i.e. copy it to the right place
+
+		throw new NotImplementedException ();
+	}
+
+	void StartQuest ()
+	{
+		// TODO: if a starting quest is given try to start it. first locally, otherwise download it and start it
+
+		webloadingmessage.enabled = true;
+		questmilllogo.enabled = true;
+		bool connected = CheckConnection ();
+		if (connected) {
+			webloadingmessage.text = "Downloading content ...";
+			downloadQuest (startingQuest);
+		}
+		else {
+			webloadingmessage.text = "You need to be connected to the internet!";
+		}
 	}
 
 	bool CheckConnection ()
