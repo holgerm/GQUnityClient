@@ -12,7 +12,7 @@ PlayerSettings:
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: QuestMill
-  productName: Carl Benz in Kalrsruhe
+  productName: Carl Benz
   cloudProjectId: 
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -74,7 +74,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.questmill.geoquest.phka.carlbenz
+  bundleIdentifier: com.questmill.geoquest.carlbenz
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
@@ -136,24 +136,6 @@ PlayerSettings:
     m_Icons:
     - m_Icon: {fileID: 2800000, guid: 2cc4f1bda31734688bab0aa7ff2f91aa, type: 3}
       m_Size: 128
-  - m_BuildTarget: iPhone
-    m_Icons:
-    - m_Icon: {fileID: 2800000, guid: ee856b230b62b454f881298727a54503, type: 3}
-      m_Size: 180
-    - m_Icon: {fileID: 0}
-      m_Size: 152
-    - m_Icon: {fileID: 0}
-      m_Size: 144
-    - m_Icon: {fileID: 0}
-      m_Size: 120
-    - m_Icon: {fileID: 0}
-      m_Size: 114
-    - m_Icon: {fileID: 0}
-      m_Size: 76
-    - m_Icon: {fileID: 0}
-      m_Size: 72
-    - m_Icon: {fileID: 0}
-      m_Size: 57
   - m_BuildTarget: Android
     m_Icons:
     - m_Icon: {fileID: 2800000, guid: 35e841a4f8fc5495fa53dfc671132ce6, type: 3}
@@ -168,6 +150,24 @@ PlayerSettings:
       m_Size: 48
     - m_Icon: {fileID: 0}
       m_Size: 36
+  - m_BuildTarget: iPhone
+    m_Icons:
+    - m_Icon: {fileID: 2800000, guid: 0291900d06dac4347860ec2d81346db2, type: 3}
+      m_Size: 180
+    - m_Icon: {fileID: 2800000, guid: 42f22c102ab27464494610f0a8e29d3b, type: 3}
+      m_Size: 152
+    - m_Icon: {fileID: 2800000, guid: 87fd3f6210dbb4bd98c3bfb54c5a1df6, type: 3}
+      m_Size: 144
+    - m_Icon: {fileID: 2800000, guid: 60d6f0340d63942399d7b6a4e60d3603, type: 3}
+      m_Size: 120
+    - m_Icon: {fileID: 2800000, guid: 60d6f0340d63942399d7b6a4e60d3603, type: 3}
+      m_Size: 114
+    - m_Icon: {fileID: 2800000, guid: 4b5dd3bc63bbf42ccbbb151a6a40c246, type: 3}
+      m_Size: 76
+    - m_Icon: {fileID: 2800000, guid: e37b019c2b40b49ecbc0e3911dc6fd5f, type: 3}
+      m_Size: 72
+    - m_Icon: {fileID: 2800000, guid: 2e420070fc2eb429ebf6971299e723a4, type: 3}
+      m_Size: 57
   m_BuildTargetBatching:
   - m_BuildTarget: Android
     m_StaticBatching: 1
