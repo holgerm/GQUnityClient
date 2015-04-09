@@ -2498,6 +2498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9550d02c2d244fc9034bcabbc47c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingQuest: 6141
   newxml: 1
   currentquest:
     name: 
@@ -2530,7 +2531,7 @@ MonoBehaviour:
         actions: []
       onFailure:
         actions: []
-      state: 
+      state: new
       result: 
     xmlcontent: 
   questdataprefab: {fileID: 483494, guid: 0bc29257c789c49eea959680bd54985d, type: 2}
@@ -2540,7 +2541,7 @@ MonoBehaviour:
   downloadmsg: {fileID: 2040646807}
   publicquestslist: {fileID: 1116271734}
   actioncontroller: {fileID: 1756337060}
-  message_prefab: {fileID: 11441554, guid: 5f4326f904afd488eb75e6e7fabc9bd9, type: 2}
+  message_prefab: {fileID: 1957542042}
   hotspots: []
   questmilllogo: {fileID: 950268824}
   webloadingmessage: {fileID: 238289913}
@@ -2837,6 +2838,12 @@ RectTransform:
   m_AnchoredPosition: {x: 2.24116739e-05, y: -596}
   m_SizeDelta: {x: 735, y: 136}
   m_Pivot: {x: .5, y: .5}
+--- !u!114 &1957542042
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11441554, guid: 5f4326f904afd488eb75e6e7fabc9bd9,
+    type: 2}
+  m_PrefabInternal: {fileID: 2080237959}
+  m_Script: {fileID: 11500000, guid: 21d8ae9a5999f46ca8e5db131246a596, type: 3}
 --- !u!1 &1985324660
 GameObject:
   m_ObjectHideFlags: 0
