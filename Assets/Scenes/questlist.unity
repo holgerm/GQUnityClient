@@ -2498,7 +2498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9550d02c2d244fc9034bcabbc47c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingQuest: 6141
+  predefinedStartingQuest: 6141
   newxml: 1
   currentquest:
     name: 
