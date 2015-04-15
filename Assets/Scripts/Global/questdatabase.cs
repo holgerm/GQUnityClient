@@ -12,14 +12,13 @@ using System.Text;
 
 public class questdatabase : MonoBehaviour
 {
-	public int startingQuest;
+	public int predefinedStartingQuest;
 	public bool newxml = true;
 	public Quest currentquest;
 	public Transform questdataprefab;
 	public Transform currentquestdata;
 	public List<Quest> allquests;
 	public List<Quest> localquests;
-	private List<int> predeployedQuests;
 	private WWW www;
 	public List<WWW> filedownloads;
 	public Text downloadmsg;
@@ -32,20 +31,38 @@ public class questdatabase : MonoBehaviour
 	public List<String> loadedfiles;
 	public string webxml;
 	public bool fixedposition = true;
-
 	ScreenOrientation originalOrientation = ScreenOrientation.Portrait;
-
-
+	private string PATH_2_PREDEPLOYED_QUESTS;
+	private string PREDEPLOYED_QUESTS_ZIP;
+	private string LOCAL_QUESTS_ZIP;
+	private string PATH_2_QUESTS;
+	
 	void Start ()
 	{
-		//AllowAutoRotation (false);
+		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
+		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
+		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "predeployedquests.zip");
+		PATH_2_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
 
+
+#if (UNITY_ANDROID && !UNITY_EDITOR)
+
+		PATH_2_PREDEPLOYED_QUESTS = "jar:file://" + Application.dataPath + "!/assets/" + "game.xml";
+		// PATH_2_PREDEPLOYED_QUESTS = "file:///android_asset/predeployed/quests"; NOT WORKING
+
+#endif
+
+		Debug.Log ("PDir1 = " + PATH_2_PREDEPLOYED_QUESTS);
+
+		if (!Directory.Exists (PATH_2_QUESTS)) {
+			Directory.CreateDirectory (PATH_2_QUESTS);
+		}
 
 		if (GameObject.Find ("QuestDatabase") != gameObject) {
 			Destroy (gameObject);		
 		} else {
 			DontDestroyOnLoad (gameObject);
-			Debug.Log (Application.persistentDataPath);
+//			Debug.Log (Application.persistentDataPath);
 		}
 
 
@@ -60,41 +77,89 @@ public class questdatabase : MonoBehaviour
 		// TODO: filter predeployed but missing quests and copy them to the right place (emulate loading them)
 		InitPredeployedQuests ();
 
-		if (startingQuest != 0) {
-			StartQuest ();
+		if (predefinedStartingQuest != 0) {
+			StartQuest (predefinedStartingQuest);
 		}
 
 		// TODO: if no starting quest is given show foyer lists
-
-
 	}
 
 	void InitPredeployedQuests ()
 	{
-		// TODO: get path to folder where predeployed quests are stored
+		DirectoryInfo dir = new DirectoryInfo (PATH_2_PREDEPLOYED_QUESTS);
+		DirectoryInfo predeployedZIP = new DirectoryInfo (PREDEPLOYED_QUESTS_ZIP);
 
-		// TODO: find all predeployed quest ids
+		if (PREDEPLOYED_QUESTS_ZIP.Contains ("://")) {
+			// on platforms which use an url type as asset path (e.g. Android):
+			WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);  // this is the path to your StreamingAssets in android
+			while (!questZIP.isDone) {
+			}  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
+			
+			Debug.Log ("PDir3: LOADED BY WWW. questZIP.text: " + questZIP.text);
+			if (questZIP.error != null && !questZIP.error.Equals ("")) 
+				Debug.Log ("PDir3: LOADED BY WWW. questZIP.error: " + questZIP.error);
+			Debug.Log ("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
+			File.WriteAllBytes (LOCAL_QUESTS_ZIP, questZIP.bytes);
+			Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
+		} else {
+			// on platforms which have a straight file path (e.g. iOS):
+			File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+		}
 
-		// TODO: for each predeployed quest check if it is not already initialized
-		//		 if not initialize it, i.e. copy it to the right place
+		// TODO should we catch Exceptions here beofre deleting the zip file?:
+		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
+		File.Delete (LOCAL_QUESTS_ZIP);
 
-		throw new NotImplementedException ();
+/*
+ 		// File.WriteAllBytes(filepath, loadDB.bytes);
+		string[] dirNames = Directory.GetDirectories (PATH_2_PREDEPLOYED_QUESTS);
+		Debug.Log ("PDir4: NACH Directory.GetDirectories(PATH_2_PREDEPLOYED_QUESTS).");
+
+		DirectoryInfo[] questDirs = dir.GetDirectories ();
+		Debug.Log ("PDir5: NACH dir.GetDirectories ().");
+
+		// For each predeployed quest check if it is not already initialized
+		// if not initialize it, i.e. copy it to the right place
+		foreach (DirectoryInfo questDir in questDirs) {
+			Debug.Log ("Predeployed Quest found: " + questDir.Name);
+			if (!IsQuestInitialized (Convert.ToInt32 (questDir.Name))) {
+				string newQuestDirPath = System.IO.Path.Combine (PATH_2_QUESTS, questDir.Name);
+				if (!Directory.Exists (newQuestDirPath))
+					Directory.CreateDirectory (newQuestDirPath);
+				CopyFolder (questDir.FullName, newQuestDirPath);
+				Debug.Log ("Predeployed Quest initialized: " + questDir.Name);
+			}
+		}
+
+*/
+
 	}
 
-	void StartQuest ()
+	bool IsQuestInitialized (int id)
 	{
-		// TODO: if a starting quest is given try to start it. first locally, otherwise download it and start it
+		string questDirPath = System.IO.Path.Combine (PATH_2_QUESTS, id.ToString ());
+		return Directory.Exists (questDirPath);
+	}
 
-		webloadingmessage.enabled = true;
-		questmilllogo.enabled = true;
-		bool connected = CheckConnection ();
-		if (connected) {
-			webloadingmessage.text = "Downloading content ...";
-			downloadQuest (startingQuest);
+	void StartQuest (int id)
+	{
+		// if the given quest is already intialized start it, otherwise download it first and start it:
+		List<Quest> localQuests = GetLocalQuests ();
+		Quest q = null;
+		foreach (Quest curQuest in localQuests) {
+			
+			if (curQuest.id == id) {
+				q = curQuest;
+			}
+			
 		}
-		else {
-			webloadingmessage.text = "You need to be connected to the internet!";
+		
+		if (q == null) {
+			downloadQuest (q);
+		} else {
+			startQuest (q);
 		}
+
 	}
 
 	bool CheckConnection ()
@@ -105,15 +170,35 @@ public class questdatabase : MonoBehaviour
 
 		return (www.responseHeaders.Count () > 0);
 	}
+
+	static public void CopyFolder (string sourceFolder, string destFolder)
+	{
+		if (!Directory.Exists (destFolder))
+			Directory.CreateDirectory (destFolder);
+		string[] files = Directory.GetFiles (sourceFolder);
+		foreach (string file in files) {
+			string name = Path.GetFileName (file);
+			if (!name.EndsWith (".meta")) {
+				string dest = Path.Combine (destFolder, name);
+				File.Copy (file, dest);
+			}
+		}
+		string[] folders = Directory.GetDirectories (sourceFolder);
+		foreach (string folder in folders) {
+			string name = Path.GetFileName (folder);
+			string dest = Path.Combine (destFolder, name);
+			CopyFolder (folder, dest);
+		}
+	}
 	
 	public List<QuestRuntimeHotspot> getActiveHotspots ()
 	{
 		List<QuestRuntimeHotspot> activehs = new List<QuestRuntimeHotspot> ();
 		
 		foreach (QuestRuntimeHotspot qrh in hotspots) {
-
-
-
+			
+			
+			
 			if (qrh.active) {
 
 				activehs.Add (qrh);
@@ -298,6 +383,16 @@ public class questdatabase : MonoBehaviour
 
 	public void downloadQuest (Quest q)
 	{
+		
+		webloadingmessage.enabled = true;
+		questmilllogo.enabled = true;
+		bool connected = CheckConnection ();
+		if (connected) {
+			webloadingmessage.text = "Downloading content ...";
+			downloadQuest (q.id);
+		} else {
+			webloadingmessage.text = "You need to be connected to the internet!";
+		}
 
 		if (newxml) {
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
@@ -310,8 +405,6 @@ public class questdatabase : MonoBehaviour
 			string url = "http://www.qeevee.org:9091/game/download/" + q.id;
 		
 			www = new WWW (url);
-			//Debug.Log (url);
-		
 
 			downloadmsg.enabled = true;
 			downloadmsg.text = "Downloading ... " + (www.progress * 100) + " %";
@@ -460,7 +553,7 @@ public class questdatabase : MonoBehaviour
 
 			DirectoryInfo info = new DirectoryInfo (Application.persistentDataPath + "/quests/");
 			if (!info.Exists) {
-				info.Create();
+				info.Create ();
 				return localquests;
 			}
 
@@ -948,7 +1041,7 @@ public class questdatabase : MonoBehaviour
 
 #endif
 				}
-				//	ZipUtil.Unzip (fileName, exportLocation);
+//					ZipUtil.Unzip (fileName, exportLocation);
 
 
 
@@ -1012,6 +1105,12 @@ public class Quest  : IComparable<Quest>
 	{
 
 
+	}
+
+	public static Quest CreateQuest (int id)
+	{
+		Quest q = new Quest ();
+		return q.LoadFromText (id, true);
 	}
 
 	public int CompareTo (Quest q)
