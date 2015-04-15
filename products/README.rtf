@@ -4,4 +4,18 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 
-\f0\fs24 \cf0 put product folders containing their streaming assets in a exported unity package herein.}
+\f0\fs24 \cf0 this folders is a store for products. Only one of these product can be active for the build process at a time. put product folders containing their streaming assets in a exported unity package herein.\
+\
+for each product create a folder herein with the product name, e.g. \'93carlbenz\'94. export a unity package with all contained product specific assets and store it with name \'93carlbenz.unitypackage\'94 here.\
+\
+Use this name also as part of the bundle id, e.g. \'93com.questmill.geoquest.carlbenz\'94.\
+\
+each product setting typically contains:\
+\
+- unity assets such as movies\
+- a zip file containing all redeployed quests\
+\
+\
+to activate a product for buylding, import its package into StreamingAssets in Unity. This should create a folder named \'93predeployed\'94 contain all media and quests etc.\
+\
+currently the id of the optional starting quest is not part of this package, but we should integrate it here too.}
