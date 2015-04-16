@@ -154,6 +154,7 @@ public class page_npctalk : MonoBehaviour
 		}
 
 
+
 	}
 
 	void Update ()
@@ -306,11 +307,13 @@ public class page_npctalk : MonoBehaviour
 		}
 
 
-		Canvas.ForceUpdateCanvases();
-		
-		text.transform.parent.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
-		Canvas.ForceUpdateCanvases();
 
+		if (dialogitem_state > 1) {
+			Canvas.ForceUpdateCanvases ();
+		
+			text.transform.parent.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
+			Canvas.ForceUpdateCanvases ();
+		}
 
 
 	}
