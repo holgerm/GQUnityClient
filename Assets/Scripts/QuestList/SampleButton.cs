@@ -39,7 +39,7 @@ public class SampleButton : MonoBehaviour {
 	public void startquest(){
 
 		GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuest(q);
-
+		//Debug.Log ("starting");
 
 	}
 

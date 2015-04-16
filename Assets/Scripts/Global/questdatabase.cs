@@ -13,7 +13,6 @@ using System.Text;
 public class questdatabase : MonoBehaviour
 {
 	public int predefinedStartingQuest;
-	public bool newxml = true;
 	public Quest currentquest;
 	public Transform questdataprefab;
 	public Transform currentquestdata;
@@ -85,6 +84,9 @@ public class questdatabase : MonoBehaviour
 	void InitPredeployedQuests ()
 	{
 		DirectoryInfo dir = new DirectoryInfo (PATH_2_PREDEPLOYED_QUESTS);
+
+
+		if(File.Exists(PREDEPLOYED_QUESTS_ZIP)){
 		DirectoryInfo predeployedZIP = new DirectoryInfo (PREDEPLOYED_QUESTS_ZIP);
 
 		if (PREDEPLOYED_QUESTS_ZIP.Contains ("://")) {
@@ -130,7 +132,7 @@ public class questdatabase : MonoBehaviour
 		}
 
 */
-
+		}
 	}
 
 	bool IsQuestInitialized (int id)
@@ -163,7 +165,10 @@ public class questdatabase : MonoBehaviour
 	bool CheckConnection ()
 	{
 		WWW www = new WWW ("http://www.google.com");
+
+		int i = 0;
 		while (!www.isDone) {
+
 		}
 
 		return (www.responseHeaders.Count () > 0);
@@ -304,11 +309,9 @@ public class questdatabase : MonoBehaviour
 	public void startQuest (Quest q)
 	{
 		currentquest = q;
-
 		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 
-		//Debug.Log (currentquest.id);
-
+		Debug.Log ("Starting: "+currentquest.id);
 
 
 
@@ -387,30 +390,15 @@ public class questdatabase : MonoBehaviour
 		bool connected = CheckConnection ();
 		if (connected) {
 			webloadingmessage.text = "Downloading content ...";
-			downloadQuest (q.id);
-		} else {
-			webloadingmessage.text = "You need to be connected to the internet!";
-		}
-
-		if (newxml) {
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
 			downloadmsg.enabled = true;
 			downloadmsg.text = "Getting Quest-Definition ... ";
 			StartCoroutine (DownloadFinished (q));
-			
+		
+
 		} else {
-			string url = "http://www.qeevee.org:9091/game/download/" + q.id;
-		
-			www = new WWW (url);
-
-			downloadmsg.enabled = true;
-			downloadmsg.text = "Downloading ... " + (www.progress * 100) + " %";
-
-		
-			StartCoroutine (DownloadPercentage ());
-			StartCoroutine (DownloadFinished (q));
-
+			webloadingmessage.text = "You need to be connected to the internet!";
 		}
 	}
 
@@ -419,6 +407,7 @@ public class questdatabase : MonoBehaviour
 		Quest q = new Quest ();
 		q.id = id;
 		currentquest = q;
+
 		downloadQuest (q);
 
 	}
@@ -646,7 +635,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-		if (newxml && !localload) {
+		if (!localload) {
 
 			// resave xml
 			string exportLocation = Application.persistentDataPath + "/quests/" + currentquest.id + "/";
@@ -752,7 +741,7 @@ public class questdatabase : MonoBehaviour
 						
 
 		} else {
-
+			Debug.Log("showing message");
 			showmessage ("Entschuldigung! Die Quest kann in dieser Beta-Version nicht abgespielt werden.");
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
@@ -924,7 +913,7 @@ public class questdatabase : MonoBehaviour
 		
 		}
 		
-		
+
 	}
 	
 	void showmessage (string text)
@@ -934,7 +923,7 @@ public class questdatabase : MonoBehaviour
 		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
 			
 		nqa.message = text;
-			
+
 		nqa.transform.SetParent (GameObject.Find ("Canvas").transform, false);
 		nqa.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0f);
 
@@ -976,8 +965,6 @@ public class questdatabase : MonoBehaviour
 
 
 
-			if (newxml) {
-
 				downloadmsg.text = "Downloading Quest Assets...";
 
 
@@ -1005,56 +992,7 @@ public class questdatabase : MonoBehaviour
 				installQuest (currentquest, b, false);
 
 				
-			} else {
-				//Debug.Log("WWW Finished");
-				downloadmsg.text = "Installing Quest...";
-
-	
-				string fileName = Application.temporaryCachePath + "/quest" + q.id + ".zip";
-				FileStream zip = File.Create (fileName);
-				zip.Write (www.bytes, 0, www.size);
-
-				zip.Close ();
-
-
-
-
-				string exportLocation = Application.persistentDataPath + "/quests/" + q.id + "/";
-
-
-
-				if (Directory.Exists (exportLocation)) {
-
-					#if UNITY_WEBPLAYER
-				
-				Debug.Log("cannot delete local files on web");
-
-				
-					# else 
-					Directory.Delete (exportLocation, true);
-
-#endif
-				}
-//					ZipUtil.Unzip (fileName, exportLocation);
-
-
-
-				q.filepath = exportLocation;
-
-
-				bool b = false;
-				
-				
-				foreach (Quest lq in localquests) {
-					if (lq.id == q.id) {
-						
-						b = true;
-					}
-				}
-				installQuest (q, b, false);
-
-
-			}
+		
 			
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
