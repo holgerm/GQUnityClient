@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 874c8460267b14472ac9d365a944a999
-timeCreated: 1428921607
+timeCreated: 1429082322
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -13,14 +13,14 @@ PluginImporter:
       settings:
         CPU: AnyCPU
     Any:
-      enabled: 0
+      enabled: 1
       settings: {}
     Editor:
       enabled: 1
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
-        OS: OSX
+        OS: AnyOS
     Linux:
       enabled: 0
       settings:
@@ -37,6 +37,12 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
+    Web:
+      enabled: 1
+      settings: {}
+    WebStreamed:
+      enabled: 1
+      settings: {}
     Win:
       enabled: 0
       settings:
