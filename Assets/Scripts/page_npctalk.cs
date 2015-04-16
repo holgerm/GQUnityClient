@@ -159,7 +159,7 @@ public class page_npctalk : MonoBehaviour
 	void Update ()
 	{
 		
-		
+		Debug.Log (text.transform.parent.GetComponent<ScrollRect> ().verticalScrollbar.value);
 		
 		if (texttoticker != null) {
 
@@ -271,6 +271,9 @@ public class page_npctalk : MonoBehaviour
 
 			} else {
 
+
+				text.text = "<color=#5c5c5c>"+text.text+"</color>";
+
 				if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker").Length > 0) {
 					
 					text.text += "<b>" + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker") + "</b>: ";
@@ -287,6 +290,8 @@ public class page_npctalk : MonoBehaviour
 			}
 			dialogitem_state++;
 
+			Debug.Log("scrolling?");
+
 			if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 				buttontext.text = npctalk.getAttribute ("endbuttontext");
 			
@@ -299,6 +304,15 @@ public class page_npctalk : MonoBehaviour
 			buttontext.text = npctalk.getAttribute ("endbuttontext");
 
 		}
+
+
+		Canvas.ForceUpdateCanvases();
+		
+		text.transform.parent.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
+		Canvas.ForceUpdateCanvases();
+
+
+
 	}
 	
 	IEnumerator waitforImage ()
