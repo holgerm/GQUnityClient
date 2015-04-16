@@ -159,7 +159,7 @@ public class page_npctalk : MonoBehaviour
 	void Update ()
 	{
 		
-		Debug.Log (text.transform.parent.GetComponent<ScrollRect> ().verticalScrollbar.value);
+//		Debug.Log (text.transform.parent.GetComponent<ScrollRect> ().verticalScrollbar.value);
 		
 		if (texttoticker != null) {
 
