@@ -52,32 +52,30 @@ public class questdatabase : MonoBehaviour
 
 #endif
 
-		Debug.Log ("PDir1 = " + PATH_2_PREDEPLOYED_QUESTS);
-
-		if (!Directory.Exists (PATH_2_QUESTS)) {
-			Directory.CreateDirectory (PATH_2_QUESTS);
-		}
-
 		if (GameObject.Find ("QuestDatabase") != gameObject) {
 			Destroy (gameObject);		
 		} else {
 			DontDestroyOnLoad (gameObject);
-//			Debug.Log (Application.persistentDataPath);
+			//			Debug.Log (Application.persistentDataPath);
 		}
-
-
+		
 		if (Application.isWebPlayer) {
 			webloadingmessage.enabled = true;
 			questmilllogo.enabled = true;
 		}
+		
 
-		// collect local quests in list
-		localquests = GetLocalQuests ();
+		Debug.Log ("PDir1 = " + PATH_2_PREDEPLOYED_QUESTS);
 
-		// TODO: filter predeployed but missing quests and copy them to the right place (emulate loading them)
-		InitPredeployedQuests ();
+		if (!Directory.Exists (PATH_2_QUESTS) || new DirectoryInfo (PATH_2_QUESTS).GetFileSystemInfos ().Length == 0) {
+			Directory.CreateDirectory (PATH_2_QUESTS);
+
+			InitPredeployedQuests ();
+		}
+
 
 		if (predefinedStartingQuest != 0) {
+			questmilllogo.enabled = true;
 			StartQuest (predefinedStartingQuest);
 		}
 
@@ -532,10 +530,6 @@ public class questdatabase : MonoBehaviour
 				}
 
 			}
-
-
-
-
 
 		}
 

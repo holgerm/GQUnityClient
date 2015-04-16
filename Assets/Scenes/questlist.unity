@@ -153,7 +153,7 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 115676585}
---- !u!224 &184534516
+--- !u!224 &184534516 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22441560, guid: 5f4326f904afd488eb75e6e7fabc9bd9,
     type: 2}
@@ -701,7 +701,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
---- !u!224 &669051478
+--- !u!224 &669051478 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22425732, guid: 7dbbf06ee6bb2426f9115156808026e0,
     type: 2}
@@ -1986,7 +1986,7 @@ MonoBehaviour:
     canvastext: {fileID: 0}
     camera: {fileID: 0}
   questdb: {fileID: 0}
---- !u!224 &1380657191
+--- !u!224 &1380657191 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22466820, guid: 83834eea2a6e644c78b7266da3fd1ae8,
     type: 2}
@@ -2217,8 +2217,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: .99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2838,7 +2838,7 @@ RectTransform:
   m_AnchoredPosition: {x: 2.24116739e-05, y: -596}
   m_SizeDelta: {x: 735, y: 136}
   m_Pivot: {x: .5, y: .5}
---- !u!114 &1957542042
+--- !u!114 &1957542042 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11441554, guid: 5f4326f904afd488eb75e6e7fabc9bd9,
     type: 2}
@@ -3121,6 +3121,10 @@ Prefab:
     - target: {fileID: 141560, guid: 5f4326f904afd488eb75e6e7fabc9bd9, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 141558, guid: 5f4326f904afd488eb75e6e7fabc9bd9, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f4326f904afd488eb75e6e7fabc9bd9, type: 2}
