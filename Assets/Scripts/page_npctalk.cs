@@ -273,8 +273,15 @@ public class page_npctalk : MonoBehaviour
 			} else {
 
 
-				text.text = "<color=#5c5c5c>"+text.text+"</color>";
 
+
+				if(!questdb.GetComponent<palette>().darkBG){
+				text.text = "<color=#5c5c5c>"+text.text+"</color>";
+				} else {
+
+					text.text = "<color=#989898>"+text.text+"</color>";
+
+				}
 				if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker").Length > 0) {
 					
 					text.text += "<b>" + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker") + "</b>: ";

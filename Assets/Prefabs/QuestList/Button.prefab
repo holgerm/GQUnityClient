@@ -182,20 +182,18 @@ MonoBehaviour:
   applications:
   - title: ButtonBg
     color: button
-    canvasimage: {fileID: 11466816}
-    canvastext: {fileID: 0}
-    camera: {fileID: 0}
-  - title: ButtonText
-    color: buttonfont
     canvasimage: {fileID: 0}
-    canvastext: {fileID: 11466820}
-    camera: {fileID: 0}
-  - title: DeleteIcon
-    color: comp1
-    canvasimage: {fileID: 11408018}
     canvastext: {fileID: 0}
     camera: {fileID: 0}
+    button: {fileID: 11466818}
+  - title: delete
+    color: comp1
+    canvasimage: {fileID: 11408022}
+    canvastext: {fileID: 0}
+    camera: {fileID: 0}
+    button: {fileID: 0}
   questdb: {fileID: 0}
+  hasbutton: 0
 --- !u!114 &11466816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: .779411793, g: .779411793, b: .779411793, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0

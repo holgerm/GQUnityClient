@@ -106,11 +106,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   applications:
   - title: font
-    color: 
+    color: font
     canvasimage: {fileID: 0}
     canvastext: {fileID: 11425728}
     camera: {fileID: 0}
+    button: {fileID: 0}
   questdb: {fileID: 0}
+  hasbutton: 0
 --- !u!222 &22225730
 CanvasRenderer:
   m_ObjectHideFlags: 1
