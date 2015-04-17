@@ -118,7 +118,7 @@ public class applyColorPalette : MonoBehaviour {
 		if(hasbutton){
 		foreach (ColorApplication ca in applications) {
 
-
+				if(ca.button != null){
 			if(!ca.button.IsActive()){
 
 					foreach(Text t in ca.button.GetComponentsInChildren<Text>()){
@@ -133,7 +133,7 @@ public class applyColorPalette : MonoBehaviour {
 					}
 
 					}
-
+				}
 				}
 
 		}
