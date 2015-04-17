@@ -46,7 +46,7 @@ public class questdatabase : MonoBehaviour
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
-		PATH_2_PREDEPLOYED_QUESTS = "jar:file://" + Application.dataPath + "!/assets/" + "game.xml";
+		PREDEPLOYED_QUESTS_ZIP = "jar:file://" + Application.dataPath + "!/assets/" + "predeployed/quests.zip";
 		// PATH_2_PREDEPLOYED_QUESTS = "file:///android_asset/predeployed/quests"; NOT WORKING
 
 #endif
@@ -67,10 +67,12 @@ public class questdatabase : MonoBehaviour
 		Debug.Log ("PDir1 = " + PATH_2_PREDEPLOYED_QUESTS);
 
 		if (!Directory.Exists (PATH_2_QUESTS) || new DirectoryInfo (PATH_2_QUESTS).GetFileSystemInfos ().Length == 0) {
+			Debug.Log ("PDir2: we need to initialize pedeployed quests");
 			Directory.CreateDirectory (PATH_2_QUESTS);
 
 			InitPredeployedQuests ();
-		}
+		} else 
+			Debug.Log ("PDir2: predeployed questst already initialized");
 
 
 		if (predefinedStartingQuest != 0) {
@@ -83,12 +85,7 @@ public class questdatabase : MonoBehaviour
 
 	void InitPredeployedQuests ()
 	{
-		DirectoryInfo dir = new DirectoryInfo (PATH_2_PREDEPLOYED_QUESTS);
-
-
-		if(File.Exists(PREDEPLOYED_QUESTS_ZIP)){
-		DirectoryInfo predeployedZIP = new DirectoryInfo (PREDEPLOYED_QUESTS_ZIP);
-
+		Debug.Log ("InitPredeployedQuests 1, looking for predep zip: " + PREDEPLOYED_QUESTS_ZIP);
 		if (PREDEPLOYED_QUESTS_ZIP.Contains ("://")) {
 			// on platforms which use an url type as asset path (e.g. Android):
 			WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);  // this is the path to your StreamingAssets in android
@@ -96,43 +93,29 @@ public class questdatabase : MonoBehaviour
 			}  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
 			
 			Debug.Log ("PDir3: LOADED BY WWW. questZIP.text: " + questZIP.text);
-			if (questZIP.error != null && !questZIP.error.Equals ("")) 
+			if (questZIP.error != null && !questZIP.error.Equals ("")) {
 				Debug.Log ("PDir3: LOADED BY WWW. questZIP.error: " + questZIP.error);
+				return;
+			}
 			Debug.Log ("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
+
+			if (File.Exists (LOCAL_QUESTS_ZIP)) {
+				Debug.LogWarning ("Local copy of predeployment zip file was found. Should have been deleted at last initialization.");
+				File.Delete (LOCAL_QUESTS_ZIP);
+			}
+
 			File.WriteAllBytes (LOCAL_QUESTS_ZIP, questZIP.bytes);
 			Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
 		} else {
 			// on platforms which have a straight file path (e.g. iOS):
-			File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+			if (File.Exists (PREDEPLOYED_QUESTS_ZIP)) 
+				File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
 		}
 
 		// TODO should we catch Exceptions here beofre deleting the zip file?:
 		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
 		File.Delete (LOCAL_QUESTS_ZIP);
 
-/*
- 		// File.WriteAllBytes(filepath, loadDB.bytes);
-		string[] dirNames = Directory.GetDirectories (PATH_2_PREDEPLOYED_QUESTS);
-		Debug.Log ("PDir4: NACH Directory.GetDirectories(PATH_2_PREDEPLOYED_QUESTS).");
-
-		DirectoryInfo[] questDirs = dir.GetDirectories ();
-		Debug.Log ("PDir5: NACH dir.GetDirectories ().");
-
-		// For each predeployed quest check if it is not already initialized
-		// if not initialize it, i.e. copy it to the right place
-		foreach (DirectoryInfo questDir in questDirs) {
-			Debug.Log ("Predeployed Quest found: " + questDir.Name);
-			if (!IsQuestInitialized (Convert.ToInt32 (questDir.Name))) {
-				string newQuestDirPath = System.IO.Path.Combine (PATH_2_QUESTS, questDir.Name);
-				if (!Directory.Exists (newQuestDirPath))
-					Directory.CreateDirectory (newQuestDirPath);
-				CopyFolder (questDir.FullName, newQuestDirPath);
-				Debug.Log ("Predeployed Quest initialized: " + questDir.Name);
-			}
-		}
-
-*/
-		}
 	}
 
 	bool IsQuestInitialized (int id)
@@ -155,6 +138,7 @@ public class questdatabase : MonoBehaviour
 		}
 		
 		if (q == null) {
+			Debug.Log ("Problem 1 id: " + id);
 			downloadQuest (q);
 		} else {
 			startQuest (q);
@@ -311,11 +295,12 @@ public class questdatabase : MonoBehaviour
 		currentquest = q;
 		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 
-		Debug.Log ("Starting: "+currentquest.id);
+		Debug.Log ("Starting: " + currentquest.id);
 
 
 
 		if (!localquests.Contains (q)) {
+			Debug.Log ("Problem 2");
 
 			downloadQuest (q);
 		} else {
@@ -389,7 +374,7 @@ public class questdatabase : MonoBehaviour
 		questmilllogo.enabled = true;
 		bool connected = CheckConnection ();
 		if (connected) {
-			webloadingmessage.text = "Downloading content ...";
+			webloadingmessage.text = "Downloading quest ... " + q.name;
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
 			downloadmsg.enabled = true;
@@ -406,6 +391,8 @@ public class questdatabase : MonoBehaviour
 	{
 		Quest q = new Quest ();
 		q.id = id;
+		Debug.Log ("Problem 3, id: " + id);
+
 		currentquest = q;
 
 		downloadQuest (q);
@@ -530,7 +517,7 @@ public class questdatabase : MonoBehaviour
 #if !UNITY_WEBPLAYER
 		if (!Application.isWebPlayer) {
 
-			localquests.Clear ();
+			localquests.Clear (); 
 
 
 
@@ -563,7 +550,8 @@ public class questdatabase : MonoBehaviour
 					n.filepath = folder.ToString () + "/";
 					n = n.LoadFromText (int.Parse (splitted [splitted.Length - 1]), true);
 					//n.deserializeAttributes();
-					localquests.Add (n);
+					if (n != null)
+						localquests.Add (n);
 					//Debug.Log(folder.ToString());
 				}
 			}
@@ -629,6 +617,12 @@ public class questdatabase : MonoBehaviour
 
 //				Debug.Log ("installing..."+reload);
 		currentquest = q.LoadFromText (q.id, x);
+		if (currentquest == null) {
+			webloadingmessage.enabled = false;
+			questmilllogo.enabled = false;
+			downloadmsg.enabled = false;
+			return;
+		}
 
 		//q.deserializeAttributes ();
 //		Debug.Log ("done installing...");
@@ -658,6 +652,7 @@ public class questdatabase : MonoBehaviour
 
 			
 				var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
+
 				// WRITE FILES TO XML -> NOT WORKING ON IOS
 				//var serializer = new XmlSerializer (typeof(Quest));
 				//serializer.Serialize (stream, currentquest);
@@ -741,7 +736,7 @@ public class questdatabase : MonoBehaviour
 						
 
 		} else {
-			Debug.Log("showing message");
+			Debug.Log ("showing message");
 			showmessage ("Entschuldigung! Die Quest kann in dieser Beta-Version nicht abgespielt werden.");
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
@@ -916,7 +911,7 @@ public class questdatabase : MonoBehaviour
 
 	}
 	
-	void showmessage (string text)
+	public void showmessage (string text)
 	{
 		
 
@@ -965,31 +960,31 @@ public class questdatabase : MonoBehaviour
 
 
 
-				downloadmsg.text = "Downloading Quest Assets...";
+			downloadmsg.text = "Downloading Quest Assets...";
 
 
-				currentquest = new Quest ();
+			currentquest = new Quest ();
 				
-				currentquest.id = q.id;
+			currentquest.id = q.id;
 				
-				currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
+			currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 				
-				currentquest.xmlcontent = UTF8Encoding.UTF8.GetString (www.bytes); 
+			currentquest.xmlcontent = UTF8Encoding.UTF8.GetString (www.bytes); 
 
-				bool b = false;
+			bool b = false;
 
 
 
-				foreach (Quest lq in localquests) {
-					if (lq.id == q.id) {
+			foreach (Quest lq in localquests) {
+				if (lq.id == q.id) {
 
-						b = true;
-					}
+					b = true;
 				}
+			}
 
 //				Debug.Log(q.id+","+b);
 
-				installQuest (currentquest, b, false);
+			installQuest (currentquest, b, false);
 
 				
 		
@@ -998,7 +993,9 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("WWW Error: " + www.error);
 			downloadmsg.text = www.error;
 
-		}    
+		}  
+
+		webloadingmessage.enabled = false;
 		
 		
 	}
@@ -1065,6 +1062,14 @@ public class Quest  : IComparable<Quest>
 		string fp = filepath;
 		string xmlfilepath = filepath;
 		string xmlcontent_copy = xmlcontent;
+
+		if (xmlcontent_copy != null && xmlcontent_copy.StartsWith ("<error>")) {
+			string errMsg = xmlcontent_copy;
+
+			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().showmessage (errMsg);
+			return null;
+		}
+
 		if (filepath == null) {
 			xmlfilepath = " ";
 
