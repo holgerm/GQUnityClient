@@ -26,7 +26,7 @@ public class attachtoQuestDb : MonoBehaviour {
 
 		} else if (asDownloadText) {
 			
-			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().downloadmsg = GetComponent<Text>();
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage = GetComponent<Text>();
 			
 		} 
 

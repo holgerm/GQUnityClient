@@ -13,7 +13,11 @@ public class palette : MonoBehaviour {
 
 	public Color darkColor;
 
-	public Color brightColor;
+	public Color buttonColor;
+
+	public bool darkButton = false;
+
+	public Color buttonDisabledColor;
 
 	public Color compColor;
 
