@@ -405,7 +405,7 @@ RectTransform:
   m_Father: {fileID: 969569938}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: .5, y: .5}
@@ -446,7 +446,6 @@ GameObject:
   - 224: {fileID: 328853094}
   - 222: {fileID: 328853096}
   - 114: {fileID: 328853095}
-  - 114: {fileID: 328853097}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -485,7 +484,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .195999995, g: .195999995, b: .195999995, a: 1}
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: b8013433a79d34ccdad4db9aaed0a7d4, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -503,20 +502,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 328853093}
---- !u!114 &328853097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 328853093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35b938ee5bc44fedacdf58217108b57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  default_c: {r: 0, g: 0, b: 0, a: 1}
-  disabled_c: {r: .764705896, g: .764705896, b: .764705896, a: 1}
-  button: {fileID: 763440325}
 --- !u!1 &521211303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,8 +1069,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 4.95910645e-05}
-  m_SizeDelta: {x: 1036, y: 0}
+  m_AnchoredPosition: {x: 45, y: 0}
+  m_SizeDelta: {x: 991, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1531027272
 MonoBehaviour:
@@ -1101,7 +1086,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 872d6c2e2f86e40fba012ea9b2c32c5a, type: 3}
     m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
@@ -1261,27 +1246,21 @@ MonoBehaviour:
     canvasimage: {fileID: 0}
     canvastext: {fileID: 0}
     camera: {fileID: 133501172}
-  - title: Text_Background
-    color: Bright
-    canvasimage: {fileID: 28842017}
+    button: {fileID: 0}
+  - title: Button
+    color: button
+    canvasimage: {fileID: 0}
     canvastext: {fileID: 0}
     camera: {fileID: 0}
+    button: {fileID: 763440325}
   - title: Text
     color: font
     canvasimage: {fileID: 0}
     canvastext: {fileID: 1531027272}
     camera: {fileID: 0}
-  - title: Button Background
-    color: bright
-    canvasimage: {fileID: 763440326}
-    canvastext: {fileID: 0}
-    camera: {fileID: 0}
-  - title: Buttontext
-    color: font
-    canvasimage: {fileID: 0}
-    canvastext: {fileID: 328853095}
-    camera: {fileID: 0}
+    button: {fileID: 0}
   questdb: {fileID: 0}
+  hasbutton: 0
 --- !u!1 &1911540883
 GameObject:
   m_ObjectHideFlags: 0
