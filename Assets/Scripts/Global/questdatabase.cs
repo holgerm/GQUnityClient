@@ -20,7 +20,6 @@ public class questdatabase : MonoBehaviour
 	public List<Quest> localquests;
 	private WWW www;
 	public List<WWW> filedownloads;
-	public Text downloadmsg;
 	public Image publicquestslist;
 	public actions actioncontroller;
 	public QuestMessage message_prefab;
@@ -377,8 +376,8 @@ public class questdatabase : MonoBehaviour
 			webloadingmessage.text = "Downloading quest ... " + q.name;
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
-			downloadmsg.enabled = true;
-			downloadmsg.text = "Getting Quest-Definition ... ";
+			webloadingmessage.enabled = true;
+			webloadingmessage.text = "Getting Quest-Definition ... ";
 			StartCoroutine (DownloadFinished (q));
 		
 
@@ -620,7 +619,7 @@ public class questdatabase : MonoBehaviour
 		if (currentquest == null) {
 			webloadingmessage.enabled = false;
 			questmilllogo.enabled = false;
-			downloadmsg.enabled = false;
+			webloadingmessage.enabled = false;
 			return;
 		}
 
@@ -730,7 +729,7 @@ public class questdatabase : MonoBehaviour
 		if (canPlayQuest (currentquest)) {
 
 			Debug.Log ("WAITING FOR QUEST ASSETS");
-			downloadmsg.text = "Downloading Quest Assets ... 0 %";
+			webloadingmessage.text = "Downloading Quest Assets ... 0 %";
 
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
@@ -746,7 +745,7 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator waitforquestassets (int pageid, float timeout)
 	{
-		//downloadmsg.text = "Downloading Quest Assets ... 0 %";
+		//webloadingmessage.text = "Downloading Quest Assets ... 0 %";
 
 
 		timeout += 0.5f;
@@ -776,7 +775,7 @@ public class questdatabase : MonoBehaviour
 		}
 		Debug.Log ("percent done: " + percent);
 
-		downloadmsg.text = "Downloading Quest Assets ... " + percent + " %";
+		webloadingmessage.text = "Downloading Quest Assets ... " + percent + " %";
 
 
 		if (done) {
@@ -827,7 +826,7 @@ public class questdatabase : MonoBehaviour
 		
 		if (www.progress < 1f && www.error == null) {
 			
-			downloadmsg.text = "Downloading Quest ... " + (www.progress * 100) + " %";
+			webloadingmessage.text = "Downloading Quest ... " + (www.progress * 100) + " %";
 			StartCoroutine (DownloadPercentage ());
 			
 		} else {
@@ -951,7 +950,7 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator DownloadFinished (Quest q)
 	{
-		downloadmsg.enabled = true;
+		webloadingmessage.enabled = true;
 
 		localquests.Add (q);
 		yield return www;
@@ -960,7 +959,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-			downloadmsg.text = "Downloading Quest Assets...";
+			webloadingmessage.text = "Downloading Quest Assets...";
 
 
 			currentquest = new Quest ();
@@ -991,7 +990,7 @@ public class questdatabase : MonoBehaviour
 			
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
-			downloadmsg.text = www.error;
+			webloadingmessage.text = www.error;
 
 		}  
 
