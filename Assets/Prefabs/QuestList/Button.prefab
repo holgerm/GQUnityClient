@@ -49,6 +49,7 @@ GameObject:
   - 114: {fileID: 11466822}
   - 114: {fileID: 11496444}
   - 114: {fileID: 11454774}
+  - 114: {fileID: 11480446}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -312,6 +313,18 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
+--- !u!114 &11480446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1200242548, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!114 &11496444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -415,10 +428,10 @@ RectTransform:
   - {fileID: 22408018}
   m_Father: {fileID: 22466820}
   m_RootOrder: 0
-  m_AnchorMin: {x: .5, y: .5}
-  m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 468.500031, y: 3.00000763}
-  m_SizeDelta: {x: 150, y: 150}
+  m_AnchorMin: {x: 1, y: .5}
+  m_AnchorMax: {x: 1, y: .5}
+  m_AnchoredPosition: {x: -75, y: .200000003}
+  m_SizeDelta: {x: 150, y: 147.199997}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22466820
 RectTransform:

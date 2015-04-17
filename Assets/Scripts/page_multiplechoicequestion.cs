@@ -79,7 +79,10 @@ public class page_multiplechoicequestion : MonoBehaviour {
 		if (multiplechoicequestion.onEnd != null) {
 			
 			multiplechoicequestion.onEnd.Invoke ();
-		} else if(!multiplechoicequestion.onSuccess.hasMissionAction()  && !multiplechoicequestion.onFailure.hasMissionAction()) {
+		} else if((multiplechoicequestion.onSuccess == null && multiplechoicequestion.onFailure == null)
+		          ||
+		          ( multiplechoicequestion.onSuccess != null && !multiplechoicequestion.onSuccess.hasMissionAction()  && multiplechoicequestion.onFailure != null && !multiplechoicequestion.onFailure.hasMissionAction())
+		          ) {
 			
 			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest();
 			
