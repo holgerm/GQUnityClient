@@ -617,7 +617,6 @@ public class questdatabase : MonoBehaviour
 //				Debug.Log ("installing..."+reload);
 		currentquest = q.LoadFromText (q.id, x);
 		if (currentquest == null) {
-			webloadingmessage.enabled = false;
 			questmilllogo.enabled = false;
 			webloadingmessage.enabled = false;
 			return;
@@ -730,7 +729,7 @@ public class questdatabase : MonoBehaviour
 
 			Debug.Log ("WAITING FOR QUEST ASSETS");
 			webloadingmessage.text = "Downloading Quest Assets ... 0 %";
-
+			webloadingmessage.enabled = true;
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
 
@@ -994,7 +993,7 @@ public class questdatabase : MonoBehaviour
 
 		}  
 
-		webloadingmessage.enabled = false;
+		//webloadingmessage.enabled = false;
 		
 		
 	}
