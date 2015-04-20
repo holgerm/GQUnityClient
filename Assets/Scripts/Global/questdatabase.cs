@@ -107,11 +107,11 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
 		} else {
 			// on platforms which have a straight file path (e.g. iOS):
-			if (File.Exists (PREDEPLOYED_QUESTS_ZIP)) 
-				File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+			if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) 
+				return;
+			File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
 		}
 
-		// TODO should we catch Exceptions here beofre deleting the zip file?:
 		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
 		File.Delete (LOCAL_QUESTS_ZIP);
 
@@ -145,16 +145,19 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-	bool CheckConnection ()
+	IEnumerator CheckConnection (Quest q, float elapsedTime, WWW www)
 	{
-		WWW www = new WWW ("http://www.google.com");
-
-		int i = 0;
-		while (!www.isDone) {
-
+		Debug.Log ("CheckConnection(): before ping");
+		yield return new WaitForSeconds (0.1f);
+		if (www.isDone) {
+			bool ok = (www.error == null);
+			downloadAfterConnectionChecked (q, ok);
+		} else 
+			if (elapsedTime < 2.0f)
+			StartCoroutine (CheckConnection (q, elapsedTime + 0.1f, www));
+		else {
+			downloadAfterConnectionChecked (q, false);
 		}
-
-		return (www.responseHeaders.Count () > 0);
 	}
 
 	static public void CopyFolder (string sourceFolder, string destFolder)
@@ -368,10 +371,13 @@ public class questdatabase : MonoBehaviour
 
 	public void downloadQuest (Quest q)
 	{
-		
 		webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
-		bool connected = CheckConnection ();
+		StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+	}
+
+	void downloadAfterConnectionChecked (Quest q, bool connected)
+	{
 		if (connected) {
 			webloadingmessage.text = "Downloading quest ... " + q.name;
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
@@ -379,11 +385,12 @@ public class questdatabase : MonoBehaviour
 			webloadingmessage.enabled = true;
 			webloadingmessage.text = "Getting Quest-Definition ... ";
 			StartCoroutine (DownloadFinished (q));
-		
-
 		} else {
-			webloadingmessage.text = "You need to be connected to the internet!";
+			showmessage ("You need to be connected to the internet!");
+			questmilllogo.enabled = false;
+			webloadingmessage.enabled = false;
 		}
+
 	}
 
 	public void downloadQuest (int id)
@@ -602,20 +609,7 @@ public class questdatabase : MonoBehaviour
 		}
 
 
-
-
-		bool x = false;
-
-
-		if (localload) {
-			Debug.Log ("LOCAL");
-			x = true;
-		}
-
-
-
-//				Debug.Log ("installing..."+reload);
-		currentquest = q.LoadFromText (q.id, x);
+		currentquest = q.LoadFromText (q.id, localload);
 		if (currentquest == null) {
 			questmilllogo.enabled = false;
 			webloadingmessage.enabled = false;
@@ -677,58 +671,19 @@ public class questdatabase : MonoBehaviour
 		}
 
 				
-
-
-
-
-		bool did = false;
-		foreach (QuestPage qp in currentquest.pages) {
-
-			if (did == false) {
-				currentquest.currentpage = qp;
-				did = true;
-			}
-
-		}
+		currentquest.currentpage = currentquest.pages.First ();
 
 		hotspots = new List<QuestRuntimeHotspot> ();
 		foreach (QuestHotspot qh in currentquest.hotspots) {
+			bool initialActivity = qh.hasAttribute ("initialActivity") && qh.getAttribute ("initialActivity") == "true";
+			bool initialVisibility = qh.hasAttribute ("initialVisibility") && qh.getAttribute ("initialVisibility") == "true";
 
-
-
-
-			bool a = false;
-			if (qh.hasAttribute ("initialActivity")) {
-
-				if (qh.getAttribute ("initialActivity") == "true") {
-					a = true;
-				}
-
-			}
-
-			bool v = false;
-			if (qh.hasAttribute ("initialVisibility")) {
-				
-				if (qh.getAttribute ("initialVisibility") == "true") {
-					v = true;
-				}
-				
-			}
-
-			hotspots.Add (new QuestRuntimeHotspot (qh, a, v, qh.latlon));
-		
-
+			hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
 		}
 
-
-
-
-
-
 		if (canPlayQuest (currentquest)) {
-
 			Debug.Log ("WAITING FOR QUEST ASSETS");
-			webloadingmessage.text = "Downloading Quest Assets ... 0 %";
+			webloadingmessage.text = "Loading Quest Assets ... 0 %";
 			webloadingmessage.enabled = true;
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
@@ -774,7 +729,7 @@ public class questdatabase : MonoBehaviour
 		}
 		Debug.Log ("percent done: " + percent);
 
-		webloadingmessage.text = "Downloading Quest Assets ... " + percent + " %";
+		webloadingmessage.text = "Loading Quest Assets ... " + percent + " %";
 
 
 		if (done) {
