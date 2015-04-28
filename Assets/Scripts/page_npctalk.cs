@@ -19,6 +19,8 @@ public class page_npctalk : MonoBehaviour
 	public Image image_hochkant;
 	public Text text;
 	public Button nextbutton;
+	public Button backbutton;
+
 	public Text buttontext;
 	public int dialogitem_state = 0;
 	public string texttoticker;
@@ -42,6 +44,12 @@ public class page_npctalk : MonoBehaviour
 		}
 
 
+		if (questdb.currentquest.previouspage != null && questdb.currentquest.previouspage.type != "NPCTalk") {
+
+			Destroy(backbutton.gameObject);
+
+
+		}
 
 
 
@@ -384,7 +392,14 @@ public class page_npctalk : MonoBehaviour
 
 
 	}
+	public void backButton ()
+	{
+		
+		questdb.changePage (questdb.currentquest.previouspage.id);
+		
 
+		
+	}
 	public void onEnd ()
 	{
 

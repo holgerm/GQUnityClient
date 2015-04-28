@@ -835,7 +835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalID: 141
-  autostartQuestID: 6088
+  autostartQuestID: 6141
   colorProfile: carlbenz
 --- !u!4 &714240441
 Transform:
@@ -1314,6 +1314,31 @@ MonoBehaviour:
       onFailure:
         actions: []
       state: 
+      result: 
+    previouspage:
+      id: 0
+      type: 
+      attributes: []
+      contents_dialogitems: []
+      contents_expectedcode: []
+      contents_answers: []
+      contents_question:
+        id: 0
+        content: 
+        attributes: []
+        answers: []
+      contents_answersgroup: []
+      onEnd:
+        actions: []
+      onStart:
+        actions: []
+      onTap:
+        actions: []
+      onSuccess:
+        actions: []
+      onFailure:
+        actions: []
+      state: new
       result: 
     xmlcontent: 
   filteredOnlineList: []
@@ -2480,7 +2505,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2833,6 +2858,31 @@ MonoBehaviour:
         actions: []
       state: new
       result: 
+    previouspage:
+      id: 0
+      type: 
+      attributes: []
+      contents_dialogitems: []
+      contents_expectedcode: []
+      contents_answers: []
+      contents_question:
+        id: 0
+        content: 
+        attributes: []
+        answers: []
+      contents_answersgroup: []
+      onEnd:
+        actions: []
+      onStart:
+        actions: []
+      onTap:
+        actions: []
+      onSuccess:
+        actions: []
+      onFailure:
+        actions: []
+      state: new
+      result: 
     xmlcontent: 
   questdataprefab: {fileID: 483494, guid: 0bc29257c789c49eea959680bd54985d, type: 2}
   currentquestdata: {fileID: 0}
@@ -2905,6 +2955,31 @@ MonoBehaviour:
       onFailure:
         actions: []
       state: 
+      result: 
+    previouspage:
+      id: 0
+      type: 
+      attributes: []
+      contents_dialogitems: []
+      contents_expectedcode: []
+      contents_answers: []
+      contents_question:
+        id: 0
+        content: 
+        attributes: []
+        answers: []
+      contents_answersgroup: []
+      onEnd:
+        actions: []
+      onStart:
+        actions: []
+      onTap:
+        actions: []
+      onSuccess:
+        actions: []
+      onFailure:
+        actions: []
+      state: new
       result: 
     xmlcontent: 
   questdb: {fileID: 0}

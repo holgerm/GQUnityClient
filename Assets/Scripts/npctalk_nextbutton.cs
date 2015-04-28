@@ -8,7 +8,7 @@ public class npctalk_nextbutton : MonoBehaviour, IPointerClickHandler {
 	public page_npctalk controller;
 	private float clickTime;            // time of click
 	public bool onClick = true;            // is click allowed on button?
-
+	public bool backbutton = false;
 	
 	public void OnPointerClick(PointerEventData data)
 	{      
@@ -18,7 +18,11 @@ public class npctalk_nextbutton : MonoBehaviour, IPointerClickHandler {
 						// single click
 						if (onClick) {
 
+				if(!backbutton){
 								controller.nextButton ();
+				} else {
+					controller.backButton();
+				}
 
 						}
 		
