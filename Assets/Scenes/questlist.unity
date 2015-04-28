@@ -835,6 +835,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalID: 141
+  autostartQuestID: 6088
+  colorProfile: carlbenz
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -2798,7 +2800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9550d02c2d244fc9034bcabbc47c7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  predefinedStartingQuest: 0
   currentquest:
     name: 
     id: 0
@@ -2947,7 +2948,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e46d4660d0a49e6ad005466e824161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadProfile: carlbenz
   profiles:
   - id: default
     mainColor: {r: .145098045, g: .360784322, b: .411764741, a: 1}
