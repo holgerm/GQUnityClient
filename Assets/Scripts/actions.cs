@@ -99,7 +99,7 @@ public class actions : MonoBehaviour
 				quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 
 				if (action.type == "StartMission") {
-			quest.previouspage = quest.currentpage;
+			quest.previouspages.Add(quest.currentpage);
 						questdb.changePage (int.Parse (action.getAttribute ("id")));
 				} else if (action.type == "EndGame") {
 			photos = new List<QuestRuntimeAsset> ();

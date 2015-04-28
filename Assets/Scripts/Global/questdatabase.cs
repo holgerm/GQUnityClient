@@ -980,7 +980,7 @@ public class Quest  : IComparable<Quest>
 		hotspots;
 	public bool hasData = false;
 	public QuestPage currentpage;
-	public QuestPage previouspage;
+	public List<QuestPage> previouspages;
 
 	public string xmlcontent;
 

@@ -44,7 +44,7 @@ public class page_npctalk : MonoBehaviour
 		}
 
 
-		if (questdb.currentquest.previouspage != null && questdb.currentquest.previouspage.type != "NPCTalk") {
+		if (questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null && questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type != "NPCTalk") {
 
 			Destroy(backbutton.gameObject);
 
@@ -394,8 +394,12 @@ public class page_npctalk : MonoBehaviour
 	}
 	public void backButton ()
 	{
-		
-		questdb.changePage (questdb.currentquest.previouspage.id);
+
+
+
+		QuestPage show = questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1];
+		questdb.currentquest.previouspages.Remove (questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1]);
+		questdb.changePage (show.id);
 		
 
 		

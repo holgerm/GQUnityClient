@@ -1315,31 +1315,7 @@ MonoBehaviour:
         actions: []
       state: 
       result: 
-    previouspage:
-      id: 0
-      type: 
-      attributes: []
-      contents_dialogitems: []
-      contents_expectedcode: []
-      contents_answers: []
-      contents_question:
-        id: 0
-        content: 
-        attributes: []
-        answers: []
-      contents_answersgroup: []
-      onEnd:
-        actions: []
-      onStart:
-        actions: []
-      onTap:
-        actions: []
-      onSuccess:
-        actions: []
-      onFailure:
-        actions: []
-      state: new
-      result: 
+    previouspages: []
     xmlcontent: 
   filteredOnlineList: []
   filteredOfflineList: []
@@ -2858,31 +2834,7 @@ MonoBehaviour:
         actions: []
       state: new
       result: 
-    previouspage:
-      id: 0
-      type: 
-      attributes: []
-      contents_dialogitems: []
-      contents_expectedcode: []
-      contents_answers: []
-      contents_question:
-        id: 0
-        content: 
-        attributes: []
-        answers: []
-      contents_answersgroup: []
-      onEnd:
-        actions: []
-      onStart:
-        actions: []
-      onTap:
-        actions: []
-      onSuccess:
-        actions: []
-      onFailure:
-        actions: []
-      state: new
-      result: 
+    previouspages: []
     xmlcontent: 
   questdataprefab: {fileID: 483494, guid: 0bc29257c789c49eea959680bd54985d, type: 2}
   currentquestdata: {fileID: 0}
@@ -2956,31 +2908,7 @@ MonoBehaviour:
         actions: []
       state: 
       result: 
-    previouspage:
-      id: 0
-      type: 
-      attributes: []
-      contents_dialogitems: []
-      contents_expectedcode: []
-      contents_answers: []
-      contents_question:
-        id: 0
-        content: 
-        attributes: []
-        answers: []
-      contents_answersgroup: []
-      onEnd:
-        actions: []
-      onStart:
-        actions: []
-      onTap:
-        actions: []
-      onSuccess:
-        actions: []
-      onFailure:
-        actions: []
-      state: new
-      result: 
+    previouspages: []
     xmlcontent: 
   questdb: {fileID: 0}
   score: 0
