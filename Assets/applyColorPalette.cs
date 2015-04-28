@@ -73,7 +73,7 @@ public class applyColorPalette : MonoBehaviour {
 				ColorBlock colors = ca.button.colors;
 				colors.normalColor = questdb.buttonColor;
 				colors.disabledColor = questdb.buttonDisabledColor;
-				colors.pressedColor =  questdb.buttonColor;
+				colors.pressedColor =  questdb.buttonDisabledColor;
 				colors.highlightedColor =  questdb.buttonColor;
 				ca.button.colors = colors;
 
