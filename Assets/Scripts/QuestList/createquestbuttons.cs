@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
@@ -25,8 +24,6 @@ public class createquestbuttons : MonoBehaviour
 
 	void Start ()
 	{
-
-
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 
 		if (!Application.isWebPlayer) {
@@ -131,8 +128,9 @@ public class createquestbuttons : MonoBehaviour
 	{
 		questdb.allquests.Clear ();
 
-		string url = "http://www.qeevee.org:9091/json/" + portal_id + "/publicgames";
-		
+//		string url = "http://www.qeevee.org:9091/json/" + portal_id + "/publicgames";
+		string url = "http://www.qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgames";
+
 		www = new WWW (url);
 		
 		
