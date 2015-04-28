@@ -131,14 +131,14 @@ public class page_npctalk : MonoBehaviour
 					Debug.Log ("webimage");
 
 					www = new WWW (url);
-					StartCoroutine (waitforImage ());
+					waitforImage ();
 
 
 				} else if (File.Exists (npctalk.getAttribute ("image"))) {
 
 					Debug.Log ("File Exists");
 					www = new WWW (url);
-					StartCoroutine (waitforImage ());
+					waitforImage ();
 				}
 
 			}
@@ -343,10 +343,13 @@ public class page_npctalk : MonoBehaviour
 
 	}
 	
-	IEnumerator waitforImage ()
+	void waitforImage ()
 	{
-		
-		yield return www;
+
+		while (!www.isDone) {
+
+		}
+
 
 		if (www.error == null) {
 			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
@@ -375,6 +378,9 @@ public class page_npctalk : MonoBehaviour
 		
 		
 		} else {
+
+
+
 			Debug.Log (www.error);
 
 			image.enabled = false;
