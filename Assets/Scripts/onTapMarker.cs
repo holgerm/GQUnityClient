@@ -14,7 +14,6 @@ void OnMouseDown(){
 
 		if (hotspot.active) {
 
-						hotspot.hotspot.onEnter.Invoke ();
 
 						hotspot.hotspot.onTap.Invoke ();
 
