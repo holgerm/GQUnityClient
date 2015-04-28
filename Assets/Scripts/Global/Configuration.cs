@@ -6,8 +6,12 @@ public class Configuration : MonoBehaviour
 {
 
 	private static Configuration _instance;
+	
 	public int portalID = 1;
+	public int autostartQuestID = 0;
 	public string colorProfile = "default";
+
+
 	private bool externalBuildProcess = false;
 	
 	public static Configuration instance {
