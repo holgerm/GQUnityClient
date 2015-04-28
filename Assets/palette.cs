@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class palette : MonoBehaviour {
-
-	public string loadProfile = "default";
+public class palette : MonoBehaviour
+{
 
 	public List<ColorPalette> profiles;
 
@@ -25,12 +24,13 @@ public class palette : MonoBehaviour {
 	public Color secondCompColor;
 
 	// Use this for initialization
-	void Awake () {
+	void Awake ()
+	{
 	
 		foreach (ColorPalette cp in profiles) {
 
 
-			if(cp.id == loadProfile){
+			if (cp.id == Configuration.instance.colorProfile) {
 
 				mainColor = cp.mainColor;
 				backgroundColor = cp.backgroundColor;
@@ -60,7 +60,8 @@ public class palette : MonoBehaviour {
 
 
 [System.Serializable]
-public class ColorPalette{
+public class ColorPalette
+{
 
 
 	public string id;
