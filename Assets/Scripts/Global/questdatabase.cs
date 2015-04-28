@@ -12,7 +12,6 @@ using System.Text;
 
 public class questdatabase : MonoBehaviour
 {
-	public int predefinedStartingQuest;
 	public Quest currentquest;
 	public Transform questdataprefab;
 	public Transform currentquestdata;
@@ -74,9 +73,9 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("PDir2: predeployed questst already initialized");
 
 
-		if (predefinedStartingQuest != 0) {
+		if (Configuration.instance.autostartQuestID != 0) {
 			questmilllogo.enabled = true;
-			StartQuest (predefinedStartingQuest);
+			StartQuest (Configuration.instance.autostartQuestID);
 		}
 
 		// TODO: if no starting quest is given show foyer lists
