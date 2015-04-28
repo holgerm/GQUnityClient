@@ -8,8 +8,10 @@ namespace Product
 {
 	public class Builder
 	{
-		private static string PRODUCT_SHORT_NAME = "wcc"; // TODO make an environment var etc.
-		private static string PRODUCT_DISPLAY_NAME = "WCC Regio Bonn"; // TODO make an environment var etc.
+//		private static string PRODUCT_SHORT_NAME = "wcc"; // TODO make an environment var etc.
+//		private static string PRODUCT_DISPLAY_NAME = "WCC Regio Bonn"; // TODO make an environment var etc.
+		private static string PRODUCT_SHORT_NAME = "carlbenz"; // TODO make an environment var etc.
+		private static string PRODUCT_DISPLAY_NAME = "Carl Benz"; // TODO make an environment var etc.
 		private static string BUILD_TARGET = "Android"; // TODO make an environment var etc.
 
 		private static string PRODUCTS_DIR = "Production/products/";
