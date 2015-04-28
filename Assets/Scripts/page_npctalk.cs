@@ -131,14 +131,14 @@ public class page_npctalk : MonoBehaviour
 					Debug.Log ("webimage");
 
 					www = new WWW (url);
-					waitforImage ();
+					StartCoroutine(waitforImage ());
 
 
 				} else if (File.Exists (npctalk.getAttribute ("image"))) {
 
 					Debug.Log ("File Exists");
 					www = new WWW (url);
-					waitforImage ();
+					StartCoroutine(waitforImage ());
 				}
 
 			}
@@ -343,7 +343,7 @@ public class page_npctalk : MonoBehaviour
 
 	}
 	
-	void waitforImage ()
+	IEnumerator waitforImage ()
 	{
 
 		while (!www.isDone) {
@@ -385,6 +385,9 @@ public class page_npctalk : MonoBehaviour
 
 			image.enabled = false;
 		}
+
+
+		yield return 0;
 		
 	}
 

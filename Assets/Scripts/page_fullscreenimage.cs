@@ -84,7 +84,7 @@ public class page_fullscreenimage : MonoBehaviour
 
 						www = new WWW (url);
 				
-						waitforImage ();
+			StartCoroutine(waitforImage ());
 				}
 
 
@@ -114,7 +114,7 @@ public class page_fullscreenimage : MonoBehaviour
 				onEnd ();
 		}
 
-		void waitforImage ()
+		IEnumerator waitforImage ()
 		{
 		
 			while (!www.isDone) {
@@ -148,7 +148,9 @@ public class page_fullscreenimage : MonoBehaviour
 				} else {
 						Debug.Log (www.error);
 				}
-		
+
+
+		yield return 0;
 		}
 
 		public void onEnd ()
