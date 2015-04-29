@@ -90,13 +90,14 @@ namespace Product
 				return; // TODO how should we exit in error cases like this?
 			}
 
-			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
-			PlayerSettings.productName = getProductName ();
+			changeAndSavePlayerSettings ();
 
 			Debug.Log ("Building product " + PlayerSettings.productName + " (" + PlayerSettings.bundleIdentifier + ")");
 
 			BuildAndroidPlayer ();
 //			BuildIOSPlayer ();
+
+			restoreSavedPlayerSettings ();
 		}
 
 		static void BuildAndroidPlayer ()
@@ -136,6 +137,31 @@ namespace Product
 			} else {
 				Debug.Log ("Build done for iOS.");
 			}
+		}
+
+		static string savedSettingsBundleIdentifier;
+		static string savedSettingsProductName;
+		static Texture2D[] savedSettingsIcons4Android;
+		static Texture2D[] savedSettingsIcons4iOS;
+
+		static void changeAndSavePlayerSettings ()
+		{
+			savedSettingsBundleIdentifier = PlayerSettings.bundleIdentifier;
+			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
+
+			savedSettingsProductName = PlayerSettings.productName;
+			PlayerSettings.productName = getProductName ();
+
+			savedSettingsIcons4Android = PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.Android);
+			savedSettingsIcons4iOS = PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.iOS);
+		}
+
+		static void restoreSavedPlayerSettings ()
+		{
+			PlayerSettings.bundleIdentifier = savedSettingsBundleIdentifier;
+			PlayerSettings.productName = savedSettingsProductName;
+			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.Android, savedSettingsIcons4Android);
+			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.iOS, savedSettingsIcons4iOS);
 		}
 		
 		/// <summary>
