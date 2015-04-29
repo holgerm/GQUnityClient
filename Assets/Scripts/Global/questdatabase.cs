@@ -60,25 +60,27 @@ public class questdatabase : MonoBehaviour
 			webloadingmessage.enabled = true;
 			questmilllogo.enabled = true;
 		}
+
+		FileSystemInfo[] questsDirInfo = new DirectoryInfo (PATH_2_QUESTS).GetFileSystemInfos ();
 		
 
-		Debug.Log ("PDir1 = " + PATH_2_PREDEPLOYED_QUESTS);
-
-		if (!Directory.Exists (PATH_2_QUESTS) || new DirectoryInfo (PATH_2_QUESTS).GetFileSystemInfos ().Length == 0) {
+		if (!Directory.Exists (PATH_2_QUESTS) || questsDirInfo.Length == 0) {
 			Debug.Log ("PDir2: we need to initialize pedeployed quests");
 			Directory.CreateDirectory (PATH_2_QUESTS);
 
 			InitPredeployedQuests ();
-		} else 
-			Debug.Log ("PDir2: predeployed questst already initialized");
-
+		} else {
+			Debug.Log ("START: The following quests are already initialized: initialize\n");
+			foreach (FileSystemInfo fileInfo in questsDirInfo) {
+				Debug.Log ("\t" + fileInfo.FullName + "\n");
+			}
+		}
 
 		if (Configuration.instance.autostartQuestID != 0) {
 			questmilllogo.enabled = true;
 			StartQuest (Configuration.instance.autostartQuestID);
 		}
 
-		// TODO: if no starting quest is given show foyer lists
 	}
 
 	void InitPredeployedQuests ()
