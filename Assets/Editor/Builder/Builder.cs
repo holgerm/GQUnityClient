@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 namespace Product
 {
@@ -10,9 +11,50 @@ namespace Product
 	{
 //		private static string PRODUCT_SHORT_NAME = "wcc"; // TODO make an environment var etc.
 //		private static string PRODUCT_DISPLAY_NAME = "WCC Regio Bonn"; // TODO make an environment var etc.
-		private static string PRODUCT_SHORT_NAME = "carlbenz"; // TODO make an environment var etc.
-		private static string PRODUCT_DISPLAY_NAME = "Carl Benz"; // TODO make an environment var etc.
-		private static string BUILD_TARGET = "Android"; // TODO make an environment var etc.
+		static string productID = "default";
+
+		public static string ProductID {
+			get {
+				return productID;
+			}
+			set {
+				productID = value;
+			}
+		}
+
+		static Dictionary<string, string> productNames = new Dictionary<string, string> () {
+			{
+				"default", 
+				"GeoQuest"
+			},
+			{
+				"carlbenz", 
+				"Carl Benz"
+			},
+			{
+				"wcc",
+				"WCC Regio Bonn"
+			},
+			{
+				"ebk",
+				"GeoQuest"
+			},
+			{
+				"phka",
+				"EduQuest"
+			}
+		};
+
+		static string getProductName ()
+		{
+			string name;
+			if (!productNames.TryGetValue (ProductID, out name)) {
+				Debug.LogError ("ERROR: Unknown product ID: " + ProductID);
+			}
+			return name;
+		}
+
+		// TODO make an environment var etc.
 
 		private static string PRODUCTS_DIR = "Production/products/";
 		private static string PRODUCT_ASSETS_DIR = "Assets/Editor/products/";
@@ -28,22 +70,74 @@ namespace Product
 			}
 		};
 
-		public static void BuildAndroidPlayer ()
+		public static void BuildPlayers ()
 		{
+			string[] args = Environment.GetCommandLineArgs ();
+			bool productIDFound = false;
+			int i = 0;
+			while (i < args.Length && !productIDFound) {
+				if (args [i].Equals ("--gqproduct") && args.Length > i + 1) {
+					productIDFound = true;
+					productID = args [i + 1];
+				} else
+					i++;
+			}
+
+			if (productIDFound) {
+				Debug.Log ("Producing: " + productID);
+			} else {
+				Debug.LogError ("ERROR: No product ID specified. Use --gqproduct <productID> to build your product!");
+				return; // TODO how should we exit in error cases like this?
+			}
+
 			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
-			PlayerSettings.productName = PRODUCT_DISPLAY_NAME;
+			PlayerSettings.productName = getProductName ();
 
-			Debug.Log ("ICONS: set before: " + PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.Android).Length);
-			Debug.Log ("ICONS: own icons: " + GetAppIcons (BuildTarget.Android).Length);
-			Debug.Log ("ICONS: own icon height: " + GetAppIcons (BuildTarget.Android) [0].height);
+			Debug.Log ("Building product " + PlayerSettings.productName + " (" + PlayerSettings.bundleIdentifier + ")");
 
-			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.Android, GetAppIcons (BuildTarget.Android));
-
-			Debug.Log ("ICONS: set after: " + PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.Android).Length);
-
-			BuildPipeline.BuildPlayer (GetScenes (), GetAndroidOutputPath (), BuildTarget.Android, BuildOptions.None);
+			BuildAndroidPlayer ();
+//			BuildIOSPlayer ();
 		}
 
+		static void BuildAndroidPlayer ()
+		{
+			string errorMsg;
+
+			// Build Android:
+			Debug.Log ("Building Android player ...");
+			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.Android, GetAppIcons (BuildTarget.Android));
+			string outDir = PRODUCTS_DIR + productID + "/Android";
+			if (!Directory.Exists (outDir)) {
+				Directory.CreateDirectory (outDir + "/");
+			}
+			string outPath = outDir + "/gq_" + productID + ".apk";
+			errorMsg = BuildPipeline.BuildPlayer (GetScenes (), outPath, BuildTarget.Android, BuildOptions.None);
+			if (errorMsg != null && !errorMsg.Equals ("")) {
+				Debug.LogError ("ERROR while trying to build Android player: " + errorMsg);
+			} else {
+				Debug.Log ("Build done for Android.");
+			}
+		}
+
+		static void BuildIOSPlayer ()
+		{
+			string errorMsg;
+			
+			// Build Android:
+			Debug.Log ("Building iOS player ...");
+			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.Android, GetAppIcons (BuildTarget.Android));
+			string outDir = PRODUCTS_DIR + productID + "/iOS/gq_" + productID;
+			if (!Directory.Exists (outDir)) {
+				Directory.CreateDirectory (outDir + "/");
+			}
+			errorMsg = BuildPipeline.BuildPlayer (GetScenes (), outDir, BuildTarget.iOS, BuildOptions.None);
+			if (errorMsg != null && !errorMsg.Equals ("")) {
+				Debug.LogError ("ERROR while trying to build iOS player: " + errorMsg);
+			} else {
+				Debug.Log ("Build done for iOS.");
+			}
+		}
+		
 		/// <summary>
 		/// Gets the scenes to be included into the build.
 		/// 
@@ -68,12 +162,12 @@ namespace Product
 
 		static string GetBundleIdentifier ()
 		{
-			return "com.questmill.geoquest." + PRODUCT_SHORT_NAME;
+			return "com.questmill.geoquest." + productID;
 		}
 
 		static Texture2D[] GetAppIcons (BuildTarget target)
 		{
-			string appIconPathTrunk = PRODUCT_ASSETS_DIR + PRODUCT_SHORT_NAME + "/appIcon_";
+			string appIconPathTrunk = PRODUCT_ASSETS_DIR + productID + "/appIcon_";
 			List<int> sizes;
 			if (!appIconSizes.TryGetValue (target, out sizes)) {
 				Debug.LogError ("No app icon sizes defined for build target " + target.GetType ().Name);
@@ -90,14 +184,6 @@ namespace Product
 			return appIcons;
 		}
 
-		/// <summary>
-		/// Gets the Android apk output path - relative to the project dir.
-		/// </summary>
-		/// <returns>The relative output path for Android apk.</returns>
-		static string GetAndroidOutputPath ()
-		{
-			return PRODUCTS_DIR + PRODUCT_SHORT_NAME + "/" + BUILD_TARGET + "/gq_" + PRODUCT_SHORT_NAME + ".apk";
-		}
 	}
-}
 
+}
