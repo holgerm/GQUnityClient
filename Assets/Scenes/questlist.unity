@@ -212,7 +212,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: version 0.9.2
+  m_Text: version 0.9.6
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -835,7 +835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalID: 141
-  autostartQuestID: 6141
+  autostartQuestID: 6088
   colorProfile: carlbenz
 --- !u!4 &714240441
 Transform:
@@ -2352,7 +2352,7 @@ GameObject:
   - 222: {fileID: 1583482457}
   - 114: {fileID: 1583482456}
   m_Layer: 5
-  m_Name: Version
+  m_Name: SmallVersion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2400,7 +2400,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: version 0.9.2
+  m_Text: version 0.9.6
 --- !u!222 &1583482457
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2481,7 +2481,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
