@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo "Welcome to gq_build!"
+
+if [ ! "$#" -eq 1 ]; then
+	echo "  usage: gq_build <productName>"
+	exit 1
+fi
+
+# TODO: check that given product name is valid, i.e. folder exists and minimal requirements for product
+
+# TODO: copy associated config file into streaming assets folder of unity project
+
+# Build Android project:
+/Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode \
+	-projectPath /Users/muegge/projects/qv-geoquest/GQUnityClient  \
+	-executeMethod Product.Builder.BuildPlayers \
+	--gqproduct $1
+ret_code=$?
+
+# TODO: check whether build successful
+if [ $ret_code != 0 ]; then
+	printf "Build ERROR : [%d]\n\n" $ret_code
+
+# TODO: build failed, we should open editor.log file
+  
+  	exit $ret_code
+else
+	printf "Build succeded.\n"
+fi
+
+# TODO: store build with version number in versions folder (android and iOS seprarately)
+
+# TODO build (and append?) iOS project
