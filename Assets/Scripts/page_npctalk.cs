@@ -20,7 +20,6 @@ public class page_npctalk : MonoBehaviour
 	public Text text;
 	public Button nextbutton;
 	public Button backbutton;
-
 	public Text buttontext;
 	public int dialogitem_state = 0;
 	public string texttoticker;
@@ -48,7 +47,7 @@ public class page_npctalk : MonoBehaviour
 		if (questdb.currentquest.previouspages.Count > 0 && questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] != null) {
 			if (questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type != "NPCTalk") {
 
-				Destroy (backbutton.gameObject);
+//				Destroy (backbutton.gameObject);
 
 
 			}
@@ -131,14 +130,14 @@ public class page_npctalk : MonoBehaviour
 					Debug.Log ("webimage");
 
 					www = new WWW (url);
-					StartCoroutine(waitforImage ());
+					StartCoroutine (waitforImage ());
 
 
 				} else if (File.Exists (npctalk.getAttribute ("image"))) {
 
 					Debug.Log ("File Exists");
 					www = new WWW (url);
-					StartCoroutine(waitforImage ());
+					StartCoroutine (waitforImage ());
 				}
 
 			}
@@ -293,11 +292,11 @@ public class page_npctalk : MonoBehaviour
 
 
 
-				if(!questdb.GetComponent<palette>().darkBG){
-				text.text = "<color=#5c5c5c>"+text.text+"</color>";
+				if (!questdb.GetComponent<palette> ().darkBG) {
+					text.text = "<color=#5c5c5c>" + text.text + "</color>";
 				} else {
 
-					text.text = "<color=#989898>"+text.text+"</color>";
+					text.text = "<color=#989898>" + text.text + "</color>";
 
 				}
 				if (npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker").Length > 0) {
@@ -316,7 +315,7 @@ public class page_npctalk : MonoBehaviour
 			}
 			dialogitem_state++;
 
-			Debug.Log("scrolling?");
+			Debug.Log ("scrolling?");
 
 			if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 				buttontext.text = npctalk.getAttribute ("endbuttontext");
@@ -411,6 +410,7 @@ public class page_npctalk : MonoBehaviour
 
 
 	}
+
 	public void backButton ()
 	{
 
@@ -423,6 +423,7 @@ public class page_npctalk : MonoBehaviour
 
 		
 	}
+
 	public void onEnd ()
 	{
 
