@@ -43,15 +43,12 @@ public class page_videoplay : MonoBehaviour
 
 
 			if (Application.platform != RuntimePlatform.Android) {
-				url = url.Replace ("@streamingassets@", Application.streamingAssetsPath + "/prepackaged/");
+				url = url.Replace ("@streamingassets@", Application.streamingAssetsPath + "/predeployed/media/");
 				url = "file:/" + url;
 			} else {
-				url = url.Replace ("@streamingassets@", "prepackaged/");		
+				url = url.Replace ("@streamingassets@", "predeployed/media/");		
 			}
 			 
-
-			//	url = "file://"+Application.streamingAssetsPath+"/1_Code_7_-_Trailer_(1080p).mp4";
-
 			Debug.Log ("video url:" + url);
 
 			StartCoroutine (PlayStreamingVideo (url));
