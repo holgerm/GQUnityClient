@@ -78,6 +78,7 @@ public class questdatabase : MonoBehaviour
 
 		if (Configuration.instance.autostartQuestID != 0) {
 			questmilllogo.enabled = true;
+			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 			StartQuest (Configuration.instance.autostartQuestID);
 		}
 
@@ -108,9 +109,15 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
 		} else {
 			// on platforms which have a straight file path (e.g. iOS):
-			if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) 
+			Debug.Log ("InitPredeployedQuests: on IOS.");
+			if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
+				Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
 				return;
+			}
 			File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+			if (!File.Exists (LOCAL_QUESTS_ZIP)) {
+				Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
+			}
 		}
 
 		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
@@ -440,6 +447,9 @@ public class questdatabase : MonoBehaviour
 				Directory.CreateDirectory (Path.GetDirectoryName (filename));
 			}
 
+			if (wwwfile == null || wwwfile.bytes == null || wwwfile.bytes.Length == 0)
+				Debug.Log ("Download Problem: Empty file " + filename);
+
 			FileStream fs = File.Create (filename);
 			fs.Write (wwwfile.bytes, 0, wwwfile.size);
 			fs.Close ();
@@ -737,7 +747,7 @@ public class questdatabase : MonoBehaviour
 
 			changePage (pageid);
 		} else {
-
+			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
 			StartCoroutine (waitforquestassets (pageid, timeout));
 
 		}
@@ -818,7 +828,7 @@ public class questdatabase : MonoBehaviour
 	public void changePage (int id)
 	{
 		
-
+		Debug.Log ("Change Page to " + id);
 
 		foreach (QuestPage qp in currentquest.pages) {
 		
@@ -983,7 +993,6 @@ public class Quest  : IComparable<Quest>
 	public bool hasData = false;
 	public QuestPage currentpage;
 	public List<QuestPage> previouspages;
-
 	public string xmlcontent;
 
 	public Quest ()
