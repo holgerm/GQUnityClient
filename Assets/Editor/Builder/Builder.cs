@@ -94,8 +94,8 @@ namespace Product
 
 			Debug.Log ("Building product " + PlayerSettings.productName + " (" + PlayerSettings.bundleIdentifier + ")");
 
-			BuildAndroidPlayer ();
-//			BuildIOSPlayer ();
+//			BuildAndroidPlayer ();
+			BuildIOSPlayer ();
 
 			restoreSavedPlayerSettings ();
 		}
@@ -126,7 +126,7 @@ namespace Product
 			
 			// Build Android:
 			Debug.Log ("Building iOS player ...");
-			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.Android, GetAppIcons (BuildTarget.Android));
+			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.iOS, GetAppIcons (BuildTarget.iOS));
 			string outDir = PRODUCTS_DIR + productID + "/iOS/gq_" + productID;
 			if (!Directory.Exists (outDir)) {
 				Directory.CreateDirectory (outDir + "/");
