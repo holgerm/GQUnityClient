@@ -110,7 +110,7 @@ public class page_videoplay : MonoBehaviour
 #else
 
 
-		questdb.Debug("Video Playback can't be simulated in web-preview right now");
+		questdb.debug("Video Playback can't be simulated in web-preview right now");
 
 		StartCoroutine(onEnd());
 
@@ -126,7 +126,13 @@ public class page_videoplay : MonoBehaviour
 	{
 		//        Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
 		yield return new WaitForSeconds (1.0f);
+
+		#if !UNITY_WEBPLAYER
+
 		Handheld.PlayFullScreenMovie (url, Color.black, FullScreenMovieControlMode.Full);
+
+#endif
+
 		yield return new WaitForEndOfFrame ();
 		yield return new WaitForEndOfFrame ();
 		StartCoroutine (onEnd ());

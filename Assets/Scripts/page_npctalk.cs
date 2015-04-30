@@ -47,7 +47,7 @@ public class page_npctalk : MonoBehaviour
 		if (questdb.currentquest.previouspages.Count > 0 && questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] != null) {
 			if (questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type != "NPCTalk") {
 
-//				Destroy (backbutton.gameObject);
+				Destroy (backbutton.gameObject);
 
 
 			}
@@ -345,10 +345,7 @@ public class page_npctalk : MonoBehaviour
 	IEnumerator waitforImage ()
 	{
 
-		while (!www.isDone) {
-
-		}
-
+		yield return www;
 
 		if (www.error == null) {
 			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
