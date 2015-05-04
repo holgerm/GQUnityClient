@@ -12,6 +12,7 @@ namespace Product
 //		private static string PRODUCT_SHORT_NAME = "wcc"; // TODO make an environment var etc.
 //		private static string PRODUCT_DISPLAY_NAME = "WCC Regio Bonn"; // TODO make an environment var etc.
 		static string productID = "default";
+		static bool replaceProduct = false;
 
 		public static string ProductID {
 			get {
@@ -78,9 +79,12 @@ namespace Product
 			while (i < args.Length && !productIDFound) {
 				if (args [i].Equals ("--gqproduct") && args.Length > i + 1) {
 					productIDFound = true;
-					productID = args [i + 1];
-				} else
-					i++;
+					productID = args [++i];
+				} 
+				if (args [i].Equals ("--gqreplace")) {
+					replaceProduct = true;
+				} 
+				i++;
 			}
 
 			if (productIDFound) {
@@ -94,7 +98,7 @@ namespace Product
 
 			Debug.Log ("Building product " + PlayerSettings.productName + " (" + PlayerSettings.bundleIdentifier + ")");
 
-//			BuildAndroidPlayer ();
+			BuildAndroidPlayer ();
 			BuildIOSPlayer ();
 
 			restoreSavedPlayerSettings ();
@@ -124,14 +128,16 @@ namespace Product
 		{
 			string errorMsg;
 			
-			// Build Android:
+			// Build iOS:
 			Debug.Log ("Building iOS player ...");
 			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.iOS, GetAppIcons (BuildTarget.iOS));
 			string outDir = PRODUCTS_DIR + productID + "/iOS/gq_" + productID;
 			if (!Directory.Exists (outDir)) {
 				Directory.CreateDirectory (outDir + "/");
 			}
-			errorMsg = BuildPipeline.BuildPlayer (GetScenes (), outDir, BuildTarget.iOS, BuildOptions.None);
+			// should we replace the project? otherwise we append
+			BuildOptions buildOptions = replaceProduct ? BuildOptions.None : BuildOptions.AcceptExternalModificationsToPlayer;
+			errorMsg = BuildPipeline.BuildPlayer (GetScenes (), outDir, BuildTarget.iOS, buildOptions);
 			if (errorMsg != null && !errorMsg.Equals ("")) {
 				Debug.LogError ("ERROR while trying to build iOS player: " + errorMsg);
 			} else {
@@ -205,7 +211,7 @@ namespace Product
 				// TODO: check that file exists or log error.
 				appIcons [i++] =
 					AssetDatabase.LoadMainAssetAtPath (appIconPathTrunk + size + ".png") as Texture2D;
-
+				Debug.Log ("Loaded app icon from path: " + appIconPathTrunk + size + ".png");
 			}
 			return appIcons;
 		}
