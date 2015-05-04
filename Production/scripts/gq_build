@@ -2,10 +2,21 @@
 
 echo "Welcome to gq_build!"
 
-if [ ! "$#" -eq 1 ]; then
-	echo "  usage: gq_build <productName>"
+if [ ! "$#" -ge 1 ]; then
+	echo "  usage: gq_build <productName> <optional arguments ...>"
+	echo "    optional arguments are:"
+	echo "       --gqreplace (replaces / overwrites iOS product files)"
 	exit 1
 fi
+
+# filter out the first agruments and forward only the optional additional arguments to unity:
+inArgs=($@)
+forwardArgs=()
+for i in "${!inArgs[@]}"; do
+	if [ $i -gt 0 ]; then
+		forwardArgs+=(${inArgs[$i]})
+	fi
+done
 
 # TODO: check that given product name is valid, i.e. folder exists and minimal requirements for product
 
@@ -15,13 +26,12 @@ fi
 /Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode \
 	-projectPath /Users/muegge/projects/qv-geoquest/GQUnityClient  \
 	-executeMethod Product.Builder.BuildPlayers \
-	--gqproduct $1
+	--gqproduct $1 $forwardArgs
 ret_code=$?
 
 # TODO: check whether build successful
 if [ $ret_code != 0 ]; then
-	printf "Build ERROR : [%d]\n\n" $ret_code
-
+	printf "Build ERROR : [%d]\n\n" $ret_cod
 # TODO: build failed, we should open editor.log file
   
   	exit $ret_code
