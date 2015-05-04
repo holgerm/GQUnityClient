@@ -150,7 +150,7 @@ PlayerSettings:
       m_Size: 128
   - m_BuildTarget: iPhone
     m_Icons:
-    - m_Icon: {fileID: 2800000, guid: ffd543fb9a09b4d4fbcc53c320c9ea20, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 30cd20ae5d95a4650b9cd37b894604f6, type: 3}
       m_Size: 180
     - m_Icon: {fileID: 2800000, guid: 7283d2158f9714bfda41942f447370fc, type: 3}
       m_Size: 152
