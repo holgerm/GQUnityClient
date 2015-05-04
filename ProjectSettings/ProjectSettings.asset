@@ -148,20 +148,6 @@ PlayerSettings:
     m_Icons:
     - m_Icon: {fileID: 2800000, guid: 35e841a4f8fc5495fa53dfc671132ce6, type: 3}
       m_Size: 128
-  - m_BuildTarget: Android
-    m_Icons:
-    - m_Icon: {fileID: 2800000, guid: 138ecbeebb6114a488283c67a949371a, type: 3}
-      m_Size: 192
-    - m_Icon: {fileID: 2800000, guid: d06e72513d3a3431d81a5ffaeffb2182, type: 3}
-      m_Size: 144
-    - m_Icon: {fileID: 2800000, guid: d340159e7ac0541d79c53ab53571230e, type: 3}
-      m_Size: 96
-    - m_Icon: {fileID: 2800000, guid: 16f10e323310949b59e86b4431f7a8d6, type: 3}
-      m_Size: 72
-    - m_Icon: {fileID: 2800000, guid: 4fa9fc993e5c64eb5b8b25bd8bd422b9, type: 3}
-      m_Size: 48
-    - m_Icon: {fileID: 2800000, guid: 69f82a2ce99b34068b58bd30edc5b8b8, type: 3}
-      m_Size: 36
   - m_BuildTarget: iPhone
     m_Icons:
     - m_Icon: {fileID: 2800000, guid: ffd543fb9a09b4d4fbcc53c320c9ea20, type: 3}
@@ -180,6 +166,20 @@ PlayerSettings:
       m_Size: 72
     - m_Icon: {fileID: 2800000, guid: ca63547f9f93d4952b6cf5a36936cb16, type: 3}
       m_Size: 57
+  - m_BuildTarget: Android
+    m_Icons:
+    - m_Icon: {fileID: 2800000, guid: 138ecbeebb6114a488283c67a949371a, type: 3}
+      m_Size: 192
+    - m_Icon: {fileID: 2800000, guid: d06e72513d3a3431d81a5ffaeffb2182, type: 3}
+      m_Size: 144
+    - m_Icon: {fileID: 2800000, guid: d340159e7ac0541d79c53ab53571230e, type: 3}
+      m_Size: 96
+    - m_Icon: {fileID: 2800000, guid: 16f10e323310949b59e86b4431f7a8d6, type: 3}
+      m_Size: 72
+    - m_Icon: {fileID: 2800000, guid: 4fa9fc993e5c64eb5b8b25bd8bd422b9, type: 3}
+      m_Size: 48
+    - m_Icon: {fileID: 2800000, guid: 69f82a2ce99b34068b58bd30edc5b8b8, type: 3}
+      m_Size: 36
   m_BuildTargetBatching:
   - m_BuildTarget: Android
     m_StaticBatching: 1
