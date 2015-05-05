@@ -32,15 +32,14 @@ public class questdatabase : MonoBehaviour
 	private string PATH_2_PREDEPLOYED_QUESTS;
 	private string PREDEPLOYED_QUESTS_ZIP;
 	private string LOCAL_QUESTS_ZIP;
-	private string PATH_2_QUESTS;
-	
+	private string PATH_2_LOCAL_QUESTS;
+
 	void Start ()
 	{
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
 		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
-		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "predeployedquests.zip");
-		PATH_2_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
-
+		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
+		PATH_2_LOCAL_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
@@ -62,12 +61,12 @@ public class questdatabase : MonoBehaviour
 		} else {
 
 #if !UNITY_WEBPLAYER
-			FileSystemInfo[] questsDirInfo = new DirectoryInfo (PATH_2_QUESTS).GetFileSystemInfos ();
+			FileSystemInfo[] questsDirInfo = new DirectoryInfo (PATH_2_LOCAL_QUESTS).GetFileSystemInfos ();
 		
 
-			if (!Directory.Exists (PATH_2_QUESTS) || questsDirInfo.Length == 0) {
+			if (!Directory.Exists (PATH_2_LOCAL_QUESTS) || questsDirInfo.Length == 0) {
 				Debug.Log ("PDir2: we need to initialize pedeployed quests");
-				Directory.CreateDirectory (PATH_2_QUESTS);
+				Directory.CreateDirectory (PATH_2_LOCAL_QUESTS);
 
 				InitPredeployedQuests ();
 			} else {
@@ -81,7 +80,11 @@ public class questdatabase : MonoBehaviour
 		}
 
 		if (Configuration.instance.autostartQuestID != 0) {
-			questmilllogo.enabled = true;
+			GameObject questListPanel = GameObject.Find ("/Canvas");
+			questListPanel.SetActive (false);
+
+			questmilllogo.enabled = false;
+			webloadingmessage.enabled = false;
 			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 			StartQuest (Configuration.instance.autostartQuestID);
 		}
@@ -94,42 +97,42 @@ public class questdatabase : MonoBehaviour
 
 		#if !UNITY_WEBPLAYER
 
-			Debug.Log ("InitPredeployedQuests 1, looking for predep zip: " + PREDEPLOYED_QUESTS_ZIP);
-			if (PREDEPLOYED_QUESTS_ZIP.Contains ("://")) {
-				// on platforms which use an url type as asset path (e.g. Android):
-				WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);  // this is the path to your StreamingAssets in android
-				while (!questZIP.isDone) {
-				}  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
+		Debug.Log ("InitPredeployedQuests 1, looking for predep zip: " + PREDEPLOYED_QUESTS_ZIP);
+		if (PREDEPLOYED_QUESTS_ZIP.Contains ("://")) {
+			// on platforms which use an url type as asset path (e.g. Android):
+			WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);  // this is the path to your StreamingAssets in android
+			while (!questZIP.isDone) {
+			}  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
 			
-				Debug.Log ("PDir3: LOADED BY WWW. questZIP.text: " + questZIP.text);
-				if (questZIP.error != null && !questZIP.error.Equals ("")) {
-					Debug.Log ("PDir3: LOADED BY WWW. questZIP.error: " + questZIP.error);
-					return;
-				}
-				Debug.Log ("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
+			Debug.Log ("PDir3: LOADED BY WWW. questZIP.text: " + questZIP.text);
+			if (questZIP.error != null && !questZIP.error.Equals ("")) {
+				Debug.Log ("PDir3: LOADED BY WWW. questZIP.error: " + questZIP.error);
+				return;
+			}
+			Debug.Log ("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
 
-				if (File.Exists (LOCAL_QUESTS_ZIP)) {
-					Debug.LogWarning ("Local copy of predeployment zip file was found. Should have been deleted at last initialization.");
-					File.Delete (LOCAL_QUESTS_ZIP);
-				}
-
-				File.WriteAllBytes (LOCAL_QUESTS_ZIP, questZIP.bytes);
-				Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
-			} else {
-				// on platforms which have a straight file path (e.g. iOS):
-				Debug.Log ("InitPredeployedQuests: on IOS.");
-				if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
-					Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
-					return;
-				}
-				File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
-				if (!File.Exists (LOCAL_QUESTS_ZIP)) {
-					Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
-				}
+			if (File.Exists (LOCAL_QUESTS_ZIP)) {
+				Debug.LogWarning ("Local copy of predeployment zip file was found. Should have been deleted at last initialization.");
+				File.Delete (LOCAL_QUESTS_ZIP);
 			}
 
-			ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
-			File.Delete (LOCAL_QUESTS_ZIP);
+			File.WriteAllBytes (LOCAL_QUESTS_ZIP, questZIP.bytes);
+			Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
+		} else {
+			// on platforms which have a straight file path (e.g. iOS):
+			Debug.Log ("InitPredeployedQuests: on IOS.");
+			if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
+				Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
+				return;
+			}
+			File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+			if (!File.Exists (LOCAL_QUESTS_ZIP)) {
+				Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
+			}
+		}
+
+		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
+		File.Delete (LOCAL_QUESTS_ZIP);
 
 #endif
 
@@ -137,7 +140,7 @@ public class questdatabase : MonoBehaviour
 
 	bool IsQuestInitialized (int id)
 	{
-		string questDirPath = System.IO.Path.Combine (PATH_2_QUESTS, id.ToString ());
+		string questDirPath = System.IO.Path.Combine (PATH_2_LOCAL_QUESTS, id.ToString ());
 		return Directory.Exists (questDirPath);
 	}
 
@@ -751,7 +754,6 @@ public class questdatabase : MonoBehaviour
 		Debug.Log ("percent done: " + percent);
 
 		webloadingmessage.text = "Loading Quest Assets ... " + percent + " %";
-
 
 		if (done) {
 
