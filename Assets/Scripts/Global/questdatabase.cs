@@ -81,9 +81,10 @@ public class questdatabase : MonoBehaviour
 
 		if (Configuration.instance.autostartQuestID != 0) {
 			GameObject questListPanel = GameObject.Find ("/Canvas");
-			questListPanel.SetActive (false);
+			//questListPanel.SetActive (false);
 
-			questmilllogo.enabled = false;
+			questmilllogo.enabled = true;
+			questmilllogo.color= Color.black;
 			webloadingmessage.enabled = false;
 			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 			StartQuest (Configuration.instance.autostartQuestID);
@@ -159,6 +160,8 @@ public class questdatabase : MonoBehaviour
 		
 		if (q == null) {
 			Debug.Log ("Problem 1 id: " + id);
+			q = new Quest();
+			q.id = id;
 			downloadQuest (q);
 		} else {
 			startQuest (q);
@@ -840,7 +843,7 @@ public class questdatabase : MonoBehaviour
 	public void changePage (int id)
 	{
 		
-		debug ("Changing page to " + id);
+		Debug.Log("Changing page to " + id);
 
 		foreach (QuestPage qp in currentquest.pages) {
 		
@@ -853,32 +856,126 @@ public class questdatabase : MonoBehaviour
 
 				currentquest.currentpage.state = "running";
 
+			
+				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = true;
+
+				
+				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>() ;
+
+
+				string debug = "";
+
+				foreach(GameObject go in allObjects){
+
+					debug += go.name+"; ";
+
+				}
+
+				Debug.Log(debug);
+
+
+
+					foreach(GameObject go in allObjects)
+						if(go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
+					   && go.name != "ImpressumCanvas" && !go.transform.IsChildOf(GameObject.Find("ImpressumCanvas").transform)
+					  && go.name != "Configuration" &&  go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
+					  && go.name != "" && !go.name.Contains("[tile") && go.name != "EventSystem_Map"){
+
+
+
+					bool des = true;
+
+					if(GameObject.Find("MapCanvas") != null){
+
+						if(go.transform.IsChildOf(GameObject.Find("MapCanvas").transform)){
+							des = false;
+							//Debug.Log("is child of mapcanvas");
+						}
+
+					}
+
+					if(GameObject.Find("[Map]")){
+
+						if(go.transform.IsChildOf(GameObject.Find("[Map]").transform)){
+
+							des = false;
+
+						}
+							
+							
+							
+						}
+
+					if(GameObject.Find("[location marker]")){
+						
+						if(go.transform.IsChildOf(GameObject.Find("[location marker]").transform)){
+							
+							des = false;
+							
+						}
+						
+						
+						
+					}
+
+					if(GameObject.Find("PageController_Map")){
+
+						if(go == GameObject.Find("PageController_Map").GetComponent<page_map>().map){
+
+							des = false;
+
+						}
+
+					}
+
+if(des){
+						Destroy(go);
+					}
+
+					}
+
+
+				//if(GameObject.Find("MapCam") != null){
+				//GameObject.Find("MapCam").GetComponent<Camera>().enabled = false;
+				//}
+				
+				
 				if (qp.type == "NPCTalk") {
-					Application.LoadLevel (1);
+					Application.LoadLevelAdditive (1);
 				} else if (qp.type == "StartAndExitScreen") {
-					Application.LoadLevel (2);
+					Application.LoadLevelAdditive (2);
 
 				} else if (qp.type == "MultipleChoiceQuestion") {
-					Application.LoadLevel (3);
+					Application.LoadLevelAdditive (3);
 
 				} else if (qp.type == "VideoPlay") {
-					Application.LoadLevel (4);
+					Application.LoadLevelAdditive (4);
 
 				} else if (qp.type == "TagScanner") {
-					Application.LoadLevel (5);
+					Application.LoadLevelAdditive (5);
 					
 				} else if (qp.type == "ImageCapture") {
-					Application.LoadLevel (6);
+					Application.LoadLevelAdditive (6);
 					
 				} else if (qp.type == "TextQuestion") {
-					Application.LoadLevel (7);
+					Application.LoadLevelAdditive (7);
 				} else if (qp.type == "AudioRecord") {
-					Application.LoadLevel (8);
+					Application.LoadLevelAdditive (8);
 				} else if (qp.type == "MapOSM") {
-					Application.LoadLevel (9);
+
+					if(GameObject.Find("MapCam") == null){
+						Application.LoadLevelAdditive (9);
+					} else {
+
+						//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
+
+						//GameObject.Find("MapCam").GetComponent<Camera>().enabled = true;
+
+					}
 				}
 				
-				
+				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
+
 				
 			}
 		

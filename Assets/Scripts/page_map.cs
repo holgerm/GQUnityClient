@@ -134,9 +134,16 @@ public class page_map : MonoBehaviour
 		
 		// create an OSM tile layer
 		OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer>("OSM");
-		osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
-		
+		//osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
+		osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/mapbox.pencil/";
+		osmLayer.TileImageExtension = "@2x.png?access_token=pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 		layers.Add(osmLayer);
+
+
+		osmLayer.TileCacheSizeLimit = osmLayer.TileCacheSizeLimit * 2;
+
+		
+		//layers.Add(osmLayer);
 		
 
 
