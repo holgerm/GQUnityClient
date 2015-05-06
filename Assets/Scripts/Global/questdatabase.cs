@@ -84,8 +84,8 @@ public class questdatabase : MonoBehaviour
 			//questListPanel.SetActive (false);
 
 			questmilllogo.enabled = true;
-			questmilllogo.color= Color.black;
-			webloadingmessage.enabled = false;
+			//questmilllogo.color= Color.black;
+			//webloadingmessage.enabled = false;
 			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 			StartQuest (Configuration.instance.autostartQuestID);
 		}
@@ -845,6 +845,14 @@ public class questdatabase : MonoBehaviour
 		
 		Debug.Log("Changing page to " + id);
 
+
+		if (GameObject.Find ("MapHider") != null) {
+
+
+			GameObject.Find("MapHider").GetComponent<Image>().enabled = true;
+		}
+
+
 		foreach (QuestPage qp in currentquest.pages) {
 		
 
@@ -966,6 +974,12 @@ if(des){
 					if(GameObject.Find("MapCam") == null){
 						Application.LoadLevelAdditive (9);
 					} else {
+
+						if (GameObject.Find ("MapHider") != null) {
+							
+							
+							GameObject.Find("MapHider").GetComponent<Image>().enabled = false;
+						}
 
 						//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 
