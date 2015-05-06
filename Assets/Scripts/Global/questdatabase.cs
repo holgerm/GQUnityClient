@@ -160,7 +160,7 @@ public class questdatabase : MonoBehaviour
 		
 		if (q == null) {
 			Debug.Log ("Problem 1 id: " + id);
-			q = new Quest();
+			q = new Quest ();
 			q.id = id;
 			downloadQuest (q);
 		} else {
@@ -843,15 +843,19 @@ public class questdatabase : MonoBehaviour
 	public void changePage (int id)
 	{
 		
-		Debug.Log("Changing page to " + id);
+		Debug.Log ("Changing page to " + id);
 
 
 		if (GameObject.Find ("MapHider") != null) {
 
 
-			GameObject.Find("MapHider").GetComponent<Image>().enabled = true;
+			GameObject.Find ("MapHider").GetComponent<Image> ().enabled = true;
 		}
-
+		if (GameObject.Find ("MapCam") != null) {
+			
+			
+			GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
+		}
 
 		foreach (QuestPage qp in currentquest.pages) {
 		
@@ -868,79 +872,73 @@ public class questdatabase : MonoBehaviour
 				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = true;
 
 				
-				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>() ;
-
-
-				string debug = "";
-
-				foreach(GameObject go in allObjects){
-
-					debug += go.name+"; ";
-
-				}
-
-				Debug.Log(debug);
+				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject> ();
 
 
 
-					foreach(GameObject go in allObjects)
-						if(go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
-					   && go.name != "ImpressumCanvas" && !go.transform.IsChildOf(GameObject.Find("ImpressumCanvas").transform)
-					  && go.name != "Configuration" &&  go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
-					  && go.name != "" && !go.name.Contains("[tile") && go.name != "EventSystem_Map"){
+				foreach (GameObject go in allObjects)
+					if (go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
+						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform)
+						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
+						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map") {
 
-
-
-					bool des = true;
-
-					if(GameObject.Find("MapCanvas") != null){
-
-						if(go.transform.IsChildOf(GameObject.Find("MapCanvas").transform)){
-							des = false;
-							//Debug.Log("is child of mapcanvas");
-						}
-
-					}
-
-					if(GameObject.Find("[Map]")){
-
-						if(go.transform.IsChildOf(GameObject.Find("[Map]").transform)){
-
-							des = false;
-
-						}
-							
-							
-							
-						}
-
-					if(GameObject.Find("[location marker]")){
 						
-						if(go.transform.IsChildOf(GameObject.Find("[location marker]").transform)){
+
+						bool des = true;
+
+						if (GameObject.Find ("MapCanvas") != null) {
+
+							if (go.transform.IsChildOf (GameObject.Find ("MapCanvas").transform)) {
+								des = false;
+								//Debug.Log("is child of mapcanvas");
+							}
+
+						}
+
+						if (GameObject.Find ("[Map]")) {
+
+							if (go.transform.IsChildOf (GameObject.Find ("[Map]").transform)) {
+
+								des = false;
+
+							}
 							
-							des = false;
+							
 							
 						}
+
+						if (GameObject.Find ("[location marker]")) {
+						
+							if (go.transform.IsChildOf (GameObject.Find ("[location marker]").transform)) {
+							
+								des = false;
+							
+							}
 						
 						
 						
-					}
+						}
 
-					if(GameObject.Find("PageController_Map")){
+						if (GameObject.Find ("PageController_Map")) {
 
-						if(go == GameObject.Find("PageController_Map").GetComponent<page_map>().map){
+							if (go == GameObject.Find ("PageController_Map").GetComponent<page_map> ().map) {
 
-							des = false;
+								des = false;
 
+							}
+
+						}
+
+						if (des) {
+							Debug.Log ("destroying: " + go.name);
+							Destroy (go);
 						}
 
 					}
 
-if(des){
-						Destroy(go);
-					}
-
-					}
+				Debug.Log ("Resources GameObject # =" + Resources.FindObjectsOfTypeAll (typeof(GameObject)).Count ());
+				Debug.Log ("Resources Sprite # =" + Resources.FindObjectsOfTypeAll (typeof(Sprite)).Count ());
+				Resources.UnloadUnusedAssets ();
 
 
 				//if(GameObject.Find("MapCam") != null){
@@ -971,14 +969,20 @@ if(des){
 					Application.LoadLevelAdditive (8);
 				} else if (qp.type == "MapOSM") {
 
-					if(GameObject.Find("MapCam") == null){
+					if (GameObject.Find ("MapCam") == null) {
 						Application.LoadLevelAdditive (9);
 					} else {
 
 						if (GameObject.Find ("MapHider") != null) {
 							
 							
-							GameObject.Find("MapHider").GetComponent<Image>().enabled = false;
+							GameObject.Find ("MapHider").GetComponent<Image> ().enabled = false;
+						}
+
+						if (GameObject.Find ("MapCam") != null) {
+							
+							
+							GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
 						}
 
 						//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
