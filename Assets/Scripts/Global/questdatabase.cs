@@ -857,6 +857,13 @@ public class questdatabase : MonoBehaviour
 			GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
 		}
 
+
+		if (GameObject.Find ("BgCam")) {
+			GameObject.Find ("BgCam").GetComponent<Camera>().enabled = true;
+			GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = true;
+
+		}
+
 		foreach (QuestPage qp in currentquest.pages) {
 		
 
@@ -880,7 +887,7 @@ public class questdatabase : MonoBehaviour
 					if (go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform)
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
-						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map") {
+					    && go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam") {
 
 						
 
@@ -990,6 +997,12 @@ public class questdatabase : MonoBehaviour
 						//GameObject.Find("MapCam").GetComponent<Camera>().enabled = true;
 
 					}
+				}
+
+				if (GameObject.Find ("BgCam")) {
+					GameObject.Find ("BgCam").GetComponent<Camera>().enabled = false;
+					GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = false;
+
 				}
 				
 				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
