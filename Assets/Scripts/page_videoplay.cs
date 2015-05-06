@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 public class page_videoplay : MonoBehaviour
 {
@@ -10,18 +11,48 @@ public class page_videoplay : MonoBehaviour
 	public questdatabase questdb;
 	public Quest quest;
 	public QuestPage npctalk;
-	public YoutubeVideo youtube;
+//	public YoutubeVideo youtube;
 	private bool videoplayed = false;
-	// Use this for initialization
-	void Start ()
+
+	static string filepath;
+
+
+	IEnumerator BeginDownload ()
+	{
+		filepath = Application.persistentDataPath + "/test.mp4";
+		WWW www = new WWW ("https://quest-mill.com/tests/Geburtshaus.mp4");
+		while (!www.isDone) {
+			yield return null;
+		}
+		System.IO.File.WriteAllBytes (filepath, www.bytes);
+		FileInfo finfo = new FileInfo (filepath);
+		Debug.Log ("filepath = " + filepath);
+		Debug.Log ("file length is " + finfo.Length);
+		Debug.Log ("www had read bytes: " + www.bytes.Length);
+		Debug.Log ("WWW Error :" + www.error);
+		if (www.responseHeaders.Count > 0) {
+			foreach (KeyValuePair<string, string> entry in www.responseHeaders) {
+				Debug.Log ("Response Header: " + entry.Value + "=" + entry.Key);
+			}
+		}
+
+		Handheld.PlayFullScreenMovie ("file://" + filepath);
+	}
+
+
+	IEnumerator Start ()
 	{
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 		npctalk = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 
-		string pre = "file:";
-
+		if (npctalk.onStart != null) {
+			
+			npctalk.onStart.Invoke ();
+		}
+		
+		
 
 		#if !UNITY_WEBPLAYER
 
@@ -29,36 +60,19 @@ public class page_videoplay : MonoBehaviour
 
 		
 		
-		if (npctalk.onStart != null) {
-			
-			npctalk.onStart.Invoke ();
-		}
-
-
 
 		string url = npctalk.getAttribute ("file");
+		Debug.Log ("We want to play video url = " + url);
 
 		if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
 
+			Debug.Log ("Starting video url = " + url);
+			Handheld.PlayFullScreenMovie ("file://" + url);
 
+			yield return new WaitForEndOfFrame ();
+			yield return new WaitForEndOfFrame ();
+			videoplayed = true;
 
-			if (Application.platform != RuntimePlatform.Android) {
-				url = url.Replace ("@streamingassets@", Application.streamingAssetsPath + "/predeployed/media/");
-				url = "file:/" + url;
-			} else {
-				url = url.Replace ("@streamingassets@", "predeployed/media/");		
-			}
-			 
-			Debug.Log ("video url:" + url);
-
-			StartCoroutine (PlayStreamingVideo (url));
-
-
-
-
-
-								
-				
 		} else {
 
 
@@ -129,7 +143,7 @@ public class page_videoplay : MonoBehaviour
 
 		#if !UNITY_WEBPLAYER
 
-		Handheld.PlayFullScreenMovie (url, Color.black, FullScreenMovieControlMode.Full);
+		Handheld.PlayFullScreenMovie (url);
 
 #endif
 
@@ -151,23 +165,23 @@ public class page_videoplay : MonoBehaviour
 
 	}
 		
-	public void playMovie (string x)
-	{
-
-		StartCoroutine (playMovieFullscreen (x));
-		//onEnd();
-		videoplayed = true;
-		
-	}
-
-	public IEnumerator playMovieFullscreen (string x)
-	{
-
-#if !UNITY_WEBPLAYER
-		Handheld.PlayFullScreenMovie (x, Color.black, FullScreenMovieControlMode.Full);
-#endif
-		yield return 0;
-	}
+//	public void playMovie (string x)
+//	{
+//
+//		StartCoroutine (playMovieFullscreen (x));
+//		//onEnd();
+//		videoplayed = true;
+//		
+//	}
+//
+//	public IEnumerator playMovieFullscreen (string x)
+//	{
+//
+//#if !UNITY_WEBPLAYER
+//		Handheld.PlayFullScreenMovie (x, Color.black, FullScreenMovieControlMode.Full);
+//#endif
+//		yield return 0;
+//	}
 
 	public IEnumerator onEnd ()
 	{
