@@ -34,6 +34,7 @@ public class questdatabase : MonoBehaviour
 	private string LOCAL_QUESTS_ZIP;
 	private string PATH_2_LOCAL_QUESTS;
 
+	public int msgsactive = 0;
 	public int files_all = 0;
 	public int files_complete = 0;
 
@@ -174,6 +175,12 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator CheckConnection (Quest q, float elapsedTime, WWW www)
 	{
+
+		while (msgsactive > 0) {
+			yield return 0;
+		}
+
+
 		Debug.Log ("CheckConnection(): before ping");
 		yield return new WaitForSeconds (0.1f);
 		if (www.isDone) {
@@ -400,8 +407,21 @@ public class questdatabase : MonoBehaviour
 	{
 		webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
-		StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+
+
+
+
+		showmessage("Bitte stelle sicher, das du eine funktionierende WLAN-Verbindung hast.", "Habe ich gemacht");
+
+
+		StartCoroutine(CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+
+		               
+		               
 	}
+
+
+	
 
 	void downloadAfterConnectionChecked (Quest q, bool connected)
 	{
@@ -413,9 +433,13 @@ public class questdatabase : MonoBehaviour
 			webloadingmessage.text = "Getting Quest-Definition ... ";
 			StartCoroutine (DownloadFinished (q));
 		} else {
-			showmessage ("You need to be connected to the internet!");
-			questmilllogo.enabled = false;
-			webloadingmessage.enabled = false;
+			
+			
+			showmessage("Wir konnten keine Verbindung mit dem Internet herstellen.", "Nochmal versuchen");
+			
+			
+			StartCoroutine(CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+
 		}
 
 	}
@@ -739,7 +763,7 @@ public class questdatabase : MonoBehaviour
 
 		if (canPlayQuest (currentquest)) {
 			Debug.Log ("WAITING FOR QUEST ASSETS");
-			webloadingmessage.text = "Loading Quest Assets ... 0 %";
+			webloadingmessage.text = "Loading Quest Assets ...";
 			webloadingmessage.enabled = true;
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
@@ -836,7 +860,7 @@ public class questdatabase : MonoBehaviour
 
 
 		if (error == "") {
-			webloadingmessage.text = "Loading Quest Assets ... " + filesleft + " files left";
+			webloadingmessage.text = "Loading Quest Assets ...\n" + filesleft + " files left";
 		} else {
 
 			webloadingmessage.text = error;
@@ -1101,7 +1125,7 @@ public class questdatabase : MonoBehaviour
 	
 	public void showmessage (string text)
 	{
-		
+		msgsactive += 1;
 
 		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
 			
@@ -1112,6 +1136,23 @@ public class questdatabase : MonoBehaviour
 
 		
 	}
+
+	public void showmessage(string text,string button){
+		msgsactive += 1;
+
+		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
+		
+		nqa.message = text;
+		nqa.setButtonText (button);
+		nqa.transform.SetParent (GameObject.Find ("Canvas").transform, false);
+		nqa.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0f);
+
+
+
+	}
+
+
+
 
 	public QuestRuntimeHotspot getHotspot (string str)
 	{

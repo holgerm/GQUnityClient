@@ -14,6 +14,11 @@ public class QuestMessage : MonoBehaviour {
 
 
 
+	public IEnumerator action;
+
+
+
+
 	public void Start(){
 
 		boxtext.text = message;
@@ -28,7 +33,8 @@ public class QuestMessage : MonoBehaviour {
 
 	public void done(){
 
-		Destroy (gameObject);
+		GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().msgsactive -= 1;
+			Destroy (gameObject);
 
 
 		}
