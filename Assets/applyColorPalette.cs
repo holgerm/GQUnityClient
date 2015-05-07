@@ -37,12 +37,12 @@ public class applyColorPalette : MonoBehaviour
 
 				if (!questdb.darkBG) {
 					newcolor = Color.black;
-					Debug.Log ("black font");
+//					Debug.Log ("black font");
 				} else {
 					newcolor = Color.white;
-					Debug.Log ("white font");
+			//		Debug.Log ("white font");
 				}
-				Debug.Log ("font color is " + newcolor);
+//				Debug.Log ("font color is " + newcolor);
 			} else 	if (ca.color == "buttonfont") {
 				
 				

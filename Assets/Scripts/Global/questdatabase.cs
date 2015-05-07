@@ -34,6 +34,10 @@ public class questdatabase : MonoBehaviour
 	private string LOCAL_QUESTS_ZIP;
 	private string PATH_2_LOCAL_QUESTS;
 
+	public int msgsactive = 0;
+	public int files_all = 0;
+	public int files_complete = 0;
+
 	void Start ()
 	{
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
@@ -159,7 +163,7 @@ public class questdatabase : MonoBehaviour
 		}
 		
 		if (q == null) {
-			Debug.Log ("Problem 1 id: " + id);
+//			Debug.Log ("Problem 1 id: " + id);
 			q = new Quest ();
 			q.id = id;
 			downloadQuest (q);
@@ -171,6 +175,12 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator CheckConnection (Quest q, float elapsedTime, WWW www)
 	{
+
+		while (msgsactive > 0) {
+			yield return 0;
+		}
+
+
 		Debug.Log ("CheckConnection(): before ping");
 		yield return new WaitForSeconds (0.1f);
 		if (www.isDone) {
@@ -397,8 +407,21 @@ public class questdatabase : MonoBehaviour
 	{
 		webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
-		StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+
+
+
+
+		showmessage("Bitte stelle sicher, das du eine funktionierende WLAN-Verbindung hast.", "Habe ich gemacht");
+
+
+		StartCoroutine(CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+
+		               
+		               
 	}
+
+
+	
 
 	void downloadAfterConnectionChecked (Quest q, bool connected)
 	{
@@ -410,9 +433,13 @@ public class questdatabase : MonoBehaviour
 			webloadingmessage.text = "Getting Quest-Definition ... ";
 			StartCoroutine (DownloadFinished (q));
 		} else {
-			showmessage ("You need to be connected to the internet!");
-			questmilllogo.enabled = false;
-			webloadingmessage.enabled = false;
+			
+			
+			showmessage("Wir konnten keine Verbindung mit dem Internet herstellen.", "Nochmal versuchen");
+			
+			
+			StartCoroutine(CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+
 		}
 
 	}
@@ -432,27 +459,66 @@ public class questdatabase : MonoBehaviour
 	public void downloadAsset (string url, string filename)
 	{
 
+		if (!url.Contains ("/clientxml")) {
 
-		WWW wwwfile = new WWW (url);
 
-		if (filedownloads == null) {
-			filedownloads = new List<WWW> ();
+			WWW wwwfile = new WWW (url);
+
+			if (filedownloads == null) {
+				filedownloads = new List<WWW> ();
+			}
+			filedownloads.Add (wwwfile);
+
+
+			files_all += 1;
+
+			StartCoroutine (downloadAssetFinished (wwwfile, filename, 0f));
+
 		}
-		filedownloads.Add (wwwfile);
-
-		StartCoroutine (downloadAssetFinished (wwwfile, filename, 0f));
-
-
 
 	}
 
 	public IEnumerator downloadAssetFinished (WWW wwwfile, string filename, float timeout)
 	{
 
+
+//		Debug.Log ("trying to download " + wwwfile.url);
+
 		yield return new WaitForSeconds (0.3f);
 		timeout += 0.3f;
 
-		if (wwwfile.isDone) {
+
+
+		if(wwwfile.error != null){
+			
+			Debug.Log("error downloading "+wwwfile.url+" ("+wwwfile.error+")");
+
+				
+				
+			if(wwwfile.error != "unsupported URL"){
+			   Debug.Log ("redoing www");
+
+
+				downloadAsset (wwwfile.url, filename);
+			
+			}
+				filedownloads.Remove (wwwfile);
+
+				wwwfile.Dispose ();
+
+
+
+
+				
+				
+			} else 
+				
+			if (wwwfile.isDone) {
+
+
+
+
+		
 
 
 
@@ -469,8 +535,15 @@ public class questdatabase : MonoBehaviour
 			FileStream fs = File.Create (filename);
 			fs.Write (wwwfile.bytes, 0, wwwfile.size);
 			fs.Close ();
-			Debug.Log ("file saved: " + filename);
+//			Debug.Log ("file saved: " + filename);
 
+
+
+			files_complete += 1;
+
+			filedownloads.Remove (wwwfile);
+			
+			wwwfile.Dispose ();
 
 		} else {
 
@@ -478,26 +551,31 @@ public class questdatabase : MonoBehaviour
 
 				//Debug.Log(timeout+" - "+wwwfile.progress);
 
-				if (wwwfile.progress < 0.1f && timeout > 5f) {
+				if (wwwfile.progress < 0.1f && timeout > 10f) {
 
 					Debug.Log ("Error: " + www.url + " - " + timeout);
 
 
 
+					if(!wwwfile.url.Contains("/clientxml")){
 
-					
-					Debug.Log ("redoing www");
-					
-					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-					
-					questdb.filedownloads.Remove (wwwfile);
+
+						Debug.Log ("redoing www");
 					
 					
-					questdb.downloadAsset (wwwfile.url, filename);
+					filedownloads.Remove (wwwfile);
+					
+					
+					downloadAsset (wwwfile.url, filename);
 					
 					wwwfile.Dispose ();
 
+					} else {
+						filedownloads.Remove (wwwfile);
 
+						wwwfile.Dispose ();
+
+					}
 
 
 
@@ -511,36 +589,11 @@ public class questdatabase : MonoBehaviour
 				}
 
 
-			} else {
-
-
-				//TODO: Handle WWW Error -> REDO?
-
-				Debug.Log ("Error: " + www.url + " - " + www.error);
-				if (www.error.Contains ("peer")) {
-					
-					
-					
-					Debug.Log ("redoing www");
-					
-					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-					
-					questdb.filedownloads.Remove (wwwfile);
-					
-					
-					questdb.downloadAsset (wwwfile.url, filename);
-					
-					wwwfile.Dispose ();
-					
-					
-
-
-
-				}
+			}
 
 			}
 
-		}
+
 
 	}
 
@@ -710,7 +763,7 @@ public class questdatabase : MonoBehaviour
 
 		if (canPlayQuest (currentquest)) {
 			Debug.Log ("WAITING FOR QUEST ASSETS");
-			webloadingmessage.text = "Loading Quest Assets ... 0 %";
+			webloadingmessage.text = "Loading Quest Assets ...";
 			webloadingmessage.enabled = true;
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
@@ -737,8 +790,15 @@ public class questdatabase : MonoBehaviour
 		int downloadsundone = 0;
 
 
+		string error = "";
+
+
+		int bytesloadedbutunfinished = 0;
+
 
 		if (filedownloads != null) {
+			Debug.Log ("WWW Objects" + filedownloads.Count);
+
 			foreach (WWW www in filedownloads) {
 
 				if (!www.isDone) {
@@ -746,23 +806,71 @@ public class questdatabase : MonoBehaviour
 					downloadsundone += 1;
 				}
 
+				if(www.error != null){
+
+
+
+					if(www.url.StartsWith("http")){
+
+					done = false;
+					downloadsundone += 1;
+//					Debug.Log("WWW ERROR: "+ www.error + " ("+www.url+")");
+
+					//error += www.url +"couldn't be downloaded.";
+					}
+				
+
+				}
+
 			}
 
 
 
 
-			percent = 100 - (downloadsundone * 100 / filedownloads.Count);
+
+			int bytes_finished =  files_complete;
+			int bytes_all = files_all;
+
+
+		//	percent = 100 - ((bytes_all-bytes_finished) * 100 / bytes_finished);
+
+		} else{
+
+
+			done = true;
+		}
+//		Debug.Log ("percent done: " + percent);
+
+		int filesleft = 0;
+
+		if (filedownloads != null) {
+
+			filesleft = filedownloads.Count;
+
+			string openfileloads = "Open WWW Files: ";
+
+			foreach(WWW awww in filedownloads){
+
+				openfileloads +=awww.url+"; ";
+
+			}
+
+			Debug.Log(openfileloads);
+		}
+
+
+		if (error == "") {
+			webloadingmessage.text = "Loading Quest Assets ...\n" + filesleft + " files left";
+		} else {
+
+			webloadingmessage.text = error;
 
 		}
-		Debug.Log ("percent done: " + percent);
-
-		webloadingmessage.text = "Loading Quest Assets ... " + percent + " %";
-
 		if (done) {
 
 			changePage (pageid);
 		} else {
-			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
+//			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
 			StartCoroutine (waitforquestassets (pageid, timeout));
 
 		}
@@ -937,7 +1045,7 @@ public class questdatabase : MonoBehaviour
 						}
 
 						if (des) {
-							Debug.Log ("destroying: " + go.name);
+//							Debug.Log ("destroying: " + go.name);
 							Destroy (go);
 						}
 
@@ -1017,7 +1125,7 @@ public class questdatabase : MonoBehaviour
 	
 	public void showmessage (string text)
 	{
-		
+		msgsactive += 1;
 
 		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
 			
@@ -1028,6 +1136,23 @@ public class questdatabase : MonoBehaviour
 
 		
 	}
+
+	public void showmessage(string text,string button){
+		msgsactive += 1;
+
+		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
+		
+		nqa.message = text;
+		nqa.setButtonText (button);
+		nqa.transform.SetParent (GameObject.Find ("Canvas").transform, false);
+		nqa.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0f);
+
+
+
+	}
+
+
+
 
 	public QuestRuntimeHotspot getHotspot (string str)
 	{

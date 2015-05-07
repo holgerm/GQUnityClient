@@ -16,7 +16,7 @@ public class Configuration : MonoBehaviour
 	
 	public static Configuration instance {
 		get {
-			Debug.Log ("SETTINGS: get()");
+//			Debug.Log ("SETTINGS: get()");
 
 			if (_instance == null) {
 				_instance = GameObject.FindObjectOfType<Configuration> ();
@@ -36,7 +36,7 @@ public class Configuration : MonoBehaviour
 	
 	void Awake ()
 	{
-		Debug.Log ("SETTINGS: awake(): externalBuild = " + externalBuildProcess);
+//		Debug.Log ("SETTINGS: awake(): externalBuild = " + externalBuildProcess);
 
 //		System.Object t = AssetDatabase.LoadAssetAtPath ("Assets/Config/configuration.json", Type.GetType ("System.Object"));
 

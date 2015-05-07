@@ -197,12 +197,14 @@ public class page_map : MonoBehaviour
 
 			a = gpsdata.CoordinatesWGS84 [0];
 			b = gpsdata.CoordinatesWGS84 [1];
+			map.CenterWGS84 = new double[2] { a	, b };
 
 
 
 		} else {
 
 
+			if(Application.isWebPlayer || Application.isEditor){
 			QuestRuntimeHotspot minhotspot = null;
 			double[] minhotspotposition = null;
 
@@ -250,36 +252,46 @@ public class page_map : MonoBehaviour
 		
 			a = minhotspotposition [1];
 			b = minhotspotposition [0];
+				map.CenterWGS84 = new double[2] { a	, b };
+
+			} else {
+
+			// disable location
+
+			}
 
 
 		}
+
+
+		if (gpsdata.CoordinatesWGS84.Length > 1 || Application.isWebPlayer || Application.isEditor) {
+
+
+
+
+			// create the location marker
+			var posi = Tile.CreateTileTemplate ().gameObject;
+			posi.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
+			posi.GetComponent<Renderer> ().material.renderQueue = 4000;
+			posi.transform.localScale /= 8.0f;
 		
-		map.CenterWGS84 = new double[2] { a	, b };
+			GameObject markerPosi = Instantiate (posi) as GameObject;
+			location = map.SetLocationMarker<LocationMarker> (markerPosi, a, b);
+			location.OrientationMarker = location.transform;
+			location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
 
 
-		// create the location marker
-		var posi = Tile.CreateTileTemplate ().gameObject;
-		posi.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
-		posi.GetComponent<Renderer> ().material.renderQueue = 4000;
-		posi.transform.localScale /= 8.0f;
-		
-		GameObject markerPosi = Instantiate (posi) as GameObject;
-		location = map.SetLocationMarker<LocationMarker> (markerPosi, a, b);
-		location.OrientationMarker = location.transform;
-		location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
+			location.gameObject.AddComponent <locationcontrol> ();
+			locationcontrol lc = location.GetComponent<locationcontrol> ();
+			lc.mapcontroller = this;
+			lc.map = map;
+			lc.location = location;
 
-
-		location.gameObject.AddComponent <locationcontrol> ();
-		locationcontrol lc = location.GetComponent<locationcontrol> ();
-		lc.mapcontroller = this;
-		lc.map = map;
-		lc.location = location;
-
-		DestroyImmediate (posi);
+			DestroyImmediate (posi);
 
 
 
-
+		}
 
 
 		if (mappage.onStart != null) {
