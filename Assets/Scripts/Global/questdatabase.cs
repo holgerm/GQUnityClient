@@ -41,6 +41,9 @@ public class questdatabase : MonoBehaviour
 
 	public int bytesloaded = 0;
 
+	public float fakebytes = 0;
+
+
 	void Start ()
 	{
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
@@ -274,6 +277,12 @@ public class questdatabase : MonoBehaviour
 	{
 
 
+
+		if (fakebytes > 0) {
+
+			fakebytes += Time.deltaTime;
+
+		}
 
 		if (Input.GetKey (KeyCode.G) && Input.GetKey (KeyCode.E) && Input.GetKey (KeyCode.O) && Input.GetKey (KeyCode.Q)) {
 			Debug.Log ("Destroying GameObject");
@@ -807,14 +816,14 @@ public class questdatabase : MonoBehaviour
 
 		if (canPlayQuest (currentquest)) {
 			Debug.Log ("WAITING FOR QUEST ASSETS");
-			webloadingmessage.text = "Loading Quest Assets ...";
+			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
 			webloadingmessage.enabled = true;
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
 
 		} else {
 			Debug.Log ("showing message");
-			showmessage ("Entschuldigung! Die Quest kann in dieser Beta-Version nicht abgespielt werden.");
+			showmessage ("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
 		}
@@ -825,6 +834,9 @@ public class questdatabase : MonoBehaviour
 	{
 		//webloadingmessage.text = "Downloading Quest Assets ... 0 %";
 
+		if (fakebytes == 0) {
+			fakebytes = 1;
+		}
 
 		timeout += 0.5f;
 		yield return new WaitForSeconds (0.5f);
@@ -908,7 +920,8 @@ public class questdatabase : MonoBehaviour
 
 
 		if (error == "") {
-			webloadingmessage.text = "Loading Quest Assets ...\n Noch " + filesleft + " Dateien";
+			int bytesloaded2 = (int)(bytesloaded + (fakebytes *900));
+			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n "+bytesloaded2+" Bytes geladen";
 		} else {
 
 			webloadingmessage.text = error;
