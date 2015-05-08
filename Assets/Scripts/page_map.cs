@@ -208,60 +208,60 @@ public class page_map : MonoBehaviour
 		} else {
 
 
-			if(Application.isWebPlayer || Application.isEditor){
-			QuestRuntimeHotspot minhotspot = null;
-			double[] minhotspotposition = null;
+			if (Application.isWebPlayer || Application.isEditor) {
+				QuestRuntimeHotspot minhotspot = null;
+				double[] minhotspotposition = null;
 
-			foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
+				foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
 
-				if (minhotspot == null) {
+					if (minhotspot == null) {
 
-					minhotspot = qrh;
-				
-					double[] xy = new double[] {qrh.lon, qrh.lat };
-					double lon = (0 / 20037508.34) * 180;                        
-					double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
-					lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
-					double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
-					minhotspotposition = xy1;
-
-				
-				} else {
-
-					// Lon/Lat offset by (x// 20037508.34) * 180;
-					// i only use lat right now.
-
-					double[] xy = new double[] {qrh.lon, qrh.lat };
-					double lon = (0 / 20037508.34) * 180;                        
-					double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
-
-					lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
-					double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
-
-
-				
-				
-					if (xy1 [1] < minhotspotposition [1]) {
 						minhotspot = qrh;
+				
+						double[] xy = new double[] {qrh.lon, qrh.lat };
+						double lon = (0 / 20037508.34) * 180;                        
+						double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
+						lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
+						double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
 						minhotspotposition = xy1;
+
+				
+					} else {
+
+						// Lon/Lat offset by (x// 20037508.34) * 180;
+						// i only use lat right now.
+
+						double[] xy = new double[] {qrh.lon, qrh.lat };
+						double lon = (0 / 20037508.34) * 180;                        
+						double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
+
+						lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
+						double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
+
+
+				
+				
+						if (xy1 [1] < minhotspotposition [1]) {
+							minhotspot = qrh;
+							minhotspotposition = xy1;
+						}
+
+
 					}
 
-
 				}
-
-			}
 
 
 //						Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
 		
-			a = minhotspotposition [1];
-			b = minhotspotposition [0];
+				a = minhotspotposition [1];
+				b = minhotspotposition [0];
 				map.CenterWGS84 = new double[2] { a	, b };
 
 			} else {
 
-			// disable location
-				setFixedPosition(false);
+				// disable location
+				setFixedPosition (false);
 
 			}
 
@@ -297,7 +297,7 @@ public class page_map : MonoBehaviour
 
 
 		} else {
-			setFixedPosition(false);
+			setFixedPosition (false);
 
 			gotgps = false;
 
@@ -494,7 +494,7 @@ public class page_map : MonoBehaviour
 			map.Zoom (1.0f);
 		} else {
 
-			map.CameraFollowsOrientation = true;
+			map.CameraFollowsOrientation = false;
 
 		}
 		fixedonposition = b;
@@ -538,7 +538,7 @@ public class page_map : MonoBehaviour
 			lc.location = location;
 			
 			DestroyImmediate (posi);
-			setFixedPosition(true);
+			setFixedPosition (true);
 
 			gotgps = true;
 
