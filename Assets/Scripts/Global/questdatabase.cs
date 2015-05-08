@@ -492,11 +492,11 @@ public class questdatabase : MonoBehaviour
 	void downloadAfterConnectionChecked (Quest q, bool connected)
 	{
 		if (connected) {
-			webloadingmessage.text = "Downloading quest ... " + q.name;
+			webloadingmessage.text = "Lade Quest ... " + q.name;
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
 			webloadingmessage.enabled = true;
-			webloadingmessage.text = "Getting Quest-Definition ... ";
+			webloadingmessage.text = "Bitte warten ... ";
 			StartCoroutine (DownloadFinished (q));
 		} else {
 			
