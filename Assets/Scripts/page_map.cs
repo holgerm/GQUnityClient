@@ -38,6 +38,10 @@ public class page_map : MonoBehaviour
 	private bool zoomout = false;
 	public bool fixedonposition = true;
 
+
+	public bool gotgps = true;
+
+
 	private
 		
 		void
@@ -257,6 +261,7 @@ public class page_map : MonoBehaviour
 			} else {
 
 			// disable location
+				setFixedPosition(false);
 
 			}
 
@@ -290,6 +295,11 @@ public class page_map : MonoBehaviour
 			DestroyImmediate (posi);
 
 
+
+		} else {
+			setFixedPosition(false);
+
+			gotgps = false;
 
 		}
 
@@ -499,6 +509,42 @@ public class page_map : MonoBehaviour
 	
 	void Update ()
 	{
+
+
+		if (gpsdata.CoordinatesWGS84.Length > 1 && !gotgps) {
+
+
+			
+			double a = gpsdata.CoordinatesWGS84 [0];
+			double b = gpsdata.CoordinatesWGS84 [1];
+			map.CenterWGS84 = new double[2] { a	, b };
+			
+			// create the location marker
+			var posi = Tile.CreateTileTemplate ().gameObject;
+			posi.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
+			posi.GetComponent<Renderer> ().material.renderQueue = 4000;
+			posi.transform.localScale /= 8.0f;
+			
+			GameObject markerPosi = Instantiate (posi) as GameObject;
+			location = map.SetLocationMarker<LocationMarker> (markerPosi, a, b);
+			location.OrientationMarker = location.transform;
+			location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
+			
+			
+			location.gameObject.AddComponent <locationcontrol> ();
+			locationcontrol lc = location.GetComponent<locationcontrol> ();
+			lc.mapcontroller = this;
+			lc.map = map;
+			lc.location = location;
+			
+			DestroyImmediate (posi);
+			setFixedPosition(true);
+
+			gotgps = true;
+
+
+		}
+
 
 
 		if (fixedonposition) {

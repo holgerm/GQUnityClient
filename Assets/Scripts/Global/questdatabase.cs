@@ -143,6 +143,23 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+
+
+
+
+
+	void reloadAutoStartQuest(){
+
+
+	
+
+
+
+
+	}
+
+
+
 	bool IsQuestInitialized (int id)
 	{
 		string questDirPath = System.IO.Path.Combine (PATH_2_LOCAL_QUESTS, id.ToString ());
