@@ -444,11 +444,24 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+
+
+	public void retryAllOpenWWW(){
+
+		List<WWW> todelete = new List<WWW>();
+		foreach(WWW awww in filedownloads){
+
+			todelete.Add (awww);
+
+		}
+	
+
+	}
+
 	public void downloadQuest (Quest q)
 	{
 		webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
-
 
 
 
@@ -592,7 +605,13 @@ public class questdatabase : MonoBehaviour
 
 				//Debug.Log(timeout+" - "+wwwfile.progress);
 
-				if (wwwfile.progress < 0.1f && timeout > 10f) {
+			if(timeout > 180f){
+
+				showmessage("Download fehlgeschlagen.");
+				Application.LoadLevel(0);
+
+			} else 
+				if (timeout > 10f && wwwfile.progress < 0.1f) {
 
 					Debug.Log ("Error: " + www.url + " - " + timeout);
 
@@ -624,6 +643,10 @@ public class questdatabase : MonoBehaviour
 
 
 				} else {
+
+				int bytesloaded = 0;
+
+
 
 					StartCoroutine (downloadAssetFinished (wwwfile, filename, timeout));
 
@@ -873,9 +896,9 @@ public class questdatabase : MonoBehaviour
 
 			foreach(WWW awww in filedownloads){
 				//Debug.Log(awww.bytesDownloaded);
-				if(awww.progress > 0.1){
-				bytescomplete += (int)(awww.bytesDownloaded);
-				}
+
+				//bytescomplete += (int)(awww.bytesDownloaded);
+
 				openfileloads +=awww.url+"; ";
 
 			}
@@ -885,7 +908,7 @@ public class questdatabase : MonoBehaviour
 
 
 		if (error == "") {
-			webloadingmessage.text = "Loading Quest Assets ...\n" + bytescomplete + " MB geladen";
+			webloadingmessage.text = "Loading Quest Assets ...\n Noch " + filesleft + " Dateien";
 		} else {
 
 			webloadingmessage.text = error;
