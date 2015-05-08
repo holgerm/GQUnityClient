@@ -835,7 +835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portalID: 141
-  autostartQuestID: 0
+  autostartQuestID: 6088
   colorProfile: carlbenz
 --- !u!4 &714240441
 Transform:
@@ -2849,6 +2849,9 @@ MonoBehaviour:
   loadedfiles: []
   webxml: 
   fixedposition: 1
+  msgsactive: 0
+  files_all: 0
+  files_complete: 0
 --- !u!4 &1756337059
 Transform:
   m_ObjectHideFlags: 0
