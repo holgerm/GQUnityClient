@@ -43,6 +43,7 @@ public class questdatabase : MonoBehaviour
 
 	public float fakebytes = 0;
 
+	public string currentxml;
 
 	void Start ()
 	{
@@ -944,22 +945,20 @@ public class questdatabase : MonoBehaviour
 				
 				var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
 				
-				// WRITE FILES TO XML -> NOT WORKING ON IOS
-				//var serializer = new XmlSerializer (typeof(Quest));
-				//serializer.Serialize (stream, currentquest);
+			
 				stream.Close ();
 				var stream2 = new StreamWriter (exportLocation + "game.xml");
 				
 				
+				Debug.Log("CONTENT TO WRITE:"+currentquest.xmlcontent);
 				
-				
-				stream2.Write (currentquest.xmlcontent);
+				stream2.Write (currentxml);
 				
 				stream2.Close ();
 
-			changePage (pageid);
+				changePage (pageid);
 
-
+				
 			}
 		} else {
 //			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
@@ -1328,7 +1327,8 @@ public class questdatabase : MonoBehaviour
 			currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 				
 			currentquest.xmlcontent = UTF8Encoding.UTF8.GetString (www.bytes); 
-
+			currentxml = UTF8Encoding.UTF8.GetString (www.bytes); 
+			Debug.Log("XML:"+currentxml);
 			bool b = false;
 
 
