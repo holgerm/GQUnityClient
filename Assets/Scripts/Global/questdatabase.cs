@@ -959,15 +959,18 @@ public class questdatabase : MonoBehaviour
 
 			GameObject.Find ("MapHider").GetComponent<Image> ().enabled = true;
 		}
+
 		if (GameObject.Find ("MapCam") != null) {
 			
-			
+			GameObject.Find ("MapCam").GetComponent<Camera>().enabled = false;
+
 			GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
 		}
 
 
 		if (GameObject.Find ("BgCam")) {
 			GameObject.Find ("BgCam").GetComponent<Camera>().enabled = true;
+
 			GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = true;
 
 		}
@@ -1084,21 +1087,34 @@ public class questdatabase : MonoBehaviour
 					Application.LoadLevelAdditive (8);
 				} else if (qp.type == "MapOSM") {
 
+
+
+
 					if (GameObject.Find ("MapCam") == null) {
-						Application.LoadLevelAdditive (9);
+
+
+						StartCoroutine(loadMap());
+
 					} else {
 
+
+						
+
 						if (GameObject.Find ("MapHider") != null) {
-							
-							
+
 							GameObject.Find ("MapHider").GetComponent<Image> ().enabled = false;
 						}
 
-						if (GameObject.Find ("MapCam") != null) {
+						if (GameObject.Find ("BgCam")) {
+							GameObject.Find ("BgCam").GetComponent<Camera>().enabled = false;
+
+							GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = false;
 							
-							
-							GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
 						}
+
+							GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = true;
+							GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
+
 
 						//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 
@@ -1107,11 +1123,6 @@ public class questdatabase : MonoBehaviour
 					}
 				}
 
-				if (GameObject.Find ("BgCam")) {
-					GameObject.Find ("BgCam").GetComponent<Camera>().enabled = false;
-					GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = false;
-
-				}
 				
 				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 
@@ -1122,6 +1133,26 @@ public class questdatabase : MonoBehaviour
 		
 
 	}
+
+
+
+	IEnumerator loadMap() {
+		AsyncOperation async = Application.LoadLevelAdditiveAsync (9);
+		
+	
+		yield return async;
+		if(GameObject.Find ("BgCam") != null){
+			
+			GameObject.Find ("BgCam").GetComponent<Camera>().enabled = false;
+			
+			
+		}
+		if(GameObject.Find ("MapCam") != null){
+			
+			GameObject.Find ("MapCam").GetComponent<Camera>().enabled = true;
+			
+			
+		}	}
 	
 	public void showmessage (string text)
 	{
