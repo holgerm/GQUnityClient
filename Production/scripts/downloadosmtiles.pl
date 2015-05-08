@@ -1,4 +1,4 @@
-#! perl
+#! /opt/local/bin/perl
 
 use 5.008008;
 use strict;

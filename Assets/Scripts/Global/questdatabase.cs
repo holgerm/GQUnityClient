@@ -157,14 +157,15 @@ public class questdatabase : MonoBehaviour
 
 
 
-	public void reloadAutoStartQuest(){
+	public void reloadAutoStartQuest ()
+	{
 
 
 		foreach (Quest lq in localquests) {
 			if (lq.id == Configuration.instance.autostartQuestID) {
 				
 				
-				removeQuest(lq);
+				removeQuest (lq);
 				
 				
 			}
@@ -413,7 +414,7 @@ public class questdatabase : MonoBehaviour
 #endif
 			localquests.Remove (q);
 
-			if(currentquest.id == q.id){
+			if (currentquest.id == q.id) {
 
 				currentquest = null;
 
@@ -456,10 +457,11 @@ public class questdatabase : MonoBehaviour
 
 
 
-	public void retryAllOpenWWW(){
+	public void retryAllOpenWWW ()
+	{
 
-		List<WWW> todelete = new List<WWW>();
-		foreach(WWW awww in filedownloads){
+		List<WWW> todelete = new List<WWW> ();
+		foreach (WWW awww in filedownloads) {
 
 			todelete.Add (awww);
 
@@ -475,10 +477,10 @@ public class questdatabase : MonoBehaviour
 
 
 
-		showmessage("Bitte stelle sicher, das du eine funktionierende WLAN-Verbindung hast.", "Habe ich gemacht");
+		showmessage ("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK");
 
 
-		StartCoroutine(CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+		StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
 
 		               
 		               
@@ -499,10 +501,10 @@ public class questdatabase : MonoBehaviour
 		} else {
 			
 			
-			showmessage("Wir konnten keine Verbindung mit dem Internet herstellen.", "Nochmal versuchen");
+			showmessage ("Wir konnten keine Verbindung mit dem Internet herstellen.", "Nochmal versuchen");
 			
 			
-			StartCoroutine(CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+			StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
 
 		}
 
@@ -553,29 +555,29 @@ public class questdatabase : MonoBehaviour
 
 
 
-		if(wwwfile.error != null){
+		if (wwwfile.error != null) {
 			
-			Debug.Log("error downloading "+wwwfile.url+" ("+wwwfile.error+")");
+			Debug.Log ("error downloading " + wwwfile.url + " (" + wwwfile.error + ")");
 
 				
 				
-			if(wwwfile.error != "unsupported URL"){
-			   Debug.Log ("redoing www");
+			if (wwwfile.error != "unsupported URL") {
+				Debug.Log ("redoing www");
 
 
 				downloadAsset (wwwfile.url, filename);
 			
 			}
-				filedownloads.Remove (wwwfile);
+			filedownloads.Remove (wwwfile);
 
-				wwwfile.Dispose ();
+			wwwfile.Dispose ();
 
 
 
 
 				
 				
-			} else 
+		} else 
 				
 			if (wwwfile.isDone) {
 
@@ -613,24 +615,24 @@ public class questdatabase : MonoBehaviour
 		} else {
 
 
-				//Debug.Log(timeout+" - "+wwwfile.progress);
+			//Debug.Log(timeout+" - "+wwwfile.progress);
 
-			if(timeout > 180f){
+			if (timeout > Configuration.instance.downloadTimeOutSeconds) {
 
-				showmessage("Download fehlgeschlagen.");
-				Application.LoadLevel(0);
+				showmessage ("Download fehlgeschlagen.");
+				Application.LoadLevel (0);
 
 			} else 
 				if (timeout > 10f && wwwfile.progress < 0.1f) {
 
-					Debug.Log ("Error: " + www.url + " - " + timeout);
+				Debug.Log ("Error: " + www.url + " - " + timeout);
 
 
 
-					if(!wwwfile.url.Contains("/clientxml")){
+				if (!wwwfile.url.Contains ("/clientxml")) {
 
 
-						Debug.Log ("redoing www");
+					Debug.Log ("redoing www");
 					
 					
 					filedownloads.Remove (wwwfile);
@@ -640,32 +642,32 @@ public class questdatabase : MonoBehaviour
 					
 					wwwfile.Dispose ();
 
-					} else {
-						filedownloads.Remove (wwwfile);
-
-						wwwfile.Dispose ();
-
-					}
-
-
-
-
-
-
 				} else {
+					filedownloads.Remove (wwwfile);
+
+					wwwfile.Dispose ();
+
+				}
+
+
+
+
+
+
+			} else {
 
 				int bytesloaded = 0;
 
 
 
-					StartCoroutine (downloadAssetFinished (wwwfile, filename, timeout));
+				StartCoroutine (downloadAssetFinished (wwwfile, filename, timeout));
 
-				}
+			}
 
 
 			
 
-			}
+		}
 
 
 
@@ -863,17 +865,17 @@ public class questdatabase : MonoBehaviour
 					downloadsundone += 1;
 				}
 
-				if(www.error != null){
+				if (www.error != null) {
 
 
 
-					if(www.url.StartsWith("http")){
+					if (www.url.StartsWith ("http")) {
 
-					done = false;
-					downloadsundone += 1;
+						done = false;
+						downloadsundone += 1;
 //					Debug.Log("WWW ERROR: "+ www.error + " ("+www.url+")");
 
-					//error += www.url +"couldn't be downloaded.";
+						//error += www.url +"couldn't be downloaded.";
 					}
 				
 
@@ -885,13 +887,13 @@ public class questdatabase : MonoBehaviour
 
 
 
-			int bytes_finished =  files_complete;
+			int bytes_finished = files_complete;
 			int bytes_all = files_all;
 
 
-		//	percent = 100 - ((bytes_all-bytes_finished) * 100 / bytes_finished);
+			//	percent = 100 - ((bytes_all-bytes_finished) * 100 / bytes_finished);
 
-		} else{
+		} else {
 
 
 			done = true;
@@ -907,22 +909,22 @@ public class questdatabase : MonoBehaviour
 
 			string openfileloads = "Open WWW Files: ";
 
-			foreach(WWW awww in filedownloads){
+			foreach (WWW awww in filedownloads) {
 				//Debug.Log(awww.bytesDownloaded);
 
 				//bytescomplete += (int)(awww.bytesDownloaded);
 
-				openfileloads +=awww.url+"; ";
+				openfileloads += awww.url + "; ";
 
 			}
 
-			Debug.Log(openfileloads);
+			Debug.Log (openfileloads);
 		}
 
 
 		if (error == "") {
-			int bytesloaded2 = (int)(bytesloaded + (fakebytes *900));
-			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n "+bytesloaded2+" Bytes geladen";
+			int bytesloaded2 = (int)(bytesloaded + (fakebytes * 900));
+			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n " + bytesloaded2 + " Bytes geladen";
 		} else {
 
 			webloadingmessage.text = error;
@@ -950,8 +952,9 @@ public class questdatabase : MonoBehaviour
 				var stream2 = new StreamWriter (exportLocation + "game.xml");
 				
 				
-				Debug.Log("CONTENT TO WRITE:"+currentquest.xmlcontent);
+				Debug.Log ("CONTENT TO WRITE:" + currentquest.xmlcontent);
 				
+				Debug.Log ("CONTENT currentxml:" + currentxml);
 				stream2.Write (currentxml);
 				
 				stream2.Close ();
@@ -1053,16 +1056,16 @@ public class questdatabase : MonoBehaviour
 
 		if (GameObject.Find ("MapCam") != null) {
 			
-			GameObject.Find ("MapCam").GetComponent<Camera>().enabled = false;
+			GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
 
 			GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
 		}
 
 
 		if (GameObject.Find ("BgCam")) {
-			GameObject.Find ("BgCam").GetComponent<Camera>().enabled = true;
+			GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = true;
 
-			GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = true;
+			GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = true;
 
 		}
 
@@ -1089,7 +1092,7 @@ public class questdatabase : MonoBehaviour
 					if (go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform)
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
-					    && go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam") {
+						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam") {
 
 						
 
@@ -1184,7 +1187,7 @@ public class questdatabase : MonoBehaviour
 					if (GameObject.Find ("MapCam") == null) {
 
 
-						StartCoroutine(loadMap());
+						StartCoroutine (loadMap ());
 
 					} else {
 
@@ -1197,14 +1200,14 @@ public class questdatabase : MonoBehaviour
 						}
 
 						if (GameObject.Find ("BgCam")) {
-							GameObject.Find ("BgCam").GetComponent<Camera>().enabled = false;
+							GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
 
-							GameObject.Find ("BgCam").GetComponent<AudioListener>().enabled = false;
+							GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = false;
 							
 						}
 
-							GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = true;
-							GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
+						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = true;
+						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
 
 
 						//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
@@ -1227,23 +1230,25 @@ public class questdatabase : MonoBehaviour
 
 
 
-	IEnumerator loadMap() {
+	IEnumerator loadMap ()
+	{
 		AsyncOperation async = Application.LoadLevelAdditiveAsync (9);
 		
 	
 		yield return async;
-		if(GameObject.Find ("BgCam") != null){
+		if (GameObject.Find ("BgCam") != null) {
 			
-			GameObject.Find ("BgCam").GetComponent<Camera>().enabled = false;
+			GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
 			
 			
 		}
-		if(GameObject.Find ("MapCam") != null){
+		if (GameObject.Find ("MapCam") != null) {
 			
-			GameObject.Find ("MapCam").GetComponent<Camera>().enabled = true;
+			GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = true;
 			
 			
-		}	}
+		}
+	}
 	
 	public void showmessage (string text)
 	{
@@ -1262,7 +1267,8 @@ public class questdatabase : MonoBehaviour
 		
 	}
 
-	public void showmessage(string text,string button){
+	public void showmessage (string text, string button)
+	{
 		Debug.Log ("MSGSActive before:" + msgsactive);
 
 		msgsactive += 1;
@@ -1317,7 +1323,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-			webloadingmessage.text = "Downloading Quest Assets...";
+			webloadingmessage.text = "Bitte warten ...";
 
 
 			currentquest = new Quest ();
@@ -1328,7 +1334,7 @@ public class questdatabase : MonoBehaviour
 				
 			currentquest.xmlcontent = UTF8Encoding.UTF8.GetString (www.bytes); 
 			currentxml = UTF8Encoding.UTF8.GetString (www.bytes); 
-			Debug.Log("XML:"+currentxml);
+			Debug.Log ("XML:" + currentxml);
 			bool b = false;
 
 

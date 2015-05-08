@@ -13,6 +13,8 @@ public class Configuration : MonoBehaviour
 
 	public string colorProfile = "default";
 
+	public float downloadTimeOutSeconds = 300.0f;
+
 
 	private bool externalBuildProcess = false;
 	
