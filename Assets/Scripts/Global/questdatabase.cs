@@ -38,12 +38,17 @@ public class questdatabase : MonoBehaviour
 	public int files_all = 0;
 	public int files_complete = 0;
 
+
+	public int bytesloaded = 0;
+
 	void Start ()
 	{
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
 		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
 		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
 		PATH_2_LOCAL_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
+
+		//msgsactive = 0;
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
@@ -53,7 +58,7 @@ public class questdatabase : MonoBehaviour
 #endif
 
 		if (GameObject.Find ("QuestDatabase") != gameObject) {
-			Destroy (gameObject);		
+			Destroy (GameObject.Find ("QuestDatabase"));		
 		} else {
 			DontDestroyOnLoad (gameObject);
 			//			Debug.Log (Application.persistentDataPath);
@@ -148,11 +153,24 @@ public class questdatabase : MonoBehaviour
 
 
 
-	void reloadAutoStartQuest(){
+	public void reloadAutoStartQuest(){
 
 
+		foreach (Quest lq in localquests) {
+			if (lq.id == Configuration.instance.autostartQuestID) {
+				
+				
+				removeQuest(lq);
+				
+				
+			}
+		}
+
+
+
+		Application.LoadLevel (0);
 	
-
+		GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().closeImpressum ();
 
 
 
@@ -195,6 +213,7 @@ public class questdatabase : MonoBehaviour
 
 		while (msgsactive > 0) {
 			yield return 0;
+			//Debug.Log("messages active");
 		}
 
 
@@ -384,6 +403,11 @@ public class questdatabase : MonoBehaviour
 #endif
 			localquests.Remove (q);
 
+			if(currentquest.id == q.id){
+
+				currentquest = null;
+
+			}
 
 		}
 
@@ -557,14 +581,14 @@ public class questdatabase : MonoBehaviour
 
 
 			files_complete += 1;
-
+			//Debug.Log(wwwfile.bytesDownloaded);
+			bytesloaded += (int)(wwwfile.bytesDownloaded);
 			filedownloads.Remove (wwwfile);
 			
 			wwwfile.Dispose ();
 
 		} else {
 
-			if (wwwfile.error == null) {
 
 				//Debug.Log(timeout+" - "+wwwfile.progress);
 
@@ -606,7 +630,7 @@ public class questdatabase : MonoBehaviour
 				}
 
 
-			}
+			
 
 			}
 
@@ -739,27 +763,7 @@ public class questdatabase : MonoBehaviour
 				Directory.CreateDirectory (exportLocation);
 
 
-			
-				var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
 
-				// WRITE FILES TO XML -> NOT WORKING ON IOS
-				//var serializer = new XmlSerializer (typeof(Quest));
-				//serializer.Serialize (stream, currentquest);
-				stream.Close ();
-				var stream2 = new StreamWriter (exportLocation + "game.xml");
-
-
-
-
-				stream2.Write (q.xmlcontent);
-
-				stream2.Close ();
-
-				Debug.Log ("WRITING XML FILE: " + exportLocation + "game.xml");
-				if (File.Exists (exportLocation + "game.xml")) {
-					Debug.Log ("...exists");
-
-				}
 
 
 
@@ -858,6 +862,7 @@ public class questdatabase : MonoBehaviour
 		}
 //		Debug.Log ("percent done: " + percent);
 
+		int bytescomplete = bytesloaded;
 		int filesleft = 0;
 
 		if (filedownloads != null) {
@@ -867,7 +872,10 @@ public class questdatabase : MonoBehaviour
 			string openfileloads = "Open WWW Files: ";
 
 			foreach(WWW awww in filedownloads){
-
+				//Debug.Log(awww.bytesDownloaded);
+				if(awww.progress > 0.1){
+				bytescomplete += (int)(awww.bytesDownloaded);
+				}
 				openfileloads +=awww.url+"; ";
 
 			}
@@ -877,7 +885,7 @@ public class questdatabase : MonoBehaviour
 
 
 		if (error == "") {
-			webloadingmessage.text = "Loading Quest Assets ...\n" + filesleft + " files left";
+			webloadingmessage.text = "Loading Quest Assets ...\n" + bytescomplete + " MB geladen";
 		} else {
 
 			webloadingmessage.text = error;
@@ -885,7 +893,38 @@ public class questdatabase : MonoBehaviour
 		}
 		if (done) {
 
+			string exportLocation = Application.persistentDataPath + "/quests/" + currentquest.id + "/";
+
+
+
+			
+			Debug.Log ("WRITING XML FILE: " + exportLocation + "game.xml");
+			if (File.Exists (exportLocation + "game.xml")) {
+				Debug.Log ("...exists");
+				changePage (pageid);
+
+			} else {
+				
+				
+				var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
+				
+				// WRITE FILES TO XML -> NOT WORKING ON IOS
+				//var serializer = new XmlSerializer (typeof(Quest));
+				//serializer.Serialize (stream, currentquest);
+				stream.Close ();
+				var stream2 = new StreamWriter (exportLocation + "game.xml");
+				
+				
+				
+				
+				stream2.Write (currentquest.xmlcontent);
+				
+				stream2.Close ();
+
 			changePage (pageid);
+
+
+			}
 		} else {
 //			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
 			StartCoroutine (waitforquestassets (pageid, timeout));
@@ -1173,7 +1212,10 @@ public class questdatabase : MonoBehaviour
 	
 	public void showmessage (string text)
 	{
+		Debug.Log ("MSGSActive before:" + msgsactive);
+
 		msgsactive += 1;
+		Debug.Log ("MSGSActive after:" + msgsactive);
 
 		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
 			
@@ -1186,7 +1228,10 @@ public class questdatabase : MonoBehaviour
 	}
 
 	public void showmessage(string text,string button){
+		Debug.Log ("MSGSActive before:" + msgsactive);
+
 		msgsactive += 1;
+		Debug.Log ("MSGSActive after:" + msgsactive);
 
 		QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
 		

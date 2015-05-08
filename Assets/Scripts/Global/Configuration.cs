@@ -9,6 +9,8 @@ public class Configuration : MonoBehaviour
 	
 	public int portalID = 1;
 	public int autostartQuestID = 0;
+	public int autostartQuestSize = 0;
+
 	public string colorProfile = "default";
 
 

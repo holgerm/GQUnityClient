@@ -1114,8 +1114,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -1.90734863e-06, y: 7.62939999e-06}
-  m_SizeDelta: {x: 137, y: 140}
+  m_AnchoredPosition: {x: -3.375, y: 3}
+  m_SizeDelta: {x: 167.75, y: 164}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1799968837
 MonoBehaviour:
@@ -1130,7 +1130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: .786764741, g: .786764741, b: .786764741, a: 1}
-  m_Sprite: {fileID: 21300000, guid: c7d2b3080688d48f0b5fac44639f0aa6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 25af5d598cf4249d0b2745bf81031d65, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1266,3 +1266,4 @@ MonoBehaviour:
   location: {fileID: 0}
   radiusprefab: {fileID: 497184, guid: 8a5ffc3b1036f4a75870653ae20a4592, type: 2}
   fixedonposition: 1
+  gotgps: 1

@@ -13,7 +13,7 @@ public class showimpressum : MonoBehaviour {
 	public Text impressum_text;
 	public Button impressum_closebutton;
 	public Text impressum_closebuttontext;
-
+	public Image impressum_reloadbutton;
 
 
 
@@ -38,7 +38,7 @@ public class showimpressum : MonoBehaviour {
 			impressum_text.enabled = false;
 			impressum_closebutton.enabled = false;
 			impressum_closebutton.GetComponent<Image>().enabled = false;
-
+			impressum_reloadbutton.enabled = false;
 			impressum_closebuttontext.enabled = false;
 
 				} else {
@@ -48,7 +48,7 @@ public class showimpressum : MonoBehaviour {
 			impressum_closebutton.enabled = true;
 			impressum_closebuttontext.enabled = true;
 			impressum_closebutton.GetComponent<Image>().enabled = true;
-
+			impressum_reloadbutton.enabled = true;
 				}
 
 
@@ -62,7 +62,7 @@ public class showimpressum : MonoBehaviour {
 		impressum_text.enabled = false;
 		impressum_closebutton.enabled = false;
 		impressum_closebutton.GetComponent<Image>().enabled = false;
-		
+		impressum_reloadbutton.enabled = false;
 		impressum_closebuttontext.enabled = false;
 
 
