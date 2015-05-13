@@ -3,8 +3,10 @@ using UnityEngine.UI;
 
 using System.Collections;
 
-using CielaSpike.Unity.Barcode;
+//using CielaSpike.Unity.Barcode;
 using System.Threading;
+
+using ZXing;
 
 public class page_tagscanner : MonoBehaviour {
 	
@@ -23,32 +25,55 @@ public class page_tagscanner : MonoBehaviour {
 
 
 
-	WebCamTexture cameraTexture;
+	WebCamTexture camTexture;
+	WebCamTexture camTexture2;
+
+	private Thread qrThread;
+	
+	private Color32[] c;
+	private sbyte[] d;
+	private int W, H, WxH;
+	private int x, y, z;
 	
 	Material cameraMat;
-	GameObject plane;
+	public MeshRenderer plane;
 	
 	
-	
+	private string qrcontent;
 	WebCamDecoder decoder;
 
 
 	
 	
 	void Update(){
-		
-		if (qrresult == "") {
-						var result = decoder.Result;
-			if(result.BarcodeType != 0){
-			Debug.Log(result.BarcodeType);
-			}
-			if (result.Success && result.BarcodeType == BarcodeType.QrCode) {
-			
-			
-								checkResult (result.Text);
 
-						}
-				}
+
+
+		if (camTexture != null) {
+			c = camTexture.GetPixels32 ();
+		}
+
+//
+//		if (qrresult == "") {
+//						var result = decoder.Result;
+//			if(result.BarcodeType != 0){
+//			Debug.Log(result.BarcodeType);
+//			}
+//			if (result.Success && result.BarcodeType == BarcodeType.QrCode) {
+//			
+//			
+//								checkResult (result.Text);
+//
+//						}
+//				}
+
+
+
+		if (qrcontent != null && qrcontent != "") {
+
+			checkResult(qrcontent);
+
+		}
 		
 	}
 
@@ -97,33 +122,35 @@ public class page_tagscanner : MonoBehaviour {
 
 
 		// get render target;
-		plane = GameObject.Find("Plane");
-		cameraMat = plane.GetComponent<MeshRenderer>().material;
+		//plane = GameObject.Find("Plane");
+		//cameraMat = plane.GetComponent<MeshRenderer>().material;
 		
 		// get a reference to web cam decoder component;
 		decoder = GetComponent<WebCamDecoder>();
 		
 		
 		// init web cam;
-		if (Application.platform == RuntimePlatform.OSXWebPlayer ||
-		    Application.platform == RuntimePlatform.WindowsWebPlayer)
+		if (Application.isWebPlayer)
 		{
 			yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
 		}
 		
 		var devices = WebCamTexture.devices;
 		var deviceName = devices[0].name;
-		cameraTexture = new WebCamTexture(deviceName, 1920, 1080);
-		cameraTexture.Play();
-		
-		// start decoding;
-		yield return StartCoroutine(decoder.StartDecoding(cameraTexture));
-		
-		cameraMat.mainTexture = cameraTexture;
-		
+		camTexture = new WebCamTexture(deviceName, 1920, 1080);
+
+
+		camTexture.Play();
+		// old tagscanner
+		//yield return StartCoroutine(decoder.StartDecoding(camTexture));
+	
+
 		//image.renderer.material.mainTexture = cameraTexture;
 		
+		OnEnable();
 		
+		qrThread = new Thread(DecodeQR);
+		qrThread.Start();
 		
 		
 		// adjust texture orientation;
@@ -131,10 +158,89 @@ public class page_tagscanner : MonoBehaviour {
 		//   Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.up);
 	
 
-
+		WebCamTexture texture = new WebCamTexture(deviceName);
+		plane.material.mainTexture = texture;
+		texture.Play();
 	}
 
 
+
+
+
+
+
+	void OnEnable () {
+		if(camTexture != null) {
+			camTexture.Play();
+
+
+			W = camTexture.width;
+			H = camTexture.height;
+
+			WxH = W * H;
+
+
+			Debug.Log("WebcamTexture: "+W+":"+H+"="+WxH);
+		}
+	}
+	
+	void OnDisable () {
+		if(camTexture != null) {
+			camTexture.Pause();
+		}
+	}
+	
+	void OnDestroy () {
+		qrThread.Abort();
+		camTexture.Stop();
+	}
+	
+
+
+	
+	void DecodeQR()
+	{  
+		// create a reader with a custom luminance source
+		
+		var barcodeReader = new BarcodeReader {AutoRotate=false, TryHarder=false};
+		
+		while (true)
+			
+		{
+
+			
+			try
+				
+			{
+				string result = ""; 
+				
+				// decode the current frame
+				
+				if (c != null){
+					
+					print ("Start Decode!");
+					result = barcodeReader.Decode(c, W, H).Text; //This line of code is generating unknown exceptions for some arcane reason
+					print ("Got past decode!");
+				}       
+				if (result != null)
+				{           
+					qrcontent = result;        
+					print(result);
+				}
+				// Sleep a little bit and set the signal to get the next frame
+				c = null;
+				Thread.Sleep(200); 
+			}
+			catch 
+			{   
+				continue;
+			}
+			
+		}
+	}
+	
+	
+	//old
 
 
 	void checkResult(string r){
@@ -142,7 +248,7 @@ public class page_tagscanner : MonoBehaviour {
 		if (r != qrresult) {
 						qrresult = r;
 
-						if (r.Length > 0 && r != "0000") {
+						if (r.Length > 0) {
 								questdb.debug ("QR CODE gescannt:" + r);
 
 
@@ -208,7 +314,7 @@ public class page_tagscanner : MonoBehaviour {
 
 	IEnumerator onSuccess(){
 		
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (0f);
 
 		
 		if (tagscanner.onSuccess != null) {
@@ -221,7 +327,7 @@ public class page_tagscanner : MonoBehaviour {
 	}
 	IEnumerator onFailure(){
 		
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (0f);
 		
 		if (tagscanner.onFailure != null) {
 			tagscanner.state = "failed";
@@ -237,7 +343,7 @@ public class page_tagscanner : MonoBehaviour {
 	IEnumerator  onEnd(){
 		
 		
-		yield return new WaitForSeconds (1.5f);
+		yield return new WaitForSeconds (0.2f);
 
 
 		if (tagscanner.state != "failed") {
