@@ -152,8 +152,21 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+	private int reloadButtonPressed = 0;
+	private int numberOfPressesNeededToReload = 10;
 
+	public void ReloadButtonPressed ()
+	{
+		reloadButtonPressed++;
+		if (reloadButtonPressed >= numberOfPressesNeededToReload) {
+			reloadButtonPressed = 0;
+			reloadAutoStartQuest ();
+		} else {
+			int remainingPresses = numberOfPressesNeededToReload - reloadButtonPressed;
+//			showmessage ("Wenn sie diesen Button noch " + (remainingPresses) + " mal drücken werden alle Medien gelöscht und neu geladen.", "OK");
 
+		}
+	}
 
 
 
