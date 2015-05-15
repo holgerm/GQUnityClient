@@ -82,7 +82,7 @@ PlayerSettings:
   metroEnableLowLatencyPresentationAPI: 0
   xboxOneDisableKinectGpuReservation: 0
   productGUID: c2b2669b3813a4b21860482a3f8c3f38
-  AndroidBundleVersionCode: 1
+  AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 15
   AndroidPreferredInstallLocation: 0
   aotOptions: 
@@ -132,8 +132,8 @@ PlayerSettings:
   iOSLaunchScreenCustomXibPath: 
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: /Users/muegge/Personen/QuestMill/legal/signing/keystores/geoquest.keystore
+  AndroidKeyaliasName: carlbenz_key
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 0
