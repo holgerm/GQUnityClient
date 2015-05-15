@@ -33,16 +33,11 @@ public class questdatabase : MonoBehaviour
 	private string PREDEPLOYED_QUESTS_ZIP;
 	private string LOCAL_QUESTS_ZIP;
 	private string PATH_2_LOCAL_QUESTS;
-
 	public int msgsactive = 0;
 	public int files_all = 0;
 	public int files_complete = 0;
-
-
 	public int bytesloaded = 0;
-
 	public float fakebytes = 0;
-
 	public string currentxml;
 
 	void Start ()
@@ -94,12 +89,9 @@ public class questdatabase : MonoBehaviour
 
 		if (Configuration.instance.autostartQuestID != 0) {
 			GameObject questListPanel = GameObject.Find ("/Canvas");
-			//questListPanel.SetActive (false);
-
 			questmilllogo.enabled = true;
-			//questmilllogo.color= Color.black;
-			//webloadingmessage.enabled = false;
 			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
+
 			StartQuest (Configuration.instance.autostartQuestID);
 		}
 
@@ -168,8 +160,6 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-
-
 	public void reloadAutoStartQuest ()
 	{
 
@@ -193,8 +183,6 @@ public class questdatabase : MonoBehaviour
 
 
 	}
-
-
 
 	bool IsQuestInitialized (int id)
 	{
@@ -468,8 +456,6 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-
-
 	public void retryAllOpenWWW ()
 	{
 
@@ -499,9 +485,6 @@ public class questdatabase : MonoBehaviour
 		               
 	}
 
-
-	
-
 	void downloadAfterConnectionChecked (Quest q, bool connected)
 	{
 		if (connected) {
@@ -527,212 +510,108 @@ public class questdatabase : MonoBehaviour
 	{
 		Quest q = new Quest ();
 		q.id = id;
-		Debug.Log ("Problem 3, id: " + id);
-
 		currentquest = q;
-
 		downloadQuest (q);
-
 	}
 
 	public void downloadAsset (string url, string filename)
 	{
-
 		if (!url.Contains ("/clientxml")) {
-
-
 			WWW wwwfile = new WWW (url);
 
 			if (filedownloads == null) {
 				filedownloads = new List<WWW> ();
 			}
 			filedownloads.Add (wwwfile);
-
-
 			files_all += 1;
-
 			StartCoroutine (downloadAssetFinished (wwwfile, filename, 0f));
-
 		}
-
 	}
 
 	public IEnumerator downloadAssetFinished (WWW wwwfile, string filename, float timeout)
 	{
-
-
-//		Debug.Log ("trying to download " + wwwfile.url);
-
 		yield return new WaitForSeconds (0.3f);
 		timeout += 0.3f;
 
-
-
 		if (wwwfile.error != null) {
-			
 			Debug.Log ("error downloading " + wwwfile.url + " (" + wwwfile.error + ")");
-
-				
 				
 			if (wwwfile.error != "unsupported URL") {
 				Debug.Log ("redoing www");
 
-
 				downloadAsset (wwwfile.url, filename);
-			
 			}
 			filedownloads.Remove (wwwfile);
-
 			wwwfile.Dispose ();
-
-
-
-
-				
-				
-		} else 
-				
-			if (wwwfile.isDone) {
-
-
-
-
-		
-
-
-
-			if (!Directory.Exists (Path.GetDirectoryName (filename))) {
-				
-				Debug.Log ("creating folder:" + Path.GetDirectoryName (filename));
-				
-				Directory.CreateDirectory (Path.GetDirectoryName (filename));
-			}
-
-			if (wwwfile == null || wwwfile.bytes == null || wwwfile.bytes.Length == 0)
-				Debug.Log ("Download Problem: Empty file " + filename);
-
-			FileStream fs = File.Create (filename);
-			fs.Write (wwwfile.bytes, 0, wwwfile.size);
-			fs.Close ();
-//			Debug.Log ("file saved: " + filename);
-
-
-
-			files_complete += 1;
-			//Debug.Log(wwwfile.bytesDownloaded);
-			bytesloaded += (int)(wwwfile.bytesDownloaded);
-			filedownloads.Remove (wwwfile);
-			
-			wwwfile.Dispose ();
-
 		} else {
-
-
-			//Debug.Log(timeout+" - "+wwwfile.progress);
-
-			if (timeout > Configuration.instance.downloadTimeOutSeconds) {
-
-				showmessage ("Download fehlgeschlagen.");
-				Application.LoadLevel (0);
-
-			} else 
-				if (timeout > 10f && wwwfile.progress < 0.1f) {
-
-				Debug.Log ("Error: " + www.url + " - " + timeout);
-
-
-
-				if (!wwwfile.url.Contains ("/clientxml")) {
-
-
-					Debug.Log ("redoing www");
-					
-					
-					filedownloads.Remove (wwwfile);
-					
-					
-					downloadAsset (wwwfile.url, filename);
-					
-					wwwfile.Dispose ();
-
-				} else {
-					filedownloads.Remove (wwwfile);
-
-					wwwfile.Dispose ();
-
+			if (wwwfile.isDone) {
+				if (!Directory.Exists (Path.GetDirectoryName (filename))) {
+						
+					Debug.Log ("creating folder:" + Path.GetDirectoryName (filename));
+						
+					Directory.CreateDirectory (Path.GetDirectoryName (filename));
 				}
-
-
-
-
-
-
+				if (wwwfile == null || wwwfile.bytes == null || wwwfile.bytes.Length == 0)
+					Debug.Log ("Download Problem: Empty file " + filename);
+				FileStream fs = File.Create (filename);
+				fs.Write (wwwfile.bytes, 0, wwwfile.size);
+				fs.Close ();
+				files_complete += 1;
+				bytesloaded += (int)(wwwfile.bytesDownloaded);
+				filedownloads.Remove (wwwfile);
+				wwwfile.Dispose ();
+				
 			} else {
+				if (timeout > Configuration.instance.downloadTimeOutSeconds) {
+					showmessage ("Download fehlgeschlagen.");
+					Application.LoadLevel (0);
+				} else 
+					if (timeout > 10f && wwwfile.progress < 0.1f) {
+					Debug.Log ("Error: " + wwwfile.url + " - " + timeout);
 
-				int bytesloaded = 0;
-
-
-
-				StartCoroutine (downloadAssetFinished (wwwfile, filename, timeout));
-
+					if (!wwwfile.url.Contains ("/clientxml")) {
+						Debug.Log ("redoing www");
+							
+						filedownloads.Remove (wwwfile);
+						downloadAsset (wwwfile.url, filename);
+						wwwfile.Dispose ();
+					} else {
+						filedownloads.Remove (wwwfile);
+						wwwfile.Dispose ();
+					}
+				} else {
+					int bytesloaded = 0;
+					StartCoroutine (downloadAssetFinished (wwwfile, filename, timeout));
+				}
 			}
-
-
-			
-
 		}
-
-
-
 	}
 
 	public List<Quest> GetLocalQuests ()
 	{
 
 #if !UNITY_WEBPLAYER
+
 		if (!Application.isWebPlayer) {
-
 			localquests.Clear (); 
-
-
-
 			DirectoryInfo info = new DirectoryInfo (Application.persistentDataPath + "/quests/");
 			if (!info.Exists) {
 				info.Create ();
 				return localquests;
 			}
-
 			var fileInfo = info.GetDirectories ();
 
-
-
-
 			foreach (DirectoryInfo folder in fileInfo) { 
-						
-
-
 				if (File.Exists (folder.ToString () + "/game.xml")) {
-
 					Quest n = new Quest ();
-
-
-
 					string[] splitted = folder.ToString ().Split ('/');
-
 					n.id = int.Parse (splitted [splitted.Length - 1]);
-//			Debug.Log("folder found:"+splitted[splitted.Length - 1]);
-
 					n.filepath = folder.ToString () + "/";
 					n = n.LoadFromText (int.Parse (splitted [splitted.Length - 1]), true);
-					//n.deserializeAttributes();
 					if (n != null)
 						localquests.Add (n);
-					//Debug.Log(folder.ToString());
 				}
 			}
-
-
-
 		}
 
 #endif
@@ -1241,8 +1120,6 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-
-
 	IEnumerator loadMap ()
 	{
 		AsyncOperation async = Application.LoadLevelAdditiveAsync (9);
@@ -1297,9 +1174,6 @@ public class questdatabase : MonoBehaviour
 
 
 	}
-
-
-
 
 	public QuestRuntimeHotspot getHotspot (string str)
 	{
