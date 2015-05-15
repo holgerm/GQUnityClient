@@ -13,6 +13,12 @@ public class Configuration : MonoBehaviour
 
 	public string colorProfile = "default";
 
+	public string mapboxKey = "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_";
+	// key for carlbenz: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
+	// default key: pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw
+	public string mapboxMapID = "gqcarlbenz.ac1f8820_bloedsinn";
+	// mapID for carlbanz: gqcarlbenz.ac1f8820
+
 	public float downloadTimeOutSeconds = 300.0f;
 
 
