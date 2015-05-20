@@ -9,6 +9,8 @@ namespace Product
 {
 	public class Builder
 	{
+		const string UNITY_IOS_ProjectFileName = "Unity-iPhone.xcodeproj";
+
 //		private static string PRODUCT_SHORT_NAME = "wcc"; // TODO make an environment var etc.
 //		private static string PRODUCT_DISPLAY_NAME = "WCC Regio Bonn"; // TODO make an environment var etc.
 		static string productID = "default";
@@ -136,10 +138,19 @@ namespace Product
 				Directory.CreateDirectory (outDir + "/");
 			}
 			// should we replace the project? otherwise we append
-			BuildOptions buildOptions = replaceProduct ? BuildOptions.None : BuildOptions.AcceptExternalModificationsToPlayer;
+			BuildOptions buildOptions = replaceProduct ? 
+				BuildOptions.None : 
+					BuildOptions.AcceptExternalModificationsToPlayer;
+			// in case we did not build that project vefore, we can not append to it:
+			if (! File.Exists (outDir + "/" + UNITY_IOS_ProjectFileName)) 
+				buildOptions = BuildOptions.None;
 			errorMsg = BuildPipeline.BuildPlayer (GetScenes (), outDir, BuildTarget.iOS, buildOptions);
 			if (errorMsg != null && !errorMsg.Equals ("")) {
 				Debug.LogError ("ERROR while trying to build iOS player: " + errorMsg);
+				Debug.LogError ("  args follow:");
+				foreach (string arg in Environment.GetCommandLineArgs ()) {
+					Debug.LogError ("    " + arg);
+				}
 			} else {
 				Debug.Log ("Build done for iOS.");
 			}

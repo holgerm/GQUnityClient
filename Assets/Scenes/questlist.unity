@@ -1169,8 +1169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portalID: 1
-  autostartQuestID: 0
+  portalID: 281
+  autostartQuestID: 4803
   autostartQuestSize: 191446736
   colorProfile: wcc
   mapboxKey: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
@@ -3915,7 +3915,7 @@ MonoBehaviour:
     secondCompColor: {r: 1, g: .721568644, b: 0, a: 1}
   - id: wcc
     mainColor: {r: 0, g: .698039234, b: 1, a: 1}
-    backgroundColor: {r: .757352948, g: .745787024, b: .707234025, a: 1}
+    backgroundColor: {r: .737254918, g: .670588255, b: .474509835, a: 1}
     darkBG: 0
     buttonColor: {r: .721568644, g: .607843161, b: .301960796, a: 1}
     darkButton: 1
