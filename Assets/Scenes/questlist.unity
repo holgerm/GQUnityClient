@@ -920,6 +920,45 @@ MonoBehaviour:
   mapboxKey: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
   mapboxMapID: gqcarlbenz.ac1f8820
   downloadTimeOutSeconds: 300
+  impressum: "<b>Titel</b>\\n WikiCultureCity\\n\\n <b>Beschreibung</b>\\n Anbieterkennzeichnung
+    der WikiCultureCity GbR, Sebastianstr. 39, D-53115 Bonn\\n\\n <b>Einrichtung /
+    Institution</b>\\n WikiCultureCity GbR\\n\\n <b>Rechtsform</b>\\n Gesellschaft
+    b\xFCrgerlichen Rechts (GbR)\\n\\n <b>Vertreten durch</b>\\n Frank Wittwer\\n\\n
+    <b>Stra\xDFe</b>\\n Sebastianstr. 39\\n\\n <b>Ort</b>\\n D-53115 Bonn\\n\\n <b>E-Mail</b>\\n
+    f.wittwer@wikiculturecity.com\\n\\n <b>Land</b>\\n Deutschland\\n\\n <b>Domain</b>\\n
+    wikiculturecity.com\\n\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n FEHLT NOCH\\n\\n
+    <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n Frank Wittwer\\n\\n <b>Technisch
+    verantwortlich</b>\\n QuestMill GmbH\\n\\n \\n <b>Rechtliche Hinweise</b>\\n \\n
+    Alle Angaben unserer mobilen App wurden sorgf\xE4ltig gepr\xFCft. Wir bem\xFChen
+    uns, dieses Informationsangebot aktuell und inhaltlich richtig sowie vollst\xE4ndig
+    anzubieten. Dennoch ist das Auftreten von Fehlern nicht v\xF6llig auszuschlie\xDFen.
+    Eine Garantie f\xFCr die Vollst\xE4ndigkeit, Richtigkeit und letzte Aktualit\xE4t
+    kann daher nicht \xFCbernommen werden. Der Herausgeber kann diese Webseite nach
+    eigenem Ermessen jederzeit ohne Ank\xFCndigung ver\xE4ndern und / oder deren Betrieb
+    einstellen. Er ist nicht verpflichtet, Inhalte dieser Webseite zu aktualisieren.
+    Der Zugang und die Benutzung dieses Angebots geschieht auf eigene Gefahr des Benutzers.
+    WikiCultureCity ist nicht verantwortlich und \xFCbernimmt keinerlei Haftung f\xFCr
+    Sch\xE4den, u. a. f\xFCr direkte, indirekte, zuf\xE4llige, vorab konkret zu bestimmende
+    oder Folgesch\xE4den, die angeblich durch den oder in Verbindung mit dem Zugang
+    und/oder der Benutzung dieses Angebots aufgetreten sind. Der Betreiber \xFCbernimmt
+    keine Verantwortung f\xFCr die Inhalte und die Verf\xFCgbarkeit von Websites Dritter,
+    die \xFCber externe Links dieses Informationsangebotes erreicht werden. Der Herausgeber
+    distanziert sich ausdr\xFCcklich von allen Inhalten, die m\xF6glicherweise straf-
+    oder haftungsrechtlich relevant sind. Bei der Anforderung von Inhalten aus diesem
+    Internetangebot werden Zugriffsdaten gespeichert. Das sind Daten \xFCber die Seite,
+    von der aus die Datei angefordert wurde, der Name der angeforderten Datei, das
+    Datum, Uhrzeit und Dauer der Anforderung, die \xFCbertragene Datenmenge sowie
+    der Zugriffsstatus (z.B. Datei \xFCbertragen, Datei nicht gefunden). Diese gespeicherten
+    Daten werden ausschlie\xDFlich zu statistischen Zwecken ausgewertet und auf keinen
+    Fall an Dritte weitergeleitet. Sofern innerhalb des Internetangebotes die M\xF6glichkeit
+    zur Eingabe pers\xF6nlicher oder gesch\xE4ftlicher Daten (E-Mailadressen, Namen,
+    Anschriften) besteht, so erfolgt die Preisgabe dieser Daten seitens des Nutzers
+    auf ausdr\xFCcklich freiwilliger Basis Bilder und Text die von Dritten, den Teilnehmen
+    die Beitr\xE4ge und Bilder bei WCC einstellen, haften diese f\xFCr die Inhalte
+    und Darstellung. Regelm\xE4\xDFig, wenn nicht etwas anders ausdr\xFCcklich zu
+    einzelnen Bildern und Texten angegeben wird, haben diejenige, die diese Texte
+    und Bilder einstellen, die Rechte an Bild und Text und gestatten WCC die uneingeschr\xE4nkte
+    Verwendung auf der Plattform von WCC. "
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
