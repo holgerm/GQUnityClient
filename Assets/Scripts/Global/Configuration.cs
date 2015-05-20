@@ -13,11 +13,15 @@ public class Configuration : MonoBehaviour
 
 	public string colorProfile = "default";
 
-	public string mapboxKey = "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_";
+	public string mapboxKey = "pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA";
+	public string mapboxMapID = "gqwcc.m824ig5p";
 	// key for carlbenz: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
+	// id for carlbenz: gqcarlbenz.ac1f8820
+
+	// key for wcc: pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA
+	// id for wcc: gqwcc.m824ig5p
+
 	// default key: pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw
-	public string mapboxMapID = "gqcarlbenz.ac1f8820_bloedsinn";
-	// mapID for carlbanz: gqcarlbenz.ac1f8820
 
 	public float downloadTimeOutSeconds = 300.0f;
 

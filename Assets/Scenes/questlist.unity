@@ -1173,11 +1173,9 @@ MonoBehaviour:
   autostartQuestID: 4803
   autostartQuestSize: 191446736
   colorProfile: wcc
-  mapboxKey: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
-  mapboxMapID: gqcarlbenz.ac1f8820
+  mapboxKey: pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA
+  mapboxMapID: gqwcc.m824ig5p
   downloadTimeOutSeconds: 300
-  fixedMapCenterLat: 50.734147999999998
-  fixedMapCenterLong: 7.0994529999999996
   impressum: "<b>Titel</b>\\n WikiCultureCity\\n\\n <b>Beschreibung</b>\\n Anbieterkennzeichnung
     der WikiCultureCity GbR, Sebastianstr. 39, D-53115 Bonn\\n\\n <b>Einrichtung /
     Institution</b>\\n WikiCultureCity GbR\\n\\n <b>Rechtsform</b>\\n Gesellschaft
