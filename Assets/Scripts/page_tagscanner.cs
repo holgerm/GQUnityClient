@@ -126,7 +126,7 @@ public class page_tagscanner : MonoBehaviour {
 		//cameraMat = plane.GetComponent<MeshRenderer>().material;
 		
 		// get a reference to web cam decoder component;
-		decoder = GetComponent<WebCamDecoder>();
+		//decoder = GetComponent<WebCamDecoder>();
 		
 		
 		// init web cam;
@@ -137,10 +137,9 @@ public class page_tagscanner : MonoBehaviour {
 		
 		var devices = WebCamTexture.devices;
 		var deviceName = devices[0].name;
-		camTexture = new WebCamTexture(deviceName, 1920, 1080);
-
-
+		camTexture = new WebCamTexture(deviceName, 720,(int)(Camera.main.aspect * 720f));
 		camTexture.Play();
+
 		// old tagscanner
 		//yield return StartCoroutine(decoder.StartDecoding(camTexture));
 	
@@ -176,6 +175,9 @@ public class page_tagscanner : MonoBehaviour {
 
 			W = camTexture.width;
 			H = camTexture.height;
+
+
+
 
 			WxH = W * H;
 
