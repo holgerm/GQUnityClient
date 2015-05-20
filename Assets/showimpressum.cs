@@ -14,7 +14,7 @@ public class showimpressum : MonoBehaviour {
 	public Button impressum_closebutton;
 	public Text impressum_closebuttontext;
 	public Image impressum_reloadbutton;
-
+	public Image impressum_scrollpanel;
 	public Image impressum_geoquestbutton;
 
 
@@ -24,6 +24,10 @@ public class showimpressum : MonoBehaviour {
 		} else {
 			DontDestroyOnLoad (gameObject);
 			Debug.Log (Application.persistentDataPath);
+
+			impressum_text.text = Configuration.instance.impressum.Replace("\\n","\n");
+
+
 		}
 
 	}
@@ -41,6 +45,7 @@ public class showimpressum : MonoBehaviour {
 			impressum_reloadbutton.enabled = false;
 			impressum_closebuttontext.enabled = false;
 			impressum_geoquestbutton.enabled = false;
+			impressum_scrollpanel.enabled = false;
 				} else {
 
 			impressum_bg.enabled = true;
@@ -50,6 +55,7 @@ public class showimpressum : MonoBehaviour {
 			impressum_closebutton.GetComponent<Image>().enabled = true;
 			impressum_reloadbutton.enabled = true;
 			impressum_geoquestbutton.enabled = true;
+			impressum_scrollpanel.enabled = true;
 				}
 
 
@@ -66,6 +72,7 @@ public class showimpressum : MonoBehaviour {
 		impressum_reloadbutton.enabled = false;
 		impressum_closebuttontext.enabled = false;
 		impressum_geoquestbutton.enabled = false;
+		impressum_scrollpanel.enabled = false;
 
 
 	}
