@@ -1111,7 +1111,7 @@ MonoBehaviour:
   portalID: 1
   autostartQuestID: 0
   autostartQuestSize: 191446736
-  colorProfile: carlbenz
+  colorProfile: wcc
   mapboxKey: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
   mapboxMapID: gqcarlbenz.ac1f8820
   downloadTimeOutSeconds: 300
@@ -3239,7 +3239,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3744,6 +3744,15 @@ MonoBehaviour:
     buttonDisabledColor: {r: .568627477, g: .850980401, b: 1, a: .988235295}
     compColor: {r: 1, g: .20784314, b: 0, a: 1}
     secondCompColor: {r: 1, g: .721568644, b: 0, a: 1}
+  - id: wcc
+    mainColor: {r: 0, g: .698039234, b: 1, a: 1}
+    backgroundColor: {r: .757352948, g: .745787024, b: .707234025, a: 1}
+    darkBG: 0
+    buttonColor: {r: .721568644, g: .607843161, b: .301960796, a: 1}
+    darkButton: 1
+    buttonDisabledColor: {r: .749019623, g: .701960802, b: .564705908, a: .988235295}
+    compColor: {r: .674509823, g: .384313762, b: .294117659, a: 1}
+    secondCompColor: {r: .768627524, g: .78039223, b: .313725501, a: 1}
   mainColor: {r: .227450982, g: .392156869, b: .141176477, a: 1}
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   darkBG: 0
