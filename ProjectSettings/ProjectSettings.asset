@@ -102,7 +102,7 @@ PlayerSettings:
   uIStatusBarHidden: 1
   uIExitOnSuspend: 0
   uIStatusBarStyle: 0
-  iPhoneSplashScreen: {fileID: 2800000, guid: caa0393982f97485c862db2c17692640, type: 3}
+  iPhoneSplashScreen: {fileID: 2800000, guid: 58a42fffc31d64658b6c1c1db4074014, type: 3}
   iPhoneHighResSplashScreen: {fileID: 2800000, guid: caa0393982f97485c862db2c17692640,
     type: 3}
   iPhoneTallHighResSplashScreen: {fileID: 2800000, guid: caa0393982f97485c862db2c17692640,
@@ -131,7 +131,7 @@ PlayerSettings:
   iOSLaunchScreenSize: 100
   iOSLaunchScreenCustomXibPath: 
   AndroidTargetDevice: 0
-  AndroidSplashScreenScale: 0
+  AndroidSplashScreenScale: 2
   AndroidKeystoreName: /Users/muegge/Personen/QuestMill/legal/signing/keystores/geoquest.keystore
   AndroidKeyaliasName: 
   AndroidTVCompatibility: 1
