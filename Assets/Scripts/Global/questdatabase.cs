@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System;
 using System.Linq;
 using System.Text;
+using GQ.Geo;
 
 public class questdatabase : MonoBehaviour
 {
@@ -67,7 +68,7 @@ public class questdatabase : MonoBehaviour
 		if (Application.isWebPlayer) {
 			webloadingmessage.enabled = true;
 			questmilllogo.enabled = true;
-			loadlogo.enable();
+			loadlogo.enable ();
 		} else {
 
 #if !UNITY_WEBPLAYER
@@ -278,6 +279,22 @@ public class questdatabase : MonoBehaviour
 		return activehs;
 	}
 
+	public GeoPosition getCenter ()
+	{
+		float centerLat = 0f;
+		float centerLong = 0f;
+
+		foreach (QuestRuntimeHotspot curHotspot in hotspots) {
+			centerLat += curHotspot.lat;
+			centerLong += curHotspot.lon;
+		}
+
+		centerLat = centerLat / hotspots.Count;
+		centerLong = centerLong / hotspots.Count;
+
+		return new GeoPosition (centerLat, centerLong);
+	}
+
 	void Update ()
 	{
 
@@ -333,7 +350,7 @@ public class questdatabase : MonoBehaviour
 		if (webloadingmessage != null) {
 			webloadingmessage.text = "Loading...";
 			webloadingmessage.enabled = true;
-			loadlogo.enable();	
+			loadlogo.enable ();	
 		}
 
 		www = new WWW (x);
@@ -476,7 +493,7 @@ public class questdatabase : MonoBehaviour
 		webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
 
-		loadlogo.enable();
+		loadlogo.enable ();
 
 		showmessage ("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK");
 
@@ -494,7 +511,7 @@ public class questdatabase : MonoBehaviour
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
 			webloadingmessage.enabled = true;
-			loadlogo.enable();
+			loadlogo.enable ();
 			webloadingmessage.text = "Bitte warten ... ";
 			StartCoroutine (DownloadFinished (q));
 		} else {
@@ -666,7 +683,7 @@ public class questdatabase : MonoBehaviour
 		if (currentquest == null) {
 			questmilllogo.enabled = false;
 			webloadingmessage.enabled = false;
-			loadlogo.disable();
+			loadlogo.disable ();
 			return;
 		}
 
@@ -719,7 +736,7 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("WAITING FOR QUEST ASSETS");
 			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
 			webloadingmessage.enabled = true;
-			loadlogo.enable();
+			loadlogo.enable ();
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
 
@@ -1209,7 +1226,7 @@ public class questdatabase : MonoBehaviour
 	IEnumerator DownloadFinished (Quest q)
 	{
 		webloadingmessage.enabled = true;
-		loadlogo.enable();
+		loadlogo.enable ();
 		localquests.Add (q);
 		yield return www;
 		if (www.error == null) {

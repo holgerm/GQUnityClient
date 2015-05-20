@@ -24,12 +24,6 @@ public class Configuration : MonoBehaviour
 
 	private bool externalBuildProcess = false;
 
-	public double fixedMapCenterLat = 0d;
-	public double fixedMapCenterLong = 0d;
-
-
-
-
 	public string impressum = "";
 
 
