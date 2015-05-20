@@ -37,10 +37,7 @@ public class page_map : MonoBehaviour
 	private bool zoomin = false;
 	private bool zoomout = false;
 	public bool fixedonposition = true;
-
-
 	public bool gotgps = true;
-
 
 	private
 		
@@ -489,7 +486,10 @@ public class page_map : MonoBehaviour
 
 		if (b == false) {
 			map.CameraFollowsOrientation = false;
-			map.CenterWGS84 = new double[]{8.403653,49.006890};
+			map.CenterWGS84 = new double[] {
+				Configuration.instance.fixedMapCenterLong,
+				Configuration.instance.fixedMapCenterLat
+			};
 			
 			map.CurrentZoom = 14.0f;
 			map.Zoom (1.0f);
