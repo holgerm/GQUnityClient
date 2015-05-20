@@ -525,6 +525,8 @@ public class questdatabase : MonoBehaviour
 			filedownloads.Add (wwwfile);
 			files_all += 1;
 			StartCoroutine (downloadAssetFinished (wwwfile, filename, 0f));
+		} else {
+			Debug.Log ("downloadAsset() with clientxml in url-arg called");
 		}
 	}
 
