@@ -39,6 +39,7 @@ public class questdatabase : MonoBehaviour
 	public int bytesloaded = 0;
 	public float fakebytes = 0;
 	public string currentxml;
+	public loadinglogo loadlogo;
 
 	void Start ()
 	{
@@ -66,6 +67,7 @@ public class questdatabase : MonoBehaviour
 		if (Application.isWebPlayer) {
 			webloadingmessage.enabled = true;
 			questmilllogo.enabled = true;
+			loadlogo.enable();
 		} else {
 
 #if !UNITY_WEBPLAYER
@@ -331,7 +333,7 @@ public class questdatabase : MonoBehaviour
 		if (webloadingmessage != null) {
 			webloadingmessage.text = "Loading...";
 			webloadingmessage.enabled = true;
-						
+			loadlogo.enable();	
 		}
 
 		www = new WWW (x);
@@ -474,7 +476,7 @@ public class questdatabase : MonoBehaviour
 		webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
 
-
+		loadlogo.enable();
 
 		showmessage ("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK");
 
@@ -492,6 +494,7 @@ public class questdatabase : MonoBehaviour
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
 			webloadingmessage.enabled = true;
+			loadlogo.enable();
 			webloadingmessage.text = "Bitte warten ... ";
 			StartCoroutine (DownloadFinished (q));
 		} else {
@@ -663,6 +666,7 @@ public class questdatabase : MonoBehaviour
 		if (currentquest == null) {
 			questmilllogo.enabled = false;
 			webloadingmessage.enabled = false;
+			loadlogo.disable();
 			return;
 		}
 
@@ -715,6 +719,7 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("WAITING FOR QUEST ASSETS");
 			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
 			webloadingmessage.enabled = true;
+			loadlogo.enable();
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 						
 
@@ -1204,7 +1209,7 @@ public class questdatabase : MonoBehaviour
 	IEnumerator DownloadFinished (Quest q)
 	{
 		webloadingmessage.enabled = true;
-
+		loadlogo.enable();
 		localquests.Add (q);
 		yield return www;
 		if (www.error == null) {
