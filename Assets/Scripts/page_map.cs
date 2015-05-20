@@ -10,6 +10,7 @@ using ProjNet.Converters.WellKnownText;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using GQ.Geo;
 
 public class page_map : MonoBehaviour
 {
@@ -486,9 +487,15 @@ public class page_map : MonoBehaviour
 
 		if (b == false) {
 			map.CameraFollowsOrientation = false;
+			questdb.getActiveHotspots ();
+
+			GeoPosition center = questdb.getCenter ();
+
 			map.CenterWGS84 = new double[] {
-				Configuration.instance.fixedMapCenterLong,
-				Configuration.instance.fixedMapCenterLat
+				center.Lat,
+				center.Long
+//				Configuration.instance.fixedMapCenterLong,
+//				Configuration.instance.fixedMapCenterLat
 			};
 			
 			map.CurrentZoom = 14.0f;
