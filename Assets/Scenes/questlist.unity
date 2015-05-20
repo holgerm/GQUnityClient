@@ -1153,7 +1153,7 @@ MonoBehaviour:
     und Darstellung. Regelm\xE4\xDFig, wenn nicht etwas anders ausdr\xFCcklich zu
     einzelnen Bildern und Texten angegeben wird, haben diejenige, die diese Texte
     und Bilder einstellen, die Rechte an Bild und Text und gestatten WCC die uneingeschr\xE4nkte
-    Verwendung auf der Plattform von WCC."
+    Verwendung auf der Plattform von WCC. "
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
