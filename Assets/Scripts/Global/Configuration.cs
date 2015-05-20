@@ -23,7 +23,14 @@ public class Configuration : MonoBehaviour
 
 
 	private bool externalBuildProcess = false;
-	
+
+
+
+
+	public string impressum = "";
+
+
+
 	public static Configuration instance {
 		get {
 //			Debug.Log ("SETTINGS: get()");

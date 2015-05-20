@@ -51,7 +51,18 @@ public class page_tagscanner : MonoBehaviour {
 
 		if (camTexture != null) {
 			c = camTexture.GetPixels32 ();
+			W = camTexture.width;
+			H = camTexture.height;
+
+			Debug.Log("WebcamTexture: "+W+":"+H+"="+WxH);
+			
+			
+			if(c != null){
+				Debug.Log("Webcam actual pixels: "+c.Length);
+				
+			}
 		}
+
 
 //
 //		if (qrresult == "") {
@@ -137,7 +148,7 @@ public class page_tagscanner : MonoBehaviour {
 		
 		var devices = WebCamTexture.devices;
 		var deviceName = devices[0].name;
-		camTexture = new WebCamTexture(deviceName, 720,(int)(Camera.main.aspect * 720f));
+		camTexture = new WebCamTexture(deviceName,1280,720);
 		camTexture.Play();
 
 		// old tagscanner
@@ -146,8 +157,8 @@ public class page_tagscanner : MonoBehaviour {
 
 		//image.renderer.material.mainTexture = cameraTexture;
 		
-		OnEnable();
-		
+		StartCoroutine(OnEnable());
+
 		qrThread = new Thread(DecodeQR);
 		qrThread.Start();
 		
@@ -168,21 +179,36 @@ public class page_tagscanner : MonoBehaviour {
 
 
 
-	void OnEnable () {
+	IEnumerator OnEnable () {
 		if(camTexture != null) {
 			camTexture.Play();
 
 
+
+			if(camTexture.didUpdateThisFrame && c != null){
+
 			W = camTexture.width;
 			H = camTexture.height;
+				WxH = W * H;
+				
+				
+				Debug.Log("WebcamTexture: "+W+":"+H+"="+WxH);
+
+
+				if(c != null){
+					Debug.Log("Webcam actual pixels: "+c.Length);
+
+				}
+			} else {
+				yield return new WaitForEndOfFrame();
+				yield return new WaitForEndOfFrame();
+
+				StartCoroutine(OnEnable());
+
+			}
 
 
 
-
-			WxH = W * H;
-
-
-			Debug.Log("WebcamTexture: "+W+":"+H+"="+WxH);
 		}
 	}
 	
@@ -226,7 +252,9 @@ public class page_tagscanner : MonoBehaviour {
 				}       
 				if (result != null)
 				{           
-					qrcontent = result;        
+					qrcontent = result;   
+
+					Debug.Log("got result:"+qrcontent);
 					print(result);
 				}
 				// Sleep a little bit and set the signal to get the next frame
