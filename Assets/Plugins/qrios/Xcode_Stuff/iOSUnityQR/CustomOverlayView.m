@@ -21,7 +21,7 @@
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     UILabel* testLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 30)];
-    testLabel.text = @"here is your text";
+    testLabel.text = @" ";
     
     [self addSubview:testLabel];
 }
