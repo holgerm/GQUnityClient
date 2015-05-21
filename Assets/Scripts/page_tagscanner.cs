@@ -44,7 +44,7 @@ public class page_tagscanner : MonoBehaviour
 	WebCamDecoder decoder;
 
 
-	
+	public MessageReceiver receiver;
 	
 	void Update ()
 	{
@@ -65,24 +65,12 @@ public class page_tagscanner : MonoBehaviour
 			}
 		}
 
+		qrcontent = receiver.QRInfo;
 
-//
-//		if (qrresult == "") {
-//						var result = decoder.Result;
-//			if(result.BarcodeType != 0){
-//			Debug.Log(result.BarcodeType);
-//			}
-//			if (result.Success && result.BarcodeType == BarcodeType.QrCode) {
-//			
-//			
-//								checkResult (result.Text);
-//
-//						}
-//				}
+		Debug.Log ("QR RESULT:" + receiver.QRInfo);
 
 
-
-		if (qrcontent != null && qrcontent != "") {
+		if (qrcontent != null && qrcontent != "" && qrcontent != "!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012") {
 
 			checkResult (qrcontent);
 
@@ -95,92 +83,135 @@ public class page_tagscanner : MonoBehaviour
 	IEnumerator Start ()
 	{
 
+		if (GameObject.Find ("QuestDatabase") == null) {
 
+			Application.LoadLevel (0);
 
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		tagscanner = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
-
-		
-		if (tagscanner.onStart != null) {
-			
-			tagscanner.onStart.Invoke ();
-		}
-		
-		if (tagscanner.hasAttribute ("taskdescription")) {
-			text.text = tagscanner.getAttribute ("taskdescription");
 		} else {
+
+			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+			quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+			tagscanner = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+
+
+		
+			if (tagscanner.onStart != null) {
 			
-			text.enabled = false;
-			textbg.enabled = false;
-			
-		}
-
-
-
-		if (tagscanner.hasAttribute ("showTagContent")) {
-
-			if (tagscanner.getAttribute ("showTagContent") == "true") {
-
-				showresult = true;
+				tagscanner.onStart.Invoke ();
+			}
+		
+			if (tagscanner.hasAttribute ("taskdescription")) {
+				text.text = tagscanner.getAttribute ("taskdescription");
 			} else {
+			
+				text.enabled = false;
+				textbg.enabled = false;
+			
+			}
 
+
+
+			if (tagscanner.hasAttribute ("showTagContent")) {
+
+				if (tagscanner.getAttribute ("showTagContent") == "true") {
+
+					showresult = true;
+				} else {
+
+					showresult = false;
+
+				}
+
+			} else {
 				showresult = false;
+			}
+
+
+			// get render target;
+			//plane = GameObject.Find("Plane");
+			//cameraMat = plane.GetComponent<MeshRenderer>().material;
+		
+			// get a reference to web cam decoder component;
+			//decoder = GetComponent<WebCamDecoder>();
+		
+		
+
+
+			if(Application.platform != RuntimePlatform.IPhonePlayer){
+			// init web cam;
+			if (Application.isWebPlayer) {
+				yield return Application.RequestUserAuthorization (UserAuthorization.WebCam);
+			}
+		
+			var devices = WebCamTexture.devices;
+
+			string debugdevices = "WEBCAMDEVICES: ";
+
+			foreach (WebCamDevice wcd in devices) {
+
+				debugdevices += wcd.name + ", ";
+
 
 			}
 
-		} else {
-			showresult = false;
+			Debug.Log (debugdevices);
+
+			var deviceName = devices [0].name;
+			camTexture = new WebCamTexture (deviceName);
+			camTexture = new WebCamTexture ();
+			camTexture.requestedHeight = Screen.height; // 480;
+			camTexture.requestedWidth = Screen.width; //640;
+			camTexture.Play ();
+
+			// old tagscanner
+			//yield return StartCoroutine(decoder.StartDecoding(camTexture));
+	
+
+			//image.renderer.material.mainTexture = cameraTexture;
+		
+			StartCoroutine (OnEnableCam ());
+
+			qrThread = new Thread (DecodeQR);
+			qrThread.Start ();
+		
+		
+			// adjust texture orientation;
+			// plane.transform.rotation = plane.transform.rotation * 
+			//   Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.up);
+	
+
+			WebCamTexture texture = new WebCamTexture (deviceName);
+			plane.material.mainTexture = texture;
+			texture.Play ();
+
+
+			} else {
+
+
+
+
+				UZBarReaderViewController zBar = new UZBarReaderViewController();
+				zBar.cameraDevice = kCameraDevice.ZBAR_CAMERA_DEVICE_REAR;
+				zBar.symbolType = kScanSymbolType.ZBAR_I25;
+				zBar.configOpt = kScanConfigOptions.ZBAR_CFG_ENABLE;
+				zBar.configSymbolValue = 0;
+				zBar.cameraFlashMode = kCameraFlashMode.ZBAR_CAMERA_FLASH_MODE_AUTO;
+				zBar.showsZBarControls = false;
+
+				UIBinding.ActivateUI (zBar.getZBarInfos());
+
+
+
+			}
 		}
 
 
-		// get render target;
-		//plane = GameObject.Find("Plane");
-		//cameraMat = plane.GetComponent<MeshRenderer>().material;
-		
-		// get a reference to web cam decoder component;
-		//decoder = GetComponent<WebCamDecoder>();
-		
-		
-		// init web cam;
-		if (Application.isWebPlayer) {
-			yield return Application.RequestUserAuthorization (UserAuthorization.WebCam);
-		}
-		
-		var devices = WebCamTexture.devices;
-		var deviceName = devices [0].name;
-		camTexture = new WebCamTexture (deviceName, 1280, 720);
-		camTexture.Play ();
 
-		// old tagscanner
-		//yield return StartCoroutine(decoder.StartDecoding(camTexture));
-	
-
-		//image.renderer.material.mainTexture = cameraTexture;
-		
-		StartCoroutine (OnEnable ());
-
-		qrThread = new Thread (DecodeQR);
-		qrThread.Start ();
-		
-		
-		// adjust texture orientation;
-		// plane.transform.rotation = plane.transform.rotation * 
-		//   Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.up);
-	
-
-		WebCamTexture texture = new WebCamTexture (deviceName);
-		plane.material.mainTexture = texture;
-		texture.Play ();
 	}
 
 
 
-
-
-
-
-	IEnumerator OnEnable ()
+	IEnumerator OnEnableCam ()
 	{
 		if (camTexture != null) {
 			camTexture.Play ();
@@ -194,18 +225,18 @@ public class page_tagscanner : MonoBehaviour
 				WxH = W * H;
 				
 				
-				Debug.Log ("WebcamTexture: " + W + ":" + H + "=" + WxH);
+				//Debug.Log ("WebcamTexture: " + W + ":" + H + "=" + WxH);
 
 
 				if (c != null) {
-					Debug.Log ("Webcam actual pixels: " + c.Length);
+				//	Debug.Log ("Webcam actual pixels: " + c.Length);
 
 				}
 			} else {
 				yield return new WaitForEndOfFrame ();
 				yield return new WaitForEndOfFrame ();
 
-				StartCoroutine (OnEnable ());
+				StartCoroutine (OnEnableCam ());
 
 			}
 
@@ -223,8 +254,16 @@ public class page_tagscanner : MonoBehaviour
 	
 	void OnDestroy ()
 	{
-		qrThread.Abort ();
-		camTexture.Stop ();
+
+
+		if (qrThread != null) {
+			qrThread.Abort ();
+		}
+
+		if (camTexture != null) {
+
+			camTexture.Stop ();
+		}
 	}
 	
 
@@ -246,9 +285,9 @@ public class page_tagscanner : MonoBehaviour
 				
 				if (c != null) {
 					
-					print ("Start Decode!");
+				Debug.Log ("Start Decode!");
 					result = barcodeReader.Decode (c, W, H).Text; //This line of code is generating unknown exceptions for some arcane reason
-					print ("Got past decode!");
+					Debug.Log ("Got past decode!");
 				}       
 				if (result != null) {           
 					qrcontent = result;   

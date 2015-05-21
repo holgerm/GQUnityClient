@@ -236,7 +236,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!1 &269666583
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +437,7 @@ Transform:
   m_LocalScale: {x: 1.91330004, y: 1, z: 1.15659153}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!114 &798526963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +510,46 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -190.250061}
   m_SizeDelta: {x: 0, y: 380.5}
   m_Pivot: {x: .5, y: .5}
+--- !u!1 &1750957258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1750957260}
+  - 114: {fileID: 1750957259}
+  m_Layer: 0
+  m_Name: MessageReceiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1750957259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1750957258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18bbe718344c4d1bb74b98afc94c688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  QRInfo: '!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012'
+--- !u!4 &1750957260
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1750957258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.31848907, y: 9.61134911, z: -12.4387598}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!1 &1792935471
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +637,7 @@ RectTransform:
   - {fileID: 54984536}
   - {fileID: 379437871}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -675,7 +715,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &1953851290
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +780,8 @@ MonoBehaviour:
       result: 
     previouspages: []
     xmlcontent: 
+    start_longitude: 0
+    start_latitude: 0
   tagscanner:
     id: 0
     type: 
@@ -772,6 +814,7 @@ MonoBehaviour:
   qrresult: 
   showresult: 0
   plane: {fileID: 798526959}
+  receiver: {fileID: 1750957259}
 --- !u!4 &1953851292
 Transform:
   m_ObjectHideFlags: 0
@@ -783,7 +826,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!114 &1953851293
 MonoBehaviour:
   m_ObjectHideFlags: 0

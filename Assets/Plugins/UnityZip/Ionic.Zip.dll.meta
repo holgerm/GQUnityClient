@@ -9,14 +9,14 @@ PluginImporter:
   isPreloaded: 0
   platformData:
     Android:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
     Any:
-      enabled: 1
+      enabled: 0
       settings: {}
     Editor:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
@@ -37,11 +37,15 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
+    SamsungTV:
+      enabled: 0
+      settings:
+        STV_MODEL: STANDARD_13
     Web:
-      enabled: 1
+      enabled: 0
       settings: {}
     WebStreamed:
-      enabled: 1
+      enabled: 0
       settings: {}
     Win:
       enabled: 0
@@ -52,7 +56,7 @@ PluginImporter:
       settings:
         CPU: AnyCPU
     iOS:
-      enabled: 1
+      enabled: 0
       settings:
         CompileFlags: 
         FrameworkDependencies: 

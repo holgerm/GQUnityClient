@@ -140,7 +140,7 @@ public class questdatabase : MonoBehaviour
 			}
 		}
 
-		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
+//		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
 		File.Delete (LOCAL_QUESTS_ZIP);
 
 #endif
