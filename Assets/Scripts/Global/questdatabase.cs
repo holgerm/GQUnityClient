@@ -83,7 +83,7 @@ public class questdatabase : MonoBehaviour
 			} else {
 				Debug.Log ("START: The following quests are already initialized: initialize\n");
 				foreach (FileSystemInfo fileInfo in questsDirInfo) {
-					Debug.Log ("\t" + fileInfo.FullName + "\n");
+//					Debug.Log ("\t" + fileInfo.FullName + "\n");
 				}
 			}
 
@@ -1305,6 +1305,10 @@ public class Quest  : IComparable<Quest>
 	public QuestPage currentpage;
 	public List<QuestPage> previouspages;
 	public string xmlcontent;
+
+	public float start_longitude;
+	public float start_latitude;
+
 
 	public Quest ()
 	{

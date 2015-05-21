@@ -295,6 +295,10 @@ public class createquestbuttons : MonoBehaviour
 			}
 			break; 
 		case JSONObject.Type.ARRAY:
+			//Debug.Log("ARRAY: "+kei);
+			if (kei == "quest_hotspots") {
+				currentquest = new Quest();
+			} 
 			foreach (JSONObject j in obj.list) {
 				accessData (j, kei);
 			}
@@ -306,10 +310,28 @@ public class createquestbuttons : MonoBehaviour
 			}
 			break;
 		case JSONObject.Type.NUMBER:
+			//Debug.Log("NUMBER: "+kei);
 			if (kei == "quest_id") {
-				currentquest = new Quest ();
+
 				currentquest.id = (int)obj.n;
 				//	Debug.Log(kei+":"+obj.n);
+			} else if(kei == "quest_hotspots_latitude"){
+
+				if(currentquest.start_latitude == null || currentquest.start_latitude == 0){
+
+					currentquest.start_latitude = obj.n;
+
+				}
+
+			} else if(kei == "quest_hotspots_longitude"){
+				Debug.Log("FOUND LONGITUDE");
+
+				if(currentquest.start_longitude == null || currentquest.start_longitude == 0){
+					Debug.Log("SETTING LONGITUDE");
+					currentquest.start_longitude = obj.n;
+					
+				}
+
 			}
 			break;
 		case JSONObject.Type.BOOL:
@@ -325,6 +347,10 @@ public class createquestbuttons : MonoBehaviour
 
 
 
+	void accessHotspotData (object j, string kei)
+	{
+		throw new System.NotImplementedException ();
+	}
 }
 
 

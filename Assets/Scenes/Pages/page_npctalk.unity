@@ -1711,6 +1711,8 @@ MonoBehaviour:
       result: 
     previouspages: []
     xmlcontent: 
+    start_longitude: 0
+    start_latitude: 0
   npctalk:
     id: 0
     type: 
