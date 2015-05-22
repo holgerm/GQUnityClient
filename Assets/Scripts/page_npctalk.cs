@@ -83,7 +83,7 @@ public class page_npctalk : MonoBehaviour
 
 							
 							
-						Debug.Log (qra.texture.height + "," + qra.texture.width);
+						Debug.Log ("npctalk.image: (h, w) " + qra.texture.height + "," + qra.texture.width);
 						if (qra.texture.height > qra.texture.width) {
 
 							image_hochkant.sprite = s;
@@ -137,7 +137,7 @@ public class page_npctalk : MonoBehaviour
 
 		}
 
-//		Debug.Log ("after npc talk image");
+		Debug.Log ("after npc talk image");
 		text.text = "";
 
 
@@ -161,7 +161,7 @@ public class page_npctalk : MonoBehaviour
 		}
 
 
-
+		Debug.Log ("at end of Start in npctalk");
 
 
 
@@ -169,6 +169,7 @@ public class page_npctalk : MonoBehaviour
 
 	void Update ()
 	{
+		Debug.Log ("npctalk.Update() entered");
 		
 //		Debug.Log (text.transform.parent.GetComponent<ScrollRect> ().verticalScrollbar.value);
 		

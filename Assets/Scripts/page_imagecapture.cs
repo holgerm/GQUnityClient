@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 using System.Collections;
 using System.IO;
-public class page_imagecapture : MonoBehaviour {
+public class page_imagecapture : MonoBehaviour
+{
+
 
 	
 	public questdatabase questdb;
@@ -30,7 +32,7 @@ public class page_imagecapture : MonoBehaviour {
 
 	
 	// Use this for initialization
-	IEnumerator Start()
+	IEnumerator Start ()
 	{
 		
 		
@@ -41,9 +43,9 @@ public class page_imagecapture : MonoBehaviour {
 		imagecapture = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 		
 		
-		if(imagecapture.onStart != null){
+		if (imagecapture.onStart != null) {
 			
-			imagecapture.onStart.Invoke();
+			imagecapture.onStart.Invoke ();
 		}
 		
 		if (imagecapture.hasAttribute ("task") && imagecapture.getAttribute ("task").Length > 1) {
@@ -59,21 +61,20 @@ public class page_imagecapture : MonoBehaviour {
 
 
 		// get render target;
-		plane = GameObject.Find("Plane");
-		cameraMat = plane.GetComponent<MeshRenderer>().material;
+		plane = GameObject.Find ("Plane");
+		cameraMat = plane.GetComponent<MeshRenderer> ().material;
 		
 
 		// init web cam;
 		if (Application.platform == RuntimePlatform.OSXWebPlayer ||
-		    Application.platform == RuntimePlatform.WindowsWebPlayer)
-		{
-			yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
+			Application.platform == RuntimePlatform.WindowsWebPlayer) {
+			yield return Application.RequestUserAuthorization (UserAuthorization.WebCam);
 		}
 		
 		var devices = WebCamTexture.devices;
-		var deviceName = devices[0].name;
-		cameraTexture = new WebCamTexture(deviceName, 1920, 1080);
-		cameraTexture.Play();
+		var deviceName = devices [0].name;
+		cameraTexture = new WebCamTexture (deviceName, 1920, 1080);
+		cameraTexture.Play ();
 		
 
 		cameraMat.mainTexture = cameraTexture;
@@ -83,18 +84,20 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-	public void TakeSnapshot()
+	public void TakeSnapshot ()
 	{
 
 
 		Debug.Log ("starting photo");
-		Texture2D snap = new Texture2D(cameraTexture.width, cameraTexture.height);
-		snap.SetPixels(cameraTexture.GetPixels());
-		snap.Apply();
+		Texture2D snap = new Texture2D (cameraTexture.width, cameraTexture.height);
+		snap.SetPixels (cameraTexture.GetPixels ());
+		snap.Apply ();
+		cameraTexture.Stop ();
 	
 		cameraTexture.Stop ();
 
 		cameraMat.mainTexture = snap;
+		Debug.Log ("Took snapshot: texture height is " + cameraMat.mainTexture.height);
 
 	
 		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), snap);
@@ -117,12 +120,13 @@ public class page_imagecapture : MonoBehaviour {
 
 
 	
-	void onEnd(){
+	void onEnd ()
+	{
 
 
 	
 
-			imagecapture.state = "succeeded";
+		imagecapture.state = "succeeded";
 			
 
 		
@@ -131,7 +135,7 @@ public class page_imagecapture : MonoBehaviour {
 			imagecapture.onEnd.Invoke ();
 		} else {
 			
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest();
+			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
 			
 		}
 		

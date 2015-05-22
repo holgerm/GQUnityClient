@@ -457,7 +457,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &939975277
@@ -811,6 +811,8 @@ MonoBehaviour:
       result: 
     previouspages: []
     xmlcontent: 
+    start_longitude: 0
+    start_latitude: 0
   imagecapture:
     id: 0
     type: 
