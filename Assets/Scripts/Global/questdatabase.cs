@@ -914,7 +914,8 @@ public class questdatabase : MonoBehaviour
 				qp.type != "ImageCapture" && 
 				qp.type != "AudioRecord" && 
 				qp.type != "TextQuestion" && 
-				qp.type != "MapOSM") {
+				qp.type != "MapOSM" &&
+			    qp.type != "WebPage") {
 
 
 
@@ -1108,6 +1109,8 @@ public class questdatabase : MonoBehaviour
 					Application.LoadLevelAdditive (7);
 				} else if (qp.type == "AudioRecord") {
 					Application.LoadLevelAdditive (8);
+				} else if (qp.type == "WebPage") {
+					Application.LoadLevelAdditive (10);
 				} else if (qp.type == "MapOSM") {
 
 
