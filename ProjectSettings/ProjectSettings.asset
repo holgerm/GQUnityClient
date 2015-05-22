@@ -12,7 +12,7 @@ PlayerSettings:
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: QuestMill
-  productName: Carl Benz
+  productName: WCC Regio Bonn
   cloudProjectId: 
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -75,7 +75,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.questmill.geoquest.carlbenz
+  bundleIdentifier: com.questmill.geoquest.wcc
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
@@ -168,17 +168,17 @@ PlayerSettings:
       m_Size: 57
   - m_BuildTarget: Android
     m_Icons:
-    - m_Icon: {fileID: 2800000, guid: 138ecbeebb6114a488283c67a949371a, type: 3}
+    - m_Icon: {fileID: 2800000, guid: d22a3292fff6c4f34a4def16d6e24b7e, type: 3}
       m_Size: 192
-    - m_Icon: {fileID: 2800000, guid: d06e72513d3a3431d81a5ffaeffb2182, type: 3}
+    - m_Icon: {fileID: 2800000, guid: c1019f97656e44d82a803c30875ba58b, type: 3}
       m_Size: 144
-    - m_Icon: {fileID: 2800000, guid: d340159e7ac0541d79c53ab53571230e, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 7f120351aedd049b99714a0c46329a63, type: 3}
       m_Size: 96
-    - m_Icon: {fileID: 2800000, guid: 16f10e323310949b59e86b4431f7a8d6, type: 3}
+    - m_Icon: {fileID: 2800000, guid: e27e2ab946c9241689e374e4a8b13b1f, type: 3}
       m_Size: 72
-    - m_Icon: {fileID: 2800000, guid: 4fa9fc993e5c64eb5b8b25bd8bd422b9, type: 3}
+    - m_Icon: {fileID: 2800000, guid: cfd24f49ab4ed4b49b6feedaa6fed64a, type: 3}
       m_Size: 48
-    - m_Icon: {fileID: 2800000, guid: 69f82a2ce99b34068b58bd30edc5b8b8, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 74876588d881f429eaaa4c16601f74f7, type: 3}
       m_Size: 36
   m_BuildTargetBatching:
   - m_BuildTarget: Android

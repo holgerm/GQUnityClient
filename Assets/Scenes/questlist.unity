@@ -1411,9 +1411,9 @@ MonoBehaviour:
   autostartQuestID: 0
   autostartQuestSize: 191446736
   colorProfile: wcc
-  mapboxKey: pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A
-  mapboxMapID: gqcarlbenz.ac1f8820
-  downloadTimeOutSeconds: 300
+  mapboxKey: pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA
+  mapboxMapID: gqwcc.m824ig5p
+  downloadTimeOutSeconds: 100
   impressum: "<b>Titel</b>\\n WikiCultureCity\\n\\n <b>Beschreibung</b>\\n Anbieterkennzeichnung
     der WikiCultureCity GbR, Sebastianstr. 39, D-53115 Bonn\\n\\n <b>Einrichtung /
     Institution</b>\\n WikiCultureCity GbR\\n\\n <b>Rechtsform</b>\\n Gesellschaft
@@ -4049,8 +4049,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
-  m_Size: .99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5826,7 +5826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: .786764741, g: .786764741, b: .786764741, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_Sprite: {fileID: 21300000, guid: 25af5d598cf4249d0b2745bf81031d65, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
