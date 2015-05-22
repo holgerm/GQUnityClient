@@ -300,7 +300,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-		if (fakebytes > 0) {
+		if (fakebytes > 0 && fakebytes < (int.MaxValue - 1000)) {
 
 			fakebytes += Time.deltaTime;
 

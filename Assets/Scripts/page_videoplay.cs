@@ -19,11 +19,15 @@ public class page_videoplay : MonoBehaviour
 
 	IEnumerator BeginDownload ()
 	{
+
+		#if !UNITY_WEBPLAYER
+
 		filepath = Application.persistentDataPath + "/test.mp4";
 		WWW www = new WWW ("https://quest-mill.com/tests/Geburtshaus.mp4");
 		while (!www.isDone) {
 			yield return null;
 		}
+
 		System.IO.File.WriteAllBytes (filepath, www.bytes);
 		FileInfo finfo = new FileInfo (filepath);
 		Debug.Log ("filepath = " + filepath);
@@ -37,6 +41,16 @@ public class page_videoplay : MonoBehaviour
 		}
 
 		Handheld.PlayFullScreenMovie ("file://" + filepath);
+
+#else
+
+		yield return null;
+
+		questdb.debug("Video can't be previewed in Web-Editor");
+		StartCoroutine(onEnd());
+
+
+#endif
 	}
 
 
@@ -81,12 +95,10 @@ public class page_videoplay : MonoBehaviour
 
 			/*
 
-			#if !UNITY_WEBPLAYER
-			
+
 			
 			StartCoroutine (youtube.LoadVideo (url));
 			
-			#endif
 
 
 			*/
@@ -123,6 +135,7 @@ public class page_videoplay : MonoBehaviour
 		
 #else
 
+		yield return null;
 
 		questdb.debug("Video Playback can't be simulated in web-preview right now");
 
