@@ -3,9 +3,7 @@ using UnityEngine.UI;
 
 using System.Collections;
 using System.IO;
-public class page_imagecapture : MonoBehaviour
-{
-
+public class page_imagecapture : MonoBehaviour {
 
 	
 	public questdatabase questdb;
@@ -72,9 +70,20 @@ public class page_imagecapture : MonoBehaviour
 		}
 		
 		var devices = WebCamTexture.devices;
-		var deviceName = devices [0].name;
-		cameraTexture = new WebCamTexture (deviceName, 1920, 1080);
-		cameraTexture.Play ();
+		var deviceName = devices[0].name;
+
+
+		if (Application.platform == RuntimePlatform.Android) {
+			cameraTexture = new WebCamTexture (deviceName, 1280	, 720);
+
+			
+		} else {
+			cameraTexture = new WebCamTexture (deviceName, 1920, 1080);
+		}
+
+
+
+		cameraTexture.Play();
 		
 
 		cameraMat.mainTexture = cameraTexture;
@@ -84,35 +93,73 @@ public class page_imagecapture : MonoBehaviour
 
 
 
-	public void TakeSnapshot ()
+
+
+	IEnumerator takeSnapshotAndroid(WebCamTexture cameraTexture2){
+
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
+
+
+		Texture2D snap = new Texture2D (cameraTexture2.width, cameraTexture2.height);
+		snap.SetPixels (cameraTexture2.GetPixels ());
+		snap.Apply ();
+		
+		cameraTexture2.Stop ();
+		
+		cameraMat.mainTexture = snap;
+		
+		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), snap);
+		
+		actioncontroller.photos.Add (qra);
+		onEnd ();
+
+
+	}
+	public void TakeSnapshot()
 	{
 
 
 		Debug.Log ("starting photo");
-		Texture2D snap = new Texture2D (cameraTexture.width, cameraTexture.height);
-		snap.SetPixels (cameraTexture.GetPixels ());
-		snap.Apply ();
-		cameraTexture.Stop ();
+
+		if (Application.platform == RuntimePlatform.Android) {
+			var devices = WebCamTexture.devices;
+			var deviceName = devices [0].name;
+			WebCamTexture cameraTexture2 = new WebCamTexture (deviceName, 1920, 1080);
+			cameraTexture.Stop();
+			cameraTexture2.Play();
+
+			StartCoroutine(takeSnapshotAndroid(cameraTexture2));
+
+
+		} else {
+		
+			Texture2D snap = new Texture2D (cameraTexture.width, cameraTexture.height);
+			snap.SetPixels (cameraTexture.GetPixels ());
+			snap.Apply ();
 	
-		cameraTexture.Stop ();
+			cameraTexture.Stop ();
 
-		cameraMat.mainTexture = snap;
-		Debug.Log ("Took snapshot: texture height is " + cameraMat.mainTexture.height);
+			cameraMat.mainTexture = snap;
+			QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), snap);
+			
+			actioncontroller.photos.Add (qra);
 
+
+			onEnd ();
+
+
+		}
 	
-		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), snap);
-
-		actioncontroller.photos.Add (qra);
-
-
-
-
-
-
 	
 
 
-		onEnd ();
+
+
+
+	
+
+
 
 
 	}
