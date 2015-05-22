@@ -50,26 +50,28 @@ public class page_tagscanner : MonoBehaviour
 	{
 
 
+		if (Application.platform == RuntimePlatform.IPhonePlayer) {
+			qrcontent = receiver.QRInfo;
 
-		if (camTexture != null) {
-			c = camTexture.GetPixels32 ();
-			W = camTexture.width;
-			H = camTexture.height;
+			Debug.Log ("QR RESULT:" + receiver.QRInfo);
 
-			Debug.Log ("WebcamTexture: " + W + ":" + H + "=" + WxH);
-			
-			
-			if (c != null) {
-				Debug.Log ("Webcam actual pixels: " + c.Length);
+		} else {
+
+			if (camTexture != null) {
+				c = camTexture.GetPixels32 ();
+				W = camTexture.width;
+				H = camTexture.height;
 				
+				Debug.Log ("WebcamTexture: " + W + ":" + H + "=" + WxH);
+				
+				
+				if (c != null) {
+					Debug.Log ("Webcam actual pixels: " + c.Length);
+					
+				}
 			}
+
 		}
-
-		qrcontent = receiver.QRInfo;
-
-		Debug.Log ("QR RESULT:" + receiver.QRInfo);
-
-
 		if (qrcontent != null && qrcontent != "" && qrcontent != "!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012") {
 
 			checkResult (qrcontent);

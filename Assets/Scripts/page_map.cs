@@ -502,8 +502,9 @@ public class page_map : MonoBehaviour
 			map.Zoom (1.0f);
 		} else {
 
+			if(map != null){
 			map.CameraFollowsOrientation = false;
-
+}
 		}
 		fixedonposition = b;
 				
