@@ -22,6 +22,7 @@ public class Configuration : MonoBehaviour
 	// id for wcc: gqwcc.m824ig5p
 
 	// default key: pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw
+	// default map id: mapbox.streets
 
 	public float downloadTimeOutSeconds = 300.0f;
 
