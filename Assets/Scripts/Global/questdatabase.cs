@@ -733,12 +733,25 @@ public class questdatabase : MonoBehaviour
 		}
 
 		if (canPlayQuest (currentquest)) {
+
+
+
+			if(Application.isWebPlayer){
+
+
+
+				changePage (currentquest.currentpage.id);
+
+
+			} else {
+
 			Debug.Log ("WAITING FOR QUEST ASSETS");
 			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
 			webloadingmessage.enabled = true;
 			loadlogo.enable ();
 			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
-						
+					
+			}
 
 		} else {
 			Debug.Log ("showing message");
@@ -1005,7 +1018,7 @@ public class questdatabase : MonoBehaviour
 
 
 				foreach (GameObject go in allObjects)
-					if (go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
+					if (go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform)
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
 						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam") {

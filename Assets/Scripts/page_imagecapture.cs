@@ -92,6 +92,8 @@ public class page_imagecapture : MonoBehaviour {
 		snap.SetPixels(cameraTexture.GetPixels());
 		snap.Apply();
 	
+		cameraTexture.Stop ();
+
 		cameraMat.mainTexture = snap;
 
 	
@@ -107,7 +109,7 @@ public class page_imagecapture : MonoBehaviour {
 	
 
 
-	StartCoroutine(onEnd ());
+		onEnd ();
 
 
 	}
@@ -115,12 +117,11 @@ public class page_imagecapture : MonoBehaviour {
 
 
 	
-	IEnumerator onEnd(){
+	void onEnd(){
 
 
 	
 
-		yield return new WaitForSeconds (1f);
 			imagecapture.state = "succeeded";
 			
 

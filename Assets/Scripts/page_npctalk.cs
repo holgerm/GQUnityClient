@@ -69,12 +69,14 @@ public class page_npctalk : MonoBehaviour
 				
 
 
-				foreach (QuestRuntimeAsset qra in	questactions.photos) {
+				foreach (QuestRuntimeAsset qra in questactions.photos) {
 					
-					
+					//Debug.Log("KEY:"+qra.key);
 					
 					if (qra.key == npctalk.getAttribute ("image")) {
-						
+
+
+					
 						
 						Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
 						
@@ -99,7 +101,7 @@ public class page_npctalk : MonoBehaviour
 
 					}
 				}
-				
+				Debug.Log("donewithforeach");
 				
 				
 				
