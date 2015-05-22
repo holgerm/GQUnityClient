@@ -160,9 +160,10 @@ public class page_tagscanner : MonoBehaviour
 
 			var deviceName = devices [0].name;
 			camTexture = new WebCamTexture (deviceName);
-			camTexture = new WebCamTexture ();
 			camTexture.requestedHeight = Screen.height; // 480;
 			camTexture.requestedWidth = Screen.width; //640;
+			plane.material.mainTexture = camTexture;
+
 			camTexture.Play ();
 
 			// old tagscanner
@@ -182,9 +183,6 @@ public class page_tagscanner : MonoBehaviour
 			//   Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.up);
 	
 
-			WebCamTexture texture = new WebCamTexture (deviceName);
-			plane.material.mainTexture = texture;
-			texture.Play ();
 
 
 			} else {
@@ -216,7 +214,7 @@ public class page_tagscanner : MonoBehaviour
 	IEnumerator OnEnableCam ()
 	{
 		if (camTexture != null) {
-			camTexture.Play ();
+			//camTexture.Play ();
 
 
 
