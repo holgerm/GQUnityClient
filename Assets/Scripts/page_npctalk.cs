@@ -207,7 +207,7 @@ public class page_npctalk : MonoBehaviour
 				
 				} else {
 
-					if (npctalk.contents_dialogitems [dialogitem_state - 1].getAttribute ("blocking") == "true") {
+					if (dialogitem_state > 0 && npctalk.contents_dialogitems [dialogitem_state - 1].getAttribute ("blocking") == "true") {
 
 
 						if (questactions.npcaudio != null) {
