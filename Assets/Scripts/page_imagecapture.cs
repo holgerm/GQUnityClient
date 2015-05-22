@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-#if UNITY_ANDROID
 
-using CameraShot;
-#endif
 using System.Collections;
 using System.IO;
 public class page_imagecapture : MonoBehaviour {
@@ -30,20 +27,7 @@ public class page_imagecapture : MonoBehaviour {
 	GameObject plane;
 	
 
-	void Awake(){
 
-		
-		#if UNITY_ANDROID
-		CameraShotEventListener.onImageLoad += OnImageLoad;
-		CameraShotEventListener.onError += OnError;
-		CameraShotEventListener.onFailed += OnFailed;
-		CameraShotEventListener.onCancel += OnCancel;
-		
-		AndroidCameraShot.LaunchCameraForImageCapture();
-		
-#endif
-
-	}
 	
 	// Use this for initialization
 	IEnumerator Start()
@@ -98,59 +82,6 @@ public class page_imagecapture : MonoBehaviour {
 	}
 
 
-	#if UNITY_ANDROID
-
-
-	void OnImageLoad(string imgPath, Texture2D tex)
-	{
-		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), tex);
-		
-		actioncontroller.photos.Add (qra);
-		
-		cameraMat.mainTexture = tex;
-		
-		StartCoroutine(onEnd ());
-
-	}
-
-	void OnError(string errorMsg)
-	{
-		Debug.Log ("Error : "+errorMsg);
-		//AndroidCameraShot.LaunchCameraForImageCapture();
-		text.text = errorMsg;
-	}
-	void OnFailed()
-	{
-		Debug.Log ("Failed");
-		//AndroidCameraShot.LaunchCameraForImageCapture();
-		text.text = "Failed";
-	}
-	void OnCancel()
-	{
-		Debug.Log ("Error");
-		AndroidCameraShot.LaunchCameraForImageCapture();
-	}
-
-	
-	IEnumerator waitForAndroidPhoto(WWW www){
-
-		yield return www;
-		if (www.error == null) {
-
-
-			Texture2D t2 = www.texture as Texture2D;
-
-		
-
-
-				}
-
-
-
-
-		}
-
-#endif
 
 	public void TakeSnapshot()
 	{
@@ -173,30 +104,7 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-		/*
-		if(!Directory.Exists(Application.persistentDataPath + quest.id + "runtime/")){
-			Directory.CreateDirectory(Application.persistentDataPath + quest.id + "runtime/");
-		}
-
-		int r = Random.Range (10000000, 999999999);
-		while(File.Exists(Application.persistentDataPath + quest.id + "runtime/" + imagecapture.id + r + ".png")){
-			r = Random.Range (10000000, 999999999);
-			}
-
-
-
-						System.IO.File.WriteAllBytes (Application.persistentDataPath + quest.id + "runtime/" + imagecapture.id + r + ".png", snap.EncodeToPNG ());
-				
-
-
-
-		if(imagecapture.hasAttribute("file")){
-			questdb.GetComponent<actions>().setVariable("@_"+imagecapture.getAttribute("file"),Application.persistentDataPath + quest.id + "runtime/" + imagecapture.id + r + ".png");
-
-			                                            }
-
-*/
-
+	
 
 
 	StartCoroutine(onEnd ());
@@ -210,13 +118,7 @@ public class page_imagecapture : MonoBehaviour {
 	IEnumerator onEnd(){
 
 
-		#if UNITY_ANDROID
-
-		CameraShotEventListener.onImageLoad -= OnImageLoad;
-		CameraShotEventListener.onError -= OnError;
-		CameraShotEventListener.onFailed -= OnFailed;
-		CameraShotEventListener.onCancel -= OnCancel;
-#endif
+	
 
 		yield return new WaitForSeconds (1f);
 			imagecapture.state = "succeeded";
