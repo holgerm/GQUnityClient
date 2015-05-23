@@ -18,13 +18,33 @@ for i in "${!inArgs[@]}"; do
 	fi
 done
 
+# TODO: read project path from environment variable
+projectPath=/Users/muegge/projects/qv-geoquest/GQUnityClient
+
 # TODO: check that given product name is valid, i.e. folder exists and minimal requirements for product
 
 # TODO: copy associated config file into streaming assets folder of unity project
 
+# Splash screen image is copied into place:
+productSplash=$projectPath/Production/products/${1}/resources/splash.jpg
+if [ ! -f "$productSplash" ]; then
+	echo "ERROR:  I'm missing the splashscreen file for your product."
+	echo "  Please provide it at: $productSplash"
+	echo "Build failed.\n"
+	exit 1
+fi 
+splashPlaceholder=$projectPath/Assets/Generated/splash.jpg
+if [ ! -f "$splashPlaceholder" ]; then
+	echo "ERROR:  Splash screen placeholder is missing: $splashPlaceholder"
+	echo "Build failed.\n"
+	exit 1
+fi 
+cp $projectPath/Production/products/${1}/resources/splash.jpg $projectPath/Assets/Generated/splash.jpg
+# TODO check that splash screen image for product exists, otherwise use default and issue warning.
+
 # Build Android project:
 /Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode \
-	-projectPath /Users/muegge/projects/qv-geoquest/GQUnityClient  \
+	-projectPath $projectPath  \
 	-executeMethod Product.Builder.BuildPlayers \
 	--gqproduct $1 $forwardArgs
 ret_code=$?
@@ -36,7 +56,7 @@ if [ $ret_code != 0 ]; then
   
   	exit $ret_code
 else
-	printf "Build succeded.\n"
+	printf "Build succeeded.\n"
 fi
 
 # TODO: store build with version number in versions folder (android and iOS seprarately)
