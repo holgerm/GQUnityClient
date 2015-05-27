@@ -4927,6 +4927,7 @@ MonoBehaviour:
   fakebytes: 0
   currentxml: 
   loadlogo: {fileID: 1538797159}
+  convertedSprites: []
 --- !u!4 &1756337059
 Transform:
   m_ObjectHideFlags: 0

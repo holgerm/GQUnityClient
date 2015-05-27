@@ -5,6 +5,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.IO;
 using System;
+using GQ.Util;
 
 public class page_npctalk : MonoBehaviour
 {
@@ -68,11 +69,12 @@ public class page_npctalk : MonoBehaviour
 
 			}
 			savedtickertime = tickertime;
+			DateTime start = DateTime.Now;
 
 			if (npctalk.getAttribute ("image") != "") {
 				if (npctalk.getAttribute ("image").StartsWith ("@_")) {
 				
-				
+
 
 
 					foreach (QuestRuntimeAsset qra in questactions.photos) {
@@ -115,29 +117,58 @@ public class page_npctalk : MonoBehaviour
 				} else {
 		
 
+					
+					foreach(SpriteConverter sc in questdb.convertedSprites){
 
 
-					string url = npctalk.getAttribute ("image");
-					if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-						url = pre + "" + npctalk.getAttribute ("image");
+
+						if(sc.filename == npctalk.getAttribute ("image")){
+
+							if (sc.sprite.texture.height > sc.sprite.texture.width) {
+								
+								image_hochkant.sprite = sc.sprite;
+								image_hochkant.enabled = true;
+								image.enabled = false;
+								
+								
+							} else {
+								
+								image.sprite = sc.sprite;
+								image.enabled = true;
+								
+								
+							}
+							
+
+
+
+						}
+
 					}
-			
-					Debug.Log ("myfile:" + url + " (" + npctalk.getAttribute ("image") + ")");
 
 
-					if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
-						Debug.Log ("webimage");
 
-						www = new WWW (url);
-						StartCoroutine (waitforImage ());
-
-
-					} else if (File.Exists (npctalk.getAttribute ("image"))) {
-
-						Debug.Log ("File Exists");
-						www = new WWW (url);
-						StartCoroutine (waitforImage ());
-					}
+//					string url = npctalk.getAttribute ("image");
+//					if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
+//						url = pre + "" + npctalk.getAttribute ("image");
+//					}
+//			
+//					Debug.Log ("myfile:" + url + " (" + npctalk.getAttribute ("image") + ")");
+//
+//
+//					if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
+//						Debug.Log ("webimage");
+//
+//						www = new WWW (url);
+//						StartCoroutine (waitforImage ());
+//
+//
+//					} else if (File.Exists (npctalk.getAttribute ("image"))) {
+//
+//						Debug.Log ("File Exists");
+//						www = new WWW (url);
+//						StartCoroutine (waitforImage ());
+//					}
 
 				}
 
@@ -147,7 +178,11 @@ public class page_npctalk : MonoBehaviour
 			text.text = "";
 
 
-	
+
+		
+				
+				
+			Debug.Log ("Sprite display took: " + DateTime.Now.Subtract(start).Milliseconds);
 
 			string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
 			int size = int.Parse (resultString);

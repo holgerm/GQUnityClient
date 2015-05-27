@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Text;
 using GQ.Geo;
+using GQ.Util;
 
 public class questdatabase : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class questdatabase : MonoBehaviour
 	public float fakebytes = 0;
 	public string currentxml;
 	public loadinglogo loadlogo;
+	public List<SpriteConverter> convertedSprites;
 
 	void Start ()
 	{
@@ -582,6 +584,8 @@ public class questdatabase : MonoBehaviour
 				bytesloaded += (int)(wwwfile.bytesDownloaded);
 				filedownloads.Remove (wwwfile);
 				wwwfile.Dispose ();
+
+				performSpriteConversion (filename);
 				
 			} else {
 				if (timeout > Configuration.instance.downloadTimeOutSeconds) {
@@ -721,6 +725,7 @@ public class questdatabase : MonoBehaviour
 #endif
 		}
 
+
 				
 		currentquest.currentpage = currentquest.pages.First ();
 
@@ -736,21 +741,24 @@ public class questdatabase : MonoBehaviour
 
 
 
-			if(Application.isWebPlayer){
+			if (Application.isWebPlayer) {
 
 
 
 				changePage (currentquest.currentpage.id);
 
 
-			} else {
+			} else if (!localload) {
 
-			Debug.Log ("WAITING FOR QUEST ASSETS");
-			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
-			webloadingmessage.enabled = true;
-			loadlogo.enable ();
-			StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
+				Debug.Log ("WAITING FOR QUEST ASSETS");
+				webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
+				webloadingmessage.enabled = true;
+				loadlogo.enable ();
+				StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 					
+			} else {
+				StartCoroutine (waitForSpriteConversion (currentquest.currentpage.id));
+
 			}
 
 		} else {
@@ -759,6 +767,66 @@ public class questdatabase : MonoBehaviour
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
 		}
+
+	}
+
+	public void performSpriteConversion (string value)
+	{
+
+
+
+		if (File.Exists (value)) {
+			FileInfo fi = new FileInfo(value);
+
+			List<string> imageextensions = new List<string>(){".jpg",".jpeg",".gif",".png"};
+			Debug.Log(imageextensions.Count);
+			Debug.Log(fi.Extension);
+			if(imageextensions.Contains(fi.Extension)){
+
+			SpriteConverter sc = new SpriteConverter (value);
+			convertedSprites.Add (sc);
+
+			sc.startConversion ();
+			}
+		} else {
+
+			Debug.Log("[ATTENTION] A file didn't exist: "+value);
+
+		}
+	}
+
+	IEnumerator waitForSpriteConversion (int pageid)
+	{
+		yield return null;
+
+		
+		bool spritesConverted = true;
+		
+		foreach(SpriteConverter sc in convertedSprites){
+			
+			if(!sc.isDone){
+				spritesConverted = false;
+				
+			}
+			
+		}
+		
+		if(spritesConverted){
+			
+			Debug.Log("Converted Sprites has "+convertedSprites.Count+" objects.");
+			changePage (pageid);
+			
+			
+		} else {
+			yield return new WaitForSeconds (0.2f);
+
+			StartCoroutine (waitForSpriteConversion (pageid));
+
+		}
+
+
+
+
 
 	}
 
@@ -824,8 +892,9 @@ public class questdatabase : MonoBehaviour
 
 		} else {
 
-
 			done = true;
+
+
 		}
 //		Debug.Log ("percent done: " + percent);
 
@@ -863,35 +932,26 @@ public class questdatabase : MonoBehaviour
 
 			string exportLocation = Application.persistentDataPath + "/quests/" + currentquest.id + "/";
 
+			if (!File.Exists (exportLocation + "game.xml")) {
 
-
-			
-			Debug.Log ("WRITING XML FILE: " + exportLocation + "game.xml");
-			if (File.Exists (exportLocation + "game.xml")) {
-				Debug.Log ("...exists");
-				changePage (pageid);
-
-			} else {
-				
-				
 				var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
 				
 			
 				stream.Close ();
 				var stream2 = new StreamWriter (exportLocation + "game.xml");
 				
-				
-				Debug.Log ("CONTENT TO WRITE:" + currentquest.xmlcontent);
-				
-				Debug.Log ("CONTENT currentxml:" + currentxml);
+			
 				stream2.Write (currentxml);
 				
 				stream2.Close ();
 
-				changePage (pageid);
-
-				
 			}
+
+
+
+			StartCoroutine (waitForSpriteConversion (pageid));
+
+
 		} else {
 //			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
 			StartCoroutine (waitforquestassets (pageid, timeout));
@@ -915,7 +975,7 @@ public class questdatabase : MonoBehaviour
 				qp.type != "AudioRecord" && 
 				qp.type != "TextQuestion" && 
 				qp.type != "MapOSM" &&
-			    qp.type != "WebPage") {
+				qp.type != "WebPage") {
 
 
 
@@ -1022,7 +1082,7 @@ public class questdatabase : MonoBehaviour
 					if (go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform)
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
-					   && go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)") {
+						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)") {
 
 						
 
@@ -1321,10 +1381,8 @@ public class Quest  : IComparable<Quest>
 	public QuestPage currentpage;
 	public List<QuestPage> previouspages;
 	public string xmlcontent;
-
 	public float start_longitude;
 	public float start_latitude;
-
 
 	public Quest ()
 	{
@@ -1573,7 +1631,9 @@ public class QuestPage
 						if (splitted.Length > 3) {
 							
 							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-							
+						
+							questdb.performSpriteConversion (xmla.Value);
+
 						}
 					}
 
@@ -1740,8 +1800,10 @@ public class QuestHotspot
 						if (splitted.Length > 3) {
 										
 							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-										
-						}
+							questdb.performSpriteConversion (xmla.Value);
+
+						}							
+
 					}
 								
 								
@@ -1859,7 +1921,8 @@ public class QuestContent
 						if (splitted.Length > 3) {
 											
 							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-											
+							questdb.performSpriteConversion (xmla.Value);
+
 						}
 					}
 									
@@ -2080,7 +2143,8 @@ public class QuestAction
 						if (splitted.Length > 3) {
 											
 							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-											
+							questdb.performSpriteConversion (xmla.Value);
+
 						}
 					}
 									
