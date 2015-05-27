@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.IO;
+using System;
 
 public class page_npctalk : MonoBehaviour
 {
@@ -30,55 +31,55 @@ public class page_npctalk : MonoBehaviour
 	{ 
 
 
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		npctalk = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
-		questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
+			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+			quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+			npctalk = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 
-		string pre = "file: /";
+			string pre = "file: /";
 
-		if (npctalk.onStart != null) {
+			if (npctalk.onStart != null) {
 			
-			npctalk.onStart.Invoke ();
-		}
+				npctalk.onStart.Invoke ();
+			}
 
 
 
-		if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null) {
-			Destroy (backbutton.gameObject);
-		}
+			if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null) {
+				Destroy (backbutton.gameObject);
+			}
 
 
 
-		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
 
-			pre = "file:";
-		}
+				pre = "file:";
+			}
 
 
-		if (npctalk.getAttribute ("tickerspeed").Length > 0) {
+			if (npctalk.getAttribute ("tickerspeed").Length > 0) {
 
-			tickertime = float.Parse (npctalk.getAttribute ("tickerspeed")) / 1000;
+				tickertime = float.Parse (npctalk.getAttribute ("tickerspeed")) / 1000;
 
-		}
-		savedtickertime = tickertime;
+			}
+			savedtickertime = tickertime;
 
-		if (npctalk.getAttribute ("image") != "") {
-			if (npctalk.getAttribute ("image").StartsWith ("@_")) {
+			if (npctalk.getAttribute ("image") != "") {
+				if (npctalk.getAttribute ("image").StartsWith ("@_")) {
 				
 				
 
 
-				foreach (QuestRuntimeAsset qra in questactions.photos) {
+					foreach (QuestRuntimeAsset qra in questactions.photos) {
 					
-					//Debug.Log("KEY:"+qra.key);
+						//Debug.Log("KEY:"+qra.key);
 					
-					if (qra.key == npctalk.getAttribute ("image")) {
+						if (qra.key == npctalk.getAttribute ("image")) {
 
 
 					
 						
-						Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
+							Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
 						
 
 							
@@ -86,84 +87,84 @@ public class page_npctalk : MonoBehaviour
 						Debug.Log ("npctalk.image: (h, w) " + qra.texture.height + "," + qra.texture.width);
 						if (qra.texture.height > qra.texture.width) {
 
-							image_hochkant.sprite = s;
-							image_hochkant.enabled = true;
-							image.enabled = false;
+								image_hochkant.sprite = s;
+								image_hochkant.enabled = true;
+								image.enabled = false;
 
 
-						} else {
+							} else {
 
-							image.sprite = s;
-							image.enabled = true;
+								image.sprite = s;
+								image.enabled = true;
 
+
+							}
 
 						}
-
 					}
-				}
-				Debug.Log("donewithforeach");
+					Debug.Log ("donewithforeach");
 				
 				
 				
 				
-			} else {
+				} else {
 		
 
 
 
-				string url = npctalk.getAttribute ("image");
-				if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-					url = pre + "" + npctalk.getAttribute ("image");
-				}
+					string url = npctalk.getAttribute ("image");
+					if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
+						url = pre + "" + npctalk.getAttribute ("image");
+					}
 			
-				Debug.Log ("myfile:" + url + " (" + npctalk.getAttribute ("image") + ")");
+					Debug.Log ("myfile:" + url + " (" + npctalk.getAttribute ("image") + ")");
 
 
-				if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
-					Debug.Log ("webimage");
+					if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
+						Debug.Log ("webimage");
 
-					www = new WWW (url);
-					StartCoroutine (waitforImage ());
+						www = new WWW (url);
+						StartCoroutine (waitforImage ());
 
 
-				} else if (File.Exists (npctalk.getAttribute ("image"))) {
+					} else if (File.Exists (npctalk.getAttribute ("image"))) {
 
-					Debug.Log ("File Exists");
-					www = new WWW (url);
-					StartCoroutine (waitforImage ());
+						Debug.Log ("File Exists");
+						www = new WWW (url);
+						StartCoroutine (waitforImage ());
+					}
+
 				}
 
 			}
 
-		}
-
-		Debug.Log ("after npc talk image");
-		text.text = "";
+//		Debug.Log ("after npc talk image");
+			text.text = "";
 
 
 	
 
-		string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
-		int size = int.Parse (resultString);
-		text.fontSize = size * 3;
+			string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
+			int size = int.Parse (resultString);
+			text.fontSize = size * 3;
 
 
 
 
-		if (npctalk.hasAttribute ("text")) {
-			text.text += npctalk.getAttribute ("text");
-			nextbutton.interactable = true;
-			buttontext.text = npctalk.getAttribute ("endbuttontext");
+			if (npctalk.hasAttribute ("text")) {
+				text.text += npctalk.getAttribute ("text");
+				nextbutton.interactable = true;
+				buttontext.text = npctalk.getAttribute ("endbuttontext");
 
 
-		} else {
-			nextdialogitem ();
+			} else {
+				nextdialogitem ();
+			}
+
+
+
+
 		}
-
-
-		Debug.Log ("at end of Start in npctalk");
-
-
 
 	}
 
@@ -339,12 +340,19 @@ public class page_npctalk : MonoBehaviour
 	IEnumerator waitforImage ()
 	{
 
+		DateTime startWWW = DateTime.Now;
+
 		yield return www;
 
 		if (www.error == null) {
+
+			DateTime start = DateTime.Now;
+
 			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 		
-		
+			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract(start).Milliseconds);
+			Debug.Log ("All took: " + DateTime.Now.Subtract(startWWW).Milliseconds);
+
 			Debug.Log (www.texture.height + "," + www.texture.width);
 			if (www.texture.height > www.texture.width) {
 				
