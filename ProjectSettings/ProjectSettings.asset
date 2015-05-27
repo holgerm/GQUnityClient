@@ -425,8 +425,10 @@ PlayerSettings:
   iOS::ScriptingBackend: 0
   boolPropertyNames:
   - WebGL::dataCaching
+  - WebGL::useEmbeddedResources
   - iOS::UseIl2CppPrecompiledHeader
   WebGL::dataCaching: 0
+  WebGL::useEmbeddedResources: 0
   iOS::UseIl2CppPrecompiledHeader: 0
   stringPropertyNames:
   - WebGL::emscriptenArgs
