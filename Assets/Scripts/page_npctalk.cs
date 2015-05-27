@@ -29,6 +29,11 @@ public class page_npctalk : MonoBehaviour
 
 	void Start ()
 	{ 
+		if (GameObject.Find ("QuestDatabase") == null) {
+			
+			Application.LoadLevel (0);
+			
+		} else {
 
 
 			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
