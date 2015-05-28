@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using GQ.Util;
 
 public class page_fullscreenimage : MonoBehaviour
 {
@@ -15,10 +16,14 @@ public class page_fullscreenimage : MonoBehaviour
 	public Quest quest;
 	public QuestPage fullscreenimage;
 	public actions questactions;
+	public questdatabase questdb;
+
 
 	// Use this for initialization
 	void Start ()
 	{
+		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+
 		questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 		fullscreenimage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
@@ -34,6 +39,7 @@ public class page_fullscreenimage : MonoBehaviour
 			
 			pre = "file:";
 		}
+
 
 
 
@@ -75,14 +81,41 @@ public class page_fullscreenimage : MonoBehaviour
 		} else {
 
 
-			string url = fullscreenimage.getAttribute ("image");
-			if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-				url = pre + "" + fullscreenimage.getAttribute ("image");
-			}
-
-			www = new WWW (url);
+			foreach(SpriteConverter sc in questdb.convertedSprites){
 				
-			StartCoroutine (waitforImage ());
+				
+				
+				if(sc.filename == fullscreenimage.getAttribute ("image")){
+					
+					if(sc.isDone){
+						if(sc.sprite != null){
+							if (sc.sprite.texture.width < sc.sprite.texture.height) {
+								
+								imagev.sprite = sc.sprite;
+								imagev.enabled = true;
+								imageh.enabled = false;
+							} else {
+								imageh.sprite = sc.sprite;
+								imageh.enabled = true;
+								imagev.enabled = false;
+								
+							}
+							
+							
+							
+							
+							
+						} else {
+							
+							Debug.Log("Sprite was null");
+						}
+					} else {
+						
+						Debug.Log("SpriteConverter was not done.");
+						
+					}
+				}
+			}
 		}
 
 

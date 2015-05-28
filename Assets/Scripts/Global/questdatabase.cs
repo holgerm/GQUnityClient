@@ -43,7 +43,7 @@ public class questdatabase : MonoBehaviour
 	public string currentxml;
 	public loadinglogo loadlogo;
 	public List<SpriteConverter> convertedSprites;
-
+	public string spriteError;
 	void Start ()
 	{
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
@@ -322,7 +322,7 @@ public class questdatabase : MonoBehaviour
 	public void debug (string s)
 	{
 		
-		Debug.Log (s);
+//		Debug.Log (s);
 		if (Application.isWebPlayer) {
 			
 
@@ -772,32 +772,61 @@ public class questdatabase : MonoBehaviour
 
 	public void performSpriteConversion (string value)
 	{
+		bool doit = true;
+
+		List<SpriteConverter> redo = new List<SpriteConverter> ();
+		foreach (SpriteConverter asc in convertedSprites) {
+
+			if(asc.filename == value){
+
+				if(asc.isDone){
 
 
+				doit = false;
 
-		if (File.Exists (value)) {
-			FileInfo fi = new FileInfo(value);
+				} else {
 
-			List<string> imageextensions = new List<string>(){".jpg",".jpeg",".gif",".png"};
-			Debug.Log(imageextensions.Count);
-			Debug.Log(fi.Extension);
-			if(imageextensions.Contains(fi.Extension)){
-
-			SpriteConverter sc = new SpriteConverter (value);
-			convertedSprites.Add (sc);
-
-			sc.startConversion ();
+					redo.Add(asc);
+				}
 			}
-		} else {
 
-			Debug.Log("[ATTENTION] A file didn't exist: "+value);
+		}
 
+		foreach (SpriteConverter sc in redo) {
+
+			convertedSprites.Remove(sc);
+			sc.myWWW = null;
+
+		}
+
+
+		if (doit) {
+			if (File.Exists (value)) {
+				FileInfo fi = new FileInfo (value);
+
+				List<string> imageextensions = new List<string> (){".jpg",".jpeg",".gif",".png"};
+				//Debug.Log (imageextensions.Count);
+			//	Debug.Log (fi.Extension);
+				if (imageextensions.Contains (fi.Extension)) {
+
+					SpriteConverter sc = new SpriteConverter (value);
+					convertedSprites.Add (sc);
+
+					sc.startConversion ();
+					StartCoroutine(waitForSingleSpriteCompletion(sc));
+				}
+			} else {
+
+				Debug.Log ("[ATTENTION] A file didn't exist: " + value);
+
+			}
 		}
 	}
 
 	IEnumerator waitForSpriteConversion (int pageid)
 	{
 		yield return null;
+
 
 		
 		bool spritesConverted = true;
@@ -818,9 +847,22 @@ public class questdatabase : MonoBehaviour
 			
 			
 		} else {
+
+			webloadingmessage.text = "Starte Quest... ";
+			webloadingmessage.enabled = true;
+			loadlogo.enable ();
+
+			if(spriteError != null){
+				webloadingmessage.text = spriteError;
+				yield return new WaitForSeconds(2f);
+				Application.LoadLevel(0);
+
+			} else {
+			
 			yield return new WaitForSeconds (0.2f);
 
 			StartCoroutine (waitForSpriteConversion (pageid));
+			}
 
 		}
 
@@ -830,6 +872,55 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+
+	IEnumerator waitForSingleSpriteCompletion (SpriteConverter sc)
+	{
+
+		WWW myWWW = sc.myWWW;
+		//Debug.Log ("trying to acces: " + myWWW.url);
+		
+		if (myWWW.url == null || myWWW.url == "") {
+			Debug.Log("nothing to do");
+			sc.isDone = true;
+			yield return null;
+			
+		} else {
+			
+			
+			yield return myWWW;
+			//Debug.Log ("not done with WWW object:" + myWWW.url);
+			
+			if (myWWW.error != null) {
+				Debug.Log ("error:" + myWWW.error);
+				//TODO: error handling
+
+				spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+				
+			} else {
+				//Debug.Log ("DONE with WWW object");
+			
+					if (myWWW.texture != null) {
+						
+						//Debug.Log ("starting sprite conversion");
+						sc.sprite = Sprite.Create (myWWW.texture, new Rect (0, 0, myWWW.texture.width, myWWW.texture.height), new Vector2 (0.5f, 0.5f));
+					if(sc.sprite == null){
+
+				// TODO: error handling		
+						spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+
+					} else {
+						sc.isDone = true;
+					}
+					} else {
+						sc.isDone = true;
+					}
+
+			}
+		}
+		myWWW = null;
+		sc.myWWW = null;
+	}
+	
 	IEnumerator waitforquestassets (int pageid, float timeout)
 	{
 		//webloadingmessage.text = "Downloading Quest Assets ... 0 %";
@@ -1138,8 +1229,8 @@ public class questdatabase : MonoBehaviour
 
 					}
 
-				Debug.Log ("Resources GameObject # =" + Resources.FindObjectsOfTypeAll (typeof(GameObject)).Count ());
-				Debug.Log ("Resources Sprite # =" + Resources.FindObjectsOfTypeAll (typeof(Sprite)).Count ());
+			//	Debug.Log ("Resources GameObject # =" + Resources.FindObjectsOfTypeAll (typeof(GameObject)).Count ());
+			//	Debug.Log ("Resources Sprite # =" + Resources.FindObjectsOfTypeAll (typeof(Sprite)).Count ());
 				Resources.UnloadUnusedAssets ();
 
 

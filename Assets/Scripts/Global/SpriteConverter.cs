@@ -18,8 +18,7 @@ namespace GQ.Util
 
 		public Sprite sprite;
 
-		WWW myWWW;
-		Thread waitForWWW;
+		public WWW myWWW;
 
 		public SpriteConverter (string s)
 		{
@@ -42,10 +41,8 @@ namespace GQ.Util
 
 
 				if(File.Exists(filename)){
-				Debug.Log("opening www: "+filename);
+				//Debug.Log("opening www: "+filename);
 				myWWW = new WWW (pre + filename);
-				
-				waitForCompletion (myWWW);
 				}
 			} else {
 				
@@ -55,42 +52,13 @@ namespace GQ.Util
 
 		}
 
-		void waitForCompletion (WWW givenWWW)
-		{
-
-			Debug.Log ("trying to acces: " + givenWWW.url);
-	
-			if (givenWWW.url == null || givenWWW.url == "") {
-
-				isDone = true;
 
 
-			} else {
-				while (!givenWWW.isDone) {
 
-					if (givenWWW.error != null) {
 
-						break;
-					}
-				}
-				if (givenWWW.error == null) {
-					if(givenWWW.texture != null){
-					//Sprite Conversion
 
-						Debug.Log("starting sprite conversion");
-					sprite = Sprite.Create (givenWWW.texture, new Rect (0, 0, givenWWW.texture.width, givenWWW.texture.height), new Vector2 (0.5f, 0.5f));
 
-					isDone = true;
-					} else {
 
-						isDone = true;
-					}
-				} else {
-
-					Debug.Log (givenWWW.error);
-				}
-			}
-			}
 
 	}
 }

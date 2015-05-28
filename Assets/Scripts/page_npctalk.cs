@@ -28,6 +28,7 @@ public class page_npctalk : MonoBehaviour
 	public float tickertime;
 	private float savedtickertime;
 
+
 	void Start ()
 	{ 
 		if (GameObject.Find ("QuestDatabase") == null) {
@@ -109,13 +110,14 @@ public class page_npctalk : MonoBehaviour
 
 						}
 					}
-					Debug.Log ("donewithforeach");
+					//Debug.Log ("donewithforeach");
 				
 				
 				
 				
 				} else {
 		
+
 
 					
 					foreach(SpriteConverter sc in questdb.convertedSprites){
@@ -124,6 +126,8 @@ public class page_npctalk : MonoBehaviour
 
 						if(sc.filename == npctalk.getAttribute ("image")){
 
+							if(sc.isDone){
+							if(sc.sprite != null){
 							if (sc.sprite.texture.height > sc.sprite.texture.width) {
 								
 								image_hochkant.sprite = sc.sprite;
@@ -142,8 +146,17 @@ public class page_npctalk : MonoBehaviour
 
 
 
-						}
+						
+						} else {
 
+							Debug.Log("Sprite was null");
+						}
+							} else {
+
+								Debug.Log("SpriteConverter was not done.");
+
+							}
+						}
 					}
 
 
@@ -182,7 +195,7 @@ public class page_npctalk : MonoBehaviour
 		
 				
 				
-			Debug.Log ("Sprite display took: " + DateTime.Now.Subtract(start).Milliseconds);
+//			Debug.Log ("Sprite display took: " + DateTime.Now.Subtract(start).Milliseconds);
 
 			string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
 			int size = int.Parse (resultString);
@@ -210,7 +223,7 @@ public class page_npctalk : MonoBehaviour
 
 	void Update ()
 	{
-		Debug.Log ("npctalk.Update() entered");
+//		Debug.Log ("npctalk.Update() entered");
 		
 //		Debug.Log (text.transform.parent.GetComponent<ScrollRect> ().verticalScrollbar.value);
 		
@@ -350,7 +363,7 @@ public class page_npctalk : MonoBehaviour
 			}
 			dialogitem_state++;
 
-			Debug.Log ("scrolling?");
+//			Debug.Log ("scrolling?");
 
 			if (npctalk.contents_dialogitems.Count == dialogitem_state) {
 				buttontext.text = npctalk.getAttribute ("endbuttontext");

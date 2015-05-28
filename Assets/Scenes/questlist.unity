@@ -4396,7 +4396,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4928,6 +4928,7 @@ MonoBehaviour:
   currentxml: 
   loadlogo: {fileID: 1538797159}
   convertedSprites: []
+  spriteError: 
 --- !u!4 &1756337059
 Transform:
   m_ObjectHideFlags: 0
