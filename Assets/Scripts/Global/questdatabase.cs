@@ -797,7 +797,7 @@ public class questdatabase : MonoBehaviour
 			Debug.Log ("showing message");
 			showmessage ("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
 			webloadingmessage.enabled = false;
-			loadlogo.enabled = false;
+			loadlogo.disable();
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
 		}
