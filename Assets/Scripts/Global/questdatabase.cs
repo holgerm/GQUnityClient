@@ -838,7 +838,7 @@ public class questdatabase : MonoBehaviour
 				List<string> imageextensions = new List<string> (){".jpg",".jpeg",".gif",".png"};
 				//Debug.Log (imageextensions.Count);
 			//	Debug.Log (fi.Extension);
-				if (imageextensions.Contains (fi.Extension)) {
+				if (imageextensions.Contains (fi.Extension.ToLower())) {
 
 					SpriteConverter sc = new SpriteConverter (value);
 					convertedSprites.Add (sc);

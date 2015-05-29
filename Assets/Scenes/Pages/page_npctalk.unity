@@ -101,6 +101,8 @@ GameObject:
   - 114: {fileID: 28842020}
   - 114: {fileID: 28842021}
   - 114: {fileID: 28842022}
+  - 95: {fileID: 28842024}
+  - 114: {fileID: 28842023}
   m_Layer: 5
   m_Name: Scroll
   m_TagString: Untagged
@@ -230,6 +232,34 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 3
+--- !u!114 &28842023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 28842015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 196b60d3f48a444e5b71496f28cf5213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &28842024
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 28842015}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1675a91488871464181c3c19281e94be, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &133501168
 GameObject:
   m_ObjectHideFlags: 0
