@@ -44,7 +44,10 @@ public class questdatabase : MonoBehaviour
 	public loadinglogo loadlogo;
 	public List<SpriteConverter> convertedSprites;
 	public string spriteError;
-	void Start ()
+
+
+	public menucontroller menu;
+	IEnumerator Start ()
 	{
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
 		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
@@ -66,7 +69,10 @@ public class questdatabase : MonoBehaviour
 			DontDestroyOnLoad (gameObject);
 			//			Debug.Log (Application.persistentDataPath);
 		}
-		
+
+
+
+
 		if (Application.isWebPlayer) {
 			webloadingmessage.enabled = true;
 			questmilllogo.enabled = true;
@@ -99,6 +105,17 @@ public class questdatabase : MonoBehaviour
 
 			StartQuest (Configuration.instance.autostartQuestID);
 		}
+
+
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
+
+		if (GameObject.Find ("MenuCanvas") != null) {
+			
+			menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller>();
+			
+		}
+
 
 	}
 
@@ -471,6 +488,20 @@ public class questdatabase : MonoBehaviour
 		Debug.Log ("Destroying GameObject");
 		Destroy (actioncontroller.msgcanvas.gameObject);
 		Destroy (gameObject);
+		if (menu.isActive) {
+			menu.endQuestAnimation ();
+		} else {
+
+			returnToMainMenu ();
+
+		}
+	}
+
+
+
+
+
+	public void returnToMainMenu(){
 
 		Application.LoadLevel (0);
 
@@ -1125,6 +1156,10 @@ public class questdatabase : MonoBehaviour
 
 	public void changePage (int id)
 	{
+
+
+
+	
 		
 		Debug.Log ("Changing page to " + id);
 
@@ -1153,6 +1188,9 @@ public class questdatabase : MonoBehaviour
 		foreach (QuestPage qp in currentquest.pages) {
 		
 
+
+
+
 			if (qp.id == id) {
 
 				currentquest.currentpage = qp;
@@ -1171,7 +1209,7 @@ public class questdatabase : MonoBehaviour
 
 				foreach (GameObject go in allObjects)
 					if (go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
-						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform)
+					    && go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
 						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)") {
 
@@ -1179,6 +1217,15 @@ public class questdatabase : MonoBehaviour
 
 						bool des = true;
 
+
+					if (GameObject.Find ("MenuCanvas") != null) {
+						
+						if (go.transform.IsChildOf (GameObject.Find ("MenuCanvas").transform)) {
+							des = false;
+							//Debug.Log("is child of mapcanvas");
+						}
+						
+					}
 						if (GameObject.Find ("MapCanvas") != null) {
 
 							if (go.transform.IsChildOf (GameObject.Find ("MapCanvas").transform)) {
@@ -1237,7 +1284,12 @@ public class questdatabase : MonoBehaviour
 				//if(GameObject.Find("MapCam") != null){
 				//GameObject.Find("MapCam").GetComponent<Camera>().enabled = false;
 				//}
-				
+
+
+
+				if(!menu.isActive){
+					menu.showTopBar();
+				}
 				
 				if (qp.type == "NPCTalk") {
 					Application.LoadLevelAdditive (1);

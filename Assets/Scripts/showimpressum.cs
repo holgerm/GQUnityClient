@@ -35,29 +35,7 @@ public class showimpressum : MonoBehaviour {
 	public void toggleImpressum(){
 
 
-
-		if (impressum_bg.enabled) {
-
-			impressum_bg.enabled = false;
-			impressum_text.enabled = false;
-			impressum_closebutton.enabled = false;
-			impressum_closebutton.GetComponent<Image>().enabled = false;
-			impressum_reloadbutton.enabled = false;
-			impressum_closebuttontext.enabled = false;
-			impressum_geoquestbutton.enabled = false;
-			impressum_scrollpanel.enabled = false;
-				} else {
-
-			impressum_bg.enabled = true;
-			impressum_text.enabled = true;
-			impressum_closebutton.enabled = true;
-			impressum_closebuttontext.enabled = true;
-			impressum_closebutton.GetComponent<Image>().enabled = true;
-			impressum_reloadbutton.enabled = true;
-			impressum_geoquestbutton.enabled = true;
-			impressum_scrollpanel.enabled = true;
-				}
-
+		GetComponent<Animator> ().SetTrigger ("toggle");
 
 	}
 
@@ -65,14 +43,7 @@ public class showimpressum : MonoBehaviour {
 
 
 	public void closeImpressum(){
-		impressum_bg.enabled = false;
-		impressum_text.enabled = false;
-		impressum_closebutton.enabled = false;
-		impressum_closebutton.GetComponent<Image>().enabled = false;
-		impressum_reloadbutton.enabled = false;
-		impressum_closebuttontext.enabled = false;
-		impressum_geoquestbutton.enabled = false;
-		impressum_scrollpanel.enabled = false;
+		GetComponent<Animator> ().SetTrigger ("close");
 
 
 	}

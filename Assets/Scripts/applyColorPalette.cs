@@ -136,37 +136,47 @@ public class applyColorPalette : MonoBehaviour
 	void Update ()
 	{
 	
+		if (questdb != null) {
+			if (hasbutton) {
+				foreach (ColorApplication ca in applications) {
 
-		if (hasbutton) {
-			foreach (ColorApplication ca in applications) {
+					if (ca.button != null) {
+						if (!ca.button.IsActive ()) {
 
-				if (ca.button != null) {
-					if (!ca.button.IsActive ()) {
-
-						foreach (Text t in ca.button.GetComponentsInChildren<Text>()) {
+							foreach (Text t in ca.button.GetComponentsInChildren<Text>()) {
 						
-							t.color = Color.grey; 
+								t.color = Color.grey; 
 						
-						}
-					} else {
-						foreach (Text t in ca.button.GetComponentsInChildren<Text>()) {
-
-							if (!questdb.darkButton) {
-								t.color = Color.black;
-							} else {
-								t.color = Color.white;
 							}
-						}
+						} else {
+							foreach (Text t in ca.button.GetComponentsInChildren<Text>()) {
 
+								if (!questdb.darkButton) {
+									t.color = Color.black;
+								} else {
+									t.color = Color.white;
+								}
+							}
+
+						}
 					}
 				}
-			}
 
-		}
+			}
 
 
 				   
+		} else {
 
+
+			if(GameObject.Find("QuestDatabase") != null){
+
+				questdb = GameObject.Find("QuestDatabase").GetComponent<palette>();
+
+			}
+
+
+		}
 
 	}
 }
