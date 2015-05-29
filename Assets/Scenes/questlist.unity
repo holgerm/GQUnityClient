@@ -2330,7 +2330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 1
+  product: 3
   overrideProductSettingsInInspector: 0
   portalID: 1
   autostartQuestID: 0

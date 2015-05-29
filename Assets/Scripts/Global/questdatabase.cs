@@ -796,6 +796,8 @@ public class questdatabase : MonoBehaviour
 		} else {
 			Debug.Log ("showing message");
 			showmessage ("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
+			webloadingmessage.enabled = false;
+			loadlogo.enabled = false;
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
 		}
@@ -884,12 +886,12 @@ public class questdatabase : MonoBehaviour
 			
 			
 		} else {
-
+			Debug.Log("STARTE");
 			webloadingmessage.text = "Starte Quest... ";
 			webloadingmessage.enabled = true;
 			loadlogo.enable ();
 
-			if(spriteError != null){
+			if(spriteError != null && spriteError != ""){
 				webloadingmessage.text = spriteError;
 				yield return new WaitForSeconds(2f);
 				Application.LoadLevel(0);
@@ -1164,7 +1166,7 @@ public class questdatabase : MonoBehaviour
 	{
 
 
-		convertToSprites = false;
+
 	
 		
 		Debug.Log ("Changing page to " + id);
