@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Threading;
 using System.IO;
+
 
 namespace GQ.Util
 {
@@ -19,6 +19,14 @@ namespace GQ.Util
 		public Sprite sprite;
 
 		public WWW myWWW;
+
+
+		public int width;
+		public int height;
+
+		public Texture2D myTexture;
+
+	//	public Thread conversionThread;
 
 		public SpriteConverter (string s)
 		{
@@ -56,6 +64,28 @@ namespace GQ.Util
 
 
 
+		public void convertSprite(){
+
+
+
+			//Debug.Log ("starting sprite conversion");
+			 sprite = Sprite.Create (myTexture, new Rect (0, 0, width, height), new Vector2 (0.5f, 0.5f));
+
+			if(sprite == null){
+				
+				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+			} else {
+				isDone = true;
+				myWWW = null;
+				myTexture = null;
+			}
+			
+			
+			
+			
+		}
+		
+		
 
 
 

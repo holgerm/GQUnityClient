@@ -12,6 +12,7 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 
+
 public class questdatabase : MonoBehaviour
 {
 	public Quest currentquest;
@@ -864,7 +865,6 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator waitForSpriteConversion (int pageid)
 	{
-		yield return null;
 
 
 		
@@ -906,11 +906,40 @@ public class questdatabase : MonoBehaviour
 		}
 
 
+		yield return null;
 
-
-
+		
+		
 	}
 
+
+
+
+
+	public bool nextSpriteToBeConverted(SpriteConverter sc){
+
+
+		bool me = true;
+
+		foreach (SpriteConverter asc in convertedSprites) {
+
+
+			if(asc == sc){
+
+				break;
+			} else if(asc.isDone != true){
+
+				me = false;
+
+				break;
+			}
+
+
+
+		}
+
+		return me;
+	}
 
 	IEnumerator waitForSingleSpriteCompletion (SpriteConverter sc)
 	{
@@ -938,28 +967,37 @@ public class questdatabase : MonoBehaviour
 			} else {
 				//Debug.Log ("DONE with WWW object");
 			
+
+
+				if(nextSpriteToBeConverted(sc)){
+
+
 					if (myWWW.texture != null) {
-						
-						//Debug.Log ("starting sprite conversion");
-						sc.sprite = Sprite.Create (myWWW.texture, new Rect (0, 0, myWWW.texture.width, myWWW.texture.height), new Vector2 (0.5f, 0.5f));
-					if(sc.sprite == null){
 
-				// TODO: error handling		
-						spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+						sc.myTexture = myWWW.texture;
+						sc.width = myWWW.texture.width;
+						sc.height = myWWW.texture.height;
+						sc.convertSprite();
+
 
 					} else {
 						sc.isDone = true;
+						myWWW = null;
+						sc.myWWW = null;
 					}
-					} else {
-						sc.isDone = true;
-					}
+				} else {
+					yield return new WaitForSeconds(0.5f);
+					StartCoroutine(waitForSingleSpriteCompletion(sc));
 
+				}
 			}
 		}
-		myWWW = null;
-		sc.myWWW = null;
-	}
 	
+	}
+
+
+
+
 	IEnumerator waitforquestassets (int pageid, float timeout)
 	{
 		//webloadingmessage.text = "Downloading Quest Assets ... 0 %";
