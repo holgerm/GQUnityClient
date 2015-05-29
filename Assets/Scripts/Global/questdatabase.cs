@@ -45,6 +45,7 @@ public class questdatabase : MonoBehaviour
 	public List<SpriteConverter> convertedSprites;
 	public string spriteError;
 
+	public bool convertToSprites = false;
 
 	public menucontroller menu;
 	IEnumerator Start ()
@@ -713,7 +714,7 @@ public class questdatabase : MonoBehaviour
 			loadedfiles.Clear ();
 		}
 
-
+		convertToSprites = true;
 		currentquest = q.LoadFromText (q.id, localload);
 		if (currentquest == null) {
 			questmilllogo.enabled = false;
@@ -803,53 +804,58 @@ public class questdatabase : MonoBehaviour
 
 	public void performSpriteConversion (string value)
 	{
-		bool doit = true;
-
-		List<SpriteConverter> redo = new List<SpriteConverter> ();
-		foreach (SpriteConverter asc in convertedSprites) {
-
-			if(asc.filename == value){
-
-				if(asc.isDone){
 
 
-				doit = false;
 
-				} else {
+		if (convertToSprites) {
+			bool doit = true;
 
-					redo.Add(asc);
+			List<SpriteConverter> redo = new List<SpriteConverter> ();
+			foreach (SpriteConverter asc in convertedSprites) {
+
+				if (asc.filename == value) {
+
+					if (asc.isDone) {
+
+
+						doit = false;
+
+					} else {
+
+						redo.Add (asc);
+					}
 				}
+
 			}
 
-		}
+			foreach (SpriteConverter sc in redo) {
 
-		foreach (SpriteConverter sc in redo) {
+				convertedSprites.Remove (sc);
+				sc.myWWW = null;
 
-			convertedSprites.Remove(sc);
-			sc.myWWW = null;
-
-		}
+			}
 
 
-		if (doit) {
-			if (File.Exists (value)) {
-				FileInfo fi = new FileInfo (value);
+			if (doit) {
+				if (File.Exists (value)) {
+					FileInfo fi = new FileInfo (value);
 
-				List<string> imageextensions = new List<string> (){".jpg",".jpeg",".gif",".png"};
-				//Debug.Log (imageextensions.Count);
-			//	Debug.Log (fi.Extension);
-				if (imageextensions.Contains (fi.Extension.ToLower())) {
+					List<string> imageextensions = new List<string> (){".jpg",".jpeg",".gif",".png"};
+					//Debug.Log (imageextensions.Count);
+					//	Debug.Log (fi.Extension);
+					if (imageextensions.Contains (fi.Extension.ToLower ())) {
 
-					SpriteConverter sc = new SpriteConverter (value);
-					convertedSprites.Add (sc);
+						SpriteConverter sc = new SpriteConverter (value);
+						convertedSprites.Add (sc);
 
-					sc.startConversion ();
-					StartCoroutine(waitForSingleSpriteCompletion(sc));
+						sc.startConversion ();
+						StartCoroutine (waitForSingleSpriteCompletion (sc));
+					}
+				} else {
+
+					Debug.Log ("[ATTENTION] A file didn't exist: " + value);
+
 				}
-			} else {
-
-				Debug.Log ("[ATTENTION] A file didn't exist: " + value);
-
 			}
 		}
 	}
@@ -1158,7 +1164,7 @@ public class questdatabase : MonoBehaviour
 	{
 
 
-
+		convertToSprites = false;
 	
 		
 		Debug.Log ("Changing page to " + id);

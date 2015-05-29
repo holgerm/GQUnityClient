@@ -6062,6 +6062,7 @@ MonoBehaviour:
   loadlogo: {fileID: 1538797159}
   convertedSprites: []
   spriteError: 
+  convertToSprites: 0
   menu: {fileID: 1822233847}
 --- !u!4 &1756337059
 Transform:
