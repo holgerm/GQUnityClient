@@ -1234,6 +1234,11 @@ public class questdatabase : MonoBehaviour
 
 		}
 
+
+		if (GameObject.Find ("[Map]")) {
+
+			GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle>().hideMap();
+		}
 		foreach (QuestPage qp in currentquest.pages) {
 		
 
@@ -1402,10 +1407,10 @@ public class questdatabase : MonoBehaviour
 						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = true;
 						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
 
-
-						//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
-
-						//GameObject.Find("MapCam").GetComponent<Camera>().enabled = true;
+						if (GameObject.Find ("[Map]")) {
+							
+							GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle>().showMap();
+						}
 
 					}
 				}

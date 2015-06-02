@@ -81,6 +81,8 @@ public class page_map : MonoBehaviour
 		map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
 	
 
+		map.gameObject.AddComponent<mapdisplaytoggle> ();
+
 
 
 
