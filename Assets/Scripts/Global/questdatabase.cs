@@ -1224,6 +1224,9 @@ public class questdatabase : MonoBehaviour
 		}
 
 
+		
+
+
 		if (GameObject.Find ("BgCam")) {
 			GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = true;
 
@@ -1331,7 +1334,7 @@ public class questdatabase : MonoBehaviour
 				//GameObject.Find("MapCam").GetComponent<Camera>().enabled = false;
 				//}
 
-
+				bool needsCamera = false;
 
 				if(!menu.isActive){
 					menu.showTopBar();
@@ -1349,9 +1352,12 @@ public class questdatabase : MonoBehaviour
 					Application.LoadLevelAdditive (4);
 
 				} else if (qp.type == "TagScanner") {
+					needsCamera = true;
 					Application.LoadLevelAdditive (5);
 					
 				} else if (qp.type == "ImageCapture") {
+					needsCamera = true;
+
 					Application.LoadLevelAdditive (6);
 					
 				} else if (qp.type == "TextQuestion") {
@@ -1387,6 +1393,11 @@ public class questdatabase : MonoBehaviour
 							
 						}
 
+						if (GameObject.Find ("MapCanvas") != null) {
+							
+							GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = true;
+						}
+
 						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = true;
 						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = true;
 
@@ -1398,6 +1409,21 @@ public class questdatabase : MonoBehaviour
 					}
 				}
 
+
+
+				if(needsCamera){
+					if (GameObject.Find ("MapCanvas") != null) {
+						Debug.Log("Disabling Map Canvas");
+						GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
+					}
+
+					Debug.Log("needs Camera");
+					GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
+					GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
+					GameObject.Find("BgCam").GetComponent<AudioListener>().enabled = false;
+					GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
+
+				}
 				
 				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 
