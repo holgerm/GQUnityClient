@@ -917,7 +917,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Nochmal aufnhemen
+  m_Text: Nochmal aufnehmen
 --- !u!222 &1867023242
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1056,6 +1056,8 @@ MonoBehaviour:
       result: 
     previouspages: []
     xmlcontent: 
+    start_longitude: 0
+    start_latitude: 0
   audiorecord:
     id: 0
     type: 
