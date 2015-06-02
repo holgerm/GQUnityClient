@@ -1363,6 +1363,7 @@ public class questdatabase : MonoBehaviour
 				} else if (qp.type == "TextQuestion") {
 					Application.LoadLevelAdditive (7);
 				} else if (qp.type == "AudioRecord") {
+					needsCamera = true;
 					Application.LoadLevelAdditive (8);
 				} else if (qp.type == "WebPage") {
 					Application.LoadLevelAdditive (10);
