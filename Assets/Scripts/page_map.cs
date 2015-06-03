@@ -387,13 +387,22 @@ public class page_map : MonoBehaviour
 				
 			} else {
 				
-				go.transform.localScale = new Vector3 (1.0f, ((float)height/(float)width), 1.0f);
+				go.transform.localScale = new Vector3 (1.0f, ((float)height / (float)width), 1.0f);
 				
 			}
 
 			go.transform.localScale /= 512f;
 			go.transform.localScale *= width;
-		
+
+			int screenWidth;
+#if UNITY_WEBPLAYER || UNITY_EDITOR 
+			screenWidth = 1080;
+#else
+			screenWidth = Screen.width;
+#endif
+
+			go.transform.localScale *= screenWidth / 600f;
+
 			go.AddComponent<onTapMarker> ();
 			go.GetComponent<onTapMarker> ().hotspot = qrh;
 
@@ -504,9 +513,9 @@ public class page_map : MonoBehaviour
 			map.Zoom (1.0f);
 		} else {
 
-			if(map != null){
-			map.CameraFollowsOrientation = false;
-}
+			if (map != null) {
+				map.CameraFollowsOrientation = false;
+			}
 		}
 		fixedonposition = b;
 				
