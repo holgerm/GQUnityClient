@@ -2313,7 +2313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 3
+  product: 0
   overrideProductSettingsInInspector: 0
   portalID: 1
   autostartQuestID: 0
@@ -4454,7 +4454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1383468337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4515,7 +4515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1425578965
 RectTransform:
   m_ObjectHideFlags: 0
