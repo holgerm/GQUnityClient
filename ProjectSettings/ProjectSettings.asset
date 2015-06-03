@@ -12,7 +12,7 @@ PlayerSettings:
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: QuestMill
-  productName: WCC Regio Bonn
+  productName: GeoQuest
   cloudProjectId: 
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -75,7 +75,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.questmill.geoquest.wcc
+  bundleIdentifier: com.questmill.geoquest.ebk
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
@@ -141,35 +141,35 @@ PlayerSettings:
       m_Size: 128
   - m_BuildTarget: iPhone
     m_Icons:
-    - m_Icon: {fileID: 2800000, guid: ffd543fb9a09b4d4fbcc53c320c9ea20, type: 3}
+    - m_Icon: {fileID: 2800000, guid: ac2d2939f7d114f0ba15f1444485952f, type: 3}
       m_Size: 180
-    - m_Icon: {fileID: 2800000, guid: 7283d2158f9714bfda41942f447370fc, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 118d9eeb95871467296046e48081ec1e, type: 3}
       m_Size: 152
-    - m_Icon: {fileID: 2800000, guid: d06e72513d3a3431d81a5ffaeffb2182, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 8495d816a28f24997933c35ad42121e4, type: 3}
       m_Size: 144
-    - m_Icon: {fileID: 2800000, guid: 96bd053d611b145fca54561f6f549b31, type: 3}
+    - m_Icon: {fileID: 2800000, guid: a6b4742b49cfe48acb231ee1ed3ad02c, type: 3}
       m_Size: 120
-    - m_Icon: {fileID: 2800000, guid: 4965724279e4241c3b861f6d071c9ae1, type: 3}
+    - m_Icon: {fileID: 2800000, guid: fcc20c8a12c694746993202966e47757, type: 3}
       m_Size: 114
-    - m_Icon: {fileID: 2800000, guid: d46e1afe41fd24f248a4633a101eedf8, type: 3}
+    - m_Icon: {fileID: 2800000, guid: dfe26a38f146c4f2c9728f7607be7037, type: 3}
       m_Size: 76
-    - m_Icon: {fileID: 2800000, guid: 16f10e323310949b59e86b4431f7a8d6, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 9e38d05980a214cf5b14d886a81d22d8, type: 3}
       m_Size: 72
-    - m_Icon: {fileID: 2800000, guid: ca63547f9f93d4952b6cf5a36936cb16, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 643359b214cee46999b3c13991c6ad21, type: 3}
       m_Size: 57
   - m_BuildTarget: Android
     m_Icons:
-    - m_Icon: {fileID: 2800000, guid: d22a3292fff6c4f34a4def16d6e24b7e, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 1024e6d4585fd47b9a513007c11b2eca, type: 3}
       m_Size: 192
-    - m_Icon: {fileID: 2800000, guid: c1019f97656e44d82a803c30875ba58b, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 8495d816a28f24997933c35ad42121e4, type: 3}
       m_Size: 144
-    - m_Icon: {fileID: 2800000, guid: 7f120351aedd049b99714a0c46329a63, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 87b24f900df1941a082375c02596fedd, type: 3}
       m_Size: 96
-    - m_Icon: {fileID: 2800000, guid: e27e2ab946c9241689e374e4a8b13b1f, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 9e38d05980a214cf5b14d886a81d22d8, type: 3}
       m_Size: 72
-    - m_Icon: {fileID: 2800000, guid: cfd24f49ab4ed4b49b6feedaa6fed64a, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 5b6a948fb19414436b426f9860a7974a, type: 3}
       m_Size: 48
-    - m_Icon: {fileID: 2800000, guid: 74876588d881f429eaaa4c16601f74f7, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 239a0a18a79674821a6ac014a3784770, type: 3}
       m_Size: 36
   m_BuildTargetBatching:
   - m_BuildTarget: Android

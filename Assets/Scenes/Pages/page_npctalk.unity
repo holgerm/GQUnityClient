@@ -1153,6 +1153,7 @@ GameObject:
   - 114: {fileID: 1234740413}
   - 114: {fileID: 1234740412}
   - 114: {fileID: 1234740416}
+  - 114: {fileID: 1234740417}
   m_Layer: 5
   m_Name: npc_image
   m_TagString: Untagged
@@ -1236,6 +1237,21 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 4
+--- !u!114 &1234740417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1234740411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a94cdc4b99b14684a0d27219d18b326, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myWeight: 4
+  weightOfRest: 4
+  standardScreenAspectRatio: 1.5
+  layoutElement: {fileID: 1234740416}
 --- !u!1 &1313306987
 GameObject:
   m_ObjectHideFlags: 0
@@ -1561,7 +1577,7 @@ RectTransform:
   - {fileID: 236615128}
   - {fileID: 1078550317}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -1789,7 +1805,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!1 &1957163287
 GameObject:
   m_ObjectHideFlags: 0
