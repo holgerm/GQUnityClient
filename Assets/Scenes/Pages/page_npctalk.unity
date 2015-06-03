@@ -1250,7 +1250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myWeight: 4
   weightOfRest: 4
-  standardScreenAspectRatio: 1.5
+  standardScreenAspectRatio: 1.20000005
   layoutElement: {fileID: 1234740416}
 --- !u!1 &1313306987
 GameObject:
