@@ -550,6 +550,11 @@ public class actions : MonoBehaviour
 
 				}
 
+
+
+		k = k.Replace ("<br>", "\n");
+
+
 				return k;
 
 		}

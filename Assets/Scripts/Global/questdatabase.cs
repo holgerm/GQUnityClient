@@ -808,56 +808,57 @@ public class questdatabase : MonoBehaviour
 	public void performSpriteConversion (string value)
 	{
 
+		if (!Application.isWebPlayer) {
+
+			if (convertToSprites) {
+				bool doit = true;
+
+				List<SpriteConverter> redo = new List<SpriteConverter> ();
+				foreach (SpriteConverter asc in convertedSprites) {
+
+					if (asc.filename == value) {
+
+						if (asc.isDone) {
 
 
-		if (convertToSprites) {
-			bool doit = true;
+							doit = false;
 
-			List<SpriteConverter> redo = new List<SpriteConverter> ();
-			foreach (SpriteConverter asc in convertedSprites) {
+						} else {
 
-				if (asc.filename == value) {
-
-					if (asc.isDone) {
-
-
-						doit = false;
-
-					} else {
-
-						redo.Add (asc);
+							redo.Add (asc);
+						}
 					}
+
 				}
 
-			}
+				foreach (SpriteConverter sc in redo) {
 
-			foreach (SpriteConverter sc in redo) {
+					convertedSprites.Remove (sc);
+					sc.myWWW = null;
 
-				convertedSprites.Remove (sc);
-				sc.myWWW = null;
-
-			}
+				}
 
 
-			if (doit) {
-				if (File.Exists (value)) {
-					FileInfo fi = new FileInfo (value);
+				if (doit) {
+					if (File.Exists (value)) {
+						FileInfo fi = new FileInfo (value);
 
-					List<string> imageextensions = new List<string> (){".jpg",".jpeg",".gif",".png"};
-					//Debug.Log (imageextensions.Count);
-					//	Debug.Log (fi.Extension);
-					if (imageextensions.Contains (fi.Extension.ToLower ())) {
+						List<string> imageextensions = new List<string> (){".jpg",".jpeg",".gif",".png"};
+						//Debug.Log (imageextensions.Count);
+						//	Debug.Log (fi.Extension);
+						if (imageextensions.Contains (fi.Extension.ToLower ())) {
 
-						SpriteConverter sc = new SpriteConverter (value);
-						convertedSprites.Add (sc);
+							SpriteConverter sc = new SpriteConverter (value);
+							convertedSprites.Add (sc);
 
-						sc.startConversion ();
-						StartCoroutine (waitForSingleSpriteCompletion (sc));
+							sc.startConversion ();
+							StartCoroutine (waitForSingleSpriteCompletion (sc));
+						}
+					} else {
+
+						Debug.Log ("[ATTENTION] A file didn't exist: " + value);
+
 					}
-				} else {
-
-					Debug.Log ("[ATTENTION] A file didn't exist: " + value);
-
 				}
 			}
 		}
@@ -1239,6 +1240,8 @@ public class questdatabase : MonoBehaviour
 
 			GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle>().hideMap();
 		}
+
+
 		foreach (QuestPage qp in currentquest.pages) {
 		
 

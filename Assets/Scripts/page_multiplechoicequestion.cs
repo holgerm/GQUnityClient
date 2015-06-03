@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 using System.Collections;
 using GQ.Util;
+using System;
 
 public class page_multiplechoicequestion : MonoBehaviour {
 
@@ -13,11 +14,7 @@ public class page_multiplechoicequestion : MonoBehaviour {
 	public Quest quest;
 	public QuestPage multiplechoicequestion;
 	private WWW www;
-	private WWW www1;
-	private WWW www2;
-	private WWW www3;
-	private WWW www4;
-	private WWW www5;
+
 	public Text questiontext;
 	public VerticalLayoutGroup list;
 	public multiplechoiceanswerbutton answerbuttonprefab;
@@ -91,7 +88,22 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 
 			if (multiplechoicequestion.getAttribute ("bg") != "") {
-				if (multiplechoicequestion.getAttribute ("bg").StartsWith ("@_")) {
+
+
+
+
+
+				if (
+					multiplechoicequestion.getAttribute ("bg").StartsWith ("http://") ||
+					multiplechoicequestion.getAttribute ("bg").StartsWith ("https://")
+					) {
+					
+					www = new WWW(multiplechoicequestion.getAttribute("bg"));
+					
+					StartCoroutine(waitforImage());
+					
+					
+				} else if (multiplechoicequestion.getAttribute ("bg").StartsWith ("@_")) {
 				
 				
 				
@@ -187,6 +199,45 @@ public class page_multiplechoicequestion : MonoBehaviour {
 		
 		
 	}
+
+
+
+
+	IEnumerator waitforImage ()
+	{
+		
+		DateTime startWWW = DateTime.Now;
+		
+		yield return www;
+		
+		if (www.error == null) {
+			
+			DateTime start = DateTime.Now;
+			
+			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
+
+				
+				image.sprite = s;
+				image.enabled = true;
+				
+				
+			
+			
+			
+		} else {
+			
+			
+			
+			Debug.Log (www.error);
+			
+			image.enabled = false;
+		}
+		
+		
+		yield return 0;
+		
+	}
+
 
 
 	public void onSuccess(){

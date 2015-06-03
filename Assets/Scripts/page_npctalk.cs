@@ -73,7 +73,20 @@ public class page_npctalk : MonoBehaviour
 			DateTime start = DateTime.Now;
 
 			if (npctalk.getAttribute ("image") != "") {
-				if (npctalk.getAttribute ("image").StartsWith ("@_")) {
+
+
+
+				if (
+					npctalk.getAttribute ("image").StartsWith ("http://") ||
+				    npctalk.getAttribute ("image").StartsWith ("https://")
+				   ) {
+
+					www = new WWW(npctalk.getAttribute("image"));
+
+					StartCoroutine(waitforImage());
+
+
+				} else if (npctalk.getAttribute ("image").StartsWith ("@_")) {
 				
 
 

@@ -387,12 +387,12 @@ public class page_map : MonoBehaviour
 				
 			} else {
 				
-				go.transform.localScale = new Vector3 (1.0f, height / width, 1.0f);
+				go.transform.localScale = new Vector3 (1.0f, ((float)height/(float)width), 1.0f);
 				
 			}
 
-			go.transform.localScale /= 7.0f;
-
+			go.transform.localScale /= 512f;
+			go.transform.localScale *= width;
 		
 			go.AddComponent<onTapMarker> ();
 			go.GetComponent<onTapMarker> ().hotspot = qrh;
