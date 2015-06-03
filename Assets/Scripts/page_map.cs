@@ -114,7 +114,7 @@ public class page_map : MonoBehaviour
 		map.CenterOnLocation ();
 
 
-		map.MaxZoom = 22.0f;
+		map.MaxZoom = 20.0f;
 		map.MinZoom = 13.0f;
 
 
