@@ -63,6 +63,8 @@ GameObject:
   - 222: {fileID: 22241560}
   - 114: {fileID: 11441564}
   - 114: {fileID: 11441554}
+  - 95: {fileID: 9594082}
+  - 114: {fileID: 11477368}
   m_Layer: 5
   m_Name: msg
   m_TagString: Untagged
@@ -87,6 +89,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &9594082
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141560}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2de2ba583dbfd4c2d9696fb077780563, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11441552
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,6 +290,38 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Schlie\xDFen"
+--- !u!114 &11477368
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aafac337e5fe47b5a9bb767661a90a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applications:
+  - title: bg
+    color: background
+    canvasimage: {fileID: 11441552}
+    canvastext: {fileID: 0}
+    camera: {fileID: 0}
+    button: {fileID: 0}
+  - title: text
+    color: font
+    canvasimage: {fileID: 0}
+    canvastext: {fileID: 11441562}
+    camera: {fileID: 0}
+    button: {fileID: 0}
+  - title: button
+    color: button
+    canvasimage: {fileID: 0}
+    canvastext: {fileID: 0}
+    camera: {fileID: 0}
+    button: {fileID: 11441558}
+  questdb: {fileID: 0}
+  hasbutton: 0
 --- !u!222 &22241552
 CanvasRenderer:
   m_ObjectHideFlags: 1
