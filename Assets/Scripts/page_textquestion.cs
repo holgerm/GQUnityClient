@@ -10,14 +10,10 @@ public class page_textquestion : MonoBehaviour
 	
 	
 	public questdatabase questdb;
-
 	public Quest quest;
 	public QuestPage textquestion;
-
 	public Text questiontext;
-
 	public Button submitbutton;
-
 	public InputField input;
 	
 	// Use this for initialization
@@ -41,9 +37,6 @@ public class page_textquestion : MonoBehaviour
 		
 
 	}
-
-
-
 
 	public void checkAnswerFinal ()
 	{
@@ -133,7 +126,6 @@ public class page_textquestion : MonoBehaviour
 		
 	}
 	
-	
 	public void onSuccess ()
 	{
 		
@@ -147,6 +139,7 @@ public class page_textquestion : MonoBehaviour
 		
 		
 	}
+
 	public void onFailure ()
 	{
 		
