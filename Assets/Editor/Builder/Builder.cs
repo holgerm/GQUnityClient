@@ -45,6 +45,14 @@ namespace Product
 			{
 				"phka",
 				"EduQuest"
+			},
+			{
+				"public",
+				"GeoQuest"
+			},
+			{
+				"intern",
+				"GeoQuest"
 			}
 		};
 
