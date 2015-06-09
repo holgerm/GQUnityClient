@@ -26,6 +26,7 @@ public class Configuration : MonoBehaviour
 	public string mapboxMapID = "gqwcc.m824ig5p";
 	public float downloadTimeOutSeconds = 300.0f;
 	public string impressum = "";
+	public Sprite toplogo;
 	private string productName;
 
 	public static Configuration instance {
