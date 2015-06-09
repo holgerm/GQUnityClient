@@ -47,6 +47,8 @@ public class page_textquestion : MonoBehaviour
 
 	public void checkAnswerFinal ()
 	{
+		Debug.Log ("TextQuestion: START");
+		
 		string x = input.text;
 
 		bool repeat = false;
@@ -65,23 +67,29 @@ public class page_textquestion : MonoBehaviour
 			foreach (QuestContent y in textquestion.contents_answers) {
 				match = Regex.IsMatch (x, y.content, RegexOptions.IgnoreCase);
 
+				Debug.Log ("TextQuestion: REGEXP " + x + " MATCH " + y.content + " -> " + match);
+
 				questdb.debug ("REGEXP " + x + " MATCH " + y.content + " -> " + match);
 
 				if (y.content == x || match) {
 					b = true;
+					Debug.Log ("TextQuestion: MATCHED");
 				}
 
 
 			}
 
 			if (b) {
+				Debug.Log ("TextQuestion: SUCCESS");
+
 				textquestion.state = "succeeded";
 
 				onSuccess ();
 			} else {
 
+				Debug.Log ("TextQuestion: FAILURE");
 
-
+				
 				if (!repeat) {
 					textquestion.state = "failed";
 
@@ -105,44 +113,6 @@ public class page_textquestion : MonoBehaviour
 
 	}
 
-
-
-	public void checkAnswerMid (string c)
-	{
-		if (textquestion.contents_answers.Count > 0) {
-			
-			string x = input.text;
-			bool b = false;
-			
-			
-			foreach (QuestContent y in textquestion.contents_answers) {
-
-				if (y.content == x || Regex.IsMatch (x, y.content, RegexOptions.IgnoreCase)) {
-					b = true;
-
-				}
-				
-				
-			}
-			textquestion.result = x;
-
-			if (b) {
-				textquestion.state = "succeeded";
-				onSuccess ();
-				onEnd ();
-			} 
-			
-		} 
-		
-
-		
-
-
-	}
-
-
-
-	
 	public void onEnd ()
 	{
 		
