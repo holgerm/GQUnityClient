@@ -11,8 +11,6 @@ namespace Product
 	{
 		const string UNITY_IOS_ProjectFileName = "Unity-iPhone.xcodeproj";
 
-//		private static string PRODUCT_SHORT_NAME = "wcc"; // TODO make an environment var etc.
-//		private static string PRODUCT_DISPLAY_NAME = "WCC Regio Bonn"; // TODO make an environment var etc.
 		static string productID = "default";
 		static bool replaceProduct = false;
 
@@ -53,6 +51,10 @@ namespace Product
 			{
 				"intern",
 				"GeoQuest"
+			},
+			{
+				"lwl",
+				"LWL GeoQuest"
 			}
 		};
 
