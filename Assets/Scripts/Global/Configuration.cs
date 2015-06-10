@@ -11,10 +11,11 @@ public class Configuration : MonoBehaviour
 	public enum ProductIDs
 	{ 
 		Public,
-		Intern,
-		WikiCultureCity, 
+		CarlBenz,
 		ErzbistumKoeln, 
-		CarlBenz
+		LWL,
+		WikiCultureCity, 
+		Intern
 	}
 	public ProductIDs product;
 	public bool overrideProductSettingsInInspector = false;
@@ -55,16 +56,21 @@ public class Configuration : MonoBehaviour
 				Destroy (this.gameObject);
 		}
 
+		if (!overrideProductSettingsInInspector)
+			initProductDefinitions ();
+
+		
 	}
 
 	public void Start ()
 	{
-		if (!overrideProductSettingsInInspector)
-			initProductDefinitions ();
+//		if (!overrideProductSettingsInInspector)
+//			initProductDefinitions ();
 	}
 	
 	private void initProductDefinitions ()
 	{
+		Debug.Log ("CONFIG: setting product: " + product);
 		switch (product) {
 		case ProductIDs.CarlBenz:
 			productName = "carlbenz";
@@ -75,7 +81,6 @@ public class Configuration : MonoBehaviour
 			mapboxKey = "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A";
 			mapboxMapID = "gqcarlbenz.ac1f8820";
 			impressum = "<b>Impressum</b>\n\nStadtmuseum im Prinz-Max­Palais\n\n<b>Leitung:</b>\nDr. Peter Pretsch\n\n<b>Adresse:</b>\nKarlstraße 10\n76133 Karlsruhe\n\nTel.: 0721-133 4230, 4231, 4234\nFax: 0721-133 4239\n\nstadtmuseum@kultur.karlsruhe.de\n\n<b>Öffnungszeiten:</b>\nDi, Fr 10-18 Uhr • Do 10-19 Uhr,\nSa 14-18 Uhr • So 11-18 Uhr\nMo, Mi geschlos­­sen\n\n<b>Straßenbahnlinien:</b>\nTram 1, 2, 3, 4, 6 und S-Bahn S1, S5, S11\nHaltestelle Europaplatz";
-
 			break;
 		case ProductIDs.WikiCultureCity:
 			productName = "wcc";
@@ -93,6 +98,16 @@ public class Configuration : MonoBehaviour
 			autostartQuestID = 0;
 			downloadTimeOutSeconds = 60f;
 			colorProfile = "default";
+			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+			mapboxMapID = "mapbox.streets";
+			impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
+			break;
+		case ProductIDs.LWL:
+			productName = "lwl";
+			portalID = 402;
+			autostartQuestID = 0;
+			downloadTimeOutSeconds = 60f;
+			colorProfile = "lwl";
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
 			impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";

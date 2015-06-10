@@ -32,6 +32,8 @@ public class palette : MonoBehaviour
 
 			if (cp.id == Configuration.instance.colorProfile) {
 
+				Debug.Log ("COLOR PALETTE: Setting to profile: " + Configuration.instance.colorProfile);
+
 				mainColor = cp.mainColor;
 				backgroundColor = cp.backgroundColor;
 				darkBG = cp.darkBG;
