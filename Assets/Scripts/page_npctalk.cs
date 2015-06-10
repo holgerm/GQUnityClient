@@ -28,7 +28,6 @@ public class page_npctalk : MonoBehaviour
 	public float tickertime;
 	private float savedtickertime;
 
-
 	void Start ()
 	{ 
 		if (GameObject.Find ("QuestDatabase") == null) {
@@ -52,7 +51,7 @@ public class page_npctalk : MonoBehaviour
 
 
 
-			if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null) {
+			if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("MultipleChoiceQuestion")) {
 				Destroy (backbutton.gameObject);
 			}
 
@@ -78,12 +77,12 @@ public class page_npctalk : MonoBehaviour
 
 				if (
 					npctalk.getAttribute ("image").StartsWith ("http://") ||
-				    npctalk.getAttribute ("image").StartsWith ("https://")
+					npctalk.getAttribute ("image").StartsWith ("https://")
 				   ) {
 
-					www = new WWW(npctalk.getAttribute("image"));
+					www = new WWW (npctalk.getAttribute ("image"));
 
-					StartCoroutine(waitforImage());
+					StartCoroutine (waitforImage ());
 
 
 				} else if (npctalk.getAttribute ("image").StartsWith ("@_")) {
@@ -105,8 +104,8 @@ public class page_npctalk : MonoBehaviour
 
 							
 							
-						Debug.Log ("npctalk.image: (h, w) " + qra.texture.height + "," + qra.texture.width);
-						if (qra.texture.height > qra.texture.width) {
+							Debug.Log ("npctalk.image: (h, w) " + qra.texture.height + "," + qra.texture.width);
+							if (qra.texture.height > qra.texture.width) {
 
 								image_hochkant.sprite = s;
 								image_hochkant.enabled = true;
@@ -133,40 +132,40 @@ public class page_npctalk : MonoBehaviour
 
 
 					
-					foreach(SpriteConverter sc in questdb.convertedSprites){
+					foreach (SpriteConverter sc in questdb.convertedSprites) {
 
 
 
-						if(sc.filename == npctalk.getAttribute ("image")){
+						if (sc.filename == npctalk.getAttribute ("image")) {
 
-							if(sc.isDone){
-							if(sc.sprite != null){
-							if (sc.sprite.texture.height > sc.sprite.texture.width) {
+							if (sc.isDone) {
+								if (sc.sprite != null) {
+									if (sc.sprite.texture.height > sc.sprite.texture.width) {
 								
-								image_hochkant.sprite = sc.sprite;
-								image_hochkant.enabled = true;
-								image.enabled = false;
-								
-								
-							} else {
-								
-								image.sprite = sc.sprite;
-								image.enabled = true;
+										image_hochkant.sprite = sc.sprite;
+										image_hochkant.enabled = true;
+										image.enabled = false;
 								
 								
-							}
+									} else {
+								
+										image.sprite = sc.sprite;
+										image.enabled = true;
+								
+								
+									}
 							
 
 
 
 						
-						} else {
+								} else {
 
-							Debug.Log("Sprite was null");
-						}
+									Debug.Log ("Sprite was null");
+								}
 							} else {
 
-								Debug.Log("SpriteConverter was not done.");
+								Debug.Log ("SpriteConverter was not done.");
 
 							}
 						}
@@ -416,8 +415,8 @@ public class page_npctalk : MonoBehaviour
 
 			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 		
-			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract(start).Milliseconds);
-			Debug.Log ("All took: " + DateTime.Now.Subtract(startWWW).Milliseconds);
+			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract (start).Milliseconds);
+			Debug.Log ("All took: " + DateTime.Now.Subtract (startWWW).Milliseconds);
 
 			Debug.Log (www.texture.height + "," + www.texture.width);
 			if (www.texture.height > www.texture.width) {
