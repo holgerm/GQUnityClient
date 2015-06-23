@@ -107,7 +107,7 @@ public class page_webpage : MonoBehaviour {
 		}
 #else
 
-
+		questdb.debug("WebView kann nur auf mobilen Geräten angezeigt werden. Rufe direkt den Beenden-Trigger der Seite auf.");
 		onEnd();
 
 
@@ -117,23 +117,28 @@ public class page_webpage : MonoBehaviour {
 
 	
 	public void deactivateWebView(){
-		
+
+		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
+
 		webView.enabled = false;
-		
+#endif
 	}
 	
 	public void activateWebView(){
-		
+
+		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
+
 		webView.enabled = true;
-		
+#endif
 	}
 
 	
 	public void onEnd(){
 
+		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 
 		webView.enabled = false;
-
+#endif
 
 			webpage.state = "succeeded";
 		
