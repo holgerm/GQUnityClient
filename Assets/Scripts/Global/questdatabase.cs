@@ -1823,7 +1823,7 @@ public class QuestPage
 
 
 							
-				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
+				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://") && !(type == "WebPage" && xmla.Name.ToLower() == "url")) {
 
 
 					string[] splitted = xmla.Value.Split ('/');

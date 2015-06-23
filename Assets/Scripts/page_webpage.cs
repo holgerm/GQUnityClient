@@ -94,6 +94,8 @@ public class page_webpage : MonoBehaviour {
 
 
 		if(webpage.getAttribute ("url") != null && webpage.getAttribute("url") != ""){
+
+			Debug.Log("URL:"+webpage.getAttribute ("url"));
 			webView.url = webpage.getAttribute ("url");
 		webView.Load();
 		
