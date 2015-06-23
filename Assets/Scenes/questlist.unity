@@ -2234,7 +2234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 3
+  product: 5
   overrideProductSettingsInInspector: 0
   portalID: 121
   autostartQuestID: 0
@@ -4050,6 +4050,18 @@ MonoBehaviour:
           m_StringArgument: showmenu
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1822233847}
+        m_MethodName: showMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &1345608056
@@ -5859,6 +5871,7 @@ GameObject:
   - 114: {fileID: 1822233845}
   - 95: {fileID: 1822233846}
   - 114: {fileID: 1822233847}
+  - 114: {fileID: 1822233848}
   m_Layer: 5
   m_Name: MenuCanvas
   m_TagString: Untagged
@@ -6004,6 +6017,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 0
   questdb: {fileID: 0}
+--- !u!114 &1822233848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1822233840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6c08a9f54e544f1a5013e9e11bae54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  events:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1822233847}
+        m_MethodName: hideMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1825719834
 GameObject:
   m_ObjectHideFlags: 0

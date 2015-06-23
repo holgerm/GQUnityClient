@@ -39,7 +39,27 @@ public class menucontroller : MonoBehaviour {
 	}
 
 
+	public void showMenu(){
 
+		if (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage.type == "WebPage") {
+
+			GameObject.Find("PageController").GetComponent<page_webpage>().deactivateWebView();
+
+		}
+
+	}
+
+
+	public void hideMenu(){
+
+		if (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage.type == "WebPage") {
+			
+			GameObject.Find("PageController").GetComponent<page_webpage>().activateWebView();
+			
+		}
+		
+		
+	}
 
 	public void showImpressum(){
 

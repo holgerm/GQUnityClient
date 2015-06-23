@@ -1144,6 +1144,7 @@ public class questdatabase : MonoBehaviour
 				qp.type != "AudioRecord" && 
 				qp.type != "TextQuestion" && 
 				qp.type != "MapOSM" &&
+			    qp.type != "MetaData" &&
 				qp.type != "WebPage") {
 
 

@@ -16,12 +16,14 @@ public class page_webpage : MonoBehaviour {
 	#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 	
 	//1. First of all, we need a reference to hold an instance of UniWebView
-	private UniWebView _webView;
+	private UniWebView webView;
 	
 	private string _errorMessage;
 	private GameObject _cube;
 	private Vector3 _moveVector;
-	
+
+	[SerializeField]
+	public float[] insets = new float[]{0,0,0,0};
 #endif
 
 	public void backButton ()
@@ -75,23 +77,25 @@ public class page_webpage : MonoBehaviour {
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 
 	
-		_webView = GetComponent<UniWebView>();
-		if (_webView == null) {
-			_webView = gameObject.AddComponent<UniWebView>();
-			_webView.OnReceivedMessage += OnReceivedMessage;
-			_webView.OnLoadComplete += OnLoadComplete;
-			_webView.OnWebViewShouldClose += OnWebViewShouldClose;
-			_webView.OnEvalJavaScriptFinished += OnEvalJavaScriptFinished;
-			_webView.InsetsForScreenOreitation += InsetsForScreenOreitation;
+		webView = GetComponent<UniWebView>();
+		if (webView == null) {
+
+
+			GameObject go = new GameObject("web_");
+			webView = go.AddComponent<UniWebView>();
+			webView.OnReceivedMessage += OnReceivedMessage;
+			webView.OnLoadComplete += OnLoadComplete;
+			webView.OnWebViewShouldClose += OnWebViewShouldClose;
+			webView.OnEvalJavaScriptFinished += OnEvalJavaScriptFinished;
+			webView.InsetsForScreenOreitation += InsetsForScreenOreitation;
 
 		}
 		
 
 
-
 		if(webpage.getAttribute ("url") != null && webpage.getAttribute("url") != ""){
-			_webView.url = webpage.getAttribute ("url");
-		_webView.Load();
+			webView.url = webpage.getAttribute ("url");
+		webView.Load();
 		
 		_errorMessage = null;
 		} else {
@@ -110,8 +114,25 @@ public class page_webpage : MonoBehaviour {
 	}
 
 	
-	public void onEnd(){
+	public void deactivateWebView(){
 		
+		webView.enabled = false;
+		
+	}
+	
+	public void activateWebView(){
+		
+		webView.enabled = true;
+		
+	}
+
+	
+	public void onEnd(){
+
+
+		webView.enabled = false;
+
+
 			webpage.state = "succeeded";
 		
 		
@@ -182,7 +203,7 @@ public class page_webpage : MonoBehaviour {
 			//The sample(float time) is written in the js in webpage, in which we pop 
 			//up an alert and return a demo string.
 			//When the js excute finished, OnEvalJavaScriptFinished will be raised.
-			_webView.EvaluatingJavaScript("sample(" + time +")");
+			webView.EvaluatingJavaScript("sample(" + time +")");
 		}
 	}
 	
@@ -195,8 +216,8 @@ public class page_webpage : MonoBehaviour {
 	//    we should set your reference to null to release it. 
 	//    Then we can return true here to tell the webview to dismiss.
 	bool OnWebViewShouldClose(UniWebView webView) {
-		if (webView == _webView) {
-			_webView = null;
+		if (webView == webView) {
+			webView = null;
 			return true;
 		}
 		return false;
@@ -206,13 +227,15 @@ public class page_webpage : MonoBehaviour {
 	// for both situation. Although they seem to be the same, screenHeight was changed, leading a difference between the result.
 	// eg. on iPhone 5, bottomInset is 284 (568 * 0.5) in portrait mode while it is 160 (320 * 0.5) in landscape.
 	UniWebViewEdgeInsets InsetsForScreenOreitation(UniWebView webView, UniWebViewOrientation orientation) {
-		int bottomInset = (int)(UniWebViewHelper.screenHeight * 0.18f);
 
-		if (orientation == UniWebViewOrientation.Portrait) {
-			return new UniWebViewEdgeInsets(0,0,bottomInset,0);
-		} else {
-			return new UniWebViewEdgeInsets(0,0,bottomInset,0);
-		}
+		int topInset = (int)(UniWebViewHelper.screenHeight * insets[0]);
+		int bottomInset = (int)(UniWebViewHelper.screenHeight * insets[1]);
+
+		int rightInset = (int)(UniWebViewHelper.screenWidth* insets[2]);
+		int leftInset = (int)(UniWebViewHelper.screenWidth* insets[3]);
+
+			return new UniWebViewEdgeInsets(topInset,leftInset,bottomInset,rightInset);
+		
 	}
 
 

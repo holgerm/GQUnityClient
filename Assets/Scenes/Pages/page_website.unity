@@ -295,6 +295,11 @@ MonoBehaviour:
     state: new
     result: 
   nextButtonObject: {fileID: 1048294423}
+  insets:
+  - .0799999982
+  - .159999996
+  - 0
+  - 0
 --- !u!114 &656237961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,7 +760,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 32767
+  m_SortingOrder: 100
 --- !u!224 &1617944429
 RectTransform:
   m_ObjectHideFlags: 0
