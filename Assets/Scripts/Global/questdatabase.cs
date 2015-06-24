@@ -1143,6 +1143,8 @@ public class questdatabase : MonoBehaviour
 				qp.type != "ImageCapture" && 
 				qp.type != "AudioRecord" && 
 				qp.type != "TextQuestion" && 
+			    qp.type != "ImageWithText" &&
+			    qp.type != "Menu" &&
 				qp.type != "MapOSM" &&
 			    qp.type != "MetaData" &&
 				qp.type != "WebPage") {
@@ -1351,12 +1353,16 @@ public class questdatabase : MonoBehaviour
 				
 				if (qp.type == "NPCTalk") {
 					Application.LoadLevelAdditive (1);
+				} else if (qp.type == "ImageWithText") {
+					Application.LoadLevelAdditive (1);
 				} else if (qp.type == "StartAndExitScreen") {
 					Application.LoadLevelAdditive (2);
 
 				} else if (qp.type == "MultipleChoiceQuestion") {
 					Application.LoadLevelAdditive (3);
-
+				} else if (qp.type == "Menu") {
+					Application.LoadLevelAdditive (3);
+					
 				} else if (qp.type == "VideoPlay") {
 					Application.LoadLevelAdditive (4);
 
@@ -1602,6 +1608,9 @@ public class Quest  : IComparable<Quest>
 	[XmlElement("hotspot")]
 	public List<QuestHotspot>
 		hotspots;
+
+	public List<QuestMetaData> metadata;
+
 	public bool hasData = false;
 	public QuestPage currentpage;
 	public List<QuestPage> previouspages;
@@ -1698,6 +1707,44 @@ public class Quest  : IComparable<Quest>
 		return q;
 	}
 
+
+	public void addMetaData (QuestMetaData meta)
+	{
+
+
+		string key = meta.key;
+
+
+		List<QuestMetaData> todelete = new List<QuestMetaData> ();
+
+		if (metadata == null) {
+
+
+			metadata = new List<QuestMetaData>();
+
+		} else {
+			foreach (QuestMetaData qmd in metadata) {
+
+				if (qmd.key == key) {
+					todelete.Add (qmd);
+				}
+
+			}
+
+
+			foreach (QuestMetaData qmd in todelete) {
+				metadata.Remove (qmd);
+			}
+
+		}
+
+			metadata.Add (meta);
+
+
+		
+
+	}
+
 	public void deserializeAttributes (bool redo)
 	{
 
@@ -1721,6 +1768,20 @@ public class Quest  : IComparable<Quest>
 	
 	
 }
+
+
+
+[System.Serializable]
+public class QuestMetaData
+{
+
+	public string key;
+	public string value;
+
+}
+
+
+
 
 [System.Serializable]
 public class QuestPage

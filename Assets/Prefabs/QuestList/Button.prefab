@@ -367,7 +367,7 @@ MonoBehaviour:
   m_MinHeight: 150
   m_PreferredWidth: -1
   m_PreferredHeight: -1
-  m_FlexibleWidth: 1
+  m_FlexibleWidth: -1
   m_FlexibleHeight: -1
 --- !u!114 &11480446
 MonoBehaviour:
@@ -400,6 +400,7 @@ MonoBehaviour:
     filepath: 
     pages: []
     hotspots: []
+    metadata: []
     hasData: 0
     currentpage:
       id: 0
