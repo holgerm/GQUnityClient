@@ -130,7 +130,7 @@ public class createquestbuttons : MonoBehaviour
 
 //		string url = "http://www.qeevee.org:9091/json/" + portal_id + "/publicgames";
 	//	string url = "http://www.qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgames";
-		string url = "http://qeevee.org:9091/json/"+portal_id+"/publicgamesinfo";
+		string url = "http://qeevee.org:9091/json/"+Configuration.instance.portalID+"/publicgamesinfo";
 	//	string url = "https://quest-mill.com/temp/publicgamesinfo.json";
 
 		www = new WWW (url);
