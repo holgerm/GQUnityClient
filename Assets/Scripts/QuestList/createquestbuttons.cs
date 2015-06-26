@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class createquestbuttons : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class createquestbuttons : MonoBehaviour
 	public string namefilter;
 	private WWW www;
 
+
+	public string sortedby = "Erstellungsdatum";
 	void Start ()
 	{
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
@@ -45,6 +48,9 @@ public class createquestbuttons : MonoBehaviour
 	{
 
 		questdb.allquests.Clear ();
+		filteredOnlineList.Clear ();
+		filteredOfflineList.Clear ();
+
 		getPublicQuests ();
 
 
@@ -81,7 +87,7 @@ public class createquestbuttons : MonoBehaviour
 				foreach (Quest q in questdb.localquests) {
 					
 					//Debug.Log (q.name + " contains " + s + "? " + q.name.Contains (s));
-					if (q.name.ToUpper ().Contains (s.ToUpper ())) {
+					if (q.meta_combined.ToUpper ().Contains (s.ToUpper ())) {
 						filteredOfflineList.Add (q);
 					}
 				}
@@ -195,8 +201,37 @@ public class createquestbuttons : MonoBehaviour
 			filteredOfflineList.Add (q);
 		}
 
+
+
+
+		
 		filterForName (namefilter);
 
+
+
+	}
+
+
+
+
+
+	public List<Quest> sortByMetaDataAsc(List<Quest> quests,string meta){
+
+	
+
+		List<Quest> sortedlist = new List<Quest>();
+
+		Quest[] queststoshow = quests.ToArray();
+		
+		Array.Sort<Quest>(queststoshow, (x,y) => String.Compare(x.getMetaComparer("Wert"), y.getMetaComparer("Wert")));
+		
+		
+		sortedlist.AddRange(queststoshow);
+		
+	
+		
+		
+		return sortedlist;
 
 
 	}
@@ -224,8 +259,22 @@ public class createquestbuttons : MonoBehaviour
 
 
 		if (sortbyname) {
+
+
+			
 			showonline.Sort ();
 			showoffline.Sort ();
+//TODO: Finish
+//			if(sortedby == "Name"){
+//
+//			showonline.Sort ();
+//			showoffline.Sort ();
+//
+//			} else {
+//				showonline = sortByMetaDataAsc(showonline,sortedby);
+//			}
+
+
 		} else {
 			showoffline.Reverse ();
 		}
@@ -361,7 +410,7 @@ public class createquestbuttons : MonoBehaviour
 //			Debug.Log("ARRAY: "+kei);
 			if (kei == "quest_hotspots") {
 
-				Debug.Log("New Quest");
+//				Debug.Log("New Quest");
 
 				currentquest = new Quest();
 				if(questdb.allquests == null){
@@ -407,12 +456,12 @@ public class createquestbuttons : MonoBehaviour
 				currentquest.start_latitude = obj.n;
 				
 			}
-			
+		
 		} else if(kei == "quest_hotspots_longitude"){
-			Debug.Log("FOUND LONGITUDE");
+			//Debug.Log("FOUND LONGITUDE");
 			
 			if(currentquest.start_longitude == null || currentquest.start_longitude == 0){
-				Debug.Log("SETTING LONGITUDE");
+			//	Debug.Log("SETTING LONGITUDE");
 				currentquest.start_longitude = obj.n;
 				
 			}

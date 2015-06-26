@@ -26,7 +26,7 @@ public class ButtonControler : MonoBehaviour {
 
 	void Update(){
 
-		Debug.Log (b.spriteState);
+//		Debug.Log (b.spriteState);
 	}
 	public void OnPointerDown(PointerEventData data)
 	{

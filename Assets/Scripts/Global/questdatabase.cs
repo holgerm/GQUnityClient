@@ -45,7 +45,9 @@ public class questdatabase : MonoBehaviour
 	public loadinglogo loadlogo;
 	public List<SpriteConverter> convertedSprites;
 	public string spriteError;
-
+	public List<string> allmetakeys;
+	public string sortby = "Erstellungsdatum";
+	public bool descending = false;
 	public bool convertToSprites = false;
 
 	public menucontroller menu;
@@ -759,8 +761,20 @@ public class questdatabase : MonoBehaviour
 		}
 
 
-				
+		bool hasmorethanmetadata = true;
 		currentquest.currentpage = currentquest.pages.First ();
+		int c = 0;
+		while (currentquest.currentpage.type == "MetaData") {
+
+			if(currentquest.pages.Count >= c-1){
+			currentquest.currentpage = currentquest.pages[c];
+			c++;
+			} else {
+
+				hasmorethanmetadata = false;
+				break;
+			}
+		}
 
 		hotspots = new List<QuestRuntimeHotspot> ();
 		foreach (QuestHotspot qh in currentquest.hotspots) {
@@ -770,7 +784,7 @@ public class questdatabase : MonoBehaviour
 			hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
 		}
 
-		if (canPlayQuest (currentquest)) {
+		if (canPlayQuest (currentquest) && hasmorethanmetadata) {
 
 
 
@@ -1608,6 +1622,10 @@ public class Quest  : IComparable<Quest>
 	[XmlElement("hotspot")]
 	public List<QuestHotspot>
 		hotspots;
+	[XmlAnyAttribute()]
+	public XmlAttribute[]
+	help_attributes;
+	public List<QuestAttribute> attributes;
 
 	public List<QuestMetaData> metadata;
 
@@ -1617,6 +1635,7 @@ public class Quest  : IComparable<Quest>
 	public string xmlcontent;
 	public float start_longitude;
 	public float start_latitude;
+	public string meta_combined;
 
 	public Quest ()
 	{
@@ -1704,6 +1723,62 @@ public class Quest  : IComparable<Quest>
 		q.deserializeAttributes (redo);
 
 
+
+
+		q.meta_combined += q.name;
+
+		if (metadata != null) {
+
+			metadata.Clear ();
+		} else {
+
+			metadata = new List<QuestMetaData>();
+		}
+
+
+
+
+
+
+		if (q.hasAttribute ("author")) {
+
+			q.addMetaData(new QuestMetaData("author",q.getAttribute("author")));
+
+		}
+
+		if (q.hasAttribute ("version")) {
+			
+			q.addMetaData(new QuestMetaData("version",q.getAttribute("version")));
+			
+		}
+
+
+
+		foreach(QuestPage qp in q.pages){
+
+		if(qp.type == "MetaData"){
+
+				foreach(QuestContent qc in qp.contents_stringmeta){
+
+					if(qc.hasAttribute("key") && qc.hasAttribute("value")){
+						QuestMetaData newmeta = new QuestMetaData();
+						newmeta.key = qc.getAttribute("key");
+						newmeta.value = qc.getAttribute("value");
+						q.addMetaData(newmeta);
+
+					}
+
+				}
+
+
+			}
+
+		}
+
+
+
+
+
 		return q;
 	}
 
@@ -1741,13 +1816,79 @@ public class Quest  : IComparable<Quest>
 			metadata.Add (meta);
 
 
-		
+		meta_combined += ";" + meta.value;
+
+
+		questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+
+		if (!questdb.allmetakeys.Contains (meta.key)) {
+
+			questdb.allmetakeys.Add(meta.key);
+		}
 
 	}
+
+
 
 	public void deserializeAttributes (bool redo)
 	{
 
+
+		attributes = new List<QuestAttribute> ();
+		
+		if (help_attributes != null) {
+			foreach (XmlAttribute xmla in help_attributes) {
+				
+				
+				
+				
+				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
+					
+					
+					string[] splitted = xmla.Value.Split ('/');
+					
+					
+					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+					
+					
+					string filename = "files/" + splitted [splitted.Length - 1];
+					
+					int i = 0;
+					while (questdb.loadedfiles.Contains(filename)) {
+						i++;
+						filename = "files/" + i + "_" + splitted [splitted.Length - 1];
+						
+					}
+					
+					questdb.loadedfiles.Add (filename);
+					
+					
+					
+					
+					if (!Application.isWebPlayer) {
+						
+						
+						
+						if (!redo) {
+							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						}
+						if (splitted.Length > 3) {
+							
+							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+							
+							questdb.performSpriteConversion (xmla.Value);
+							
+						}
+					}
+					
+					
+				}	
+				
+				attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
+				
+				
+			}
+		}
 
 		if (pages != null) {
 			foreach (QuestPage qp in pages) {
@@ -1765,7 +1906,95 @@ public class Quest  : IComparable<Quest>
 		}
 
 	}
-	
+
+	public string getAttribute (string k)
+	{
+		
+		foreach (QuestAttribute qa in attributes) {
+			
+			
+			if (qa.key.Equals (k)) {
+				return qa.value;
+			}
+			
+		}
+		
+		
+		return "";
+		
+	}
+
+
+	public string getMeta (string k)
+	{
+		if (metadata != null) {
+			foreach (QuestMetaData qa in metadata) {
+
+			
+				if (qa.key.Equals (k)) {
+					return qa.value;
+				}
+			
+			}
+		}
+		
+		return "";
+		
+	}
+
+	public string getMetaComparer (string k)
+	{
+		if (metadata != null) {
+			foreach (QuestMetaData qa in metadata) {
+				
+				
+				if (qa.key.Equals (k)) {
+					return qa.value;
+				}
+				
+			}
+		}
+		
+		return ((char)0xFF).ToString();
+		
+	}
+
+
+
+	public bool hasMeta(string k){
+
+		bool h = false;
+		foreach (QuestMetaData qa in metadata) {
+			
+			
+			if (qa.key.Equals (k)) {
+				h = true;
+			}
+			
+		}
+		
+		
+		return h;
+
+
+	}
+	public bool hasAttribute (string k)
+	{
+		
+		bool h = false;
+		foreach (QuestAttribute qa in attributes) {
+			
+			
+			if (qa.key.Equals (k)) {
+				h = true;
+			}
+			
+		}
+		
+		
+		return h;
+		
+	}
 	
 }
 
@@ -1778,6 +2007,12 @@ public class QuestMetaData
 	public string key;
 	public string value;
 
+
+	public QuestMetaData(){}
+	public QuestMetaData(string k,string v){
+		key = k;
+		value = v;
+	}
 }
 
 
@@ -1813,6 +2048,9 @@ public class QuestPage
 	[XmlElement("answers")]
 	public List<QuestContent>
 		contents_answersgroup;
+	[XmlElement("stringmeta")]
+	public List<QuestContent>
+		contents_stringmeta;
 	[XmlElement("onEnd")]
 	public QuestTrigger
 		onEnd;
@@ -1949,7 +2187,9 @@ public class QuestPage
 		}
 
 
-			
+		foreach (QuestContent qcdi in contents_stringmeta) {
+			qcdi.deserializeAttributes (id, redo);
+		}
 			
 
 		foreach (QuestContent qcdi in contents_expectedcode) {
@@ -2153,6 +2393,25 @@ public class QuestContent
 			}
 		}
 		return "";
+	}
+
+	
+	public bool hasAttribute (string k)
+	{
+		
+		bool h = false;
+		foreach (QuestAttribute qa in attributes) {
+			
+			
+			if (qa.key.Equals (k)) {
+				h = true;
+			}
+			
+		}
+		
+		
+		return h;
+		
 	}
 
 	public void deserializeAttributes (int id, bool redo)
