@@ -21,6 +21,8 @@ public class questdatabase : MonoBehaviour
 	public List<Quest> allquests;
 	public List<Quest> localquests;
 	private WWW www;
+
+	public List<string> wanttoload;
 	public List<WWW> filedownloads;
 	public Image publicquestslist;
 	public actions actioncontroller;
@@ -571,19 +573,63 @@ public class questdatabase : MonoBehaviour
 		downloadQuest (q);
 	}
 
-	public void downloadAsset (string url, string filename)
-	{
-		if (!url.Contains ("/clientxml")) {
-			WWW wwwfile = new WWW (url);
 
-			if (filedownloads == null) {
-				filedownloads = new List<WWW> ();
+
+
+	public void downloadAsset(string url,string filename){
+		
+		if(wanttoload == null){ wanttoload = new List<string>(); }
+		if(!wanttoload.Contains(url)){
+			
+			wanttoload.Add(url);
+		}
+
+		StartCoroutine (downloadAssetAsync(url, filename));
+
+	}
+
+	public IEnumerator downloadAssetAsync (string url, string filename)
+	{
+
+		bool done = true;
+		if (filedownloads != null) {
+			foreach (WWW w in filedownloads) {
+
+				if (!w.isDone) {
+
+					done = false;
+				}
+
+
 			}
-			filedownloads.Add (wwwfile);
-			files_all += 1;
-			StartCoroutine (downloadAssetFinished (wwwfile, filename, 0f));
+		}
+
+
+		if (done) {
+
+
+			if (!url.Contains ("/clientxml")) {
+				WWW wwwfile = new WWW (url);
+
+				if (filedownloads == null) {
+					filedownloads = new List<WWW> ();
+				}
+				filedownloads.Add (wwwfile);
+				files_all += 1;
+				StartCoroutine (downloadAssetFinished (wwwfile, filename, 0f));
+			} else {
+				Debug.Log ("downloadAsset() with clientxml in url-arg called");
+			}
+
 		} else {
-			Debug.Log ("downloadAsset() with clientxml in url-arg called");
+
+
+
+
+			yield return new WaitForEndOfFrame();
+		downloadAsset(url,filename);
+
+			            
 		}
 	}
 
@@ -598,7 +644,7 @@ public class questdatabase : MonoBehaviour
 			if (wwwfile.error != "unsupported URL") {
 				Debug.Log ("redoing www");
 
-				downloadAsset (wwwfile.url, filename);
+						downloadAsset (wwwfile.url, filename);
 			}
 			filedownloads.Remove (wwwfile);
 			wwwfile.Dispose ();
@@ -618,23 +664,35 @@ public class questdatabase : MonoBehaviour
 				files_complete += 1;
 				bytesloaded += (int)(wwwfile.bytesDownloaded);
 				filedownloads.Remove (wwwfile);
+
+
+
+				if(wanttoload.Contains(wwwfile.url)){ wanttoload.Remove(wwwfile.url); }
+
 				wwwfile.Dispose ();
 
+
+		
+
 				performSpriteConversion (filename);
+
+
+
+
 				
 			} else {
 				if (timeout > Configuration.instance.downloadTimeOutSeconds) {
 					showmessage ("Download fehlgeschlagen.");
 					Application.LoadLevel (0);
 				} else 
-					if (timeout > 10f && wwwfile.progress < 0.1f) {
+					if (timeout > 60f && wwwfile.progress < 0.1f) {
 					Debug.Log ("Error: " + wwwfile.url + " - " + timeout);
 
 					if (!wwwfile.url.Contains ("/clientxml")) {
 						Debug.Log ("redoing www");
 							
 						filedownloads.Remove (wwwfile);
-						downloadAsset (wwwfile.url, filename);
+							downloadAsset (wwwfile.url, filename);
 						wwwfile.Dispose ();
 					} else {
 						filedownloads.Remove (wwwfile);
@@ -1034,6 +1092,12 @@ public class questdatabase : MonoBehaviour
 
 		int bytesloadedbutunfinished = 0;
 
+
+
+		if (wanttoload.Count > 0) {
+
+			done = false;
+		} else 
 
 		if (filedownloads != null) {
 			Debug.Log ("WWW Objects" + filedownloads.Count);
