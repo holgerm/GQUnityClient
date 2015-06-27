@@ -76,7 +76,7 @@ public class Configuration : MonoBehaviour
 			productName = "carlbenz";
 			portalID = 141;
 			autostartQuestID = 6088;
-			downloadTimeOutSeconds = 60f;
+			downloadTimeOutSeconds = 600f;
 			colorProfile = "carlbenz";
 			mapboxKey = "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A";
 			mapboxMapID = "gqcarlbenz.ac1f8820";
