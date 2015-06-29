@@ -100,7 +100,7 @@ public class Configuration : MonoBehaviour
 			colorProfile = "default";
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
-			impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
+			impressum = "<b>Titel</b>\n GeoQuest\n <b>Einrichtung / Institution</b>\n Erzbistum Köln\n <b>Rechtsform</b>\n Körperschaft des öffentlichen Rechts (KdöR)\n <b>Vertreten durch</b>\n Generalvikar Dr. Dominik Meiering\n <b>Straße</b>\n Marzellenstraße 32\n <b>Ort</b>\n 50668 Köln\n <b>Telefon</b>\n 0049 (0)221 1642 0\n <b>Fax</b>\n 0049 (0)221 1642 1700\n <b><E-Mail</b>\n TODO\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n erzbistum-koeln.de\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n Ust-IdNr. DE 122 777 469 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n TODO\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
 			break;
 		case ProductIDs.LWL:
 			productName = "lwl";
