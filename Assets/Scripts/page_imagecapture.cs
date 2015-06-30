@@ -40,7 +40,8 @@ public class page_imagecapture : MonoBehaviour {
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 		imagecapture = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 		
-		
+		Screen.orientation = ScreenOrientation.LandscapeLeft;
+
 		if (imagecapture.onStart != null) {
 			
 			imagecapture.onStart.Invoke ();
@@ -174,7 +175,7 @@ public class page_imagecapture : MonoBehaviour {
 	
 
 		imagecapture.state = "succeeded";
-			
+		Screen.orientation = ScreenOrientation.Portrait;
 
 		
 		if (imagecapture.onEnd != null) {

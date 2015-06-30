@@ -1513,7 +1513,9 @@ public class questdatabase : MonoBehaviour
 
 					Debug.Log("needs Camera");
 					GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
+					if(GameObject.Find ("MapCam") != null){
 					GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
+					}
 					GameObject.Find("BgCam").GetComponent<AudioListener>().enabled = false;
 					GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
 
