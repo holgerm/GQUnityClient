@@ -7303,7 +7303,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -8073,6 +8073,7 @@ MonoBehaviour:
   currentquestdata: {fileID: 0}
   allquests: []
   localquests: []
+  wanttoload: []
   publicquestslist: {fileID: 1116271734}
   actioncontroller: {fileID: 1756337060}
   message_prefab: {fileID: 11441554, guid: 5f4326f904afd488eb75e6e7fabc9bd9, type: 2}
