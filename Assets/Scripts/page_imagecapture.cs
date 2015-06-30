@@ -42,7 +42,6 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-		Screen.orientation = ScreenOrientation.LandscapeLeft;
 
 		if (imagecapture.onStart != null) {
 			
