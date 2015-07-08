@@ -3,17 +3,14 @@
 --- !u!129 &1
 PlayerSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   AndroidProfiler: 1
   defaultScreenOrientation: 0
   targetDevice: 2
-  targetGlesGraphics: 1
-  targetIOSGraphics: -1
   targetResolution: 0
   accelerometerFrequency: 60
-  companyName: QuestMill
-  productName: GeoQuest
-  cloudProjectId: 
+  companyName: QuestMill GmbH
+  productName: "Erlebnis Sch\xF6pfung"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_ShowUnitySplashScreen: 0
@@ -26,7 +23,6 @@ PlayerSettings:
   m_ActiveColorSpace: 0
   m_MTRendering: 1
   m_MobileMTRendering: 0
-  m_UseDX11: 0
   m_Stereoscopic3D: 0
   iosShowActivityIndicatorOnLoading: -1
   androidShowActivityIndicatorOnLoading: -1
@@ -75,12 +71,13 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.questmill.geoquest.lwl
+  bundleIdentifier: com.questmill.geoquest.ebkagnes
   bundleVersion: 1.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   xboxOneDisableKinectGpuReservation: 0
+  virtualRealitySupported: 0
   productGUID: c2b2669b3813a4b21860482a3f8c3f38
   AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 15
@@ -123,8 +120,9 @@ PlayerSettings:
   iOSLaunchScreenCustomXibPath: 
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 2
+  androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: /Users/muegge/Personen/QuestMill/legal/signing/keystores/geoquest.keystore
-  AndroidKeyaliasName: 
+  AndroidKeyaliasName: ebkwuppertal_key
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 0
@@ -141,17 +139,17 @@ PlayerSettings:
       m_Size: 128
   - m_BuildTarget: Android
     m_Icons:
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: cfe6cbf9aba514e67ac24b825afe431c, type: 3}
       m_Size: 192
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: 08bb6f62af75840f6ab77b725848df14, type: 3}
       m_Size: 144
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: 56167aa44a9fd4dc18d1b3c076472720, type: 3}
       m_Size: 96
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: 9b57aeff120aa4adcac8c6658a833f20, type: 3}
       m_Size: 72
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: 8d2af2f2be1444a129b4d530a5be91de, type: 3}
       m_Size: 48
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: b3b0258e443584baa8f9810643da682f, type: 3}
       m_Size: 36
   - m_BuildTarget: iPhone
     m_Icons:
@@ -178,6 +176,13 @@ PlayerSettings:
   - m_BuildTarget: iPhone
     m_StaticBatching: 1
     m_DynamicBatching: 1
+  m_BuildTargetGraphicsAPIs:
+  - m_BuildTarget: WindowsStandaloneSupport
+    m_APIs: 01000000
+    m_Automatic: 0
+  - m_BuildTarget: AndroidPlayer
+    m_APIs: 08000000
+    m_Automatic: 0
   webPlayerTemplate: APPLICATION:Black Background
   m_TemplateCustomTags: {}
   actionOnDotNetUnhandledException: 1
@@ -239,6 +244,7 @@ PlayerSettings:
   ps4ApplicationParam2: 0
   ps4ApplicationParam3: 0
   ps4ApplicationParam4: 0
+  ps4GarlicHeapSize: 2048
   ps4Passcode: uJlCA7pLqGEgUX8FicGgesae2GDNvUqT
   ps4pnSessions: 1
   ps4pnPresence: 1
@@ -382,8 +388,7 @@ PlayerSettings:
   blackberrySquareSplashScreen: {fileID: 0}
   tizenProductDescription: 
   tizenProductURL: 
-  tizenCertificatePath: 
-  tizenCertificatePassword: 
+  tizenSigningProfileName: 
   tizenGPSPermissions: 0
   tizenMicrophonePermissions: 0
   stvDeviceAddress: 
@@ -421,12 +426,14 @@ PlayerSettings:
   WebGL::audioCompressionFormat: 4
   WebGL::exceptionSupport: 0
   WebGL::memorySize: 256
-  iOS::Architecture: 0
-  iOS::ScriptingBackend: 0
+  iOS::Architecture: 2
+  iOS::ScriptingBackend: 1
   boolPropertyNames:
+  - WebGL::analyzeBuildSize
   - WebGL::dataCaching
   - WebGL::useEmbeddedResources
   - iOS::UseIl2CppPrecompiledHeader
+  WebGL::analyzeBuildSize: 0
   WebGL::dataCaching: 0
   WebGL::useEmbeddedResources: 0
   iOS::UseIl2CppPrecompiledHeader: 0
@@ -435,4 +442,9 @@ PlayerSettings:
   - WebGL::template
   WebGL::emscriptenArgs: 
   WebGL::template: APPLICATION:Default
-  firstStreamedLevelWithResources: 0
+  firstStreamedSceneWithResources: 0
+  cloudProjectId: 
+  projectId: 
+  projectName: 
+  organizationId: 
+  cloudEnabled: 0
