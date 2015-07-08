@@ -41,6 +41,14 @@ namespace Product
 				"GeoQuest"
 			},
 			{
+				"ebkagnes",
+				"Erlebnis Schöpfung"
+			},
+			{
+				"ebkwuppertal",
+				"Erlebnis Schöpfung"
+			},
+			{
 				"phka",
 				"EduQuest"
 			},
@@ -107,9 +115,7 @@ namespace Product
 			}
 
 			changeAndSavePlayerSettings ();
-
-			Debug.Log ("Building product " + PlayerSettings.productName + " (" + PlayerSettings.bundleIdentifier + ")");
-
+			
 			BuildAndroidPlayer ();
 			BuildIOSPlayer ();
 
@@ -148,9 +154,7 @@ namespace Product
 				Directory.CreateDirectory (outDir + "/");
 			}
 			// should we replace the project? otherwise we append
-			BuildOptions buildOptions = replaceProduct ? 
-				BuildOptions.None : 
-					BuildOptions.AcceptExternalModificationsToPlayer;
+			BuildOptions buildOptions = replaceProduct ? BuildOptions.AcceptExternalModificationsToPlayer : BuildOptions.None;
 			// in case we did not build that project vefore, we can not append to it:
 			if (! File.Exists (outDir + "/" + UNITY_IOS_ProjectFileName)) 
 				buildOptions = BuildOptions.None;
@@ -167,6 +171,7 @@ namespace Product
 		}
 
 		static string savedSettingsBundleIdentifier;
+		static string savedSettingsCompanyName;
 		static string savedSettingsProductName;
 		static Texture2D[] savedSettingsIcons4Android;
 		static Texture2D[] savedSettingsIcons4iOS;
@@ -175,6 +180,9 @@ namespace Product
 		{
 			savedSettingsBundleIdentifier = PlayerSettings.bundleIdentifier;
 			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
+
+			savedSettingsCompanyName = PlayerSettings.companyName;
+			PlayerSettings.companyName = "QuestMill GmbH";
 
 			savedSettingsProductName = PlayerSettings.productName;
 			PlayerSettings.productName = getProductName ();
@@ -186,6 +194,7 @@ namespace Product
 		static void restoreSavedPlayerSettings ()
 		{
 			PlayerSettings.bundleIdentifier = savedSettingsBundleIdentifier;
+			PlayerSettings.companyName = savedSettingsCompanyName;
 			PlayerSettings.productName = savedSettingsProductName;
 			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.Android, savedSettingsIcons4Android);
 			PlayerSettings.SetIconsForTargetGroup (BuildTargetGroup.iOS, savedSettingsIcons4iOS);
