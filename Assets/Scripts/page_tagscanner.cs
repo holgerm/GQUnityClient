@@ -189,17 +189,7 @@ public class page_tagscanner : MonoBehaviour
 
 
 
-
-				UZBarReaderViewController zBar = new UZBarReaderViewController();
-				zBar.cameraDevice = kCameraDevice.ZBAR_CAMERA_DEVICE_REAR;
-				zBar.symbolType = kScanSymbolType.ZBAR_I25;
-				zBar.configOpt = kScanConfigOptions.ZBAR_CFG_ENABLE;
-				zBar.configSymbolValue = 0;
-				zBar.cameraFlashMode = kCameraFlashMode.ZBAR_CAMERA_FLASH_MODE_AUTO;
-				zBar.showsZBarControls = false;
-
-				UIBinding.ActivateUI (zBar.getZBarInfos());
-
+				onEnd();
 
 
 			}

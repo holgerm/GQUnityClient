@@ -16,7 +16,7 @@ public class QRGUI : MonoBehaviour {
 			zBar.configSymbolValue = 0;
 			zBar.cameraFlashMode = kCameraFlashMode.ZBAR_CAMERA_FLASH_MODE_AUTO;
 			zBar.showsZBarControls = false;
-			UIBinding.ActivateUI (zBar.getZBarInfos());
+			//UIBinding.ActivateUI (zBar.getZBarInfos());
 		}
 	}
 }
