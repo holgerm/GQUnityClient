@@ -65,7 +65,11 @@ public class page_map : MonoBehaviour
 			
 			pre = "file:";
 		}
-		
+
+		if(Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed){
+			
+			pre = "";
+		}
 		
 		
 		
@@ -182,6 +186,9 @@ public class page_map : MonoBehaviour
 					
 					
 				} else if (File.Exists (qrh.hotspot.getAttribute ("img"))) {
+					www = new WWW (url);
+					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
+				} else if(questdb.currentquest.predeployed){
 					www = new WWW (url);
 					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
 				}

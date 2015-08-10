@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 using System.Collections;
 using System.IO;
 
@@ -21,6 +23,8 @@ namespace GQ.Util
 		public WWW myWWW;
 
 
+
+
 		public int width;
 		public int height;
 
@@ -38,24 +42,25 @@ namespace GQ.Util
 
 
 		public void startConversion(){
-			string pre = "file: /";
-			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-				
-				pre = "file:";
-			}
-			
-			if (filename != null && filename != "") {
-
-
-
-				if(File.Exists(filename)){
-				//Debug.Log("opening www: "+filename);
-				myWWW = new WWW (pre + filename);
-				}
-			} else {
-				
+//			string pre = "file: /";
+//			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+//				
+//				pre = "file:";
+//			}
+//			
+//			if (filename != null && filename != "") {
+//
+//
+//
+//				if(File.Exists(filename)){
+//				//Debug.Log("opening www: "+filename);
+//				myWWW = new WWW (pre + filename);
+//				}
+//
+//			} else {
+//				
 				isDone = true;
-			}
+//			}
 
 
 		}
@@ -68,21 +73,34 @@ namespace GQ.Util
 
 
 
-			//Debug.Log ("starting sprite conversion");
-			 sprite = Sprite.Create (myTexture, new Rect (0, 0, width, height), new Vector2 (0.5f, 0.5f));
+			if (myTexture == null) {
 
-			if(sprite == null){
-				
-				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+					GameObject.Find("QuestDatabase").GetComponent<questdatabase>().spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+
 			} else {
-				isDone = true;
-				myWWW = null;
+					isDone = true;
+
 				myTexture = null;
 			}
-			
-			
-			
-			
+
+
+			//Debug.Log ("starting sprite conversion");
+			// sprite = Sprite.Create (myTexture, new Rect (0, 0, width, height), new Vector2 (0.5f, 0.5f));
+
+//
+//
+//				if(sprite == null){
+//				
+//				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().spriteError = "Fehlerhafte Datei\nBitte lade diese Quest erneut.";
+//			} else {
+//				isDone = true;
+//				myWWW = null;
+//			//	myTexture = null;
+//			}
+//			
+//			
+//			
+//			
 		}
 		
 		

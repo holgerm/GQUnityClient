@@ -452,19 +452,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 236615127}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: -98529514, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!222 &236615130
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -988,8 +987,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -49.0440521}
+  m_SizeDelta: {x: 0, y: -96.0879974}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1078550318
 MonoBehaviour:
@@ -1729,6 +1728,8 @@ MonoBehaviour:
     filepath: 
     pages: []
     hotspots: []
+    attributes: []
+    metadata: []
     hasData: 0
     currentpage:
       id: 0
@@ -1743,6 +1744,7 @@ MonoBehaviour:
         attributes: []
         answers: []
       contents_answersgroup: []
+      contents_stringmeta: []
       onEnd:
         actions: []
       onStart:
@@ -1759,6 +1761,7 @@ MonoBehaviour:
     xmlcontent: 
     start_longitude: 0
     start_latitude: 0
+    meta_combined: 
   npctalk:
     id: 0
     type: 
@@ -1772,6 +1775,7 @@ MonoBehaviour:
       attributes: []
       answers: []
     contents_answersgroup: []
+    contents_stringmeta: []
     onEnd:
       actions: []
     onStart:
@@ -1815,8 +1819,8 @@ GameObject:
   m_Component:
   - 224: {fileID: 1957163288}
   - 222: {fileID: 1957163290}
-  - 114: {fileID: 1957163289}
   - 114: {fileID: 1957163291}
+  - 114: {fileID: 1957163289}
   m_Layer: 5
   m_Name: npc_image
   m_TagString: Untagged
@@ -1836,10 +1840,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1234740415}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 752, y: 0}
+  m_AnchorMin: {x: .5, y: 1}
+  m_AnchorMax: {x: .5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -302}
+  m_SizeDelta: {x: 1080, y: 604}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1957163289
 MonoBehaviour:
@@ -1847,21 +1851,20 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1957163287}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: -98529514, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!222 &1957163290
 CanvasRenderer:
   m_ObjectHideFlags: 0

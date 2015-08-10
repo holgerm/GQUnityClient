@@ -13,8 +13,6 @@ public class Configuration : MonoBehaviour
 		Public,
 		CarlBenz,
 		ErzbistumKoeln, 
-		EBK_Schoepfung_Agnes,
-		EBK_Schoepfung_Wuppertal,
 		LWL,
 		WikiCultureCity, 
 		Intern
@@ -24,6 +22,7 @@ public class Configuration : MonoBehaviour
 	public int portalID = 1;
 	public int autostartQuestID = 0;
 	public int autostartQuestSize = 0;
+	public bool autostartIsPredeployed = false;
 	public string colorProfile = "default";
 	public string mapboxKey = "pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA";
 	public string mapboxMapID = "gqwcc.m824ig5p";
@@ -31,6 +30,7 @@ public class Configuration : MonoBehaviour
 	public string impressum = "";
 	public Sprite toplogo;
 	private string productName;
+	public string nameForQuest = "Quest";
 
 	public static Configuration instance {
 		get {
@@ -98,31 +98,11 @@ public class Configuration : MonoBehaviour
 			productName = "ebk";
 			portalID = 121;
 			autostartQuestID = 0;
-			downloadTimeOutSeconds = 200f;
+			downloadTimeOutSeconds = 60f;
 			colorProfile = "default";
-			mapboxKey = "ppk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ";
-			mapboxMapID = "gqebk.ed1de6df";
-			impressum = "Anbieterkennzeichnung gemäß § 5 Telemediengesetz (TMG) und Informationspflicht im Sinne des § 55 Abs. 2 Rundfunkstaatsvertrags (RStV).\n <b>Titel</b>\n GeoQuest\n <b>Einrichtung / Institution</b>\n Erzbistum Köln\n <b>Rechtsform</b>\n Körperschaft des öffentlichen Rechts (KdöR)\n <b>Vertreten durch</b>\n Generalvikar Dr. Dominik Meiering\n <b>Straße</b>\n Marzellenstraße 32\n <b>Ort</b>\n 50668 Köln\n <b>Telefon</b>\n 0049 (0)221 1642 0\n <b>Fax</b>\n 0049 (0)221 1642 1700\n <b>E-Mail</b>\n ehe-familie@erzbistum-koeln.de\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n erzbistum-koeln.de\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n Ust-IdNr. DE 122 777 469 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Efi Goebel\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
-			break;
-		case ProductIDs.EBK_Schoepfung_Agnes:
-			productName = "ebkagnes";
-			portalID = 121;
-			autostartQuestID = 6510;
-			downloadTimeOutSeconds = 200f;
-			colorProfile = "default";
-			mapboxKey = "pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ";
-			mapboxMapID = "gqebk.ed1de6df";
-			impressum = "Anbieterkennzeichnung gemäß § 5 Telemediengesetz (TMG) und Informationspflicht im Sinne des § 55 Abs. 2 Rundfunkstaatsvertrags (RStV).\n <b>Titel</b>\n GeoQuest\n <b>Einrichtung / Institution</b>\n Erzbistum Köln\n <b>Rechtsform</b>\n Körperschaft des öffentlichen Rechts (KdöR)\n <b>Vertreten durch</b>\n Generalvikar Dr. Dominik Meiering\n <b>Straße</b>\n Marzellenstraße 32\n <b>Ort</b>\n 50668 Köln\n <b>Telefon</b>\n 0049 (0)221 1642 0\n <b>Fax</b>\n 0049 (0)221 1642 1700\n <b>E-Mail</b>\n ehe-familie@erzbistum-koeln.de\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n erzbistum-koeln.de\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n Ust-IdNr. DE 122 777 469 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Efi Goebel\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
-			break;
-		case ProductIDs.EBK_Schoepfung_Wuppertal:
-			productName = "ebkwuppertal";
-			portalID = 121;
-			autostartQuestID = 6544;
-			downloadTimeOutSeconds = 200f;
-			colorProfile = "default";
-			mapboxKey = "pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ";
-			mapboxMapID = "gqebk.ed1de6df";
-			impressum = "Anbieterkennzeichnung gemäß § 5 Telemediengesetz (TMG) und Informationspflicht im Sinne des § 55 Abs. 2 Rundfunkstaatsvertrags (RStV).\n <b>Titel</b>\n GeoQuest\n <b>Einrichtung / Institution</b>\n Erzbistum Köln\n <b>Rechtsform</b>\n Körperschaft des öffentlichen Rechts (KdöR)\n <b>Vertreten durch</b>\n Generalvikar Dr. Dominik Meiering\n <b>Straße</b>\n Marzellenstraße 32\n <b>Ort</b>\n 50668 Köln\n <b>Telefon</b>\n 0049 (0)221 1642 0\n <b>Fax</b>\n 0049 (0)221 1642 1700\n <b>E-Mail</b>\n ehe-familie@erzbistum-koeln.de\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n erzbistum-koeln.de\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n Ust-IdNr. DE 122 777 469 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Efi Goebel\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
+			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+			mapboxMapID = "mapbox.streets";
+			impressum = "<b>Titel</b>\n GeoQuest\n <b>Einrichtung / Institution</b>\n Erzbistum Köln\n <b>Rechtsform</b>\n Körperschaft des öffentlichen Rechts (KdöR)\n <b>Vertreten durch</b>\n Generalvikar Dr. Dominik Meiering\n <b>Straße</b>\n Marzellenstraße 32\n <b>Ort</b>\n 50668 Köln\n <b>Telefon</b>\n 0049 (0)221 1642 0\n <b>Fax</b>\n 0049 (0)221 1642 1700\n <b><E-Mail</b>\n TODO\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n erzbistum-koeln.de\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n Ust-IdNr. DE 122 777 469 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n TODO\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
 			break;
 		case ProductIDs.LWL:
 			productName = "lwl";

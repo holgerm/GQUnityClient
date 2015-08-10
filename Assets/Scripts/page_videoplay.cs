@@ -17,42 +17,6 @@ public class page_videoplay : MonoBehaviour
 	static string filepath;
 
 
-	IEnumerator BeginDownload ()
-	{
-
-		#if !UNITY_WEBPLAYER
-
-		filepath = Application.persistentDataPath + "/test.mp4";
-		WWW www = new WWW ("https://quest-mill.com/tests/Geburtshaus.mp4");
-		while (!www.isDone) {
-			yield return null;
-		}
-
-		System.IO.File.WriteAllBytes (filepath, www.bytes);
-		FileInfo finfo = new FileInfo (filepath);
-		Debug.Log ("filepath = " + filepath);
-		Debug.Log ("file length is " + finfo.Length);
-		Debug.Log ("www had read bytes: " + www.bytes.Length);
-		Debug.Log ("WWW Error :" + www.error);
-		if (www.responseHeaders.Count > 0) {
-			foreach (KeyValuePair<string, string> entry in www.responseHeaders) {
-				Debug.Log ("Response Header: " + entry.Value + "=" + entry.Key);
-			}
-		}
-
-		Handheld.PlayFullScreenMovie ("file://" + filepath);
-
-#else
-
-		yield return null;
-
-		questdb.debug("Video can't be previewed in Web-Editor");
-		StartCoroutine(onEnd());
-
-
-#endif
-	}
-
 
 	IEnumerator Start ()
 	{
@@ -81,7 +45,17 @@ public class page_videoplay : MonoBehaviour
 		if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
 
 			Debug.Log ("Starting video url = " + url);
+
+			if(Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed){
+
+
+
+				 url = url.Replace(questdb.PATH_2_PREDEPLOYED_QUESTS,"predeployed/quests");
+				Handheld.PlayFullScreenMovie (url);
+
+			} else {
 			Handheld.PlayFullScreenMovie ("file://" + url);
+			}
 
 			yield return new WaitForEndOfFrame ();
 			yield return new WaitForEndOfFrame ();

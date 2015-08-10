@@ -3,7 +3,16 @@ using System.Collections;
 
 public class QRGUI : MonoBehaviour {
 
-
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+	
 	void OnGUI() {
 		GUI.Label(new Rect(10, 10, 500, 20), MessageReceiver.Instance().QRInfo);
 		
@@ -15,8 +24,8 @@ public class QRGUI : MonoBehaviour {
 			zBar.configOpt = kScanConfigOptions.ZBAR_CFG_ENABLE;
 			zBar.configSymbolValue = 0;
 			zBar.cameraFlashMode = kCameraFlashMode.ZBAR_CAMERA_FLASH_MODE_AUTO;
-			zBar.showsZBarControls = false;
-			//UIBinding.ActivateUI (zBar.getZBarInfos());
+			zBar.showsZBarControls = true;
+			UIBinding.ActivateUI (zBar.getZBarInfos());
 		}
 	}
 }

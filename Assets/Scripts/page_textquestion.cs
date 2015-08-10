@@ -91,6 +91,11 @@ public class page_textquestion : MonoBehaviour
 
 			}
 	
+		} else {
+
+			textquestion.state = "succeeded";
+
+
 		}
 		textquestion.result = x;
 

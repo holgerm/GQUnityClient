@@ -12,10 +12,6 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
-		Debug.Log ("QR RESULT:"+receiver.QRInfo);
-
 		if (receiver.QRInfo.Equals("scene1")) {
 			Application.LoadLevel(1);
 		}

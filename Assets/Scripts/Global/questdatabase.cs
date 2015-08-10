@@ -34,7 +34,8 @@ public class questdatabase : MonoBehaviour
 	public string webxml;
 	public bool fixedposition = true;
 	ScreenOrientation originalOrientation = ScreenOrientation.Portrait;
-	private string PATH_2_PREDEPLOYED_QUESTS;
+	private string PATH_2_PREDEPLOYED_QUEST;
+	public string PATH_2_PREDEPLOYED_QUESTS;
 	private string PREDEPLOYED_QUESTS_ZIP;
 	private string LOCAL_QUESTS_ZIP;
 	private string PATH_2_LOCAL_QUESTS;
@@ -51,7 +52,7 @@ public class questdatabase : MonoBehaviour
 	public string sortby = "Erstellungsdatum";
 	public bool descending = false;
 	public bool convertToSprites = false;
-
+	bool predepzipfound = false;
 	public menucontroller menu;
 	IEnumerator Start ()
 	{
@@ -64,7 +65,9 @@ public class questdatabase : MonoBehaviour
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
-		PREDEPLOYED_QUESTS_ZIP = "jar:file://" + Application.dataPath + "!/assets/" + "predeployed/quests.zip";
+		PREDEPLOYED_QUESTS_ZIP = "jar:file://" + Application.dataPath + "!/assets/" + "/predeployed/quests.zip";
+		PATH_2_PREDEPLOYED_QUESTS = "jar:file://" + Application.dataPath + "!/assets/predeployed/quests";
+
 		// PATH_2_PREDEPLOYED_QUESTS = "file:///android_asset/predeployed/quests"; NOT WORKING
 
 #endif
@@ -93,24 +96,22 @@ public class questdatabase : MonoBehaviour
 				Debug.Log ("PDir2: we need to initialize pedeployed quests");
 				Directory.CreateDirectory (PATH_2_LOCAL_QUESTS);
 
-				InitPredeployedQuests ();
+			StartCoroutine(	InitPredeployedQuests ());
 			} else {
 				Debug.Log ("START: The following quests are already initialized: initialize\n");
 				foreach (FileSystemInfo fileInfo in questsDirInfo) {
 //					Debug.Log ("\t" + fileInfo.FullName + "\n");
 				}
+
+
+
+				autoStartQuest();
 			}
 
 #endif
 		}
 
-		if (Configuration.instance.autostartQuestID != 0) {
-			GameObject questListPanel = GameObject.Find ("/Canvas");
-			questmilllogo.enabled = true;
-			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 
-			StartQuest (Configuration.instance.autostartQuestID);
-		}
 
 
 		yield return new WaitForEndOfFrame ();
@@ -125,52 +126,98 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-	void InitPredeployedQuests ()
-	{
 
+
+	void autoStartQuest(){
+
+		if (Configuration.instance.autostartQuestID != 0) {
+			GameObject questListPanel = GameObject.Find ("/Canvas");
+			questmilllogo.enabled = true;
+			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
+
+			if(Configuration.instance.autostartIsPredeployed){
+			StartCoroutine(	startPredeployedQuest(Configuration.instance.autostartQuestID));
+
+			} else {
+			StartQuest (Configuration.instance.autostartQuestID);
+			}
+		}
+
+	}
+
+	IEnumerator InitPredeployedQuests ()
+	{
 
 		#if !UNITY_WEBPLAYER
 
+		webloadingmessage.text = "Lade...";
+		webloadingmessage.enabled = true;
+		questmilllogo.enabled = true;
+	
+		yield return null;
+		
 		Debug.Log ("InitPredeployedQuests 1, looking for predep zip: " + PREDEPLOYED_QUESTS_ZIP);
 		if (PREDEPLOYED_QUESTS_ZIP.Contains ("://")) {
 			// on platforms which use an url type as asset path (e.g. Android):
-			WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);  // this is the path to your StreamingAssets in android
-			while (!questZIP.isDone) {
-			}  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
+			Debug.Log ("WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);");
+			WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP); // this is the path to your StreamingAssets in android
+			yield return questZIP;
 			
 			Debug.Log ("PDir3: LOADED BY WWW. questZIP.text: " + questZIP.text);
 			if (questZIP.error != null && !questZIP.error.Equals ("")) {
 				Debug.Log ("PDir3: LOADED BY WWW. questZIP.error: " + questZIP.error);
-				return;
+			} else {				
+				Debug.Log ("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
+				if (File.Exists (LOCAL_QUESTS_ZIP)) {
+					Debug.LogWarning ("Local copy of predeployment zip file was found. Should have been deleted at last initialization.");
+					File.Delete (LOCAL_QUESTS_ZIP);
+				}
 			}
-			Debug.Log ("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
-
-			if (File.Exists (LOCAL_QUESTS_ZIP)) {
-				Debug.LogWarning ("Local copy of predeployment zip file was found. Should have been deleted at last initialization.");
-				File.Delete (LOCAL_QUESTS_ZIP);
-			}
-
 			File.WriteAllBytes (LOCAL_QUESTS_ZIP, questZIP.bytes);
 			Debug.Log ("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists (LOCAL_QUESTS_ZIP));
+			predepzipfound = true;
 		} else {
-			// on platforms which have a straight file path (e.g. iOS):
-			Debug.Log ("InitPredeployedQuests: on IOS.");
-			if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
-				Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
-				return;
-			}
-			File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
-			if (!File.Exists (LOCAL_QUESTS_ZIP)) {
-				Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
-			}
+			Debug.Log ("Not running on platforms which use an url type as asset path (e.g. Android):");
+			initPreloadedQuestiOS();
 		}
 
-		ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
-		File.Delete (LOCAL_QUESTS_ZIP);
 
+		if (predepzipfound) {
+		
+			ZipUtil.Unzip (LOCAL_QUESTS_ZIP, Application.persistentDataPath);
+			File.Delete (LOCAL_QUESTS_ZIP);
+			Debug.Log ("ZIP FILE DELETED");
+			questmilllogo.enabled = false;
+			webloadingmessage.enabled = false;
+
+			autoStartQuest ();
+		}
+
+#else
+		yield return null;
 #endif
-
 	}
+
+
+
+void initPreloadedQuestiOS(){
+
+	// on platforms which have a straight file path (e.g. iOS):
+	Debug.Log ("InitPredeployedQuests: on IOS.");
+	if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
+		Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
+		return;
+	}
+	File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+	if (!File.Exists (LOCAL_QUESTS_ZIP)) {
+		Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
+	}
+
+		predepzipfound = true;
+
+
+}
+
 
 	private int reloadButtonPressed = 0;
 	private int numberOfPressesNeededToReload = 10;
@@ -217,6 +264,99 @@ public class questdatabase : MonoBehaviour
 		string questDirPath = System.IO.Path.Combine (PATH_2_LOCAL_QUESTS, id.ToString ());
 		return Directory.Exists (questDirPath);
 	}
+
+
+
+
+	IEnumerator startPredeployedQuest(int id){
+
+
+		Quest q = new Quest ();
+
+		q.id = id;
+		q.predeployed = true;
+
+		q.filepath = PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/game.xml";
+		currentquest = q;
+
+
+		string pre = "file: //";
+	
+		
+		if (Application.platform == RuntimePlatform.Android) {
+			
+			pre = "";
+		}
+		
+		
+
+
+		WWW wwwpdq = new WWW (pre+""+q.filepath);
+
+		yield return wwwpdq;
+
+		if (wwwpdq.error == null) {
+			
+
+			
+			
+			//currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
+			q.xmlcontent = UTF8Encoding.UTF8.GetString (wwwpdq.bytes); 
+
+		} else {
+
+			Debug.Log("Error: "+wwwpdq.error);
+		}
+		//Debug.Log ("creatign predeployed quest");
+		//Debug.Log(q.xmlcontent);
+
+
+		currentquest = q.LoadFromText (id, true);
+		localquests.Add (currentquest);
+		bool hasmorethanmetadata = true;
+		currentquest.currentpage = currentquest.pages.First ();
+		int c = 0;
+		while (currentquest.currentpage.type == "MetaData") {
+			
+			if(currentquest.pages.Count >= c-1){
+				currentquest.currentpage = currentquest.pages[c];
+				c++;
+			} else {
+				
+				hasmorethanmetadata = false;
+				break;
+			}
+		}
+		
+		hotspots = new List<QuestRuntimeHotspot> ();
+		foreach (QuestHotspot qh in currentquest.hotspots) {
+			bool initialActivity = qh.hasAttribute ("initialActivity") && qh.getAttribute ("initialActivity") == "true";
+			bool initialVisibility = qh.hasAttribute ("initialVisibility") && qh.getAttribute ("initialVisibility") == "true";
+			
+			hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
+		}
+		
+		if (canPlayQuest (currentquest) && hasmorethanmetadata) {
+			
+			
+			
+		
+				StartCoroutine (waitForSpriteConversion (currentquest.currentpage.id));
+				
+
+			
+		} else {
+			Debug.Log ("showing message");
+			showmessage ("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
+			webloadingmessage.enabled = false;
+			loadlogo.disable();
+			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
+			
+		}
+
+	}
+
+
 
 	void StartQuest (int id)
 	{
@@ -907,6 +1047,7 @@ public class questdatabase : MonoBehaviour
 
 					convertedSprites.Remove (sc);
 					sc.myWWW = null;
+					sc.myTexture = null;
 
 				}
 
@@ -921,10 +1062,13 @@ public class questdatabase : MonoBehaviour
 						if (imageextensions.Contains (fi.Extension.ToLower ())) {
 
 							SpriteConverter sc = new SpriteConverter (value);
+
+
+
 							convertedSprites.Add (sc);
 
 							sc.startConversion ();
-							StartCoroutine (waitForSingleSpriteCompletion (sc));
+						//	StartCoroutine (waitForSingleSpriteCompletion (sc));
 						}
 					} else {
 
@@ -960,7 +1104,7 @@ public class questdatabase : MonoBehaviour
 			
 		} else {
 			Debug.Log("STARTE");
-			webloadingmessage.text = "Starte Quest... ";
+			webloadingmessage.text = "Starte "+Configuration.instance.nameForQuest+"... ";
 			webloadingmessage.enabled = true;
 			loadlogo.enable ();
 
@@ -1704,9 +1848,11 @@ public class Quest  : IComparable<Quest>
 	public float start_latitude;
 	public string meta_combined;
 
+	public bool predeployed = false;
+
 	public Quest ()
 	{
-
+		predeployed = false;
 
 	}
 
@@ -1754,9 +1900,6 @@ public class Quest  : IComparable<Quest>
 			xmlcontent_copy = " ";
 		}
 
-		if (!xmlfilepath.EndsWith (".xml")) {
-			xmlfilepath = filepath + "game.xml";
-		}
 
 
 		Encoding enc = System.Text.Encoding.UTF8;
@@ -1764,14 +1907,20 @@ public class Quest  : IComparable<Quest>
 		
 		TextReader txr = new StringReader (xmlcontent_copy);
 
-
-
-		if (xmlfilepath != null && xmlfilepath.Length > 9) {
-
+		Debug.Log ("XML:"+xmlcontent_copy);
 
 
 
+		if (!predeployed && xmlfilepath != null && xmlfilepath.Length > 9) {
 
+			Debug.Log(xmlfilepath);
+
+
+			if(!xmlfilepath.Contains("game.xml")){
+
+				xmlfilepath = xmlfilepath+"game.xml";
+
+			}
 			txr = new StreamReader (xmlfilepath, enc);
 
 		}
@@ -1779,7 +1928,8 @@ public class Quest  : IComparable<Quest>
 
 		Quest q = serializer.Deserialize (txr) as Quest; 
 	
-	
+		q.predeployed = predeployed;
+
 
 
 		q.filepath = fp;
@@ -1940,9 +2090,16 @@ public class Quest  : IComparable<Quest>
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
+
+
+							if(predeployed){
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+
+							} else {
 							
 							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 							
+							}
 							questdb.performSpriteConversion (xmla.Value);
 							
 						}
@@ -2220,9 +2377,17 @@ public class QuestPage
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
-							
-							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-						
+
+							if(questdb.currentquest.predeployed){
+								Debug.Log("is predeployed file: "+filename);
+
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+								
+							} else {
+								
+								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+								
+							}						
 							questdb.performSpriteConversion (xmla.Value);
 
 						}
@@ -2392,8 +2557,14 @@ public class QuestHotspot
 						}
 						if (splitted.Length > 3) {
 										
-							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-							questdb.performSpriteConversion (xmla.Value);
+							if(questdb.currentquest.predeployed){
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+								
+							} else {
+								
+								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+								
+							}											questdb.performSpriteConversion (xmla.Value);
 
 						}							
 
@@ -2444,9 +2615,11 @@ public class QuestContent
 	public XmlAttribute[]
 		help_attributes;
 	public List<QuestAttribute> attributes;
+	[System.NonSerialized()]
 	[XmlElement("questiontext")]
 	public QuestContent
 		questiontext;
+	[System.NonSerialized()]
 	[XmlElement("answer")]
 	public List<QuestContent>
 		answers;
@@ -2532,8 +2705,15 @@ public class QuestContent
 						}
 						if (splitted.Length > 3) {
 											
-							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-							questdb.performSpriteConversion (xmla.Value);
+							if(questdb.currentquest.predeployed){
+								
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+								
+							} else {
+								
+								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+								
+							}											questdb.performSpriteConversion (xmla.Value);
 
 						}
 					}
@@ -2600,9 +2780,11 @@ public class QuestAction
 	public XmlAttribute[]
 		help_attributes;
 	public List<QuestAttribute> attributes;
+	[System.NonSerialized()]
 	[XmlArray("then"),XmlArrayItem("action")]
 	public List<QuestAction>
 		thenactions;
+	[System.NonSerialized()]
 	[XmlArray("else"),XmlArrayItem("action")]
 	public List<QuestAction>
 		elseactions;
@@ -2754,8 +2936,15 @@ public class QuestAction
 						}
 						if (splitted.Length > 3) {
 											
-							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-							questdb.performSpriteConversion (xmla.Value);
+							if(questdb.currentquest.predeployed){
+								
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+								
+							} else {
+								
+								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+								
+							}											questdb.performSpriteConversion (xmla.Value);
 
 						}
 					}

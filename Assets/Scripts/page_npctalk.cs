@@ -17,7 +17,7 @@ public class page_npctalk : MonoBehaviour
 	public Quest quest;
 	public QuestPage npctalk;
 	public actions 	questactions;
-	public Image image;
+	public RawImage image;
 	public Image image_hochkant;
 	public Text text;
 	public Button nextbutton;
@@ -62,6 +62,10 @@ public class page_npctalk : MonoBehaviour
 				pre = "file:";
 			}
 
+			if(Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed){
+				
+				pre = "";
+			}
 
 			if (npctalk.getAttribute ("tickerspeed").Length > 0) {
 
@@ -114,7 +118,7 @@ public class page_npctalk : MonoBehaviour
 
 							} else {
 
-								image.sprite = s;
+								//image.texture = s;
 								image.enabled = true;
 
 
@@ -129,47 +133,59 @@ public class page_npctalk : MonoBehaviour
 				
 				} else {
 		
-
+					
+					
+					www = new WWW (pre + ""+npctalk.getAttribute ("image"));
+					
+					StartCoroutine (waitforImage ());
 
 					
-					foreach (SpriteConverter sc in questdb.convertedSprites) {
-
-
-
-						if (sc.filename == npctalk.getAttribute ("image")) {
-
-							if (sc.isDone) {
-								if (sc.sprite != null) {
-									if (sc.sprite.texture.height > sc.sprite.texture.width) {
-								
-										image_hochkant.sprite = sc.sprite;
-										image_hochkant.enabled = true;
-										image.enabled = false;
-								
-								
-									} else {
-								
-										image.sprite = sc.sprite;
-										image.enabled = true;
-								
-								
-									}
-							
-
-
-
-						
-								} else {
-
-									Debug.Log ("Sprite was null");
-								}
-							} else {
-
-								Debug.Log ("SpriteConverter was not done.");
-
-							}
-						}
-					}
+//					foreach (SpriteConverter sc in questdb.convertedSprites) {
+//
+//
+//
+//						if (sc.filename == npctalk.getAttribute ("image")) {
+//
+//							if (sc.isDone) {
+//								if (sc.myTexture != null) {
+//								
+//								
+//										image.texture = (Texture)sc.myTexture;
+//										image.enabled = true;
+//
+//
+//
+//									float myX = (float)sc.myTexture.width;
+//
+//
+//									float myY = (float)sc.myTexture.height;
+//
+//
+//									float scaler = myY/604f;
+//
+//									myX = myX / scaler;
+//									myY = 604f;
+//
+//
+//									image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
+//
+//								
+//							
+//
+//
+//
+//						
+//								} else {
+//
+//									Debug.Log ("Sprite was null");
+//								}
+//							} else {
+//
+//								Debug.Log ("SpriteConverter was not done.");
+//
+//							}
+//						}
+//					}
 
 
 
@@ -411,29 +427,33 @@ public class page_npctalk : MonoBehaviour
 
 		if (www.error == null) {
 
-			DateTime start = DateTime.Now;
+			//DateTime start = DateTime.Now;
 
-			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
+			//Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 		
-			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract (start).Milliseconds);
-			Debug.Log ("All took: " + DateTime.Now.Subtract (startWWW).Milliseconds);
+//			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract (start).Milliseconds);
+		//	Debug.Log ("All took: " + DateTime.Now.Subtract (startWWW).Milliseconds);
 
-			Debug.Log (www.texture.height + "," + www.texture.width);
-			if (www.texture.height > www.texture.width) {
+			//Debug.Log (www.texture.height + "," + www.texture.width);
 				
-				image_hochkant.sprite = s;
-				image_hochkant.enabled = true;
-				image.enabled = false;
+			image.texture = www.texture;
 				
-				
-			} else {
-				
-				image.sprite = s;
-				image.enabled = true;
-				
-				
-			}
-		
+			
+			float myX = (float)www.texture.width;
+			
+			
+			float myY = (float)www.texture.height;
+			
+			
+												float scaler = myY/604f;
+			
+												myX = myX / scaler;
+												myY = 604f;
+			
+			
+												image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
+			
+											
 		
 		
 		
