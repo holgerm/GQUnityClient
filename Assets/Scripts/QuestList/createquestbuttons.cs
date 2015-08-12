@@ -35,7 +35,7 @@ public class createquestbuttons : MonoBehaviour
 				filteredOfflineList.Add (q);
 			}
 
-			if (questdb.allquests.Count < 1 && filteredOfflineList.Count < 1) {
+			if ((questdb.allquests.Count < 1 && filteredOfflineList.Count < 1) || Configuration.instance.showcloudquestsimmediately) {
 				getPublicQuests ();
 			} else {
 				DisplayList ();
@@ -133,64 +133,24 @@ public class createquestbuttons : MonoBehaviour
 	public void getPublicQuests ()
 	{
 		questdb.allquests.Clear ();
+	
 
-//		string url = "http://www.qeevee.org:9091/json/" + portal_id + "/publicgames";
-	//	string url = "http://www.qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgames";
+
 		string url = "http://qeevee.org:9091/json/"+Configuration.instance.portalID+"/publicgamesinfo";
-	//	string url = "https://quest-mill.com/temp/publicgamesinfo.json";
 
 		www = new WWW (url);
 		
 		
+
 		
-		
-		
-		StartCoroutine (DownloadPercentage ());
-		StartCoroutine (DownloadList ());
+
+		StartCoroutine (questdb.DownloadPercentage (www));
+		StartCoroutine (questdb.DownloadList (www));
 		
 	}
 
-	IEnumerator DownloadPercentage ()
-	{
-		yield return new WaitForSeconds (0.01f);
 
 
-		
-		if (www.progress < 1f && www.error == null) {
-
-			downloadmsg.text = (www.progress * 100) + " %";
-			StartCoroutine (DownloadPercentage ());
-
-		} else {
-
-
-		}
-
-
-	}
-
-	IEnumerator DownloadList ()
-	{
-		downloadmsg.enabled = true;
-
-		yield return www;
-		if (www.error == null) {
-			DisplayList ();
-			//Debug.Log("WWW Ok!: " + www.data);
-			
-			JSONObject j = new JSONObject (www.text);
-			accessData (j, "quest");
-			foreach (Quest q in questdb.allquests) {
-				filteredOnlineList.Add (q);
-			}
-			DisplayList ();
-		} else {
-			Debug.Log ("WWW Error: " + www.error);
-			downloadmsg.text = www.error;
-		}    
-
-
-	}
 
 	public void resetList ()
 	{
@@ -332,151 +292,6 @@ public class createquestbuttons : MonoBehaviour
 
 	}
 
-
-
-	void createMetaData(JSONObject obj){
-
-		QuestMetaData meta = new QuestMetaData();
-
-		for (int i = 0; i < obj.list.Count; i++) {
-			string key = (string)obj.keys [i];
-			JSONObject j = (JSONObject)obj.list [i];
-
-
-
-			if(key == "key"){
-				
-				meta.key = j.str;
-
-			} else if(key == "value"){
-//				Debug.Log("Meta Value found");
-				meta.value = j.str;
-				
-			}
-
-
-		}
-		currentquest.addMetaData(meta);
-
-
-	}
-
-	void accessHotspotData(JSONObject obj){
-		
-
-		for (int i = 0; i < obj.list.Count; i++) {
-			string key = (string)obj.keys [i];
-			JSONObject j = (JSONObject)obj.list [i];
-			
-			Debug.Log(key);
-			if(key == "longitude"){
-
-				Debug.Log("long found");
-				if(currentquest.start_longitude == null || currentquest.start_longitude == 0){
-					currentquest.start_longitude = obj.n;
-					Debug.Log("long set: "+obj.str);
-				}
-				
-			} else if(key == "latitude"){
-				Debug.Log("lat found");
-
-				if(currentquest.start_latitude == null || currentquest.start_latitude == 0){
-					currentquest.start_latitude = obj.n;
-				}
-				
-			}
-			
-			
-		}
-
-		
-	}
-
-
-	void accessData (JSONObject obj, string kei)
-	{
-		switch (obj.type) {
-		
-		
-		case JSONObject.Type.OBJECT:
-
-			for (int i = 0; i < obj.list.Count; i++) {
-				string key = (string)obj.keys [i];
-				JSONObject j = (JSONObject)obj.list [i];
-				accessData (j, kei + "_" + key);
-			}
-			break; 
-		case JSONObject.Type.ARRAY:
-//			Debug.Log("ARRAY: "+kei);
-			if (kei == "quest_hotspots") {
-
-//				Debug.Log("New Quest");
-
-				currentquest = new Quest();
-				if(questdb.allquests == null){
-					questdb.allquests = new List<Quest>();
-				}
-				questdb.allquests.Add (currentquest);
-
-				foreach (JSONObject j in obj.list) {
-					accessData (j,kei);
-				}
-			
-					//getFirstHotspot (obj);
-
-			} else if(kei == "quest"){
-				//Debug.Log("here");
-
-
-				foreach (JSONObject j in obj.list) {
-					accessData (j,kei);
-				}
-
-
-			}
-			if (kei == "quest_metadata") {
-				foreach (JSONObject j in obj.list) {
-					createMetaData (j);
-				}
-			} 
-
-			break;
-		case JSONObject.Type.STRING:
-			if (kei == "quest_name") {
-				currentquest.name = obj.str;
-			}
-			break;
-		case JSONObject.Type.NUMBER:
-			if (kei == "quest_id") {
-				currentquest.id = (int)obj.n;
-			 	} else if(kei == "quest_hotspots_latitude"){
-			
-			if(currentquest.start_latitude == null || currentquest.start_latitude == 0){
-				
-				currentquest.start_latitude = obj.n;
-				
-			}
-		
-		} else if(kei == "quest_hotspots_longitude"){
-			//Debug.Log("FOUND LONGITUDE");
-			
-			if(currentquest.start_longitude == null || currentquest.start_longitude == 0){
-			//	Debug.Log("SETTING LONGITUDE");
-				currentquest.start_longitude = obj.n;
-				
-			}
-
-			}
-
-
-			break;
-		case JSONObject.Type.BOOL:
-			break;
-		case JSONObject.Type.NULL:
-			break;
-			
-		}
-	}
 
 
 

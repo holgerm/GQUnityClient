@@ -39,6 +39,7 @@ public class page_map : MonoBehaviour
 	private bool zoomout = false;
 	public bool fixedonposition = true;
 	public bool gotgps = true;
+	public bool showquests = false;
 
 	private
 		
@@ -52,10 +53,12 @@ public class page_map : MonoBehaviour
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 		gpsdata = questdb.GetComponent<GPSPosition> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
-		questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 
+		if (questdb.currentquest != null && questdb.currentquest.id != 0) {
+			quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+			mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
+		}
 		
 		string pre = "file: /";
 		
@@ -157,7 +160,7 @@ public class page_map : MonoBehaviour
 		
 			WWW www = null;
 		
-		
+	
 			
 			if (qrh.hotspot.getAttribute ("img").StartsWith ("@_")) {
 				
@@ -165,7 +168,7 @@ public class page_map : MonoBehaviour
 				www = new WWW (pre + "" + questactions.getVariable (qrh.hotspot.getAttribute ("img")).string_value [0]);
 				
 				
-			} else {
+			} else if(qrh.hotspot.getAttribute ("img") != "") {
 				
 				
 				
@@ -193,6 +196,12 @@ public class page_map : MonoBehaviour
 					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
 				}
 				
+			} else {
+
+
+				createMarker(qrh,Configuration.instance.defaultmarker.texture);
+
+
 			}
 
 
@@ -219,8 +228,16 @@ public class page_map : MonoBehaviour
 			if (Application.isWebPlayer || Application.isEditor) {
 				QuestRuntimeHotspot minhotspot = null;
 				double[] minhotspotposition = null;
+				Debug.Log("Hotspot Count: "+questdb.getActiveHotspots().Count);
+
+
+				if(questdb.getActiveHotspots().Count > 0){
 
 				foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
+						if((qrh.lon < 1f && qrh.lon > -1f) && qrh.lat < 1f && qrh.lat > -1f){
+
+							Debug.Log("null hotspot");
+						} else {
 
 					if (minhotspot == null) {
 
@@ -256,7 +273,7 @@ public class page_map : MonoBehaviour
 
 
 					}
-
+						}
 				}
 
 
@@ -265,7 +282,11 @@ public class page_map : MonoBehaviour
 				a = minhotspotposition [1];
 				b = minhotspotposition [0];
 				map.CenterWGS84 = new double[2] { a	, b };
+				} else {
 
+					map.CenterWGS84 = new double[2] { 51	, 8 };
+
+				}
 			} else {
 
 				// disable location
@@ -312,7 +333,7 @@ public class page_map : MonoBehaviour
 		}
 
 
-		if (mappage.onStart != null) {
+		if (mappage != null && mappage.onStart != null) {
 			
 			mappage.onStart.Invoke ();
 		}
@@ -366,6 +387,107 @@ public class page_map : MonoBehaviour
 		
 	}
 
+
+
+
+
+	void createMarker(QuestRuntimeHotspot qrh, Texture image){
+
+		
+		// Prefab
+		GameObject go = Tile.CreateTileTemplate (Tile.AnchorPoint.BottomCenter).gameObject;
+		
+		
+		go.GetComponent<Renderer> ().material.mainTexture = image;
+		go.GetComponent<Renderer> ().material.renderQueue = 4001;
+		
+		
+		
+		int height = go.GetComponent<Renderer> ().material.mainTexture.height;
+		int width = go.GetComponent<Renderer> ().material.mainTexture.width;
+		
+		
+		if (height > width) {
+			
+			//Debug.Log(width+"/"+height+"="+width/height);
+			go.transform.localScale = new Vector3 (((float)width) / ((float)height), 1.0f, 1.0f);
+			
+		} else {
+			
+			go.transform.localScale = new Vector3 (1.0f, ((float)height / (float)width), 1.0f);
+			
+		}
+		
+		go.transform.localScale /= 512f;
+		go.transform.localScale *= width;
+		
+		int screenWidth;
+		#if UNITY_WEBPLAYER || UNITY_EDITOR 
+		screenWidth = 1080;
+		#else
+		screenWidth = Screen.width;
+		#endif
+		
+		go.transform.localScale *= screenWidth / 600f;
+		
+		go.AddComponent<onTapMarker> ();
+		go.GetComponent<onTapMarker> ().hotspot = qrh;
+		
+
+		if (questdb.currentquest != null && questdb.currentquest.id != 0) {
+
+		
+			go.AddComponent<circletests> ();
+		
+			if (qrh.hotspot.hasAttribute ("radius")) {
+				go.GetComponent<circletests> ().radius = int.Parse (qrh.hotspot.getAttribute ("radius"));
+			}
+
+		}
+
+		go.GetComponent<BoxCollider> ().center = new Vector3 (0f, 0f, 0.5f);
+		go.GetComponent<BoxCollider> ().size = new Vector3 (1f, 0.1f, 1f);
+		
+		go.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
+		
+		
+		// Instantiate
+		GameObject markerGO;
+		markerGO = Instantiate (go) as GameObject;
+		
+		
+		
+		qrh.renderer = markerGO.GetComponent<MeshRenderer> ();
+		
+		
+		
+		
+		
+		
+		// CreateMarker(Name,longlat,prefab)
+		Marker m = map.CreateMarker<Marker> (qrh.hotspot.getAttribute ("name"), new double[2] {
+			qrh.lat,
+			qrh.lon
+		}, markerGO);
+		
+		
+		
+		
+		
+		// Destroy Prefab
+		DestroyImmediate (go);
+		
+		
+		if (!qrh.visible) {
+			
+			qrh.renderer.enabled = false;
+			
+			
+		}
+
+
+	}
+
 	IEnumerator createMarkerAfterImageLoaded (WWW www, QuestRuntimeHotspot qrh)
 	{
 		
@@ -373,93 +495,7 @@ public class page_map : MonoBehaviour
 		
 		if (www.error == null) {
 
-
-			// Prefab
-			GameObject go = Tile.CreateTileTemplate (Tile.AnchorPoint.BottomCenter).gameObject;
-			
-		
-			go.GetComponent<Renderer> ().material.mainTexture = www.texture;
-			go.GetComponent<Renderer> ().material.renderQueue = 4001;
-
-
-
-			int height = go.GetComponent<Renderer> ().material.mainTexture.height;
-			int width = go.GetComponent<Renderer> ().material.mainTexture.width;
-			
-
-			if (height > width) {
-				
-				//Debug.Log(width+"/"+height+"="+width/height);
-				go.transform.localScale = new Vector3 (((float)width) / ((float)height), 1.0f, 1.0f);
-				
-			} else {
-				
-				go.transform.localScale = new Vector3 (1.0f, ((float)height / (float)width), 1.0f);
-				
-			}
-
-			go.transform.localScale /= 512f;
-			go.transform.localScale *= width;
-
-			int screenWidth;
-#if UNITY_WEBPLAYER || UNITY_EDITOR 
-			screenWidth = 1080;
-#else
-			screenWidth = Screen.width;
-#endif
-
-			go.transform.localScale *= screenWidth / 600f;
-
-			go.AddComponent<onTapMarker> ();
-			go.GetComponent<onTapMarker> ().hotspot = qrh;
-
-
-
-			go.AddComponent<circletests> ();
-	
-			if (qrh.hotspot.hasAttribute ("radius")) {
-				go.GetComponent<circletests> ().radius = int.Parse (qrh.hotspot.getAttribute ("radius"));
-			}
-			go.GetComponent<BoxCollider> ().center = new Vector3 (0f, 0f, 0.5f);
-			go.GetComponent<BoxCollider> ().size = new Vector3 (1f, 0.1f, 1f);
-
-			go.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
-			
-			
-			// Instantiate
-			GameObject markerGO;
-			markerGO = Instantiate (go) as GameObject;
-
-
-
-			qrh.renderer = markerGO.GetComponent<MeshRenderer> ();
-
-
-
-
-
-
-			// CreateMarker(Name,longlat,prefab)
-			Marker m = map.CreateMarker<Marker> (qrh.hotspot.getAttribute ("name"), new double[2] {
-				qrh.lat,
-				qrh.lon
-			}, markerGO);
-		
-
-
-
-
-			// Destroy Prefab
-			DestroyImmediate (go);
-
-
-			if (!qrh.visible) {
-				
-				qrh.renderer.enabled = false;
-
-				
-			}
-
+			createMarker(qrh,www.texture);
 
 
 		} else {

@@ -124,7 +124,7 @@ Camera:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 143068475}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: .498039216, g: .498039216, b: .498039216, a: 1}
@@ -156,7 +156,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 143068475}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!92 &143068479
 Behaviour:
   m_ObjectHideFlags: 0
@@ -960,7 +960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1652231403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1129,7 +1129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: .786764741, g: .786764741, b: .786764741, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_Sprite: {fileID: 21300000, guid: 25af5d598cf4249d0b2745bf81031d65, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
@@ -1206,6 +1206,8 @@ MonoBehaviour:
     filepath: 
     pages: []
     hotspots: []
+    attributes: []
+    metadata: []
     hasData: 0
     currentpage:
       id: 0
@@ -1218,8 +1220,8 @@ MonoBehaviour:
         id: 0
         content: 
         attributes: []
-        answers: []
       contents_answersgroup: []
+      contents_stringmeta: []
       onEnd:
         actions: []
       onStart:
@@ -1234,6 +1236,10 @@ MonoBehaviour:
       result: 
     previouspages: []
     xmlcontent: 
+    start_longitude: 0
+    start_latitude: 0
+    meta_combined: 
+    predeployed: 0
   mappage:
     id: 0
     type: 
@@ -1245,8 +1251,8 @@ MonoBehaviour:
       id: 0
       content: 
       attributes: []
-      answers: []
     contents_answersgroup: []
+    contents_stringmeta: []
     onEnd:
       actions: []
     onStart:
@@ -1267,3 +1273,4 @@ MonoBehaviour:
   radiusprefab: {fileID: 497184, guid: 8a5ffc3b1036f4a75870653ae20a4592, type: 2}
   fixedonposition: 1
   gotgps: 1
+  showquests: 0

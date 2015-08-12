@@ -31,6 +31,15 @@ public class Configuration : MonoBehaviour
 	public Sprite toplogo;
 	private string productName;
 	public string nameForQuest = "Quest";
+	public string questvisualization = "list";
+	public bool questvisualizationchangable = false;
+	public bool showcloudquestsimmediately = false;
+	public bool showtextinloadinglogo = true;
+	public bool showinternetconnectionmessage = true;
+	public Sprite defaultmarker;
+
+	public List<MarkerCategorySprite> categoryMarker;
+
 
 	public static Configuration instance {
 		get {
@@ -142,3 +151,16 @@ public class Configuration : MonoBehaviour
 
 }
 
+
+
+[System.Serializable]
+public class MarkerCategorySprite {
+
+
+
+	public string category;
+	public Sprite sprite;
+
+
+
+}

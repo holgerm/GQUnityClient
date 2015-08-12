@@ -33,17 +33,22 @@ public class loadinglogo : MonoBehaviour {
 
 
 	public void enable(){
-		
+
 		foreach (Image i in GetComponentsInChildren<Image>()) {
 			
 			i.enabled = true;
 			
 		}
-		
-		foreach (Text t in GetComponentsInChildren<Text>()) {
+
+		if (Configuration.instance.showtextinloadinglogo) {
+			foreach (Text t in GetComponentsInChildren<Text>()) {
 			
-			t.enabled = true;
+				t.enabled = true;
 			
+			}
+		} else {
+
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage.enabled = false;
 		}
 		
 	}
