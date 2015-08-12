@@ -28,6 +28,11 @@ public class page_npctalk : MonoBehaviour
 	public float tickertime;
 	private float savedtickertime;
 
+
+	public int indexoflink = 0;
+	public string link;
+
+
 	void Start ()
 	{ 
 		if (GameObject.Find ("QuestDatabase") == null) {
@@ -233,7 +238,29 @@ public class page_npctalk : MonoBehaviour
 
 
 			if (npctalk.hasAttribute ("text")) {
-				text.text += npctalk.getAttribute ("text");
+
+
+				string toadd = npctalk.getAttribute ("text");
+				int i = 0;	
+				Debug.Log("LINK? "+ toadd.IndexOf("<a href="));
+				while(toadd.IndexOf("<a href=") > -1){
+				
+					int index_start = toadd.IndexOf("<a href=",i);
+					int index_mid = toadd.IndexOf(">",index_start);
+					int index_end = toadd.IndexOf("</a>",index_mid);
+					i = index_end;
+
+
+					string one = toadd.Substring(0,index_start);
+					string two = toadd.Substring(index_mid,index_end-index_mid);
+					string three = toadd.Substring(index_end,toadd.Length-index_end);
+
+					link = two;
+					indexoflink = index_start;
+					toadd = one+""+two+""+three;
+				}
+
+				text.text += toadd;
 				nextbutton.interactable = true;
 				buttontext.text = npctalk.getAttribute ("endbuttontext");
 
@@ -379,7 +406,38 @@ public class page_npctalk : MonoBehaviour
 					
 					text.text += "<b>" + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker") + "</b>: ";
 				}
-				text.text += questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
+
+
+
+
+
+
+
+				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
+				toadd = toadd+"   ";
+				int i = 0;	
+				Debug.Log("LINK? "+ toadd.IndexOf("<a href="));
+				while(toadd.IndexOf("<a href=") > -1){
+					
+					int index_start = toadd.IndexOf("<a href=",i);
+					int index_mid = toadd.IndexOf(">",index_start);
+					int index_end = toadd.IndexOf("</a>",index_mid);
+					i = index_end;
+					
+					
+					string one = toadd.Substring(0,index_start);
+					string two = toadd.Substring(index_mid+1,index_end-index_mid-1);
+					Debug.Log(toadd.Length+","+index_end+","+(toadd.Length-index_end));
+					string three = toadd.Substring(index_end+5,toadd.Length-index_end-5);
+					
+					toadd = one+"<color=#164386>"+two+"</color>"+three;
+				}
+				
+				text.text += toadd;
+
+
+
+
 								
 
 
@@ -414,6 +472,14 @@ public class page_npctalk : MonoBehaviour
 			text.transform.parent.GetComponent<ScrollRect> ().verticalNormalizedPosition = 0f;
 			Canvas.ForceUpdateCanvases ();
 		}
+
+
+	}
+
+
+	public void clickLink(){
+
+
 
 
 	}

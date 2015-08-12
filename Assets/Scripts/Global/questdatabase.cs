@@ -753,6 +753,13 @@ void initPreloadedQuestiOS(){
 					qh.attributes.Add(qa);
 					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(qh,true,true,aq.start_latitude+","+aq.start_longitude);
 					//Debug.Log("Longitude Latitude: "+aq.start_longitude+","+aq.start_latitude);
+
+					if(aq.hasMeta("category")){
+
+						qrh.category = aq.getMeta("category");
+
+					}
+
 					qrh.startquest = aq;
 
 					activehs.Add(qrh);
@@ -3952,7 +3959,26 @@ public class QuestRuntimeHotspot
 
 		
 	}
-	
+
+
+
+	public Sprite getMarkerImage(){
+
+
+		Sprite s = Configuration.instance.defaultmarker;
+		Debug.Log ("Category: " + category);
+		foreach (MarkerCategorySprite mcs in Configuration.instance.categoryMarker) {
+
+			if(mcs.category == category){
+
+				s = mcs.sprite;
+
+			}
+
+		}
+
+		return s;
+	}
 	
 	
 }

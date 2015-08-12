@@ -786,9 +786,13 @@ public class actions : MonoBehaviour
 		                 .ToArray ());
 
 
+		if (k == "quest.name") {
 
 
-		if (k == "score") {
+			return new QuestVariable ("quest.name", questdb.currentquest.name);
+
+
+		} else if (k == "score") {
 
 
 

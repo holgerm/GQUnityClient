@@ -199,7 +199,9 @@ public class page_map : MonoBehaviour
 			} else {
 
 
-				createMarker(qrh,Configuration.instance.defaultmarker.texture);
+			
+
+				createMarker(qrh,qrh.getMarkerImage().texture);
 
 
 			}

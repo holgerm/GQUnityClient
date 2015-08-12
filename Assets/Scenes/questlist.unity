@@ -228,11 +228,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1711651852}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 0, y: 213.621872}
-  m_SizeDelta: {x: 706, y: 745}
+  m_AnchoredPosition: {x: 20, y: 213.619995}
+  m_SizeDelta: {x: 706, y: 563}
   m_Pivot: {x: .5, y: .5}
 --- !u!95 &88333180
 Animator:
@@ -3347,13 +3347,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 1
-  overrideProductSettingsInInspector: 0
+  product: 4
+  overrideProductSettingsInInspector: 1
   portalID: 281
   autostartQuestID: 0
   autostartQuestSize: 191446736
   autostartIsPredeployed: 1
-  colorProfile: default
+  colorProfile: wcc
   mapboxKey: pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw
   mapboxMapID: mapbox.streets
   downloadTimeOutSeconds: 100
@@ -3365,15 +3365,36 @@ MonoBehaviour:
     <b>Land</b>\\n Deutschland\\n <b>Domain</b>\\n quest-mill.com\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
     DE298593210 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n Holger M\xFCgge\\n
     <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
-  toplogo: {fileID: 21300000, guid: 784a843aabf7f467091ccfda0e37b68b, type: 3}
+  toplogo: {fileID: 21300000, guid: 098425dc29c9245f3b5f851e9c90bd28, type: 3}
   nameForQuest: Ort
-  questvisualization: list
+  questvisualization: map
   questvisualizationchangable: 0
   showcloudquestsimmediately: 1
   showtextinloadinglogo: 0
   showinternetconnectionmessage: 0
-  defaultmarker: {fileID: 21300000, guid: ca4aa2af48acd4ec7a57ff697a715075, type: 3}
-  categoryMarker: []
+  defaultmarker: {fileID: 21300000, guid: 9583b5b7a3de2408bb1ebac827f8ede0, type: 3}
+  categoryMarker:
+  - category: wcc.culture
+    anzeigename_de: Kultur
+    sprite: {fileID: 21300000, guid: 80eadcdccf2a14eceab8aa81d74d6687, type: 3}
+  - category: wcc.architecture
+    anzeigename_de: Architektur
+    sprite: {fileID: 21300000, guid: 40604b4f6d6ea4d0ab5081e80ac3ec12, type: 3}
+  - category: wcc.cafe
+    anzeigename_de: "Caf\xE9"
+    sprite: {fileID: 21300000, guid: 09a7cf6a3ccae4a1cb3ae60f2c1e1ca3, type: 3}
+  - category: wcc.history
+    anzeigename_de: Historisch
+    sprite: {fileID: 21300000, guid: 5c84930ca34e44ca98f0401dc2e7a3fe, type: 3}
+  - category: wcc.info
+    anzeigename_de: Information
+    sprite: {fileID: 21300000, guid: 76db04478feb846869a9e917d337d453, type: 3}
+  - category: wcc.nature
+    anzeigename_de: Natur
+    sprite: {fileID: 21300000, guid: 1f78dc001edf44833b89b63f05f0ea4b, type: 3}
+  - category: wcc.restaurant
+    anzeigename_de: Restaurant
+    sprite: {fileID: 21300000, guid: e438c2dcf472147c787c9b4d2b970c4b, type: 3}
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -3844,7 +3865,7 @@ RectTransform:
   m_LocalScale: {x: .269055963, y: .269055963, z: .269055963}
   m_Children: []
   m_Father: {fileID: 1711651852}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 0, y: 213.621887}
@@ -7238,6 +7259,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f71299437fb449909aed7b8267e0a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1618061641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1618061642}
+  - 222: {fileID: 1618061644}
+  - 114: {fileID: 1618061643}
+  m_Layer: 5
+  m_Name: Image 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1618061642
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1618061641}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .867963016, y: .867962778, z: .867962778}
+  m_Children: []
+  m_Father: {fileID: 1711651852}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 144.949738}
+  m_SizeDelta: {x: 980, y: 1518.16943}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &1618061643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1618061641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: .678431392}
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1618061644
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1618061641}
 --- !u!1 &1625223665
 GameObject:
   m_ObjectHideFlags: 0
@@ -7573,7 +7655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1637960584
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7919,7 +8001,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1711651852
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7930,6 +8012,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.15212286, y: 1.15212309, z: 1.15212309}
   m_Children:
+  - {fileID: 1618061642}
   - {fileID: 839550136}
   - {fileID: 1773505149}
   - {fileID: 88333179}
@@ -8590,7 +8673,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1711651852}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 0, y: 112.621918}
