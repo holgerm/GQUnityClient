@@ -40,15 +40,21 @@ public class loadinglogo : MonoBehaviour {
 			
 		}
 
-		if (Configuration.instance.showtextinloadinglogo) {
 			foreach (Text t in GetComponentsInChildren<Text>()) {
 			
-				t.enabled = true;
-			
-			}
-		} else {
+			t.enabled = true;
+		}
+			if(!Configuration.instance.showtextinloadinglogo) {
 
+
+
+	 
+
+			if(GameObject.Find("QuestDatabase").GetComponent<questdatabase>() != null){
+				if(GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage != null){
 			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage.enabled = false;
+				}
+			}
 		}
 		
 	}

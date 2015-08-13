@@ -71,8 +71,9 @@ public class filtercontroller : MonoBehaviour {
 	public void reloadAllData(){
 		
 		
-		GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().ReloadButtonPressed ();
-		
+	bool b =	GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().ReloadButtonPressed ();
+
+
 		
 	}
 	

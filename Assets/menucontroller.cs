@@ -9,14 +9,20 @@ public class menucontroller : MonoBehaviour {
 	public bool isActive = false;
 	public questdatabase questdb;
 
-	
 
+
+
+	public GameObject impressumbutton;
+	public GameObject quitquestbutton;
+	public GameObject deletedatabutton;
+	public GameObject impressumduringmapbutton;
+	public GameObject categoriesformap;
 
 
 	IEnumerator Start(){
 
 
-
+		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase>();
 		
 		if (GameObject.Find ("MenuCanvas") != gameObject) {
 			Destroy (gameObject);		
@@ -32,6 +38,12 @@ public class menucontroller : MonoBehaviour {
 
 
 
+		if (Configuration.instance.questvisualization == "map") {
+
+			showTopBar();
+
+		}
+
 
 
 
@@ -39,9 +51,59 @@ public class menucontroller : MonoBehaviour {
 	}
 
 
+	void Update(){
+
+
+		if (questdb == null) {
+
+
+			if(GameObject.Find ("QuestDatabase") != null){
+
+			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase>();
+			}
+
+		} else {
+			if (Configuration.instance.questvisualization == "map") {
+				//impressumbutton.SetActive(false);
+
+
+				if (questdb.currentquest == null) {
+					deletedatabutton.SetActive (true);
+					quitquestbutton.SetActive (false);
+				} else {
+					deletedatabutton.SetActive (false);
+					quitquestbutton.SetActive (true);
+
+
+				}
+				//impressumduringmapbutton.SetActive(true);
+				categoriesformap.SetActive (true);
+
+			} else {
+				impressumbutton.SetActive (true);
+				if (questdb.currentquest == null) {
+					quitquestbutton.SetActive (false);
+					deletedatabutton.SetActive (true);
+				} else {
+					quitquestbutton.SetActive (true);
+					deletedatabutton.SetActive (false);
+				}
+
+				//impressumduringmapbutton.SetActive(false);
+				categoriesformap.SetActive (false);
+
+
+			}
+
+
+		}
+	}
+
+
 	public void showMenu(){
 
-		if (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage.type == "WebPage") {
+
+		if (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest != null && GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage.type == "WebPage") {
 
 			GameObject.Find("PageController").GetComponent<page_webpage>().deactivateWebView();
 
@@ -52,7 +114,7 @@ public class menucontroller : MonoBehaviour {
 
 	public void hideMenu(){
 
-		if (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage.type == "WebPage") {
+		if (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest != null && GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage.type == "WebPage") {
 			
 			GameObject.Find("PageController").GetComponent<page_webpage>().activateWebView();
 			
@@ -70,8 +132,15 @@ public class menucontroller : MonoBehaviour {
 
 	public void endQuestAnimation(){
 
+		if (Configuration.instance.questvisualization == "map") {
+			GetComponent<Animator> ().SetTrigger ("endquestbutnotmenu");
+
+		
+
+		} else {
 		GetComponent<Animator> ().SetTrigger ("endmenu");
 		isActive = false;
+		}
 
 	}
 
@@ -96,25 +165,36 @@ public class menucontroller : MonoBehaviour {
 	public void reloadAllData(){
 
 
-		GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().ReloadButtonPressed ();
+	bool b = 	GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().ReloadButtonPressed ();
 
+		if (b) {
+			hideMenu();
+		}
 
 	}
 
 public void showTopBar(){
-		isActive = true;
 
 
-		if (this != null) {
-			GetComponent<Animator> ().SetTrigger ("startMenu");
-		}
+			isActive = true;
+
+
+			if (this != null) {
+				GetComponent<Animator> ().SetTrigger ("startMenu");
+			}
+
+
 	}
 
 
 
 	public void hideTopBar(){
-		isActive = false;
 
+
+		if (Configuration.instance.questvisualization != "map") {
+
+			isActive = false;
+		}
 
 	}
 

@@ -265,16 +265,17 @@ void initPreloadedQuestiOS(){
 	private int reloadButtonPressed = 0;
 	private int numberOfPressesNeededToReload = 10;
 
-	public void ReloadButtonPressed ()
+	public bool ReloadButtonPressed ()
 	{
 		reloadButtonPressed++;
 		if (reloadButtonPressed >= numberOfPressesNeededToReload) {
 			reloadButtonPressed = 0;
 			reloadAutoStartQuest ();
+			return true;
 		} else {
 			int remainingPresses = numberOfPressesNeededToReload - reloadButtonPressed;
 //			showmessage ("Wenn sie diesen Button noch " + (remainingPresses) + " mal drücken werden alle Medien gelöscht und neu geladen.", "OK");
-
+			return false;
 		}
 	}
 
@@ -282,15 +283,23 @@ void initPreloadedQuestiOS(){
 	{
 
 
-		foreach (Quest lq in localquests) {
-			if (lq.id == Configuration.instance.autostartQuestID) {
+
+
+
+		List<Quest> alllocalquests = new List<Quest> ();
+		alllocalquests.AddRange (localquests);
+
+		foreach (Quest lq in alllocalquests) {
+
 				
 				
 				removeQuest (lq);
 				
 				
-			}
+
 		}
+
+		localquests.Clear ();
 
 
 
@@ -930,10 +939,12 @@ void initPreloadedQuestiOS(){
 #endif
 			localquests.Remove (q);
 
+			if(currentquest != null){
 			if (currentquest.id == q.id) {
 
 				currentquest = null;
 
+			}
 			}
 
 		}
@@ -963,7 +974,7 @@ void initPreloadedQuestiOS(){
 			Destroy (currentquestdata.gameObject);
 		}
 		Debug.Log ("Destroying GameObject");
-		Destroy (actioncontroller.msgcanvas.gameObject);
+		Destroy (GameObject.Find("MsgCanvas"));
 		Destroy (gameObject);
 		if (menu.isActive) {
 			menu.endQuestAnimation ();
@@ -2723,119 +2734,122 @@ public class QuestPage
 	public void deserializeAttributes (int id, bool redo)
 	{
 
-		attributes = new List<QuestAttribute> ();
+		questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 
-		if (help_attributes != null) {
-			foreach (XmlAttribute xmla in help_attributes) {
+		if (questdb.currentquest != null) {
+			attributes = new List<QuestAttribute> ();
+
+			if (help_attributes != null) {
+				foreach (XmlAttribute xmla in help_attributes) {
 
 
 
 							
-				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://") && !(type == "WebPage" && xmla.Name.ToLower() == "url")) {
+					if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://") && !(type == "WebPage" && xmla.Name.ToLower () == "url")) {
 
 
-					string[] splitted = xmla.Value.Split ('/');
-
-
-					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-
-
-					string filename = "files/" + splitted [splitted.Length - 1];
-
-					int i = 0;
-					while (questdb.loadedfiles.Contains(filename)) {
-						i++;
-						filename = "files/" + i + "_" + splitted [splitted.Length - 1];
-
-					}
-
-					questdb.loadedfiles.Add (filename);
+						string[] splitted = xmla.Value.Split ('/');
 
 
 
 
-					if (!Application.isWebPlayer) {
+						string filename = "files/" + splitted [splitted.Length - 1];
+
+						int i = 0;
+						while (questdb.loadedfiles.Contains(filename)) {
+							i++;
+							filename = "files/" + i + "_" + splitted [splitted.Length - 1];
+
+						}
+
+						questdb.loadedfiles.Add (filename);
+
+
+
+
+						if (!Application.isWebPlayer) {
 
 					
 				
-						if (!redo) {
-							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+							if (!redo) {
+								questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+							}
+							if (splitted.Length > 3) {
+
+								if (questdb.currentquest.predeployed) {
+									Debug.Log ("is predeployed file: " + filename);
+
+									xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
+								
+								} else {
+								
+									xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+								
+								}						
+								questdb.performSpriteConversion (xmla.Value);
+
+							}
 						}
-						if (splitted.Length > 3) {
 
-							if(questdb.currentquest.predeployed){
-								Debug.Log("is predeployed file: "+filename);
 
-								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+					}	
 								
-							} else {
-								
-								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-								
-							}						
-							questdb.performSpriteConversion (xmla.Value);
-
-						}
-					}
-
-
-				}	
-								
-				attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
+					attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 
 			
+				}
 			}
-		}
 
 
-		foreach (QuestContent qcdi in contents_dialogitems) {
-			qcdi.deserializeAttributes (id, redo);
-		}
+			foreach (QuestContent qcdi in contents_dialogitems) {
+				qcdi.deserializeAttributes (id, redo);
+			}
 
-		foreach (QuestContent qcdi in contents_answers) {
-			qcdi.deserializeAttributes (id, redo);
-		}
+			foreach (QuestContent qcdi in contents_answers) {
+				qcdi.deserializeAttributes (id, redo);
+			}
 
-		if (contents_question != null) {
-			contents_question.deserializeAttributes (id, redo);
-		}
-		foreach (QuestContent qcdi in contents_answersgroup) {
-			qcdi.deserializeAttributes (id, redo);
-		}
+			if (contents_question != null) {
+				contents_question.deserializeAttributes (id, redo);
+			}
+			foreach (QuestContent qcdi in contents_answersgroup) {
+				qcdi.deserializeAttributes (id, redo);
+			}
 
 
-		foreach (QuestContent qcdi in contents_stringmeta) {
-			qcdi.deserializeAttributes (id, redo);
-		}
+			foreach (QuestContent qcdi in contents_stringmeta) {
+				qcdi.deserializeAttributes (id, redo);
+			}
 			
 
-		foreach (QuestContent qcdi in contents_expectedcode) {
-			qcdi.deserializeAttributes (id, redo);
-		}
+			foreach (QuestContent qcdi in contents_expectedcode) {
+				qcdi.deserializeAttributes (id, redo);
+			}
 
-		if (onEnd != null) {
-			foreach (QuestAction qa in onEnd.actions) {
-				qa.deserializeAttributes (id, redo);
+			if (onEnd != null) {
+				foreach (QuestAction qa in onEnd.actions) {
+					qa.deserializeAttributes (id, redo);
+				}
 			}
-		}
-		if (onStart != null) {
-			foreach (QuestAction qa in onStart.actions) {
-				qa.deserializeAttributes (id, redo);
+			if (onStart != null) {
+				foreach (QuestAction qa in onStart.actions) {
+					qa.deserializeAttributes (id, redo);
+				}
 			}
-		}
-		if (onTap != null) {
-			foreach (QuestAction qa in onTap.actions) {
-				qa.deserializeAttributes (id, redo);
+			if (onTap != null) {
+				foreach (QuestAction qa in onTap.actions) {
+					qa.deserializeAttributes (id, redo);
+				}
 			}
-		}
-		if (onSuccess != null) {
-			foreach (QuestAction qa in onSuccess.actions) {
-				qa.deserializeAttributes (id, redo);
+			if (onSuccess != null) {
+				foreach (QuestAction qa in onSuccess.actions) {
+					qa.deserializeAttributes (id, redo);
+				}
 			}
-		}
-		if (onFailure != null) {
-			foreach (QuestAction qa in onFailure.actions) {
-				qa.deserializeAttributes (id, redo);
+			if (onFailure != null) {
+				foreach (QuestAction qa in onFailure.actions) {
+					qa.deserializeAttributes (id, redo);
+				}
 			}
 		}
 	}
@@ -2945,7 +2959,7 @@ public class QuestHotspot
 						}
 						if (splitted.Length > 3) {
 										
-							if(questdb.currentquest.predeployed){
+							if(questdb != null && questdb.currentquest != null &&  questdb.currentquest.predeployed){
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
 								
 							} else {

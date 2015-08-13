@@ -161,7 +161,8 @@ public class MarkerCategorySprite {
 	public string category;
 	public string anzeigename_de;
 	public Sprite sprite;
-
+	public bool showInList = true;
+	public bool showOnMap = true;
 
 
 }

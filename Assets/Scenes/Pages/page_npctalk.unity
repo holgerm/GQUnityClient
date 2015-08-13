@@ -1398,9 +1398,9 @@ GameObject:
   m_Component:
   - 224: {fileID: 1531027271}
   - 222: {fileID: 1531027273}
-  - 114: {fileID: 1531027272}
   - 114: {fileID: 1531027274}
   - 114: {fileID: 1531027275}
+  - 114: {fileID: 1531027272}
   m_Layer: 5
   m_Name: npc_text
   m_TagString: Untagged
@@ -1433,13 +1433,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1531027270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 5966d34f847d6437a85dbdf20a6a3242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 872d6c2e2f86e40fba012ea9b2c32c5a, type: 3}
+    m_Font: {fileID: 0}
     m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
@@ -1448,11 +1448,64 @@ MonoBehaviour:
     m_Alignment: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 1
+    m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Es ist ein Fehler aufgetreten.
-
-'
+  m_Text: Es ist ein Fehler aufgetreten.
+  m_DefaultStyles: {fileID: 0}
+  m_QuadRenderersPool: []
+  m_Interactable: 1
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1953851291}
+        m_MethodName: clickLink
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Candlelight.UI.HyperText+HyperlinkEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Candlelight.UI.HyperText+HyperlinkEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Candlelight.UI.HyperText+HyperlinkEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_OnPress:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Candlelight.UI.HyperText+HyperlinkEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_OnRelease:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Candlelight.UI.HyperText+HyperlinkEvent, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_ShouldOverrideStylesFontStyle: 0
+  m_ShouldOverrideStylesFontColor: 0
+  m_ShouldOverrideStylesLineSpacing: 0
+  m_TextProcessor:
+    m_LinkKeywordCollections: []
+    m_InputText: Es ist ein Fehler aufgetreten.
+    m_InputTextSourceObject: {fileID: 0}
+    m_IsDynamicFontDesired: 1
+    m_IsRichTextDesired: 1
+    m_OutputText: Es ist ein Fehler aufgetreten.
+    m_QuadKeywordCollections: []
+    m_ReferenceFontSize: 60
+    m_ShouldOverrideStylesFontSize: 0
+    m_Styles: {fileID: 11400000, guid: 6774c33c7abe8474a998ebaca449d5ec, type: 2}
+    m_TagKeywordCollections: []
 --- !u!222 &1531027273
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1609,7 +1662,7 @@ MonoBehaviour:
   - title: Text
     color: font
     canvasimage: {fileID: 0}
-    canvastext: {fileID: 1531027272}
+    canvastext: {fileID: 0}
     camera: {fileID: 0}
     button: {fileID: 0}
   - title: BackButton
@@ -1797,6 +1850,8 @@ MonoBehaviour:
   dialogitem_state: 0
   texttoticker: 
   tickertime: .0500000007
+  indexoflink: 0
+  link: 
 --- !u!4 &1953851292
 Transform:
   m_ObjectHideFlags: 0

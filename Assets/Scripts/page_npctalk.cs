@@ -2,10 +2,13 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using System.Collections.Generic;
+
 using System.Text.RegularExpressions;
 using System.IO;
 using System;
 using GQ.Util;
+using Candlelight.UI;
 
 public class page_npctalk : MonoBehaviour
 {
@@ -32,6 +35,9 @@ public class page_npctalk : MonoBehaviour
 	public int indexoflink = 0;
 	public string link;
 
+
+
+	public List<Link> links;
 
 	void Start ()
 	{ 
@@ -257,7 +263,7 @@ public class page_npctalk : MonoBehaviour
 
 					link = two;
 					indexoflink = index_start;
-					toadd = one+""+two+""+three;
+					toadd = one+"<a name='link1'>"+two+"</a>"+three;
 				}
 
 				text.text += toadd;
@@ -417,20 +423,45 @@ public class page_npctalk : MonoBehaviour
 				toadd = toadd+"   ";
 				int i = 0;	
 				Debug.Log("LINK? "+ toadd.IndexOf("<a href="));
+				int l = 0;
+
+
 				while(toadd.IndexOf("<a href=") > -1){
 					
 					int index_start = toadd.IndexOf("<a href=",i);
 					int index_mid = toadd.IndexOf(">",index_start);
 					int index_end = toadd.IndexOf("</a>",index_mid);
 					i = index_end;
-					
+
+
 					
 					string one = toadd.Substring(0,index_start);
 					string two = toadd.Substring(index_mid+1,index_end-index_mid-1);
 					Debug.Log(toadd.Length+","+index_end+","+(toadd.Length-index_end));
 					string three = toadd.Substring(index_end+5,toadd.Length-index_end-5);
-					
-					toadd = one+"<color=#164386>"+two+"</color>"+three;
+
+
+
+					if(two.Length > 0){
+
+					links.Add(new Link("link"+l,two));
+					if(two.Length > 27){
+
+						two = two.Substring(0,25)+"...";
+					}
+
+
+
+
+					toadd = one+"<a name=\"link"+l+"\"><quad class=\"link\">  "+two+"</a>"+three;
+						l++;
+
+					} else {
+						toadd = one+" "+two;
+					}
+
+
+				
 				}
 				
 				text.text += toadd;
@@ -477,7 +508,30 @@ public class page_npctalk : MonoBehaviour
 	}
 
 
-	public void clickLink(){
+	public void clickLink(HyperText ht,Candlelight.UI.HyperText.LinkInfo li){
+
+
+
+	foreach (Link l in links) {
+
+
+			if(l.name == li.Id){
+
+
+				string url = l.url;
+
+				if(!url.StartsWith("http")){
+
+					url = "http://"+url;
+
+				}
+
+				Application.OpenURL(url);
+
+			}
+
+		}
+
 
 
 
@@ -591,5 +645,26 @@ public class page_npctalk : MonoBehaviour
 
 
 	}
+
+}
+
+[System.Serializable]
+public class Link{
+
+
+	public string name;
+	public string url;
+
+
+
+	public Link(string n, string u){
+
+
+		name = n;
+		url = u;
+
+
+	}
+
 
 }
