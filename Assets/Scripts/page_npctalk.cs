@@ -442,7 +442,7 @@ public class page_npctalk : MonoBehaviour
 
 
 
-					if(two.Length > 0){
+					if(two.Length > 0 && two != "0"){
 
 					links.Add(new Link("link"+l,two));
 					if(two.Length > 27){
@@ -457,7 +457,7 @@ public class page_npctalk : MonoBehaviour
 						l++;
 
 					} else {
-						toadd = one+" "+two;
+						toadd = one+" "+three;
 					}
 
 
