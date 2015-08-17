@@ -95,8 +95,14 @@ public class questdatabase : MonoBehaviour
 
 		}
 
+
 	
 		if (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) {
+		
+
+
+
+
 			allquests.Clear ();
 			
 			Debug.Log("doing it");
@@ -111,6 +117,8 @@ public class questdatabase : MonoBehaviour
 			
 			StartCoroutine (DownloadPercentage (listwww));
 			StartCoroutine (DownloadList (listwww));
+
+
 			
 		} else {
 			buttoncontroller.DisplayList ();
@@ -139,6 +147,8 @@ public class questdatabase : MonoBehaviour
 			menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller>();
 			
 		}
+
+
 
 
 	}
@@ -446,6 +456,9 @@ void initPreloadedQuestiOS(){
 	public IEnumerator DownloadList (WWW www)
 	{
 
+
+
+		Debug.Log ("getting list");
 		if (loadlogo != null) {
 			loadlogo.enable ();
 		}
@@ -455,11 +468,11 @@ void initPreloadedQuestiOS(){
 		}
 		yield return www;
 		if (www.error == null) {
-			if(buttoncontroller != null){
-			buttoncontroller.DisplayList ();
-			}
+
 			//Debug.Log("WWW Ok!: " + www.data);
-			
+			buttoncontroller.filteredOnlineList.Clear ();
+
+			allquests.Clear();
 			JSONObject j = new JSONObject (www.text);
 			accessData (j, "quest");
 			foreach (Quest q in allquests) {
@@ -467,7 +480,7 @@ void initPreloadedQuestiOS(){
 			}
 
 			currentquest = null;
-			
+
 			if(Configuration.instance.questvisualization == "list"){
 				
 				buttoncontroller.DisplayList ();
@@ -626,6 +639,9 @@ void initPreloadedQuestiOS(){
 		hotspots = new List<QuestRuntimeHotspot> ();
 
 		hotspots.AddRange (getActiveHotspots ());
+
+		GameObject.Find ("MenuCanvas").GetComponent<Animator> ().SetTrigger ("startMenu");
+
 
 		GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
 		Application.LoadLevelAdditive ("page_map");
@@ -878,6 +894,8 @@ void initPreloadedQuestiOS(){
 
 	public void startQuest (Quest q)
 	{
+
+		closeMap ();
 		currentquest = q;
 		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 
@@ -928,15 +946,10 @@ void initPreloadedQuestiOS(){
 		}
 
 	
+		if (buttoncontroller != null) {
 
-		if (GameObject.Find ("List") != null) {
+			buttoncontroller.resetList ();
 
-			if (GameObject.Find ("List").GetComponent<createquestbuttons> ()) {
-
-			
-				GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
-
-			}
 		}
 
 
@@ -993,7 +1006,10 @@ void initPreloadedQuestiOS(){
 
 			webloadingmessage.enabled = true;
 		}
-		questmilllogo.enabled = true;
+
+		if (questmilllogo != null) {
+			questmilllogo.enabled = true;
+		}
 		if (loadlogo != null) {
 
 			loadlogo.enable ();
@@ -1770,6 +1786,31 @@ void initPreloadedQuestiOS(){
 
 
 		return resultpage;
+
+	}
+
+
+
+	public void closeMap(){
+
+
+		if (GameObject.Find ("MapCanvas") != null) {
+			Destroy (GameObject.Find ("MapCanvas"));
+		}
+		if (GameObject.Find ("PageController_Map") != null) {
+			Destroy (GameObject.Find ("PageController_Map"));
+		}
+		if (GameObject.Find ("MapCam") != null) {
+			Destroy (GameObject.Find ("MapCam"));
+		}
+		if (GameObject.Find ("[Map]") != null) {
+			Destroy (GameObject.Find ("[Map]"));
+		}
+
+			
+				
+
+				
 
 	}
 
@@ -2562,15 +2603,16 @@ public class Quest  : IComparable<Quest>
 	public bool hasMeta(string k){
 
 		bool h = false;
-		foreach (QuestMetaData qa in metadata) {
+		if (metadata != null) {
+			foreach (QuestMetaData qa in metadata) {
 			
-			
-			if (qa.key.Equals (k)) {
-				h = true;
+				if (qa.key != null) {
+					if (qa.key.Equals (k)) {
+						h = true;
+					}
+				}
 			}
-			
 		}
-		
 		
 		return h;
 

@@ -70,14 +70,17 @@ public class menucontroller : MonoBehaviour {
 				if (questdb.currentquest == null) {
 					deletedatabutton.SetActive (true);
 					quitquestbutton.SetActive (false);
+					categoriesformap.SetActive (true);
+
 				} else {
 					deletedatabutton.SetActive (false);
 					quitquestbutton.SetActive (true);
+					categoriesformap.SetActive (false);
+
 
 
 				}
 				//impressumduringmapbutton.SetActive(true);
-				categoriesformap.SetActive (true);
 
 			} else {
 				impressumbutton.SetActive (true);

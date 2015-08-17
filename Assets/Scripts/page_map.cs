@@ -453,79 +453,83 @@ public class page_map : MonoBehaviour
 
 	void createMarker(QuestRuntimeHotspot qrh, Texture image){
 
+		if (qrh.lon != 0f || qrh.lat != 0f) {
+
+
+			Debug.Log(qrh.lon+","+qrh.lat);
 		
-		// Prefab
-		GameObject go = Tile.CreateTileTemplate (Tile.AnchorPoint.BottomCenter).gameObject;
-		
-		
-		go.GetComponent<Renderer> ().material.mainTexture = image;
-		go.GetComponent<Renderer> ().material.renderQueue = 4001;
-		
-		
-		
-		int height = go.GetComponent<Renderer> ().material.mainTexture.height;
-		int width = go.GetComponent<Renderer> ().material.mainTexture.width;
+			// Prefab
+			GameObject go = Tile.CreateTileTemplate (Tile.AnchorPoint.BottomCenter).gameObject;
 		
 		
-		if (height > width) {
+			go.GetComponent<Renderer> ().material.mainTexture = image;
+			go.GetComponent<Renderer> ().material.renderQueue = 4001;
+		
+		
+		
+			int height = go.GetComponent<Renderer> ().material.mainTexture.height;
+			int width = go.GetComponent<Renderer> ().material.mainTexture.width;
+		
+		
+			if (height > width) {
 			
-			//Debug.Log(width+"/"+height+"="+width/height);
-			go.transform.localScale = new Vector3 (((float)width) / ((float)height), 1.0f, 1.0f);
+				//Debug.Log(width+"/"+height+"="+width/height);
+				go.transform.localScale = new Vector3 (((float)width) / ((float)height), 1.0f, 1.0f);
 			
-		} else {
+			} else {
 			
-			go.transform.localScale = new Vector3 (1.0f, ((float)height / (float)width), 1.0f);
+				go.transform.localScale = new Vector3 (1.0f, ((float)height / (float)width), 1.0f);
 			
-		}
+			}
 		
-		go.transform.localScale /= 512f;
-		go.transform.localScale *= width;
+			go.transform.localScale /= 512f;
+			go.transform.localScale *= width;
 		
-		int screenWidth;
-		#if UNITY_WEBPLAYER || UNITY_EDITOR 
-		screenWidth = 1080;
-		#else
+			int screenWidth;
+			#if UNITY_WEBPLAYER || UNITY_EDITOR 
+			screenWidth = 1080;
+			#else
 		screenWidth = Screen.width;
-		#endif
+			#endif
 		
-		go.transform.localScale *= screenWidth / 600f;
+			go.transform.localScale *= screenWidth / 600f;
 		
-		go.AddComponent<onTapMarker> ();
-		go.GetComponent<onTapMarker> ().hotspot = qrh;
+			go.AddComponent<onTapMarker> ();
+			go.GetComponent<onTapMarker> ().hotspot = qrh;
 		
 
-		if (questdb.currentquest != null && questdb.currentquest.id != 0) {
+			if (questdb.currentquest != null && questdb.currentquest.id != 0) {
 
 		
-			go.AddComponent<circletests> ();
+				go.AddComponent<circletests> ();
 		
-			if (qrh.hotspot.hasAttribute ("radius")) {
-				go.GetComponent<circletests> ().radius = int.Parse (qrh.hotspot.getAttribute ("radius"));
+				if (qrh.hotspot.hasAttribute ("radius")) {
+					go.GetComponent<circletests> ().radius = int.Parse (qrh.hotspot.getAttribute ("radius"));
+				}
+
 			}
 
-		}
-
-		go.GetComponent<BoxCollider> ().center = new Vector3 (0f, 0f, 0.5f);
-		go.GetComponent<BoxCollider> ().size = new Vector3 (1f, 0.1f, 1f);
+			go.GetComponent<BoxCollider> ().center = new Vector3 (0f, 0f, 0.5f);
+			go.GetComponent<BoxCollider> ().size = new Vector3 (1f, 0.1f, 1f);
 		
-		go.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
+			go.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 		
 		
-		// Instantiate
-		GameObject markerGO;
-		markerGO = Instantiate (go) as GameObject;
+			// Instantiate
+			GameObject markerGO;
+			markerGO = Instantiate (go) as GameObject;
 		
 		
 		
-		qrh.renderer = markerGO.GetComponent<MeshRenderer> ();
+			qrh.renderer = markerGO.GetComponent<MeshRenderer> ();
 		
 		
 		
 		
 		
 		
-		// CreateMarker(Name,longlat,prefab)
-		Marker m = map.CreateMarker<Marker> (qrh.hotspot.getAttribute ("name"), new double[2] {
+			// CreateMarker(Name,longlat,prefab)
+			Marker m = map.CreateMarker<Marker> (qrh.hotspot.getAttribute ("name"), new double[2] {
 			qrh.lat,
 			qrh.lon
 		}, markerGO);
@@ -534,18 +538,18 @@ public class page_map : MonoBehaviour
 
 		
 		
-		// Destroy Prefab
-		DestroyImmediate (go);
+			// Destroy Prefab
+			DestroyImmediate (go);
 		
 		
-		if (!qrh.visible) {
+			if (!qrh.visible) {
 			
-			qrh.renderer.enabled = false;
+				qrh.renderer.enabled = false;
 			
 			
+			}
+
 		}
-
-
 	}
 
 	IEnumerator createMarkerAfterImageLoaded (WWW www, QuestRuntimeHotspot qrh)

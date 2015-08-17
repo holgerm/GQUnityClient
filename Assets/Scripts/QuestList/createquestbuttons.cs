@@ -49,7 +49,7 @@ public class createquestbuttons : MonoBehaviour
 
 		questdb.allquests.Clear ();
 		filteredOnlineList.Clear ();
-		filteredOfflineList.Clear ();
+		//filteredOfflineList.Clear ();
 
 		getPublicQuests ();
 
@@ -134,6 +134,7 @@ public class createquestbuttons : MonoBehaviour
 	{
 		questdb.allquests.Clear ();
 	
+		filteredOnlineList.Clear ();
 
 
 		string url = "http://qeevee.org:9091/json/"+Configuration.instance.portalID+"/publicgamesinfo";
@@ -142,7 +143,7 @@ public class createquestbuttons : MonoBehaviour
 		
 		
 
-		
+
 
 		StartCoroutine (questdb.DownloadPercentage (www));
 		StartCoroutine (questdb.DownloadList (www));
