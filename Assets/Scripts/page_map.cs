@@ -50,6 +50,9 @@ public class page_map : MonoBehaviour
 			Start ()
 	{
 
+
+
+
 		if (GameObject.Find ("QuestDatabase") == null) {
 			
 			Application.LoadLevel (0);
@@ -58,14 +61,17 @@ public class page_map : MonoBehaviour
 
 
 			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+
 			gpsdata = questdb.GetComponent<GPSPosition> ();
 
 			if (questdb.currentquest != null && questdb.currentquest.id != 0) {
+
 				quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 				mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 				questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 			}
 		
+
 			pre = "file: /";
 		
 			//allmarker = new List<Marker>();
@@ -75,12 +81,13 @@ public class page_map : MonoBehaviour
 				pre = "file:";
 			}
 
+			if(questdb.currentquest != null){
 			if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
 			
 				pre = "";
 			}
-		
-		
+			}
+
 		
 			// setup the gui scale according to the screen resolution
 			guiXScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.width : Screen.height) / 480.0f;
