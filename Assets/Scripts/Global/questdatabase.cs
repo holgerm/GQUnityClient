@@ -125,29 +125,7 @@ public class questdatabase : MonoBehaviour
 			}
 			questmilllogo.enabled = true;
 			loadlogo.enable ();
-		} else {
-
-#if !UNITY_WEBPLAYER
-			FileSystemInfo[] questsDirInfo = new DirectoryInfo (PATH_2_LOCAL_QUESTS).GetFileSystemInfos ();
-		
-
-			if (!Directory.Exists (PATH_2_LOCAL_QUESTS) || questsDirInfo.Length == 0) {
-				Debug.Log ("PDir2: we need to initialize pedeployed quests");
-				Directory.CreateDirectory (PATH_2_LOCAL_QUESTS);
-
-			StartCoroutine(	InitPredeployedQuests ());
-			} else {
-				Debug.Log ("START: The following quests are already initialized: initialize\n");
-				foreach (FileSystemInfo fileInfo in questsDirInfo) {
-//					Debug.Log ("\t" + fileInfo.FullName + "\n");
-				}
-
-
-
-			}
-
-#endif
-		}
+		} 
 
 
 		autoStartQuest();
