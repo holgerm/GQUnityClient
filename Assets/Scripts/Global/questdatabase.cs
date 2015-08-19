@@ -796,6 +796,10 @@ void initPreloadedQuestiOS(){
 
 
 
+
+
+
+
 		if (fakebytes > 0 && fakebytes < (int.MaxValue - 1000)) {
 
 			fakebytes += Time.deltaTime;
@@ -903,7 +907,23 @@ void initPreloadedQuestiOS(){
 
 
 
-		if (!localquests.Contains (q)) {
+
+		bool islocal = false;
+		Quest localq;
+
+		foreach(Quest lq in localquests){
+
+			if(lq.id == q.id){
+				islocal = true;
+				q = lq;
+			}
+
+		}
+
+
+
+
+		if (!islocal) {
 			Debug.Log ("Problem 2");
 
 			downloadQuest (q);

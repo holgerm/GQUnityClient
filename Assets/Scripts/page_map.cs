@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
 
 using System;
 
@@ -41,6 +42,8 @@ public class page_map : MonoBehaviour
 	public bool gotgps = true;
 	public bool showquests = false;
 	private string pre;
+	public checkmarkcolor positionCheckmark;
+	public Toggle positionToggle;
 
 	//private List<Marker> allmarker;
 	private
@@ -127,10 +130,9 @@ public class page_map : MonoBehaviour
 
 
 
-			map.UpdateCenterWithLocation = questdb.fixedposition;
 	
 			map.UseOrientation = true;
-			map.CameraFollowsOrientation = true;
+			//map.CameraFollowsOrientation = true;
 			map.CenterOnLocation ();
 
 
@@ -604,6 +606,8 @@ public class page_map : MonoBehaviour
 
 
 		if (b == false) {
+
+			if(questdb.fixedposition){
 			map.CameraFollowsOrientation = false;
 			questdb.getActiveHotspots ();
 
@@ -615,13 +619,26 @@ public class page_map : MonoBehaviour
 //				Configuration.instance.fixedMapCenterLong,
 //				Configuration.instance.fixedMapCenterLat
 			};
-			
-			map.CurrentZoom = 14.0f;
+
+			if(map.CurrentZoom < 17.0f){
+			map.CurrentZoom = 17.0f;
+			}
 			map.Zoom (1.0f);
+			}
 		} else {
 
 			if (map != null) {
 				map.CameraFollowsOrientation = false;
+			
+				map.CenterWGS84 = new double[] {
+					location.CoordinatesWGS84 [0],
+					location.CoordinatesWGS84 [1]
+					//				Configuration.instance.fixedMapCenterLong,
+					//				Configuration.instance.fixedMapCenterLat
+				};
+
+
+
 			}
 		}
 		fixedonposition = b;
@@ -636,6 +653,15 @@ public class page_map : MonoBehaviour
 	
 	void Update ()
 	{
+
+		if (UnityEngine.Input.touchCount > 0 || Input.GetMouseButtonDown(0)) {
+
+			questdb.fixedposition = false;
+			//positionCheckmark.setMode(false);
+			positionToggle.isOn = false;
+
+		}
+
 
 
 		if (gpsdata.CoordinatesWGS84.Length > 1 && !gotgps) {

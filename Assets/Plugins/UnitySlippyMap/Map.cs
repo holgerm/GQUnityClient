@@ -662,6 +662,9 @@ namespace UnitySlippyMap
 		UnitySlippyMap.Profiler.Begin("Map.Update");
 #endif
 		
+
+
+
 			// update the centerWGS84 with the last location if enabled
 			if (useLocation
 				&& UnityEngine.Input.location.status == LocationServiceStatus.Running) {

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 using System.Collections;
 
 public class changequestview : MonoBehaviour {
@@ -20,6 +22,24 @@ public class changequestview : MonoBehaviour {
 		}
 
 		Application.LoadLevel (0);
+
+	}
+
+
+	void Update(){
+
+
+		if (GameObject.Find ("QuestDatabase") != null && GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest == null) {
+			GetComponent<Image> ().enabled = true;
+			GetComponent<Button> ().enabled = true;
+			GetComponentInChildren<Text> ().enabled = true;
+
+		} else {
+			GetComponent<Image> ().enabled = false;
+			GetComponent<Button> ().enabled = false;
+			GetComponentInChildren<Text> ().enabled = false;
+
+		}
 
 	}
 }

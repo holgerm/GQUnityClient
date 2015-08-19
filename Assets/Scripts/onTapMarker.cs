@@ -14,6 +14,9 @@ void OnMouseDown(){
 
 		if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject ()) {
 
+
+			if(UnityEngine.Input.touchCount < 2){
+
 			if (hotspot.active) {
 
 
@@ -24,6 +27,7 @@ void OnMouseDown(){
 				}
 				hotspot.hotspot.onTap.Invoke ();
 
+			}
 			}
 		}
 	}

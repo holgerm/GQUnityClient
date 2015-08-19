@@ -158,6 +158,10 @@ namespace UnitySlippyMap.Input
                      */
 	    			{
                         //Debug.LogError("DEBUG: mouse down");
+
+
+
+						map.UpdateCenterWithLocation = false;
                         panning = true;
 	    				screenPosition = UnityEngine.Input.mousePosition;
 						//screenPosition = new Vector2(Event.current.mousePosition.x, Screen.height - Event.current.mousePosition.y);
