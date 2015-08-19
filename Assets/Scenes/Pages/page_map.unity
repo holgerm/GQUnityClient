@@ -982,18 +982,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2039521839}
-        m_MethodName: setFixedPosition
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-      - m_Target: {fileID: 1799968839}
-        m_MethodName: setMode
+        m_MethodName: togglePositionClicked
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1340,3 +1329,5 @@ MonoBehaviour:
   showquests: 0
   positionCheckmark: {fileID: 1799968839}
   positionToggle: {fileID: 1609439372}
+  togglebuttontouched: 1
+  togglebuttoncounter: .100000001

@@ -46,6 +46,9 @@ public class page_map : MonoBehaviour
 	public checkmarkcolor positionCheckmark;
 	public Toggle positionToggle;
 	public bool togglebuttontouched = false;
+	public float togglebuttoncounter = 0f;
+	public float mapmovedcounter = 0f;
+	public bool fixedpositionbeforemapmovement = true;
 	//private List<Marker> allmarker;
 	private
 		
@@ -305,7 +308,6 @@ public class page_map : MonoBehaviour
 	}
 
 
-
 	public void updateMapMarker(){
 
 		// DELETE ALL MARKERS
@@ -403,6 +405,44 @@ public class page_map : MonoBehaviour
 	}
 
 
+	public void togglePositionClicked(bool b){
+
+
+
+
+		if (mapmovedcounter > 0) {
+
+			positionCheckmark.setMode(!fixedpositionbeforemapmovement);
+			//positionToggle.isOn = false;
+			
+			setFixedPosition(!fixedpositionbeforemapmovement);
+
+
+
+
+		} else if(!questdb.fixedposition){
+
+				positionCheckmark.setMode(true);
+				//positionToggle.isOn = false;
+
+				setFixedPosition(true);
+
+
+				} else {
+
+					positionCheckmark.setMode(false);
+				//	positionToggle.isOn = true;
+
+				setFixedPosition(false);
+
+				
+			}
+				
+
+			
+
+
+	}
 
 
 	private double deg2rad (double deg)
@@ -602,42 +642,42 @@ public class page_map : MonoBehaviour
 
 	public void setFixedPosition (bool b)
 	{
-
-		togglebuttontouched = true;
-
-
-		Debug.Log ("toggle clicked");
+			togglebuttoncounter = 0.2f;
+			togglebuttontouched = true;
 
 
-		if (b == false) {
-
-			if(questdb.fixedposition){
+			Debug.Log ("toggle clicked: "+b);
 
 
-				Debug.Log("untoggle");
-			map.CameraFollowsOrientation = false;
-			questdb.getActiveHotspots ();
-				questdb.fixedposition = false;
-			GeoPosition center = questdb.getCenter ();
+			if (b == false) {
 
-			map.CenterWGS84 = new double[] {
+				
+
+
+					Debug.Log ("untoggle");
+					map.CameraFollowsOrientation = false;
+					questdb.getActiveHotspots ();
+					questdb.fixedposition = false;
+					GeoPosition center = questdb.getCenter ();
+
+					map.CenterWGS84 = new double[] {
 				center.Lat,
 				center.Long
 //				Configuration.instance.fixedMapCenterLong,
 //				Configuration.instance.fixedMapCenterLat
 			};
 
-			if(map.CurrentZoom < 17.0f){
-			map.CurrentZoom = 17.0f;
-			}
-			map.Zoom (1.0f);
-			}
-		} else {
-			questdb.fixedposition = true;
-			if (map != null) {
-				map.CameraFollowsOrientation = false;
+					if (map.CurrentZoom < 17.0f) {
+						map.CurrentZoom = 17.0f;
+					}
+					map.Zoom (1.0f);
+				
+			} else {
+				questdb.fixedposition = true;
+				if (map != null) {
+					map.CameraFollowsOrientation = false;
 			
-				map.CenterWGS84 = new double[] {
+					map.CenterWGS84 = new double[] {
 					location.CoordinatesWGS84 [0],
 					location.CoordinatesWGS84 [1]
 					//				Configuration.instance.fixedMapCenterLong,
@@ -646,9 +686,9 @@ public class page_map : MonoBehaviour
 
 
 
+				}
 			}
-		}
-		fixedonposition = b;
+			fixedonposition = b;
 				
 
 	}
@@ -662,20 +702,38 @@ public class page_map : MonoBehaviour
 	{
 
 
+		if (mapmovedcounter > 0f) {
 
+			mapmovedcounter -= Time.deltaTime;
+		}
+
+
+		if (togglebuttoncounter > 0f) {
+			
+			togglebuttoncounter -= Time.deltaTime;
+			
+		} else {
+			
+			
+			if (Input.GetMouseButtonDown (0)) {
+
+				fixedpositionbeforemapmovement = questdb.fixedposition;
+				
+			//questdb.fixedposition = false;
+			positionCheckmark.setMode(false);
+			//positionToggle.isOn = false;
+				questdb.fixedposition = false;
+				mapmovedcounter = 0.3f;
+
+			}
+		}
 
 	
 
 
-			if (Input.GetMouseButtonDown(0)) {
-
-				questdb.fixedposition = false;
-				//positionCheckmark.setMode(false);
-				positionToggle.isOn = false;
-
-			}
-
+		
 			
+
 
 
 
@@ -719,7 +777,7 @@ public class page_map : MonoBehaviour
 
 
 
-		if (fixedonposition) {
+		if (questdb.fixedposition) {
 
 			map.CenterWGS84 = gpsdata.CoordinatesWGS84;
 

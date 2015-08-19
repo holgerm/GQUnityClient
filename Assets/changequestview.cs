@@ -37,11 +37,18 @@ public class changequestview : MonoBehaviour {
 
 		} else {
 
-			if(GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.name != ""){
+			if(GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.name != null && GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.name.Length > 0){
 				Debug.Log("currentquest:"+GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.name);
 			GetComponent<Image> ().enabled = false;
 			GetComponent<Button> ().enabled = false;
 			GetComponentInChildren<Text> ().enabled = false;
+			} else {
+
+				GetComponent<Image> ().enabled = true;
+				GetComponent<Button> ().enabled = true;
+				GetComponentInChildren<Text> ().enabled = true;
+
+
 			}
 
 		}
