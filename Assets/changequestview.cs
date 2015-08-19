@@ -29,15 +29,20 @@ public class changequestview : MonoBehaviour {
 	void Update(){
 
 
-		if (GameObject.Find ("QuestDatabase") != null && GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest == null) {
+		if (GameObject.Find ("QuestDatabase") != null && GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest == null
+		    ) {
 			GetComponent<Image> ().enabled = true;
 			GetComponent<Button> ().enabled = true;
 			GetComponentInChildren<Text> ().enabled = true;
 
 		} else {
+
+			if(GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.name != ""){
+				Debug.Log("currentquest:"+GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.name);
 			GetComponent<Image> ().enabled = false;
 			GetComponent<Button> ().enabled = false;
 			GetComponentInChildren<Text> ().enabled = false;
+			}
 
 		}
 

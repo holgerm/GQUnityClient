@@ -647,6 +647,9 @@ void initPreloadedQuestiOS(){
 		Application.LoadLevelAdditive ("page_map");
 
 	
+		if (webloadingmessage != null) {
+			webloadingmessage.enabled = false;
+		}
 
 	}
 
@@ -912,7 +915,7 @@ void initPreloadedQuestiOS(){
 		Quest localq;
 
 		foreach(Quest lq in localquests){
-
+		
 			if(lq.id == q.id){
 				islocal = true;
 				q = lq;

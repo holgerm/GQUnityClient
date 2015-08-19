@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using GQ.Geo;
+using UnityEngine.EventSystems;
 
 public class page_map : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class page_map : MonoBehaviour
 	private string pre;
 	public checkmarkcolor positionCheckmark;
 	public Toggle positionToggle;
-
+	public bool togglebuttontouched = false;
 	//private List<Marker> allmarker;
 	private
 		
@@ -602,15 +603,21 @@ public class page_map : MonoBehaviour
 	public void setFixedPosition (bool b)
 	{
 
+		togglebuttontouched = true;
 
+
+		Debug.Log ("toggle clicked");
 
 
 		if (b == false) {
 
 			if(questdb.fixedposition){
+
+
+				Debug.Log("untoggle");
 			map.CameraFollowsOrientation = false;
 			questdb.getActiveHotspots ();
-
+				questdb.fixedposition = false;
 			GeoPosition center = questdb.getCenter ();
 
 			map.CenterWGS84 = new double[] {
@@ -626,7 +633,7 @@ public class page_map : MonoBehaviour
 			map.Zoom (1.0f);
 			}
 		} else {
-
+			questdb.fixedposition = true;
 			if (map != null) {
 				map.CameraFollowsOrientation = false;
 			
@@ -654,17 +661,29 @@ public class page_map : MonoBehaviour
 	void Update ()
 	{
 
-		if (UnityEngine.Input.touchCount > 0 || Input.GetMouseButtonDown(0)) {
-
-			questdb.fixedposition = false;
-			//positionCheckmark.setMode(false);
-			positionToggle.isOn = false;
-
-		}
 
 
 
-		if (gpsdata.CoordinatesWGS84.Length > 1 && !gotgps) {
+	
+
+
+			if (Input.GetMouseButtonDown(0)) {
+
+				questdb.fixedposition = false;
+				//positionCheckmark.setMode(false);
+				positionToggle.isOn = false;
+
+			}
+
+			
+
+
+
+
+
+
+
+		if (gpsdata != null && gpsdata.CoordinatesWGS84.Length > 1 && !gotgps) {
 
 
 			
