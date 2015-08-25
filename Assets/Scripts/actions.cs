@@ -122,11 +122,146 @@ public class actions : MonoBehaviour
 			sendVartoWeb ();
 		} else if (action.type == "ShowMessage") {
 			showmessage (action);
+		} else if (action.type == "AddRoute") {
+			addRoute(action);
 		} else if (action.type == "SetHotspotState") {
 			sethotspotstate (action);
 		}
 		
 		
+	}
+
+
+
+
+	public void addRoute(QuestAction action){
+
+
+
+		if (GameObject.Find ("PageController_Map") != null) {
+
+			page_map mapcontroller = GameObject.Find ("PageController_Map").GetComponent<page_map>();
+				
+
+
+			if(action.hasAttribute ("from") && action.hasAttribute ("to")){
+			
+
+
+				QuestRuntimeHotspot from = questdb.getHotspot(action.getAttribute("from"));
+				QuestRuntimeHotspot to = questdb.getHotspot(action.getAttribute("to"));
+
+
+
+
+
+				string url = "http://www.yournavigation.org/api/1.0/gosmore.php?"+
+					"format=kml" +
+					"&flat=" + from.lon +
+					"&flon=" + from.lat +
+					"&tlat=" + to.lon +
+					"&tlon=" + to.lat +
+					"&v=foot&" +
+					"fast=1" +
+					"&layer=mapnik"+
+					"&instructions=1"+
+					"&lang=de";
+
+				Debug.Log(url);
+				WWW routewww = new WWW(url);
+
+				StartCoroutine(waitForRouteFile(routewww));
+
+
+			} else {
+
+				questdb.debug("Eine Route muss aus zwei Hotspots bestehen.");
+
+			}
+
+
+		} else {
+
+
+			questdb.debug("Die Map muss mindestens einmal vorher geöffnet worden sein.");
+
+		}
+
+
+
+	}
+
+
+
+
+	public IEnumerator waitForRouteFile(WWW mywww){
+
+		yield return mywww;
+
+
+
+		if (mywww.error == null || mywww.error == "") {
+
+			Debug.Log(mywww.text);
+
+
+			string routefile = mywww.text;
+
+			routefile = routefile.Substring(routefile.IndexOf("<coordinates>"));
+			routefile = routefile.Substring(14,routefile.IndexOf("</coordinates>")-14);
+
+
+
+
+			if (GameObject.Find ("PageController_Map") != null) {
+				
+				page_map mapcontroller = GameObject.Find ("PageController_Map").GetComponent<page_map>();
+
+
+				mapcontroller.currentroute = new Route();
+
+
+
+
+				string[] coordinates = routefile.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+				foreach(string s in coordinates){
+
+
+					if(s.Contains(",")){
+
+
+						string[] co = s.Split(',');
+
+
+						mapcontroller.currentroute.addPoint(co[0],co[1]);
+
+
+
+
+					}
+
+
+
+
+				}
+
+				mapcontroller.drawCurrentRoute();
+
+
+			}
+
+
+
+		} else {
+
+			Debug.Log("Route WWW Error:"+mywww.error);
+
+		}
+
+
+
+
 	}
 
 	public void sethotspotstate (QuestAction action)

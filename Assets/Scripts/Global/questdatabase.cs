@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using GQ.Geo;
 using GQ.Util;
+using UnitySlippyMap;
 
 
 public class questdatabase : MonoBehaviour
@@ -2142,28 +2143,41 @@ void initPreloadedQuestiOS(){
 
 	}
 
+
+	public QuestHotspot getHotspotObject(int i){
+
+		foreach (QuestHotspot qh in currentquest.hotspots) {
+
+			if(qh.id == i){
+
+				return qh;
+			}
+		}
+
+		return null;
+
+	}
+
 	public QuestRuntimeHotspot getHotspot (string str)
 	{
 
-		QuestRuntimeHotspot qh = null;
-	
+
 		foreach (QuestRuntimeHotspot qrh in hotspots) {
-
-
 
 			if (qrh.hotspot.id == int.Parse (str)) {
 
-				qh = qrh;
+				return qrh;
 
 
 			}
 
 
 
+
+
+
 		}
-
-		return qh;
-
+		return null;
 	}
 
 	IEnumerator DownloadFinished (Quest q)

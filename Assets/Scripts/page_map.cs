@@ -13,6 +13,9 @@ using System.Collections;
 using System.Collections.Generic;
 using GQ.Geo;
 using UnityEngine.EventSystems;
+using System.Xml.Serialization;
+using System.Text;
+using System.Globalization;
 
 public class page_map : MonoBehaviour
 {
@@ -49,6 +52,10 @@ public class page_map : MonoBehaviour
 	public float togglebuttoncounter = 0f;
 	public float mapmovedcounter = 0f;
 	public bool fixedpositionbeforemapmovement = true;
+
+
+
+	public Route currentroute;
 	//private List<Marker> allmarker;
 	private
 		
@@ -398,6 +405,53 @@ public class page_map : MonoBehaviour
 			
 		}
 
+
+
+
+
+	}
+
+
+
+	public void drawCurrentRoute(){
+
+
+		int i = 0;
+
+
+
+		GameObject.Find ("RouteRender").GetComponent<LineRenderer> ().SetVertexCount (currentroute.points.Count);
+
+		foreach (RoutePoint rp in currentroute.points) {
+
+
+			Debug.Log(i);
+
+			//string lon = rp.lon;
+			//string lat = rp.lat;
+
+			float lat = float.Parse(rp.lon, CultureInfo.InvariantCulture);
+			float lon = float.Parse(rp.lat, CultureInfo.InvariantCulture);
+
+
+		
+				GameObject waypoint = new GameObject();
+				
+				Marker m1 = map.CreateMarker<Marker> ("", new double[2] {
+					lat,
+					lon
+				}, waypoint);
+
+			rp.waypoint = waypoint;
+
+
+
+			GameObject.Find("RouteRender").GetComponent<LineRenderer>().SetPosition(i, m1.transform.position);
+
+			GameObject.Find("RouteRender").GetComponent<LineRenderer>().sortingLayerName = "Foreground";
+			i++;
+
+		}
 
 
 
@@ -824,5 +878,105 @@ public class page_map : MonoBehaviour
 		UnitySlippyMap.Profiler.Reset();
 	}
 	#endif
+
+
+
+
+
+	public Route LoadFromText (WWW routewww)
+	{
+		
+		string xmlcontent = routewww.text;
+		
+		if (xmlcontent != null && xmlcontent.StartsWith ("<error>")) {
+			string errMsg = xmlcontent;
+			
+			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().showmessage (errMsg);
+			return null;
+		}
+		
+	
+		if (xmlcontent == null) {
+			
+			xmlcontent = " ";
+		}
+		
+		
+		
+		Encoding enc = System.Text.Encoding.UTF8;
+		
+		
+		TextReader txr = new StringReader (xmlcontent);
+		
+
+		
+		
+		XmlSerializer serializer = new XmlSerializer (typeof(Route));
+		
+		Route r =  serializer.Deserialize (txr) as Route; 
+		
+		
+		
+
+		
+		return r;
+	}
+	
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+
+[System.Serializable]
+public class Route 
+{
+	
+	
+	public string version;
+
+	public List<RoutePoint> points;
+
+
+
+
+	public void addPoint(string a,string b){
+
+		RoutePoint rp = new RoutePoint ();
+		rp.lon = a;
+		rp.lat = b;
+
+
+		if (points == null) {
+
+			points = new List<RoutePoint>();
+		}
+		points.Add (rp);
+
+	}
+
+	
+}
+
+
+
+[System.Serializable]
+public class RoutePoint
+{
+
+
+	public string lon;
+	public string lat;
+	public string description;
+
+
+	public GameObject waypoint;
+	
 }
 

@@ -89,6 +89,9 @@ using UnitySlippyMap.Input;
 //	 }
 // }
 // </example>
+using System.Xml.Serialization;
+using System.Text;
+using System.IO;
 
 namespace UnitySlippyMap
 {
@@ -995,4 +998,8 @@ namespace UnitySlippyMap
 	#endregion
 	}
 
-}
+
+
+
+
+						}
