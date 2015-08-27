@@ -2,9 +2,7 @@
 using System.Collections;
 using System;
 using UnitySlippyMap;
-using ProjNet.CoordinateSystems;
-using ProjNet.CoordinateSystems.Transformations;
-using ProjNet.Converters.WellKnownText;
+using Vectrosity;
 
 public class circletests : MonoBehaviour {
 
@@ -12,57 +10,80 @@ public class circletests : MonoBehaviour {
 
 
 
-	public int radius = 20;
-	
+	public float radius = 20;
+
+	public questdatabase questdb;
+
+	public Map map;
+
+
+	public Vector3 up;
+	private VectorLine currentCircle;
+
 	// Update is called once per frame
 	void Update () {
 
-
-		if (GetComponent<MeshRenderer> ().enabled) {
-
-						float theta_scale = 0.1f;             //Set lower to add more points
-						int size = (int)((2.0f * Mathf.PI) / theta_scale); //Total number of points in circle.
-
-						LineRenderer lineRenderer = new LineRenderer ();
-
-						if (gameObject.GetComponent<LineRenderer> () != null) {
-								lineRenderer = gameObject.GetComponent<LineRenderer> ();
-								lineRenderer.enabled = true;
-						} else {
-								lineRenderer = gameObject.AddComponent<LineRenderer> ();
-						}
-
-
-						//lineRenderer.material = new Material(Shader.Find("Default"));
-						lineRenderer.SetColors (Color.blue, Color.blue);
-						lineRenderer.SetWidth (0.001F, 0.001F);
-						lineRenderer.SetVertexCount (0);
-						lineRenderer.SetVertexCount (size + 1);
+		if (questdb == null) {
+			
+			if(GameObject.Find("QuestDatabase") != null){
+				questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			}
+			
+		} else
+	
+		if (map == null) {
+			
+			
+			map = GameObject.Find("PageController_Map").GetComponent<page_map>().map;
+			
+		} else {
 
 
-						int i = 0;
-						for (float theta = 0f; theta < (2f * Mathf.PI); theta += 0.1f) {
-								//Debug.Log (i);
+			if(map.IsDirty || questdb.fixedposition ){
 
-								float x = 0.035f * GeoHelpers.MetersPerInch * radius * Mathf.Cos (theta);
-								float y = 0.035f * GeoHelpers.MetersPerInch * radius * Mathf.Sin (theta);
-								//Debug.Log(i);
-								Vector3 pos = new Vector3 (transform.position.x + y, transform.position.y + 0.001f, transform.position.z + x);
-								lineRenderer.SetPosition (i, pos);
-								i += 1;
-						}
-
-				} else {
-
-
-			if(gameObject.GetComponent<LineRenderer>() != null){
-
-				gameObject.GetComponent<LineRenderer>().enabled = false;
+			float width = 3f;
+			
+			
+			if(map.RoundedZoom == 17){
+				
+				width = 2.8f;
+				
+			} else if(map.RoundedZoom == 16){
+				width = 2.6f;
+				
+			} else if(map.RoundedZoom == 15){
+				width = 2.4f;
+				
+			} else if(map.RoundedZoom == 14){
+				width = 2.2f;
+				
+			} else if(map.RoundedZoom == 13){
+				width = 2.0f;
+				
+			} else if(map.RoundedZoom == 12){
+				width = 1.8f;
+			} else if(map.RoundedZoom == 11){
+				width = 1.6f;
 
 			}
 
 
 
-				}
+				VectorLine.SetCanvasCamera (GameObject.Find("MapCam").GetComponent<Camera>());
+			VectorLine.canvas.sortingLayerName = "Default";
+
+				VectorLine.Destroy (ref currentCircle);
+				var myLine = new VectorLine ("Round", new Vector3[202], null, width);
+
+
+				myLine.color = new Color(questdb.GetComponent<palette>().mainColor.r,questdb.GetComponent<palette>().mainColor.g,questdb.GetComponent<palette>().mainColor.b,0.75f);
+				myLine.MakeCircle ( transform.position,new Vector3(0f,90f,0f), (float)(radius/1000f), 100,1f);
+				myLine.joins = Joins.Weld;
+
+				currentCircle = myLine;
+
+			myLine.Draw ();
+			}
+		}
 	}
 }

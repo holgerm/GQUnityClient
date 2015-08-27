@@ -1647,8 +1647,8 @@ void initPreloadedQuestiOS(){
 
 						GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84 = 
 						new double[]{
-							40d,
-							8d};
+						
+							7.075938d,	50.722687d};
 					}
 
 

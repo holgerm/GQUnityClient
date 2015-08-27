@@ -60,6 +60,8 @@ public class onTapMarker : MonoBehaviour {
 		if (hotspot.active) {
 
 
+			GetComponent<MeshRenderer>().sortingOrder = 10;
+
 
 
 

@@ -49,8 +49,10 @@ public class routerender : MonoBehaviour {
 
 
 
-			if ((map.IsDirty || !started) && mapController.currentroute != null && questdb.currentquest.currentpage.type == "MapOSM") {
+			if ((map.IsDirty || questdb.fixedposition || !started) && mapController.currentroute != null && questdb.currentquest.currentpage.type == "MapOSM") {
 
+
+				Debug.Log("redoing");
 				VectorLine.Destroy (ref currentLine);
 //				Debug.Log("map is dirty");
 

@@ -54,6 +54,14 @@ public class LocationMarker : Marker
     }
 
 
+		void Start(){
+
+			GetComponentInChildren<MeshRenderer>().sortingOrder = 11;
+
+
+		}
+
+
 
 	}
 
