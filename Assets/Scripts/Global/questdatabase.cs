@@ -1623,7 +1623,7 @@ void initPreloadedQuestiOS(){
 	
 	 void transferQuestHotspots(int pageid){
 		
-		if (currentquest.getAttribute("transferToUserPosition") == "false") {
+		if (currentquest.getAttribute("transferToUserPosition") != "true" || GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84 != new double[]{0d,0d}) {
 		
 			changePage (pageid);
 		

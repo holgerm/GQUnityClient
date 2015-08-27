@@ -3649,8 +3649,8 @@ MonoBehaviour:
   questvisualization: list
   questvisualizationchangable: 1
   showcloudquestsimmediately: 1
-  showtextinloadinglogo: 0
-  showinternetconnectionmessage: 0
+  showtextinloadinglogo: 1
+  showinternetconnectionmessage: 1
   defaultmarker: {fileID: 21300000, guid: 5f110930afe6a4961a27b0098624432d, type: 3}
   categoryMarker:
   - category: wcc.culture
