@@ -3,6 +3,10 @@ using UnityEngine.UI;
 
 using System.Collections;
 using System.IO;
+using System;
+using System.Globalization;
+
+
 public class page_imagecapture : MonoBehaviour {
 
 	
@@ -112,12 +116,35 @@ public class page_imagecapture : MonoBehaviour {
 		cameraMat.mainTexture = snap;
 		
 		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), snap);
+
+
+
+		GetComponent<AndroidCamera>().OnImageSaved += OnImageSaved;
+
+		DateTime now = DateTime.Now;
+		string text = now.ToString("yyyy_MM_dd_HH_mm_ss_fff",
+		                                CultureInfo.InvariantCulture);
 		
+		GetComponent<AndroidCamera>().SaveImageToGallery(snap,text);
+
+
 		actioncontroller.photos.Add (qra);
 		onEnd ();
 
 
 	}
+
+
+	void OnImageSaved (GallerySaveResult result) {
+		AndroidCamera.instance.OnImageSaved -= OnImageSaved;
+		if(result.IsSucceeded) {
+			Debug.Log("Image saved to gallery " + "Path: " + result.imagePath);
+		} else {
+			Debug.Log("Image save to gallery failed");
+		}
+	}
+
+
 	public void TakeSnapshot()
 	{
 
@@ -144,7 +171,15 @@ public class page_imagecapture : MonoBehaviour {
 
 			cameraMat.mainTexture = snap;
 			QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), snap);
-			
+
+
+
+			if(Application.platform == RuntimePlatform.IPhonePlayer){
+
+			GetComponent<IOSCamera>().SaveTextureToCameraRoll(snap);
+
+			}
+
 			actioncontroller.photos.Add (qra);
 
 
@@ -167,7 +202,11 @@ public class page_imagecapture : MonoBehaviour {
 	}
 	
 
+	
+	
+	
 
+	
 	
 	void onEnd ()
 	{

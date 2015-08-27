@@ -1659,7 +1659,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &391807780
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3595,7 +3595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 0
+  product: 2
   overrideProductSettingsInInspector: 0
   portalID: 281
   autostartQuestID: 0
@@ -3644,7 +3644,7 @@ MonoBehaviour:
     einzelnen Bildern und Texten angegeben wird, haben diejenige, die diese Texte
     und Bilder einstellen, die Rechte an Bild und Text und gestatten WCC die uneingeschr\xE4nkte
     Verwendung auf der Plattform von WCC. "
-  toplogo: {fileID: 21300000, guid: f3628365512cb4d5e9fe427a06d5352d, type: 3}
+  toplogo: {fileID: 21300000, guid: 496a87f147c474847934e81e25a32252, type: 3}
   nameForQuest: Ort
   questvisualization: list
   questvisualizationchangable: 1
@@ -6867,7 +6867,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1383468337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8165,7 +8165,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9102,6 +9102,7 @@ MonoBehaviour:
   questaudiosources: []
   npcaudio: {fileID: 0}
   audiosources: []
+  gPSRouteUpdateInterval: 10
 --- !u!114 &1756337061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9182,6 +9183,15 @@ MonoBehaviour:
     buttonDisabledColor: {r: .477941155, g: .340884507, b: .391438216, a: .988235295}
     compColor: {r: .960784316, g: 0, b: 0, a: 1}
     secondCompColor: {r: 0, g: .333333343, b: .615686297, a: 1}
+  - id: ebk
+    mainColor: {r: 1, g: .703000009, b: .0666666701, a: 1}
+    backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    darkBG: 0
+    buttonColor: {r: 1, g: .701960802, b: .0666666701, a: 1}
+    darkButton: 0
+    buttonDisabledColor: {r: 1, g: .800000072, b: .513793111, a: .988235295}
+    compColor: {r: 1, g: .352941185, b: .466666698, a: 1}
+    secondCompColor: {r: .266666681, g: .866666734, b: 1, a: 1}
   mainColor: {r: .227450982, g: .392156869, b: .141176477, a: 1}
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   darkBG: 0

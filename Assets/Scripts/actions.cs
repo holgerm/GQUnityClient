@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +24,45 @@ public class actions : MonoBehaviour
 	public List<QuestRuntimeAsset> photos;
 	public List<QuestRuntimeAsset> audioclips;
 
+
+
+	private QuestAction gpsRoute;
+	private bool updateGPSRoute = false;
+	public float gPSRouteUpdateInterval = 10f;
+
+
+	private float gPSRouteUpdateInterval_save = 10f;
+
+
+	void Update(){
+
+
+		if (updateGPSRoute && questdb.currentquest.currentpage.type == "MapOSM") {
+
+			gPSRouteUpdateInterval -= Time.deltaTime;
+
+
+			if(gPSRouteUpdateInterval < 0f){
+
+				gPSRouteUpdateInterval = gPSRouteUpdateInterval_save;
+
+
+				addRoute(gpsRoute);
+
+			}
+
+
+		}
+
+	}
+
+
+
 	void Start ()
 	{
+
+
+		gPSRouteUpdateInterval_save = gPSRouteUpdateInterval;
 
 		questdb = GetComponent<questdatabase> ();
 		variables = new List<QuestVariable> ();
@@ -144,23 +181,79 @@ public class actions : MonoBehaviour
 				
 
 
-			if(action.hasAttribute ("from") && action.hasAttribute ("to")){
+			if(action.hasAttribute ("from") || action.hasAttribute ("to")){
 			
+
+				float lon1 = 0f;
+				float lat1 = 0f;
+				float lon2 = 0f;
+				float lat2 = 0f;
+				
+
+				if(action.getAttribute("from") != "" && action.getAttribute("from") != "0"){
 
 
 				QuestRuntimeHotspot from = questdb.getHotspot(action.getAttribute("from"));
-				QuestRuntimeHotspot to = questdb.getHotspot(action.getAttribute("to"));
 
+					lon1 = from.lon;
+					lat1 = from.lat;
+
+				} else {
+
+					lon1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
+					lat1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
+					gpsRoute =action;
+					
+					
+				}
+
+
+
+				if(action.getAttribute("to") != "" && action.getAttribute("to") != "0"){
+
+					QuestRuntimeHotspot to = questdb.getHotspot(action.getAttribute("to"));
+
+
+
+					 lon2 = to.lon;
+					lat2 = to.lat;
+
+				} else {
+
+
+					lon1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
+					lat1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
+					gpsRoute =action;
+
+					
+				}
+
+
+
+
+
+
+				if((lon1 != lon2) && (lat1 != lat2)){
+
+
+
+					if(gpsRoute != null){
+
+						updateGPSRoute = true;
+
+					}
+
+				
 
 
 
 
 				string url = "http://www.yournavigation.org/api/1.0/gosmore.php?"+
 					"format=kml" +
-					"&flat=" + from.lon +
-					"&flon=" + from.lat +
-					"&tlat=" + to.lon +
-					"&tlon=" + to.lat +
+					"&flat=" + lon1 +
+					"&flon=" + lat1 +
+					"&tlat=" + lon2 +
+					"&tlon=" + lat2 +
 					"&v=foot&" +
 					"fast=1" +
 					"&layer=mapnik"+
@@ -173,9 +266,19 @@ public class actions : MonoBehaviour
 				StartCoroutine(waitForRouteFile(routewww));
 
 
+
+				} else {
+
+
+					questdb.debug("Eine Route muss aus zwei nicht-identischen Orten bestehen.");
+
+					updateGPSRoute = false;
+				}
+
 			} else {
 
-				questdb.debug("Eine Route muss aus zwei Hotspots bestehen.");
+				questdb.debug("Eine Route muss mindestens einen festen Hotspot beinhalten.");
+				updateGPSRoute = false;
 
 			}
 
@@ -184,6 +287,7 @@ public class actions : MonoBehaviour
 
 
 			questdb.debug("Die Map muss mindestens einmal vorher geöffnet worden sein.");
+			updateGPSRoute = false;
 
 		}
 
@@ -220,7 +324,7 @@ public class actions : MonoBehaviour
 
 				mapcontroller.currentroute = new Route();
 
-
+				Debug.Log("doing new oute");
 
 
 				string[] coordinates = routefile.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);

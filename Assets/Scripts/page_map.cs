@@ -54,6 +54,8 @@ public class page_map : MonoBehaviour
 	public bool fixedpositionbeforemapmovement = true;
 
 
+	public bool onStartInvoked = false;
+
 
 	public Route currentroute;
 	//private List<Marker> allmarker;
@@ -253,6 +255,11 @@ public class page_map : MonoBehaviour
 		
 						a = minhotspotposition [1];
 						b = minhotspotposition [0];
+
+						gpsdata.CoordinatesWGS84 = new double[]{
+							minhotspotposition [1],
+							minhotspotposition [0]};
+
 						map.CenterWGS84 = new double[2] { a	, b };
 					} else {
 
@@ -305,10 +312,7 @@ public class page_map : MonoBehaviour
 			}
 
 
-			if (mappage != null && mappage.onStart != null) {
-			
-				mappage.onStart.Invoke ();
-			}
+		
 
 
 		}
@@ -412,20 +416,33 @@ public class page_map : MonoBehaviour
 	}
 
 
+	public void unDrawCurrentRoute(){
+
+		Debug.Log ("unloading Route");
+		foreach (RoutePoint rp in currentroute.points) {
+
+			if(rp.marker != null){
+			map.RemoveMarker(rp.marker);
+			DestroyImmediate(rp.waypoint);
+			rp.marker = null;
+			rp.waypoint = null;
+			}
+
+		}
+			
+			
+	}
 
 	public void drawCurrentRoute(){
 
 
-		int i = 0;
+//		Debug.Log (questdb.currentquest.currentpage.type);
+		if(questdb.currentquest.currentpage.type == "MapOSM"){
 
-
-
-		GameObject.Find ("RouteRender").GetComponent<LineRenderer> ().SetVertexCount (currentroute.points.Count);
 
 		foreach (RoutePoint rp in currentroute.points) {
 
 
-			Debug.Log(i);
 
 			//string lon = rp.lon;
 			//string lat = rp.lat;
@@ -441,59 +458,54 @@ public class page_map : MonoBehaviour
 					lat,
 					lon
 				}, waypoint);
-
+					rp.marker = m1;
 			rp.waypoint = waypoint;
 
 
 
-			GameObject.Find("RouteRender").GetComponent<LineRenderer>().SetPosition(i, m1.transform.position);
-
-			GameObject.Find("RouteRender").GetComponent<LineRenderer>().sortingLayerName = "Foreground";
-			i++;
-
 		}
 
 
-
-
+			GameObject.Find("RouteRender").GetComponent<routerender>().started = false;
+		}
 	}
 
 
 	public void togglePositionClicked(bool b){
 
 
+		if (questdb != null) {
 
+			if (mapmovedcounter > 0) {
 
-		if (mapmovedcounter > 0) {
-
-			positionCheckmark.setMode(!fixedpositionbeforemapmovement);
-			//positionToggle.isOn = false;
+				positionCheckmark.setMode (!fixedpositionbeforemapmovement);
+				//positionToggle.isOn = false;
 			
-			setFixedPosition(!fixedpositionbeforemapmovement);
+				setFixedPosition (!fixedpositionbeforemapmovement);
 
 
 
 
-		} else if(!questdb.fixedposition){
+			} else if (!questdb.fixedposition) {
 
-				positionCheckmark.setMode(true);
+				positionCheckmark.setMode (true);
 				//positionToggle.isOn = false;
 
-				setFixedPosition(true);
+				setFixedPosition (true);
 
 
-				} else {
+			} else {
 
-					positionCheckmark.setMode(false);
+				positionCheckmark.setMode (false);
 				//	positionToggle.isOn = true;
 
-				setFixedPosition(false);
+				setFixedPosition (false);
 
 				
 			}
 				
 
-			
+		}
 
 
 	}
@@ -756,6 +768,24 @@ public class page_map : MonoBehaviour
 	{
 
 
+
+		if (!onStartInvoked &&  mappage != null) {
+
+			if(mappage.onStart != null){
+			mappage.onStart.Invoke ();
+			}
+
+		if(currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points[0].waypoint == null){
+
+				drawCurrentRoute();
+
+
+			}
+
+
+		}
+
+		
 		if (mapmovedcounter > 0f) {
 
 			mapmovedcounter -= Time.deltaTime;
@@ -831,7 +861,7 @@ public class page_map : MonoBehaviour
 
 
 
-		if (questdb.fixedposition) {
+		if (questdb != null && questdb.fixedposition) {
 
 			map.CenterWGS84 = gpsdata.CoordinatesWGS84;
 
@@ -975,7 +1005,7 @@ public class RoutePoint
 	public string lat;
 	public string description;
 
-
+				public Marker marker;
 	public GameObject waypoint;
 	
 }

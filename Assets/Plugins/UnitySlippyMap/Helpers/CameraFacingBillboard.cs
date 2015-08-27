@@ -13,8 +13,12 @@ public class CameraFacingBillboard : MonoBehaviour
 
     void Update()
     {
-        Transform cameraTransform = Camera.main.transform;
-        myTransform.LookAt(myTransform.position + cameraTransform.rotation * Axis,
+
+
+		if (Camera.main != null) {
+			Transform cameraTransform = Camera.main.transform;
+			myTransform.LookAt (myTransform.position + cameraTransform.rotation * Axis,
             cameraTransform.rotation * Vector3.up);
+		}
     }
 }

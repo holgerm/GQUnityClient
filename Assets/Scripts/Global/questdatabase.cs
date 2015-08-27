@@ -1879,7 +1879,13 @@ void initPreloadedQuestiOS(){
 		}
 
 
-		foreach (QuestPage qp in currentquest.pages) {
+		if (GameObject.Find ("PageController_Map")) {
+
+			GameObject.Find ("PageController_Map").GetComponent<page_map> ().unDrawCurrentRoute ();
+
+		}
+		   
+		   foreach (QuestPage qp in currentquest.pages) {
 		
 
 
@@ -1905,7 +1911,8 @@ void initPreloadedQuestiOS(){
 					if (go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 					    && go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
-						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)") {
+						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)"
+					    && go.name != "RouteRender" && go.name != "VectorCanvas") {
 
 						
 
@@ -2029,7 +2036,10 @@ void initPreloadedQuestiOS(){
 					} else {
 
 
-						
+						if(GameObject.Find("PageController_Map") != null){
+
+							GameObject.Find("PageController_Map").GetComponent<page_map>().onStartInvoked = false;
+						}
 
 						if (GameObject.Find ("MapHider") != null) {
 

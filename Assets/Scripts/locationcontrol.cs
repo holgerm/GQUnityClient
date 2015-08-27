@@ -61,16 +61,19 @@ public class locationcontrol : MonoBehaviour {
 
 
 
-		if(Input.GetKey(KeyCode.A)){
+
+		bool updateposition = false;
+
+		if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
 
 
 
-
+			updateposition = true;
 			transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y - Time.deltaTime * 100f,transform.eulerAngles.z);
 
 		}
 
-		if(Input.GetKey(KeyCode.D)){
+		if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
 			
 			
 			
@@ -78,7 +81,7 @@ public class locationcontrol : MonoBehaviour {
 			
 		}
 
-		if (Input.GetKey (KeyCode.W)) {
+		if (Input.GetKey (KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
 
 			location.CoordinatesEPSG900913 = new double[]{
 				location.CoordinatesEPSG900913[0] + (transform.forward.x* Time.deltaTime *50f ),
@@ -86,7 +89,7 @@ public class locationcontrol : MonoBehaviour {
 			};
 			gpsdata.CoordinatesWGS84 = location.CoordinatesWGS84;
 
-		} else 	if (Input.GetKey (KeyCode.S)) {
+		} else 	if (Input.GetKey (KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
 			
 			location.CoordinatesEPSG900913 = new double[]{
 				location.CoordinatesEPSG900913[0] - (transform.forward.x* Time.deltaTime *50f ),
@@ -98,7 +101,7 @@ public class locationcontrol : MonoBehaviour {
 		}
 
 
-
+	
 
 
 

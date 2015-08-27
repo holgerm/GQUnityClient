@@ -2,8 +2,9 @@
 using System.Collections;
 using UnitySlippyMap;
 using System.Globalization;
+using System.Collections.Generic;
 
-
+using Vectrosity;
 
 public class routerender : MonoBehaviour {
 
@@ -16,12 +17,26 @@ public class routerender : MonoBehaviour {
 	public Map map;
 	public page_map mapController;
 
+	public Material material;
+	public bool started = false;
+
+	public questdatabase questdb;
+
+
+	VectorLine currentLine;
+
 
 
 	void Update(){
 
 
-		if (map == null) {
+		if (questdb == null) {
+
+			if(GameObject.Find("QuestDatabase") != null){
+			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			}
+
+		} else if (map == null) {
 
 
 			map = mapController.map;
@@ -34,79 +49,89 @@ public class routerender : MonoBehaviour {
 
 
 
-			if (map.IsDirty && mapController.currentroute != null) {
+			if ((map.IsDirty || !started) && mapController.currentroute != null && questdb.currentquest.currentpage.type == "MapOSM") {
+
+				VectorLine.Destroy (ref currentLine);
+//				Debug.Log("map is dirty");
+
+				started = true;
 
 
-
-
-				float width = 0.0025f;
+				float width = 4f;
 
 
 				if(map.RoundedZoom == 17){
 
-					width = 0.005f;
+					width = 6f;
 
 				} else if(map.RoundedZoom == 16){
-					width = 0.01f;
+					width = 7f;
 
 				} else if(map.RoundedZoom == 15){
-					width = 0.03f;
+					width = 10f;
 
 				} else if(map.RoundedZoom == 14){
-					width = 0.05f;
+					width = 12f;
 
 				} else if(map.RoundedZoom == 13){
-					width = 0.1f;
+					width = 14f;
 
 				} else if(map.RoundedZoom == 12){
-					width = 0.5f;
+					width = 16f;
 				} else if(map.RoundedZoom == 11){
 
 				}
 
 
-				Debug.Log(map.RoundedZoom);
+//				if(map.RoundedZoom <= 15){
+//
+//					material.color = new Color(material.color.r,material.color.g,material.color.b,1f);
+//
+//				} else {
+//
+//					material.color = new Color(material.color.r,material.color.g,material.color.b,0.5f);
+//
+//				}
 
-				GetComponent<LineRenderer>().SetWidth(width,width);
+//				Debug.Log(map.RoundedZoom);
+
+//				GetComponent<LineRenderer>().SetWidth(width,width);
+//
+//
+//				GetComponent<LineRenderer> ().SetVertexCount (mapController.currentroute.points.Count);
+
+				var linePoints = new List<Vector3>();
 
 
-				GetComponent<LineRenderer> ().SetVertexCount (mapController.currentroute.points.Count);
-
-				int i = 0;
 
 				foreach (RoutePoint rp in mapController.currentroute.points) {
 				
 				
-//					Debug.Log (i);
-				
-					//string lon = rp.lon;
-					//string lat = rp.lat;
-				
-					float lat = float.Parse (rp.lon, CultureInfo.InvariantCulture);
-					float lon = float.Parse (rp.lat, CultureInfo.InvariantCulture);
-				
-				
-				
-					GameObject waypoint = new GameObject ();
-				
-					Marker m1 = map.CreateMarker<Marker> ("", new double[2] {
-					lat,
-					lon
-				}, waypoint);
-				
-					rp.waypoint = waypoint;
-				
-				
-				
-					GetComponent<LineRenderer> ().SetPosition (i, m1.transform.position);
-				
-					GetComponent<LineRenderer> ().sortingLayerName = "Foreground";
-					i++;
+//			
+					if(rp.waypoint != null){
+//				
+
+					linePoints.Add(rp.waypoint.transform.position);
+					}
 				
 				}
 
+				if(linePoints.Count > 0 && linePoints.Count % 2 != 0){
 
+					linePoints.Add(linePoints[linePoints.Count-1]);
 
+				}
+			if	(linePoints.Count > 0){
+				//VectorLine.canvas.transform.SetParent(map.gameObject.transform);
+				//VectorLine.canvas.renderMode = RenderMode.WorldSpace;
+				VectorLine.SetCanvasCamera (GameObject.Find("MapCam").GetComponent<Camera>());
+				VectorLine myLine = new VectorLine("MyLine", linePoints, material, width,LineType.Continuous);
+				myLine.joins = Joins.Fill;
+				myLine.Draw();
+
+				currentLine = myLine;
+
+				} 
 			}
 
 		}
