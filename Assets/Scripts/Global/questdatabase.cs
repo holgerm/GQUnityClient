@@ -58,6 +58,10 @@ public class questdatabase : MonoBehaviour
 
 
 
+	public List<string> savedmessages;
+
+	public List<WWW> routewwws;
+
 	public createquestbuttons buttoncontroller;
 
 
@@ -1491,7 +1495,7 @@ void initPreloadedQuestiOS(){
 		if(spritesConverted){
 			
 			Debug.Log("Converted Sprites has "+convertedSprites.Count+" objects.");
-			changePage (pageid);
+			 transferQuestHotspots(pageid);
 			
 			
 		} else {
@@ -1528,6 +1532,7 @@ void initPreloadedQuestiOS(){
 		
 		
 	}
+
 
 
 
@@ -1610,6 +1615,248 @@ void initPreloadedQuestiOS(){
 			}
 		}
 	
+	}
+
+
+
+
+	
+	 void transferQuestHotspots(int pageid){
+		
+		if (currentquest.getAttribute("transferToUserPosition") == "false") {
+		
+			changePage (pageid);
+		
+
+		} else {
+
+
+			Debug.Log("[WAITING FOR HOTSPOT TRANSFER]"+hotspots.Count);
+
+			foreach(QuestRuntimeHotspot mainhs in hotspots){
+
+
+				if(mainhs.hotspot.id == int.Parse(currentquest.getAttribute("transferHotspot"))){
+
+					
+				
+
+
+					if(Application.isWebPlayer || Application.isEditor){
+
+
+						GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84 = 
+						new double[]{
+							40d,
+							8d};
+					}
+
+
+
+					foreach(QuestRuntimeHotspot subhs in hotspots){
+
+
+
+						Debug.Log("editing sub hotspot:"+subhs.hotspot.id);
+
+
+				
+						if(subhs.hotspot.id != mainhs.hotspot.id){
+
+
+
+							subhs.lon -= mainhs.lon;
+							subhs.lon += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
+
+
+							subhs.lat -= mainhs.lat;
+	
+							subhs.lat += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
+
+
+
+
+
+
+							
+							string url = "http://www.yournavigation.org/api/1.0/gosmore.php?"+
+								"format=kml" +
+									"&flat=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1] +
+									"&flon=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0] +
+									"&tlat=" + subhs.lon +
+									"&tlon=" + subhs.lat +
+									"&v=foot&" +
+									"fast=1" +
+									"&layer=mapnik"+
+									"&instructions=1"+
+									"&lang=de";
+							
+							WWW routewww = new WWW(url);
+
+							Debug.Log(url);
+
+							if(routewwws == null){
+
+								routewwws = new List<WWW>();
+							}
+
+							routewwws.Add(routewww);
+
+
+
+							StartCoroutine(waitForRouteFile(routewww,subhs));
+					
+
+
+						}
+
+
+					}
+
+
+					mainhs.lat = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
+					mainhs.lon = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
+
+				}
+
+
+			}
+
+
+			StartCoroutine(waitForTransferCompletion(pageid));
+
+
+		}
+		
+		
+	}
+
+
+
+	public IEnumerator waitForTransferCompletion(int pageid){
+
+		yield return new WaitForEndOfFrame ();
+
+		bool b = true;
+
+		foreach (WWW mywww in routewwws) {
+
+			if(!mywww.isDone){
+
+				b = false;
+
+			}
+		}
+
+
+
+		if (b) {
+
+			changePage (pageid);
+
+
+		} else {
+
+			yield return new WaitForSeconds(0.1f);
+			StartCoroutine(waitForTransferCompletion(pageid));
+
+		}
+
+
+
+
+	}
+
+
+
+
+	public IEnumerator waitForRouteFile(WWW mywww, QuestRuntimeHotspot qrh){
+		
+		yield return mywww;
+		
+		
+		
+		if (mywww.error == null || mywww.error == "") {
+			
+			Debug.Log(mywww.text);
+			
+
+
+			Debug.Log("got route www object");
+			string routefile = mywww.text;
+			
+			routefile = routefile.Substring(routefile.IndexOf("<coordinates>"));
+			routefile = routefile.Substring(14,routefile.IndexOf("</coordinates>")-14);
+
+
+
+
+			
+
+				string[] coordinates = routefile.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+				
+				
+
+			int i = coordinates.Count()-2;
+			string s = coordinates[i];
+					
+					
+					if(s.Contains(",")){
+						
+						
+						string[] co = s.Split(',');
+						
+						
+				if(float.Parse(co[0]) != 0f && float.Parse(	co[1]) != 0f ){
+				qrh.lat =	float.Parse(co[0]);
+
+
+				qrh.lon = float.Parse(	co[1]);
+					Debug.Log("REARRANGED HOTSPOT:"+qrh.lat+","+qrh.lon);
+
+				} else {
+
+
+
+
+					if(savedmessages == null){
+
+						savedmessages = new List<string>();
+					}
+
+
+					savedmessages.Add("An deinem Standort sind nicht genügend Weginformationen vorhanden. Manche Kartenobjekte könnten nicht erreichbar sein.");
+
+					Debug.Log("REARRANGING FAILED:"+qrh.lat+","+qrh.lon);
+
+
+
+				}
+
+						
+						
+					}
+					
+					
+					
+					
+				
+				
+				
+				
+
+			
+			
+			
+		} else {
+			
+			Debug.Log("Route WWW Error:"+mywww.error);
+			
+		}
+		
+		
+		
+		
 	}
 
 
@@ -2096,6 +2343,20 @@ void initPreloadedQuestiOS(){
 		}
 		
 
+
+		string lastmessage = "";
+
+		foreach (string s in savedmessages) {
+
+			if(s != lastmessage){
+			showmessage(s);
+				lastmessage = s;
+			}
+
+
+		}
+		savedmessages.Clear ();
+
 	}
 
 	IEnumerator loadMap ()
@@ -2129,7 +2390,7 @@ void initPreloadedQuestiOS(){
 			
 		nqa.message = text;
 
-		nqa.transform.SetParent (GameObject.Find ("Canvas").transform, false);
+		nqa.transform.SetParent (GameObject.Find ("MsgCanvas").transform, false);
 		nqa.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, 0f);
 
 		

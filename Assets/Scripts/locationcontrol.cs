@@ -49,8 +49,9 @@ public class locationcontrol : MonoBehaviour {
 
 			if(mapcontroller.distance(location.CoordinatesWGS84[0],location.CoordinatesWGS84[1],(double)qrh.lat,(double)qrh.lon,'M') < int.Parse(qrh.hotspot.getAttribute("radius"))){
 
+					if(qrh.hotspot.onEnter != null){
 				qrh.hotspot.onEnter.Invoke();
-
+					}
 					qrh.entered = true;
 			}
 

@@ -138,7 +138,11 @@ public class actions : MonoBehaviour
 		} else	if (action.type == "PlayAudio") {
 			PlayAudio (action);
 		} else if (action.type == "SetVariable") {
+			Debug.Log("setting var");
 			setVariable (action);
+			sendVartoWeb ();
+		} else if (action.type == "LoadVariable") {
+			loadVariable (action);
 			sendVartoWeb ();
 		} else if (action.type == "If") {
 			ifCondition (action);
@@ -163,6 +167,10 @@ public class actions : MonoBehaviour
 			addRoute(action);
 		} else if (action.type == "SetHotspotState") {
 			sethotspotstate (action);
+		} else if (action.type == "LoadVar") {
+			loadVariable (action);
+		} else if (action.type == "SaveVar") {
+			saveVariable (action);
 		}
 		
 		
@@ -788,8 +796,115 @@ public class actions : MonoBehaviour
 
 	}
 
+
+
+	public void saveVariable (QuestAction action)
+	{
+		
+	
+		
+		
+		string key = action.getAttribute ("var");
+
+		string varname = key;
+		varname = new String(varname.Where(Char.IsLetter).ToArray());
+		
+		varname = questdb.currentquest.id + "_" + varname;
+
+
+
+
+		QuestVariable qv =  getVariable (key);
+
+
+		if (qv != null) {
+			if (qv.type == "num") {
+
+				PlayerPrefs.SetFloat (varname, qv.num_value [0]);
+
+			} else if (qv.type == "string") {
+
+				PlayerPrefs.SetString (varname, qv.string_value [0]);
+
+			} else if (qv.type == "bool") {
+
+
+				if (qv.bool_value [0]) {
+					PlayerPrefs.SetInt (varname, 1);
+				} else {
+					PlayerPrefs.SetInt (varname, 0);
+
+				}
+
+			}
+
+
+		}
+
+	}
+
+
+
+
+
+	void removeVariable(string key){
+
+		
+		List<QuestVariable> helplist = new List<QuestVariable> ();
+		foreach (QuestVariable qa in variables) {
+			helplist.Add (qa);
+		}
+		
+		foreach (QuestVariable qa in helplist) { 
+			if (qa.key == key) {
+				variables.Remove (qa);
+			}
+		}
+
+
+	}
+
+	void loadVariable (QuestAction action)
+	{
+
+
+
+		Debug.Log ("loading vars");
+
+		string varname = action.getAttribute ("var");
+		varname = new String(varname.Where(Char.IsLetter).ToArray());
+
+		varname = questdb.currentquest.id + "_" + varname;
+
+
+
+
+	
+
+		if (PlayerPrefs.GetString (varname,"[GEOQUEST_NO_VALUE]") != "[GEOQUEST_NO_VALUE]") {
+			removeVariable(action.getAttribute("var"));
+			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetString (varname)));
+		} else if (PlayerPrefs.GetFloat (varname,-9999.999f) != -9999.999f) {
+			removeVariable(action.getAttribute("var"));
+
+			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetFloat (varname)));
+		} else if (PlayerPrefs.GetInt (varname,-99999) != -99999) {
+			removeVariable(action.getAttribute("var"));
+
+			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetInt (varname)));
+
+		}
+
+	}
+
+
+
+
 	public void setVariable (string key, float f)
 	{
+
+
+		Debug.Log ("setting var " + key + " to " + f);
 
 		List<QuestVariable> helplist = new List<QuestVariable> ();
 		foreach (QuestVariable qa in variables) {
@@ -862,6 +977,7 @@ public class actions : MonoBehaviour
 
 		string key = action.getAttribute ("var");
 
+		Debug.Log ("trying to set var " + key);
 		if (action.value != null) {
 
 			if (key == "score" && action.value.num_value != null && action.value.num_value.Count > 0) {
@@ -872,6 +988,7 @@ public class actions : MonoBehaviour
 				Debug.Log (key + " has bool value");
 				variables.Add (new QuestVariable (key, action.value.bool_value [0]));
 			} else if (action.value.num_value != null && action.value.num_value.Count > 0) {
+				Debug.Log("value found: "+action.value.num_value [0]);
 				variables.Add (new QuestVariable (key, action.value.num_value [0]));
 			} else if (action.value.string_value != null && action.value.string_value.Count > 0) {
 				variables.Add (new QuestVariable (key, action.value.string_value [0]));

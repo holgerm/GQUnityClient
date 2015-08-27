@@ -773,6 +773,7 @@ public class page_map : MonoBehaviour
 
 			if(mappage.onStart != null){
 			mappage.onStart.Invoke ();
+				onStartInvoked = true;
 			}
 
 		if(currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points[0].waypoint == null){
