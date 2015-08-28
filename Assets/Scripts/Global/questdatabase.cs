@@ -502,6 +502,7 @@ void initPreloadedQuestiOS(){
 			if(webloadingmessage != null){
 
 			webloadingmessage.text = www.error;
+				buttoncontroller.DisplayList ();
 			}
 		}    
 		
@@ -1623,7 +1624,7 @@ void initPreloadedQuestiOS(){
 	
 	 void transferQuestHotspots(int pageid){
 		
-		if (currentquest.getAttribute("transferToUserPosition") != "true" || GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84 != new double[]{0d,0d}) {
+		if (currentquest.getAttribute("transferToUserPosition") != "true") {
 		
 			changePage (pageid);
 		
@@ -1648,7 +1649,7 @@ void initPreloadedQuestiOS(){
 						GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84 = 
 						new double[]{
 						
-							7.075938d,	50.722687d};
+							7d,	50d};
 					}
 
 
@@ -2159,12 +2160,21 @@ void initPreloadedQuestiOS(){
 					    && go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
 						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)"
-					    && go.name != "RouteRender" && go.name != "VectorCanvas") {
+					   && go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
 
 						
 
 						bool des = true;
 
+
+					if (GameObject.Find ("VarOverlayCanvas") != null) {
+						
+						if (go.transform.IsChildOf (GameObject.Find ("VarOverlayCanvas").transform)) {
+							des = false;
+							//Debug.Log("is child of mapcanvas");
+						}
+						
+					}
 
 					if (GameObject.Find ("MenuCanvas") != null) {
 						
@@ -2174,6 +2184,8 @@ void initPreloadedQuestiOS(){
 						}
 						
 					}
+
+
 						if (GameObject.Find ("MapCanvas") != null) {
 
 							if (go.transform.IsChildOf (GameObject.Find ("MapCanvas").transform)) {
@@ -3491,7 +3503,10 @@ public class QuestVariableValue
 	public List<string>
 		var_value;
 
-	
+
+
+	public List<double>
+		double_value;
 	
 }
 
@@ -3883,7 +3898,7 @@ public class QuestConditionComparer
 	public List<string>
 		string_value;
 	[XmlElement("num")]
-	public List<float>
+	public List<double>
 		num_value;
 	[XmlElement("boolean")]
 	public List<bool>
@@ -4074,10 +4089,10 @@ public class QuestConditionComparer
 	
 	}
 
-	public List<float> intcomponents ()
+	public List<double> intcomponents ()
 	{
 
-		List<float> comp = new List<float> ();
+		List<double> comp = new List<double> ();
 
 
 

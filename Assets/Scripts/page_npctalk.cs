@@ -113,27 +113,26 @@ public class page_npctalk : MonoBehaviour
 
 
 					
-						
-							Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
-						
-
+							image.texture = qra.texture;
 							
 							
-							Debug.Log ("npctalk.image: (h, w) " + qra.texture.height + "," + qra.texture.width);
-							if (qra.texture.height > qra.texture.width) {
-
-								image_hochkant.sprite = s;
-								image_hochkant.enabled = true;
-								image.enabled = false;
-
-
-							} else {
-
-								//image.texture = s;
-								image.enabled = true;
-
-
-							}
+							float myX = (float)qra.texture.width;
+							
+							
+							float myY = (float)qra.texture.height;
+							
+							
+							float scaler = myY/604f;
+							
+							myX = myX / scaler;
+							myY = 604f;
+							
+							
+							image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
+							
+							
+							
+							
 
 						}
 					}

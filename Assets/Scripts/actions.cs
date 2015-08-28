@@ -138,7 +138,7 @@ public class actions : MonoBehaviour
 		} else	if (action.type == "PlayAudio") {
 			PlayAudio (action);
 		} else if (action.type == "SetVariable") {
-			Debug.Log("setting var");
+//			Debug.Log("setting var");
 			setVariable (action);
 			sendVartoWeb ();
 		} else if (action.type == "LoadVariable") {
@@ -171,6 +171,8 @@ public class actions : MonoBehaviour
 			loadVariable (action);
 		} else if (action.type == "SaveVar") {
 			saveVariable (action);
+		} else if (action.type == "ShowVar") {
+			showVariableOverlay (action);
 		}
 		
 		
@@ -203,8 +205,11 @@ public class actions : MonoBehaviour
 
 				QuestRuntimeHotspot from = questdb.getHotspot(action.getAttribute("from"));
 
+					if(from != null){
 					lon1 = from.lon;
 					lat1 = from.lat;
+
+					}
 
 				} else {
 
@@ -222,9 +227,10 @@ public class actions : MonoBehaviour
 					QuestRuntimeHotspot to = questdb.getHotspot(action.getAttribute("to"));
 
 
-
+if(to != null){
 					 lon2 = to.lon;
 					lat2 = to.lat;
+					}
 
 				} else {
 
@@ -375,6 +381,21 @@ public class actions : MonoBehaviour
 
 
 	}
+
+
+
+	void showVariableOverlay (QuestAction action)
+	{
+
+		GameObject.Find ("VarOverlayCanvas").GetComponent<varoverlay> ().action = action;
+		GameObject.Find ("VarOverlayCanvas").GetComponent<varoverlay> ().show ();
+
+
+
+	}
+
+
+
 
 	public void sethotspotstate (QuestAction action)
 	{
@@ -539,7 +560,7 @@ public class actions : MonoBehaviour
 
 			if (qv.type == "num") {
 
-				float value = qv.getNumValue ();
+				double value = qv.getNumValue ();
 
 				value += 1;
 
@@ -562,7 +583,7 @@ public class actions : MonoBehaviour
 			
 			if (qv.type == "num") {
 				
-				float value = qv.getNumValue ();
+				double value = qv.getNumValue ();
 				
 				value -= 1;
 				
@@ -820,7 +841,7 @@ public class actions : MonoBehaviour
 		if (qv != null) {
 			if (qv.type == "num") {
 
-				PlayerPrefs.SetFloat (varname, qv.num_value [0]);
+				PlayerPrefs.SetString (varname, "[GQ_NUM_VALUE]"+qv.num_value [0]);
 
 			} else if (qv.type == "string") {
 
@@ -869,7 +890,7 @@ public class actions : MonoBehaviour
 
 
 
-		Debug.Log ("loading vars");
+//		Debug.Log ("loading vars");
 
 		string varname = action.getAttribute ("var");
 		varname = new String(varname.Where(Char.IsLetter).ToArray());
@@ -882,12 +903,30 @@ public class actions : MonoBehaviour
 	
 
 		if (PlayerPrefs.GetString (varname,"[GEOQUEST_NO_VALUE]") != "[GEOQUEST_NO_VALUE]") {
-			removeVariable(action.getAttribute("var"));
-			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetString (varname)));
-		} else if (PlayerPrefs.GetFloat (varname,-9999.999f) != -9999.999f) {
+		
+
+
+
+
 			removeVariable(action.getAttribute("var"));
 
-			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetFloat (varname)));
+
+
+			if(PlayerPrefs.GetString (varname).StartsWith("[GQ_NUM_VALUE]")){
+
+
+				string s = PlayerPrefs.GetString (varname).Replace("[GQ_NUM_VALUE]","");
+				double n = double.Parse(s);
+				variables.Add (new QuestVariable (action.getAttribute("var"),n));
+
+				
+			} else {
+
+			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetString (varname)));
+		
+
+			}
+
 		} else if (PlayerPrefs.GetInt (varname,-99999) != -99999) {
 			removeVariable(action.getAttribute("var"));
 
@@ -977,7 +1016,7 @@ public class actions : MonoBehaviour
 
 		string key = action.getAttribute ("var");
 
-		Debug.Log ("trying to set var " + key);
+//		Debug.Log ("trying to set var " + key);
 		if (action.value != null) {
 
 			if (key == "score" && action.value.num_value != null && action.value.num_value.Count > 0) {
@@ -1009,18 +1048,51 @@ public class actions : MonoBehaviour
 		}
 	}
 
-	public float mathVariable (string input)
+	public double mathVariable (string input)
 	{
 
-		float currentvalue = 0.0f;
+
+
+
+		double currentvalue = 0.0d;
 		bool needsstartvalue = true;
 		input = new string (input.ToCharArray ()
 		                 .Where (c => !Char.IsWhiteSpace (c))
 		                 .ToArray ());
+	//	Debug.Log ("Rechnung:"+input);
+
+		string arithmetics = "";
+
+
+		foreach (Char c in input.ToCharArray()) {
+
+
+			if(c == '+'){
+
+				arithmetics = arithmetics + "+";
+			}
+			if(c == '-'){
+				
+				arithmetics = arithmetics + "-";
+			}
+			if(c == '*'){
+				
+				arithmetics = arithmetics + "*";
+			}
+			if(c == '/'){
+				
+				arithmetics = arithmetics + "/";
+			}
+			if(c == ':'){
+				
+				arithmetics = arithmetics + ":";
+			}
+
+		}
+
+
 		
-		string arithmetics = new string (input.ToCharArray ()
-		                   .Where (c => Char.IsSymbol (c))
-		                   .ToArray ());
+		//Debug.Log ("Rechnung:"+arithmetics);
 
 		char[] splitter = "+-/*:".ToCharArray ();
 		string[] splitted = input.Split (splitter);
@@ -1031,8 +1103,8 @@ public class actions : MonoBehaviour
 
 		foreach (string s in splitted) {
 
-			float n;
-			bool isNumeric = float.TryParse (s, out n);
+			double n;
+			bool isNumeric = double.TryParse (s, out n);
 			if (isNumeric) {
 
 				if (needsstartvalue) {
@@ -1059,21 +1131,25 @@ public class actions : MonoBehaviour
 			} else {
 
 				QuestVariable qv = getVariable (s);
-				if (qv != null) {
+				if (!qv.isNull()) {
 					if (qv.num_value != null && qv.num_value.Count > 0) {
 						if (needsstartvalue) {
 
 							currentvalue = qv.num_value [0];
+							Debug.Log(s+":"+currentvalue.ToString("F10"));
+
 							needsstartvalue = false;
 					
 						} else {
 
 							n = qv.num_value [0];
 
+							Debug.Log(n);
 							if (arithmetics.Substring (count, 1) == "+") {
 								currentvalue += n;
 							} else if (arithmetics.Substring (count, 1) == "-") {
 								currentvalue -= n;
+//								Debug.Log(currentvalue);
 							} else if (arithmetics.Substring (count, 1) == "*") {
 								currentvalue *= n;
 							} else if ((arithmetics.Substring (count, 1) == "/") || (arithmetics.Substring (count, 1) == ":")) {
@@ -1142,7 +1218,19 @@ public class actions : MonoBehaviour
 		                 .ToArray ());
 
 
-		if (k == "quest.name") {
+
+		if (k == "$date.now") {
+
+			Debug.Log("looking for date");
+			 DateTime Jan1St1970 = new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			double unixTime = ((DateTime.UtcNow - Jan1St1970).TotalSeconds);
+			unixTime = Math.Round(unixTime,0);
+			return new QuestVariable("$date.now",unixTime);
+
+
+
+		} else if (k == "quest.name") {
 
 
 			return new QuestVariable ("quest.name", questdb.currentquest.name);
@@ -1225,7 +1313,8 @@ public class actions : MonoBehaviour
 
 
 		questdb.debug ("Variable " + k + " wurde nicht gefunden.");
-		return null;
+	return new QuestVariable (k, "[null]");
+
 
 	}
 	
@@ -1435,9 +1524,10 @@ public class QuestVariable
 	public string key;
 	public string type;
 	public List<string> string_value;
-	public List<float> num_value;
+	public List<double> num_value;
 	public List<bool> bool_value;
-	
+	public List<double> double_value;
+
 	public QuestVariable (string k, string s)
 	{
 		string_value = new List<string> ();
@@ -1446,14 +1536,15 @@ public class QuestVariable
 		key = k;
 	}
 
-	public QuestVariable (string k, float n)
+	public QuestVariable (string k, double n)
 	{
 
-		num_value = new List<float> ();
+		num_value = new List<double> ();
 		num_value.Add (n);
 		type = "num";
 		key = k;
 	}
+
 
 	public QuestVariable (string k, bool b)
 	{
@@ -1487,7 +1578,29 @@ public class QuestVariable
 
 	}
 
-	public float getNumValue ()
+
+	public bool isNull(){
+
+		if (string_value != null && string_value.Count > 0) {
+
+			if(string_value[0] == "[null]"){
+
+				return true;
+			} else {
+
+				return false;
+
+			}
+
+
+		} else {
+
+			return false;
+		}
+
+	}
+
+	public double getNumValue ()
 	{
 
 

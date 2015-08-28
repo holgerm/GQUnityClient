@@ -565,7 +565,7 @@ public class page_map : MonoBehaviour
 		if (qrh.lon != 0f || qrh.lat != 0f) {
 
 
-			Debug.Log(qrh.lon+","+qrh.lat);
+//			Debug.Log(qrh.lon+","+qrh.lat);
 		
 			// Prefab
 			GameObject go = Tile.CreateTileTemplate (Tile.AnchorPoint.BottomCenter).gameObject;
