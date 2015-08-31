@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class Configuration : MonoBehaviour
 {
-
 	private static Configuration _instance;
 
 	public enum ProductIDs
@@ -21,7 +20,6 @@ public class Configuration : MonoBehaviour
 	public bool overrideProductSettingsInInspector = false;
 	public int portalID = 1;
 	public int autostartQuestID = 0;
-	public int autostartQuestSize = 0;
 	public bool autostartIsPredeployed = false;
 	public string colorProfile = "default";
 	public string mapboxKey = "pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA";
@@ -37,7 +35,6 @@ public class Configuration : MonoBehaviour
 	public bool showtextinloadinglogo = true;
 	public bool showinternetconnectionmessage = true;
 	public Sprite defaultmarker;
-
 	public List<MarkerCategorySprite> categoryMarker;
 
 
@@ -67,8 +64,9 @@ public class Configuration : MonoBehaviour
 				Destroy (this.gameObject);
 		}
 
-		if (!overrideProductSettingsInInspector)
+		if (!overrideProductSettingsInInspector) {
 			initProductDefinitions ();
+		}
 
 		
 	}
@@ -96,7 +94,7 @@ public class Configuration : MonoBehaviour
 		case ProductIDs.WikiCultureCity:
 			productName = "wcc";
 			portalID = 281;
-			autostartQuestID = 4803;
+			autostartQuestID = 0;
 			downloadTimeOutSeconds = 60f;
 			colorProfile = "wcc";
 			mapboxKey = "pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA";
