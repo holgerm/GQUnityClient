@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 using Vectrosity;
 
-public class routerender : MonoBehaviour {
+public class routerender : MonoBehaviour
+{
 
 
 
@@ -27,13 +28,14 @@ public class routerender : MonoBehaviour {
 
 
 
-	void Update(){
+	void Update ()
+	{
 
 
 		if (questdb == null) {
 
-			if(GameObject.Find("QuestDatabase") != null){
-			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			if (GameObject.Find ("QuestDatabase") != null) {
+				questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 			}
 
 		} else if (map == null) {
@@ -49,7 +51,7 @@ public class routerender : MonoBehaviour {
 
 
 
-			if ((map.IsDirty || questdb.fixedposition || !started) && mapController.currentroute != null && questdb.currentquest.currentpage.type == "MapOSM") {
+			if ((map.IsDirty || questdb.fixedposition || !started) && mapController.currentroute != null && questdb.currentquest != null && questdb.currentquest.currentpage.type == "MapOSM") {
 
 
 //				Debug.Log("redoing");
@@ -62,25 +64,25 @@ public class routerender : MonoBehaviour {
 				float width = 4f;
 
 
-				if(map.RoundedZoom == 17){
+				if (map.RoundedZoom == 17) {
 
 					width = 6f;
 
-				} else if(map.RoundedZoom == 16){
+				} else if (map.RoundedZoom == 16) {
 					width = 7f;
 
-				} else if(map.RoundedZoom == 15){
+				} else if (map.RoundedZoom == 15) {
 					width = 10f;
 
-				} else if(map.RoundedZoom == 14){
+				} else if (map.RoundedZoom == 14) {
 					width = 12f;
 
-				} else if(map.RoundedZoom == 13){
+				} else if (map.RoundedZoom == 13) {
 					width = 14f;
 
-				} else if(map.RoundedZoom == 12){
+				} else if (map.RoundedZoom == 12) {
 					width = 16f;
-				} else if(map.RoundedZoom == 11){
+				} else if (map.RoundedZoom == 11) {
 
 				}
 
@@ -102,7 +104,7 @@ public class routerender : MonoBehaviour {
 //
 //				GetComponent<LineRenderer> ().SetVertexCount (mapController.currentroute.points.Count);
 
-				var linePoints = new List<Vector3>();
+				var linePoints = new List<Vector3> ();
 
 
 
@@ -110,28 +112,28 @@ public class routerender : MonoBehaviour {
 				
 				
 //			
-					if(rp.waypoint != null){
+					if (rp.waypoint != null) {
 //				
 
-					linePoints.Add(rp.waypoint.transform.position);
+						linePoints.Add (rp.waypoint.transform.position);
 					}
 				
 				}
 
-				if(linePoints.Count > 0 && linePoints.Count % 2 != 0){
+				if (linePoints.Count > 0 && linePoints.Count % 2 != 0) {
 
-					linePoints.Add(linePoints[linePoints.Count-1]);
+					linePoints.Add (linePoints [linePoints.Count - 1]);
 
 				}
-			if	(linePoints.Count > 0){
-				//VectorLine.canvas.transform.SetParent(map.gameObject.transform);
-				//VectorLine.canvas.renderMode = RenderMode.WorldSpace;
-				VectorLine.SetCanvasCamera (GameObject.Find("MapCam").GetComponent<Camera>());
-				VectorLine myLine = new VectorLine("MyLine", linePoints, material, width,LineType.Continuous);
-				myLine.joins = Joins.Fill;
-				myLine.Draw();
+				if (linePoints.Count > 0) {
+					//VectorLine.canvas.transform.SetParent(map.gameObject.transform);
+					//VectorLine.canvas.renderMode = RenderMode.WorldSpace;
+					VectorLine.SetCanvasCamera (GameObject.Find ("MapCam").GetComponent<Camera> ());
+					VectorLine myLine = new VectorLine ("MyLine", linePoints, material, width, LineType.Continuous);
+					myLine.joins = Joins.Fill;
+					myLine.Draw ();
 
-				currentLine = myLine;
+					currentLine = myLine;
 
 				} 
 			}
