@@ -12,6 +12,7 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
+using GQ.Conf;
 
 
 public class questdatabase : MonoBehaviour
@@ -110,9 +111,9 @@ public class questdatabase : MonoBehaviour
 
 			allquests.Clear ();
 			
-			Debug.Log("doing it");
+			Debug.Log ("doing it");
 			
-			string url = "http://qeevee.org:9091/json/"+Configuration.instance.portalID+"/publicgamesinfo";
+			string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
 			
 			WWW listwww = new WWW (url);
 			
@@ -132,16 +133,16 @@ public class questdatabase : MonoBehaviour
 
 
 		if (Application.isWebPlayer) {
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.enabled = true;
+				webloadingmessage.enabled = true;
 			}
 			questmilllogo.enabled = true;
 			loadlogo.enable ();
 		} 
 
 
-		autoStartQuest();
+		autoStartQuest ();
 
 
 		yield return new WaitForEndOfFrame ();
@@ -149,7 +150,7 @@ public class questdatabase : MonoBehaviour
 
 		if (GameObject.Find ("MenuCanvas") != null) {
 			
-			menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller>();
+			menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller> ();
 			
 		}
 
@@ -160,18 +161,19 @@ public class questdatabase : MonoBehaviour
 
 
 
-	void autoStartQuest(){
+	void autoStartQuest ()
+	{
 
 		if (Configuration.instance.autostartQuestID != 0) {
 			GameObject questListPanel = GameObject.Find ("/Canvas");
 			questmilllogo.enabled = true;
 			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 
-			if(Configuration.instance.autostartIsPredeployed){
-			StartCoroutine(	startPredeployedQuest(Configuration.instance.autostartQuestID));
+			if (Configuration.instance.autostartIsPredeployed) {
+				StartCoroutine (startPredeployedQuest (Configuration.instance.autostartQuestID));
 
 			} else {
-			StartQuest (Configuration.instance.autostartQuestID);
+				StartQuest (Configuration.instance.autostartQuestID);
 			}
 		}
 
@@ -181,9 +183,9 @@ public class questdatabase : MonoBehaviour
 	{
 
 		#if !UNITY_WEBPLAYER
-		if(webloadingmessage != null){
+		if (webloadingmessage != null) {
 
-		webloadingmessage.text = "Lade...";
+			webloadingmessage.text = "Lade...";
 		}
 		//webloadingmessage.enabled = true;
 		questmilllogo.enabled = true;
@@ -212,7 +214,7 @@ public class questdatabase : MonoBehaviour
 			predepzipfound = true;
 		} else {
 			Debug.Log ("Not running on platforms which use an url type as asset path (e.g. Android):");
-			initPreloadedQuestiOS();
+			initPreloadedQuestiOS ();
 		}
 
 
@@ -222,9 +224,9 @@ public class questdatabase : MonoBehaviour
 			File.Delete (LOCAL_QUESTS_ZIP);
 			Debug.Log ("ZIP FILE DELETED");
 			questmilllogo.enabled = false;
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.enabled = false;
+				webloadingmessage.enabled = false;
 			}
 			autoStartQuest ();
 		}
@@ -236,23 +238,24 @@ public class questdatabase : MonoBehaviour
 
 
 
-void initPreloadedQuestiOS(){
+	void initPreloadedQuestiOS ()
+	{
 
-	// on platforms which have a straight file path (e.g. iOS):
-	Debug.Log ("InitPredeployedQuests: on IOS.");
-	if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
-		Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
-		return;
-	}
-	File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
-	if (!File.Exists (LOCAL_QUESTS_ZIP)) {
-		Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
-	}
+		// on platforms which have a straight file path (e.g. iOS):
+		Debug.Log ("InitPredeployedQuests: on IOS.");
+		if (!File.Exists (PREDEPLOYED_QUESTS_ZIP)) {
+			Debug.Log ("InitPredeployedQuests: ZIP FILE NOT FOUND");
+			return;
+		}
+		File.Copy (PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
+		if (!File.Exists (LOCAL_QUESTS_ZIP)) {
+			Debug.Log ("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
+		}
 
 		predepzipfound = true;
 
 
-}
+	}
 
 
 	private int reloadButtonPressed = 0;
@@ -286,7 +289,7 @@ void initPreloadedQuestiOS(){
 
 				
 				
-				removeQuest (lq);
+			removeQuest (lq);
 				
 				
 
@@ -333,24 +336,24 @@ void initPreloadedQuestiOS(){
 				
 				//				Debug.Log("New Quest");
 				
-				currentquest = new Quest();
-				if(allquests == null){
-					allquests = new List<Quest>();
+				currentquest = new Quest ();
+				if (allquests == null) {
+					allquests = new List<Quest> ();
 				}
 				allquests.Add (currentquest);
 				
 				foreach (JSONObject j in obj.list) {
-					accessData (j,kei);
+					accessData (j, kei);
 				}
 				
 				//getFirstHotspot (obj);
 				
-			} else if(kei == "quest"){
+			} else if (kei == "quest") {
 				//Debug.Log("here");
 				
 				
 				foreach (JSONObject j in obj.list) {
-					accessData (j,kei);
+					accessData (j, kei);
 				}
 				
 				
@@ -370,28 +373,28 @@ void initPreloadedQuestiOS(){
 		case JSONObject.Type.NUMBER:
 			if (kei == "quest_id") {
 				currentquest.id = (int)obj.n;
-			} else if(kei == "quest_hotspots_latitude"){
+			} else if (kei == "quest_hotspots_latitude") {
 				
-				if(currentquest.start_latitude == null || currentquest.start_latitude == 0){
+				if (currentquest.start_latitude == null || currentquest.start_latitude == 0) {
 					
 					currentquest.start_latitude = obj.n;
 					
 				}
 				
-			} else if(kei == "quest_hotspots_longitude"){
+			} else if (kei == "quest_hotspots_longitude") {
 				//Debug.Log("FOUND LONGITUDE");
 				
-				if(currentquest.start_longitude == null || currentquest.start_longitude == 0){
+				if (currentquest.start_longitude == null || currentquest.start_longitude == 0) {
 					//	Debug.Log("SETTING LONGITUDE");
 					currentquest.start_longitude = obj.n;
 						
-					}
-					
 				}
+					
+			}
 				
 				
-				break;
-			case JSONObject.Type.BOOL:
+			break;
+		case JSONObject.Type.BOOL:
 			break;
 		case JSONObject.Type.NULL:
 			break;
@@ -399,26 +402,27 @@ void initPreloadedQuestiOS(){
 		}
 	}
 	
-	void accessHotspotData(JSONObject obj){
+	void accessHotspotData (JSONObject obj)
+	{
 		
 		
 		for (int i = 0; i < obj.list.Count; i++) {
 			string key = (string)obj.keys [i];
 			JSONObject j = (JSONObject)obj.list [i];
 			
-			Debug.Log(key);
-			if(key == "longitude"){
+			Debug.Log (key);
+			if (key == "longitude") {
 				
-				Debug.Log("long found");
-				if(currentquest.start_longitude == null || currentquest.start_longitude == 0){
+				Debug.Log ("long found");
+				if (currentquest.start_longitude == null || currentquest.start_longitude == 0) {
 					currentquest.start_longitude = obj.n;
-					Debug.Log("long set: "+obj.str);
+					Debug.Log ("long set: " + obj.str);
 				}
 				
-			} else if(key == "latitude"){
-				Debug.Log("lat found");
+			} else if (key == "latitude") {
+				Debug.Log ("lat found");
 				
-				if(currentquest.start_latitude == null || currentquest.start_latitude == 0){
+				if (currentquest.start_latitude == null || currentquest.start_latitude == 0) {
 					currentquest.start_latitude = obj.n;
 				}
 				
@@ -431,9 +435,10 @@ void initPreloadedQuestiOS(){
 	}
 	
 	
-	void createMetaData(JSONObject obj){
+	void createMetaData (JSONObject obj)
+	{
 		
-		QuestMetaData meta = new QuestMetaData();
+		QuestMetaData meta = new QuestMetaData ();
 		
 		for (int i = 0; i < obj.list.Count; i++) {
 			string key = (string)obj.keys [i];
@@ -441,11 +446,11 @@ void initPreloadedQuestiOS(){
 			
 			
 			
-			if(key == "key"){
+			if (key == "key") {
 				
 				meta.key = j.str;
 				
-			} else if(key == "value"){
+			} else if (key == "value") {
 				//				Debug.Log("Meta Value found");
 				meta.value = j.str;
 				
@@ -453,7 +458,7 @@ void initPreloadedQuestiOS(){
 			
 			
 		}
-		currentquest.addMetaData(meta);
+		currentquest.addMetaData (meta);
 		
 		
 	}
@@ -477,7 +482,7 @@ void initPreloadedQuestiOS(){
 			//Debug.Log("WWW Ok!: " + www.data);
 			buttoncontroller.filteredOnlineList.Clear ();
 
-			allquests.Clear();
+			allquests.Clear ();
 			JSONObject j = new JSONObject (www.text);
 			accessData (j, "quest");
 			foreach (Quest q in allquests) {
@@ -486,22 +491,22 @@ void initPreloadedQuestiOS(){
 
 			currentquest = null;
 
-			if(Configuration.instance.questvisualization == "list"){
+			if (Configuration.instance.questvisualization == "list") {
 				
 				buttoncontroller.DisplayList ();
 				
-			} else if(Configuration.instance.questvisualization == "map"){
+			} else if (Configuration.instance.questvisualization == "map") {
 				
-				showQuestMap();
+				showQuestMap ();
 				
 			}
 			
 			
 		} else {
-			Debug.Log ("WWW Error: " + www.error);
-			if(webloadingmessage != null){
+			Debug.Log ("WWW Error: " + www.error + " url: " + www.url);
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = www.error;
+				webloadingmessage.text = www.error;
 				buttoncontroller.DisplayList ();
 			}
 		}    
@@ -518,18 +523,18 @@ void initPreloadedQuestiOS(){
 		if (www.progress < 1f && www.error == null) {
 			if (loadlogo != null) {
 
-			loadlogo.enable();
+				loadlogo.enable ();
 			}
 
-			if(webloadingmessage != null){
-			webloadingmessage.text = (www.progress * 100) + " %";
+			if (webloadingmessage != null) {
+				webloadingmessage.text = (www.progress * 100) + " %";
 			}
 			StartCoroutine (DownloadPercentage (www));
 			
 		} else {
 			if (loadlogo != null) {
 
-			loadlogo.disable();
+				loadlogo.disable ();
 			}
 			
 		}
@@ -541,7 +546,8 @@ void initPreloadedQuestiOS(){
 
 
 
-	IEnumerator startPredeployedQuest(int id){
+	IEnumerator startPredeployedQuest (int id)
+	{
 
 
 		Quest q = new Quest ();
@@ -549,7 +555,7 @@ void initPreloadedQuestiOS(){
 		q.id = id;
 		q.predeployed = true;
 
-		q.filepath = PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/game.xml";
+		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
 		currentquest = q;
 
 
@@ -564,7 +570,7 @@ void initPreloadedQuestiOS(){
 		
 
 
-		WWW wwwpdq = new WWW (pre+""+q.filepath);
+		WWW wwwpdq = new WWW (pre + "" + q.filepath);
 
 		yield return wwwpdq;
 
@@ -578,7 +584,7 @@ void initPreloadedQuestiOS(){
 
 		} else {
 
-			Debug.Log("Error: "+wwwpdq.error);
+			Debug.Log ("Error: " + wwwpdq.error);
 		}
 		//Debug.Log ("creatign predeployed quest");
 		//Debug.Log(q.xmlcontent);
@@ -591,8 +597,8 @@ void initPreloadedQuestiOS(){
 		int c = 0;
 		while (currentquest.currentpage.type == "MetaData") {
 			
-			if(currentquest.pages.Count >= c-1){
-				currentquest.currentpage = currentquest.pages[c];
+			if (currentquest.pages.Count >= c - 1) {
+				currentquest.currentpage = currentquest.pages [c];
 				c++;
 			} else {
 				
@@ -614,20 +620,20 @@ void initPreloadedQuestiOS(){
 			
 			
 		
-				StartCoroutine (waitForSpriteConversion (currentquest.currentpage.id));
+			StartCoroutine (waitForSpriteConversion (currentquest.currentpage.id));
 				
 
 			
 		} else {
 			Debug.Log ("showing message");
 			showmessage ("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.enabled = false;
+				webloadingmessage.enabled = false;
 			}
 			if (loadlogo != null) {
 
-			loadlogo.disable();
+				loadlogo.disable ();
 			}
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 			
@@ -638,7 +644,8 @@ void initPreloadedQuestiOS(){
 
 
 
-	public void showQuestMap(){
+	public void showQuestMap ()
+	{
 
 		Debug.Log ("showing map");
 
@@ -752,29 +759,29 @@ void initPreloadedQuestiOS(){
 
 
 
-			foreach(Quest aq in allquests){
+			foreach (Quest aq in allquests) {
 
 //				Debug.Log("Quest: "+aq.name);
 
-				if(aq.start_longitude != null && aq.start_longitude != 0f){
-				QuestHotspot qh = new QuestHotspot();
+				if (aq.start_longitude != null && aq.start_longitude != 0f) {
+					QuestHotspot qh = new QuestHotspot ();
 				
-					QuestAttribute qa = new QuestAttribute("radius","20");
+					QuestAttribute qa = new QuestAttribute ("radius", "20");
 
-					qh.attributes = new List<QuestAttribute>();
-					qh.attributes.Add(qa);
-					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(qh,true,true,aq.start_latitude+","+aq.start_longitude);
+					qh.attributes = new List<QuestAttribute> ();
+					qh.attributes.Add (qa);
+					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot (qh, true, true, aq.start_latitude + "," + aq.start_longitude);
 					//Debug.Log("Longitude Latitude: "+aq.start_longitude+","+aq.start_latitude);
 
-					if(aq.hasMeta("category")){
+					if (aq.hasMeta ("category")) {
 
-						qrh.category = aq.getMeta("category");
+						qrh.category = aq.getMeta ("category");
 
 					}
 
 					qrh.startquest = aq;
 
-					activehs.Add(qrh);
+					activehs.Add (qrh);
 				}
 			}
 
@@ -861,7 +868,7 @@ void initPreloadedQuestiOS(){
 			webloadingmessage.enabled = true;
 			if (loadlogo != null) {
 
-			loadlogo.enable ();	
+				loadlogo.enable ();	
 			}
 		}
 
@@ -920,9 +927,9 @@ void initPreloadedQuestiOS(){
 		bool islocal = false;
 		Quest localq;
 
-		foreach(Quest lq in localquests){
+		foreach (Quest lq in localquests) {
 		
-			if(lq.id == q.id){
+			if (lq.id == q.id) {
 				islocal = true;
 				q = lq;
 			}
@@ -964,12 +971,12 @@ void initPreloadedQuestiOS(){
 #endif
 			localquests.Remove (q);
 
-			if(currentquest != null){
-			if (currentquest.id == q.id) {
+			if (currentquest != null) {
+				if (currentquest.id == q.id) {
 
-				currentquest = null;
+					currentquest = null;
 
-			}
+				}
 			}
 
 		}
@@ -994,7 +1001,7 @@ void initPreloadedQuestiOS(){
 			Destroy (currentquestdata.gameObject);
 		}
 		Debug.Log ("Destroying GameObject");
-		Destroy (GameObject.Find("MsgCanvas"));
+		Destroy (GameObject.Find ("MsgCanvas"));
 		Destroy (gameObject);
 		if (menu.isActive) {
 			menu.endQuestAnimation ();
@@ -1009,7 +1016,8 @@ void initPreloadedQuestiOS(){
 
 
 
-	public void returnToMainMenu(){
+	public void returnToMainMenu ()
+	{
 
 		Application.LoadLevel (0);
 
@@ -1057,19 +1065,19 @@ void initPreloadedQuestiOS(){
 	void downloadAfterConnectionChecked (Quest q, bool connected)
 	{
 		if (connected) {
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = "Lade Quest ... " + q.name;
+				webloadingmessage.text = "Lade Quest ... " + q.name;
 			}
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
 			www = new WWW (url);
 			if (loadlogo != null) {
 
-			loadlogo.enable ();
+				loadlogo.enable ();
 			}
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = "Bitte warten ... ";
+				webloadingmessage.text = "Bitte warten ... ";
 			}
 			StartCoroutine (DownloadFinished (q));
 		} else {
@@ -1095,15 +1103,18 @@ void initPreloadedQuestiOS(){
 
 
 
-	public void downloadAsset(string url,string filename){
+	public void downloadAsset (string url, string filename)
+	{
 		
-		if(wanttoload == null){ wanttoload = new List<string>(); }
-		if(!wanttoload.Contains(url)){
+		if (wanttoload == null) {
+			wanttoload = new List<string> ();
+		}
+		if (!wanttoload.Contains (url)) {
 			
-			wanttoload.Add(url);
+			wanttoload.Add (url);
 		}
 
-		StartCoroutine (downloadAssetAsync(url, filename));
+		StartCoroutine (downloadAssetAsync (url, filename));
 
 	}
 
@@ -1145,8 +1156,8 @@ void initPreloadedQuestiOS(){
 
 
 
-			yield return new WaitForEndOfFrame();
-		downloadAsset(url,filename);
+			yield return new WaitForEndOfFrame ();
+			downloadAsset (url, filename);
 
 			            
 		}
@@ -1163,7 +1174,7 @@ void initPreloadedQuestiOS(){
 			if (wwwfile.error != "unsupported URL") {
 				Debug.Log ("redoing www");
 
-						downloadAsset (wwwfile.url, filename);
+				downloadAsset (wwwfile.url, filename);
 			}
 			filedownloads.Remove (wwwfile);
 			wwwfile.Dispose ();
@@ -1186,7 +1197,9 @@ void initPreloadedQuestiOS(){
 
 
 
-				if(wanttoload.Contains(wwwfile.url)){ wanttoload.Remove(wwwfile.url); }
+				if (wanttoload.Contains (wwwfile.url)) {
+					wanttoload.Remove (wwwfile.url);
+				}
 
 				wwwfile.Dispose ();
 
@@ -1211,7 +1224,7 @@ void initPreloadedQuestiOS(){
 						Debug.Log ("redoing www");
 							
 						filedownloads.Remove (wwwfile);
-							downloadAsset (wwwfile.url, filename);
+						downloadAsset (wwwfile.url, filename);
 						wwwfile.Dispose ();
 					} else {
 						filedownloads.Remove (wwwfile);
@@ -1298,13 +1311,13 @@ void initPreloadedQuestiOS(){
 		currentquest = q.LoadFromText (q.id, localload);
 		if (currentquest == null) {
 			questmilllogo.enabled = false;
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.enabled = false;
+				webloadingmessage.enabled = false;
 			}
 			if (loadlogo != null) {
 
-			loadlogo.disable ();
+				loadlogo.disable ();
 			}
 			return;
 		}
@@ -1349,9 +1362,9 @@ void initPreloadedQuestiOS(){
 		int c = 0;
 		while (currentquest.currentpage.type == "MetaData") {
 
-			if(currentquest.pages.Count >= c-1){
-			currentquest.currentpage = currentquest.pages[c];
-			c++;
+			if (currentquest.pages.Count >= c - 1) {
+				currentquest.currentpage = currentquest.pages [c];
+				c++;
 			} else {
 
 				hasmorethanmetadata = false;
@@ -1381,14 +1394,14 @@ void initPreloadedQuestiOS(){
 			} else if (!localload) {
 
 				Debug.Log ("WAITING FOR QUEST ASSETS");
-				if(webloadingmessage != null){
+				if (webloadingmessage != null) {
 
-				webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
+					webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
 				}
 				//webloadingmessage.enabled = true;
 				if (loadlogo != null) {
 
-				loadlogo.enable ();
+					loadlogo.enable ();
 				}
 				StartCoroutine (waitforquestassets (currentquest.currentpage.id, 0f));
 					
@@ -1400,13 +1413,13 @@ void initPreloadedQuestiOS(){
 		} else {
 			Debug.Log ("showing message");
 			showmessage ("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.enabled = false;
+				webloadingmessage.enabled = false;
 			}
 			if (loadlogo != null) {
 
-			loadlogo.disable();
+				loadlogo.disable ();
 			}
 			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
 
@@ -1465,7 +1478,7 @@ void initPreloadedQuestiOS(){
 							convertedSprites.Add (sc);
 
 							sc.startConversion ();
-						//	StartCoroutine (waitForSingleSpriteCompletion (sc));
+							//	StartCoroutine (waitForSingleSpriteCompletion (sc));
 						}
 					} else {
 
@@ -1484,45 +1497,45 @@ void initPreloadedQuestiOS(){
 		
 		bool spritesConverted = true;
 		
-		foreach(SpriteConverter sc in convertedSprites){
+		foreach (SpriteConverter sc in convertedSprites) {
 			
-			if(!sc.isDone){
+			if (!sc.isDone) {
 				spritesConverted = false;
 				
 			}
 			
 		}
 		
-		if(spritesConverted){
+		if (spritesConverted) {
 			
-			Debug.Log("Converted Sprites has "+convertedSprites.Count+" objects.");
-			 transferQuestHotspots(pageid);
+			Debug.Log ("Converted Sprites has " + convertedSprites.Count + " objects.");
+			changePage (pageid);
 			
 			
 		} else {
-			Debug.Log("STARTE");
-			if(webloadingmessage != null){
+			Debug.Log ("STARTE");
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = "Starte "+Configuration.instance.nameForQuest+"... ";
-			webloadingmessage.enabled = true;
+				webloadingmessage.text = "Starte " + Configuration.instance.nameForQuest + "... ";
+				webloadingmessage.enabled = true;
 			}
 			if (loadlogo != null) {
 
-			loadlogo.enable ();
+				loadlogo.enable ();
 			}
-			if(spriteError != null && spriteError != ""){
-				if(webloadingmessage != null){
+			if (spriteError != null && spriteError != "") {
+				if (webloadingmessage != null) {
 
-				webloadingmessage.text = spriteError;
+					webloadingmessage.text = spriteError;
 				}
-				yield return new WaitForSeconds(2f);
-				Application.LoadLevel(0);
+				yield return new WaitForSeconds (2f);
+				Application.LoadLevel (0);
 
 			} else {
 			
-			yield return new WaitForSeconds (0.2f);
+				yield return new WaitForSeconds (0.2f);
 
-			StartCoroutine (waitForSpriteConversion (pageid));
+				StartCoroutine (waitForSpriteConversion (pageid));
 			}
 
 		}
@@ -1538,8 +1551,8 @@ void initPreloadedQuestiOS(){
 
 
 
-
-	public bool nextSpriteToBeConverted(SpriteConverter sc){
+	public bool nextSpriteToBeConverted (SpriteConverter sc)
+	{
 
 
 		bool me = true;
@@ -1547,10 +1560,10 @@ void initPreloadedQuestiOS(){
 		foreach (SpriteConverter asc in convertedSprites) {
 
 
-			if(asc == sc){
+			if (asc == sc) {
 
 				break;
-			} else if(asc.isDone != true){
+			} else if (asc.isDone != true) {
 
 				me = false;
 
@@ -1571,7 +1584,7 @@ void initPreloadedQuestiOS(){
 		//Debug.Log ("trying to acces: " + myWWW.url);
 		
 		if (myWWW.url == null || myWWW.url == "") {
-			Debug.Log("nothing to do");
+			Debug.Log ("nothing to do");
 			sc.isDone = true;
 			yield return null;
 			
@@ -1592,7 +1605,7 @@ void initPreloadedQuestiOS(){
 			
 
 
-				if(nextSpriteToBeConverted(sc)){
+				if (nextSpriteToBeConverted (sc)) {
 
 
 					if (myWWW.texture != null) {
@@ -1600,7 +1613,7 @@ void initPreloadedQuestiOS(){
 						sc.myTexture = myWWW.texture;
 						sc.width = myWWW.texture.width;
 						sc.height = myWWW.texture.height;
-						sc.convertSprite();
+						sc.convertSprite ();
 
 
 					} else {
@@ -1609,8 +1622,8 @@ void initPreloadedQuestiOS(){
 						sc.myWWW = null;
 					}
 				} else {
-					yield return new WaitForSeconds(0.5f);
-					StartCoroutine(waitForSingleSpriteCompletion(sc));
+					yield return new WaitForSeconds (0.5f);
+					StartCoroutine (waitForSingleSpriteCompletion (sc));
 
 				}
 			}
@@ -1622,9 +1635,10 @@ void initPreloadedQuestiOS(){
 
 
 	
-	 void transferQuestHotspots(int pageid){
+	void transferQuestHotspots (int pageid)
+	{
 		
-		if (currentquest.getAttribute("transferToUserPosition") != "true") {
+		if (currentquest.getAttribute ("transferToUserPosition") != "true") {
 		
 			changePage (pageid);
 		
@@ -1632,21 +1646,21 @@ void initPreloadedQuestiOS(){
 		} else {
 
 
-			Debug.Log("[WAITING FOR HOTSPOT TRANSFER]"+hotspots.Count);
+			Debug.Log ("[WAITING FOR HOTSPOT TRANSFER]" + hotspots.Count);
 
-			foreach(QuestRuntimeHotspot mainhs in hotspots){
+			foreach (QuestRuntimeHotspot mainhs in hotspots) {
 
 
-				if(mainhs.hotspot.id == int.Parse(currentquest.getAttribute("transferHotspot"))){
+				if (mainhs.hotspot.id == int.Parse (currentquest.getAttribute ("transferHotspot"))) {
 
 					
 				
 
 
-					if(Application.isWebPlayer || Application.isEditor){
+					if (Application.isWebPlayer || Application.isEditor) {
 
 
-						GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84 = 
+						GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 = 
 						new double[]{
 						
 							7d,	50d};
@@ -1654,25 +1668,25 @@ void initPreloadedQuestiOS(){
 
 
 
-					foreach(QuestRuntimeHotspot subhs in hotspots){
+					foreach (QuestRuntimeHotspot subhs in hotspots) {
 
 
 
-						Debug.Log("editing sub hotspot:"+subhs.hotspot.id);
+						Debug.Log ("editing sub hotspot:" + subhs.hotspot.id);
 
 
 				
-						if(subhs.hotspot.id != mainhs.hotspot.id){
+						if (subhs.hotspot.id != mainhs.hotspot.id) {
 
 
 
 							subhs.lon -= mainhs.lon;
-							subhs.lon += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
+							subhs.lon += (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [1];
 
 
 							subhs.lat -= mainhs.lat;
 	
-							subhs.lat += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
+							subhs.lat += (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [0];
 
 
 
@@ -1680,32 +1694,32 @@ void initPreloadedQuestiOS(){
 
 
 							
-							string url = "http://www.yournavigation.org/api/1.0/gosmore.php?"+
+							string url = "http://www.yournavigation.org/api/1.0/gosmore.php?" +
 								"format=kml" +
-									"&flat=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1] +
-									"&flon=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0] +
-									"&tlat=" + subhs.lon +
-									"&tlon=" + subhs.lat +
-									"&v=foot&" +
-									"fast=1" +
-									"&layer=mapnik"+
-									"&instructions=1"+
-									"&lang=de";
+								"&flat=" + GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [1] +
+								"&flon=" + GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [0] +
+								"&tlat=" + subhs.lon +
+								"&tlon=" + subhs.lat +
+								"&v=foot&" +
+								"fast=1" +
+								"&layer=mapnik" +
+								"&instructions=1" +
+								"&lang=de";
 							
-							WWW routewww = new WWW(url);
+							WWW routewww = new WWW (url);
 
-							Debug.Log(url);
+							Debug.Log (url);
 
-							if(routewwws == null){
+							if (routewwws == null) {
 
-								routewwws = new List<WWW>();
+								routewwws = new List<WWW> ();
 							}
 
-							routewwws.Add(routewww);
+							routewwws.Add (routewww);
 
 
 
-							StartCoroutine(waitForRouteFile(routewww,subhs));
+							StartCoroutine (waitForRouteFile (routewww, subhs));
 					
 
 
@@ -1715,8 +1729,8 @@ void initPreloadedQuestiOS(){
 					}
 
 
-					mainhs.lat = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
-					mainhs.lon = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
+					mainhs.lat = (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [0];
+					mainhs.lon = (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [1];
 
 				}
 
@@ -1724,7 +1738,7 @@ void initPreloadedQuestiOS(){
 			}
 
 
-			StartCoroutine(waitForTransferCompletion(pageid));
+			StartCoroutine (waitForTransferCompletion (pageid));
 
 
 		}
@@ -1734,7 +1748,8 @@ void initPreloadedQuestiOS(){
 
 
 
-	public IEnumerator waitForTransferCompletion(int pageid){
+	public IEnumerator waitForTransferCompletion (int pageid)
+	{
 
 		yield return new WaitForEndOfFrame ();
 
@@ -1742,7 +1757,7 @@ void initPreloadedQuestiOS(){
 
 		foreach (WWW mywww in routewwws) {
 
-			if(!mywww.isDone){
+			if (!mywww.isDone) {
 
 				b = false;
 
@@ -1758,8 +1773,8 @@ void initPreloadedQuestiOS(){
 
 		} else {
 
-			yield return new WaitForSeconds(0.1f);
-			StartCoroutine(waitForTransferCompletion(pageid));
+			yield return new WaitForSeconds (0.1f);
+			StartCoroutine (waitForTransferCompletion (pageid));
 
 		}
 
@@ -1771,7 +1786,8 @@ void initPreloadedQuestiOS(){
 
 
 
-	public IEnumerator waitForRouteFile(WWW mywww, QuestRuntimeHotspot qrh){
+	public IEnumerator waitForRouteFile (WWW mywww, QuestRuntimeHotspot qrh)
+	{
 		
 		yield return mywww;
 		
@@ -1779,56 +1795,56 @@ void initPreloadedQuestiOS(){
 		
 		if (mywww.error == null || mywww.error == "") {
 			
-			Debug.Log(mywww.text);
+			Debug.Log (mywww.text);
 			
 
 
-			Debug.Log("got route www object");
+			Debug.Log ("got route www object");
 			string routefile = mywww.text;
 			
-			routefile = routefile.Substring(routefile.IndexOf("<coordinates>"));
-			routefile = routefile.Substring(14,routefile.IndexOf("</coordinates>")-14);
+			routefile = routefile.Substring (routefile.IndexOf ("<coordinates>"));
+			routefile = routefile.Substring (14, routefile.IndexOf ("</coordinates>") - 14);
 
 
 
 
 			
 
-				string[] coordinates = routefile.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+			string[] coordinates = routefile.Split (new string[] { Environment.NewLine }, StringSplitOptions.None);
 				
 				
 
-			int i = coordinates.Count()-2;
-			string s = coordinates[i];
+			int i = coordinates.Count () - 2;
+			string s = coordinates [i];
 					
 					
-					if(s.Contains(",")){
+			if (s.Contains (",")) {
 						
 						
-						string[] co = s.Split(',');
+				string[] co = s.Split (',');
 						
 						
-				if(float.Parse(co[0]) != 0f && float.Parse(	co[1]) != 0f ){
-				qrh.lat =	float.Parse(co[0]);
+				if (float.Parse (co [0]) != 0f && float.Parse (co [1]) != 0f) {
+					qrh.lat = float.Parse (co [0]);
 
 
-				qrh.lon = float.Parse(	co[1]);
-					Debug.Log("REARRANGED HOTSPOT:"+qrh.lat+","+qrh.lon);
+					qrh.lon = float.Parse (co [1]);
+					Debug.Log ("REARRANGED HOTSPOT:" + qrh.lat + "," + qrh.lon);
 
 				} else {
 
 
 
 
-					if(savedmessages == null){
+					if (savedmessages == null) {
 
-						savedmessages = new List<string>();
+						savedmessages = new List<string> ();
 					}
 
 
-					savedmessages.Add("An deinem Standort sind nicht genügend Weginformationen vorhanden. Manche Kartenobjekte könnten nicht erreichbar sein.");
+					savedmessages.Add ("An deinem Standort sind nicht genügend Weginformationen vorhanden. Manche Kartenobjekte könnten nicht erreichbar sein.");
 
-					Debug.Log("REARRANGING FAILED:"+qrh.lat+","+qrh.lon);
+					Debug.Log ("REARRANGING FAILED:" + qrh.lat + "," + qrh.lon);
 
 
 
@@ -1836,7 +1852,7 @@ void initPreloadedQuestiOS(){
 
 						
 						
-					}
+			}
 					
 					
 					
@@ -1851,7 +1867,7 @@ void initPreloadedQuestiOS(){
 			
 		} else {
 			
-			Debug.Log("Route WWW Error:"+mywww.error);
+			Debug.Log ("Route WWW Error:" + mywww.error);
 			
 		}
 		
@@ -1961,14 +1977,14 @@ void initPreloadedQuestiOS(){
 
 		if (error == "") {
 			int bytesloaded2 = (int)(bytesloaded + (fakebytes * 900));
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n " + bytesloaded2 + " Bytes geladen";
+				webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n " + bytesloaded2 + " Bytes geladen";
 			}
 		} else {
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = error;
+				webloadingmessage.text = error;
 			}
 
 		}
@@ -2018,10 +2034,10 @@ void initPreloadedQuestiOS(){
 				qp.type != "ImageCapture" && 
 				qp.type != "AudioRecord" && 
 				qp.type != "TextQuestion" && 
-			    qp.type != "ImageWithText" &&
-			    qp.type != "Menu" &&
+				qp.type != "ImageWithText" &&
+				qp.type != "Menu" &&
 				qp.type != "MapOSM" &&
-			    qp.type != "MetaData" &&
+				qp.type != "MetaData" &&
 				qp.type != "WebPage") {
 
 
@@ -2063,7 +2079,8 @@ void initPreloadedQuestiOS(){
 
 
 
-	public void closeMap(){
+	public void closeMap ()
+	{
 
 
 		if (GameObject.Find ("MapCanvas") != null) {
@@ -2123,7 +2140,7 @@ void initPreloadedQuestiOS(){
 
 		if (GameObject.Find ("[Map]")) {
 
-			GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle>().hideMap();
+			GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle> ().hideMap ();
 		}
 
 
@@ -2133,7 +2150,7 @@ void initPreloadedQuestiOS(){
 
 		}
 		   
-		   foreach (QuestPage qp in currentquest.pages) {
+		foreach (QuestPage qp in currentquest.pages) {
 		
 
 
@@ -2157,33 +2174,33 @@ void initPreloadedQuestiOS(){
 
 				foreach (GameObject go in allObjects)
 					if (go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
-					    && go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
+						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
 						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)"
-					   && go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
+						&& go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
 
 						
 
 						bool des = true;
 
 
-					if (GameObject.Find ("VarOverlayCanvas") != null) {
+						if (GameObject.Find ("VarOverlayCanvas") != null) {
 						
-						if (go.transform.IsChildOf (GameObject.Find ("VarOverlayCanvas").transform)) {
-							des = false;
-							//Debug.Log("is child of mapcanvas");
+							if (go.transform.IsChildOf (GameObject.Find ("VarOverlayCanvas").transform)) {
+								des = false;
+								//Debug.Log("is child of mapcanvas");
+							}
+						
 						}
-						
-					}
 
-					if (GameObject.Find ("MenuCanvas") != null) {
+						if (GameObject.Find ("MenuCanvas") != null) {
 						
-						if (go.transform.IsChildOf (GameObject.Find ("MenuCanvas").transform)) {
-							des = false;
-							//Debug.Log("is child of mapcanvas");
+							if (go.transform.IsChildOf (GameObject.Find ("MenuCanvas").transform)) {
+								des = false;
+								//Debug.Log("is child of mapcanvas");
+							}
+						
 						}
-						
-					}
 
 
 						if (GameObject.Find ("MapCanvas") != null) {
@@ -2236,8 +2253,8 @@ void initPreloadedQuestiOS(){
 
 					}
 
-			//	Debug.Log ("Resources GameObject # =" + Resources.FindObjectsOfTypeAll (typeof(GameObject)).Count ());
-			//	Debug.Log ("Resources Sprite # =" + Resources.FindObjectsOfTypeAll (typeof(Sprite)).Count ());
+				//	Debug.Log ("Resources GameObject # =" + Resources.FindObjectsOfTypeAll (typeof(GameObject)).Count ());
+				//	Debug.Log ("Resources Sprite # =" + Resources.FindObjectsOfTypeAll (typeof(Sprite)).Count ());
 				Resources.UnloadUnusedAssets ();
 
 
@@ -2247,8 +2264,8 @@ void initPreloadedQuestiOS(){
 
 				bool needsCamera = false;
 
-				if(!menu.isActive){
-					menu.showTopBar();
+				if (!menu.isActive) {
+					menu.showTopBar ();
 				}
 				
 				if (qp.type == "NPCTalk") {
@@ -2295,9 +2312,9 @@ void initPreloadedQuestiOS(){
 					} else {
 
 
-						if(GameObject.Find("PageController_Map") != null){
+						if (GameObject.Find ("PageController_Map") != null) {
 
-							GameObject.Find("PageController_Map").GetComponent<page_map>().onStartInvoked = false;
+							GameObject.Find ("PageController_Map").GetComponent<page_map> ().onStartInvoked = false;
 						}
 
 						if (GameObject.Find ("MapHider") != null) {
@@ -2322,7 +2339,7 @@ void initPreloadedQuestiOS(){
 
 						if (GameObject.Find ("[Map]")) {
 							
-							GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle>().showMap();
+							GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle> ().showMap ();
 						}
 
 					}
@@ -2330,20 +2347,20 @@ void initPreloadedQuestiOS(){
 
 
 
-				if(needsCamera){
+				if (needsCamera) {
 					if (GameObject.Find ("MapCanvas") != null) {
-						Debug.Log("Disabling Map Canvas");
+						Debug.Log ("Disabling Map Canvas");
 						GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
 					}
 
-					Debug.Log("needs Camera");
-					GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
-					if(GameObject.Find ("MapCam") != null){
-					GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
+					Debug.Log ("needs Camera");
+					GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
+					if (GameObject.Find ("MapCam") != null) {
+						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
 						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
 
 					}
-					GameObject.Find("BgCam").GetComponent<AudioListener>().enabled = false;
+					GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = false;
 
 				}
 				
@@ -2360,8 +2377,8 @@ void initPreloadedQuestiOS(){
 
 		foreach (string s in savedmessages) {
 
-			if(s != lastmessage){
-			showmessage(s);
+			if (s != lastmessage) {
+				showmessage (s);
 				lastmessage = s;
 			}
 
@@ -2427,11 +2444,12 @@ void initPreloadedQuestiOS(){
 	}
 
 
-	public QuestHotspot getHotspotObject(int i){
+	public QuestHotspot getHotspotObject (int i)
+	{
 
 		foreach (QuestHotspot qh in currentquest.hotspots) {
 
-			if(qh.id == i){
+			if (qh.id == i) {
 
 				return qh;
 			}
@@ -2479,9 +2497,9 @@ void initPreloadedQuestiOS(){
 
 
 
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = "Bitte warten ...";
+				webloadingmessage.text = "Bitte warten ...";
 			}
 
 			currentquest = new Quest ();
@@ -2513,9 +2531,9 @@ void initPreloadedQuestiOS(){
 			
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
-			if(webloadingmessage != null){
+			if (webloadingmessage != null) {
 
-			webloadingmessage.text = www.error;
+				webloadingmessage.text = www.error;
 			}
 
 		}  
@@ -2553,7 +2571,7 @@ public class Quest  : IComparable<Quest>
 		hotspots;
 	[XmlAnyAttribute()]
 	public XmlAttribute[]
-	help_attributes;
+		help_attributes;
 	public List<QuestAttribute> attributes;
 
 	public List<QuestMetaData> metadata;
@@ -2580,14 +2598,15 @@ public class Quest  : IComparable<Quest>
 		return q.LoadFromText (id, true);
 	}
 
-	public string getCategory(){
+	public string getCategory ()
+	{
 
 
 		string x = "";
 
 		if (hasMeta ("category")) {
 
-			x = getMeta("category");
+			x = getMeta ("category");
 
 		}
 
@@ -2651,9 +2670,9 @@ public class Quest  : IComparable<Quest>
 //			Debug.Log(xmlfilepath);
 
 
-			if(!xmlfilepath.Contains("game.xml")){
+			if (!xmlfilepath.Contains ("game.xml")) {
 
-				xmlfilepath = xmlfilepath+"game.xml";
+				xmlfilepath = xmlfilepath + "game.xml";
 
 			}
 			txr = new StreamReader (xmlfilepath, enc);
@@ -2684,7 +2703,7 @@ public class Quest  : IComparable<Quest>
 			metadata.Clear ();
 		} else {
 
-			metadata = new List<QuestMetaData>();
+			metadata = new List<QuestMetaData> ();
 		}
 
 
@@ -2694,29 +2713,29 @@ public class Quest  : IComparable<Quest>
 
 		if (q.hasAttribute ("author")) {
 
-			q.addMetaData(new QuestMetaData("author",q.getAttribute("author")));
+			q.addMetaData (new QuestMetaData ("author", q.getAttribute ("author")));
 
 		}
 
 		if (q.hasAttribute ("version")) {
 			
-			q.addMetaData(new QuestMetaData("version",q.getAttribute("version")));
+			q.addMetaData (new QuestMetaData ("version", q.getAttribute ("version")));
 			
 		}
 
 
 
-		foreach(QuestPage qp in q.pages){
+		foreach (QuestPage qp in q.pages) {
 
-		if(qp.type == "MetaData"){
+			if (qp.type == "MetaData") {
 
-				foreach(QuestContent qc in qp.contents_stringmeta){
+				foreach (QuestContent qc in qp.contents_stringmeta) {
 
-					if(qc.hasAttribute("key") && qc.hasAttribute("value")){
-						QuestMetaData newmeta = new QuestMetaData();
-						newmeta.key = qc.getAttribute("key");
-						newmeta.value = qc.getAttribute("value");
-						q.addMetaData(newmeta);
+					if (qc.hasAttribute ("key") && qc.hasAttribute ("value")) {
+						QuestMetaData newmeta = new QuestMetaData ();
+						newmeta.key = qc.getAttribute ("key");
+						newmeta.value = qc.getAttribute ("value");
+						q.addMetaData (newmeta);
 
 					}
 
@@ -2747,7 +2766,7 @@ public class Quest  : IComparable<Quest>
 		if (metadata == null) {
 
 
-			metadata = new List<QuestMetaData>();
+			metadata = new List<QuestMetaData> ();
 
 		} else {
 			foreach (QuestMetaData qmd in metadata) {
@@ -2765,7 +2784,7 @@ public class Quest  : IComparable<Quest>
 
 		}
 
-			metadata.Add (meta);
+		metadata.Add (meta);
 
 
 		meta_combined += ";" + meta.value;
@@ -2775,7 +2794,7 @@ public class Quest  : IComparable<Quest>
 
 		if (!questdb.allmetakeys.Contains (meta.key)) {
 
-			questdb.allmetakeys.Add(meta.key);
+			questdb.allmetakeys.Add (meta.key);
 		}
 
 	}
@@ -2827,12 +2846,12 @@ public class Quest  : IComparable<Quest>
 						if (splitted.Length > 3) {
 
 
-							if(predeployed){
-								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+							if (predeployed) {
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 
 							} else {
 							
-							xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
+								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 							
 							}
 							questdb.performSpriteConversion (xmla.Value);
@@ -2914,13 +2933,14 @@ public class Quest  : IComparable<Quest>
 			}
 		}
 		
-		return ((char)0xFF).ToString();
+		return ((char)0xFF).ToString ();
 		
 	}
 
 
 
-	public bool hasMeta(string k){
+	public bool hasMeta (string k)
+	{
 
 		bool h = false;
 		if (metadata != null) {
@@ -2968,8 +2988,11 @@ public class QuestMetaData
 	public string value;
 
 
-	public QuestMetaData(){}
-	public QuestMetaData(string k,string v){
+	public QuestMetaData ()
+	{
+	}
+	public QuestMetaData (string k, string v)
+	{
 		key = k;
 		value = v;
 	}
@@ -3299,14 +3322,15 @@ public class QuestHotspot
 						}
 						if (splitted.Length > 3) {
 										
-							if(questdb != null && questdb.currentquest != null &&  questdb.currentquest.predeployed){
-								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+							if (questdb != null && questdb.currentquest != null && questdb.currentquest.predeployed) {
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
 							} else {
 								
 								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 								
-							}											questdb.performSpriteConversion (xmla.Value);
+							}
+							questdb.performSpriteConversion (xmla.Value);
 
 						}							
 
@@ -3447,15 +3471,16 @@ public class QuestContent
 						}
 						if (splitted.Length > 3) {
 											
-							if(questdb.currentquest.predeployed){
+							if (questdb.currentquest.predeployed) {
 								
-								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
 							} else {
 								
 								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 								
-							}											questdb.performSpriteConversion (xmla.Value);
+							}
+							questdb.performSpriteConversion (xmla.Value);
 
 						}
 					}
@@ -3681,15 +3706,16 @@ public class QuestAction
 						}
 						if (splitted.Length > 3) {
 											
-							if(questdb.currentquest.predeployed){
+							if (questdb.currentquest.predeployed) {
 								
-								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS +"/" + id + "/" + filename;
+								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
 							} else {
 								
 								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 								
-							}											questdb.performSpriteConversion (xmla.Value);
+							}
+							questdb.performSpriteConversion (xmla.Value);
 
 						}
 					}
@@ -4319,14 +4345,15 @@ public class QuestRuntimeHotspot
 
 
 
-	public Sprite getMarkerImage(){
+	public Sprite getMarkerImage ()
+	{
 
 
 		Sprite s = Configuration.instance.defaultmarker;
 		Debug.Log ("Category: " + category);
 		foreach (MarkerCategorySprite mcs in Configuration.instance.categoryMarker) {
 
-			if(mcs.category == category){
+			if (mcs.category == category) {
 
 				s = mcs.sprite;
 
