@@ -10,7 +10,7 @@ PlayerSettings:
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: QuestMill
-  productName: t@p
+  productName: Wiki Culture City
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_ShowUnitySplashScreen: 0
@@ -71,7 +71,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.questmill.geoquest.lwl
+  bundleIdentifier: com.questmill.geoquest.wcc
   bundleVersion: 1.0.4
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
@@ -120,7 +120,7 @@ PlayerSettings:
   iOSLaunchScreenCustomXibPath: 
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 2
-  androidSplashScreen: {fileID: 2800000, guid: eba69ffcb36dc4c128ffa108fb66db2b, type: 3}
+  androidSplashScreen: {fileID: 2800000, guid: cc6213492f46f478b87b7c6e61c2bbc6, type: 3}
   AndroidKeystoreName: /Users/muegge/Personen/QuestMill/legal/signing/keystores/geoquest.keystore
   AndroidKeyaliasName: 
   AndroidTVCompatibility: 1
@@ -135,8 +135,40 @@ PlayerSettings:
   m_BuildTargetIcons:
   - m_BuildTarget: 
     m_Icons:
-    - m_Icon: {fileID: 2800000, guid: c804ba04e6b5342b995924495c0da0f4, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 9ed78d96a1b6f404598b2c9c3a93e14b, type: 3}
       m_Size: 128
+  - m_BuildTarget: Android
+    m_Icons:
+    - m_Icon: {fileID: 0}
+      m_Size: 192
+    - m_Icon: {fileID: 0}
+      m_Size: 144
+    - m_Icon: {fileID: 0}
+      m_Size: 96
+    - m_Icon: {fileID: 0}
+      m_Size: 72
+    - m_Icon: {fileID: 0}
+      m_Size: 48
+    - m_Icon: {fileID: 0}
+      m_Size: 36
+  - m_BuildTarget: iPhone
+    m_Icons:
+    - m_Icon: {fileID: 0}
+      m_Size: 180
+    - m_Icon: {fileID: 0}
+      m_Size: 152
+    - m_Icon: {fileID: 0}
+      m_Size: 144
+    - m_Icon: {fileID: 0}
+      m_Size: 120
+    - m_Icon: {fileID: 0}
+      m_Size: 114
+    - m_Icon: {fileID: 0}
+      m_Size: 76
+    - m_Icon: {fileID: 0}
+      m_Size: 72
+    - m_Icon: {fileID: 0}
+      m_Size: 57
   m_BuildTargetBatching:
   - m_BuildTarget: Android
     m_StaticBatching: 1
