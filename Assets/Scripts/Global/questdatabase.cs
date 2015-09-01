@@ -13,7 +13,6 @@ using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
 
-
 public class questdatabase : MonoBehaviour
 {
 	public Quest currentquest;
@@ -22,7 +21,6 @@ public class questdatabase : MonoBehaviour
 	public List<Quest> allquests;
 	public List<Quest> localquests;
 	private WWW www;
-
 	public List<string> wanttoload;
 	public List<WWW> filedownloads;
 	public Image publicquestslist;
@@ -55,15 +53,9 @@ public class questdatabase : MonoBehaviour
 	public bool convertToSprites = false;
 	bool predepzipfound = false;
 	public menucontroller menu;
-
-
-
 	public List<string> savedmessages;
-
 	public List<WWW> routewwws;
-
 	public createquestbuttons buttoncontroller;
-
 
 	IEnumerator Start ()
 	{
@@ -134,9 +126,9 @@ public class questdatabase : MonoBehaviour
 		
 
 
-		autoStartQuest();
+			autoStartQuest ();
 
-		}else {
+		} else {
 			if (webloadingmessage != null) {
 
 				webloadingmessage.enabled = true;
@@ -162,8 +154,6 @@ public class questdatabase : MonoBehaviour
 
 
 	}
-
-
 
 	void autoStartQuest ()
 	{
@@ -240,8 +230,6 @@ public class questdatabase : MonoBehaviour
 #endif
 	}
 
-
-
 	void initPreloadedQuestiOS ()
 	{
 
@@ -260,7 +248,6 @@ public class questdatabase : MonoBehaviour
 
 
 	}
-
 
 	private int reloadButtonPressed = 0;
 	private int numberOfPressesNeededToReload = 10;
@@ -316,10 +303,6 @@ public class questdatabase : MonoBehaviour
 		string questDirPath = System.IO.Path.Combine (PATH_2_LOCAL_QUESTS, id.ToString ());
 		return Directory.Exists (questDirPath);
 	}
-
-
-
-
 
 	void accessData (JSONObject obj, string kei)
 	{
@@ -438,7 +421,6 @@ public class questdatabase : MonoBehaviour
 		
 	}
 	
-	
 	void createMetaData (JSONObject obj)
 	{
 		
@@ -546,10 +528,6 @@ public class questdatabase : MonoBehaviour
 		
 	}
 
-	
-
-
-
 	IEnumerator startPredeployedQuest (int id)
 	{
 
@@ -645,9 +623,6 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-
-
-
 	public void showQuestMap ()
 	{
 
@@ -669,8 +644,6 @@ public class questdatabase : MonoBehaviour
 		}
 
 	}
-
-
 
 	void StartQuest (int id)
 	{
@@ -1016,10 +989,6 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-
-
-
-
 	public void returnToMainMenu ()
 	{
 
@@ -1103,9 +1072,6 @@ public class questdatabase : MonoBehaviour
 		currentquest = q;
 		downloadQuest (q);
 	}
-
-
-
 
 	public void downloadAsset (string url, string filename)
 	{
@@ -1425,7 +1391,9 @@ public class questdatabase : MonoBehaviour
 
 				loadlogo.disable ();
 			}
-			GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
+			if (GameObject.Find ("List").GetComponent<createquestbuttons> () != null) {
+				GameObject.Find ("List").GetComponent<createquestbuttons> ().resetList ();
+			}
 
 		}
 
@@ -1551,10 +1519,6 @@ public class questdatabase : MonoBehaviour
 		
 	}
 
-
-
-
-
 	public bool nextSpriteToBeConverted (SpriteConverter sc)
 	{
 
@@ -1634,10 +1598,6 @@ public class questdatabase : MonoBehaviour
 		}
 	
 	}
-
-
-
-
 	
 	void transferQuestHotspots (int pageid)
 	{
@@ -1750,8 +1710,6 @@ public class questdatabase : MonoBehaviour
 		
 	}
 
-
-
 	public IEnumerator waitForTransferCompletion (int pageid)
 	{
 
@@ -1786,9 +1744,6 @@ public class questdatabase : MonoBehaviour
 
 
 	}
-
-
-
 
 	public IEnumerator waitForRouteFile (WWW mywww, QuestRuntimeHotspot qrh)
 	{
@@ -1879,9 +1834,6 @@ public class questdatabase : MonoBehaviour
 		
 		
 	}
-
-
-
 
 	IEnumerator waitforquestassets (int pageid, float timeout)
 	{
@@ -2057,7 +2009,6 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-
 	public QuestPage getPage (int id)
 	{
 		QuestPage resultpage = null;
@@ -2080,8 +2031,6 @@ public class questdatabase : MonoBehaviour
 		return resultpage;
 
 	}
-
-
 
 	public void closeMap ()
 	{
@@ -2447,7 +2396,6 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-
 	public QuestHotspot getHotspotObject (int i)
 	{
 
@@ -2577,9 +2525,7 @@ public class Quest  : IComparable<Quest>
 	public XmlAttribute[]
 		help_attributes;
 	public List<QuestAttribute> attributes;
-
 	public List<QuestMetaData> metadata;
-
 	public bool hasData = false;
 	public QuestPage currentpage;
 	public List<QuestPage> previouspages;
@@ -2587,7 +2533,6 @@ public class Quest  : IComparable<Quest>
 	public float start_longitude;
 	public float start_latitude;
 	public string meta_combined;
-
 	public bool predeployed = false;
 
 	public Quest ()
@@ -2757,7 +2702,6 @@ public class Quest  : IComparable<Quest>
 		return q;
 	}
 
-
 	public void addMetaData (QuestMetaData meta)
 	{
 
@@ -2802,8 +2746,6 @@ public class Quest  : IComparable<Quest>
 		}
 
 	}
-
-
 
 	public void deserializeAttributes (bool redo)
 	{
@@ -2906,7 +2848,6 @@ public class Quest  : IComparable<Quest>
 		
 	}
 
-
 	public string getMeta (string k)
 	{
 		if (metadata != null) {
@@ -2941,8 +2882,6 @@ public class Quest  : IComparable<Quest>
 		
 	}
 
-
-
 	public bool hasMeta (string k)
 	{
 
@@ -2962,6 +2901,7 @@ public class Quest  : IComparable<Quest>
 
 
 	}
+
 	public bool hasAttribute (string k)
 	{
 		
@@ -2982,8 +2922,6 @@ public class Quest  : IComparable<Quest>
 	
 }
 
-
-
 [System.Serializable]
 public class QuestMetaData
 {
@@ -2991,19 +2929,16 @@ public class QuestMetaData
 	public string key;
 	public string value;
 
-
 	public QuestMetaData ()
 	{
 	}
+
 	public QuestMetaData (string k, string v)
 	{
 		key = k;
 		value = v;
 	}
 }
-
-
-
 
 [System.Serializable]
 public class QuestPage
@@ -3247,8 +3182,6 @@ public class QuestHotspot
 	[XmlElement("onTap")]
 	public QuestTrigger
 		onTap;
-
-
 	public int startquest = 0;
 
 	public string getAttribute (string k)
@@ -3404,7 +3337,6 @@ public class QuestContent
 		}
 		return "";
 	}
-
 	
 	public bool hasAttribute (string k)
 	{
@@ -3531,9 +3463,6 @@ public class QuestVariableValue
 	[XmlElement("var")]
 	public List<string>
 		var_value;
-
-
-
 	public List<double>
 		double_value;
 	
@@ -4134,7 +4063,7 @@ public class QuestConditionComparer
 
 
 
-				if(!s.Contains("+") && !s.Contains("-") && !s.Contains("*") && !s.Contains("/") && !s.Contains(":") ){
+				if (!s.Contains ("+") && !s.Contains ("-") && !s.Contains ("*") && !s.Contains ("/") && !s.Contains (":")) {
 				
 
 
@@ -4150,8 +4079,8 @@ public class QuestConditionComparer
 				} else {
 					
 					
-					double ergebnis = 	GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable(s);
-					Debug.Log("IF MATH"+ergebnis);
+					double ergebnis = GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable (s);
+					Debug.Log ("IF MATH" + ergebnis);
 					comp.Add (ergebnis);
 					
 					
@@ -4205,12 +4134,12 @@ public class QuestConditionComparer
 		if (var_value != null && var_value.Count > 0) {
 
 
-			Debug.Log("looking for var values");
+			Debug.Log ("looking for var values");
 
 			foreach (string k in var_value) {
 
 
-				Debug.Log("looking vor var "+k);
+				Debug.Log ("looking vor var " + k);
 
 
 				string kk = new string (k.ToCharArray ()
@@ -4219,31 +4148,31 @@ public class QuestConditionComparer
 
 				//Debug.Log("-----starting to look for '"+kk+"'");
 
-				if(!kk.Contains("+") && !kk.Contains("-") && !kk.Contains("*") && !kk.Contains("/") && !kk.Contains(":") ){
-				QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (kk);
+				if (!kk.Contains ("+") && !kk.Contains ("-") && !kk.Contains ("*") && !kk.Contains ("/") && !kk.Contains (":")) {
+					QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (kk);
 
 
 
-				if (qv != null) {
+					if (qv != null) {
 
-					//Debug.Log("found");
-					if (qv.getStringValue () != null) {
-						comp.Add (qv.getStringValue ());
+						//Debug.Log("found");
+						if (qv.getStringValue () != null) {
+							comp.Add (qv.getStringValue ());
+						}
+
+					} else {
+
+						Debug.Log ("couldn't find var " + kk);
+
 					}
 
-				} else {
-
-					Debug.Log ("couldn't find var " + kk);
-
-				}
-
 
 				} else {
 
 
-				double ergebnis = 	GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable(kk);
-					Debug.Log("IF MATH"+ergebnis);
-					comp.Add (ergebnis.ToString());
+					double ergebnis = GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable (kk);
+					Debug.Log ("IF MATH" + ergebnis);
+					comp.Add (ergebnis.ToString ());
 
 					
 					
@@ -4256,8 +4185,6 @@ public class QuestConditionComparer
 		return comp;
 		
 	}
-
-
 
 	public double mathVariable (string input)
 	{
@@ -4278,23 +4205,23 @@ public class QuestConditionComparer
 		foreach (Char c in input.ToCharArray()) {
 			
 			
-			if(c == '+'){
+			if (c == '+') {
 				
 				arithmetics = arithmetics + "+";
 			}
-			if(c == '-'){
+			if (c == '-') {
 				
 				arithmetics = arithmetics + "-";
 			}
-			if(c == '*'){
+			if (c == '*') {
 				
 				arithmetics = arithmetics + "*";
 			}
-			if(c == '/'){
+			if (c == '/') {
 				
 				arithmetics = arithmetics + "/";
 			}
-			if(c == ':'){
+			if (c == ':') {
 				
 				arithmetics = arithmetics + ":";
 			}
@@ -4342,12 +4269,12 @@ public class QuestConditionComparer
 			} else {
 				
 				QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (s);
-				if (!qv.isNull()) {
+				if (!qv.isNull ()) {
 					if (qv.num_value != null && qv.num_value.Count > 0) {
 						if (needsstartvalue) {
 							
 							currentvalue = qv.num_value [0];
-							Debug.Log(s+":"+currentvalue.ToString("F10"));
+							Debug.Log (s + ":" + currentvalue.ToString ("F10"));
 							
 							needsstartvalue = false;
 							
@@ -4355,7 +4282,7 @@ public class QuestConditionComparer
 							
 							n = qv.num_value [0];
 							
-							Debug.Log(n);
+							Debug.Log (n);
 							if (arithmetics.Substring (count, 1) == "+") {
 								currentvalue += n;
 							} else if (arithmetics.Substring (count, 1) == "-") {
@@ -4514,8 +4441,6 @@ public class QuestRuntimeHotspot
 
 		
 	}
-
-
 
 	public Sprite getMarkerImage ()
 	{
