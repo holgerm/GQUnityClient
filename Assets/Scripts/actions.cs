@@ -173,6 +173,8 @@ public class actions : MonoBehaviour
 			saveVariable (action);
 		} else if (action.type == "ShowVar") {
 			showVariableOverlay (action);
+		} else if (action.type == "HideVar") {
+			hideVariableOverlay (action);
 		}
 		
 		
@@ -394,6 +396,10 @@ if(to != null){
 
 	}
 
+	void hideVariableOverlay (QuestAction action)
+	{
+		GameObject.Find ("VarOverlayCanvas").GetComponent<varoverlay> ().hide ();
+	}
 
 
 
@@ -1574,6 +1580,25 @@ public class QuestVariable
 			return null;
 
 		}
+
+
+	}
+
+
+	public string ToString(){
+
+		if (type == "bool") {
+
+			return bool_value[0].ToString();
+		} else if (type == "num") {
+			
+			return num_value[0].ToString();
+		} else if (type == "string") {
+			
+			return string_value[0];
+		} 
+
+		return "";
 
 
 	}

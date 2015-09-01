@@ -65,7 +65,15 @@ public class varoverlay : MonoBehaviour {
 				
 					if (!GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (action.value.var_value [0]).isNull()) {
 					
-						//show = show+""+GameObject.Find("QuestDatabase").GetComponent<actions>().getVariable (action.value.var_value [0]).getStringValue
+
+
+
+						show = show+""+GameObject.Find("QuestDatabase").GetComponent<actions>().getVariable (action.value.var_value [0]).ToString();
+
+
+
+
+
 						Debug.Log("found variable"+action.value.var_value [0]);
 					} else {
 						string d = action.value.var_value [0];

@@ -318,26 +318,26 @@ public class SocialPlatfromSettingsEditor : Editor {
 
 
 		if(IsFacebookInstalled) {
-		
-
-
-			ApplicationId_meta.SetValue("android:value", "\\ " + FBSettings.AppId);
-
-			LoginActivity.SetValue("android:label", "@string/app_name");
-			LoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar");
-			LoginActivity.SetValue("android:configChanges", "keyboardHidden|orientation");
-
-
-			FBUnityLoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen");
-			FBUnityLoginActivity.SetValue("android:configChanges", "fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen");
-
-			FBUnityDialogsActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen");
-			FBUnityDialogsActivity.SetValue("android:configChanges", "fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen");
-
-			FBUnityDeepLinkingActivity.SetValue("android:exported", "true");
-
-
-			
+//		
+//
+//
+//			ApplicationId_meta.SetValue("android:value", "\\ " + FBSettings.AppId);
+//
+//			LoginActivity.SetValue("android:label", "@string/app_name");
+//			LoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar");
+//			LoginActivity.SetValue("android:configChanges", "keyboardHidden|orientation");
+//
+////
+////			FBUnityLoginActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen");
+////			FBUnityLoginActivity.SetValue("android:configChanges", "fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen");
+////
+////			FBUnityDialogsActivity.SetValue("android:theme", "@android:style/Theme.Translucent.NoTitleBar.Fullscreen");
+////			FBUnityDialogsActivity.SetValue("android:configChanges", "fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen");
+////
+////			FBUnityDeepLinkingActivity.SetValue("android:exported", "true");
+//
+//
+//			
 		} else {
 			application.RemoveProperty(ApplicationId_meta);
 			application.RemoveActivity(LoginActivity);

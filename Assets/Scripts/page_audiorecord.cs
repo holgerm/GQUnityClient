@@ -61,7 +61,7 @@ public class page_audiorecord : MonoBehaviour {
 		}
 		
 		if (audiorecord.hasAttribute ("task") && audiorecord.getAttribute ("task").Length > 1) {
-			text.text = audiorecord.getAttribute ("task");
+			text.text = questdb.GetComponent<actions> ().formatString (audiorecord.getAttribute ("task"));
 		} else {
 			
 			text.enabled = false;

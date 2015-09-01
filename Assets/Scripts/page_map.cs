@@ -579,15 +579,26 @@ public class page_map : MonoBehaviour
 			int height = go.GetComponent<Renderer> ().material.mainTexture.height;
 			int width = go.GetComponent<Renderer> ().material.mainTexture.width;
 		
+
+
+
+			float scale = 1.0f;
+
+
+			if(Application.isMobilePlatform){
+
+				scale = 2.0f;
+
+			}
 		
 			if (height > width) {
 			
 				//Debug.Log(width+"/"+height+"="+width/height);
-				go.transform.localScale = new Vector3 (((float)width) / ((float)height), 1.0f, 1.0f);
+				go.transform.localScale = new Vector3 ((scale*((float)width) / ((float)height)), scale, scale);
 			
 			} else {
 			
-				go.transform.localScale = new Vector3 (1.0f, ((float)height / (float)width), 1.0f);
+				go.transform.localScale = new Vector3 (scale, (scale*((float)width) / ((float)height)), scale);
 			
 			}
 		

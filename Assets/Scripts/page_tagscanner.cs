@@ -103,7 +103,7 @@ public class page_tagscanner : MonoBehaviour
 			}
 		
 			if (tagscanner.hasAttribute ("taskdescription")) {
-				text.text = tagscanner.getAttribute ("taskdescription");
+				text.text = questdb.GetComponent<actions> ().formatString (tagscanner.getAttribute ("taskdescription"));
 			} else {
 			
 				text.enabled = false;

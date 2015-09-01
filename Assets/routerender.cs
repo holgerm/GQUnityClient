@@ -51,7 +51,7 @@ public class routerender : MonoBehaviour
 
 
 
-			if ((map.IsDirty || questdb.fixedposition || !started) && mapController.currentroute != null && questdb.currentquest != null && questdb.currentquest.currentpage.type == "MapOSM") {
+			if (questdb.currentquest != null && questdb.currentquest.currentpage != null && questdb.currentquest.currentpage.type == "MapOSM" && (map.IsDirty || questdb.fixedposition || !started) && mapController.currentroute != null) {
 
 
 //				Debug.Log("redoing");

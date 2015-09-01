@@ -21,13 +21,13 @@ public class QuestMessage : MonoBehaviour {
 
 	public void Start(){
 
-		boxtext.text = message;
+		boxtext.text = GameObject.Find("QuestDatabase").GetComponent<actions> ().formatString (message);
 
 	}
 
 
 	public void setButtonText(string s){
-		buttontext.text = s;
+		buttontext.text = GameObject.Find("QuestDatabase").GetComponent<actions> ().formatString (s);
 		}
 	
 
