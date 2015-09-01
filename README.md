@@ -12,7 +12,7 @@ We checked these files into git and afterwards marked them so that git ignores f
 
 Use this:
 
-	git update-index --assume-unchanged path/file.cfg
+	git update-index --assume-unchanged Assets/ConfigAssets/Resources/*
 
 And to restore:
 

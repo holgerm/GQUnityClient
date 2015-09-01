@@ -189,13 +189,13 @@ namespace GQ_ET
 			ProductConfigManager.current.showNetConnectionWarning =
 				EditorGUILayout.Toggle ("Show Connection Warning?", ProductConfigManager.current.showNetConnectionWarning);
 
-			// TODO toplogo
 			ProductConfigManager.topLogo = 
 				(Sprite)EditorGUILayout.ObjectField (
 					"Top Bar Logo", 
 					ProductConfigManager.topLogo,
 					typeof(Sprite),
 					false);
+			// TODO resize visualization in editor to correct 
 
 			ProductConfigManager.current.mapboxMapID = 
 				EditorGUILayout.TextField (
@@ -211,6 +211,15 @@ namespace GQ_ET
 			// TODO make generic representation for map types (google, OSM, Mapbox)
 			
 			// TODO default marker
+			ProductConfigManager.defaultMarker = 
+				(Sprite)EditorGUILayout.ObjectField (
+					"Default Marker", 
+					ProductConfigManager.defaultMarker,
+					typeof(Sprite),
+					false);
+			// TODO resize visualization in editor to correct 
+
+			// TODO marker categories ...
 
 			GUI.enabled = true;
 			return;

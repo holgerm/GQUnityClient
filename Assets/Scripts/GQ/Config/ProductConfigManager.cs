@@ -88,6 +88,17 @@ namespace GQ.Conf
 				_appIconTexture = value;
 			}
 		}
+		
+		private static Texture2D _splashScreen;
+		
+		public static Texture2D splashScreen {
+			get {
+				return _splashScreen;
+			}
+			set {
+				_splashScreen = value;
+			}
+		}
 
 		private static Sprite _topLogo;
 
@@ -100,15 +111,20 @@ namespace GQ.Conf
 			}
 		}
 		
-		private static Texture2D _splashScreen;
+		private static Sprite _defaultMarker;
 		
-		public static Texture2D splashScreen {
+		public static Sprite defaultMarker {
 			get {
-				return _splashScreen;
+				return _defaultMarker;
 			}
 			set {
-				_splashScreen = value;
+				_defaultMarker = value;
 			}
+		}
+
+		public static string GetBundleIdentifier ()
+		{
+			return "com.questmill.geoquest." + current.id;
 		}
 
 		static Config deserialize ()

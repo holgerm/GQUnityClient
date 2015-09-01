@@ -120,7 +120,7 @@ PlayerSettings:
   iOSLaunchScreenCustomXibPath: 
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 2
-  androidSplashScreen: {fileID: 2800000, guid: cc6213492f46f478b87b7c6e61c2bbc6, type: 3}
+  androidSplashScreen: {fileID: 2800000, guid: 06bea5d2eb2864b1e8fbcb149d5089e9, type: 3}
   AndroidKeystoreName: /Users/muegge/Personen/QuestMill/legal/signing/keystores/geoquest.keystore
   AndroidKeyaliasName: 
   AndroidTVCompatibility: 1
