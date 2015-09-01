@@ -1,0 +1,15 @@
+
+{
+    "id" : "phka",
+    "name" : "PHKA GeoQuest",
+    "portal" : 141,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 0,
+    "questVisualization"     : "list",
+    "questVisualizationChangeable" : false,
+    "colorProfile"                 : null,
+    "mapboxKey"                    : null,
+    "mapboxMapID"                  : null,
+    "imprint"                      : null
+}
