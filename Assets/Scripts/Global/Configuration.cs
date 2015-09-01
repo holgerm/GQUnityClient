@@ -24,7 +24,7 @@ public class Configuration : MonoBehaviour
 	public string colorProfile = "default";
 	public string mapboxKey = "pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA";
 	public string mapboxMapID = "gqwcc.m824ig5p";
-	public float downloadTimeOutSeconds = 300.0f;
+	public int downloadTimeOutSeconds = 300;
 	public string impressum = "";
 	public Sprite toplogo;
 	private string productName;
@@ -85,7 +85,7 @@ public class Configuration : MonoBehaviour
 			productName = "carlbenz";
 			portalID = 141;
 			autostartQuestID = 6088;
-			downloadTimeOutSeconds = 600f;
+			downloadTimeOutSeconds = 600;
 			colorProfile = "carlbenz";
 			mapboxKey = "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A";
 			mapboxMapID = "gqcarlbenz.ac1f8820";
@@ -95,7 +95,7 @@ public class Configuration : MonoBehaviour
 			productName = "wcc";
 			portalID = 281;
 			autostartQuestID = 0;
-			downloadTimeOutSeconds = 60f;
+			downloadTimeOutSeconds = 60;
 			colorProfile = "wcc";
 			mapboxKey = "pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA";
 			mapboxMapID = "gqwcc.m824ig5p";
@@ -105,7 +105,7 @@ public class Configuration : MonoBehaviour
 			productName = "ebk";
 			portalID = 121;
 			autostartQuestID = 0;
-			downloadTimeOutSeconds = 60f;
+			downloadTimeOutSeconds = 60;
 			colorProfile = "ebk";
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
@@ -115,7 +115,7 @@ public class Configuration : MonoBehaviour
 			productName = "lwl";
 			portalID = 402;
 			autostartQuestID = 0;
-			downloadTimeOutSeconds = 60f;
+			downloadTimeOutSeconds = 60;
 			colorProfile = "lwl";
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
@@ -125,7 +125,7 @@ public class Configuration : MonoBehaviour
 			productName = "public";
 			portalID = 61;
 			autostartQuestID = 0;
-			downloadTimeOutSeconds = 60f;
+			downloadTimeOutSeconds = 60;
 			colorProfile = "default";
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
@@ -136,7 +136,7 @@ public class Configuration : MonoBehaviour
 			productName = "intern";
 			portalID = 1;
 			autostartQuestID = 0;
-			downloadTimeOutSeconds = 60f;
+			downloadTimeOutSeconds = 60;
 			colorProfile = "default";
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
@@ -152,7 +152,8 @@ public class Configuration : MonoBehaviour
 
 
 [System.Serializable]
-public class MarkerCategorySprite {
+public class MarkerCategorySprite
+{
 
 
 

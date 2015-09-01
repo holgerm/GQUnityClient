@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using GQ.Conf;
 
 namespace Product
 {
@@ -23,49 +24,49 @@ namespace Product
 			}
 		}
 
-		static Dictionary<string, string> productNames = new Dictionary<string, string> () {
-			{
-				"default", 
-				"GeoQuest"
-			},
-			{
-				"carlbenz", 
-				"Carl Benz"
-			},
-			{
-				"wcc",
-				"WCC Regio Bonn"
-			},
-			{
-				"ebk",
-				"GeoQuest"
-			},
-			{
-				"phka",
-				"EduQuest"
-			},
-			{
-				"public",
-				"GeoQuest"
-			},
-			{
-				"intern",
-				"GeoQuest"
-			},
-			{
-				"lwl",
-				"LWL GeoQuest"
-			}
-		};
-
-		static string getProductName ()
-		{
-			string name;
-			if (!productNames.TryGetValue (ProductID, out name)) {
-				Debug.LogError ("ERROR: Unknown product ID: " + ProductID);
-			}
-			return name;
-		}
+//		static Dictionary<string, string> productNames = new Dictionary<string, string> () {
+//			{
+//				"default", 
+//				"GeoQuest"
+//			},
+//			{
+//				"carlbenz", 
+//				"Carl Benz"
+//			},
+//			{
+//				"wcc",
+//				"WCC Regio Bonn"
+//			},
+//			{
+//				"ebk",
+//				"GeoQuest"
+//			},
+//			{
+//				"phka",
+//				"EduQuest"
+//			},
+//			{
+//				"public",
+//				"GeoQuest"
+//			},
+//			{
+//				"intern",
+//				"GeoQuest"
+//			},
+//			{
+//				"lwl",
+//				"LWL GeoQuest"
+//			}
+//		};
+//
+//		static string getProductName ()
+//		{
+//			string name;
+//			if (!productNames.TryGetValue (ProductID, out name)) {
+//				Debug.LogError ("ERROR: Unknown product ID: " + ProductID);
+//			}
+//			return name;
+//		}
 
 		// TODO make an environment var etc.
 
@@ -101,6 +102,7 @@ namespace Product
 
 			if (productIDFound) {
 				Debug.Log ("Producing: " + productID);
+				ProductConfigManager.load (productID);
 			} else {
 				Debug.LogError ("ERROR: No product ID specified. Use --gqproduct <productID> to build your product!");
 				return; // TODO how should we exit in error cases like this?
@@ -177,7 +179,7 @@ namespace Product
 			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
 
 			savedSettingsProductName = PlayerSettings.productName;
-			PlayerSettings.productName = getProductName ();
+			PlayerSettings.productName = ProductConfigManager.current.name;
 
 			savedSettingsIcons4Android = PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.Android);
 			savedSettingsIcons4iOS = PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.iOS);
@@ -215,7 +217,7 @@ namespace Product
 
 		static string GetBundleIdentifier ()
 		{
-			return "com.questmill.geoquest." + productID;
+			return "com.questmill.geoquest." + ProductConfigManager.current.id;
 		}
 
 		static Texture2D[] GetAppIcons (BuildTarget target)

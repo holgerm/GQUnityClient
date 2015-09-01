@@ -3718,12 +3718,11 @@ MonoBehaviour:
   overrideProductSettingsInInspector: 0
   portalID: 281
   autostartQuestID: 0
-  autostartQuestSize: 191446736
-  autostartIsPredeployed: 1
+  autostartIsPredeployed: 0
   colorProfile: wcc
   mapboxKey: pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw
   mapboxMapID: mapbox.streets
-  downloadTimeOutSeconds: 100
+  downloadTimeOutSeconds: 300
   impressum: "<b>Titel</b>\\n WikiCultureCity\\n\\n <b>Beschreibung</b>\\n Anbieterkennzeichnung
     der WikiCultureCity GbR, Sebastianstr. 39, D-53115 Bonn\\n\\n <b>Einrichtung /
     Institution</b>\\n WikiCultureCity GbR\\n\\n <b>Rechtsform</b>\\n Gesellschaft
@@ -7797,7 +7796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1547474655
 RectTransform:
   m_ObjectHideFlags: 0
