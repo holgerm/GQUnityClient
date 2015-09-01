@@ -12,7 +12,6 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
-using GQ.Conf;
 
 
 public class questdatabase : MonoBehaviour
@@ -1213,7 +1212,7 @@ public class questdatabase : MonoBehaviour
 
 				
 			} else {
-				if (timeout > Configuration.instance.downloadTimeOutSeconds) {
+				if (timeout > (float)Configuration.instance.downloadTimeOutSeconds) {
 					showmessage ("Download fehlgeschlagen.");
 					Application.LoadLevel (0);
 				} else 
