@@ -62,10 +62,16 @@ namespace GQ.Conf
 			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".png"))
 				appIcon = 
 					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".png") as Texture2D;
+			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".jpg"))
+				appIcon = 
+					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".jpg") as Texture2D;
 			else
 				appIcon = null; // TODO replace null with default
 
-			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg"))
+			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png"))
+				splashScreen = 
+					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png") as Texture2D;
+			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg"))
 				splashScreen = 
 					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg") as Texture2D;
 			else
