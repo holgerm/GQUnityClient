@@ -30,4 +30,4 @@ To simplify, you can make an alias for that in your $HOME/.gitconfig:
 Then you can type just git ls-assume-unchanged. It even works with auto-completion if you have the git-completion in place (for bash, tcsh, zsh).
 
 
-Using SmartGit one can not set files to assume-unchanged state, but one can filter these files in or out in the Files view.
+Using SmartGit one can set files to assume-unchanged state in the Local menu using "toggle assume-unchanged", and one can filter these files in or out in the Files view.
