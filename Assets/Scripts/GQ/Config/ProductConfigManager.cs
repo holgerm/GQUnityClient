@@ -16,6 +16,10 @@ namespace GQ.Conf
 		const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "/product";
 		public const string PRODUCTS_DIR = "Assets/Editor/products";
 		public const string PRODUCT_FILE = "product.json";
+		const string APP_ICON_FILE_BASE = "appIcon";
+		const string SPLASH_SCREEN_FILE_BASE = "splashScreen";
+		const string TOP_LOGO_FILE_BASE = "topLogo";
+		const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
 
 		//////////////////////////////////
 		// CHANGING THE CURRENT PRODUCT:
@@ -51,6 +55,40 @@ namespace GQ.Conf
 
 			current = deserialize ();
 
+			// adjust Player Settings to newly loaded product:
+			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
+
+			// load images:
+			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".png"))
+				appIcon = 
+					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".png") as Texture2D;
+			else
+				appIcon = null; // TODO replace null with default
+
+			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg"))
+				splashScreen = 
+					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg") as Texture2D;
+			else
+				splashScreen = null; // TODO replace null with default
+
+			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd"))
+				topLogo = 
+					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
+			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".png"))
+				topLogo = 
+					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg"))
+				topLogo = 
+					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
+			else
+				topLogo = null; // TODO replace null with default
+
+			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png"))
+				defaultMarker = 
+					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+			else
+				defaultMarker = null; // TODO replace null with default
+
 //			TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath (RUNTIME_PRODUCT_DIR + "/appIcon");
 //			importer.isReadable = true;
 //			AssetDatabase.ImportAsset (RUNTIME_PRODUCT_DIR + "/appIcon");
@@ -80,7 +118,7 @@ namespace GQ.Conf
 
 		private static Texture2D _appIconTexture;
 
-		public static Texture2D appIconTexture {
+		public static Texture2D appIcon {
 			get {
 				return _appIconTexture;
 			}

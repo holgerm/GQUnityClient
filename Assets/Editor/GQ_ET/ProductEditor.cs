@@ -23,7 +23,6 @@ namespace GQ_ET
 		static private int selectedProductIndex;
 		static private string[] productIDs;
 		static private bool initialized = false;
-		private string errortext = null;
 
 		[MenuItem ("Window/GQ Product Editor")]
 		public static void  ShowWindow ()
@@ -94,10 +93,10 @@ namespace GQ_ET
 					ProductConfigManager.current.name, 
 					GUILayout.Height (EditorGUIUtility.singleLineHeight));
 
-			ProductConfigManager.appIconTexture = 
+			ProductConfigManager.appIcon = 
 				(Texture2D)EditorGUILayout.ObjectField (
 					"App Icon", 
-					ProductConfigManager.appIconTexture,
+					ProductConfigManager.appIcon,
 			        typeof(Texture),
 					false);
 
@@ -235,6 +234,7 @@ namespace GQ_ET
 
 		void createGUIEditSpec ()
 		{
+			// TODO rework the complete editing UI in the editor to buttons
 			GUILayout.Label ("Edit Product Configuration", EditorStyles.boldLabel);
 
 			bool oldAllowChanges = allowChanges;
@@ -299,7 +299,6 @@ namespace GQ_ET
 		{
 			if (index.Equals (selectedProductIndex))
 				return;
-			DirectoryInfo configSourceDir, configTargetDir;
 
 			try {
 				GUI.enabled = false;
@@ -309,7 +308,7 @@ namespace GQ_ET
 				EditorPrefs.SetInt ("ProductIndex", index);
 				allowChanges = false;
 			} catch (System.IndexOutOfRangeException e) {
-				errortext = "No product defined for product index [" + index + "].";
+				Debug.LogWarning (e.Message);
 				initialized = false;
 			}
 		}
