@@ -53,7 +53,7 @@ public class page_imagecapture : MonoBehaviour {
 		}
 		
 		if (imagecapture.hasAttribute ("task") && imagecapture.getAttribute ("task").Length > 1) {
-			text.text = imagecapture.getAttribute ("task");
+			text.text = questdb.GetComponent<actions> ().formatString (imagecapture.getAttribute ("task"));
 		} else {
 			
 			text.enabled = false;

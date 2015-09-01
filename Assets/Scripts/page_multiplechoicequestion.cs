@@ -48,19 +48,8 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 
 
+				questiontext.text = questdb.GetComponent<actions> ().formatString (multiplechoicequestion.getAttribute ("question"));
 
-			if (multiplechoicequestion.contents_question != null) {
-
-
-				//multiplechoicequestion.contents_question.questiontext.
-
-
-
-			} else {
-
-
-
-				questiontext.text = multiplechoicequestion.getAttribute ("question");
 
 				foreach (QuestContent qc in multiplechoicequestion.contents_answers) {
 
@@ -79,7 +68,9 @@ public class page_multiplechoicequestion : MonoBehaviour {
 				}
 
 
-			}
+
+
+			
 
 
 

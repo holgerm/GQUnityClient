@@ -326,7 +326,7 @@ AudioListener:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 133501168}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &133501170
 Behaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +373,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!4 &133501173
 Transform:
   m_ObjectHideFlags: 0
@@ -1256,6 +1257,7 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
+  m_RepeatDelay: .5
   m_AllowActivationOnMobileDevice: 0
 --- !u!114 &1911540886
 MonoBehaviour:
@@ -1317,6 +1319,8 @@ MonoBehaviour:
     filepath: 
     pages: []
     hotspots: []
+    attributes: []
+    metadata: []
     hasData: 0
     currentpage:
       id: 0
@@ -1329,8 +1333,8 @@ MonoBehaviour:
         id: 0
         content: 
         attributes: []
-        answers: []
       contents_answersgroup: []
+      contents_stringmeta: []
       onEnd:
         actions: []
       onStart:
@@ -1347,6 +1351,8 @@ MonoBehaviour:
     xmlcontent: 
     start_longitude: 0
     start_latitude: 0
+    meta_combined: 
+    predeployed: 0
   multiplechoicequestion:
     id: 0
     type: 
@@ -1358,8 +1364,8 @@ MonoBehaviour:
       id: 0
       content: 
       attributes: []
-      answers: []
     contents_answersgroup: []
+    contents_stringmeta: []
     onEnd:
       actions: []
     onStart:

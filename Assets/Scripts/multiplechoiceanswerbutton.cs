@@ -27,7 +27,7 @@ public class multiplechoiceanswerbutton : MonoBehaviour {
 
 
 	public void setText(string l){
-		text.text = l;
+		text.text = GameObject.Find("QuestDatabase").GetComponent<actions> ().formatString (l);
 
 	}
 

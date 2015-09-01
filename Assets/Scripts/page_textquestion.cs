@@ -33,7 +33,7 @@ public class page_textquestion : MonoBehaviour
 		
 		
 		
-		questiontext.text = textquestion.getAttribute ("question");
+		questiontext.text = questdb.GetComponent<actions> ().formatString (textquestion.getAttribute ("question"));
 		
 
 	}
@@ -64,7 +64,7 @@ public class page_textquestion : MonoBehaviour
 
 				questdb.debug ("REGEXP " + x + " MATCH " + y.content + " -> " + match);
 
-				if (y.content == x || match) {
+				if (questdb.GetComponent<actions> ().formatString (y.content) == x || match) {
 					b = true;
 					Debug.Log ("TextQuestion: MATCHED");
 				}

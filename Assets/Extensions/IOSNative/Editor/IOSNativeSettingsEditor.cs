@@ -83,9 +83,7 @@ public class IOSNativeSettingsEditor : Editor {
 		EditorGUILayout.HelpBox("Editing IOS Native Settings not available with web player platfrom. Please switch to any other platform under Build Settings menu", MessageType.Warning);
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.Space();
-		if(GUILayout.Button("Switch To IOS Platfrom",  GUILayout.Width(150))) {
-			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
-		}
+
 		EditorGUILayout.EndHorizontal();
 
 		if(Application.isEditor) {

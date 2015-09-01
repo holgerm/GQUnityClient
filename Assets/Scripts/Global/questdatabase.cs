@@ -93,45 +93,50 @@ public class questdatabase : MonoBehaviour
 
 
 
+		if (!Application.isWebPlayer) {
 
-		if (Configuration.instance.questvisualization != "list") {
+			if (Configuration.instance.questvisualization != "list") {
 
-			GameObject.Find ("ListPanel").SetActive (false);
+				GameObject.Find ("ListPanel").SetActive (false);
 
-		}
+			}
 
 
 	
-		if (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) {
+			if (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) {
 		
 
 
 
 
-			allquests.Clear ();
+				allquests.Clear ();
 			
-			Debug.Log ("doing it");
+				Debug.Log ("doing it");
 			
-			string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
+				string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
 			
-			WWW listwww = new WWW (url);
-			
-			
+				WWW listwww = new WWW (url);
 			
 			
 			
-			StartCoroutine (DownloadPercentage (listwww));
-			StartCoroutine (DownloadList (listwww));
+			
+			
+				StartCoroutine (DownloadPercentage (listwww));
+				StartCoroutine (DownloadList (listwww));
 
 
 			
-		} else {
-			buttoncontroller.DisplayList ();
+			} else {
+				buttoncontroller.DisplayList ();
 			
-		}
+			}
+
+		
 
 
-		if (Application.isWebPlayer) {
+		autoStartQuest();
+
+		}else {
 			if (webloadingmessage != null) {
 
 				webloadingmessage.enabled = true;
@@ -4126,13 +4131,35 @@ public class QuestConditionComparer
 
 			foreach (string s in var_value) {
 
-				QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (s);
 
-				if (qv != null) {
-					if (qv.num_value != null && qv.num_value.Count > 0) {
-						comp.Add (qv.num_value [0]);
+
+
+				if(!s.Contains("+") && !s.Contains("-") && !s.Contains("*") && !s.Contains("/") && !s.Contains(":") ){
+				
+
+
+					QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (s);
+					
+					if (qv != null) {
+						if (qv.num_value != null && qv.num_value.Count > 0) {
+							comp.Add (qv.num_value [0]);
+						}
 					}
+					
+					
+				} else {
+					
+					
+					double ergebnis = 	GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable(s);
+					Debug.Log("IF MATH"+ergebnis);
+					comp.Add (ergebnis);
+					
+					
+					
 				}
+
+
+
 
 			}
 
@@ -4177,8 +4204,13 @@ public class QuestConditionComparer
 		}
 		if (var_value != null && var_value.Count > 0) {
 
+
+			Debug.Log("looking for var values");
+
 			foreach (string k in var_value) {
 
+
+				Debug.Log("looking vor var "+k);
 
 
 				string kk = new string (k.ToCharArray ()
@@ -4187,7 +4219,10 @@ public class QuestConditionComparer
 
 				//Debug.Log("-----starting to look for '"+kk+"'");
 
+				if(!kk.Contains("+") && !kk.Contains("-") && !kk.Contains("*") && !kk.Contains("/") && !kk.Contains(":") ){
 				QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (kk);
+
+
 
 				if (qv != null) {
 
@@ -4195,17 +4230,155 @@ public class QuestConditionComparer
 					if (qv.getStringValue () != null) {
 						comp.Add (qv.getStringValue ());
 					}
+
 				} else {
 
 					Debug.Log ("couldn't find var " + kk);
 
-				}	
+				}
+
+
+				} else {
+
+
+				double ergebnis = 	GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable(kk);
+					Debug.Log("IF MATH"+ergebnis);
+					comp.Add (ergebnis.ToString());
+
+					
+					
+				}
 
 			}
 
 		}
 		
 		return comp;
+		
+	}
+
+
+
+	public double mathVariable (string input)
+	{
+		
+		
+		
+		
+		double currentvalue = 0.0d;
+		bool needsstartvalue = true;
+		input = new string (input.ToCharArray ()
+		                    .Where (c => !Char.IsWhiteSpace (c))
+		                    .ToArray ());
+		//	Debug.Log ("Rechnung:"+input);
+		
+		string arithmetics = "";
+		
+		
+		foreach (Char c in input.ToCharArray()) {
+			
+			
+			if(c == '+'){
+				
+				arithmetics = arithmetics + "+";
+			}
+			if(c == '-'){
+				
+				arithmetics = arithmetics + "-";
+			}
+			if(c == '*'){
+				
+				arithmetics = arithmetics + "*";
+			}
+			if(c == '/'){
+				
+				arithmetics = arithmetics + "/";
+			}
+			if(c == ':'){
+				
+				arithmetics = arithmetics + ":";
+			}
+			
+		}
+		
+		
+		
+		//Debug.Log ("Rechnung:"+arithmetics);
+		
+		char[] splitter = "+-/*:".ToCharArray ();
+		string[] splitted = input.Split (splitter);
+		
+		
+		int count = 0;
+		
+		
+		foreach (string s in splitted) {
+			
+			double n;
+			bool isNumeric = double.TryParse (s, out n);
+			if (isNumeric) {
+				
+				if (needsstartvalue) {
+					
+					currentvalue = n;
+					needsstartvalue = false;
+				} else {
+					
+					if (arithmetics.Substring (count, 1) == "+") {
+						currentvalue += n;
+					} else if (arithmetics.Substring (count, 1) == "-") {
+						currentvalue -= n;
+					} else if (arithmetics.Substring (count, 1) == "*") {
+						currentvalue *= n;
+					} else if ((arithmetics.Substring (count, 1) == "/") || (arithmetics.Substring (count, 1) == ":")) {
+						
+						currentvalue = currentvalue / n;
+					} 
+					
+					
+				}
+				
+				
+			} else {
+				
+				QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (s);
+				if (!qv.isNull()) {
+					if (qv.num_value != null && qv.num_value.Count > 0) {
+						if (needsstartvalue) {
+							
+							currentvalue = qv.num_value [0];
+							Debug.Log(s+":"+currentvalue.ToString("F10"));
+							
+							needsstartvalue = false;
+							
+						} else {
+							
+							n = qv.num_value [0];
+							
+							Debug.Log(n);
+							if (arithmetics.Substring (count, 1) == "+") {
+								currentvalue += n;
+							} else if (arithmetics.Substring (count, 1) == "-") {
+								currentvalue -= n;
+								//								Debug.Log(currentvalue);
+							} else if (arithmetics.Substring (count, 1) == "*") {
+								currentvalue *= n;
+							} else if ((arithmetics.Substring (count, 1) == "/") || (arithmetics.Substring (count, 1) == ":")) {
+								
+								currentvalue = currentvalue / n;
+							}
+							count += 1;
+							
+						}
+						
+					}
+				}
+			}
+			
+			
+		}
+		
+		return currentvalue;
 		
 	}
 
