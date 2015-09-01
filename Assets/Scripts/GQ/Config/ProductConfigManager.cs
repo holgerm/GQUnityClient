@@ -89,6 +89,28 @@ namespace GQ.Conf
 			}
 		}
 
+		private static Sprite _topLogo;
+
+		public static Sprite topLogo {
+			get {
+				return _topLogo;
+			}
+			set {
+				_topLogo = value;
+			}
+		}
+		
+		private static Texture2D _splashScreen;
+		
+		public static Texture2D splashScreen {
+			get {
+				return _splashScreen;
+			}
+			set {
+				_splashScreen = value;
+			}
+		}
+
 		static Config deserialize ()
 		{
 			if (!File.Exists (RUNTIME_PRODUCT_FILE + ".json")) {

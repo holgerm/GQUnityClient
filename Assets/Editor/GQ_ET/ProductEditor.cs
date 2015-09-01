@@ -94,7 +94,6 @@ namespace GQ_ET
 					ProductConfigManager.current.name, 
 					GUILayout.Height (EditorGUIUtility.singleLineHeight));
 
-			// TODO appicon
 			ProductConfigManager.appIconTexture = 
 				(Texture2D)EditorGUILayout.ObjectField (
 					"App Icon", 
@@ -168,7 +167,13 @@ namespace GQ_ET
 			EditorGUILayout.EndHorizontal ();
 
 			// TODO splash screen
-			
+			ProductConfigManager.splashScreen = 
+				(Texture2D)EditorGUILayout.ObjectField (
+					"Splash Screen", 
+					ProductConfigManager.splashScreen,
+					typeof(Texture),
+					false);
+
 			ProductConfigManager.current.colorProfile = 
 				EditorGUILayout.TextField (
 					"Color Profile", 
@@ -185,7 +190,13 @@ namespace GQ_ET
 				EditorGUILayout.Toggle ("Show Connection Warning?", ProductConfigManager.current.showNetConnectionWarning);
 
 			// TODO toplogo
-			
+			ProductConfigManager.topLogo = 
+				(Sprite)EditorGUILayout.ObjectField (
+					"Top Bar Logo", 
+					ProductConfigManager.topLogo,
+					typeof(Sprite),
+					false);
+
 			ProductConfigManager.current.mapboxMapID = 
 				EditorGUILayout.TextField (
 					"Mapbox Map ID", 
