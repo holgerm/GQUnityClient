@@ -30,13 +30,8 @@ public class page_npctalk : MonoBehaviour
 	public string texttoticker;
 	public float tickertime;
 	private float savedtickertime;
-
-
 	public int indexoflink = 0;
 	public string link;
-
-
-
 	public List<Link> links;
 
 	void Start ()
@@ -73,7 +68,7 @@ public class page_npctalk : MonoBehaviour
 				pre = "file:";
 			}
 
-			if(Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed){
+			if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
 				
 				pre = "";
 			}
@@ -122,13 +117,13 @@ public class page_npctalk : MonoBehaviour
 							float myY = (float)qra.texture.height;
 							
 							
-							float scaler = myY/604f;
+							float scaler = myY / 604f;
 							
 							myX = myX / scaler;
 							myY = 604f;
 							
 							
-							image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
+							image.GetComponent<RectTransform> ().sizeDelta = new Vector2 (myX, myY);
 							
 							
 							
@@ -145,7 +140,7 @@ public class page_npctalk : MonoBehaviour
 		
 					
 					
-					www = new WWW (pre + ""+npctalk.getAttribute ("image"));
+					www = new WWW (pre + "" + npctalk.getAttribute ("image"));
 					
 					StartCoroutine (waitforImage ());
 
@@ -247,22 +242,22 @@ public class page_npctalk : MonoBehaviour
 
 				string toadd = npctalk.getAttribute ("text");
 				int i = 0;	
-				Debug.Log("LINK? "+ toadd.IndexOf("<a href="));
-				while(toadd.IndexOf("<a href=") > -1){
+				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
+				while (toadd.IndexOf("<a href=") > -1) {
 				
-					int index_start = toadd.IndexOf("<a href=",i);
-					int index_mid = toadd.IndexOf(">",index_start);
-					int index_end = toadd.IndexOf("</a>",index_mid);
+					int index_start = toadd.IndexOf ("<a href=", i);
+					int index_mid = toadd.IndexOf (">", index_start);
+					int index_end = toadd.IndexOf ("</a>", index_mid);
 					i = index_end;
 
 
-					string one = toadd.Substring(0,index_start);
-					string two = toadd.Substring(index_mid,index_end-index_mid);
-					string three = toadd.Substring(index_end,toadd.Length-index_end);
+					string one = toadd.Substring (0, index_start);
+					string two = toadd.Substring (index_mid, index_end - index_mid);
+					string three = toadd.Substring (index_end, toadd.Length - index_end);
 
 					link = two;
 					indexoflink = index_start;
-					toadd = one+"<a name='link1'>"+two+"</a>"+three;
+					toadd = one + "<a name='link1'>" + two + "</a>" + three;
 				}
 
 				text.text += toadd;
@@ -419,44 +414,44 @@ public class page_npctalk : MonoBehaviour
 
 
 				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
-				toadd = toadd+"   ";
+				toadd = toadd + "   ";
 				int i = 0;	
-				Debug.Log("LINK? "+ toadd.IndexOf("<a href="));
+				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
 				int l = 0;
 
 
-				while(toadd.IndexOf("<a href=") > -1){
+				while (toadd.IndexOf("<a href=") > -1) {
 					
-					int index_start = toadd.IndexOf("<a href=",i);
-					int index_mid = toadd.IndexOf(">",index_start);
-					int index_end = toadd.IndexOf("</a>",index_mid);
+					int index_start = toadd.IndexOf ("<a href=", i);
+					int index_mid = toadd.IndexOf (">", index_start);
+					int index_end = toadd.IndexOf ("</a>", index_mid);
 					i = index_end;
 
 
 					
-					string one = toadd.Substring(0,index_start);
-					string two = toadd.Substring(index_mid+1,index_end-index_mid-1);
-					Debug.Log(toadd.Length+","+index_end+","+(toadd.Length-index_end));
-					string three = toadd.Substring(index_end+5,toadd.Length-index_end-5);
+					string one = toadd.Substring (0, index_start);
+					string two = toadd.Substring (index_mid + 1, index_end - index_mid - 1);
+					Debug.Log (toadd.Length + "," + index_end + "," + (toadd.Length - index_end));
+					string three = toadd.Substring (index_end + 5, toadd.Length - index_end - 5);
 
 
 
-					if(two.Length > 0 && two != "0"){
+					if (two.Length > 0 && two != "0") {
 
-					links.Add(new Link("link"+l,two));
-					if(two.Length > 27){
+						links.Add (new Link ("link" + l, two));
+						if (two.Length > 27) {
 
-						two = two.Substring(0,25)+"...";
-					}
-
-
+							two = two.Substring (0, 25) + "...";
+						}
 
 
-					toadd = one+"<a name=\"link"+l+"\"><quad class=\"link\">  "+two+"</a>"+three;
+
+
+						toadd = one + "<a name=\"link" + l + "\"><quad class=\"link\">  " + two + "</a>" + three;
 						l++;
 
 					} else {
-						toadd = one+" "+three;
+						toadd = one + " " + three;
 					}
 
 
@@ -506,26 +501,26 @@ public class page_npctalk : MonoBehaviour
 
 	}
 
-
-	public void clickLink(HyperText ht,Candlelight.UI.HyperText.LinkInfo li){
-
-
-
-	foreach (Link l in links) {
+	public void clickLink (HyperText ht, Candlelight.UI.HyperText.LinkInfo li)
+	{
 
 
-			if(l.name == li.Id){
+
+		foreach (Link l in links) {
+
+
+			if (l.name == li.Id) {
 
 
 				string url = l.url;
 
-				if(!url.StartsWith("http")){
+				if (!url.StartsWith ("http")) {
 
-					url = "http://"+url;
+					url = "http://" + url;
 
 				}
 
-				Application.OpenURL(url);
+				Application.OpenURL (url);
 
 			}
 
@@ -551,7 +546,7 @@ public class page_npctalk : MonoBehaviour
 			//Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 		
 //			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract (start).Milliseconds);
-		//	Debug.Log ("All took: " + DateTime.Now.Subtract (startWWW).Milliseconds);
+			//	Debug.Log ("All took: " + DateTime.Now.Subtract (startWWW).Milliseconds);
 
 			//Debug.Log (www.texture.height + "," + www.texture.width);
 				
@@ -564,13 +559,13 @@ public class page_npctalk : MonoBehaviour
 			float myY = (float)www.texture.height;
 			
 			
-												float scaler = myY/604f;
+			float scaler = myY / 604f;
 			
-												myX = myX / scaler;
-												myY = 604f;
+			myX = myX / scaler;
+			myY = 604f;
 			
 			
-												image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
+			image.GetComponent<RectTransform> ().sizeDelta = new Vector2 (myX, myY);
 			
 											
 		
@@ -648,15 +643,15 @@ public class page_npctalk : MonoBehaviour
 }
 
 [System.Serializable]
-public class Link{
+public class Link
+{
 
 
 	public string name;
 	public string url;
 
-
-
-	public Link(string n, string u){
+	public Link (string n, string u)
+	{
 
 
 		name = n;
