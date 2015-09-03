@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using GQ.Conf;
+using GQ.ET;
 
 namespace Product
 {
@@ -102,7 +103,7 @@ namespace Product
 
 			if (productIDFound) {
 				Debug.Log ("Producing: " + productID);
-				ProductConfigManager.load (productID);
+				ProductEditor.load (productID);
 			} else {
 				Debug.LogError ("ERROR: No product ID specified. Use --gqproduct <productID> to build your product!");
 				return; // TODO how should we exit in error cases like this?

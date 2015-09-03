@@ -12,97 +12,12 @@ namespace GQ.Conf
 	public class ProductConfigManager
 	{
 
-		const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
-		const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "/product";
-		public const string PRODUCTS_DIR = "Assets/Editor/products";
+		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
+		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "/product";
 		public const string PRODUCT_FILE = "product.json";
-		const string APP_ICON_FILE_BASE = "appIcon";
-		const string SPLASH_SCREEN_FILE_BASE = "splashScreen";
-		const string TOP_LOGO_FILE_BASE = "topLogo";
-		const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
+		public const string TOP_LOGO_FILE_BASE = "topLogo";
+		public const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
 
-		//////////////////////////////////
-		// CHANGING THE CURRENT PRODUCT:
-		
-		/// <summary>
-		/// Changes the currently used product to the given ID. 
-		/// 
-		/// The contract assumes that for the given ID a folder containing all necessary config data exists and is readable. 
-		/// Any such checks need to be made in advance to calling this method.
-		/// </summary>
-		/// <param name="id">Product Identifier.</param>
-		public static void load (string id)
-		{
-			if (id.Equals (current.id)) {
-				return;
-			}
-
-			DirectoryInfo configPersistentDir = new DirectoryInfo (PRODUCTS_DIR + "/" + id);
-			DirectoryInfo configRuntimeDir = new DirectoryInfo (RUNTIME_PRODUCT_DIR);
-				
-			if (!configRuntimeDir.Exists) {
-				configRuntimeDir.Create ();
-			}
-
-			GQ.Util.Files.clearDirectory (configRuntimeDir.FullName);
-
-			foreach (FileInfo file in configPersistentDir.GetFiles()) {
-				if (!file.Extension.ToLower ().EndsWith ("meta") && !file.Extension.ToLower ().EndsWith ("ds_store")) {
-					File.Copy (file.FullName, RUNTIME_PRODUCT_DIR + "/" + file.Name);
-				}
-			}
-			AssetDatabase.ImportAsset (RUNTIME_PRODUCT_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
-
-			current = deserialize ();
-
-			// adjust Player Settings to newly loaded product:
-			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
-
-			// load images:
-			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".png"))
-				appIcon = 
-					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".png") as Texture2D;
-			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".jpg"))
-				appIcon = 
-					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + APP_ICON_FILE_BASE + ".jpg") as Texture2D;
-			else
-				appIcon = null; // TODO replace null with default
-
-			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png"))
-				splashScreen = 
-					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png") as Texture2D;
-			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg"))
-				splashScreen = 
-					AssetDatabase.LoadMainAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg") as Texture2D;
-			else
-				splashScreen = null; // TODO replace null with default
-
-			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd"))
-				topLogo = 
-					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
-			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".png"))
-				topLogo = 
-					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
-			else if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg"))
-				topLogo = 
-					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
-			else
-				topLogo = null; // TODO replace null with default
-
-			if (File.Exists (RUNTIME_PRODUCT_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png"))
-				defaultMarker = 
-					AssetDatabase.LoadAssetAtPath (RUNTIME_PRODUCT_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
-			else
-				defaultMarker = null; // TODO replace null with default
-
-//			TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath (RUNTIME_PRODUCT_DIR + "/appIcon");
-//			importer.isReadable = true;
-//			AssetDatabase.ImportAsset (RUNTIME_PRODUCT_DIR + "/appIcon");
-//			// Load Textures:
-//			appIconTexture = Resources.Load ("appIcon") as Texture2D;
-//			AssetDatabase.Refresh ();
-			// TODO fix this bullshit with: http://docs.unity3d.com/ScriptReference/EditorUtility.OpenFilePanel.html
-		}
 
 		//////////////////////////////////
 		// RETRIEVING THE CURRENT PRODUCT:
@@ -119,28 +34,6 @@ namespace GQ.Conf
 			}
 			set {
 				_current = value;
-			}
-		}
-
-		private static Texture2D _appIconTexture;
-
-		public static Texture2D appIcon {
-			get {
-				return _appIconTexture;
-			}
-			set {
-				_appIconTexture = value;
-			}
-		}
-		
-		private static Texture2D _splashScreen;
-		
-		public static Texture2D splashScreen {
-			get {
-				return _splashScreen;
-			}
-			set {
-				_splashScreen = value;
 			}
 		}
 
@@ -166,12 +59,7 @@ namespace GQ.Conf
 			}
 		}
 
-		public static string GetBundleIdentifier ()
-		{
-			return "com.questmill.geoquest." + current.id;
-		}
-
-		static Config deserialize ()
+		public static Config deserialize ()
 		{
 			if (!File.Exists (RUNTIME_PRODUCT_FILE + ".json")) {
 				throw new ArgumentException ("Config JSON File Missing! Please provide one at " + RUNTIME_PRODUCT_FILE + ".json");
@@ -182,36 +70,11 @@ namespace GQ.Conf
 			if (configAsset == null) {
 				throw new ArgumentException ("Config JSON File does not represent a loadable asset. Cf. " + RUNTIME_PRODUCT_FILE + ".json");
 			}
-			return JsonMapper.ToObject<Config> (configAsset.text);
+			current = JsonMapper.ToObject<Config> (configAsset.text);
+			return current;
 		}
 
-		public static void save (string productID)
-		{
-			serialize ();
-
-//			byte[] bytes = _appIconTexture.EncodeToJPG ();
-//			File.WriteAllBytes (RUNTIME_PRODUCT_DIR + "/appIcon.png", bytes);
-
-			string configPersistentDirPath = PRODUCTS_DIR + "/" + productID;
-			DirectoryInfo configPersistentDir = new DirectoryInfo (configPersistentDirPath);
-			DirectoryInfo configRuntimeDir = new DirectoryInfo (RUNTIME_PRODUCT_DIR);
-			
-			if (!configPersistentDir.Exists) {
-				configPersistentDir.Create ();
-			}
-			
-			GQ.Util.Files.clearDirectory (configPersistentDir.FullName);
-			
-			foreach (FileInfo file in configRuntimeDir.GetFiles()) {
-				if (!file.Extension.EndsWith ("meta")) {
-					File.Copy (file.FullName, configPersistentDirPath + "/" + file.Name);
-				}
-			}
-
-			AssetDatabase.ImportAsset (PRODUCTS_DIR + "/" + current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
-		}
-
-		static void serialize ()
+		public static void serialize ()
 		{
 			StringBuilder sb = new StringBuilder ();
 			JsonWriter jsonWriter = new JsonWriter (sb);

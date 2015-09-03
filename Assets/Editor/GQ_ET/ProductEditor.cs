@@ -7,7 +7,7 @@ using LitJson;
 using GQ.Conf;
 using System;
 
-namespace GQ_ET
+namespace GQ.ET
 {
 	public class ProductEditor : EditorWindow
 	{
@@ -15,6 +15,34 @@ namespace GQ_ET
 		static private string[] productIDs;
 		static private bool initialized = false;
 
+		public const string PRODUCTS_DIR = "Assets/Editor/products";
+		const string RT_PROD_DIR = ProductConfigManager.RUNTIME_PRODUCT_DIR;
+
+		const string APP_ICON_FILE_BASE = "appIcon";
+		const string SPLASH_SCREEN_FILE_BASE = "splashScreen";
+
+		private static Texture2D _appIconTexture;
+		
+		public static Texture2D appIcon {
+			get {
+				return _appIconTexture;
+			}
+			set {
+				_appIconTexture = value;
+			}
+		}
+		
+		private static Texture2D _splashScreen;
+		
+		public static Texture2D splashScreen {
+			get {
+				return _splashScreen;
+			}
+			set {
+				_splashScreen = value;
+			}
+		}
+		
 		[MenuItem ("Window/GQ Product Editor")]
 		public static void  ShowWindow ()
 		{
@@ -23,6 +51,7 @@ namespace GQ_ET
 
 		void initialize ()
 		{
+			Debug.Log ("initialize()");
 			this.titleContent = new GUIContent ("GQ Product");
 			productIDs = retrieveProductNames ();
 			if (productIDs.Length < 1) {
@@ -32,11 +61,11 @@ namespace GQ_ET
 			if (EditorPrefs.HasKey ("ProductIndex")) {
 				selectedProductIndex = EditorPrefs.GetInt ("ProductIndex");
 				GUI.enabled = false;
-				ProductConfigManager.load (productIDs [selectedProductIndex]);
+				load (productIDs [selectedProductIndex]);
 				GUI.enabled = true;
 			}
-			if (!Directory.Exists (ProductConfigManager.PRODUCTS_DIR)) {    
-				Directory.CreateDirectory (ProductConfigManager.PRODUCTS_DIR);
+			if (!Directory.Exists (PRODUCTS_DIR)) {    
+				Directory.CreateDirectory (PRODUCTS_DIR);
 				Debug.LogWarning ("No product directory found. Created an empty one. No products defined!");
 			}
 			initialized = true;
@@ -61,7 +90,10 @@ namespace GQ_ET
 		void createGUIProductSelection ()
 		{
 			GUILayout.Label ("Select Product to Build", EditorStyles.boldLabel);
-			changeProduct (EditorGUILayout.Popup ("Product ID", selectedProductIndex, productIDs));
+			int newSelProdIndex = EditorGUILayout.Popup ("Product ID", selectedProductIndex, productIDs);
+			if (newSelProdIndex != selectedProductIndex) {
+				changeProduct (newSelProdIndex);
+			}
 		}
 
 		bool allowChanges = false;
@@ -84,10 +116,10 @@ namespace GQ_ET
 					ProductConfigManager.current.name, 
 					GUILayout.Height (EditorGUIUtility.singleLineHeight));
 
-			ProductConfigManager.appIcon = 
+			appIcon = 
 				(Texture2D)EditorGUILayout.ObjectField (
 					"App Icon", 
-					ProductConfigManager.appIcon,
+					appIcon,
 			        typeof(Texture),
 					false);
 
@@ -157,10 +189,10 @@ namespace GQ_ET
 			EditorGUILayout.EndHorizontal ();
 
 			// TODO splash screen
-			ProductConfigManager.splashScreen = 
+			splashScreen = 
 				(Texture2D)EditorGUILayout.ObjectField (
 					"Splash Screen", 
-					ProductConfigManager.splashScreen,
+					splashScreen,
 					typeof(Texture),
 					false);
 
@@ -275,25 +307,129 @@ namespace GQ_ET
 
 		}
 
+		//////////////////////////////////
+		// CHANGING THE CURRENT PRODUCT:
+		
+		/// <summary>
+		/// Changes the currently used product to the given ID. 
+		/// 
+		/// The contract assumes that for the given ID a folder containing all necessary config data exists and is readable. 
+		/// Any such checks need to be made in advance to calling this method.
+		/// </summary>
+		/// <param name="id">Product Identifier.</param>
+		public static void load (string id)
+		{
+			DirectoryInfo configPersistentDir = new DirectoryInfo (PRODUCTS_DIR + "/" + id);
+			DirectoryInfo configRuntimeDir = new DirectoryInfo (RT_PROD_DIR);
+			
+			if (!configRuntimeDir.Exists) {
+				configRuntimeDir.Create ();
+			}
+			
+			GQ.Util.Files.clearDirectory (configRuntimeDir.FullName);
+			
+			foreach (FileInfo file in configPersistentDir.GetFiles()) {
+				if (!file.Extension.ToLower ().EndsWith ("meta") && !file.Extension.ToLower ().EndsWith ("ds_store")) {
+					File.Copy (file.FullName, RT_PROD_DIR + "/" + file.Name);
+				}
+			}
+
+			Debug.Log ("Import assets in load(" + id + ")");
+			AssetDatabase.ImportAsset (RT_PROD_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+			
+			ProductConfigManager.deserialize ();
+			
+			// adjust Player Settings to newly loaded product:
+			PlayerSettings.bundleIdentifier = "com.questmill.geoquest." + ProductConfigManager.current.id;
+			
+			// load images:
+			if (File.Exists (RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".png"))
+				appIcon = 
+					AssetDatabase.LoadMainAssetAtPath (RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".png") as Texture2D;
+			else if (File.Exists (RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".jpg"))
+				appIcon = 
+					AssetDatabase.LoadMainAssetAtPath (RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".jpg") as Texture2D;
+			else
+				appIcon = null; // TODO replace null with default
+			
+			if (File.Exists (RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png"))
+				splashScreen = 
+					AssetDatabase.LoadMainAssetAtPath (RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png") as Texture2D;
+			else if (File.Exists (RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg"))
+				splashScreen = 
+					AssetDatabase.LoadMainAssetAtPath (RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg") as Texture2D;
+			else
+				splashScreen = null; // TODO replace null with default
+			
+			if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".psd"))
+				ProductConfigManager.topLogo = 
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
+			else if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".png"))
+				ProductConfigManager.topLogo = 
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+			else if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".jpg"))
+				ProductConfigManager.topLogo = 
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
+			else
+				ProductConfigManager.topLogo = null; // TODO replace null with default
+			
+			if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.DEFAULT_MARKER_FILE_BASE + ".png"))
+				ProductConfigManager.defaultMarker = 
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+			else
+				ProductConfigManager.defaultMarker = null; // TODO replace null with default
+			
+			//			TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath (RUNTIME_PRODUCT_DIR + "/appIcon");
+			//			importer.isReadable = true;
+			//			AssetDatabase.ImportAsset (RUNTIME_PRODUCT_DIR + "/appIcon");
+			//			// Load Textures:
+			//			appIconTexture = Resources.Load ("appIcon") as Texture2D;
+			//			AssetDatabase.Refresh ();
+			// TODO fix this bullshit with: http://docs.unity3d.com/ScriptReference/EditorUtility.OpenFilePanel.html
+		}
+
 		void performSaveConfig (string productID)
 		{
 			ProductConfigManager.current.id = productID;
-			ProductConfigManager.save (productID);
+			save (productID);
 		}
 
-		void OnProjectChange ()
+		public static void save (string productID)
 		{
-			initialize ();
+			ProductConfigManager.serialize ();
+			
+			string configPersistentDirPath = PRODUCTS_DIR + "/" + productID;
+			DirectoryInfo configPersistentDir = new DirectoryInfo (configPersistentDirPath);
+			DirectoryInfo configRuntimeDir = new DirectoryInfo (RT_PROD_DIR);
+			
+			if (!configPersistentDir.Exists) {
+				configPersistentDir.Create ();
+			}
+			
+			GQ.Util.Files.clearDirectory (configPersistentDir.FullName);
+			
+			foreach (FileInfo file in configRuntimeDir.GetFiles()) {
+				if (!file.Extension.EndsWith ("meta")) {
+					File.Copy (file.FullName, configPersistentDirPath + "/" + file.Name);
+				}
+			}
+
+			// TODO should we store the images, too?
+			Debug.Log ("Import assets in save(" + productID + ")");
+			AssetDatabase.ImportAsset (PRODUCTS_DIR + "/" + ProductConfigManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
+		
+
 
 		void changeProduct (int index)
 		{
+			Debug.Log ("changeProduct (" + selectedProductIndex + " --> " + index + ")");
 			if (index.Equals (selectedProductIndex))
 				return;
 
 			try {
 				GUI.enabled = false;
-				ProductConfigManager.load (productIDs [index]);
+				load (productIDs [index]);
 				GUI.enabled = true;
 				selectedProductIndex = index;
 				EditorPrefs.SetInt ("ProductIndex", index);
@@ -306,7 +442,7 @@ namespace GQ_ET
 
 		static string[] retrieveProductNames ()
 		{
-			return Directory.GetDirectories (ProductConfigManager.PRODUCTS_DIR).Select (d => new DirectoryInfo (d).Name).ToArray ();
+			return Directory.GetDirectories (PRODUCTS_DIR).Select (d => new DirectoryInfo (d).Name).ToArray ();
 		}
 	}
 }
