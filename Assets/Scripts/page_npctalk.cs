@@ -57,8 +57,15 @@ public class page_npctalk : MonoBehaviour
 
 
 
+
+			if(questdb.allowReturn){
 			if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("MultipleChoiceQuestion") || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("TextQuestion")) {
 				Destroy (backbutton.gameObject);
+			}
+			} else {
+
+				Destroy (backbutton.gameObject);
+
 			}
 
 

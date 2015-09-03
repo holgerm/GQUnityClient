@@ -130,8 +130,7 @@ public class actions : MonoBehaviour
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 
 		if (action.type == "StartMission") {
-			quest.previouspages.Add (quest.currentpage);
-			questdb.changePage (int.Parse (action.getAttribute ("id")));
+			changePage(action);
 		} else if (action.type == "EndGame") {
 			photos = new List<QuestRuntimeAsset> ();
 			questdb.endQuest ();
@@ -388,6 +387,41 @@ if(to != null){
 
 	}
 
+	void changePage (QuestAction action)
+	{
+		quest.previouspages.Add (quest.currentpage);
+
+
+
+		if(questdb.currentquest.hasAttribute("individualReturnDefinitions")
+		   && questdb.currentquest.getAttribute(("individualReturnDefinitions")) == "true"){
+
+		if (action.getAttribute ("allowReturn") != "") {
+
+		if(	action.getAttribute ("allowReturn") == "0"){
+				questdb.allowReturn = false;
+
+
+			} else {
+				questdb.allowReturn = true;
+
+			}
+
+		} else {
+
+			questdb.allowReturn = true;
+
+		}
+
+		} else {
+
+			questdb.allowReturn = true;
+
+		}
+
+		questdb.changePage (int.Parse (action.getAttribute ("id")));
+	
+	}
 
 
 	void showVariableOverlay (QuestAction action)
@@ -1242,178 +1276,199 @@ if(to != null){
 	public QuestVariable getVariable (string k)
 	{
 
-		string k2 = k;
-		k = new string (k.ToCharArray ()
+		if (k != null) {
+
+
+
+			string k2 = k;
+			k = new string (k.ToCharArray ()
 		                 .Where (c => !Char.IsWhiteSpace (c))
 		                 .ToArray ());
 
 
-		if (k.StartsWith ("date(")) {
+			if (k.StartsWith ("date(")) {
 
 
-			string d = k;
-				d = d.Replace("date(","");
-				d = d.Replace(")","");
+				string d = k;
+				d = d.Replace ("date(", "");
+				d = d.Replace (")", "");
 
 			
+				if(getVariable (d).num_value != null){
 
 				
-				double ergebnis = getVariable(d).num_value[0];
-				Debug.Log(ergebnis);
-				TimeSpan time = TimeSpan.FromSeconds(ergebnis);
+				double ergebnis = getVariable (d).num_value [0];
+				Debug.Log (ergebnis);
+				TimeSpan time = TimeSpan.FromSeconds (ergebnis);
 				
-				double seconds = time.Seconds ;
-				string seconds_str = seconds.ToString();
+				double seconds = time.Seconds;
+				string seconds_str = seconds.ToString ();
 				
-				if(seconds < 10){ seconds_str = "0"+seconds; }
+				if (seconds < 10) {
+					seconds_str = "0" + seconds;
+				}
 				
 				
 				double minutes = time.Minutes;
-				string minutes_str = minutes.ToString();
+				string minutes_str = minutes.ToString ();
 				
-				if(minutes < 10){ minutes_str = "0"+(int)minutes; }
-				if(minutes < 0){ minutes_str = "00"; }
+				if (minutes < 10) {
+					minutes_str = "0" + (int)minutes;
+				}
+				if (minutes < 0) {
+					minutes_str = "00";
+				}
 				
 				int hours = time.Hours;
-				string hours_str = hours.ToString();
+				string hours_str = hours.ToString ();
 				
-				if(hours < 10){ hours_str = "0"+hours; }
-				if(hours < 0){ hours_str = "00"; }
+				if (hours < 10) {
+					hours_str = "0" + hours;
+				}
+				if (hours < 0) {
+					hours_str = "00";
+				}
 				
 				
 				int days = (int)time.TotalDays;
-				string days_str = days.ToString();
+				string days_str = days.ToString ();
 				
-				if(days < 0){ days_str = "0"; }
+				if (days < 0) {
+					days_str = "0";
+				}
 				
 				
 				
 				string finaldate = "";
 				
-				if(days > 0){
+				if (days > 0) {
 					
-					finaldate = days_str+":";
+					finaldate = days_str + ":";
 					
 				}
 				
-				if(hours > 0){
+				if (hours > 0) {
 					
 					finaldate = finaldate + "" + hours_str + ":";
 				}
 				
-				finaldate = finaldate + "" + minutes_str + ":"+seconds_str;
+				finaldate = finaldate + "" + minutes_str + ":" + seconds_str;
 				
 				
 				
-			return new QuestVariable(k,finaldate);
+				return new QuestVariable (k, finaldate);
 
 				
 				
 			
+				} else {
+
+					return new QuestVariable (k, "[null]");
+
+				}
 
 
 
-
-		} else
+			} else
 
 		if (k.Contains ("+") || k.Contains ("-") || k.Contains ("*") || k.Contains (":") || k.Contains ("/")) {
 
 
-				return new QuestVariable(k,mathVariable(k));
+				return new QuestVariable (k, mathVariable (k));
 
 
-		} else if (k == "$date.now") {
+			} else if (k == "$date.now") {
 
-			Debug.Log("looking for date");
-			 DateTime Jan1St1970 = new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+				Debug.Log ("looking for date");
+				DateTime Jan1St1970 = new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-			double unixTime = ((DateTime.UtcNow - Jan1St1970).TotalSeconds);
-			unixTime = Math.Round(unixTime,0);
-			return new QuestVariable("$date.now",unixTime);
-
-
-
-		} else if (k == "quest.name") {
-
-
-			return new QuestVariable ("quest.name", questdb.currentquest.name);
-
-
-		} else if (k == "score") {
+				double unixTime = ((DateTime.UtcNow - Jan1St1970).TotalSeconds);
+				unixTime = Math.Round (unixTime, 0);
+				return new QuestVariable ("$date.now", unixTime);
 
 
 
-			return new QuestVariable ("score", (float)score);
+			} else if (k == "quest.name") {
+
+
+				return new QuestVariable ("quest.name", questdb.currentquest.name);
+
+
+			} else if (k == "score") {
+
+
+
+				return new QuestVariable ("score", (float)score);
 
 			
 			
 			
-		} else if (k.StartsWith ("$_mission_") || k.StartsWith ("$_")) {
+			} else if (k.StartsWith ("$_mission_") || k.StartsWith ("$_")) {
 
 
-			k = k.Replace ("$_mission_", "");
-			k = k.Replace ("$_", "");
+				k = k.Replace ("$_mission_", "");
+				k = k.Replace ("$_", "");
 
-			if (k.EndsWith (".result")) {
+				if (k.EndsWith (".result")) {
 
-				k = k.Replace (".result", "");
+					k = k.Replace (".result", "");
 
-				QuestPage qp = questdb.getPage (int.Parse (k));
+					QuestPage qp = questdb.getPage (int.Parse (k));
 
 
-				if (qp != null && qp.result != null && qp.result.Length > 0) {
-					return new QuestVariable (k2, qp.result);
-				} else if (Application.isWebPlayer) {
+					if (qp != null && qp.result != null && qp.result.Length > 0) {
+						return new QuestVariable (k2, qp.result);
+					} else if (Application.isWebPlayer) {
 
-					return new QuestVariable (k2, "[MISSIONRESULT: " + k2 + " ]");
+						return new QuestVariable (k2, "[MISSIONRESULT: " + k2 + " ]");
 					
-				} else {
+					} else {
 
-					return new QuestVariable (k2, "");
+						return new QuestVariable (k2, "");
 
-				}
+					}
 
-			} else if (k.EndsWith (".state")) {
+				} else if (k.EndsWith (".state")) {
 
-				k = k.Replace (".state", "");
-				QuestPage qp = questdb.getPage (int.Parse (k));
+					k = k.Replace (".state", "");
+					QuestPage qp = questdb.getPage (int.Parse (k));
 
 
 
-				if (qp != null && qp.state != null && qp.state.Length > 0) {
-					return new QuestVariable (k2, qp.state);
-				} else if (Application.isWebPlayer) {
-					return new QuestVariable (k2, "[MISSIONSTATE: " + k2 + " ]");
+					if (qp != null && qp.state != null && qp.state.Length > 0) {
+						return new QuestVariable (k2, qp.state);
+					} else if (Application.isWebPlayer) {
+						return new QuestVariable (k2, "[MISSIONSTATE: " + k2 + " ]");
 					
-				} else {
-					return new QuestVariable (k2, "");
+					} else {
+						return new QuestVariable (k2, "");
+
+
+					}
 
 
 				}
 
 
-			}
+
+			} else {
 
 
 
-		} else {
+				//Debug.Log("searching '"+k+"'");
+				foreach (QuestVariable qa in variables) {
+					//Debug.Log("found '"+qa.key+"'");
+					if (qa.key == k) {
+
+						return qa;
+					}
 
 
-
-			//Debug.Log("searching '"+k+"'");
-			foreach (QuestVariable qa in variables) {
-				//Debug.Log("found '"+qa.key+"'");
-				if (qa.key == k) {
-
-					return qa;
 				}
-
 
 			}
 
 		}
-
-
 
 		questdb.debug ("Variable " + k + " wurde nicht gefunden.");
 	return new QuestVariable (k, "[null]");

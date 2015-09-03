@@ -57,6 +57,8 @@ public class questdatabase : MonoBehaviour
 	public List<string> savedmessages;
 	public List<WWW> routewwws;
 	public createquestbuttons buttoncontroller;
+	public bool allowReturn = false;
+
 
 	IEnumerator Start ()
 	{
