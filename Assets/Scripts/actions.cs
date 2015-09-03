@@ -264,6 +264,7 @@ if(to != null){
 
 
 
+
 				string url = "http://www.yournavigation.org/api/1.0/gosmore.php?"+
 					"format=kml" +
 					"&flat=" + lon1 +
@@ -281,7 +282,10 @@ if(to != null){
 
 				StartCoroutine(waitForRouteFile(routewww));
 
+					if(Application.isWebPlayer){
 
+						questdb.debug("Es wurde eine neue Route gesetzt. Diese sind aktuell nicht in der Editor-Vorschau sichtbar. Benutze zum Testen eine Android- oder iOS-App.");
+					}
 
 				} else {
 
@@ -752,6 +756,8 @@ if(to != null){
 		if (s.Contains ("@")) {
 
 
+			bool lastwasvar = true;
+
 
 			char[] splitter = "@".ToCharArray ();
 
@@ -764,11 +770,15 @@ if(to != null){
 
 
 
-				if (c1 % 2 == 0) {
+
+
+				Debug.Log(x);
 
 					string x2 = new string (x.ToCharArray ()
 					                 .Where (c => !Char.IsWhiteSpace (c))
 					                 .ToArray ());
+
+				Debug.Log(x2);
 
 					if (x == x2) {
 
@@ -777,29 +787,43 @@ if(to != null){
 						if (x2 == "score") {
 
 							k += score.ToString ();
+						lastwasvar = true;
 
 						} else 
-						if (getVariable (x2) != null) {
+						if (getVariable (x2).ToString() != "[null]") {
 
 							k += getVariable (x2).getStringValue ();
-						} else {
-
-							k += "[VARIABLE NOT FOUND: " + x2 + "]";
-						}
+						lastwasvar = true;
 
 					} else {
 
+
+						if(lastwasvar){
+							k += x;
+						} else {
+							k += "@"+x;
+
+						}
+						lastwasvar = false;
+
+					}
+
+
+					} else {
+
+					if(lastwasvar){
 						k += x;
+					} else {
+						k += "@"+x;
+						
+					}
+					lastwasvar = false;
 
 					}
 
 							
 
-				} else {
-
-					k += x;
-
-				}
+				
 						
 				c1++;
 
@@ -1224,8 +1248,81 @@ if(to != null){
 		                 .ToArray ());
 
 
+		if (k.StartsWith ("date(")) {
 
-		if (k == "$date.now") {
+
+			string d = k;
+				d = d.Replace("date(","");
+				d = d.Replace(")","");
+
+			
+
+				
+				double ergebnis = getVariable(d).num_value[0];
+				Debug.Log(ergebnis);
+				TimeSpan time = TimeSpan.FromSeconds(ergebnis);
+				
+				double seconds = time.Seconds ;
+				string seconds_str = seconds.ToString();
+				
+				if(seconds < 10){ seconds_str = "0"+seconds; }
+				
+				
+				double minutes = time.Minutes;
+				string minutes_str = minutes.ToString();
+				
+				if(minutes < 10){ minutes_str = "0"+(int)minutes; }
+				if(minutes < 0){ minutes_str = "00"; }
+				
+				int hours = time.Hours;
+				string hours_str = hours.ToString();
+				
+				if(hours < 10){ hours_str = "0"+hours; }
+				if(hours < 0){ hours_str = "00"; }
+				
+				
+				int days = (int)time.TotalDays;
+				string days_str = days.ToString();
+				
+				if(days < 0){ days_str = "0"; }
+				
+				
+				
+				string finaldate = "";
+				
+				if(days > 0){
+					
+					finaldate = days_str+":";
+					
+				}
+				
+				if(hours > 0){
+					
+					finaldate = finaldate + "" + hours_str + ":";
+				}
+				
+				finaldate = finaldate + "" + minutes_str + ":"+seconds_str;
+				
+				
+				
+			return new QuestVariable(k,finaldate);
+
+				
+				
+			
+
+
+
+
+		} else
+
+		if (k.Contains ("+") || k.Contains ("-") || k.Contains ("*") || k.Contains (":") || k.Contains ("/")) {
+
+
+				return new QuestVariable(k,mathVariable(k));
+
+
+		} else if (k == "$date.now") {
 
 			Debug.Log("looking for date");
 			 DateTime Jan1St1970 = new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);

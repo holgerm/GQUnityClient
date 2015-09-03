@@ -3718,11 +3718,11 @@ MonoBehaviour:
   overrideProductSettingsInInspector: 0
   portalID: 281
   autostartQuestID: 0
-  autostartIsPredeployed: 0
+  autostartIsPredeployed: 1
   colorProfile: wcc
   mapboxKey: pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw
   mapboxMapID: mapbox.streets
-  downloadTimeOutSeconds: 300
+  downloadTimeOutSeconds: 100
   impressum: "<b>Titel</b>\\n WikiCultureCity\\n\\n <b>Beschreibung</b>\\n Anbieterkennzeichnung
     der WikiCultureCity GbR, Sebastianstr. 39, D-53115 Bonn\\n\\n <b>Einrichtung /
     Institution</b>\\n WikiCultureCity GbR\\n\\n <b>Rechtsform</b>\\n Gesellschaft
@@ -3762,8 +3762,8 @@ MonoBehaviour:
     einzelnen Bildern und Texten angegeben wird, haben diejenige, die diese Texte
     und Bilder einstellen, die Rechte an Bild und Text und gestatten WCC die uneingeschr\xE4nkte
     Verwendung auf der Plattform von WCC. "
-  toplogo: {fileID: 21300000, guid: b4faa7795bc6b4600b7515aeb20908ac, type: 3}
-  nameForQuest: Quest
+  toplogo: {fileID: 21300000, guid: c0de6870b2ef3496597a50d7831af070, type: 3}
+  nameForQuest: Ort
   questvisualization: list
   questvisualizationchangable: 0
   showcloudquestsimmediately: 1

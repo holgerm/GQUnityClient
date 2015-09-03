@@ -48,8 +48,9 @@ public class routerender : MonoBehaviour
 
 
 
-
-
+			if (mapController.currentroute != null){
+				//Debug.Log ("Route is not null");
+		}
 
 			if (questdb.currentquest != null && questdb.currentquest.currentpage != null && questdb.currentquest.currentpage.type == "MapOSM" && (map.IsDirty || questdb.fixedposition || !started) && mapController.currentroute != null) {
 

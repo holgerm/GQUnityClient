@@ -13,6 +13,7 @@ using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
 
+
 public class questdatabase : MonoBehaviour
 {
 	public Quest currentquest;
@@ -718,6 +719,10 @@ public class questdatabase : MonoBehaviour
 
 		List<QuestRuntimeHotspot> activehs = new List<QuestRuntimeHotspot> ();
 
+
+
+//		Debug.Log ("Current Quest: "+currentquest.id);
+
 		if (currentquest != null && currentquest.id != 0) {
 
 			foreach (QuestRuntimeHotspot qrh in hotspots) {
@@ -1344,10 +1349,17 @@ public class questdatabase : MonoBehaviour
 
 		hotspots = new List<QuestRuntimeHotspot> ();
 		foreach (QuestHotspot qh in currentquest.hotspots) {
+
+			Debug.Log("adding runtime hotspot");
 			bool initialActivity = qh.hasAttribute ("initialActivity") && qh.getAttribute ("initialActivity") == "true";
+
+			Debug.Log("initital Activity: "+qh.getAttribute ("initialActivity")+"/"+initialActivity);
 			bool initialVisibility = qh.hasAttribute ("initialVisibility") && qh.getAttribute ("initialVisibility") == "true";
 
 			hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
+
+			Debug.Log ("Hotspot Count #0: " + getActiveHotspots ().Count +"/"+hotspots.Count);
+
 		}
 
 		if (canPlayQuest (currentquest) && hasmorethanmetadata) {
@@ -1358,7 +1370,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-				changePage (currentquest.currentpage.id);
+				transferQuestHotspots(currentquest.currentpage.id);
 
 
 			} else if (!localload) {
@@ -1481,8 +1493,11 @@ public class questdatabase : MonoBehaviour
 		if (spritesConverted) {
 			
 			Debug.Log ("Converted Sprites has " + convertedSprites.Count + " objects.");
-			changePage (pageid);
-			
+
+
+
+		
+			transferQuestHotspots(pageid);
 			
 		} else {
 			Debug.Log ("STARTE");
@@ -2059,6 +2074,7 @@ public class questdatabase : MonoBehaviour
 	public void changePage (int id)
 	{
 
+		Debug.Log ("Hotspot Count #1: " + getActiveHotspots ().Count);
 
 
 	
@@ -2343,6 +2359,11 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator loadMap ()
 	{
+
+
+		Debug.Log ("Hotspot Count #2: " + getActiveHotspots ().Count);
+
+
 		AsyncOperation async = Application.LoadLevelAdditiveAsync (9);
 		
 	
@@ -2638,7 +2659,7 @@ public class Quest  : IComparable<Quest>
 		q.filepath = fp;
 		q.hasData = true;
 	
-		q.id = id;
+		//q.id = id;
 //		Debug.Log ("my id is " + id + " -> " + q.id);
 		q.deserializeAttributes (redo);
 

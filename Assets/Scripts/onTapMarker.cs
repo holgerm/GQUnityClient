@@ -57,6 +57,9 @@ public class onTapMarker : MonoBehaviour {
 	void Update(){
 
 
+		hotspot = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().getHotspot (""+hotspot.hotspot.id);
+
+
 		if (hotspot.active) {
 
 

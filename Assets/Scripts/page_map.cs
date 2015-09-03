@@ -200,6 +200,8 @@ public class page_map : MonoBehaviour
 
 
 				if (Application.isWebPlayer || Application.isEditor) {
+
+					//questdb.showmessage("Starte Positions-Simulation. Zum Bewegen der Position benutze die Tasten W,A,S und D.");
 					QuestRuntimeHotspot minhotspot = null;
 					double[] minhotspotposition = null;
 					Debug.Log ("Hotspot Count: " + questdb.getActiveHotspots ().Count);
@@ -778,13 +780,16 @@ public class page_map : MonoBehaviour
 	void Update ()
 	{
 
-
+	
 
 		if (!onStartInvoked &&  mappage != null) {
 
 			if(mappage.onStart != null){
+				Debug.Log("invoking on Start of Map");
+
 			mappage.onStart.Invoke ();
 				onStartInvoked = true;
+
 			}
 
 		if(currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points[0].waypoint == null){

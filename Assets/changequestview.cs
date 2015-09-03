@@ -16,6 +16,7 @@ public class changequestview : MonoBehaviour {
 
 		if (Configuration.instance.questvisualization == "map") {
 			Configuration.instance.questvisualization = "list";
+			GameObject.Find("MenuCanvas").GetComponent<Animator>().ResetTrigger("startMenu");
 			GameObject.Find("MenuCanvas").GetComponent<Animator>().SetTrigger("endmenu");
 		} else if (Configuration.instance.questvisualization == "list") {
 			Configuration.instance.questvisualization = "map";

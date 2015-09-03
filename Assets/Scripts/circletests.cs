@@ -38,6 +38,7 @@ public class circletests : MonoBehaviour {
 			
 		} else {
 
+			if(GetComponent<onTapMarker>().hotspot.visible){
 
 			if(map.IsDirty || questdb.fixedposition ){
 
@@ -83,6 +84,13 @@ public class circletests : MonoBehaviour {
 				currentCircle = myLine;
 
 			myLine.Draw ();
+			}
+			} else {
+
+				if(currentCircle != null){
+					VectorLine.Destroy (ref currentCircle);
+
+				}
 			}
 		}
 	}
