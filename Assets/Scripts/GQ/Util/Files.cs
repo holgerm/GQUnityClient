@@ -7,6 +7,9 @@ namespace GQ.Util
 
 		static public void clearDirectory (string dirPath)
 		{
+
+			#if !UNITY_WEBPLAYER
+
 			DirectoryInfo downloadedMessageInfo = new DirectoryInfo (dirPath);
 			
 			foreach (FileInfo file in downloadedMessageInfo.GetFiles()) {
@@ -16,6 +19,8 @@ namespace GQ.Util
 			foreach (DirectoryInfo dir in downloadedMessageInfo.GetDirectories()) {
 				dir.Delete (true); 
 			}
+
+#endif
 		}
 	}
 }

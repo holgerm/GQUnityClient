@@ -76,12 +76,14 @@ namespace GQ.Conf
 
 		public static void serialize ()
 		{
+#if !UNITY_WEBPLAYER
 			StringBuilder sb = new StringBuilder ();
 			JsonWriter jsonWriter = new JsonWriter (sb);
 			jsonWriter.PrettyPrint = true;
 			JsonMapper.ToJson (current, jsonWriter);
 			File.WriteAllText (RUNTIME_PRODUCT_FILE + ".json", sb.ToString ());
 			AssetDatabase.ImportAsset (RUNTIME_PRODUCT_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+#endif
 		}
 
 
