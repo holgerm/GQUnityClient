@@ -414,7 +414,8 @@ public class page_npctalk : MonoBehaviour
 
 
 				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
-				toadd = toadd + "   ";
+//				toadd = toadd + "   "; 
+//					hm: wozu war das gut? Hat bei<br> am Ende zu EInrückung in der kommendenZeile geführt.
 				int i = 0;	
 				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
 				int l = 0;
