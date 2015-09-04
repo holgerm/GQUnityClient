@@ -247,8 +247,8 @@ public class page_npctalk : MonoBehaviour
 
 			if (npctalk.hasAttribute ("text")) {
 
+				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.getAttribute ("text"));
 
-				string toadd = npctalk.getAttribute ("text");
 				int i = 0;	
 				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
 				while (toadd.IndexOf("<a href=") > -1) {
