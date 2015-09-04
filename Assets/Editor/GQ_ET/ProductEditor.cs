@@ -6,6 +6,7 @@ using System.Linq;
 using LitJson;
 using GQ.Conf;
 using System;
+using System.Text;
 
 namespace GQ.ET
 {
@@ -17,9 +18,12 @@ namespace GQ.ET
 
 		public const string PRODUCTS_DIR = "Assets/Editor/products";
 		const string RT_PROD_DIR = ProductConfigManager.RUNTIME_PRODUCT_DIR;
+		const string RT_PROD_FILE = ProductConfigManager.RUNTIME_PRODUCT_FILE;
 
 		const string APP_ICON_FILE_BASE = "appIcon";
 		const string SPLASH_SCREEN_FILE_BASE = "splashScreen";
+		const string TOP_LOGO_FILE_BASE = "topLogo";
+		const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
 
 		private static Texture2D _appIconTexture;
 		
@@ -326,7 +330,9 @@ namespace GQ.ET
 				configRuntimeDir.Create ();
 			}
 			
+			#if !UNITY_WEBPLAYER
 			GQ.Util.Files.clearDirectory (configRuntimeDir.FullName);
+			#endif
 			
 			foreach (FileInfo file in configPersistentDir.GetFiles()) {
 				if (!file.Extension.ToLower ().EndsWith ("meta") && !file.Extension.ToLower ().EndsWith ("ds_store")) {
@@ -361,21 +367,21 @@ namespace GQ.ET
 			else
 				splashScreen = null; // TODO replace null with default
 			
-			if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".psd"))
+			if (File.Exists (RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd"))
 				ProductConfigManager.topLogo = 
-					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
-			else if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".png"))
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
+			else if (File.Exists (RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".png"))
 				ProductConfigManager.topLogo = 
-					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
-			else if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".jpg"))
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+			else if (File.Exists (RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg"))
 				ProductConfigManager.topLogo = 
-					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
 			else
 				ProductConfigManager.topLogo = null; // TODO replace null with default
 			
-			if (File.Exists (RT_PROD_DIR + "/" + ProductConfigManager.DEFAULT_MARKER_FILE_BASE + ".png"))
+			if (File.Exists (RT_PROD_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png"))
 				ProductConfigManager.defaultMarker = 
-					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + ProductConfigManager.DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+					AssetDatabase.LoadAssetAtPath (RT_PROD_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			else
 				ProductConfigManager.defaultMarker = null; // TODO replace null with default
 			
@@ -396,7 +402,7 @@ namespace GQ.ET
 
 		public static void save (string productID)
 		{
-			ProductConfigManager.serialize ();
+			serialize ();
 			
 			string configPersistentDirPath = PRODUCTS_DIR + "/" + productID;
 			DirectoryInfo configPersistentDir = new DirectoryInfo (configPersistentDirPath);
@@ -406,8 +412,10 @@ namespace GQ.ET
 				configPersistentDir.Create ();
 			}
 			
+			#if !UNITY_WEBPLAYER
 			GQ.Util.Files.clearDirectory (configPersistentDir.FullName);
-			
+			#endif			
+
 			foreach (FileInfo file in configRuntimeDir.GetFiles()) {
 				if (!file.Extension.EndsWith ("meta")) {
 					File.Copy (file.FullName, configPersistentDirPath + "/" + file.Name);
@@ -419,7 +427,15 @@ namespace GQ.ET
 			AssetDatabase.ImportAsset (PRODUCTS_DIR + "/" + ProductConfigManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
 		
-
+		static void serialize ()
+		{
+			StringBuilder sb = new StringBuilder ();
+			JsonWriter jsonWriter = new JsonWriter (sb);
+			jsonWriter.PrettyPrint = true;
+			JsonMapper.ToJson (ProductConfigManager.current, jsonWriter);
+			File.WriteAllText (RT_PROD_FILE + ".json", sb.ToString ());
+			AssetDatabase.ImportAsset (RT_PROD_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+		}
 
 		void changeProduct (int index)
 		{

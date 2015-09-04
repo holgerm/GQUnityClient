@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using LitJson;
-using UnityEditor;
 using System.Text;
 
 namespace GQ.Conf
@@ -15,9 +14,6 @@ namespace GQ.Conf
 		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
 		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "/product";
 		public const string PRODUCT_FILE = "product.json";
-		public const string TOP_LOGO_FILE_BASE = "topLogo";
-		public const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
-
 
 		//////////////////////////////////
 		// RETRIEVING THE CURRENT PRODUCT:
@@ -73,17 +69,6 @@ namespace GQ.Conf
 			current = JsonMapper.ToObject<Config> (configAsset.text);
 			return current;
 		}
-
-		public static void serialize ()
-		{
-			StringBuilder sb = new StringBuilder ();
-			JsonWriter jsonWriter = new JsonWriter (sb);
-			jsonWriter.PrettyPrint = true;
-			JsonMapper.ToJson (current, jsonWriter);
-			File.WriteAllText (RUNTIME_PRODUCT_FILE + ".json", sb.ToString ());
-			AssetDatabase.ImportAsset (RUNTIME_PRODUCT_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
-		}
-
 
 	}
 	

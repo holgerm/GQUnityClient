@@ -1,11 +1,3 @@
-using UnityEngine;
-using System.Collections;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using LitJson;
-using UnityEditor;
-
 namespace GQ.Conf
 {
 	public class Config
