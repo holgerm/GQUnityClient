@@ -58,10 +58,10 @@ public class page_npctalk : MonoBehaviour
 
 
 
-			if(questdb.allowReturn){
-			if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("MultipleChoiceQuestion") || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("TextQuestion")) {
-				Destroy (backbutton.gameObject);
-			}
+			if (questdb.allowReturn) {
+				if (questdb.currentquest.previouspages.Count == 0 || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1] == null || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("MultipleChoiceQuestion") || questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1].type.Equals ("TextQuestion")) {
+					Destroy (backbutton.gameObject);
+				}
 			} else {
 
 				Destroy (backbutton.gameObject);
@@ -238,6 +238,7 @@ public class page_npctalk : MonoBehaviour
 //			Debug.Log ("Sprite display took: " + DateTime.Now.Subtract(start).Milliseconds);
 
 			string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
+			Debug.Log ("parsing size from: " + resultString);
 			int size = int.Parse (resultString);
 			text.fontSize = size * 3;
 

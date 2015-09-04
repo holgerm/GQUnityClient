@@ -34,7 +34,8 @@ public class actions : MonoBehaviour
 	private float gPSRouteUpdateInterval_save = 10f;
 
 
-	void Update(){
+	void Update ()
+	{
 
 
 		if (updateGPSRoute && questdb.currentquest.currentpage.type == "MapOSM") {
@@ -42,12 +43,12 @@ public class actions : MonoBehaviour
 			gPSRouteUpdateInterval -= Time.deltaTime;
 
 
-			if(gPSRouteUpdateInterval < 0f){
+			if (gPSRouteUpdateInterval < 0f) {
 
 				gPSRouteUpdateInterval = gPSRouteUpdateInterval_save;
 
 
-				addRoute(gpsRoute);
+				addRoute (gpsRoute);
 
 			}
 
@@ -130,7 +131,7 @@ public class actions : MonoBehaviour
 		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
 
 		if (action.type == "StartMission") {
-			changePage(action);
+			changePage (action);
 		} else if (action.type == "EndGame") {
 			photos = new List<QuestRuntimeAsset> ();
 			questdb.endQuest ();
@@ -163,7 +164,7 @@ public class actions : MonoBehaviour
 		} else if (action.type == "ShowMessage") {
 			showmessage (action);
 		} else if (action.type == "AddRoute") {
-			addRoute(action);
+			addRoute (action);
 		} else if (action.type == "SetHotspotState") {
 			sethotspotstate (action);
 		} else if (action.type == "LoadVar") {
@@ -182,17 +183,18 @@ public class actions : MonoBehaviour
 
 
 
-	public void addRoute(QuestAction action){
+	public void addRoute (QuestAction action)
+	{
 
 
 
 		if (GameObject.Find ("PageController_Map") != null) {
 
-			page_map mapcontroller = GameObject.Find ("PageController_Map").GetComponent<page_map>();
+			page_map mapcontroller = GameObject.Find ("PageController_Map").GetComponent<page_map> ();
 				
 
 
-			if(action.hasAttribute ("from") || action.hasAttribute ("to")){
+			if (action.hasAttribute ("from") || action.hasAttribute ("to")) {
 			
 
 				float lon1 = 0f;
@@ -201,44 +203,44 @@ public class actions : MonoBehaviour
 				float lat2 = 0f;
 				
 
-				if(action.getAttribute("from") != "" && action.getAttribute("from") != "0"){
+				if (action.getAttribute ("from") != "" && action.getAttribute ("from") != "0") {
 
 
-				QuestRuntimeHotspot from = questdb.getHotspot(action.getAttribute("from"));
+					QuestRuntimeHotspot from = questdb.getHotspot (action.getAttribute ("from"));
 
-					if(from != null){
-					lon1 = from.lon;
-					lat1 = from.lat;
+					if (from != null) {
+						lon1 = from.lon;
+						lat1 = from.lat;
 
 					}
 
 				} else {
 
-					lon1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
-					lat1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
-					gpsRoute =action;
+					lon1 = (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [1];
+					lat1 = (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [0];
+					gpsRoute = action;
 					
 					
 				}
 
 
 
-				if(action.getAttribute("to") != "" && action.getAttribute("to") != "0"){
+				if (action.getAttribute ("to") != "" && action.getAttribute ("to") != "0") {
 
-					QuestRuntimeHotspot to = questdb.getHotspot(action.getAttribute("to"));
+					QuestRuntimeHotspot to = questdb.getHotspot (action.getAttribute ("to"));
 
 
-if(to != null){
-					 lon2 = to.lon;
-					lat2 = to.lat;
+					if (to != null) {
+						lon2 = to.lon;
+						lat2 = to.lat;
 					}
 
 				} else {
 
 
-					lon1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
-					lat1 = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
-					gpsRoute =action;
+					lon1 = (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [1];
+					lat1 = (float)GameObject.Find ("QuestDatabase").GetComponent<GPSPosition> ().CoordinatesWGS84 [0];
+					gpsRoute = action;
 
 					
 				}
@@ -248,11 +250,11 @@ if(to != null){
 
 
 
-				if((lon1 != lon2) && (lat1 != lat2)){
+				if ((lon1 != lon2) && (lat1 != lat2)) {
 
 
 
-					if(gpsRoute != null){
+					if (gpsRoute != null) {
 
 						updateGPSRoute = true;
 
@@ -264,39 +266,39 @@ if(to != null){
 
 
 
-				string url = "http://www.yournavigation.org/api/1.0/gosmore.php?"+
-					"format=kml" +
-					"&flat=" + lon1 +
-					"&flon=" + lat1 +
-					"&tlat=" + lon2 +
-					"&tlon=" + lat2 +
-					"&v=foot&" +
-					"fast=1" +
-					"&layer=mapnik"+
-					"&instructions=1"+
-					"&lang=de";
+					string url = "http://www.yournavigation.org/api/1.0/gosmore.php?" +
+						"format=kml" +
+						"&flat=" + lon1 +
+						"&flon=" + lat1 +
+						"&tlat=" + lon2 +
+						"&tlon=" + lat2 +
+						"&v=foot&" +
+						"fast=1" +
+						"&layer=mapnik" +
+						"&instructions=1" +
+						"&lang=de";
 
-				Debug.Log(url);
-				WWW routewww = new WWW(url);
+					Debug.Log (url);
+					WWW routewww = new WWW (url);
 
-				StartCoroutine(waitForRouteFile(routewww));
+					StartCoroutine (waitForRouteFile (routewww));
 
-					if(Application.isWebPlayer){
+					if (Application.isWebPlayer) {
 
-						questdb.debug("Es wurde eine neue Route gesetzt. Diese sind aktuell nicht in der Editor-Vorschau sichtbar. Benutze zum Testen eine Android- oder iOS-App.");
+						questdb.debug ("Es wurde eine neue Route gesetzt. Diese sind aktuell nicht in der Editor-Vorschau sichtbar. Benutze zum Testen eine Android- oder iOS-App.");
 					}
 
 				} else {
 
 
-					questdb.debug("Eine Route muss aus zwei nicht-identischen Orten bestehen.");
+					questdb.debug ("Eine Route muss aus zwei nicht-identischen Orten bestehen.");
 
 					updateGPSRoute = false;
 				}
 
 			} else {
 
-				questdb.debug("Eine Route muss mindestens einen festen Hotspot beinhalten.");
+				questdb.debug ("Eine Route muss mindestens einen festen Hotspot beinhalten.");
 				updateGPSRoute = false;
 
 			}
@@ -305,7 +307,7 @@ if(to != null){
 		} else {
 
 
-			questdb.debug("Die Map muss mindestens einmal vorher geöffnet worden sein.");
+			questdb.debug ("Die Map muss mindestens einmal vorher geöffnet worden sein.");
 			updateGPSRoute = false;
 
 		}
@@ -317,7 +319,8 @@ if(to != null){
 
 
 
-	public IEnumerator waitForRouteFile(WWW mywww){
+	public IEnumerator waitForRouteFile (WWW mywww)
+	{
 
 		yield return mywww;
 
@@ -325,39 +328,39 @@ if(to != null){
 
 		if (mywww.error == null || mywww.error == "") {
 
-			Debug.Log(mywww.text);
+			Debug.Log (mywww.text);
 
 
 			string routefile = mywww.text;
 
-			routefile = routefile.Substring(routefile.IndexOf("<coordinates>"));
-			routefile = routefile.Substring(14,routefile.IndexOf("</coordinates>")-14);
+			routefile = routefile.Substring (routefile.IndexOf ("<coordinates>"));
+			routefile = routefile.Substring (14, routefile.IndexOf ("</coordinates>") - 14);
 
 
 
 
 			if (GameObject.Find ("PageController_Map") != null) {
 				
-				page_map mapcontroller = GameObject.Find ("PageController_Map").GetComponent<page_map>();
+				page_map mapcontroller = GameObject.Find ("PageController_Map").GetComponent<page_map> ();
 
 
-				mapcontroller.currentroute = new Route();
+				mapcontroller.currentroute = new Route ();
 
-				Debug.Log("doing new oute");
-
-
-				string[] coordinates = routefile.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-
-				foreach(string s in coordinates){
+				Debug.Log ("doing new oute");
 
 
-					if(s.Contains(",")){
+				string[] coordinates = routefile.Split (new string[] { Environment.NewLine }, StringSplitOptions.None);
+
+				foreach (string s in coordinates) {
 
 
-						string[] co = s.Split(',');
+					if (s.Contains (",")) {
 
 
-						mapcontroller.currentroute.addPoint(co[0],co[1]);
+						string[] co = s.Split (',');
+
+
+						mapcontroller.currentroute.addPoint (co [0], co [1]);
 
 
 
@@ -369,7 +372,7 @@ if(to != null){
 
 				}
 
-				mapcontroller.drawCurrentRoute();
+				mapcontroller.drawCurrentRoute ();
 
 
 			}
@@ -378,7 +381,7 @@ if(to != null){
 
 		} else {
 
-			Debug.Log("Route WWW Error:"+mywww.error);
+			Debug.Log ("Route WWW Error:" + mywww.error);
 
 		}
 
@@ -393,25 +396,25 @@ if(to != null){
 
 
 
-		if(questdb.currentquest.hasAttribute("individualReturnDefinitions")
-		   && questdb.currentquest.getAttribute(("individualReturnDefinitions")) == "true"){
+		if (questdb.currentquest.hasAttribute ("individualReturnDefinitions")
+			&& questdb.currentquest.getAttribute (("individualReturnDefinitions")) == "true") {
 
-		if (action.getAttribute ("allowReturn") != "") {
+			if (action.getAttribute ("allowReturn") != "") {
 
-		if(	action.getAttribute ("allowReturn") == "0"){
-				questdb.allowReturn = false;
+				if (action.getAttribute ("allowReturn") == "0") {
+					questdb.allowReturn = false;
 
+
+				} else {
+					questdb.allowReturn = true;
+
+				}
 
 			} else {
+
 				questdb.allowReturn = true;
 
 			}
-
-		} else {
-
-			questdb.allowReturn = true;
-
-		}
 
 		} else {
 
@@ -806,36 +809,36 @@ if(to != null){
 
 
 
-				Debug.Log(x);
+				Debug.Log (x);
 
-					string x2 = new string (x.ToCharArray ()
+				string x2 = new string (x.ToCharArray ()
 					                 .Where (c => !Char.IsWhiteSpace (c))
 					                 .ToArray ());
 
-				Debug.Log(x2);
+				Debug.Log (x2);
 
-					if (x == x2) {
+				if (x == x2) {
 
 
 
-						if (x2 == "score") {
+					if (x2 == "score") {
 
-							k += score.ToString ();
+						k += score.ToString ();
 						lastwasvar = true;
 
-						} else 
-						if (getVariable (x2).ToString() != "[null]") {
+					} else 
+						if (getVariable (x2).ToString () != "[null]") {
 
-							k += getVariable (x2).getStringValue ();
+						k += getVariable (x2).getStringValue ();
 						lastwasvar = true;
 
 					} else {
 
 
-						if(lastwasvar){
+						if (lastwasvar) {
 							k += x;
 						} else {
-							k += "@"+x;
+							k += "@" + x;
 
 						}
 						lastwasvar = false;
@@ -843,17 +846,17 @@ if(to != null){
 					}
 
 
-					} else {
+				} else {
 
-					if(lastwasvar){
+					if (lastwasvar) {
 						k += x;
 					} else {
-						k += "@"+x;
+						k += "@" + x;
 						
 					}
 					lastwasvar = false;
 
-					}
+				}
 
 							
 
@@ -892,20 +895,20 @@ if(to != null){
 		string key = action.getAttribute ("var");
 
 		string varname = key;
-		varname = new String(varname.Where(Char.IsLetter).ToArray());
+		varname = new String (varname.Where (Char.IsLetter).ToArray ());
 		
 		varname = questdb.currentquest.id + "_" + varname;
 
 
 
 
-		QuestVariable qv =  getVariable (key);
+		QuestVariable qv = getVariable (key);
 
 
 		if (qv != null) {
 			if (qv.type == "num") {
 
-				PlayerPrefs.SetString (varname, "[GQ_NUM_VALUE]"+qv.num_value [0]);
+				PlayerPrefs.SetString (varname, "[GQ_NUM_VALUE]" + qv.num_value [0]);
 
 			} else if (qv.type == "string") {
 
@@ -932,7 +935,8 @@ if(to != null){
 
 
 
-	void removeVariable(string key){
+	void removeVariable (string key)
+	{
 
 		
 		List<QuestVariable> helplist = new List<QuestVariable> ();
@@ -957,7 +961,7 @@ if(to != null){
 //		Debug.Log ("loading vars");
 
 		string varname = action.getAttribute ("var");
-		varname = new String(varname.Where(Char.IsLetter).ToArray());
+		varname = new String (varname.Where (Char.IsLetter).ToArray ());
 
 		varname = questdb.currentquest.id + "_" + varname;
 
@@ -966,35 +970,35 @@ if(to != null){
 
 	
 
-		if (PlayerPrefs.GetString (varname,"[GEOQUEST_NO_VALUE]") != "[GEOQUEST_NO_VALUE]") {
+		if (PlayerPrefs.GetString (varname, "[GEOQUEST_NO_VALUE]") != "[GEOQUEST_NO_VALUE]") {
 		
 
 
 
 
-			removeVariable(action.getAttribute("var"));
+			removeVariable (action.getAttribute ("var"));
 
 
 
-			if(PlayerPrefs.GetString (varname).StartsWith("[GQ_NUM_VALUE]")){
+			if (PlayerPrefs.GetString (varname).StartsWith ("[GQ_NUM_VALUE]")) {
 
 
-				string s = PlayerPrefs.GetString (varname).Replace("[GQ_NUM_VALUE]","");
-				double n = double.Parse(s);
-				variables.Add (new QuestVariable (action.getAttribute("var"),n));
+				string s = PlayerPrefs.GetString (varname).Replace ("[GQ_NUM_VALUE]", "");
+				double n = double.Parse (s);
+				variables.Add (new QuestVariable (action.getAttribute ("var"), n));
 
 				
 			} else {
 
-			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetString (varname)));
+				variables.Add (new QuestVariable (action.getAttribute ("var"), PlayerPrefs.GetString (varname)));
 		
 
 			}
 
-		} else if (PlayerPrefs.GetInt (varname,-99999) != -99999) {
-			removeVariable(action.getAttribute("var"));
+		} else if (PlayerPrefs.GetInt (varname, -99999) != -99999) {
+			removeVariable (action.getAttribute ("var"));
 
-			variables.Add (new QuestVariable (action.getAttribute("var"), PlayerPrefs.GetInt (varname)));
+			variables.Add (new QuestVariable (action.getAttribute ("var"), PlayerPrefs.GetInt (varname)));
 
 		}
 
@@ -1091,7 +1095,7 @@ if(to != null){
 				Debug.Log (key + " has bool value");
 				variables.Add (new QuestVariable (key, action.value.bool_value [0]));
 			} else if (action.value.num_value != null && action.value.num_value.Count > 0) {
-				Debug.Log("value found: "+action.value.num_value [0]);
+				Debug.Log ("value found: " + action.value.num_value [0]);
 				variables.Add (new QuestVariable (key, action.value.num_value [0]));
 			} else if (action.value.string_value != null && action.value.string_value.Count > 0) {
 				variables.Add (new QuestVariable (key, action.value.string_value [0]));
@@ -1123,7 +1127,7 @@ if(to != null){
 		input = new string (input.ToCharArray ()
 		                 .Where (c => !Char.IsWhiteSpace (c))
 		                 .ToArray ());
-	//	Debug.Log ("Rechnung:"+input);
+		//	Debug.Log ("Rechnung:"+input);
 
 		string arithmetics = "";
 
@@ -1131,23 +1135,23 @@ if(to != null){
 		foreach (Char c in input.ToCharArray()) {
 
 
-			if(c == '+'){
+			if (c == '+') {
 
 				arithmetics = arithmetics + "+";
 			}
-			if(c == '-'){
+			if (c == '-') {
 				
 				arithmetics = arithmetics + "-";
 			}
-			if(c == '*'){
+			if (c == '*') {
 				
 				arithmetics = arithmetics + "*";
 			}
-			if(c == '/'){
+			if (c == '/') {
 				
 				arithmetics = arithmetics + "/";
 			}
-			if(c == ':'){
+			if (c == ':') {
 				
 				arithmetics = arithmetics + ":";
 			}
@@ -1195,12 +1199,12 @@ if(to != null){
 			} else {
 
 				QuestVariable qv = getVariable (s);
-				if (!qv.isNull()) {
+				if (!qv.isNull ()) {
 					if (qv.num_value != null && qv.num_value.Count > 0) {
 						if (needsstartvalue) {
 
 							currentvalue = qv.num_value [0];
-							Debug.Log(s+":"+currentvalue.ToString("F10"));
+							Debug.Log (s + ":" + currentvalue.ToString ("F10"));
 
 							needsstartvalue = false;
 					
@@ -1208,7 +1212,7 @@ if(to != null){
 
 							n = qv.num_value [0];
 
-							Debug.Log(n);
+							Debug.Log (n);
 							if (arithmetics.Substring (count, 1) == "+") {
 								currentvalue += n;
 							} else if (arithmetics.Substring (count, 1) == "-") {
@@ -1294,69 +1298,69 @@ if(to != null){
 				d = d.Replace (")", "");
 
 			
-				if(getVariable (d).num_value != null){
+				if (getVariable (d).num_value != null) {
 
 				
-				double ergebnis = getVariable (d).num_value [0];
-				Debug.Log (ergebnis);
-				TimeSpan time = TimeSpan.FromSeconds (ergebnis);
+					double ergebnis = getVariable (d).num_value [0];
+					Debug.Log (ergebnis);
+					TimeSpan time = TimeSpan.FromSeconds (ergebnis);
 				
-				double seconds = time.Seconds;
-				string seconds_str = seconds.ToString ();
+					double seconds = time.Seconds;
+					string seconds_str = seconds.ToString ();
 				
-				if (seconds < 10) {
-					seconds_str = "0" + seconds;
-				}
-				
-				
-				double minutes = time.Minutes;
-				string minutes_str = minutes.ToString ();
-				
-				if (minutes < 10) {
-					minutes_str = "0" + (int)minutes;
-				}
-				if (minutes < 0) {
-					minutes_str = "00";
-				}
-				
-				int hours = time.Hours;
-				string hours_str = hours.ToString ();
-				
-				if (hours < 10) {
-					hours_str = "0" + hours;
-				}
-				if (hours < 0) {
-					hours_str = "00";
-				}
+					if (seconds < 10) {
+						seconds_str = "0" + seconds;
+					}
 				
 				
-				int days = (int)time.TotalDays;
-				string days_str = days.ToString ();
+					double minutes = time.Minutes;
+					string minutes_str = minutes.ToString ();
 				
-				if (days < 0) {
-					days_str = "0";
-				}
+					if (minutes < 10) {
+						minutes_str = "0" + (int)minutes;
+					}
+					if (minutes < 0) {
+						minutes_str = "00";
+					}
+				
+					int hours = time.Hours;
+					string hours_str = hours.ToString ();
+				
+					if (hours < 10) {
+						hours_str = "0" + hours;
+					}
+					if (hours < 0) {
+						hours_str = "00";
+					}
+				
+				
+					int days = (int)time.TotalDays;
+					string days_str = days.ToString ();
+				
+					if (days < 0) {
+						days_str = "0";
+					}
 				
 				
 				
-				string finaldate = "";
+					string finaldate = "";
 				
-				if (days > 0) {
+					if (days > 0) {
 					
-					finaldate = days_str + ":";
+						finaldate = days_str + ":";
 					
-				}
+					}
 				
-				if (hours > 0) {
+					if (hours > 0) {
 					
-					finaldate = finaldate + "" + hours_str + ":";
-				}
+						finaldate = finaldate + "" + hours_str + ":";
+					}
 				
-				finaldate = finaldate + "" + minutes_str + ":" + seconds_str;
+					finaldate = finaldate + "" + minutes_str + ":" + seconds_str;
 				
 				
 				
-				return new QuestVariable (k, finaldate);
+					return new QuestVariable (k, finaldate);
 
 				
 				
@@ -1471,7 +1475,7 @@ if(to != null){
 		}
 
 		questdb.debug ("Variable " + k + " wurde nicht gefunden.");
-	return new QuestVariable (k, "[null]");
+		return new QuestVariable (k, "[null]");
 
 
 	}
@@ -1582,6 +1586,10 @@ if(to != null){
 
 		questaudiosources.Add (nqa);
 
+		Debug.Log ("nqa:" + nqa);
+		Debug.Log ("nqa.transform:" + nqa.transform);
+		Debug.Log ("questdb:" + questdb);
+		Debug.Log ("questdb.currentquestdata:" + questdb.currentquestdata);
 
 		nqa.transform.parent = questdb.currentquestdata.transform;
 		bool looping = false;
@@ -1737,17 +1745,18 @@ public class QuestVariable
 	}
 
 
-	public string ToString(){
+	public string ToString ()
+	{
 
 		if (type == "bool") {
 
-			return bool_value[0].ToString();
+			return bool_value [0].ToString ();
 		} else if (type == "num") {
 			
-			return num_value[0].ToString();
+			return num_value [0].ToString ();
 		} else if (type == "string") {
 			
-			return string_value[0];
+			return string_value [0];
 		} 
 
 		return "";
@@ -1756,11 +1765,12 @@ public class QuestVariable
 	}
 
 
-	public bool isNull(){
+	public bool isNull ()
+	{
 
 		if (string_value != null && string_value.Count > 0) {
 
-			if(string_value[0] == "[null]"){
+			if (string_value [0] == "[null]") {
 
 				return true;
 			} else {
