@@ -784,7 +784,8 @@ public class actions : MonoBehaviour
 
 	public string formatString (string s)
 	{
-
+		if (s == null)
+			return "";
 
 
 
