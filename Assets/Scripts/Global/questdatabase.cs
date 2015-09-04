@@ -542,6 +542,9 @@ public class questdatabase : MonoBehaviour
 		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
 		currentquest = q;
 
+		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
+
+
 
 		string pre = "file: //";
 	
