@@ -10,7 +10,7 @@ PlayerSettings:
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: QuestMill
-  productName: Wiki Culture City
+  productName: "Erlebnis Sch\xF6pfung Wuppertal"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_ShowUnitySplashScreen: 0
@@ -71,15 +71,15 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: com.questmill.geoquest.ebk
-  bundleVersion: 1.0.4
+  bundleIdentifier: com.questmill.geoquest.ebkwuppertal
+  bundleVersion: 1.0.6
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   xboxOneDisableKinectGpuReservation: 0
   virtualRealitySupported: 0
   productGUID: c2b2669b3813a4b21860482a3f8c3f38
-  AndroidBundleVersionCode: 2
+  AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 15
   AndroidPreferredInstallLocation: 0
   aotOptions: 
@@ -92,9 +92,6 @@ PlayerSettings:
   APKExpansionFiles: 0
   preloadShaders: 0
   StripUnusedMeshComponents: 1
-  VertexChannelCompressionMask:
-    serializedVersion: 2
-    m_Bits: 238
   iPhoneSdkVersion: 988
   iPhoneTargetOSVersion: 22
   uIPrerenderedIcon: 0
@@ -121,14 +118,6 @@ PlayerSettings:
   iOSLaunchScreenFillPct: 100
   iOSLaunchScreenSize: 100
   iOSLaunchScreenCustomXibPath: 
-  iOSLaunchScreeniPadType: 0
-  iOSLaunchScreeniPadImage: {fileID: 0}
-  iOSLaunchScreeniPadBackgroundColor:
-    serializedVersion: 2
-    rgba: 0
-  iOSLaunchScreeniPadFillPct: 100
-  iOSLaunchScreeniPadSize: 100
-  iOSLaunchScreeniPadCustomXibPath: 
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 2
   androidSplashScreen: {fileID: 2800000, guid: b1ecd46c6c0a24c77a9bb90b6b1bbcc2, type: 3}
@@ -148,38 +137,6 @@ PlayerSettings:
     m_Icons:
     - m_Icon: {fileID: 2800000, guid: dfb5a73f245934179b99167eea73e54f, type: 3}
       m_Size: 128
-  - m_BuildTarget: Android
-    m_Icons:
-    - m_Icon: {fileID: 0}
-      m_Size: 192
-    - m_Icon: {fileID: 0}
-      m_Size: 144
-    - m_Icon: {fileID: 0}
-      m_Size: 96
-    - m_Icon: {fileID: 0}
-      m_Size: 72
-    - m_Icon: {fileID: 0}
-      m_Size: 48
-    - m_Icon: {fileID: 0}
-      m_Size: 36
-  - m_BuildTarget: iPhone
-    m_Icons:
-    - m_Icon: {fileID: 0}
-      m_Size: 180
-    - m_Icon: {fileID: 0}
-      m_Size: 152
-    - m_Icon: {fileID: 0}
-      m_Size: 144
-    - m_Icon: {fileID: 0}
-      m_Size: 120
-    - m_Icon: {fileID: 0}
-      m_Size: 114
-    - m_Icon: {fileID: 0}
-      m_Size: 76
-    - m_Icon: {fileID: 0}
-      m_Size: 72
-    - m_Icon: {fileID: 0}
-      m_Size: 57
   m_BuildTargetBatching:
   - m_BuildTarget: Android
     m_StaticBatching: 1
@@ -248,8 +205,6 @@ PlayerSettings:
   ps4SaveDataImagePath: 
   ps4BGMPath: 
   ps4ShareFilePath: 
-  ps4ShareOverlayImagePath: 
-  ps4PrivacyGuardImagePath: 
   ps4NPtitleDatPath: 
   ps4RemotePlayKeyAssignment: -1
   ps4EnterButtonAssignment: 1
