@@ -3715,7 +3715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   product: 2
-  overrideProductSettingsInInspector: 0
+  overrideProductSettingsInInspector: 1
   portalID: 121
   autostartQuestID: 6544
   autostartIsPredeployed: 1
@@ -3967,6 +3967,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
+  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10

@@ -1622,6 +1622,7 @@ public class actions : MonoBehaviour
 		www = new WWW (url);
 
 
+		Debug.Log ("test");
 		StartCoroutine (waitforAudio (nqa));
 
 
@@ -1655,7 +1656,7 @@ public class actions : MonoBehaviour
 				audios.setAudio (www.GetAudioClip (false));
 				audios.Play ();
 			} else {
-				Debug.Log (www.error);
+				Debug.Log ("geoquest audio error: "+www.error);
 			}
 		} else {
 			StartCoroutine (waitforAudio (audios));
@@ -1668,10 +1669,10 @@ public class actions : MonoBehaviour
 		yield return www;
 		
 		if (www.error == null) {
-			audios.setAudio (www.audioClip);
+			audios.setAudio (www.GetAudioClip (false));
 			audios.Play ();
 		} else {
-			Debug.Log (www.error);
+			Debug.Log ("geoquest audio error: "+www.error);
 		}
 		
 	}

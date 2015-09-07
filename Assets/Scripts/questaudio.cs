@@ -24,15 +24,17 @@ public class questaudio : MonoBehaviour
 
 	public void setAudio (AudioClip ac)
 	{
-
-		audiosource.clip = ac;
+		if (audiosource != null) {
+			audiosource.clip = ac;
+		}
 
 	}
 
 	public void Play ()
 	{
-
-		audiosource.Play ();
+		if (audiosource != null) {
+			audiosource.Play ();
+		}
 
 	}
 

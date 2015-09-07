@@ -162,7 +162,10 @@ public class questdatabase : MonoBehaviour
 
 		if (Configuration.instance.autostartQuestID != 0) {
 			GameObject questListPanel = GameObject.Find ("/Canvas");
-			questmilllogo.enabled = true;
+			if (loadlogo != null) {
+				
+				loadlogo.enable ();
+			}
 			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 
 			if (Configuration.instance.autostartIsPredeployed) {
@@ -3430,12 +3433,12 @@ public class QuestContent
 										
 										
 
-						if (!redo) {
+						if (!redo || (questdb.currentquest.predeployed && filename.ToLower().Contains(".mp3"))) {
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
-											
-							if (questdb.currentquest.predeployed) {
+							
+							if (questdb.currentquest.predeployed && !filename.ToLower().Contains(".mp3")) {
 								
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
@@ -3445,7 +3448,7 @@ public class QuestContent
 								
 							}
 							questdb.performSpriteConversion (xmla.Value);
-
+							
 						}
 					}
 									
@@ -3662,12 +3665,12 @@ public class QuestAction
 										
 										
 										
-						if (!redo) {
+						if (!redo || (questdb.currentquest.predeployed &&  filename.ToLower().Contains(".mp3"))) {
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
 											
-							if (questdb.currentquest.predeployed) {
+							if (questdb.currentquest.predeployed && !filename.ToLower().Contains(".mp3")) {
 								
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
