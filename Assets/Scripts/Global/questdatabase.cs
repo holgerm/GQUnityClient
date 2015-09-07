@@ -62,6 +62,10 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator Start ()
 	{
+		Debug.Log ("Start with params: autostart=" + Configuration.instance.autostartQuestID);
+		Debug.Log ("                   isPredeployed=" + Configuration.instance.autostartIsPredeployed);
+		Debug.Log ("                   showCQImmediately=" + Configuration.instance.showcloudquestsimmediately);
+
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
 		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
 		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
@@ -92,6 +96,7 @@ public class questdatabase : MonoBehaviour
 
 			if (Configuration.instance.questvisualization != "list") {
 
+				Debug.Log ("starting without list");
 				GameObject.Find ("ListPanel").SetActive (false);
 
 			}
@@ -100,13 +105,9 @@ public class questdatabase : MonoBehaviour
 	
 			if (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) {
 		
-
-
-
-
 				allquests.Clear ();
 			
-				Debug.Log ("doing it");
+				Debug.Log ("starting showing quests immediately (and no autostart)");
 			
 				string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
 			
@@ -122,7 +123,11 @@ public class questdatabase : MonoBehaviour
 
 			
 			} else {
-				buttoncontroller.DisplayList ();
+
+				Debug.Log ("starting either without showing quest immediately or autostart");
+				if (Configuration.instance.autostartQuestID != 0) {
+					buttoncontroller.DisplayList ();
+				}
 			
 			}
 
@@ -161,12 +166,12 @@ public class questdatabase : MonoBehaviour
 	{
 
 		if (Configuration.instance.autostartQuestID != 0) {
+			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 			GameObject questListPanel = GameObject.Find ("/Canvas");
 			if (loadlogo != null) {
 				
 				loadlogo.enable ();
 			}
-			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 
 			if (Configuration.instance.autostartIsPredeployed) {
 				StartCoroutine (startPredeployedQuest (Configuration.instance.autostartQuestID));
@@ -549,7 +554,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-		string pre = "file: //";
+		string pre = "file://";
 	
 		
 		if (Application.platform == RuntimePlatform.Android) {
@@ -574,7 +579,7 @@ public class questdatabase : MonoBehaviour
 
 		} else {
 
-			Debug.Log ("Error: " + wwwpdq.error);
+			Debug.Log ("Error: " + wwwpdq.error + "www.url=" + www.url);
 		}
 		//Debug.Log ("creatign predeployed quest");
 		//Debug.Log(q.xmlcontent);
@@ -1357,15 +1362,15 @@ public class questdatabase : MonoBehaviour
 		hotspots = new List<QuestRuntimeHotspot> ();
 		foreach (QuestHotspot qh in currentquest.hotspots) {
 
-			Debug.Log("adding runtime hotspot");
+			Debug.Log ("adding runtime hotspot");
 			bool initialActivity = qh.hasAttribute ("initialActivity") && qh.getAttribute ("initialActivity") == "true";
 
-			Debug.Log("initital Activity: "+qh.getAttribute ("initialActivity")+"/"+initialActivity);
+			Debug.Log ("initital Activity: " + qh.getAttribute ("initialActivity") + "/" + initialActivity);
 			bool initialVisibility = qh.hasAttribute ("initialVisibility") && qh.getAttribute ("initialVisibility") == "true";
 
 			hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
 
-			Debug.Log ("Hotspot Count #0: " + getActiveHotspots ().Count +"/"+hotspots.Count);
+			Debug.Log ("Hotspot Count #0: " + getActiveHotspots ().Count + "/" + hotspots.Count);
 
 		}
 
@@ -1377,7 +1382,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-				transferQuestHotspots(currentquest.currentpage.id);
+				transferQuestHotspots (currentquest.currentpage.id);
 
 
 			} else if (!localload) {
@@ -1504,7 +1509,7 @@ public class questdatabase : MonoBehaviour
 
 
 		
-			transferQuestHotspots(pageid);
+			transferQuestHotspots (pageid);
 			
 		} else {
 			Debug.Log ("STARTE");
@@ -3433,12 +3438,12 @@ public class QuestContent
 										
 										
 
-						if (!redo || (questdb.currentquest.predeployed && filename.ToLower().Contains(".mp3"))) {
+						if (!redo || (questdb.currentquest.predeployed && filename.ToLower ().Contains (".mp3"))) {
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
 							
-							if (questdb.currentquest.predeployed && !filename.ToLower().Contains(".mp3")) {
+							if (questdb.currentquest.predeployed && !filename.ToLower ().Contains (".mp3")) {
 								
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
@@ -3665,12 +3670,12 @@ public class QuestAction
 										
 										
 										
-						if (!redo || (questdb.currentquest.predeployed &&  filename.ToLower().Contains(".mp3"))) {
+						if (!redo || (questdb.currentquest.predeployed && filename.ToLower ().Contains (".mp3"))) {
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
 											
-							if (questdb.currentquest.predeployed && !filename.ToLower().Contains(".mp3")) {
+							if (questdb.currentquest.predeployed && !filename.ToLower ().Contains (".mp3")) {
 								
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
