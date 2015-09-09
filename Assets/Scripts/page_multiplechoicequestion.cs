@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using System.Collections;
 using GQ.Util;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class page_multiplechoicequestion : MonoBehaviour {
 
@@ -51,7 +53,28 @@ public class page_multiplechoicequestion : MonoBehaviour {
 				questiontext.text = questdb.GetComponent<actions> ().formatString (multiplechoicequestion.getAttribute ("question"));
 
 
-				foreach (QuestContent qc in multiplechoicequestion.contents_answers) {
+			List<QuestContent> answers = multiplechoicequestion.contents_answers;
+
+			if(multiplechoicequestion.hasAttribute ("shuffle") && multiplechoicequestion.getAttribute ("shuffle") == "true"){
+
+
+				int n = answers.Count;
+				System.Random rnd = new System.Random();
+				while (n > 1) {
+					int k = (rnd.Next(0, n) % n);
+					n--;
+					QuestContent value = answers[k];
+					answers[k] = answers[n];
+					answers[n] = value;
+				}
+				
+				
+				
+			}
+			
+			
+			
+			foreach (QuestContent qc in multiplechoicequestion.contents_answers) {
 
 
 					multiplechoiceanswerbutton btn = (multiplechoiceanswerbutton)Instantiate (answerbuttonprefab, transform.position, Quaternion.identity);
