@@ -164,5 +164,13 @@ public class onTapMarker : MonoBehaviour {
 			
 		}
 
+		if (hotspot.visible) {
+			GetComponent<MeshRenderer>().enabled = true;
+		} else {
+			GetComponent<MeshRenderer>().enabled = false;
+
+
+		}
+
 	}
 }

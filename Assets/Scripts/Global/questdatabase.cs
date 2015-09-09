@@ -2086,7 +2086,7 @@ public class questdatabase : MonoBehaviour
 	public void changePage (int id)
 	{
 
-		Debug.Log ("Hotspot Count #1: " + getActiveHotspots ().Count);
+//		Debug.Log ("Hotspot Count #1: " + getActiveHotspots ().Count);
 
 
 	
@@ -2373,7 +2373,7 @@ public class questdatabase : MonoBehaviour
 	{
 
 
-		Debug.Log ("Hotspot Count #2: " + getActiveHotspots ().Count);
+//		Debug.Log ("Hotspot Count #2: " + getActiveHotspots ().Count);
 
 
 		AsyncOperation async = Application.LoadLevelAdditiveAsync (9);
@@ -2567,6 +2567,7 @@ public class Quest  : IComparable<Quest>
 	public float start_latitude;
 	public string meta_combined;
 	public bool predeployed = false;
+	public string version;
 
 	public Quest ()
 	{
@@ -4170,12 +4171,12 @@ public class QuestConditionComparer
 		if (var_value != null && var_value.Count > 0) {
 
 
-			Debug.Log ("looking for var values");
+//			Debug.Log ("looking for var values");
 
 			foreach (string k in var_value) {
 
 
-				Debug.Log ("looking vor var " + k);
+			//	Debug.Log ("looking vor var " + k);
 
 
 				string kk = new string (k.ToCharArray ()

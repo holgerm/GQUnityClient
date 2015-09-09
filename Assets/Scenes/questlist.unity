@@ -3715,7 +3715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   product: 2
-  overrideProductSettingsInInspector: 1
+  overrideProductSettingsInInspector: 0
   portalID: 121
   autostartQuestID: 6544
   autostartIsPredeployed: 1
@@ -3733,7 +3733,7 @@ MonoBehaviour:
     Deutschland\\n <b>Domain</b>\\n erzbistum-koeln.de\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
     Ust-IdNr. DE 122 777 469 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
-  toplogo: {fileID: 21300000, guid: b4faa7795bc6b4600b7515aeb20908ac, type: 3}
+  toplogo: {fileID: 21300000, guid: c0de6870b2ef3496597a50d7831af070, type: 3}
   nameForQuest: Quest
   questvisualization: list
   questvisualizationchangable: 0
@@ -4651,6 +4651,7 @@ MonoBehaviour:
     start_latitude: 0
     meta_combined: 
     predeployed: 0
+    version: 
   filteredOnlineList: []
   filteredOfflineList: []
   header: {fileID: 1184618443}
@@ -9150,6 +9151,7 @@ MonoBehaviour:
     start_latitude: 0
     meta_combined: 
     predeployed: 0
+    version: 
   questdataprefab: {fileID: 483494, guid: 0bc29257c789c49eea959680bd54985d, type: 2}
   currentquestdata: {fileID: 0}
   allquests: []
@@ -9249,6 +9251,7 @@ MonoBehaviour:
     start_latitude: 0
     meta_combined: 
     predeployed: 0
+    version: 
   questdb: {fileID: 0}
   score: 0
   loopcount: 0

@@ -266,27 +266,24 @@ public class actions : MonoBehaviour
 
 
 
-					string url = "http://www.yournavigation.org/api/1.0/gosmore.php?" +
+					string url = "http://qeevee.org:9091/routes/gosmore.php-" +
 						"format=kml" +
-						"&flat=" + lon1 +
-						"&flon=" + lat1 +
-						"&tlat=" + lon2 +
-						"&tlon=" + lat2 +
-						"&v=foot&" +
-						"fast=1" +
-						"&layer=mapnik" +
-						"&instructions=1" +
-						"&lang=de";
+						"_flat=" + lon1 +
+						"_flon=" + lat1 +
+						"_tlat=" + lon2 +
+						"_tlon=" + lat2 +
+						"_v=foot" +
+						"_fast=1" +
+						"_layer=mapnik" +
+						"_instructions=1" +
+						"_lang=de";
 
 					Debug.Log (url);
 					WWW routewww = new WWW (url);
 
 					StartCoroutine (waitForRouteFile (routewww));
 
-					if (Application.isWebPlayer) {
 
-						questdb.debug ("Es wurde eine neue Route gesetzt. Diese sind aktuell nicht in der Editor-Vorschau sichtbar. Benutze zum Testen eine Android- oder iOS-App.");
-					}
 
 				} else {
 
@@ -810,13 +807,13 @@ public class actions : MonoBehaviour
 
 
 
-				Debug.Log (x);
+//				Debug.Log (x);
 
 				string x2 = new string (x.ToCharArray ()
 					                 .Where (c => !Char.IsWhiteSpace (c))
 					                 .ToArray ());
 
-				Debug.Log (x2);
+//				Debug.Log (x2);
 
 				if (x == x2) {
 
@@ -1205,7 +1202,7 @@ public class actions : MonoBehaviour
 						if (needsstartvalue) {
 
 							currentvalue = qv.num_value [0];
-							Debug.Log (s + ":" + currentvalue.ToString ("F10"));
+//							Debug.Log (s + ":" + currentvalue.ToString ("F10"));
 
 							needsstartvalue = false;
 					
@@ -1213,7 +1210,7 @@ public class actions : MonoBehaviour
 
 							n = qv.num_value [0];
 
-							Debug.Log (n);
+//							Debug.Log (n);
 							if (arithmetics.Substring (count, 1) == "+") {
 								currentvalue += n;
 							} else if (arithmetics.Substring (count, 1) == "-") {
@@ -1303,7 +1300,7 @@ public class actions : MonoBehaviour
 
 				
 					double ergebnis = getVariable (d).num_value [0];
-					Debug.Log (ergebnis);
+//					Debug.Log (ergebnis);
 					TimeSpan time = TimeSpan.FromSeconds (ergebnis);
 				
 					double seconds = time.Seconds;
@@ -1384,7 +1381,7 @@ public class actions : MonoBehaviour
 
 			} else if (k == "$date.now") {
 
-				Debug.Log ("looking for date");
+//				Debug.Log ("looking for date");
 				DateTime Jan1St1970 = new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 				double unixTime = ((DateTime.UtcNow - Jan1St1970).TotalSeconds);

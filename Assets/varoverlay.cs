@@ -74,7 +74,7 @@ public class varoverlay : MonoBehaviour {
 
 
 
-						Debug.Log("found variable"+action.value.var_value [0]);
+//						Debug.Log("found variable"+action.value.var_value [0]);
 					} else {
 						string d = action.value.var_value [0];
 						bool date = false;
