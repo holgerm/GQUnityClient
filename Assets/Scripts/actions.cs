@@ -175,12 +175,21 @@ public class actions : MonoBehaviour
 			showVariableOverlay (action);
 		} else if (action.type == "HideVar") {
 			hideVariableOverlay (action);
+		} else if (action.type == "StartQuest") {
+			startQuest (action);
 		}
 		
 		
 	}
 
 
+	public void startQuest (QuestAction action){
+
+		if (action.hasAttribute ("quest")){
+			questdb.StartQuest(int.Parse(action.getAttribute ("quest")));
+		}
+
+	}
 
 
 	public void addRoute (QuestAction action)

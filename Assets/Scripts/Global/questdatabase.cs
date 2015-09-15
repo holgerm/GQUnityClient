@@ -658,7 +658,7 @@ public class questdatabase : MonoBehaviour
 
 	}
 
-	void StartQuest (int id)
+	public void StartQuest (int id)
 	{
 		// if the given quest is already intialized start it, otherwise download it first and start it:
 		List<Quest> localQuests = GetLocalQuests ();
