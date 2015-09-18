@@ -128,7 +128,7 @@ public class page_imagecapture : MonoBehaviour {
 		GetComponent<AndroidCamera>().SaveImageToGallery(snap,text);
 
 
-		actioncontroller.photos.Add (qra);
+		actioncontroller.addPhoto(qra);
 		onEnd ();
 
 
@@ -180,7 +180,7 @@ public class page_imagecapture : MonoBehaviour {
 
 			}
 
-			actioncontroller.photos.Add (qra);
+			actioncontroller.addPhoto(qra);
 
 
 			onEnd ();

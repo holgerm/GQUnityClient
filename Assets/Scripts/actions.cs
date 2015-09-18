@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+using UnityEngine.Networking;
+
 public class actions : MonoBehaviour
 {
 
@@ -24,7 +26,7 @@ public class actions : MonoBehaviour
 	public List<QuestRuntimeAsset> photos;
 	public List<QuestRuntimeAsset> audioclips;
 
-
+	public networkactions networkActionsObject;
 
 	private QuestAction gpsRoute;
 	private bool updateGPSRoute = false;
@@ -70,6 +72,14 @@ public class actions : MonoBehaviour
 		questaudiosources = new List<questaudio> ();
 		photos = new List<QuestRuntimeAsset> ();
 		audioclips = new List<QuestRuntimeAsset> ();
+
+	}
+
+
+
+	public void setNetworkIdentity(networkactions na){
+
+		networkActionsObject = na;
 
 	}
 
@@ -177,6 +187,8 @@ public class actions : MonoBehaviour
 			hideVariableOverlay (action);
 		} else if (action.type == "StartQuest") {
 			startQuest (action);
+		} else if (action.type == "SendVarToServer") {
+			sendVarToServer (action);
 		}
 		
 		
@@ -191,6 +203,291 @@ public class actions : MonoBehaviour
 
 	}
 
+	void sendVarToServer (QuestAction action)
+	{
+
+		Debug.Log ("sending var to server #1");
+		if (action.hasAttribute ("ip") && action.hasAttribute("var")) {
+
+			Debug.Log ("sending var to server #2");
+
+
+
+
+
+
+
+					NetworkManager.singleton.StopClient();
+
+
+
+						NetworkManager.singleton.networkAddress = action.getAttribute("ip");
+
+			NetworkManager.singleton.StartClient();
+
+
+
+				Debug.Log ("sending var to server #3");
+
+			
+
+			
+
+
+				StartCoroutine(waitForClientStart(action,0));
+
+
+			}
+
+
+
+	
+
+
+		 
+
+
+
+	}
+
+
+	IEnumerator waitForClientStart(QuestAction action,int tries){
+		tries += 1;
+		Debug.Log ("waiting for client to start");
+
+
+		yield return null;
+
+		if (networkActionsObject != null) {
+
+			Debug.Log ("waiting for client to start #2");
+
+			if(getVariable(action.getAttribute("var")).getStringValue() != "[null]"){
+
+
+				Debug.Log("var send succesfully");
+			string deviceid = SystemInfo.deviceUniqueIdentifier;
+			networkActionsObject.CmdSendVar(deviceid,action.getAttribute("var"),getVariable(action.getAttribute("var")).getStringValue());
+
+
+				yield return new WaitForSeconds(10f);
+				NetworkManager.singleton.StopClient();
+
+
+				                                } else {
+
+
+
+				bool filefound = false;
+				string deviceid = SystemInfo.deviceUniqueIdentifier;
+
+
+
+				// PHOTOS
+
+
+				List<byte> filebytes = new List<byte>();
+
+				string filetype = "image/jpg";
+
+				QuestRuntimeAsset qra = null;
+
+				foreach (QuestRuntimeAsset qrat in photos) {
+					
+					if (!filefound && qrat.key == action.getAttribute("var")) {
+						filefound = true;
+						qra = qrat;
+
+					}
+						
+						
+					}
+					
+
+
+				if(filefound){
+
+						filebytes =	qra.texture.EncodeToJPG(90).ToList();
+
+				} else {
+
+
+
+				 filetype = "audio";
+					
+
+					foreach (QuestRuntimeAsset qrat in audioclips) {
+						
+						if (!filefound && qrat.key == action.getAttribute("var")) {
+							filefound = true;
+							qra = qrat;
+							
+						}
+						
+						
+					}
+
+
+					if(filefound){
+
+						int length= qra.clip.samples * qra.clip.channels;
+						var samples = new float[length];
+						qra.clip.GetData(samples, 0);
+
+						int length2 = samples.Count() * 4;
+						var filebytes2 = new byte[length2];
+						Buffer.BlockCopy(samples, 0, filebytes2, 0, filebytes2.Count());
+						
+
+						filebytes = filebytes2.ToList();
+
+
+
+					}
+
+
+
+
+
+				}
+
+
+
+
+						Debug.Log(filebytes.Count);
+
+						int size = 1300;
+
+
+
+						List<byte[]> sendbytes = new List<byte[]>();
+
+						for (int i = 0; i < filebytes.Count; i += size)
+						{
+							var list = new List<byte>();
+
+							if((i+size) > filebytes.Count){
+								Debug.Log("last: "+i+"*"+size+"="+(i*size));
+								size = filebytes.Count - (i);
+								Debug.Log(size);
+							}
+
+							list.AddRange(filebytes.GetRange(i, size));
+							sendbytes.Add(list.ToArray());
+						}
+
+
+						networkActionsObject.CmdSendFile(deviceid,action.getAttribute("var"),filetype,sendbytes[0]);
+						int y = sendbytes[0].Count();
+						Debug.Log("send chunk #1: "+ y);
+
+
+						yield return new WaitForEndOfFrame();
+
+
+						int k = 1;
+
+						foreach(byte[] b in sendbytes){
+
+							if(k <= sendbytes.Count){
+					
+					if(k > 1){
+						networkActionsObject.CmdAddToFile(deviceid,action.getAttribute("var"),filetype,b);
+
+									int x = b.Count();
+									Debug.Log("send chunk #"+k+": "+x);
+
+						
+							if(k % 150 == 0){
+							
+								yield return new WaitForSeconds(2f);
+							}
+
+								}
+
+								k++;
+							}
+						}
+
+
+//						yield return new WaitForEndOfFrame();
+//						yield return new WaitForEndOfFrame();
+
+						networkActionsObject.CmdFinishFile(deviceid,action.getAttribute("var"),filetype);
+
+						Debug.Log("finish File");
+
+						
+						
+				//yield return new WaitForEndOfFrame();
+				//NetworkManager.singleton.StopClient();
+
+
+					
+					
+
+				
+
+
+
+
+				if(!filefound){
+				Debug.Log("var not found");
+					questdb.debug("Die Variable "+action.getAttribute("var")+" konnte nicht gefunden werden.");
+
+				}
+
+
+			}
+				
+
+		} else {
+			yield return new WaitForSeconds(0.2f);
+
+			if(tries > 20){
+				sendVarToServer(action);
+			} else {
+			StartCoroutine(waitForClientStart(action,tries));
+			}
+		}
+
+
+
+
+	}
+
+	public void addPhoto (QuestRuntimeAsset tqra)
+	{
+
+
+
+		List<QuestRuntimeAsset> temp = new List<QuestRuntimeAsset> ();
+
+
+		foreach (QuestRuntimeAsset qra in photos) {
+		
+			temp.Add(qra);
+		
+		
+		}
+
+
+		foreach (QuestRuntimeAsset qra in temp) {
+			
+			if(qra.key == tqra.key){
+				Debug.Log("removed old one");
+				photos.Remove(qra);
+
+			}
+			
+			
+		}
+
+		photos.Add (tqra);
+
+	
+	
+	}
 
 	public void addRoute (QuestAction action)
 	{
@@ -666,12 +963,13 @@ public class actions : MonoBehaviour
 	public IEnumerator continueVibrating (int d)
 	{
 		yield return new WaitForSeconds (0.5f);
-		#if UNITY_WEBPLAYER
-		
+		#if UNITY_IPHONE || UNITY_WP8 || UNITY_ANDROID || UNITY_BLACKBERRY
+		Handheld.Vibrate ();
+# else 
 		Debug.Log("cannot vibrate on web");
 		
-		# else 
-		Handheld.Vibrate ();
+
+
 #endif
 		int b = d - 1;
 
@@ -1745,7 +2043,7 @@ public class QuestVariable
 
 		} else {
 
-			return null;
+			return "[null]";
 
 		}
 
@@ -1811,7 +2109,7 @@ public class QuestVariable
 	
 	
 }
-
+[System.Serializable]
 public class QuestRuntimeAsset
 {
 

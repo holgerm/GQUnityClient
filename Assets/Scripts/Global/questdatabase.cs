@@ -62,16 +62,24 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator Start ()
 	{
-		Debug.Log ("Start with params: autostart=" + Configuration.instance.autostartQuestID);
-		Debug.Log ("                   isPredeployed=" + Configuration.instance.autostartIsPredeployed);
-		Debug.Log ("                   showCQImmediately=" + Configuration.instance.showcloudquestsimmediately);
 
-		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
-		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
-		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
-		PATH_2_LOCAL_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
 
-		//msgsactive = 0;
+
+		if (Application.platform == RuntimePlatform.OSXPlayer) {
+
+			Application.LoadLevel("mediaserver");
+
+		} else {
+			Debug.Log ("Start with params: autostart=" + Configuration.instance.autostartQuestID);
+			Debug.Log ("                   isPredeployed=" + Configuration.instance.autostartIsPredeployed);
+			Debug.Log ("                   showCQImmediately=" + Configuration.instance.showcloudquestsimmediately);
+
+			PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
+			PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
+			LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
+			PATH_2_LOCAL_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
+
+			//msgsactive = 0;
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
@@ -82,82 +90,82 @@ public class questdatabase : MonoBehaviour
 
 #endif
 
-		if (GameObject.Find ("QuestDatabase") != gameObject) {
-			Destroy (GameObject.Find ("QuestDatabase"));		
-		} else {
-			DontDestroyOnLoad (gameObject);
-			//			Debug.Log (Application.persistentDataPath);
-		}
-
-
-
-
-		if (!Application.isWebPlayer) {
-
-			if (Configuration.instance.questvisualization != "list") {
-
-				Debug.Log ("starting without list");
-				GameObject.Find ("ListPanel").SetActive (false);
-
+			if (GameObject.Find ("QuestDatabase") != gameObject) {
+				Destroy (GameObject.Find ("QuestDatabase"));		
+			} else {
+				DontDestroyOnLoad (gameObject);
+				//			Debug.Log (Application.persistentDataPath);
 			}
+
+
+
+
+			if (!Application.isWebPlayer) {
+
+				if (Configuration.instance.questvisualization != "list") {
+
+					Debug.Log ("starting without list");
+					GameObject.Find ("ListPanel").SetActive (false);
+
+				}
 
 
 	
-			if (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) {
+				if (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) {
 		
-				allquests.Clear ();
+					allquests.Clear ();
 			
-				Debug.Log ("starting showing quests immediately (and no autostart)");
+					Debug.Log ("starting showing quests immediately (and no autostart)");
 			
-				string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
+					string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
 			
-				WWW listwww = new WWW (url);
-			
-			
+					WWW listwww = new WWW (url);
 			
 			
 			
-				StartCoroutine (DownloadPercentage (listwww));
-				StartCoroutine (DownloadList (listwww));
+			
+			
+					StartCoroutine (DownloadPercentage (listwww));
+					StartCoroutine (DownloadList (listwww));
 
 
 			
-			} else {
+				} else {
 
-				Debug.Log ("starting either without showing quest immediately or autostart");
-				if (Configuration.instance.autostartQuestID != 0) {
-					buttoncontroller.DisplayList ();
+					Debug.Log ("starting either without showing quest immediately or autostart");
+					if (Configuration.instance.autostartQuestID != 0) {
+						buttoncontroller.DisplayList ();
+					}
+			
 				}
-			
-			}
 
 		
 
 
 
-		} else {
-			if (webloadingmessage != null) {
+			} else {
+				if (webloadingmessage != null) {
 
-				webloadingmessage.enabled = true;
+					webloadingmessage.enabled = true;
+				}
+				questmilllogo.enabled = true;
+				loadlogo.enable ();
+			} 
+
+
+			autoStartQuest ();
+
+
+			yield return new WaitForEndOfFrame ();
+			yield return new WaitForEndOfFrame ();
+
+			if (GameObject.Find ("MenuCanvas") != null) {
+			
+				menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller> ();
+			
 			}
-			questmilllogo.enabled = true;
-			loadlogo.enable ();
-		} 
 
-
-		autoStartQuest ();
-
-
-		yield return new WaitForEndOfFrame ();
-		yield return new WaitForEndOfFrame ();
-
-		if (GameObject.Find ("MenuCanvas") != null) {
-			
-			menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller> ();
-			
 		}
-
-
 
 
 	}
@@ -2158,7 +2166,8 @@ public class questdatabase : MonoBehaviour
 						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
 						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)"
-						&& go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
+					    && go.name != "NetworkManager" && !go.name.Contains("NetworkIdentity")	
+					   && go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
 
 						
 

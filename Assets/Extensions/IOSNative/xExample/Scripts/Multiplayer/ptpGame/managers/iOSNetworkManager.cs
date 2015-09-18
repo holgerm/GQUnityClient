@@ -10,53 +10,24 @@
 
 using UnityEngine;
 using System.Collections;
-using System.IO;
 
-public abstract class BasePackage  {
-
-	protected MemoryStream buffer = new MemoryStream();
-	protected BinaryWriter writer;
+public class iOSNetworkManager  {
 
 	//--------------------------------------
 	// INITIALIZE
 	//--------------------------------------
 
-	public void initWriter() {
-		writer = new BinaryWriter (buffer);
-		writeInt(getId());
-	}
 
-
-	public abstract int getId();
-
-
-
-
-	public byte[] getBytes() {
-		return buffer.ToArray ();
-	}
-
-	public void send() {
-
-		//NetworkManager.send (this);
-	}
 
 	//--------------------------------------
 	//  PUBLIC METHODS
 	//--------------------------------------
 
-	public void writeInt(int val) {
-		writer.Write (val);
-	}
-	
-	public void writeString(string val) {
-
-		//writer.Write (val);
+	public static void send(BasePackage pack) {
+		GameCenter_RTM.instance.SendDataToAll (pack.getBytes(), GK_MatchSendDataMode.RELIABLE);
 	}
 
-	public void writeFloat(float val) {
-		writer.Write (val);
-	}
+
 	
 	//--------------------------------------
 	//  GET/SET
@@ -65,6 +36,8 @@ public abstract class BasePackage  {
 	//--------------------------------------
 	//  EVENTS
 	//--------------------------------------
+
+
 	
 	//--------------------------------------
 	//  PRIVATE METHODS
