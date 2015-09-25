@@ -957,7 +957,6 @@ public class questdatabase : MonoBehaviour
 	{
 
 
-		if (localquests.Contains (q)) {
 
 						
 			#if UNITY_WEBPLAYER
@@ -981,7 +980,7 @@ public class questdatabase : MonoBehaviour
 				}
 			}
 
-		}
+		
 
 	
 		if (buttoncontroller != null) {
