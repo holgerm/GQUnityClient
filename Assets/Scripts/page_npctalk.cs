@@ -4,11 +4,11 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-using System.Text.RegularExpressions;
 using System.IO;
 using System;
 using GQ.Util;
 using Candlelight.UI;
+using System.Text.RegularExpressions;
 
 public class page_npctalk : MonoBehaviour
 {
@@ -415,62 +415,69 @@ public class page_npctalk : MonoBehaviour
 					text.text += "<b>" + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("speaker") + "</b>: ";
 				}
 
-
-
-
-
-
-
 				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
-//				toadd = toadd + "   "; 
-//					hm: wozu war das gut? Hat bei<br> am Ende zu EInrückung in der kommendenZeile geführt.
-				int i = 0;	
-				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
-				int l = 0;
 
-
-				while (toadd.IndexOf("<a href=") > -1) {
-					
-					int index_start = toadd.IndexOf ("<a href=", i);
-					int index_mid = toadd.IndexOf (">", index_start);
-					int index_end = toadd.IndexOf ("</a>", index_mid);
-					i = index_end;
-
-
-					
-					string one = toadd.Substring (0, index_start);
-					string two = toadd.Substring (index_mid + 1, index_end - index_mid - 1);
-					Debug.Log (toadd.Length + "," + index_end + "," + (toadd.Length - index_end));
-					string three = toadd.Substring (index_end + 5, toadd.Length - index_end - 5);
-
-
-
-					if (two.Length > 0 && two != "0") {
-
-						links.Add (new Link ("link" + l, two));
-						if (two.Length > 27) {
-
-							two = two.Substring (0, 25) + "...";
-						}
-
-
-
-
-						toadd = one + "<a name=\"link" + l + "\"><quad class=\"link\">  " + two + "</a>" + three;
-						l++;
-
-					} else {
-						toadd = one + " " + three;
-					}
-
-
-				
-				}
+//				string pattern = @"<a\s*href\s*=\s*\\""(?'url'(?:(?:http(?:s)?\:\/\/)?[a-zA-Z0-9]+(?:(?:\.|\-)[a-zA-Z0-9]+)+(?:\:\d+)?(?:\/[\w\-]+)*(?:\/?|\/\w+\.[a-zA-Z]{2,4}(?:\?[\w]+\=[\w\-]+)?)?(?:\&[\w]+\=[\w\-]+)*))\\""\s*>(?'linktext'.*?)<\/a>";
+//				MatchCollection matchColl = Regex.Matches (toadd, pattern);
+//				Debug.Log ("FOUND matches: " + matchColl.Count);
+//				Debug.Log ("in input: " + toadd);
+//				foreach (Match match in Regex.Matches(toadd, pattern)) {
+//					Debug.Log ("adding a link to: " + match.Groups ["url"].Value);
+//				}
+//
+//				int i = 0;	
+//				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
+//				int l = 0;
+//
+//
+//				while (toadd.IndexOf("<a href=") > -1) {
+//					
+//					int index_start = toadd.IndexOf ("<a href=", i);
+//					int index_mid = toadd.IndexOf (">", index_start);
+//					int index_end = toadd.IndexOf ("</a>", index_mid);
+//					i = index_end;
+//
+//
+//					
+//					string one = toadd.Substring (0, index_start);
+//					string linkText = toadd.Substring (index_mid + 1, index_end - index_mid - 1);
+//					Debug.Log (toadd.Length + "," + index_end + "," + (toadd.Length - index_end));
+//					string three = toadd.Substring (index_end + 5, toadd.Length - index_end - 5);
+//
+//					Debug.Log ("start=" + index_start);
+//					Debug.Log ("mid=" + index_mid);
+//					Debug.Log ("end=" + index_end);
+//					Debug.Log ("one=" + one);
+//					Debug.Log ("three=" + three);
+//					Debug.Log ("two=" + linkText);
+//
+//					three = "http:quest-mill.com";
+//
+//					
+//					if (linkText.Length > 0 && linkText != "0") {
+//
+//						links.Add (new Link ("link" + l, three));
+//						if (linkText.Length > 27) {
+//
+//							linkText = linkText.Substring (0, 25) + "...";
+//						}
+//
+////						toadd = one + "<a name=\"link" + l + "\"><quad class=\"link\">  " + linkText + "</a>" + three;
+//						toadd = one + "<a name=\"link" + l + "\">" + "Linktext(" + three + ")" + "</a>";
+//						l++;
+//
+//					} else {
+//						toadd = one + " " + three;
+//					}
+//
+//
+//				
+//				}
 				
 				text.text += toadd;
 
 
-
+				Debug.Log ("New text: " + text.text);
 
 								
 
@@ -529,6 +536,7 @@ public class page_npctalk : MonoBehaviour
 
 				}
 
+				Debug.Log ("Opening url: " + url);
 				Application.OpenURL (url);
 
 			}

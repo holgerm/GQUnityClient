@@ -1,5 +1,35 @@
 Change List:
 
+1.5.4:
+    - Fixed null reference exception in Unity 5.2.1.
+1.5.3:
+    - Fixed bug causing quads to use errant materials when multiple HyperText
+      instances were masked in the scene and one was disabled then re-enabled.
+1.5.2:
+    - Fixed bug introduced in 1.5.0 that could cause an exception in Unity 4.6
+      when a link hitbox was clipped.
+    - Fixed KeywordsGlossary inspector bug introduced in 1.5.1.
+    - Library updates.
+1.5.1:
+    - Fixed bug introduced in 1.5.0 preventing builds.
+    - Library updates.
+1.5.0:
+    - Added compatibility for Unity 5.2.0.
+    - Added compatibility with new RectMask2D component.
+    - Vertex colors no longer continuously update if there is no current state
+      transition.
+    - HyperText.GetLinkHitboxes() now returns the correct result as soon as the
+      text has been changed, even if graphics have not been rebuilt yet.
+    - Added HyperText.SetTagKeywordCollections().
+    - When a style sheet is assigned to a HyperText instance from the inspector,
+      the HyperText's font property is cleared if the style sheet has a font.
+    - When a new HyperText instance is created and a default sheet with a font is
+      specified, the instance's font will be cleared if it is the Arial default.
+    - Cleaned up inspectors for overridable/inherited styles and properties to
+      better draw attention to overridden properties; check tooltips on labels if
+      you need clarification.
+    - Removed obsolete methods.
+    - Library updates.
 1.4.3:
     - Fixed regression introduced in 1.4.2 causing new quads to not properly
       set their parents.

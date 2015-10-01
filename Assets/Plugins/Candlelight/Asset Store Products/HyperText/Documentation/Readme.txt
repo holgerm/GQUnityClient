@@ -1,6 +1,9 @@
-HyperText 1.4.3 readme
+HyperText 1.5.4 readme
 ================================================================================
-WARNING: PATCH RELEASES ARE NOT OFFICIALLY SUPPORTED. USE AT YOUR OWN RISK.
+Although alpha and beta releases of Unity are not officially supported, this
+package will sometimes be updated during test cycles to add support as feasible.
+
+PATCH RELEASES ARE NOT OFFICIALLY SUPPORTED. USE THEM AT YOUR OWN RISK.
 
 More and up to date information available at
 http://developers.candlelightinteractive.com/
@@ -109,8 +112,8 @@ It adds the following features:
   
 - HyperText and HyperTextStyles fully support undo and multi-object editing.
 
-- HyperText can be subclassed if you need to support custom IVertexModifier
-  types. Simply override the method PostprocessCharacterIndexRanges().
+- HyperText can be subclassed if you need to support custom IVertexModifier or
+  IMeshModifier types. You will need to override PostprocessVertexIndexRanges().
   
 The package includes documented source code and inspector tooltips throughout.
 Please feel free to contact me though if you have any problems, questions, or

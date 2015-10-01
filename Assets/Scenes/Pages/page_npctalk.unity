@@ -332,6 +332,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: .0219999999
+  m_StereoMirrorMode: 0
 --- !u!4 &133501173
 Transform:
   m_ObjectHideFlags: 0
@@ -1439,8 +1440,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FontData:
-    m_Font: {fileID: 0}
-    m_FontSize: 60
+    m_Font: {fileID: 12800000, guid: 872d6c2e2f86e40fba012ea9b2c32c5a, type: 3}
+    m_FontSize: 80
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -1462,8 +1463,7 @@ MonoBehaviour:
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1502,9 +1502,9 @@ MonoBehaviour:
     m_IsRichTextDesired: 1
     m_OutputText: Es ist ein Fehler aufgetreten.
     m_QuadKeywordCollections: []
-    m_ReferenceFontSize: 60
+    m_ReferenceFontSize: 80
     m_ShouldOverrideStylesFontSize: 0
-    m_Styles: {fileID: 11400000, guid: 6774c33c7abe8474a998ebaca449d5ec, type: 2}
+    m_Styles: {fileID: 0}
     m_TagKeywordCollections: []
 --- !u!222 &1531027273
 CanvasRenderer:
@@ -1719,6 +1719,7 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
+  m_RepeatDelay: .5
   m_AllowActivationOnMobileDevice: 0
 --- !u!114 &1911540886
 MonoBehaviour:
@@ -1815,6 +1816,7 @@ MonoBehaviour:
     start_latitude: 0
     meta_combined: 
     predeployed: 0
+    version: 
   npctalk:
     id: 0
     type: 
@@ -1852,6 +1854,7 @@ MonoBehaviour:
   tickertime: .0500000007
   indexoflink: 0
   link: 
+  links: []
 --- !u!4 &1953851292
 Transform:
   m_ObjectHideFlags: 0
