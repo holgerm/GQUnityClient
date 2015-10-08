@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class onTapMarker : MonoBehaviour {
+public class onTapMarker : MonoBehaviour
+{
 
 
 
@@ -16,13 +17,14 @@ public class onTapMarker : MonoBehaviour {
 
 
 
-	void OnMouseDown(){
+	void OnMouseDown ()
+	{
 
 
 		if (!Application.isMobilePlatform && hotspot.active) {
 
 
-			GetComponent<MeshRenderer>().material.color = Color.grey;
+			GetComponent<MeshRenderer> ().material.color = Color.grey;
 
 
 		}
@@ -31,7 +33,8 @@ public class onTapMarker : MonoBehaviour {
 
 	}
 
-	void OnMouseUp(){
+	void OnMouseUp ()
+	{
 
 
 		if (!Application.isMobilePlatform && hotspot.active) {
@@ -42,10 +45,10 @@ public class onTapMarker : MonoBehaviour {
 				GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().startQuest (hotspot.startquest);
 			}
 
-			GetComponent<MeshRenderer>().material.color = Color.white;
+			GetComponent<MeshRenderer> ().material.color = Color.white;
 
 
-			Debug.Log("onTap invoked");
+			Debug.Log ("onTap invoked");
 			hotspot.hotspot.onTap.Invoke ();
 
 			
@@ -54,36 +57,50 @@ public class onTapMarker : MonoBehaviour {
 		
 		
 	}
-	void Update(){
 
 
-		hotspot = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().getHotspot (""+hotspot.hotspot.id);
+	void Update ()
+	{
+
+		GameObject qdbGO = GameObject.Find ("QuestDatabase");
+		if (qdbGO == null) {
+			Debug.Log ("Cannot find QuestDataBase GameObject");
+			return;
+		}
+		questdatabase qdb = qdbGO.GetComponent<questdatabase> ();
+		if (qdb == null) {
+			Debug.Log ("Cannot get component questdatabase");
+			return;
+		}
+		hotspot = qdb.getHotspot ("" + hotspot.hotspot.id);
+		if (hotspot == null) {
+			Debug.Log ("Cannot find hotspot " + hotspot.hotspot.id);
+			return;
+		}
 
 
 		if (hotspot.active) {
 
 
-			GetComponent<MeshRenderer>().sortingOrder = 10;
+			GetComponent<MeshRenderer> ().sortingOrder = 10;
 
 
 
 
-				if (UnityEngine.Input.touchCount == 1) {
+			if (UnityEngine.Input.touchCount == 1) {
 
 				
-				if (UnityEngine.Input.GetTouch (0).phase == TouchPhase.Ended && positionmoved < 10f && !EventSystem.current.IsPointerOverGameObject()) {
+				if (UnityEngine.Input.GetTouch (0).phase == TouchPhase.Ended && positionmoved < 10f && !EventSystem.current.IsPointerOverGameObject ()) {
 					//Debug.Log("touch ended: "+positionmoved);
 
 					Touch touch = UnityEngine.Input.GetTouch (0);
 
-					Ray ray = GameObject.Find("MapCam").GetComponent<Camera>().ScreenPointToRay(touch.position);
+					Ray ray = GameObject.Find ("MapCam").GetComponent<Camera> ().ScreenPointToRay (touch.position);
 					RaycastHit hit;
 					
-					if (Physics.Raycast(ray, out hit)) 
-					       
-						{
+					if (Physics.Raycast (ray, out hit)) {
 
-						if(hit.transform.gameObject == gameObject){
+						if (hit.transform.gameObject == gameObject) {
 
 
 							if (hotspot.startquest.id != 0) {
@@ -92,10 +109,10 @@ public class onTapMarker : MonoBehaviour {
 								GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().startQuest (hotspot.startquest);
 							}
 
-							GetComponent<MeshRenderer>().material.color = Color.white;
+							GetComponent<MeshRenderer> ().material.color = Color.white;
 
 
-						hotspot.hotspot.onTap.Invoke ();
+							hotspot.hotspot.onTap.Invoke ();
 
 						}
 
@@ -107,14 +124,14 @@ public class onTapMarker : MonoBehaviour {
 
 				} else if (UnityEngine.Input.GetTouch (0).phase == TouchPhase.Moved) {
 
-				if(	UnityEngine.Input.GetTouch (0).deltaPosition.x > 0){
+					if (UnityEngine.Input.GetTouch (0).deltaPosition.x > 0) {
 						positionmoved += UnityEngine.Input.GetTouch (0).deltaPosition.x;
 					} else {
 						positionmoved -= UnityEngine.Input.GetTouch (0).deltaPosition.x;
 
 					}
 
-					if(UnityEngine.Input.GetTouch (0).deltaPosition.y > 0){
+					if (UnityEngine.Input.GetTouch (0).deltaPosition.y > 0) {
 						positionmoved += UnityEngine.Input.GetTouch (0).deltaPosition.y;
 					} else {
 						positionmoved -= UnityEngine.Input.GetTouch (0).deltaPosition.y;
@@ -122,16 +139,16 @@ public class onTapMarker : MonoBehaviour {
 					}
 
 
-					if(positionmoved > 10){
+					if (positionmoved > 10) {
 
-						GetComponent<MeshRenderer>().material.color = Color.white;
+						GetComponent<MeshRenderer> ().material.color = Color.white;
 
 
 					}
 
 					//Debug.Log("touch move: "+positionmoved);
 
-				} else if(UnityEngine.Input.GetTouch (0).phase == TouchPhase.Began){
+				} else if (UnityEngine.Input.GetTouch (0).phase == TouchPhase.Began) {
 
 
 
@@ -139,16 +156,14 @@ public class onTapMarker : MonoBehaviour {
 
 					Touch touch = UnityEngine.Input.GetTouch (0);
 					
-					Ray ray = GameObject.Find("MapCam").GetComponent<Camera>().ScreenPointToRay(touch.position);
+					Ray ray = GameObject.Find ("MapCam").GetComponent<Camera> ().ScreenPointToRay (touch.position);
 					RaycastHit hit;
 					
-					if (Physics.Raycast(ray, out hit)) 
+					if (Physics.Raycast (ray, out hit)) {
 						
-					{
-						
-						if(hit.transform.gameObject == gameObject){
+						if (hit.transform.gameObject == gameObject) {
 
-					GetComponent<MeshRenderer>().material.color = Color.grey;
+							GetComponent<MeshRenderer> ().material.color = Color.grey;
 
 						}
 					}
@@ -160,14 +175,14 @@ public class onTapMarker : MonoBehaviour {
 				}
 
 
-				} 
+			} 
 			
 		}
 
 		if (hotspot.visible) {
-			GetComponent<MeshRenderer>().enabled = true;
+			GetComponent<MeshRenderer> ().enabled = true;
 		} else {
-			GetComponent<MeshRenderer>().enabled = false;
+			GetComponent<MeshRenderer> ().enabled = false;
 
 
 		}
