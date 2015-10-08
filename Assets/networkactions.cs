@@ -39,14 +39,17 @@ public class networkactions : NetworkBehaviour{
 
 
 	[Command]
-public void	CmdSendVar(string deviceid, string var, string value){
+public void	CmdSendVar(int id,string deviceid, string var, string value){
 
 		SendVariable v = new SendVariable ();
+		v.id = id;
+		v.messagetype = "setVar";
 		v.deviceid = deviceid;
 		v.var = var;
 		v.value = value;
 
-		GameObject.Find("MediaServer").SendMessage("setVar",v);
+		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue",v);
+		RpcMessageSuccesful (id);
 
 	}
 
@@ -54,17 +57,20 @@ public void	CmdSendVar(string deviceid, string var, string value){
 
 	
 	[Command]
-	public void	CmdSendFile(string deviceid, string var, string filetype, byte[] file){
+	public void	CmdSendFile(int id,string deviceid, string var, string filetype, byte[] file){
 		
 		SendVariable v = new SendVariable ();
+		v.id = id;
+		v.messagetype = "setFile";
 		v.deviceid = deviceid;
 		v.var = var;
 
 		v.filetype = filetype;
 		v.bytes = file;
 		
-		GameObject.Find("MediaServer").SendMessage("setFile",v);
-		
+		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue",v);
+		RpcMessageSuccesful (id);
+
 	}
 
 
@@ -74,39 +80,85 @@ public void	CmdSendVar(string deviceid, string var, string value){
 
 	
 	[Command]
-	public void	CmdAddToFile(string deviceid, string var, string filetype, byte[] file){
+	public void	CmdAddToFile(int id, string deviceid, string var, string filetype, byte[] file){
 		
 		SendVariable v = new SendVariable ();
+		v.id = id;
+		v.messagetype = "addToFile";
 		v.deviceid = deviceid;
 		v.var = var;
 		
 		v.filetype = filetype;
 		v.bytes = file;
 		
-		GameObject.Find("MediaServer").SendMessage("addToFile",v);
-		
+		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue",v);
+		RpcMessageSuccesful (id);
+
 	}
 
 
 
 	
 	[Command]
-	public void	CmdFinishFile(string deviceid, string var, string filetype){
+	public void	CmdFinishFile(int id, string deviceid, string var, string filetype){
 		
 		SendVariable v = new SendVariable ();
+		v.id = id;
+		v.messagetype = "finishFile";
 		v.deviceid = deviceid;
 		v.var = var;
 		v.filetype = filetype;
-		GameObject.Find("MediaServer").SendMessage("finishFile",v);
-		
+		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue",v);
+
+		RpcMessageSuccesful (id);
 	}
 
+
+
+
+
+	[ClientRpc]
+	public void RpcMessageSuccesful(int id) {
+
+		GameObject.Find ("QuestDatabase").SendMessage ("messageReceived", id);
+
+	}
+
+
+
+	[Command]
+	public void	CmdAskForNextExpectedMessage(string deviceid){
+
+		int expectedmessage = 0;
+
+		if (PlayerPrefs.HasKey ("nextmessage_" + deviceid)) {
+
+
+			expectedmessage = PlayerPrefs.GetInt("nextmessage_"+deviceid);
+
+		}
+
+		RpcReturnNextExpectedMessage (expectedmessage);
+
+	}
+
+
+	[ClientRpc]
+	public void RpcReturnNextExpectedMessage(int nextexpectedmessage){
+
+		GameObject.Find ("QuestDatabase").SendMessage ("setExpectedNextMessage", nextexpectedmessage);
+
+
+	}
 
 
 }
 
 [System.Serializable]
 public class SendVariable{
+
+	public int id;
+	public string messagetype;
 
 
 	public string deviceid;

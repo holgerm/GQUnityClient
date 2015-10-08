@@ -392,7 +392,7 @@ public class actions : MonoBehaviour
 
 				Debug.Log("var send succesfully");
 			string deviceid = SystemInfo.deviceUniqueIdentifier;
-			networkActionsObject.CmdSendVar(deviceid,action.getAttribute("var"),getVariable(action.getAttribute("var")).getStringValue());
+			//networkActionsObject.CmdSendVar(deviceid,action.getAttribute("var"),getVariable(action.getAttribute("var")).getStringValue());
 
 
 				yield return new WaitForSeconds(10f);
@@ -502,7 +502,7 @@ public class actions : MonoBehaviour
 						}
 
 
-						networkActionsObject.CmdSendFile(deviceid,action.getAttribute("var"),filetype,sendbytes[0]);
+						//networkActionsObject.CmdSendFile(deviceid,action.getAttribute("var"),filetype,sendbytes[0]);
 						int y = sendbytes[0].Count();
 						Debug.Log("send chunk #1: "+ y);
 
@@ -517,7 +517,7 @@ public class actions : MonoBehaviour
 							if(k <= sendbytes.Count){
 					
 					if(k > 1){
-						networkActionsObject.CmdAddToFile(deviceid,action.getAttribute("var"),filetype,b);
+						//networkActionsObject.CmdAddToFile(deviceid,action.getAttribute("var"),filetype,b);
 
 									int x = b.Count();
 									Debug.Log("send chunk #"+k+": "+x);
@@ -535,18 +535,13 @@ public class actions : MonoBehaviour
 						}
 
 
-//						yield return new WaitForEndOfFrame();
-//						yield return new WaitForEndOfFrame();
 
-						networkActionsObject.CmdFinishFile(deviceid,action.getAttribute("var"),filetype);
+			//			networkActionsObject.CmdFinishFile(deviceid,action.getAttribute("var"),filetype);
 
 						Debug.Log("finish File");
 
 						
-						
-				//yield return new WaitForEndOfFrame();
-				//NetworkManager.singleton.StopClient();
-
+			
 
 					
 					

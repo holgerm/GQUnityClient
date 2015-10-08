@@ -6,6 +6,12 @@ using System.Collections.Generic;
 
 public class sendqueue : MonoBehaviour {
 
+
+
+	public bool receivedExpectedMessageId = false;
+
+
+
 	public List<SendQueueEntry> queue;
 
 	public networkactions networkActionsObject;
@@ -37,15 +43,14 @@ public class sendqueue : MonoBehaviour {
 		messageTimerSave = messageTimer;
 		connectionTimeoutSave = connectionTimeout;
 		deviceid = SystemInfo.deviceUniqueIdentifier;
+
+
+		idCounter = 10000023;
 	}
 
 
 
 	void Update(){
-
-
-
-
 
 
 
@@ -81,6 +86,14 @@ public class sendqueue : MonoBehaviour {
 
 				if (networkActionsObject != null) {
 
+					if(!receivedExpectedMessageId){
+
+
+
+						networkActionsObject.CmdAskForNextExpectedMessage(deviceid);
+
+
+					} else {
 
 
 					foreach (SendQueueEntry sqe in queue.GetRange(0,queue.Count)) {
@@ -93,7 +106,7 @@ public class sendqueue : MonoBehaviour {
 						}
 					}
 
-
+					}
 
 				} else {
 
@@ -127,13 +140,58 @@ public class sendqueue : MonoBehaviour {
 
 
 
+	public void setExpectedNextMessage(int nextmessage){
+
+		idCounter = nextmessage;
+
+
+	
+		foreach (SendQueueEntry sqe in queue) {
+
+
+			sqe.id = idCounter;
+			idCounter++;
+
+			if (idCounter == int.MaxValue) {
+				idCounter = 0;
+			}
+
+		}
+
+		PlayerPrefs.SetInt ("nextmessage_" + NetworkManager.singleton.networkAddress, idCounter);
+
+		receivedExpectedMessageId = true;
+
+
+
+	}
+
+
 	public void addMessageToQueue(string ip, string var, string value){
 
 		SendQueueEntry sqe = new SendQueueEntry ();
 
+		if (idCounter == 0) {
+
+
+			if(PlayerPrefs.HasKey("nextmessage_" + sqe.ip)){
+
+				idCounter = PlayerPrefs.GetInt ("nextmessage_" + sqe.ip);
+
+			}
+
+		}
+
 
 		sqe.id = idCounter;
 		idCounter++;
+
+		if (idCounter == int.MaxValue) {
+			idCounter = 0;
+		}
+
+
+		PlayerPrefs.SetInt ("nextmessage_" + sqe.ip, idCounter);
 
 
 		sqe.mode = MODE_VALUE;
@@ -213,10 +271,32 @@ public class sendqueue : MonoBehaviour {
 
 
 
+
+
+
+	public void messageReceived(int id){
+
+
+		foreach (SendQueueEntry sqe in queue.GetRange(0,queue.Count)) {
+
+			if(sqe.id == id){
+
+
+				queue.Remove(sqe);
+			}
+
+
+
+		}
+
+
+	}
+
+
 	public void send(SendQueueEntry sqe, float timeout){
 
 
-		queue.Remove (sqe);
+		//queue.Remove (sqe);
 
 
 		sqe.timeout = messageTimeout;
@@ -225,20 +305,20 @@ public class sendqueue : MonoBehaviour {
 		if (sqe.mode == MODE_VALUE) {
 
 
-		networkActionsObject.CmdSendVar(deviceid,sqe.var,sqe.value);
+		networkActionsObject.CmdSendVar(sqe.id, deviceid,sqe.var,sqe.value);
 
 
 		} else if (sqe.mode == MODE_FILE_START) {
 
-			networkActionsObject.CmdSendFile(deviceid,sqe.var,sqe.filetype,sqe.file);
+			networkActionsObject.CmdSendFile(sqe.id, deviceid,sqe.var,sqe.filetype,sqe.file);
 					
 		} else if (sqe.mode == MODE_FILE_MID) {
 
-			networkActionsObject.CmdAddToFile(deviceid,sqe.var,sqe.filetype,sqe.file);
+			networkActionsObject.CmdAddToFile(sqe.id, deviceid,sqe.var,sqe.filetype,sqe.file);
 
 		} else if (sqe.mode == MODE_FILE_FINISH) {
 			
-			networkActionsObject.CmdFinishFile(deviceid,sqe.var,sqe.filetype);
+			networkActionsObject.CmdFinishFile(sqe.id, deviceid,sqe.var,sqe.filetype);
 
 		}
 
