@@ -7,6 +7,7 @@ using LitJson;
 using GQ.Conf;
 using System;
 using System.Text;
+using System.Reflection;
 
 namespace GQ.ET
 {
@@ -50,7 +51,10 @@ namespace GQ.ET
 		[MenuItem ("Window/GQ Product Editor")]
 		public static void  ShowWindow ()
 		{
-			EditorWindow.GetWindow (typeof(ProductEditor));
+			Assembly editorAsm = typeof(Editor).Assembly;
+			Type insWndType = editorAsm.GetType ("UnityEditor.InspectorWindow");
+
+			EditorWindow.GetWindow <ProductEditor> ("GQ Product", true, insWndType);
 		}
 
 		void initialize ()
@@ -80,15 +84,20 @@ namespace GQ.ET
 			if (!initialized)
 				initialize ();
 
+			createEditorContent ();
+		}
+
+		Vector2 scrollPos;
+
+		void createEditorContent ()
+		{
+			scrollPos = EditorGUILayout.BeginScrollView (scrollPos);
 			createGUIProductSelection ();
-
 			EditorGUILayout.Space ();
-
 			createGUIShowDetails ();
-
 			EditorGUILayout.Space ();
-
 			createGUIEditSpec ();
+			EditorGUILayout.EndScrollView ();
 		}
 
 		void createGUIProductSelection ()
@@ -185,11 +194,14 @@ namespace GQ.ET
 			ProductConfigManager.current.showCloudQuestsImmediately =
 				EditorGUILayout.Toggle ("Load cloud quests asap?", ProductConfigManager.current.showCloudQuestsImmediately);
 
-			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.BeginHorizontal (GUILayout.Width (300));
 			EditorGUILayout.PrefixLabel ("Imprint");
+			Vector2 scrollPos = new Vector2 ();
+			scrollPos = EditorGUILayout.BeginScrollView (scrollPos);
 			ProductConfigManager.current.imprint = 
 				EditorGUILayout.TextArea (
 					ProductConfigManager.current.imprint);
+			EditorGUILayout.EndScrollView ();
 			EditorGUILayout.EndHorizontal ();
 
 			// TODO splash screen
