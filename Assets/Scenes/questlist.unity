@@ -3926,7 +3926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 0
+  product: 1
   overrideProductSettingsInInspector: 0
   portalID: 141
   autostartQuestID: 0
@@ -9973,6 +9973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2fc615edcad46ee83ff42b96457525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  receivedExpectedMessageId: 0
   queue: []
   networkActionsObject: {fileID: 0}
   messageTimer: .00999999978
