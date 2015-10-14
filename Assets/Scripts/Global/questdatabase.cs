@@ -67,7 +67,7 @@ public class questdatabase : MonoBehaviour
 
 		if (Application.platform == RuntimePlatform.OSXPlayer) {
 
-			Application.LoadLevel("mediaserver");
+			Application.LoadLevel ("mediaserver");
 
 		} else {
 			Debug.Log ("Start with params: autostart=" + Configuration.instance.autostartQuestID);
@@ -705,7 +705,7 @@ public class questdatabase : MonoBehaviour
 			bool ok = (www.error == null);
 			downloadAfterConnectionChecked (q, ok);
 		} else 
-			if (elapsedTime < 2.0f)
+			if (elapsedTime < 10.0f)
 			StartCoroutine (CheckConnection (q, elapsedTime + 0.1f, www));
 		else {
 			downloadAfterConnectionChecked (q, false);
@@ -959,26 +959,26 @@ public class questdatabase : MonoBehaviour
 
 
 						
-			#if UNITY_WEBPLAYER
+		#if UNITY_WEBPLAYER
 
 			Debug.Log("cannot remove on web");
 
-			# else 
-			if (Directory.Exists (Application.persistentDataPath + "/quests/" + q.id)) {
-				Directory.Delete (Application.persistentDataPath + "/quests/" + q.id, true);
+		# else 
+		if (Directory.Exists (Application.persistentDataPath + "/quests/" + q.id)) {
+			Directory.Delete (Application.persistentDataPath + "/quests/" + q.id, true);
 
 
-			}
+		}
 #endif
-			localquests.Remove (q);
+		localquests.Remove (q);
 
-			if (currentquest != null) {
-				if (currentquest.id == q.id) {
+		if (currentquest != null) {
+			if (currentquest.id == q.id) {
 
-					currentquest = null;
+				currentquest = null;
 
-				}
 			}
+		}
 
 		
 
@@ -1053,7 +1053,7 @@ public class questdatabase : MonoBehaviour
 			showmessage ("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK");
 		}
 
-		StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://www.google.com")));
+		StartCoroutine (CheckConnection (q, 0.0f, new WWW ("http://qeevee.org:9091/testConnection")));
 
 		               
 		               
@@ -2165,8 +2165,8 @@ public class questdatabase : MonoBehaviour
 						&& go.name != "ImpressumCanvas" && !go.transform.IsChildOf (GameObject.Find ("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 						&& go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
 						&& go.name != "" && !go.name.Contains ("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)"
-					    && go.name != "NetworkManager" && !go.name.Contains("NetworkIdentity")	
-					   && go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
+						&& go.name != "NetworkManager" && !go.name.Contains ("NetworkIdentity")	
+						&& go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas") {
 
 						
 
@@ -4184,7 +4184,7 @@ public class QuestConditionComparer
 			foreach (string k in var_value) {
 
 
-			//	Debug.Log ("looking vor var " + k);
+				//	Debug.Log ("looking vor var " + k);
 
 
 				string kk = new string (k.ToCharArray ()
