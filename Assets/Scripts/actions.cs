@@ -25,16 +25,11 @@ public class actions : MonoBehaviour
 	public List<AudioSource> audiosources;
 	public List<QuestRuntimeAsset> photos;
 	public List<QuestRuntimeAsset> audioclips;
-
 	public networkactions networkActionsObject;
-
 	private QuestAction gpsRoute;
 	private bool updateGPSRoute = false;
 	public float gPSRouteUpdateInterval = 10f;
-
-
 	private float gPSRouteUpdateInterval_save = 10f;
-
 
 	void Update ()
 	{
@@ -59,8 +54,6 @@ public class actions : MonoBehaviour
 
 	}
 
-
-
 	void Start ()
 	{
 
@@ -75,9 +68,8 @@ public class actions : MonoBehaviour
 
 	}
 
-
-
-	public void setNetworkIdentity(networkactions na){
+	public void setNetworkIdentity (networkactions na)
+	{
 
 		networkActionsObject = na;
 
@@ -194,11 +186,11 @@ public class actions : MonoBehaviour
 		
 	}
 
+	public void startQuest (QuestAction action)
+	{
 
-	public void startQuest (QuestAction action){
-
-		if (action.hasAttribute ("quest")){
-			questdb.StartQuest(int.Parse(action.getAttribute ("quest")));
+		if (action.hasAttribute ("quest")) {
+			questdb.StartQuest (int.Parse (action.getAttribute ("quest")));
 		}
 
 	}
@@ -206,13 +198,13 @@ public class actions : MonoBehaviour
 	void sendVarToServer (QuestAction action)
 	{
 
-		if (action.hasAttribute ("ip") && action.hasAttribute("var")) {
+		if (action.hasAttribute ("ip") && action.hasAttribute ("var")) {
 
 		
 
-			if(getVariable(action.getAttribute("var")).getStringValue() != "[null]"){
+			if (getVariable (action.getAttribute ("var")).getStringValue () != "[null]") {
 
-					GetComponent<sendqueue>().addMessageToQueue(action.getAttribute("ip"),action.getAttribute("var"),getVariable(action.getAttribute("var")).getStringValue());
+				GetComponent<sendqueue> ().addMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), getVariable (action.getAttribute ("var")).getStringValue ());
 
 			} else {
 
@@ -226,7 +218,7 @@ public class actions : MonoBehaviour
 				// PHOTOS
 				
 				
-				List<byte> filebytes = new List<byte>();
+				List<byte> filebytes = new List<byte> ();
 				
 				string filetype = "image/jpg";
 				
@@ -234,7 +226,7 @@ public class actions : MonoBehaviour
 				
 				foreach (QuestRuntimeAsset qrat in photos) {
 					
-					if (!filefound && qrat.key == action.getAttribute("var")) {
+					if (!filefound && qrat.key == action.getAttribute ("var")) {
 						filefound = true;
 						qra = qrat;
 						
@@ -245,9 +237,9 @@ public class actions : MonoBehaviour
 				
 				
 				
-				if(filefound){
+				if (filefound) {
 					
-					filebytes =	qra.texture.EncodeToJPG(90).ToList();
+					filebytes = qra.texture.EncodeToJPG (90).ToList ();
 					
 				} else {
 					
@@ -258,7 +250,7 @@ public class actions : MonoBehaviour
 					
 					foreach (QuestRuntimeAsset qrat in audioclips) {
 						
-						if (!filefound && qrat.key == action.getAttribute("var")) {
+						if (!filefound && qrat.key == action.getAttribute ("var")) {
 							filefound = true;
 							qra = qrat;
 							
@@ -268,18 +260,18 @@ public class actions : MonoBehaviour
 					}
 					
 					
-					if(filefound){
+					if (filefound) {
 						
-						int length= qra.clip.samples * qra.clip.channels;
+						int length = qra.clip.samples * qra.clip.channels;
 						var samples = new float[length];
-						qra.clip.GetData(samples, 0);
+						qra.clip.GetData (samples, 0);
 						
-						int length2 = samples.Count() * 4;
+						int length2 = samples.Count () * 4;
 						var filebytes2 = new byte[length2];
-						Buffer.BlockCopy(samples, 0, filebytes2, 0, filebytes2.Count());
+						Buffer.BlockCopy (samples, 0, filebytes2, 0, filebytes2.Count ());
 						
 						
-						filebytes = filebytes2.ToList();
+						filebytes = filebytes2.ToList ();
 						
 						
 						
@@ -298,38 +290,37 @@ public class actions : MonoBehaviour
 				
 				
 				
-				List<byte[]> sendbytes = new List<byte[]>();
+				List<byte[]> sendbytes = new List<byte[]> ();
 				
-				for (int i = 0; i < filebytes.Count; i += size)
-				{
-					var list = new List<byte>();
+				for (int i = 0; i < filebytes.Count; i += size) {
+					var list = new List<byte> ();
 					
-					if((i+size) > filebytes.Count){
+					if ((i + size) > filebytes.Count) {
 						size = filebytes.Count - (i);
 					}
 					
-					list.AddRange(filebytes.GetRange(i, size));
-					sendbytes.Add(list.ToArray());
+					list.AddRange (filebytes.GetRange (i, size));
+					sendbytes.Add (list.ToArray ());
 				}
 				
 
+				// jetzt ist die datei in byte arrays zerlegt (liegen in sendbytes)
 
-
-				GetComponent<sendqueue>().addMessageToQueue(action.getAttribute("ip"),action.getAttribute("var"),filetype,sendbytes[0],0);
+				GetComponent<sendqueue> ().addMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), filetype, sendbytes [0], 0);
 
 	
 
 				
 				int k = 1;
 				
-				foreach(byte[] b in sendbytes){
+				foreach (byte[] b in sendbytes) {
 					
-					if(k <= sendbytes.Count){
+					if (k <= sendbytes.Count) {
 						
-						if(k > 1){
-							GetComponent<sendqueue>().addMessageToQueue(action.getAttribute("ip"),action.getAttribute("var"),filetype,b,k);
+						if (k > 1) {
+							GetComponent<sendqueue> ().addMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), filetype, b, k);
 							
-							int x = b.Count();
+							int x = b.Count ();
 						
 						}
 						
@@ -339,14 +330,14 @@ public class actions : MonoBehaviour
 				
 				
 
-				GetComponent<sendqueue>().addFinishMessageToQueue(action.getAttribute("ip"),action.getAttribute("var"),filetype);
+				GetComponent<sendqueue> ().addFinishMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), filetype);
 				
 			
 			
 				
-				if(!filefound){
-					Debug.Log("var not found");
-					questdb.debug("Die Variable "+action.getAttribute("var")+" konnte nicht gefunden werden.");
+				if (!filefound) {
+					Debug.Log ("var not found");
+					questdb.debug ("Die Variable " + action.getAttribute ("var") + " konnte nicht gefunden werden.");
 					
 				}
 
@@ -362,7 +353,7 @@ public class actions : MonoBehaviour
 		
 
 
-			}
+		}
 
 
 
@@ -375,8 +366,8 @@ public class actions : MonoBehaviour
 
 	}
 
-
-	IEnumerator waitForClientStart(QuestAction action,int tries){
+	IEnumerator waitForClientStart (QuestAction action, int tries)
+	{
 		tries += 1;
 		Debug.Log ("waiting for client to start");
 
@@ -387,19 +378,19 @@ public class actions : MonoBehaviour
 
 			Debug.Log ("waiting for client to start #2");
 
-			if(getVariable(action.getAttribute("var")).getStringValue() != "[null]"){
+			if (getVariable (action.getAttribute ("var")).getStringValue () != "[null]") {
 
 
-				Debug.Log("var send succesfully");
-			string deviceid = SystemInfo.deviceUniqueIdentifier;
-			//networkActionsObject.CmdSendVar(deviceid,action.getAttribute("var"),getVariable(action.getAttribute("var")).getStringValue());
+				Debug.Log ("var send succesfully");
+				string deviceid = SystemInfo.deviceUniqueIdentifier;
+				//networkActionsObject.CmdSendVar(deviceid,action.getAttribute("var"),getVariable(action.getAttribute("var")).getStringValue());
 
 
-				yield return new WaitForSeconds(10f);
-				NetworkManager.singleton.StopClient();
+				yield return new WaitForSeconds (10f);
+				NetworkManager.singleton.StopClient ();
 
 
-				                                } else {
+			} else {
 
 
 
@@ -411,7 +402,7 @@ public class actions : MonoBehaviour
 				// PHOTOS
 
 
-				List<byte> filebytes = new List<byte>();
+				List<byte> filebytes = new List<byte> ();
 
 				string filetype = "image/jpg";
 
@@ -419,31 +410,31 @@ public class actions : MonoBehaviour
 
 				foreach (QuestRuntimeAsset qrat in photos) {
 					
-					if (!filefound && qrat.key == action.getAttribute("var")) {
+					if (!filefound && qrat.key == action.getAttribute ("var")) {
 						filefound = true;
 						qra = qrat;
 
 					}
 						
 						
-					}
+				}
 					
 
 
-				if(filefound){
+				if (filefound) {
 
-						filebytes =	qra.texture.EncodeToJPG(90).ToList();
+					filebytes = qra.texture.EncodeToJPG (90).ToList ();
 
 				} else {
 
 
 
-				 filetype = "audio";
+					filetype = "audio";
 					
 
 					foreach (QuestRuntimeAsset qrat in audioclips) {
 						
-						if (!filefound && qrat.key == action.getAttribute("var")) {
+						if (!filefound && qrat.key == action.getAttribute ("var")) {
 							filefound = true;
 							qra = qrat;
 							
@@ -453,18 +444,18 @@ public class actions : MonoBehaviour
 					}
 
 
-					if(filefound){
+					if (filefound) {
 
-						int length= qra.clip.samples * qra.clip.channels;
+						int length = qra.clip.samples * qra.clip.channels;
 						var samples = new float[length];
-						qra.clip.GetData(samples, 0);
+						qra.clip.GetData (samples, 0);
 
-						int length2 = samples.Count() * 4;
+						int length2 = samples.Count () * 4;
 						var filebytes2 = new byte[length2];
-						Buffer.BlockCopy(samples, 0, filebytes2, 0, filebytes2.Count());
+						Buffer.BlockCopy (samples, 0, filebytes2, 0, filebytes2.Count ());
 						
 
-						filebytes = filebytes2.ToList();
+						filebytes = filebytes2.ToList ();
 
 
 
@@ -479,66 +470,65 @@ public class actions : MonoBehaviour
 
 
 
-						Debug.Log(filebytes.Count);
+				Debug.Log (filebytes.Count);
 
-						int size = 1300;
-
-
-
-						List<byte[]> sendbytes = new List<byte[]>();
-
-						for (int i = 0; i < filebytes.Count; i += size)
-						{
-							var list = new List<byte>();
-
-							if((i+size) > filebytes.Count){
-								Debug.Log("last: "+i+"*"+size+"="+(i*size));
-								size = filebytes.Count - (i);
-								Debug.Log(size);
-							}
-
-							list.AddRange(filebytes.GetRange(i, size));
-							sendbytes.Add(list.ToArray());
-						}
+				int size = 1300;
 
 
-						//networkActionsObject.CmdSendFile(deviceid,action.getAttribute("var"),filetype,sendbytes[0]);
-						int y = sendbytes[0].Count();
-						Debug.Log("send chunk #1: "+ y);
+
+				List<byte[]> sendbytes = new List<byte[]> ();
+
+				for (int i = 0; i < filebytes.Count; i += size) {
+					var list = new List<byte> ();
+
+					if ((i + size) > filebytes.Count) {
+						Debug.Log ("last: " + i + "*" + size + "=" + (i * size));
+						size = filebytes.Count - (i);
+						Debug.Log (size);
+					}
+
+					list.AddRange (filebytes.GetRange (i, size));
+					sendbytes.Add (list.ToArray ());
+				}
 
 
-						yield return new WaitForEndOfFrame();
+				//networkActionsObject.CmdSendFile(deviceid,action.getAttribute("var"),filetype,sendbytes[0]);
+				int y = sendbytes [0].Count ();
+				Debug.Log ("send chunk #1: " + y);
 
 
-						int k = 1;
+				yield return new WaitForEndOfFrame ();
 
-						foreach(byte[] b in sendbytes){
 
-							if(k <= sendbytes.Count){
+				int k = 1;
+
+				foreach (byte[] b in sendbytes) {
+
+					if (k <= sendbytes.Count) {
 					
-					if(k > 1){
-						//networkActionsObject.CmdAddToFile(deviceid,action.getAttribute("var"),filetype,b);
+						if (k > 1) {
+							//networkActionsObject.CmdAddToFile(deviceid,action.getAttribute("var"),filetype,b);
 
-									int x = b.Count();
-									Debug.Log("send chunk #"+k+": "+x);
+							int x = b.Count ();
+							Debug.Log ("send chunk #" + k + ": " + x);
 
 						
-							if(k % 150 == 0){
+							if (k % 150 == 0) {
 							
-								yield return new WaitForSeconds(2f);
+								yield return new WaitForSeconds (2f);
 							}
 
-								}
-
-								k++;
-							}
 						}
 
+						k++;
+					}
+				}
 
 
-			//			networkActionsObject.CmdFinishFile(deviceid,action.getAttribute("var"),filetype);
 
-						Debug.Log("finish File");
+				//			networkActionsObject.CmdFinishFile(deviceid,action.getAttribute("var"),filetype);
+
+				Debug.Log ("finish File");
 
 						
 			
@@ -551,9 +541,9 @@ public class actions : MonoBehaviour
 
 
 
-				if(!filefound){
-				Debug.Log("var not found");
-					questdb.debug("Die Variable "+action.getAttribute("var")+" konnte nicht gefunden werden.");
+				if (!filefound) {
+					Debug.Log ("var not found");
+					questdb.debug ("Die Variable " + action.getAttribute ("var") + " konnte nicht gefunden werden.");
 
 				}
 
@@ -562,12 +552,12 @@ public class actions : MonoBehaviour
 				
 
 		} else {
-			yield return new WaitForSeconds(0.2f);
+			yield return new WaitForSeconds (0.2f);
 
-			if(tries > 20){
-				sendVarToServer(action);
+			if (tries > 20) {
+				sendVarToServer (action);
 			} else {
-			StartCoroutine(waitForClientStart(action,tries));
+				StartCoroutine (waitForClientStart (action, tries));
 			}
 		}
 
@@ -586,7 +576,7 @@ public class actions : MonoBehaviour
 
 		foreach (QuestRuntimeAsset qra in photos) {
 		
-			temp.Add(qra);
+			temp.Add (qra);
 		
 		
 		}
@@ -594,9 +584,9 @@ public class actions : MonoBehaviour
 
 		foreach (QuestRuntimeAsset qra in temp) {
 			
-			if(qra.key == tqra.key){
-				Debug.Log("removed old one");
-				photos.Remove(qra);
+			if (qra.key == tqra.key) {
+				Debug.Log ("removed old one");
+				photos.Remove (qra);
 
 			}
 			
@@ -739,9 +729,6 @@ public class actions : MonoBehaviour
 
 	}
 
-
-
-
 	public IEnumerator waitForRouteFile (WWW mywww)
 	{
 
@@ -849,7 +836,6 @@ public class actions : MonoBehaviour
 	
 	}
 
-
 	void showVariableOverlay (QuestAction action)
 	{
 
@@ -864,8 +850,6 @@ public class actions : MonoBehaviour
 	{
 		GameObject.Find ("VarOverlayCanvas").GetComponent<varoverlay> ().hide ();
 	}
-
-
 
 	public void sethotspotstate (QuestAction action)
 	{
@@ -1086,7 +1070,7 @@ public class actions : MonoBehaviour
 		#if UNITY_IPHONE || UNITY_WP8 || UNITY_ANDROID || UNITY_BLACKBERRY
 		Handheld.Vibrate ();
 # else 
-		Debug.Log("cannot vibrate on web");
+		Debug.Log ("cannot vibrate on web");
 		
 
 
@@ -1309,8 +1293,6 @@ public class actions : MonoBehaviour
 
 	}
 
-
-
 	public void saveVariable (QuestAction action)
 	{
 		
@@ -1355,10 +1337,6 @@ public class actions : MonoBehaviour
 		}
 
 	}
-
-
-
-
 
 	void removeVariable (string key)
 	{
@@ -1428,9 +1406,6 @@ public class actions : MonoBehaviour
 		}
 
 	}
-
-
-
 
 	public void setVariable (string key, float f)
 	{
@@ -2080,7 +2055,7 @@ public class actions : MonoBehaviour
 				audios.setAudio (www.GetAudioClip (false));
 				audios.Play ();
 			} else {
-				Debug.Log ("geoquest audio error: "+www.error);
+				Debug.Log ("geoquest audio error: " + www.error);
 			}
 		} else {
 			StartCoroutine (waitforAudio (audios));
@@ -2096,7 +2071,7 @@ public class actions : MonoBehaviour
 			audios.setAudio (www.GetAudioClip (false));
 			audios.Play ();
 		} else {
-			Debug.Log ("geoquest audio error: "+www.error);
+			Debug.Log ("geoquest audio error: " + www.error);
 		}
 		
 	}
@@ -2137,7 +2112,6 @@ public class QuestVariable
 		key = k;
 	}
 
-
 	public QuestVariable (string k, bool b)
 	{
 		bool_value = new List<bool> ();
@@ -2170,7 +2144,6 @@ public class QuestVariable
 
 	}
 
-
 	public string ToString ()
 	{
 
@@ -2189,7 +2162,6 @@ public class QuestVariable
 
 
 	}
-
 
 	public bool isNull ()
 	{
@@ -2229,6 +2201,7 @@ public class QuestVariable
 	
 	
 }
+
 [System.Serializable]
 public class QuestRuntimeAsset
 {
