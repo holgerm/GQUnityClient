@@ -46,6 +46,9 @@ public class varoverlay : MonoBehaviour {
 
 	public void Update(){
 
+	
+
+
 		if (text.enabled) {
 			string key = action.getAttribute ("var");
 			string show = action.getAttribute ("description");

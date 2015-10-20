@@ -3502,7 +3502,7 @@ public class QuestVariableValue
 	[XmlElement("num")]
 	public List<float>
 		num_value;
-	[XmlElement("boolean")]
+	[XmlElement("bool")]
 	public List<bool>
 		bool_value;
 	[XmlElement("var")]

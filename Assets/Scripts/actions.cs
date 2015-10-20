@@ -1484,8 +1484,9 @@ public class actions : MonoBehaviour
 
 		string key = action.getAttribute ("var");
 
-//		Debug.Log ("trying to set var " + key);
+		Debug.Log ("trying to set var " + key);
 		if (action.value != null) {
+
 
 			if (key == "score" && action.value.num_value != null && action.value.num_value.Count > 0) {
 
