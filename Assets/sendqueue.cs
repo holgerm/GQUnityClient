@@ -3,6 +3,10 @@ using UnityEngine.Networking;
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using LitJson;
+using System.IO;
+using System;
 
 public class sendqueue : MonoBehaviour {
 
@@ -44,9 +48,74 @@ public class sendqueue : MonoBehaviour {
 		connectionTimeoutSave = connectionTimeout;
 		deviceid = SystemInfo.deviceUniqueIdentifier;
 
-
-		idCounter = 10000023;
+		reconstructSendQueue ();
 	}
+
+
+
+
+	void reconstructSendQueue(){
+
+		string pre = "file: /";
+		
+		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+			
+			pre = "file:";
+		}
+
+
+
+		if (Directory.Exists (Application.persistentDataPath + "/quests/")) {
+
+
+			foreach (string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/")) {
+
+				Debug.Log(quest);
+
+
+				if (Directory.Exists (quest + "/sendqueue/")) {
+			
+
+					Debug.Log("exists");
+					string FolderName = new DirectoryInfo(quest).Name;
+					Debug.Log ("foldername: "+FolderName);
+
+					foreach (string file in	Directory.GetFiles(quest + "/sendqueue/")) {
+
+
+
+						int num1 = 0;
+						int num2 = 0;
+
+
+
+						if(int.TryParse(FolderName, out num1)){
+
+
+						if (int.TryParse (Path.GetFileNameWithoutExtension(file), out num2)) {
+
+								Debug.Log (Path.GetFileNameWithoutExtension(file));
+
+
+								if (File.Exists (Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json")) {
+
+
+									WWW www = new WWW(pre+""+Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
+									StartCoroutine(deserialize(www));
+
+								}
+						}
+					}
+					}
+
+
+				}
+			}
+
+		}
+
+	}
+
 
 
 
@@ -146,17 +215,17 @@ public class sendqueue : MonoBehaviour {
 
 
 	
-		foreach (SendQueueEntry sqe in queue) {
-
-
-			sqe.id = idCounter;
-			idCounter++;
-
-			if (idCounter == int.MaxValue) {
-				idCounter = 0;
-			}
-
-		}
+//		foreach (SendQueueEntry sqe in queue) {
+//
+//
+//			sqe.id = idCounter;
+//			idCounter++;
+//
+//			if (idCounter == int.MaxValue) {
+//				idCounter = 0;
+//			}
+//
+//		}
 
 		PlayerPrefs.SetInt ("nextmessage_" + NetworkManager.singleton.networkAddress, idCounter);
 
@@ -185,6 +254,7 @@ public class sendqueue : MonoBehaviour {
 
 		sqe.id = idCounter;
 		idCounter++;
+		sqe.questid = GetComponent<questdatabase> ().currentquest.id;
 
 		if (idCounter == int.MaxValue) {
 			idCounter = 0;
@@ -206,6 +276,8 @@ public class sendqueue : MonoBehaviour {
 
 		queue.Add (sqe);
 
+		serialize (sqe);
+
 	}
 
 
@@ -216,6 +288,7 @@ public class sendqueue : MonoBehaviour {
 		
 		sqe.id = idCounter;
 		idCounter++;
+		sqe.questid = GetComponent<questdatabase> ().currentquest.id;
 
 
 		if (part == 0) {
@@ -240,7 +313,8 @@ public class sendqueue : MonoBehaviour {
 		
 		
 		queue.Add (sqe);
-		
+		serialize (sqe);
+
 	}
 
 	public void addFinishMessageToQueue (string ip, string var, string filetype)
@@ -250,6 +324,7 @@ public class sendqueue : MonoBehaviour {
 		
 		
 		sqe.id = idCounter;
+		sqe.questid = GetComponent<questdatabase> ().currentquest.id;
 		idCounter++;
 		sqe.timeout = 0f;
 
@@ -259,6 +334,7 @@ public class sendqueue : MonoBehaviour {
 		sqe.mode = MODE_FILE_FINISH;
 	
 		queue.Add (sqe);
+		serialize (sqe);
 
 	
 	}
@@ -283,6 +359,11 @@ public class sendqueue : MonoBehaviour {
 
 
 				queue.Remove(sqe);
+
+				
+				if (File.Exists (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json")) {
+					File.Delete(Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
+				}
 			}
 
 
@@ -327,13 +408,71 @@ public class sendqueue : MonoBehaviour {
 	}
 
 
+
+
+	 void serialize (SendQueueEntry sqe)
+	{
+
+
+		PlayerPrefs.SetInt ("currentquestid", GetComponent<questdatabase> ().currentquest.id);
+		StringBuilder sb = new StringBuilder ();
+		JsonWriter jsonWriter = new JsonWriter (sb);
+		jsonWriter.PrettyPrint = true;
+		JsonMapper.ToJson (sqe, jsonWriter);
+
+		if (!Directory.Exists (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/")) {
+
+			Directory.CreateDirectory(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/");
+
+		}
+
+		if (File.Exists (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json")) {
+			File.Delete(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json");
+		}
+
+
+		File.WriteAllText (Application.persistentDataPath+"/quests/"+GetComponent<questdatabase>().currentquest.id+"/sendqueue/"+sqe.id+".json", sb.ToString ());
+	}
+
+
+
+	public IEnumerator deserialize (WWW www)
+	{
+
+
+		yield return www;
+
+
+
+		if (www.error == null || www.error == "") {
+
+
+
+		
+			SendQueueEntry sqe = JsonMapper.ToObject<SendQueueEntry> (www.text);
+			queue.Add (sqe);
+
+
+
+		} else {
+
+			Debug.Log(www.error);
+
+		}
+	
+	
 }
 
 
+}
 [System.Serializable]
 public class SendQueueEntry{
 
 	public int id;
+
+
+
+	public int questid;
 
 	public string ip;
 
