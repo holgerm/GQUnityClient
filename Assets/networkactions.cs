@@ -39,7 +39,7 @@ public class networkactions : NetworkBehaviour{
 
 
 	[Command]
-public void	CmdSendVar(int id,string deviceid, string var, string value){
+public void	CmdSendVar(int id,string deviceid, string var, string value,bool reset){
 
 		SendVariable v = new SendVariable ();
 		v.id = id;
@@ -47,6 +47,7 @@ public void	CmdSendVar(int id,string deviceid, string var, string value){
 		v.deviceid = deviceid;
 		v.var = var;
 		v.value = value;
+		v.resetid = reset;
 
 		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue",v);
 		RpcMessageSuccesful (id);
@@ -57,14 +58,14 @@ public void	CmdSendVar(int id,string deviceid, string var, string value){
 
 	
 	[Command]
-	public void	CmdSendFile(int id,string deviceid, string var, string filetype, byte[] file){
+	public void	CmdSendFile(int id,string deviceid, string var, string filetype, byte[] file,bool reset){
 		
 		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "setFile";
 		v.deviceid = deviceid;
 		v.var = var;
-
+		v.resetid = reset;
 		v.filetype = filetype;
 		v.bytes = file;
 		
@@ -80,14 +81,14 @@ public void	CmdSendVar(int id,string deviceid, string var, string value){
 
 	
 	[Command]
-	public void	CmdAddToFile(int id, string deviceid, string var, string filetype, byte[] file){
+	public void	CmdAddToFile(int id, string deviceid, string var, string filetype, byte[] file,bool reset){
 		
 		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "addToFile";
 		v.deviceid = deviceid;
 		v.var = var;
-		
+		v.resetid = reset;
 		v.filetype = filetype;
 		v.bytes = file;
 		
@@ -100,13 +101,14 @@ public void	CmdSendVar(int id,string deviceid, string var, string value){
 
 	
 	[Command]
-	public void	CmdFinishFile(int id, string deviceid, string var, string filetype){
+	public void	CmdFinishFile(int id, string deviceid, string var, string filetype,bool reset){
 		
 		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "finishFile";
 		v.deviceid = deviceid;
 		v.var = var;
+		v.resetid = reset;
 		v.filetype = filetype;
 		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue",v);
 
@@ -159,7 +161,7 @@ public class SendVariable{
 
 	public int id;
 	public string messagetype;
-
+	public int fileid; 
 
 	public string deviceid;
 	public string var;
@@ -168,5 +170,7 @@ public class SendVariable{
 	public string filepath;
 	public byte[] bytes;
 	public string filetype;
+
+	public bool resetid;
 
 }
