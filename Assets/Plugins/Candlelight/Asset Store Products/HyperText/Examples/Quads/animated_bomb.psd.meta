@@ -1,19 +1,20 @@
 fileFormatVersion: 2
-guid: 6f29f065c62f34cb3b09134ff401748d
-labels:
-- Gui
-- Text
-- HyperText
-- Styles
-- Ui
-- Links
-- Dialogue
-- Editor
-- Localization
-- Language
+guid: 1d636acfe01b24326a757fc47bdd7e8d
+timeCreated: 1445984010
+licenseType: Store
 TextureImporter:
   fileIDToRecycleName:
-    21300000: ps_triangle
+    21300000: animated_bomb
+    21300002: animated_bomb_1
+    21300004: animated_bomb_2
+    21300006: animated_bomb_3
+    21300008: animated_bomb_4
+    21300010: animated_bomb_5
+    21300012: animated_bomb_6
+    21300014: animated_bomb_7
+    21300016: animated_bomb_8
+    21300018: animated_bomb_9
+    21300020: animated_bomb_10
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -37,30 +38,40 @@ TextureImporter:
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -3
-  maxTextureSize: 128
+  maxTextureSize: 1024
   textureSettings:
-    filterMode: -1
+    filterMode: 0
     aniso: 16
     mipBias: -1
-    wrapMode: 1
+    wrapMode: 0
   nPOTScale: 0
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  textureType: 8
+  textureType: 5
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
-  spritePackingTag: '[RECT]HyperText Quads'
+    sprites:
+    - name: animated_bomb
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 704
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

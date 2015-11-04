@@ -55,6 +55,11 @@ MonoBehaviour:
   m_FontSize: 32
   m_InheritedStyles: []
   m_LineSpacing: 1
+  m_LinkHitboxPadding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_LinkStyles:
   - m_ClassName: items_rare
     m_Style:
@@ -148,3 +153,4 @@ MonoBehaviour:
   m_ShouldOverrideInheritedDefaultTextColor: 0
   m_ShouldOverrideInheritedFontSize: 0
   m_ShouldOverrideInheritedLineSpacing: 0
+  m_ShouldOverrideInheritedLinkHitboxPadding: 0

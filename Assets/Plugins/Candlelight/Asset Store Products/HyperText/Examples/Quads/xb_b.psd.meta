@@ -1,19 +1,20 @@
 fileFormatVersion: 2
-guid: 6f29f065c62f34cb3b09134ff401748d
+guid: 436dc103c606a442986bf1bfc31ef293
 labels:
-- Gui
-- Text
-- HyperText
-- Styles
-- Ui
-- Links
 - Dialogue
 - Editor
-- Localization
+- Gui
+- HyperText
 - Language
+- Links
+- Localization
+- Text
+- Ui
+- Styles
+timeCreated: 1445998278
+licenseType: Store
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: ps_triangle
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

@@ -37,10 +37,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c7aacc94be3049018be6258bef22c7c, type: 2}
   - {fileID: 11400000, guid: 662521a6cf8864b718fc3e306b00a50c, type: 2}
   m_LineSpacing: 1
+  m_LinkHitboxPadding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_LinkStyles: []
-  m_QuadStyles: []
+  m_QuadStyles:
+  - m_LinkClassName: 
+    m_LinkId: 
+    m_ClassName: lit2
+    m_ShouldRespectColorization: 1
+    m_SizeScalar: 2
+    m_Sprite: {fileID: 21300000, guid: b2196b0c44a294eaa87522755ad6399d, type: 3}
+    m_VerticalOffset: 0
   m_ShouldOverrideInheritedDefaultFontStyle: 0
   m_ShouldOverrideInheritedDefaultLinkStyle: 0
   m_ShouldOverrideInheritedDefaultTextColor: 0
   m_ShouldOverrideInheritedFontSize: 0
   m_ShouldOverrideInheritedLineSpacing: 0
+  m_ShouldOverrideInheritedLinkHitboxPadding: 0
