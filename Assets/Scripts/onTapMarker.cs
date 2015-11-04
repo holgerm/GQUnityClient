@@ -8,14 +8,7 @@ public class onTapMarker : MonoBehaviour
 
 
 	public QuestRuntimeHotspot hotspot;
-
-
-
 	public float positionmoved = 0f;
-
-
-
-
 
 	void OnMouseDown ()
 	{
@@ -58,7 +51,6 @@ public class onTapMarker : MonoBehaviour
 		
 	}
 
-
 	void Update ()
 	{
 
@@ -72,10 +64,14 @@ public class onTapMarker : MonoBehaviour
 			Debug.Log ("Cannot get component questdatabase");
 			return;
 		}
-		hotspot = qdb.getHotspot ("" + hotspot.hotspot.id);
-		if (hotspot == null) {
-			Debug.Log ("Cannot find hotspot " + hotspot.hotspot.id);
-			return;
+
+		if (hotspot == null || hotspot.hotspot == null) {
+			QuestRuntimeHotspot rtHotspot = qdb.getHotspot ("" + hotspot.hotspot.id);
+			if (rtHotspot == null) {
+				Debug.Log ("Cannot find hotspot with id: " + hotspot.hotspot.id);
+				return;
+			}
+			hotspot = rtHotspot;
 		}
 
 
