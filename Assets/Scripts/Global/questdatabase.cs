@@ -921,11 +921,6 @@ public class questdatabase : MonoBehaviour
 		currentquest = q;
 		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 
-		Debug.Log ("Starting: " + currentquest.id);
-
-
-
-
 		bool islocal = false;
 		Quest localq;
 
@@ -942,8 +937,6 @@ public class questdatabase : MonoBehaviour
 
 
 		if (!islocal) {
-			Debug.Log ("Problem 2");
-
 			downloadQuest (q);
 		} else {
 
@@ -994,14 +987,9 @@ public class questdatabase : MonoBehaviour
 
 	public void endQuest ()
 	{
-
-//		Debug.Log ("what?");
-		debug ("Quest beendet");
-
 		if (currentquestdata != null) {
 			Destroy (currentquestdata.gameObject);
 		}
-		Debug.Log ("Destroying GameObject");
 		Destroy (GameObject.Find ("MsgCanvas"));
 		Destroy (gameObject);
 		if (menu.isActive) {
@@ -4489,16 +4477,11 @@ public class QuestRuntimeHotspot
 
 	public Sprite getMarkerImage ()
 	{
-
-
 		Sprite s = Configuration.instance.defaultmarker;
-		Debug.Log ("Category: " + category);
 		foreach (MarkerCategorySprite mcs in Configuration.instance.categoryMarker) {
 
 			if (mcs.category == category) {
-
 				s = mcs.sprite;
-
 			}
 
 		}

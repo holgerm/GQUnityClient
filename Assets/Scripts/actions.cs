@@ -1484,7 +1484,6 @@ public class actions : MonoBehaviour
 
 		string key = action.getAttribute ("var");
 
-		Debug.Log ("trying to set var " + key);
 		if (action.value != null) {
 
 

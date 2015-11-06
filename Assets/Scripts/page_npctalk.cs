@@ -151,94 +151,12 @@ public class page_npctalk : MonoBehaviour
 					
 					StartCoroutine (waitforImage ());
 
-					
-//					foreach (SpriteConverter sc in questdb.convertedSprites) {
-//
-//
-//
-//						if (sc.filename == npctalk.getAttribute ("image")) {
-//
-//							if (sc.isDone) {
-//								if (sc.myTexture != null) {
-//								
-//								
-//										image.texture = (Texture)sc.myTexture;
-//										image.enabled = true;
-//
-//
-//
-//									float myX = (float)sc.myTexture.width;
-//
-//
-//									float myY = (float)sc.myTexture.height;
-//
-//
-//									float scaler = myY/604f;
-//
-//									myX = myX / scaler;
-//									myY = 604f;
-//
-//
-//									image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
-//
-//								
-//							
-//
-//
-//
-//						
-//								} else {
-//
-//									Debug.Log ("Sprite was null");
-//								}
-//							} else {
-//
-//								Debug.Log ("SpriteConverter was not done.");
-//
-//							}
-//						}
-//					}
-
-
-
-//					string url = npctalk.getAttribute ("image");
-//					if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-//						url = pre + "" + npctalk.getAttribute ("image");
-//					}
-//			
-//					Debug.Log ("myfile:" + url + " (" + npctalk.getAttribute ("image") + ")");
-//
-//
-//					if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
-//						Debug.Log ("webimage");
-//
-//						www = new WWW (url);
-//						StartCoroutine (waitforImage ());
-//
-//
-//					} else if (File.Exists (npctalk.getAttribute ("image"))) {
-//
-//						Debug.Log ("File Exists");
-//						www = new WWW (url);
-//						StartCoroutine (waitforImage ());
-//					}
-
 				}
 
 			}
-
-//		Debug.Log ("after npc talk image");
 			text.text = "";
 
-
-
-		
-				
-				
-//			Debug.Log ("Sprite display took: " + DateTime.Now.Subtract(start).Milliseconds);
-
 			string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
-			Debug.Log ("parsing size from: " + resultString);
 			int size = int.Parse (resultString);
 			text.fontSize = size * 3;
 
@@ -267,10 +185,6 @@ public class page_npctalk : MonoBehaviour
 
 	void Update ()
 	{
-//		Debug.Log ("npctalk.Update() entered");
-		
-//		Debug.Log (text.transform.parent.GetComponent<ScrollRect> ().verticalScrollbar.value);
-		
 		if (texttoticker != null) {
 
 
@@ -400,18 +314,7 @@ public class page_npctalk : MonoBehaviour
 				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
 
 				// evtl. auf Regexp ändern: https://regex101.com/r/cC4vF0/7
-
-					
-
-
-				
 				text.text += convertStringForHypertext (toadd);
-
-
-				Debug.Log ("New text: " + text.text);
-
-								
-
 
 				questdb.debug ("Dialog Item is Blocking? -> " + npctalk.contents_dialogitems [dialogitem_state].getAttribute ("blocking"));
 

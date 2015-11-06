@@ -52,11 +52,7 @@ public class page_map : MonoBehaviour
 	public float togglebuttoncounter = 0f;
 	public float mapmovedcounter = 0f;
 	public bool fixedpositionbeforemapmovement = true;
-
-
 	public bool onStartInvoked = false;
-
-
 	public Route currentroute;
 	//private List<Marker> allmarker;
 	private
@@ -97,11 +93,11 @@ public class page_map : MonoBehaviour
 				pre = "file:";
 			}
 
-			if(questdb.currentquest != null){
-			if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
+			if (questdb.currentquest != null) {
+				if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
 			
-				pre = "";
-			}
+					pre = "";
+				}
 			}
 
 		
@@ -180,7 +176,7 @@ public class page_map : MonoBehaviour
 
 
 
-			updateMapMarker();
+			updateMapMarker ();
 
 
 
@@ -320,8 +316,8 @@ public class page_map : MonoBehaviour
 		}
 	}
 
-
-	public void updateMapMarker(){
+	public void updateMapMarker ()
+	{
 
 		// DELETE ALL MARKERS
 
@@ -331,8 +327,8 @@ public class page_map : MonoBehaviour
 
 		foreach (Marker m in allmarker) {
 
-			Destroy(m.gameObject);
-			map.Markers.Remove(m);
+			Destroy (m.gameObject);
+			map.Markers.Remove (m);
 
 		}
 
@@ -341,13 +337,13 @@ public class page_map : MonoBehaviour
 
 			bool show = true;
 			
-			if(qrh.category != null && qrh.category != ""){
+			if (qrh.category != null && qrh.category != "") {
 
-			foreach(MarkerCategorySprite mcs in Configuration.instance.categoryMarker){
+				foreach (MarkerCategorySprite mcs in Configuration.instance.categoryMarker) {
 
-					if(mcs.category == qrh.category){
+					if (mcs.category == qrh.category) {
 
-						if(!mcs.showOnMap){
+						if (!mcs.showOnMap) {
 
 							show = false;
 						}
@@ -358,54 +354,54 @@ public class page_map : MonoBehaviour
 
 			}
 
-			if(show){
-			WWW www = null;
+			if (show) {
+				WWW www = null;
 			
 			
 			
-			if (qrh.hotspot.getAttribute ("img").StartsWith ("@_")) {
+				if (qrh.hotspot.getAttribute ("img").StartsWith ("@_")) {
 				
 				
-				www = new WWW (pre + "" + questactions.getVariable (qrh.hotspot.getAttribute ("img")).string_value [0]);
+					www = new WWW (pre + "" + questactions.getVariable (qrh.hotspot.getAttribute ("img")).string_value [0]);
 				
 				
-			} else if (qrh.hotspot.getAttribute ("img") != "") {
+				} else if (qrh.hotspot.getAttribute ("img") != "") {
 				
 				
 				
 				
-				string url = qrh.hotspot.getAttribute ("img");
-				if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-					url = pre + "" + qrh.hotspot.getAttribute ("img");
+					string url = qrh.hotspot.getAttribute ("img");
+					if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
+						url = pre + "" + qrh.hotspot.getAttribute ("img");
+					}
+				
+					//				Debug.Log(url);
+				
+				
+					if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
+						//Debug.Log("webimage");
+					
+						www = new WWW (url);
+						StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
+					
+					
+					} else if (File.Exists (qrh.hotspot.getAttribute ("img"))) {
+						www = new WWW (url);
+						StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
+					} else if (questdb.currentquest.predeployed) {
+						www = new WWW (url);
+						StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
+					}
+				
+				} else {
+				
+				
+				
+				
+					createMarker (qrh, qrh.getMarkerImage ().texture);
+				
+				
 				}
-				
-				//				Debug.Log(url);
-				
-				
-				if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
-					//Debug.Log("webimage");
-					
-					www = new WWW (url);
-					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
-					
-					
-				} else if (File.Exists (qrh.hotspot.getAttribute ("img"))) {
-					www = new WWW (url);
-					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
-				} else if (questdb.currentquest.predeployed) {
-					www = new WWW (url);
-					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
-				}
-				
-			} else {
-				
-				
-				
-				
-				createMarker (qrh, qrh.getMarkerImage ().texture);
-				
-				
-			}
 			
 			}
 			
@@ -417,17 +413,17 @@ public class page_map : MonoBehaviour
 
 	}
 
-
-	public void unDrawCurrentRoute(){
+	public void unDrawCurrentRoute ()
+	{
 
 		Debug.Log ("unloading Route");
 		foreach (RoutePoint rp in currentroute.points) {
 
-			if(rp.marker != null){
-			map.RemoveMarker(rp.marker);
-			DestroyImmediate(rp.waypoint);
-			rp.marker = null;
-			rp.waypoint = null;
+			if (rp.marker != null) {
+				map.RemoveMarker (rp.marker);
+				DestroyImmediate (rp.waypoint);
+				rp.marker = null;
+				rp.waypoint = null;
 			}
 
 		}
@@ -435,45 +431,46 @@ public class page_map : MonoBehaviour
 			
 	}
 
-	public void drawCurrentRoute(){
+	public void drawCurrentRoute ()
+	{
 
 
 //		Debug.Log (questdb.currentquest.currentpage.type);
-		if(questdb.currentquest.currentpage.type == "MapOSM"){
+		if (questdb.currentquest.currentpage.type == "MapOSM") {
 
 
-		foreach (RoutePoint rp in currentroute.points) {
+			foreach (RoutePoint rp in currentroute.points) {
 
 
 
-			//string lon = rp.lon;
-			//string lat = rp.lat;
+				//string lon = rp.lon;
+				//string lat = rp.lat;
 
-			float lat = float.Parse(rp.lon, CultureInfo.InvariantCulture);
-			float lon = float.Parse(rp.lat, CultureInfo.InvariantCulture);
+				float lat = float.Parse (rp.lon, CultureInfo.InvariantCulture);
+				float lon = float.Parse (rp.lat, CultureInfo.InvariantCulture);
 
 
 		
-				GameObject waypoint = new GameObject();
+				GameObject waypoint = new GameObject ();
 				
 				Marker m1 = map.CreateMarker<Marker> ("", new double[2] {
 					lat,
 					lon
 				}, waypoint);
-					rp.marker = m1;
-			rp.waypoint = waypoint;
+				rp.marker = m1;
+				rp.waypoint = waypoint;
 
 
 
-		}
+			}
 
 
-			GameObject.Find("RouteRender").GetComponent<routerender>().started = false;
+			GameObject.Find ("RouteRender").GetComponent<routerender> ().started = false;
 		}
 	}
 
-
-	public void togglePositionClicked(bool b){
+	public void togglePositionClicked (bool b)
+	{
 
 
 		if (questdb != null) {
@@ -511,7 +508,6 @@ public class page_map : MonoBehaviour
 
 
 	}
-
 
 	private double deg2rad (double deg)
 	{
@@ -558,11 +554,8 @@ public class page_map : MonoBehaviour
 		
 	}
 
-
-
-
-
-	void createMarker(QuestRuntimeHotspot qrh, Texture image){
+	void createMarker (QuestRuntimeHotspot qrh, Texture image)
+	{
 
 		if (qrh.lon != 0f || qrh.lat != 0f) {
 
@@ -587,7 +580,7 @@ public class page_map : MonoBehaviour
 			float scale = 1.0f;
 
 
-			if(Application.isMobilePlatform){
+			if (Application.isMobilePlatform) {
 
 				scale = 2.0f;
 
@@ -596,11 +589,11 @@ public class page_map : MonoBehaviour
 			if (height > width) {
 			
 				//Debug.Log(width+"/"+height+"="+width/height);
-				go.transform.localScale = new Vector3 ((scale*((float)width) / ((float)height)), scale, scale);
+				go.transform.localScale = new Vector3 ((scale * ((float)width) / ((float)height)), scale, scale);
 			
 			} else {
 			
-				go.transform.localScale = new Vector3 (scale, (scale*((float)width) / ((float)height)), scale);
+				go.transform.localScale = new Vector3 (scale, (scale * ((float)width) / ((float)height)), scale);
 			
 			}
 		
@@ -611,7 +604,7 @@ public class page_map : MonoBehaviour
 			#if UNITY_WEBPLAYER || UNITY_EDITOR 
 			screenWidth = 1080;
 			#else
-		screenWidth = Screen.width;
+			screenWidth = Screen.width;
 			#endif
 		
 			go.transform.localScale *= screenWidth / 600f;
@@ -681,7 +674,7 @@ public class page_map : MonoBehaviour
 		
 		if (www.error == null) {
 
-			createMarker(qrh,www.texture);
+			createMarker (qrh, www.texture);
 
 
 		} else {
@@ -721,53 +714,53 @@ public class page_map : MonoBehaviour
 
 	public void setFixedPosition (bool b)
 	{
-			togglebuttoncounter = 0.2f;
-			togglebuttontouched = true;
+		togglebuttoncounter = 0.2f;
+		togglebuttontouched = true;
 
 
-			Debug.Log ("toggle clicked: "+b);
+		Debug.Log ("toggle clicked: " + b);
 
 
-			if (b == false) {
+		if (b == false) {
 
 				
 
 
-					Debug.Log ("untoggle");
-					map.CameraFollowsOrientation = false;
-					questdb.getActiveHotspots ();
-					questdb.fixedposition = false;
-					GeoPosition center = questdb.getCenter ();
+			Debug.Log ("untoggle");
+			map.CameraFollowsOrientation = false;
+			questdb.getActiveHotspots ();
+			questdb.fixedposition = false;
+			GeoPosition center = questdb.getCenter ();
 
-					map.CenterWGS84 = new double[] {
+			map.CenterWGS84 = new double[] {
 				center.Lat,
 				center.Long
 //				Configuration.instance.fixedMapCenterLong,
 //				Configuration.instance.fixedMapCenterLat
 			};
 
-					if (map.CurrentZoom < 17.0f) {
-						map.CurrentZoom = 17.0f;
-					}
-					map.Zoom (1.0f);
+			if (map.CurrentZoom < 17.0f) {
+				map.CurrentZoom = 17.0f;
+			}
+			map.Zoom (1.0f);
 				
-			} else {
-				questdb.fixedposition = true;
-				if (map != null) {
-					map.CameraFollowsOrientation = false;
+		} else {
+			questdb.fixedposition = true;
+			if (map != null) {
+				map.CameraFollowsOrientation = false;
 			
-					map.CenterWGS84 = new double[] {
+				map.CenterWGS84 = new double[] {
 					location.CoordinatesWGS84 [0],
 					location.CoordinatesWGS84 [1]
-					//				Configuration.instance.fixedMapCenterLong,
-					//				Configuration.instance.fixedMapCenterLat
+				//				Configuration.instance.fixedMapCenterLong,
+				//				Configuration.instance.fixedMapCenterLat
 				};
 
 
 
-				}
 			}
-			fixedonposition = b;
+		}
+		fixedonposition = b;
 				
 
 	}
@@ -782,19 +775,19 @@ public class page_map : MonoBehaviour
 
 	
 
-		if (!onStartInvoked &&  mappage != null) {
+		if (!onStartInvoked && mappage != null) {
 
-			if(mappage.onStart != null){
-				Debug.Log("invoking on Start of Map");
+			if (mappage.onStart != null) {
+				Debug.Log ("invoking on Start of Map");
 
-			mappage.onStart.Invoke ();
+				mappage.onStart.Invoke ();
 				onStartInvoked = true;
 
 			}
 
-		if(currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points[0].waypoint == null){
+			if (currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points [0].waypoint == null) {
 
-				drawCurrentRoute();
+				drawCurrentRoute ();
 
 
 			}
@@ -820,9 +813,9 @@ public class page_map : MonoBehaviour
 
 				fixedpositionbeforemapmovement = questdb.fixedposition;
 				
-			//questdb.fixedposition = false;
-			positionCheckmark.setMode(false);
-			//positionToggle.isOn = false;
+				//questdb.fixedposition = false;
+				positionCheckmark.setMode (false);
+				//positionToggle.isOn = false;
 				questdb.fixedposition = false;
 				mapmovedcounter = 0.3f;
 
@@ -960,7 +953,7 @@ public class page_map : MonoBehaviour
 		
 		XmlSerializer serializer = new XmlSerializer (typeof(Route));
 		
-		Route r =  serializer.Deserialize (txr) as Route; 
+		Route r = serializer.Deserialize (txr) as Route; 
 		
 		
 		
@@ -976,24 +969,16 @@ public class page_map : MonoBehaviour
 	
 }
 
-
-
-
-
-
 [System.Serializable]
-public class Route 
+public class Route
 {
 	
 	
 	public string version;
-
 	public List<RoutePoint> points;
 
-
-
-
-	public void addPoint(string a,string b){
+	public void addPoint (string a, string b)
+	{
 
 		RoutePoint rp = new RoutePoint ();
 		rp.lon = a;
@@ -1002,7 +987,7 @@ public class Route
 
 		if (points == null) {
 
-			points = new List<RoutePoint>();
+			points = new List<RoutePoint> ();
 		}
 		points.Add (rp);
 
@@ -1010,8 +995,6 @@ public class Route
 
 	
 }
-
-
 
 [System.Serializable]
 public class RoutePoint
@@ -1021,8 +1004,7 @@ public class RoutePoint
 	public string lon;
 	public string lat;
 	public string description;
-
-				public Marker marker;
+	public Marker marker;
 	public GameObject waypoint;
 	
 }
