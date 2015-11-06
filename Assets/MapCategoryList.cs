@@ -19,7 +19,6 @@ public class MapCategoryList : MonoBehaviour
 			if (mcs.showInList) {
 
 				GameObject go = (GameObject)Instantiate (prefab);
-//				go.transform.parent = this.transform;
 				go.transform.SetParent (this.transform, false);
 				go.transform.localScale = new Vector3 (1f, 1f, 1f);
 				go.GetComponent<MapCategoryMenuEntry> ().markerCategory = mcs;
