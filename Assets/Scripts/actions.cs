@@ -1226,17 +1226,17 @@ public class actions : MonoBehaviour
 
 //				Debug.Log (x2);
 
-				if (x == x2) {
+				if (x.Equals (x2)) {
 
 
 
-					if (x2 == "score") {
+					if (x2.Equals ("score")) {
 
 						k += score.ToString ();
 						lastwasvar = true;
 
 					} else 
-						if (getVariable (x2).ToString () != "[null]") {
+					if (!getVariable (x2).getStringValue ().Equals ("[null]")) {
 
 						k += getVariable (x2).getStringValue ();
 						lastwasvar = true;
@@ -1776,7 +1776,8 @@ public class actions : MonoBehaviour
 
 			} else
 
-		if (k.Contains ("+") || k.Contains ("-") || k.Contains ("*") || k.Contains (":") || k.Contains ("/")) {
+				// XML Tags filtered out with "<" and ">"
+		if (!(k.Contains ("<") && k.Contains (">")) && (k.Contains ("+") || k.Contains ("-") || k.Contains ("*") || k.Contains (":") || k.Contains ("/"))) {
 
 
 				return new QuestVariable (k, mathVariable (k));

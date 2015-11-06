@@ -249,26 +249,7 @@ public class page_npctalk : MonoBehaviour
 
 				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.getAttribute ("text"));
 
-				int i = 0;	
-				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
-				while (toadd.IndexOf("<a href=") > -1) {
-				
-					int index_start = toadd.IndexOf ("<a href=", i);
-					int index_mid = toadd.IndexOf (">", index_start);
-					int index_end = toadd.IndexOf ("</a>", index_mid);
-					i = index_end;
-
-
-					string one = toadd.Substring (0, index_start);
-					string two = toadd.Substring (index_mid, index_end - index_mid);
-					string three = toadd.Substring (index_end, toadd.Length - index_end);
-
-					link = two;
-					indexoflink = index_start;
-					toadd = one + "<a name='link1'>" + two + "</a>" + three;
-				}
-
-				text.text += toadd;
+				text.text += convertStringForHypertext (toadd);
 				nextbutton.interactable = true;
 				buttontext.text = npctalk.getAttribute ("endbuttontext");
 
@@ -396,6 +377,7 @@ public class page_npctalk : MonoBehaviour
 				}
 
 				texttoticker = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
+				texttoticker = convertStringForHypertext (texttoticker);
 				nextbutton.interactable = false;
 
 			} else {
@@ -417,64 +399,13 @@ public class page_npctalk : MonoBehaviour
 
 				string toadd = questdb.GetComponent<actions> ().formatString (npctalk.contents_dialogitems [dialogitem_state].content) + "\n";
 
-//				string pattern = @"<a\s*href\s*=\s*\\""(?'url'(?:(?:http(?:s)?\:\/\/)?[a-zA-Z0-9]+(?:(?:\.|\-)[a-zA-Z0-9]+)+(?:\:\d+)?(?:\/[\w\-]+)*(?:\/?|\/\w+\.[a-zA-Z]{2,4}(?:\?[\w]+\=[\w\-]+)?)?(?:\&[\w]+\=[\w\-]+)*))\\""\s*>(?'linktext'.*?)<\/a>";
-//				MatchCollection matchColl = Regex.Matches (toadd, pattern);
-//				Debug.Log ("FOUND matches: " + matchColl.Count);
-//				Debug.Log ("in input: " + toadd);
-//				foreach (Match match in Regex.Matches(toadd, pattern)) {
-//					Debug.Log ("adding a link to: " + match.Groups ["url"].Value);
-//				}
-//
-//				int i = 0;	
-//				Debug.Log ("LINK? " + toadd.IndexOf ("<a href="));
-//				int l = 0;
-//
-//
-//				while (toadd.IndexOf("<a href=") > -1) {
-//					
-//					int index_start = toadd.IndexOf ("<a href=", i);
-//					int index_mid = toadd.IndexOf (">", index_start);
-//					int index_end = toadd.IndexOf ("</a>", index_mid);
-//					i = index_end;
-//
-//
-//					
-//					string one = toadd.Substring (0, index_start);
-//					string linkText = toadd.Substring (index_mid + 1, index_end - index_mid - 1);
-//					Debug.Log (toadd.Length + "," + index_end + "," + (toadd.Length - index_end));
-//					string three = toadd.Substring (index_end + 5, toadd.Length - index_end - 5);
-//
-//					Debug.Log ("start=" + index_start);
-//					Debug.Log ("mid=" + index_mid);
-//					Debug.Log ("end=" + index_end);
-//					Debug.Log ("one=" + one);
-//					Debug.Log ("three=" + three);
-//					Debug.Log ("two=" + linkText);
-//
-//					three = "http:quest-mill.com";
-//
-//					
-//					if (linkText.Length > 0 && linkText != "0") {
-//
-//						links.Add (new Link ("link" + l, three));
-//						if (linkText.Length > 27) {
-//
-//							linkText = linkText.Substring (0, 25) + "...";
-//						}
-//
-////						toadd = one + "<a name=\"link" + l + "\"><quad class=\"link\">  " + linkText + "</a>" + three;
-//						toadd = one + "<a name=\"link" + l + "\">" + "Linktext(" + three + ")" + "</a>";
-//						l++;
-//
-//					} else {
-//						toadd = one + " " + three;
-//					}
-//
-//
-//				
-//				}
+				// evtl. auf Regexp ändern: https://regex101.com/r/cC4vF0/7
+
+					
+
+
 				
-				text.text += toadd;
+				text.text += convertStringForHypertext (toadd);
 
 
 				Debug.Log ("New text: " + text.text);
@@ -517,6 +448,35 @@ public class page_npctalk : MonoBehaviour
 
 	}
 
+	string convertStringForHypertext (string toadd)
+	{
+		int i = 0;
+		int l = 0;
+		while (toadd.IndexOf ("<a href=") > -1) {
+			int aStartTagStartIndex = toadd.IndexOf ("<a href=", i);
+			int aStartTagEndIndex = toadd.IndexOf (">", aStartTagStartIndex);
+			int aEndTagStartIndex = toadd.IndexOf ("</a>", aStartTagEndIndex);
+			i = aEndTagStartIndex;
+			string textBeforeLink = toadd.Substring (0, aStartTagStartIndex);
+			string url = toadd.Substring (aStartTagStartIndex + "<a href=".Length + 1, aStartTagEndIndex - (aStartTagStartIndex + "<a href=".Length + 2));
+			string linkText = toadd.Substring (aStartTagEndIndex + 1, aEndTagStartIndex - aStartTagEndIndex - 1);
+			string textAfterLink = toadd.Substring (aEndTagStartIndex + 4, toadd.Length - aEndTagStartIndex - 4);
+			Regex urlRegex = new Regex (@"^(?:https?:\/\/)?(([a-z\d-]+)\.)+([a-z\d]+)([\/\?]\S*)?$");
+			if (urlRegex.IsMatch (url)) {
+				links.Add (new Link ("link" + l, url));
+				if (linkText.Length > 27) {
+					linkText = linkText.Substring (0, 25) + "...";
+				}
+				toadd = textBeforeLink + "<a name=\"link" + l + "\"><quad class=\"link\">  " + linkText + "</a>" + textAfterLink;
+				l++;
+			} else {
+				toadd = textBeforeLink + " " + textAfterLink;
+			}
+		}
+
+		return toadd;
+	}
+
 	public void clickLink (HyperText ht, Candlelight.UI.HyperText.LinkInfo li)
 	{
 
@@ -525,7 +485,7 @@ public class page_npctalk : MonoBehaviour
 		foreach (Link l in links) {
 
 
-			if (l.name == li.Id) {
+			if (l.name == li.Name) {
 
 
 				string url = l.url;
