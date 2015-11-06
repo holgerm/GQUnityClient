@@ -1540,8 +1540,8 @@ MonoBehaviour:
   m_LinkHitboxPadding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Top: 10
+    m_Bottom: 10
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1582,7 +1582,7 @@ MonoBehaviour:
   m_ShouldOverrideStylesFontStyle: 0
   m_ShouldOverrideStylesFontColor: 0
   m_ShouldOverrideStylesLineSpacing: 0
-  m_ShouldOverrideStylesLinkHitboxPadding: 0
+  m_ShouldOverrideStylesLinkHitboxPadding: 1
   m_TextProcessor:
     m_LinkKeywordCollections: []
     m_InputText: Es ist ein Fehler aufgetreten.
@@ -1591,7 +1591,7 @@ MonoBehaviour:
     m_IsRichTextDesired: 1
     m_OutputText: Es ist ein Fehler aufgetreten.
     m_QuadKeywordCollections: []
-    m_ReferenceFontSize: 80
+    m_ReferenceFontSize: 60
     m_ShouldOverrideStylesFontSize: 0
     m_Styles: {fileID: 11400000, guid: a4aec1bb6f1a342bcb4c72229ed41769, type: 2}
     m_TagKeywordCollections: []
