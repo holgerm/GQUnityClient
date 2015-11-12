@@ -3946,11 +3946,12 @@ MonoBehaviour:
   toplogo: {fileID: 21300000, guid: 1d9e6940ac58844519d19fdc1150720e, type: 3}
   nameForQuest: Quest
   questvisualization: map
-  questvisualizationchangable: 0
+  questvisualizationchangable: 1
   showcloudquestsimmediately: 1
   showtextinloadinglogo: 0
   showinternetconnectionmessage: 0
   defaultmarker: {fileID: 21300000, guid: 866b01dac34d8447181c266492bc3465, type: 3}
+  markerScale: .699999988
   categoryMarker:
   - category: wcc.culture
     anzeigename_de: Kultur
@@ -3959,7 +3960,7 @@ MonoBehaviour:
     showOnMap: 1
   - category: wcc.gallery
     anzeigename_de: Galerie
-    sprite: {fileID: 21300000, guid: 80eadcdccf2a14eceab8aa81d74d6687, type: 3}
+    sprite: {fileID: 21300000, guid: 563182bfda3da48208d1b9dc3688be61, type: 3}
     showInList: 1
     showOnMap: 1
   - category: wcc.architecture

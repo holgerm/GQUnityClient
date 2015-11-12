@@ -55,11 +55,7 @@ public class page_map : MonoBehaviour
 	public bool onStartInvoked = false;
 	public Route currentroute;
 	//private List<Marker> allmarker;
-	private
-		
-		void
-			
-			Start ()
+	private void Start ()
 	{
 
 
@@ -577,12 +573,12 @@ public class page_map : MonoBehaviour
 
 
 
-			float scale = 1.0f;
+			float scale = Configuration.instance.markerScale;
 
 
 			if (Application.isMobilePlatform) {
 
-				scale = 2.0f;
+				scale *= 2.0f;
 
 			}
 		

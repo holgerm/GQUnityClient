@@ -35,6 +35,7 @@ public class Configuration : MonoBehaviour
 	public bool showtextinloadinglogo = true;
 	public bool showinternetconnectionmessage = true;
 	public Sprite defaultmarker;
+	public float markerScale = 1.0f;
 	public List<MarkerCategorySprite> categoryMarker;
 
 
