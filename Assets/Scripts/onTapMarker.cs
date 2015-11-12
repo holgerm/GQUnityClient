@@ -10,11 +10,12 @@ public class onTapMarker : MonoBehaviour
 	public QuestRuntimeHotspot hotspot;
 	public float positionmoved = 0f;
 
+
 	void OnMouseDown ()
 	{
 
 
-		if (!Application.isMobilePlatform && hotspot.active) {
+		if (!EventSystem.current.IsPointerOverGameObject () && !Application.isMobilePlatform && hotspot.active) {
 
 
 			GetComponent<MeshRenderer> ().material.color = Color.grey;
@@ -30,7 +31,7 @@ public class onTapMarker : MonoBehaviour
 	{
 
 
-		if (!Application.isMobilePlatform && hotspot.active) {
+		if (!EventSystem.current.IsPointerOverGameObject () && !Application.isMobilePlatform && hotspot.active) {
 
 			if (hotspot.startquest.id != 0) {
 				
