@@ -1,4 +1,3 @@
-[Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
@@ -13,7 +12,11 @@
 /*.pidb
 /*.booproj
 
-#Unity3D Generated File On Crash Reports
+# Unity3D Generated File On Crash Reports
 sysinfo.txt
 *.DS_Store
 /undeployed/
+
+
+# specific folders:
+/Library/
