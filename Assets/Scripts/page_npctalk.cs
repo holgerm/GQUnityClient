@@ -88,9 +88,7 @@ public class page_npctalk : MonoBehaviour
 			savedtickertime = tickertime;
 			DateTime start = DateTime.Now;
 
-			if (npctalk.getAttribute ("image") != "") {
-
-
+			if (npctalk.getAttribute ("image") != null && npctalk.getAttribute ("image") != "") {
 
 				if (
 					npctalk.getAttribute ("image").StartsWith ("http://") ||
@@ -101,67 +99,38 @@ public class page_npctalk : MonoBehaviour
 
 					StartCoroutine (waitforImage ());
 
-
 				} else if (npctalk.getAttribute ("image").StartsWith ("@_")) {
 				
-
-
-
 					foreach (QuestRuntimeAsset qra in questactions.photos) {
-					
-						//Debug.Log("KEY:"+qra.key);
 					
 						if (qra.key == npctalk.getAttribute ("image")) {
 
-
-					
 							image.texture = qra.texture;
-							
-							
 							float myX = (float)qra.texture.width;
-							
-							
 							float myY = (float)qra.texture.height;
-							
-							
 							float scaler = myY / 604f;
-							
 							myX = myX / scaler;
 							myY = 604f;
-							
-							
+
 							image.GetComponent<RectTransform> ().sizeDelta = new Vector2 (myX, myY);
 							
-							
-							
-							
-
 						}
 					}
-					//Debug.Log ("donewithforeach");
-				
-				
-				
-				
 				} else {
-		
-					
-					
+
 					www = new WWW (pre + "" + npctalk.getAttribute ("image"));
-					
 					StartCoroutine (waitforImage ());
 
 				}
 
+			} else {
+				deactivateImage ();
 			}
-			text.text = "";
 
+			text.text = "";
 			string resultString = Regex.Match (npctalk.getAttribute ("textsize"), @"\d+").Value;
 			int size = int.Parse (resultString);
 			text.fontSize = size * 3;
-
-
-
 
 			if (npctalk.hasAttribute ("text")) {
 
@@ -266,6 +235,16 @@ public class page_npctalk : MonoBehaviour
 		}
 		
 		
+	}
+
+	/// <summary>
+	/// Deactivates the image. Useful when there is no image given, hence the text can start at the top of the screen.
+	/// </summary>
+	void deactivateImage ()
+	{
+		image_hochkant.transform.parent.gameObject.SetActive (false);
+		LayoutElement scrollLayout = GameObject.Find ("/Canvas/Panel/Scroll").GetComponent<LayoutElement> ();
+		scrollLayout.flexibleHeight = 7;
 	}
 
 	void nextdialogitem ()
