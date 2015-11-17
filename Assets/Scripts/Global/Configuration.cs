@@ -34,6 +34,8 @@ public class Configuration : MonoBehaviour
 	public bool showcloudquestsimmediately = false;
 	public bool showtextinloadinglogo = true;
 	public bool showinternetconnectionmessage = true;
+	public string defaultlanguage = "system";
+	public bool languageChangableByUser = true;
 	public Sprite defaultmarker;
 	public float markerScale = 1.0f;
 	public List<MarkerCategorySprite> categoryMarker;

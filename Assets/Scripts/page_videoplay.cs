@@ -32,7 +32,7 @@ public class page_videoplay : MonoBehaviour
 		
 		
 
-		#if !UNITY_WEBPLAYER
+		#if !UNITY_WEBPLAYER && !UNITY_STANDALONE_OSX
 
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 
@@ -51,6 +51,9 @@ public class page_videoplay : MonoBehaviour
 
 
 				 url = url.Replace(questdb.PATH_2_PREDEPLOYED_QUESTS,"predeployed/quests");
+
+
+
 				Handheld.PlayFullScreenMovie (url);
 
 			} else {
@@ -128,7 +131,7 @@ public class page_videoplay : MonoBehaviour
 		//        Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
 		yield return new WaitForSeconds (1.0f);
 
-		#if !UNITY_WEBPLAYER
+		#if !UNITY_WEBPLAYER && !UNITY_STANDALONE_OSX
 
 		Handheld.PlayFullScreenMovie (url);
 
