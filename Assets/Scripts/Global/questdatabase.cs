@@ -60,8 +60,26 @@ public class questdatabase : MonoBehaviour
 	public bool allowReturn = false;
 
 
+	public RectTransform messageCanvas;
+	public privacyAgreement privacyAgreementObject;
+
+	public string privacyAgreementVersionRead = "-1";
+
 	IEnumerator Start ()
 	{
+
+
+		if (PlayerPrefs.HasKey ("privacyAgreementVersionRead")) {
+
+			privacyAgreementVersionRead = PlayerPrefs.GetString("privacyAgreementVersionRead");
+
+		}
+
+		if (Configuration.instance.showPrivacyAgreement) {
+
+			StartCoroutine(showPrivacyAgreement());
+
+		}
 
 
 
@@ -169,6 +187,44 @@ public class questdatabase : MonoBehaviour
 
 
 	}
+
+
+	IEnumerator showPrivacyAgreement(){
+
+		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement");
+		yield return www;
+
+
+		if (www.error != null && www.error != "") {
+
+			Debug.Log("Couldn't load privacy agreement: "+www.error);
+
+		} else {
+
+
+			string version = www.text.Substring(9).Split(new string[] { "<br>" }, StringSplitOptions.None)[0];
+			Debug.Log("Privacy Agreement Version: "+version);
+
+
+			if(version != privacyAgreementVersionRead){
+
+				privacyAgreementObject.version = version;
+				privacyAgreementObject.gameObject.SetActive(true);
+
+				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(www.text);
+				privacyAgreementObject.GetComponent<Animator>().SetTrigger("in");
+			}
+
+
+
+
+		}
+
+
+
+	}
+
+
 
 	void autoStartQuest ()
 	{

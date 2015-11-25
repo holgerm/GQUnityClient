@@ -30,6 +30,7 @@ public class Configuration : MonoBehaviour
 	private string productName;
 	public string nameForQuest = "Quest";
 	public string questvisualization = "list";
+	public bool showPrivacyAgreement = true;
 	public bool questvisualizationchangable = false;
 	public bool showcloudquestsimmediately = false;
 	public bool showtextinloadinglogo = true;
