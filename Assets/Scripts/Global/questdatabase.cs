@@ -71,7 +71,7 @@ public class questdatabase : MonoBehaviour
 
 		if (PlayerPrefs.HasKey ("privacyAgreementVersionRead")) {
 
-			privacyAgreementVersionRead = PlayerPrefs.GetString("privacyAgreementVersionRead");
+			//privacyAgreementVersionRead = PlayerPrefs.GetString("privacyAgreementVersionRead");
 
 		}
 
@@ -211,7 +211,10 @@ public class questdatabase : MonoBehaviour
 				privacyAgreementObject.version = version;
 				privacyAgreementObject.gameObject.SetActive(true);
 
-				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(www.text);
+				string agreement = www.text.Substring(www.text.IndexOf("<br>")+4);
+
+
+				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(agreement);
 				privacyAgreementObject.GetComponent<Animator>().SetTrigger("in");
 			}
 
