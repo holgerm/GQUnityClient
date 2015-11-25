@@ -71,7 +71,7 @@ public class questdatabase : MonoBehaviour
 
 		if (PlayerPrefs.HasKey ("privacyAgreementVersionRead")) {
 
-			//privacyAgreementVersionRead = PlayerPrefs.GetString("privacyAgreementVersionRead");
+			privacyAgreementVersionRead = PlayerPrefs.GetString("privacyAgreementVersionRead");
 
 		}
 
