@@ -191,7 +191,7 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator showPrivacyAgreement(){
 
-		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement");
+		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement/version");
 		yield return www;
 
 
@@ -202,16 +202,19 @@ public class questdatabase : MonoBehaviour
 		} else {
 
 
-			string version = www.text.Substring(9).Split(new string[] { "<br>" }, StringSplitOptions.None)[0];
+			string version = www.text;
 			Debug.Log("Privacy Agreement Version: "+version);
 
 
 			if(version != privacyAgreementVersionRead){
 
+				WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement");
+				yield return www2;
+
 				privacyAgreementObject.version = version;
 				privacyAgreementObject.gameObject.SetActive(true);
 
-				string agreement = www.text.Substring(www.text.IndexOf("<br>")+4);
+				string agreement = www2.text;
 
 
 				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(agreement);
