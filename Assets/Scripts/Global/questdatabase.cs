@@ -62,8 +62,9 @@ public class questdatabase : MonoBehaviour
 
 	public RectTransform messageCanvas;
 	public privacyAgreement privacyAgreementObject;
-
 	public string privacyAgreementVersionRead = "-1";
+	public privacyAgreement agbObject;
+	public string agbVersionRead = "-1";
 
 	IEnumerator Start ()
 	{
@@ -75,9 +76,28 @@ public class questdatabase : MonoBehaviour
 
 		}
 
-		if (Configuration.instance.showPrivacyAgreement) {
+		bool hideBlack = true;
 
+		if (Configuration.instance.showPrivacyAgreement) {
+			hideBlack = false;
 			StartCoroutine(showPrivacyAgreement());
+		}
+
+		if (PlayerPrefs.HasKey ("agbVersionRead")) {
+			
+			agbVersionRead = PlayerPrefs.GetString("agbVersionRead");
+			
+		}
+		
+		if (Configuration.instance.showAGBs) {
+			hideBlack = false;
+			StartCoroutine(showAGBs());
+			
+		}
+
+		if (hideBlack) {
+
+			hideBlackCanvas();
 
 		}
 
@@ -188,6 +208,12 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+	public void hideBlackCanvas ()
+	{
+		if (GameObject.Find ("[BLACK]") != null) {
+			GameObject.Find ("[BLACK]").GetComponent<Animator> ().SetTrigger ("out");
+		}
+	}
 
 	IEnumerator showPrivacyAgreement(){
 
@@ -198,6 +224,7 @@ public class questdatabase : MonoBehaviour
 		if (www.error != null && www.error != "") {
 
 			Debug.Log("Couldn't load privacy agreement: "+www.error);
+			hideBlackCanvas ();
 
 		} else {
 
@@ -219,6 +246,9 @@ public class questdatabase : MonoBehaviour
 
 				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(agreement);
 				privacyAgreementObject.GetComponent<Animator>().SetTrigger("in");
+			} else {
+				hideBlackCanvas ();
+
 			}
 
 
@@ -230,6 +260,47 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+	IEnumerator showAGBs ()
+	{
+		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs/version");
+		yield return www;
+		
+		
+		if (www.error != null && www.error != "") {
+			
+			Debug.Log("Couldn't load privacy agreement: "+www.error);
+			hideBlackCanvas ();
+		} else {
+			
+			
+			string version = www.text;
+			Debug.Log("AGB Version: "+version);
+			
+			
+			if(version != privacyAgreementVersionRead){
+				
+				WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs");
+				yield return www2;
+				
+				agbObject.version = version;
+				agbObject.gameObject.SetActive(true);
+				
+				string agreement = www2.text;
+				
+				
+				agbObject.textObject.text = GetComponent<actions>().formatString(agreement);
+				agbObject.GetComponent<Animator>().SetTrigger("in");
+			} else {
+				hideBlackCanvas ();
+
+			}
+			
+			
+			
+			
+		}
+		
+	}
 
 
 	void autoStartQuest ()

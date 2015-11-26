@@ -12,7 +12,6 @@ public class privacyAgreement : MonoBehaviour {
 
 
 	public void disableGameObject(){
-
 		gameObject.SetActive (false);
 
 	}
@@ -21,6 +20,7 @@ public class privacyAgreement : MonoBehaviour {
 
 	public void accept(){
 
+		GameObject.Find("QuestDatabase").GetComponent<questdatabase>().hideBlackCanvas ();
 		GetComponent<Animator> ().SetTrigger ("out");
 
 		PlayerPrefs.SetString ("privacyAgreementVersionRead", version);
