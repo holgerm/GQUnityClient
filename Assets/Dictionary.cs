@@ -9,7 +9,7 @@ public class Dictionary : MonoBehaviour {
 
 	public string language = "de";
 
-	 List<Translation> translations;
+	public List<Translation> translations;
 
 	public string oldlanguage = "de";
 
@@ -91,10 +91,12 @@ public class Dictionary : MonoBehaviour {
 		translations.Add (new Translation("Antwort abschicken", "Send answer"));
 		translations.Add (new Translation("Weiter", "Continue"));
 		translations.Add (new Translation("Sprache", "Language"));
+		translations.Add (new Translation("Datenschutzvereinbarung", "Privacy Agreement"));
+		translations.Add (new Translation("Allgemeine Geschäftsbedingungen", "Terms and Conditions"));
+		translations.Add (new Translation("Akzeptieren", "Accept"));
 
 
-		
-		
+
 
 	}
 

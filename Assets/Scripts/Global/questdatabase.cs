@@ -62,9 +62,9 @@ public class questdatabase : MonoBehaviour
 
 	public RectTransform messageCanvas;
 	public privacyAgreement privacyAgreementObject;
-	public string privacyAgreementVersionRead = "-1";
+	public int privacyAgreementVersionRead = -1;
 	public privacyAgreement agbObject;
-	public string agbVersionRead = "-1";
+	public int agbVersionRead = -1;
 
 	IEnumerator Start ()
 	{
@@ -72,7 +72,7 @@ public class questdatabase : MonoBehaviour
 
 		if (PlayerPrefs.HasKey ("privacyAgreementVersionRead")) {
 
-			privacyAgreementVersionRead = PlayerPrefs.GetString("privacyAgreementVersionRead");
+			privacyAgreementVersionRead = PlayerPrefs.GetInt("privacyAgreementVersionRead");
 
 		}
 
@@ -85,7 +85,7 @@ public class questdatabase : MonoBehaviour
 
 		if (PlayerPrefs.HasKey ("agbVersionRead")) {
 			
-			agbVersionRead = PlayerPrefs.GetString("agbVersionRead");
+			agbVersionRead = PlayerPrefs.GetInt("agbVersionRead");
 			
 		}
 		
@@ -228,23 +228,30 @@ public class questdatabase : MonoBehaviour
 
 		} else {
 
-
+		
 			string version = www.text;
 			Debug.Log("Privacy Agreement Version: "+version);
 
 
-			if(version != privacyAgreementVersionRead){
+			if(int.Parse(version) > privacyAgreementVersionRead || Configuration.instance.privacyAgreementVersion > privacyAgreementVersionRead){
+
+
+				string agreement = Configuration.instance.privacyAgreement;
+
+				if(int.Parse(version) > Configuration.instance.privacyAgreementVersion){
 
 				WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement");
 				yield return www2;
+					agreement = www2.text;
+					}
 
-				privacyAgreementObject.version = version;
+
+				privacyAgreementObject.version = int.Parse(version);
 				privacyAgreementObject.gameObject.SetActive(true);
 
-				string agreement = www2.text;
 
-
-				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(agreement);
+				GetComponent<actions>().localizeStringToDictionary(agreement);
+				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(agreement));
 				privacyAgreementObject.GetComponent<Animator>().SetTrigger("in");
 			} else {
 				hideBlackCanvas ();
@@ -277,23 +284,31 @@ public class questdatabase : MonoBehaviour
 			Debug.Log("AGB Version: "+version);
 			
 			
-			if(version != privacyAgreementVersionRead){
+			if(int.Parse(version) > agbVersionRead || Configuration.instance.agbsVersion > agbVersionRead){
 				
-				WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs");
-				yield return www2;
 				
-				agbObject.version = version;
+				string agreement = Configuration.instance.agbs;
+				
+				if(int.Parse(version) > Configuration.instance.agbsVersion){
+					
+					WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs");
+					yield return www2;
+					agreement = www2.text;
+				}
+				
+				
+				agbObject.version = int.Parse(version);
 				agbObject.gameObject.SetActive(true);
 				
-				string agreement = www2.text;
 				
-				
-				agbObject.textObject.text = GetComponent<actions>().formatString(agreement);
+				GetComponent<actions>().localizeStringToDictionary(agreement);
+				agbObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(agreement));
 				agbObject.GetComponent<Animator>().SetTrigger("in");
 			} else {
 				hideBlackCanvas ();
-
+				
 			}
+
 			
 			
 			

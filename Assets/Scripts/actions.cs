@@ -1190,6 +1190,112 @@ public class actions : MonoBehaviour
 		}
 	}
 
+
+	public void localizeStringToDictionary(string s){
+		
+		//TODO: for more than DE and EN
+		
+
+		string german = "";
+		string english = "";
+
+		
+		if (s.Contains ("[---DE---]")) {
+			
+			
+			string help = s.Substring (s.IndexOf ("[---DE---]") + ("[---DE---]").Length);
+			
+			german = help;
+			
+			if(help.IndexOf("[---") != -1){
+				german = help.Substring(0,help.IndexOf("[---"));
+				
+			}
+
+			
+		}
+
+
+		if(s.IndexOf("[---EN---]") != -1){
+				// use english
+				string help = s.Substring (s.IndexOf ("[---EN---]") + ("[---EN---]").Length);
+				
+				english = help;
+				
+				if(help.IndexOf("[---") != -1){
+					english = help.Substring(0,help.IndexOf("[---"));
+					
+				}
+				
+				
+
+			
+		}
+		
+		
+		
+		
+		GetComponent<Dictionary>().translations.Add(new Translation(german, english));
+		
+		
+	}
+
+	public String localizeString(string s){
+
+		Debug.Log (s);
+
+
+
+		string lang = GetComponent<Dictionary> ().language;
+
+
+			if (s.Contains ("[---" + lang.ToUpper() + "---]")) {
+
+
+			string help = s.Substring (s.IndexOf ("[---" + lang.ToUpper() + "---]") + ("[---" + lang.ToUpper() + "---]").Length);
+
+			string final = help;
+
+			if(help.IndexOf("[---") != -1){
+			final = help.Substring(0,help.IndexOf("[---"));
+
+			}
+
+			return final;
+
+		} else {
+
+			// use either english or s
+
+			if(s.IndexOf("[---EN---]") != -1){
+				// use english
+				string help = s.Substring (s.IndexOf ("[---EN---]") + ("[---EN---]").Length);
+				
+				string final = help;
+				
+				if(help.IndexOf("[---") != -1){
+					final = help.Substring(0,help.IndexOf("[---"));
+					
+				}
+				
+				return final;
+
+			} else {
+				// no fallback language defined
+
+				return s;
+			}
+
+		}
+
+
+
+
+
+
+
+	}
+
 	public string formatString (string s)
 	{
 		if (s == null)

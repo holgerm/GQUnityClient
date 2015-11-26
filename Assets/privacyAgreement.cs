@@ -8,8 +8,10 @@ public class privacyAgreement : MonoBehaviour {
 
 	public HyperText textObject;
 
-	public string version;
+	public int version;
 
+	public bool privacy = false;
+	public bool agb = false;
 
 	public void disableGameObject(){
 		gameObject.SetActive (false);
@@ -23,7 +25,12 @@ public class privacyAgreement : MonoBehaviour {
 		GameObject.Find("QuestDatabase").GetComponent<questdatabase>().hideBlackCanvas ();
 		GetComponent<Animator> ().SetTrigger ("out");
 
-		PlayerPrefs.SetString ("privacyAgreementVersionRead", version);
+		if (privacy) {
+			PlayerPrefs.SetInt ("privacyAgreementVersionRead", version);
+		} else if (agb) {
+			PlayerPrefs.SetInt ("agbVersionRead", version);
+
+		}
 
 	}
 }
