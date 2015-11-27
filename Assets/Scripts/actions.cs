@@ -1233,7 +1233,8 @@ public class actions : MonoBehaviour
 		}
 		
 		
-		
+
+		Debug.Log ("new dictionary entry: " + german + "," + english);
 		
 		GetComponent<Dictionary>().translations.Add(new Translation(german, english));
 		
@@ -1260,7 +1261,7 @@ public class actions : MonoBehaviour
 			final = help.Substring(0,help.IndexOf("[---"));
 
 			}
-
+			Debug.Log(final);
 			return final;
 
 		} else {

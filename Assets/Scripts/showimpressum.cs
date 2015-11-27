@@ -72,7 +72,6 @@ public class showimpressum : MonoBehaviour {
 
 			GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(imprint);
 
-
 			imprint = 	GameObject.Find("QuestDatabase").GetComponent<actions>().localizeString(imprint);
 
 			

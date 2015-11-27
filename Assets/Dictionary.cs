@@ -151,6 +151,9 @@ public class Dictionary : MonoBehaviour {
 		}
 
 
+
+		Debug.Log ("no translation found: " + s);
+
 			return s;
 
 
@@ -163,7 +166,7 @@ public class Dictionary : MonoBehaviour {
 }
 
 
-
+[System.Serializable]
 public class Translation{
 
 	public string german;

@@ -7,7 +7,7 @@ using Candlelight.UI;
 public class translateTextComponent : MonoBehaviour {
 
 
-
+	public bool debug = false;
 
 
 	public bool keepTranslatingAtRuntime;
@@ -69,13 +69,14 @@ public class translateTextComponent : MonoBehaviour {
 
 	void Update(){
 
+		bool done = false;
 		if (keepTranslatingAtRuntime && !GetComponent<Text> ().text.Equals (textcontent)) {
 			translate();
-
+			done = true;
 		}
 
 
-		if(currentLanguage != GameObject.Find ("QuestDatabase").GetComponent<Dictionary> ().language){
+		if(!done && currentLanguage != GameObject.Find ("QuestDatabase").GetComponent<Dictionary> ().language){
 
 			translate();
 
