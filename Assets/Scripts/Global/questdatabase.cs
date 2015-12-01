@@ -69,12 +69,38 @@ public class questdatabase : MonoBehaviour
 	IEnumerator Start ()
 	{
 
+		if (PlayerPrefs.HasKey ("privacyagreementversion")) {
+
+			if(PlayerPrefs.GetInt("privacyagreementversion") > Configuration.instance.privacyAgreementVersion){
+
+				Configuration.instance.privacyAgreementVersion = PlayerPrefs.GetInt("privacyagreementversion");
+				Configuration.instance.privacyAgreement = PlayerPrefs.GetString("privacyagreement");
+
+			}
+
+		}
+
+		if (PlayerPrefs.HasKey ("agbsversion")) {
+			
+			if(PlayerPrefs.GetInt("agbsversion") > Configuration.instance.privacyAgreementVersion){
+				
+				Configuration.instance.agbsVersion = PlayerPrefs.GetInt("agbsversion");
+				Configuration.instance.agbs = PlayerPrefs.GetString("agbs");
+				
+			}
+			
+		}
 
 		if (PlayerPrefs.HasKey ("privacyAgreementVersionRead")) {
 
 			privacyAgreementVersionRead = PlayerPrefs.GetInt("privacyAgreementVersionRead");
 
 		}
+
+
+		GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadAGBs ();
+		GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadPrivacy ();
+
 
 		bool hideBlack = true;
 
@@ -233,6 +259,8 @@ public class questdatabase : MonoBehaviour
 			Debug.Log("Privacy Agreement Version: "+version);
 
 
+
+
 			if(int.Parse(version) > privacyAgreementVersionRead || Configuration.instance.privacyAgreementVersion > privacyAgreementVersionRead){
 
 
@@ -243,6 +271,16 @@ public class questdatabase : MonoBehaviour
 				WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement");
 				yield return www2;
 					agreement = www2.text;
+
+					PlayerPrefs.SetInt("privacyagreementversion",int.Parse(version));
+					PlayerPrefs.SetString("privacyagreement",agreement);
+
+					Configuration.instance.privacyAgreementVersion = int.Parse(version);
+					Configuration.instance.privacyAgreement = agreement;
+					GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadPrivacy();
+
+
+
 					}
 
 
@@ -294,6 +332,14 @@ public class questdatabase : MonoBehaviour
 					WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs");
 					yield return www2;
 					agreement = www2.text;
+
+					PlayerPrefs.SetInt("agbsversion",int.Parse(version));
+					PlayerPrefs.SetString("agbs",agreement);
+					Configuration.instance.agbsVersion = int.Parse(version);
+					Configuration.instance.agbs = agreement;
+					GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadAGBs ();
+
+
 				}
 				
 				

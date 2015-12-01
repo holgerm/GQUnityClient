@@ -93,6 +93,7 @@ public class Dictionary : MonoBehaviour {
 		translations.Add (new Translation("Sprache", "Language"));
 		translations.Add (new Translation("Datenschutzvereinbarung", "Privacy Agreement"));
 		translations.Add (new Translation("Allgemeine Geschäftsbedingungen", "Terms and Conditions"));
+		translations.Add (new Translation("AGBs", "Terms and Conditions"));
 		translations.Add (new Translation("Akzeptieren", "Accept"));
 
 
