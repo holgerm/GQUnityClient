@@ -4,6 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - CenterToggleInMap
   - ProductSpecific
   layers:
   - Default
@@ -44,4 +45,7 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 2583718753
+    locked: 0
+  - name: MapOverlay
+    uniqueID: 2536981123
     locked: 0

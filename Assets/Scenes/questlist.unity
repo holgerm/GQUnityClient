@@ -4232,7 +4232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 0
+  product: 4
   overrideProductSettingsInInspector: 0
   portalID: 141
   autostartQuestID: 0
@@ -4249,17 +4249,15 @@ MonoBehaviour:
     <b>Land</b>\\n Deutschland\\n <b>Domain</b>\\n quest-mill.com\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
     DE298593210 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n Holger M\xFCgge\\n
     <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
-  toplogo: {fileID: 21300000, guid: 1d9e6940ac58844519d19fdc1150720e, type: 3}
+  toplogo: {fileID: 21300000, guid: 5e3f16b17a584441c81b0d0d79d826f4, type: 3}
   nameForQuest: Quest
-  questvisualization: list
-  questvisualizationchangable: 0
+  questvisualization: map
+  questvisualizationchangable: 1
   showcloudquestsimmediately: 1
   showtextinloadinglogo: 0
   showinternetconnectionmessage: 0
   defaultlanguage: system
   languageChangableByUser: 1
-  defaultmarker: {fileID: 21300000, guid: 866b01dac34d8447181c266492bc3465, type: 3}
-  markerScale: .699999988
   categoryMarker:
   - category: wcc.culture
     anzeigename_de: Kultur
@@ -4312,15 +4310,21 @@ MonoBehaviour:
     showInList: 0
     showOnMap: 0
   - category: tour
-    anzeigename_de: Tour
+    anzeigename_de: Route
     sprite: {fileID: 21300000, guid: 71a496772f81242c19547180cc9633be, type: 3}
-    showInList: 0
-    showOnMap: 0
+    showInList: 1
+    showOnMap: 1
   - category: sport
     anzeigename_de: Sport
     sprite: {fileID: 21300000, guid: 26528893e0d374452a1bce9e80e40596, type: 3}
     showInList: 0
     showOnMap: 0
+  defaultmarker: {fileID: 21300000, guid: 866b01dac34d8447181c266492bc3465, type: 3}
+  markerScale: .699999988
+  storedMapZoom: 18
+  useDefaultPositionValuesAtStart: 0
+  defaultLongitude: 50
+  defaultLatitude: 8
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -9656,7 +9660,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

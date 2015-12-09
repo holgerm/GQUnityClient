@@ -8,40 +8,29 @@ using LitJson;
 using System.IO;
 using System;
 
-public class sendqueue : MonoBehaviour {
+public class sendqueue : MonoBehaviour
+{
 
 
 
 	public bool receivedExpectedMessageId = false;
-
-
-
 	public List<SendQueueEntry> queue;
-
 	public networkactions networkActionsObject;
-
 	public float messageTimer = 0.2f;
 	float messageTimerSave = 0.2f;
-
-
 	public float messageTimeout = 10f;
-
-
 	public string deviceid;
-
 	public int idCounter = 0;
-
-
 	public bool triedEstablishingConnection = false;
 	public float connectionTimeout = 10f;
 	float connectionTimeoutSave = 10f;
-
 	const string MODE_VALUE = "value";
 	const string MODE_FILE_START = "file_start";
 	const string MODE_FILE_MID = "file_mid";
 	const string MODE_FILE_FINISH = "file_finish";
 
-	void Start(){
+	void Start ()
+	{
 
 		queue = new List<SendQueueEntry> ();
 		messageTimerSave = messageTimer;
@@ -50,15 +39,16 @@ public class sendqueue : MonoBehaviour {
 
 		reconstructSendQueue ();
 	}
-public void setExpectedNextMessage(int nm){
+
+	public void setExpectedNextMessage (int nm)
+	{
 
 
 
 	}
 
-
-
-	void reconstructSendQueue(){
+	void reconstructSendQueue ()
+	{
 
 		string pre = "file: /";
 		
@@ -74,15 +64,10 @@ public void setExpectedNextMessage(int nm){
 
 			foreach (string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/")) {
 
-				Debug.Log(quest);
-
-
 				if (Directory.Exists (quest + "/sendqueue/")) {
 			
 
-					Debug.Log("exists");
-					string FolderName = new DirectoryInfo(quest).Name;
-					Debug.Log ("foldername: "+FolderName);
+					string FolderName = new DirectoryInfo (quest).Name;
 
 					foreach (string file in	Directory.GetFiles(quest + "/sendqueue/")) {
 
@@ -93,23 +78,20 @@ public void setExpectedNextMessage(int nm){
 
 
 
-						if(int.TryParse(FolderName, out num1)){
+						if (int.TryParse (FolderName, out num1)) {
 
 
-						if (int.TryParse (Path.GetFileNameWithoutExtension(file), out num2)) {
-
-								Debug.Log (Path.GetFileNameWithoutExtension(file));
-
+							if (int.TryParse (Path.GetFileNameWithoutExtension (file), out num2)) {
 
 								if (File.Exists (Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json")) {
 
 
-									WWW www = new WWW(pre+""+Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
-									StartCoroutine(deserialize(www));
+									WWW www = new WWW (pre + "" + Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
+									StartCoroutine (deserialize (www));
 
 								}
+							}
 						}
-					}
 					}
 
 
@@ -128,10 +110,8 @@ public void setExpectedNextMessage(int nm){
 
 	}
 
-
-
-
-	void Update(){
+	void Update ()
+	{
 
 
 
@@ -142,15 +122,15 @@ public void setExpectedNextMessage(int nm){
 			messageTimer -= Time.deltaTime;
 
 		
-			if(networkActionsObject == null && triedEstablishingConnection){
+			if (networkActionsObject == null && triedEstablishingConnection) {
 
 				connectionTimeout -= Time.deltaTime;
 				
-				if(connectionTimeout <= 0f){
+				if (connectionTimeout <= 0f) {
 					
 					connectionTimeout = connectionTimeoutSave;
 					triedEstablishingConnection = false;
-					Network.Disconnect();
+					Network.Disconnect ();
 				}
 
 			}
@@ -171,12 +151,12 @@ public void setExpectedNextMessage(int nm){
 
 
 					foreach (SendQueueEntry sqe in queue.GetRange(0,queue.Count)) {
-						if(canSendMessage){
-								sqe.timeout -= Time.deltaTime;
-								if(sqe.timeout <= 0f){
-									send (sqe,messageTimeout);
-									canSendMessage = false;
-								}
+						if (canSendMessage) {
+							sqe.timeout -= Time.deltaTime;
+							if (sqe.timeout <= 0f) {
+								send (sqe, messageTimeout);
+								canSendMessage = false;
+							}
 						}
 					
 
@@ -185,13 +165,14 @@ public void setExpectedNextMessage(int nm){
 				} else {
 
 
-					if(!triedEstablishingConnection){
+					if (!triedEstablishingConnection) {
 					
-					NetworkManager.singleton.networkAddress = queue[0].ip;
+						NetworkManager.singleton.networkAddress = queue [0].ip;
 					
-					NetworkManager.singleton.StartClient();
+						if (!NetworkManager.singleton.IsClientConnected ())
+							NetworkManager.singleton.StartClient ();	
 
-					triedEstablishingConnection = true;
+						triedEstablishingConnection = true;
 
 
 					}
@@ -201,8 +182,8 @@ public void setExpectedNextMessage(int nm){
 
 			} else if (NetworkManager.singleton.isNetworkActive) {
 
-				if(networkActionsObject != null){
-					Network.Disconnect();
+				if (networkActionsObject != null) {
+					Network.Disconnect ();
 				}
 
 			}
@@ -212,12 +193,8 @@ public void setExpectedNextMessage(int nm){
 
 	}
 
-
-
-
-
-
-	public void addMessageToQueue(string ip, string var, string value){
+	public void addMessageToQueue (string ip, string var, string value)
+	{
 
 		SendQueueEntry sqe = new SendQueueEntry ();
 
@@ -271,8 +248,8 @@ public void setExpectedNextMessage(int nm){
 
 	}
 
-
-	public void addMessageToQueue(string ip, string var,string filetype, byte[] bytes,int part){
+	public void addMessageToQueue (string ip, string var, string filetype, byte[] bytes, int part)
+	{
 		
 		SendQueueEntry sqe = new SendQueueEntry ();
 	
@@ -338,30 +315,27 @@ public void setExpectedNextMessage(int nm){
 	
 	}
 
-	public void setNetworkIdentity(networkactions na){
+	public void setNetworkIdentity (networkactions na)
+	{
 		
 		networkActionsObject = na;
 		
 	}
 
-
-
-
-
-
-	public void messageReceived(int id){
+	public void messageReceived (int id)
+	{
 
 
 		foreach (SendQueueEntry sqe in queue.GetRange(0,queue.Count)) {
 
-			if(sqe.id == id){
+			if (sqe.id == id) {
 
 
-				queue.Remove(sqe);
+				queue.Remove (sqe);
 
 				
 				if (File.Exists (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json")) {
-					File.Delete(Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
+					File.Delete (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
 				}
 			}
 
@@ -372,8 +346,8 @@ public void setExpectedNextMessage(int nm){
 
 	}
 
-
-	public void send(SendQueueEntry sqe, float timeout){
+	public void send (SendQueueEntry sqe, float timeout)
+	{
 
 
 		//queue.Remove (sqe);
@@ -385,20 +359,20 @@ public void setExpectedNextMessage(int nm){
 		if (sqe.mode == MODE_VALUE) {
 
 
-		networkActionsObject.CmdSendVar(sqe.id, deviceid,sqe.var,sqe.value,sqe.resetid);
+			networkActionsObject.CmdSendVar (sqe.id, deviceid, sqe.var, sqe.value, sqe.resetid);
 
 
 		} else if (sqe.mode == MODE_FILE_START) {
 
-			networkActionsObject.CmdSendFile(sqe.id, deviceid,sqe.var,sqe.filetype,sqe.file,sqe.resetid);
+			networkActionsObject.CmdSendFile (sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
 					
 		} else if (sqe.mode == MODE_FILE_MID) {
 
-			networkActionsObject.CmdAddToFile(sqe.id, deviceid,sqe.var,sqe.filetype,sqe.file,sqe.resetid);
+			networkActionsObject.CmdAddToFile (sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
 
 		} else if (sqe.mode == MODE_FILE_FINISH) {
 			
-			networkActionsObject.CmdFinishFile(sqe.id, deviceid,sqe.var,sqe.filetype,sqe.resetid);
+			networkActionsObject.CmdFinishFile (sqe.id, deviceid, sqe.var, sqe.filetype, sqe.resetid);
 
 		}
 
@@ -406,10 +380,7 @@ public void setExpectedNextMessage(int nm){
 
 	}
 
-
-
-
-	 void serialize (SendQueueEntry sqe)
+	void serialize (SendQueueEntry sqe)
 	{
 
 
@@ -421,19 +392,17 @@ public void setExpectedNextMessage(int nm){
 
 		if (!Directory.Exists (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/")) {
 
-			Directory.CreateDirectory(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/");
+			Directory.CreateDirectory (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/");
 
 		}
 
 		if (File.Exists (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json")) {
-			File.Delete(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json");
+			File.Delete (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json");
 		}
 
 
-		File.WriteAllText (Application.persistentDataPath+"/quests/"+GetComponent<questdatabase>().currentquest.id+"/sendqueue/"+sqe.id+".json", sb.ToString ());
+		File.WriteAllText (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json", sb.ToString ());
 	}
-
-
 
 	public IEnumerator deserialize (WWW www)
 	{
@@ -455,38 +424,29 @@ public void setExpectedNextMessage(int nm){
 
 		} else {
 
-			Debug.Log(www.error);
+			Debug.Log (www.error);
 
 		}
 	
 	
-}
+	}
 
 
 }
+
 [System.Serializable]
-public class SendQueueEntry{
+public class SendQueueEntry
+{
 
 	public int id;
-
-
-
 	public int questid;
-
 	public string ip;
-
 	public float timeout;
 	public string mode;
-
 	public string var;
-
 	public string value;
-
 	public string filetype;
 	public byte[] file;
-
-
-
 	public bool resetid = false;
 
 

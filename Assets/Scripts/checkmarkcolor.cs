@@ -6,7 +6,7 @@ using System.Collections;
 public class checkmarkcolor : MonoBehaviour {
 
 
-
+	// TODO get rid of mode field we do not need it anymore, I believe (hm)
 
 
 	public bool mode = true;
@@ -17,12 +17,13 @@ public class checkmarkcolor : MonoBehaviour {
 	void Start () {
 	
 
-		if (mode) {
+		if ( mode ) {
 			
-			GetComponent<Image> ().color = on;
+			GetComponent<Image>().color = on;
 			
 			
-		} else {
+		}
+		else {
 			
 			GetComponent<Image>().color = off;
 			
@@ -39,21 +40,22 @@ public class checkmarkcolor : MonoBehaviour {
 	
 	}
 
-
-	public void setMode(bool b){
+	public void setMode (bool b) {
 		mode = b;
 
 
-		if (b) {
+		if ( b ) {
 
-			GetComponent<Image> ().color = on;
+			GetComponent<Image>().color = on;
 
 
-		} else {
+		}
+		else {
 
 			GetComponent<Image>().color = off;
 
 		}
 
 	}
+
 }

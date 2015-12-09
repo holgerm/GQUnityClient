@@ -492,7 +492,10 @@ public class page_npctalk : MonoBehaviour
 
 		} else {
 			//Debug.Log ("ending");
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
+			GameObject questDBGO = GameObject.Find ("QuestDatabase");
+			if (questDBGO != null) {
+				questDBGO.GetComponent<questdatabase> ().endQuest ();
+			}
 
 		}
 

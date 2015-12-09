@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 using System;
@@ -17,13 +16,17 @@ using System.Xml.Serialization;
 using System.Text;
 using System.Globalization;
 
-public class page_map : MonoBehaviour
-{
+/// <summary>
+/// Caution: We use the order (LATITUDE, LONGITUDE) throughout our implementation here! 
+/// 
+/// </summary>
+public class page_map : MonoBehaviour {
 	public Map		map;
 	public questdatabase questdb;
 	public Quest quest;
 	public QuestPage mappage;
 	public actions questactions;
+	Locationcontrol locationController;
 	public GPSPosition gpsdata;
 	public Texture	LocationTexture;
 	public Texture	MarkerTexture;
@@ -39,307 +42,352 @@ public class page_map : MonoBehaviour
 	private List<Layer> layers;
 	private int     currentLayerIndex = 0;
 	public LocationMarker location;
-	public Transform radiusprefab;
 	private bool zoomin = false;
 	private bool zoomout = false;
-	public bool fixedonposition = true;
-	public bool gotgps = true;
 	public bool showquests = false;
 	private string pre;
 	public checkmarkcolor positionCheckmark;
 	public Toggle positionToggle;
-	public bool togglebuttontouched = false;
-	public float togglebuttoncounter = 0f;
-	public float mapmovedcounter = 0f;
-	public bool fixedpositionbeforemapmovement = true;
 	public bool onStartInvoked = false;
 	public Route currentroute;
-	//private List<Marker> allmarker;
-	private void Start ()
-	{
+	private double[] baseDefPos = {
+		7d,
+		51d
+	};
 
+	double[] getCurrentPosition () {
+		return new double[] { 
+			gpsdata.CoordinatesWGS84[0],
+			gpsdata.CoordinatesWGS84[1]
+		};
+	}
 
+	void centerMap (double[] position) {
+		map.CenterWGS84 = position;
+	}
 
-
-		if (GameObject.Find ("QuestDatabase") == null) {
+	private void Start () {
+		if ( GameObject.Find("QuestDatabase") == null ) {
 			
-			Application.LoadLevel (0);
+			Application.LoadLevel(0);
+			return;
 			
-		} else {
+		} 
 
+		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
-			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+		gpsdata = questdb.GetComponent<GPSPosition>();
 
-			gpsdata = questdb.GetComponent<GPSPosition> ();
+		if ( questdb.currentquest != null && questdb.currentquest.id != 0 ) {
 
-			if (questdb.currentquest != null && questdb.currentquest.id != 0) {
+			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
+			mappage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
+			questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();
+		}
+		
+		// TODO: extract prefix determination in globally accessable method:
+		pre = "file: /";
 
-				quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-				mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
-				questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
+		if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
+			
+			pre = "file:";
+		}
+
+		if ( questdb.currentquest != null ) {
+			if ( Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed ) {
+			
+				pre = "";
 			}
-		
+		}
 
-			pre = "file: /";
+		// setup the gui scale according to the screen resolution
+		guiXScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.width : Screen.height) / 480.0f;
+		guiYScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.height : Screen.width) / 640.0f;
+		// setup the gui area
+		guiRect = new Rect(16.0f * guiXScale, 4.0f * guiXScale, Screen.width / guiXScale - 32.0f * guiXScale, 32.0f * guiYScale);
 		
-			//allmarker = new List<Marker>();
-		
-			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
-			
-				pre = "file:";
-			}
-
-			if (questdb.currentquest != null) {
-				if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
-			
-					pre = "";
-				}
-			}
-
-		
-			// setup the gui scale according to the screen resolution
-			guiXScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.width : Screen.height) / 480.0f;
-			guiYScale = (Screen.orientation == ScreenOrientation.Landscape ? Screen.height : Screen.width) / 640.0f;
-			// setup the gui area
-			guiRect = new Rect (16.0f * guiXScale, 4.0f * guiXScale, Screen.width / guiXScale - 32.0f * guiXScale, 32.0f * guiYScale);
-		
-			// create the map singleton
-			map = Map.Instance;
-			map.CurrentCamera = Camera.main;
-			map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
+		// create the map singleton
+		map = Map.Instance;
+		map.CurrentCamera = Camera.main;
+		map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
 	
 
-			map.gameObject.AddComponent<mapdisplaytoggle> ();
+		map.gameObject.AddComponent<mapdisplaytoggle>();
 
+		initMap();
+		
+		layers = new List<Layer>();
+		
+		// create an OSM tile layer
+		OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer>("OSM");
+		//osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
+		osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + Configuration.instance.mapboxMapID + "/";
+		osmLayer.TileImageExtension = "@2x.png?access_token=" + Configuration.instance.mapboxKey;
+		layers.Add(osmLayer);
 
+		updateMapMarker();
 
+	}
 
-			if (questdb.getActiveHotspots ().Count > 0) {
+	/// <summary>
+	/// Initializes the map position and zoom at Start().
+	/// </summary>
+	void initMap () {
+		// set position to default:
+		gpsdata.CoordinatesWGS84 = new double[] {
+			Configuration.instance.defaultLatitude,
+			Configuration.instance.defaultLongitude
+		};
+		
+		
+		if ( Application.isWebPlayer || Application.isEditor ) {
+			initPositionSimulation();
+		}
+		else {
+			initPositionBySensor();
+		}
 
-				QuestRuntimeHotspot first = questdb.getActiveHotspots () [0];
-				map.CurrentZoom = 18.0f;
+		map.UseLocation = true;
+		map.UseOrientation = true; // TODO: should be false, shouldn't it?
+		
+		map.MaxZoom = 20.0f;
+		map.MinZoom = 13.0f;
+		
+		map.InputsEnabled = true;
+		map.ShowGUIControls = true;
+		
+		// Initialize zoom level in map
+		map.CurrentZoom = Configuration.instance.storedMapZoom;
+		
+		// Initialize centering mode:
+		if ( positionToggle.isOn != Configuration.instance.storedMapPositionModeIsCentering ) {
+			positionToggle.isOn = Configuration.instance.storedMapPositionModeIsCentering;
+			questdb.fixedposition = positionToggle.isOn;
+		}
 
-				map.CenterWGS84 = new double[2] {(double)first.lat,(double)first.lon };
+		// Initialize map position:
+		centerMap(getInitialMapCenter());
+	}
 
-
-			} else {
-
-
-				map.CurrentZoom = 18.0f;
-
-				map.CenterWGS84 = new double[2] { 51	, 8 };
+	private double[] getInitialMapCenter () {
+		// if in manual positioning mode,
+		if ( !Configuration.instance.storedMapPositionModeIsCentering ) {
+			// if old position is stored, use it:
+			if ( Configuration.instance.storedMapCenter != null ) {
+				return Configuration.instance.storedMapCenter;
 			}
-
-			map.UseLocation = true;
-
-
-
-
-	
-			map.UseOrientation = true;
-			//map.CameraFollowsOrientation = true;
-			map.CenterOnLocation ();
-
-
-			map.MaxZoom = 20.0f;
-			map.MinZoom = 13.0f;
-
-
-
-			map.InputsEnabled = true;
-			map.ShowGUIControls = true;
-		
-			//map.GUIDelegate += Toolbar;
-		
-			layers = new List<Layer> ();
-		
-			// create an OSM tile layer
-			OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer> ("OSM");
-			//osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
-			osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + Configuration.instance.mapboxMapID + "/";
-			osmLayer.TileImageExtension = "@2x.png?access_token=" + Configuration.instance.mapboxKey;
-			layers.Add (osmLayer);
-			Debug.Log ("MAP URL: " + osmLayer.BaseURL + osmLayer.TileImageExtension);
-
-
-//		osmLayer.TileCacheSizeLimit = osmLayer.TileCacheSizeLimit * 2;
-
-		
-			//layers.Add(osmLayer);
-		
-
-
-
-
-
-			updateMapMarker ();
-
-
-
-
-			double a = 0;
-			double b = 0;
-			if (gpsdata.CoordinatesWGS84.Length > 1) {
-
-
-				a = gpsdata.CoordinatesWGS84 [0];
-				b = gpsdata.CoordinatesWGS84 [1];
-				map.CenterWGS84 = new double[2] { a	, b };
-
-
-
-			} else {
-
-
-				if (Application.isWebPlayer || Application.isEditor) {
-
-					//questdb.showmessage("Starte Positions-Simulation. Zum Bewegen der Position benutze die Tasten W,A,S und D.");
-					QuestRuntimeHotspot minhotspot = null;
-					double[] minhotspotposition = null;
-					Debug.Log ("Hotspot Count: " + questdb.getActiveHotspots ().Count);
-
-
-					if (questdb.getActiveHotspots ().Count > 0) {
-
-						foreach (QuestRuntimeHotspot qrh in questdb.getActiveHotspots()) {
-							if ((qrh.lon < 1f && qrh.lon > -1f) && qrh.lat < 1f && qrh.lat > -1f) {
-
-								Debug.Log ("null hotspot");
-							} else {
-
-								if (minhotspot == null) {
-
-									minhotspot = qrh;
-				
-									double[] xy = new double[] {qrh.lon, qrh.lat };
-									double lon = (0 / 20037508.34) * 180;                        
-									double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
-									lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
-									double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
-									minhotspotposition = xy1;
-
-				
-								} else {
-
-									// Lon/Lat offset by (x// 20037508.34) * 180;
-									// i only use lat right now.
-
-									double[] xy = new double[] {qrh.lon, qrh.lat };
-									double lon = (0 / 20037508.34) * 180;                        
-									double lat = (((-1) * ((double.Parse (qrh.hotspot.getAttribute ("radius")) * 2d) + 5d)) / 20037508.34) * 180;
-
-									lat = 180 / Math.PI * (2 * Math.Atan (Math.Exp (lat * Math.PI / 180)) - Math.PI / 2);                        
-									double[] xy1 = new double[] { xy [0] + lon, xy [1] + lat };
-
-
-				
-				
-									if (xy1 [1] < minhotspotposition [1]) {
-										minhotspot = qrh;
-										minhotspotposition = xy1;
-									}
-
-
-								}
-							}
-						}
-
-
-//						Debug.Log ("LONLAT:" + minhotspotposition [0] + "," + minhotspotposition [1]);
-		
-						a = minhotspotposition [1];
-						b = minhotspotposition [0];
-
-						gpsdata.CoordinatesWGS84 = new double[]{
-							minhotspotposition [1],
-							minhotspotposition [0]};
-
-						map.CenterWGS84 = new double[2] { a	, b };
-					} else {
-
-						map.CenterWGS84 = new double[2] { 51	, 8 };
-
-					}
-				} else {
-
-					// disable location
-					setFixedPosition (false);
-
+			// otherwise, use the center of the quest or defaults if no hotspots exist:
+			else {
+				return calculateCenterOfHotspots();
+			}
+		}
+		// if in centering mode:
+		else {
+			// if no gps available
+			if ( gpsdata == null || gpsdata.CoordinatesWGS84.Length <= 1 ) {
+				// if old stored position available use it:
+				if ( Configuration.instance.storedMapCenter != null ) {
+					return Configuration.instance.storedMapCenter;
 				}
-
-
+				// if not, use defaults:
+				else {
+					return getPositionDefaults();
+				}
 			}
-
-
-			if (gpsdata.CoordinatesWGS84.Length > 1 || Application.isWebPlayer || Application.isEditor) {
-
-
-
-
-				// create the location marker
-				var posi = Tile.CreateTileTemplate ().gameObject;
-				posi.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
-				posi.GetComponent<Renderer> ().material.renderQueue = 4000;
-				posi.transform.localScale /= 8.0f;
-		
-				GameObject markerPosi = Instantiate (posi) as GameObject;
-				location = map.SetLocationMarker<LocationMarker> (markerPosi, a, b);
-				location.OrientationMarker = location.transform;
-				location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
-
-
-				location.gameObject.AddComponent <locationcontrol> ();
-				locationcontrol lc = location.GetComponent<locationcontrol> ();
-				lc.mapcontroller = this;
-				lc.map = map;
-				lc.location = location;
-
-				DestroyImmediate (posi);
-
-
-
-			} else {
-				setFixedPosition (false);
-
-				gotgps = false;
-
+			// if positioning available
+			else {
+				return gpsdata.CoordinatesWGS84;
 			}
-
-
-		
-
-
 		}
 	}
 
-	public void updateMapMarker ()
-	{
+	void initPositionSimulation () {
+		// create the location marker
+		var posi = Tile.CreateTileTemplate().gameObject;
+		posi.GetComponent<Renderer>().material.mainTexture = LocationTexture;
+		posi.GetComponent<Renderer>().material.renderQueue = 4000;
+		posi.transform.localScale /= 8.0f;
+		GameObject markerPosi = Instantiate(posi) as GameObject;
+
+		// initialize simulated position:
+		double[] simulatedPosition;
+		if ( Configuration.instance.storedSimulatedPosition == null ) { 
+			// either outside of all hotspots:
+			simulatedPosition = calculatePosOutsideOfAllHotspots();
+		}
+		else { 
+			// or at the position where you had been before you left the map:
+			simulatedPosition = Configuration.instance.storedSimulatedPosition;
+		}
+
+
+		location = map.SetLocationMarker<LocationMarker>(markerPosi, simulatedPosition[0], simulatedPosition[1]);
+		location.OrientationMarker = location.transform;
+		location.GetComponentInChildren<MeshRenderer>().material.color = Color.cyan;
+		location.gameObject.AddComponent<Locationcontrol>();
+		Locationcontrol lc = location.GetComponent<Locationcontrol>();
+		lc.mapcontroller = this;
+		lc.map = map;
+		lc.location = location;
+
+		// initialize simulated position markers angle:
+		if ( Configuration.instance._storedLocationMarkerAngles != default(Vector3) ) {
+			lc.transform.eulerAngles = Configuration.instance._storedLocationMarkerAngles;
+		}
+
+		locationController = lc;
+		DestroyImmediate(posi);
+		gpsdata.CoordinatesWGS84[0] = simulatedPosition[0];
+		gpsdata.CoordinatesWGS84[1] = simulatedPosition[1];
+	}
+
+	void initPositionBySensor () {
+		// create the location marker
+		var posi = Tile.CreateTileTemplate().gameObject;
+		posi.GetComponent<Renderer>().material.mainTexture = LocationTexture;
+		posi.GetComponent<Renderer>().material.renderQueue = 4000;
+		posi.transform.localScale /= 8.0f;
+		GameObject markerPosi = Instantiate(posi) as GameObject;
+		
+		// initialize simulated position:
+		double[] simulatedPosition;
+		if ( Configuration.instance.storedSimulatedPosition == null ) { 
+			// either outside of all hotspots:
+			simulatedPosition = calculatePosOutsideOfAllHotspots();
+		}
+		else { 
+			// or at the position where you had been before you left the map:
+			simulatedPosition = Configuration.instance.storedSimulatedPosition;
+		}
+		
+		
+		location = map.SetLocationMarker<LocationMarker>(markerPosi, gpsdata.CoordinatesWGS84[0], gpsdata.CoordinatesWGS84[1]);
+		location.OrientationMarker = location.transform;
+		location.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
+		location.gameObject.AddComponent<Locationcontrol>();
+		Locationcontrol lc = location.GetComponent<Locationcontrol>();
+		lc.mapcontroller = this;
+		lc.map = map;
+		lc.location = location;
+		
+		// initialize simulated position markers angle:
+		if ( Configuration.instance._storedLocationMarkerAngles != default(Vector3) ) {
+			lc.transform.eulerAngles = Configuration.instance._storedLocationMarkerAngles;
+		}
+		
+		locationController = lc;
+		DestroyImmediate(posi);
+		gpsdata.CoordinatesWGS84[0] = simulatedPosition[0];
+		gpsdata.CoordinatesWGS84[1] = simulatedPosition[1];
+	}
+
+	/// <summary>
+	/// Returns the position of the center of all hotspots or the default position if no hotspots exist.
+	/// </summary>
+	/// <returns>The center of hotspots.</returns>
+	double[] calculateCenterOfHotspots () {
+		if ( questdb == null ) {
+			return getPositionDefaults();
+		}
+		GeoPosition centerOfQuest = questdb.getQuestCenter();
+		if ( centerOfQuest.Lat != 0f || centerOfQuest.Long != 0f ) {
+			return new double[] {
+				Convert.ToDouble(centerOfQuest.Lat),
+				Convert.ToDouble(centerOfQuest.Long)
+			};
+		}
+		else {
+			return getPositionDefaults();
+		}
+	}
+
+	double[] calculatePosOutsideOfAllHotspots () {
+		if ( questdb == null ) {
+			return getPositionDefaults();
+		}
+		List<QuestRuntimeHotspot> activeHotspots = questdb.getActiveHotspots();
+
+		if ( activeHotspots.Count == 0 ) {
+			// if we have no hitspots, we use some default position:
+			return getPositionDefaults();
+		}
+
+		// hence we have at least one hotspot:
+
+		QuestRuntimeHotspot mostWesternHotspot = activeHotspots[0];
+
+		for ( int i = 1; i < activeHotspots.Count; i++ ) {
+			if ( activeHotspots[i].lon < mostWesternHotspot.lon ) {
+				mostWesternHotspot = activeHotspots[i];
+			}
+		}
+
+		return getPositionWestOfHotspot(mostWesternHotspot);
+	}
+
+	double[] getPositionDefaults () {
+		if ( Configuration.instance.useDefaultPositionValuesAtStart ) {
+			return new double[] { 
+				Configuration.instance.defaultLongitude,
+				Configuration.instance.defaultLatitude 
+			};
+		}
+		else {
+			return baseDefPos;
+		}
+	}
+	
+	private double[] getPositionWestOfHotspot (QuestRuntimeHotspot hotspot) {
+		// calculate circumference of the latitude circle at the hotpost position in meters:
+		double earthRadiusMeter = 6371000d;
+		double latitudeCircumference = 2d * 3.1415d * Math.Cos(hotspot.lat) * earthRadiusMeter;
+		// divide it by 360 so we get the length of one longitunal degree on the latitude of the hotspot:
+		double lengthOfOneLongitudeDegree = latitudeCircumference / 360d;
+		// we need to go the defined hotspot radius plus some 50 meters further west:
+		double distanceToGoWestFromHotspotCenter = double.Parse(hotspot.hotspot.getAttribute("radius")) + 50d;
+		// get the delta longitude angle that we need to go further west:
+		double deltaLongitude = distanceToGoWestFromHotspotCenter / lengthOfOneLongitudeDegree;
+		// subtract the delat longitude from the hotspot longitude:
+		double westOfHotspotLongitude = hotspot.lon - deltaLongitude;
+		// if the value is below -180 degrees, we switch to east of greenwich, i.e. are just below +180:
+		if ( westOfHotspotLongitude < -180d ) {
+			westOfHotspotLongitude += 360d;
+		}
+		// return the new position:
+		double[] pointWestOfHostpot = new double[] {
+			hotspot.lat,
+			westOfHotspotLongitude
+		};
+		return pointWestOfHostpot;
+	}
+
+	public void updateMapMarker () {
 
 		// DELETE ALL MARKERS
 
 
-		List<Marker> allmarker = new List<Marker> ();
-		allmarker.AddRange (map.Markers);
+		List<Marker> allmarker = new List<Marker>();
+		allmarker.AddRange(map.Markers);
 
-		foreach (Marker m in allmarker) {
+		foreach ( Marker m in allmarker ) {
 
-			Destroy (m.gameObject);
-			map.Markers.Remove (m);
+			Destroy(m.gameObject);
+			map.Markers.Remove(m);
 
 		}
 
 
-		foreach (QuestRuntimeHotspot qrh in questdb.hotspots) {
+		foreach ( QuestRuntimeHotspot qrh in questdb.hotspots ) {
 
 			bool show = true;
 			
-			if (qrh.category != null && qrh.category != "") {
+			if ( qrh.category != null && qrh.category != "" ) {
 
-				foreach (MarkerCategorySprite mcs in Configuration.instance.categoryMarker) {
+				foreach ( MarkerCategorySprite mcs in Configuration.instance.categoryMarker ) {
 
-					if (mcs.category == qrh.category) {
+					if ( mcs.category == qrh.category ) {
 
-						if (!mcs.showOnMap) {
+						if ( !mcs.showOnMap ) {
 
 							show = false;
 						}
@@ -350,51 +398,58 @@ public class page_map : MonoBehaviour
 
 			}
 
-			if (show) {
+			if ( show ) {
 				WWW www = null;
 			
 			
 			
-				if (qrh.hotspot.getAttribute ("img").StartsWith ("@_")) {
+				if ( qrh.hotspot.getAttribute("img").StartsWith("@_") ) {
 				
 				
-					www = new WWW (pre + "" + questactions.getVariable (qrh.hotspot.getAttribute ("img")).string_value [0]);
+					www = new WWW(pre + "" + questactions.getVariable(qrh.hotspot.getAttribute("img")).string_value[0]);
 				
 				
-				} else if (qrh.hotspot.getAttribute ("img") != "") {
+				}
+				else
+				if ( qrh.hotspot.getAttribute("img") != "" ) {
 				
 				
 				
 				
-					string url = qrh.hotspot.getAttribute ("img");
-					if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
-						url = pre + "" + qrh.hotspot.getAttribute ("img");
+					string url = qrh.hotspot.getAttribute("img");
+					if ( !url.StartsWith("http:") && !url.StartsWith("https:") ) {
+						url = pre + "" + qrh.hotspot.getAttribute("img");
 					}
 				
 					//				Debug.Log(url);
 				
 				
-					if (url.StartsWith ("http:") || url.StartsWith ("https:")) {
+					if ( url.StartsWith("http:") || url.StartsWith("https:") ) {
 						//Debug.Log("webimage");
 					
-						www = new WWW (url);
-						StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
+						www = new WWW(url);
+						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
 					
 					
-					} else if (File.Exists (qrh.hotspot.getAttribute ("img"))) {
-						www = new WWW (url);
-						StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
-					} else if (questdb.currentquest.predeployed) {
-						www = new WWW (url);
-						StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
+					}
+					else
+					if ( File.Exists(qrh.hotspot.getAttribute("img")) ) {
+						www = new WWW(url);
+						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
+					}
+					else
+					if ( questdb.currentquest.predeployed ) {
+						www = new WWW(url);
+						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
 					}
 				
-				} else {
+				}
+				else {
 				
 				
 				
 				
-					createMarker (qrh, qrh.getMarkerImage ().texture);
+					createMarker(qrh, qrh.getMarkerImage().texture);
 				
 				
 				}
@@ -409,15 +464,14 @@ public class page_map : MonoBehaviour
 
 	}
 
-	public void unDrawCurrentRoute ()
-	{
+	public void unDrawCurrentRoute () {
 
-		Debug.Log ("unloading Route");
-		foreach (RoutePoint rp in currentroute.points) {
+		Debug.Log("unloading Route");
+		foreach ( RoutePoint rp in currentroute.points ) {
 
-			if (rp.marker != null) {
-				map.RemoveMarker (rp.marker);
-				DestroyImmediate (rp.waypoint);
+			if ( rp.marker != null ) {
+				map.RemoveMarker(rp.marker);
+				DestroyImmediate(rp.waypoint);
 				rp.marker = null;
 				rp.waypoint = null;
 			}
@@ -427,170 +481,97 @@ public class page_map : MonoBehaviour
 			
 	}
 
-	public void drawCurrentRoute ()
-	{
+	public void drawCurrentRoute () {
 
 
 //		Debug.Log (questdb.currentquest.currentpage.type);
-		if (questdb.currentquest.currentpage.type == "MapOSM") {
+		if ( questdb.currentquest.currentpage.type == "MapOSM" ) {
 
 
-			foreach (RoutePoint rp in currentroute.points) {
+			foreach ( RoutePoint rp in currentroute.points ) {
 
 
 
 				//string lon = rp.lon;
 				//string lat = rp.lat;
 
-				float lat = float.Parse (rp.lon, CultureInfo.InvariantCulture);
-				float lon = float.Parse (rp.lat, CultureInfo.InvariantCulture);
+				float lat = float.Parse(rp.lat, CultureInfo.InvariantCulture);
+				float lon = float.Parse(rp.lon, CultureInfo.InvariantCulture);
 
 
 		
-				GameObject waypoint = new GameObject ();
+				GameObject waypoint = new GameObject();
 				
-				Marker m1 = map.CreateMarker<Marker> ("", new double[2] {
+				Marker m1 = map.CreateMarker<Marker>("", new double[2] {
 					lat,
 					lon
 				}, waypoint);
 				rp.marker = m1;
 				rp.waypoint = waypoint;
-
-
-
 			}
-
-
-			GameObject.Find ("RouteRender").GetComponent<routerender> ().started = false;
+			GameObject.Find("RouteRender").GetComponent<routerender>().started = false;
 		}
 	}
 
-	public void togglePositionClicked (bool b)
-	{
+	/// <summary>
+	/// Gets called by event trigger of toggle in map page in case of PointerClick. 
+	/// When this method is called, the positionToggle.isOn state variable of the toggle is already set newly.
+	/// </summary>
+	/// <param name="obsolete">If set to <c>true</c> obsolete.</param>
+	public void positionToggleClicked (bool obsolete /* TODO remove */) {
+		bool enteringFixedMode = positionToggle.isOn;
+		bool enteringManualMode = !enteringFixedMode;
 
-
-		if (questdb != null) {
-
-			if (mapmovedcounter > 0) {
-
-				positionCheckmark.setMode (!fixedpositionbeforemapmovement);
-				//positionToggle.isOn = false;
-			
-				setFixedPosition (!fixedpositionbeforemapmovement);
-
-
-
-
-			} else if (!questdb.fixedposition) {
-
-				positionCheckmark.setMode (true);
-				//positionToggle.isOn = false;
-
-				setFixedPosition (true);
-
-
-			} else {
-
-				positionCheckmark.setMode (false);
-				//	positionToggle.isOn = true;
-
-				setFixedPosition (false);
-
-				
+		if ( questdb != null ) {
+			if ( enteringManualMode ) {
+				questdb.fixedposition = false;
+				Debug.Log("TOGGLE: Entering MANUAL mode by CLICK @" + Time.frameCount);
+				centerMap(questdb.getQuestCenterPosition());
+				return;
 			}
-				
-
-		}
-
+			if ( enteringFixedMode ) {
+				Debug.Log("TOGGLE: Entering FIXED mode @" + Time.frameCount);
+				questdb.fixedposition = true;
+				centerMap(gpsdata.CoordinatesWGS84);
+				return;
+			}
+		} 
+		Debug.LogError("Unexpected Behaviour in page_map.togglePositionClicked()");
 
 	}
 
-	private double deg2rad (double deg)
-	{
-		
-		return (deg * Math.PI / 180.0);
-		
-	}
-
-	private double rad2deg (double rad)
-	{
-		
-		return (rad / Math.PI * 180.0);
-		
+	public void enterPositionModeManual () {
+		bool a = positionToggle.isOn;
+		Debug.Log("TOGGLE: positionToggle changed in Update(). old isON State = " + a + " new will be: false. @" + Time.frameCount);
+		questdb.fixedposition = false;
+		positionToggle.isOn = false;
 	}
 	
-	public double distance (double lat1, double lon1, double lat2, double lon2, char unit)
-	{
-		
-		double theta = lon1 - lon2;
-		
-		double dist = Math.Sin (deg2rad (lat1)) * Math.Sin (deg2rad (lat2)) + Math.Cos (deg2rad (lat1)) * Math.Cos (deg2rad (lat2)) * Math.Cos (deg2rad (theta));
-		
-		dist = Math.Acos (dist);
-		
-		dist = rad2deg (dist);
-		
-		dist = dist * 60 * 1.1515;
-		
-		if (unit == 'K') {
-			
-			dist = dist * 1.609344;
-			
-		} else if (unit == 'N') {
-			
-			dist = dist * 0.8684;
-			
-		} else if (unit == 'M') {
-			
-			dist = dist * 1609;
-			
-		}
-		
-		return (dist);
-		
-	}
+	void createMarker (QuestRuntimeHotspot qrh, Texture image) {
 
-	void createMarker (QuestRuntimeHotspot qrh, Texture image)
-	{
-
-		if (qrh.lon != 0f || qrh.lat != 0f) {
-
-
-//			Debug.Log(qrh.lon+","+qrh.lat);
-		
+		if ( qrh.lon != 0f || qrh.lat != 0f ) {
 			// Prefab
-			GameObject go = Tile.CreateTileTemplate (Tile.AnchorPoint.BottomCenter).gameObject;
+			GameObject go = Tile.CreateTileTemplate(Tile.AnchorPoint.BottomCenter).gameObject;
+			go.GetComponent<Renderer>().material.mainTexture = image;
+			go.GetComponent<Renderer>().material.renderQueue = 4001;
 		
-		
-			go.GetComponent<Renderer> ().material.mainTexture = image;
-			go.GetComponent<Renderer> ().material.renderQueue = 4001;
-		
-		
-		
-			int height = go.GetComponent<Renderer> ().material.mainTexture.height;
-			int width = go.GetComponent<Renderer> ().material.mainTexture.width;
-		
-
-
+			int height = go.GetComponent<Renderer>().material.mainTexture.height;
+			int width = go.GetComponent<Renderer>().material.mainTexture.width;
 
 			float scale = Configuration.instance.markerScale;
 
-
-			if (Application.isMobilePlatform) {
-
+			if ( Application.isMobilePlatform ) {
 				scale *= 2.0f;
-
 			}
 		
-			if (height > width) {
-			
+			if ( height > width ) {
 				//Debug.Log(width+"/"+height+"="+width/height);
-				go.transform.localScale = new Vector3 ((scale * ((float)width) / ((float)height)), scale, scale);
+				go.transform.localScale = new Vector3((scale * ((float)width) / ((float)height)), scale, scale);
 			
-			} else {
+			}
+			else {
 			
-				go.transform.localScale = new Vector3 (scale, (scale * ((float)width) / ((float)height)), scale);
-			
+				go.transform.localScale = new Vector3(scale, (scale * ((float)width) / ((float)height)), scale);
 			}
 		
 			go.transform.localScale /= 512f;
@@ -605,304 +586,114 @@ public class page_map : MonoBehaviour
 		
 			go.transform.localScale *= screenWidth / 600f;
 		
-			go.AddComponent<onTapMarker> ();
-			go.GetComponent<onTapMarker> ().hotspot = qrh;
+			go.AddComponent<onTapMarker>();
+			go.GetComponent<onTapMarker>().hotspot = qrh;
 		
-
-			if (questdb.currentquest != null && questdb.currentquest.id != 0) {
-
+			if ( questdb.currentquest != null && questdb.currentquest.id != 0 ) {
+				go.AddComponent<circletests>();
 		
-				go.AddComponent<circletests> ();
-		
-				if (qrh.hotspot.hasAttribute ("radius")) {
-					go.GetComponent<circletests> ().radius = int.Parse (qrh.hotspot.getAttribute ("radius"));
+				if ( qrh.hotspot.hasAttribute("radius") ) {
+					go.GetComponent<circletests>().radius = int.Parse(qrh.hotspot.getAttribute("radius"));
 				}
-
 			}
 
-			go.GetComponent<BoxCollider> ().center = new Vector3 (0f, 0f, 0.5f);
-			go.GetComponent<BoxCollider> ().size = new Vector3 (1f, 0.1f, 1f);
-		
-			go.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
-		
+			go.GetComponent<BoxCollider>().center = new Vector3(0f, 0f, 0.5f);
+			go.GetComponent<BoxCollider>().size = new Vector3(1f, 0.1f, 1f);
+			go.AddComponent<CameraFacingBillboard>().Axis = Vector3.up;
 		
 			// Instantiate
 			GameObject markerGO;
-			markerGO = Instantiate (go) as GameObject;
-		
-		
-		
-			qrh.renderer = markerGO.GetComponent<MeshRenderer> ();
-		
-		
-		
-		
-		
+			markerGO = Instantiate(go) as GameObject;
+			qrh.renderer = markerGO.GetComponent<MeshRenderer>();
 		
 			// CreateMarker(Name,longlat,prefab)
-			Marker m = map.CreateMarker<Marker> (qrh.hotspot.getAttribute ("name"), new double[2] {
-			qrh.lat,
-			qrh.lon
-		}, markerGO);
-		
-		
-
-		
+			Marker m = map.CreateMarker<Marker>(qrh.hotspot.getAttribute("name"), new double[2] {
+				qrh.lat,
+				qrh.lon
+			}, markerGO);
 		
 			// Destroy Prefab
-			DestroyImmediate (go);
+			DestroyImmediate(go);
 		
-		
-			if (!qrh.visible) {
-			
+			if ( !qrh.visible ) {
 				qrh.renderer.enabled = false;
-			
-			
 			}
-
 		}
 	}
 
-	IEnumerator createMarkerAfterImageLoaded (WWW www, QuestRuntimeHotspot qrh)
-	{
-		
+	IEnumerator createMarkerAfterImageLoaded (WWW www, QuestRuntimeHotspot qrh) {
 		yield return www;
 		
-		if (www.error == null) {
-
-			createMarker (qrh, www.texture);
-
-
-		} else {
-			Debug.Log (www.error);
-			
+		if ( www.error == null ) {
+			createMarker(qrh, www.texture);
 		}
-		
+		else {
+			Debug.Log(www.error);
+		}
 	}
 
-	public void initiateZoomIn ()
-	{
-
+	public void initiateZoomIn () {
 		zoomin = true;
-
 	}
 
-	public void initiateZoomOut ()
-	{
-		
+	public void initiateZoomOut () {
 		zoomout = true;
-		
 	}
 
-	public void endZoomIn ()
-	{
-		
+	public void endZoomIn () {
 		zoomin = false;
-		
 	}
 
-	public void endZoomOut ()
-	{
-		
+	public void endZoomOut () {
 		zoomout = false;
-		
 	}
 
-	public void setFixedPosition (bool b)
-	{
-		togglebuttoncounter = 0.2f;
-		togglebuttontouched = true;
-
-
-		Debug.Log ("toggle clicked: " + b);
-
-
-		if (b == false) {
-
-				
-
-
-			Debug.Log ("untoggle");
-			map.CameraFollowsOrientation = false;
-			questdb.getActiveHotspots ();
-			questdb.fixedposition = false;
-			GeoPosition center = questdb.getCenter ();
-
-			map.CenterWGS84 = new double[] {
-				center.Lat,
-				center.Long
-//				Configuration.instance.fixedMapCenterLong,
-//				Configuration.instance.fixedMapCenterLat
-			};
-
-			if (map.CurrentZoom < 17.0f) {
-				map.CurrentZoom = 17.0f;
-			}
-			map.Zoom (1.0f);
-				
-		} else {
-			questdb.fixedposition = true;
-			if (map != null) {
-				map.CameraFollowsOrientation = false;
-			
-				map.CenterWGS84 = new double[] {
-					location.CoordinatesWGS84 [0],
-					location.CoordinatesWGS84 [1]
-				//				Configuration.instance.fixedMapCenterLong,
-				//				Configuration.instance.fixedMapCenterLat
-				};
-
-
-
-			}
-		}
-		fixedonposition = b;
-				
-
-	}
-
-	void OnApplicationQuit ()
-	{
+	void OnApplicationQuit () {
 		map = null;
 	}
 	
-	void Update ()
-	{
+	void Update () {
+		if ( !onStartInvoked && mappage != null ) {
 
-	
-
-		if (!onStartInvoked && mappage != null) {
-
-			if (mappage.onStart != null) {
-				Debug.Log ("invoking on Start of Map");
-
-				mappage.onStart.Invoke ();
+			if ( mappage.onStart != null ) {
+				mappage.onStart.Invoke();
 				onStartInvoked = true;
-
 			}
 
-			if (currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points [0].waypoint == null) {
-
-				drawCurrentRoute ();
-
-
-			}
-
-
-		}
-
-		
-		if (mapmovedcounter > 0f) {
-
-			mapmovedcounter -= Time.deltaTime;
-		}
-
-
-		if (togglebuttoncounter > 0f) {
-			
-			togglebuttoncounter -= Time.deltaTime;
-			
-		} else {
-			
-			
-			if (Input.GetMouseButtonDown (0)) {
-
-				fixedpositionbeforemapmovement = questdb.fixedposition;
-				
-				//questdb.fixedposition = false;
-				positionCheckmark.setMode (false);
-				//positionToggle.isOn = false;
-				questdb.fixedposition = false;
-				mapmovedcounter = 0.3f;
-
+			if ( currentroute != null && currentroute.points != null & currentroute.points.Count > 1 && currentroute.points[0].waypoint == null ) {
+				drawCurrentRoute();
 			}
 		}
 
-	
-
-
-		
-			
-
-
-
-
-
-
-
-
-		if (gpsdata != null && gpsdata.CoordinatesWGS84.Length > 1 && !gotgps) {
-
-
-			
-			double a = gpsdata.CoordinatesWGS84 [0];
-			double b = gpsdata.CoordinatesWGS84 [1];
-			map.CenterWGS84 = new double[2] { a	, b };
-			
-			// create the location marker
-			var posi = Tile.CreateTileTemplate ().gameObject;
-			posi.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
-			posi.GetComponent<Renderer> ().material.renderQueue = 4000;
-			posi.transform.localScale /= 8.0f;
-			
-			GameObject markerPosi = Instantiate (posi) as GameObject;
-			location = map.SetLocationMarker<LocationMarker> (markerPosi, a, b);
-			location.OrientationMarker = location.transform;
-			location.GetComponentInChildren<MeshRenderer> ().material.color = Color.blue;
-			
-			
-			location.gameObject.AddComponent <locationcontrol> ();
-			locationcontrol lc = location.GetComponent<locationcontrol> ();
-			lc.mapcontroller = this;
-			lc.map = map;
-			lc.location = location;
-			
-			DestroyImmediate (posi);
-			setFixedPosition (true);
-
-			gotgps = true;
-
-
+		if ( Input.GetMouseButtonDown(0) && EventSystem.current.currentSelectedGameObject == null ) {
+			enterPositionModeManual();
 		}
 
-
-
-		if (questdb != null && questdb.fixedposition) {
-
-			map.CenterWGS84 = gpsdata.CoordinatesWGS84;
-
-
+		if ( questdb != null && questdb.fixedposition && gpsdata != null && gpsdata.CoordinatesWGS84.Length > 1 ) {
+			centerMap(gpsdata.CoordinatesWGS84);
 		} 
 
-
-
-		if (zoomin) {
-
-//			Debug.Log(map.CurrentZoom);
-			map.Zoom (1.0f);
-
-			
-		} else if (zoomout) {
-
-			map.Zoom (-1.0f);
-
-			
+		if ( zoomin ) {
+			map.Zoom(0.8f);
+		}
+		else
+		if ( zoomout ) {
+			map.Zoom(-0.8f);
 		}
 
-
-		if (destinationAngle != 0.0f) {
-			Vector3 cameraLeft = Quaternion.AngleAxis (-90.0f, Camera.main.transform.up) * Camera.main.transform.forward;
-			if ((Time.time - animationStartTime) < animationDuration) {
-				float angle = Mathf.LerpAngle (0.0f, destinationAngle, (Time.time - animationStartTime) / animationDuration);
-				Camera.main.transform.RotateAround (Vector3.zero, cameraLeft, angle - currentAngle);
+		if ( destinationAngle != 0.0f ) {
+			Vector3 cameraLeft = Quaternion.AngleAxis(-90.0f, Camera.main.transform.up) * Camera.main.transform.forward;
+			if ( (Time.time - animationStartTime) < animationDuration ) {
+				float angle = Mathf.LerpAngle(0.0f, destinationAngle, (Time.time - animationStartTime) / animationDuration);
+				Camera.main.transform.RotateAround(Vector3.zero, cameraLeft, angle - currentAngle);
 				currentAngle = angle;
-			} else {
-				Camera.main.transform.RotateAround (Vector3.zero, cameraLeft, destinationAngle - currentAngle);
+			}
+			else {
+				Camera.main.transform.RotateAround(Vector3.zero, cameraLeft, destinationAngle - currentAngle);
 				destinationAngle = 0.0f;
 				currentAngle = 0.0f;
 				map.IsDirty = true;
 			}
-			
 			map.HasMoved = true;
 		}
 	}
@@ -915,90 +706,77 @@ public class page_map : MonoBehaviour
 	}
 	#endif
 
-
-
-
-
-	public Route LoadFromText (WWW routewww)
-	{
+	public Route LoadFromText (WWW routewww) {
 		
 		string xmlcontent = routewww.text;
 		
-		if (xmlcontent != null && xmlcontent.StartsWith ("<error>")) {
-			string errMsg = xmlcontent;
-			
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().showmessage (errMsg);
+		if ( xmlcontent != null && xmlcontent.StartsWith("<error>") ) {
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().showmessage(xmlcontent);
 			return null;
 		}
 		
-	
-		if (xmlcontent == null) {
-			
+		if ( xmlcontent == null ) {
 			xmlcontent = " ";
 		}
-		
-		
-		
+
 		Encoding enc = System.Text.Encoding.UTF8;
-		
-		
-		TextReader txr = new StringReader (xmlcontent);
-		
-
-		
-		
-		XmlSerializer serializer = new XmlSerializer (typeof(Route));
-		
-		Route r = serializer.Deserialize (txr) as Route; 
-		
-		
-		
-
-		
-		return r;
+		TextReader txr = new StringReader(xmlcontent);
+		XmlSerializer serializer = new XmlSerializer(typeof(Route));
+		return serializer.Deserialize(txr) as Route; 
 	}
 	
-	
-	
+	void OnDestroy () {
+		// save current zoom and position:
+		if ( map != null ) {
+			Configuration.instance.storedMapCenter = map.CenterWGS84;
+			Configuration.instance.storedSimulatedPosition = location.CoordinatesWGS84;
+			try {
+				Configuration.instance._storedLocationMarkerAngles = locationController.transform.eulerAngles;
+			} catch ( NullReferenceException exc ) {
+				Configuration.instance._storedLocationMarkerAngles = default(Vector3);
+			}
+			Configuration.instance.storedMapZoom = map.CurrentZoom;
+			Configuration.instance.storedMapPositionModeIsCentering = positionToggle.isOn;
+		}
+	}
 	
 	
 	
 }
 
+
 [System.Serializable]
-public class Route
-{
+public class Route {
 	
 	
 	public string version;
 	public List<RoutePoint> points;
 
-	public void addPoint (string a, string b)
-	{
+	public void addPoint (string a, string b) {
 
-		RoutePoint rp = new RoutePoint ();
-		rp.lon = a;
-		rp.lat = b;
+		RoutePoint rp = new RoutePoint();
+		rp.lat = a;
+		rp.lon = b;
 
 
-		if (points == null) {
+		if ( points == null ) {
 
-			points = new List<RoutePoint> ();
+			points = new List<RoutePoint>();
 		}
-		points.Add (rp);
+		points.Add(rp);
 
 	}
 
 	
 }
 
+
 [System.Serializable]
-public class RoutePoint
-{
+public class RoutePoint {
 
 
-	public string lon;
 	public string lat;
+	public string lon;
 	public string description;
 	public Marker marker;
 	public GameObject waypoint;
