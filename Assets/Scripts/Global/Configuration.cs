@@ -41,8 +41,6 @@ public class Configuration : MonoBehaviour {
 	public string defaultlanguage = "system";
 	public bool languageChangableByUser = true;
 	public string languagesAvailable = "de,en";
-	public Sprite defaultmarker;
-	public float markerScale = 1.0f;
 	public List<MarkerCategorySprite> categoryMarker;
 	public Sprite defaultmarker; // TODO make available in portal
 	public float markerScale = 1.0f; // TODO make available in portal
