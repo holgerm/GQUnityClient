@@ -525,12 +525,12 @@ public class page_map : MonoBehaviour {
 		if ( questdb != null ) {
 			if ( enteringManualMode ) {
 				questdb.fixedposition = false;
-				Debug.Log("TOGGLE: Entering MANUAL mode by CLICK @" + Time.frameCount);
+//				Debug.Log("TOGGLE: Entering MANUAL mode by CLICK @" + Time.frameCount);
 				centerMap(questdb.getQuestCenterPosition());
 				return;
 			}
 			if ( enteringFixedMode ) {
-				Debug.Log("TOGGLE: Entering FIXED mode @" + Time.frameCount);
+//				Debug.Log("TOGGLE: Entering FIXED mode @" + Time.frameCount);
 				questdb.fixedposition = true;
 				centerMap(gpsdata.CoordinatesWGS84);
 				return;
@@ -542,7 +542,7 @@ public class page_map : MonoBehaviour {
 
 	public void enterPositionModeManual () {
 		bool a = positionToggle.isOn;
-		Debug.Log("TOGGLE: positionToggle changed in Update(). old isON State = " + a + " new will be: false. @" + Time.frameCount);
+//		Debug.Log("TOGGLE: positionToggle changed in Update(). old isON State = " + a + " new will be: false. @" + Time.frameCount);
 		questdb.fixedposition = false;
 		positionToggle.isOn = false;
 	}
