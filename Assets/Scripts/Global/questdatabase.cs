@@ -671,7 +671,6 @@ public class questdatabase : MonoBehaviour {
 
 
 
-		Debug.Log("getting list");
 		if ( loadlogo != null ) {
 			loadlogo.enable();
 		}
