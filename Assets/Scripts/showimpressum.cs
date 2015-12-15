@@ -28,32 +28,32 @@ public class showimpressum : MonoBehaviour {
 
 	public GameObject upperPanel;
 
-	public void Start(){
-		if (GameObject.Find ("ImpressumCanvas") != gameObject) {
-			Destroy (gameObject);		
-		} else {
-			DontDestroyOnLoad (gameObject);
-			Debug.Log (Application.persistentDataPath);
+	public void Start () {
+		if ( GameObject.Find("ImpressumCanvas") != gameObject ) {
+			Destroy(gameObject);		
+		}
+		else {
+			DontDestroyOnLoad(gameObject);
+			Debug.Log(Application.persistentDataPath);
 
 			StartCoroutine(loadImpressum());
 
-			impressum_text.text = Configuration.instance.impressum.Replace("\\n","\n");
+			impressum_text.text = Configuration.instance.impressum.Replace("\\n", "\n");
 
 
 		}
 
 	}
 
-
-	public string RemoveWhitespace(this string input)
-	{
+	// TODO maybe we should really make an extension of string of this method here: (hm), i.e. add "this" to param list
+	public string RemoveWhitespace (string input) {
 		return new string(input.ToCharArray()
 		                  .Where(c => !Char.IsWhiteSpace(c))
 		                  .ToArray());
 	}
 
 
-	public void loadPrivacy(){
+	public void loadPrivacy () {
 		string s = Configuration.instance.privacyAgreement;
 
 		GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(s);
@@ -64,7 +64,7 @@ public class showimpressum : MonoBehaviour {
 
 	}
 
-	public void loadAGBs(){
+	public void loadAGBs () {
 		string s = Configuration.instance.agbs;
 
 		GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(s);
@@ -77,33 +77,34 @@ public class showimpressum : MonoBehaviour {
 
 
 
-	IEnumerator loadImpressum(){
+	IEnumerator loadImpressum () {
 		
-		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/imprint");
+		WWW www = new WWW("http://qeevee.org:9091/" + Configuration.instance.portalID + "/imprint");
 		yield return www;
 
 
-		if (PlayerPrefs.HasKey ("imprint")) {
+		if ( PlayerPrefs.HasKey("imprint") ) {
 
-			Configuration.instance.impressum  = PlayerPrefs.GetString("imprint");
+			Configuration.instance.impressum = PlayerPrefs.GetString("imprint");
 
 		}
 
 		string imprint = Configuration.instance.impressum;
 
 		
-		if (www.error != null && www.error != "" && www.text != "") {
+		if ( www.error != null && www.error != "" && www.text != "" ) {
 			
-			Debug.Log("Couldn't load imprint: "+www.error);
+			Debug.Log("Couldn't load imprint: " + www.error);
 
 
 			
-		} else {
+		}
+		else {
 			
 
 				
 				
-			if(www.text != null && RemoveWhitespace(www.text) != ""){
+			if ( www.text != null && RemoveWhitespace(www.text) != "" ) {
 
 				imprint = www.text;
 				PlayerPrefs.SetString("imprint", imprint);
@@ -117,7 +118,7 @@ public class showimpressum : MonoBehaviour {
 		
 		GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(imprint);
 		
-		imprint = 	GameObject.Find("QuestDatabase").GetComponent<actions>().localizeString(imprint);
+		imprint = GameObject.Find("QuestDatabase").GetComponent<actions>().localizeString(imprint);
 		
 		
 		impressum_text.text = imprint;
@@ -125,18 +126,18 @@ public class showimpressum : MonoBehaviour {
 		
 	}
 
-	public void toggleImpressum(){
+	public void toggleImpressum () {
 
 
-		GetComponent<Animator> ().SetTrigger ("toggle");
+		GetComponent<Animator>().SetTrigger("toggle");
 
 	}
 
 
 
 
-	public void closeImpressum(){
-		GetComponent<Animator> ().SetTrigger ("close");
+	public void closeImpressum () {
+		GetComponent<Animator>().SetTrigger("close");
 
 
 	}
