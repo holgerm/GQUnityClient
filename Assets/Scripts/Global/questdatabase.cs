@@ -60,8 +60,79 @@ public class questdatabase : MonoBehaviour {
 	IEnumerator Start () {
 		if ( Application.platform == RuntimePlatform.OSXPlayer ) {
 
-			Application.LoadLevel("mediaserver");
 
+	public RectTransform messageCanvas;
+	public privacyAgreement privacyAgreementObject;
+	public int privacyAgreementVersionRead = -1;
+	public privacyAgreement agbObject;
+	public int agbVersionRead = -1;
+
+	IEnumerator Start ()
+	{
+
+		if (PlayerPrefs.HasKey ("privacyagreementversion")) {
+
+			if(PlayerPrefs.GetInt("privacyagreementversion") > Configuration.instance.privacyAgreementVersion){
+
+				Configuration.instance.privacyAgreementVersion = PlayerPrefs.GetInt("privacyagreementversion");
+				Configuration.instance.privacyAgreement = PlayerPrefs.GetString("privacyagreement");
+
+			}
+
+		}
+
+		if (PlayerPrefs.HasKey ("agbsversion")) {
+			
+			if(PlayerPrefs.GetInt("agbsversion") > Configuration.instance.privacyAgreementVersion){
+				
+				Configuration.instance.agbsVersion = PlayerPrefs.GetInt("agbsversion");
+				Configuration.instance.agbs = PlayerPrefs.GetString("agbs");
+				
+			}
+			
+		}
+
+		if (PlayerPrefs.HasKey ("privacyAgreementVersionRead")) {
+
+			privacyAgreementVersionRead = PlayerPrefs.GetInt("privacyAgreementVersionRead");
+
+		}
+
+
+		GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadAGBs ();
+		GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadPrivacy ();
+
+
+		bool hideBlack = true;
+
+		if (Configuration.instance.showPrivacyAgreement) {
+			hideBlack = false;
+			StartCoroutine(showPrivacyAgreement());
+		}
+
+		if (PlayerPrefs.HasKey ("agbVersionRead")) {
+			
+			agbVersionRead = PlayerPrefs.GetInt("agbVersionRead");
+			
+		}
+		
+		if (Configuration.instance.showAGBs) {
+			hideBlack = false;
+			StartCoroutine(showAGBs());
+			
+		}
+
+		if (hideBlack) {
+
+			hideBlackCanvas();
+
+		}
+
+
+
+		if (Application.platform == RuntimePlatform.OSXPlayer) {
+
+			Application.LoadLevel ("mediaserver");
 		}
 		else {
 			Debug.Log("Start with params: autostart=" + Configuration.instance.autostartQuestID);
@@ -167,32 +238,159 @@ public class questdatabase : MonoBehaviour {
 
 	}
 
-	void OnDestroy () {
-		Debug.Log("Destroying questdatabase");
+	public void hideBlackCanvas ()
+	{
+		if (GameObject.Find ("[BLACK]") != null) {
+			GameObject.Find ("[BLACK]").GetComponent<Animator> ().SetTrigger ("out");
+		}
 	}
 
-	void autoStartQuest () {
+	IEnumerator showPrivacyAgreement(){
 
-		if ( Configuration.instance.autostartQuestID != 0 ) {
-			Debug.Log("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
-			GameObject questListPanel = GameObject.Find("/Canvas");
-			if ( loadlogo != null ) {
+		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement/version");
+		yield return www;
+
+
+		if (www.error != null && www.error != "") {
+
+			Debug.Log("Couldn't load privacy agreement: "+www.error);
+			hideBlackCanvas ();
+
+		} else {
+
+		
+			string version = www.text;
+			Debug.Log("Privacy Agreement Version: "+version);
+
+
+
+
+			if(int.Parse(version) > privacyAgreementVersionRead || Configuration.instance.privacyAgreementVersion > privacyAgreementVersionRead){
+
+
+				string agreement = Configuration.instance.privacyAgreement;
+
+				if(int.Parse(version) > Configuration.instance.privacyAgreementVersion){
+
+				WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/privacyagreement");
+				yield return www2;
+					agreement = www2.text;
+
+					PlayerPrefs.SetInt("privacyagreementversion",int.Parse(version));
+					PlayerPrefs.SetString("privacyagreement",agreement);
+
+					Configuration.instance.privacyAgreementVersion = int.Parse(version);
+					Configuration.instance.privacyAgreement = agreement;
+					GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadPrivacy();
+
+
+
+					}
+
+
+				privacyAgreementObject.version = int.Parse(version);
+				privacyAgreementObject.gameObject.SetActive(true);
+
+
+				GetComponent<actions>().localizeStringToDictionary(agreement);
+				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(agreement));
+				privacyAgreementObject.GetComponent<Animator>().SetTrigger("in");
+			} else {
+				hideBlackCanvas ();
+
+			}
+
+
+
+
+		}
+
+
+
+	}
+
+	IEnumerator showAGBs ()
+	{
+		WWW www = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs/version");
+		yield return www;
+		
+		
+		if (www.error != null && www.error != "") {
+			
+			Debug.Log("Couldn't load privacy agreement: "+www.error);
+			hideBlackCanvas ();
+		} else {
+			
+			
+			string version = www.text;
+			Debug.Log("AGB Version: "+version);
+			
+			
+			if(int.Parse(version) > agbVersionRead || Configuration.instance.agbsVersion > agbVersionRead){
 				
-				loadlogo.enable();
+				
+				string agreement = Configuration.instance.agbs;
+				
+				if(int.Parse(version) > Configuration.instance.agbsVersion){
+					
+					WWW www2 = new WWW ("http://qeevee.org:9091/"+Configuration.instance.portalID+"/agbs");
+					yield return www2;
+					agreement = www2.text;
+
+					PlayerPrefs.SetInt("agbsversion",int.Parse(version));
+					PlayerPrefs.SetString("agbs",agreement);
+					Configuration.instance.agbsVersion = int.Parse(version);
+					Configuration.instance.agbs = agreement;
+					GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().loadAGBs ();
+
+
+				}
+				
+				
+				agbObject.version = int.Parse(version);
+				agbObject.gameObject.SetActive(true);
+				
+				
+				GetComponent<actions>().localizeStringToDictionary(agreement);
+				agbObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(agreement));
+				agbObject.GetComponent<Animator>().SetTrigger("in");
+			} else {
+				hideBlackCanvas ();
+				
 			}
 
-			if ( Configuration.instance.autostartIsPredeployed ) {
-				StartCoroutine(startPredeployedQuest(Configuration.instance.autostartQuestID));
+			
+			
+			
+			
+		}
+		
+	}
 
+
+	void autoStartQuest ()
+	{
+
+		if (Configuration.instance.autostartQuestID != 0) {
+			Debug.Log ("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
+			GameObject questListPanel = GameObject.Find ("/Canvas");
+			if (loadlogo != null) {
+				
+				loadlogo.enable ();
 			}
-			else {
-				StartQuest(Configuration.instance.autostartQuestID);
+
+			if (Configuration.instance.autostartIsPredeployed) {
+				StartCoroutine (startPredeployedQuest (Configuration.instance.autostartQuestID));
+
+			} else {
+				StartQuest (Configuration.instance.autostartQuestID);
 			}
 		}
 
 	}
 
-	IEnumerator InitPredeployedQuests () {
+	IEnumerator InitPredeployedQuests ()
+	{
 
 		#if !UNITY_WEBPLAYER
 		if ( webloadingmessage != null ) {
@@ -548,10 +746,10 @@ public class questdatabase : MonoBehaviour {
 			
 		}
 		else {
-//			if (loadlogo != null) {
-//
-//				loadlogo.disable ();
-//			}
+			if (loadlogo != null) {
+
+				loadlogo.disable ();
+			}
 
 		}
 		

@@ -28,12 +28,21 @@ public class Configuration : MonoBehaviour {
 	private string productName;
 	public string nameForQuest = "Quest";
 	public string questvisualization = "list";
+	public bool showPrivacyAgreement = true;
+	public string privacyAgreement = "";
+	public int privacyAgreementVersion = -1;
+	public bool showAGBs = true;
+	public string agbs = "";
+	public int agbsVersion = -1;
 	public bool questvisualizationchangable = false;
 	public bool showcloudquestsimmediately = false;
 	public bool showtextinloadinglogo = true;
 	public bool showinternetconnectionmessage = true;
 	public string defaultlanguage = "system";
 	public bool languageChangableByUser = true;
+	public string languagesAvailable = "de,en";
+	public Sprite defaultmarker;
+	public float markerScale = 1.0f;
 	public List<MarkerCategorySprite> categoryMarker;
 	public Sprite defaultmarker; // TODO make available in portal
 	public float markerScale = 1.0f; // TODO make available in portal
