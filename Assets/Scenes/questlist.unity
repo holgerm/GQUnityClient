@@ -1706,7 +1706,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Version 1.0.7
+  m_Text: Version 1.0.8
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5860,14 +5860,16 @@ MonoBehaviour:
   mapboxKey: pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ
   mapboxMapID: gqebk.ed1de6df
   downloadTimeOutSeconds: 100
-  impressum: "<b>Titel</b>\\n GeoQuest\\n <b>Beschreibung</b>\\n Anbieterkennzeichnung
-    der QuestMill GmbH,\\n Clostermannstr. 1, \\n51065 K\xF6ln <b>Einrichtung / Institution</b>\\n
-    QuestMill GmbH\\n <b>Rechtsform</b>\\n Gesellschaft mit beschr\xE4nkter Haftung
-    (GmbH)\\n <b>Vertreten durch</b>\\n Holger M\xFCgge\\n <b>Stra\xDFe</b>\\n Clostermannstr.
-    1\\n <b>Ort</b>\\n 51065 K\xF6ln\\n <b>Telefon</b>\\n 0049 (0)221 922 4343\\n
-    <b>Land</b>\\n Deutschland\\n <b>Domain</b>\\n quest-mill.com\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
-    DE298593210 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n Holger M\xFCgge\\n
-    <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
+  impressum: "Anbieterkennzeichnung gem\xE4\xDF \xA7 5 Telemediengesetz (TMG) und
+    Informationspflicht im Sinne des \xA7 55 Abs. 2 Rundfunkstaatsvertrags (RStV).\\n
+    <b>Titel</b>\\n GeoQuest\\n <b>Einrichtung / Institution</b>\\n Erzbistum K\xF6ln\\n
+    <b>Rechtsform</b>\\n K\xF6rperschaft des \xF6ffentlichen Rechts (Kd\xF6R)\\n <b>Vertreten
+    durch</b>\\n Generalvikar Dr. Dominik Meiering\\n <b>Stra\xDFe</b>\\n Marzellenstra\xDFe
+    32\\n <b>Ort</b>\\n 50668 K\xF6ln\\n <b>Telefon</b>\\n 0049 (0)221 1642 0\\n <b>Fax</b>\\n
+    0049 (0)221 1642 1700\\n <b>E-Mail</b>\\n ehe-familie@erzbistum-koeln.de\\n <b>Land</b>\\n
+    Deutschland\\n <b>Domain</b>\\n erzbistum-koeln.de\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
+    Ust-IdNr. DE 122 777 469 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n
+    Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
   toplogo: {fileID: 21300000, guid: b4faa7795bc6b4600b7515aeb20908ac, type: 3}
   nameForQuest: Quest
   questvisualization: list
@@ -5880,7 +5882,7 @@ MonoBehaviour:
   questvisualizationchangable: 0
   showcloudquestsimmediately: 1
   showtextinloadinglogo: 0
-  showinternetconnectionmessage: 0
+  showinternetconnectionmessage: 1
   defaultlanguage: system
   languageChangableByUser: 1
   languagesAvailable: de,en
