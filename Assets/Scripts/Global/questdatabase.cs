@@ -210,18 +210,18 @@ public class questdatabase : MonoBehaviour {
 		Debug.Log("starting showing quests immediately (and no autostart)");
 		string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
 		Download download = new Download(url, timeout: 20000);
-		download.OnStart = new Download.StartCallback(enableLoadingLogo);
+		download.OnStart = new Download.StartCallback(whenQuestListDownloadStarts);
 		download.OnProgress = new Download.ProgressUpdate(updateProgress);
-		download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(disableLoadingLogo);
+		download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(whenQuestListDownloadSucceeds);
 		download.OnError = new Download.ErrorCallback(handleErrorWhenDownloadingQuestList);
 		StartCoroutine(download.startDownload());
 	}
 
 	void handleErrorWhenDownloadingQuestList (Download download, string msg) {
 		Action retryAction = new Action(() => { 
-			download.restart();
+			ReloadQuestListAndRefresh();
 		});
-		showmessage("Test", "Noch mal!", retryAction);
+		showmessage("Wir konnten keine Verbindung mit dem Internet herstellen.", "Nochmal versuchen", retryAction);
 	}
 
 	public void hideBlackCanvas () {
@@ -689,7 +689,8 @@ public class questdatabase : MonoBehaviour {
 		}
 	}
 
-	void enableLoadingLogo (Download d) {
+	void whenQuestListDownloadStarts (Download d) {
+		Debug.Log("DOWNLOAD of QUEST LIST STARTED");
 		if ( loadlogo != null ) {
 			loadlogo.enable();
 		}
@@ -698,7 +699,7 @@ public class questdatabase : MonoBehaviour {
 		}
 	}
 
-	void disableLoadingLogo (Download d) {
+	void whenQuestListDownloadSucceeds (Download d) {
 		if ( loadlogo != null ) {
 			loadlogo.disable();
 		}
@@ -2623,11 +2624,6 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator loadMap () {
-
-
-//		Debug.Log ("Hotspot Count #2: " + getActiveHotspots ().Count);
-
-
 		AsyncOperation loadLevelOperation = Application.LoadLevelAdditiveAsync(9);
 		
 	

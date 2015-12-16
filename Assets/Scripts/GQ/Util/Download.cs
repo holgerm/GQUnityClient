@@ -138,9 +138,9 @@ namespace GQ.Util {
 					if ( OnTimeout != null ) {
 						if ( OnTimeout(this, stopwatch.ElapsedMilliseconds) ) {
 							stopwatch.Stop();
-							Www.Dispose();
 							OnError(this, String.Format("Client side timeout. Download not completed after {0} ms", 
 							        			 		Timeout));
+							Www.Dispose();
 							yield break;
 						}
 					}
@@ -153,6 +153,7 @@ namespace GQ.Util {
 				if ( OnError != null ) {
 					OnError(this, Www.error);
 				}
+				Www.Dispose();
 			}
 			else {
 				if ( OnProgress != null ) {
@@ -165,10 +166,6 @@ namespace GQ.Util {
 			}
 
 			yield break;
-		}
-
-		public void restart () {
-			throw new NotImplementedException();
 		}
 
 		#endregion
