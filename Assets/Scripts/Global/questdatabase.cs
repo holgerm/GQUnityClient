@@ -56,7 +56,6 @@ public class questdatabase : MonoBehaviour {
 	public List<WWW> routewwws;
 	public createquestbuttons buttoncontroller;
 	public bool allowReturn = false;
-
 	public RectTransform messageCanvas;
 	public privacyAgreement privacyAgreementObject;
 	public int privacyAgreementVersionRead = -1;
@@ -180,17 +179,18 @@ public class questdatabase : MonoBehaviour {
 			
 					string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
 			
-					WWW listwww = new WWW(url);
-			
-			
-			
-			
-			
-					StartCoroutine(DownloadPercentage(listwww));
-					StartCoroutine(DownloadList(listwww));
+//					WWW listwww = new WWW(url);
+//					StartCoroutine(DownloadPercentage(listwww));
+//					StartCoroutine(DownloadList(listwww));
 
-
-			
+					Download download = 
+						new Download(
+							url, 
+							timeout: 20000);
+					download.OnStart = new Download.StartCallback(enableLoadingLogo);
+					download.OnProgress = new Download.ProgressUpdate(updateProgress);
+					download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(disableLoadingLogo);
+					StartCoroutine(download.startDownload());
 				}
 				else {
 
@@ -198,26 +198,17 @@ public class questdatabase : MonoBehaviour {
 					if ( Configuration.instance.autostartQuestID != 0 ) {
 						buttoncontroller.DisplayList();
 					}
-			
 				}
-
-		
-
-
-
 			}
 			else {
 				if ( webloadingmessage != null ) {
-
 					webloadingmessage.enabled = true;
 				}
 				questmilllogo.enabled = true;
 				loadlogo.enable();
 			} 
 
-
 			autoStartQuest();
-
 
 			yield return new WaitForEndOfFrame();
 			yield return new WaitForEndOfFrame();
@@ -363,7 +354,6 @@ public class questdatabase : MonoBehaviour {
 		}
 		
 	}
-
 
 	void autoStartQuest () {
 
@@ -680,36 +670,7 @@ public class questdatabase : MonoBehaviour {
 		}
 		yield return www;
 		if ( www.error == null ) {
-
-			//Debug.Log("WWW Ok!: " + www.data);
-			buttoncontroller.filteredOnlineList.Clear();
-
-			allquests.Clear();
-			JSONObject j = new JSONObject(www.text);
-			accessData(j, "quest");
-			foreach ( Quest q in allquests ) {
-				buttoncontroller.filteredOnlineList.Add(q);
-			}
-
-			currentquest = null;
-
-			if ( Configuration.instance.questvisualization == "list" ) {
-				
-				buttoncontroller.DisplayList();
-				
-			}
-			else
-			if ( Configuration.instance.questvisualization == "map" ) {
-				
-				showQuestMap();
-				
-			}
-			if ( loadlogo != null ) {
-			
-				loadlogo.disable();
-			}
-
-			
+			updateAndShowQuestList(www);
 		}
 		else {
 			Debug.Log("WWW Error: " + www.error + " url: " + www.url);
@@ -719,10 +680,67 @@ public class questdatabase : MonoBehaviour {
 				buttoncontroller.DisplayList();
 			}
 		}    
-		
-		
 	}
 
+	// TODO: integrate with next method when call in createquestbuttons.cs is adapted to new download class. (hm)
+	void updateAndShowQuestList (Download download) {
+		WWW www = download.Www;
+		updateAndShowQuestList(www);
+	}
+	
+	void updateAndShowQuestList (WWW www) {
+		buttoncontroller.filteredOnlineList.Clear();
+		
+		allquests.Clear();
+		JSONObject j = new JSONObject(www.text);
+		accessData(j, "quest");
+		foreach ( Quest q in allquests ) {
+			buttoncontroller.filteredOnlineList.Add(q);
+		}
+		
+		currentquest = null;
+		
+		if ( Configuration.instance.questvisualization == "list" ) {
+			
+			buttoncontroller.DisplayList();
+			
+		}
+		else
+		if ( Configuration.instance.questvisualization == "map" ) {
+			
+			showQuestMap();
+			
+		}
+		if ( loadlogo != null ) {
+			
+			loadlogo.disable();
+		}
+	}
+
+	void enableLoadingLogo (Download d) {
+		if ( loadlogo != null ) {
+			loadlogo.enable();
+		}
+		if ( webloadingmessage != null ) {
+			webloadingmessage.enabled = true;
+		}
+	}
+
+	void disableLoadingLogo (Download d) {
+		if ( loadlogo != null ) {
+			loadlogo.disable();
+		}
+		if ( webloadingmessage != null ) {
+			webloadingmessage.enabled = false;
+		}
+	}
+
+	void updateProgress (Download download, float progress) {
+		if ( webloadingmessage != null ) {
+			webloadingmessage.text = String.Format("{0:N2}% loaded", progress * 100f);
+		}
+	}
+	
 	public IEnumerator DownloadPercentage (WWW www) {
 		yield return new WaitForSeconds(0.01f);
 		
