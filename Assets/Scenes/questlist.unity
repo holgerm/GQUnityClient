@@ -6567,7 +6567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 0
+  product: 2
   overrideProductSettingsInInspector: 0
   portalID: 141
   autostartQuestID: 0
@@ -6598,7 +6598,7 @@ MonoBehaviour:
   agbsVersion: -1
   questvisualizationchangable: 0
   showcloudquestsimmediately: 1
-  showtextinloadinglogo: 0
+  showtextinloadinglogo: 1
   showinternetconnectionmessage: 1
   defaultlanguage: system
   languageChangableByUser: 1

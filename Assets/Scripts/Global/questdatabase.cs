@@ -213,7 +213,15 @@ public class questdatabase : MonoBehaviour {
 		download.OnStart = new Download.StartCallback(enableLoadingLogo);
 		download.OnProgress = new Download.ProgressUpdate(updateProgress);
 		download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(disableLoadingLogo);
+		download.OnError = new Download.ErrorCallback(handleErrorWhenDownloadingQuestList);
 		StartCoroutine(download.startDownload());
+	}
+
+	void handleErrorWhenDownloadingQuestList (Download download, string msg) {
+		Action retryAction = new Action(() => { 
+			download.restart();
+		});
+		showmessage("Test", "Noch mal!", retryAction);
 	}
 
 	public void hideBlackCanvas () {
@@ -2620,10 +2628,10 @@ public class questdatabase : MonoBehaviour {
 //		Debug.Log ("Hotspot Count #2: " + getActiveHotspots ().Count);
 
 
-		AsyncOperation async = Application.LoadLevelAdditiveAsync(9);
+		AsyncOperation loadLevelOperation = Application.LoadLevelAdditiveAsync(9);
 		
 	
-		yield return async;
+		yield return loadLevelOperation;
 		if ( GameObject.Find("BgCam") != null ) {
 			
 			GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
@@ -2638,32 +2646,38 @@ public class questdatabase : MonoBehaviour {
 		}
 	}
 	
-	public void showmessage (string text) {
+//	public void showmessage (string text) {
+//		Debug.Log("MSGSActive before:" + msgsactive);
+//
+//		msgsactive += 1;
+//		Debug.Log("MSGSActive after:" + msgsactive);
+//
+//		QuestMessage nqa = (QuestMessage)Instantiate(message_prefab, transform.position, Quaternion.identity);
+//
+//			
+//		nqa.message = text;
+//
+//		nqa.transform.SetParent(GameObject.Find("MsgCanvas").transform, false);
+//		nqa.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
+//
+//		
+//	}
+//
+	public void showmessage (string text, string button = null, Action action = null) {
 		Debug.Log("MSGSActive before:" + msgsactive);
 
 		msgsactive += 1;
 		Debug.Log("MSGSActive after:" + msgsactive);
 
 		QuestMessage nqa = (QuestMessage)Instantiate(message_prefab, transform.position, Quaternion.identity);
-			
-		nqa.message = text;
-
-		nqa.transform.SetParent(GameObject.Find("MsgCanvas").transform, false);
-		nqa.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
-
-		
-	}
-
-	public void showmessage (string text, string button) {
-		Debug.Log("MSGSActive before:" + msgsactive);
-
-		msgsactive += 1;
-		Debug.Log("MSGSActive after:" + msgsactive);
-
-		QuestMessage nqa = (QuestMessage)Instantiate(message_prefab, transform.position, Quaternion.identity);
 		
 		nqa.message = text;
-		nqa.setButtonText(button);
+		if ( button != null ) {
+			nqa.setButtonText(button);
+		}
+		if ( action != null ) {
+			nqa.Action = action;
+		}
 		nqa.transform.SetParent(GameObject.Find("Canvas").transform, false);
 		nqa.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
 
