@@ -161,9 +161,6 @@ public class questdatabase : MonoBehaviour {
 				//			Debug.Log (Application.persistentDataPath);
 			}
 
-
-
-
 			if ( !Application.isWebPlayer ) {
 
 				if ( Configuration.instance.questvisualization != "list" ) {
@@ -172,29 +169,9 @@ public class questdatabase : MonoBehaviour {
 					GameObject.Find("ListPanel").SetActive(false);
 
 				}
-
-
-	
 				if ( Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0 ) {
 		
-					allquests.Clear();
-			
-					Debug.Log("starting showing quests immediately (and no autostart)");
-			
-					string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
-			
-//					WWW listwww = new WWW(url);
-//					StartCoroutine(DownloadPercentage(listwww));
-//					StartCoroutine(DownloadList(listwww));
-
-					Download download = 
-						new Download(
-							url, 
-							timeout: 20000);
-					download.OnStart = new Download.StartCallback(enableLoadingLogo);
-					download.OnProgress = new Download.ProgressUpdate(updateProgress);
-					download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(disableLoadingLogo);
-					StartCoroutine(download.startDownload());
+					reloadQuestListAndRefresh();
 				}
 				else {
 
@@ -226,6 +203,17 @@ public class questdatabase : MonoBehaviour {
 		}
 
 
+	}
+
+	public void reloadQuestListAndRefresh () {
+		allquests.Clear();
+		Debug.Log("starting showing quests immediately (and no autostart)");
+		string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
+		Download download = new Download(url, timeout: 20000);
+		download.OnStart = new Download.StartCallback(enableLoadingLogo);
+		download.OnProgress = new Download.ProgressUpdate(updateProgress);
+		download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(disableLoadingLogo);
+		StartCoroutine(download.startDownload());
 	}
 
 	public void hideBlackCanvas () {
@@ -1822,8 +1810,6 @@ public class questdatabase : MonoBehaviour {
 		}
 		else {
 			Debug.Log("no Datasend action found");
-	
-	
 			transferQuestHotspots(pageid);
 
 		}

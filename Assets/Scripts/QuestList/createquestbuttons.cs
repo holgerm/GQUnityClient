@@ -34,25 +34,13 @@ public class createquestbuttons : MonoBehaviour {
 			}
 
 			if ( (questdb.allquests.Count < 1 && filteredOfflineList.Count < 1) || Configuration.instance.showcloudquestsimmediately ) {
-				getPublicQuests();
+				LoadQuestsFromServer();
 			}
 			else {
 				DisplayList();
 			
 			}
 		}
-	}
-
-	public void restart () {
-
-		questdb.allquests.Clear();
-		filteredOnlineList.Clear();
-		//filteredOfflineList.Clear ();
-
-		// TODO load quest list again
-		getPublicQuests();
-
-
 	}
 
 	public void setSortByName (bool b) {
@@ -129,44 +117,18 @@ public class createquestbuttons : MonoBehaviour {
 
 	}
 
-	public void getPublicQuests () {
-		questdb.allquests.Clear();
-	
+	public void LoadQuestsFromServer () {
 		filteredOnlineList.Clear();
-
-
-		string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
-
-		www = new WWW(url);
-		
-		
-
-
-
-//		StartCoroutine (questdb.DownloadPercentage (www));
-//		StartCoroutine (questdb.DownloadList (www));
-		
+		questdb.reloadQuestListAndRefresh();
 	}
 
-
-
-
 	public void resetList () {
-
 		filteredOfflineList.Clear();
 
 		foreach ( Quest q in questdb.GetLocalQuests() ) {
 			filteredOfflineList.Add(q);
 		}
-
-
-
-
-		
 		filterForName(namefilter);
-
-
-
 	}
 
 
@@ -174,29 +136,19 @@ public class createquestbuttons : MonoBehaviour {
 
 
 	public List<Quest> sortByMetaDataAsc (List<Quest> quests, string meta) {
-
-	
-
 		List<Quest> sortedlist = new List<Quest>();
 
 		Quest[] queststoshow = quests.ToArray();
 		
 		Array.Sort<Quest>(queststoshow, (x,y) => String.Compare(x.getMetaComparer("Wert"), y.getMetaComparer("Wert")));
-		
-		
+
 		sortedlist.AddRange(queststoshow);
-		
-	
-		
-		
+
 		return sortedlist;
-
-
 	}
 
-	public void  DisplayList () {
-	
 
+	public void  DisplayList () {
 
 		foreach ( RectTransform go in GetComponentsInChildren<RectTransform>() ) {
 			if ( go != transform ) {
