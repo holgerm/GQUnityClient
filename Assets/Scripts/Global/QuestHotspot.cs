@@ -67,7 +67,29 @@ public class QuestHotspot {
 		
 	}
 
+	public bool hasActionInChildren (string type1) {
+		
+		bool b = false;
+		
+		if ( onTap != null && onTap.hasActionInChildren(type1) ) {
+			return true;
+		}
+		else
+		if ( onEnter != null && onEnter.hasActionInChildren(type1) ) {
+			return true;
+		}
+		else
+		if ( onLeave != null && onLeave.hasActionInChildren(type1) ) {
+			return true;
+		} 
+		
+		return b;
+		
+	}
+
 	public void deserializeAttributes (int id, bool redo) {
+		
+		attributes = new List<QuestAttribute>();
 		
 		attributes = new List<QuestAttribute>();
 		

@@ -203,4 +203,32 @@ public class QuestPage {
 		}
 	}
 
+	public bool hasActionInChildren (string type1) {
+		
+		bool b = false;
+
+		if ( onTap != null && onTap.hasActionInChildren(type1) ) {
+			return true;
+		}
+		else
+		if ( onEnd != null && onEnd.hasActionInChildren(type1) ) {
+			return true;
+		}
+		else
+		if ( onStart != null && onStart.hasActionInChildren(type1) ) {
+			return true;
+		}
+		else
+		if ( onSuccess != null && onSuccess.hasActionInChildren(type1) ) {
+			return true;
+		}
+		else
+		if ( onFailure != null && onFailure.hasActionInChildren(type1) ) {
+			return true;
+		}
+		
+		return b;
+		
+	}
+
 }

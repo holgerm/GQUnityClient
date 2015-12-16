@@ -62,6 +62,10 @@ public class questdatabase : MonoBehaviour {
 	public privacyAgreement agbObject;
 	public int agbVersionRead = -1;
 
+
+
+	public datasendAccept datasendAcceptMessage;
+
 	IEnumerator Start () {
 
 		if ( PlayerPrefs.HasKey("privacyagreementversion") ) {
@@ -1735,10 +1739,8 @@ public class questdatabase : MonoBehaviour {
 			Debug.Log("Converted Sprites has " + convertedSprites.Count + " objects.");
 
 
-
+			checkForDatasend(pageid);
 		
-			transferQuestHotspots(pageid);
-			
 		}
 		else {
 			Debug.Log("STARTE");
@@ -1775,6 +1777,59 @@ public class questdatabase : MonoBehaviour {
 		
 		
 	}
+
+
+
+	public void acceptedDatasend (int pageid) {
+
+
+		currentquest.acceptedDS = true;
+
+		transferQuestHotspots(pageid);
+
+
+
+	}
+
+	public void rejectedDatasend (int pageid) {
+		
+		
+		currentquest.acceptedDS = false;
+
+		//TODO: can I start the quest?
+
+		transferQuestHotspots(pageid);
+		
+		
+		
+	}
+
+	void checkForDatasend (int pageid) {
+
+	
+		if ( Configuration.instance.showMessageForDatasendAction && !currentquest.acceptedDS &&
+			currentquest.hasActionInChildren("SendVarToServer") ) {
+
+			Debug.Log("Datasend action found");
+
+			// TODO: show message
+
+			datasendAcceptMessage.pageid = pageid;
+			datasendAcceptMessage.gameObject.SetActive(true);
+			datasendAcceptMessage.GetComponent<Animator>().SetTrigger("in");
+
+
+		}
+		else {
+			Debug.Log("no Datasend action found");
+	
+	
+			transferQuestHotspots(pageid);
+
+		}
+	
+	}
+
 
 	public bool nextSpriteToBeConverted (SpriteConverter sc) {
 
@@ -2787,7 +2842,6 @@ public class questdatabase : MonoBehaviour {
 	
 
 }
-
 
 
 

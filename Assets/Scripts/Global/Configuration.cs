@@ -28,6 +28,7 @@ public class Configuration : MonoBehaviour {
 	private string productName;
 	public string nameForQuest = "Quest";
 	public string questvisualization = "list";
+	public bool showMessageForDatasendAction = true;
 	public bool showPrivacyAgreement = true;
 	public string privacyAgreement = "";
 	public int privacyAgreementVersion = -1;

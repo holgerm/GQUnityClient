@@ -47,6 +47,7 @@ public class Quest  : IComparable<Quest> {
 	public string meta_combined;
 	public bool predeployed = false;
 	public string version;
+	public bool acceptedDS = false;
 
 	public Quest () {
 		predeployed = false;
@@ -367,6 +368,29 @@ public class Quest  : IComparable<Quest> {
 		}
 		
 		return h;
+		
+	}
+
+	public bool hasActionInChildren (string type1) {
+		
+		bool b = false;
+	
+		foreach ( QuestPage qp in pages ) {
+			if ( !b ) {
+				if ( qp.hasActionInChildren(type1) ) {
+					b = true;
+				}
+			}
+		}
+		foreach ( QuestHotspot qh in hotspots ) {
+			if ( !b ) {
+				if ( qh.hasActionInChildren(type1) ) {
+					b = true;
+				}
+			}
+		}
+		
+		return b;
 		
 	}
 	

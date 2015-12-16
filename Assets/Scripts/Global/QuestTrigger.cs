@@ -32,6 +32,20 @@ public class QuestTrigger {
 
 	}
 
+	public bool hasActionInChildren (string type1) {
+
+		bool b = false;
+			
+		foreach ( QuestAction a in actions ) {
+			if ( a.hasActionInChildren(type1) ) {
+				b = true;
+			}
+		}
+			
+		return b;
+
+	}
+
 	public bool hasMissionAction () {
 		
 		bool b = false;

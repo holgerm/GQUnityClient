@@ -52,6 +52,32 @@ public class QuestAction {
 		
 	}
 
+	public bool hasActionInChildren (string type1) {
+
+		if ( type.Equals(type1) ) {
+			return true;
+		}
+		else {
+
+			bool b = false;
+
+			foreach ( QuestAction a in thenactions ) {
+				if ( a.hasActionInChildren(type1) ) {
+					b = true;
+				}
+			}
+			foreach ( QuestAction a in elseactions ) {
+				if ( a.hasActionInChildren(type1) ) {
+					b = true;
+				}
+			}
+
+			return b;
+
+		}
+		
+	}
+
 	public bool hasMissionAction () {
 
 		bool b = false;
