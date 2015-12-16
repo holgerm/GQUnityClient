@@ -34,7 +34,7 @@ public class createquestbuttons : MonoBehaviour {
 			}
 
 			if ( (questdb.allquests.Count < 1 && filteredOfflineList.Count < 1) || Configuration.instance.showcloudquestsimmediately ) {
-				LoadQuestsFromServer();
+//				LoadQuestsFromServer();
 			}
 			else {
 				DisplayList();
