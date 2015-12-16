@@ -63,7 +63,14 @@ public class questdatabase : MonoBehaviour {
 	public privacyAgreement agbObject;
 	public int agbVersionRead = -1;
 
-	IEnumerator Start () {
+
+
+	public datasendAccept datasendAcceptMessage;
+
+	IEnumerator Start ()
+	{
+
+		if (PlayerPrefs.HasKey ("privacyagreementversion")) {
 
 		if ( PlayerPrefs.HasKey("privacyagreementversion") ) {
 
@@ -1717,14 +1724,11 @@ public class questdatabase : MonoBehaviour {
 			Debug.Log("Converted Sprites has " + convertedSprites.Count + " objects.");
 
 
-
+			checkForDatasend(pageid);
 		
-			transferQuestHotspots(pageid);
-			
-		}
-		else {
-			Debug.Log("STARTE");
-			if ( webloadingmessage != null ) {
+		} else {
+			Debug.Log ("STARTE");
+			if (webloadingmessage != null) {
 
 				webloadingmessage.text = "Starte " + Configuration.instance.nameForQuest + "... ";
 				webloadingmessage.enabled = true;
@@ -1758,7 +1762,61 @@ public class questdatabase : MonoBehaviour {
 		
 	}
 
-	public bool nextSpriteToBeConverted (SpriteConverter sc) {
+
+
+	public void acceptedDatasend(int pageid){
+
+
+		currentquest.acceptedDS = true;
+
+		transferQuestHotspots (pageid);
+
+
+
+	}
+
+	public void rejectedDatasend(int pageid){
+		
+		
+		currentquest.acceptedDS = false;
+
+		//TODO: can I start the quest?
+
+		transferQuestHotspots (pageid);
+		
+		
+		
+	}
+
+	void checkForDatasend (int pageid)
+	{
+
+	
+		if (Configuration.instance.showMessageForDatasendAction && !currentquest.acceptedDS &&
+		    currentquest.hasActionInChildren ("SendVarToServer")) {
+
+			Debug.Log("Datasend action found");
+
+			// TODO: show message
+
+			datasendAcceptMessage.pageid = pageid;
+			datasendAcceptMessage.gameObject.SetActive(true);
+			datasendAcceptMessage.GetComponent<Animator> ().SetTrigger ("in");
+
+
+		} else {
+			Debug.Log("no Datasend action found");
+	
+	
+			transferQuestHotspots (pageid);
+
+		}
+	
+	}
+
+
+	public bool nextSpriteToBeConverted (SpriteConverter sc)
+	{
 
 
 		bool me = true;
@@ -2804,6 +2862,8 @@ public class Quest  : IComparable<Quest> {
 	public string meta_combined;
 	public bool predeployed = false;
 	public string version;
+	public bool acceptedDS = false;
+
 
 	public Quest () {
 		predeployed = false;
@@ -3182,6 +3242,33 @@ public class Quest  : IComparable<Quest> {
 		return h;
 		
 	}
+
+
+
+
+	public bool hasActionInChildren(string type1){
+		
+		bool b = false;
+		
+	
+		foreach (QuestPage qp in pages) {
+			if(!b){
+				if(qp.hasActionInChildren(type1)){
+					b = true;
+				}
+			}
+		}
+		foreach (QuestHotspot qh in hotspots) {
+			if(!b){
+				if(qh.hasActionInChildren(type1)){
+					b = true;
+				}
+			}
+		}
+		
+		return b;
+		
+	}
 	
 }
 
@@ -3415,6 +3502,28 @@ public class QuestPage {
 		}
 	}
 
+	public bool hasActionInChildren(string type1){
+		
+		bool b = false;
+		
+
+		if (onTap != null && onTap.hasActionInChildren (type1)) {
+			return true;
+		} else if (onEnd != null && onEnd.hasActionInChildren (type1)) {
+			return true;
+		} else if (onStart != null &&  onStart.hasActionInChildren (type1)) {
+			return true;
+		} else if (onSuccess != null && onSuccess.hasActionInChildren (type1)) {
+			return true;
+		} else if (onFailure != null && onFailure.hasActionInChildren (type1)) {
+			return true;
+		}
+
+		
+		return b;
+		
+	}
+
 }
 
 [System.Serializable]
@@ -3475,7 +3584,28 @@ public class QuestHotspot {
 		
 	}
 
-	public void deserializeAttributes (int id, bool redo) {
+	public bool hasActionInChildren(string type1){
+		
+		bool b = false;
+		
+		
+		if (onTap != null && onTap.hasActionInChildren (type1)) {
+			return true;
+		} else if (onEnter != null && onEnter.hasActionInChildren (type1)) {
+			return true;
+		} else if (onLeave != null && onLeave.hasActionInChildren (type1)) {
+			return true;
+		} 
+		
+		
+		return b;
+		
+	}
+
+	public void deserializeAttributes (int id, bool redo)
+	{
+		
+		attributes = new List<QuestAttribute> ();
 		
 		attributes = new List<QuestAttribute>();
 		
@@ -3761,7 +3891,39 @@ public class QuestAction {
 		
 	}
 
-	public bool hasMissionAction () {
+
+	public bool hasActionInChildren(string type1){
+
+		if (type.Equals (type1)) {
+			return true;
+		} else {
+
+			bool b = false;
+
+			foreach(QuestAction a in thenactions){
+				if(a.hasActionInChildren(type1)){
+					b = true;
+				}
+			}
+			foreach(QuestAction a in elseactions){
+				if(a.hasActionInChildren(type1)){
+					b = true;
+				}
+			}
+
+			return b;
+
+		}
+
+
+
+		
+	}
+
+
+
+	public bool hasMissionAction ()
+	{
 
 		bool b = false;
 
@@ -4630,7 +4792,24 @@ public class QuestTrigger {
 
 	}
 
-	public bool hasMissionAction () {
+
+	public bool hasActionInChildren(string type1){
+
+			bool b = false;
+			
+			foreach(QuestAction a in actions){
+				if(a.hasActionInChildren(type1)){
+					b = true;
+				}
+			}
+
+			
+			return b;
+
+	}
+
+	public bool hasMissionAction ()
+	{
 		
 		bool b = false;
 		foreach ( QuestAction a in actions ) {
@@ -4647,6 +4826,8 @@ public class QuestTrigger {
 		return b;
 
 	}
+
+
 
 
 	
