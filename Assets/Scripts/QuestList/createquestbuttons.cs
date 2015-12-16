@@ -112,14 +112,11 @@ public class createquestbuttons : MonoBehaviour {
 
 		}
 		DisplayList();
-		
-		
-
 	}
 
 	public void LoadQuestsFromServer () {
 		filteredOnlineList.Clear();
-		questdb.reloadQuestListAndRefresh();
+		questdb.ReloadQuestListAndRefresh();
 	}
 
 	public void resetList () {

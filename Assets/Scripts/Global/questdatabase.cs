@@ -171,7 +171,7 @@ public class questdatabase : MonoBehaviour {
 				}
 				if ( Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0 ) {
 		
-					reloadQuestListAndRefresh();
+					ReloadQuestListAndRefresh();
 				}
 				else {
 
@@ -205,7 +205,7 @@ public class questdatabase : MonoBehaviour {
 
 	}
 
-	public void reloadQuestListAndRefresh () {
+	public void ReloadQuestListAndRefresh () {
 		allquests.Clear();
 		Debug.Log("starting showing quests immediately (and no autostart)");
 		string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
@@ -649,38 +649,10 @@ public class questdatabase : MonoBehaviour {
 		
 	}
 
-	public IEnumerator DownloadList (WWW www) {
 
-
-
-		if ( loadlogo != null ) {
-			loadlogo.enable();
-		}
-		if ( webloadingmessage != null ) {
-
-			webloadingmessage.enabled = true;
-		}
-		yield return www;
-		if ( www.error == null ) {
-			updateAndShowQuestList(www);
-		}
-		else {
-			Debug.Log("WWW Error: " + www.error + " url: " + www.url);
-			if ( webloadingmessage != null ) {
-
-				webloadingmessage.text = www.error;
-				buttoncontroller.DisplayList();
-			}
-		}    
-	}
-
-	// TODO: integrate with next method when call in createquestbuttons.cs is adapted to new download class. (hm)
 	void updateAndShowQuestList (Download download) {
 		WWW www = download.Www;
-		updateAndShowQuestList(www);
-	}
-	
-	void updateAndShowQuestList (WWW www) {
+
 		buttoncontroller.filteredOnlineList.Clear();
 		
 		allquests.Clear();
@@ -733,34 +705,6 @@ public class questdatabase : MonoBehaviour {
 		}
 	}
 	
-	public IEnumerator DownloadPercentage (WWW www) {
-		yield return new WaitForSeconds(0.01f);
-		
-		
-		
-		if ( www.progress < 1f && www.error == null ) {
-			if ( loadlogo != null ) {
-
-				loadlogo.enable();
-			}
-
-			if ( webloadingmessage != null ) {
-				webloadingmessage.text = (www.progress * 100) + " %";
-			}
-			StartCoroutine(DownloadPercentage(www));
-			
-		}
-		else {
-			if ( loadlogo != null ) {
-
-				loadlogo.disable();
-			}
-
-		}
-		
-		
-	}
-
 	IEnumerator startPredeployedQuest (int id) {
 
 

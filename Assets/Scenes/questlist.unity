@@ -9628,8 +9628,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 948390058}
-        m_MethodName: LoadQuestsFromServer
+      - m_Target: {fileID: 1756337058}
+        m_MethodName: ReloadQuestListAndRefresh
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
