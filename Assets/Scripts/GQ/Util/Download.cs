@@ -8,15 +8,78 @@ namespace GQ.Util
 	public class Download
 	{
 		string url;
-		long timeout;
+		long _timeout;
+
+		public long Timeout {
+			get {
+				return _timeout;
+			}
+			set {
+				_timeout = value;
+			}
+		}
+
 		Stopwatch stopwatch;
 		WWW _www;
 
-		StartCallback onStart;
-		ErrorCallback onError;
-		TimeoutCallback onTimeout;
-		SuccessCallback onSuccess;
-		ProgressUpdate onProgress;
+		StartCallback _onStart;
+
+		public StartCallback OnStart {
+			get {
+				return _onStart;
+			}
+			set {
+				_onStart = value;
+			}
+		}
+
+		ErrorCallback _onError;
+
+		public ErrorCallback OnError {
+			get {
+				return _onError;
+			}
+			set {
+				_onError = value;
+			}
+		}
+
+		TimeoutCallback _onTimeout;
+
+		/// <summary>
+		/// Gets or sets the on timeout. Your timeout callback bool response is used to either do the timeout and stop the download (true) or ignore the timeout (false).
+		/// </summary>
+		/// <value>The on timeout.</value>
+		public TimeoutCallback OnTimeout {
+			get {
+				return _onTimeout;
+			}
+			set {
+				_onTimeout = value;
+			}
+		}
+
+		SuccessCallback _onSuccess;
+
+		public SuccessCallback OnSuccess {
+			get {
+				return _onSuccess;
+			}
+			set {
+				_onSuccess = value;
+			}
+		}
+
+		ProgressUpdate _onProgress;
+
+		public ProgressUpdate OnProgress {
+			get {
+				return _onProgress;
+			}
+			set {
+				_onProgress = value;
+			}
+		}
 
 		#region Public Interface
 		
@@ -41,74 +104,46 @@ namespace GQ.Util
 		
 		/// <summary>
 		/// Initializes a new Downloader object. 
-		/// You can start the download afterthat by calling <see cref="GQ.Util.Downloader.startDownload()"/> class.
+		/// You can start the download as Coroutine: StartCoroutine(download.startDownload).
+		/// All callbacks are intialized with defaults. You can customize the behaviour via properties 
+		/// onStart, onError, onTimeout, onSuccess, onProgress.
 		/// </summary>
 		/// <param name="url">URL.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
-		/// <param name="onStart">Call back function which is called when the download has started (optional).</param>
-		/// <param name="onSuccess">Call back function which is called when the download has successfully finished (optional).</param>
-		/// <param name="onError">Call back function which is called when the download encounters an error (optional).</param>
-		/// <param name="onTimeout">Call back function which is called when the download takes longer than the given timeout (optional).</param>
-		/// <param name="onProgress">Call back function which is called when the download has progresses (optional). 
-		/// Gives you a float between 0 (no progress yet) and 1 (download completed)</param>
 		public Download (
 			string url, 
-			long timeout = 0,
-			StartCallback onStart = null,
-			SuccessCallback onSuccess = null, 
-			ErrorCallback onError = null, 
-			TimeoutCallback onTimeout = null,
-			ProgressUpdate onProgress = null)
+			long timeout = 0)
 		{
 			this.url = url;
-			this.timeout = timeout;
+			Timeout = timeout;
 			stopwatch = new Stopwatch ();
-
-			if (onStart != null)
-				this.onStart = onStart;
-			else
-				this.onStart = defaultStartHandling;
-
-			if (onError != null)
-				this.onError = onError;
-			else
-				this.onError = defaultErrorHandling;
-			
-			if (onTimeout != null)
-				this.onTimeout = onTimeout;
-			else
-				this.onTimeout = defaultTimeoutHandling;
-
-			if (onSuccess != null)
-				this.onSuccess = onSuccess;
-			else
-				this.onSuccess = defaultSuccessHandling;
-
-			if (onProgress != null)
-				this.onProgress = onProgress;
+			OnStart = defaultStartHandling;
+			OnError = defaultErrorHandling;
+			OnTimeout = defaultTimeoutHandling;
+			OnSuccess = defaultSuccessHandling;
+			OnProgress = defaultProgressHandling;
 		}
 
 		public IEnumerator startDownload ()
 		{
 			Www = new WWW (url);
 			stopwatch.Start();
-			onStart(this);
+			if (OnStart != null)
+				OnStart(this);
 
 			float progress = 0f;
 			while (!Www.isDone) {
-				if (onProgress != null && progress < Www.progress) {
+				if (OnProgress != null && progress < Www.progress) {
 					progress = Www.progress;
-					onProgress(this, progress);
+					OnProgress(this, progress);
 				}
-				if (timeout > 0 && stopwatch.ElapsedMilliseconds >= timeout) {
-					if (onTimeout != null) {
-						if (onTimeout(this, stopwatch.ElapsedMilliseconds)) {
-							stopwatch = Stopwatch.StartNew();
-						} else {
+				if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout) {
+					if (OnTimeout != null) {
+						if (OnTimeout(this, stopwatch.ElapsedMilliseconds)) {
 							stopwatch.Stop();
 							Www.Dispose();
-							onError(this, String.Format("Client side timeout. Download not completed after {0} ms", 
-							        			 		timeout));
+							OnError(this, String.Format("Client side timeout. Download not completed after {0} ms", 
+							        			 		Timeout));
 							yield break;
 						}
 					}
@@ -118,12 +153,14 @@ namespace GQ.Util
 			stopwatch.Stop();
 			
 			if (Www.error != null) {
-				onError(this, Www.error);
+				if (OnError != null)
+					OnError(this, Www.error);
 			} else {
-				if (onProgress != null)
-					onProgress(this, Www.progress);
+				if (OnProgress != null)
+					OnProgress(this, Www.progress);
 				yield return null;
-				onSuccess(this);
+				if (OnSuccess != null)
+					OnSuccess(this);
 			}
 
 			yield break;
@@ -137,8 +174,8 @@ namespace GQ.Util
 		{
 			string msg = String.Format("Start to download url {0}", 
 			                           downloader.url);
-			if (downloader.timeout > 0) {
-				msg += String.Format(", timout set to {0} ms.", downloader.timeout);
+			if (downloader._timeout > 0) {
+				msg += String.Format(", timout set to {0} ms.", downloader._timeout);
 			}
 			UnityEngine.Debug.Log(msg);
 		}
@@ -158,7 +195,7 @@ namespace GQ.Util
 		{
 			UnityEngine.Debug.LogWarning(String.Format("Timeout: already {1} ms elapsed while trying to download url {0}", 
 			                                           downloader.url, elapsedTime));
-			return false; // do not repeat timeout
+			return true; // do timeout
 		}
 
 		public static void defaultSuccessHandling (Download downloader)
