@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-
 using UnitySlippyMap;
 using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
