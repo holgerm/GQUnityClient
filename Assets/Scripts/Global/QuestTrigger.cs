@@ -36,9 +36,11 @@ public class QuestTrigger {
 
 		bool b = false;
 			
-		foreach ( QuestAction a in actions ) {
-			if ( a.hasActionInChildren(type1) ) {
-				b = true;
+		if (actions != null) {
+			foreach (QuestAction a in actions) {
+				if (a.hasActionInChildren (type1)) {
+					b = true;
+				}
 			}
 		}
 			

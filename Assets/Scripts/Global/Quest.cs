@@ -49,6 +49,8 @@ public class Quest  : IComparable<Quest> {
 	public string version;
 	public bool acceptedDS = false;
 
+	public string alternateDownloadLink;
+
 	public Quest () {
 		predeployed = false;
 

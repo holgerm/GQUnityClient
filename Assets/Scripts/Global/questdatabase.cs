@@ -1207,7 +1207,7 @@ public class questdatabase : MonoBehaviour {
 			loadlogo.enable();
 		}
 
-		if ( Configuration.instance.showinternetconnectionmessage ) {
+		if ( Configuration.instance.showinternetconnectionmessage && q.alternateDownloadLink == "") {
 			showmessage("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK");
 		}
 
@@ -1223,7 +1223,16 @@ public class questdatabase : MonoBehaviour {
 
 				webloadingmessage.text = "Lade Quest ... " + q.name;
 			}
+
+
 			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
+
+			if(q.alternateDownloadLink != null && q.alternateDownloadLink != ""){
+
+				url = q.alternateDownloadLink;
+			}
+
+
 			www = new WWW(url);
 			if ( loadlogo != null ) {
 
