@@ -73,6 +73,9 @@ public class translateTextComponent : MonoBehaviour {
 
 
 	void Update () {
+		if ( GameObject.Find("QuestDatabase") == null ) {
+			return;
+		}
 
 		bool done = false;
 		if ( keepTranslatingAtRuntime && !GetComponent<Text>().text.Equals(textcontent) ) {
