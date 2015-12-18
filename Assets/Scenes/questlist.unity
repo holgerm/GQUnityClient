@@ -7230,7 +7230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 2
+  product: 4
   overrideProductSettingsInInspector: 0
   portalID: 141
   autostartQuestID: 0
@@ -7251,7 +7251,7 @@ MonoBehaviour:
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
   toplogo: {fileID: 21300000, guid: b4faa7795bc6b4600b7515aeb20908ac, type: 3}
   nameForQuest: Quest
-  questvisualization: list
+  questvisualization: map
   showMessageForDatasendAction: 1
   showPrivacyAgreement: 1
   privacyAgreement: 
@@ -7265,7 +7265,7 @@ MonoBehaviour:
   showinternetconnectionmessage: 1
   defaultlanguage: system
   languageChangableByUser: 1
-  languagesAvailable: de,en
+  languagesAvailable: de
   categoryMarker:
   - category: wcc.culture
     anzeigename_de: Kultur
@@ -15620,7 +15620,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
