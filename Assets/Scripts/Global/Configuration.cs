@@ -51,6 +51,9 @@ public class Configuration : MonoBehaviour
 	public bool useDefaultPositionValuesAtStart = true;
 	public double defaultLongitude = 51.0d; // TODO make available in portal
 	public double defaultLatitude = 8.0d; // TODO make available in portal
+	public bool checkForAppversion = true;
+	public string appVersionURL = "";
+	public int appVersion = 0;
 
 
 	
@@ -119,7 +122,7 @@ public class Configuration : MonoBehaviour
 	
 	private void initProductDefinitions ()
 	{
-		Debug.Log ("CONFIG: setting product: " + product);
+//		Debug.Log ("CONFIG: setting product: " + product);
 		switch (product) {
 		case ProductIDs.CarlBenz:
 			productName = "carlbenz";

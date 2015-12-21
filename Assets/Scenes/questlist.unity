@@ -8063,7 +8063,7 @@ MonoBehaviour:
     nach Ma\xDFgabe ordentlich k\xFCndigen Stand:  Dezember2015  "
   agbsVersion: 5
   questvisualizationchangable: 0
-  showcloudquestsimmediately: 0
+  showcloudquestsimmediately: 1
   showtextinloadinglogo: 1
   showinternetconnectionmessage: 1
   defaultlanguage: system
@@ -8152,6 +8152,9 @@ MonoBehaviour:
   useDefaultPositionValuesAtStart: 1
   defaultLongitude: 51
   defaultLatitude: 8
+  checkForAppversion: 1
+  appVersionURL: https://quest-mill.com/appversion/121.html
+  appVersion: 1
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0

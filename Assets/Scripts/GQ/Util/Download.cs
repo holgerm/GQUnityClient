@@ -3,8 +3,10 @@ using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
 
-namespace GQ.Util {
-	public class Download {
+namespace GQ.Util
+{
+	public class Download
+	{
 		string url;
 		long _timeout;
 
@@ -110,10 +112,11 @@ namespace GQ.Util {
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
 		public Download (
 			string url, 
-			long timeout = 0) {
+			long timeout = 0)
+		{
 			this.url = url;
 			Timeout = timeout;
-			stopwatch = new Stopwatch();
+			stopwatch = new Stopwatch ();
 			OnStart = defaultStartHandling;
 			OnError = defaultErrorHandling;
 			OnTimeout = defaultTimeoutHandling;
@@ -121,47 +124,47 @@ namespace GQ.Util {
 			OnProgress = defaultProgressHandling;
 		}
 
-		public IEnumerator startDownload () {
-			Www = new WWW(url);
-			stopwatch.Start();
-			if ( OnStart != null ) {
-				OnStart(this);
+		public IEnumerator startDownload ()
+		{
+			Www = new WWW (url);
+			stopwatch.Start ();
+			if (OnStart != null) {
+				OnStart (this);
 			}
 
 			float progress = 0f;
-			while ( !Www.isDone ) {
-				if ( OnProgress != null && progress < Www.progress ) {
+			while (!Www.isDone) {
+				if (OnProgress != null && progress < Www.progress) {
 					progress = Www.progress;
-					OnProgress(this, progress);
+					OnProgress (this, progress);
 				}
-				if ( Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout ) {
-					if ( OnTimeout != null ) {
-						if ( OnTimeout(this, stopwatch.ElapsedMilliseconds) ) {
-							stopwatch.Stop();
-							OnError(this, String.Format("Client side timeout. Download not completed after {0} ms", 
+				if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout) {
+					if (OnTimeout != null) {
+						if (OnTimeout (this, stopwatch.ElapsedMilliseconds)) {
+							stopwatch.Stop ();
+							OnError (this, String.Format ("Client side timeout. Download not completed after {0} ms", 
 							        			 		Timeout));
-							Www.Dispose();
+							Www.Dispose ();
 							yield break;
 						}
 					}
 				}
 				yield return null;
 			} 
-			stopwatch.Stop();
+			stopwatch.Stop ();
 			
-			if ( Www.error != null ) {
-				if ( OnError != null ) {
-					OnError(this, Www.error);
+			if (Www.error != null) {
+				if (OnError != null) {
+					OnError (this, Www.error);
 				}
-				Www.Dispose();
-			}
-			else {
-				if ( OnProgress != null ) {
-					OnProgress(this, Www.progress);
+				Www.Dispose ();
+			} else {
+				if (OnProgress != null) {
+					OnProgress (this, Www.progress);
 				}
 				yield return null;
-				if ( OnSuccess != null ) {
-					OnSuccess(this);
+				if (OnSuccess != null) {
+					OnSuccess (this);
 				}
 			}
 
@@ -172,17 +175,19 @@ namespace GQ.Util {
 
 		#region Callbacks Defaults
 		
-		public static void defaultStartHandling (Download downloader) {
-			string msg = String.Format("Start to download url {0}", 
+		public static void defaultStartHandling (Download downloader)
+		{
+			string msg = String.Format ("Start to download url {0}", 
 			                           downloader.url);
-			if ( downloader._timeout > 0 ) {
-				msg += String.Format(", timout set to {0} ms.", downloader._timeout);
+			if (downloader._timeout > 0) {
+				msg += String.Format (", timout set to {0} ms.", downloader._timeout);
 			}
-			UnityEngine.Debug.Log(msg);
+//			UnityEngine.Debug.Log (msg);
 		}
 		
-		public static void defaultErrorHandling (Download downloader, string msg) {
-			UnityEngine.Debug.LogWarning(String.Format("Encountered a problem during download of url {0}: {1}", 
+		public static void defaultErrorHandling (Download downloader, string msg)
+		{
+			UnityEngine.Debug.LogWarning (String.Format ("Encountered a problem during download of url {0}: {1}", 
 			                                           downloader.url, msg));
 		}
 		
@@ -191,20 +196,23 @@ namespace GQ.Util {
 		/// </summary>
 		/// <param name="url">URL.</param>
 		/// <param name="elapsedTime">Elapsed time.</param>
-		public static bool defaultTimeoutHandling (Download downloader, long elapsedTime) {
-			UnityEngine.Debug.LogWarning(String.Format("Timeout: already {1} ms elapsed while trying to download url {0}", 
+		public static bool defaultTimeoutHandling (Download downloader, long elapsedTime)
+		{
+			UnityEngine.Debug.LogWarning (String.Format ("Timeout: already {1} ms elapsed while trying to download url {0}", 
 			                                           downloader.url, elapsedTime));
 			return true; // do timeout
 		}
 
-		public static void defaultSuccessHandling (Download downloader) {
-			UnityEngine.Debug.Log(String.Format("Download completed. (URL: {0})", 
+		public static void defaultSuccessHandling (Download downloader)
+		{
+			UnityEngine.Debug.Log (String.Format ("Download completed. (URL: {0})", 
 			                                    downloader.url));
 		}
 		
-		public static void defaultProgressHandling (Download downloader, float progress) {
-			UnityEngine.Debug.Log(String.Format("Downloading: URL {0}, got {1:N2}%", 
-			                                    downloader.url, progress * 100));
+		public static void defaultProgressHandling (Download downloader, float progress)
+		{
+//			UnityEngine.Debug.Log(String.Format("Downloading: URL {0}, got {1:N2}%", 
+//			                                    downloader.url, progress * 100));
 		}
 		
 		#endregion
