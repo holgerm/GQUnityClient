@@ -86,7 +86,7 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleIdentifier: com.questmill.geoquest.ebk
-  bundleVersion: 1.0.8
+  bundleVersion: 1.0.9
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
@@ -115,6 +115,7 @@ PlayerSettings:
   iPhoneTargetOSVersion: 22
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
+  uIRequiresFullScreen: 1
   uIStatusBarHidden: 1
   uIExitOnSuspend: 0
   uIStatusBarStyle: 0
@@ -150,7 +151,7 @@ PlayerSettings:
   AndroidSplashScreenScale: 2
   androidSplashScreen: {fileID: 2800000, guid: e4913ccce79fa4eb687ef377c0a8724e, type: 3}
   AndroidKeystoreName: /Users/muegge/Personen/QuestMill/legal/signing/keystores/geoquest.keystore
-  AndroidKeyaliasName: 
+  AndroidKeyaliasName: ebk
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 0
@@ -274,6 +275,8 @@ PlayerSettings:
   ps4ReprojectionSupport: 0
   ps4UseAudio3dBackend: 0
   ps4Audio3dVirtualSpeakerCount: 14
+  ps4attribCpuUsage: 0
+  ps4SocialScreenEnabled: 0
   ps4attribUserManagement: 0
   ps4attribMoveSupport: 0
   ps4attrib3DSupport: 0

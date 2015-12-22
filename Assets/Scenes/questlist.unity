@@ -1162,8 +1162,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 493, y: 1215}
-  m_SizeDelta: {x: 900, y: 1072}
+  m_AnchoredPosition: {x: 493, y: 1284}
+  m_SizeDelta: {x: 900, y: 1141}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &120371366
 MonoBehaviour:
@@ -4169,8 +4169,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 493, y: 1215}
-  m_SizeDelta: {x: 900, y: 1072}
+  m_AnchoredPosition: {x: 493, y: 1284}
+  m_SizeDelta: {x: 900, y: 1141}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &437149053
 MonoBehaviour:
@@ -7715,298 +7715,167 @@ MonoBehaviour:
   questvisualization: list
   showMessageForDatasendAction: 1
   showPrivacyAgreement: 1
-  privacyAgreement: "<br>Das Erzbistum K\xF6ln, Marzellenstr. 32, 50668 K\xF6ln vertreten
-    durch den Generalvikar Dr. Dominik Meiering (nachfolgend \u201EErzbistum K\xF6ln\u201C)
-    betreibt eine Webportal, auf dem registrierte ehrenamtliche Mitglieder (nachfolgend
-    \u201EAutoren\u201C) mithilfe des Global Position Systems (GPS) interaktive Touren
-    zu verschiedenen Themenbereichen erstellen k\xF6nnen (nachfolgend \u201EGeoQuests\u201C).
-    Hierzu erstellt der  Autor anhand von GPS-Koordinaten eine Route die sich unter
-    Zuhilfenahme von Bildern, Texten, Videoclips und Voice-Messages mit verschiedenen
-    Themenbereichen auseinandersetzt. Die GeoQuests werden sowohl registrierten, als
-    auch nicht registrierten Nutzern \xFCber eine Smartphone-Applikation (nachfolgend
-    \u201EApp\u201C) zur Verf\xFCgung gestellt. 1.\tGeltungsbereich der Nutzungsbedingungen
-    Diese Nutzungsbedingungen gelten f\xFCr alle Inhalte und Dienste, die durch das
-    Erzbistum K\xF6ln im Rahmen des Webportals unter www.tap-erlebnis.de und der App
-    angeboten werden. Die Nutzungsbedingungen sind jederzeit abrufbar. Es besteht
-    die M\xF6glichkeit, dass die Nutzungsbedingungen ausgedruckt werden.   Entgegenstehende
-    oder diesen Nutzungsbedingungen abweichende Bedingungen des Nutzer haben keine
-    Geltung.   1.1.\tBereitstellungsbedingungen 1.1.1.\tDurch die unentgeltliche Bereitstellung
-    sowie durch einen entsprechenden Abruf der GeoQuests seitens der nicht registrierten
-    Nutzer wird kein Vertragsverh\xE4ltnis zwischen dem Erzbistum K\xF6ln und dem
-    jeweiligen Nutzer begr\xFCndet.  1.1.2.\tDas Erzbistum K\xF6ln ist bem\xFCht,
-    einen ordnungsgem\xE4\xDFen Betrieb des Webportals sicherzustellen, steht jedoch
-    nicht f\xFCr die ununterbrochene Nutzbarkeit bzw. Erreichbarkeit des Webportals
-    ein. Dies gilt insbesondere f\xFCr technisch bedingte Verz\xF6gerungen im Rahmen
-    von Wartungsarbeiten oder Weiterentwicklungen, Unterbrechungen oder Ausf\xE4lle
-    der Angebote, des Internets oder des Zugangs zum Internet.  1.1.3.\tDas Erzbistum
-    K\xF6ln beh\xE4lt sich vor, Teile der Angebote, einzelne Angebote oder alle Angebote
-    als Ganzes ohne gesonderte Vorank\xFCndigung zu ver\xE4ndern oder die Ver\xF6ffentlichung
-    zeitweise oder endg\xFCltig einzustellen. Entsch\xE4digungsanspr\xFCche des Nutzers
-    entstehen hieraus nicht.  1.2.\tRegistrierung  1.2.1.\tDie Nutzung des Webportals
-    ist erst nach erfolgreicher Registrierung des Autors m\xF6glich. Registrieren
-    d\xFCrfen sich nur gesch\xE4ftsf\xE4hige Personen oder Personen, die mit Zustimmung
-    ihrer gesetzlichen Vertretungsberechtigten handeln.   1.2.2.\tDie Registrierung
-    erfolgt \xFCber das Webportal. Der Autor kann sich durch die Eingabe eines Nicknamen
-    und einer E-Mail-Adresse registrieren. Nach der Registrierung erh\xE4lt der Kunde
-    eine Best\xE4tigung \xFCber die Erstellung des Accounts per E-Mail. 1.2.3.\tDer
-    Autor ist verpflichtet, im Rahmen des Registrierungsprozesses wahrheitsgem\xE4\xDFe
-    Angaben zu machen und seine Angaben soweit erforderlich zu aktualisieren. Insbesondere
-    d\xFCrfen durch die Registrierung keine Rechte Dritter verletzt werden (z.B. Verwendung
-    von personenbezogenen Daten Dritter). 1.2.4.\tDer Autor hat ein dem Stand der
-    Technik nach sicheres Passwort zu w\xE4hlen. Das Passwort zeichnet sich dadurch
-    aus, dass es mindestens aus 12 Zeichen (darunter Gro\xDF- und Kleinbuchstaben,
-    Ziffern und Sonderzeichen) besteht. Der Autor ist verpflichtet dieses Passwort
-    geheim zu halten.  1.2.5.\tEin Anspruch auf Registrierung besteht nicht.  1.3.\tRechte
-    an den Inhalten  1.3.1.\tDas Webportal enth\xE4lt Inhalte, die sowohl von dem
-    Erzbistum K\xF6ln, als auch von den Nutzern erstellt wurden. Das gesamte Material,
-    das auf dem Webportal ver\xF6ffentlicht ist, insbesondere Texte, Fotografien,
-    Grafiken und Videoclips, unterliegt dem jeweils geltenden gesetzlichen Schutz,
-    insbesondere dem Marken-, Urheber-, Leistungsschutz- und Wettbewerbsrecht. Die
-    Vervielf\xE4ltigung, \xF6ffentliche Wiedergabe oder die sonstige Nutzung oder
-    Verwertung derart gesch\xFCtzter Inhalte ist ohne Zustimmung des jeweiligen Rechteinhabers
-    in der Regel unzul\xE4ssig.  1.3.2.\tMit dem Hochladen von Texten, Bildern, Screenshots
-    oder anderen urheberrechtlich gesch\xFCtzten Inhalten auf das Webportal gew\xE4hrt
-    der Nutzer und/oder Autor dem Erzbistum K\xF6ln unentgeltlich ein \xFCbertragbares,
-    nicht ausschlie\xDFliches, r\xE4umlich und zeitlich unbeschr\xE4nktes Recht diese
-    Inhalte zu nutzen. Hiervon umfasst ist auch das Recht zur Bearbeitung und \xDCbersetzung
-    der zur Verf\xFCgung gestellten Werke.  1.3.3.\tMit Ver\xF6ffentlichung der GeoQuests
-    auf dem Webportal gew\xE4hrt der Autor dem Erzbistum K\xF6ln unentgeltlich ein
-    \xFCbertragbares, nicht ausschlie\xDFliches, r\xE4umlich und zeitlich unbeschr\xE4nktes
-    Recht diese Inhalte zu nutzen. Hiervon ist auch das Recht zur Bearbeitung der
-    GeoQuests umfasst.  1.3.4.\tSofern der Autor Bilder, Texte, Lieder usw. hochl\xE4dt,
-    hat er die M\xF6glichkeit die urheberrechtlich gesch\xFCtzten Inhalte jederzeit
-    zu l\xF6schen. Dies gilt auch f\xFCr alle von ihm erstellten GeoQuests. Die mit
-    Ziff. 1.3.2 und Ziff. 1.3.3. einger\xE4umten Nutzungsrechte erl\xF6schen in diesem
-    Fall. 1.3.5.\tDas Erzbistum K\xF6ln beh\xE4lt sich das Recht vor, Inhalte auch
-    ohne Angabe von Gr\xFCnden nicht oder nur in einen begrenzten Zeitraum auf dem
-    Webportal bereitzuhalten sowie GeoQuests zu \xE4ndern oder zu l\xF6schen.  1.3.6.\tDer
-    Autor ist angehalten nur solche Inhalte auf dem Webportal einzustellen, an den
-    er die notwendigen Rechte hat. In der Regel besitzt der Autor die erforderlichen
-    Rechte nur, wenn er die Inhalte selbst erstellt oder die Zustimmung vom Rechteinhaber
-    eingeholt hat. Dies gilt insbesondere bei von ihm eingestelltem Bildmaterial.
-    Falls auf dem Bildmaterial Personen abgebildet werden, ist dar\xFCber hinaus sicherzustellen,
-    dass die Einwilligung der abgebildeten Person vorliegt.  1.3.7.\tDer Autor stellt
-    das Erzbistum K\xF6ln von Anspr\xFCchen Dritter, insbesondere von Anspr\xFCchen
-    wegen schuldhaft verursachten Urheberrechts-, Wettbewerbs-, Markenrechts- und
-    Pers\xF6nlichkeitsrechtsverletzungen, die gegen das Erzbistum K\xF6ln im Zusammenhang
-    mit vom Autor erstellten GeoQuests geltend gemacht werden, auf erstes Anfordern
-    hin frei. Dem Autor bekannt werdende Beeintr\xE4chtigungen der vertragsgegenst\xE4ndlichen
-    Rechte hat dieser dem Erzbistum K\xF6ln unverz\xFCglich mitzuteilen.  1.3.8.\tDer
-    Autor ist berechtigt, selbst geeignete Ma\xDFnahmen zur Abwehr von Anspr\xFCchen
-    Dritter oder zur Verfolgung seiner Rechte vorzunehmen. Eigene Ma\xDFnahmen des
-    Autors hat dieser im Vorwege mit dem Erzbistum K\xF6ln abzustimmen. Die Freistellung
-    beinhaltet auch den Ersatz der Kosten, die dem Erzbistum K\xF6ln durch die Rechtsverfolgung/-verteidigung
-    entstehen bzw. entstanden sind. Das Erzbistum K\xF6ln wird den Autor unverz\xFCglich
-    von vorzunehmenden Ma\xDFnahmen der Rechtsverfolgung/-verteidigung in Kenntnis
-    setzen.  1.4.\tVerbotene Inhalte  1.4.1.\tInhalte, die gegen geltende Gesetze
-    versto\xDFen oder in sonstiger Weise rechtswidrige Inhalt haben, sind verboten.
-    Ebenso sind Inhalte verboten, die sch\xE4digend, bedrohend, missbr\xE4uchlich,
-    bel\xE4stigend, verleumderisch, diskriminierend, ehrverletzend, sexistisch, pornographisch,
-    Gewalt verherrlichend oder verharmlosend, rassistisch, extremistisch, f\xFCr terroristische
-    oder extremistische politische Vereinigung werbend, zu einer Straftat auffordernd,
-    \ oder auf sonstige Weise jugendgef\xE4hrdend sind. Die Strafgesetze und Jugendschutzbestimmungen
-    sind zu beachten.  1.4.2.\tUnzul\xE4ssig sind auch Inhalte, die Informationen
-    \xFCber illegale Aktivit\xE4ten verbreiten(z.B. das Thematisieren von illegalen
-    Programmen, Cracks, illegalen Downloads, Emulatoren). 1.4.3.\tInhalte, die Rechte
-    Dritter verletzen, insbesondere Patente, Marken-, Urheber- oder Leistungsschutzrechte,
-    Gesch\xE4ftsgeheimnisse, Pers\xF6nlichkeitsrechte oder Eigentumsrechte, d\xFCrfen
-    nicht hochgeladen und zum Abruf bereit gehalten werden.  1.4.4.\tDie Ver\xF6ffentlichung
-    von personenbezogenen Daten Dritter (z.B. Name, Adresse, Telefonnummer) ohne ausdr\xFCckliche
-    schriftliche Zustimmung des Betroffenen ist nicht erlaubt.  1.4.5.\tInhalte, die
-    Waren oder Dienstleistungen anbieten bzw. sonstigen werblichen oder kommerziellen
-    Zwecken dienen, sind nicht gestattet. Unter dieses Verbot fallen auch Inhalte
-    wie ein \u201ESchneeballsystem\u201C. 1.4.6.\tVerlinkungen, die direkt zu einem
-    Download oder einer Datei f\xFChren, die in keinerlei Zusammenhang mit dem Webportal
-    stehen, sind untersagt.  1.4.7.\tMehrfach erstellte GeoQuests mit gleichem Inhalt,
-    Beitr\xE4ge mit sinnfreiem Inhalt oder Beitr\xE4ge, die einer Diskussion nicht
-    zutr\xE4glich sind, werden als Spam eingestuft und sind ebenfalls zu unterlassen.
-    1.5.\tNetiquette  Die Nutzer sind gehalten einen friedlichen Umgangston zu wahren.
-    Das Webportal soll durch die erstellten GeoQuests interessante und gewinnbringende
-    Debatten zu spirituellen, religi\xF6sen, katechetischen Inhalten f\xF6rdern. Pers\xF6nliche
-    Angriffe gegen andere Nutzer, Beleidigungen und Diskriminierungen, sind daher
-    ausdr\xFCcklich nicht gestattet und werden nicht geduldet. Auf zynische und ironische
-    \xC4u\xDFerungen sollte verzichtet werden.  1.6.\tHaftung und Haftungsbeschr\xE4nkung
-    \ 1.6.1.\tDas Erzbistum K\xF6ln ist \u2013 soweit sich dies aus dem Impressum
-    des jeweiligen Angebots ergibt \u2013 Diensteanbieter i.S.d. \xA7 7 Abs. 1 TMG
-    und f\xFCr eigene Inhalte, die im Rahmen des Webportals abrufbar sind, nach den
-    allgemeinen Gesetzen verantwortlich. Das Erzbistum K\xF6ln \xFCbernimmt keine
-    Gew\xE4hrleistung bez\xFCglich der Ergebnisse, die durch die Nutzung der Angebote
-    erzielt werden k\xF6nnen, oder bez\xFCglich der Richtigkeit und Zuverl\xE4ssigkeit
-    der im Rahmen der Angebote erh\xE4ltlichen Informationen und Anwendungen.  1.6.2.\tDas
-    Erzbistum K\xF6ln ist nicht verpflichtet und auch nicht in der Lage, die Rechtm\xE4\xDFigkeit
-    der von Nutzern oder den Autorn hochgeladenen oder publizierten Inhalte umfassend
-    zu pr\xFCfen, zu \xFCberwachen und/oder nach Umst\xE4nden zu forschen, die auf
-    eine rechtswidrige T\xE4tigkeit hinweisen. Das gleiche gilt, wenn und soweit von
-    den Angeboten des Erzbistum K\xF6ln auf Webseiten Dritter verlinkt oder verwiesen
-    wird. Das Erzbistum K\xF6ln macht sich die von Nutzern hochgeladenen oder publizierten
-    Inhalte sowie die auf den Webseiten Dritter liegenden, durch Link verkn\xFCpften
-    Inhalte nicht zu Eigen. Das Erzbistum K\xF6ln steht nicht daf\xFCr ein, dass diese
-    Inhalte rechtm\xE4\xDFig, korrekt, aktuell und/oder vollst\xE4ndig sind. F\xFCr
-    Sch\xE4den, die Aufgrund der Nutzung dieser Inhalte entstehen haftet das Erzbistum
-    K\xF6ln nicht. 1.6.3.\tWenn das Erzbistum K\xF6ln Hinweise auf Gesetzesverst\xF6\xDFe
-    oder Rechtsverletzungen durch fremde oder verlinkte Inhalte erh\xE4lt, wird das
-    Erzbistum K\xF6ln soweit eine Pflicht besteht die Inhalte \xFCberpr\xFCfen und
-    erforderlichenfalls sperren und l\xF6schen.  1.6.4.\tDas Erzbistum K\xF6ln haftet
-    f\xFCr Schadensersatz oder Ersatz vergeblicher Aufwendungen unbeschr\xE4nkt bei
-    Vorsatz oder grober Fahrl\xE4ssigkeit, f\xFCr die Verletzung von Leben, Leib oder
-    Gesundheit, nach den Vorschriften des Produkthaftungsgesetzes sowie im Umfang
-    einer vom Erzbistum K\xF6ln \xFCbernommenen Garantie. 1.6.5.\tBei leicht fahrl\xE4ssiger
-    Verletzung einer Pflicht, die wesentlich f\xFCr die Erreichung des Vertragszwecks
-    ist (Kardinalpflicht), ist die Haftung vom Erzbistum K\xF6ln der H\xF6he nach
-    begrenzt auf den Schaden, der nach der Art des fraglichen Gesch\xE4fts vorhersehbar
-    und typisch ist. 1.6.6.\tDie vorstehende Haftungsbeschr\xE4nkung der Ziff. 1.6.4.
-    \u2013 1.6.5. gilt auch f\xFCr die pers\xF6nliche Haftung der Mitarbeiter, Vertreter
-    und Organe des Erzbistums K\xF6ln.  1.6.7.\tDas Erzbistum K\xF6ln haftet f\xFCr
-    den Verlust von Daten nur bis zu dem Betrag, der bei ordnungsgem\xE4\xDFer und
-    regelm\xE4\xDFiger, gefahrentsprechender Sicherung der Daten zu deren Wiederherstellung
-    angefallen w\xE4re. 1.6.8.\tEine dar\xFCber hinausgehende Haftung besteht nicht.
-    \ 1.7.\tDatenschutz Wir nehmen den Schutz Ihrer Daten sehr ernst. Das Erzbistum
-    K\xF6ln wird die personenbezogenen Daten, die wir von den Nutzern und Autorn erhalten
-    nicht unbefugt an Dritte weitergeben oder zur Kenntnis bringen. Einzelheiten zur
-    Datenerhebung und Datenverarbeitung sind den Datenschutzbestimmungen zu entnehmen.
-    1.8.\tOffenlegung von Informationen  Das Erzbistum K\xF6ln ist berechtigt, vorhandene
-    Informationen von und \xFCber Nutzer ohne dessen ausdr\xFCckliches Einverst\xE4ndnis
-    an Dritte herauszugeben, soweit es hierzu verpflichtet oder nach pflichtgem\xE4\xDFen
-    Ermessen notwendig und rechtlich zul\xE4ssig ist, um gesetzliche Bestimmungen
-    oder richterliche oder beh\xF6rdliche Anordnungen zu erf\xFCllen.  1.9.\tAnwendbares
-    Recht, Gerichtsstand 1.9.1.\tEs gilt das Recht der Bundesrepublik Deutschland
-    unter Ausschluss der Normen des Kollisionsrechts und des UN-Kaufrechts.  1.9.2.\tGerichtsstand
-    f\xFCr alle Streitigkeiten ist \u2013 soweit gesetzlich zul\xE4ssig \u2013 der
-    Sitz des Erzbistums K\xF6ln.  1.10.\tSalvatorische Klausel  Sollten einzelne Regelungen
-    der Nutzungsbedingungen unwirksam sein oder werden, wird dadurch die Wirksamkeit
-    der \xFCbrigen Regelungen nicht ber\xFChrt. Sofern Teile der Nutzungsbedingungen
-    der geltenden Rechtslage nicht, nicht mehr oder nicht vollst\xE4ndig entsprechen
-    sollten, bleiben die \xFCbrigen Teile in ihrem Inhalt und ihrer G\xFCltigkeit
-    davon unber\xFChrt und der ung\xFCltige Teil gilt als durch einen solchen ersetzt,
-    der dem Sinn und Zweck des unwirksamen Teils bzw. dem Parteiwillen in rechtswirksamer
-    Weise wirtschaftlich am n\xE4chsten kommt.  1.11.\t\xC4nderungsvorbehalt Das Erzbistum
-    K\xF6ln hat das Recht, Bestimmungen dieser Nutzungsbedingungen zu \xE4ndern, wenn
-    ein wichtiger Grund hierf\xFCr vorliegt. Das Erzbistum K\xF6ln wird den Nutzern
-    die \xC4nderung per E-Mail mitteilen. Widerspricht der Nutzer nicht innerhalb
-    einer Frist von 6 Wochen nach Erhalt der E-Mail, gelten die ge\xE4nderten Nutzungsbedingungen
-    als vereinbart. Der Nutzer wird auf diese Rechtsfolge hingewiesen. Widerspricht
-    der Nutzer den neuen Nutzungsbedingungen, kann das Erzbistum K\xF6ln den Vertrag
-    nach Ma\xDFgabe ordentlich k\xFCndigen Stand:  Dezember2015  "
-  privacyAgreementVersion: 6
+  privacyAgreement: "<br> Datenschutzerkl\xE4rung und Einwilligung <br>Wir, das Erzbistum
+    K\xF6ln, K\xF6rperschaft des \xF6ffentlichen Rechts (Kd\xF6R), Marzellenstra\xDFe
+    32, 50668 K\xF6ln, Deutschland, freuen uns \xFCber Ihr Interesse an unserer App
+    Tap-Erlebnis. Als Anbieter dieser App ist uns der sichere Umgang mit Ihren Daten
+    besonders wichtig. Die Erhebung, Verarbeitung und Nutzung Ihrer personenbezogenen
+    Daten geschieht ausschlie\xDFlich unter Beachtung der geltenden datenschutzrechtlichen
+    Bestimmungen und des Telemediengesetzes (TMG). Ohne Ihre Zustimmung werden wir
+    Ihre personenbezogenen Daten nicht auf anderem Wege nutzen, als er sich aus oder
+    im Zusammenhang mit dieser Datenschutzerkl\xE4rung ergibt. Diese Datenschutzerkl\xE4rung
+    kann jederzeit unter der URL www.erzbistum-koeln.de/xxx abgerufen, abgespeichert
+    und ausgedruckt werden. Wir m\xF6chten Ihnen nachfolgend erl\xE4utern, welche
+    Daten wir wann und zu welchem Zweck erheben, verarbeiten und nutzen.<br><br>1.
+    Erhebung, Verarbeitung und Nutzung personenbezogener Daten<br>Personenbezogene
+    Daten sind Einzelangaben \xFCber pers\xF6nliche und sachliche Verh\xE4ltnisse
+    einer bestimmten oder bestimmbaren Person also Daten die R\xFCckschl\xFCsse \xFCber
+    eine Person zulassen. <br>Mit der Installation von Tap-Erlebnis erheben wir folgende
+    Daten:<br>a. Registrierung und Nutzung <br>Die Nutzung von Tap-Erlebnis ist ohne
+    Registrierung m\xF6glich. <br>b. Standortdaten<br>Wir ben\xF6tigen den Zugriff
+    auf den Standort Ihres Ger\xE4tes. Ihre GPS-Daten werden erhoben, gespeichert
+    und an den Anbieter \xFCbermittelt. Die GPS-Daten sind notwendig, damit der Nutzer
+    GeoQuests absolvieren kann und \xFCber GeoQuests in seiner n\xE4heren Umgebung
+    informiert wird. Daten zu Ihrem Standort werden nur f\xFCr diese Bearbeitung Ihrer
+    Anfrage genutzt. Die \xDCbertragung Ihrer Standortdaten erfolgt \xFCber eine verschl\xFCsselte
+    Verbindung. Ihre Standortdaten werden nach Beendigung Ihrer Anfrage nicht gespeichert
+    und nicht weitergegeben.<br>c. Aktives Kontaktieren<br><br>Der Nutzer gestattet,
+    dass der Betreiber die App aktiv kontaktiert, sofern diese online genutzt wird,
+    um \xFCber Aktualisierungen der Datenschutzerkl\xE4rung zu informieren.<br>II.
+    Datensicherheit<br>Wir sichern unsere Systeme durch technische und organisatorische
+    Ma\xDFnahmen gegen Verlust, Zerst\xF6rung, Zugriff, Ver\xE4nderung oder Verbreitung
+    Ihrer Daten durch unbefugte Personen. Trotz regelm\xE4\xDFiger Kontrollen ist
+    ein vollst\xE4ndiger Schutz gegen alle Gefahren jedoch nicht m\xF6glich.<br>GeoQuest
+    verwendet an manchen Stellen zur Verschl\xFCsselung den Industriestandard SSL
+    (Secure Sockets Layer). Dadurch wird die Vertraulichkeit Ihrer pers\xF6nlichen
+    Angaben \xFCber das Internet gew\xE4hrleistet.<br>III. Bekanntmachung von Ver\xE4nderungen<br>Gesetzes\xE4nderungen
+    oder \xC4nderungen unserer unternehmensinternen Prozesse k\xF6nnen eine Anpassung
+    dieser Datenschutzerkl\xE4rung erforderlich machen. F\xFCr den Fall einer solchen
+    \xC4nderung wird die App, sofern Sie online gehen, Sie informieren.<br><br>V.
+    Auskunftsrecht<br><br>Wir speichern keine Daten von Ihnen. Sollten Sie dennoch
+    Fragen haben, steht Ihnen unser Datenschutzbeauftragter unter:<br><br>Erzbistum
+    K\xF6ln<br>K\xF6rperschaft des \xF6ffentlichen Rechts (Kd\xF6R)<br>Marzellenstra\xDFe
+    32, 50668 K\xF6ln<br>datenschutzbeauftragte@erzbistum-koeln.de<br>gerne zur Verf\xFCgung.<br>"
+  privacyAgreementVersion: 1
   showAGBs: 1
-  agbs: "<br> Das Erzbistum K\xF6ln, Marzellenstr. 32, 50668 K\xF6ln vertreten durch
-    den Generalvikar Dr. Dominik Meiering (nachfolgend \u201EErzbistum K\xF6ln\u201C)
-    betreibt eine Webportal, auf dem registrierte ehrenamtliche Mitglieder (nachfolgend
-    \u201EAutoren\u201C) mithilfe des Global Position Systems (GPS) interaktive Touren
-    zu verschiedenen Themenbereichen erstellen k\xF6nnen (nachfolgend \u201EGeoQuests\u201C).
+  agbs: "<br> Nutzungsbedingungen <br>Das Erzbistum K\xF6ln, Marzellenstr. 32, 50668
+    K\xF6ln vertreten durch den Generalvikar Dr. Dominik Meiering (nachfolgend \u201EErzbistum
+    K\xF6ln\u201C) betreibt eine Webportal, auf dem registrierte ehrenamtliche Mitglieder
+    (nachfolgend \u201EAutoren\u201C) mithilfe des Global Position Systems (GPS) interaktive
+    Touren zu verschiedenen Themenbereichen erstellen k\xF6nnen (nachfolgend \u201EGeoQuests\u201C).
     Hierzu erstellt der  Autor anhand von GPS-Koordinaten eine Route die sich unter
     Zuhilfenahme von Bildern, Texten, Videoclips und Voice-Messages mit verschiedenen
     Themenbereichen auseinandersetzt. Die GeoQuests werden sowohl registrierten, als
     auch nicht registrierten Nutzern \xFCber eine Smartphone-Applikation (nachfolgend
-    \u201EApp\u201C) zur Verf\xFCgung gestellt. 1.\tGeltungsbereich der Nutzungsbedingungen
-    Diese Nutzungsbedingungen gelten f\xFCr alle Inhalte und Dienste, die durch das
-    Erzbistum K\xF6ln im Rahmen des Webportals unter www.tap-erlebnis.de und der App
-    angeboten werden. Die Nutzungsbedingungen sind jederzeit abrufbar. Es besteht
-    die M\xF6glichkeit, dass die Nutzungsbedingungen ausgedruckt werden.   Entgegenstehende
-    oder diesen Nutzungsbedingungen abweichende Bedingungen des Nutzer haben keine
-    Geltung.   1.1.\tBereitstellungsbedingungen 1.1.1.\tDurch die unentgeltliche Bereitstellung
-    sowie durch einen entsprechenden Abruf der GeoQuests seitens der nicht registrierten
-    Nutzer wird kein Vertragsverh\xE4ltnis zwischen dem Erzbistum K\xF6ln und dem
-    jeweiligen Nutzer begr\xFCndet.  1.1.2.\tDas Erzbistum K\xF6ln ist bem\xFCht,
-    einen ordnungsgem\xE4\xDFen Betrieb des Webportals sicherzustellen, steht jedoch
-    nicht f\xFCr die ununterbrochene Nutzbarkeit bzw. Erreichbarkeit des Webportals
-    ein. Dies gilt insbesondere f\xFCr technisch bedingte Verz\xF6gerungen im Rahmen
-    von Wartungsarbeiten oder Weiterentwicklungen, Unterbrechungen oder Ausf\xE4lle
-    der Angebote, des Internets oder des Zugangs zum Internet.  1.1.3.\tDas Erzbistum
-    K\xF6ln beh\xE4lt sich vor, Teile der Angebote, einzelne Angebote oder alle Angebote
-    als Ganzes ohne gesonderte Vorank\xFCndigung zu ver\xE4ndern oder die Ver\xF6ffentlichung
-    zeitweise oder endg\xFCltig einzustellen. Entsch\xE4digungsanspr\xFCche des Nutzers
-    entstehen hieraus nicht.  1.2.\tRegistrierung  1.2.1.\tDie Nutzung des Webportals
-    ist erst nach erfolgreicher Registrierung des Autors m\xF6glich. Registrieren
-    d\xFCrfen sich nur gesch\xE4ftsf\xE4hige Personen oder Personen, die mit Zustimmung
-    ihrer gesetzlichen Vertretungsberechtigten handeln.   1.2.2.\tDie Registrierung
-    erfolgt \xFCber das Webportal. Der Autor kann sich durch die Eingabe eines Nicknamen
-    und einer E-Mail-Adresse registrieren. Nach der Registrierung erh\xE4lt der Kunde
-    eine Best\xE4tigung \xFCber die Erstellung des Accounts per E-Mail. 1.2.3.\tDer
-    Autor ist verpflichtet, im Rahmen des Registrierungsprozesses wahrheitsgem\xE4\xDFe
-    Angaben zu machen und seine Angaben soweit erforderlich zu aktualisieren. Insbesondere
-    d\xFCrfen durch die Registrierung keine Rechte Dritter verletzt werden (z.B. Verwendung
-    von personenbezogenen Daten Dritter). 1.2.4.\tDer Autor hat ein dem Stand der
-    Technik nach sicheres Passwort zu w\xE4hlen. Das Passwort zeichnet sich dadurch
-    aus, dass es mindestens aus 12 Zeichen (darunter Gro\xDF- und Kleinbuchstaben,
-    Ziffern und Sonderzeichen) besteht. Der Autor ist verpflichtet dieses Passwort
-    geheim zu halten.  1.2.5.\tEin Anspruch auf Registrierung besteht nicht.  1.3.\tRechte
-    an den Inhalten  1.3.1.\tDas Webportal enth\xE4lt Inhalte, die sowohl von dem
-    Erzbistum K\xF6ln, als auch von den Nutzern erstellt wurden. Das gesamte Material,
-    das auf dem Webportal ver\xF6ffentlicht ist, insbesondere Texte, Fotografien,
-    Grafiken und Videoclips, unterliegt dem jeweils geltenden gesetzlichen Schutz,
-    insbesondere dem Marken-, Urheber-, Leistungsschutz- und Wettbewerbsrecht. Die
-    Vervielf\xE4ltigung, \xF6ffentliche Wiedergabe oder die sonstige Nutzung oder
-    Verwertung derart gesch\xFCtzter Inhalte ist ohne Zustimmung des jeweiligen Rechteinhabers
-    in der Regel unzul\xE4ssig.  1.3.2.\tMit dem Hochladen von Texten, Bildern, Screenshots
-    oder anderen urheberrechtlich gesch\xFCtzten Inhalten auf das Webportal gew\xE4hrt
-    der Nutzer und/oder Autor dem Erzbistum K\xF6ln unentgeltlich ein \xFCbertragbares,
-    nicht ausschlie\xDFliches, r\xE4umlich und zeitlich unbeschr\xE4nktes Recht diese
-    Inhalte zu nutzen. Hiervon umfasst ist auch das Recht zur Bearbeitung und \xDCbersetzung
-    der zur Verf\xFCgung gestellten Werke.  1.3.3.\tMit Ver\xF6ffentlichung der GeoQuests
-    auf dem Webportal gew\xE4hrt der Autor dem Erzbistum K\xF6ln unentgeltlich ein
-    \xFCbertragbares, nicht ausschlie\xDFliches, r\xE4umlich und zeitlich unbeschr\xE4nktes
-    Recht diese Inhalte zu nutzen. Hiervon ist auch das Recht zur Bearbeitung der
-    GeoQuests umfasst.  1.3.4.\tSofern der Autor Bilder, Texte, Lieder usw. hochl\xE4dt,
-    hat er die M\xF6glichkeit die urheberrechtlich gesch\xFCtzten Inhalte jederzeit
-    zu l\xF6schen. Dies gilt auch f\xFCr alle von ihm erstellten GeoQuests. Die mit
-    Ziff. 1.3.2 und Ziff. 1.3.3. einger\xE4umten Nutzungsrechte erl\xF6schen in diesem
-    Fall. 1.3.5.\tDas Erzbistum K\xF6ln beh\xE4lt sich das Recht vor, Inhalte auch
-    ohne Angabe von Gr\xFCnden nicht oder nur in einen begrenzten Zeitraum auf dem
-    Webportal bereitzuhalten sowie GeoQuests zu \xE4ndern oder zu l\xF6schen.  1.3.6.\tDer
-    Autor ist angehalten nur solche Inhalte auf dem Webportal einzustellen, an den
-    er die notwendigen Rechte hat. In der Regel besitzt der Autor die erforderlichen
-    Rechte nur, wenn er die Inhalte selbst erstellt oder die Zustimmung vom Rechteinhaber
-    eingeholt hat. Dies gilt insbesondere bei von ihm eingestelltem Bildmaterial.
-    Falls auf dem Bildmaterial Personen abgebildet werden, ist dar\xFCber hinaus sicherzustellen,
-    dass die Einwilligung der abgebildeten Person vorliegt.  1.3.7.\tDer Autor stellt
-    das Erzbistum K\xF6ln von Anspr\xFCchen Dritter, insbesondere von Anspr\xFCchen
-    wegen schuldhaft verursachten Urheberrechts-, Wettbewerbs-, Markenrechts- und
-    Pers\xF6nlichkeitsrechtsverletzungen, die gegen das Erzbistum K\xF6ln im Zusammenhang
-    mit vom Autor erstellten GeoQuests geltend gemacht werden, auf erstes Anfordern
-    hin frei. Dem Autor bekannt werdende Beeintr\xE4chtigungen der vertragsgegenst\xE4ndlichen
-    Rechte hat dieser dem Erzbistum K\xF6ln unverz\xFCglich mitzuteilen.  1.3.8.\tDer
-    Autor ist berechtigt, selbst geeignete Ma\xDFnahmen zur Abwehr von Anspr\xFCchen
-    Dritter oder zur Verfolgung seiner Rechte vorzunehmen. Eigene Ma\xDFnahmen des
-    Autors hat dieser im Vorwege mit dem Erzbistum K\xF6ln abzustimmen. Die Freistellung
-    beinhaltet auch den Ersatz der Kosten, die dem Erzbistum K\xF6ln durch die Rechtsverfolgung/-verteidigung
+    \u201EApp\u201C) zur Verf\xFCgung gestellt.<br>1.\tGeltungsbereich der Nutzungsbedingungen<br>Diese
+    Nutzungsbedingungen gelten f\xFCr alle Inhalte und Dienste, die durch das Erzbistum
+    K\xF6ln im Rahmen des Webportals unter www.tap-erlebnis.de und der App angeboten
+    werden. Die Nutzungsbedingungen sind jederzeit abrufbar. Es besteht die M\xF6glichkeit,
+    dass die Nutzungsbedingungen ausgedruckt werden.  <br>Entgegenstehende oder diesen
+    Nutzungsbedingungen abweichende Bedingungen des Nutzer haben keine Geltung.  <br>1.1.\tBereitstellungsbedingungen<br>1.1.1.\tDurch
+    die unentgeltliche Bereitstellung sowie durch einen entsprechenden Abruf der GeoQuests
+    seitens der nicht registrierten Nutzer wird kein Vertragsverh\xE4ltnis zwischen
+    dem Erzbistum K\xF6ln und dem jeweiligen Nutzer begr\xFCndet. <br>1.1.2.\tDas
+    Erzbistum K\xF6ln ist bem\xFCht, einen ordnungsgem\xE4\xDFen Betrieb des Webportals
+    sicherzustellen, steht jedoch nicht f\xFCr die ununterbrochene Nutzbarkeit bzw.
+    Erreichbarkeit des Webportals ein. Dies gilt insbesondere f\xFCr technisch bedingte
+    Verz\xF6gerungen im Rahmen von Wartungsarbeiten oder Weiterentwicklungen, Unterbrechungen
+    oder Ausf\xE4lle der Angebote, des Internets oder des Zugangs zum Internet. <br>1.1.3.\tDas
+    Erzbistum K\xF6ln beh\xE4lt sich vor, Teile der Angebote, einzelne Angebote oder
+    alle Angebote als Ganzes ohne gesonderte Vorank\xFCndigung zu ver\xE4ndern oder
+    die Ver\xF6ffentlichung zeitweise oder endg\xFCltig einzustellen. Entsch\xE4digungsanspr\xFCche
+    des Nutzers entstehen hieraus nicht. <br>1.2.\tRegistrierung <br>1.2.1.\tDie Nutzung
+    des Webportals ist erst nach erfolgreicher Registrierung des Autors m\xF6glich.
+    Registrieren d\xFCrfen sich nur gesch\xE4ftsf\xE4hige Personen oder Personen,
+    die mit Zustimmung ihrer gesetzlichen Vertretungsberechtigten handeln.  <br>1.2.2.\tDie
+    Registrierung erfolgt \xFCber das Webportal. Der Autor kann sich durch die Eingabe
+    eines Nicknamen und einer E-Mail-Adresse registrieren. Nach der Registrierung
+    erh\xE4lt der Kunde eine Best\xE4tigung \xFCber die Erstellung des Accounts per
+    E-Mail.<br>1.2.3.\tDer Autor ist verpflichtet, im Rahmen des Registrierungsprozesses
+    wahrheitsgem\xE4\xDFe Angaben zu machen und seine Angaben soweit erforderlich
+    zu aktualisieren. Insbesondere d\xFCrfen durch die Registrierung keine Rechte
+    Dritter verletzt werden (z.B. Verwendung von personenbezogenen Daten Dritter).<br>1.2.4.\tDer
+    Autor hat ein dem Stand der Technik nach sicheres Passwort zu w\xE4hlen. Das Passwort
+    zeichnet sich dadurch aus, dass es mindestens aus 12 Zeichen (darunter Gro\xDF-
+    und Kleinbuchstaben, Ziffern und Sonderzeichen) besteht. Der Autor ist verpflichtet
+    dieses Passwort geheim zu halten. <br>1.2.5.\tEin Anspruch auf Registrierung besteht
+    nicht. <br>1.3.\tRechte an den Inhalten <br>1.3.1.\tDas Webportal enth\xE4lt Inhalte,
+    die sowohl von dem Erzbistum K\xF6ln, als auch von den Nutzern erstellt wurden.
+    Das gesamte Material, das auf dem Webportal ver\xF6ffentlicht ist, insbesondere
+    Texte, Fotografien, Grafiken und Videoclips, unterliegt dem jeweils geltenden
+    gesetzlichen Schutz, insbesondere dem Marken-, Urheber-, Leistungsschutz- und
+    Wettbewerbsrecht. Die Vervielf\xE4ltigung, \xF6ffentliche Wiedergabe oder die
+    sonstige Nutzung oder Verwertung derart gesch\xFCtzter Inhalte ist ohne Zustimmung
+    des jeweiligen Rechteinhabers in der Regel unzul\xE4ssig. <br>1.3.2.\tMit dem
+    Hochladen von Texten, Bildern, Screenshots oder anderen urheberrechtlich gesch\xFCtzten
+    Inhalten auf das Webportal gew\xE4hrt der Nutzer und/oder Autor dem Erzbistum
+    K\xF6ln unentgeltlich ein \xFCbertragbares, nicht ausschlie\xDFliches, r\xE4umlich
+    und zeitlich unbeschr\xE4nktes Recht diese Inhalte zu nutzen. Hiervon umfasst
+    ist auch das Recht zur Bearbeitung und \xDCbersetzung der zur Verf\xFCgung gestellten
+    Werke. <br>1.3.3.\tMit Ver\xF6ffentlichung der GeoQuests auf dem Webportal gew\xE4hrt
+    der Autor dem Erzbistum K\xF6ln unentgeltlich ein \xFCbertragbares, nicht ausschlie\xDFliches,
+    r\xE4umlich und zeitlich unbeschr\xE4nktes Recht diese Inhalte zu nutzen. Hiervon
+    ist auch das Recht zur Bearbeitung der GeoQuests umfasst. <br>1.3.4.\tSofern der
+    Autor Bilder, Texte, Lieder usw. hochl\xE4dt, hat er die M\xF6glichkeit die urheberrechtlich
+    gesch\xFCtzten Inhalte jederzeit zu l\xF6schen. Dies gilt auch f\xFCr alle von
+    ihm erstellten GeoQuests. Die mit Ziff. 1.3.2 und Ziff. 1.3.3. einger\xE4umten
+    Nutzungsrechte erl\xF6schen in diesem Fall.<br>1.3.5.\tDas Erzbistum K\xF6ln beh\xE4lt
+    sich das Recht vor, Inhalte auch ohne Angabe von Gr\xFCnden nicht oder nur in
+    einen begrenzten Zeitraum auf dem Webportal bereitzuhalten sowie GeoQuests zu
+    \xE4ndern oder zu l\xF6schen. <br>1.3.6.\tDer Autor ist angehalten nur solche
+    Inhalte auf dem Webportal einzustellen, an den er die notwendigen Rechte hat.
+    In der Regel besitzt der Autor die erforderlichen Rechte nur, wenn er die Inhalte
+    selbst erstellt oder die Zustimmung vom Rechteinhaber eingeholt hat. Dies gilt
+    insbesondere bei von ihm eingestelltem Bildmaterial. Falls auf dem Bildmaterial
+    Personen abgebildet werden, ist dar\xFCber hinaus sicherzustellen, dass die Einwilligung
+    der abgebildeten Person vorliegt. <br>1.3.7.\tDer Autor stellt das Erzbistum K\xF6ln
+    von Anspr\xFCchen Dritter, insbesondere von Anspr\xFCchen wegen schuldhaft verursachten
+    Urheberrechts-, Wettbewerbs-, Markenrechts- und Pers\xF6nlichkeitsrechtsverletzungen,
+    die gegen das Erzbistum K\xF6ln im Zusammenhang mit vom Autor erstellten GeoQuests
+    geltend gemacht werden, auf erstes Anfordern hin frei. Dem Autor bekannt werdende
+    Beeintr\xE4chtigungen der vertragsgegenst\xE4ndlichen Rechte hat dieser dem Erzbistum
+    K\xF6ln unverz\xFCglich mitzuteilen. <br>1.3.8.\tDer Autor ist berechtigt, selbst
+    geeignete Ma\xDFnahmen zur Abwehr von Anspr\xFCchen Dritter oder zur Verfolgung
+    seiner Rechte vorzunehmen. Eigene Ma\xDFnahmen des Autors hat dieser im Vorwege
+    mit dem Erzbistum K\xF6ln abzustimmen. Die Freistellung beinhaltet auch den Ersatz
+    der Kosten, die dem Erzbistum K\xF6ln durch die Rechtsverfolgung/-verteidigung
     entstehen bzw. entstanden sind. Das Erzbistum K\xF6ln wird den Autor unverz\xFCglich
     von vorzunehmenden Ma\xDFnahmen der Rechtsverfolgung/-verteidigung in Kenntnis
-    setzen.  1.4.\tVerbotene Inhalte  1.4.1.\tInhalte, die gegen geltende Gesetze
+    setzen. <br>1.4.\tVerbotene Inhalte <br>1.4.1.\tInhalte, die gegen geltende Gesetze
     versto\xDFen oder in sonstiger Weise rechtswidrige Inhalt haben, sind verboten.
     Ebenso sind Inhalte verboten, die sch\xE4digend, bedrohend, missbr\xE4uchlich,
     bel\xE4stigend, verleumderisch, diskriminierend, ehrverletzend, sexistisch, pornographisch,
     Gewalt verherrlichend oder verharmlosend, rassistisch, extremistisch, f\xFCr terroristische
     oder extremistische politische Vereinigung werbend, zu einer Straftat auffordernd,
     \ oder auf sonstige Weise jugendgef\xE4hrdend sind. Die Strafgesetze und Jugendschutzbestimmungen
-    sind zu beachten.  1.4.2.\tUnzul\xE4ssig sind auch Inhalte, die Informationen
+    sind zu beachten. <br>1.4.2.\tUnzul\xE4ssig sind auch Inhalte, die Informationen
     \xFCber illegale Aktivit\xE4ten verbreiten(z.B. das Thematisieren von illegalen
-    Programmen, Cracks, illegalen Downloads, Emulatoren). 1.4.3.\tInhalte, die Rechte
-    Dritter verletzen, insbesondere Patente, Marken-, Urheber- oder Leistungsschutzrechte,
+    Programmen, Cracks, illegalen Downloads, Emulatoren).<br>1.4.3.\tInhalte, die
+    Rechte Dritter verletzen, insbesondere Patente, Marken-, Urheber- oder Leistungsschutzrechte,
     Gesch\xE4ftsgeheimnisse, Pers\xF6nlichkeitsrechte oder Eigentumsrechte, d\xFCrfen
-    nicht hochgeladen und zum Abruf bereit gehalten werden.  1.4.4.\tDie Ver\xF6ffentlichung
+    nicht hochgeladen und zum Abruf bereit gehalten werden. <br>1.4.4.\tDie Ver\xF6ffentlichung
     von personenbezogenen Daten Dritter (z.B. Name, Adresse, Telefonnummer) ohne ausdr\xFCckliche
-    schriftliche Zustimmung des Betroffenen ist nicht erlaubt.  1.4.5.\tInhalte, die
-    Waren oder Dienstleistungen anbieten bzw. sonstigen werblichen oder kommerziellen
+    schriftliche Zustimmung des Betroffenen ist nicht erlaubt. <br>1.4.5.\tInhalte,
+    die Waren oder Dienstleistungen anbieten bzw. sonstigen werblichen oder kommerziellen
     Zwecken dienen, sind nicht gestattet. Unter dieses Verbot fallen auch Inhalte
-    wie ein \u201ESchneeballsystem\u201C. 1.4.6.\tVerlinkungen, die direkt zu einem
+    wie ein \u201ESchneeballsystem\u201C.<br>1.4.6.\tVerlinkungen, die direkt zu einem
     Download oder einer Datei f\xFChren, die in keinerlei Zusammenhang mit dem Webportal
-    stehen, sind untersagt.  1.4.7.\tMehrfach erstellte GeoQuests mit gleichem Inhalt,
-    Beitr\xE4ge mit sinnfreiem Inhalt oder Beitr\xE4ge, die einer Diskussion nicht
-    zutr\xE4glich sind, werden als Spam eingestuft und sind ebenfalls zu unterlassen.
-    1.5.\tNetiquette  Die Nutzer sind gehalten einen friedlichen Umgangston zu wahren.
-    Das Webportal soll durch die erstellten GeoQuests interessante und gewinnbringende
-    Debatten zu spirituellen, religi\xF6sen, katechetischen Inhalten f\xF6rdern. Pers\xF6nliche
+    stehen, sind untersagt. <br>1.4.7.\tMehrfach erstellte GeoQuests mit gleichem
+    Inhalt, Beitr\xE4ge mit sinnfreiem Inhalt oder Beitr\xE4ge, die einer Diskussion
+    nicht zutr\xE4glich sind, werden als Spam eingestuft und sind ebenfalls zu unterlassen.<br>1.5.\tNetiquette
+    <br>Die Nutzer sind gehalten einen friedlichen Umgangston zu wahren. Das Webportal
+    soll durch die erstellten GeoQuests interessante und gewinnbringende Debatten
+    zu spirituellen, religi\xF6sen, katechetischen Inhalten f\xF6rdern. Pers\xF6nliche
     Angriffe gegen andere Nutzer, Beleidigungen und Diskriminierungen, sind daher
     ausdr\xFCcklich nicht gestattet und werden nicht geduldet. Auf zynische und ironische
-    \xC4u\xDFerungen sollte verzichtet werden.  1.6.\tHaftung und Haftungsbeschr\xE4nkung
-    \ 1.6.1.\tDas Erzbistum K\xF6ln ist \u2013 soweit sich dies aus dem Impressum
+    \xC4u\xDFerungen sollte verzichtet werden. <br>1.6.\tHaftung und Haftungsbeschr\xE4nkung
+    <br>1.6.1.\tDas Erzbistum K\xF6ln ist \u2013 soweit sich dies aus dem Impressum
     des jeweiligen Angebots ergibt \u2013 Diensteanbieter i.S.d. \xA7 7 Abs. 1 TMG
     und f\xFCr eigene Inhalte, die im Rahmen des Webportals abrufbar sind, nach den
     allgemeinen Gesetzen verantwortlich. Das Erzbistum K\xF6ln \xFCbernimmt keine
     Gew\xE4hrleistung bez\xFCglich der Ergebnisse, die durch die Nutzung der Angebote
     erzielt werden k\xF6nnen, oder bez\xFCglich der Richtigkeit und Zuverl\xE4ssigkeit
-    der im Rahmen der Angebote erh\xE4ltlichen Informationen und Anwendungen.  1.6.2.\tDas
+    der im Rahmen der Angebote erh\xE4ltlichen Informationen und Anwendungen. <br>1.6.2.\tDas
     Erzbistum K\xF6ln ist nicht verpflichtet und auch nicht in der Lage, die Rechtm\xE4\xDFigkeit
     der von Nutzern oder den Autorn hochgeladenen oder publizierten Inhalte umfassend
     zu pr\xFCfen, zu \xFCberwachen und/oder nach Umst\xE4nden zu forschen, die auf
@@ -8017,51 +7886,51 @@ MonoBehaviour:
     Inhalte nicht zu Eigen. Das Erzbistum K\xF6ln steht nicht daf\xFCr ein, dass diese
     Inhalte rechtm\xE4\xDFig, korrekt, aktuell und/oder vollst\xE4ndig sind. F\xFCr
     Sch\xE4den, die Aufgrund der Nutzung dieser Inhalte entstehen haftet das Erzbistum
-    K\xF6ln nicht. 1.6.3.\tWenn das Erzbistum K\xF6ln Hinweise auf Gesetzesverst\xF6\xDFe
+    K\xF6ln nicht.<br>1.6.3.\tWenn das Erzbistum K\xF6ln Hinweise auf Gesetzesverst\xF6\xDFe
     oder Rechtsverletzungen durch fremde oder verlinkte Inhalte erh\xE4lt, wird das
     Erzbistum K\xF6ln soweit eine Pflicht besteht die Inhalte \xFCberpr\xFCfen und
-    erforderlichenfalls sperren und l\xF6schen.  1.6.4.\tDas Erzbistum K\xF6ln haftet
-    f\xFCr Schadensersatz oder Ersatz vergeblicher Aufwendungen unbeschr\xE4nkt bei
-    Vorsatz oder grober Fahrl\xE4ssigkeit, f\xFCr die Verletzung von Leben, Leib oder
-    Gesundheit, nach den Vorschriften des Produkthaftungsgesetzes sowie im Umfang
-    einer vom Erzbistum K\xF6ln \xFCbernommenen Garantie. 1.6.5.\tBei leicht fahrl\xE4ssiger
+    erforderlichenfalls sperren und l\xF6schen. <br>1.6.4.\tDas Erzbistum K\xF6ln
+    haftet f\xFCr Schadensersatz oder Ersatz vergeblicher Aufwendungen unbeschr\xE4nkt
+    bei Vorsatz oder grober Fahrl\xE4ssigkeit, f\xFCr die Verletzung von Leben, Leib
+    oder Gesundheit, nach den Vorschriften des Produkthaftungsgesetzes sowie im Umfang
+    einer vom Erzbistum K\xF6ln \xFCbernommenen Garantie.<br>1.6.5.\tBei leicht fahrl\xE4ssiger
     Verletzung einer Pflicht, die wesentlich f\xFCr die Erreichung des Vertragszwecks
     ist (Kardinalpflicht), ist die Haftung vom Erzbistum K\xF6ln der H\xF6he nach
     begrenzt auf den Schaden, der nach der Art des fraglichen Gesch\xE4fts vorhersehbar
-    und typisch ist. 1.6.6.\tDie vorstehende Haftungsbeschr\xE4nkung der Ziff. 1.6.4.
-    \u2013 1.6.5. gilt auch f\xFCr die pers\xF6nliche Haftung der Mitarbeiter, Vertreter
-    und Organe des Erzbistums K\xF6ln.  1.6.7.\tDas Erzbistum K\xF6ln haftet f\xFCr
-    den Verlust von Daten nur bis zu dem Betrag, der bei ordnungsgem\xE4\xDFer und
-    regelm\xE4\xDFiger, gefahrentsprechender Sicherung der Daten zu deren Wiederherstellung
-    angefallen w\xE4re. 1.6.8.\tEine dar\xFCber hinausgehende Haftung besteht nicht.
-    \ 1.7.\tDatenschutz Wir nehmen den Schutz Ihrer Daten sehr ernst. Das Erzbistum
+    und typisch ist.<br>1.6.6.\tDie vorstehende Haftungsbeschr\xE4nkung der Ziff.
+    1.6.4. \u2013 1.6.5. gilt auch f\xFCr die pers\xF6nliche Haftung der Mitarbeiter,
+    Vertreter und Organe des Erzbistums K\xF6ln. <br>1.6.7.\tDas Erzbistum K\xF6ln
+    haftet f\xFCr den Verlust von Daten nur bis zu dem Betrag, der bei ordnungsgem\xE4\xDFer
+    und regelm\xE4\xDFiger, gefahrentsprechender Sicherung der Daten zu deren Wiederherstellung
+    angefallen w\xE4re.<br>1.6.8.\tEine dar\xFCber hinausgehende Haftung besteht nicht.
+    <br>1.7.\tDatenschutz<br>Wir nehmen den Schutz Ihrer Daten sehr ernst. Das Erzbistum
     K\xF6ln wird die personenbezogenen Daten, die wir von den Nutzern und Autorn erhalten
     nicht unbefugt an Dritte weitergeben oder zur Kenntnis bringen. Einzelheiten zur
-    Datenerhebung und Datenverarbeitung sind den Datenschutzbestimmungen zu entnehmen.
-    1.8.\tOffenlegung von Informationen  Das Erzbistum K\xF6ln ist berechtigt, vorhandene
-    Informationen von und \xFCber Nutzer ohne dessen ausdr\xFCckliches Einverst\xE4ndnis
-    an Dritte herauszugeben, soweit es hierzu verpflichtet oder nach pflichtgem\xE4\xDFen
-    Ermessen notwendig und rechtlich zul\xE4ssig ist, um gesetzliche Bestimmungen
-    oder richterliche oder beh\xF6rdliche Anordnungen zu erf\xFCllen.  1.9.\tAnwendbares
-    Recht, Gerichtsstand 1.9.1.\tEs gilt das Recht der Bundesrepublik Deutschland
-    unter Ausschluss der Normen des Kollisionsrechts und des UN-Kaufrechts.  1.9.2.\tGerichtsstand
-    f\xFCr alle Streitigkeiten ist \u2013 soweit gesetzlich zul\xE4ssig \u2013 der
-    Sitz des Erzbistums K\xF6ln.  1.10.\tSalvatorische Klausel  Sollten einzelne Regelungen
-    der Nutzungsbedingungen unwirksam sein oder werden, wird dadurch die Wirksamkeit
-    der \xFCbrigen Regelungen nicht ber\xFChrt. Sofern Teile der Nutzungsbedingungen
-    der geltenden Rechtslage nicht, nicht mehr oder nicht vollst\xE4ndig entsprechen
-    sollten, bleiben die \xFCbrigen Teile in ihrem Inhalt und ihrer G\xFCltigkeit
-    davon unber\xFChrt und der ung\xFCltige Teil gilt als durch einen solchen ersetzt,
-    der dem Sinn und Zweck des unwirksamen Teils bzw. dem Parteiwillen in rechtswirksamer
-    Weise wirtschaftlich am n\xE4chsten kommt.  1.11.\t\xC4nderungsvorbehalt Das Erzbistum
-    K\xF6ln hat das Recht, Bestimmungen dieser Nutzungsbedingungen zu \xE4ndern, wenn
-    ein wichtiger Grund hierf\xFCr vorliegt. Das Erzbistum K\xF6ln wird den Nutzern
-    die \xC4nderung per E-Mail mitteilen. Widerspricht der Nutzer nicht innerhalb
-    einer Frist von 6 Wochen nach Erhalt der E-Mail, gelten die ge\xE4nderten Nutzungsbedingungen
+    Datenerhebung und Datenverarbeitung sind den Datenschutzbestimmungen zu entnehmen.<br>1.8.\tOffenlegung
+    von Informationen <br>Das Erzbistum K\xF6ln ist berechtigt, vorhandene Informationen
+    von und \xFCber Nutzer ohne dessen ausdr\xFCckliches Einverst\xE4ndnis an Dritte
+    herauszugeben, soweit es hierzu verpflichtet oder nach pflichtgem\xE4\xDFen Ermessen
+    notwendig und rechtlich zul\xE4ssig ist, um gesetzliche Bestimmungen oder richterliche
+    oder beh\xF6rdliche Anordnungen zu erf\xFCllen. <br>1.9.\tAnwendbares Recht, Gerichtsstand<br>1.9.1.\tEs
+    gilt das Recht der Bundesrepublik Deutschland unter Ausschluss der Normen des
+    Kollisionsrechts und des UN-Kaufrechts.<br><br>1.9.2.\tGerichtsstand f\xFCr alle
+    Streitigkeiten ist \u2013 soweit gesetzlich zul\xE4ssig \u2013 der Sitz des Erzbistums
+    K\xF6ln. <br>1.10.\tSalvatorische Klausel <br>Sollten einzelne Regelungen der
+    Nutzungsbedingungen unwirksam sein oder werden, wird dadurch die Wirksamkeit der
+    \xFCbrigen Regelungen nicht ber\xFChrt. Sofern Teile der Nutzungsbedingungen der
+    geltenden Rechtslage nicht, nicht mehr oder nicht vollst\xE4ndig entsprechen sollten,
+    bleiben die \xFCbrigen Teile in ihrem Inhalt und ihrer G\xFCltigkeit davon unber\xFChrt
+    und der ung\xFCltige Teil gilt als durch einen solchen ersetzt, der dem Sinn und
+    Zweck des unwirksamen Teils bzw. dem Parteiwillen in rechtswirksamer Weise wirtschaftlich
+    am n\xE4chsten kommt. <br>1.11.\t\xC4nderungsvorbehalt<br>Das Erzbistum K\xF6ln
+    hat das Recht, Bestimmungen dieser Nutzungsbedingungen zu \xE4ndern, wenn ein
+    wichtiger Grund hierf\xFCr vorliegt. Das Erzbistum K\xF6ln wird den Nutzern die
+    \xC4nderung per E-Mail mitteilen. Widerspricht der Nutzer nicht innerhalb einer
+    Frist von 6 Wochen nach Erhalt der E-Mail, gelten die ge\xE4nderten Nutzungsbedingungen
     als vereinbart. Der Nutzer wird auf diese Rechtsfolge hingewiesen. Widerspricht
     der Nutzer den neuen Nutzungsbedingungen, kann das Erzbistum K\xF6ln den Vertrag
-    nach Ma\xDFgabe ordentlich k\xFCndigen Stand:  Dezember2015  "
-  agbsVersion: 5
+    nach Ma\xDFgabe ordentlich k\xFCndigen<br>Stand:  Dezember 2015 <br>"
+  agbsVersion: 1
   questvisualizationchangable: 0
   showcloudquestsimmediately: 1
   showtextinloadinglogo: 1
