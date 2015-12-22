@@ -2264,6 +2264,7 @@ GameObject:
   - 222: {fileID: 238289914}
   - 114: {fileID: 238289913}
   - 114: {fileID: 238289915}
+  - 114: {fileID: 238289916}
   m_Layer: 5
   m_Name: Version
   m_TagString: Untagged
@@ -2319,7 +2320,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Version 1.0.8
+  m_Text: will show up
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2341,6 +2342,17 @@ MonoBehaviour:
   keepTranslatingAtRuntime: 1
   translateOnlyPart: 
   currentLanguage: 
+--- !u!114 &238289916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 238289911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5bbd6b7fc3b74ca4863cb6461086875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &265351026
 GameObject:
   m_ObjectHideFlags: 0
@@ -8024,6 +8036,7 @@ MonoBehaviour:
   checkForAppversion: 1
   appVersionURL: https://quest-mill.com/appversion/121.html
   appVersion: 1
+  subversionNumber: 0.9
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -16522,6 +16535,7 @@ GameObject:
   - 222: {fileID: 1583482457}
   - 114: {fileID: 1583482456}
   - 114: {fileID: 1583482458}
+  - 114: {fileID: 1583482459}
   m_Layer: 5
   m_Name: SmallVersion
   m_TagString: Untagged
@@ -16577,7 +16591,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Version 1.0.7
+  m_Text: will show up
 --- !u!222 &1583482457
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16599,6 +16613,17 @@ MonoBehaviour:
   keepTranslatingAtRuntime: 0
   translateOnlyPart: Version
   currentLanguage: 
+--- !u!114 &1583482459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1583482454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5bbd6b7fc3b74ca4863cb6461086875, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1603723952
 GameObject:
   m_ObjectHideFlags: 0
