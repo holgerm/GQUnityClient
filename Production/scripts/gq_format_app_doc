@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Welcome to gq_format_app_doc!"
+
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+
+echo "<br>" >> out.txt 
+perl -p -e 's/\n/<br>/' $1 > $1.gqapp 
+cat $1.gqapp >> out.txt 
+rm $1.gqapp
+mv out.txt $1.gqapp
+
+IFS=$SAVEIFS
