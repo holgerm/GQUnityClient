@@ -231,11 +231,6 @@ public class questdatabase : MonoBehaviour {
 
 			string[] split = d.Www.text.Split(';');
 
-			foreach ( string s in split ) {
-
-				Debug.Log(s);
-			}
-
 			int num;
 			if ( int.TryParse(split[0], out num) ) {
 
