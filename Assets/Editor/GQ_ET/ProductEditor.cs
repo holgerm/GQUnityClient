@@ -15,7 +15,7 @@ namespace GQ.ET {
 		static private int selectedProductIndex;
 		static private string[] productIDs;
 		static private bool initialized = false;
-		public const string PRODUCTS_DIR = "Assets/Editor/products";
+		public const string PRODUCTS_DIR = "Assets/Editor/products/";
 		const string RT_PROD_DIR = ProductConfigManager.RUNTIME_PRODUCT_DIR;
 		const string RT_PROD_FILE = ProductConfigManager.RUNTIME_PRODUCT_FILE;
 		const string APP_ICON_FILE_BASE = "appIcon";
@@ -31,7 +31,6 @@ namespace GQ.ET {
 			}
 			set {
 				if ( !value.Equals(_appIconTexture) ) {
-					Debug.Log("resetting appIcon");
 					_appIconTexture = value;
 					PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Unknown, new Texture2D[] {
 						_appIconTexture
@@ -48,15 +47,14 @@ namespace GQ.ET {
 			}
 			set {
 				if ( value != null ) {
-					Debug.Log("setting splashScreen to a gven value.");
 					_splashScreen = value;
 					PlayerSettings.resolutionDialogBanner = _splashScreen;
 					try {
+//						Files.CopyImage(ProductConfigManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, PLACEHOLDERS_SPLASHSCREEN_FILE);
 						if ( File.Exists(PLACEHOLDERS_SPLASHSCREEN_FILE) ) {
 							File.Delete(PLACEHOLDERS_SPLASHSCREEN_FILE);
 						}
-						FileUtil.CopyFileOrDirectory(ProductConfigManager.RUNTIME_PRODUCT_DIR + "/splashScreen.jpg", PLACEHOLDERS_SPLASHSCREEN_FILE);
-						Debug.Log("setting Splashscreen newly.");
+						FileUtil.CopyFileOrDirectory(ProductConfigManager.RUNTIME_PRODUCT_DIR + "splashScreen.jpg", PLACEHOLDERS_SPLASHSCREEN_FILE);
 					} catch ( Exception exc ) {
 						Debug.Log("setting Splashscreen newly. Exception: " + exc.Message);
 					}
@@ -379,9 +377,9 @@ namespace GQ.ET {
 		/// </summary>
 		/// <param name="id">Product Identifier.</param>
 		public static void load (string id) {
-			DirectoryInfo configPersistentDir = new DirectoryInfo(PRODUCTS_DIR + "/" + id);
+			DirectoryInfo configPersistentDir = new DirectoryInfo(PRODUCTS_DIR + id);
 			DirectoryInfo configRuntimeDir = new DirectoryInfo(RT_PROD_DIR);
-			
+
 			if ( !configRuntimeDir.Exists ) {
 				configRuntimeDir.Create();
 			}
@@ -392,13 +390,11 @@ namespace GQ.ET {
 			
 			foreach ( FileInfo file in configPersistentDir.GetFiles() ) {
 				if ( !file.Extension.ToLower().EndsWith("meta") && !file.Extension.ToLower().EndsWith("ds_store") ) {
-					File.Copy(file.FullName, RT_PROD_DIR + "/" + file.Name);
-					Debug.Log("load(" + id + ") target: " + RT_PROD_DIR + "/" + file.Name);
+					File.Copy(file.FullName, RT_PROD_DIR + file.Name);
 				}
 			}
 
-			Debug.Log("Import assets in load(" + id + ")");
-			AssetDatabase.ImportAsset(RT_PROD_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+			AssetDatabase.Refresh();
 
 			ProductConfigManager.deserialize();
 			
@@ -406,55 +402,53 @@ namespace GQ.ET {
 			PlayerSettings.bundleIdentifier = "com.questmill.geoquest." + ProductConfigManager.current.id;
 			
 			// load images:
-			if ( File.Exists(RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".png") ) {
+			if ( File.Exists(RT_PROD_DIR + APP_ICON_FILE_BASE + ".png") ) {
 				appIcon = 
-					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".png") as Texture2D;
+					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + APP_ICON_FILE_BASE + ".png") as Texture2D;
 			}
 			else
-			if ( File.Exists(RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".jpg") ) {
+			if ( File.Exists(RT_PROD_DIR + APP_ICON_FILE_BASE + ".jpg") ) {
 				appIcon = 
-					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + "/" + APP_ICON_FILE_BASE + ".jpg") as Texture2D;
+					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + APP_ICON_FILE_BASE + ".jpg") as Texture2D;
 			}
 			else {
 				appIcon = null;
 			} // TODO replace null with default
 
-//			splashScreen = null;
-			if ( File.Exists(RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png") ) {
+			if ( File.Exists(RT_PROD_DIR + SPLASH_SCREEN_FILE_BASE + ".png") ) {
 				splashScreen = 
-					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".png") as Texture2D;
+					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + SPLASH_SCREEN_FILE_BASE + ".png") as Texture2D;
 			}
 			else
-			if ( File.Exists(RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg") ) {
+			if ( File.Exists(RT_PROD_DIR + SPLASH_SCREEN_FILE_BASE + ".jpg") ) {
 				splashScreen = 
-					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + "/" + SPLASH_SCREEN_FILE_BASE + ".jpg") as Texture2D;
-				Debug.Log("TEST");
+					AssetDatabase.LoadMainAssetAtPath(RT_PROD_DIR + SPLASH_SCREEN_FILE_BASE + ".jpg") as Texture2D;
 			}
 			else {
 				splashScreen = null;
 			} // TODO replace null with default
 			
-			if ( File.Exists(RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd") ) {
+			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".psd") ) {
 				ProductConfigManager.topLogo = 
-					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
+					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
 			}
 			else
-			if ( File.Exists(RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".png") ) {
+			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".png") ) {
 				ProductConfigManager.topLogo = 
-					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			}
 			else
-			if ( File.Exists(RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg") ) {
+			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".jpg") ) {
 				ProductConfigManager.topLogo = 
-					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + "/" + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
+					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
 			}
 			else {
 				ProductConfigManager.topLogo = null;
 			} // TODO replace null with default
 			
-			if ( File.Exists(RT_PROD_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png") ) {
+			if ( File.Exists(RT_PROD_DIR + DEFAULT_MARKER_FILE_BASE + ".png") ) {
 				ProductConfigManager.defaultMarker = 
-					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + "/" + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
+					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			}
 			else {
 				ProductConfigManager.defaultMarker = null;
@@ -474,7 +468,7 @@ namespace GQ.ET {
 
 			serialize();
 			
-			string configPersistentDirPath = PRODUCTS_DIR + "/" + productID;
+			string configPersistentDirPath = PRODUCTS_DIR + productID;
 			DirectoryInfo configPersistentDir = new DirectoryInfo(configPersistentDirPath);
 			DirectoryInfo configRuntimeDir = new DirectoryInfo(RT_PROD_DIR);
 			
@@ -494,7 +488,7 @@ namespace GQ.ET {
 
 			// TODO should we store the images, too?
 			Debug.Log("Import assets in save(" + productID + ")");
-			AssetDatabase.ImportAsset(PRODUCTS_DIR + "/" + ProductConfigManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+			AssetDatabase.ImportAsset(PRODUCTS_DIR + ProductConfigManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
 		
 		static void serialize () {
@@ -503,7 +497,9 @@ namespace GQ.ET {
 			jsonWriter.PrettyPrint = true;
 			JsonMapper.ToJson(ProductConfigManager.current, jsonWriter);
 			File.WriteAllText(RT_PROD_FILE + ".json", sb.ToString());
-			AssetDatabase.ImportAsset(RT_PROD_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+			AssetDatabase.Refresh();
+			Debug.Log("CHECKED");
+//			AssetDatabase.ImportAsset(RT_PROD_DIR, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
 
 		void changeProduct (int index) {

@@ -9,11 +9,11 @@ using System.Text;
 namespace GQ.Conf {
 	public class ProductConfigManager {
 
-		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
-		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "/product";
+		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources/";
+		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "product";
 		public const string PRODUCT_FILE = "product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
-		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
+		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + BUILD_TIME_FILE_NAME + ".txt";
 
 		#region RETRIEVING THE CURRENT PRODUCT
 		private static Config _current = null;
