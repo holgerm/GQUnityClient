@@ -8,6 +8,7 @@ using GQ.Conf;
 using System;
 using System.Text;
 using System.Reflection;
+using GQ.Util;
 
 namespace GQ.ET {
 	public class ProductEditor : EditorWindow {
@@ -386,7 +387,7 @@ namespace GQ.ET {
 			}
 			
 			#if !UNITY_WEBPLAYER
-			GQ.Util.Files.clearDirectory(configRuntimeDir.FullName);
+			Files.ClearDirectory(configRuntimeDir.FullName);
 			#endif
 			
 			foreach ( FileInfo file in configPersistentDir.GetFiles() ) {
@@ -482,7 +483,7 @@ namespace GQ.ET {
 			}
 			
 			#if !UNITY_WEBPLAYER
-			GQ.Util.Files.clearDirectory(configPersistentDir.FullName);
+			Files.ClearDirectory(configPersistentDir.FullName);
 			#endif			
 
 			foreach ( FileInfo file in configRuntimeDir.GetFiles() ) {
