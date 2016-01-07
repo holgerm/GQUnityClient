@@ -22,7 +22,7 @@ namespace GQ.ET {
 		const string SPLASH_SCREEN_FILE_BASE = "splashScreen";
 		const string TOP_LOGO_FILE_BASE = "topLogo";
 		const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
-		const string PLACEHOLDERS_SPLASHSCREEN_FILE = "Assets/Editor/productPlaceholders/splashScreen.jpg";
+		const string PLACEHOLDERS_SPLASHSCREEN_FILE = "Assets/Editor/productPlaceholders/splashScreen";
 		private static Texture2D _appIconTexture;
 		
 		public static Texture2D appIcon {
@@ -50,19 +50,12 @@ namespace GQ.ET {
 					_splashScreen = value;
 					PlayerSettings.resolutionDialogBanner = _splashScreen;
 					try {
-//						Files.CopyImage(ProductConfigManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, PLACEHOLDERS_SPLASHSCREEN_FILE);
-						if ( File.Exists(PLACEHOLDERS_SPLASHSCREEN_FILE) ) {
-							File.Delete(PLACEHOLDERS_SPLASHSCREEN_FILE);
-						}
-						FileUtil.CopyFileOrDirectory(ProductConfigManager.RUNTIME_PRODUCT_DIR + "splashScreen.jpg", PLACEHOLDERS_SPLASHSCREEN_FILE);
+						Files.CopyImage(ProductConfigManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, 
+						                PLACEHOLDERS_SPLASHSCREEN_FILE);
 					} catch ( Exception exc ) {
-						Debug.Log("setting Splashscreen newly. Exception: " + exc.Message);
 					}
 					AssetDatabase.Refresh();
 				}
-//				else {
-//					Debug.Log("splashScreen was same");
-//				}
 			}
 		}
 		

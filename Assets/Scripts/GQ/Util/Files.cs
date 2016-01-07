@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using UnityEngine;
+using UnityEditor;
 
 namespace GQ.Util {
 	public static class Files {
@@ -64,7 +66,7 @@ namespace GQ.Util {
 		public static void Delete (string filePath, string[] extensions) {
 			foreach ( string ext in extensions ) {
 				if ( File.Exists(filePath + ext) ) {
-					File.Delete(filePath + ext);
+					FileUtil.DeleteFileOrDirectory(filePath + ext);
 				}
 			}
 		}
@@ -96,8 +98,10 @@ namespace GQ.Util {
 			while ( !copied && i < extensions.Length ) {
 				// copy file with all found extensions:
 				if ( File.Exists(sourceFilePath + extensions[i]) ) {
-					File.Copy(sourceFilePath + extensions[i], targetFilePath + extensions[i]);
+					File.Copy(sourceFilePath + extensions[i], targetFilePath + extensions[i], true);
+					copied = true;
 				}
+				i++;
 			}
 		}
 
