@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using UnityEngine;
-using UnityEditor;
 
 namespace GQ.Util {
 	public static class Files {
@@ -66,7 +65,7 @@ namespace GQ.Util {
 		public static void Delete (string filePath, string[] extensions) {
 			foreach ( string ext in extensions ) {
 				if ( File.Exists(filePath + ext) ) {
-					FileUtil.DeleteFileOrDirectory(filePath + ext);
+					File.Delete(filePath + ext);
 				}
 			}
 		}
