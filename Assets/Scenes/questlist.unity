@@ -7703,12 +7703,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 2
+  product: 6
   overrideProductSettingsInInspector: 0
-  portalID: 141
+  portalID: 341
   autostartQuestID: 0
   autostartIsPredeployed: 0
-  colorProfile: wcc
+  colorProfile: ebk
   mapboxKey: pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ
   mapboxMapID: gqebk.ed1de6df
   downloadTimeOutSeconds: 100
