@@ -12,7 +12,8 @@ public class Configuration : MonoBehaviour {
 		ErzbistumKoeln, 
 		LWL,
 		WikiCultureCity, 
-		Intern
+		Intern,
+		Demos
 	}
 	public ProductIDs product;
 	public bool overrideProductSettingsInInspector = false;
@@ -173,6 +174,16 @@ public class Configuration : MonoBehaviour {
 			case ProductIDs.Public:
 				productName = "public";
 				portalID = 61;
+				autostartQuestID = 0;
+				downloadTimeOutSeconds = 60;
+				colorProfile = "default";
+				mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+				mapboxMapID = "mapbox.streets";
+				impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
+				break;
+			case ProductIDs.Demos:
+				productName = "demos";
+				portalID = 341;
 				autostartQuestID = 0;
 				downloadTimeOutSeconds = 60;
 				colorProfile = "default";
