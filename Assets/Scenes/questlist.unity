@@ -7944,7 +7944,7 @@ MonoBehaviour:
     nach Ma\xDFgabe ordentlich k\xFCndigen<br>Stand:  Dezember 2015 <br>"
   agbsVersion: 1
   questvisualizationchangable: 0
-  showcloudquestsimmediately: 1
+  showcloudquestsimmediately: 0
   showtextinloadinglogo: 1
   showinternetconnectionmessage: 1
   defaultlanguage: system
@@ -9007,7 +9007,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
