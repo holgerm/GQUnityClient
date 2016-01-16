@@ -589,6 +589,9 @@ public class page_map : MonoBehaviour {
 			go.AddComponent<onTapMarker>();
 			go.GetComponent<onTapMarker>().hotspot = qrh;
 		
+			// TODO do not draw radius circles on real devices:
+#if (UNITY_WEBPLAYER || UNITY_EDITOR) 
+
 			if ( questdb.currentquest != null && questdb.currentquest.id != 0 ) {
 				go.AddComponent<circletests>();
 		
@@ -596,6 +599,8 @@ public class page_map : MonoBehaviour {
 					go.GetComponent<circletests>().radius = int.Parse(qrh.hotspot.getAttribute("radius"));
 				}
 			}
+
+#endif
 
 			go.GetComponent<BoxCollider>().center = new Vector3(0f, 0f, 0.5f);
 			go.GetComponent<BoxCollider>().size = new Vector3(1f, 0.1f, 1f);
