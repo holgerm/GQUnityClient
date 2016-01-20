@@ -401,8 +401,9 @@ public class questdatabase : MonoBehaviour {
 			
 			
 			string version = www.text;
-			Debug.Log("AGB Version: " + version);
-			
+			Debug.Log("AGB Version Online: " + version);
+			Debug.Log("AGB Version Read: " + agbVersionRead);
+
 			
 			if ( int.Parse(version) > agbVersionRead || Configuration.instance.agbsVersion > agbVersionRead ) {
 				
@@ -421,11 +422,14 @@ public class questdatabase : MonoBehaviour {
 					Configuration.instance.agbs = agreement;
 					GameObject.Find("ImpressumCanvas").GetComponent<showimpressum>().loadAGBs();
 
+					agbObject.version = int.Parse(version);
 
 				}
-				
-				
-				agbObject.version = int.Parse(version);
+				else {
+					agbObject.version = Configuration.instance.agbsVersion;
+
+				}
+
 				agbObject.gameObject.SetActive(true);
 				
 				

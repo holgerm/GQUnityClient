@@ -1160,10 +1160,10 @@ RectTransform:
   - {fileID: 1397414575}
   m_Father: {fileID: 330467925}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 493, y: 1284}
-  m_SizeDelta: {x: 900, y: 1141}
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 900, y: 0}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &120371366
 MonoBehaviour:
@@ -2923,8 +2923,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -196}
-  m_SizeDelta: {x: 0, y: -394}
+  m_AnchoredPosition: {x: 0, y: -27}
+  m_SizeDelta: {x: 0, y: -589}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &330467926
 MonoBehaviour:
@@ -4179,10 +4179,10 @@ RectTransform:
   - {fileID: 1511673007}
   m_Father: {fileID: 1033317794}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 493, y: 1284}
-  m_SizeDelta: {x: 900, y: 1141}
+  m_AnchorMin: {x: .5, y: 0}
+  m_AnchorMax: {x: .5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 900, y: 0}
   m_Pivot: {x: .5, y: 1}
 --- !u!114 &437149053
 MonoBehaviour:
@@ -7727,19 +7727,18 @@ MonoBehaviour:
   questvisualization: list
   showMessageForDatasendAction: 1
   showPrivacyAgreement: 1
-  privacyAgreement: "<br> Datenschutzerkl\xE4rung und Einwilligung <br>Wir, das Erzbistum
-    K\xF6ln, K\xF6rperschaft des \xF6ffentlichen Rechts (Kd\xF6R), Marzellenstra\xDFe
-    32, 50668 K\xF6ln, Deutschland, freuen uns \xFCber Ihr Interesse an unserer App
-    Tap-Erlebnis. Als Anbieter dieser App ist uns der sichere Umgang mit Ihren Daten
-    besonders wichtig. Die Erhebung, Verarbeitung und Nutzung Ihrer personenbezogenen
-    Daten geschieht ausschlie\xDFlich unter Beachtung der geltenden datenschutzrechtlichen
-    Bestimmungen und des Telemediengesetzes (TMG). Ohne Ihre Zustimmung werden wir
-    Ihre personenbezogenen Daten nicht auf anderem Wege nutzen, als er sich aus oder
-    im Zusammenhang mit dieser Datenschutzerkl\xE4rung ergibt. Diese Datenschutzerkl\xE4rung
-    kann jederzeit unter der URL www.erzbistum-koeln.de/xxx abgerufen, abgespeichert
-    und ausgedruckt werden. Wir m\xF6chten Ihnen nachfolgend erl\xE4utern, welche
-    Daten wir wann und zu welchem Zweck erheben, verarbeiten und nutzen.<br><br>1.
-    Erhebung, Verarbeitung und Nutzung personenbezogener Daten<br>Personenbezogene
+  privacyAgreement: "Wir, das Erzbistum K\xF6ln, K\xF6rperschaft des \xF6ffentlichen
+    Rechts (Kd\xF6R), Marzellenstra\xDFe 32, 50668 K\xF6ln, Deutschland, freuen uns
+    \xFCber Ihr Interesse an unserer App Tap-Erlebnis. Als Anbieter dieser App ist
+    uns der sichere Umgang mit Ihren Daten besonders wichtig. Die Erhebung, Verarbeitung
+    und Nutzung Ihrer personenbezogenen Daten geschieht ausschlie\xDFlich unter Beachtung
+    der geltenden datenschutzrechtlichen Bestimmungen und des Telemediengesetzes (TMG).
+    Ohne Ihre Zustimmung werden wir Ihre personenbezogenen Daten nicht auf anderem
+    Wege nutzen, als er sich aus oder im Zusammenhang mit dieser Datenschutzerkl\xE4rung
+    ergibt. Diese Datenschutzerkl\xE4rung kann jederzeit unter der URL www.erzbistum-koeln.de/xxx
+    abgerufen, abgespeichert und ausgedruckt werden. Wir m\xF6chten Ihnen nachfolgend
+    erl\xE4utern, welche Daten wir wann und zu welchem Zweck erheben, verarbeiten
+    und nutzen.<br><br>1. Erhebung, Verarbeitung und Nutzung personenbezogener Daten<br>Personenbezogene
     Daten sind Einzelangaben \xFCber pers\xF6nliche und sachliche Verh\xE4ltnisse
     einer bestimmten oder bestimmbaren Person also Daten die R\xFCckschl\xFCsse \xFCber
     eine Person zulassen. <br>Mit der Installation von Tap-Erlebnis erheben wir folgende
@@ -7770,11 +7769,11 @@ MonoBehaviour:
     32, 50668 K\xF6ln<br>datenschutzbeauftragte@erzbistum-koeln.de<br>gerne zur Verf\xFCgung.<br>"
   privacyAgreementVersion: 1
   showAGBs: 1
-  agbs: "<br> Nutzungsbedingungen <br>Das Erzbistum K\xF6ln, Marzellenstr. 32, 50668
-    K\xF6ln vertreten durch den Generalvikar Dr. Dominik Meiering (nachfolgend \u201EErzbistum
-    K\xF6ln\u201C) betreibt eine Webportal, auf dem registrierte ehrenamtliche Mitglieder
-    (nachfolgend \u201EAutoren\u201C) mithilfe des Global Position Systems (GPS) interaktive
-    Touren zu verschiedenen Themenbereichen erstellen k\xF6nnen (nachfolgend \u201EGeoQuests\u201C).
+  agbs: "Das Erzbistum K\xF6ln, Marzellenstr. 32, 50668 K\xF6ln vertreten durch den
+    Generalvikar Dr. Dominik Meiering (nachfolgend \u201EErzbistum K\xF6ln\u201C)
+    betreibt eine Webportal, auf dem registrierte ehrenamtliche Mitglieder (nachfolgend
+    \u201EAutoren\u201C) mithilfe des Global Position Systems (GPS) interaktive Touren
+    zu verschiedenen Themenbereichen erstellen k\xF6nnen (nachfolgend \u201EGeoQuests\u201C).
     Hierzu erstellt der  Autor anhand von GPS-Koordinaten eine Route die sich unter
     Zuhilfenahme von Bildern, Texten, Videoclips und Voice-Messages mit verschiedenen
     Themenbereichen auseinandersetzt. Die GeoQuests werden sowohl registrierten, als
@@ -11116,8 +11115,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 4.76837158e-07}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -65}
+  m_SizeDelta: {x: 0, y: -544}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1033317795
 MonoBehaviour:
@@ -14589,7 +14588,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 12800000, guid: a8659e731b11d41d187d88b44827a9b9, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -15808,7 +15807,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 12800000, guid: a8659e731b11d41d187d88b44827a9b9, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -16828,7 +16827,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
