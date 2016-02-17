@@ -9,14 +9,16 @@
 // ------------------------------------------------------------------------------
 using System;
 using UnityEditor;
-using NUnit.Framework;
+
+//using NUnit.Framework;
 using UnityEngine;
 using System.IO;
 using GQ.Util;
 using System.Reflection;
+using UnityEngine.Assertions;
 
 namespace GQ.ET.Tests {
-	[TestFixture]
+	[NUnit.Framework.TestFixture]
 	public class FilesTest {
 
 		DirectoryInfo originDir, targetDir;
@@ -31,7 +33,8 @@ namespace GQ.ET.Tests {
 		};
 
 		#region Setup & TearDown
-		[SetUp]
+
+		[NUnit.Framework.SetUp]
 		public void SetUp () {
 			originDir = Directory.CreateDirectory(GQTests.TestFilesDir + "FilesTest/origin/");
 			createTestPNG(originDir.FullName + "testImage");
@@ -40,14 +43,16 @@ namespace GQ.ET.Tests {
 			targetDir = Directory.CreateDirectory(GQTests.TestFilesDir + "FilesTest/target/");
 		}
 
-		[TearDown]
+		[NUnit.Framework.TearDown]
 		public void TearDown () {
 			Files.ClearDirectory(GQTests.TestFilesDir);
 		}
+
 		#endregion
 
 		#region clear directory
-		[Test]
+
+		[NUnit.Framework.Test]
 		public void clearDirectory () {
 			// arrange:
 			createTestJPG(targetDir.FullName + "shouldBeDeleted1");
@@ -77,7 +82,7 @@ namespace GQ.ET.Tests {
 				fs.Close();
 			}
 		}
-		
+
 		void createTestJPG (string filePath) {
 			// Create the file.
 			using ( FileStream fs = File.Create(filePath + ".jpg") ) {
@@ -87,11 +92,12 @@ namespace GQ.ET.Tests {
 				fs.Close();
 			}
 		}
+
 		#endregion
 
 		#region exists
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void exists () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatExistsOnlyAfterCreated";
@@ -111,7 +117,7 @@ namespace GQ.ET.Tests {
 			Assert.IsTrue(Files.ExistsImage(filePath), "file should have been found since it is already created");
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void existImageWithEmptyExtensionArray () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatExistsOnlyAfterCreated";
@@ -126,7 +132,7 @@ namespace GQ.ET.Tests {
 			Assert.IsFalse(Files.Exists(filePath, emptyExtensions), "file should not be found with empty extension array");
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void existImageFindsJPG () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatExistsOnlyAfterCreated";
@@ -140,8 +146,8 @@ namespace GQ.ET.Tests {
 			// post assert:
 			Assert.IsTrue(Files.ExistsImage(filePath), "file should have been found since it is already created");
 		}
-		
-		[Test]
+
+		[NUnit.Framework.Test]
 		public void existImageFindsPNG () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatExistsOnlyAfterCreated";
@@ -156,7 +162,7 @@ namespace GQ.ET.Tests {
 			Assert.IsTrue(Files.ExistsImage(filePath), "file should have been found since it is already created");
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void existsNonExistingDir () {
 			// arrange:
 			string nonExistingDir = "this/is/a/non/existing/path/";
@@ -166,7 +172,7 @@ namespace GQ.ET.Tests {
 			try {
 				Assert.IsFalse(Files.Exists(nonExistingDir + filename, Files.ImageExtensions));
 			} catch ( Exception exc ) {
-				Assert.Fail("Should not throw an exception, but threw: " + exc.Message);
+				Assert.IsTrue(false, "Should not throw an exception, but threw: " + exc.Message);
 			}
 		}
 
@@ -175,7 +181,7 @@ namespace GQ.ET.Tests {
 
 		#region delete
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void deleteJPGFile () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatWillBeDeleted";
@@ -190,8 +196,8 @@ namespace GQ.ET.Tests {
 			// post assert:
 			Assert.IsFalse(Files.Exists(filePath, jpgExtensions), "file should not have been found since it is deleted");
 		}
-		
-		[Test]
+
+		[NUnit.Framework.Test]
 		public void deletePNGFile () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatWillBeDeleted";
@@ -206,8 +212,8 @@ namespace GQ.ET.Tests {
 			// post assert:
 			Assert.IsFalse(Files.Exists(filePath, pngExtensions), "file should not have been found since it is deleted");
 		}
-		
-		[Test]
+
+		[NUnit.Framework.Test]
 		public void deleteImageFiles () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatWillBeDeleted";
@@ -226,7 +232,7 @@ namespace GQ.ET.Tests {
 			Assert.IsFalse(Files.Exists(filePath, pngExtensions), "no img file should be found since it is deleted");
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void deleteNonExistingFile () {
 			// arrange:
 			string filePath = targetDir.FullName + "fileThatWillBeDeleted";
@@ -241,7 +247,7 @@ namespace GQ.ET.Tests {
 			Assert.IsFalse(Files.ExistsImage(filePath), "file should not have been found since it is deleted");
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void deleteFileInNonExistingDir () {
 			// arrange:
 			string nonExistingDir = "this/is/a/non/existing/path/";
@@ -255,7 +261,7 @@ namespace GQ.ET.Tests {
 				Files.DeleteImage(nonExistingDir + filename);
 			} catch ( Exception exc ) {
 				// negative post assert:
-				Assert.Fail("Should not throw an exception, but threw: " + exc.Message);
+				Assert.IsTrue(false, "Should not throw an exception, but threw: " + exc.Message);
 			}
 			
 			// post assert:
@@ -267,7 +273,7 @@ namespace GQ.ET.Tests {
 
 		#region copy
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void copyJPGFile () {
 			// arrange:
 			string filename = "file";
@@ -287,8 +293,8 @@ namespace GQ.ET.Tests {
 			Assert.IsTrue(Files.Exists(targetFile, jpgExtensions));
 
 		}
-		
-		[Test]
+
+		[NUnit.Framework.Test]
 		public void copyPNGFile () {
 			// arrange:
 			string filename = "file";
@@ -309,7 +315,7 @@ namespace GQ.ET.Tests {
 			
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void copyJPGOverwritingPNG () {
 			// arrange:
 			string filename = "file";
@@ -320,29 +326,29 @@ namespace GQ.ET.Tests {
 
 			// pre assert:
 			Assert.IsTrue(Files.Exists(originFile, Files.ImageExtensions), 
-			              "there should be a jpg image file at origin before we copy");
+				"there should be a jpg image file at origin before we copy");
 			Assert.IsTrue(Files.Exists(targetFile, Files.ImageExtensions), 
-			              "there should be a png image file at target before we copy");
+				"there should be a png image file at target before we copy");
 			Assert.IsTrue(Files.Exists(targetFile, pngExtensions), 
-			              "there should be a png file at target before we copy");
+				"there should be a png file at target before we copy");
 			Assert.IsFalse(Files.Exists(targetFile, jpgExtensions), 
-			              "there should not be a jpg file at target before we copy");
+				"there should not be a jpg file at target before we copy");
 
 			// act:
 			Files.Copy(originFile, targetFile, Files.ImageExtensions);
 
 			// post assert:
 			Assert.IsTrue(Files.Exists(originFile, Files.ImageExtensions), 
-			              "there should still be a jpg image file at origin after we copy");
+				"there should still be a jpg image file at origin after we copy");
 			Assert.IsTrue(Files.Exists(targetFile, Files.ImageExtensions), 
-			              "there should again be an image file at target after we copy");
+				"there should again be an image file at target after we copy");
 			Assert.IsTrue(Files.Exists(targetFile, jpgExtensions), 
-			              "there should now be a jpg image file at target after we copy");
+				"there should now be a jpg image file at target after we copy");
 			Assert.IsFalse(Files.Exists(targetFile, pngExtensions), 
-			              "there should not be a png image file at target after we copy");
+				"there should not be a png image file at target after we copy");
 		}
-		
-		[Test]
+
+		[NUnit.Framework.Test]
 		public void copyImageFile () {
 			// arrange:
 			string filename = "file";
@@ -363,7 +369,7 @@ namespace GQ.ET.Tests {
 			Assert.IsTrue(Files.ExistsImage(targetFile));
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void copyNonExistingOrigin () {
 			// arrange:
 			string nonExistingDir = "this/is/a/non/existing/path/";
@@ -374,20 +380,20 @@ namespace GQ.ET.Tests {
 				Files.Copy(nonExistingDir + filename, targetDir.FullName + filename, jpgExtensions);
 			} catch ( Exception exc ) {
 				// negative post assert:
-				Assert.Fail("Should not throw an exception, but threw: " + exc.Message);
+				Assert.IsTrue(false, "Should not throw an exception, but threw: " + exc.Message);
 			}
 			
 			// post assert:
 			Assert.IsFalse(Files.ExistsImage(targetDir.FullName + filename), "file should not have been found since it was not copied");
 		}
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void checkOurProblem () {
 			try {
 				Files.Copy("Assets/ConfigAssets/Resources/splashScreen", "Assets/Editor/productPlaceholders/splashScreen", Files.ImageExtensions);
 			} catch ( Exception exc ) {
 				// negative post assert:
-				Assert.Fail("Should not throw an exception, but threw: " + exc.Message);
+				Assert.IsTrue(false, "Should not throw an exception, but threw: " + exc.Message);
 			}
 		}
 
@@ -395,7 +401,7 @@ namespace GQ.ET.Tests {
 
 		#region PlayerSettings Reflection Experiment
 
-		[Test]
+		[NUnit.Framework.Test]
 		public void gatherFieldsOfPlayerSettings () {
 
 			Assembly editorAsm = typeof(Editor).Assembly;
