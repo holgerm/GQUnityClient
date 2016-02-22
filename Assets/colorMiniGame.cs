@@ -11,6 +11,12 @@ public class colorMiniGame : MonoBehaviour
 
 	public page_custom controller;
 
+
+	public Animator bgAnim;
+	public Animator textAnim;
+	public Animator timeAnim;
+	public Animator failAnim;
+
 	public string colorName1;
 	public string colorName2;
 	public string colorName3;
@@ -54,19 +60,22 @@ public class colorMiniGame : MonoBehaviour
 		yield return new WaitForEndOfFrame ();
 
 
+		if (controller != null) {
+			
+			colorName1 = controller.param1;
+			colorName2 = controller.param3;
+			colorName3 = controller.param5;
+			colorName4 = controller.param7;
 
-		colorName1 = controller.param1;
-		colorName2 = controller.param3;
-		colorName3 = controller.param5;
-		colorName4 = controller.param7;
+			color1 = hexToColor (controller.param2);
+			color2 = hexToColor (controller.param4);
+			color3 = hexToColor (controller.param6);
+			color4 = hexToColor (controller.param8);
 
-		color1 = hexToColor (controller.param2);
-		color2 = hexToColor (controller.param4);
-		color3 = hexToColor (controller.param6);
-		color4 = hexToColor (controller.param8);
+			time = float.Parse (controller.param9);
 
+		}
 
-		time = float.Parse (controller.param9);
 
 
 		color1Button.GetComponent<Image> ().color = color1;
@@ -81,6 +90,8 @@ public class colorMiniGame : MonoBehaviour
 
 		nextColor ();
 		running = false;
+		timeAnim.SetBool ("running", false);
+
 	}
 
 	private static Color hexToColor (string hex)
@@ -110,6 +121,11 @@ public class colorMiniGame : MonoBehaviour
 
 	public void nextColor ()
 	{
+
+
+
+
+		textAnim.SetTrigger ("jump");
 		string currentColorName = actionText.text;
 		Color currentColor = actionText.color;
 
@@ -117,7 +133,7 @@ public class colorMiniGame : MonoBehaviour
 		while (actionText.text == currentColorName &&
 		       actionText.color == currentColor) {
 
-			int c =	Random.Range (1, 4);
+			int c =	Random.Range (1, 5);
 
 			if (c == 1) {
 
@@ -201,11 +217,25 @@ public class colorMiniGame : MonoBehaviour
 	public void checkColor (string cname)
 	{
 
+		if (actionText.text == cname) {
+			
+
+			bgAnim.SetTrigger ("succ");
+
+		} else {
+
+			bgAnim.SetTrigger ("fail");
+			failAnim.SetTrigger ("fail");
+
+		}
+
 
 		if (!running) {
 			if (actionText.text == cname) {
 				
 				running = true;
+
+				timeAnim.SetBool ("running", true);
 			}
 		}
 
@@ -214,6 +244,10 @@ public class colorMiniGame : MonoBehaviour
 			if (actionText.text == cname) {
 
 				score += 100;
+
+			} else {
+
+				score -= 100;
 
 			}
 
@@ -235,6 +269,9 @@ public class colorMiniGame : MonoBehaviour
 
 
 			if (time <= 0f) {
+
+				timeAnim.SetBool ("running", false);
+
 
 				controller.questactions.setVariable (controller.param10, (float)score);
 				controller.onEnd ();
