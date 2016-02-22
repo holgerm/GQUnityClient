@@ -24,7 +24,7 @@ namespace GQ.ET {
 		const string DEFAULT_MARKER_FILE_BASE = "defaultMarker";
 		const string PLACEHOLDERS_SPLASHSCREEN_FILE = "Assets/Editor/productPlaceholders/splashScreen";
 		private static Texture2D _appIconTexture;
-		
+
 		public static Texture2D appIcon {
 			get {
 				return _appIconTexture;
@@ -38,9 +38,9 @@ namespace GQ.ET {
 				}
 			}
 		}
-		
+
 		private static Texture2D _splashScreen;
-		
+
 		public static Texture2D splashScreen {
 			get {
 				return _splashScreen;
@@ -50,16 +50,18 @@ namespace GQ.ET {
 					_splashScreen = value;
 					PlayerSettings.resolutionDialogBanner = _splashScreen;
 					try {
+						#if !UNITY_WEBPLAYER
 						Files.CopyImage(ProductConfigManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, 
 						                PLACEHOLDERS_SPLASHSCREEN_FILE);
+						#endif
 					} catch ( Exception exc ) {
 					}
 					AssetDatabase.Refresh();
 				}
 			}
 		}
-		
-		[MenuItem ("Window/GQ Product Editor")]
+
+		[MenuItem("Window/GQ Product Editor")]
 		public static void  ShowWindow () {
 			Assembly editorAsm = typeof(Editor).Assembly;
 			Type insWndType = editorAsm.GetType("UnityEditor.InspectorWindow");
@@ -121,7 +123,7 @@ namespace GQ.ET {
 		}
 
 		bool allowChanges = false;
-		
+
 		void createGUIShowDetails () {
 			GUILayout.Label("Details of Selected Product", EditorStyles.boldLabel);
 
@@ -135,29 +137,29 @@ namespace GQ.ET {
 
 			ProductConfigManager.current.name = 
 				EditorGUILayout.TextField(
-					"Name", 
-					ProductConfigManager.current.name, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Name", 
+				ProductConfigManager.current.name, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
 			appIcon = 
 				(Texture2D)EditorGUILayout.ObjectField(
-					"App Icon", 
-					appIcon,
-			        typeof(Texture),
-					false);
+				"App Icon", 
+				appIcon,
+				typeof(Texture),
+				false);
 
 			ProductConfigManager.current.portal = 
 				EditorGUILayout.IntField(
-					"Portal", 
-					ProductConfigManager.current.portal, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Portal", 
+				ProductConfigManager.current.portal, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO check and offer selection from server
 
 			ProductConfigManager.current.autoStartQuestID = 
 				EditorGUILayout.IntField(
-					"Autostart Quest ID", 
-					ProductConfigManager.current.autoStartQuestID, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Autostart Quest ID", 
+				ProductConfigManager.current.autoStartQuestID, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO check at server and offer browser to select driectly from server
 
 			if ( ProductConfigManager.current.autoStartQuestID != 0 ) {
@@ -170,15 +172,15 @@ namespace GQ.ET {
 			
 			ProductConfigManager.current.downloadTimeOutSeconds = 
 				EditorGUILayout.IntField(
-					"Download Timeout (s)", 
-					ProductConfigManager.current.downloadTimeOutSeconds);
+				"Download Timeout (s)", 
+				ProductConfigManager.current.downloadTimeOutSeconds);
 			// TODO limit to a value bigger than something (5s?)
 
 			ProductConfigManager.current.nameForQuest = 
 				EditorGUILayout.TextField(
-					"Name for 'Quest'", 
-					ProductConfigManager.current.nameForQuest, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Name for 'Quest'", 
+				ProductConfigManager.current.nameForQuest, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			if ( ProductConfigManager.current.nameForQuest == null || ProductConfigManager.current.nameForQuest.Equals("") ) {
 				ProductConfigManager.current.nameForQuest = "Quest";
 			}
@@ -212,7 +214,7 @@ namespace GQ.ET {
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 			ProductConfigManager.current.imprint = 
 				EditorGUILayout.TextArea(
-					ProductConfigManager.current.imprint);
+				ProductConfigManager.current.imprint);
 			EditorGUILayout.EndScrollView();
 			EditorGUILayout.EndHorizontal();
 
@@ -229,9 +231,9 @@ namespace GQ.ET {
 
 			ProductConfigManager.current.colorProfile = 
 				EditorGUILayout.TextField(
-					"Color Profile", 
-					ProductConfigManager.current.colorProfile, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Color Profile", 
+				ProductConfigManager.current.colorProfile, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO change to better representation of Color Profile
 			
 			ProductConfigManager.current.showTextInLoadingLogo =
@@ -244,32 +246,32 @@ namespace GQ.ET {
 
 			ProductConfigManager.topLogo = 
 				(Sprite)EditorGUILayout.ObjectField(
-					"Top Bar Logo", 
-					ProductConfigManager.topLogo,
-					typeof(Sprite),
-					false);
+				"Top Bar Logo", 
+				ProductConfigManager.topLogo,
+				typeof(Sprite),
+				false);
 			// TODO resize visualization in editor to correct 
 
 			ProductConfigManager.current.mapboxMapID = 
 				EditorGUILayout.TextField(
-					"Mapbox Map ID", 
-					ProductConfigManager.current.mapboxMapID, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Mapbox Map ID", 
+				ProductConfigManager.current.mapboxMapID, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			
 			ProductConfigManager.current.mapboxKey = 
 				EditorGUILayout.TextField(
-					"Mapbox User Key", 
-					ProductConfigManager.current.mapboxKey, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				"Mapbox User Key", 
+				ProductConfigManager.current.mapboxKey, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO make generic representation for map types (google, OSM, Mapbox)
 			
 			// TODO default marker
 			ProductConfigManager.defaultMarker = 
 				(Sprite)EditorGUILayout.ObjectField(
-					"Default Marker", 
-					ProductConfigManager.defaultMarker,
-					typeof(Sprite),
-					false);
+				"Default Marker", 
+				ProductConfigManager.defaultMarker,
+				typeof(Sprite),
+				false);
 			// TODO resize visualization in editor to correct 
 
 			// TODO marker categories ...
@@ -333,11 +335,11 @@ namespace GQ.ET {
 
 				if ( GUILayout.Button(buttonText[(int)saveType]) ) {
 					bool okPressed = EditorUtility.DisplayDialog(
-						dialogTitle[(int)saveType], 
-						dialogMessagePrefix[(int)saveType] + editedProdID + 
-						dialogMessagePostfix[(int)saveType], 
-					    okText[(int)saveType], 
-					    "Cancel");
+						                 dialogTitle[(int)saveType], 
+						                 dialogMessagePrefix[(int)saveType] + editedProdID +
+						                 dialogMessagePostfix[(int)saveType], 
+						                 okText[(int)saveType], 
+						                 "Cancel");
 					if ( okPressed ) {
 						performSaveConfig(editedProdID);
 					}
@@ -352,7 +354,7 @@ namespace GQ.ET {
 			// TODO make some updates?
 			Debug.Log("GQEditor.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
 		}
-		
+
 		public void OnDestroy () {
 			// make some saves?
 			Debug.Log("GQEditor.OnDestroy() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
@@ -379,13 +381,13 @@ namespace GQ.ET {
 			
 			#if !UNITY_WEBPLAYER
 			Files.ClearDirectory(configRuntimeDir.FullName);
-			#endif
-			
+
 			foreach ( FileInfo file in configPersistentDir.GetFiles() ) {
 				if ( !file.Extension.ToLower().EndsWith("meta") && !file.Extension.ToLower().EndsWith("ds_store") ) {
 					File.Copy(file.FullName, RT_PROD_DIR + file.Name);
 				}
 			}
+			#endif
 
 			AssetDatabase.Refresh();
 
@@ -483,7 +485,7 @@ namespace GQ.ET {
 			Debug.Log("Import assets in save(" + productID + ")");
 			AssetDatabase.ImportAsset(PRODUCTS_DIR + ProductConfigManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
-		
+
 		static void serialize () {
 			StringBuilder sb = new StringBuilder();
 			JsonWriter jsonWriter = new JsonWriter(sb);

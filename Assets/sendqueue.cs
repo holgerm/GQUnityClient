@@ -8,8 +8,7 @@ using LitJson;
 using System.IO;
 using System;
 
-public class sendqueue : MonoBehaviour
-{
+public class sendqueue : MonoBehaviour {
 
 
 
@@ -29,47 +28,44 @@ public class sendqueue : MonoBehaviour
 	const string MODE_FILE_MID = "file_mid";
 	const string MODE_FILE_FINISH = "file_finish";
 
-	void Start ()
-	{
+	void Start () {
 
-		queue = new List<SendQueueEntry> ();
+		queue = new List<SendQueueEntry>();
 		messageTimerSave = messageTimer;
 		connectionTimeoutSave = connectionTimeout;
 		deviceid = SystemInfo.deviceUniqueIdentifier;
 
-		reconstructSendQueue ();
+		reconstructSendQueue();
 	}
 
-	public void setExpectedNextMessage (int nm)
-	{
+	public void setExpectedNextMessage (int nm) {
 
 
 
 	}
 
-	void reconstructSendQueue ()
-	{
+	void reconstructSendQueue () {
 
 		string pre = "file: /";
 		
-		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+		if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
 			
 			pre = "file:";
 		}
 
 
 
-		if (Directory.Exists (Application.persistentDataPath + "/quests/")) {
+		if ( Directory.Exists(Application.persistentDataPath + "/quests/") ) {
 
 
-			foreach (string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/")) {
+			foreach ( string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/") ) {
 
-				if (Directory.Exists (quest + "/sendqueue/")) {
+				if ( Directory.Exists(quest + "/sendqueue/") ) {
 			
 
-					string FolderName = new DirectoryInfo (quest).Name;
+					string FolderName = new DirectoryInfo(quest).Name;
 
-					foreach (string file in	Directory.GetFiles(quest + "/sendqueue/")) {
+					foreach ( string file in	Directory.GetFiles(quest + "/sendqueue/") ) {
 
 
 
@@ -78,16 +74,16 @@ public class sendqueue : MonoBehaviour
 
 
 
-						if (int.TryParse (FolderName, out num1)) {
+						if ( int.TryParse(FolderName, out num1) ) {
 
 
-							if (int.TryParse (Path.GetFileNameWithoutExtension (file), out num2)) {
+							if ( int.TryParse(Path.GetFileNameWithoutExtension(file), out num2) ) {
 
-								if (File.Exists (Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json")) {
+								if ( File.Exists(Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json") ) {
 
 
-									WWW www = new WWW (pre + "" + Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
-									StartCoroutine (deserialize (www));
+									WWW www = new WWW(pre + "" + Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
+									StartCoroutine(deserialize(www));
 
 								}
 							}
@@ -101,7 +97,7 @@ public class sendqueue : MonoBehaviour
 		}
 
 
-		if (queue.Count == 0) {
+		if ( queue.Count == 0 ) {
 
 
 
@@ -110,34 +106,33 @@ public class sendqueue : MonoBehaviour
 
 	}
 
-	void Update ()
-	{
+	void Update () {
 
 
 
-		if (queue.Count > 0) {
+		if ( queue.Count > 0 ) {
 
 
 			bool canSendMessage = false;
 			messageTimer -= Time.deltaTime;
 
 		
-			if (networkActionsObject == null && triedEstablishingConnection) {
+			if ( networkActionsObject == null && triedEstablishingConnection ) {
 
 				connectionTimeout -= Time.deltaTime;
 				
-				if (connectionTimeout <= 0f) {
+				if ( connectionTimeout <= 0f ) {
 					
 					connectionTimeout = connectionTimeoutSave;
 					triedEstablishingConnection = false;
-					Network.Disconnect ();
+					Network.Disconnect();
 				}
 
 			}
 
 
 
-			if (messageTimer <= 0f) {
+			if ( messageTimer <= 0f ) {
 
 
 				messageTimer = messageTimerSave;
@@ -145,16 +140,16 @@ public class sendqueue : MonoBehaviour
 				canSendMessage = true;
 
 
-				if (networkActionsObject != null) {
+				if ( networkActionsObject != null ) {
 
 
 
 
-					foreach (SendQueueEntry sqe in queue.GetRange(0,queue.Count)) {
-						if (canSendMessage) {
+					foreach ( SendQueueEntry sqe in queue.GetRange(0,queue.Count) ) {
+						if ( canSendMessage ) {
 							sqe.timeout -= Time.deltaTime;
-							if (sqe.timeout <= 0f) {
-								send (sqe, messageTimeout);
+							if ( sqe.timeout <= 0f ) {
+								send(sqe, messageTimeout);
 								canSendMessage = false;
 							}
 						}
@@ -162,15 +157,16 @@ public class sendqueue : MonoBehaviour
 
 					}
 
-				} else {
+				}
+				else {
 
 
-					if (!triedEstablishingConnection) {
+					if ( !triedEstablishingConnection ) {
 					
-						NetworkManager.singleton.networkAddress = queue [0].ip;
+						NetworkManager.singleton.networkAddress = queue[0].ip;
 					
-						if (!NetworkManager.singleton.IsClientConnected ())
-							NetworkManager.singleton.StartClient ();	
+						if ( !NetworkManager.singleton.IsClientConnected() )
+							NetworkManager.singleton.StartClient();	
 
 						triedEstablishingConnection = true;
 
@@ -180,10 +176,12 @@ public class sendqueue : MonoBehaviour
 				}
 
 
-			} else if (NetworkManager.singleton.isNetworkActive) {
+			}
+			else
+			if ( NetworkManager.singleton.isNetworkActive ) {
 
-				if (networkActionsObject != null) {
-					Network.Disconnect ();
+				if ( networkActionsObject != null ) {
+					Network.Disconnect();
 				}
 
 			}
@@ -193,25 +191,25 @@ public class sendqueue : MonoBehaviour
 
 	}
 
-	public void addMessageToQueue (string ip, string var, string value)
-	{
+	public void addMessageToQueue (string ip, string var, string value) {
 
-		SendQueueEntry sqe = new SendQueueEntry ();
-
+		SendQueueEntry sqe = new SendQueueEntry();
 
 
-		if (queue.Count > 0) {
-			if (idCounter == 0) {
+
+		if ( queue.Count > 0 ) {
+			if ( idCounter == 0 ) {
 
 
-				if (PlayerPrefs.HasKey ("nextmessage_" + sqe.ip)) {
+				if ( PlayerPrefs.HasKey("nextmessage_" + sqe.ip) ) {
 
-					idCounter = PlayerPrefs.GetInt ("nextmessage_" + sqe.ip);
+					idCounter = PlayerPrefs.GetInt("nextmessage_" + sqe.ip);
 
 				}
 
 			}
-		} else {
+		}
+		else {
 
 			idCounter = 0;
 			sqe.resetid = true;
@@ -222,14 +220,14 @@ public class sendqueue : MonoBehaviour
 
 		sqe.id = idCounter;
 		idCounter++;
-		sqe.questid = GetComponent<questdatabase> ().currentquest.id;
+		sqe.questid = GetComponent<questdatabase>().currentquest.id;
 
-		if (idCounter == int.MaxValue) {
+		if ( idCounter == int.MaxValue ) {
 			idCounter = 0;
 		}
 
 
-		PlayerPrefs.SetInt ("nextmessage_" + sqe.ip, idCounter);
+		PlayerPrefs.SetInt("nextmessage_" + sqe.ip, idCounter);
 
 
 		sqe.mode = MODE_VALUE;
@@ -242,20 +240,20 @@ public class sendqueue : MonoBehaviour
 
 
 
-		queue.Add (sqe);
+		queue.Add(sqe);
 
-		serialize (sqe);
+		serialize(sqe);
 
 	}
 
-	public void addMessageToQueue (string ip, string var, string filetype, byte[] bytes, int part)
-	{
+	public void addMessageToQueue (string ip, string var, string filetype, byte[] bytes, int part) {
 		
-		SendQueueEntry sqe = new SendQueueEntry ();
+		SendQueueEntry sqe = new SendQueueEntry();
 	
-		if (queue.Count > 0) {
+		if ( queue.Count > 0 ) {
 		
-		} else {
+		}
+		else {
 			
 			idCounter = 0;
 			sqe.resetid = true;
@@ -264,14 +262,15 @@ public class sendqueue : MonoBehaviour
 		
 		sqe.id = idCounter;
 		idCounter++;
-		sqe.questid = GetComponent<questdatabase> ().currentquest.id;
+		sqe.questid = GetComponent<questdatabase>().currentquest.id;
 
 
-		if (part == 0) {
+		if ( part == 0 ) {
 
 			sqe.mode = MODE_FILE_START;
 
-		} else {
+		}
+		else {
 		
 			sqe.mode = MODE_FILE_MID;
 
@@ -288,19 +287,18 @@ public class sendqueue : MonoBehaviour
 		
 		
 		
-		queue.Add (sqe);
-		serialize (sqe);
+		queue.Add(sqe);
+		serialize(sqe);
 
 	}
 
-	public void addFinishMessageToQueue (string ip, string var, string filetype)
-	{
+	public void addFinishMessageToQueue (string ip, string var, string filetype) {
 
-		SendQueueEntry sqe = new SendQueueEntry ();
+		SendQueueEntry sqe = new SendQueueEntry();
 		
 		
 		sqe.id = idCounter;
-		sqe.questid = GetComponent<questdatabase> ().currentquest.id;
+		sqe.questid = GetComponent<questdatabase>().currentquest.id;
 		idCounter++;
 		sqe.timeout = 0f;
 
@@ -309,33 +307,31 @@ public class sendqueue : MonoBehaviour
 		
 		sqe.mode = MODE_FILE_FINISH;
 	
-		queue.Add (sqe);
-		serialize (sqe);
+		queue.Add(sqe);
+		serialize(sqe);
 
 	
 	}
 
-	public void setNetworkIdentity (networkactions na)
-	{
+	public void setNetworkIdentity (networkactions na) {
 		
 		networkActionsObject = na;
 		
 	}
 
-	public void messageReceived (int id)
-	{
+	public void messageReceived (int id) {
 
 
-		foreach (SendQueueEntry sqe in queue.GetRange(0,queue.Count)) {
+		foreach ( SendQueueEntry sqe in queue.GetRange(0,queue.Count) ) {
 
-			if (sqe.id == id) {
+			if ( sqe.id == id ) {
 
 
-				queue.Remove (sqe);
+				queue.Remove(sqe);
 
 				
-				if (File.Exists (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json")) {
-					File.Delete (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
+				if ( File.Exists(Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json") ) {
+					File.Delete(Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
 				}
 			}
 
@@ -346,8 +342,7 @@ public class sendqueue : MonoBehaviour
 
 	}
 
-	public void send (SendQueueEntry sqe, float timeout)
-	{
+	public void send (SendQueueEntry sqe, float timeout) {
 
 
 		//queue.Remove (sqe);
@@ -356,23 +351,29 @@ public class sendqueue : MonoBehaviour
 		sqe.timeout = messageTimeout;
 
 
-		if (sqe.mode == MODE_VALUE) {
+		if ( sqe.mode == MODE_VALUE ) {
 
 
-			networkActionsObject.CmdSendVar (sqe.id, deviceid, sqe.var, sqe.value, sqe.resetid);
+			networkActionsObject.CmdSendVar(sqe.id, deviceid, sqe.var, sqe.value, sqe.resetid);
 
 
-		} else if (sqe.mode == MODE_FILE_START) {
+		}
+		else
+		if ( sqe.mode == MODE_FILE_START ) {
 
-			networkActionsObject.CmdSendFile (sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
+			networkActionsObject.CmdSendFile(sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
 					
-		} else if (sqe.mode == MODE_FILE_MID) {
+		}
+		else
+		if ( sqe.mode == MODE_FILE_MID ) {
 
-			networkActionsObject.CmdAddToFile (sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
+			networkActionsObject.CmdAddToFile(sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
 
-		} else if (sqe.mode == MODE_FILE_FINISH) {
+		}
+		else
+		if ( sqe.mode == MODE_FILE_FINISH ) {
 			
-			networkActionsObject.CmdFinishFile (sqe.id, deviceid, sqe.var, sqe.filetype, sqe.resetid);
+			networkActionsObject.CmdFinishFile(sqe.id, deviceid, sqe.var, sqe.filetype, sqe.resetid);
 
 		}
 
@@ -380,10 +381,9 @@ public class sendqueue : MonoBehaviour
 
 	}
 
-	void serialize (SendQueueEntry sqe)
-	{
+	void serialize (SendQueueEntry sqe) {
 
-
+		#if !UNITY_WEBPLAYER
 		PlayerPrefs.SetInt ("currentquestid", GetComponent<questdatabase> ().currentquest.id);
 		StringBuilder sb = new StringBuilder ();
 		JsonWriter jsonWriter = new JsonWriter (sb);
@@ -402,29 +402,30 @@ public class sendqueue : MonoBehaviour
 
 
 		File.WriteAllText (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json", sb.ToString ());
+		#endif
 	}
 
-	public IEnumerator deserialize (WWW www)
-	{
+	public IEnumerator deserialize (WWW www) {
 
 
 		yield return www;
 
 
 
-		if (www.error == null || www.error == "") {
+		if ( www.error == null || www.error == "" ) {
 
 
 
 		
-			SendQueueEntry sqe = JsonMapper.ToObject<SendQueueEntry> (www.text);
-			queue.Add (sqe);
+			SendQueueEntry sqe = JsonMapper.ToObject<SendQueueEntry>(www.text);
+			queue.Add(sqe);
 
 
 
-		} else {
+		}
+		else {
 
-			Debug.Log (www.error);
+			Debug.Log(www.error);
 
 		}
 	
@@ -434,9 +435,9 @@ public class sendqueue : MonoBehaviour
 
 }
 
+
 [System.Serializable]
-public class SendQueueEntry
-{
+public class SendQueueEntry {
 
 	public int id;
 	public int questid;

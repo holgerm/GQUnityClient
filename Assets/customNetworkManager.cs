@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 using System.Collections;
 using UnityEngine.Networking;
-using System.Net.NetworkInformation;
+
+//using System.Net.NetworkInformation;
 using System;
 
 public  class customNetworkManager : NetworkManager {
@@ -11,20 +12,20 @@ public  class customNetworkManager : NetworkManager {
 
 
 
-	void Start(){
+	void Start () {
 
 
-		NetworkManager.singleton.StartClient ();
+		NetworkManager.singleton.StartClient();
 
 	}
 
 
 
-	public void connectToServer(string a4){
+	public void connectToServer (string a4) {
 
 	
-	NetworkManager.singleton.networkAddress = a4;
-		NetworkManager.singleton.StartClient ();
+		NetworkManager.singleton.networkAddress = a4;
+		NetworkManager.singleton.StartClient();
 		
 	}
 
