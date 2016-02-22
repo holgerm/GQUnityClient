@@ -7815,7 +7815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 4
+  product: 0
   overrideProductSettingsInInspector: 0
   portalID: 341
   autostartQuestID: 0
@@ -7836,7 +7836,7 @@ MonoBehaviour:
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
   toplogo: {fileID: 21300000, guid: 5e3f16b17a584441c81b0d0d79d826f4, type: 3}
   nameForQuest: Quest
-  questvisualization: map
+  questvisualization: list
   showMessageForDatasendAction: 1
   showPrivacyAgreement: 1
   privacyAgreement: "Wir, das Erzbistum K\xF6ln, K\xF6rperschaft des \xF6ffentlichen
@@ -8147,7 +8147,7 @@ MonoBehaviour:
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
   appVersion: 1
-  subversionNumber: 16.1
+  subversionNumber: 17.1
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0

@@ -2350,6 +2350,7 @@ public class questdatabase : MonoBehaviour
 			    qp.type != "Menu" &&
 			    qp.type != "MapOSM" &&
 			    qp.type != "MetaData" &&
+			    qp.type != "Custom" &&
 			    qp.type != "WebPage") {
 
 
@@ -2618,6 +2619,8 @@ public class questdatabase : MonoBehaviour
 					Application.LoadLevelAdditive (8);
 				} else if (qp.type == "WebPage") {
 					Application.LoadLevelAdditive (10);
+				} else if (qp.type == "Custom") {
+					Application.LoadLevelAdditive (11);
 				} else if (qp.type == "MapOSM") {
 
 
