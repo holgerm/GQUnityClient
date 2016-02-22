@@ -7820,7 +7820,7 @@ MonoBehaviour:
   portalID: 341
   autostartQuestID: 0
   autostartIsPredeployed: 0
-  colorProfile: ebk
+  colorProfile: odysseum
   mapboxKey: pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ
   mapboxMapID: gqebk.ed1de6df
   downloadTimeOutSeconds: 100
@@ -9123,7 +9123,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -18667,6 +18667,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   profiles:
   - id: default
+    mainColor: {r: 0.14509805, g: 0.36078432, b: 0.41176474, a: 1}
+    backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    darkBG: 0
+    buttonColor: {r: 0.14509805, g: 0.36078432, b: 0.4117647, a: 1}
+    darkButton: 1
+    buttonDisabledColor: {r: 0.41960788, g: 0.5803922, b: 0.61960787, a: 1}
+    compColor: {r: 0.6666667, g: 0.27450982, b: 0.22352941, a: 1}
+    secondCompColor: {r: 0.6666667, g: 0.5294118, b: 0.22352941, a: 1}
+  - id: odysseum
     mainColor: {r: 0.14509805, g: 0.36078432, b: 0.41176474, a: 1}
     backgroundColor: {r: 1, g: 1, b: 1, a: 1}
     darkBG: 0

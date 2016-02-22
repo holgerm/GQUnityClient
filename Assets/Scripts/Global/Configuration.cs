@@ -6,15 +6,17 @@ using System.Collections.Generic;
 public class Configuration : MonoBehaviour {
 	private static Configuration _instance;
 
-	public enum ProductIDs { 
+	public enum ProductIDs {
 		Public,
 		CarlBenz,
-		ErzbistumKoeln, 
+		ErzbistumKoeln,
 		LWL,
-		WikiCultureCity, 
+		WikiCultureCity,
 		Intern,
-		Demos
+		Demos,
+		Odysseum
 	}
+
 	public ProductIDs product;
 	public bool overrideProductSettingsInInspector = false;
 	public int portalID = 1;
@@ -44,12 +46,17 @@ public class Configuration : MonoBehaviour {
 	public bool languageChangableByUser = true;
 	public List<Language> languagesAvailable;
 	public List<MarkerCategorySprite> categoryMarker;
-	public Sprite defaultmarker; // TODO make available in portal
-	public float markerScale = 1.0f; // TODO make available in portal
-	public float storedMapZoom = 18.0f; // TODO make available in portal
+	public Sprite defaultmarker;
+	// TODO make available in portal
+	public float markerScale = 1.0f;
+	// TODO make available in portal
+	public float storedMapZoom = 18.0f;
+	// TODO make available in portal
 	public bool useDefaultPositionValuesAtStart = true;
-	public double defaultLongitude = 51.0d; // TODO make available in portal
-	public double defaultLatitude = 8.0d; // TODO make available in portal
+	public double defaultLongitude = 51.0d;
+	// TODO make available in portal
+	public double defaultLatitude = 8.0d;
+	// TODO make available in portal
 	public bool checkForAppversion = true;
 	public string appVersionURL = "";
 	/// <summary>
@@ -127,7 +134,7 @@ public class Configuration : MonoBehaviour {
 //		if (!overrideProductSettingsInInspector)
 //			initProductDefinitions ();
 	}
-	
+
 	private void initProductDefinitions () {
 //		Debug.Log ("CONFIG: setting product: " + product);
 		switch ( product ) {
@@ -191,6 +198,16 @@ public class Configuration : MonoBehaviour {
 				mapboxMapID = "mapbox.streets";
 				impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
 				break;
+			case ProductIDs.Odysseum:
+				productName = "odysseum";
+				portalID = 381;
+				autostartQuestID = 0;
+				downloadTimeOutSeconds = 60;
+				colorProfile = "odysseum";
+				mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+				mapboxMapID = "mapbox.streets";
+				impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
+				break;
 			case ProductIDs.Intern:
 			default:
 				productName = "intern";
@@ -208,6 +225,7 @@ public class Configuration : MonoBehaviour {
 	}
 
 }
+
 
 [System.Serializable]
 public class MarkerCategorySprite {
