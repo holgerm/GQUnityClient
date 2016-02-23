@@ -9123,7 +9123,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -17249,7 +17249,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -18676,10 +18676,10 @@ MonoBehaviour:
     compColor: {r: 0.6666667, g: 0.27450982, b: 0.22352941, a: 1}
     secondCompColor: {r: 0.6666667, g: 0.5294118, b: 0.22352941, a: 1}
   - id: odysseum
-    mainColor: {r: 0.14509805, g: 0.36078432, b: 0.41176474, a: 1}
+    mainColor: {r: 0.9411765, g: 0.43921253, b: 0.15916954, a: 1}
     backgroundColor: {r: 1, g: 1, b: 1, a: 1}
     darkBG: 0
-    buttonColor: {r: 0.14509805, g: 0.36078432, b: 0.4117647, a: 1}
+    buttonColor: {r: 0.94117653, g: 0.43921572, b: 0.16078432, a: 1}
     darkButton: 1
     buttonDisabledColor: {r: 0.41960788, g: 0.5803922, b: 0.61960787, a: 1}
     compColor: {r: 0.6666667, g: 0.27450982, b: 0.22352941, a: 1}
