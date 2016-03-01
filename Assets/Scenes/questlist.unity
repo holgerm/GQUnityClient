@@ -8016,7 +8016,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 7
+  product: 1
   overrideProductSettingsInInspector: 0
   portalID: 341
   autostartQuestID: 0
@@ -8038,8 +8038,8 @@ MonoBehaviour:
   toplogo: {fileID: 21300000, guid: 6738867ed1fcb4572a8ea9c05a53492c, type: 3}
   nameForQuest: Quest
   questvisualization: list
-  showMessageForDatasendAction: 1
-  showPrivacyAgreement: 1
+  showMessageForDatasendAction: 0
+  showPrivacyAgreement: 0
   privacyAgreement: "Wir, das Erzbistum K\xF6ln, K\xF6rperschaft des \xF6ffentlichen
     Rechts (Kd\xF6R), Marzellenstra\xDFe 32, 50668 K\xF6ln, Deutschland, freuen uns
     \xFCber Ihr Interesse an unserer App Tap-Erlebnis. Als Anbieter dieser App ist
@@ -8081,7 +8081,7 @@ MonoBehaviour:
     K\xF6ln<br>K\xF6rperschaft des \xF6ffentlichen Rechts (Kd\xF6R)<br>Marzellenstra\xDFe
     32, 50668 K\xF6ln<br>datenschutzbeauftragte@erzbistum-koeln.de<br>gerne zur Verf\xFCgung.<br>"
   privacyAgreementVersion: 1
-  showAGBs: 1
+  showAGBs: 0
   agbs: "Das Erzbistum K\xF6ln, Marzellenstr. 32, 50668 K\xF6ln vertreten durch den
     Generalvikar Dr. Dominik Meiering (nachfolgend \u201EErzbistum K\xF6ln\u201C)
     betreibt eine Webportal, auf dem registrierte ehrenamtliche Mitglieder (nachfolgend
@@ -8255,7 +8255,7 @@ MonoBehaviour:
     der Nutzer den neuen Nutzungsbedingungen, kann das Erzbistum K\xF6ln den Vertrag
     nach Ma\xDFgabe ordentlich k\xFCndigen<br>Stand:  Dezember 2015 <br>"
   agbsVersion: 1
-  questvisualizationchangable: 1
+  questvisualizationchangable: 0
   showcloudquestsimmediately: 1
   showtextinloadinglogo: 1
   showinternetconnectionmessage: 1
@@ -8348,7 +8348,7 @@ MonoBehaviour:
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
   appVersion: 1
-  subversionNumber: 17.1
+  subversionNumber: 16.2
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -9324,7 +9324,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -12422,7 +12422,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: 0}
+  m_AnchoredPosition: {x: 540.00006, y: -0.000061035156}
   m_SizeDelta: {x: 1080, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1080246903
@@ -18950,7 +18950,6 @@ MonoBehaviour:
   files_complete: 0
   bytesloaded: 0
   fakebytes: 0
-  currentxml: 
   loadlogo: {fileID: 1548526791}
   convertedSprites: []
   spriteError: 
