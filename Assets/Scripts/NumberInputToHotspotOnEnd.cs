@@ -51,6 +51,7 @@ public class NumberInputToHotspotOnEnd : MonoBehaviour
 
 		}
 
+		field.text = "";
 
 	}
 
