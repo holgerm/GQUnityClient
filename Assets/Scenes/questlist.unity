@@ -2358,8 +2358,8 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.00005840685, y: -346.66672}
-  m_SizeDelta: {x: 280.00006, y: 537.5}
+  m_AnchoredPosition: {x: -3, y: -381.82}
+  m_SizeDelta: {x: 271, y: 632.42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &238289913
 MonoBehaviour:
@@ -8019,8 +8019,8 @@ MonoBehaviour:
   product: 1
   overrideProductSettingsInInspector: 0
   portalID: 341
-  autostartQuestID: 0
-  autostartIsPredeployed: 0
+  autostartQuestID: 6088
+  autostartIsPredeployed: 1
   colorProfile: odysseum
   mapboxKey: pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ
   mapboxMapID: gqebk.ed1de6df
@@ -8035,7 +8035,7 @@ MonoBehaviour:
     Deutschland\\n <b>Domain</b>\\n erzbistum-koeln.de\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
     Ust-IdNr. DE 122 777 469 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
-  toplogo: {fileID: 21300000, guid: 6738867ed1fcb4572a8ea9c05a53492c, type: 3}
+  toplogo: {fileID: 21300000, guid: f06c05e0d71294a8199ebb49fe3e9391, type: 3}
   nameForQuest: Quest
   questvisualization: list
   showMessageForDatasendAction: 0
@@ -8256,11 +8256,11 @@ MonoBehaviour:
     nach Ma\xDFgabe ordentlich k\xFCndigen<br>Stand:  Dezember 2015 <br>"
   agbsVersion: 1
   questvisualizationchangable: 0
-  showcloudquestsimmediately: 1
+  showcloudquestsimmediately: 0
   showtextinloadinglogo: 1
   showinternetconnectionmessage: 1
   defaultlanguage: system
-  languageChangableByUser: 1
+  languageChangableByUser: 0
   languagesAvailable:
   - bezeichnung: de
     anzeigename_de: Deutsch
@@ -8269,7 +8269,7 @@ MonoBehaviour:
   - bezeichnung: en
     anzeigename_de: Englisch
     sprite: {fileID: 21300000, guid: a56c2eaef1b544ebcaedacbdad164bd3, type: 3}
-    available: 1
+    available: 0
   - bezeichnung: es
     anzeigename_de: Spanisch
     sprite: {fileID: 21300000, guid: 560a0c1791f004326bfa7673ba4a1b65, type: 3}
@@ -8356,7 +8356,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 714240439}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16, y: 562, z: 18}
+  m_LocalPosition: {x: 48.943485, y: 192.12283, z: -1044.8467}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -17421,7 +17421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1573896800
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17948,7 +17948,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1637960584
 RectTransform:
   m_ObjectHideFlags: 0

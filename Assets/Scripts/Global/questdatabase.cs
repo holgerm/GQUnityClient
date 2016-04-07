@@ -189,8 +189,8 @@ public class questdatabase : MonoBehaviour {
 						buttoncontroller.DisplayList();
 					}
 
-					webloadingmessage.enabled = false;
-					loadlogo.disable();
+//					webloadingmessage.enabled = false;
+//					loadlogo.disable();
 				}
 			}
 			else {
@@ -450,15 +450,22 @@ public class questdatabase : MonoBehaviour {
 			Debug.Log("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
 			GameObject questListPanel = GameObject.Find("/Canvas");
 			if ( loadlogo != null ) {
-				
+				Debug.Log("Autostart: loadlogo != null ");
+
 				loadlogo.enable();
+				webloadingmessage.enabled = true;
+			}
+			else {
+				Debug.Log("Autostart: loadlogo == null ");
 			}
 
 			if ( Configuration.instance.autostartIsPredeployed ) {
+				Debug.Log("Autostart: is predeployed ");
 				StartCoroutine(startPredeployedQuest(Configuration.instance.autostartQuestID));
 
 			}
 			else {
+				Debug.Log("Autostart: is NOT predeployed ");
 				StartQuest(Configuration.instance.autostartQuestID);
 			}
 		}
@@ -928,11 +935,14 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void StartQuest (int id) {
+		Debug.Log("StartQuest(): " + id);
+
 		// if the given quest is already intialized start it, otherwise download it first and start it:
 		List<Quest> localQuests = GetLocalQuests();
 		Quest q = null;
 		foreach ( Quest curQuest in localQuests ) {
 			
+			Debug.Log("StartQuest(): foreach cur=" + curQuest.id);
 			if ( curQuest.id == id ) {
 				q = curQuest;
 			}
@@ -943,9 +953,11 @@ public class questdatabase : MonoBehaviour {
 //			Debug.Log ("Problem 1 id: " + id);
 			q = new Quest();
 			q.id = id;
+			Debug.Log("StartQuest(): downloading quest " + q.name);
 			downloadQuest(q);
 		}
 		else {
+			Debug.Log("StartQuest(): starting quest " + q.name);
 			startQuest(q);
 		}
 
@@ -1380,12 +1392,12 @@ public class questdatabase : MonoBehaviour {
 		if ( filedownloads == null ) {
 			filedownloads = new List<WWW>();
 		}
-		else {
-			foreach ( WWW fileWWW in filedownloads ) {
-				Debug.Log("FILE WWW LOADING " + fileWWW.url + " : " + fileWWW.progress + " isDone? :" + fileWWW.isDone);
-			}
-		}
-		Debug.Log("downloadAssetAsync(" + url + ", " + filename + ")" + " wanttoload# = " + wanttoload.Count + "; filedownloads# = " + filedownloads.Count);
+//		else {
+//			foreach ( WWW fileWWW in filedownloads ) {
+//				Debug.Log("FILE WWW LOADING " + fileWWW.url + " : " + fileWWW.progress + " isDone? :" + fileWWW.isDone);
+//			}
+//		}
+//		Debug.Log("downloadAssetAsync(" + url + ", " + filename + ")" + " wanttoload# = " + wanttoload.Count + "; filedownloads# = " + filedownloads.Count);
 
 		bool done = true;
 		if ( filedownloads != null ) {
@@ -1402,7 +1414,7 @@ public class questdatabase : MonoBehaviour {
 
 
 		if ( done ) {
-			Debug.Log("downloadAssetAsync##done new will be: " + url);
+//			Debug.Log("downloadAssetAsync##done new will be: " + url);
 
 			if ( !url.Contains("/clientxml") ) {
 				WWW wwwfile = new WWW(url);
@@ -1412,22 +1424,19 @@ public class questdatabase : MonoBehaviour {
 					filedownloads = new List<WWW>();
 				}
 
-				Debug.Log("Started new download for " + url + " in downloadAssetAsync(). Now we have: " + (filedownloads.Count + 1));
+//				Debug.Log("Started new download for " + url + " in downloadAssetAsync(). Now we have: " + (filedownloads.Count + 1));
 
 				filedownloads.Add(wwwfile);
 				files_all += 1;
 				StartCoroutine(downloadAssetFinished(wwwfile, filename, 0f));
 			}
-			else {
-				Debug.Log("downloadAsset() with clientxml in url-arg called");
-			}
+//			else {
+//				Debug.Log("downloadAsset() with clientxml in url-arg called");
+//			}
 
 		}
 		else {
-			Debug.Log("downloadAssetAsync##else(!done); not loading: " + url);
-
-
-
+//			Debug.Log("downloadAssetAsync##else(!done); not loading: " + url);
 
 			yield return new WaitForEndOfFrame();
 			downloadAsset(url, filename);
@@ -1437,7 +1446,7 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public IEnumerator downloadAssetFinished (WWW wwwfile, string filename, float timeout) {
-		Debug.Log("downloadAssetFinished(" + filename + ", " + timeout + ")");
+//		Debug.Log("downloadAssetFinished(" + filename + ", " + timeout + ")");
 
 		yield return new WaitForSeconds(0.3f);
 		timeout += 0.3f;
@@ -1457,7 +1466,7 @@ public class questdatabase : MonoBehaviour {
 			if ( wwwfile.isDone ) {
 				if ( !Directory.Exists(Path.GetDirectoryName(filename)) ) {
 						
-					Debug.Log("creating folder:" + Path.GetDirectoryName(filename));
+//					Debug.Log("creating folder:" + Path.GetDirectoryName(filename));
 						
 					Directory.CreateDirectory(Path.GetDirectoryName(filename));
 				}
@@ -2226,8 +2235,7 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator waitforquestassets (int pageid, float timeout) {
-		//webloadingmessage.text = "Downloading Quest Assets ... 0 %";
-
+		Debug.Log("waitforquestassets");
 		if ( fakebytes == 0 ) {
 			fakebytes = 1;
 		}
@@ -2326,6 +2334,7 @@ public class questdatabase : MonoBehaviour {
 			if ( webloadingmessage != null ) {
 
 				webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n " + bytesloaded2 + " Bytes geladen";
+				Debug.Log("WEBLOADINGMESSAGE: " + webloadingmessage.text);
 			}
 		}
 		else {

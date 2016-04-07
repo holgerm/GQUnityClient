@@ -141,7 +141,7 @@ public class Configuration : MonoBehaviour {
 			case ProductIDs.CarlBenz:
 				productName = "carlbenz";
 				portalID = 141;
-				autostartQuestID = 0; //6088;
+				autostartQuestID = 6088;
 				downloadTimeOutSeconds = 600;
 				colorProfile = "carlbenz";
 				mapboxKey = "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A";
