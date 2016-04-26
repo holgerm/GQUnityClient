@@ -2340,14 +2340,17 @@ public class questdatabase : MonoBehaviour
 
 				var stream = new FileStream (exportLocation + "game.xml", FileMode.Create);
 				
-			
+				Debug.Log ("writing xml #0");
+
 				stream.Close ();
 				var stream2 = new StreamWriter (exportLocation + "game.xml");
 				
-			
+				Debug.Log ("writing xml #1: " + currentquest.xmlcontent);
 				stream2.Write (currentquest.xmlcontent);
-				
+				Debug.Log ("writing xml #2");
+
 				stream2.Close ();
+				Debug.Log ("writing xml #3");
 
 			}
 
