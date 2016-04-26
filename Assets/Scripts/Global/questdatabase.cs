@@ -188,8 +188,8 @@ public class questdatabase : MonoBehaviour
 						buttoncontroller.DisplayList ();
 					}
 
-//					webloadingmessage.enabled = false;
-//					loadlogo.disable();
+					webloadingmessage.enabled = false;
+					loadlogo.disable ();
 				}
 			} else {
 				if (webloadingmessage != null) {
