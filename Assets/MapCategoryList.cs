@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 using System.Collections;
 
 public class MapCategoryList : MonoBehaviour
 {
 
+	bool currentToggleState = true;
+
+	public Button toggleAllButon;
 
 	public GameObject prefab;
 	// Use this for initialization
@@ -26,6 +30,22 @@ public class MapCategoryList : MonoBehaviour
 			}
 
 		}
+	}
+
+	public void whatever ()
+	{
+
+
+		foreach (Transform child in transform) {
+
+
+			child.GetComponent<MapCategoryMenuEntry> ().onChange ();
+			toggleAllButon.GetComponentInChildren<Text> ().text = "Show All";
+
+
+		}
+
+
 	}
 	
 
