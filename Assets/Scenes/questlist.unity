@@ -8017,7 +8017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 4
+  product: 3
   overrideProductSettingsInInspector: 0
   portalID: 341
   autostartQuestID: 0
@@ -8038,7 +8038,7 @@ MonoBehaviour:
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
   toplogo: {fileID: 21300000, guid: f3628365512cb4d5e9fe427a06d5352d, type: 3}
   nameForQuest: Quest
-  questvisualization: map
+  questvisualization: list
   showMessageForDatasendAction: 1
   showPrivacyAgreement: 0
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter
@@ -8234,6 +8234,7 @@ MonoBehaviour:
   defaultLatitude: 8
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
+  useMapOffline: 1
   appVersion: 1
   subversionNumber: 16.4
 --- !u!4 &714240441
@@ -9211,7 +9212,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

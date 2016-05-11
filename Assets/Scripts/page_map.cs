@@ -124,7 +124,7 @@ public class page_map : MonoBehaviour
 		if (showMap) {
 		
 			// TODO: extract prefix determination in globally accessable method:
-			pre = "file: /";
+			pre = "file://";
 
 			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
 			
@@ -159,9 +159,22 @@ public class page_map : MonoBehaviour
 			// create an OSM tile layer
 			OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer> ("OSM");
 			//osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
-			osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + Configuration.instance.mapboxMapID + "/";
-			osmLayer.TileImageExtension = "@2x.png?access_token=" + Configuration.instance.mapboxKey;
+
+			if (!Configuration.instance.useMapOffline) {
+
+				osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + Configuration.instance.mapboxMapID + "/";
+				osmLayer.TileImageExtension = "@2x.png?access_token=" + Configuration.instance.mapboxKey;
+
+
+			} else {
+
+				osmLayer.BaseURL = pre + Application.streamingAssetsPath + "/mapTiles/";
+				osmLayer.TileImageExtension = ".jpg";
+
+
+			}
 			layers.Add (osmLayer);
+
 
 			updateMapMarker ();
 
@@ -188,8 +201,12 @@ public class page_map : MonoBehaviour
 
 		map.UseLocation = true;
 		map.UseOrientation = true; // TODO: should be false, shouldn't it?
-		
-		map.MaxZoom = 20.0f;
+
+		if (!Configuration.instance.useMapOffline) {
+			map.MaxZoom = 20.0f;
+		} else {
+			map.MaxZoom = 18.0f;
+		}
 		map.MinZoom = 13.0f;
 		
 		map.InputsEnabled = true;
