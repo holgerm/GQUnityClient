@@ -32,6 +32,8 @@ public class actions : MonoBehaviour
 	public float gPSRouteUpdateInterval = 10f;
 	private float gPSRouteUpdateInterval_save = 10f;
 
+	public string lastServerIp;
+
 	void Update ()
 	{
 
@@ -196,6 +198,32 @@ public class actions : MonoBehaviour
 
 	}
 
+
+	public string getServerIp (string s)
+	{
+
+		lastServerIp = PlayerPrefs.GetString ("lastServerIp");
+
+		if (s != null && s.Length > 2) {
+
+			lastServerIp = s;
+			PlayerPrefs.SetString ("lastServerIp", lastServerIp);
+			return s;
+
+		} else if (lastServerIp != null && lastServerIp.Length > 2) {
+
+			return lastServerIp;
+
+		}
+
+
+		lastServerIp = "192.168.43.67";
+		PlayerPrefs.SetString ("lastServerIp", lastServerIp);
+
+		return "192.168.43.67";
+
+	}
+
 	void sendVarToServer (QuestAction action)
 	{
 
@@ -213,13 +241,13 @@ public class actions : MonoBehaviour
 
 		} else {
 
-			if (action.hasAttribute ("ip") && action.hasAttribute ("var")) {
+			if (action.hasAttribute ("var")) {
 
 		
 
 				if (getVariable (action.getAttribute ("var")).getStringValue () != "[null]") {
 
-					GetComponent<sendqueue> ().addMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), getVariable (action.getAttribute ("var")).getStringValue ());
+					GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), getVariable (action.getAttribute ("var")).getStringValue ());
 
 				} else {
 
@@ -321,7 +349,7 @@ public class actions : MonoBehaviour
 
 					// jetzt ist die datei in byte arrays zerlegt (liegen in sendbytes)
 
-					GetComponent<sendqueue> ().addMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), filetype, sendbytes [0], 0);
+					GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype, sendbytes [0], 0);
 
 	
 
@@ -333,7 +361,7 @@ public class actions : MonoBehaviour
 						if (k <= sendbytes.Count) {
 						
 							if (k > 1) {
-								GetComponent<sendqueue> ().addMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), filetype, b, k);
+								GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype, b, k);
 							
 								int x = b.Count ();
 						
@@ -345,7 +373,7 @@ public class actions : MonoBehaviour
 				
 				
 
-					GetComponent<sendqueue> ().addFinishMessageToQueue (action.getAttribute ("ip"), action.getAttribute ("var"), filetype);
+					GetComponent<sendqueue> ().addFinishMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype);
 				
 			
 			
