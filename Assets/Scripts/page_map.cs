@@ -126,10 +126,14 @@ public class page_map : MonoBehaviour
 			// TODO: extract prefix determination in globally accessable method:
 			pre = "file://";
 
-			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+			if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android) {
 			
 				pre = "file:";
 			}
+
+
+
+
 
 			if (questdb.currentquest != null) {
 				if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
@@ -168,8 +172,21 @@ public class page_map : MonoBehaviour
 
 			} else {
 
+				if (Application.platform == RuntimePlatform.Android) {
+
+					pre = "";
+
+				}
+
 				osmLayer.BaseURL = pre + Application.streamingAssetsPath + "/mapTiles/";
 				osmLayer.TileImageExtension = ".jpg";
+
+
+				if (Application.platform == RuntimePlatform.Android) {
+
+					pre = "file:";
+
+				}
 
 
 			}
