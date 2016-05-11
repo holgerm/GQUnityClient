@@ -217,10 +217,10 @@ public class actions : MonoBehaviour
 		}
 
 
-		lastServerIp = "192.168.43.67";
+		lastServerIp = "192.168.178.67";
 		//	PlayerPrefs.SetString ("lastServerIp", lastServerIp);
 
-		return "192.168.43.67";
+		return "192.168.178.67";
 
 	}
 

@@ -17751,7 +17751,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -19132,6 +19132,7 @@ MonoBehaviour:
   audioclips: []
   networkActionsObject: {fileID: 0}
   gPSRouteUpdateInterval: 10
+  lastServerIp: 
 --- !u!114 &1756337061
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,7 +7,8 @@ using System;
 using System.Globalization;
 
 
-public class page_imagecapture : MonoBehaviour {
+public class page_imagecapture : MonoBehaviour
+{
 
 	
 	public questdatabase questdb;
@@ -71,16 +72,16 @@ public class page_imagecapture : MonoBehaviour {
 
 		// init web cam;
 		if (Application.platform == RuntimePlatform.OSXWebPlayer ||
-			Application.platform == RuntimePlatform.WindowsWebPlayer) {
+		    Application.platform == RuntimePlatform.WindowsWebPlayer) {
 			yield return Application.RequestUserAuthorization (UserAuthorization.WebCam);
 		}
 		
 		var devices = WebCamTexture.devices;
-		var deviceName = devices[0].name;
+		var deviceName = devices [0].name;
 
 
 		if (Application.platform == RuntimePlatform.Android) {
-			cameraTexture = new WebCamTexture (deviceName, 1280	, 720);
+			cameraTexture = new WebCamTexture (deviceName, 1280, 720);
 
 			
 		} else {
@@ -89,7 +90,7 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-		cameraTexture.Play();
+		cameraTexture.Play ();
 		
 
 		cameraMat.mainTexture = cameraTexture;
@@ -101,11 +102,16 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-	IEnumerator takeSnapshotAndroid(WebCamTexture cameraTexture2){
+	IEnumerator takeSnapshotAndroid (WebCamTexture cameraTexture2)
+	{
+
 
 		yield return new WaitForEndOfFrame ();
 		yield return new WaitForEndOfFrame ();
-
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
+		yield return new WaitForEndOfFrame ();
 
 		Texture2D snap = new Texture2D (cameraTexture2.width, cameraTexture2.height);
 		snap.SetPixels (cameraTexture2.GetPixels ());
@@ -119,33 +125,34 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-		GetComponent<AndroidCamera>().OnImageSaved += OnImageSaved;
+		GetComponent<AndroidCamera> ().OnImageSaved += OnImageSaved;
 
 		DateTime now = DateTime.Now;
-		string text = now.ToString("yyyy_MM_dd_HH_mm_ss_fff",
-		                                CultureInfo.InvariantCulture);
+		string text = now.ToString ("yyyy_MM_dd_HH_mm_ss_fff",
+			              CultureInfo.InvariantCulture);
 		
-		GetComponent<AndroidCamera>().SaveImageToGallery(snap,text);
+		GetComponent<AndroidCamera> ().SaveImageToGallery (snap, text);
 
 
-		actioncontroller.addPhoto(qra);
+		actioncontroller.addPhoto (qra);
 		onEnd ();
 
 
 	}
 
 
-	void OnImageSaved (GallerySaveResult result) {
+	void OnImageSaved (GallerySaveResult result)
+	{
 		AndroidCamera.instance.OnImageSaved -= OnImageSaved;
-		if(result.IsSucceeded) {
-			Debug.Log("Image saved to gallery " + "Path: " + result.imagePath);
+		if (result.IsSucceeded) {
+			Debug.Log ("Image saved to gallery " + "Path: " + result.imagePath);
 		} else {
-			Debug.Log("Image save to gallery failed");
+			Debug.Log ("Image save to gallery failed");
 		}
 	}
 
 
-	public void TakeSnapshot()
+	public void TakeSnapshot ()
 	{
 
 
@@ -155,10 +162,10 @@ public class page_imagecapture : MonoBehaviour {
 			var devices = WebCamTexture.devices;
 			var deviceName = devices [0].name;
 			WebCamTexture cameraTexture2 = new WebCamTexture (deviceName, 1920, 1080);
-			cameraTexture.Stop();
-			cameraTexture2.Play();
+			cameraTexture.Stop ();
+			cameraTexture2.Play ();
 
-			StartCoroutine(takeSnapshotAndroid(cameraTexture2));
+			StartCoroutine (takeSnapshotAndroid (cameraTexture2));
 
 
 		} else {
@@ -174,13 +181,13 @@ public class page_imagecapture : MonoBehaviour {
 
 
 
-			if(Application.platform == RuntimePlatform.IPhonePlayer){
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
 
-			GetComponent<IOSCamera>().SaveTextureToCameraRoll(snap);
+				GetComponent<IOSCamera> ().SaveTextureToCameraRoll (snap);
 
 			}
 
-			actioncontroller.addPhoto(qra);
+			actioncontroller.addPhoto (qra);
 
 
 			onEnd ();
@@ -200,7 +207,7 @@ public class page_imagecapture : MonoBehaviour {
 
 
 	}
-	
+
 
 	
 	
