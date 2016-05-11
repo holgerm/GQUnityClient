@@ -350,33 +350,34 @@ public class actions : MonoBehaviour
 
 					// jetzt ist die datei in byte arrays zerlegt (liegen in sendbytes)
 
-					GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype, sendbytes [0], 0);
+					if (sendbytes != null && sendbytes.Count > 0) {
+						GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype, sendbytes [0], 0);
 
-	
-
-				
-					int k = 1;
-				
-					foreach (byte[] b in sendbytes) {
 					
-						if (k <= sendbytes.Count) {
-						
-							if (k > 1) {
-								GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype, b, k);
-							
-								int x = b.Count ();
-						
-							}
-						
-							k++;
-						}
-					}
-				
-				
 
-					GetComponent<sendqueue> ().addFinishMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype);
 				
-			
+						int k = 1;
+				
+						foreach (byte[] b in sendbytes) {
+					
+							if (k <= sendbytes.Count) {
+						
+								if (k > 1) {
+									GetComponent<sendqueue> ().addMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype, b, k);
+							
+									int x = b.Count ();
+						
+								}
+						
+								k++;
+							}
+						}
+				
+					
+
+						GetComponent<sendqueue> ().addFinishMessageToQueue (getServerIp (action.getAttribute ("ip")), action.getAttribute ("var"), filetype);
+				
+					}
 			
 				
 					if (!filefound) {
