@@ -202,12 +202,12 @@ public class actions : MonoBehaviour
 	public string getServerIp (string s)
 	{
 
-		lastServerIp = PlayerPrefs.GetString ("lastServerIp");
+		//lastServerIp = PlayerPrefs.GetString ("lastServerIp");
 
 		if (s != null && s.Length > 2) {
 
 			lastServerIp = s;
-			PlayerPrefs.SetString ("lastServerIp", lastServerIp);
+			//	PlayerPrefs.SetString ("lastServerIp", lastServerIp);
 			return s;
 
 		} else if (lastServerIp != null && lastServerIp.Length > 2) {
@@ -218,11 +218,12 @@ public class actions : MonoBehaviour
 
 
 		lastServerIp = "192.168.43.67";
-		PlayerPrefs.SetString ("lastServerIp", lastServerIp);
+		//	PlayerPrefs.SetString ("lastServerIp", lastServerIp);
 
 		return "192.168.43.67";
 
 	}
+
 
 	void sendVarToServer (QuestAction action)
 	{
