@@ -26,16 +26,17 @@ public class MapCategoryMenuEntry : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	
+
 		markerImage.sprite = markerCategory.sprite;
 		text.text = markerCategory.anzeigename_de;
 
-		if (!markerCategory.showOnMap) {
+		if (!markerCategory.showOnMap && toggle != null) {
 
 			toggle.isOn = false;
 		}
 
 	}
+
 
 
 

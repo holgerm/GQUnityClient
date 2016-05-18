@@ -27,6 +27,9 @@ public class onTapMarker : MonoBehaviour
 
 	}
 
+
+
+
 	void OnMouseUp ()
 	{
 
@@ -34,9 +37,9 @@ public class onTapMarker : MonoBehaviour
 		if (!EventSystem.current.IsPointerOverGameObject () && !Application.isMobilePlatform && hotspot.active) {
 
 			if (hotspot.startquest.id != 0) {
-				
-				
-				GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().startQuest (hotspot.startquest);
+				GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().closeMap ();
+
+				GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().startQuestAtEndOfFrame (hotspot.startquest);
 			}
 
 			GetComponent<MeshRenderer> ().material.color = Color.white;

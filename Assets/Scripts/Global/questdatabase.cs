@@ -1192,12 +1192,33 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
+
+	public void startQuestAtEndOfFrame (Quest q)
+	{
+
+
+		StartCoroutine (startQuestAtEndOfFrameCoRoutine (q));
+
+	}
+
+	public IEnumerator startQuestAtEndOfFrameCoRoutine (Quest q)
+	{
+
+		yield return new WaitForEndOfFrame ();
+
+		yield return new WaitForEndOfFrame ();
+
+		startQuest (q);
+
+	}
+
 	public void startQuest (Quest q)
 	{
 
 		Debug.Log ("Starting Quest " + q.name + " (" + q.id + ")");
 
 		closeMap ();
+
 		currentquest = q;
 		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 
@@ -2445,7 +2466,11 @@ public class questdatabase : MonoBehaviour
 			Destroy (GameObject.Find ("[Map]"));
 		}
 
-			
+		if (GameObject.Find ("RouteRender") != null) {
+
+			Destroy (GameObject.Find ("RouteRender"));
+
+		}
 				
 
 				
@@ -2500,9 +2525,12 @@ public class questdatabase : MonoBehaviour
 
 		}
 		   
+		//Debug.Log ("looking for page with id:" + id);
 		foreach (QuestPage qp in currentquest.pages) {
 
-			if (qp.id == id) {
+//			Debug.Log (qp.id);
+
+			if (qp.id.Equals (id)) {
 
 				currentquest.currentpage = qp;
 
@@ -2662,14 +2690,18 @@ public class questdatabase : MonoBehaviour
 
 
 
+					//	Debug.Log ("trying to start map");
+
 
 					if (GameObject.Find ("MapCam") == null) {
+//						Debug.Log ("MapCam not found");
 
 
 						StartCoroutine (loadMap ());
 
 					} else {
 
+						//	Debug.Log ("MapCam found");
 
 						if (GameObject.Find ("PageController_Map") != null) {
 
@@ -2702,26 +2734,31 @@ public class questdatabase : MonoBehaviour
 						}
 
 					}
+
+
+
+
+
 				}
 
 
 
-				if (needsCamera) {
-					if (GameObject.Find ("MapCanvas") != null) {
-						Debug.Log ("Disabling Map Canvas");
-						GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
-					}
-
-					Debug.Log ("needs Camera");
-					GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
-					if (GameObject.Find ("MapCam") != null) {
-						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
-						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
-
-					}
-					GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = false;
-
-				}
+//				if (needsCamera) {
+//					if (GameObject.Find ("MapCanvas") != null) {
+//						Debug.Log ("Disabling Map Canvas");
+//						GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
+//					}
+//
+//					Debug.Log ("needs Camera");
+//					GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
+//					if (GameObject.Find ("MapCam") != null) {
+//						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
+//						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
+//
+//					}
+//					GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = false;
+//
+//				}
 				
 				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 
