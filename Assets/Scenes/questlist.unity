@@ -8017,7 +8017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 3
+  product: 4
   overrideProductSettingsInInspector: 0
   portalID: 341
   autostartQuestID: 0
@@ -8036,10 +8036,10 @@ MonoBehaviour:
     Deutschland\\n <b>Domain</b>\\n erzbistum-koeln.de\\n <b>Umsatzsteuer-Identifikations-Nr.</b>\\n
     Ust-IdNr. DE 122 777 469 \\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\\n
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
-  toplogo: {fileID: 21300000, guid: f3628365512cb4d5e9fe427a06d5352d, type: 3}
+  toplogo: {fileID: 21300000, guid: 1d9e6940ac58844519d19fdc1150720e, type: 3}
   nameForQuest: Quest
-  questvisualization: list
-  showMessageForDatasendAction: 1
+  questvisualization: map
+  showMessageForDatasendAction: 0
   showPrivacyAgreement: 0
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter
     dieser App ist uns der sichere Umgang mit Ihren Daten besonders wichtig. Die Erhebung,
@@ -8142,10 +8142,10 @@ MonoBehaviour:
     Nutzungsbedingungen zu \xE4ndern, wenn ein wichtiger Grund hierf\xFCr vorliegt.
     <br>"
   agbsVersion: 1
-  questvisualizationchangable: 0
-  showcloudquestsimmediately: 0
-  showtextinloadinglogo: 1
-  showinternetconnectionmessage: 1
+  questvisualizationchangable: 1
+  showcloudquestsimmediately: 1
+  showtextinloadinglogo: 0
+  showinternetconnectionmessage: 0
   defaultlanguage: system
   languageChangableByUser: 0
   languagesAvailable:
@@ -8166,6 +8166,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: bcd500bc549a04f91ab112eec4cd0756, type: 3}
     available: 0
   categoryMarker:
+  - category: wcc.tour
+    anzeigename_de: Tour
+    sprite: {fileID: 21300000, guid: c647774d1f4284f85995b053bad2c4c7, type: 3}
+    showInList: 1
+    showOnMap: 1
   - category: wcc.culture
     anzeigename_de: Kultur
     sprite: {fileID: 21300000, guid: 80eadcdccf2a14eceab8aa81d74d6687, type: 3}
@@ -8234,9 +8239,9 @@ MonoBehaviour:
   defaultLatitude: 8
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
-  useMapOffline: 1
+  useMapOffline: 0
   appVersion: 1
-  subversionNumber: 16.4
+  subversionNumber: 16.5
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -9212,8 +9217,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17751,8 +17756,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
