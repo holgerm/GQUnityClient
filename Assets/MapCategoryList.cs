@@ -3,48 +3,55 @@ using UnityEngine.UI;
 
 using System.Collections;
 
-public class MapCategoryList : MonoBehaviour
-{
+public class MapCategoryList : MonoBehaviour {
 
-	bool currentToggleState = true;
+	bool currentToggleStateShowAll;
 
-	public Button toggleAllButon;
+	public Button toggleAllButton;
 
 	public GameObject prefab;
-	// Use this for initialization
-	void Start ()
-	{
-	
 
+	void Awake () {
+		currentToggleStateShowAll = false;
+		updateToggleAllButtonText();
+	}
 
+	void Start () {
 
-		foreach (MarkerCategorySprite mcs in Configuration.instance.categoryMarker) {
+		Debug.Log("Starting to create marker categories. Size: " + Configuration.instance.categoryMarker.Count);
 
-			if (mcs.showInList) {
+		foreach ( MarkerCategorySprite mcs in Configuration.instance.categoryMarker ) {
 
-				GameObject go = (GameObject)Instantiate (prefab);
-				go.transform.SetParent (this.transform, false);
-				go.transform.localScale = new Vector3 (1f, 1f, 1f);
-				go.GetComponent<MapCategoryMenuEntry> ().markerCategory = mcs;
+			if ( mcs.showInList ) {
 
+				GameObject go = (GameObject)Instantiate(prefab);
+				go.transform.SetParent(this.transform, false);
+				go.transform.localScale = new Vector3(1f, 1f, 1f);
+				go.GetComponent<MapCategoryMenuEntry>().markerCategory = mcs;
+
+				Debug.Log("Created marker category " + mcs.anzeigename_de);
 			}
-
 		}
 	}
 
-	public void whatever ()
-	{
+	public void whatever () {
+		MapCategoryMenuEntry[] allChildren = GetComponentsInChildren<MapCategoryMenuEntry>();
 
-
-		foreach (Transform child in transform) {
-
-
-			child.GetComponent<MapCategoryMenuEntry> ().onChange ();
-			toggleAllButon.GetComponentInChildren<Text> ().text = "Show All";
-
-
+		foreach ( MapCategoryMenuEntry child in allChildren ) {
+			child.setState(currentToggleStateShowAll);
 		}
 
+		currentToggleStateShowAll = !currentToggleStateShowAll;
+		updateToggleAllButtonText();
+	}
+
+	private void updateToggleAllButtonText () {
+		if ( currentToggleStateShowAll ) {
+			toggleAllButton.GetComponentInChildren<Text>().text = "Alle anzeigen";
+		}
+		else {
+			toggleAllButton.GetComponentInChildren<Text>().text = "Alle ausblenden";
+		}
 
 	}
 	
