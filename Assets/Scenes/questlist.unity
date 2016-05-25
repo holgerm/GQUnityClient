@@ -4017,11 +4017,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22437084, guid: 795d1abf60b6f46b4856cf15bf3df5db, type: 2}
       propertyPath: m_Pivot.x
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 22437084, guid: 795d1abf60b6f46b4856cf15bf3df5db, type: 2}
       propertyPath: m_Pivot.y
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 130678, guid: 795d1abf60b6f46b4856cf15bf3df5db, type: 2}
       propertyPath: m_Name
@@ -7436,11 +7436,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22466820, guid: 83834eea2a6e644c78b7266da3fd1ae8, type: 2}
       propertyPath: m_Pivot.x
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 22466820, guid: 83834eea2a6e644c78b7266da3fd1ae8, type: 2}
       propertyPath: m_Pivot.y
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 166820, guid: 83834eea2a6e644c78b7266da3fd1ae8, type: 2}
       propertyPath: m_IsActive
@@ -8017,9 +8017,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 4
-  overrideProductSettingsInInspector: 0
-  portalID: 341
+  product: 0
+  overrideProductSettingsInInspector: 1
+  portalID: 421
   autostartQuestID: 0
   autostartIsPredeployed: 0
   colorProfile: odysseum
@@ -8038,7 +8038,7 @@ MonoBehaviour:
     Efi Goebel\\n <b>Technisch verantwortlich</b>\\n QuestMill GmbH\\n"
   toplogo: {fileID: 21300000, guid: 1d9e6940ac58844519d19fdc1150720e, type: 3}
   nameForQuest: Quest
-  questvisualization: map
+  questvisualization: list
   showMessageForDatasendAction: 0
   showPrivacyAgreement: 0
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter
@@ -8142,8 +8142,11 @@ MonoBehaviour:
     Nutzungsbedingungen zu \xE4ndern, wenn ein wichtiger Grund hierf\xFCr vorliegt.
     <br>"
   agbsVersion: 1
-  questvisualizationchangable: 1
-  showcloudquestsimmediately: 1
+  questvisualizationchangable: 0
+  cloudQuestsVisible: 0
+  showcloudquestsimmediately: 0
+  downloadAllCloudQuestOnStart: 1
+  localQuestsDeletable: 0
   showtextinloadinglogo: 0
   showinternetconnectionmessage: 0
   defaultlanguage: system
@@ -8231,6 +8234,13 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 26528893e0d374452a1bce9e80e40596, type: 3}
     showInList: 0
     showOnMap: 0
+  metaCategoryUsage:
+  - name: Kategorien
+    considerInSearch: 1
+    filterButton: 0
+  - name: Stichworte
+    considerInSearch: 1
+    filterButton: 0
   defaultmarker: {fileID: 21300000, guid: 866b01dac34d8447181c266492bc3465, type: 3}
   markerScale: 0.7
   storedMapZoom: 18
@@ -11561,11 +11571,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22425732, guid: 7dbbf06ee6bb2426f9115156808026e0, type: 2}
       propertyPath: m_Pivot.x
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 22425732, guid: 7dbbf06ee6bb2426f9115156808026e0, type: 2}
       propertyPath: m_Pivot.y
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 125732, guid: 7dbbf06ee6bb2426f9115156808026e0, type: 2}
       propertyPath: m_IsActive
@@ -17499,11 +17509,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22425732, guid: 7dbbf06ee6bb2426f9115156808026e0, type: 2}
       propertyPath: m_Pivot.x
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 22425732, guid: 7dbbf06ee6bb2426f9115156808026e0, type: 2}
       propertyPath: m_Pivot.y
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 125732, guid: 7dbbf06ee6bb2426f9115156808026e0, type: 2}
       propertyPath: m_IsActive
@@ -18336,11 +18346,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22466820, guid: 83834eea2a6e644c78b7266da3fd1ae8, type: 2}
       propertyPath: m_Pivot.x
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 22466820, guid: 83834eea2a6e644c78b7266da3fd1ae8, type: 2}
       propertyPath: m_Pivot.y
-      value: .5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 166820, guid: 83834eea2a6e644c78b7266da3fd1ae8, type: 2}
       propertyPath: m_IsActive
@@ -19039,6 +19049,7 @@ MonoBehaviour:
   currentquestdata: {fileID: 0}
   allquests: []
   localquests: []
+  downloadquests: []
   wanttoload: []
   publicquestslist: {fileID: 1116271734}
   actioncontroller: {fileID: 1756337060}

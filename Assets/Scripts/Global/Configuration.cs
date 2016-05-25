@@ -39,13 +39,18 @@ public class Configuration : MonoBehaviour {
 	public string agbs = "";
 	public int agbsVersion = -1;
 	public bool questvisualizationchangable = false;
+	public bool cloudQuestsVisible = true;
 	public bool showcloudquestsimmediately = false;
+	public bool downloadAllCloudQuestOnStart = false;
+	public bool localQuestsDeletable = true;
+
 	public bool showtextinloadinglogo = true;
 	public bool showinternetconnectionmessage = true;
 	public string defaultlanguage = "system";
 	public bool languageChangableByUser = true;
 	public List<Language> languagesAvailable;
 	public List<MarkerCategorySprite> categoryMarker;
+	public List<QuestMetaCategory> metaCategoryUsage;
 	public Sprite defaultmarker;
 	// TODO make available in portal
 	public float markerScale = 1.0f;
@@ -228,6 +233,28 @@ public class Configuration : MonoBehaviour {
 		return;
 	}
 
+
+
+	public bool metaCategoryIsSearchable (string category)
+	{
+
+		if (metaCategoryUsage != null && metaCategoryUsage.Count > 0) {
+
+			foreach (QuestMetaCategory qmc in metaCategoryUsage) {
+
+				if (qmc.name.ToUpper ().Equals (category.ToUpper ()) && qmc.considerInSearch) {
+
+					return true;
+
+				}
+
+			}
+
+		}
+
+		return false;
+	}
+
 }
 
 
@@ -262,6 +289,12 @@ public class Language {
 
 
 
+[System.Serializable]
+public class QuestMetaCategory
+{
+	public string name;
 
+	public bool considerInSearch;
+	public bool filterButton;
 
-
+}

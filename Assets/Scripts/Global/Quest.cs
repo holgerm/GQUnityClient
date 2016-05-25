@@ -46,9 +46,14 @@ public class Quest  : IComparable<Quest>
 	public float start_longitude;
 	public float start_latitude;
 	public string meta_combined;
+	public string meta_Search_Combined;
+
 	public bool predeployed = false;
 	public string version;
 	public bool acceptedDS = false;
+
+	[XmlIgnore]
+	public WWW www;
 
 	public string alternateDownloadLink;
 
@@ -146,7 +151,15 @@ public class Quest  : IComparable<Quest>
 //		Debug.Log ("my id is " + id + " -> " + q.id);
 		q.deserializeAttributes (redo);
 
+
+
+		q.meta_Search_Combined += q.name + "; ";
+
+
 		q.meta_combined += q.name;
+
+
+		Debug.Log ("meta");
 
 		if (metadata != null) {
 
@@ -187,6 +200,37 @@ public class Quest  : IComparable<Quest>
 			}
 
 		}
+		if (q.pages != null && q.pages.Count > 0 && q.pages [0].onStart != null && q.pages [0].onStart.actions != null && q.pages [0].onStart.actions.Count > 0) {
+			foreach (QuestAction qameta in q.pages[0].onStart.actions) {
+
+				if (qameta.type == "SetVariable") {
+					//	Debug.Log ("found setVar");
+					if (qameta.hasAttribute ("var")) {
+						
+						QuestMetaData newmeta = new QuestMetaData ();
+						newmeta.key = qameta.getAttribute ("var");
+						newmeta.value = qameta.value.string_value [0];
+
+
+						Debug.Log ("new meta: " + newmeta.key + "," + newmeta.value);
+						q.addMetaData (newmeta);
+
+					}
+
+
+				}
+
+
+
+			}
+
+
+
+		}
+
+
+
+
 
 		return q;
 	}
@@ -218,6 +262,15 @@ public class Quest  : IComparable<Quest>
 		}
 
 		metadata.Add (meta);
+
+
+
+		if (Configuration.instance.metaCategoryIsSearchable (meta.key)) {
+
+			meta_Search_Combined += " " + meta.value;
+
+		}
+
 
 		meta_combined += ";" + meta.value;
 

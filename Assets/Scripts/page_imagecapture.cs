@@ -113,6 +113,8 @@ public class page_imagecapture : MonoBehaviour
 		yield return new WaitForEndOfFrame ();
 		yield return new WaitForEndOfFrame ();
 
+
+
 		Texture2D snap = new Texture2D (cameraTexture2.width, cameraTexture2.height);
 		snap.SetPixels (cameraTexture2.GetPixels ());
 		snap.Apply ();
