@@ -14,7 +14,8 @@ public class Configuration : MonoBehaviour {
 		WikiCultureCity,
 		Intern,
 		Demos,
-		Odysseum
+		Odysseum,
+		SLSSpiele
 	}
 
 	public ProductIDs product;
@@ -217,6 +218,16 @@ public class Configuration : MonoBehaviour {
 				mapboxMapID = "mapbox.streets";
 				impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
 				break;
+			case ProductIDs.SLSSpiele:
+				productName = "slspiele";
+				portalID = 421;
+				autostartQuestID = 0;
+				downloadTimeOutSeconds = 60;
+				colorProfile = "default";
+				mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+				mapboxMapID = "mapbox.streets";
+				impressum = "<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n";
+				break;
 			case ProductIDs.Intern:
 			default:
 				productName = "intern";
@@ -235,14 +246,13 @@ public class Configuration : MonoBehaviour {
 
 
 
-	public bool metaCategoryIsSearchable (string category)
-	{
+	public bool metaCategoryIsSearchable (string category) {
 
-		if (metaCategoryUsage != null && metaCategoryUsage.Count > 0) {
+		if ( metaCategoryUsage != null && metaCategoryUsage.Count > 0 ) {
 
-			foreach (QuestMetaCategory qmc in metaCategoryUsage) {
+			foreach ( QuestMetaCategory qmc in metaCategoryUsage ) {
 
-				if (qmc.name.ToUpper ().Equals (category.ToUpper ()) && qmc.considerInSearch) {
+				if ( qmc.name.ToUpper().Equals(category.ToUpper()) && qmc.considerInSearch ) {
 
 					return true;
 
@@ -290,8 +300,7 @@ public class Language {
 
 
 [System.Serializable]
-public class QuestMetaCategory
-{
+public class QuestMetaCategory {
 	public string name;
 
 	public bool considerInSearch;

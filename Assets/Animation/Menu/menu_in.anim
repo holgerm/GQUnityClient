@@ -12,6 +12,7 @@ AnimationClip:
   m_UseHighQualityCurve: 1
   m_RotationCurves: []
   m_CompressedRotationCurves: []
+  m_EulerCurves: []
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves:
@@ -19,22 +20,23 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: .784313738
+        value: 0.78431374
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - time: 1.2166667
-        value: .835294127
+        value: 0.8352941
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 2.54999995
-        value: .784313738
+      - time: 2.55
+        value: 0.78431374
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Color.a
     path: bg
     classID: 114
@@ -49,6 +51,7 @@ AnimationClip:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
     path: side
     classID: 224
@@ -63,6 +66,7 @@ AnimationClip:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
     path: top
     classID: 224
@@ -77,6 +81,7 @@ AnimationClip:
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: bg
     classID: 114
@@ -116,11 +121,14 @@ AnimationClip:
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 2.54999995
+    m_StopTime: 2.55
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
     m_LoopTime: 1
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
@@ -136,22 +144,23 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: .784313738
+        value: 0.78431374
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - time: 1.2166667
-        value: .835294127
+        value: 0.8352941
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 2.54999995
-        value: .784313738
+      - time: 2.55
+        value: 0.78431374
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Color.a
     path: bg
     classID: 114
@@ -166,6 +175,7 @@ AnimationClip:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
     path: side
     classID: 224
@@ -180,6 +190,7 @@ AnimationClip:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
     path: top
     classID: 224
@@ -194,6 +205,7 @@ AnimationClip:
         tangentMode: 31
       m_PreInfinity: 2
       m_PostInfinity: 2
+      m_RotationOrder: 4
     attribute: m_Enabled
     path: bg
     classID: 114
