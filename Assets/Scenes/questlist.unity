@@ -8345,7 +8345,7 @@ MonoBehaviour:
   appVersionURL: https://quest-mill.com/appversion/121.html
   useMapOffline: 0
   appVersion: 1
-  subversionNumber: 16.5
+  subversionNumber: 16.6
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -8353,7 +8353,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 714240439}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 48.943485, y: 192.12283, z: -1044.8467}
+  m_LocalPosition: {x: 155, y: 248, z: -1930.1926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
