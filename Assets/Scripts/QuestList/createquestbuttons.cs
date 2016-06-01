@@ -138,8 +138,73 @@ public class createquestbuttons : MonoBehaviour
 			filteredOfflineList.Add (q);
 		}
 		filterForName (namefilter);
+		filterForMetaCategories ();
 	}
 
+	public void filterForMetaCategories ()
+	{
+
+
+		foreach (Quest q in filteredOfflineList.GetRange(0,filteredOfflineList.Count)) {
+
+		
+
+			if (Configuration.instance.metaCategoryUsage != null) {
+				foreach (QuestMetaCategory qmC in Configuration.instance.metaCategoryUsage) {
+
+
+					if (qmC.filterButton && qmC.chosenValues != null && qmC.chosenValues.Count > 0) {
+
+						if (q.hasMeta (qmC.name)) {
+
+							bool oneWasIn = false;
+
+							foreach (string s2 in qmC.chosenValues) {
+
+								if (q.getMeta (qmC.name).ToUpper ().Contains (s2.ToUpper ())) {
+									oneWasIn = true;
+
+								}
+
+							}
+
+							if (!oneWasIn) {
+								if (filteredOfflineList.Contains (q)) {
+									filteredOfflineList.Remove (q);
+								}
+
+							}
+
+
+
+
+
+
+						} else {
+							if (filteredOfflineList.Contains (q)) {
+								filteredOfflineList.Remove (q);
+							}
+						}
+					}
+
+
+				}
+			}
+
+
+
+
+
+
+
+		}
+
+
+		DisplayList ();
+
+
+
+	}
 
 
 

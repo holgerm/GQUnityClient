@@ -1635,6 +1635,9 @@ public class questdatabase : MonoBehaviour
 					}
 				}
 			}
+
+			GameObject.Find ("[FILTERLIST]").GetComponent<categoryFilterList> ().reInstantiateFilter ();
+
 			//downloadingAll = true;
 
 		}

@@ -269,6 +269,12 @@ public class Quest  : IComparable<Quest>
 
 			meta_Search_Combined += " " + meta.value;
 
+
+		}
+		if (Configuration.instance.getMetaCategory (meta.key) != null) {
+
+			Configuration.instance.getMetaCategory (meta.key).addPossibleValues (meta.value);
+
 		}
 
 
