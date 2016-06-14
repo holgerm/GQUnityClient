@@ -14,27 +14,26 @@ using GQ.Util;
 using UnitySlippyMap;
 
 [System.Serializable]
-[XmlRoot ("game")]
-public class Quest  : IComparable<Quest>
-{
+[XmlRoot("game")]
+public class Quest  : IComparable<Quest> {
 	
-	[XmlAttribute ("name")]
+	[XmlAttribute("name")]
 	public string
 		name;
-	[XmlAttribute ("id")]
+	[XmlAttribute("id")]
 	public int
 		id;
-	[XmlAttribute ("xmlformat")]
+	[XmlAttribute("xmlformat")]
 	public int
 		xmlformat;
 	public string filepath;
-	[XmlElement ("mission")]
+	[XmlElement("mission")]
 	public List<QuestPage>
 		pages;
-	[XmlElement ("hotspot")]
+	[XmlElement("hotspot")]
 	public List<QuestHotspot>
 		hotspots;
-	[XmlAnyAttribute ()]
+	[XmlAnyAttribute()]
 	public XmlAttribute[]
 		help_attributes;
 	public List<QuestAttribute> attributes;
@@ -57,26 +56,23 @@ public class Quest  : IComparable<Quest>
 
 	public string alternateDownloadLink;
 
-	public Quest ()
-	{
+	public Quest () {
 		predeployed = false;
 
 	}
 
-	public static Quest CreateQuest (int id)
-	{
-		Quest q = new Quest ();
-		return q.LoadFromText (id, true);
+	public static Quest CreateQuest (int id) {
+		Quest q = new Quest();
+		return q.LoadFromText(id, true);
 	}
 
-	public string getCategory ()
-	{
+	public string getCategory () {
 
 		string x = "";
 
-		if (hasMeta ("category")) {
+		if ( hasMeta("category") ) {
 
-			x = getMeta ("category");
+			x = getMeta("category");
 
 		}
 
@@ -84,63 +80,62 @@ public class Quest  : IComparable<Quest>
 
 	}
 
-	public int CompareTo (Quest q)
-	{
+	public int CompareTo (Quest q) {
 
-		if (q == null) {
+		if ( q == null ) {
 			return 1;
-		} else {
+		}
+		else {
 
-			return this.name.ToUpper ().CompareTo (q.name.ToUpper ());
+			return this.name.ToUpper().CompareTo(q.name.ToUpper());
 		}
 
 	}
 
-	public  Quest LoadFromText (int id, bool redo)
-	{
+	public  Quest LoadFromText (int id, bool redo) {
 	
 		string fp = filepath;
 		string xmlfilepath = filepath;
 		string xmlcontent_copy = xmlcontent;
 
-		if (xmlcontent_copy != null && xmlcontent_copy.StartsWith ("<error>")) {
+		if ( xmlcontent_copy != null && xmlcontent_copy.StartsWith("<error>") ) {
 			string errMsg = xmlcontent_copy;
 
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().showmessage (errMsg);
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().showmessage(errMsg);
 			return null;
 		}
 
-		if (filepath == null) {
+		if ( filepath == null ) {
 			xmlfilepath = " ";
 
 		}
 
-		if (xmlcontent_copy == null) {
+		if ( xmlcontent_copy == null ) {
 
 			xmlcontent_copy = " ";
 		}
 
 		Encoding enc = System.Text.Encoding.UTF8;
 		
-		TextReader txr = new StringReader (xmlcontent_copy);
+		TextReader txr = new StringReader(xmlcontent_copy);
 
 //		Debug.Log ("XML:"+xmlcontent_copy);
 
-		if (!predeployed && xmlfilepath != null && xmlfilepath.Length > 9) {
+		if ( !predeployed && xmlfilepath != null && xmlfilepath.Length > 9 ) {
 
 //			Debug.Log(xmlfilepath);
 
-			if (!xmlfilepath.Contains ("game.xml")) {
+			if ( !xmlfilepath.Contains("game.xml") ) {
 
 				xmlfilepath = xmlfilepath + "game.xml";
 
 			}
-			txr = new StreamReader (xmlfilepath, enc);
+			txr = new StreamReader(xmlfilepath, enc);
 
 		}
-		XmlSerializer serializer = new XmlSerializer (typeof(Quest));
+		XmlSerializer serializer = new XmlSerializer(typeof(Quest));
 
-		Quest q = serializer.Deserialize (txr) as Quest; 
+		Quest q = serializer.Deserialize(txr) as Quest; 
 		q.xmlcontent = xmlcontent;
 		q.predeployed = predeployed;
 
@@ -149,7 +144,7 @@ public class Quest  : IComparable<Quest>
 	
 		//q.id = id;
 //		Debug.Log ("my id is " + id + " -> " + q.id);
-		q.deserializeAttributes (redo);
+		q.deserializeAttributes(redo);
 
 
 
@@ -159,39 +154,40 @@ public class Quest  : IComparable<Quest>
 		q.meta_combined += q.name;
 
 
-		Debug.Log ("meta");
+		Debug.Log("meta");
 
-		if (metadata != null) {
+		if ( metadata != null ) {
 
-			metadata.Clear ();
-		} else {
+			metadata.Clear();
+		}
+		else {
 
-			metadata = new List<QuestMetaData> ();
+			metadata = new List<QuestMetaData>();
 		}
 
-		if (q.hasAttribute ("author")) {
+		if ( q.hasAttribute("author") ) {
 
-			q.addMetaData (new QuestMetaData ("author", q.getAttribute ("author")));
+			q.addMetaData(new QuestMetaData("author", q.getAttribute("author")));
 
 		}
 
-		if (q.hasAttribute ("version")) {
+		if ( q.hasAttribute("version") ) {
 			
-			q.addMetaData (new QuestMetaData ("version", q.getAttribute ("version")));
+			q.addMetaData(new QuestMetaData("version", q.getAttribute("version")));
 			
 		}
 
-		foreach (QuestPage qp in q.pages) {
+		foreach ( QuestPage qp in q.pages ) {
 
-			if (qp.type == "MetaData") {
+			if ( qp.type == "MetaData" ) {
 
-				foreach (QuestContent qc in qp.contents_stringmeta) {
+				foreach ( QuestContent qc in qp.contents_stringmeta ) {
 
-					if (qc.hasAttribute ("key") && qc.hasAttribute ("value")) {
-						QuestMetaData newmeta = new QuestMetaData ();
-						newmeta.key = qc.getAttribute ("key");
-						newmeta.value = qc.getAttribute ("value");
-						q.addMetaData (newmeta);
+					if ( qc.hasAttribute("key") && qc.hasAttribute("value") ) {
+						QuestMetaData newmeta = new QuestMetaData();
+						newmeta.key = qc.getAttribute("key");
+						newmeta.value = qc.getAttribute("value");
+						q.addMetaData(newmeta);
 
 					}
 
@@ -200,20 +196,25 @@ public class Quest  : IComparable<Quest>
 			}
 
 		}
-		if (q.pages != null && q.pages.Count > 0 && q.pages [0].onStart != null && q.pages [0].onStart.actions != null && q.pages [0].onStart.actions.Count > 0) {
-			foreach (QuestAction qameta in q.pages[0].onStart.actions) {
+		if ( q.pages != null && q.pages.Count > 0 && q.pages[0].onStart != null && q.pages[0].onStart.actions != null && q.pages[0].onStart.actions.Count > 0 ) {
+			foreach ( QuestAction qameta in q.pages[0].onStart.actions ) {
 
-				if (qameta.type == "SetVariable") {
+				if ( qameta.type == "SetVariable" ) {
 					//	Debug.Log ("found setVar");
-					if (qameta.hasAttribute ("var")) {
+					if ( qameta.hasAttribute("var") ) {
 						
-						QuestMetaData newmeta = new QuestMetaData ();
-						newmeta.key = qameta.getAttribute ("var");
-						newmeta.value = qameta.value.string_value [0];
+						QuestMetaData newmeta = new QuestMetaData();
+						newmeta.key = qameta.getAttribute("var");
+						if ( qameta.value != null && qameta.value.string_value != null && qameta.value.string_value.Count > 0 ) {
+							newmeta.value = qameta.value.string_value[0];
+						}
+						else {
+							continue;
+						}
 
 
-						Debug.Log ("new meta: " + newmeta.key + "," + newmeta.value);
-						q.addMetaData (newmeta);
+						Debug.Log("new meta: " + newmeta.key + "," + newmeta.value);
+						q.addMetaData(newmeta);
 
 					}
 
@@ -235,135 +236,135 @@ public class Quest  : IComparable<Quest>
 		return q;
 	}
 
-	public void addMetaData (QuestMetaData meta)
-	{
+	public void addMetaData (QuestMetaData meta) {
 
 		string key = meta.key;
 
-		List<QuestMetaData> todelete = new List<QuestMetaData> ();
+		List<QuestMetaData> todelete = new List<QuestMetaData>();
 
-		if (metadata == null) {
+		if ( metadata == null ) {
 
-			metadata = new List<QuestMetaData> ();
+			metadata = new List<QuestMetaData>();
 
-		} else {
-			foreach (QuestMetaData qmd in metadata) {
+		}
+		else {
+			foreach ( QuestMetaData qmd in metadata ) {
 
-				if (qmd.key == key) {
-					todelete.Add (qmd);
+				if ( qmd.key == key ) {
+					todelete.Add(qmd);
 				}
 
 			}
 
-			foreach (QuestMetaData qmd in todelete) {
-				metadata.Remove (qmd);
+			foreach ( QuestMetaData qmd in todelete ) {
+				metadata.Remove(qmd);
 			}
 
 		}
 
-		metadata.Add (meta);
+		metadata.Add(meta);
 
 
 
-		if (Configuration.instance.metaCategoryIsSearchable (meta.key)) {
+		if ( Configuration.instance.metaCategoryIsSearchable(meta.key) ) {
 
 			meta_Search_Combined += " " + meta.value;
 
 
 		}
-		if (Configuration.instance.getMetaCategory (meta.key) != null) {
+		if ( Configuration.instance.getMetaCategory(meta.key) != null ) {
 
-			Configuration.instance.getMetaCategory (meta.key).addPossibleValues (meta.value);
+			Configuration.instance.getMetaCategory(meta.key).addPossibleValues(meta.value);
 
 		}
 
 
 		meta_combined += ";" + meta.value;
 
-		questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+		questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
-		if (!questdb.allmetakeys.Contains (meta.key)) {
+		if ( !questdb.allmetakeys.Contains(meta.key) ) {
 
-			questdb.allmetakeys.Add (meta.key);
+			questdb.allmetakeys.Add(meta.key);
 		}
 
 	}
 
-	public void deserializeAttributes (bool redo)
-	{
+	public void deserializeAttributes (bool redo) {
 
-		attributes = new List<QuestAttribute> ();
+		attributes = new List<QuestAttribute>();
 		
-		if (help_attributes != null) {
-			foreach (XmlAttribute xmla in help_attributes) {
+		if ( help_attributes != null ) {
+			foreach ( XmlAttribute xmla in help_attributes ) {
 				
-				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
+				if ( xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://") ) {
 					
-					string[] splitted = xmla.Value.Split ('/');
+					string[] splitted = xmla.Value.Split('/');
 					
-					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+					questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 					
-					string filename = "files/" + splitted [splitted.Length - 1];
+					string filename = "files/" + splitted[splitted.Length - 1];
 					
 					int i = 0;
-					while (questdb.loadedfiles.Contains (filename)) {
+					while ( questdb.loadedfiles.Contains(filename) ) {
 						i++;
-						filename = "files/" + i + "_" + splitted [splitted.Length - 1];
+						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
 						
 					}
 					
-					questdb.loadedfiles.Add (filename);
+					questdb.loadedfiles.Add(filename);
 					
-					if (!Application.isWebPlayer) {
+					if ( !Application.isWebPlayer ) {
 						
-						if (!redo) {
-							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						if ( !redo ) {
+							questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
-						if (splitted.Length > 3) {
+						if ( splitted.Length > 3 ) {
 
-							if (predeployed) {
+							if ( predeployed ) {
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 
-							} else {
+							}
+							else {
 							
 								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 							
 							}
-							questdb.performSpriteConversion (xmla.Value);
+							questdb.performSpriteConversion(xmla.Value);
 							
 						}
 					}
 					
 				}	
 				
-				attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
+				attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
 				
 			}
 		}
 
-		if (pages != null) {
-			foreach (QuestPage qp in pages) {
-				qp.deserializeAttributes (id, redo);
+		if ( pages != null ) {
+			foreach ( QuestPage qp in pages ) {
+				qp.deserializeAttributes(id, redo);
 			}
-		} else {
-
-			Debug.Log ("no pages");
 		}
-		if (hotspots != null) {
+		else {
 
-			foreach (QuestHotspot qh in hotspots) {
-				qh.deserializeAttributes (id, redo);
+			Debug.Log("no pages");
+		}
+		if ( hotspots != null ) {
+
+			foreach ( QuestHotspot qh in hotspots ) {
+				qh.deserializeAttributes(id, redo);
 			}
 		}
 
 	}
 
-	public string getAttribute (string k)
-	{
+	public string getAttribute (string k) {
 		
-		foreach (QuestAttribute qa in attributes) {
+		foreach ( QuestAttribute qa in attributes ) {
 			
-			if (qa.key.Equals (k)) {
+			if ( qa.key.Equals(k) ) {
 				return qa.value;
 			}
 			
@@ -373,12 +374,11 @@ public class Quest  : IComparable<Quest>
 		
 	}
 
-	public string getMeta (string k)
-	{
-		if (metadata != null) {
-			foreach (QuestMetaData qa in metadata) {
+	public string getMeta (string k) {
+		if ( metadata != null ) {
+			foreach ( QuestMetaData qa in metadata ) {
 			
-				if (qa.key.Equals (k)) {
+				if ( qa.key.Equals(k) ) {
 					return qa.value;
 				}
 			
@@ -389,31 +389,29 @@ public class Quest  : IComparable<Quest>
 		
 	}
 
-	public string getMetaComparer (string k)
-	{
-		if (metadata != null) {
-			foreach (QuestMetaData qa in metadata) {
+	public string getMetaComparer (string k) {
+		if ( metadata != null ) {
+			foreach ( QuestMetaData qa in metadata ) {
 				
-				if (qa.key.Equals (k)) {
+				if ( qa.key.Equals(k) ) {
 					return qa.value;
 				}
 				
 			}
 		}
 		
-		return ((char)0xFF).ToString ();
+		return ((char)0xFF).ToString();
 		
 	}
 
-	public bool hasMeta (string k)
-	{
+	public bool hasMeta (string k) {
 
 		bool h = false;
-		if (metadata != null) {
-			foreach (QuestMetaData qa in metadata) {
+		if ( metadata != null ) {
+			foreach ( QuestMetaData qa in metadata ) {
 			
-				if (qa.key != null) {
-					if (qa.key.Equals (k)) {
+				if ( qa.key != null ) {
+					if ( qa.key.Equals(k) ) {
 						h = true;
 					}
 				}
@@ -424,13 +422,12 @@ public class Quest  : IComparable<Quest>
 
 	}
 
-	public bool hasAttribute (string k)
-	{
+	public bool hasAttribute (string k) {
 		
 		bool h = false;
-		foreach (QuestAttribute qa in attributes) {
+		foreach ( QuestAttribute qa in attributes ) {
 			
-			if (qa.key.Equals (k)) {
+			if ( qa.key.Equals(k) ) {
 				h = true;
 			}
 			
@@ -440,21 +437,20 @@ public class Quest  : IComparable<Quest>
 		
 	}
 
-	public bool hasActionInChildren (string type1)
-	{
+	public bool hasActionInChildren (string type1) {
 		
 		bool b = false;
 	
-		foreach (QuestPage qp in pages) {
-			if (!b) {
-				if (qp.hasActionInChildren (type1)) {
+		foreach ( QuestPage qp in pages ) {
+			if ( !b ) {
+				if ( qp.hasActionInChildren(type1) ) {
 					b = true;
 				}
 			}
 		}
-		foreach (QuestHotspot qh in hotspots) {
-			if (!b) {
-				if (qh.hasActionInChildren (type1)) {
+		foreach ( QuestHotspot qh in hotspots ) {
+			if ( !b ) {
+				if ( qh.hasActionInChildren(type1) ) {
 					b = true;
 				}
 			}
