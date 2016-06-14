@@ -27,6 +27,7 @@ namespace GQ.ET {
 				Debug.LogWarning("Could not write build time file at " + ProductConfigManager.BUILD_TIME_FILE_PATH);
 				return;
 			} 
+			// TODO sometimes too early, so it will not work.
 			AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate); 
 		}
 	}
