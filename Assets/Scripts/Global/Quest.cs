@@ -179,11 +179,9 @@ public class Quest  : IComparable<Quest> {
 		}
 
 		foreach ( QuestPage qp in q.pages ) {
-
 			if ( qp.type == "MetaData" ) {
 
 				foreach ( QuestContent qc in qp.contents_stringmeta ) {
-
 					if ( qc.hasAttribute("key") && qc.hasAttribute("value") ) {
 						QuestMetaData newmeta = new QuestMetaData();
 						newmeta.key = qc.getAttribute("key");
@@ -195,9 +193,14 @@ public class Quest  : IComparable<Quest> {
 				}
 
 			}
-
 		}
-		if ( q.pages != null && q.pages.Count > 0 && q.pages[0].onStart != null && q.pages[0].onStart.actions != null && q.pages[0].onStart.actions.Count > 0 ) {
+
+		if ( q.pages != null &&
+		     q.pages.Count > 0 &&
+		     q.pages[0].onStart != null &&
+		     q.pages[0].onStart.actions != null &&
+		     q.pages[0].onStart.actions.Count > 0 ) {
+
 			foreach ( QuestAction qameta in q.pages[0].onStart.actions ) {
 
 				if ( qameta.type == "SetVariable" ) {

@@ -1706,6 +1706,9 @@ public class questdatabase : MonoBehaviour {
 		// TODO: Here we create the THIRD Quest object (in download case). 
 		// We can only assume that q has an id here. Is this really a good idea? (hm)
 		Quest nq = q.LoadFromText(q.id, localload);
+
+		Debug.Log("XXX: back from LoadFromText()");
+
 		nq.id = q.id;
 		if ( nq == null ) {
 			questmilllogo.enabled = false;
@@ -2332,75 +2335,61 @@ public class questdatabase : MonoBehaviour {
 	int waitedFor = 0;
 
 	IEnumerator waitforquestassets (int pageid, float timeout) {
-//		Debug.Log ("waitforquestassets");
+		Debug.Log("waitforquestassets page: " + pageid);
 		if ( fakebytes == 0 ) {
 			fakebytes = 1;
 		}
 
 		timeout += 0.5f;
 		yield return new WaitForSeconds(0.5f);
-		bool done = true;
 
+		bool done = true;
 		int percent = 100;
 		int downloadsundone = 0;
-
-
 		string error = "";
-
-
 		int bytesloadedbutunfinished = 0;
 
-
-
 		if ( wanttoload.Count > 0 ) {
-
 			done = false;
 		}
-		else
-		if ( filedownloads != null ) {
-//			Debug.Log ("WWW Objects" + filedownloads.Count);
+		else {
+			if ( filedownloads != null ) {
+				Debug.Log("WWW Objects" + filedownloads.Count);
 
-			foreach ( WWW www in filedownloads ) {
+				foreach ( WWW www in filedownloads ) {
 
-				if ( !www.isDone ) {
-					done = false;
-					downloadsundone += 1;
-				}
-
-				if ( www.error != null ) {
-
-
-
-					if ( www.url.StartsWith("http") ) {
-
+					if ( !www.isDone ) {
 						done = false;
 						downloadsundone += 1;
-//					Debug.Log("WWW ERROR: "+ www.error + " ("+www.url+")");
-
-						//error += www.url +"couldn't be downloaded.";
 					}
+
+					if ( www.error != null ) {
+
+
+
+						if ( www.url.StartsWith("http") ) {
+
+							done = false;
+							downloadsundone += 1;
+							Debug.Log("WWW ERROR: " + www.error + " (" + www.url + ")");
+
+							//error += www.url +"couldn't be downloaded.";
+						}
 				
+
+					}
 
 				}
 
+				int bytes_finished = files_complete;
+				int bytes_all = files_all;
+
+				//	percent = 100 - ((bytes_all-bytes_finished) * 100 / bytes_finished);
+
 			}
-
-
-
-
-
-			int bytes_finished = files_complete;
-			int bytes_all = files_all;
-
-
-			//	percent = 100 - ((bytes_all-bytes_finished) * 100 / bytes_finished);
-
-		}
-		else {
-
-			done = true;
-
-
+			else {
+				done = true;
+			}
 		}
 //		Debug.Log ("percent done: " + percent);
 
@@ -2422,12 +2411,8 @@ public class questdatabase : MonoBehaviour {
 				openfileloads += awww.url + "; ";
 				d++;
 			}
-
-		
-
-//			Debug.Log (openfileloads);
+			//			Debug.Log (openfileloads);
 		}
-
 
 		if ( error == "" ) {
 			int bytesloaded2 = (int)(bytesloaded + (fakebytes * 900));
@@ -2439,44 +2424,29 @@ public class questdatabase : MonoBehaviour {
 		}
 		else {
 			if ( webloadingmessage != null ) {
-
 				webloadingmessage.text = error;
 			}
 
 		}
 		if ( done ) {
-
-
-
-
-
-
+			
 			if ( !downloadingAll ) {
 
 				writeQuestXML(currentquest);
 				StartCoroutine(waitForSpriteConversion(pageid));
 			}
 			else {
-
-
 				waitedFor += 1;
 				Debug.Log(waitedFor);
 				if ( waitedFor >= allquests.Count ) {
 					Debug.Log("really done? " + localquests.Count);
-
 				
 					downloadingAll = false;
 					downloadedAll = true;
 
 					foreach ( Quest q in downloadquests ) {
 
-
 						writeQuestXML(q);
-
-						//downloadingAll = false;
-
-
-
 
 						if ( webloadingmessage != null ) {
 
@@ -2491,19 +2461,13 @@ public class questdatabase : MonoBehaviour {
 					buttoncontroller.loadLocalQuests();
 					buttoncontroller.DisplayList();
 				}
-
-
-
-
-
 			}
-
-
 		}
 		else {
-//			Debug.Log ("waitforquestassets: not done yet; timeout = " + timeout);
+			Debug.Log(
+				"waitforquestassets: not done yet; timeout = " + timeout + "; files left: " +
+				filedownloads.Count + "wanttoload: " + wanttoload.Count);
 			StartCoroutine(waitforquestassets(pageid, timeout));
-
 		}
 	}
 
