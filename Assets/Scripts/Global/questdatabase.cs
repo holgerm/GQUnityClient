@@ -1453,9 +1453,9 @@ public class questdatabase : MonoBehaviour {
 		downloadQuest(q);
 	}
 
-	public void downloadAsset (string url, string filename) {
+	public void downloadAsset (string url, string localTargetPath) {
 
-//		Debug.Log ("downloadAsset(" + url + ", " + filename + ")");
+		Debug.Log("downloadAsset(" + url + ", " + localTargetPath + ")");
 		
 		if ( wanttoload == null ) {
 			wanttoload = new List<string>();
@@ -1465,7 +1465,7 @@ public class questdatabase : MonoBehaviour {
 			wanttoload.Add(url);
 		}
 
-		StartCoroutine(downloadAssetAsync(url, filename));
+		StartCoroutine(downloadAssetAsync(url, localTargetPath));
 
 	}
 
@@ -1872,10 +1872,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2335,7 +2335,9 @@ public class questdatabase : MonoBehaviour {
 	int waitedFor = 0;
 
 	IEnumerator waitforquestassets (int pageid, float timeout) {
-		Debug.Log("waitforquestassets page: " + pageid);
+		// TODO (hm) timeout seems never be used, i.e. checked to take some action like ending the trial ... why (is it still here)?
+		Debug.Log("waitforquestassets page: " + pageid + " wanttoload: " + wanttoload.Count + " filedownloads: " + filedownloads.Count);
+
 		if ( fakebytes == 0 ) {
 			fakebytes = 1;
 		}
