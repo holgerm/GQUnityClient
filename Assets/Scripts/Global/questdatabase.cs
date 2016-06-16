@@ -1014,8 +1014,17 @@ public class questdatabase : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Checks the connection (to the www object given) and then calls download method. 
+	/// Thereby it gives a true as parameter if connection has been ok, a false if it either wresulted in an error or 
+	/// did not react for more than 10 sec.
+	/// </summary>
+	/// <returns>The quest after connection check.</returns>
+	/// <param name="q">Q.</param>
+	/// <param name="elapsedTime">Elapsed time.</param>
+	/// <param name="www">Www.</param>
 	// TODO replace by generic testConnection method which blocks and returns bool after success or timeout
-	IEnumerator CheckConnection (Quest q, float elapsedTime, WWW www) {
+	IEnumerator DownloadQuestAfterConnectionCheck (Quest q, float elapsedTime, WWW www) {
 
 		while ( msgsactive > 0 ) {
 			yield return 0;
@@ -1029,12 +1038,13 @@ public class questdatabase : MonoBehaviour {
 			bool ok = (www.error == null);
 			downloadAfterConnectionChecked(q, ok);
 		}
-		else
-		if ( elapsedTime < 10.0f ) {
-			StartCoroutine(CheckConnection(q, elapsedTime + 0.1f, www));
-		}
 		else {
-			downloadAfterConnectionChecked(q, false);
+			if ( elapsedTime < 10.0f ) {
+				StartCoroutine(DownloadQuestAfterConnectionCheck(q, elapsedTime + 0.1f, www));
+			}
+			else {
+				downloadAfterConnectionChecked(q, false);
+			}
 		}
 	}
 
@@ -1374,7 +1384,7 @@ public class questdatabase : MonoBehaviour {
 
 	// TODO parameter should only be the id of the quest (hm)
 	public void downloadQuest (Quest q) {
-//		Debug.Log ("downloadQuest(Quest with id:" + q.id + ")");
+		Debug.Log("downloadQuest(Quest with id:" + q.id + ")");
 		if ( webloadingmessage != null ) {
 
 			webloadingmessage.enabled = true;
@@ -1393,7 +1403,7 @@ public class questdatabase : MonoBehaviour {
 		}
 //		Debug.Log ("downloadQuest(): q.alternateDownloadLink =" + q.alternateDownloadLink);
 
-		StartCoroutine(CheckConnection(q, 0.0f, new WWW("http://qeevee.org:9091/testConnection")));
+		StartCoroutine(DownloadQuestAfterConnectionCheck(q, 0.0f, new WWW("http://qeevee.org:9091/testConnection")));
 	}
 
 	void downloadAfterConnectionChecked (Quest q, bool connected) {
@@ -1429,7 +1439,7 @@ public class questdatabase : MonoBehaviour {
 			showmessage("Wir konnten keine Verbindung mit dem Internet herstellen.", "Nochmal versuchen");
 			
 			
-			StartCoroutine(CheckConnection(q, 0.0f, new WWW("http://www.google.com")));
+			StartCoroutine(DownloadQuestAfterConnectionCheck(q, 0.0f, new WWW("http://www.google.com")));
 
 		}
 
@@ -1672,6 +1682,15 @@ public class questdatabase : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Installs the quest. reload is always true, when we call install after download. 
+	/// localload is false in that case. 
+	/// q is a new Quest object with only the id set to the id of the downloaded quest. 
+	/// In localquests list there is another Quest object with the same id as q.id.
+	/// </summary>
+	/// <param name="q">Q.</param>
+	/// <param name="reload">If set to <c>true</c> reload.</param>
+	/// <param name="localload">If set to <c>true</c> localload.</param>
 	public void installQuest (Quest q, bool reload, bool localload) {
 
 
@@ -1683,6 +1702,9 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		convertToSprites = true;
+
+		// TODO: Here we create the THIRD Quest object (in download case). 
+		// We can only assume that q has an id here. Is this really a good idea? (hm)
 		Quest nq = q.LoadFromText(q.id, localload);
 		nq.id = q.id;
 		if ( nq == null ) {
@@ -1720,26 +1742,15 @@ public class questdatabase : MonoBehaviour {
 
 			// resave xml
 			string exportLocation = Application.persistentDataPath + "/quests/" + nq.id + "/";
-			
-			
-			
-			#if !UNITY_WEBPLAYER
+
+#if !UNITY_WEBPLAYER
 
 			if ( !Application.isWebPlayer && (!Directory.Exists(exportLocation) || reload) ) {
 
-
-
 				if ( Directory.Exists(exportLocation) ) {
-
 					Directory.Delete(exportLocation, true);
-
 				}
 				Directory.CreateDirectory(exportLocation);
-
-
-
-
-
 
 			}
 #endif
@@ -1872,10 +1883,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -3062,8 +3073,13 @@ public class questdatabase : MonoBehaviour {
 
 			loadlogo.enable();
 		}
+
+		// TODO: shouldn't we add it to the local quests only after the download of the quest xml has been completed, i.e. one line later? (hm)
 		localquests.Add(q);
 		yield return q.www;
+
+		// Quest XML has been downloaded now.
+
 		if ( q.www.error == null ) {
 
 
@@ -3084,43 +3100,30 @@ public class questdatabase : MonoBehaviour {
 			bool b = false;
 
 
-
+			// TODO: what is this good for? We already know that it is in the list, since we put it in there. (hm)
 			foreach ( Quest lq in localquests ) {
 				if ( lq.id == q.id ) {
-
 					b = true;
 				}
 			}
-
-//				Debug.Log(q.id+","+b);
 
 			if ( !downloadingAll ) {
 				currentquest = nq;
 			}
 
-			// TODO: here b is always true! So we can elimiate the foreach loop above!
+			// TODO: here b is always true! So we can elimiate the foreach loop above! (hm again ;-) )
 			installQuest(nq, b, false);
-
-				
-		
-			
+			// TODO: why do we use a new Quest object nq which only has the id from q. Shouldn't we just use q itself?
 		}
 		else {
-			Debug.Log("WWW Error: " + q.www.error);
+			Debug.LogWarning("WWW Error: " + q.www.error);
 			if ( webloadingmessage != null ) {
 
 				webloadingmessage.text = q.www.error;
 			}
 
 		}  
-
-		//webloadingmessage.enabled = false;
-		
-		
 	}
-
-
-	
 
 }
 
