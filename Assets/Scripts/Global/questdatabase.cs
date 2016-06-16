@@ -1789,41 +1789,30 @@ public class questdatabase : MonoBehaviour {
 
 		if ( canPlayQuest(currentquest) && hasmorethanmetadata ) {
 
-
-
 			if ( Application.isWebPlayer ) {
-
-
-
 				transferQuestHotspots(currentquest.currentpage.id);
-
-
-			}
-			else
-			if ( !localload ) {
-
-//				Debug.Log ("WAITING FOR QUEST ASSETS");
-				if ( webloadingmessage != null ) {
-
-					webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
-				}
-				//webloadingmessage.enabled = true;
-				if ( loadlogo != null ) {
-
-					loadlogo.enable();
-				}
-				StartCoroutine(waitforquestassets(nq.currentpage.id, 0f));
-					
 			}
 			else {
-				StartCoroutine(waitForSpriteConversion(nq.currentpage.id));
+				if ( !localload ) {
 
+//				Debug.Log ("WAITING FOR QUEST ASSETS");
+					if ( webloadingmessage != null ) {
+
+						webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n ";
+					}
+
+					if ( loadlogo != null ) {
+						loadlogo.enable();
+					}
+
+					StartCoroutine(waitforquestassets(nq.currentpage.id, 0f));
+				}
+				else {
+					StartCoroutine(waitForSpriteConversion(nq.currentpage.id));
+				}
 			}
-
 		}
 		else {
-
-
 			Debug.Log("showing message");
 			showmessage("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
 			if ( webloadingmessage != null ) {
@@ -1837,10 +1826,7 @@ public class questdatabase : MonoBehaviour {
 			if ( GameObject.Find("List").GetComponent<createquestbuttons>() != null ) {
 				GameObject.Find("List").GetComponent<createquestbuttons>().resetList();
 			}
-
-
 		}
-
 	}
 
 	public void performSpriteConversion (string value) {
@@ -1883,10 +1869,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
