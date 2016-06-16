@@ -16,6 +16,7 @@ namespace GQ.Conf {
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + BUILD_TIME_FILE_NAME + ".txt";
 
 		#region RETRIEVING THE CURRENT PRODUCT
+
 		private static Config _current = null;
 
 		public static Config current {
@@ -41,9 +42,9 @@ namespace GQ.Conf {
 				_topLogo = value;
 			}
 		}
-		
+
 		private static Sprite _defaultMarker;
-		
+
 		public static Sprite defaultMarker {
 			get {
 				return _defaultMarker;
@@ -65,7 +66,6 @@ namespace GQ.Conf {
 							throw new ArgumentException("Buildtime File does not represent a loadable asset. Cf. " + BUILD_TIME_FILE_NAME);
 						}
 						_buildtime = buildTimeAsset.text;
-						Debug.Log("Build time read from file: " + _buildtime);
 					} catch ( Exception exc ) {
 						Debug.LogWarning("Could not read build time file at " + BUILD_TIME_FILE_PATH + " " + exc.Message);
 						_buildtime = "unknown";
@@ -95,7 +95,8 @@ namespace GQ.Conf {
 		#endregion
 
 	}
-	
+
+
 	public enum QuestVisualizationMethod {
 		list,
 		map

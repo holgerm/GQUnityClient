@@ -34,13 +34,10 @@ public class showimpressum : MonoBehaviour {
 		}
 		else {
 			DontDestroyOnLoad(gameObject);
-			Debug.Log(Application.persistentDataPath);
 
 			StartCoroutine(loadImpressum());
 
 			impressum_text.text = Configuration.instance.impressum.Replace("\\n", "\n");
-
-
 		}
 
 	}

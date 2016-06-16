@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class palette : MonoBehaviour
-{
+public class palette : MonoBehaviour {
 
 	public List<ColorPalette> profiles;
 
@@ -24,16 +23,9 @@ public class palette : MonoBehaviour
 	public Color secondCompColor;
 
 	// Use this for initialization
-	void Awake ()
-	{
-	
-		foreach (ColorPalette cp in profiles) {
-
-
-			if (cp.id == Configuration.instance.colorProfile) {
-
-				Debug.Log ("COLOR PALETTE: Setting to profile: " + Configuration.instance.colorProfile);
-
+	void Awake () {
+		foreach ( ColorPalette cp in profiles ) {
+			if ( cp.id == Configuration.instance.colorProfile ) {
 				mainColor = cp.mainColor;
 				backgroundColor = cp.backgroundColor;
 				darkBG = cp.darkBG;
@@ -42,18 +34,9 @@ public class palette : MonoBehaviour
 				buttonDisabledColor = cp.buttonDisabledColor;
 				compColor = cp.compColor;
 				secondCompColor = cp.secondCompColor;
-
 			}
-
-
-
-
 		}
-
-	
 	}
-	
-
 }
 
 
@@ -62,8 +45,7 @@ public class palette : MonoBehaviour
 
 
 [System.Serializable]
-public class ColorPalette
-{
+public class ColorPalette {
 
 
 	public string id;

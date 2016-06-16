@@ -173,7 +173,7 @@ public class Configuration : MonoBehaviour {
 				productName = "ebk";
 				portalID = 121;
 				autostartQuestID = 0;
-				downloadTimeOutSeconds = 60;
+				downloadTimeOutSeconds = 600;
 				colorProfile = "ebk";
 				mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 				mapboxMapID = "mapbox.streets";

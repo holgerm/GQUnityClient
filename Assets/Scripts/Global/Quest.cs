@@ -145,16 +145,9 @@ public class Quest  : IComparable<Quest> {
 		//q.id = id;
 //		Debug.Log ("my id is " + id + " -> " + q.id);
 		q.deserializeAttributes(redo);
-
-
-
 		q.meta_Search_Combined += q.name + "; ";
-
-
 		q.meta_combined += q.name;
 
-
-		Debug.Log("meta");
 
 		if ( metadata != null ) {
 
@@ -212,26 +205,14 @@ public class Quest  : IComparable<Quest> {
 							continue;
 						}
 
-
-						Debug.Log("new meta: " + newmeta.key + "," + newmeta.value);
 						q.addMetaData(newmeta);
-
 					}
-
 
 				}
 
-
-
 			}
-
-
-
+		
 		}
-
-
-
-
 
 		return q;
 	}
