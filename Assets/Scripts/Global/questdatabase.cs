@@ -1454,8 +1454,11 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void downloadAsset (string url, string localTargetPath) {
-
 		Debug.Log("downloadAsset(" + url + ", " + localTargetPath + ")");
+		if ( filedownloads != null )
+			Debug.Log("filedownloads: " + filedownloads.Count);
+		else
+			Debug.Log("filedownloads: NULL");
 		
 		if ( wanttoload == null ) {
 			wanttoload = new List<string>();
@@ -1471,7 +1474,11 @@ public class questdatabase : MonoBehaviour {
 
 	private static List<string> debugDownloadsStarted = new List<string>();
 
-	public IEnumerator downloadAssetAsync (string url, string filename) {
+	private float time;
+
+	public IEnumerator downloadAssetAsync (string url, string localTargetPath) {
+		Debug.Log("downloadAssetAsync(" + url + ", " + localTargetPath + ")");
+
 		if ( filedownloads == null ) {
 			filedownloads = new List<WWW>();
 		}
@@ -1480,7 +1487,7 @@ public class questdatabase : MonoBehaviour {
 //				Debug.Log("FILE WWW LOADING " + fileWWW.url + " : " + fileWWW.progress + " isDone? :" + fileWWW.isDone);
 //			}
 //		}
-//		Debug.Log("downloadAssetAsync(" + url + ", " + filename + ")" + " wanttoload# = " + wanttoload.Count + "; filedownloads# = " + filedownloads.Count);
+		//		Debug.Log("downloadAssetAsync(" + url + ", " + localTargetPath + ")" + " wanttoload# = " + wanttoload.Count + "; filedownloads# = " + filedownloads.Count);
 
 		bool done = true;
 		if ( filedownloads != null ) {
@@ -1489,6 +1496,9 @@ public class questdatabase : MonoBehaviour {
 				if ( !w.isDone ) {
 
 					done = false;
+				}
+				else {
+					Debug.Log("DONE downloading: " + w.url + " (" + w.size + ") took " + (Time.time - time));
 				}
 
 
@@ -1500,6 +1510,10 @@ public class questdatabase : MonoBehaviour {
 //			Debug.Log("downloadAssetAsync##done new will be: " + url);
 
 			if ( !url.Contains("/clientxml") ) {
+
+				time = Time.time;
+				Debug.Log("BEGIN downloading: " + url + " at " + time);
+
 				WWW wwwfile = new WWW(url);
 				debugDownloadsStarted.Add(url);
 
@@ -1511,7 +1525,7 @@ public class questdatabase : MonoBehaviour {
 
 				filedownloads.Add(wwwfile);
 				files_all += 1;
-				StartCoroutine(downloadAssetFinished(wwwfile, filename, 0f));
+				StartCoroutine(downloadAssetFinished(wwwfile, localTargetPath, 0f));
 			}
 //			else {
 //				Debug.Log("downloadAsset() with clientxml in url-arg called");
@@ -1522,7 +1536,7 @@ public class questdatabase : MonoBehaviour {
 //			Debug.Log("downloadAssetAsync##else(!done); not loading: " + url);
 
 			yield return new WaitForEndOfFrame();
-			downloadAsset(url, filename);
+			downloadAsset(url, localTargetPath);
 
 			            
 		}
@@ -1538,7 +1552,7 @@ public class questdatabase : MonoBehaviour {
 			Debug.Log("error downloading " + wwwfile.url + " (" + wwwfile.error + ")");
 				
 			if ( wwwfile.error != "unsupported URL" ) {
-				Debug.Log("redoing www");
+				Debug.Log("redoing www error: " + wwwfile.error);
 
 				downloadAsset(wwwfile.url, filename);
 			}
@@ -1872,10 +1886,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2336,7 +2350,7 @@ public class questdatabase : MonoBehaviour {
 
 	IEnumerator waitforquestassets (int pageid, float timeout) {
 		// TODO (hm) timeout seems never be used, i.e. checked to take some action like ending the trial ... why (is it still here)?
-		Debug.Log("waitforquestassets page: " + pageid + " wanttoload: " + wanttoload.Count + " filedownloads: " + filedownloads.Count);
+//		Debug.Log("waitforquestassets page: " + pageid + " wanttoload: " + wanttoload.Count + " filedownloads: " + filedownloads.Count);
 
 		if ( fakebytes == 0 ) {
 			fakebytes = 1;
@@ -2459,9 +2473,9 @@ public class questdatabase : MonoBehaviour {
 			}
 		}
 		else {
-			Debug.Log(
-				"waitforquestassets: not done yet; timeout = " + timeout + "; files left: " +
-				filedownloads.Count + "wanttoload: " + wanttoload.Count);
+//			Debug.Log(
+//				"waitforquestassets: not done yet; timeout = " + timeout + "; files left: " +
+//				filedownloads.Count + "wanttoload: " + wanttoload.Count);
 			StartCoroutine(waitforquestassets(pageid, timeout));
 		}
 	}
