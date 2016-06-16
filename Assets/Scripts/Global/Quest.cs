@@ -92,7 +92,15 @@ public class Quest  : IComparable<Quest> {
 
 	}
 
+	/// <summary>
+	/// redo equals localload in case a download of the quest has preceeded. In this case it is false. (hm)
+	/// </summary>
+	/// <returns>The from text.</returns>
+	/// <param name="id">Identifier.</param>
+	/// <param name="redo">If set to <c>true</c> redo.</param>
 	public  Quest LoadFromText (int id, bool redo) {
+
+		Debug.Log("XXX: LoadFromText id: " + id);
 	
 		string fp = filepath;
 		string xmlfilepath = filepath;
