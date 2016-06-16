@@ -1872,10 +1872,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2364,21 +2364,14 @@ public class questdatabase : MonoBehaviour {
 					}
 
 					if ( www.error != null ) {
-
-
-
 						if ( www.url.StartsWith("http") ) {
-
 							done = false;
 							downloadsundone += 1;
 							Debug.Log("WWW ERROR: " + www.error + " (" + www.url + ")");
 
 							//error += www.url +"couldn't be downloaded.";
 						}
-				
-
 					}
-
 				}
 
 				int bytes_finished = files_complete;
