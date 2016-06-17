@@ -1138,8 +1138,10 @@ public class questdatabase : MonoBehaviour {
 			centerLong += curHotspot.lon;
 		}
 
-		centerLat = centerLat / hotspots.Count;
-		centerLong = centerLong / hotspots.Count;
+		if ( hotspots.Count > 0 ) {
+			centerLat = centerLat / hotspots.Count;
+			centerLong = centerLong / hotspots.Count;
+		}
 
 		return new GeoPosition(centerLat, centerLong);
 	}
@@ -1886,10 +1888,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
