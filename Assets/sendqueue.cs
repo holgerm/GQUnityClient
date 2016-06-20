@@ -81,7 +81,7 @@ public class sendqueue : MonoBehaviour {
 	}
 
 	void Update () {
-		if ( queue.Count <= 0 )
+		if ( queue.Count == 0 )
 			return;
 
 		bool canSendMessage = false;
@@ -124,43 +124,27 @@ public class sendqueue : MonoBehaviour {
 				}
 			}
 		}
-		else {
-			if ( NetworkManager.singleton.isNetworkActive ) {
-
-				if ( networkActionsObject != null ) {
-					Network.Disconnect();
-				}
-
-			}
-		}
+//		else {
+//			if ( NetworkManager.singleton.isNetworkActive ) {
+//
+//				if ( networkActionsObject != null ) {
+//					Network.Disconnect();
+//				}
+//
+//			}
+//		}
 	}
 
 	public void addMessageToQueue (string ip, string var, string value) {
 
 		SendQueueEntry sqe = new SendQueueEntry();
 
-
-
-		if ( queue.Count > 0 ) {
-			if ( idCounter == 0 ) {
-
-
-				if ( PlayerPrefs.HasKey("nextmessage_" + sqe.ip) ) {
-
-					idCounter = PlayerPrefs.GetInt("nextmessage_" + sqe.ip);
-
-				}
-
-			}
-		}
-		else {
+		if ( queue == null || queue.Count == 0 ) {
 
 			idCounter = 0;
 			sqe.resetid = true;
 
 		}
-		
-
 
 		sqe.id = idCounter;
 		idCounter++;
@@ -170,9 +154,7 @@ public class sendqueue : MonoBehaviour {
 			idCounter = 0;
 		}
 
-
 		PlayerPrefs.SetInt("nextmessage_" + sqe.ip, idCounter);
-
 
 		sqe.mode = MODE_VALUE;
 		sqe.timeout = 0f;
@@ -180,9 +162,6 @@ public class sendqueue : MonoBehaviour {
 		sqe.ip = ip;
 		sqe.var = var;
 		sqe.value = value;
-
-
-
 
 		queue.Add(sqe);
 
@@ -194,16 +173,13 @@ public class sendqueue : MonoBehaviour {
 		
 		SendQueueEntry sqe = new SendQueueEntry();
 	
-		if ( queue.Count > 0 ) {
-		
-		}
-		else {
-			
+		if ( queue == null || queue.Count == 0 ) {
+
 			idCounter = 0;
 			sqe.resetid = true;
-			
+
 		}
-		
+
 		sqe.id = idCounter;
 		idCounter++;
 		sqe.questid = GetComponent<questdatabase>().currentquest.id;

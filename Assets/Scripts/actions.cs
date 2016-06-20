@@ -264,6 +264,25 @@ public class actions : MonoBehaviour {
 
 	}
 
+	void addFileBytesToSendQueue (QuestAction action, string filetype, List<byte[]> sendbytes) {
+		string ip = getServerIp(action.getAttribute("ip"));
+		string var = action.getAttribute("var");
+
+		if ( sendbytes == null || sendbytes.Count <= 0 )
+			return;
+
+		// Start part:
+		GetComponent<sendqueue>().addMessageToQueue(ip, var, filetype, sendbytes[0], 0);
+
+		// Middle Parts:
+		for ( int i = 1; i < sendbytes.Count; i++ ) {
+			GetComponent<sendqueue>().addMessageToQueue(ip, var, filetype, sendbytes[i], i);
+		}
+
+		// FINISH Part:
+		GetComponent<sendqueue>().addFinishMessageToQueue(ip, var, filetype);
+	}
+
 
 	void sendVarToServer (QuestAction action) {
 
@@ -285,18 +304,17 @@ public class actions : MonoBehaviour {
 			if ( action.hasAttribute("var") ) {
 				
 				if ( getVariable(action.getAttribute("var")).getStringValue() != "[null]" ) {
-
+					// Cases String Bool Number variables (has string representation):
 					GetComponent<sendqueue>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
-
 				}
 				else {
 					bool filefound = false;
 					string deviceid = SystemInfo.deviceUniqueIdentifier;
 				
-					// PHOTOS
-				
 					List<byte> filebytes = new List<byte>();
 				
+					// PHOTOS
+
 					string filetype = "image/jpg";
 				
 					QuestRuntimeAsset qra = null;
@@ -340,52 +358,12 @@ public class actions : MonoBehaviour {
 							filebytes = filebytes2.ToList();
 						}
 					}
-	
-					int size = 1300;
-					// TODO hm: fixed size?
-	
-					List<byte[]> sendbytes = new List<byte[]>();
-				
-					for ( int i = 0; i < filebytes.Count; i += size ) {
-						var list = new List<byte>();
-					
-						if ( (i + size) > filebytes.Count ) {
-							size = filebytes.Count - (i);
-						}
-					
-						list.AddRange(filebytes.GetRange(i, size));
-						sendbytes.Add(list.ToArray());
-					}
+
+					List<byte[]> sendbytes = SendHelper.prepareToSend(filebytes);
 
 					// jetzt ist die datei in byte arrays zerlegt (liegen in sendbytes)
 
-					if ( sendbytes != null && sendbytes.Count > 0 ) {
-						GetComponent<sendqueue>().addMessageToQueue(
-							getServerIp(action.getAttribute("ip")), 
-							action.getAttribute("var"), 
-							filetype, 
-							sendbytes[0], 
-							0);
-										
-						int k = 1;
-				
-						foreach ( byte[] b in sendbytes ) {
-					
-							if ( k <= sendbytes.Count ) {
-						
-								if ( k > 1 ) {
-									GetComponent<sendqueue>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), filetype, b, k);
-							
-									int x = b.Count();
-						
-								}
-								k++;
-							}
-						}
-
-						GetComponent<sendqueue>().addFinishMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), filetype);
-				
-					}
+					addFileBytesToSendQueue(action, filetype, sendbytes);
 			
 				
 					if ( !filefound ) {
