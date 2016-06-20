@@ -20,18 +20,19 @@ public class GetVideo : MonoBehaviour {
 	public string videoId1 = "";
 	public string videoId2 = "";
 
-	void OnGUI()
-	{
+	void OnGUI () {
 		GUI.depth = 0;
-		if(GUI.Button(new Rect(0,0,Screen.width,Screen.height/2),"Load Video 1"))
-		{
+		if ( GUI.Button(new Rect(0, 0, Screen.width, Screen.height / 2), "Load Video 1") ) {
+			#if UNITY_IOS || UNITY_ANDROID
             Handheld.PlayFullScreenMovie(YoutubeVideo.Instance.RequestVideo(videoId1, 720)); //if the second parameter is 0 will use the YoutubeVideo.cs quality settings
-            Debug.Log("The video only plays on mobile device, if you receive one big url on console all it's ok");
+			#endif
+			Debug.Log("The video only plays on mobile device, if you receive one big url on console all it's ok");
 		}
-		if(GUI.Button(new Rect(0,Screen.height/2,Screen.width,Screen.height/2),"Load Video 2"))
-		{
-            Handheld.PlayFullScreenMovie(YoutubeVideo.Instance.RequestVideo(videoId2, 720));
-            Debug.Log("The video only plays on mobile device, if you receive one big url on console all it's ok");
+		if ( GUI.Button(new Rect(0, Screen.height / 2, Screen.width, Screen.height / 2), "Load Video 2") ) {
+			#if UNITY_IOS || UNITY_ANDROID
+			Handheld.PlayFullScreenMovie(YoutubeVideo.Instance.RequestVideo(videoId2, 720));
+			#endif
+			Debug.Log("The video only plays on mobile device, if you receive one big url on console all it's ok");
 		}
 	}
 }
