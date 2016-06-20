@@ -283,25 +283,17 @@ public class actions : MonoBehaviour {
 		else {
 
 			if ( action.hasAttribute("var") ) {
-
-		
-
+				
 				if ( getVariable(action.getAttribute("var")).getStringValue() != "[null]" ) {
 
 					GetComponent<sendqueue>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
 
 				}
 				else {
-
-
-
 					bool filefound = false;
 					string deviceid = SystemInfo.deviceUniqueIdentifier;
 				
-				
-				
 					// PHOTOS
-				
 				
 					List<byte> filebytes = new List<byte>();
 				
@@ -316,11 +308,7 @@ public class actions : MonoBehaviour {
 							qra = qrat;
 						
 						}
-					
-					
 					}
-				
-				
 				
 					if ( filefound ) {
 					
@@ -328,11 +316,7 @@ public class actions : MonoBehaviour {
 					
 					}
 					else {
-					
-					
-					
 						filetype = "audio";
-					
 					
 						foreach ( QuestRuntimeAsset qrat in audioclips ) {
 						
@@ -341,10 +325,7 @@ public class actions : MonoBehaviour {
 								qra = qrat;
 							
 							}
-						
-						
 						}
-					
 					
 						if ( filefound ) {
 						
@@ -356,26 +337,13 @@ public class actions : MonoBehaviour {
 							var filebytes2 = new byte[length2];
 							Buffer.BlockCopy(samples, 0, filebytes2, 0, filebytes2.Count());
 						
-						
 							filebytes = filebytes2.ToList();
-						
-						
-						
 						}
-					
-					
-					
-					
-					
 					}
-				
-				
-				
-
+	
 					int size = 1300;
-				
-				
-				
+					// TODO hm: fixed size?
+	
 					List<byte[]> sendbytes = new List<byte[]>();
 				
 					for ( int i = 0; i < filebytes.Count; i += size ) {
@@ -388,16 +356,17 @@ public class actions : MonoBehaviour {
 						list.AddRange(filebytes.GetRange(i, size));
 						sendbytes.Add(list.ToArray());
 					}
-				
 
 					// jetzt ist die datei in byte arrays zerlegt (liegen in sendbytes)
 
 					if ( sendbytes != null && sendbytes.Count > 0 ) {
-						GetComponent<sendqueue>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), filetype, sendbytes[0], 0);
-
-					
-
-				
+						GetComponent<sendqueue>().addMessageToQueue(
+							getServerIp(action.getAttribute("ip")), 
+							action.getAttribute("var"), 
+							filetype, 
+							sendbytes[0], 
+							0);
+										
 						int k = 1;
 				
 						foreach ( byte[] b in sendbytes ) {
@@ -410,12 +379,9 @@ public class actions : MonoBehaviour {
 									int x = b.Count();
 						
 								}
-						
 								k++;
 							}
 						}
-				
-					
 
 						GetComponent<sendqueue>().addFinishMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), filetype);
 				
@@ -427,30 +393,9 @@ public class actions : MonoBehaviour {
 						questdb.debug("Die Variable " + action.getAttribute("var") + " konnte nicht gefunden werden.");
 					
 					}
-
-
-
-
 				}
-			
-
-			
-
-
-		
-
-
 			}
-
-
-
-	
-
-
-		 
-
 		}
-
 	}
 
 	IEnumerator waitForClientStart (QuestAction action, int tries) {

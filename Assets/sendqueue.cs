@@ -10,8 +10,6 @@ using System;
 
 public class sendqueue : MonoBehaviour {
 
-
-
 	public bool receivedExpectedMessageId = false;
 	public List<SendQueueEntry> queue;
 	public networkactions networkActionsObject;
@@ -49,39 +47,23 @@ public class sendqueue : MonoBehaviour {
 		string pre = "file: /";
 		
 		if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
-			
 			pre = "file:";
 		}
 
-
-
 		if ( Directory.Exists(Application.persistentDataPath + "/quests/") ) {
-
-
+	
 			foreach ( string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/") ) {
 
 				if ( Directory.Exists(quest + "/sendqueue/") ) {
-			
-
 					string FolderName = new DirectoryInfo(quest).Name;
 
 					foreach ( string file in	Directory.GetFiles(quest + "/sendqueue/") ) {
-
-
-
 						int num1 = 0;
 						int num2 = 0;
 
-
-
 						if ( int.TryParse(FolderName, out num1) ) {
-
-
 							if ( int.TryParse(Path.GetFileNameWithoutExtension(file), out num2) ) {
-
 								if ( File.Exists(Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json") ) {
-
-
 									WWW www = new WWW(pre + "" + Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
 									StartCoroutine(deserialize(www));
 
@@ -89,95 +71,60 @@ public class sendqueue : MonoBehaviour {
 							}
 						}
 					}
-
-
 				}
 			}
-
 		}
 
-
 		if ( queue.Count == 0 ) {
-
-
-
-
 		}
 
 	}
 
 	void Update () {
+		if ( queue.Count <= 0 )
+			return;
 
+		bool canSendMessage = false;
+		messageTimer -= Time.deltaTime;
 
+		if ( networkActionsObject == null && triedEstablishingConnection ) {
 
-		if ( queue.Count > 0 ) {
-
-
-			bool canSendMessage = false;
-			messageTimer -= Time.deltaTime;
-
-		
-			if ( networkActionsObject == null && triedEstablishingConnection ) {
-
-				connectionTimeout -= Time.deltaTime;
+			connectionTimeout -= Time.deltaTime;
 				
-				if ( connectionTimeout <= 0f ) {
-					
-					connectionTimeout = connectionTimeoutSave;
-					triedEstablishingConnection = false;
-					Network.Disconnect();
-				}
-
+			if ( connectionTimeout <= 0f ) {
+				connectionTimeout = connectionTimeoutSave;
+				triedEstablishingConnection = false;
+				Network.Disconnect();
 			}
+		}
 
+		if ( messageTimer <= 0f ) {
+			messageTimer = messageTimerSave;
+			canSendMessage = true;
 
-
-			if ( messageTimer <= 0f ) {
-
-
-				messageTimer = messageTimerSave;
-			
-				canSendMessage = true;
-
-
-				if ( networkActionsObject != null ) {
-
-
-
-
-					foreach ( SendQueueEntry sqe in queue.GetRange(0,queue.Count) ) {
-						if ( canSendMessage ) {
-							sqe.timeout -= Time.deltaTime;
-							if ( sqe.timeout <= 0f ) {
-								send(sqe, messageTimeout);
-								canSendMessage = false;
-							}
+			if ( networkActionsObject != null ) {
+				foreach ( SendQueueEntry sqe in queue.GetRange(0,queue.Count) ) {
+					if ( canSendMessage ) {
+						sqe.timeout -= Time.deltaTime;
+						if ( sqe.timeout <= 0f ) {
+							send(sqe, messageTimeout);
+							canSendMessage = false;
 						}
-					
-
 					}
-
 				}
-				else {
-
-
-					if ( !triedEstablishingConnection ) {
-					
-						NetworkManager.singleton.networkAddress = queue[0].ip;
-					
-						if ( !NetworkManager.singleton.IsClientConnected() )
-							NetworkManager.singleton.StartClient();	
-
-						triedEstablishingConnection = true;
-
-
-					}
-
-				}
-
-
 			}
-			else
+			else {
+				if ( !triedEstablishingConnection ) {
+					NetworkManager.singleton.networkAddress = queue[0].ip;
+					
+					if ( !NetworkManager.singleton.IsClientConnected() )
+						NetworkManager.singleton.StartClient();	
+
+					triedEstablishingConnection = true;
+				}
+			}
+		}
+		else {
 			if ( NetworkManager.singleton.isNetworkActive ) {
 
 				if ( networkActionsObject != null ) {
@@ -185,10 +132,7 @@ public class sendqueue : MonoBehaviour {
 				}
 
 			}
-
-		
 		}
-
 	}
 
 	public void addMessageToQueue (string ip, string var, string value) {
@@ -384,24 +328,24 @@ public class sendqueue : MonoBehaviour {
 	void serialize (SendQueueEntry sqe) {
 
 		#if !UNITY_WEBPLAYER
-		PlayerPrefs.SetInt ("currentquestid", GetComponent<questdatabase> ().currentquest.id);
-		StringBuilder sb = new StringBuilder ();
-		JsonWriter jsonWriter = new JsonWriter (sb);
+		PlayerPrefs.SetInt("currentquestid", GetComponent<questdatabase>().currentquest.id);
+		StringBuilder sb = new StringBuilder();
+		JsonWriter jsonWriter = new JsonWriter(sb);
 		jsonWriter.PrettyPrint = true;
-		JsonMapper.ToJson (sqe, jsonWriter);
+		JsonMapper.ToJson(sqe, jsonWriter);
 
-		if (!Directory.Exists (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/")) {
+		if ( !Directory.Exists(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/") ) {
 
-			Directory.CreateDirectory (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/");
+			Directory.CreateDirectory(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/");
 
 		}
 
-		if (File.Exists (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json")) {
-			File.Delete (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json");
+		if ( File.Exists(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/" + sqe.id + ".json") ) {
+			File.Delete(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/" + sqe.id + ".json");
 		}
 
 
-		File.WriteAllText (Application.persistentDataPath + "/quests/" + GetComponent<questdatabase> ().currentquest.id + "/sendqueue/" + sqe.id + ".json", sb.ToString ());
+		File.WriteAllText(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/" + sqe.id + ".json", sb.ToString());
 		#endif
 	}
 
