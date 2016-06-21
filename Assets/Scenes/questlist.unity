@@ -17308,7 +17308,6 @@ GameObject:
   - 114: {fileID: 1756337061}
   - 114: {fileID: 1756337062}
   - 114: {fileID: 1756337063}
-  - 114: {fileID: 1756337064}
   - 114: {fileID: 1756337065}
   - 114: {fileID: 1756337066}
   m_Layer: 0
@@ -17601,26 +17600,6 @@ MonoBehaviour:
   buttonDisabledColor: {r: 0.20641965, g: 0.27205884, b: 0.17203721, a: 1}
   compColor: {r: 0.6117647, g: 0.3019608, b: 0.3529412, a: 1}
   secondCompColor: {r: 0.34901962, g: 0.27450982, b: 0.38431373, a: 1}
---- !u!114 &1756337064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1756337057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a2fc615edcad46ee83ff42b96457525, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  receivedExpectedMessageId: 0
-  queue: []
-  networkActionsObject: {fileID: 0}
-  messageTimer: 0.01
-  messageTimeout: 10
-  deviceid: 
-  idCounter: 0
-  triedEstablishingConnection: 0
-  connectionTimeout: 10
 --- !u!114 &1756337065
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,12 +8,12 @@ using LitJson;
 using System.IO;
 using System;
 
-public class sendqueue : MonoBehaviour {
+public class MediaConnectorClient : MonoBehaviour {
 
 	public bool receivedExpectedMessageId = false;
 	public List<SendQueueEntry> queue;
 	public networkactions networkActionsObject;
-	public float messageTimer = 0.2f;
+	public float messageTimer = 0.01f;
 	float messageTimerSave = 0.2f;
 	public float messageTimeout = 10f;
 	public string deviceid;

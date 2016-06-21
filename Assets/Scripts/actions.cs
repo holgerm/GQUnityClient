@@ -272,15 +272,15 @@ public class actions : MonoBehaviour {
 			return;
 
 		// Start part:
-		GetComponent<sendqueue>().addMessageToQueue(ip, var, filetype, sendbytes[0], 0);
+		GetComponent<MediaConnectorClient>().addMessageToQueue(ip, var, filetype, sendbytes[0], 0);
 
 		// Middle Parts:
 		for ( int i = 1; i < sendbytes.Count; i++ ) {
-			GetComponent<sendqueue>().addMessageToQueue(ip, var, filetype, sendbytes[i], i);
+			GetComponent<MediaConnectorClient>().addMessageToQueue(ip, var, filetype, sendbytes[i], i);
 		}
 
 		// FINISH Part:
-		GetComponent<sendqueue>().addFinishMessageToQueue(ip, var, filetype);
+		GetComponent<MediaConnectorClient>().addFinishMessageToQueue(ip, var, filetype);
 	}
 
 
@@ -305,7 +305,7 @@ public class actions : MonoBehaviour {
 				
 				if ( getVariable(action.getAttribute("var")).getStringValue() != "[null]" ) {
 					// Cases String Bool Number variables (has string representation):
-					GetComponent<sendqueue>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
+					GetComponent<MediaConnectorClient>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
 				}
 				else {
 					bool filefound = false;

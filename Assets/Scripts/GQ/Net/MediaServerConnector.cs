@@ -14,23 +14,23 @@ public class MediaServerConnector : IMediaServerConnector {
 	public void send (SendQueueEntry message) {
 		message.timeout = _timeout;
 
-		if ( message.mode == sendqueue.MODE_VALUE ) {
+		if ( message.mode == MediaConnectorClient.MODE_VALUE ) {
 			_networkActionsObject.CmdSendVar(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.value, message.resetid);
 		}
 		else
-		if ( message.mode == sendqueue.MODE_FILE_START ) {
+		if ( message.mode == MediaConnectorClient.MODE_FILE_START ) {
 
 			_networkActionsObject.CmdSendFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
 
 		}
 		else
-		if ( message.mode == sendqueue.MODE_FILE_MID ) {
+		if ( message.mode == MediaConnectorClient.MODE_FILE_MID ) {
 
 			_networkActionsObject.CmdAddToFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
 
 		}
 		else
-		if ( message.mode == sendqueue.MODE_FILE_FINISH ) {
+		if ( message.mode == MediaConnectorClient.MODE_FILE_FINISH ) {
 
 			_networkActionsObject.CmdFinishFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.resetid);
 
