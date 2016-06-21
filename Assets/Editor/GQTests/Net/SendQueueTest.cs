@@ -20,7 +20,7 @@ namespace GQTests.Net {
 
 			//Act
 			//Try to rename the GameObject
-			segmentedBytes = SendHelper.prepareToSend(originalBytes);
+			segmentedBytes = SendQueueHelper.prepareToSend(originalBytes);
 
 			List<byte> composedAgainBytes = new List<byte>();
 
@@ -30,7 +30,7 @@ namespace GQTests.Net {
 
 			//Assert
 			//The object has a new name
-			Assert.AreEqual(segmentedBytes.Count, Mathf.CeilToInt((float)originalBytes.Count / (float)SendHelper.BLOCKSIZE));
+			Assert.AreEqual(segmentedBytes.Count, Mathf.CeilToInt((float)originalBytes.Count / (float)SendQueueHelper.BLOCKSIZE));
 			Assert.AreEqual(originalBytes.Count, composedAgainBytes.Count);
 			Assert.AreEqual(originalBytes, composedAgainBytes);
 		}

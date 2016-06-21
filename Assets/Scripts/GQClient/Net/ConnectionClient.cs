@@ -167,7 +167,7 @@ namespace GQ.Client.Net {
 
 			PlayerPrefs.SetInt("nextmessage_" + sqe.ip, idCounter);
 
-			sqe.mode = SendQueueEntry.MODE_VALUE;
+			sqe.mode = SendQueueHelper.MODE_VALUE;
 			sqe.timeout = 0f;
 
 			sqe.ip = ip;
@@ -175,8 +175,7 @@ namespace GQ.Client.Net {
 			sqe.value = value;
 
 			queue.Add(sqe);
-
-			serialize(sqe);
+			sqe.serialize();
 
 		}
 
@@ -195,31 +194,25 @@ namespace GQ.Client.Net {
 			idCounter++;
 			sqe.questid = questId;
 
-
 			if ( part == 0 ) {
 
-				sqe.mode = SendQueueEntry.MODE_FILE_START;
+				sqe.mode = SendQueueHelper.MODE_FILE_START;
 
 			}
 			else {
 		
-				sqe.mode = SendQueueEntry.MODE_FILE_MID;
+				sqe.mode = SendQueueHelper.MODE_FILE_MID;
 
 
 			}
 			sqe.timeout = 0f;
-		
 			sqe.ip = ip;
 			sqe.var = var;
 			sqe.filetype = filetype;
-
 			sqe.file = bytes;
 		
-		
-		
-		
 			queue.Add(sqe);
-			serialize(sqe);
+			sqe.serialize();
 
 		}
 
@@ -236,10 +229,10 @@ namespace GQ.Client.Net {
 			sqe.ip = ip;
 			sqe.var = var;
 		
-			sqe.mode = SendQueueEntry.MODE_FILE_FINISH;
+			sqe.mode = SendQueueHelper.MODE_FILE_FINISH;
 	
 			queue.Add(sqe);
-			serialize(sqe);
+			sqe.serialize();
 
 	
 		}
@@ -273,46 +266,14 @@ namespace GQ.Client.Net {
 
 		}
 
-		void serialize (SendQueueEntry sqe) {
-
-			#if !UNITY_WEBPLAYER
-			PlayerPrefs.SetInt("currentquestid", GetComponent<questdatabase>().currentquest.id);
-			StringBuilder sb = new StringBuilder();
-			JsonWriter jsonWriter = new JsonWriter(sb);
-			jsonWriter.PrettyPrint = true;
-			JsonMapper.ToJson(sqe, jsonWriter);
-
-			if ( !Directory.Exists(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/") ) {
-
-				Directory.CreateDirectory(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/");
-
-			}
-
-			if ( File.Exists(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/" + sqe.id + ".json") ) {
-				File.Delete(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/" + sqe.id + ".json");
-			}
-
-
-			File.WriteAllText(Application.persistentDataPath + "/quests/" + GetComponent<questdatabase>().currentquest.id + "/sendqueue/" + sqe.id + ".json", sb.ToString());
-			#endif
-		}
-
 		public IEnumerator deserialize (WWW www) {
-
 
 			yield return www;
 
-
-
 			if ( www.error == null || www.error == "" ) {
-
-
-
 		
 				SendQueueEntry sqe = JsonMapper.ToObject<SendQueueEntry>(www.text);
 				queue.Add(sqe);
-
-
 
 			}
 			else {
@@ -320,13 +281,7 @@ namespace GQ.Client.Net {
 				Debug.Log(www.error);
 
 			}
-	
-	
 		}
-
-
 	}
-
-
 
 }

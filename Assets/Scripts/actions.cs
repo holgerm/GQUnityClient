@@ -366,7 +366,7 @@ public class actions : MonoBehaviour {
 						}
 					}
 
-					List<byte[]> sendbytes = SendHelper.prepareToSend(filebytes);
+					List<byte[]> sendbytes = SendQueueHelper.prepareToSend(filebytes);
 
 					// jetzt ist die datei in byte arrays zerlegt (liegen in sendbytes)
 

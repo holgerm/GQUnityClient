@@ -37,7 +37,7 @@ namespace GQ.Client.Net {
 
 			PlayerPrefs.SetInt("nextmessage_" + sqe.ip, idCounter);
 
-			sqe.mode = SendQueueEntry.MODE_VALUE;
+			sqe.mode = SendQueueHelper.MODE_VALUE;
 			sqe.timeout = 0f;
 
 			sqe.ip = ip;
@@ -45,9 +45,7 @@ namespace GQ.Client.Net {
 			sqe.value = text;
 
 			queue.Add(sqe);
-
-//			serialize(sqe);
-
+			sqe.serialize();
 		}
 
 
@@ -69,12 +67,12 @@ namespace GQ.Client.Net {
 
 			if ( part == 0 ) {
 
-				sqe.mode = SendQueueEntry.MODE_FILE_START;
+				sqe.mode = SendQueueHelper.MODE_FILE_START;
 
 			}
 			else {
 
-				sqe.mode = SendQueueEntry.MODE_FILE_MID;
+				sqe.mode = SendQueueHelper.MODE_FILE_MID;
 
 
 			}
@@ -85,8 +83,7 @@ namespace GQ.Client.Net {
 			sqe.file = bytes;
 
 			queue.Add(sqe);
-//			serialize(sqe);
-
+			sqe.serialize();
 		}
 
 		public void addFileFinishMessage (string ip, string var, string filetype, int questId) {
@@ -102,12 +99,10 @@ namespace GQ.Client.Net {
 			sqe.ip = ip;
 			sqe.var = var;
 
-			sqe.mode = SendQueueEntry.MODE_FILE_FINISH;
+			sqe.mode = SendQueueHelper.MODE_FILE_FINISH;
 
 			queue.Add(sqe);
-//			serialize(sqe);
-
-
+			sqe.serialize();
 		}
 	}
 

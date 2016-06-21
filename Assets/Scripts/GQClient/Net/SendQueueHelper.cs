@@ -4,7 +4,13 @@ using System.Collections.Generic;
 
 namespace GQ.Client.Net {
 
-	public class SendHelper {
+	public class SendQueueHelper {
+
+		public const string MODE_VALUE = "value";
+		public const string MODE_FILE_START = "file_start";
+		public const string MODE_FILE_MID = "file_mid";
+		public const string MODE_FILE_FINISH = "file_finish";
+
 
 		/// heuristik über maximale länge einer nachricht an den server
 		public const int BLOCKSIZE = 1300;

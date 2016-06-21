@@ -14,12 +14,6 @@ namespace GQ.Client.Net {
 	[System.Serializable]
 	public class SendQueueEntry {
 
-		public const string MODE_VALUE = "value";
-		public const string MODE_FILE_START = "file_start";
-		public const string MODE_FILE_MID = "file_mid";
-		public const string MODE_FILE_FINISH = "file_finish";
-
-
 		public int id;
 		public int questid;
 		public string ip;
@@ -30,6 +24,31 @@ namespace GQ.Client.Net {
 		public string filetype;
 		public byte[] file;
 		public bool resetid = false;
+
+		public void serialize () {
+
+			#if !UNITY_WEBPLAYER
+			PlayerPrefs.SetInt("currentquestid", questid);
+			StringBuilder sb = new StringBuilder();
+			JsonWriter jsonWriter = new JsonWriter(sb);
+			jsonWriter.PrettyPrint = true;
+			JsonMapper.ToJson(this, jsonWriter);
+
+			string dirPath = Application.persistentDataPath + "/quests/" + questid + "/sendqueue/";
+			string filePath = dirPath + id + ".json";
+
+			if ( !Directory.Exists(dirPath) ) {
+				Directory.CreateDirectory(dirPath);
+			}
+
+			if ( File.Exists(filePath) ) {
+				File.Delete(filePath);
+			}
+
+			File.WriteAllText(filePath, sb.ToString());
+			#endif
+		}
+
 
 	}
 
