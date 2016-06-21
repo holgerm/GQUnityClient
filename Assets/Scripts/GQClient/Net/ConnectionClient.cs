@@ -8,6 +8,7 @@ using LitJson;
 using System.IO;
 using System;
 using GQ.Client.Net;
+using GQ.Util;
 
 namespace GQ.Client.Net {
 	
@@ -43,12 +44,6 @@ namespace GQ.Client.Net {
 
 		void reconstructSendQueue () {
 
-			string pre = "file: /";
-		
-			if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
-				pre = "file:";
-			}
-
 			if ( Directory.Exists(Application.persistentDataPath + "/quests/") ) {
 	
 				foreach ( string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/") ) {
@@ -63,7 +58,7 @@ namespace GQ.Client.Net {
 							if ( int.TryParse(FolderName, out num1) ) {
 								if ( int.TryParse(Path.GetFileNameWithoutExtension(file), out num2) ) {
 									if ( File.Exists(Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json") ) {
-										WWW www = new WWW(pre + "" + Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json");
+										WWW www = LocalWWW.Create("/quests/" + num1 + "/sendqueue/" + num2 + ".json");
 										StartCoroutine(deserialize(www));
 
 									}
@@ -73,10 +68,6 @@ namespace GQ.Client.Net {
 					}
 				}
 			}
-
-			if ( queue.Count == 0 ) {
-			}
-
 		}
 
 		private IMediaServerConnector _mediaServerConnector;

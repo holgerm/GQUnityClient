@@ -47,7 +47,7 @@ namespace GQ.Util {
 			}
 			return exists;
 		}
-		
+
 		/// <summary>
 		/// Checks whether the given image file exists with at least one of the allowed extensions (cf. ImageExtension). 
 		/// The argument filePath has to be given WITHOUT any extension.
@@ -114,5 +114,22 @@ namespace GQ.Util {
 		}
 
 		#endif
+
 	}
+
+
+	public static class LocalWWW {
+
+		public static WWW Create (string localFilePath) {
+			string pre = "file: /";
+
+			if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
+				pre = "file:";
+			}
+
+			return new WWW(pre + Application.persistentDataPath + localFilePath);
+		}
+
+	}
+
 }
