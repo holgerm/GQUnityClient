@@ -21,10 +21,10 @@ public class sendqueue : MonoBehaviour {
 	public bool triedEstablishingConnection = false;
 	public float connectionTimeout = 10f;
 	float connectionTimeoutSave = 10f;
-	const string MODE_VALUE = "value";
-	const string MODE_FILE_START = "file_start";
-	const string MODE_FILE_MID = "file_mid";
-	const string MODE_FILE_FINISH = "file_finish";
+	public const string MODE_VALUE = "value";
+	public const string MODE_FILE_START = "file_start";
+	public const string MODE_FILE_MID = "file_mid";
+	public const string MODE_FILE_FINISH = "file_finish";
 
 	void Start () {
 
@@ -80,6 +80,17 @@ public class sendqueue : MonoBehaviour {
 
 	}
 
+	private IMediaServerConnector _mediaServerConnector;
+
+	public IMediaServerConnector MediaServerConnector {
+		get {
+			return _mediaServerConnector;
+		}
+		set {
+			_mediaServerConnector = value;
+		}
+	}
+
 	void Update () {
 		if ( queue.Count == 0 )
 			return;
@@ -107,7 +118,8 @@ public class sendqueue : MonoBehaviour {
 					if ( canSendMessage ) {
 						sqe.timeout -= Time.deltaTime;
 						if ( sqe.timeout <= 0f ) {
-							send(sqe, messageTimeout);
+							MediaServerConnector.send(sqe);
+//							send(sqe, messageTimeout);
 							canSendMessage = false;
 						}
 					}
@@ -234,9 +246,9 @@ public class sendqueue : MonoBehaviour {
 	}
 
 	public void setNetworkIdentity (networkactions na) {
-		
 		networkActionsObject = na;
-		
+	
+		MediaServerConnector = new MediaServerConnector(messageTimeout, na);
 	}
 
 	public void messageReceived (int id) {
@@ -258,45 +270,6 @@ public class sendqueue : MonoBehaviour {
 
 
 		}
-
-
-	}
-
-	public void send (SendQueueEntry sqe, float timeout) {
-
-
-		//queue.Remove (sqe);
-
-
-		sqe.timeout = messageTimeout;
-
-
-		if ( sqe.mode == MODE_VALUE ) {
-
-
-			networkActionsObject.CmdSendVar(sqe.id, deviceid, sqe.var, sqe.value, sqe.resetid);
-
-
-		}
-		else
-		if ( sqe.mode == MODE_FILE_START ) {
-
-			networkActionsObject.CmdSendFile(sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
-					
-		}
-		else
-		if ( sqe.mode == MODE_FILE_MID ) {
-
-			networkActionsObject.CmdAddToFile(sqe.id, deviceid, sqe.var, sqe.filetype, sqe.file, sqe.resetid);
-
-		}
-		else
-		if ( sqe.mode == MODE_FILE_FINISH ) {
-			
-			networkActionsObject.CmdFinishFile(sqe.id, deviceid, sqe.var, sqe.filetype, sqe.resetid);
-
-		}
-
 
 
 	}

@@ -4,5 +4,10 @@ using UnityEngine;
 /// <summary>
 /// Basic Server Mock Implementation.
 /// </summary>
-public class MediaServerMock : IMediaServer {
+public class MediaServerMock : IMediaServerConnector {
+
+	public void send (SendQueueEntry message) {
+		
+	}
+
 }

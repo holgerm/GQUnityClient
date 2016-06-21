@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class SendQueueTest {
 
 	[Test]
-	public void EditorTest () {
+	public void SegmentFileIntoBlocks () {
 		//Arrange
 		List<byte> originalBytes = new List<byte>();
 		List<byte[]> segmentedBytes = new List<byte[]>();
@@ -33,23 +33,19 @@ public class SendQueueTest {
 	}
 
 	[Test]
-	public void AddSegmentedArray () {
-		// Arrange:
-		List<byte> originalBytes = new List<byte>();
-		List<byte[]> segmentedBytes = new List<byte[]>();
+	public void SendTextVars () {
+		// TODO move this test to a class with tests with perfect connection
 
-		for ( int i = 0; i < 10000; i++ ) {
-			originalBytes.Add((byte)(i % 256));
-		}
+		// Arrange:
+		// TODO create clientSideConnectionManager
+		// TODO setup server mock with perfect connection
+		// TODO prepare some text vars
 
 		// Act:
-		// create new sendqueue
-		// add all segments
+		// TODO send text vars
 
 		// Assert:
-		// queue has start
-		// queue has correct middle parts
-		// queue has end
+		// server has received the text vars as expected
 
 		// check recombination of all parts
 	}

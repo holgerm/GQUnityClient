@@ -7573,8 +7573,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   product: 2
-  overrideProductSettingsInInspector: 0
-  portalID: 421
+  overrideProductSettingsInInspector: 1
+  portalID: 21
   autostartQuestID: 0
   autostartIsPredeployed: 0
   colorProfile: default
@@ -7594,7 +7594,7 @@ MonoBehaviour:
   toplogo: {fileID: 21300000, guid: b4faa7795bc6b4600b7515aeb20908ac, type: 3}
   nameForQuest: Quest
   questvisualization: list
-  showMessageForDatasendAction: 0
+  showMessageForDatasendAction: 1
   showPrivacyAgreement: 1
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter
     dieser App ist uns der sichere Umgang mit Ihren Daten besonders wichtig. Die Erhebung,
@@ -7629,7 +7629,7 @@ MonoBehaviour:
     machen. F\xFCr den Fall einer solchen \xC4nderung wird die App, sofern Sie online
     gehen, Sie informieren.<br>"
   privacyAgreementVersion: 1
-  showAGBs: 1
+  showAGBs: 0
   agbs: "Anbieter dieser App ist das Stadtmuseum im Prinz-Max\xADPalais, Karlstra\xDFe
     10, 76133 Karlsruhe. Der Anbieter dieser App betreibt ein Webportal, auf dem registrierte
     Mitglieder (nachfolgend \u201EAutoren\u201C) mithilfe des Global Position Systems
@@ -8685,7 +8685,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

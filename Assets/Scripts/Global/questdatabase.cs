@@ -141,21 +141,12 @@ public class questdatabase : MonoBehaviour {
 
 
 
-		if ( Application.platform == RuntimePlatform.OSXPlayer ) {
+		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine(Application.streamingAssetsPath, "predeployed/quests");
+		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine(Application.streamingAssetsPath, "predeployed/quests.zip");
+		LOCAL_QUESTS_ZIP = System.IO.Path.Combine(Application.persistentDataPath, "tmp_predeployed_quests.zip");
+		PATH_2_LOCAL_QUESTS = System.IO.Path.Combine(Application.persistentDataPath, "quests");
 
-			Application.LoadLevel("mediaserver");
-		}
-		else {
-//			Debug.Log ("Start with params: autostart=" + Configuration.instance.autostartQuestID);
-//			Debug.Log ("                   isPredeployed=" + Configuration.instance.autostartIsPredeployed);
-//			Debug.Log ("                   showCQImmediately=" + Configuration.instance.showcloudquestsimmediately);
-
-			PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine(Application.streamingAssetsPath, "predeployed/quests");
-			PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine(Application.streamingAssetsPath, "predeployed/quests.zip");
-			LOCAL_QUESTS_ZIP = System.IO.Path.Combine(Application.persistentDataPath, "tmp_predeployed_quests.zip");
-			PATH_2_LOCAL_QUESTS = System.IO.Path.Combine(Application.persistentDataPath, "quests");
-
-			//msgsactive = 0;
+		//msgsactive = 0;
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
@@ -166,62 +157,59 @@ public class questdatabase : MonoBehaviour {
 
 #endif
 
-			if ( GameObject.Find("QuestDatabase") != gameObject ) {
-				Destroy(GameObject.Find("QuestDatabase"));		
-			}
-			else {
-				DontDestroyOnLoad(gameObject);
-				//			Debug.Log (Application.persistentDataPath);
-			}
-
-			if ( !Application.isWebPlayer ) {
-
-				if ( Configuration.instance.questvisualization != "list" ) {
-
-					Debug.Log("starting without list");
-					GameObject.Find("ListPanel").SetActive(false);
-
-				}
-
-
-			
-				if ( Configuration.instance.downloadAllCloudQuestOnStart || (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) ) {
-					buttoncontroller.DisplayList();
-
-					ReloadQuestListAndRefresh();
-				}
-				else {
-
-					Debug.Log("starting either without showing quest immediately or autostart");
-					if ( Configuration.instance.autostartQuestID != 0 ) {
-						buttoncontroller.DisplayList();
-					}
-
-					webloadingmessage.enabled = false;
-					loadlogo.disable();
-				}
-			}
-			else {
-				if ( webloadingmessage != null ) {
-					webloadingmessage.enabled = true;
-				}
-				questmilllogo.enabled = true;
-				loadlogo.enable();
-			} 
-
-			autoStartQuest();
-
-			yield return new WaitForEndOfFrame();
-			yield return new WaitForEndOfFrame();
-
-			if ( GameObject.Find("MenuCanvas") != null ) {
-			
-				menu = GameObject.Find("MenuCanvas").GetComponent<menucontroller>();
-			
-			}
-
+		if ( GameObject.Find("QuestDatabase") != gameObject ) {
+			Destroy(GameObject.Find("QuestDatabase"));		
+		}
+		else {
+			DontDestroyOnLoad(gameObject);
+			//			Debug.Log (Application.persistentDataPath);
 		}
 
+		if ( !Application.isWebPlayer ) {
+
+			if ( Configuration.instance.questvisualization != "list" ) {
+
+				Debug.Log("starting without list");
+				GameObject.Find("ListPanel").SetActive(false);
+
+			}
+
+
+			
+			if ( Configuration.instance.downloadAllCloudQuestOnStart || (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) ) {
+				buttoncontroller.DisplayList();
+
+				ReloadQuestListAndRefresh();
+			}
+			else {
+
+				Debug.Log("starting either without showing quest immediately or autostart");
+				if ( Configuration.instance.autostartQuestID != 0 ) {
+					buttoncontroller.DisplayList();
+				}
+
+				webloadingmessage.enabled = false;
+				loadlogo.disable();
+			}
+		}
+		else {
+			if ( webloadingmessage != null ) {
+				webloadingmessage.enabled = true;
+			}
+			questmilllogo.enabled = true;
+			loadlogo.enable();
+		} 
+
+		autoStartQuest();
+
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
+
+		if ( GameObject.Find("MenuCanvas") != null ) {
+			
+			menu = GameObject.Find("MenuCanvas").GetComponent<menucontroller>();
+			
+		}
 
 	}
 
@@ -1888,10 +1876,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
