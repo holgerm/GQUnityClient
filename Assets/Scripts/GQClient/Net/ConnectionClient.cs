@@ -7,9 +7,11 @@ using System.Text;
 using LitJson;
 using System.IO;
 using System;
+using GQ.Client.Net;
 
-namespace GQ.Net {
-	public class ConnectionClient : MonoBehaviour {
+namespace GQ.Client.Net {
+	
+	public class ConnectionClient : MonoBehaviour, ISendQueue {
 
 		public bool receivedExpectedMessageId = false;
 		public List<SendQueueEntry> queue;
@@ -22,10 +24,6 @@ namespace GQ.Net {
 		public bool triedEstablishingConnection = false;
 		public float connectionTimeout = 10f;
 		float connectionTimeoutSave = 10f;
-		public const string MODE_VALUE = "value";
-		public const string MODE_FILE_START = "file_start";
-		public const string MODE_FILE_MID = "file_mid";
-		public const string MODE_FILE_FINISH = "file_finish";
 
 		void Start () {
 
@@ -148,7 +146,7 @@ namespace GQ.Net {
 //		}
 		}
 
-		public void addMessageToQueue (string ip, string var, string value) {
+		public void addTextMessage (string ip, string var, string value, int questId) {
 
 			SendQueueEntry sqe = new SendQueueEntry();
 
@@ -161,7 +159,7 @@ namespace GQ.Net {
 
 			sqe.id = idCounter;
 			idCounter++;
-			sqe.questid = GetComponent<questdatabase>().currentquest.id;
+			sqe.questid = questId;
 
 			if ( idCounter == int.MaxValue ) {
 				idCounter = 0;
@@ -169,7 +167,7 @@ namespace GQ.Net {
 
 			PlayerPrefs.SetInt("nextmessage_" + sqe.ip, idCounter);
 
-			sqe.mode = MODE_VALUE;
+			sqe.mode = SendQueueEntry.MODE_VALUE;
 			sqe.timeout = 0f;
 
 			sqe.ip = ip;
@@ -182,7 +180,7 @@ namespace GQ.Net {
 
 		}
 
-		public void addMessageToQueue (string ip, string var, string filetype, byte[] bytes, int part) {
+		public void addTextMessage (string ip, string var, string filetype, byte[] bytes, int part) {
 		
 			SendQueueEntry sqe = new SendQueueEntry();
 	
@@ -200,12 +198,12 @@ namespace GQ.Net {
 
 			if ( part == 0 ) {
 
-				sqe.mode = MODE_FILE_START;
+				sqe.mode = SendQueueEntry.MODE_FILE_START;
 
 			}
 			else {
 		
-				sqe.mode = MODE_FILE_MID;
+				sqe.mode = SendQueueEntry.MODE_FILE_MID;
 
 
 			}
@@ -238,7 +236,7 @@ namespace GQ.Net {
 			sqe.ip = ip;
 			sqe.var = var;
 		
-			sqe.mode = MODE_FILE_FINISH;
+			sqe.mode = SendQueueEntry.MODE_FILE_FINISH;
 	
 			queue.Add(sqe);
 			serialize(sqe);
@@ -330,22 +328,5 @@ namespace GQ.Net {
 	}
 
 
-	[System.Serializable]
-	public class SendQueueEntry {
-
-		public int id;
-		public int questid;
-		public string ip;
-		public float timeout;
-		public string mode;
-		public string var;
-		public string value;
-		public string filetype;
-		public byte[] file;
-		public bool resetid = false;
-
-
-
-	}
 
 }

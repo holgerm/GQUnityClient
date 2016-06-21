@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 
 using UnityEngine.Networking;
-using GQ.Net;
+using GQ.Client.Net;
 
 public class actions : MonoBehaviour {
 
@@ -57,8 +57,7 @@ public class actions : MonoBehaviour {
 	}
 
 	void Start () {
-
-
+		
 		gPSRouteUpdateInterval_save = gPSRouteUpdateInterval;
 
 		questdb = GetComponent<questdatabase>();
@@ -273,11 +272,11 @@ public class actions : MonoBehaviour {
 			return;
 
 		// Start part:
-		GetComponent<ConnectionClient>().addMessageToQueue(ip, var, filetype, sendbytes[0], 0);
+		GetComponent<ConnectionClient>().addTextMessage(ip, var, filetype, sendbytes[0], 0);
 
 		// Middle Parts:
 		for ( int i = 1; i < sendbytes.Count; i++ ) {
-			GetComponent<ConnectionClient>().addMessageToQueue(ip, var, filetype, sendbytes[i], i);
+			GetComponent<ConnectionClient>().addTextMessage(ip, var, filetype, sendbytes[i], i);
 		}
 
 		// FINISH Part:
@@ -306,7 +305,11 @@ public class actions : MonoBehaviour {
 				
 				if ( getVariable(action.getAttribute("var")).getStringValue() != "[null]" ) {
 					// Cases String Bool Number variables (has string representation):
-					GetComponent<ConnectionClient>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
+					GetComponent<ConnectionClient>().addTextMessage(
+						getServerIp(action.getAttribute("ip")), 
+						action.getAttribute("var"), 
+						getVariable(action.getAttribute("var")).getStringValue(),
+						questdb.currentquest.id);
 				}
 				else {
 					bool filefound = false;

@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using GQ.Net;
 
-namespace GQ.Net {
+namespace GQ.Client.Net {
 
 	public class MediaServerConnector : IMediaServerConnector {
 
@@ -17,23 +16,23 @@ namespace GQ.Net {
 		public void send (SendQueueEntry message) {
 			message.timeout = _timeout;
 
-			if ( message.mode == ConnectionClient.MODE_VALUE ) {
+			if ( message.mode == SendQueueEntry.MODE_VALUE ) {
 				_networkActionsObject.CmdSendVar(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.value, message.resetid);
 			}
 			else
-			if ( message.mode == ConnectionClient.MODE_FILE_START ) {
+			if ( message.mode == SendQueueEntry.MODE_FILE_START ) {
 
 				_networkActionsObject.CmdSendFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
 
 			}
 			else
-			if ( message.mode == ConnectionClient.MODE_FILE_MID ) {
+			if ( message.mode == SendQueueEntry.MODE_FILE_MID ) {
 
 				_networkActionsObject.CmdAddToFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
 
 			}
 			else
-			if ( message.mode == ConnectionClient.MODE_FILE_FINISH ) {
+			if ( message.mode == SendQueueEntry.MODE_FILE_FINISH ) {
 
 				_networkActionsObject.CmdFinishFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.resetid);
 

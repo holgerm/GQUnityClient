@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace GQ.Net {
+namespace GQ.Client.Net {
 	/// <summary>
 	/// Interface for Media Server. 
 	/// </summary>

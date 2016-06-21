@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GQ.Net {
+namespace GQ.Client.Net {
 
 	public class SendHelper {
 
