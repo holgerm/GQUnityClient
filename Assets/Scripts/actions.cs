@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 
 using UnityEngine.Networking;
+using GQ.Net;
 
 public class actions : MonoBehaviour {
 
@@ -272,15 +273,15 @@ public class actions : MonoBehaviour {
 			return;
 
 		// Start part:
-		GetComponent<MediaConnectorClient>().addMessageToQueue(ip, var, filetype, sendbytes[0], 0);
+		GetComponent<ConnectionClient>().addMessageToQueue(ip, var, filetype, sendbytes[0], 0);
 
 		// Middle Parts:
 		for ( int i = 1; i < sendbytes.Count; i++ ) {
-			GetComponent<MediaConnectorClient>().addMessageToQueue(ip, var, filetype, sendbytes[i], i);
+			GetComponent<ConnectionClient>().addMessageToQueue(ip, var, filetype, sendbytes[i], i);
 		}
 
 		// FINISH Part:
-		GetComponent<MediaConnectorClient>().addFinishMessageToQueue(ip, var, filetype);
+		GetComponent<ConnectionClient>().addFinishMessageToQueue(ip, var, filetype);
 	}
 
 
@@ -305,7 +306,7 @@ public class actions : MonoBehaviour {
 				
 				if ( getVariable(action.getAttribute("var")).getStringValue() != "[null]" ) {
 					// Cases String Bool Number variables (has string representation):
-					GetComponent<MediaConnectorClient>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
+					GetComponent<ConnectionClient>().addMessageToQueue(getServerIp(action.getAttribute("ip")), action.getAttribute("var"), getVariable(action.getAttribute("var")).getStringValue());
 				}
 				else {
 					bool filefound = false;

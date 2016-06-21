@@ -2,28 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SendHelper {
+namespace GQ.Net {
 
-	/// heuristik über maximale länge einer nachricht an den server
-	public const int BLOCKSIZE = 1300;
+	public class SendHelper {
 
-	public static List<byte[]> prepareToSend (List<byte> orginialBytes) {
-		List<byte[]> sendbytes = new List<byte[]>();
+		/// heuristik über maximale länge einer nachricht an den server
+		public const int BLOCKSIZE = 1300;
 
-		int size = BLOCKSIZE;
+		public static List<byte[]> prepareToSend (List<byte> orginialBytes) {
+			List<byte[]> sendbytes = new List<byte[]>();
 
-		for ( int i = 0; i < orginialBytes.Count; i += size ) {
-			var list = new List<byte>();
+			int size = BLOCKSIZE;
 
-			// höchtens bis zum ende gehen:
-			if ( (i + size) > orginialBytes.Count ) {
-				size = orginialBytes.Count - (i);
+			for ( int i = 0; i < orginialBytes.Count; i += size ) {
+				var list = new List<byte>();
+
+				// höchtens bis zum ende gehen:
+				if ( (i + size) > orginialBytes.Count ) {
+					size = orginialBytes.Count - (i);
+				}
+
+				sendbytes.Add(orginialBytes.GetRange(i, size).ToArray());
 			}
 
-			sendbytes.Add(orginialBytes.GetRange(i, size).ToArray());
+			return sendbytes;
 		}
 
-		return sendbytes;
 	}
-
 }
