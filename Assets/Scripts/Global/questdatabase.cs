@@ -867,18 +867,7 @@ public class questdatabase : MonoBehaviour {
 
 
 
-		string pre = "file://";
-	
-		
-		if ( Application.platform == RuntimePlatform.Android ) {
-			
-			pre = "";
-		}
-		
-		
-
-
-		WWW wwwpdq = new WWW(pre + "" + q.filepath);
+		WWW wwwpdq = LocalWWW.Create(q.filepath);
 
 		yield return wwwpdq;
 

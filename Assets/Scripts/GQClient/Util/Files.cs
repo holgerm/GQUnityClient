@@ -120,6 +120,10 @@ namespace GQ.Util {
 
 	public static class LocalWWW {
 
+		/// <summary>
+		/// Use LocalWWW.Create("path/to/my.file") instead of new WWW(pre + Application.persistentDataPath + "path/to/my.file").
+		/// </summary>
+		/// <param name="localFilePath">Local file path.</param>
 		public static WWW Create (string localFilePath) {
 			string pre = "file: /";
 
