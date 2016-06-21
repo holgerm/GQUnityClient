@@ -272,15 +272,18 @@ public class actions : MonoBehaviour {
 			return;
 
 		// Start part:
-		GetComponent<ConnectionClient>().addTextMessage(ip, var, filetype, sendbytes[0], 0);
+		GetComponent<ConnectionClient>().addFileMessage(ip, var, filetype, sendbytes[0], 0,
+			questdb.currentquest.id);
 
 		// Middle Parts:
 		for ( int i = 1; i < sendbytes.Count; i++ ) {
-			GetComponent<ConnectionClient>().addTextMessage(ip, var, filetype, sendbytes[i], i);
+			GetComponent<ConnectionClient>().addFileMessage(ip, var, filetype, sendbytes[i], i,
+				questdb.currentquest.id);
 		}
 
 		// FINISH Part:
-		GetComponent<ConnectionClient>().addFinishMessageToQueue(ip, var, filetype);
+		GetComponent<ConnectionClient>().addFileFinishMessage(ip, var, filetype,
+			questdb.currentquest.id);
 	}
 
 

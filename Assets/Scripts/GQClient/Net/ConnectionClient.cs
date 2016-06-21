@@ -180,7 +180,7 @@ namespace GQ.Client.Net {
 
 		}
 
-		public void addTextMessage (string ip, string var, string filetype, byte[] bytes, int part) {
+		public void addFileMessage (string ip, string var, string filetype, byte[] bytes, int part, int questId) {
 		
 			SendQueueEntry sqe = new SendQueueEntry();
 	
@@ -193,7 +193,7 @@ namespace GQ.Client.Net {
 
 			sqe.id = idCounter;
 			idCounter++;
-			sqe.questid = GetComponent<questdatabase>().currentquest.id;
+			sqe.questid = questId;
 
 
 			if ( part == 0 ) {
@@ -223,13 +223,13 @@ namespace GQ.Client.Net {
 
 		}
 
-		public void addFinishMessageToQueue (string ip, string var, string filetype) {
+		public void addFileFinishMessage (string ip, string var, string filetype, int questId) {
 
 			SendQueueEntry sqe = new SendQueueEntry();
 		
 		
 			sqe.id = idCounter;
-			sqe.questid = GetComponent<questdatabase>().currentquest.id;
+			sqe.questid = questId;
 			idCounter++;
 			sqe.timeout = 0f;
 
