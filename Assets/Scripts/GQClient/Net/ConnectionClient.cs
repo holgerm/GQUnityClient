@@ -33,7 +33,7 @@ namespace GQ.Client.Net {
 		public float connectionTimeout = 10f;
 		float connectionTimeoutSave = 10f;
 
-		private ISendQueue sendQueue;
+		public SendQueue sendQueue;
 
 		void Start () {
 			messageTimerSave = messageTimer;
