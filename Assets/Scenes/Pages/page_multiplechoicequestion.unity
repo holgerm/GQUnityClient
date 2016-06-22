@@ -1418,6 +1418,7 @@ MonoBehaviour:
     start_longitude: 0
     start_latitude: 0
     meta_combined: 
+    meta_Search_Combined: 
     predeployed: 0
     version: 
     acceptedDS: 0
