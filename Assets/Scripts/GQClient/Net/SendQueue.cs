@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 
 namespace GQ.Client.Net {
 
+	[System.Serializable]
 	public class SendQueue : ISendQueue {
 
 		public List<SendQueueEntry> _queue;

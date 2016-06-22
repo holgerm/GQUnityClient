@@ -99,9 +99,6 @@ public class Quest  : IComparable<Quest> {
 	/// <param name="id">Identifier.</param>
 	/// <param name="redo">If set to <c>true</c> redo.</param>
 	public  Quest LoadFromText (int id, bool redo) {
-
-		Debug.Log("XXX: LoadFromText id: " + id);
-	
 		string fp = filepath;
 		string xmlfilepath = filepath;
 		string xmlcontent_copy = xmlcontent;
