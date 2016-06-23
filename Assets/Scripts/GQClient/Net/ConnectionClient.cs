@@ -10,9 +10,13 @@ using System;
 using GQ.Client.Net;
 using GQ.Util;
 
-namespace GQ.Client.Net {
+namespace GQ.Client.Net
+{
 	
-	public class ConnectionClient : MonoBehaviour, IEnumerationWorker {
+	public class ConnectionClient : MonoBehaviour, IEnumerationWorker
+	{
+
+		public GameObject unsendMessagesMessage;
 
 		public bool receivedExpectedMessageId = false;
 
@@ -36,49 +40,61 @@ namespace GQ.Client.Net {
 
 		public SendQueue sendQueue;
 
-		void Start () {
+		void Start ()
+		{
 			messageTimerSave = messageTimer;
 			connectionTimeoutSave = connectionTimeout;
 			deviceid = SystemInfo.deviceUniqueIdentifier;
 
-			sendQueue = new SendQueue(messageTimeout);
-			sendQueue.reconstructSendQueue();
+			sendQueue = new SendQueue (messageTimeout);
+
+			if (sendQueue.hasUnsendMessages ()) {
+
+				unsendMessagesMessage.SetActive (true);
+				unsendMessagesMessage.GetComponent<Animator> ().SetTrigger ("in");
+
+			}
+
+			sendQueue.setEnumerationWorker (this);
+
 		}
 
-		public void setExpectedNextMessage (int nm) {
+		public void setExpectedNextMessage (int nm)
+		{
 		}
 
-		public void enumerate (IEnumerator enumerator) {
-			StartCoroutine(enumerator);
+		public void enumerate (IEnumerator enumerator)
+		{
+			StartCoroutine (enumerator);
 		}
 
-		void Update () {
-			if ( sendQueue.Count == 0 )
+		void Update ()
+		{
+			if (sendQueue.Count == 0)
 				return;
 
 			bool canSendMessage = false;
 			messageTimer -= Time.deltaTime;
 
-			if ( networkActionsObject == null && triedEstablishingConnection ) {
+			if (networkActionsObject == null && triedEstablishingConnection) {
 
 				connectionTimeout -= Time.deltaTime;
 				
-				if ( connectionTimeout <= 0f ) {
+				if (connectionTimeout <= 0f) {
 					connectionTimeout = connectionTimeoutSave;
 					triedEstablishingConnection = false;
-					Network.Disconnect();
+					Network.Disconnect ();
 				}
 			}
 
-			if ( messageTimer <= 0f ) {
+			if (messageTimer <= 0f) {
 				messageTimer = messageTimerSave;
 
-				if ( networkActionsObject != null ) {
-					sendQueue.sendNext();
-				}
-				else {
-					if ( !triedEstablishingConnection ) {
-						triedEstablishingConnection = sendQueue.startConnectingToServer();
+				if (networkActionsObject != null) {
+					sendQueue.sendNext ();
+				} else {
+					if (!triedEstablishingConnection) {
+						triedEstablishingConnection = sendQueue.startConnectingToServer ();
 					}
 				}
 			}
@@ -93,26 +109,31 @@ namespace GQ.Client.Net {
 //		}
 		}
 
-		public void addTextMessage (string ip, string var, string value, int questId) {
-			sendQueue.addTextMessage(ip, var, value, questId);
+		public void addTextMessage (string ip, string var, string value, int questId)
+		{
+			sendQueue.addTextMessage (ip, var, value, questId);
 		}
 
-		public void addFileMessage (string ip, string var, string filetype, byte[] bytes, int part, int questId) {
-			sendQueue.addFileMessage(ip, var, filetype, bytes, part, questId);
+		public void addFileMessage (string ip, string var, string filetype, byte[] bytes, int part, int questId)
+		{
+			sendQueue.addFileMessage (ip, var, filetype, bytes, part, questId);
 		}
 
-		public void addFileFinishMessage (string ip, string var, string filetype, int questId) {
-			sendQueue.addFileFinishMessage(ip, var, filetype, questId);
+		public void addFileFinishMessage (string ip, string var, string filetype, int questId)
+		{
+			sendQueue.addFileFinishMessage (ip, var, filetype, questId);
 		}
 
-		public void setNetworkIdentity (networkactions na) {
+		public void setNetworkIdentity (networkactions na)
+		{
 			NetworkActionsObject = na;
 	
 			sendQueue.NetworkActionsObject = na;
 		}
 
-		public void messageReceived (int id) {
-			sendQueue.removeMessage(id);
+		public void messageReceived (int id)
+		{
+			sendQueue.removeMessage (id);
 		}
 
 	}

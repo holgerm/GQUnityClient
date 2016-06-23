@@ -2,25 +2,35 @@
 using UnityEngine.Networking;
 
 using System.Collections;
+using GQ.Client.Net;
 
-public class networkactions : NetworkBehaviour {
-
-
-
-	void Awake () {
-		Debug.Log("NETWORKACTIONS Awake()");
-	}
+public class networkactions : NetworkBehaviour
+{
 
 
-
-	void Start () {
-
-		Debug.Log("NETWORKACTION_OBJECT in Start gesetzt");
-
-		if ( GameObject.Find("QuestDatabase") != null ) {
+	bool sendInitial = false;
+	bool receivedInitial = false;
+	bool complete = false;
 
 
-			GameObject.Find("QuestDatabase").SendMessage("setNetworkIdentity", this);
+	float timer = 10f;
+	float timer_save = 10f;
+
+	void Start ()
+	{
+
+
+
+		//CmdSendVar ();
+
+
+
+		if (GameObject.Find ("QuestDatabase") != null) {
+
+			timer_save = timer;
+			CmdSendFirstMessageId (GameObject.Find ("QuestDatabase").GetComponent<ConnectionClient> ().sendQueue.getMin (), SystemInfo.deviceUniqueIdentifier);
+			sendInitial = true;
+
 
 
 		}
@@ -30,6 +40,52 @@ public class networkactions : NetworkBehaviour {
 
 
 
+	void Update ()
+	{
+		if (!complete && sendInitial) {
+
+			if (!receivedInitial) {
+				timer -= Time.deltaTime;
+
+				if (timer <= 0) {
+
+					timer = timer_save;
+
+					CmdSendFirstMessageId (GameObject.Find ("QuestDatabase").GetComponent<ConnectionClient> ().sendQueue.getMin (), SystemInfo.deviceUniqueIdentifier);
+
+				}
+			} else {
+				complete = true;
+				GameObject.Find ("QuestDatabase").SendMessage ("setNetworkIdentity", this);
+
+
+			}
+
+
+
+		}
+
+
+
+	}
+
+
+
+	[Command]
+	public void	CmdSendFirstMessageId (int id, string deviceid)
+	{
+
+		SendVariable v = new SendVariable ();
+		v.id = id;
+		v.messagetype = "setNextMessageId";
+		v.deviceid = deviceid;
+	
+
+		GameObject.Find ("MediaServer").SendMessage ("setExpectedMessageId", v);
+		RpcMessageSuccesful (-1);
+
+	}
+
 
 
 
@@ -37,9 +93,10 @@ public class networkactions : NetworkBehaviour {
 
 
 	[Command]
-	public void	CmdSendVar (int id, string deviceid, string var, string value, bool reset) {
+	public void	CmdSendVar (int id, string deviceid, string var, string value, bool reset)
+	{
 
-		SendVariable v = new SendVariable();
+		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "setVar";
 		v.deviceid = deviceid;
@@ -47,8 +104,8 @@ public class networkactions : NetworkBehaviour {
 		v.value = value;
 		v.resetid = reset;
 
-		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue", v);
-		RpcMessageSuccesful(id);
+		GameObject.Find ("MediaServer").SendMessage ("addSendVariableToQueue", v);
+		RpcMessageSuccesful (id);
 
 	}
 
@@ -56,9 +113,10 @@ public class networkactions : NetworkBehaviour {
 
 	
 	[Command]
-	public void	CmdSendFile (int id, string deviceid, string var, string filetype, byte[] file, bool reset) {
+	public void	CmdSendFile (int id, string deviceid, string var, string filetype, byte[] file, bool reset)
+	{
 		
-		SendVariable v = new SendVariable();
+		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "setFile";
 		v.deviceid = deviceid;
@@ -67,8 +125,8 @@ public class networkactions : NetworkBehaviour {
 		v.filetype = filetype;
 		v.bytes = file;
 		
-		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue", v);
-		RpcMessageSuccesful(id);
+		GameObject.Find ("MediaServer").SendMessage ("addSendVariableToQueue", v);
+		RpcMessageSuccesful (id);
 
 	}
 
@@ -79,9 +137,10 @@ public class networkactions : NetworkBehaviour {
 
 	
 	[Command]
-	public void	CmdAddToFile (int id, string deviceid, string var, string filetype, byte[] file, bool reset) {
+	public void	CmdAddToFile (int id, string deviceid, string var, string filetype, byte[] file, bool reset)
+	{
 		
-		SendVariable v = new SendVariable();
+		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "addToFile";
 		v.deviceid = deviceid;
@@ -90,8 +149,8 @@ public class networkactions : NetworkBehaviour {
 		v.filetype = filetype;
 		v.bytes = file;
 		
-		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue", v);
-		RpcMessageSuccesful(id);
+		GameObject.Find ("MediaServer").SendMessage ("addSendVariableToQueue", v);
+		RpcMessageSuccesful (id);
 
 	}
 
@@ -99,18 +158,19 @@ public class networkactions : NetworkBehaviour {
 
 	
 	[Command]
-	public void	CmdFinishFile (int id, string deviceid, string var, string filetype, bool reset) {
+	public void	CmdFinishFile (int id, string deviceid, string var, string filetype, bool reset)
+	{
 		
-		SendVariable v = new SendVariable();
+		SendVariable v = new SendVariable ();
 		v.id = id;
 		v.messagetype = "finishFile";
 		v.deviceid = deviceid;
 		v.var = var;
 		v.resetid = reset;
 		v.filetype = filetype;
-		GameObject.Find("MediaServer").SendMessage("addSendVariableToQueue", v);
+		GameObject.Find ("MediaServer").SendMessage ("addSendVariableToQueue", v);
 
-		RpcMessageSuccesful(id);
+		RpcMessageSuccesful (id);
 	}
 
 
@@ -118,35 +178,46 @@ public class networkactions : NetworkBehaviour {
 
 
 	[ClientRpc]
-	public void RpcMessageSuccesful (int id) {
+	public void RpcMessageSuccesful (int id)
+	{
 
-		GameObject.Find("QuestDatabase").SendMessage("messageReceived", id);
+		if (id == -1) {
+
+			receivedInitial = true;
+
+		}
+
+		GameObject.Find ("QuestDatabase").SendMessage ("messageReceived", id);
 
 	}
 
 
 
 	[Command]
-	public void	CmdAskForNextExpectedMessage (string deviceid) {
+	public void	CmdAskForNextExpectedMessage (string deviceid)
+	{
 
 		int expectedmessage = 0;
 
-		if ( PlayerPrefs.HasKey("nextmessage_" + deviceid) ) {
+		if (PlayerPrefs.HasKey ("nextmessage_" + deviceid)) {
 
 
-			expectedmessage = PlayerPrefs.GetInt("nextmessage_" + deviceid);
+			expectedmessage = PlayerPrefs.GetInt ("nextmessage_" + deviceid);
 
 		}
 
-		RpcReturnNextExpectedMessage(expectedmessage);
+		RpcReturnNextExpectedMessage (expectedmessage);
 
 	}
 
 
 	[ClientRpc]
-	public void RpcReturnNextExpectedMessage (int nextexpectedmessage) {
+	public void RpcReturnNextExpectedMessage (int nextexpectedmessage)
+	{
 
-		GameObject.Find("QuestDatabase").SendMessage("setExpectedNextMessage", nextexpectedmessage);
+	
+
+		GameObject.Find ("QuestDatabase").SendMessage ("setExpectedNextMessage", nextexpectedmessage);
 
 
 	}
@@ -154,9 +225,9 @@ public class networkactions : NetworkBehaviour {
 
 }
 
-
 [System.Serializable]
-public class SendVariable {
+public class SendVariable
+{
 
 	public int id;
 	public string messagetype;
