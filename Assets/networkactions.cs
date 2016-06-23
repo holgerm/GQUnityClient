@@ -7,11 +7,15 @@ public class networkactions : NetworkBehaviour {
 
 
 
-
+	void Awake () {
+		Debug.Log("NETWORKACTIONS Awake()");
+	}
 
 
 
 	void Start () {
+
+		Debug.Log("NETWORKACTION_OBJECT in Start gesetzt");
 
 		if ( GameObject.Find("QuestDatabase") != null ) {
 

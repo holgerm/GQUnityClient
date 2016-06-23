@@ -20,6 +20,7 @@ namespace GQ.Client.Net {
 		// TODO set directly in constructor via GameObject Find with Tag
 		public networkactions NetworkActionsObject {
 			set {
+				Debug.Log("SENDQUEUE set networkactionsobject");
 				_networkActionsObject = value;
 			}
 		}
@@ -51,6 +52,8 @@ namespace GQ.Client.Net {
 		}
 
 		private void send (SendQueueEntry message) {
+			Debug.Log("SENDQUEUE: send()");
+
 			message.timeout = _timeout;
 
 			if ( message.mode == SendQueueHelper.MODE_VALUE ) {

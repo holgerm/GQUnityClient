@@ -1256,8 +1256,6 @@ public class questdatabase : MonoBehaviour {
 
 	public void startQuest (Quest q) {
 
-		Debug.Log("Starting Quest " + q.name + " (" + q.id + ")");
-
 		closeMap();
 
 		currentquest = q;
@@ -1699,8 +1697,6 @@ public class questdatabase : MonoBehaviour {
 		// TODO: Here we create the THIRD Quest object (in download case). 
 		// We can only assume that q has an id here. Is this really a good idea? (hm)
 		Quest nq = q.LoadFromText(q.id, localload);
-
-		Debug.Log("XXX: back from LoadFromText()");
 
 		nq.id = q.id;
 		if ( nq == null ) {

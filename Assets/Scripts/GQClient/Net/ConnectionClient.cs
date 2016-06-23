@@ -105,7 +105,7 @@ namespace GQ.Client.Net {
 		}
 
 		public void setNetworkIdentity (networkactions na) {
-			networkActionsObject = na;
+			NetworkActionsObject = na;
 	
 			sendQueue.NetworkActionsObject = na;
 		}
