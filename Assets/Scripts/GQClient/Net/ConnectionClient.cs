@@ -20,6 +20,7 @@ namespace GQ.Client.Net {
 
 		public networkactions NetworkActionsObject {
 			set {
+				Debug.Log("CONNECTION_CLIENT set NWAO");
 				networkActionsObject = value;
 			}
 		}

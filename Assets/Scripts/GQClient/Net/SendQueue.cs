@@ -38,6 +38,8 @@ namespace GQ.Client.Net {
 		}
 
 		public void sendNext () {
+			Debug.Log("SENDQUEUE: sendNEXT()");
+
 			bool canSendMessage = true;
 			foreach ( SendQueueEntry sqe in _queue.GetRange(0, _queue.Count) ) {
 				if ( canSendMessage ) {
@@ -216,6 +218,8 @@ namespace GQ.Client.Net {
 		}
 
 		public bool startConnectingToServer () {
+			Debug.Log("SENDQUEUE: startConnectingToServer()");
+
 			if ( Count == 0 )
 				return false;
 
@@ -225,8 +229,11 @@ namespace GQ.Client.Net {
 
 
 
-			if ( !NetworkManager.singleton.IsClientConnected() )
+			if ( !NetworkManager.singleton.IsClientConnected() ) {
+				Debug.Log("SENDQUEUE: startConnectingToServer() BEFORE START CLIENT");
 				NetworkManager.singleton.StartClient();	
+				Debug.Log("SENDQUEUE: startConnectingToServer() AFTER START CLIENT");
+			}
 
 			return true;
 		}
