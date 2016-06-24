@@ -4,8 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-public class page_textquestion : MonoBehaviour
-{
+public class page_textquestion : MonoBehaviour {
 
 	
 	
@@ -17,81 +16,84 @@ public class page_textquestion : MonoBehaviour
 	public InputField input;
 	
 	// Use this for initialization
-	void Start ()
-	{
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+	void Start () {
+		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		textquestion = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
+		textquestion = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
 		
 		
-		if (textquestion.onStart != null) {
+		if ( textquestion.onStart != null ) {
 			
-			textquestion.onStart.Invoke ();
+			textquestion.onStart.Invoke();
 		}
 		
 		
 		
 		
-		questiontext.text = questdb.GetComponent<actions> ().formatString (textquestion.getAttribute ("question"));
+		questiontext.text = questdb.GetComponent<actions>().formatString(textquestion.getAttribute("question"));
 		
 
 	}
 
-	public void checkAnswerFinal ()
-	{
-		Debug.Log ("TextQuestion: START");
+	public void checkAnswerFinal () {
+		Debug.Log("TextQuestion: START");
 		
 		string x = input.text;
 
 		bool repeat = false;
 		
-		if (textquestion.hasAttribute ("loopUntilSuccess")) {
-			if (textquestion.getAttribute ("loopUntilSuccess") == "true") {
+		if ( textquestion.hasAttribute("loopUntilSuccess") ) {
+			if ( textquestion.getAttribute("loopUntilSuccess") == "true" ) {
 				repeat = true;
 			} 
 		}
 
-		if (textquestion.contents_answers.Count > 0) {
+		if ( textquestion.contents_answers.Count > 0 ) {
 
 			bool b = false;
 			bool match;
 
-			foreach (QuestContent y in textquestion.contents_answers) {
-				match = Regex.IsMatch (x, y.content, RegexOptions.IgnoreCase);
+			foreach ( QuestContent y in textquestion.contents_answers ) {
+				if ( x == null || y == null || y.content == null )
+					continue;
+				
+				match = Regex.IsMatch(x, y.content, RegexOptions.IgnoreCase);
 
-				Debug.Log ("TextQuestion: REGEXP " + x + " MATCH " + y.content + " -> " + match);
+				Debug.Log("TextQuestion: REGEXP " + x + " MATCH " + y.content + " -> " + match);
 
-				questdb.debug ("REGEXP " + x + " MATCH " + y.content + " -> " + match);
+				questdb.debug("REGEXP " + x + " MATCH " + y.content + " -> " + match);
 
-				if (questdb.GetComponent<actions> ().formatString (y.content) == x || match) {
+				if ( questdb.GetComponent<actions>().formatString(y.content) == x || match ) {
 					b = true;
-					Debug.Log ("TextQuestion: MATCHED");
+					Debug.Log("TextQuestion: MATCHED");
 				}
 
 
 			}
 
-			if (b) {
-				Debug.Log ("TextQuestion: SUCCESS");
+			if ( b ) {
+				Debug.Log("TextQuestion: SUCCESS");
 
 				textquestion.state = "succeeded";
 
-				onSuccess ();
-			} else {
+				onSuccess();
+			}
+			else {
 
-				Debug.Log ("TextQuestion: FAILURE");
+				Debug.Log("TextQuestion: FAILURE");
 
 				
-				if (!repeat) {
+				if ( !repeat ) {
 					textquestion.state = "failed";
 
-					onFailure ();
+					onFailure();
 				}
 
 			}
 	
-		} else {
+		}
+		else {
 
 			textquestion.state = "succeeded";
 
@@ -100,9 +102,9 @@ public class page_textquestion : MonoBehaviour
 		textquestion.result = x;
 
 
-		if (textquestion.state == "succeeded" || !repeat) {
+		if ( textquestion.state == "succeeded" || !repeat ) {
 
-			onEnd ();
+			onEnd();
 
 		}
 
@@ -111,49 +113,48 @@ public class page_textquestion : MonoBehaviour
 
 	}
 
-	public void onEnd ()
-	{
+	public void onEnd () {
 		
-		if (textquestion.state != "failed") {
+		if ( textquestion.state != "failed" ) {
 			textquestion.state = "succeeded";
 			
 		}
 		
-		if (textquestion.onEnd != null) {
+		if ( textquestion.onEnd != null ) {
 			
-			textquestion.onEnd.Invoke ();
-		} else if (!textquestion.onSuccess.hasMissionAction () && !textquestion.onFailure.hasMissionAction ()) {
+			textquestion.onEnd.Invoke();
+		}
+		else
+		if ( !textquestion.onSuccess.hasMissionAction() && !textquestion.onFailure.hasMissionAction() ) {
 			
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
 			
 		}
 		
 		
 	}
-	
-	public void onSuccess ()
-	{
+
+	public void onSuccess () {
 		
 		textquestion.state = "succeeded";
 		
 		
-		if (textquestion.onSuccess != null) {
+		if ( textquestion.onSuccess != null ) {
 			
-			textquestion.onSuccess.Invoke ();
+			textquestion.onSuccess.Invoke();
 		} 
 		
 		
 	}
 
-	public void onFailure ()
-	{
+	public void onFailure () {
 		
 		textquestion.state = "failed";
 		
 		
-		if (textquestion.onFailure != null) {
+		if ( textquestion.onFailure != null ) {
 			
-			textquestion.onFailure.Invoke ();
+			textquestion.onFailure.Invoke();
 		} 
 		
 		
