@@ -57,6 +57,7 @@ public class questdatabase : MonoBehaviour {
 	public List<string> savedmessages;
 	public List<WWW> routewwws;
 	public createquestbuttons buttoncontroller;
+	public bool individualReturnDefinitions = false;
 	public bool allowReturn = false;
 	public RectTransform messageCanvas;
 	public privacyAgreement privacyAgreementObject;
@@ -1862,10 +1863,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);

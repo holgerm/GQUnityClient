@@ -53,18 +53,7 @@ public class page_npctalk : MonoBehaviour {
 				npctalk.onStart.Invoke();
 			}
 
-
-			if ( questdb.allowReturn ) {
-				if ( questdb.currentquest.previouspages.Count == 0 ||
-				     questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] == null ) {
-					Destroy(backbutton.gameObject); 
-				}
-			}
-			else {
-				Destroy(backbutton.gameObject);
-			}
-
-
+			allowReturnOrNot();
 
 			if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
 
@@ -241,6 +230,29 @@ public class page_npctalk : MonoBehaviour {
 		}
 		
 		
+	}
+
+	/// <summary>
+	/// Create a back button with function to go back to the last page, if adequate. Depends on global quest setting individualReturnDefinitions and action attribute allowReturn.
+	/// </summary>
+	void allowReturnOrNot () {
+		bool allowReturn = false;
+		if ( questdb.individualReturnDefinitions ) {
+			allowReturn = 
+				questdb.allowReturn
+			&& questdb.currentquest.previouspages.Count > 0
+			&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null;
+		}
+		else {
+			allowReturn = 
+				questdb.currentquest.previouspages.Count > 0
+			&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null
+			&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("MultipleChoiceQuestion")
+			&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("TextQuestion");
+		}
+		if ( !allowReturn ) {
+			Destroy(backbutton.gameObject);
+		}
 	}
 
 	/// <summary>

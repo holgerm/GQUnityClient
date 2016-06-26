@@ -364,6 +364,14 @@ public class Quest  : IComparable<Quest> {
 		
 	}
 
+	public bool getBoolAttribute (string attName) {
+		string attValue = getAttribute(attName);
+		if ( attValue.Trim().Equals("") || attValue.Equals("0") || attValue.ToLower().Equals("false") )
+			return false;
+		else
+			return true;
+	}
+
 	public string getMeta (string k) {
 		if ( metadata != null ) {
 			foreach ( QuestMetaData qa in metadata ) {

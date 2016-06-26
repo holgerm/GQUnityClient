@@ -835,34 +835,11 @@ public class actions : MonoBehaviour {
 
 
 
-		if ( questdb.currentquest.hasAttribute("individualReturnDefinitions")
-		     && questdb.currentquest.getAttribute(("individualReturnDefinitions")) == "true" ) {
+		if ( questdb.currentquest.hasAttribute("individualReturnDefinitions") )
+			questdb.individualReturnDefinitions = questdb.currentquest.getBoolAttribute("individualReturnDefinitions");
 
-			if ( action.getAttribute("allowReturn") != "" ) {
-
-				if ( action.getAttribute("allowReturn") == "0" ) {
-					questdb.allowReturn = false;
-
-
-				}
-				else {
-					questdb.allowReturn = true;
-
-				}
-
-			}
-			else {
-
-				questdb.allowReturn = true;
-
-			}
-
-		}
-		else {
-
-			questdb.allowReturn = true;
-
-		}
+		if ( action.hasAttribute("allowReturn") )
+			questdb.allowReturn = action.getBoolAttribute("allowReturn");
 
 		questdb.changePage(int.Parse(action.getAttribute("id")));
 	
