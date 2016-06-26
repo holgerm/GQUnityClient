@@ -12,6 +12,7 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
+using GQ.Client.Conf;
 
 [System.Serializable]
 [XmlRoot("game")]

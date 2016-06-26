@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
-using GQ.Conf;
+using GQ.Client.Conf;
 using System;
 using System.Globalization;
 
-namespace GQ.ET {
+namespace GQ.Build {
 	[InitializeOnLoad]
 	public class BuildStartHook {
 		static BuildStartHook () {

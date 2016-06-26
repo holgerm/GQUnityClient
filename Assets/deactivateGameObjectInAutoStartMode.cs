@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GQ.Client.Conf;
 
 public class deactivateGameObjectInAutoStartMode : MonoBehaviour {
 
@@ -8,18 +9,19 @@ public class deactivateGameObjectInAutoStartMode : MonoBehaviour {
 	public bool orActivate = false;
 
 
-	void Start(){
+	void Start () {
 
 
-		if (Configuration.instance.autostartQuestID != 0) {
+		if ( Configuration.instance.autostartQuestID != 0 ) {
 
 
-			gameObject.SetActive (orActivate);
+			gameObject.SetActive(orActivate);
 
 
-		} else {
+		}
+		else {
 
-			gameObject.SetActive (!orActivate);
+			gameObject.SetActive(!orActivate);
 
 
 		}

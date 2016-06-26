@@ -6,6 +6,7 @@ using System;
 
 using UnityEngine.Networking;
 using GQ.Client.Net;
+using GQ.Client.Conf;
 
 public class actions : MonoBehaviour {
 

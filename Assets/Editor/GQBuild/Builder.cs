@@ -4,13 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
-using GQ.Conf;
-using GQ.ET;
+using GQ.Client.Conf;
 
-namespace Product
-{
-	public class Builder
-	{
+namespace GQ.Build {
+	public class Builder {
 		const string UNITY_IOS_ProjectFileName = "Unity-iPhone.xcodeproj";
 
 		static string productID = "default";
@@ -25,59 +22,60 @@ namespace Product
 			}
 		}
 
-//		static Dictionary<string, string> productNames = new Dictionary<string, string> () {
-//			{
-//				"default", 
-//				"GeoQuest"
-//			},
-//			{
-//				"carlbenz", 
-//				"Carl Benz"
-//			},
-//			{
-//				"wcc",
-//				"WCC Regio Bonn"
-//			},
-//			{
-//				"ebk",
-//				"GeoQuest"
-//			},
-//			{
-//				"phka",
-//				"EduQuest"
-//			},
-//			{
-//				"public",
-//				"GeoQuest"
-//			},
-//			{
-//				"intern",
-//				"GeoQuest"
-//			},
-//			{
-//				"lwl",
-//				"LWL GeoQuest"
-//			}
-//		};
-//
-//		static string getProductName ()
-//		{
-//			string name;
-//			if (!productNames.TryGetValue (ProductID, out name)) {
-//				Debug.LogError ("ERROR: Unknown product ID: " + ProductID);
-//			}
-//			return name;
-//		}
+		//		static Dictionary<string, string> productNames = new Dictionary<string, string> () {
+		//			{
+		//				"default",
+		//				"GeoQuest"
+		//			},
+		//			{
+		//				"carlbenz",
+		//				"Carl Benz"
+		//			},
+		//			{
+		//				"wcc",
+		//				"WCC Regio Bonn"
+		//			},
+		//			{
+		//				"ebk",
+		//				"GeoQuest"
+		//			},
+		//			{
+		//				"phka",
+		//				"EduQuest"
+		//			},
+		//			{
+		//				"public",
+		//				"GeoQuest"
+		//			},
+		//			{
+		//				"intern",
+		//				"GeoQuest"
+		//			},
+		//			{
+		//				"lwl",
+		//				"LWL GeoQuest"
+		//			}
+		//		};
+		//
+		//		static string getProductName ()
+		//		{
+		//			string name;
+		//			if (!productNames.TryGetValue (ProductID, out name)) {
+		//				Debug.LogError ("ERROR: Unknown product ID: " + ProductID);
+		//			}
+		//			return name;
+		//		}
 
 		// TODO make an environment var etc.
 
 		private static string PRODUCTS_DIR = "Production/products/";
 		private static string PRODUCT_ASSETS_DIR = "Assets/Editor/products/";
-		private static Dictionary<BuildTarget, List<int>> appIconSizes = new Dictionary<BuildTarget, List<int>> ()
-		{
-			{ 
+		private static Dictionary<BuildTarget, List<int>> appIconSizes = new Dictionary<BuildTarget, List<int>>() { { 
 				BuildTarget.Android, 
-				new List<int>() { 192, 144, 96, 72, 48, 36 }
+				new List<int>() {
+					192,
+						144,
+					96, 72, 48, 36 }
 			},
 			{ 
 				BuildTarget.iOS, 

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 using System;
+using GQ.Client.Conf;
 
 public class showimpressum : MonoBehaviour {
 

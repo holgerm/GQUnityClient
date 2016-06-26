@@ -14162,7 +14162,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 1425578965}
   m_Layer: 5
-  m_Name: Loading_public
+  m_Name: Loading_geoquest
   m_TagString: ProductSpecific
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

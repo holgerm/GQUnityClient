@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using GQ.Client.Conf;
 
 public class loadTopLogo : MonoBehaviour {
 
@@ -10,7 +11,7 @@ public class loadTopLogo : MonoBehaviour {
 	
 
 
-		GetComponent<Image> ().sprite = Configuration.instance.toplogo;
+		GetComponent<Image>().sprite = Configuration.instance.toplogo;
 	}
 	
 

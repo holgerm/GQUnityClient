@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using GQ.Client.Conf;
 
 public class beendenbutton : MonoBehaviour {
 
@@ -13,7 +14,7 @@ public class beendenbutton : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
 
 	}
@@ -21,26 +22,30 @@ public class beendenbutton : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-		if (questdb == null) {
+		if ( questdb == null ) {
 
-			if(GameObject.Find ("QuestDatabase") != null){
-			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+			if ( GameObject.Find("QuestDatabase") != null ) {
+				questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 			}
 
-		} else if (questdb.currentquest != null) {
+		}
+		else
+		if ( questdb.currentquest != null ) {
 
 			GetComponent<Image>().enabled = true;
 			GetComponent<Button>().enabled = true;
 			GetComponentInChildren<Text>().enabled = true;
 
-			if (Configuration.instance.questvisualization == "map") {
+			if ( Configuration.instance.questvisualization == "map" ) {
 				
 				GetComponentInChildren<Text>().text = "Zurück zur Karte";
-			} else {
+			}
+			else {
 				GetComponentInChildren<Text>().text = "Beenden";
 
 			}
-		} else {
+		}
+		else {
 
 			GetComponent<Image>().enabled = false;
 			GetComponent<Button>().enabled = false;

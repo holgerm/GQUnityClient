@@ -4,13 +4,13 @@ using UnityEngine;
 using System.IO;
 using System.Linq;
 using LitJson;
-using GQ.Conf;
 using System;
 using System.Text;
 using System.Reflection;
 using GQ.Util;
+using GQ.Client.Conf;
 
-namespace GQ.ET {
+namespace GQ.Build {
 	public class ProductEditor : EditorWindow {
 		static private int selectedProductIndex;
 		static private string[] productIDs;
@@ -52,7 +52,7 @@ namespace GQ.ET {
 					try {
 						#if !UNITY_WEBPLAYER
 						Files.CopyImage(ProductConfigManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, 
-						                PLACEHOLDERS_SPLASHSCREEN_FILE);
+							PLACEHOLDERS_SPLASHSCREEN_FILE);
 						#endif
 					} catch ( Exception exc ) {
 					}

@@ -6,7 +6,7 @@ using System.IO;
 using LitJson;
 using System.Text;
 
-namespace GQ.Conf {
+namespace GQ.Client.Conf {
 	public class ProductConfigManager {
 
 		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources/";

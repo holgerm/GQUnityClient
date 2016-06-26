@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GQ.Client.Conf;
 
-public class removeQuestButton : MonoBehaviour
-{
+public class removeQuestButton : MonoBehaviour {
 
 	// Use this for initialization
-	void Start ()
-	{
+	void Start () {
 	
 
-		if (!Configuration.instance.localQuestsDeletable) {
+		if ( !Configuration.instance.localQuestsDeletable ) {
 
-			gameObject.SetActive (false);
+			gameObject.SetActive(false);
 
 		}
 

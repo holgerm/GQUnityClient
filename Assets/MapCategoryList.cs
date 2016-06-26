@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using GQ.Client.Conf;
 
 public class MapCategoryList : MonoBehaviour {
 
