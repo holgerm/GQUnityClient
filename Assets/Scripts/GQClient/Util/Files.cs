@@ -4,6 +4,13 @@ using UnityEngine;
 namespace GQ.Util {
 	public static class Files {
 
+		#region Extensions and Separators
+
+		/// <summary>
+		/// Unity uses for path separators on all platforms the forward slash even on Windows.
+		/// </summary>
+		public const string PATH_ELEMENT_SEPARATOR = "/";
+
 		/// <summary>
 		/// Allowed file extensions for image files (".img", ".jpg", ".psd").
 		/// </summary>
@@ -12,6 +19,41 @@ namespace GQ.Util {
 			".jpg",
 			".psd"
 		};
+
+		public static string StripExtension (string filename) {
+			int lastDotIndex = filename.LastIndexOf('.');
+
+			if ( filename.Equals(".") || filename.Equals("..") || lastDotIndex <= 0 )
+				return filename;
+						
+			string strippedFilename = filename.Substring(0, filename.LastIndexOf('.'));
+
+			if ( strippedFilename.Equals("") )
+				return filename;
+			else
+				return strippedFilename;
+		}
+
+		public static string Extension (string filename) {
+			int lastDotIndex = filename.LastIndexOf('.');
+
+			if ( lastDotIndex <= 0 )
+				return "";
+
+			return filename.Substring(lastDotIndex + 1);
+		}
+
+		public static string ExtensionSeparator (string filename) {
+			int lastDotIndex = filename.LastIndexOf('.');
+
+			if ( filename.Equals(".") || filename.Equals("..") || lastDotIndex <= 0 )
+				return "";
+			else
+				return ".";
+			
+		}
+
+		#endregion
 
 		#if !UNITY_WEBPLAYER
 
