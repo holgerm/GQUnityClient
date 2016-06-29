@@ -42,6 +42,8 @@ public class categoryFilterList : MonoBehaviour {
 				cF.transform.localScale = Vector3.one;
 				cF.category = qmc;
 
+				filter.Add (cF);
+
 			}
 
 

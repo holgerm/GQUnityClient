@@ -5,7 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using GQ.Client.Conf;
 
-public class categoryFilter : MonoBehaviour {
+public class categoryFilter : MonoBehaviour
+{
 
 	public QuestMetaCategory category;
 
@@ -24,13 +25,14 @@ public class categoryFilter : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
-		updateName();
+	void Start ()
+	{
+		updateName ();
 
 
-		if ( prefab != null ) {
+		if (prefab != null) {
 
-			instantiateItems();
+			instantiateItems ();
 
 		}
 	
@@ -40,41 +42,41 @@ public class categoryFilter : MonoBehaviour {
 
 
 
-	public void updateName () {
+	public void updateName ()
+	{
 
-		if ( old != null ) {
+		if (old != null) {
 
-			old.updateName();
+			old.updateName ();
 		}
 
 		title.text = category.name;
 
-		if ( chosen != null ) {
+		if (chosen != null) {
 			chosen.text = "";
 			List<string> display = category.chosenValues;
-			if ( display != null && display.Count > 0 ) {
+			if (display != null && display.Count > 0) {
 
 
-				if ( display.Count > 0 ) {
+				if (display.Count > 0) {
 
-					foreach ( string s in display ) {
-						if ( chosen.text.Length < 40 ) {
+					foreach (string s in display) {
+						if (chosen.text.Length < 40) {
 							chosen.text += s + ", ";
 						}
 
 					}
 
-					chosen.text = chosen.text.Substring(0, chosen.text.Length - 2);
+					chosen.text = chosen.text.Substring (0, chosen.text.Length - 2);
 
 				}
-				if ( chosen.text.Length >= 40 ) {
+				if (chosen.text.Length >= 40) {
 			
 					chosen.text += "...";
 
 				}
 
-			}
-			else {
+			} else {
 				chosen.text = "Alle";
 
 			}
@@ -83,15 +85,19 @@ public class categoryFilter : MonoBehaviour {
 	}
 
 
-	public void instantiateItems () {
+	public void instantiateItems ()
+	{
 
-		foreach ( string s in category.possibleValues ) {
+		foreach (string s in category.possibleValues) {
 
-			categoryFilterItem cFI = Instantiate(prefab);
-			cFI.transform.SetParent(listParent, false);
-			cFI.transform.localScale = Vector3.one;
-			cFI.filterName = s;
-			cFI.filter = this;
+			if (s != "") {
+
+				categoryFilterItem cFI = Instantiate (prefab);
+				cFI.transform.SetParent (listParent, false);
+				cFI.transform.localScale = Vector3.one;
+				cFI.filterName = s;
+				cFI.filter = this;
+			}
 
 		}
 
@@ -100,15 +106,19 @@ public class categoryFilter : MonoBehaviour {
 	}
 
 
-	public void instantianteFilter () {
 
 
 
-		if ( prefab2 != null ) {
+	public void instantianteFilter ()
+	{
 
-			categoryFilter cF = Instantiate(prefab2);
 
-			cF.transform.SetParent(GameObject.Find("ImpressumCanvas").transform, false);
+
+		if (prefab2 != null) {
+
+			categoryFilter cF = Instantiate (prefab2);
+
+			cF.transform.SetParent (GameObject.Find ("ImpressumCanvas").transform, false);
 			cF.transform.localScale = Vector3.one;
 			cF.old = this;
 			cF.category = category;
@@ -118,9 +128,10 @@ public class categoryFilter : MonoBehaviour {
 	}
 
 
-	public void destroyMe () {
+	public void destroyMe ()
+	{
 
-		Destroy(gameObject);
+		Destroy (gameObject);
 	}
 
 
