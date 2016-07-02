@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
+using System;
 
 namespace GQ.Util {
 	public static class Files {
@@ -50,7 +51,6 @@ namespace GQ.Util {
 				return "";
 			else
 				return ".";
-			
 		}
 
 		#endregion
@@ -143,6 +143,28 @@ namespace GQ.Util {
 					copied = true;
 				}
 				i++;
+			}
+		}
+
+		/// <summary>
+		/// Copies the directory and overwrites if target already exists.
+		/// </summary>
+		/// <returns><c>true</c>, if directory was copyed, <c>false</c> otherwise.</returns>
+		/// <param name="originalDirPath">Original dir path.</param>
+		/// <param name="targetPath">Target path must denote the path of the target dir that not exists yet.</param>
+		public static void CopyDirectory (string originalDirPath, string targetPath) {
+			DirectoryInfo origin = new DirectoryInfo(originalDirPath);
+			if ( !origin.Exists ) {
+				throw new ArgumentException("Can not copy from the non existing directory path: " + originalDirPath);
+			}
+			DirectoryInfo target = new DirectoryInfo(targetPath);
+			if ( target.Exists ) {
+				target.Delete(true);
+			}
+
+			target.Create();
+			foreach ( var file in origin.GetFiles() ) {
+				file.CopyTo(target.FullName + PATH_ELEMENT_SEPARATOR + file.Name);
 			}
 		}
 

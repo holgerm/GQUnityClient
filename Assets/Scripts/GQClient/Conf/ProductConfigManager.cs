@@ -11,7 +11,7 @@ namespace GQ.Client.Conf {
 
 		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources/";
 		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "product";
-		public const string PRODUCT_FILE = "product.json";
+		public const string PRODUCT_FILE = "Product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + BUILD_TIME_FILE_NAME + ".txt";
 
@@ -79,15 +79,23 @@ namespace GQ.Client.Conf {
 		}
 
 		public static Config deserialize () {
+			return deserialize(RUNTIME_PRODUCT_DIR);
+		}
+
+		public static Config deserialize (string productDirPath) {
+			if ( !productDirPath.EndsWith("/") )
+				productDirPath = productDirPath + "/";
+			
 			if ( !File.Exists(RUNTIME_PRODUCT_FILE + ".json") ) {
-				throw new ArgumentException("Config JSON File Missing! Please provide one at " + RUNTIME_PRODUCT_FILE + ".json");
+				throw new ArgumentException("Config JSON File Missing! Please provide one at " + productDirPath + PRODUCT_FILE);
 			}
 
 			TextAsset configAsset = Resources.Load("product") as TextAsset;
 
 			if ( configAsset == null ) {
-				throw new ArgumentException("Config JSON File does not represent a loadable asset. Cf. " + RUNTIME_PRODUCT_FILE + ".json");
+				throw new ArgumentException("Config JSON File does not represent a loadable asset. Cf. " + productDirPath + PRODUCT_FILE);
 			}
+
 			current = JsonMapper.ToObject<Config>(configAsset.text);
 			return current;
 		}

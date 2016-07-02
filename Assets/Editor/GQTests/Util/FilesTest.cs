@@ -2,6 +2,7 @@
 using UnityEditor;
 using NUnit.Framework;
 using GQ.Util;
+using System.IO;
 
 namespace GQTests.Util {
 
@@ -115,5 +116,45 @@ namespace GQTests.Util {
 		private string reassemble (string filename) {
 			return Files.StripExtension(filename) + Files.ExtensionSeparator(filename) + Files.Extension(filename);
 		}
+
+		#region Copy Directory
+
+		[Test]
+		public void CopyDirectoryEmpty () {
+			// Arrange:
+			string origin = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Origins/Empty";
+			string target = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Targets/Empty";
+			if ( Directory.Exists(target) )
+				Directory.Delete(target, true);
+
+			// Act & Assert:
+			Assert.DoesNotThrow(() => Files.CopyDirectory(origin, target));
+			Assert.That(Directory.Exists(target));
+
+			// Clean:
+			Directory.Delete(target, true);
+		}
+
+		[Test]
+		public void CopyDirectoryWithFiles () {
+			// Arrange:
+			string origin = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Origins/SomeFiles/";
+			string target = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Targets/SomeFiles/";
+			if ( Directory.Exists(target) )
+				Directory.Delete(target, true);
+
+			// Act & Assert:
+			Assert.DoesNotThrow(() => Files.CopyDirectory(origin, target));
+			Assert.That(Directory.Exists(target));
+			foreach ( string filePath in Directory.GetFiles(origin) ) {
+				string targetFile = target + Path.GetFileName(filePath);
+				Assert.That(File.Exists(targetFile), targetFile + " should exist.");
+			}
+
+			// Clean:
+			Directory.Delete(target, true);
+		}
+
+		#endregion
 	}
 }

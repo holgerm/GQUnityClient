@@ -82,26 +82,5 @@ namespace GQTests.Testing {
 				GQAssert.UniqueNameInDir("file", BASE_DIR + "FolderFile012346"), 
 				"Unique filename should be 'file5' since that name does not exist yet.");
 		}
-
-		[Test]
-		public void TestFileExistsAt () {
-			// Arrange:
-			string BASE_DIR = GQAssert.TEST_DATA_BASE_DIR + "GQAssertTest/FileOrDirExistsAt/";
-
-			// Assert:
-			Assert.That(GQAssert.FileExistsAt(BASE_DIR + "ExistingFile"));
-			Assert.That(!GQAssert.FileExistsAt(BASE_DIR + "NonExistingFile"));
-
-		}
-
-		[Test]
-		public void TestDirectoryExistsAt () {
-			// Arrange:
-			string BASE_DIR = GQAssert.TEST_DATA_BASE_DIR + "GQAssertTest/FileOrDirExistsAt/";
-
-			// Assert:
-			Assert.That(GQAssert.DirectoryExistsAt(BASE_DIR + "ExistingDir"));
-			Assert.That(!GQAssert.DirectoryExistsAt(BASE_DIR + "NonExistingDir"));
-		}
 	}
 }
