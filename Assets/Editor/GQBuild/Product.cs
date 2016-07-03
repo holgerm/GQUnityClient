@@ -75,20 +75,25 @@ namespace GQ.Build {
 		/// <param name="id">Identifier.</param>
 		/// <param name="dir">Dir.</param>
 		internal Product (string dirPath) {
+			initIDAndDir(dirPath);
+			initConfig();
+		}
+
+		private void initIDAndDir (string dirPath) {
 			if ( !Directory.Exists(dirPath) )
 				throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
-
 			if ( dirPath.EndsWith("/") )
 				dirPath = dirPath.Substring(0, dirPath.Length);
-
 			string name = dirPath.Substring(dirPath.LastIndexOf('/') + 1);
 			if ( !IsValid(name) )
 				throw new ArgumentException("Invalid product name: " + name);
 			_id = name;
-
 			string productDir = dirPath.Substring(0, dirPath.LastIndexOf('/'));
-
 			_dir = Files.CombinePath(productDir, name);
+		}
+
+		private void initConfig () {
+			
 		}
 
 		static internal bool IsValid (string name) {
