@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using GQ.Util;
+using UnityEngine;
 
 namespace GQ.Build {
 	public class ProductManager {
@@ -16,7 +17,7 @@ namespace GQ.Build {
 		/// <summary>
 		/// This is the template for new products which is copied when we create a new product. It should contain a complete product definition.
 		/// </summary>
-		public const string TEMPLATE_PRODUCT_PATH = "Assets/Editor/productsDefault/";
+		public const string TEMPLATE_PRODUCT_PATH = "Assets/Editor/productsTemplate/templateProduct";
 
 		static private string _productsDirPath = PRODUCTS_DIR_PATH_DEFAULT;
 
@@ -103,7 +104,7 @@ namespace GQ.Build {
 			// copy default template files to a new product folder:
 			Files.CopyDirectory(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
-			Product newProduct = Product.createFromDirectory(newProductDirPath);
+			Product newProduct = new Product(newProductDirPath);
 			_productDict.Add(newProductID, newProduct);
 			return newProduct;
 		}

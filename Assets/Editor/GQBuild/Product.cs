@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using GQ.Util;
 using GQ.Client.Conf;
+using UnityEngine;
 
 namespace GQ.Build {
 
@@ -27,6 +28,10 @@ namespace GQ.Build {
 
 		private string _dir;
 
+		/// <summary>
+		/// Directory path for this product.
+		/// </summary>
+		/// <value>The dir.</value>
 		public string Dir {
 			get {
 				return (_dir);
@@ -69,12 +74,7 @@ namespace GQ.Build {
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <param name="dir">Dir.</param>
-		private Product (string id, string dir) {
-			this._id = id;
-			_dir = Files.CombinePath(dir, id);
-		}
-
-		static public Product createFromDirectory (string dirPath) {
+		internal Product (string dirPath) {
 			if ( !Directory.Exists(dirPath) )
 				throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
 
@@ -82,11 +82,13 @@ namespace GQ.Build {
 				dirPath = dirPath.Substring(0, dirPath.Length);
 
 			string name = dirPath.Substring(dirPath.LastIndexOf('/') + 1);
-			string productDir = dirPath.Substring(0, dirPath.LastIndexOf('/'));
 			if ( !IsValid(name) )
 				throw new ArgumentException("Invalid product name: " + name);
+			_id = name;
 
-			return new Product(name, productDir);
+			string productDir = dirPath.Substring(0, dirPath.LastIndexOf('/'));
+
+			_dir = Files.CombinePath(productDir, name);
 		}
 
 		static internal bool IsValid (string name) {
