@@ -39,11 +39,11 @@ namespace GQTests {
 		}
 
 		private static bool checkIfNameExistsInDir (string nameToCheck, string dir) {
-			FileInfo fileWithSameName = new FileInfo(dir + Files.PATH_ELEMENT_SEPARATOR + nameToCheck);
+			FileInfo fileWithSameName = new FileInfo(Files.CombinePath(dir, nameToCheck));
 			if ( fileWithSameName.Exists )
 				return true;
 
-			DirectoryInfo dirWithSameName = new DirectoryInfo(dir + Files.PATH_ELEMENT_SEPARATOR + nameToCheck);
+			DirectoryInfo dirWithSameName = new DirectoryInfo(Files.CombinePath(dir, nameToCheck));
 			return dirWithSameName.Exists;
 		}
 

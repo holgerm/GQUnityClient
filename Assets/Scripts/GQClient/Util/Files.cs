@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using UnityEngine;
 using System;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace GQ.Util {
 	public static class Files {
@@ -10,7 +12,7 @@ namespace GQ.Util {
 		/// <summary>
 		/// Unity uses for path separators on all platforms the forward slash even on Windows.
 		/// </summary>
-		public const string PATH_ELEMENT_SEPARATOR = "/";
+		private const string PATH_ELEMENT_SEPARATOR = "/";
 
 		/// <summary>
 		/// Allowed file extensions for image files (".img", ".jpg", ".psd").
@@ -51,6 +53,32 @@ namespace GQ.Util {
 				return "";
 			else
 				return ".";
+		}
+
+		/// <summary>
+		/// Combines the path segments given. The first argument can be an absolute path, the follwing are always treated as relative: leading "/" are ignored.
+		/// </summary>
+		/// <returns>The path.</returns>
+		/// <param name="basePath">Base path.</param>
+		/// <param name="relPathsToAppend">Rel paths to append.</param>
+		public static string CombinePath (string basePath, params string[] relPathsToAppend) {
+			StringBuilder combinedPath = new StringBuilder();
+			combinedPath.Append(basePath);
+
+			for ( int i = 0; i < relPathsToAppend.Length; i++ ) {
+				string curSegment = relPathsToAppend[i].Trim();
+
+				if ( curSegment.Equals("") )
+					continue;
+
+				// add separator only if already some path gathered:
+				if ( !combinedPath.ToString().Equals("") )
+					combinedPath.Append(PATH_ELEMENT_SEPARATOR);
+
+				combinedPath.Append(curSegment);
+			}
+
+			return Regex.Replace(combinedPath.ToString(), "/+", PATH_ELEMENT_SEPARATOR);
 		}
 
 		#endregion

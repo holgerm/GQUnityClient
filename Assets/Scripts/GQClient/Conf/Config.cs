@@ -1,4 +1,8 @@
 namespace GQ.Client.Conf {
+	/// <summary>
+	/// Config class specifies thetextual parameters of a product. It is used both at runtime to initilize the app's branding details from and 
+	/// at editor time to back the product editor view and store the parameters while we use the editor.
+	/// </summary>
 	public class Config {
 		//////////////////////////////////
 		// THE ACTUAL PRODUCT CONFIG DATA:	

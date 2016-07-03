@@ -8,6 +8,8 @@ namespace GQTests.Util {
 
 	public class FilesTest {
 
+		#region Extensions
+
 		[Test]
 		public void StripExtension () {
 			//Assert
@@ -116,6 +118,33 @@ namespace GQTests.Util {
 		private string reassemble (string filename) {
 			return Files.StripExtension(filename) + Files.ExtensionSeparator(filename) + Files.Extension(filename);
 		}
+
+		#endregion
+
+		#region Path
+
+		[Test]
+		public void CombinePath () {
+			// Assert:
+			Assert.AreEqual(
+				"some/simple/path/to/a/file.txt", 
+				Files.CombinePath("some", "simple", "path", "to", "a", "file.txt"));
+			Assert.AreEqual(
+				"some/simple/path/to/a/file.txt", 
+				Files.CombinePath("some/", "simple/", "path/", "to/", "a/", "file.txt"));
+			Assert.AreEqual(
+				"some/simple/path/to/a/file.txt", 
+				Files.CombinePath("some/", "/simple/", "/path/", "/to/", "/a/", "/file.txt"),
+				"Additional path segments should be treated as relative paths.");
+			Assert.AreEqual(
+				"/absolute/some/simple/path/to/a/file.txt", 
+				Files.CombinePath("/absolute", "some", "simple", "path", "to", "a", "file.txt"));
+			Assert.AreEqual(
+				"file.txt", 
+				Files.CombinePath("", "", "", "", "", "file.txt"));
+		}
+
+		#endregion
 
 		#region Copy Directory
 

@@ -16,7 +16,7 @@ namespace GQ.Build {
 		/// <summary>
 		/// This is the template for new products which is copied when we create a new product. It should contain a complete product definition.
 		/// </summary>
-		public const string DEFAULT_PRODUCT_PATH = "Assets/Editor/productsDefault/";
+		public const string TEMPLATE_PRODUCT_PATH = "Assets/Editor/productsDefault/";
 
 		static private string _productsDirPath = PRODUCTS_DIR_PATH_DEFAULT;
 
@@ -94,14 +94,14 @@ namespace GQ.Build {
 				throw new ArgumentException("Invalid product id: " + newProductID);
 			}
 
-			string newProductDirPath = ProductsDirPath + newProductID;
+			string newProductDirPath = Files.CombinePath(ProductsDirPath, newProductID);
 
 			if ( Directory.Exists(newProductDirPath) ) {
-				throw new ArgumentException("Product name already used: " + newProductID);
+				throw new ArgumentException("Product name already used: " + newProductID + " in: " + newProductDirPath);
 			}
 
 			// copy default template files to a new product folder:
-			Files.CopyDirectory(DEFAULT_PRODUCT_PATH, newProductDirPath);
+			Files.CopyDirectory(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
 			Product newProduct = Product.createFromDirectory(newProductDirPath);
 			_productDict.Add(newProductID, newProduct);

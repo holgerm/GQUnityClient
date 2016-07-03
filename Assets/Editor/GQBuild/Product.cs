@@ -35,25 +35,25 @@ namespace GQ.Build {
 
 		public string AppIconPath {
 			get {
-				return (Dir + Files.PATH_ELEMENT_SEPARATOR + "AppIcon.png");
+				return Files.CombinePath(Dir, "AppIcon.png");
 			}
 		}
 
 		public string SplashScreenPath {
 			get {
-				return (Dir + Files.PATH_ELEMENT_SEPARATOR + "SplashScreen.jpg");
+				return Files.CombinePath(Dir, "SplashScreen.jpg");
 			}
 		}
 
 		public string TopLogoPath {
 			get {
-				return (Dir + Files.PATH_ELEMENT_SEPARATOR + "TopLogo.jpg");
+				return Files.CombinePath(Dir, "TopLogo.jpg");
 			}	
 		}
 
 		public string ConfigPath {
 			get {
-				return (Dir + Files.PATH_ELEMENT_SEPARATOR + ProductConfigManager.PRODUCT_FILE);
+				return Files.CombinePath(Dir, ProductConfigManager.PRODUCT_FILE);
 			}	
 		}
 
@@ -71,7 +71,7 @@ namespace GQ.Build {
 		/// <param name="dir">Dir.</param>
 		private Product (string id, string dir) {
 			this._id = id;
-			_dir = dir + Files.PATH_ELEMENT_SEPARATOR + id;
+			_dir = Files.CombinePath(dir, id);
 		}
 
 		static public Product createFromDirectory (string dirPath) {
