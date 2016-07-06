@@ -1,0 +1,16 @@
+
+{
+    "id" : "product3",
+    "name" : "Product3",
+    "portal" : 333,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 60,
+    "nameForQuest"           : "Quest",
+    "questVisualization"     : "list",
+    "questVisualizationChangeable" : true,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : true,
+    "showNetConnectionWarning"     : false,
+    "colorProfile"                 : "default"
+}

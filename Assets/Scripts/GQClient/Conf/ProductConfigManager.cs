@@ -11,7 +11,7 @@ namespace GQ.Client.Conf {
 
 		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources/";
 		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "product";
-		public const string PRODUCT_FILE = "Product.json";
+		public const string CONFIG_FILE = "Product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + BUILD_TIME_FILE_NAME + ".txt";
 
@@ -87,13 +87,13 @@ namespace GQ.Client.Conf {
 				productDirPath = productDirPath + "/";
 			
 			if ( !File.Exists(RUNTIME_PRODUCT_FILE + ".json") ) {
-				throw new ArgumentException("Config JSON File Missing! Please provide one at " + productDirPath + PRODUCT_FILE);
+				throw new ArgumentException("Config JSON File Missing! Please provide one at " + productDirPath + CONFIG_FILE);
 			}
 
 			TextAsset configAsset = Resources.Load("product") as TextAsset;
 
 			if ( configAsset == null ) {
-				throw new ArgumentException("Config JSON File does not represent a loadable asset. Cf. " + productDirPath + PRODUCT_FILE);
+				throw new ArgumentException("Config JSON File does not represent a loadable asset. Cf. " + productDirPath + CONFIG_FILE);
 			}
 
 			current = JsonMapper.ToObject<Config>(configAsset.text);
