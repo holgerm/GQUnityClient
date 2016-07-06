@@ -63,6 +63,7 @@ namespace GQ.Editor.UI {
 
 		public void OnProjectChange () {
 			// make some saves?
+			// TODO: rescan products folder
 			Debug.Log("EDITOR.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
 		}
 
@@ -86,6 +87,12 @@ namespace GQ.Editor.UI {
 			string[] productIds = pm.AllProductIds.ToArray<string>();
 			int newIndex = EditorGUILayout.Popup("Available Products:", selectedProductIndex, productIds);
 			selectProduct(newIndex);
+			EditorGUILayout.BeginHorizontal();
+			if ( GUILayout.Button("Build") ) {
+				pm.SetProductForBuild(pm.AllProductIds.ElementAt(selectedProductIndex));
+			}
+			;
+			EditorGUILayout.EndHorizontal();
 		}
 
 		void selectProduct (int index) {

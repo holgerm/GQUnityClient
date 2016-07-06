@@ -18,7 +18,7 @@ public class ShowVersion : MonoBehaviour {
 			text.text = String.Format("{0}.{1} ({2})", 
 				Configuration.instance.appVersion.ToString(), 
 				Configuration.instance.subversionNumber,
-				ProductConfigManager.Buildtime);
+				ConfigurationManager.Buildtime);
 		}
 		else {
 			Debug.LogError("Text component missing or not initialized (should be used for showing version number)");

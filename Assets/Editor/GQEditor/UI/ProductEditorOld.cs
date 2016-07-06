@@ -16,8 +16,8 @@ namespace GQ.Editor.Build {
 		static private string[] productIDs;
 		static private bool initialized = false;
 		public const string PRODUCTS_DIR = "Assets/Editor/products/";
-		const string RT_PROD_DIR = ProductConfigManager.RUNTIME_PRODUCT_DIR;
-		const string RT_PROD_FILE = ProductConfigManager.RUNTIME_PRODUCT_FILE;
+		const string RT_PROD_DIR = ConfigurationManager.RUNTIME_PRODUCT_DIR;
+		const string RT_PROD_FILE = ConfigurationManager.RUNTIME_PRODUCT_FILE;
 		const string APP_ICON_FILE_BASE = "appIcon";
 		const string SPLASH_SCREEN_FILE_BASE = "splashScreen";
 		const string TOP_LOGO_FILE_BASE = "topLogo";
@@ -51,7 +51,7 @@ namespace GQ.Editor.Build {
 					PlayerSettings.resolutionDialogBanner = _splashScreen;
 					try {
 						#if !UNITY_WEBPLAYER
-						Files.CopyImage(ProductConfigManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, 
+						Files.CopyImage(ConfigurationManager.RUNTIME_PRODUCT_DIR + SPLASH_SCREEN_FILE_BASE, 
 							PLACEHOLDERS_SPLASHSCREEN_FILE);
 						#endif
 					} catch ( Exception exc ) {
@@ -135,10 +135,10 @@ namespace GQ.Editor.Build {
 			} 
 			GUI.enabled = allowChanges;
 
-			ProductConfigManager.current.name = 
+			ConfigurationManager.current.name = 
 				EditorGUILayout.TextField(
 				"Name", 
-				ProductConfigManager.current.name, 
+				ConfigurationManager.current.name, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
 			appIcon = 
@@ -148,73 +148,73 @@ namespace GQ.Editor.Build {
 				typeof(Texture),
 				false);
 
-			ProductConfigManager.current.portal = 
+			ConfigurationManager.current.portal = 
 				EditorGUILayout.IntField(
 				"Portal", 
-				ProductConfigManager.current.portal, 
+				ConfigurationManager.current.portal, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO check and offer selection from server
 
-			ProductConfigManager.current.autoStartQuestID = 
+			ConfigurationManager.current.autoStartQuestID = 
 				EditorGUILayout.IntField(
 				"Autostart Quest ID", 
-				ProductConfigManager.current.autoStartQuestID, 
+				ConfigurationManager.current.autoStartQuestID, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO check at server and offer browser to select driectly from server
 
-			if ( ProductConfigManager.current.autoStartQuestID != 0 ) {
-				ProductConfigManager.current.autostartIsPredeployed =
-				EditorGUILayout.Toggle("Autostart Predeployed?", ProductConfigManager.current.autostartIsPredeployed);
+			if ( ConfigurationManager.current.autoStartQuestID != 0 ) {
+				ConfigurationManager.current.autostartIsPredeployed =
+				EditorGUILayout.Toggle("Autostart Predeployed?", ConfigurationManager.current.autostartIsPredeployed);
 			}
 			else {
-				ProductConfigManager.current.autostartIsPredeployed = false;
+				ConfigurationManager.current.autostartIsPredeployed = false;
 			}
 			
-			ProductConfigManager.current.downloadTimeOutSeconds = 
+			ConfigurationManager.current.downloadTimeOutSeconds = 
 				EditorGUILayout.IntField(
 				"Download Timeout (s)", 
-				ProductConfigManager.current.downloadTimeOutSeconds);
+				ConfigurationManager.current.downloadTimeOutSeconds);
 			// TODO limit to a value bigger than something (5s?)
 
-			ProductConfigManager.current.nameForQuest = 
+			ConfigurationManager.current.nameForQuest = 
 				EditorGUILayout.TextField(
 				"Name for 'Quest'", 
-				ProductConfigManager.current.nameForQuest, 
+				ConfigurationManager.current.nameForQuest, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
-			if ( ProductConfigManager.current.nameForQuest == null || ProductConfigManager.current.nameForQuest.Equals("") ) {
-				ProductConfigManager.current.nameForQuest = "Quest";
+			if ( ConfigurationManager.current.nameForQuest == null || ConfigurationManager.current.nameForQuest.Equals("") ) {
+				ConfigurationManager.current.nameForQuest = "Quest";
 			}
 			
 			QuestVisualizationMethod mIn;
-			if ( ProductConfigManager.current.questVisualization == null ) {
+			if ( ConfigurationManager.current.questVisualization == null ) {
 				mIn = QuestVisualizationMethod.list;
 			}
 			else {
-				mIn = (QuestVisualizationMethod)Enum.Parse(typeof(QuestVisualizationMethod), ProductConfigManager.current.questVisualization.ToLower());
+				mIn = (QuestVisualizationMethod)Enum.Parse(typeof(QuestVisualizationMethod), ConfigurationManager.current.questVisualization.ToLower());
 			}
 			string questVisLabel = "Quest Visualization";
-			if ( ProductConfigManager.current.questVisualizationChangeable ) {
+			if ( ConfigurationManager.current.questVisualizationChangeable ) {
 				questVisLabel = "Initial " + questVisLabel;
 			}
 			QuestVisualizationMethod m =
 				(QuestVisualizationMethod)EditorGUILayout.EnumPopup(questVisLabel, mIn);
 			if ( m != null ) {
-				ProductConfigManager.current.questVisualization = m.ToString().ToLower();
+				ConfigurationManager.current.questVisualization = m.ToString().ToLower();
 			}
 
-			ProductConfigManager.current.questVisualizationChangeable =
-				EditorGUILayout.Toggle("Visualization Changeable?", ProductConfigManager.current.questVisualizationChangeable);
+			ConfigurationManager.current.questVisualizationChangeable =
+				EditorGUILayout.Toggle("Visualization Changeable?", ConfigurationManager.current.questVisualizationChangeable);
 			
-			ProductConfigManager.current.showCloudQuestsImmediately =
-				EditorGUILayout.Toggle("Load cloud quests asap?", ProductConfigManager.current.showCloudQuestsImmediately);
+			ConfigurationManager.current.showCloudQuestsImmediately =
+				EditorGUILayout.Toggle("Load cloud quests asap?", ConfigurationManager.current.showCloudQuestsImmediately);
 
 			EditorGUILayout.BeginHorizontal(GUILayout.Width(300));
 			EditorGUILayout.PrefixLabel("Imprint");
 			Vector2 scrollPos = new Vector2();
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-			ProductConfigManager.current.imprint = 
+			ConfigurationManager.current.imprint = 
 				EditorGUILayout.TextArea(
-				ProductConfigManager.current.imprint);
+				ConfigurationManager.current.imprint);
 			EditorGUILayout.EndScrollView();
 			EditorGUILayout.EndHorizontal();
 
@@ -229,47 +229,47 @@ namespace GQ.Editor.Build {
 				splashScreen = newSplashScreen;
 			}
 
-			ProductConfigManager.current.colorProfile = 
+			ConfigurationManager.current.colorProfile = 
 				EditorGUILayout.TextField(
 				"Color Profile", 
-				ProductConfigManager.current.colorProfile, 
+				ConfigurationManager.current.colorProfile, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO change to better representation of Color Profile
 			
-			ProductConfigManager.current.showTextInLoadingLogo =
-				EditorGUILayout.Toggle("Show Loading Text?", ProductConfigManager.current.showTextInLoadingLogo);
+			ConfigurationManager.current.showTextInLoadingLogo =
+				EditorGUILayout.Toggle("Show Loading Text?", ConfigurationManager.current.showTextInLoadingLogo);
 			
 			// TODO Animation Loading Logo
 			
-			ProductConfigManager.current.showNetConnectionWarning =
-				EditorGUILayout.Toggle("Show Connection Warning?", ProductConfigManager.current.showNetConnectionWarning);
+			ConfigurationManager.current.showNetConnectionWarning =
+				EditorGUILayout.Toggle("Show Connection Warning?", ConfigurationManager.current.showNetConnectionWarning);
 
-			ProductConfigManager.topLogo = 
+			ConfigurationManager.topLogo = 
 				(Sprite)EditorGUILayout.ObjectField(
 				"Top Bar Logo", 
-				ProductConfigManager.topLogo,
+				ConfigurationManager.topLogo,
 				typeof(Sprite),
 				false);
 			// TODO resize visualization in editor to correct 
 
-			ProductConfigManager.current.mapboxMapID = 
+			ConfigurationManager.current.mapboxMapID = 
 				EditorGUILayout.TextField(
 				"Mapbox Map ID", 
-				ProductConfigManager.current.mapboxMapID, 
+				ConfigurationManager.current.mapboxMapID, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			
-			ProductConfigManager.current.mapboxKey = 
+			ConfigurationManager.current.mapboxKey = 
 				EditorGUILayout.TextField(
 				"Mapbox User Key", 
-				ProductConfigManager.current.mapboxKey, 
+				ConfigurationManager.current.mapboxKey, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO make generic representation for map types (google, OSM, Mapbox)
 			
 			// TODO default marker
-			ProductConfigManager.defaultMarker = 
+			ConfigurationManager.defaultMarker = 
 				(Sprite)EditorGUILayout.ObjectField(
 				"Default Marker", 
-				ProductConfigManager.defaultMarker,
+				ConfigurationManager.defaultMarker,
 				typeof(Sprite),
 				false);
 			// TODO resize visualization in editor to correct 
@@ -391,10 +391,10 @@ namespace GQ.Editor.Build {
 
 			AssetDatabase.Refresh();
 
-			ProductConfigManager.deserialize();
+			ConfigurationManager.deserialize();
 			
 			// adjust Player Settings to newly loaded product:
-			PlayerSettings.bundleIdentifier = "com.questmill.geoquest." + ProductConfigManager.current.id;
+			PlayerSettings.bundleIdentifier = "com.questmill.geoquest." + ConfigurationManager.current.id;
 			
 			// load images:
 			if ( File.Exists(RT_PROD_DIR + APP_ICON_FILE_BASE + ".png") ) {
@@ -424,29 +424,29 @@ namespace GQ.Editor.Build {
 			} // TODO replace null with default
 			
 			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".psd") ) {
-				ProductConfigManager.topLogo = 
+				ConfigurationManager.topLogo = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
 			}
 			else
 			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".png") ) {
-				ProductConfigManager.topLogo = 
+				ConfigurationManager.topLogo = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			}
 			else
 			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".jpg") ) {
-				ProductConfigManager.topLogo = 
+				ConfigurationManager.topLogo = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
 			}
 			else {
-				ProductConfigManager.topLogo = null;
+				ConfigurationManager.topLogo = null;
 			} // TODO replace null with default
 			
 			if ( File.Exists(RT_PROD_DIR + DEFAULT_MARKER_FILE_BASE + ".png") ) {
-				ProductConfigManager.defaultMarker = 
+				ConfigurationManager.defaultMarker = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			}
 			else {
-				ProductConfigManager.defaultMarker = null;
+				ConfigurationManager.defaultMarker = null;
 			} // TODO replace null with default
 			
 			//			TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath (RUNTIME_PRODUCT_DIR + "/appIcon");
@@ -459,7 +459,7 @@ namespace GQ.Editor.Build {
 		}
 
 		void performSaveConfig (string productID) {
-			ProductConfigManager.current.id = productID;
+			ConfigurationManager.current.id = productID;
 
 			serialize();
 			
@@ -483,14 +483,14 @@ namespace GQ.Editor.Build {
 
 			// TODO should we store the images, too?
 			Debug.Log("Import assets in save(" + productID + ")");
-			AssetDatabase.ImportAsset(PRODUCTS_DIR + ProductConfigManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+			AssetDatabase.ImportAsset(PRODUCTS_DIR + ConfigurationManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
 
 		public static void serialize () {
 			StringBuilder sb = new StringBuilder();
 			JsonWriter jsonWriter = new JsonWriter(sb);
 			jsonWriter.PrettyPrint = true;
-			JsonMapper.ToJson(ProductConfigManager.current, jsonWriter);
+			JsonMapper.ToJson(ConfigurationManager.current, jsonWriter);
 			File.WriteAllText(RT_PROD_FILE + ".json", sb.ToString());
 			AssetDatabase.Refresh();
 			Debug.Log("CHECKED");
