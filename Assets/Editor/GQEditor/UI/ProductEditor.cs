@@ -16,6 +16,10 @@ namespace GQ.Editor.UI {
 	public class ProductEditor : EditorWindow {
 
 		private GUIStyle textareaGUIStyle;
+		private Texture warnIcon;
+		Vector2 scrollPos;
+
+		internal const string WARN_ICON_PATH = "Assets/Editor/GQEditor/images/warn.png";
 
 		[MenuItem("Window/QuestMill Product Editor")]
 		public static void  Init () {
@@ -34,10 +38,8 @@ namespace GQ.Editor.UI {
 		ProductManager pm;
 
 		public void OnEnable () {
-			// make some saves?
-			Debug.Log("EDITOR.OnEnable() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-
 			readStateFromEditorPrefs();
+			warnIcon = (Texture)AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
 
 			pm = ProductManager.Instance;
 		}
@@ -62,8 +64,7 @@ namespace GQ.Editor.UI {
 		}
 
 		public void OnProjectChange () {
-			// make some saves?
-			// TODO: rescan products folder
+			// TODO: rescan products folder and build folder
 			Debug.Log("EDITOR.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
 		}
 
@@ -83,16 +84,48 @@ namespace GQ.Editor.UI {
 		}
 
 		void gui4ProductManager () {
+			// Heading:
 			GUILayout.Label("Product Manager", EditorStyles.boldLabel);
+
+			// Current Build:
+			string buildName = currentBuild();
+			EditorGUILayout.BeginHorizontal();
+			if ( buildName == null ) {
+				buildName = "missing";
+				EditorGUILayout.PrefixLabel(new GUIContent("Current Build:", warnIcon));
+			}
+			else {
+				EditorGUILayout.PrefixLabel(new GUIContent("Current Build:"));
+			}
+			GUILayout.Label(buildName);
+			EditorGUILayout.EndHorizontal();
+
+			// Build Button:
+			EditorGUILayout.BeginHorizontal();
+			if ( GUILayout.Button("Build") ) {
+				string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
+				if ( !buildName.Equals(selectedProductName) )
+					pm.SetProductForBuild(selectedProductName);
+			}
+			EditorGUILayout.EndHorizontal();
 			string[] productIds = pm.AllProductIds.ToArray<string>();
 			int newIndex = EditorGUILayout.Popup("Available Products:", selectedProductIndex, productIds);
 			selectProduct(newIndex);
-			EditorGUILayout.BeginHorizontal();
-			if ( GUILayout.Button("Build") ) {
-				pm.SetProductForBuild(pm.AllProductIds.ElementAt(selectedProductIndex));
+		}
+
+		private string currentBuild () {
+			string build = null;
+
+			try {
+				string configFile = Files.CombinePath(pm.BuildExportPath, ConfigurationManager.CONFIG_FILE);
+				if ( !File.Exists(configFile) )
+					return build;
+				string configText = File.ReadAllText(configFile);
+				Config buildConfig = JsonMapper.ToObject<Config>(configText);
+				return buildConfig.id;
+			} catch ( Exception exc ) {
+				return build;
 			}
-			;
-			EditorGUILayout.EndHorizontal();
 		}
 
 		void selectProduct (int index) {
@@ -111,6 +144,8 @@ namespace GQ.Editor.UI {
 		void gui4ProductDetails () {
 			GUILayout.Label("Product Details", EditorStyles.boldLabel);
 			Product p = pm.AllProducts.ElementAt(selectedProductIndex);
+
+			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
 			GUI.enabled = false;
 
@@ -191,6 +226,7 @@ namespace GQ.Editor.UI {
 			}
 				
 			GUI.enabled = true;
+			EditorGUILayout.EndScrollView();
 		}
 
 		#endregion
