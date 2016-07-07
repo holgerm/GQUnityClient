@@ -68,8 +68,22 @@ public class questdatabase : MonoBehaviour {
 	bool downloadedAll = false;
 	bool downloadingAll = false;
 
+	public GameObject menuButton;
+
 
 	public datasendAccept datasendAcceptMessage;
+
+	public void OnEnable () {
+
+		if ( !Configuration.instance.hasMenuWithinQuests ) {
+			GameObject[] gos = GameObject.FindGameObjectsWithTag("MenuButton");
+			if ( gos != null && gos.Length > 0 ) {
+				menuButton = gos[0];
+				menuButton.GetComponent<Image>().enabled = true;
+				menuButton.GetComponent<Button>().enabled = true;
+			}
+		}
+	}
 
 	IEnumerator Start () {
 //		PlayerPrefs.DeleteAll();
@@ -170,8 +184,6 @@ public class questdatabase : MonoBehaviour {
 		if ( !Application.isWebPlayer ) {
 
 			if ( Configuration.instance.questvisualization != "list" ) {
-
-				Debug.Log("starting without list");
 				GameObject.Find("ListPanel").SetActive(false);
 
 			}
@@ -184,8 +196,6 @@ public class questdatabase : MonoBehaviour {
 				ReloadQuestListAndRefresh();
 			}
 			else {
-
-				Debug.Log("starting either without showing quest immediately or autostart");
 				if ( Configuration.instance.autostartQuestID != 0 ) {
 					buttoncontroller.DisplayList();
 				}
@@ -389,15 +399,9 @@ public class questdatabase : MonoBehaviour {
 			hideBlackCanvas();
 		}
 		else {
-			
-			
 			string version = www.text;
-			Debug.Log("AGB Version Online: " + version);
-			Debug.Log("AGB Version Read: " + agbVersionRead);
 
-			
 			if ( int.Parse(version) > agbVersionRead || Configuration.instance.agbsVersion > agbVersionRead ) {
-				
 				
 				string agreement = Configuration.instance.agbs;
 				
@@ -811,8 +815,6 @@ public class questdatabase : MonoBehaviour {
 
 		localquests = GetLocalQuests();
 
-		Debug.Log("Lokale Quests: " + localquests.Count);
-
 		if ( localquests != null && localquests.Count > 0 ) {
 			doit = false;
 		}
@@ -944,9 +946,6 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void showQuestMap () {
-
-		Debug.Log("showing map");
-
 		hotspots = new List<QuestRuntimeHotspot>();
 
 		hotspots.AddRange(getActiveHotspots());
@@ -1135,13 +1134,6 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	void Update () {
-
-
-
-
-
-
-
 		if ( fakebytes > 0 && fakebytes < (int.MaxValue - 1000) ) {
 
 			fakebytes += Time.deltaTime;
@@ -1257,6 +1249,12 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void startQuest (Quest q) {
+		if ( !Configuration.instance.hasMenuWithinQuests ) {
+			if ( menuButton != null ) {
+				menuButton.GetComponent<Image>().enabled = false;
+				menuButton.GetComponent<Button>().enabled = false;
+			}
+		}
 
 		closeMap();
 
@@ -1863,10 +1861,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);

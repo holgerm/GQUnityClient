@@ -19,8 +19,6 @@ public class MapCategoryList : MonoBehaviour {
 
 	void Start () {
 
-		Debug.Log("Starting to create marker categories. Size: " + Configuration.instance.categoryMarker.Count);
-
 		foreach ( MarkerCategorySprite mcs in Configuration.instance.categoryMarker ) {
 
 			if ( mcs.showInList ) {
@@ -29,8 +27,6 @@ public class MapCategoryList : MonoBehaviour {
 				go.transform.SetParent(this.transform, false);
 				go.transform.localScale = new Vector3(1f, 1f, 1f);
 				go.GetComponent<MapCategoryMenuEntry>().markerCategory = mcs;
-
-				Debug.Log("Created marker category " + mcs.anzeigename_de);
 			}
 		}
 	}

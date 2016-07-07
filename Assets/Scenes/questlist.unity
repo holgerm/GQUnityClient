@@ -2322,10 +2322,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1548526790}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0.05, y: 0}
-  m_AnchorMax: {x: 0.95, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 108, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.00005722046}
+  m_SizeDelta: {x: 120, y: 191.83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &265351028
 MonoBehaviour:
@@ -4625,10 +4625,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514104979}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 58, y: -101.50309}
+  m_SizeDelta: {x: 116, y: 183.00618}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &470340408
 MonoBehaviour:
@@ -7791,6 +7791,7 @@ MonoBehaviour:
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/281.html
   useMapOffline: 0
+  hasMenuWithinQuests: 0
   appVersion: 1
   subversionNumber: 16.7
 --- !u!4 &714240441
@@ -8677,8 +8678,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11250,10 +11251,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514104979}
   m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1027, y: -101.50309}
+  m_SizeDelta: {x: 106, y: 183.00618}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1045699322
 MonoBehaviour:
@@ -12510,10 +12511,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 514104979}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 545, y: -101.50309}
+  m_SizeDelta: {x: 858, y: 183.00618}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1184618443
 MonoBehaviour:
@@ -13299,7 +13300,7 @@ GameObject:
   - 114: {fileID: 1324928951}
   m_Layer: 5
   m_Name: Image 1
-  m_TagString: Untagged
+  m_TagString: MenuButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15802,10 +15803,10 @@ RectTransform:
   - {fileID: 1587095776}
   m_Father: {fileID: 558180310}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0.05, y: 0}
-  m_AnchorMax: {x: 0.95, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 108, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1548526791
 MonoBehaviour:
