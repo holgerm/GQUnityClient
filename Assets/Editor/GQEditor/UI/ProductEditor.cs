@@ -48,26 +48,26 @@ namespace GQ.Editor.UI {
 			selectedProductIndex = EditorPrefs.HasKey("selectedProductIndex") ? EditorPrefs.GetInt("selectedProductIndex") : 0;
 		}
 
-		public void OnDisable () {
-			// make some saves?
-			Debug.Log("EDITOR.OnDisable() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		}
-
-		public void OnFocus () {
-			// make some saves?
-			Debug.Log("EDITOR.OnFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		}
-
-		public void OnLostFocus () {
-			// make some saves?
-			Debug.Log("EDITOR.OnLostFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		}
-
-		public void OnProjectChange () {
-			// TODO: rescan products folder and build folder
-			Debug.Log("EDITOR.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		}
-
+		//		public void OnDisable () {
+		//			// make some saves?
+		////			Debug.Log("EDITOR.OnDisable() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
+		//		}
+		//
+		//		public void OnFocus () {
+		//			// make some saves?
+		//			Debug.Log("EDITOR.OnFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
+		//		}
+		//
+		//		public void OnLostFocus () {
+		//			// make some saves?
+		//			Debug.Log("EDITOR.OnLostFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
+		//		}
+		//
+		//		public void OnProjectChange () {
+		//			// TODO: rescan products folder and build folder
+		//			Debug.Log("EDITOR.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
+		//		}
+		//
 
 		#region GUI
 

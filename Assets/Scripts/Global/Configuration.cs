@@ -148,7 +148,6 @@ namespace GQ.Client.Conf {
 		}
 
 		private void initProductDefinitions () {
-			Debug.Log("CONFIG: setting product: " + product);
 			switch ( product ) {
 				case ProductIDs.CarlBenz:
 					productName = "carlbenz";

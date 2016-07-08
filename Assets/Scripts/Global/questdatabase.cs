@@ -88,6 +88,7 @@ public class questdatabase : MonoBehaviour {
 	IEnumerator Start () {
 //		PlayerPrefs.DeleteAll();
 
+
 		if ( PlayerPrefs.HasKey("privacyagreementversion") ) {
 
 			if ( PlayerPrefs.GetInt("privacyagreementversion") > Configuration.instance.privacyAgreementVersion ) {
@@ -1861,10 +1862,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -1892,24 +1893,14 @@ public class questdatabase : MonoBehaviour {
 
 	IEnumerator waitForSpriteConversion (int pageid) {
 		if ( !downloadingAll ) {
-
-		
 			bool spritesConverted = true;
 		
-	
-		
 			if ( spritesConverted ) {
-			
-				Debug.Log("Converted Sprites has " + convertedSprites.Count + " objects.");
-
-
-
 				checkForDatasend(pageid);
 
 		
 			}
 			else {
-				Debug.Log("STARTE");
 				if ( webloadingmessage != null ) {
 
 					webloadingmessage.text = "Starte " + Configuration.instance.nameForQuest + "... ";
@@ -1977,8 +1968,6 @@ public class questdatabase : MonoBehaviour {
 		if ( Configuration.instance.showMessageForDatasendAction && !currentquest.acceptedDS &&
 		     currentquest.hasActionInChildren("SendVarToServer") ) {
 
-			Debug.Log("Datasend action found");
-
 			// TODO: show message
 
 			datasendAcceptMessage.pageid = pageid;
@@ -1988,7 +1977,6 @@ public class questdatabase : MonoBehaviour {
 
 		}
 		else {
-			Debug.Log("no Datasend action found");
 			transferQuestHotspots(pageid);
 
 		}
@@ -2575,15 +2563,6 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void changePage (int id) {
-
-//		Debug.Log ("Hotspot Count #1: " + getActiveHotspots ().Count);
-
-
-	
-		
-		Debug.Log("Changing page to " + id);
-
-
 		if ( GameObject.Find("MapHider") != null ) {
 
 
@@ -2629,11 +2608,6 @@ public class questdatabase : MonoBehaviour {
 			if ( qp.id.Equals(id) ) {
 
 				currentquest.currentpage = qp;
-
-				Debug.Log("Starting page with type " + qp.type);
-
-
-
 				currentquest.currentpage.state = "running";
 
 			
