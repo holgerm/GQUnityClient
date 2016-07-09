@@ -1862,10 +1862,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2838,13 +2838,13 @@ public class questdatabase : MonoBehaviour {
 
 
 
-//				if (needsCamera) {
-//					if (GameObject.Find ("MapCanvas") != null) {
-//						Debug.Log ("Disabling Map Canvas");
-//						GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
-//					}
-//
-//					Debug.Log ("needs Camera");
+				if ( needsCamera ) {
+					if ( GameObject.Find("MapCanvas") != null ) {
+						Debug.Log("Disabling Map Canvas");
+						GameObject.Find("MapCanvas").GetComponent<Canvas>().enabled = false;
+					}
+
+					Debug.Log("needs Camera");
 //					GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
 //					if (GameObject.Find ("MapCam") != null) {
 //						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
@@ -2853,7 +2853,7 @@ public class questdatabase : MonoBehaviour {
 //					}
 //					GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = false;
 //
-//				}
+				}
 				
 				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 

@@ -7573,7 +7573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 4
+  product: 2
   overrideProductSettingsInInspector: 0
   portalID: 61
   autostartQuestID: 0
@@ -7583,9 +7583,9 @@ MonoBehaviour:
   mapboxMapID: gqebk.ed1de6df
   downloadTimeOutSeconds: 100
   impressum: 
-  toplogo: {fileID: 21300000, guid: 8d104b5c76cf247eba9c17a95913f876, type: 3}
+  toplogo: {fileID: 21300000, guid: 112664961124d432cbe3275f51c16bb7, type: 3}
   nameForQuest: Quest
-  questvisualization: map
+  questvisualization: list
   showMessageForDatasendAction: 0
   showPrivacyAgreement: 0
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter
@@ -7691,11 +7691,11 @@ MonoBehaviour:
   agbsVersion: 1
   questvisualizationchangable: 0
   cloudQuestsVisible: 1
-  showcloudquestsimmediately: 1
+  showcloudquestsimmediately: 0
   downloadAllCloudQuestOnStart: 0
-  localQuestsDeletable: 0
-  showtextinloadinglogo: 0
-  showinternetconnectionmessage: 0
+  localQuestsDeletable: 1
+  showtextinloadinglogo: 1
+  showinternetconnectionmessage: 1
   defaultlanguage: system
   languageChangableByUser: 0
   languagesAvailable:
@@ -7791,9 +7791,9 @@ MonoBehaviour:
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/281.html
   useMapOffline: 0
-  hasMenuWithinQuests: 0
+  hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 16.7
+  subversionNumber: 16.8
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -13915,7 +13915,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1383468337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16904,7 +16904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1711651852
 RectTransform:
   m_ObjectHideFlags: 0
