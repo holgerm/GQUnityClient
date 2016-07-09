@@ -2205,12 +2205,12 @@ GameObject:
   - 114: {fileID: 238289915}
   - 114: {fileID: 238289916}
   m_Layer: 5
-  m_Name: Version
+  m_Name: LaodMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &238289912
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2260,7 +2260,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: will show up
+  m_Text: Loading ...
 --- !u!222 &238289914
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2288,7 +2288,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 238289911}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5bbd6b7fc3b74ca4863cb6461086875, type: 3}
   m_Name: 
