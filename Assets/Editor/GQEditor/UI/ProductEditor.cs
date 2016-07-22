@@ -102,7 +102,7 @@ namespace GQ.Editor.UI {
 
 			// Build Button:
 			EditorGUILayout.BeginHorizontal();
-			if ( GUILayout.Button("Build") ) {
+			if ( GUILayout.Button("Prepare Build") ) {
 				string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
 				if ( !buildName.Equals(selectedProductName) )
 					pm.SetProductForBuild(selectedProductName);
