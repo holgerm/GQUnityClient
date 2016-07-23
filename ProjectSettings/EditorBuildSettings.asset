@@ -29,5 +29,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Pages/page_website.unity
   - enabled: 1
     path: Assets/Scenes/Pages/page_custom.unity
+  - enabled: 1
+    path: Assets/Scenes/Pages/page_readnfc.unity
   - enabled: 0
     path: Assets/Scenes/mediaserver.unity

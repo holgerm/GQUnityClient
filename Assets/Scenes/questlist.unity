@@ -7791,7 +7791,7 @@ MonoBehaviour:
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/281.html
   useMapOffline: 0
-  hasMenuWithinQuests: 0
+  hasMenuWithinQuests: 1
   appVersion: 1
   subversionNumber: 16.8
 --- !u!4 &714240441
