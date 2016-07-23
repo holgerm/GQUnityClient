@@ -3,7 +3,7 @@ using System.Collections;
 using GQ.Client.Conf;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI.Menu {
 	public class TopMenuButton : MonoBehaviour {
 
 		private questdatabase qdb;
