@@ -225,16 +225,15 @@ namespace GQ.Client.UI.Pages {
 		
 		}
 
-		public void nextButton () {
-			onEnd();
-		}
-
 		public void backButton () {
 			QuestPage show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
 			questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
 			questdb.changePage(show.id);
 		}
 
+		public void nextButton () {
+			onEnd();
+		}
 
 	}
 }

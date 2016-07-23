@@ -876,7 +876,6 @@ GameObject:
   - 222: {fileID: 763440327}
   - 114: {fileID: 763440326}
   - 114: {fileID: 763440325}
-  - 114: {fileID: 763440329}
   - 114: {fileID: 763440330}
   m_Layer: 5
   m_Name: Weiter
@@ -988,20 +987,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &763440329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 763440324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cf6e557983ed4fbb9bfa2929c34f451, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  onClick: 1
-  backbutton: 0
 --- !u!114 &763440330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1497,7 +1482,6 @@ GameObject:
   - 222: {fileID: 1313306993}
   - 114: {fileID: 1313306992}
   - 114: {fileID: 1313306991}
-  - 114: {fileID: 1313306990}
   - 114: {fileID: 1313306989}
   m_Layer: 5
   m_Name: "Zur\xFCck"
@@ -1542,20 +1526,6 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
---- !u!114 &1313306990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1313306987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cf6e557983ed4fbb9bfa2929c34f451, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  onClick: 1
-  backbutton: 1
 --- !u!114 &1313306991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2166,6 +2136,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5542e74a884ad4b0ea50a8267b75b314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  page:
+    id: 0
+    type: 
+    attributes: []
+    contents_dialogitems: []
+    contents_expectedcode: []
+    contents_answers: []
+    contents_question:
+      id: 0
+      content: 
+      attributes: []
+    contents_answersgroup: []
+    contents_stringmeta: []
+    onEnd:
+      actions: []
+    onStart:
+      actions: []
+    onTap:
+      actions: []
+    onSuccess:
+      actions: []
+    onFailure:
+      actions: []
+    state: new
+    result: 
   questdb: {fileID: 0}
   quest:
     name: 
@@ -2212,31 +2207,6 @@ MonoBehaviour:
     version: 
     acceptedDS: 0
     alternateDownloadLink: 
-  npctalk:
-    id: 0
-    type: 
-    attributes: []
-    contents_dialogitems: []
-    contents_expectedcode: []
-    contents_answers: []
-    contents_question:
-      id: 0
-      content: 
-      attributes: []
-    contents_answersgroup: []
-    contents_stringmeta: []
-    onEnd:
-      actions: []
-    onStart:
-      actions: []
-    onTap:
-      actions: []
-    onSuccess:
-      actions: []
-    onFailure:
-      actions: []
-    state: new
-    result: 
   questactions: {fileID: 0}
   image: {fileID: 1957163289}
   image_hochkant: {fileID: 521211304}
@@ -2245,8 +2215,6 @@ MonoBehaviour:
   backbutton: {fileID: 1313306991}
   buttontext: {fileID: 328853095}
   dialogitem_state: 0
-  texttoticker: 
-  tickertime: 0
   indexoflink: 0
   link: 
   links: []
