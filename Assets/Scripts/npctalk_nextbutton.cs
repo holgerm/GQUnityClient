@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
+using GQ.Client.UI.Pages;
 
 public class npctalk_nextbutton : MonoBehaviour, IPointerClickHandler {
 

@@ -12,10 +12,8 @@ using System.Text.RegularExpressions;
 
 namespace GQ.Client.UI.Pages {
 
-	public class page_npctalk : PageController {
+	public class ReadNFCPageController : PageController {
 
-	
-	
 		private WWW www;
 		public RawImage image;
 		public Image image_hochkant;
@@ -24,9 +22,6 @@ namespace GQ.Client.UI.Pages {
 		public Button backbutton;
 		public Text buttontext;
 		public int dialogitem_state = 0;
-		public string texttoticker;
-		public float tickertime;
-		private float savedtickertime;
 		public int indexoflink = 0;
 		public string link;
 		public List<Link> links;
@@ -43,16 +38,10 @@ namespace GQ.Client.UI.Pages {
 			}
 
 			if ( Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed ) {
-
+				
 				pre = "";
 			}
 
-			if ( page.getAttribute("tickerspeed").Length > 0 ) {
-
-				tickertime = float.Parse(page.getAttribute("tickerspeed")) / 1000;
-
-			}
-			savedtickertime = tickertime;
 			DateTime start = DateTime.Now;
 
 			if ( page.getAttribute("image") != null && page.getAttribute("image") != "" ) {
@@ -68,9 +57,9 @@ namespace GQ.Client.UI.Pages {
 				}
 				else
 				if ( page.getAttribute("image").StartsWith("@_") ) {
-
+				
 					foreach ( QuestRuntimeAsset qra in questactions.photos ) {
-
+					
 						if ( qra.key == page.getAttribute("image") ) {
 
 							image.texture = qra.texture;
@@ -81,7 +70,7 @@ namespace GQ.Client.UI.Pages {
 							myY = 604f;
 
 							image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX, myY);
-
+							
 						}
 					}
 				}
@@ -106,14 +95,9 @@ namespace GQ.Client.UI.Pages {
 
 				text.text += convertStringForHypertext(toadd);
 				nextbutton.interactable = true;
-				buttontext.text = page.getAttribute("endbuttontext");
-
+				buttontext.text = ">";
 
 			}
-			else {
-				nextdialogitem();
-			}
-
 		}
 
 		protected override void InitBackButton (bool show) {
@@ -122,103 +106,9 @@ namespace GQ.Client.UI.Pages {
 			}
 		}
 
-		protected override int FontSize {
-			get {
-				string resultString = Regex.Match(page.getAttribute("textsize"), @"\d+").Value;
-				int size = int.Parse(resultString);
-				return size * 3;
-			}
-		}
-
-
 		void Update () {
-			if ( texttoticker != null ) {
 
-
-
-				if ( page.getAttribute("skipwordticker") == "true" && Input.GetMouseButtonDown(0) ) {
-
-
-					tickertime = savedtickertime;
-					text.text += texttoticker;
-					texttoticker = "";
-
-
-				}
-				else {
-			
-			
-					if ( tickertime > 0f ) {
-
-						tickertime -= Time.deltaTime;
-					}
-					else
-					if ( texttoticker.Length > 0 ) {
-
-
-
-						tickertime = savedtickertime;
-						char[] tickeringtext = texttoticker.ToCharArray();
-						text.text += tickeringtext[0];
-
-
-						if ( tickeringtext.Length > 0 ) {
-							texttoticker = new string(tickeringtext, 1, tickeringtext.Length - 1);
-			
-						}
-
-
-
-				
-					}
-					else {
-
-						if ( dialogitem_state > 0 && page.contents_dialogitems[dialogitem_state - 1].getAttribute("blocking") == "true" ) {
-
-
-							if ( questactions.npcaudio != null ) {
-								if ( questactions.npcaudio.GetComponent<AudioSource>() != null && !questactions.npcaudio.GetComponent<AudioSource>().isPlaying ) {
-
-									nextbutton.interactable = true;
-								}
-
-							}
-
-
-						}
-						else {
-							nextbutton.interactable = true;
-
-						}
-
-						texttoticker = null;
-
-					}
-
-			
-				}
-			
-			
-			}
-			else {
-
-
-				//Debug.Log(dialogitem_state-1);
-
-				if ( questactions.npcaudio != null ) {
-
-					if ( (page.contents_dialogitems[dialogitem_state - 1].getAttribute("blocking") == "true" && !questactions.npcaudio.GetComponent<AudioSource>().isPlaying) ) {
-						nextbutton.interactable = true;
-					}
-				}
-				else {
-
-					nextbutton.interactable = true;
-
-				}
-
-			}
-		
+			// TODO Read from NFC Chip etc.
 		
 		}
 
@@ -231,91 +121,6 @@ namespace GQ.Client.UI.Pages {
 			scrollLayout.flexibleHeight = 7;
 		}
 
-		void nextdialogitem () {
-//		Debug.Log ("nextdialogitem()");
-
-			if ( page.contents_dialogitems.Count > 0 ) {
-
-				if ( page.contents_dialogitems[dialogitem_state].getAttribute("sound") != "" ) {
-
-
-					questdb.GetComponent<actions>().PlayNPCAudio(page.contents_dialogitems[dialogitem_state].getAttribute("sound"));
-
-
-				}
-
-
-				if ( page.getAttribute("mode") == "Wordticker" ) {
-
-					if ( page.contents_dialogitems[dialogitem_state].getAttribute("speaker").Length > 0 ) {
-
-						text.text += "<b>" + page.contents_dialogitems[dialogitem_state].getAttribute("speaker") + "</b>: ";
-					}
-
-					texttoticker = questdb.GetComponent<actions>().formatString(page.contents_dialogitems[dialogitem_state].content) + "\n";
-					texttoticker = convertStringForHypertext(texttoticker);
-					nextbutton.interactable = false;
-
-				}
-				else {
-
-
-
-
-					if ( !questdb.GetComponent<palette>().darkBG ) {
-						text.text = "<color=#5c5c5c>" + text.text + "</color>";
-					}
-					else {
-
-						text.text = "<color=#989898>" + text.text + "</color>";
-
-					}
-					if ( page.contents_dialogitems[dialogitem_state].getAttribute("speaker").Length > 0 ) {
-					
-						text.text += "<b>" + page.contents_dialogitems[dialogitem_state].getAttribute("speaker") + "</b>: ";
-					}
-
-					string toadd = questdb.GetComponent<actions>().formatString(page.contents_dialogitems[dialogitem_state].content) + "\n";
-
-					// evtl. auf Regexp ändern: https://regex101.com/r/cC4vF0/7
-					text.text += convertStringForHypertext(toadd);
-
-					questdb.debug("Dialog Item is Blocking? -> " + page.contents_dialogitems[dialogitem_state].getAttribute("blocking"));
-
-					if ( page.contents_dialogitems[dialogitem_state].getAttribute("blocking") != "true" ) {
-						nextbutton.interactable = true;
-					}
-				}
-				dialogitem_state++;
-
-//			Debug.Log ("scrolling?");
-
-				if ( page.contents_dialogitems.Count == dialogitem_state ) {
-					buttontext.text = page.getAttribute("endbuttontext");
-			
-				}
-				else {
-					buttontext.text = page.getAttribute("nextdialogbuttontext");
-				}
-
-			}
-			else {
-
-				buttontext.text = page.getAttribute("endbuttontext");
-
-			}
-
-
-
-			if ( dialogitem_state > 1 ) {
-				Canvas.ForceUpdateCanvases();
-		
-				text.transform.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0f;
-				Canvas.ForceUpdateCanvases();
-			}
-
-
-		}
 
 		string convertStringForHypertext (string toadd) {
 			int i = 0;
@@ -371,11 +176,8 @@ namespace GQ.Client.UI.Pages {
 
 			}
 
-
-
-
-
 		}
+
 
 		IEnumerator waitforImage () {
 
@@ -398,10 +200,7 @@ namespace GQ.Client.UI.Pages {
 				
 			
 				float myX = (float)www.texture.width;
-			
-			
 				float myY = (float)www.texture.height;
-			
 			
 				float scaler = myY / 604f;
 			
@@ -411,13 +210,6 @@ namespace GQ.Client.UI.Pages {
 			
 				image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX, myY);
 			
-											
-		
-		
-		
-		
-		
-		
 			}
 			else {
 
@@ -434,58 +226,16 @@ namespace GQ.Client.UI.Pages {
 		}
 
 		public void nextButton () {
-
-
-//		Debug.Log ("nextButton()");
-			if ( page.contents_dialogitems.Count == dialogitem_state ) {
-
-				onEnd();
-
-			}
-			else {
-
-						
-				nextdialogitem();
-
-			}
-
-
-
-
+			onEnd();
 		}
 
 		public void backButton () {
-
-
-
 			QuestPage show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
 			questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
 			questdb.changePage(show.id);
-		
-
-		
 		}
 
-	}
-
-
-	[System.Serializable]
-	public class Link {
-
-		// TODO move this class together with text and hypertext in UI namespace.
-
-
-		public string name;
-		public string url;
-
-		public Link (string n, string u) {
-
-
-			name = n;
-			url = u;
-
-
-		}
 
 	}
 }
+
