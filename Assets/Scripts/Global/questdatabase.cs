@@ -13,6 +13,7 @@ using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 
 public class questdatabase : MonoBehaviour {
 	public Quest currentquest;
@@ -1901,6 +1902,8 @@ public class questdatabase : MonoBehaviour {
 		
 			}
 			else {
+				// TODO FRAGE (hm): Wie kommen wir jemals hier hin? Wird spritesConverted nebenbei mal auf false gesetzt?
+
 				if ( webloadingmessage != null ) {
 
 					webloadingmessage.text = "Starte " + Configuration.instance.nameForQuest + "... ";
@@ -1968,6 +1971,8 @@ public class questdatabase : MonoBehaviour {
 		if ( Configuration.instance.showMessageForDatasendAction && !currentquest.acceptedDS &&
 		     currentquest.hasActionInChildren("SendVarToServer") ) {
 
+			// TODO FRAGE: Warum wird das für jede Seite aufgerufen, wo es doch eh immer das ganze Quest durchsucht? (hm) Erst Test schreiben dann refactoren!
+
 			// TODO: show message
 
 			datasendAcceptMessage.pageid = pageid;
@@ -1978,6 +1983,8 @@ public class questdatabase : MonoBehaviour {
 		}
 		else {
 			transferQuestHotspots(pageid);
+
+			// TODO FRAGE (hm): Warum wird das hier aufgerufen? Ich habe das woanders speziell für den Webplayer gesehen.
 
 		}
 	
@@ -2475,41 +2482,12 @@ public class questdatabase : MonoBehaviour {
 	public bool canPlayQuest (Quest q) {
 
 		if ( downloadingAll ) {
-
+			// TODO FRAGE: Ist das nicht eine fehlerhafte Abkürzung? (hm)
 			return true;
 
 		}
 
-		bool playable = true;
-		foreach ( QuestPage qp in q.pages ) {
-
-
-			if ( qp.type != "StartAndExitScreen" &&
-			     qp.type != "NPCTalk" &&
-			     qp.type != "MultipleChoiceQuestion" &&
-			     qp.type != "VideoPlay" &&
-			     qp.type != "TagScanner" &&
-			     qp.type != "ImageCapture" &&
-			     qp.type != "AudioRecord" &&
-			     qp.type != "TextQuestion" &&
-			     qp.type != "ImageWithText" &&
-			     qp.type != "Menu" &&
-			     qp.type != "MapOSM" &&
-			     qp.type != "MetaData" &&
-			     qp.type != "Custom" &&
-			     qp.type != "Navigation" &&
-			     qp.type != "WebPage" ) {
-
-
-
-				Debug.Log("Can't play because it includes mission of type " + qp.type);
-				playable = false;
-			}
-
-			
-
-		}
-		return playable;
+		return Platform.CanPlay(q);
 
 	}
 
@@ -2778,6 +2756,10 @@ public class questdatabase : MonoBehaviour {
 				else
 				if ( qp.type == "Custom" ) {
 					Application.LoadLevelAdditive(11);
+				}
+				else
+				if ( qp.type == "ReadNFC" ) {
+					Application.LoadLevelAdditive(12);
 				}
 				else
 				if ( qp.type == "MapOSM" || qp.type == "Navigation" ) {
