@@ -222,6 +222,10 @@ public class actions : MonoBehaviour {
 		if ( action.type == "SendVarToServer" ) {
 			sendVarToServer(action);
 		}
+		else
+		if ( action.type == "ParseVariables" ) {
+			parseVariable(action);
+		}
 		
 		
 	}
@@ -382,6 +386,82 @@ public class actions : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Parses the variable in case it has a canonical key-value form like this: key:value,key:value,... 
+	/// into separate veraibles with the keys as names and the values as values.
+	/// 
+	/// KEYS MUST ONLY CONTAIN A SINGLE ALPHANUMERIC CHARACTER.
+	/// 
+	/// VALUE MUST MASK COMMAS by doubling them.
+	/// 
+	/// If the given FromVar varibale contains something else, nothing happens.
+	/// </summary>
+	/// <param name="action">Action.</param>
+	void parseVariable (QuestAction action) {
+		const char DELIMITER = ',';
+
+		string rawValue = getVariable(action.getAttribute("FromVar")).getStringValue();
+
+		if ( rawValue.Equals("[null]") )
+			return;
+
+		char[] receivedChars = rawValue.ToCharArray();
+
+		int curIndex = 0;
+		char key = '\0';
+		System.Text.StringBuilder valueBuilder;
+
+		while ( curIndex <= receivedChars.Length - 2 ) {
+			// index must leave a rest of at least two chars: the key and the ':'
+
+			// parse key:
+			key = receivedChars[curIndex];
+			curIndex += 2; // skip the key char and the ':'
+
+			// parse value:
+			valueBuilder = new System.Text.StringBuilder();
+
+			while ( curIndex <= receivedChars.Length - 1 ) {
+
+				if ( receivedChars[curIndex] != DELIMITER ) {
+					// ordinary content:
+					valueBuilder.Append(receivedChars[curIndex]);
+					curIndex++;
+					continue; // do NOT store key-value but proceed to gather the value
+				}
+
+				if ( curIndex == receivedChars.Length - 1 ) {
+					// the current is a ',' and the last in the array we interpret it as an empty value
+					// e.g. [i:,] => id = ""
+					// we proceed one char and do not have to do anything since the while loop will terminate
+					curIndex++;
+				}
+				else {
+					// now we look at the char after the first ',':
+					curIndex++;
+
+					if ( receivedChars[curIndex] == DELIMITER ) {
+						// we found a double ',,' which is just a ',' within the content
+						// hence we add just one ',' ignore the second and go on parsing the value further
+						// e.g. [p:me,, you and him] -> payload = "me, you and him"
+						valueBuilder.Append(receivedChars[curIndex]);
+						curIndex++; // remember this is the second increase!
+						continue; // ready to step one char further
+					}
+					else {
+						// we found a single ',' which signifies the end of the value
+						// we keep the index pointing at the next key and finish with this value
+						// e.g. [i:123,p:hello] -> id = "123"; payload = "hello"
+						break; // leaving value gathering and go on with next key-value pair
+					}
+				}
+			}
+			// end of KV pair reached: store it
+			setVariable(key.ToString(), new QuestVariable(key.ToString(), valueBuilder.ToString()));
+		}
+
 	}
 
 	IEnumerator waitForClientStart (QuestAction action, int tries) {
