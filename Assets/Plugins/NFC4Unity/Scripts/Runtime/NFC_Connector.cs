@@ -4,11 +4,9 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-namespace QM.NFC
-{
+namespace QM.NFC {
 	
-	public class NFC_Connector : MonoBehaviour
-	{
+	public class NFC_Connector : MonoBehaviour {
 		// TODO Extract Observer into interface and test it
 		// TODO Extract Singleton into interface and test it
 
@@ -21,45 +19,42 @@ namespace QM.NFC
 
 		public static NFC_Connector Connector {
 			get {
-				if (_connector == null) {
-					connectorGO = new GameObject (NAME);
-					connectorGO.AddComponent<NFC_Connector> ();
-					_connector = connectorGO.GetComponent<NFC_Connector> ();
+				if ( _connector == null ) {
+					connectorGO = new GameObject(NAME);
+					connectorGO.AddComponent<NFC_Connector>();
+					_connector = connectorGO.GetComponent<NFC_Connector>();
 				}
 				return _connector;
 			}
 		}
 
-		void Awake ()
-		{
-			registeredReaderUIs = new List<NFC_ReaderUI> ();
+		void Awake () {
+			registeredReaderUIs = new List<NFC_ReaderUI>();
 		}
 
-		public bool registerReaderUI (NFC_ReaderUI newNFCReaderUI)
-		{
-			if (registeredReaderUIs.Contains (newNFCReaderUI))
+		public bool registerReaderUI (NFC_ReaderUI newNFCReaderUI) {
+			if ( registeredReaderUIs.Contains(newNFCReaderUI) )
 				return false;
 			else {
-				registeredReaderUIs.Add (newNFCReaderUI);
+				registeredReaderUIs.Add(newNFCReaderUI);
 				return true;
 			}
 		}
 
-		public bool unregisterReaderUI (NFC_ReaderUI nfcReaderUI)
-		{
-			return registeredReaderUIs.Remove (nfcReaderUI);
+		public bool unregisterReaderUI (NFC_ReaderUI nfcReaderUI) {
+			return registeredReaderUIs.Remove(nfcReaderUI);
 		}
 
 		/// <summary>
 		/// Called by Android Java Plugin when an NFC Tag is read. The read payload is given as parameter. 
 		/// </summary>
 		/// <param name="payload">Payload.</param>
-		public void NFCReadPayload (string payload)
-		{
+		public void NFCReadPayload (string payload) {
 			#if UNITY_ANDROID 
-			foreach (NFC_ReaderUI reader in registeredReaderUIs) {
-				reader.onNFCPayloadRead (payload);
+			foreach ( NFC_ReaderUI reader in registeredReaderUIs ) {
+				reader.onNFCPayloadRead(payload);
 			}
+
 			#elif UNITY_EDITOR
 		Debug.LogWarning ("NFC Plugin only works on Android Platform.");
 			#endif
@@ -71,33 +66,28 @@ namespace QM.NFC
 		/// Then the different contents are made available to the game by triggering an event.
 		/// </summary>
 		/// <param name="id">ID.</param>
-		public void NFCReadDetails (string marshalledContent)
-		{
+		public void NFCReadDetails (string marshalledContent) {
 			#if UNITY_ANDROID 
-			NFC_Info info = new NFC_Info (marshalledContent);
+			NFC_Info info = new NFC_Info(marshalledContent);
 
-			foreach (NFC_ReaderUI reader in registeredReaderUIs) {
-				reader.onNFCDetailsRead (info);
+			foreach ( NFC_ReaderUI reader in registeredReaderUIs ) {
+				reader.onNFCDetailsRead(info);
 			}
+
 			#elif UNITY_EDITOR
 		Debug.LogWarning ("NFC Plugin only works on Android Platform.");
 			#endif
 		}
 
-		private static int testPayloadCounter = 1;
-
-		public void NFCWrite ()
-		{
+		public void NFCWrite (string payload) {
 			#if UNITY_ANDROID 
+			AndroidJavaClass javaNFCPluginClass = new AndroidJavaClass("com.questmill.nfc.NFCPlugin");
 
-			/// TODO get payload from somewhere ...
-			AndroidJavaClass javaNFCPluginClass = new AndroidJavaClass ("com.questmill.nfc.NFCPlugin");
+			javaNFCPluginClass.CallStatic("write", new object[] {
+				payload
+			});
 
-			string payload = "test payload no. " + testPayloadCounter;
-
-			javaNFCPluginClass.CallStatic ("write", new object[] { payload });
-			testPayloadCounter++;
-			Debug.Log ("Unity Side write called: " + payload);
+			Debug.Log("Unity Side write called: " + payload);
 
 			#elif UNITY_EDITOR
 			Debug.LogWarning ("NFC Plugin only works on Android Platform.");

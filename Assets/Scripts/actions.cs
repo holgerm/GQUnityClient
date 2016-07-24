@@ -7,6 +7,7 @@ using System;
 using UnityEngine.Networking;
 using GQ.Client.Net;
 using GQ.Client.Conf;
+using QM.NFC;
 
 public class actions : MonoBehaviour {
 
@@ -226,6 +227,10 @@ public class actions : MonoBehaviour {
 		if ( action.type == "ParseVariables" ) {
 			parseVariable(action);
 		}
+		else
+		if ( action.type == "WriteToNFC" ) {
+			writeToNFC(action);
+		}
 		
 		
 	}
@@ -386,6 +391,19 @@ public class actions : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Writes the content of the variable specified by the content attribute to an NFC chip.
+	/// </summary>
+	/// <param name="action">Action.</param>
+	void writeToNFC (QuestAction action) {
+		string payload = getVariable(action.getAttribute("content")).getStringValue();
+
+		if ( payload.Equals("[null]") )
+			return;
+
+		NFC_Connector.Connector.NFCWrite(payload);
 	}
 
 	/// <summary>
