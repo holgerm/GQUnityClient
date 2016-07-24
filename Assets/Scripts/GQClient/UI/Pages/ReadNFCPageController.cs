@@ -9,6 +9,7 @@ using System;
 using GQ.Util;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
+using QM.NFC;
 
 namespace GQ.Client.UI.Pages {
 
@@ -18,6 +19,7 @@ namespace GQ.Client.UI.Pages {
 		public RawImage image;
 		public Image image_hochkant;
 		public Text text;
+		public string saveToVar;
 		public Button nextbutton;
 		public Button backbutton;
 		public Text buttontext;
@@ -98,6 +100,9 @@ namespace GQ.Client.UI.Pages {
 				buttontext.text = ">";
 
 			}
+
+			// init variable name where the nfc payload will be stored:
+			saveToVar = page.getAttribute("saveToVar");
 		}
 
 		protected override void InitBackButton (bool show) {
@@ -233,6 +238,13 @@ namespace GQ.Client.UI.Pages {
 
 		public void nextButton () {
 			onEnd();
+		}
+
+		public void onNFCRead (NFC_Info nfcInfo) {
+			QuestVariable payloadVar = new QuestVariable(saveToVar, nfcInfo.Payload);
+			questactions.setVariable(saveToVar, payloadVar);
+
+			Debug.Log("NFC READ: " + nfcInfo.Payload + " now stoed in variable " + saveToVar);
 		}
 
 	}

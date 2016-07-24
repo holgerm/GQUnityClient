@@ -1624,6 +1624,7 @@ GameObject:
   - 114: {fileID: 1531027275}
   - 114: {fileID: 1531027272}
   - 114: {fileID: 1531027276}
+  - 114: {fileID: 1531027277}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -1794,6 +1795,40 @@ MonoBehaviour:
   keepTranslatingAtRuntime: 0
   translateOnlyPart: 
   currentLanguage: 
+--- !u!114 &1531027277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1531027270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77d1f66517a1b4447abcca02050befd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NFCPayloadText: {fileID: 1531027272}
+  OnNFCReadPayload:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: QM.NFC.NFCReadPayloadEvent, Assembly-CSharp-firstpass, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  NFCIdText: {fileID: 0}
+  OnNFCReadDetails:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1953851294}
+        m_MethodName: onNFCRead
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: QM.NFC.NFCReadDetailsEvent, Assembly-CSharp-firstpass, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &1725418353
 Prefab:
   m_ObjectHideFlags: 0
