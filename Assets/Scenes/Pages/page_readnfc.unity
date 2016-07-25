@@ -1806,7 +1806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d1f66517a1b4447abcca02050befd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NFCPayloadText: {fileID: 1531027272}
+  NFCPayloadText: {fileID: 0}
   OnNFCReadPayload:
     m_PersistentCalls:
       m_Calls: []
@@ -2246,6 +2246,7 @@ MonoBehaviour:
   image: {fileID: 1957163289}
   image_hochkant: {fileID: 521211304}
   text: {fileID: 1531027272}
+  saveToVar: 
   nextbutton: {fileID: 763440325}
   backbutton: {fileID: 1313306991}
   buttontext: {fileID: 328853095}

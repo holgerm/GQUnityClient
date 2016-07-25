@@ -174,7 +174,6 @@ namespace GQ.Client.UI.Pages {
 
 					}
 
-					Debug.Log("Opening url: " + url);
 					Application.OpenURL(url);
 
 				}
@@ -244,7 +243,8 @@ namespace GQ.Client.UI.Pages {
 			QuestVariable payloadVar = new QuestVariable(saveToVar, nfcInfo.Payload);
 			questactions.setVariable(saveToVar, payloadVar);
 
-			Debug.Log("NFC READ: " + nfcInfo.Payload + " now stoed in variable " + saveToVar);
+			// TODO: Replace by argument that the develop can specify in NFC Reader UI Component. (hm)
+			text.text = "NFC Chip wurde erfolgreich ausgelesen.";
 		}
 
 	}

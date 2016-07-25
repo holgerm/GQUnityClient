@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using GQ.Client.Net;
 using GQ.Client.Conf;
 using QM.NFC;
+using GQ.Client.Util;
 
 public class actions : MonoBehaviour {
 
@@ -394,14 +395,20 @@ public class actions : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Writes the content of the variable specified by the content attribute to an NFC chip.
+	/// Writes the content as payload to an NFC chip. The content can conatin variables etc. that will be replaced.
 	/// </summary>
 	/// <param name="action">Action.</param>
 	void writeToNFC (QuestAction action) {
-		string payload = getVariable(action.getAttribute("content")).getStringValue();
+		string payload = TextHelper.makeReplacements(action.getAttribute("content"));
 
 		if ( payload.Equals("[null]") )
 			return;
+
+		// TODO woher kommen die umgebenden Anfürhungszeichen beim NFC Spiel in München? (hm)
+
+		if ( payload.StartsWith("\"") && payload.EndsWith("\"") ) {
+			payload = payload.Substring(1, payload.Length - 2);
+		}
 
 		NFC_Connector.Connector.NFCWrite(payload);
 	}
@@ -477,7 +484,15 @@ public class actions : MonoBehaviour {
 				}
 			}
 			// end of KV pair reached: store it
-			setVariable(key.ToString(), new QuestVariable(key.ToString(), valueBuilder.ToString()));
+			// if value can be parsed as number we store it as number typed var:
+			string stringValue = valueBuilder.ToString();
+			double numValue;
+			if ( Double.TryParse(stringValue, out numValue) ) {
+				setVariable(key.ToString(), new QuestVariable(key.ToString(), numValue));
+			}
+			else {
+				setVariable(key.ToString(), new QuestVariable(key.ToString(), stringValue));
+			}
 		}
 
 	}
@@ -1710,17 +1725,22 @@ public class actions : MonoBehaviour {
 			}
 			else
 			if ( action.value.bool_value != null && action.value.bool_value.Count > 0 ) {
-				Debug.Log(key + " has bool value");
+				Debug.Log(key + " has BOOL value");
 				variables.Add(new QuestVariable(key, action.value.bool_value[0]));
 			}
 			else
 			if ( action.value.num_value != null && action.value.num_value.Count > 0 ) {
-				Debug.Log("value found: " + action.value.num_value[0]);
+				Debug.Log("value of ytpe NUM found: " + action.value.num_value[0]);
 				variables.Add(new QuestVariable(key, action.value.num_value[0]));
 			}
 			else
 			if ( action.value.string_value != null && action.value.string_value.Count > 0 ) {
-				variables.Add(new QuestVariable(key, action.value.string_value[0]));
+				string unformattedContent = action.value.string_value[0];
+				Debug.Log("VAR: " + key + " has type STRING. Length: " + unformattedContent.Length);
+				Debug.Log("UNFORMATTED: >" + unformattedContent + "<");
+				string formattedContent = TextHelper.makeReplacements(unformattedContent);
+				Debug.Log("FORMATTED: >" + formattedContent + "<");
+				variables.Add(new QuestVariable(key, formattedContent));
 			}
 			else
 			if ( action.value.var_value != null && action.value.var_value.Count > 0 ) {
@@ -1753,73 +1773,53 @@ public class actions : MonoBehaviour {
 	}
 
 	public double mathVariable (string input) {
-
-
-		Debug.Log("calculating " + input);
-
+		
 		double currentvalue = 0.0d;
 		bool needsstartvalue = true;
 		input = new string(input.ToCharArray()
 		                 .Where(c => !Char.IsWhiteSpace(c))
 		                 .ToArray());
-		//	Debug.Log ("Rechnung:"+input);
 
 		string arithmetics = "";
 
-
 		foreach ( Char c in input.ToCharArray() ) {
-
-
 			if ( c == '+' ) {
-
 				arithmetics = arithmetics + "+";
 			}
 			if ( c == '-' ) {
-				
 				arithmetics = arithmetics + "-";
 			}
 			if ( c == '*' ) {
-				
 				arithmetics = arithmetics + "*";
 			}
 			if ( c == '/' ) {
-				
 				arithmetics = arithmetics + "/";
 			}
 			if ( c == ':' ) {
-				
 				arithmetics = arithmetics + ":";
 			}
 
 		}
 
-
-		
-		//Debug.Log ("Rechnung:"+arithmetics);
-
 		char[] splitter = "+-/*:".ToCharArray();
 		string[] splitted = input.Split(splitter);
-
-
 		int count = 0;
-
 
 		foreach ( string s in splitted ) {
 
-			Debug.Log("teil " + s);
-
 			double n;
 			bool isNumeric = double.TryParse(s, out n);
+
 			if ( isNumeric ) {
 
 				if ( needsstartvalue ) {
-
 					currentvalue = n;
 					needsstartvalue = false;
 				}
 				else {
 
 					if ( arithmetics.Substring(count, 1) == "+" ) {
+
 						currentvalue += n;
 					}
 					else
@@ -1845,31 +1845,22 @@ public class actions : MonoBehaviour {
 
 				QuestVariable qv = getVariable(s);
 				if ( !qv.isNull() ) {
-					Debug.Log("found");
+
 					if ( qv.num_value != null && qv.num_value.Count > 0 ) {
 
-						Debug.Log("->" + qv.num_value);
-
 						if ( needsstartvalue ) {
-
 							currentvalue = qv.num_value[0];
-//							Debug.Log (s + ":" + currentvalue.ToString ("F10"));
-
 							needsstartvalue = false;
-					
 						}
 						else {
-
 							n = qv.num_value[0];
 
-//							Debug.Log (n);
 							if ( arithmetics.Substring(count, 1) == "+" ) {
 								currentvalue += n;
 							}
 							else
 							if ( arithmetics.Substring(count, 1) == "-" ) {
 								currentvalue -= n;
-//								Debug.Log(currentvalue);
 							}
 							else
 							if ( arithmetics.Substring(count, 1) == "*" ) {
@@ -1887,9 +1878,6 @@ public class actions : MonoBehaviour {
 					}
 				}
 			}
-
-
-			Debug.Log("= " + currentvalue);
 
 		}
 

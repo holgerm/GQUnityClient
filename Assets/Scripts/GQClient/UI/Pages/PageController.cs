@@ -81,9 +81,6 @@ namespace GQ.Client.UI.Pages {
 		}
 
 		protected void onEnd () {
-
-			Debug.Log("Page.onEnd()");
-
 			page.state = PageStateOnEnd;
 
 			if ( page.onEnd != null && page.onEnd.actions != null && page.onEnd.actions.Count > 0 ) {
