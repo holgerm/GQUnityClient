@@ -75,12 +75,12 @@ namespace QM.NFC {
 			}
 
 			#elif UNITY_EDITOR
-		Debug.LogWarning ("NFC Plugin only works on Android Platform.");
+			Debug.LogWarning ("NFC Plugin only works on Android Platform.");
 			#endif
 		}
 
 		public void NFCWrite (string payload) {
-			#if UNITY_ANDROID 
+			#if UNITY_ANDROID && !UNITY_EDITOR
 			AndroidJavaClass javaNFCPluginClass = new AndroidJavaClass("com.questmill.nfc.NFCPlugin");
 
 			javaNFCPluginClass.CallStatic("write", new object[] {
@@ -89,7 +89,10 @@ namespace QM.NFC {
 
 			Debug.Log("Unity Side write called: " + payload);
 
-			#elif UNITY_EDITOR
+			#elif UNITY_ANDROID && UNITY_EDITOR
+			NFC_Emulator.emulateNFCWrite(payload);
+
+			#else
 			Debug.LogWarning ("NFC Plugin only works on Android Platform.");
 			#endif
 		}
