@@ -247,7 +247,7 @@ namespace GQ.Client.Net
 
 					if (Directory.Exists (quest + "/sendqueue/")) {
 
-						Directory.Delete (quest + "/sendqueue/");
+						Directory.Delete (quest + "/sendqueue/", true);
 
 					}
 				}
