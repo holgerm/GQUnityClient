@@ -21,7 +21,7 @@ public class sendqueueMessage : MonoBehaviour
 	public void reset ()
 	{
 
-		//	GameObject.Find ("QuestDatabase").GetComponent<ConnectionClient> ().reset ();
+		GameObject.Find ("QuestDatabase").GetComponent<ConnectionClient> ().sendQueue.reset ();
 		GetComponent<Animator> ().SetTrigger ("p_out");
 
 
