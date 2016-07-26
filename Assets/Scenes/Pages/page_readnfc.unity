@@ -2248,8 +2248,8 @@ MonoBehaviour:
   text: {fileID: 1531027272}
   saveToVar: 
   nextbutton: {fileID: 763440325}
+  nextButtontext: {fileID: 328853095}
   backbutton: {fileID: 1313306991}
-  buttontext: {fileID: 328853095}
   dialogitem_state: 0
   indexoflink: 0
   link: 

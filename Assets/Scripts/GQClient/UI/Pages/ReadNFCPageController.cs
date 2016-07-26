@@ -21,8 +21,8 @@ namespace GQ.Client.UI.Pages {
 		public Text text;
 		public string saveToVar;
 		public Button nextbutton;
+		public Text nextButtontext;
 		public Button backbutton;
-		public Text buttontext;
 		public int dialogitem_state = 0;
 		public int indexoflink = 0;
 		public string link;
@@ -92,17 +92,16 @@ namespace GQ.Client.UI.Pages {
 			text.fontSize = FontSize;
 
 			if ( page.hasAttribute("text") ) {
-
 				string toadd = questdb.GetComponent<actions>().formatString(page.getAttribute("text"));
-
 				text.text += convertStringForHypertext(toadd);
-				nextbutton.interactable = true;
-				buttontext.text = ">";
-
 			}
 
 			// init variable name where the nfc payload will be stored:
 			saveToVar = page.getAttribute("saveToVar");
+
+			// disable nextButton until NFC Chip is read:
+			nextbutton.interactable = false;
+			nextButtontext.text = ">";
 		}
 
 		protected override void InitBackButton (bool show) {
@@ -244,7 +243,11 @@ namespace GQ.Client.UI.Pages {
 			questactions.setVariable(saveToVar, payloadVar);
 
 			// TODO: Replace by argument that the develop can specify in NFC Reader UI Component. (hm)
+			// TODO AND give as argument in GQEditor
 			text.text = "NFC Chip wurde erfolgreich ausgelesen.";
+
+			nextbutton.interactable = true;
+			nextButtontext.text = "OK";
 		}
 
 	}

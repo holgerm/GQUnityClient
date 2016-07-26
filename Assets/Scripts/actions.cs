@@ -429,8 +429,9 @@ public class actions : MonoBehaviour {
 
 		string rawValue = getVariable(action.getAttribute("FromVar")).getStringValue();
 
-		if ( rawValue.Equals("[null]") )
+		if ( rawValue == null || rawValue.Equals("[null]") ) {
 			return;
+		}
 
 		char[] receivedChars = rawValue.ToCharArray();
 
