@@ -41,7 +41,7 @@ namespace QM.NFC {
 
 			// Payload:
 			payload = EditorPrefs.GetString("nfc.payload");
-			if ( payload == null || payload.Equals("") )
+			if ( payload == null )
 				payload = "payload goes here ...";
 
 			// Techs: // TODO make list of string instead to prevent errors
@@ -67,9 +67,6 @@ namespace QM.NFC {
 			GUI.SetNextControlName(PAYLOAD_TEXTFIELD_NAME);
 			string payloadOld = payload;
 			payload = EditorGUILayout.TextField("Payload", payload);
-			// must not be empty:
-			if ( payload.Equals("") )
-				payload = payloadOld; // take old value if set empty.
 			// save changes:
 			if ( !payload.Equals(payloadOld) )
 				EditorPrefs.SetString("nfc.payload", payload);
