@@ -620,9 +620,7 @@ public class questdatabase : MonoBehaviour {
 			case JSONObject.Type.ARRAY:
 			//			Debug.Log("ARRAY: "+kei);
 				if ( kei == "quest_hotspots" ) {
-				
-					//				Debug.Log("New Quest");
-				
+
 					currentquest = new Quest();
 					if ( allquests == null ) {
 						allquests = new List<Quest>();
@@ -772,7 +770,8 @@ public class questdatabase : MonoBehaviour {
 		foreach ( Quest q in allquests ) {
 			buttoncontroller.filteredOnlineList.Add(q);
 		}
-		
+
+		Debug.Log("PROBLEM : updateAndShowQuestList set null");
 		currentquest = null;
 		
 		if ( Configuration.instance.questvisualization == "list" ) {
@@ -867,6 +866,8 @@ public class questdatabase : MonoBehaviour {
 		q.predeployed = true;
 
 		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
+
+		Debug.Log("PROBLEM: startPredeployedQuest");
 		currentquest = q;
 
 		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
@@ -890,10 +891,8 @@ public class questdatabase : MonoBehaviour {
 
 			Debug.Log("Error: " + wwwpdq.error + "www.url=" + www.url);
 		}
-		//Debug.Log ("creatign predeployed quest");
-		//Debug.Log(q.xmlcontent);
 
-
+		Debug.Log("PROBLEM: before LoadFromText (q.name = " + q.name + ", q.id = " + q.id + ")");
 		currentquest = q.LoadFromText(id, true);
 		localquests.Add(currentquest);
 		bool hasmorethanmetadata = true;
@@ -1220,6 +1219,7 @@ public class questdatabase : MonoBehaviour {
 			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 			if ( !downloadingAll ) {
+				Debug.Log("PROBLEM: waitForWebXml");
 				currentquest = nq;
 			}
 
@@ -1260,6 +1260,7 @@ public class questdatabase : MonoBehaviour {
 
 		closeMap();
 
+		Debug.Log("PROBLEM: startQuest (Quest q)");
 		currentquest = q;
 		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 
@@ -1309,6 +1310,7 @@ public class questdatabase : MonoBehaviour {
 		if ( currentquest != null ) {
 			if ( currentquest.id == q.id ) {
 
+				Debug.Log("PROBLEM: removeQuest()");
 				currentquest = null;
 
 			}
@@ -1428,6 +1430,8 @@ public class questdatabase : MonoBehaviour {
 	public void downloadQuest (int id) {
 		Quest q = new Quest();
 		q.id = id;
+
+		Debug.Log("PROBLEM: downloadQuest(" + id + ")");
 		currentquest = q;
 		downloadQuest(q);
 	}
@@ -1698,7 +1702,9 @@ public class questdatabase : MonoBehaviour {
 
 		// TODO: Here we create the THIRD Quest object (in download case). 
 		// We can only assume that q has an id here. Is this really a good idea? (hm)
+//		Debug.Log("XXXXX VORHER");
 		Quest nq = q.LoadFromText(q.id, localload);
+//		Debug.Log("XXXXX NACHHER");
 
 		nq.id = q.id;
 		if ( nq == null ) {
@@ -1724,6 +1730,7 @@ public class questdatabase : MonoBehaviour {
 
 		}
 		else {
+			Debug.Log("PROBLEM: installQUest(): id = " + nq.id);
 			currentquest = nq;
 		}
 
@@ -2998,6 +3005,7 @@ public class questdatabase : MonoBehaviour {
 			}
 
 			if ( !downloadingAll ) {
+				Debug.Log("PROBLEM: downloadFinished");
 				currentquest = nq;
 			}
 

@@ -59,6 +59,9 @@ public class QuestPage {
 	[XmlElement("onFail")]
 	public QuestTrigger
 		onFailure;
+	//	[XmlElement("onRead")]
+	//	public QuestTrigger
+	//		onRead;
 	public string state;
 	public string result;
 
@@ -96,7 +99,7 @@ public class QuestPage {
 		return h;
 		
 	}
-	
+
 	public void deserializeAttributes (int id, bool redo) {
 
 		questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();

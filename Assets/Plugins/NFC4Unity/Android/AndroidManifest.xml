@@ -10,8 +10,9 @@
     </uses-feature>
     <uses-permission android:name="android.permission.NFC" >
     </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application android:label="@string/app_name"> 
-        <activity android:name=".NFCPlugin"
+        <activity android:name="com.questmill.nfc.NFCPlugin"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

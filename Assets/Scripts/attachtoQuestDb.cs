@@ -15,16 +15,19 @@ public class attachtoQuestDb : MonoBehaviour {
 
 
 
-	void Start(){
+	IEnumerator Start () {
 
 
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 
-
-		if (asScrollView) {
+		if ( asScrollView ) {
 
 			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().publicquestslist = GetComponent<Image>();
 
-		} else if (asDownloadText) {
+		}
+		else
+		if ( asDownloadText ) {
 			
 			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage = GetComponent<Text>();
 			

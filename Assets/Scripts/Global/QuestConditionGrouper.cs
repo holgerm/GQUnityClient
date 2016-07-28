@@ -68,7 +68,7 @@ public class QuestConditionGrouper {
 			foreach ( QuestConditionComparer qcc in eq ) {
 
 				allbools.Add(qcc.isFullfilled("eq"));
-
+				Debug.Log("QuestConditionGrouper : eq done");
 			}
 
 		}
@@ -126,7 +126,7 @@ public class QuestConditionGrouper {
 					}
 
 				}
-
+				Debug.Log("QuestConditionGrouper : AND results in: " + ands);
 				return ands;
 
 			}
@@ -143,6 +143,7 @@ public class QuestConditionGrouper {
 							
 				}
 						
+				Debug.Log("QuestConditionGrouper : OR results in: " + ors);
 				return ors;
 
 			}
@@ -159,11 +160,13 @@ public class QuestConditionGrouper {
 							
 				}
 						
+				Debug.Log("QuestConditionGrouper : NOT results in: " + nots);
 				return nots;
 						
 			}
 
 		} 
+		Debug.Log("QuestConditionGrouper : REST results in: true ");
 
 		return true;
 

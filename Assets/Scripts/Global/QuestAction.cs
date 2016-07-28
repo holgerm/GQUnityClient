@@ -132,16 +132,32 @@ public class QuestAction {
 	public void Invoke () {
 
 		//Debug.Log (type);
-		GameObject.Find("QuestDatabase").GetComponent<actions>().doAction(this);
+
+		GameObject dbGO = GameObject.Find("QuestDatabase");
+
+		if ( dbGO == null ) {
+			Debug.Log("QuestDatabase gameobject is null");
+		}
+
+		actions action = dbGO.GetComponent<actions>();
+
+		if ( action == null ) {
+			Debug.Log("dbGO.action is null");
+		}
+
+		action.doAction(this);
 
 	}
 
 	public void InvokeThen () {
+
+		Debug.Log("actions.InvokeThen()");
 		
 		if ( thenactions != null && thenactions.Count > 0 ) {
 			foreach ( QuestAction qa in thenactions ) {
-				
+				Debug.Log("  invoking action of type: " + qa.type);
 				qa.Invoke();
+				Debug.Log("BACK FROM " + qa.type);
 				
 			}
 		}

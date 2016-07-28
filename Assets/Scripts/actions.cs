@@ -134,8 +134,12 @@ public class actions : MonoBehaviour {
 
 		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
 
+		Debug.Log("ACTIONS.DO_ACTION # STARTED, curQuest: " + quest.name + " ACTION: " + action.type);
+
 		if ( action.type == "StartMission" ) {
+			Debug.Log("ACTIONS.DO_ACTION # BEFORE Change_Page ");
 			changePage(action);
+			Debug.Log("ACTIONS.DO_ACTION # AFTER Change_Page ");
 		}
 		else
 		if ( action.type == "EndGame" ) {
@@ -955,6 +959,7 @@ public class actions : MonoBehaviour {
 		if ( action.hasAttribute("allowReturn") )
 			questdb.allowReturn = action.getBoolAttribute("allowReturn");
 
+		Debug.Log("ACTION TEST: >" + action.getAttribute("id") + "<"); // TODO fix the bug with Quest Demo NFCRead (onRead Action startPage(id becomes "" why ever)
 		questdb.changePage(int.Parse(action.getAttribute("id")));
 	
 	}
