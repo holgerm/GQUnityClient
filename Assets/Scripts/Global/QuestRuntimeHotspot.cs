@@ -65,13 +65,22 @@ public class QuestRuntimeHotspot {
 	}
 
 	public Sprite getMarkerImage () {
-		Sprite s = Configuration.instance.defaultmarker;
+		Sprite s = null;
+		bool found = false;
 		foreach ( MarkerCategorySprite mcs in Configuration.instance.categoryMarker ) {
 
 			if ( mcs.category == category ) {
-				s = mcs.sprite;
+				if ( mcs.sprite != null ) {
+					s = mcs.sprite;
+					found = true;
+				}
+				break;
 			}
 
+		}
+
+		if ( !found && Configuration.instance.defaultmarker != null ) {
+			s = Configuration.instance.defaultmarker;
 		}
 
 		return s;

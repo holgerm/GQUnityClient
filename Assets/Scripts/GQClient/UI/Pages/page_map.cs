@@ -518,12 +518,11 @@ public class page_map : MonoBehaviour {
 				
 				}
 				else {
-				
-				
-				
-				
-					createMarker(qrh, qrh.getMarkerImage().texture);
-				
+					Sprite markerImage = qrh.getMarkerImage();
+					if ( markerImage != null )
+						createMarker(qrh, qrh.getMarkerImage().texture);
+					else
+						Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
 				
 				}
 			
