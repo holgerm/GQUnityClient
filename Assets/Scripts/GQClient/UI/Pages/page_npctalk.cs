@@ -423,7 +423,7 @@ namespace GQ.Client.UI.Pages {
 
 
 
-				Debug.Log(www.error);
+				Debug.Log(www.error + " loading took: " + DateTime.Now.Subtract(startWWW).Milliseconds);
 
 				image.enabled = false;
 			}

@@ -821,7 +821,7 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		if ( doit && !downloadedAll && Configuration.instance.downloadAllCloudQuestOnStart ) {
-			Debug.Log("Found Quests: " + allquests.Count);
+			Debug.Log("HERE . Found Quests: " + allquests.Count);
 
 			downloadedAll = true;
 			downloadingAll = true;
@@ -839,6 +839,8 @@ public class questdatabase : MonoBehaviour {
 		}
 		else
 		if ( Configuration.instance.downloadAllCloudQuestOnStart ) {
+			Debug.Log("HERE WE ARE");
+
 			if ( webloadingmessage != null ) {
 
 				webloadingmessage.enabled = false;
@@ -1441,7 +1443,7 @@ public class questdatabase : MonoBehaviour {
 		if ( filedownloads != null )
 			Debug.Log("filedownloads: " + filedownloads.Count);
 		else
-			Debug.Log("filedownloads: NULL");
+			Debug.Log("filedownloads: NULL ; url: " + url + " Local path: " + localTargetPath);
 		
 		if ( wanttoload == null ) {
 			wanttoload = new List<string>();
@@ -1870,10 +1872,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
