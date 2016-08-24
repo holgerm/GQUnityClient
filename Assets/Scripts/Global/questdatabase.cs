@@ -873,7 +873,7 @@ public class questdatabase : MonoBehaviour {
 		Debug.Log("PROBLEM: startPredeployedQuest");
 		currentquest = q;
 
-		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+//		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 
 
 
@@ -1006,7 +1006,7 @@ public class questdatabase : MonoBehaviour {
 	/// <param name="elapsedTime">Elapsed time.</param>
 	/// <param name="www">Www.</param>
 	// TODO replace by generic testConnection method which blocks and returns bool after success or timeout
-	IEnumerator DownloadQuestAfterConnectionCheck (Quest q, float elapsedTime, WWW www) {
+	IEnumerator DownloadQuestAfterConnectionCheck (Quest q, float elapsedTime, WWW wwwTestConn) {
 
 		while ( msgsactive > 0 ) {
 			yield return 0;
@@ -1016,13 +1016,13 @@ public class questdatabase : MonoBehaviour {
 
 //		Debug.Log ("CheckConnection(): before ping");
 		yield return new WaitForSeconds(0.1f);
-		if ( www.isDone ) {
-			bool ok = (www.error == null);
+		if ( wwwTestConn.isDone ) {
+			bool ok = (wwwTestConn.error == null);
 			downloadAfterConnectionChecked(q, ok);
 		}
 		else {
 			if ( elapsedTime < 10.0f ) {
-				StartCoroutine(DownloadQuestAfterConnectionCheck(q, elapsedTime + 0.1f, www));
+				StartCoroutine(DownloadQuestAfterConnectionCheck(q, elapsedTime + 0.1f, wwwTestConn));
 			}
 			else {
 				downloadAfterConnectionChecked(q, false);
@@ -1216,7 +1216,7 @@ public class questdatabase : MonoBehaviour {
 
 
 		
-			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+//			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 
 			nq.xmlcontent = UTF8Encoding.UTF8.GetString(www.bytes); 
 			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
@@ -1265,7 +1265,7 @@ public class questdatabase : MonoBehaviour {
 
 		Debug.Log("PROBLEM: startQuest (Quest q)");
 		currentquest = q;
-		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+//		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 
 		bool islocal = false;
 		Quest localq;
@@ -1711,6 +1711,17 @@ public class questdatabase : MonoBehaviour {
 		Quest nq = q.LoadFromText(q.id, localload);
 //		Debug.Log("XXXXX NACHHER");
 
+		bool alreadyStoredInLocalQuests = false;
+		foreach ( Quest quest in localquests ) {
+			if ( quest.id == nq.id ) {
+				alreadyStoredInLocalQuests = true;
+				break;
+			}
+		}
+		if ( !alreadyStoredInLocalQuests )
+			localquests.Add(nq);
+
+
 		nq.id = q.id;
 		if ( nq == null ) {
 			questmilllogo.enabled = false;
@@ -1875,22 +1886,22 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
 						if ( imageextensions.Contains(fi.Extension.ToLower()) ) {
 
-							SpriteConverter sc = new SpriteConverter(value);
-
-
-
-							convertedSprites.Add(sc);
-
-							sc.startConversion();
+//							SpriteConverter sc = new SpriteConverter(value);
+//
+//
+//
+//							convertedSprites.Add(sc);
+//
+//							sc.startConversion();
 							//	StartCoroutine (waitForSingleSpriteCompletion (sc));
 						}
 					}
@@ -2088,6 +2099,11 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	void transferQuestHotspots (int pageid) {
+
+		Debug.Log("<color=red>transferQuestHotspots(" + pageid + ")</color>");
+
+		// instatiate a quest clone at any start. This function is always called at quest start.
+		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 		
 		if ( currentquest.getAttribute("transferToUserPosition") != "true" ) {
 		
@@ -2977,7 +2993,7 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		// TODO: shouldn't we add it to the local quests only after the download of the quest xml has been completed, i.e. one line later? (hm)
-		localquests.Add(q);
+//		localquests.Add(q);
 		yield return q.www;
 
 		// Quest XML has been downloaded now.
@@ -2995,17 +3011,17 @@ public class questdatabase : MonoBehaviour {
 				
 			nq.id = q.id;
 				
-			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
-				
+//			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+//				
 			nq.xmlcontent = UTF8Encoding.UTF8.GetString(q.www.bytes); 
 //			Debug.Log ("XML:" + nq.xmlcontent);
-			bool b = false;
+			bool isLocal = false;
 
 
 			// TODO: what is this good for? We already know that it is in the list, since we put it in there. (hm)
 			foreach ( Quest lq in localquests ) {
 				if ( lq.id == q.id ) {
-					b = true;
+					isLocal = true;
 				}
 			}
 
@@ -3015,7 +3031,7 @@ public class questdatabase : MonoBehaviour {
 			}
 
 			// TODO: here b is always true! So we can elimiate the foreach loop above! (hm again ;-) )
-			installQuest(nq, b, false);
+			installQuest(nq, isLocal, false);
 			// TODO: why do we use a new Quest object nq which only has the id from q. Shouldn't we just use q itself?
 		}
 		else {

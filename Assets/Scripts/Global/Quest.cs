@@ -13,6 +13,7 @@ using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
 using GQ.Client.Conf;
+using System.ComponentModel;
 
 [System.Serializable]
 [XmlRoot("game")]
@@ -24,9 +25,11 @@ public class Quest  : IComparable<Quest> {
 	[XmlAttribute("id")]
 	public int
 		id;
+
 	[XmlAttribute("lastUpdate")]
 	public long
 		lastUpdate;
+
 	[XmlAttribute("xmlformat")]
 	public int
 		xmlformat;
@@ -310,6 +313,7 @@ public class Quest  : IComparable<Quest> {
 					if ( !Application.isWebPlayer ) {
 						
 						if ( !redo ) {
+							Debug.Log("GETTING Image for: " + id + " in " + filename);
 							questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if ( splitted.Length > 3 ) {
