@@ -823,7 +823,6 @@ public class questdatabase : MonoBehaviour {
 		if ( doit && !downloadedAll && Configuration.instance.downloadAllCloudQuestOnStart ) {
 			Debug.Log("HERE . Found Quests: " + allquests.Count);
 
-			downloadedAll = true;
 			downloadingAll = true;
 
 			foreach ( Quest q in allquests ) {
@@ -833,6 +832,8 @@ public class questdatabase : MonoBehaviour {
 
 
 			}
+
+			downloadedAll = true;
 
 
 
@@ -1381,8 +1382,10 @@ public class questdatabase : MonoBehaviour {
 			loadlogo.enable();
 		}
 
-		if ( Configuration.instance.showinternetconnectionmessage && q.alternateDownloadLink == "" ) {
-			showmessage("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK");
+		if ( Configuration.instance.showinternetconnectionmessage &&
+		     (q.alternateDownloadLink == "" || q.alternateDownloadLink == null) &&
+		     msgsactive == 0 ) {
+			showmessage("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK"); // TODO anpassen z. Bsp. für DownloadAllQuest auto)
 		}
 //		Debug.Log ("downloadQuest(): q.alternateDownloadLink =" + q.alternateDownloadLink);
 
@@ -1872,10 +1875,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);

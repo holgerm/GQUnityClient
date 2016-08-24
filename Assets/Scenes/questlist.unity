@@ -7762,11 +7762,11 @@ MonoBehaviour:
     Nutzungsbedingungen zu \xE4ndern, wenn ein wichtiger Grund hierf\xFCr vorliegt.
     <br>"
   agbsVersion: 1
-  questvisualizationchangable: 1
+  questvisualizationchangable: 0
   cloudQuestsVisible: 1
   showcloudquestsimmediately: 1
-  downloadAllCloudQuestOnStart: 0
-  localQuestsDeletable: 1
+  downloadAllCloudQuestOnStart: 1
+  localQuestsDeletable: 0
   showtextinloadinglogo: 1
   showinternetconnectionmessage: 1
   defaultlanguage: system

@@ -24,6 +24,9 @@ public class Quest  : IComparable<Quest> {
 	[XmlAttribute("id")]
 	public int
 		id;
+	[XmlAttribute("lastUpdate")]
+	public long
+		lastUpdate;
 	[XmlAttribute("xmlformat")]
 	public int
 		xmlformat;
