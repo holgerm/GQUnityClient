@@ -10,7 +10,7 @@ using System.Reflection;
 using GQ.Util;
 using GQ.Client.Conf;
 
-namespace GQ.Editor.Build {
+namespace GQ.Editor.Building {
 	public class ProductEditorOld : EditorWindow {
 		static private int selectedProductIndex;
 		static private string[] productIDs;

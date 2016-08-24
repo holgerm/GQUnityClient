@@ -9,7 +9,7 @@ using System.Text;
 using System.Reflection;
 using GQ.Util;
 using GQ.Client.Conf;
-using GQ.Editor.Build;
+using GQ.Editor.Building;
 using GQ.Client.Util;
 
 namespace GQ.Editor.UI {
