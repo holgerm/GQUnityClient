@@ -7646,7 +7646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 4
+  product: 6
   overrideProductSettingsInInspector: 0
   portalID: 61
   autostartQuestID: 0
@@ -7656,9 +7656,9 @@ MonoBehaviour:
   mapboxMapID: gqebk.ed1de6df
   downloadTimeOutSeconds: 100
   impressum: 
-  toplogo: {fileID: 21300000, guid: 8d104b5c76cf247eba9c17a95913f876, type: 3}
+  toplogo: {fileID: 21300000, guid: b76e1c9a847c7478db32b922c17f512a, type: 3}
   nameForQuest: Quest
-  questvisualization: map
+  questvisualization: list
   showMessageForDatasendAction: 0
   showPrivacyAgreement: 0
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter
@@ -7762,13 +7762,13 @@ MonoBehaviour:
     Nutzungsbedingungen zu \xE4ndern, wenn ein wichtiger Grund hierf\xFCr vorliegt.
     <br>"
   agbsVersion: 1
-  questvisualizationchangable: 0
+  questvisualizationchangable: 1
   cloudQuestsVisible: 1
   showcloudquestsimmediately: 1
-  downloadAllCloudQuestOnStart: 1
-  localQuestsDeletable: 0
-  showtextinloadinglogo: 0
-  showinternetconnectionmessage: 0
+  downloadAllCloudQuestOnStart: 0
+  localQuestsDeletable: 1
+  showtextinloadinglogo: 1
+  showinternetconnectionmessage: 1
   defaultlanguage: system
   languageChangableByUser: 0
   languagesAvailable:
@@ -7792,28 +7792,28 @@ MonoBehaviour:
   - category: wcc.tour.beethoven
     anzeigename_de: Beethoven Route
     sprite: {fileID: 21300000, guid: c647774d1f4284f85995b053bad2c4c7, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.culture
     anzeigename_de: Kultur
     sprite: {fileID: 21300000, guid: 80eadcdccf2a14eceab8aa81d74d6687, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.gallery
     anzeigename_de: Galerie
     sprite: {fileID: 21300000, guid: 563182bfda3da48208d1b9dc3688be61, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.architecture
     anzeigename_de: Architektur
     sprite: {fileID: 21300000, guid: 40604b4f6d6ea4d0ab5081e80ac3ec12, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.cafe
     anzeigename_de: "Caf\xE9"
     sprite: {fileID: 21300000, guid: 09a7cf6a3ccae4a1cb3ae60f2c1e1ca3, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.history
     anzeigename_de: Historisch
     sprite: {fileID: 21300000, guid: 5c84930ca34e44ca98f0401dc2e7a3fe, type: 3}
@@ -7822,38 +7822,38 @@ MonoBehaviour:
   - category: wcc.info
     anzeigename_de: Information
     sprite: {fileID: 21300000, guid: 76db04478feb846869a9e917d337d453, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.nature
     anzeigename_de: Natur
     sprite: {fileID: 21300000, guid: 1f78dc001edf44833b89b63f05f0ea4b, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: wcc.restaurant
     anzeigename_de: Restaurant
     sprite: {fileID: 21300000, guid: e438c2dcf472147c787c9b4d2b970c4b, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: game
     anzeigename_de: Spiel
     sprite: {fileID: 21300000, guid: 5fa89bad452ff4a34ac4b2d0c6efe392, type: 3}
-    showInList: 0
-    showOnMap: 0
+    showInList: 1
+    showOnMap: 1
   - category: education
     anzeigename_de: Lernen
     sprite: {fileID: 21300000, guid: f4357e52be36e48fe8d220f327d26a4a, type: 3}
-    showInList: 0
-    showOnMap: 0
+    showInList: 1
+    showOnMap: 1
   - category: tour
     anzeigename_de: Tour
     sprite: {fileID: 21300000, guid: 71a496772f81242c19547180cc9633be, type: 3}
-    showInList: 0
-    showOnMap: 0
+    showInList: 1
+    showOnMap: 1
   - category: sport
     anzeigename_de: Sport
     sprite: {fileID: 21300000, guid: 26528893e0d374452a1bce9e80e40596, type: 3}
-    showInList: 0
-    showOnMap: 0
+    showInList: 1
+    showOnMap: 1
   metaCategoryUsage: []
   defaultmarker: {fileID: 21300000, guid: 9583b5b7a3de2408bb1ebac827f8ede0, type: 3}
   markerScale: 0.7
@@ -7866,7 +7866,7 @@ MonoBehaviour:
   useMapOffline: 0
   hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 16.8
+  subversionNumber: 16.9
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -8762,7 +8762,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -14309,7 +14309,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1425578965
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17070,7 +17070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1711651852
 RectTransform:
   m_ObjectHideFlags: 0
