@@ -68,6 +68,19 @@ public class Quest  : IComparable<Quest> {
 
 	}
 
+	public long getLastUpdate () {
+		if ( lastUpdate == 0 ) {
+			long result;
+			if ( PlayerPrefs.HasKey(id + "_lastUpdate") && long.TryParse(PlayerPrefs.GetString(id + "_lastUpdate"), out result) ) {
+				return result;
+			}
+			else
+				return 0;
+		}
+		else
+			return lastUpdate;
+	}
+
 	public static Quest CreateQuest (int id) {
 		Quest q = new Quest();
 		return q.LoadFromText(id, true);

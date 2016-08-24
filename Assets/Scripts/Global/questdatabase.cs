@@ -22,6 +22,7 @@ public class questdatabase : MonoBehaviour {
 	public List<Quest> allquests;
 	public List<Quest> localquests;
 	public List<Quest> downloadquests;
+	public int questsToLoad = 0;
 
 	private WWW www;
 	public List<string> wanttoload;
@@ -662,6 +663,10 @@ public class questdatabase : MonoBehaviour {
 					currentquest.id = (int)obj.n;
 				}
 				else
+				if ( kei == "quest_lastUpdate" ) {
+					currentquest.lastUpdate = (long)obj.n;
+				}
+				else
 				if ( kei == "quest_hotspots_latitude" ) {
 				
 					if ( currentquest.start_latitude == null || currentquest.start_latitude == 0 ) {
@@ -812,35 +817,41 @@ public class questdatabase : MonoBehaviour {
 
 	void downloadAllQuests (Download d) {
 
-		bool doit = true;
+		bool hasNoLocalQuestsYet = true;
 
 		localquests = GetLocalQuests();
 
 		if ( localquests != null && localquests.Count > 0 ) {
-			doit = false;
+			hasNoLocalQuestsYet = false;
 		}
 
-		if ( doit && !downloadedAll && Configuration.instance.downloadAllCloudQuestOnStart ) {
-			Debug.Log("HERE . Found Quests: " + allquests.Count);
-
+		if ( !downloadedAll && Configuration.instance.downloadAllCloudQuestOnStart ) {
 			downloadingAll = true;
 
-			foreach ( Quest q in allquests ) {
+			if ( hasNoLocalQuestsYet ) {
+				Debug.Log("HERE . Found Quests: " + allquests.Count);
+
+				questsToLoad = allquests.Count;
+
+				foreach ( Quest q in allquests ) {
 
 
-				downloadQuest(q);
+					downloadQuest(q);
 
 
+				}
+			}
+			else {
+				// TODO ask user for update quests.
+				updateAllQuests();
 			}
 
 			downloadedAll = true;
 
 
-
 		}
 		else
 		if ( Configuration.instance.downloadAllCloudQuestOnStart ) {
-			Debug.Log("HERE WE ARE");
 
 			if ( webloadingmessage != null ) {
 
@@ -850,6 +861,54 @@ public class questdatabase : MonoBehaviour {
 
 				loadlogo.disable();
 			}
+
+		}
+	}
+
+	/// <summary>
+	/// Looks for neweer version of local quests and updates them. Additionally loads all "new" quests from the server.
+	/// </summary>
+	void updateAllQuests () {
+
+		questsToLoad = 0;
+		bool foundChanges = false;
+		foreach ( Quest q in allquests ) {
+
+			bool alreadyLocal = false;
+		
+			foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
+				if ( lq.id == q.id ) {
+					alreadyLocal = true;
+
+					// update new versions of existing local quests:
+					// sorry for the 100sec increase - we have such a stuodi json parser TODO
+					if ( lq.getLastUpdate() + 100000 < q.getLastUpdate() ) {
+						Debug.Log("<color=yellow>id: " + q.id + " times: " + lq.getLastUpdate() + "=" + q.getLastUpdate() + "</color>");
+
+						removeQuest(lq);
+						downloadQuest(q);
+						foundChanges = true;
+						questsToLoad += 1;
+					}
+					break;
+				}
+			}
+
+			// load new quests from server:
+			if ( !alreadyLocal ) {
+				foundChanges = true;
+				downloadQuest(q);
+				questsToLoad += 1;
+
+				Debug.Log("<color=yellow>Loading new: " + q.id + "</color>");
+
+			}
+
+		}
+
+		if ( !foundChanges ) {
+			
+			backToMenuAfterDownloadedAll();
 
 		}
 	}
@@ -1465,8 +1524,6 @@ public class questdatabase : MonoBehaviour {
 	private float time;
 
 	public IEnumerator downloadAssetAsync (string url, string localTargetPath) {
-		Debug.Log("downloadAssetAsync(" + url + ", " + localTargetPath + ")");
-
 		if ( filedownloads == null ) {
 			filedownloads = new List<WWW>();
 		}
@@ -1486,7 +1543,6 @@ public class questdatabase : MonoBehaviour {
 					done = false;
 				}
 				else {
-					Debug.Log("DONE downloading: " + w.url + " (" + w.size + ") took " + (Time.time - time));
 				}
 
 
@@ -1500,7 +1556,6 @@ public class questdatabase : MonoBehaviour {
 			if ( !url.Contains("/clientxml") ) {
 
 				time = Time.time;
-				Debug.Log("BEGIN downloading: " + url + " at " + time);
 
 				WWW wwwfile = new WWW(url);
 				debugDownloadsStarted.Add(url);
@@ -1709,6 +1764,17 @@ public class questdatabase : MonoBehaviour {
 		// We can only assume that q has an id here. Is this really a good idea? (hm)
 //		Debug.Log("XXXXX VORHER");
 		Quest nq = q.LoadFromText(q.id, localload);
+
+		// store timestamp for old quests that miss lastUpdate in XML to prevent relaoding them always:
+		if ( nq.lastUpdate == 0 && !reload && !localload ) {
+			foreach ( Quest curQ in allquests ) {
+				if ( curQ.id == nq.id ) {
+					nq.lastUpdate = curQ.lastUpdate;
+					PlayerPrefs.SetString(curQ.id + "_lastUpdate", curQ.lastUpdate.ToString());
+					Debug.Log("<color=red>TIMESTAMP stored in PLAYER_PREFS for quest id = " + curQ.id + "</color>");
+				}
+			}
+		}
 //		Debug.Log("XXXXX NACHHER");
 
 		bool alreadyStoredInLocalQuests = false;
@@ -2445,28 +2511,20 @@ public class questdatabase : MonoBehaviour {
 			else {
 				waitedFor += 1;
 				Debug.Log(waitedFor);
-				if ( waitedFor >= allquests.Count ) {
+				if ( waitedFor >= questsToLoad ) {
 					Debug.Log("really done? " + localquests.Count);
 				
-					downloadingAll = false;
-					downloadedAll = true;
+				
+
 
 					foreach ( Quest q in downloadquests ) {
 
 						writeQuestXML(q);
 
-						if ( webloadingmessage != null ) {
-
-							webloadingmessage.enabled = false;
-						}
-						if ( loadlogo != null ) {
-
-							loadlogo.disable();
-						}
 					}
-					downloadquests = null;
-					buttoncontroller.loadLocalQuests();
-					buttoncontroller.DisplayList();
+
+
+					backToMenuAfterDownloadedAll();
 				}
 			}
 		}
@@ -2478,6 +2536,19 @@ public class questdatabase : MonoBehaviour {
 		}
 	}
 
+	void backToMenuAfterDownloadedAll () {
+		if ( webloadingmessage != null ) {
+			webloadingmessage.enabled = false;
+		}
+		if ( loadlogo != null ) {
+			loadlogo.disable();
+		}
+		downloadingAll = false;
+		downloadedAll = true;
+		downloadquests = null;
+		buttoncontroller.loadLocalQuests();
+		buttoncontroller.DisplayList();
+	}
 
 
 	public void writeQuestXML (Quest q) {
@@ -3026,7 +3097,6 @@ public class questdatabase : MonoBehaviour {
 			}
 
 			if ( !downloadingAll ) {
-				Debug.Log("PROBLEM: downloadFinished");
 				currentquest = nq;
 			}
 
