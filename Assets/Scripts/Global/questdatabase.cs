@@ -866,10 +866,23 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Looks for neweer version of local quests and updates them. Additionally loads all "new" quests from the server.
+	/// 1. Deletes local quests that are no more on the server.
+	/// 2. Looks for newer version of local quests and updates them. Additionally loads all "new" quests from the server.
 	/// </summary>
 	void updateAllQuests () {
 
+		/////////////////////////
+		// 1. delete quests locally that are no more on the server:
+		foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
+			if ( allquests.FindIndex(x => x.id == lq.id) == -1 ) {
+				// lq was not loaded from server, ehnce we delete it locally:
+				localquests.Remove(lq);
+			}
+
+		}
+
+		/////////////////////////
+		// 2. get new quests from server and updates of existing quests:
 		questsToLoad = 0;
 		bool foundChanges = false;
 		foreach ( Quest q in allquests ) {
