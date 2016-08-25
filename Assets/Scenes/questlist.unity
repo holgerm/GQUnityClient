@@ -7792,8 +7792,8 @@ MonoBehaviour:
   - category: wcc.tour.beethoven
     anzeigename_de: Beethoven Route
     sprite: {fileID: 21300000, guid: c647774d1f4284f85995b053bad2c4c7, type: 3}
-    showInList: 0
-    showOnMap: 0
+    showInList: 1
+    showOnMap: 1
   - category: wcc.culture
     anzeigename_de: Kultur
     sprite: {fileID: 21300000, guid: 80eadcdccf2a14eceab8aa81d74d6687, type: 3}
@@ -7833,7 +7833,7 @@ MonoBehaviour:
     anzeigename_de: Restaurant
     sprite: {fileID: 21300000, guid: e438c2dcf472147c787c9b4d2b970c4b, type: 3}
     showInList: 1
-    showOnMap: 0
+    showOnMap: 1
   - category: game
     anzeigename_de: Spiel
     sprite: {fileID: 21300000, guid: 5fa89bad452ff4a34ac4b2d0c6efe392, type: 3}
@@ -7847,8 +7847,8 @@ MonoBehaviour:
   - category: tour
     anzeigename_de: Tour
     sprite: {fileID: 21300000, guid: 71a496772f81242c19547180cc9633be, type: 3}
-    showInList: 1
-    showOnMap: 1
+    showInList: 0
+    showOnMap: 0
   - category: sport
     anzeigename_de: Sport
     sprite: {fileID: 21300000, guid: 26528893e0d374452a1bce9e80e40596, type: 3}
@@ -7866,7 +7866,7 @@ MonoBehaviour:
   useMapOffline: 0
   hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 16.9
+  subversionNumber: 16.10
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -8956,6 +8956,7 @@ MonoBehaviour:
     m_MaxSentMessageQueueSize: 128
     m_IsAcksLong: 0
     m_UsePlatformSpecificProtocols: 0
+    m_WebSocketReceiveBufferMaxSize: 0
     m_Channels: []
   m_GlobalConfig:
     m_ThreadAwakeTimeout: 1
@@ -10177,6 +10178,7 @@ MonoBehaviour:
   currentquest:
     name: 
     id: 0
+    lastUpdate: 0
     xmlformat: 0
     filepath: 
     pages: []
@@ -17507,6 +17509,7 @@ MonoBehaviour:
   currentquest:
     name: 
     id: 0
+    lastUpdate: 0
     xmlformat: 0
     filepath: 
     pages: []
@@ -17554,6 +17557,7 @@ MonoBehaviour:
   allquests: []
   localquests: []
   downloadquests: []
+  questsToLoad: 0
   wanttoload: []
   publicquestslist: {fileID: 1116271734}
   actioncontroller: {fileID: 1756337060}
@@ -17619,6 +17623,7 @@ MonoBehaviour:
   quest:
     name: 
     id: 0
+    lastUpdate: 0
     xmlformat: 0
     filepath: 
     pages: []
