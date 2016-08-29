@@ -166,6 +166,19 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		/// <summary>
+		/// Sets the product for build, i.e. files are copied from the product dir to the client configuration dir. 
+		/// E.g. for 'wcc' the product dir is in 'Assets/Editor/products/wcc'. 
+		/// The client configuration dir is always at 'Assets/ConfigAssets/Ressources'.
+		/// 
+		/// The following file are copied:
+		/// 
+		/// 1. All files directly stored in the product dir into the config dir.
+		/// 2. AndroidManifest (in 'productDir/Android') to 'Assets/Plugins/Android/'
+		/// 3. TODO: Player Preferences?
+		/// 
+		/// </summary>
+		/// <param name="productID">Product I.</param>
 		public void SetProductForBuild (string productID) {
 			// TODO impl
 			if ( !Product.IsValid(productID) ) {
