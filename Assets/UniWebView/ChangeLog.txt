@@ -1,5 +1,145 @@
 ## UniWebView - An easier solution for integrating WebView to your mobile games
 
+2.8.0
+
+Add: An option (`openLinksInExternalBrowser`) that all the links should be opened in an external browser or not. It will be useful if you want to open a URL in Mobile Safari or Chrome, instead of opening it in UniWebView. Default is false.
+Add: Now you can set the Done button title from Unity. Use `SetDoneButtonText` to customize the button title.
+Add: LGC SDK built-in support.
+
+------------------------
+2.7.1
+
+Fix: Now the keyboard will also be dismissed in iOS when you call Hide on the web view with the keyboard showing.
+Fix: A potential problem of activity type casting which might cause the app crashes when you use UniWebView with some other third party activity.
+Fix: Add "singleTop" to launch mode in Android to prevent crash from multiple activity racing.
+
+------------------------
+2.7.0
+
+New: Add APIs for setting visibility of vertical and horizontal scroll bar of the web view.
+Fix: Update pre-compiled jar file for Prime31 and CardBoard, to be compatible to their latest SDKs.
+Fix: Return an empty string for asset path string API, so it will compile even you switch to a platform that UniWebView does not support.
+Fix: Fix a problem which prevents you from settings background color to transparent ones. It is a regression in version 2.6.0 and now it will not show a black background color anymore.
+Fix: Not disabling hardware accelerating when Settings background color with alpha for Android. This would improve the performance of using a transparent background a lot.
+Fix: A potential issue that will fail in type casting in Android activity type. This would improve the compatibility when working with other third party packages which tries to convert the Unity activity.
+
+------------------------
+2.6.0
+
+New: Rewrite video playing for Android web view. Now you could expect a better and stable video playback for both Youtube and Vimeo.
+Fix: Remove custom activity which is not needed anymore.
+
+------------------------
+2.5.2
+
+Fix: Use UnityPlayerActivity instead. This makes UniWebView compatible with Unity 5.4 (current in beta).
+
+------------------------
+2.5.1
+
+Fix: A crash issue in editor when you use AddUrlScheme.
+
+------------------------
+2.5.0
+
+Add: Support for adding customize header field.
+Add: A helper method to generate streaming asset url for local pages.
+Add: Add AppFlyer jar file.
+Fix: Hide transition callback will work correctly for Android now.
+Fix: Improve performance for OS X Editor version.
+
+------------------------
+2.4.1
+
+Fix: Compatible with Unity 5.3.0's new OS X OpenGL Core for editor.
+Fix: Clean some debug log.
+Fix: Update default page in demo scene.
+Fix: Set default user agent of Editor version to an iPhone agent. So you could get the mobile version of web view in Editor.
+
+***
+
+Notice: Unity dropped Windows Phone 8 support officially from 5.3. UniWebView will not continue development for Windows Phone as well from this version.
+
+Reason: The ammount of our Windows Phone users is very few compared to iOS and Android (it is less than 1% share according to report). 
+However, if we want to to support Windows Store App with Windows Phone 8.1 SDK or Windows 10 SDK, it would take even more time than either of other platforms.
+
+Since the Windows Phone SDK itself is not backwards compatible, the transition from Windows 8 to 8.1 or 10 means we need to rewrite all code in the package.
+We have only limited resource. To make sure we could build the asset in a better quality for most of our users, we decided to focus back to iOS and Android only from next version.
+The current Windows Phone 8 support (UniWebViewWP.dll) will be kept in later versions of UniWebView for a while, but we are sorry that it doesn't seem to get updated anymore.
+
+------------------------
+2.4.0
+
+Add: Built-in show/hide transition. You could now show or hide the webview with a transition effect. Currently we support fade in/out and transition from/to one of screen edges. Please take a look at reference of Show() and Hide() for more.
+Add: Recreate new demo scenes as a better tutorial. Now most of the useful features are contained in the demo scenes, with fully commented script to show how to use them.
+Add: Now you can use "ESC" in OS X Editor to go back or close the web view.
+Fix: The color of iOS toolbar is now white. This fixed an issue that the clear background tool bar will become black if no web page is underneath.
+Fix: Fix an issue which cause show tool bar property not working in some situation.
+Fix: Remove earlier deprecated methods like Dismiss.
+Fix: Adjust the behavior of insets, it is a preparation for later feature like insets translating. The API of insets remains the same now.
+
+***
+
+Notice: Unity will drop Windows Phone 8 support officially from 5.3. UniWebView will not continue development for Windows Phone as well from the next version.
+
+Reason: The ammount of our Windows Phone users is very few compared to iOS and Android (it is less than 1% share according to report). 
+However, if we want to to support Windows Store App with Windows Phone 8.1 SDK or Windows 10 SDK, it would take even more time than either of other platforms.
+
+Since the Windows Phone SDK itself is not backwards compatible, the transition from Windows 8 to 8.1 or 10 means we need to rewrite all code in the package.
+We have only limited resource. To make sure we could build the asset in a better quality for most of our users, we decided to focus back to iOS and Android only from next version.
+The current Windows Phone 8 support (UniWebViewWP.dll) will be kept in later versions of UniWebView for a while, but we are sorry that it doesn't seem to get updated anymore.
+
+------------------------
+2.3.1
+
+Fix: An issue that script is missing in the prefab if you import the asset in a new version of Unity.
+Fix: Compatibility for Unity 5.2.2 editor.
+
+------------------------
+2.3.0
+
+Add: SMS link support for Android devices.
+
+------------------------
+2.2.5
+
+Fix: Compatibility for Unity 5.2.1 editor.
+
+------------------------
+2.2.4
+
+Fix: A status bar truncating issue which may appears on some Android devices when user show/hide the soft keyboard for several times.
+
+------------------------
+2.2.3
+
+Add: An API to add trusted sites for Android. You will need to add your site url to the white list if you need to request the protected resources of Android devices (such as microphone or camera).
+Add: Add third party support for Craftar.
+Fix: A vulnerability that accept SSL connect even an error hanppes. Now UniWebView will use the default behavior of system and reject all untrusted SSL connection. 
+It will protect your web content from possible man-in-the-middle attacks. At the same time, it means you have to use a valid certification even if you are in test environment.
+Fix: A null exception when inputing in a text field in Editor.
+
+------------------------
+2.2.2
+
+Fix: An issue in Unity 5.2 which causes the webview not showing correctly in Unity Editor.
+Fix: Alert compatibility for iOS in Unity 5.2.
+
+------------------------
+2.2.1
+
+Add: APIs to get navigation state of current web view. Now you can use CanGoBack() and CanGoForward() to determine whether there is a page to go back or forward.
+Fix: Optimize performance for 64-bit OSX Editor version.
+
+------------------------
+2.2.0
+
+Add: An API to set background color for the web view.
+Fix: The video will paused when app switched to background in Android devices now.
+Fix: An issue causes the loading indicator not removed in Windows Phone 8 devices when dismiss the webview.
+Fix: Add Neatplugin and RigidFace to default supported third party jar.
+
+------------------------
 2.1.3
 
 Fix: File chooser for Android 5.0+.
@@ -112,7 +252,7 @@ Due to introduction of iPhone 6 Plus and its new @3x scale, the old way would no
     _webView.insets = new UniWebViewEdgeInsets(0,0,bottomInset,0);
 
 Right now, with the new API, you can just use this:
-    
+
     int bottomInset = (int)(UniWebViewHelper.screenHeight * 0.5f);
     _webView.insets = new UniWebViewEdgeInsets(0,0,bottomInset,0);
 

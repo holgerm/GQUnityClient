@@ -36,15 +36,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0ff9c07198c2e644a81d4c159232fd9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a9fa304a8f3e4a829df11f36289fdc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _insets:
-    top: 1
-    left: 1
-    bottom: 1
-    right: 1
-  url: http://unity3d.com
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+  url: https://google.com
   loadOnStart: 1
   autoShowWhenLoadComplete: 1
   toolBarShow: 0
@@ -59,4 +59,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1
