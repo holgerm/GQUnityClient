@@ -7656,7 +7656,7 @@ MonoBehaviour:
   mapboxMapID: gqebk.ed1de6df
   downloadTimeOutSeconds: 100
   impressum: 
-  toplogo: {fileID: 21300000, guid: 8d104b5c76cf247eba9c17a95913f876, type: 3}
+  toplogo: {fileID: 21300000, guid: 9d5e7082610da4cb2a3e4c14cfe3e8fc, type: 3}
   nameForQuest: Quest
   questvisualization: map
   showMessageForDatasendAction: 0
@@ -7854,6 +7854,21 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 26528893e0d374452a1bce9e80e40596, type: 3}
     showInList: 0
     showOnMap: 0
+  - category: wcc.special
+    anzeigename_de: Besonderes
+    sprite: {fileID: 21300000, guid: 16d4c032788e14711a58d7f77d62484c, type: 3}
+    showInList: 1
+    showOnMap: 1
+  - category: wcc.beethovenfest
+    anzeigename_de: Beethovenfest
+    sprite: {fileID: 21300000, guid: cc10fd78b29244eb0bd9e60ed83601d3, type: 3}
+    showInList: 1
+    showOnMap: 1
+  - category: wcc.special2
+    anzeigename_de: Besonders 2
+    sprite: {fileID: 21300000, guid: bcebbecb900584ad8b2e0848b83028c7, type: 3}
+    showInList: 1
+    showOnMap: 1
   metaCategoryUsage: []
   defaultmarker: {fileID: 21300000, guid: 9583b5b7a3de2408bb1ebac827f8ede0, type: 3}
   markerScale: 0.7
@@ -12379,7 +12394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
-  keepTranslatingAtRuntime: 0
+  keepTranslatingAtRuntime: 1
   translateOnlyPart: 
   currentLanguage: 
 --- !u!1 &1175604912
