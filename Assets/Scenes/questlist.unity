@@ -8923,6 +8923,7 @@ MonoBehaviour:
     <br>"
   agbsVersion: 1
   questvisualizationchangable: 0
+  offlinePlayable: 1
   cloudQuestsVisible: 1
   showcloudquestsimmediately: 1
   downloadAllCloudQuestOnStart: 1
@@ -9039,7 +9040,7 @@ MonoBehaviour:
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/281.html
   useMapOffline: 0
-  hasMenuWithinQuests: 1
+  hasMenuWithinQuests: 0
   appVersion: 1
   subversionNumber: 16.10
 --- !u!4 &714240441

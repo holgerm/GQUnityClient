@@ -278,17 +278,33 @@ public class questdatabase : MonoBehaviour {
 		Download download = new Download(url, timeout: 20000);
 		download.OnStart = new Download.StartCallback(whenQuestListDownloadStarts);
 		download.OnProgress = new Download.ProgressUpdate(updateProgress);
-		download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) + new Download.SuccessCallback(whenQuestListDownloadSucceeds) + new Download.SuccessCallback(downloadAllQuests);
-		download.OnError = new Download.ErrorCallback(handleErrorWhenDownloadingQuestList);
+		download.OnSuccess = new Download.SuccessCallback(updateAndShowQuestList) +
+		new Download.SuccessCallback(whenQuestListDownloadSucceeds) +
+		new Download.SuccessCallback(downloadAllQuests);
+		download.OnError = new Download.ErrorCallback(retryAfterDownloadError);
 		StartCoroutine(download.startDownload());
 	}
 
-	void handleErrorWhenDownloadingQuestList (Download download, string msg) {
-		Action retryAction = new Action(() => { 
+	void retryAfterDownloadError (Download download, string msg) {
+		if ( Configuration.instance.offlinePlayable && localquests != null && localquests.Count > 0 ) {
 			webloadingmessage.enabled = false;
 			loadlogo.disable();
-		});
-		showmessage("Wir konnten keine Verbindung mit dem Internet herstellen.", "Beenden", retryAction);
+			updateAndShowQuestList(download);
+			whenQuestListDownloadSucceeds(download);
+			downloadAllQuests(download);
+		}
+		else {
+			Action retryAction = new Action(() => { 
+				webloadingmessage.enabled = true;
+				loadlogo.enable();
+				ReloadQuestListAndRefresh();
+			});
+			string alertMsg = "Wir konnten keine Verbindung mit dem Internet herstellen.";
+			if ( Configuration.instance.offlinePlayable && (localquests == null || localquests.Count == 0) ) {
+				alertMsg = "Keine Daten vorhanden. Internetverbindung erforderlich.";
+			}
+			showmessage(alertMsg, "Erneut versuchen", retryAction); 
+		}
 	}
 
 	public void hideBlackCanvas () {
@@ -1264,14 +1280,30 @@ public class questdatabase : MonoBehaviour {
 		}
 		else {
 
+			List<int> visitedQuests = new List<int>();
 
+			foreach ( Quest aq in localquests ) {
+				if ( aq.hotspots != null && aq.hotspots.Count > 0 ) {
+					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(aq.hotspots[0], true, true, aq.hotspots[0].latlon);
+					if ( aq.hasMeta("category") ) {
+
+						qrh.category = aq.getMeta("category");
+
+					}
+
+					qrh.startquest = aq;
+
+					activehs.Add(qrh);
+					visitedQuests.Add(aq.id);
+				}
+			}
 
 
 			foreach ( Quest aq in allquests ) {
-
-//				Debug.Log("Quest: "+aq.name);
-
-				if ( aq.start_longitude != null && aq.start_longitude != 0f ) {
+				if ( visitedQuests.Contains(aq.id) )
+					break;
+				
+				if ( aq.start_longitude != 0f ) {
 					QuestHotspot qh = new QuestHotspot();
 				
 					QuestAttribute qa = new QuestAttribute("radius", "20");
@@ -1292,6 +1324,8 @@ public class questdatabase : MonoBehaviour {
 					activehs.Add(qrh);
 				}
 			}
+
+
 
 
 		}
@@ -2084,10 +2118,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
