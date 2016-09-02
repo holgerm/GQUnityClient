@@ -2286,7 +2286,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1888915951}
-        m_MethodName: update
+        m_MethodName: updateQuests
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10256,6 +10256,7 @@ MonoBehaviour:
     m_MaxSentMessageQueueSize: 128
     m_IsAcksLong: 0
     m_UsePlatformSpecificProtocols: 0
+    m_WebSocketReceiveBufferMaxSize: 0
     m_Channels: []
   m_GlobalConfig:
     m_ThreadAwakeTimeout: 1

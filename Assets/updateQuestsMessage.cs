@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class updateQuestsMessage : MonoBehaviour
-{
+public class updateQuestsMessage : MonoBehaviour {
 
 
 
 	public questdatabase questdb;
 
-	public void update()
-	{
+	public void updateQuests () {
 
 		questdb.updateAllQuests();
 		GetComponent<Animator>().SetTrigger("out");
@@ -19,8 +17,7 @@ public class updateQuestsMessage : MonoBehaviour
 
 
 
-	public void close()
-	{
+	public void close () {
 
 		GetComponent<Animator>().SetTrigger("out");
 
@@ -30,8 +27,7 @@ public class updateQuestsMessage : MonoBehaviour
 
 
 
-	public void disableGameObject()
-	{
+	public void disableGameObject () {
 
 		gameObject.SetActive(false);
 
