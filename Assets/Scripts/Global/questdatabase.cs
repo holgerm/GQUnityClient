@@ -1985,9 +1985,6 @@ public class questdatabase : MonoBehaviour {
 			// check if game has more than just metadata and set flag:
 			nq.currentpage = nq.pages.First();
 			int c = 0;
-			if ( nq.currentpage.type != "MetaData" ) {
-				hasmorethanmetadata = true;
-			}
 			while ( nq.currentpage.type == "MetaData" ) {
 				// TODO I guess this is a bug and will crash if we have e.g. a quest with a single page of type meta data
 				// TODO at least it will leave currentquest.currentpage being null.
@@ -1996,9 +1993,12 @@ public class questdatabase : MonoBehaviour {
 					c++;
 				}
 				else {
-					hasmorethanmetadata = true;
+					hasmorethanmetadata = false;
 					break;
 				}
+			}
+			if ( !nq.currentpage.type.Equals("MetaData") ) {
+				hasmorethanmetadata = true;
 			}
 		}
 		if ( currentquest != null && currentquest.hotspots != null ) {
@@ -2038,7 +2038,7 @@ public class questdatabase : MonoBehaviour {
 			if ( loadlogo != null ) {
 				loadlogo.disable();
 			}
-			if ( GameObject.Find("List").GetComponent<createquestbuttons>() != null ) {
+			if ( GameObject.Find("List") != null && GameObject.Find("List").GetComponent<createquestbuttons>() != null ) {
 				GameObject.Find("List").GetComponent<createquestbuttons>().resetList();
 			}
 		}
@@ -2084,10 +2084,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2114,50 +2114,8 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator waitForSpriteConversion (int pageid) {
-		if ( !downloadingAll ) {
-			bool spritesConverted = true;
-		
-			if ( spritesConverted ) {
-				checkForDatasend(pageid);
-
-		
-			}
-			else {
-				// TODO FRAGE (hm): Wie kommen wir jemals hier hin? Wird spritesConverted nebenbei mal auf false gesetzt?
-
-				if ( webloadingmessage != null ) {
-
-					webloadingmessage.text = "Starte " + Configuration.instance.nameForQuest + "... ";
-					webloadingmessage.enabled = true;
-				}
-				if ( loadlogo != null ) {
-
-					loadlogo.enable();
-				}
-				if ( spriteError != null && spriteError != "" ) {
-					if ( webloadingmessage != null ) {
-
-						webloadingmessage.text = spriteError;
-					}
-					yield return new WaitForSeconds(2f);
-					Application.LoadLevel(0);
-
-				}
-				else {
-			
-					yield return new WaitForSeconds(0.2f);
-
-
-					StartCoroutine(waitForSpriteConversion(pageid));
-				}
-
-			}
-		}
-
+		checkForDatasend(pageid);
 		yield return null;
-
-		
-		
 	}
 
 
