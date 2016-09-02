@@ -1470,13 +1470,16 @@ public class questdatabase : MonoBehaviour {
 		Debug.Log("#### startQuest()");
 
 		if ( !islocal ) {
+			Debug.Log("#### startQuest() --> downloadQuest()");
 			downloadQuest(q);
 		}
 		else {
 			if ( q.xmlcontent == null || q.xmlcontent.Trim().Equals("") ) {
+				Debug.Log("#### startQuest() --> initiateQuestStart()");
 				initiateQuestStart(true, q);
 			}
 			else {
+				Debug.Log("#### startQuest() --> installQuest()");
 				installQuest(q, true, true);
 			}
 		}
@@ -1977,11 +1980,14 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	void initiateQuestStart (bool localload, Quest nq) {
-		bool hasmorethanmetadata = true;
+		bool hasmorethanmetadata = false;
 		if ( nq.pages != null && nq.pages.Count > 0 ) {
 			// check if game has more than just metadata and set flag:
 			nq.currentpage = nq.pages.First();
 			int c = 0;
+			if ( nq.currentpage.type != "MetaData" ) {
+				hasmorethanmetadata = true;
+			}
 			while ( nq.currentpage.type == "MetaData" ) {
 				// TODO I guess this is a bug and will crash if we have e.g. a quest with a single page of type meta data
 				// TODO at least it will leave currentquest.currentpage being null.
@@ -1990,7 +1996,7 @@ public class questdatabase : MonoBehaviour {
 					c++;
 				}
 				else {
-					hasmorethanmetadata = false;
+					hasmorethanmetadata = true;
 					break;
 				}
 			}
@@ -2078,10 +2084,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
