@@ -953,7 +953,7 @@ public class questdatabase : MonoBehaviour {
 		foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
 			if ( allquests.FindIndex(x => x.id == lq.id) == -1 ) {
 				// lq was not loaded from server, ehnce we delete it locally:
-				localquests.Remove(lq);
+				removeQuest(lq);
 			}
 
 		}
@@ -1000,6 +1000,13 @@ public class questdatabase : MonoBehaviour {
 			
 			backToMenuAfterDownloadedAll();
 
+		}
+		else {
+			// update marker in page_map TODO
+			if ( GameObject.Find("PageController_Map") != null ) {
+				hotspots = getActiveHotspots();
+				GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
+			}
 		}
 	}
 
@@ -1298,32 +1305,32 @@ public class questdatabase : MonoBehaviour {
 				}
 			}
 
-
-			foreach ( Quest aq in allquests ) {
-				if ( visitedQuests.Contains(aq.id) )
-					break;
+			if ( Configuration.instance.cloudQuestsVisible )
+				foreach ( Quest aq in allquests ) {
+					if ( visitedQuests.Contains(aq.id) )
+						continue;
 				
-				if ( aq.start_longitude != 0f ) {
-					QuestHotspot qh = new QuestHotspot();
+					if ( aq.start_longitude != 0f ) {
+						QuestHotspot qh = new QuestHotspot();
 				
-					QuestAttribute qa = new QuestAttribute("radius", "20");
+						QuestAttribute qa = new QuestAttribute("radius", "20");
 
-					qh.attributes = new List<QuestAttribute>();
-					qh.attributes.Add(qa);
-					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(qh, true, true, aq.start_latitude + "," + aq.start_longitude);
-					//Debug.Log("Longitude Latitude: "+aq.start_longitude+","+aq.start_latitude);
+						qh.attributes = new List<QuestAttribute>();
+						qh.attributes.Add(qa);
+						QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(qh, true, true, aq.start_latitude + "," + aq.start_longitude);
+						//Debug.Log("Longitude Latitude: "+aq.start_longitude+","+aq.start_latitude);
 
-					if ( aq.hasMeta("category") ) {
+						if ( aq.hasMeta("category") ) {
 
-						qrh.category = aq.getMeta("category");
+							qrh.category = aq.getMeta("category");
 
+						}
+
+						qrh.startquest = aq;
+
+						activehs.Add(qrh);
 					}
-
-					qrh.startquest = aq;
-
-					activehs.Add(qrh);
 				}
-			}
 
 
 
@@ -1537,6 +1544,12 @@ public class questdatabase : MonoBehaviour {
 		}
 #endif
 		localquests.Remove(q);
+		foreach ( QuestRuntimeHotspot curH in hotspots.GetRange(0, hotspots.Count) ) {
+			if ( curH.startquest != null && curH.startquest.id == q.id ) {
+				Destroy(curH.renderer.gameObject);
+				hotspots.Remove(curH);
+			}
+		}
 
 		if ( currentquest != null ) {
 			if ( currentquest.id == q.id ) {
@@ -2118,10 +2131,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);

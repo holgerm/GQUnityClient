@@ -476,7 +476,8 @@ public class page_map : MonoBehaviour {
 			
 			
 			
-				if ( qrh.hotspot.getAttribute("img").StartsWith("@_") ) {
+				if ( qrh.hotspot.getAttribute("img").StartsWith("@_") && qrh.startquest == null ) {
+					// this case is called when we are on a map within a quest. And marker is taken from a variable.
 				
 				
 					www = new WWW(pre + "" + questactions.getVariable(qrh.hotspot.getAttribute("img")).string_value[0]);
@@ -484,8 +485,8 @@ public class page_map : MonoBehaviour {
 				
 				}
 				else
-				if ( qrh.hotspot.getAttribute("img") != "" ) {
-				
+				if ( qrh.hotspot.getAttribute("img") != "" && qrh.startquest == null ) {
+					// this case is called when we are on a map within a quest. And marker is not taken from a variable.
 				
 				
 				
@@ -511,7 +512,7 @@ public class page_map : MonoBehaviour {
 						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
 					}
 					else
-					if ( questdb.currentquest.predeployed ) {
+					if ( questdb.currentquest != null && questdb.currentquest.predeployed ) {
 						www = new WWW(url);
 						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
 					}

@@ -8924,8 +8924,8 @@ MonoBehaviour:
   agbsVersion: 1
   questvisualizationchangable: 0
   offlinePlayable: 1
-  cloudQuestsVisible: 1
-  showcloudquestsimmediately: 1
+  cloudQuestsVisible: 0
+  showcloudquestsimmediately: 0
   downloadAllCloudQuestOnStart: 1
   localQuestsDeletable: 0
   showtextinloadinglogo: 1
