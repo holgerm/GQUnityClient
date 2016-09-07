@@ -2136,10 +2136,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2690,6 +2690,13 @@ public class questdatabase : MonoBehaviour {
 		downloadquests = null;
 		buttoncontroller.loadLocalQuests();
 		buttoncontroller.DisplayList();
+		if ( GameObject.Find("PageController_Map") != null ) {
+			hotspots = new List<QuestRuntimeHotspot>();
+			hotspots.AddRange(getActiveHotspots());
+			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
+		}
+		Debug.Log("backToMenuAfterDownloadedAll: hotspots: " + hotspots.Count);
+
 	}
 
 
