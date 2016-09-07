@@ -134,7 +134,8 @@ public class actions : MonoBehaviour {
 
 		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
 
-		Debug.Log("ACTIONS.DO_ACTION # STARTED, curQuest: " + quest.name + " ACTION: " + action.type);
+		Debug.Log(" ACTION: " + action.type);
+		Debug.Log("ACTIONS.DO_ACTION # STARTED, curQuest: " + quest.name);
 
 		if ( action.type == "StartMission" ) {
 			Debug.Log("ACTIONS.DO_ACTION # BEFORE Change_Page ");
