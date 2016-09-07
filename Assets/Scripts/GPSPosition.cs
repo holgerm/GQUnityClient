@@ -15,11 +15,11 @@ public class GPSPosition : MonoBehaviour {
 				float newLong = Input.location.lastData.longitude;
 				float newLat = Input.location.lastData.latitude;
 
-				if ( differsSignifcantly(CoordinatesWGS84, newLong, newLat) )
-					CoordinatesWGS84 = new double[] {
-						newLong,
-						newLat
-					};
+//				if ( differsSignifcantly(CoordinatesWGS84, newLong, newLat) )
+				CoordinatesWGS84 = new double[] {
+					newLong,
+					newLat
+				};
 
 				Debug.Log("GPS Location Info changed significantly to: (" + newLong + ", " + newLat);
 			}

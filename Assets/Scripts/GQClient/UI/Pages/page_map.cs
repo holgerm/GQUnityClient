@@ -390,7 +390,7 @@ public class page_map : MonoBehaviour {
 		QuestRuntimeHotspot mostWesternHotspot = activeHotspots[0];
 
 		for ( int i = 1; i < activeHotspots.Count; i++ ) {
-			if ( activeHotspots[i].lon < mostWesternHotspot.lon ) {
+			if ( activeHotspots[i].lon != 0f && activeHotspots[i].lon < mostWesternHotspot.lon ) {
 				mostWesternHotspot = activeHotspots[i];
 			}
 		}

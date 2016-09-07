@@ -1550,7 +1550,8 @@ public class questdatabase : MonoBehaviour {
 		localquests.Remove(q);
 		foreach ( QuestRuntimeHotspot curH in hotspots.GetRange(0, hotspots.Count) ) {
 			if ( curH.startquest != null && curH.startquest.id == q.id ) {
-				Destroy(curH.renderer.gameObject);
+				if ( curH.renderer != null )
+					Destroy(curH.renderer.gameObject);
 				hotspots.Remove(curH);
 			}
 		}
