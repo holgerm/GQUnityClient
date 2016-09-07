@@ -3537,7 +3537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &341113063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8345,11 +8345,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: cc10fd78b29244eb0bd9e60ed83601d3, type: 3}
     showInList: 1
     showOnMap: 1
-  - category: wcc.special2
-    anzeigename_de: Besonders 2
-    sprite: {fileID: 21300000, guid: bcebbecb900584ad8b2e0848b83028c7, type: 3}
-    showInList: 1
-    showOnMap: 1
   metaCategoryUsage: []
   defaultmarker: {fileID: 21300000, guid: 9583b5b7a3de2408bb1ebac827f8ede0, type: 3}
   markerScale: 0.7
@@ -9258,7 +9253,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9452,6 +9447,7 @@ MonoBehaviour:
     m_MaxSentMessageQueueSize: 128
     m_IsAcksLong: 0
     m_UsePlatformSpecificProtocols: 0
+    m_WebSocketReceiveBufferMaxSize: 0
     m_Channels: []
   m_GlobalConfig:
     m_ThreadAwakeTimeout: 1
