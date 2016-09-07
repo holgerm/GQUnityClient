@@ -1343,15 +1343,19 @@ public class questdatabase : MonoBehaviour {
 	public GeoPosition getQuestCenter () {
 		float centerLat = 0f;
 		float centerLong = 0f;
+		int numberofUsedHotspots = 0;
 
 		foreach ( QuestRuntimeHotspot curHotspot in hotspots ) {
-			centerLat += curHotspot.lat;
-			centerLong += curHotspot.lon;
+			if ( curHotspot.lat != 0f && curHotspot.lon != 0f ) {
+				centerLat += curHotspot.lat;
+				centerLong += curHotspot.lon;
+				numberofUsedHotspots++;
+			}
 		}
 
-		if ( hotspots.Count > 0 ) {
-			centerLat = centerLat / hotspots.Count;
-			centerLong = centerLong / hotspots.Count;
+		if ( numberofUsedHotspots > 0 ) {
+			centerLat = centerLat / numberofUsedHotspots;
+			centerLong = centerLong / numberofUsedHotspots;
 		}
 
 		return new GeoPosition(centerLat, centerLong);
