@@ -9299,6 +9299,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: cc10fd78b29244eb0bd9e60ed83601d3, type: 3}
     showInList: 1
     showOnMap: 1
+  - category: wcc.museum
+    anzeigename_de: Museum
+    sprite: {fileID: 21300000, guid: f7dccfc9854844c11b06201edd9e3d7b, type: 3}
+    showInList: 1
+    showOnMap: 1
   metaCategoryUsage: []
   defaultmarker: {fileID: 21300000, guid: 9583b5b7a3de2408bb1ebac827f8ede0, type: 3}
   markerScale: 0.7
@@ -10244,7 +10249,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -10506,6 +10511,7 @@ MonoBehaviour:
     m_MaxSentMessageQueueSize: 128
     m_IsAcksLong: 0
     m_UsePlatformSpecificProtocols: 0
+    m_WebSocketReceiveBufferMaxSize: 0
     m_Channels: []
   m_GlobalConfig:
     m_ThreadAwakeTimeout: 1
