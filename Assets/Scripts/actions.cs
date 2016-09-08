@@ -1732,21 +1732,16 @@ public class actions : MonoBehaviour {
 			}
 			else
 			if ( action.value.bool_value != null && action.value.bool_value.Count > 0 ) {
-				Debug.Log(key + " has BOOL value");
 				variables.Add(new QuestVariable(key, action.value.bool_value[0]));
 			}
 			else
 			if ( action.value.num_value != null && action.value.num_value.Count > 0 ) {
-				Debug.Log("value of ytpe NUM found: " + action.value.num_value[0]);
 				variables.Add(new QuestVariable(key, action.value.num_value[0]));
 			}
 			else
 			if ( action.value.string_value != null && action.value.string_value.Count > 0 ) {
 				string unformattedContent = action.value.string_value[0];
-				Debug.Log("VAR: " + key + " has type STRING. Length: " + unformattedContent.Length);
-				Debug.Log("UNFORMATTED: >" + unformattedContent + "<");
 				string formattedContent = TextHelper.makeReplacements(unformattedContent);
-				Debug.Log("FORMATTED: >" + formattedContent + "<");
 				variables.Add(new QuestVariable(key, formattedContent));
 			}
 			else
