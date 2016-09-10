@@ -2366,23 +2366,17 @@ public class questdatabase : MonoBehaviour {
 	
 							subhs.lat += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
 
-
-
-
-
-
-							
 							string url = "http://www.yournavigation.org/api/1.0/gosmore.php?" +
-							             "format=kml" +
-							             "&flat=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1] +
-							             "&flon=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0] +
-							             "&tlat=" + subhs.lon +
-							             "&tlon=" + subhs.lat +
-							             "&v=foot&" +
-							             "fast=1" +
-							             "&layer=mapnik" +
-							             "&instructions=1" +
-							             "&lang=de";
+							                    "format=kml" +
+							                    "&flat=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1] +
+							                    "&flon=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0] +
+							                    "&tlat=" + subhs.lon +
+							                    "&tlon=" + subhs.lat +
+							                    "&v=foot&" +
+							                    "fast=1" +
+							                    "&layer=mapnik" +
+							                    "&instructions=1" +
+							                    "&lang=de";
 							
 							WWW routewww = new WWW(url);
 
@@ -2395,15 +2389,8 @@ public class questdatabase : MonoBehaviour {
 
 							routewwws.Add(routewww);
 
-
-
 							StartCoroutine(waitForRouteFile(routewww, subhs));
-					
-
-
 						}
-
-
 					}
 
 
@@ -2415,13 +2402,9 @@ public class questdatabase : MonoBehaviour {
 
 			}
 
-
 			StartCoroutine(waitForTransferCompletion(pageid));
 
-
 		}
-		
-		
 	}
 
 	public IEnumerator waitForTransferCompletion (int pageid) {
@@ -2439,13 +2422,8 @@ public class questdatabase : MonoBehaviour {
 			}
 		}
 
-
-
 		if ( b ) {
-
 			changePage(pageid);
-
-
 		}
 		else {
 
@@ -2453,34 +2431,17 @@ public class questdatabase : MonoBehaviour {
 			StartCoroutine(waitForTransferCompletion(pageid));
 
 		}
-
-
-
-
 	}
 
 	public IEnumerator waitForRouteFile (WWW mywww, QuestRuntimeHotspot qrh) {
 		
 		yield return mywww;
 		
-		
-		
 		if ( mywww.error == null || mywww.error == "" ) {
-			
-			Debug.Log(mywww.text);
-			
-
-
-			Debug.Log("got route www object");
 			string routefile = mywww.text;
 			
 			routefile = routefile.Substring(routefile.IndexOf("<coordinates>"));
 			routefile = routefile.Substring(14, routefile.IndexOf("</coordinates>") - 14);
-
-
-
-
-			
 
 			string[] coordinates = routefile.Split(new string[] {
 				Environment.NewLine
@@ -2507,49 +2468,20 @@ public class questdatabase : MonoBehaviour {
 
 				}
 				else {
-
-
-
-
 					if ( savedmessages == null ) {
 
 						savedmessages = new List<string>();
 					}
-
-
 					savedmessages.Add("An deinem Standort sind nicht genügend Weginformationen vorhanden. Manche Kartenobjekte könnten nicht erreichbar sein.");
 
 					Debug.Log("REARRANGING FAILED:" + qrh.lat + "," + qrh.lon);
-
-
-
 				}
-
-						
-						
 			}
 					
-					
-					
-					
-				
-				
-				
-				
-
-			
-			
-			
 		}
 		else {
-			
 			Debug.Log("Route WWW Error:" + mywww.error);
-			
 		}
-		
-		
-		
-		
 	}
 
 	int waitedFor = 0;
@@ -2599,14 +2531,11 @@ public class questdatabase : MonoBehaviour {
 				int bytes_finished = files_complete;
 				int bytes_all = files_all;
 
-				//	percent = 100 - ((bytes_all-bytes_finished) * 100 / bytes_finished);
-
 			}
 			else {
 				done = true;
 			}
 		}
-//		Debug.Log ("percent done: " + percent);
 
 		int bytescomplete = bytesloaded;
 		int filesleft = 0;
@@ -2654,10 +2583,6 @@ public class questdatabase : MonoBehaviour {
 				waitedFor += 1;
 				Debug.Log(waitedFor);
 				if ( waitedFor >= questsToLoad ) {
-					Debug.Log("really done? " + localquests.Count);
-				
-				
-
 
 					foreach ( Quest q in downloadquests ) {
 
@@ -2665,15 +2590,11 @@ public class questdatabase : MonoBehaviour {
 
 					}
 
-
 					backToMenuAfterDownloadedAll();
 				}
 			}
 		}
 		else {
-//			Debug.Log(
-//				"waitforquestassets: not done yet; timeout = " + timeout + "; files left: " +
-//				filedownloads.Count + "wanttoload: " + wanttoload.Count);
 			StartCoroutine(waitforquestassets(pageid, timeout));
 		}
 	}
@@ -2695,8 +2616,6 @@ public class questdatabase : MonoBehaviour {
 			hotspots.AddRange(getActiveHotspots());
 			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
 		}
-		Debug.Log("backToMenuAfterDownloadedAll: hotspots: " + hotspots.Count);
-
 	}
 
 
