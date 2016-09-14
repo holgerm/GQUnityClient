@@ -88,8 +88,16 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator Start () {
-//		PlayerPrefs.DeleteAll();
 
+		Debug.Log("ORDINARY Debug.Log() called.");
+
+		#if GQ_DEBUG
+		Debug.Log("GQ_DEBUG HAS BEEN called.");
+		#else
+		Debug.Log("NO GQ_DEBUG called.");
+		#endif
+			
+//		PlayerPrefs.DeleteAll();
 
 		if ( PlayerPrefs.HasKey("privacyagreementversion") ) {
 
@@ -792,7 +800,6 @@ public class questdatabase : MonoBehaviour {
 			buttoncontroller.filteredOnlineList.Add(q);
 		}
 
-		Debug.Log("PROBLEM : updateAndShowQuestList set null");
 		currentquest = null;
 		
 		if ( Configuration.instance.questvisualization == "list" ) {
@@ -845,8 +852,6 @@ public class questdatabase : MonoBehaviour {
 			downloadingAll = true;
 
 			if ( hasNoLocalQuestsYet ) {
-				Debug.Log("HERE . Found Quests: " + allquests.Count);
-
 				questsToLoad = allquests.Count;
 
 				foreach ( Quest q in allquests ) {
@@ -869,16 +874,13 @@ public class questdatabase : MonoBehaviour {
 
 					//Convert the old time from binary to a DataTime variable
 					DateTime oldDate = DateTime.FromBinary(temp);
-					print("oldDate: " + oldDate);
 
 					//Use the Subtract method and store the result as a timespan variable
 					TimeSpan difference = currentDate.Subtract(oldDate);
-					print("Difference: " + difference);
 
 
 					if ( difference.Days >= 1 ) {
 
-						Debug.Log("Difference: " + difference.Days);
 						askUserForUpdatingQuests();
 
 
@@ -1512,19 +1514,14 @@ public class questdatabase : MonoBehaviour {
 
 		currentquest = q;
 
-		Debug.Log("#### startQuest()");
-
 		if ( !islocal ) {
-			Debug.Log("#### startQuest() --> downloadQuest()");
 			downloadQuest(q);
 		}
 		else {
 			if ( q.xmlcontent == null || q.xmlcontent.Trim().Equals("") ) {
-				Debug.Log("#### startQuest() --> initiateQuestStart()");
 				initiateQuestStart(true, q);
 			}
 			else {
-				Debug.Log("#### startQuest() --> installQuest()");
 				installQuest(q, true, true);
 			}
 		}
@@ -2136,10 +2133,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2308,8 +2305,6 @@ public class questdatabase : MonoBehaviour {
 
 	void transferQuestHotspots (int pageid) {
 
-		Debug.Log("<color=red>transferQuestHotspots(" + pageid + ")</color>");
-
 		// instatiate a quest clone at any start. This function is always called at quest start.
 		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 		
@@ -2320,10 +2315,6 @@ public class questdatabase : MonoBehaviour {
 
 		}
 		else {
-
-
-			Debug.Log("[WAITING FOR HOTSPOT TRANSFER]" + hotspots.Count);
-
 			foreach ( QuestRuntimeHotspot mainhs in hotspots ) {
 
 
@@ -2367,16 +2358,16 @@ public class questdatabase : MonoBehaviour {
 							subhs.lat += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
 
 							string url = "http://www.yournavigation.org/api/1.0/gosmore.php?" +
-							                    "format=kml" +
-							                    "&flat=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1] +
-							                    "&flon=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0] +
-							                    "&tlat=" + subhs.lon +
-							                    "&tlon=" + subhs.lat +
-							                    "&v=foot&" +
-							                    "fast=1" +
-							                    "&layer=mapnik" +
-							                    "&instructions=1" +
-							                    "&lang=de";
+							             "format=kml" +
+							             "&flat=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1] +
+							             "&flon=" + GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0] +
+							             "&tlat=" + subhs.lon +
+							             "&tlon=" + subhs.lat +
+							             "&v=foot&" +
+							             "fast=1" +
+							             "&layer=mapnik" +
+							             "&instructions=1" +
+							             "&lang=de";
 							
 							WWW routewww = new WWW(url);
 
