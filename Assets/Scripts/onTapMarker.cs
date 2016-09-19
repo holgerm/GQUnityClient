@@ -31,15 +31,22 @@ public class onTapMarker : MonoBehaviour {
 			if ( hotspot.startquest.id != 0 ) {
 				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().closeMap();
 
+				Debug.Log("RETURN: marker,onMouseUp() -> startQuestAtEndOfFrame");
+
 				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuestAtEndOfFrame(hotspot.startquest);
 			}
 			else {
+
+				Debug.Log("RETURN: marker,onMouseUp() -> hotspot.onTap.Invoke()");
+
 				hotspot.hotspot.onTap.Invoke();
 			}
 
 			GetComponent<MeshRenderer>().material.color = Color.white;
 		}
 	}
+
+	private bool alreadyTouched = false;
 
 	void Update () {
 
@@ -85,27 +92,22 @@ public class onTapMarker : MonoBehaviour {
 					
 					if ( Physics.Raycast(ray, out hit) ) {
 
-						if ( hit.transform.gameObject == gameObject ) {
+						if ( hit.transform.gameObject == gameObject && !alreadyTouched ) {
+							alreadyTouched = true;
 
 
 							if ( hotspot.startquest.id != 0 ) {
-
-								
+								// In Foyer the quest indicated by the given hotspot shoul just be started:
 								GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuest(hotspot.startquest);
+							}
+							else {
+								// In Quest the hotspot onTap Events should be started:
+								hotspot.hotspot.onTap.Invoke();
 							}
 
 							GetComponent<MeshRenderer>().material.color = Color.white;
-
-
-							hotspot.hotspot.onTap.Invoke();
-
 						}
-
 					}
-
-
-
-
 
 				}
 				else

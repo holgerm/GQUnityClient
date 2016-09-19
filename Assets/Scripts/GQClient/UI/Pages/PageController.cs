@@ -43,20 +43,22 @@ namespace GQ.Client.UI.Pages {
 		private bool shouldShowBackButton {
 			get {
 				bool allowReturn = false;
-				// JUST FOR WCC TODO
-//				if ( questdb.individualReturnDefinitions ) {
-//					allowReturn = 
-//					questdb.allowReturn
-//					&& questdb.currentquest.previouspages.Count > 0
-//					&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null;
-//				}
-//				else {
-//					allowReturn = 
-//					questdb.currentquest.previouspages.Count > 0
-//					&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null
-//					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("MultipleChoiceQuestion")
-//					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("TextQuestion");
-//				}
+				if ( questdb.individualReturnDefinitions ) {
+					allowReturn = 
+					questdb.allowReturn
+					&& questdb.currentquest.previouspages.Count > 0
+					&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null;
+				}
+				else {
+
+					allowReturn = 
+					questdb.currentquest.previouspages.Count > 0
+					&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null
+					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("MultipleChoiceQuestion")
+					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("TextQuestion");
+				}
+
+				Debug.Log("RETURN: allow now: " + allowReturn);
 
 				return allowReturn;
 			}
