@@ -5,7 +5,7 @@ using GQ.Client.Conf;
 
 public class MapCategoryMenuEntry : MonoBehaviour {
 
-	public MarkerCategorySprite markerCategory;
+	public CategoryInfo markerCategory;
 	public Image markerImage;
 	public Text text;
 
@@ -21,7 +21,7 @@ public class MapCategoryMenuEntry : MonoBehaviour {
 	void Start () {
 
 		markerImage.sprite = markerCategory.sprite;
-		text.text = markerCategory.anzeigename_de;
+		text.text = markerCategory.Name;
 	}
 
 
@@ -31,23 +31,15 @@ public class MapCategoryMenuEntry : MonoBehaviour {
 
 		markerCategory.showOnMap = !markerCategory.showOnMap;
 
-		updateMarkerAndButton();
-
-	}
-
-	public void setState (bool newState) {
-
-		markerCategory.showOnMap = newState;
-
-		updateMarkerAndButton();
-	}
-
-
-	private void updateMarkerAndButton () {
-		
 		if ( GameObject.Find("PageController_Map") != null ) {
-			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
+			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarkerInFoyer();
 		}
+
+		updateButton();
+
+	}
+
+	public void updateButton () {
 
 		if ( !markerCategory.showOnMap ) {
 			backgroundImageGradient.enabled = true;

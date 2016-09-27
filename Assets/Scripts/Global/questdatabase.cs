@@ -1004,10 +1004,10 @@ public class questdatabase : MonoBehaviour {
 
 		}
 		else {
-			// update marker in page_map TODO
+			
 			if ( GameObject.Find("PageController_Map") != null ) {
 				hotspots = getActiveHotspots();
-				GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
+				GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarkerInFoyer();
 			}
 		}
 	}
@@ -2079,7 +2079,7 @@ public class questdatabase : MonoBehaviour {
 			}
 		}
 		else {
-			Debug.Log("showing message");
+			Debug.Log("INVALID Quest Version. Quest: " + currentquest.id);
 			showmessage("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
 			if ( webloadingmessage != null ) {
 				webloadingmessage.enabled = false;
@@ -2133,10 +2133,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2605,7 +2605,7 @@ public class questdatabase : MonoBehaviour {
 		if ( GameObject.Find("PageController_Map") != null ) {
 			hotspots = new List<QuestRuntimeHotspot>();
 			hotspots.AddRange(getActiveHotspots());
-			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
+			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarkerInFoyer();
 		}
 	}
 

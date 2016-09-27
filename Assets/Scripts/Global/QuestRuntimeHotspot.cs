@@ -67,9 +67,9 @@ public class QuestRuntimeHotspot {
 	public Sprite getMarkerImage () {
 		Sprite s = null;
 		bool found = false;
-		foreach ( MarkerCategorySprite mcs in Configuration.instance.categoryMarker ) {
+		foreach ( CategoryInfo mcs in ConfigurationManager.Current.markers ) {
 
-			if ( mcs.category == category ) {
+			if ( mcs.ID == category ) {
 				if ( mcs.sprite != null ) {
 					s = mcs.sprite;
 					found = true;

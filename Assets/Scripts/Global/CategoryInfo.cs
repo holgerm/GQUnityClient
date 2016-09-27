@@ -6,11 +6,28 @@ using System.Linq;
 
 namespace GQ.Client.Conf {
 
+	/// <summary>
+	/// This class is used for derserializing the JSON product configuration into at runtime. 
+	/// This is done right in the beginning in Awake() of the ConfigurationManager.
+	/// </summary>
 	[System.Serializable]
-	public class MarkerCategorySprite {
+	public class CategoryInfo {
 
-		public string category;
-		public string anzeigename_de;
+		private string _id;
+
+		public string ID { 
+			get {
+				return _id;
+			}
+			set {
+				_id = value;
+				sprite = Resources.Load<Sprite>("markers/" + _id);
+			} 
+		}
+
+
+		public string Name { get; set; }
+
 		public Sprite sprite;
 		public bool showInList = true;
 		/// <summary>

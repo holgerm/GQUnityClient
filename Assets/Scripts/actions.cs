@@ -1108,7 +1108,7 @@ public class actions : MonoBehaviour {
 		}
 
 		if ( GameObject.Find("PageController_Map") != null ) {
-			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarker();
+			GameObject.Find("PageController_Map").GetComponent<page_map>().updateMapMarkerInQuest();
 			
 		}
 	}

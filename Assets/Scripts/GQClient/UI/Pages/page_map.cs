@@ -16,6 +16,7 @@ using System.Xml.Serialization;
 using System.Text;
 using System.Globalization;
 using GQ.Client.Conf;
+using System.Diagnostics;
 
 /// <summary>
 /// Caution: We use the order (LATITUDE, LONGITUDE) throughout our implementation here! 
@@ -186,13 +187,15 @@ public class page_map : MonoBehaviour {
 					pre = "file:";
 
 				}
-
-
 			}
+
+
 			layers.Add(osmLayer);
 
-
-			updateMapMarker();
+			if ( questdb.currentquest == null )
+				updateMapMarkerInFoyer();
+			else
+				updateMapMarkerInQuest();
 
 		}
 	}
@@ -434,112 +437,106 @@ public class page_map : MonoBehaviour {
 		return pointWestOfHostpot;
 	}
 
-	public void updateMapMarker () {
-
+	void removeAllHotspotMarkers () {
 		// DELETE ALL MARKERS
-
-
 		List<Marker> allmarker = new List<Marker>();
 		allmarker.AddRange(map.Markers);
-
 		foreach ( Marker m in allmarker ) {
-
 			Destroy(m.gameObject);
 			map.Markers.Remove(m);
-
 		}
+	}
 
+	/// <summary>
+	/// Updates the map marker in quest. Used within Quests and NOT in the App Foyer (altenative to quest list).
+	/// </summary>
+	public void updateMapMarkerInQuest () {
+
+		removeAllHotspotMarkers();
 
 		foreach ( QuestRuntimeHotspot qrh in questdb.hotspots ) {
 
-			bool show = true;
-			
-			if ( qrh.category != null && qrh.category != "" ) {
+			WWW www = null;
 
-				foreach ( MarkerCategorySprite mcs in Configuration.instance.categoryMarker ) {
-
-					if ( mcs.category == qrh.category ) {
-
-						if ( !mcs.showOnMap ) {
-
-							show = false;
-						}
-
-					}
-
-				}
-
+			if ( qrh.hotspot.getAttribute("img").StartsWith("@_") ) {
+				
+				www = new WWW(pre + "" + questactions.getVariable(qrh.hotspot.getAttribute("img")).string_value[0]);
 			}
+			else
+			if ( qrh.hotspot.getAttribute("img") != "" ) {
 
-			if ( show ) {
-				WWW www = null;
-			
-			
-			
-				if ( qrh.hotspot.getAttribute("img").StartsWith("@_") && qrh.startquest == null ) {
-					// this case is called when we are on a map within a quest. And marker is taken from a variable.
+				string url = qrh.hotspot.getAttribute("img");
+				if ( !url.StartsWith("http:") && !url.StartsWith("https:") ) {
+					url = pre + "" + qrh.hotspot.getAttribute("img");
+				}
 				
-				
-					www = new WWW(pre + "" + questactions.getVariable(qrh.hotspot.getAttribute("img")).string_value[0]);
-				
-				
+				if ( url.StartsWith("http:") || url.StartsWith("https:") ) {
+					//Debug.Log("webimage");
+					
+					www = new WWW(url);
+					StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
+					
+					
 				}
 				else
-				if ( qrh.hotspot.getAttribute("img") != "" && qrh.startquest == null ) {
-					// this case is called when we are on a map within a quest. And marker is not taken from a variable.
-				
-				
-				
-					string url = qrh.hotspot.getAttribute("img");
-					if ( !url.StartsWith("http:") && !url.StartsWith("https:") ) {
-						url = pre + "" + qrh.hotspot.getAttribute("img");
-					}
-				
-					//				Debug.Log(url);
-				
-				
-					if ( url.StartsWith("http:") || url.StartsWith("https:") ) {
-						//Debug.Log("webimage");
-					
-						www = new WWW(url);
-						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
-					
-					
-					}
-					else
-					if ( File.Exists(qrh.hotspot.getAttribute("img")) ) {
-						www = new WWW(url);
-						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
-					}
-					else
-					if ( questdb.currentquest != null && questdb.currentquest.predeployed ) {
-						www = new WWW(url);
-						StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
-					}
-				
+				if ( File.Exists(qrh.hotspot.getAttribute("img")) ) {
+					www = new WWW(url);
+					StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
 				}
-				else {
-					Sprite markerImage = qrh.getMarkerImage();
-					if ( markerImage != null )
-						createMarker(qrh, qrh.getMarkerImage().texture);
-					else
-						Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
-				
+				else
+				if ( questdb.currentquest != null && questdb.currentquest.predeployed ) {
+					www = new WWW(url);
+					StartCoroutine(createMarkerAfterImageLoaded(www, qrh));
 				}
-			
+				
 			}
-			
+			else {
+				Sprite markerImage = qrh.getMarkerImage();
+				if ( markerImage != null )
+					createMarker(qrh, qrh.getMarkerImage().texture);
+				else
+					UnityEngine.Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
+				
+			}
 		}
-
-
-
-
-
 	}
+
+	/// <summary>
+	/// Updates the map marker in quest. Used in the App Foyer (altenative to quest list) and NOT within Quests.
+	/// </summary>
+	public void updateMapMarkerInFoyer () {
+
+		foreach ( QuestRuntimeHotspot qrh in questdb.hotspots ) {
+
+
+
+			if ( qrh.category != null && qrh.category != "" ) {
+
+				foreach ( CategoryInfo mcs in ConfigurationManager.Current.markers ) {
+
+					if ( mcs.ID == qrh.category ) {
+
+						if ( qrh.renderer == null ) {
+							// Lazy initialization of marker:
+
+							Sprite markerImage = qrh.getMarkerImage();
+							if ( markerImage != null )
+								createMarker(qrh, qrh.getMarkerImage().texture);
+							else
+								UnityEngine.Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
+						}
+
+						qrh.renderer.enabled = mcs.showOnMap;
+					}
+				}
+			}
+
+		}
+	}
+
 
 	public void unDrawCurrentRoute () {
 
-		Debug.Log("unloading Route");
 		foreach ( RoutePoint rp in currentroute.points ) {
 
 			if ( rp.marker != null ) {
@@ -609,7 +606,7 @@ public class page_map : MonoBehaviour {
 				return;
 			}
 		} 
-		Debug.LogError("Unexpected Behaviour in page_map.togglePositionClicked()");
+		UnityEngine.Debug.LogError("Unexpected Behaviour in page_map.togglePositionClicked()");
 
 	}
 
@@ -706,7 +703,7 @@ public class page_map : MonoBehaviour {
 			createMarker(qrh, www.texture);
 		}
 		else {
-			Debug.Log(www.error);
+			UnityEngine.Debug.Log(www.error);
 		}
 	}
 
