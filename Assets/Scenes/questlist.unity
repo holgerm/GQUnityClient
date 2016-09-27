@@ -9223,87 +9223,6 @@ MonoBehaviour:
     anzeigename_de: "Franz\xF6sisch"
     sprite: {fileID: 21300000, guid: bcd500bc549a04f91ab112eec4cd0756, type: 3}
     available: 0
-  categoryMarker:
-  - category: wcc.tour.beethoven
-    anzeigename_de: Beethoven Route
-    sprite: {fileID: 21300000, guid: c647774d1f4284f85995b053bad2c4c7, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.culture
-    anzeigename_de: Kultur
-    sprite: {fileID: 21300000, guid: 80eadcdccf2a14eceab8aa81d74d6687, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.gallery
-    anzeigename_de: Galerie
-    sprite: {fileID: 21300000, guid: 563182bfda3da48208d1b9dc3688be61, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.architecture
-    anzeigename_de: Architektur
-    sprite: {fileID: 21300000, guid: 40604b4f6d6ea4d0ab5081e80ac3ec12, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.cafe
-    anzeigename_de: "Caf\xE9"
-    sprite: {fileID: 21300000, guid: 09a7cf6a3ccae4a1cb3ae60f2c1e1ca3, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.history
-    anzeigename_de: Historisch
-    sprite: {fileID: 21300000, guid: 5c84930ca34e44ca98f0401dc2e7a3fe, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.info
-    anzeigename_de: Information
-    sprite: {fileID: 21300000, guid: 76db04478feb846869a9e917d337d453, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.nature
-    anzeigename_de: Natur
-    sprite: {fileID: 21300000, guid: 1f78dc001edf44833b89b63f05f0ea4b, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.restaurant
-    anzeigename_de: Restaurant
-    sprite: {fileID: 21300000, guid: e438c2dcf472147c787c9b4d2b970c4b, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: game
-    anzeigename_de: Spiel
-    sprite: {fileID: 21300000, guid: 5fa89bad452ff4a34ac4b2d0c6efe392, type: 3}
-    showInList: 0
-    showOnMap: 0
-  - category: education
-    anzeigename_de: Lernen
-    sprite: {fileID: 21300000, guid: f4357e52be36e48fe8d220f327d26a4a, type: 3}
-    showInList: 0
-    showOnMap: 0
-  - category: tour
-    anzeigename_de: Tour
-    sprite: {fileID: 21300000, guid: 71a496772f81242c19547180cc9633be, type: 3}
-    showInList: 0
-    showOnMap: 0
-  - category: sport
-    anzeigename_de: Sport
-    sprite: {fileID: 21300000, guid: 26528893e0d374452a1bce9e80e40596, type: 3}
-    showInList: 0
-    showOnMap: 0
-  - category: wcc.special
-    anzeigename_de: Besonderes
-    sprite: {fileID: 21300000, guid: 16d4c032788e14711a58d7f77d62484c, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.beethovenfest
-    anzeigename_de: Beethovenfest
-    sprite: {fileID: 21300000, guid: cc10fd78b29244eb0bd9e60ed83601d3, type: 3}
-    showInList: 1
-    showOnMap: 1
-  - category: wcc.museum
-    anzeigename_de: Museum
-    sprite: {fileID: 21300000, guid: f7dccfc9854844c11b06201edd9e3d7b, type: 3}
-    showInList: 1
-    showOnMap: 1
   metaCategoryUsage: []
   defaultmarker: {fileID: 21300000, guid: 9583b5b7a3de2408bb1ebac827f8ede0, type: 3}
   markerScale: 0.7
@@ -10249,7 +10168,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -15496,7 +15415,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1050764429}
-        m_MethodName: whatever
+        m_MethodName: changeAll
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19305,7 +19224,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
