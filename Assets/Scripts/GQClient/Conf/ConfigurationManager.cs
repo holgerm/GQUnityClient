@@ -7,7 +7,16 @@ using LitJson;
 using System.Text;
 
 namespace GQ.Client.Conf {
-	public class ConfigurationManager {
+
+	/// <summary>
+	/// The Configuration manager is the runtime access point to information about the build configuration, 
+	/// e.g. build time, version, contained markers and logos, links to server resources etc. 
+	/// I.e. everything the app needs for the specific product it is branded to.
+	/// 
+	/// This class will completely replace the currently still used class Configuration 
+	/// and additionally offer any information which is currently entered manuallly in the Unity Inspector View.
+	/// </summary>
+	public class ConfigurationManager : MonoBehaviour {
 
 		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources/";
 		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "product";
@@ -15,14 +24,22 @@ namespace GQ.Client.Conf {
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + BUILD_TIME_FILE_NAME + ".txt";
 
+		#region Initialize
+
+		void Awake () {
+			deserialize();
+		}
+
+		#endregion
+
 		#region RETRIEVING THE CURRENT PRODUCT
 
 		private static Config _current = null;
 
-		public static Config current {
+		public static Config Current {
 			get {
 				if ( _current == null ) {
-					_current = deserialize();
+					deserialize();
 				}
 			
 				return _current;
@@ -34,7 +51,7 @@ namespace GQ.Client.Conf {
 
 		private static Sprite _topLogo;
 
-		public static Sprite topLogo {
+		public static Sprite TopLogo {
 			get {
 				return _topLogo;
 			}
@@ -45,7 +62,7 @@ namespace GQ.Client.Conf {
 
 		private static Sprite _defaultMarker;
 
-		public static Sprite defaultMarker {
+		public static Sprite DefaultMarker {
 			get {
 				return _defaultMarker;
 			}
@@ -78,26 +95,22 @@ namespace GQ.Client.Conf {
 			}
 		}
 
-		public static Config deserialize () {
-			return deserialize(RUNTIME_PRODUCT_DIR);
-		}
+		public static void deserialize () {
 
-		public static Config deserialize (string productDirPath) {
-			if ( !productDirPath.EndsWith("/") )
-				productDirPath = productDirPath + "/";
-			
-			if ( !File.Exists(RUNTIME_PRODUCT_FILE + ".json") ) {
-				throw new ArgumentException("Config JSON File Missing! Please provide one at " + productDirPath + CONFIG_FILE);
-			}
-
-			TextAsset configAsset = Resources.Load("product") as TextAsset;
+			TextAsset configAsset = Resources.Load("Product") as TextAsset;
 
 			if ( configAsset == null ) {
-				throw new ArgumentException("Config JSON File does not represent a loadable asset. Cf. " + productDirPath + CONFIG_FILE);
+				throw new ArgumentException("Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
 			}
 
-			current = JsonMapper.ToObject<Config>(configAsset.text);
-			return current;
+			try {
+				_current = JsonMapper.ToObject<Config>(configAsset.text);
+			} catch ( Exception e ) {
+				Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
+			}
+
+			Debug.Log("Configuration: deserialized " + ConfigurationManager.Current.name);
+
 		}
 
 		#endregion

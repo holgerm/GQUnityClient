@@ -56,7 +56,6 @@ namespace GQ.Client.Conf {
 		public string defaultlanguage = "system";
 		public bool languageChangableByUser = true;
 		public List<Language> languagesAvailable;
-		public List<MarkerCategorySprite> categoryMarker;
 		public List<QuestMetaCategory> metaCategoryUsage;
 		public Sprite defaultmarker;
 		// TODO make available in portal
@@ -151,6 +150,9 @@ namespace GQ.Client.Conf {
 		}
 
 		private void initProductDefinitions () {
+
+//			ConfigurationManager.deserialize();
+
 			switch ( product ) {
 				case ProductIDs.CarlBenz:
 					productName = "carlbenz";
@@ -280,8 +282,6 @@ namespace GQ.Client.Conf {
 			return;
 		}
 
-
-
 		public bool metaCategoryIsSearchable (string category) {
 
 			if ( metaCategoryUsage != null && metaCategoryUsage.Count > 0 ) {
@@ -325,20 +325,6 @@ namespace GQ.Client.Conf {
 	}
 
 
-	[System.Serializable]
-	public class MarkerCategorySprite {
-
-		public string category;
-		public string anzeigename_de;
-		public Sprite sprite;
-		public bool showInList = true;
-		/// <summary>
-		/// Flag that determines whether this category's markers will be shown on the map. 
-		/// This is currently also the only state used for category markers and also reflects the state of the buttons etc.
-		/// </summary>
-		public bool showOnMap = true;
-
-	}
 
 
 
