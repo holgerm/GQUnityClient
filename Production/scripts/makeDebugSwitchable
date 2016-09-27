@@ -1,0 +1,24 @@
+#!/bin/bash 
+
+#shopt -s globstar
+
+function changeDebugsInFolder {
+	for filename in  $1/*.cs $1/**/*.cs ; do
+		echo $filename
+		xperl -pi -w -e 's/(Debug.Log\((?:.)*(?:\)\s*;)\s*)\n/\n#if GQ_DEBUG\n$1\n#endif\n/g;' $filename
+	done
+}
+
+
+                
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+changeDebugsInFolder $1
+
+IFS=$SAVEIFS
+
+
+
+
+

@@ -123,10 +123,10 @@ namespace GQTests.Editor.Building {
 
 			// Assert:
 			Assert.AreEqual(4, testPM.AllProducts.Count, "Product List should contain the 4 valid products.");
-			Assert.That(testPM.AllProductIds.Contains("product1"));
-			Assert.That(testPM.AllProductIds.Contains("product2"));
-			Assert.That(testPM.AllProductIds.Contains("product3"));
-			Assert.That(testPM.AllProductIds.Contains("product4"));
+			Assert.That(testPM.AllProductIds.Contains("product1"), "product1 missing");
+			Assert.That(testPM.AllProductIds.Contains("product2"), "product2 missing");
+			Assert.That(testPM.AllProductIds.Contains("product3"), "product3 missing");
+			Assert.That(testPM.AllProductIds.Contains("product4"), "product4 missing");
 			Assert.AreEqual(0, testPM.Errors.Count);
 		}
 
@@ -159,6 +159,33 @@ namespace GQTests.Editor.Building {
 			Assert.That(File.Exists(buildProduct.TopLogoPath), "Top logo file should exist at " + buildProduct.TopLogoPath);
 			Assert.That(File.Exists(buildProduct.ConfigPath), "Config file should exist at " + buildProduct.ConfigPath);
 			Assert.AreEqual("product3", buildProduct.Id);
+		}
+
+		[Test]
+		public void SetProductWithMarkers () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "Products4MarkerTest";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Files.ClearDirectory(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productWithMarkers");
+
+			// Assert:
+			Product buildProduct = new Product(testPM.BuildExportPath);
+			Assert.AreEqual("productWithMarkers", buildProduct.Id);
+			Assert.That(Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "marker directory missing in product");
+			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "markers", "marker1.png")), "marker1.png missing in product");
+			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "markers", "marker2.png")), "marker2.png missing in product");
+
+			// Act:
+			testPM.SetProductForBuild("productWithoutMarkers");
+
+			// Assert:
+			buildProduct = new Product(testPM.BuildExportPath);
+			Assert.AreEqual("productWithoutMarkers", buildProduct.Id);
+			Assert.That(!Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "marker directory should not exist with this product set for build");
 		}
 	}
 

@@ -180,7 +180,7 @@ namespace GQ.Editor.Building {
 			PlayerSettings.bundleIdentifier = GetBundleIdentifier ();
 
 			savedSettingsProductName = PlayerSettings.productName;
-			PlayerSettings.productName = ConfigurationManager.current.name;
+			PlayerSettings.productName = ConfigurationManager.Current.name;
 
 			savedSettingsIcons4Android = PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.Android);
 			savedSettingsIcons4iOS = PlayerSettings.GetIconsForTargetGroup (BuildTargetGroup.iOS);
@@ -218,7 +218,7 @@ namespace GQ.Editor.Building {
 
 		static string GetBundleIdentifier ()
 		{
-			return "com.questmill.geoquest." + ConfigurationManager.current.id;
+			return "com.questmill.geoquest." + ConfigurationManager.Current.id;
 		}
 
 		static Texture2D[] GetAppIcons (BuildTarget target)

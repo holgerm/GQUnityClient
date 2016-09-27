@@ -102,12 +102,17 @@ namespace GQ.Editor.UI {
 
 			// Prepare Build Button:
 			EditorGUILayout.BeginHorizontal();
+			// Disable build button if current build is the same as selectedProduct:
+			string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
+			EditorGUI.BeginDisabledGroup(selectedProductName.Equals(buildName));
 			if ( GUILayout.Button("Prepare Build") ) {
-				string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
 				if ( !buildName.Equals(selectedProductName) )
 					pm.SetProductForBuild(selectedProductName);
 			}
+			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
+
+			// Build Selection Popup:
 			string[] productIds = pm.AllProductIds.ToArray<string>();
 			int newIndex = EditorGUILayout.Popup("Available Products:", selectedProductIndex, productIds);
 			selectProduct(newIndex);

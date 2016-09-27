@@ -180,7 +180,6 @@ namespace GQ.Editor.Building {
 		/// </summary>
 		/// <param name="productID">Product I.</param>
 		public void SetProductForBuild (string productID) {
-			// TODO impl
 			if ( !Product.IsValid(productID) ) {
 				throw new ArgumentException("Invalid product id: " + productID);
 			}
@@ -191,16 +190,28 @@ namespace GQ.Editor.Building {
 				throw new ArgumentException("Product can not be build , since it does not exist: " + productID);
 			}
 
+			// clear build folder:
+			Files.ClearDirectory(BuildExportPath);
+
 			// copy all product files to build export folder:
 			DirectoryInfo productDir = new DirectoryInfo(productDirPath);
 			foreach ( FileInfo file in productDir.GetFiles() ) {
+				if ( file.Name.StartsWith(".") || file.Name.EndsWith(".meta") )
+					// skip files starting with "." and unity meta files:
+					continue;
 				FileInfo targetFile = new FileInfo(Files.CombinePath(BuildExportPath, file.Name));
 				if ( targetFile.Exists )
 					targetFile.Delete();
 				file.CopyTo(targetFile.FullName);
 			}
 
-//			AssetDatabase.ImportAsset(BuildExportPath, ImportAssetOptions.ImportRecursive);
+			foreach ( DirectoryInfo dir in productDir.GetDirectories() ) {
+				if ( "markers".Equals(dir.Name) ) {
+					Files.CopyDirectory(dir.FullName, Files.CombinePath(BuildExportPath, dir.Name));
+				}
+			}
+
+			AssetDatabase.ImportAsset(BuildExportPath, ImportAssetOptions.ImportRecursive);
 			AssetDatabase.Refresh();
 		}
 

@@ -135,10 +135,10 @@ namespace GQ.Editor.Building {
 			} 
 			GUI.enabled = allowChanges;
 
-			ConfigurationManager.current.name = 
+			ConfigurationManager.Current.name = 
 				EditorGUILayout.TextField(
 				"Name", 
-				ConfigurationManager.current.name, 
+				ConfigurationManager.Current.name, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 
 			appIcon = 
@@ -148,73 +148,73 @@ namespace GQ.Editor.Building {
 				typeof(Texture),
 				false);
 
-			ConfigurationManager.current.portal = 
+			ConfigurationManager.Current.portal = 
 				EditorGUILayout.IntField(
 				"Portal", 
-				ConfigurationManager.current.portal, 
+				ConfigurationManager.Current.portal, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO check and offer selection from server
 
-			ConfigurationManager.current.autoStartQuestID = 
+			ConfigurationManager.Current.autoStartQuestID = 
 				EditorGUILayout.IntField(
 				"Autostart Quest ID", 
-				ConfigurationManager.current.autoStartQuestID, 
+				ConfigurationManager.Current.autoStartQuestID, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO check at server and offer browser to select driectly from server
 
-			if ( ConfigurationManager.current.autoStartQuestID != 0 ) {
-				ConfigurationManager.current.autostartIsPredeployed =
-				EditorGUILayout.Toggle("Autostart Predeployed?", ConfigurationManager.current.autostartIsPredeployed);
+			if ( ConfigurationManager.Current.autoStartQuestID != 0 ) {
+				ConfigurationManager.Current.autostartIsPredeployed =
+				EditorGUILayout.Toggle("Autostart Predeployed?", ConfigurationManager.Current.autostartIsPredeployed);
 			}
 			else {
-				ConfigurationManager.current.autostartIsPredeployed = false;
+				ConfigurationManager.Current.autostartIsPredeployed = false;
 			}
 			
-			ConfigurationManager.current.downloadTimeOutSeconds = 
+			ConfigurationManager.Current.downloadTimeOutSeconds = 
 				EditorGUILayout.IntField(
 				"Download Timeout (s)", 
-				ConfigurationManager.current.downloadTimeOutSeconds);
+				ConfigurationManager.Current.downloadTimeOutSeconds);
 			// TODO limit to a value bigger than something (5s?)
 
-			ConfigurationManager.current.nameForQuest = 
+			ConfigurationManager.Current.nameForQuest = 
 				EditorGUILayout.TextField(
 				"Name for 'Quest'", 
-				ConfigurationManager.current.nameForQuest, 
+				ConfigurationManager.Current.nameForQuest, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
-			if ( ConfigurationManager.current.nameForQuest == null || ConfigurationManager.current.nameForQuest.Equals("") ) {
-				ConfigurationManager.current.nameForQuest = "Quest";
+			if ( ConfigurationManager.Current.nameForQuest == null || ConfigurationManager.Current.nameForQuest.Equals("") ) {
+				ConfigurationManager.Current.nameForQuest = "Quest";
 			}
 			
 			QuestVisualizationMethod mIn;
-			if ( ConfigurationManager.current.questVisualization == null ) {
+			if ( ConfigurationManager.Current.questVisualization == null ) {
 				mIn = QuestVisualizationMethod.list;
 			}
 			else {
-				mIn = (QuestVisualizationMethod)Enum.Parse(typeof(QuestVisualizationMethod), ConfigurationManager.current.questVisualization.ToLower());
+				mIn = (QuestVisualizationMethod)Enum.Parse(typeof(QuestVisualizationMethod), ConfigurationManager.Current.questVisualization.ToLower());
 			}
 			string questVisLabel = "Quest Visualization";
-			if ( ConfigurationManager.current.questVisualizationChangeable ) {
+			if ( ConfigurationManager.Current.questVisualizationChangeable ) {
 				questVisLabel = "Initial " + questVisLabel;
 			}
 			QuestVisualizationMethod m =
 				(QuestVisualizationMethod)EditorGUILayout.EnumPopup(questVisLabel, mIn);
 			if ( m != null ) {
-				ConfigurationManager.current.questVisualization = m.ToString().ToLower();
+				ConfigurationManager.Current.questVisualization = m.ToString().ToLower();
 			}
 
-			ConfigurationManager.current.questVisualizationChangeable =
-				EditorGUILayout.Toggle("Visualization Changeable?", ConfigurationManager.current.questVisualizationChangeable);
+			ConfigurationManager.Current.questVisualizationChangeable =
+				EditorGUILayout.Toggle("Visualization Changeable?", ConfigurationManager.Current.questVisualizationChangeable);
 			
-			ConfigurationManager.current.showCloudQuestsImmediately =
-				EditorGUILayout.Toggle("Load cloud quests asap?", ConfigurationManager.current.showCloudQuestsImmediately);
+			ConfigurationManager.Current.showCloudQuestsImmediately =
+				EditorGUILayout.Toggle("Load cloud quests asap?", ConfigurationManager.Current.showCloudQuestsImmediately);
 
 			EditorGUILayout.BeginHorizontal(GUILayout.Width(300));
 			EditorGUILayout.PrefixLabel("Imprint");
 			Vector2 scrollPos = new Vector2();
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-			ConfigurationManager.current.imprint = 
+			ConfigurationManager.Current.imprint = 
 				EditorGUILayout.TextArea(
-				ConfigurationManager.current.imprint);
+				ConfigurationManager.Current.imprint);
 			EditorGUILayout.EndScrollView();
 			EditorGUILayout.EndHorizontal();
 
@@ -229,47 +229,47 @@ namespace GQ.Editor.Building {
 				splashScreen = newSplashScreen;
 			}
 
-			ConfigurationManager.current.colorProfile = 
+			ConfigurationManager.Current.colorProfile = 
 				EditorGUILayout.TextField(
 				"Color Profile", 
-				ConfigurationManager.current.colorProfile, 
+				ConfigurationManager.Current.colorProfile, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO change to better representation of Color Profile
 			
-			ConfigurationManager.current.showTextInLoadingLogo =
-				EditorGUILayout.Toggle("Show Loading Text?", ConfigurationManager.current.showTextInLoadingLogo);
+			ConfigurationManager.Current.showTextInLoadingLogo =
+				EditorGUILayout.Toggle("Show Loading Text?", ConfigurationManager.Current.showTextInLoadingLogo);
 			
 			// TODO Animation Loading Logo
 			
-			ConfigurationManager.current.showNetConnectionWarning =
-				EditorGUILayout.Toggle("Show Connection Warning?", ConfigurationManager.current.showNetConnectionWarning);
+			ConfigurationManager.Current.showNetConnectionWarning =
+				EditorGUILayout.Toggle("Show Connection Warning?", ConfigurationManager.Current.showNetConnectionWarning);
 
-			ConfigurationManager.topLogo = 
+			ConfigurationManager.TopLogo = 
 				(Sprite)EditorGUILayout.ObjectField(
 				"Top Bar Logo", 
-				ConfigurationManager.topLogo,
+				ConfigurationManager.TopLogo,
 				typeof(Sprite),
 				false);
 			// TODO resize visualization in editor to correct 
 
-			ConfigurationManager.current.mapboxMapID = 
+			ConfigurationManager.Current.mapboxMapID = 
 				EditorGUILayout.TextField(
 				"Mapbox Map ID", 
-				ConfigurationManager.current.mapboxMapID, 
+				ConfigurationManager.Current.mapboxMapID, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			
-			ConfigurationManager.current.mapboxKey = 
+			ConfigurationManager.Current.mapboxKey = 
 				EditorGUILayout.TextField(
 				"Mapbox User Key", 
-				ConfigurationManager.current.mapboxKey, 
+				ConfigurationManager.Current.mapboxKey, 
 				GUILayout.Height(EditorGUIUtility.singleLineHeight));
 			// TODO make generic representation for map types (google, OSM, Mapbox)
 			
 			// TODO default marker
-			ConfigurationManager.defaultMarker = 
+			ConfigurationManager.DefaultMarker = 
 				(Sprite)EditorGUILayout.ObjectField(
 				"Default Marker", 
-				ConfigurationManager.defaultMarker,
+				ConfigurationManager.DefaultMarker,
 				typeof(Sprite),
 				false);
 			// TODO resize visualization in editor to correct 
@@ -394,7 +394,7 @@ namespace GQ.Editor.Building {
 			ConfigurationManager.deserialize();
 			
 			// adjust Player Settings to newly loaded product:
-			PlayerSettings.bundleIdentifier = "com.questmill.geoquest." + ConfigurationManager.current.id;
+			PlayerSettings.bundleIdentifier = "com.questmill.geoquest." + ConfigurationManager.Current.id;
 			
 			// load images:
 			if ( File.Exists(RT_PROD_DIR + APP_ICON_FILE_BASE + ".png") ) {
@@ -424,29 +424,29 @@ namespace GQ.Editor.Building {
 			} // TODO replace null with default
 			
 			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".psd") ) {
-				ConfigurationManager.topLogo = 
+				ConfigurationManager.TopLogo = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".psd", typeof(Sprite)) as Sprite;
 			}
 			else
 			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".png") ) {
-				ConfigurationManager.topLogo = 
+				ConfigurationManager.TopLogo = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			}
 			else
 			if ( File.Exists(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".jpg") ) {
-				ConfigurationManager.topLogo = 
+				ConfigurationManager.TopLogo = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + TOP_LOGO_FILE_BASE + ".jpg", typeof(Sprite)) as Sprite;
 			}
 			else {
-				ConfigurationManager.topLogo = null;
+				ConfigurationManager.TopLogo = null;
 			} // TODO replace null with default
 			
 			if ( File.Exists(RT_PROD_DIR + DEFAULT_MARKER_FILE_BASE + ".png") ) {
-				ConfigurationManager.defaultMarker = 
+				ConfigurationManager.DefaultMarker = 
 					AssetDatabase.LoadAssetAtPath(RT_PROD_DIR + DEFAULT_MARKER_FILE_BASE + ".png", typeof(Sprite)) as Sprite;
 			}
 			else {
-				ConfigurationManager.defaultMarker = null;
+				ConfigurationManager.DefaultMarker = null;
 			} // TODO replace null with default
 			
 			//			TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath (RUNTIME_PRODUCT_DIR + "/appIcon");
@@ -459,7 +459,7 @@ namespace GQ.Editor.Building {
 		}
 
 		void performSaveConfig (string productID) {
-			ConfigurationManager.current.id = productID;
+			ConfigurationManager.Current.id = productID;
 
 			serialize();
 			
@@ -483,14 +483,14 @@ namespace GQ.Editor.Building {
 
 			// TODO should we store the images, too?
 			Debug.Log("Import assets in save(" + productID + ")");
-			AssetDatabase.ImportAsset(PRODUCTS_DIR + ConfigurationManager.current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
+			AssetDatabase.ImportAsset(PRODUCTS_DIR + ConfigurationManager.Current.id, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ImportRecursive);
 		}
 
 		public static void serialize () {
 			StringBuilder sb = new StringBuilder();
 			JsonWriter jsonWriter = new JsonWriter(sb);
 			jsonWriter.PrettyPrint = true;
-			JsonMapper.ToJson(ConfigurationManager.current, jsonWriter);
+			JsonMapper.ToJson(ConfigurationManager.Current, jsonWriter);
 			File.WriteAllText(RT_PROD_FILE + ".json", sb.ToString());
 			AssetDatabase.Refresh();
 			Debug.Log("CHECKED");

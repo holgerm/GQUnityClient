@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace GQ.Client.Conf {
 	/// <summary>
 	/// Config class specifies thetextual parameters of a product. It is used both at runtime to initilize the app's branding details from and 
@@ -39,7 +41,10 @@ namespace GQ.Client.Conf {
 
 		public string 	imprint  { get; set; }
 
+		public List<CategoryInfo> markers { get; set; }
+
 	}
+
 
 }
 
