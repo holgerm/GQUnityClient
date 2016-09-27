@@ -58,8 +58,6 @@ namespace GQ.Client.UI.Pages {
 					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("TextQuestion");
 				}
 
-				Debug.Log("RETURN: allow now: " + allowReturn);
-
 				return allowReturn;
 			}
 		}
