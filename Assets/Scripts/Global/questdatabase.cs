@@ -14,6 +14,7 @@ using GQ.Util;
 using UnitySlippyMap;
 using GQ.Client.Conf;
 using GQ.Client.Model;
+using UnityEngine.SceneManagement;
 
 public class questdatabase : MonoBehaviour {
 	public Quest currentquest;
@@ -1136,17 +1137,12 @@ public class questdatabase : MonoBehaviour {
 		}
 		
 		if ( canPlayQuest(currentquest) && hasmorethanmetadata ) {
-			
-			
-			
-		
-			StartCoroutine(waitForSpriteConversion(currentquest.currentpage.id));
-				
 
-			
+			StartCoroutine(waitForSpriteConversion(currentquest.currentpage.id));
+
 		}
 		else {
-			Debug.Log("showing message");
+			
 			showmessage("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
 			if ( webloadingmessage != null ) {
 
@@ -1159,20 +1155,16 @@ public class questdatabase : MonoBehaviour {
 			GameObject.Find("List").GetComponent<createquestbuttons>().resetList();
 			
 		}
-
 	}
 
 	public void showQuestMap () {
+		
 		hotspots = new List<QuestRuntimeHotspot>();
-
 		hotspots.AddRange(getActiveHotspots());
 
 		GameObject.Find("MenuCanvas").GetComponent<Animator>().SetTrigger("startMenu");
-
-
 		GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
-		Application.LoadLevelAdditive("page_map");
-
+		SceneManager.LoadSceneAsync("page_map", LoadSceneMode.Additive);
 	
 		if ( webloadingmessage != null ) {
 			webloadingmessage.enabled = false;
@@ -2133,10 +2125,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 						//Debug.Log (imageextensions.Count);
 						//	Debug.Log (fi.Extension);
@@ -2686,16 +2678,9 @@ public class questdatabase : MonoBehaviour {
 		if ( GameObject.Find("[Map]") != null ) {
 			Destroy(GameObject.Find("[Map]"));
 		}
-
 		if ( GameObject.Find("RouteRender") != null ) {
-
 			Destroy(GameObject.Find("RouteRender"));
-
 		}
-				
-
-				
-
 	}
 
 	public void changePage (int id) {
@@ -2860,64 +2845,60 @@ public class questdatabase : MonoBehaviour {
 				}
 				
 				if ( qp.type == "NPCTalk" ) {
-					Application.LoadLevelAdditive(1);
+					SceneManager.LoadScene(1, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "ImageWithText" ) {
-					Application.LoadLevelAdditive(1);
+					SceneManager.LoadScene(1, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "StartAndExitScreen" ) {
-					Application.LoadLevelAdditive(2);
+					SceneManager.LoadScene(2, LoadSceneMode.Additive);
 
 				}
 				else
 				if ( qp.type == "MultipleChoiceQuestion" ) {
-					Application.LoadLevelAdditive(3);
+					SceneManager.LoadScene(3, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "Menu" ) {
-					Application.LoadLevelAdditive(3);
+					SceneManager.LoadScene(3, LoadSceneMode.Additive);
 					
 				}
 				else
 				if ( qp.type == "VideoPlay" ) {
-					Application.LoadLevelAdditive(4);
-
+					SceneManager.LoadScene(4, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "TagScanner" ) {
 					needsCamera = true;
-					Application.LoadLevelAdditive(5);
-					
+					SceneManager.LoadScene(5, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "ImageCapture" ) {
 					needsCamera = true;
-
-					Application.LoadLevelAdditive(6);
-					
+					SceneManager.LoadScene(6, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "TextQuestion" ) {
-					Application.LoadLevelAdditive(7);
+					SceneManager.LoadScene(7, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "AudioRecord" ) {
 					needsCamera = true;
-					Application.LoadLevelAdditive(8);
+					SceneManager.LoadScene(8, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "WebPage" ) {
-					Application.LoadLevelAdditive(10);
+					SceneManager.LoadScene(10, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "Custom" ) {
-					Application.LoadLevelAdditive(11);
+					SceneManager.LoadScene(11, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "ReadNFC" ) {
-					Application.LoadLevelAdditive(12);
+					SceneManager.LoadScene(12, LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "MapOSM" || qp.type == "Navigation" ) {
@@ -3020,8 +3001,8 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator loadMap () {
-		AsyncOperation loadLevelOperation = Application.LoadLevelAdditiveAsync(9);
-		
+		// TODO shouldn't we simply call SceneManager.LoadSceneAsync since it already works in a backgorund thread. 
+		AsyncOperation loadLevelOperation = SceneManager.LoadSceneAsync(9, LoadSceneMode.Additive);		
 	
 		yield return loadLevelOperation;
 		if ( GameObject.Find("BgCam") != null ) {
