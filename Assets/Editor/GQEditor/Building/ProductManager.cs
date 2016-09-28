@@ -191,6 +191,9 @@ namespace GQ.Editor.Building {
 			}
 
 			// clear build folder:
+			if ( !Directory.Exists(BuildExportPath) ) {
+				Directory.CreateDirectory(BuildExportPath);
+			}
 			Files.ClearDirectory(BuildExportPath);
 
 			// copy all product files to build export folder:
