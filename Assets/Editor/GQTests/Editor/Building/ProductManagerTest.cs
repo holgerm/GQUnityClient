@@ -136,7 +136,8 @@ namespace GQTests.Editor.Building {
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductListPopulated";
 			ProductManager testPM = ProductManager.Instance;
 			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
-			Files.ClearDirectory(testPM.BuildExportPath);
+			if ( Directory.Exists(testPM.BuildExportPath) )
+				Files.ClearDirectory(testPM.BuildExportPath);
 
 			// Act:
 			testPM.SetProductForBuild("product1");
