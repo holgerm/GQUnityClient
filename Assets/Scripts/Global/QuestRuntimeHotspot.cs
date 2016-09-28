@@ -41,7 +41,7 @@ public class QuestRuntimeHotspot {
 
 			foreach ( string x in splitted ) {
 
-				if ( lon == null || lon == 0.0f ) {
+				if ( lon == 0.0f ) {
 
 					lon = float.Parse(x);
 
@@ -59,31 +59,22 @@ public class QuestRuntimeHotspot {
 
 			lon = 0.0f;
 			lat = 0.0f;
-
 		}
-		
 	}
 
 	public Sprite getMarkerImage () {
-		Sprite s = null;
-		bool found = false;
+
 		foreach ( CategoryInfo mcs in ConfigurationManager.Current.markers ) {
 
 			if ( mcs.ID == category ) {
-				if ( mcs.sprite != null ) {
-					s = mcs.sprite;
-					found = true;
-				}
-				break;
+				if ( mcs.sprite != null )
+					return mcs.sprite;
+				else
+					return Configuration.instance.defaultmarker;
 			}
-
 		}
 
-		if ( !found && Configuration.instance.defaultmarker != null ) {
-			s = Configuration.instance.defaultmarker;
-		}
-
-		return s;
+		return Configuration.instance.defaultmarker;
 	}
 	
 }

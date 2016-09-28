@@ -1164,7 +1164,7 @@ public class questdatabase : MonoBehaviour {
 
 		GameObject.Find("MenuCanvas").GetComponent<Animator>().SetTrigger("startMenu");
 		GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
-		SceneManager.LoadSceneAsync("page_map", LoadSceneMode.Additive);
+		SceneManager.LoadScene("page_map", LoadSceneMode.Additive);
 	
 		if ( webloadingmessage != null ) {
 			webloadingmessage.enabled = false;
@@ -1490,10 +1490,7 @@ public class questdatabase : MonoBehaviour {
 
 		closeMap();
 
-//		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
-
 		bool islocal = false;
-		Quest localq;
 
 		foreach ( Quest lq in localquests ) {
 		
@@ -2125,24 +2122,11 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
-						//Debug.Log (imageextensions.Count);
-						//	Debug.Log (fi.Extension);
-						if ( imageextensions.Contains(fi.Extension.ToLower()) ) {
-
-//							SpriteConverter sc = new SpriteConverter(value);
-//
-//
-//
-//							convertedSprites.Add(sc);
-//
-//							sc.startConversion();
-							//	StartCoroutine (waitForSingleSpriteCompletion (sc));
-						}
 					}
 					else {
 
@@ -2665,6 +2649,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void closeMap () {
 
+		Debug.Log("CLOSE_MAP");
 
 		if ( GameObject.Find("MapCanvas") != null ) {
 			Destroy(GameObject.Find("MapCanvas"));
@@ -2684,6 +2669,10 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void changePage (int id) {
+
+		Debug.Log("CHANGE PAGE to ID: " + id);
+
+
 		if ( GameObject.Find("MapHider") != null ) {
 
 
@@ -2731,13 +2720,7 @@ public class questdatabase : MonoBehaviour {
 				currentquest.currentpage = qp;
 				currentquest.currentpage.state = "running";
 
-			
-				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = true;
-
-				
 				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
-
-
 
 				foreach ( GameObject go in allObjects )
 					if ( go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
@@ -2821,7 +2804,7 @@ public class questdatabase : MonoBehaviour {
 
 							}
 
-						}
+						} 
 
 						if ( des ) {
 							Destroy(go);
@@ -2829,14 +2812,7 @@ public class questdatabase : MonoBehaviour {
 
 					}
 
-				//	Debug.Log ("Resources GameObject # =" + Resources.FindObjectsOfTypeAll (typeof(GameObject)).Count ());
-				//	Debug.Log ("Resources Sprite # =" + Resources.FindObjectsOfTypeAll (typeof(Sprite)).Count ());
 				Resources.UnloadUnusedAssets();
-
-
-				//if(GameObject.Find("MapCam") != null){
-				//GameObject.Find("MapCam").GetComponent<Camera>().enabled = false;
-				//}
 
 				bool needsCamera = false;
 
