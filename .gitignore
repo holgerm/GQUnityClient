@@ -21,3 +21,8 @@ sysinfo.txt
 # specific folders:
 /Library/
 
+
+# Generated Test Output Data:
+/Assets/Editor/GQTestData/TestBuildExport/
+/Assets/Editor/GQTestData/TestBuildExport/TestBuildExport.meta
+
