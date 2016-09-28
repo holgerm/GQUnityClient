@@ -368,13 +368,7 @@ namespace GQ.Client.UI.Pages {
 					Application.OpenURL(url);
 
 				}
-
 			}
-
-
-
-
-
 		}
 
 		IEnumerator waitforImage () {
@@ -384,40 +378,20 @@ namespace GQ.Client.UI.Pages {
 			yield return www;
 
 			if ( www.error == null ) {
-
-				//DateTime start = DateTime.Now;
-
-				//Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
-		
-//			Debug.Log ("Sprite creation took: " + DateTime.Now.Subtract (start).Milliseconds);
-				//	Debug.Log ("All took: " + DateTime.Now.Subtract (startWWW).Milliseconds);
-
-				//Debug.Log (www.texture.height + "," + www.texture.width);
 				
 				image.texture = www.texture;
 				
-			
 				float myX = (float)www.texture.width;
-			
-			
 				float myY = (float)www.texture.height;
-			
 			
 				float scaler = myY / 604f;
 			
 				myX = myX / scaler;
 				myY = 604f;
 			
-			
 				image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX, myY);
-			
 											
 				www.Dispose();
-		
-		
-		
-		
-		
 			}
 			else {
 
@@ -433,37 +407,28 @@ namespace GQ.Client.UI.Pages {
 		
 		}
 
+
 		public void nextButton () {
 
-
-//		Debug.Log ("nextButton()");
 			if ( page.contents_dialogitems.Count == dialogitem_state ) {
 				Destroy(image.texture);
 				Destroy(image);
 				onEnd();
-
 			}
 			else {
-
-						
 				nextdialogitem();
-
 			}
-
-
-
-
 		}
 
 		public void backButton () {
-
-
-
+			
 			QuestPage show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
 			questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
-			questdb.changePage(show.id);
-		
 
+			Destroy(image.texture);
+			Destroy(image);
+
+			questdb.changePage(show.id);
 		
 		}
 
