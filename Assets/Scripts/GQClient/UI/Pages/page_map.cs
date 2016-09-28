@@ -801,6 +801,15 @@ public class page_map : MonoBehaviour
 
 	}
 
+	bool inputToBeReenabledSoon = false;
+
+	public void reenableInputSoon()
+	{
+
+		inputToBeReenabledSoon = true;
+
+	}
+
 	IEnumerator reenableInput()
 	{
 		yield return new WaitForEndOfFrame();
@@ -855,6 +864,13 @@ public class page_map : MonoBehaviour
 			{
 				drawCurrentRoute();
 			}
+		}
+
+
+		if (Input.GetMouseButtonUp(0) && inputToBeReenabledSoon)
+		{
+			inputToBeReenabledSoon = false;
+			StartCoroutine(reenableInput());
 		}
 
 		if (Input.GetMouseButtonDown(0) && EventSystem.current.currentSelectedGameObject == null)
