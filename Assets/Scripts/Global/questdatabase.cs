@@ -1266,6 +1266,7 @@ public class questdatabase : MonoBehaviour {
 //		Debug.Log ("Current Quest: "+currentquest.id);
 
 		if ( currentquest != null && currentquest.id != 0 ) {
+			// In Foyer:
 
 			foreach ( QuestRuntimeHotspot qrh in hotspots ) {
 			
@@ -1280,6 +1281,7 @@ public class questdatabase : MonoBehaviour {
 			}
 		}
 		else {
+			// In-Quest:
 
 			List<int> visitedQuests = new List<int>();
 
@@ -2122,10 +2124,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {
