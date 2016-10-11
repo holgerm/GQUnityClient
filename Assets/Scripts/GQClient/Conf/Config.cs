@@ -43,6 +43,14 @@ namespace GQ.Client.Conf {
 
 		public List<CategoryInfo> markers { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class.
+		/// </summary>
+		public Config () {
+			// prepare as an empty list:
+			markers = new List<CategoryInfo>();
+		}
+
 	}
 
 
