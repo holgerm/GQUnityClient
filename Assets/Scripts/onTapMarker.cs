@@ -36,7 +36,7 @@ public class onTapMarker : MonoBehaviour {
 	void OnMouseUp () {
 		if ( !EventSystem.current.IsPointerOverGameObject() && !Application.isMobilePlatform && hotspot.active && map.InputsEnabled ) {
 
-			if ( hotspot.startquest.id != 0 ) {
+			if ( hotspot.startquest != null && hotspot.startquest.id != 0 ) {
 //				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().closeMap();
 
 				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuestAtEndOfFrame(hotspot.startquest);
@@ -103,7 +103,7 @@ public class onTapMarker : MonoBehaviour {
 								alreadyTouched = true;
 
 
-								if ( hotspot.startquest.id != 0 ) {
+								if ( hotspot.startquest != null && hotspot.startquest.id != 0 ) {
 									// In Foyer the quest indicated by the given hotspot shoul just be started:
 									GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuest(hotspot.startquest);
 								}
