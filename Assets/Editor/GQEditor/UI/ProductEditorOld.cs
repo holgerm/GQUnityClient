@@ -55,6 +55,7 @@ namespace GQ.Editor.Building {
 							PLACEHOLDERS_SPLASHSCREEN_FILE);
 						#endif
 					} catch ( Exception exc ) {
+						Debug.LogWarning("ProductEditorOld set splashScreen property threw exception:\n" + exc.Message);
 					}
 					AssetDatabase.Refresh();
 				}
@@ -198,9 +199,7 @@ namespace GQ.Editor.Building {
 			}
 			QuestVisualizationMethod m =
 				(QuestVisualizationMethod)EditorGUILayout.EnumPopup(questVisLabel, mIn);
-			if ( m != null ) {
-				ConfigurationManager.Current.questVisualization = m.ToString().ToLower();
-			}
+			ConfigurationManager.Current.questVisualization = m.ToString().ToLower();
 
 			ConfigurationManager.Current.questVisualizationChangeable =
 				EditorGUILayout.Toggle("Visualization Changeable?", ConfigurationManager.Current.questVisualizationChangeable);
