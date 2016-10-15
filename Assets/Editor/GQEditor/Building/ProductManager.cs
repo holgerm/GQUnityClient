@@ -204,6 +204,7 @@ namespace GQ.Editor.Building {
 			foreach ( DirectoryInfo dir in productDirInfo.GetDirectories() ) {
 				if ( dir.Name.StartsWith("_") )
 					continue;
+				
 				Assets.CreateSubfolder(BuildExportPath, dir.Name);
 
 				string originPath = Files.CombinePath(productDirPath, dir.Name);
