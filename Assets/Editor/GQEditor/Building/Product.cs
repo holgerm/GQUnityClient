@@ -65,6 +65,10 @@ namespace GQ.Editor.Building {
 			}	
 		}
 
+		/// <summary>
+		/// Gets the path to the config file Product.json.
+		/// </summary>
+		/// <value>The config path.</value>
 		public string ConfigPath {
 			get {
 				return Files.CombinePath(Dir, ConfigurationManager.CONFIG_FILE);

@@ -7,7 +7,7 @@ namespace GQTests.Util {
 	public class ObjectsTest {
 
 		[Test]
-		public void ToString () {
+		public void TestToString () {
 			//Assert
 			//The object has a new name
 			Assert.AreEqual("New Game Object (UnityEngine.GameObject)", Objects.ToString(new GameObject()));

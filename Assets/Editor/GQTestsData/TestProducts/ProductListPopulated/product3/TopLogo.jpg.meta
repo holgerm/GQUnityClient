@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cfec6dc2203364bf3a3c206b2ba0e645
+guid: d6dbe3dbef9e54f91999d68d06faea4b
 timeCreated: 1467293601
 licenseType: Pro
 TextureImporter:
@@ -49,6 +49,7 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites: []
     outline: []
   spritePackingTag: 

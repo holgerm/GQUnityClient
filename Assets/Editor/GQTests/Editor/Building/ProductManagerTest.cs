@@ -160,23 +160,26 @@ namespace GQTests.Editor.Building {
 			Assert.That(File.Exists(buildProduct.TopLogoPath), "Top logo file should exist at " + buildProduct.TopLogoPath);
 			Assert.That(File.Exists(buildProduct.ConfigPath), "Config file should exist at " + buildProduct.ConfigPath);
 			Assert.AreEqual("product3", buildProduct.Id);
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
 		}
 
 		[Test]
 		public void SetProductWithMarkers () {
 			// Arrange:
-			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "Products4MarkerTest";
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
 			ProductManager testPM = ProductManager.Instance;
 			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
 			Files.ClearDirectory(testPM.BuildExportPath);
 
 			// Act:
 			testPM.SetProductForBuild("productWithMarkers");
+			Product buildProduct = new Product(testPM.BuildExportPath);
 
 			// Assert:
-			Product buildProduct = new Product(testPM.BuildExportPath);
 			Assert.AreEqual("productWithMarkers", buildProduct.Id);
-			Assert.That(Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "marker directory missing in product");
+			Assert.That(Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "markers directory missing in product dir: " + buildProduct.Dir);
 			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "markers", "marker1.png")), "marker1.png missing in product");
 			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "markers", "marker2.png")), "marker2.png missing in product");
 
@@ -187,6 +190,34 @@ namespace GQTests.Editor.Building {
 			buildProduct = new Product(testPM.BuildExportPath);
 			Assert.AreEqual("productWithoutMarkers", buildProduct.Id);
 			Assert.That(!Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "marker directory should not exist with this product set for build");
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void SetProductWithIgnoredSubdirs () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Files.ClearDirectory(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productWithIgnoredSubdirs");
+			Product buildProduct = new Product(testPM.BuildExportPath);
+
+			// Assert:
+			Assert.AreEqual("productWithIgnoredSubdirs", buildProduct.Id);
+			Assert.That(!Directory.Exists(Files.CombinePath(buildProduct.Dir, "_images")), "Directory _images should not be included in build.");
+			Assert.That(!Directory.Exists(Files.CombinePath(buildProduct.Dir, "_texts")), "Directory _images should not be included in build.");
+			Assert.That(Directory.Exists(Files.CombinePath(buildProduct.Dir, "images")), "Directory images should be included in build.");
+			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "images", "IncludedImage.png")), "File images/IncludedImage.png should be included in build.");
+			Assert.That(Directory.Exists(Files.CombinePath(buildProduct.Dir, "texts")), "Directory images should be included in build.");
+			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "texts", "IncludedTextDoc.txt")), "File texts/IncludedTextDoc.txt should be included in build.");
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
 		}
 	}
 

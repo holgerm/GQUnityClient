@@ -83,6 +83,9 @@ namespace GQ.Editor.UI {
 			gui4ProductDetails();
 		}
 
+		private string newProductID = "";
+
+
 		void gui4ProductManager () {
 			// Heading:
 			GUILayout.Label("Product Manager", EditorStyles.boldLabel);
@@ -116,6 +119,21 @@ namespace GQ.Editor.UI {
 			string[] productIds = pm.AllProductIds.ToArray<string>();
 			int newIndex = EditorGUILayout.Popup("Available Products:", selectedProductIndex, productIds);
 			selectProduct(newIndex);
+
+			// Create New Product row:
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Label("New product (id):");
+			newProductID = EditorGUILayout.TextField(
+				newProductID, 
+				GUILayout.Height(EditorGUIUtility.singleLineHeight));
+			bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
+			EditorGUI.BeginDisabledGroup(createButtonshouldBeDisabled);
+			if ( GUILayout.Button("Create") ) {
+				pm.createNewProduct(newProductID);
+			}
+			EditorGUI.EndDisabledGroup();
+			EditorGUILayout.EndHorizontal();
+
 		}
 
 		private string currentBuild () {
@@ -129,6 +147,7 @@ namespace GQ.Editor.UI {
 				Config buildConfig = JsonMapper.ToObject<Config>(configText);
 				return buildConfig.id;
 			} catch ( Exception exc ) {
+				Debug.LogWarning("ProductEditor.currentBuild() threw exception:\n" + exc.Message);
 				return build;
 			}
 		}
@@ -237,5 +256,60 @@ namespace GQ.Editor.UI {
 		#endregion
 
 	}
+
+
+	//	class MyAllPostprocessor : AssetPostprocessor {
+	//
+	//		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
+	//
+	//			foreach ( string str in importedAssets ) {
+	//				Debug.Log("AssetPostprocessor: Imported Asset: " + str);
+	//			}
+	//
+	//			foreach ( string str in deletedAssets ) {
+	//				Debug.Log("AssetPostprocessor: Deleted Asset: " + str);
+	//			}
+	//
+	//			for ( int i = 0; i < movedAssets.Length; i++ ) {
+	//				Debug.Log("AssetPostprocessor: Moved Asset: " + movedAssets[i] + " from: " + movedFromAssetPaths[i]);
+	//			}
+	//		}
+	//	}
+	//
+	//
+	//	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
+	//
+	//		static void OnWillCreateAsset (string assetPath) {
+	//
+	//			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
+	//		}
+	//
+	//
+	//		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
+	//
+	//			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
+	//		}
+	//
+	//
+	//		static void OnWillMoveAsset (string fromPath, string toPath) {
+	//
+	//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
+	//		}
+	//
+	//
+	//		static void OnWillSaveAssets (string[] assetPaths) {
+	//
+	//			foreach ( string str in assetPaths ) {
+	//				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
+	//			}
+	//
+	//		}
+	//
+	//
+	//		static void IsOpenForEdit (string s1, string s2) {
+	//
+	//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
+	//		}
+	//	}
 }
 

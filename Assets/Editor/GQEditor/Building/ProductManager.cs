@@ -194,29 +194,26 @@ namespace GQ.Editor.Building {
 			if ( !Directory.Exists(BuildExportPath) ) {
 				Directory.CreateDirectory(BuildExportPath);
 			}
-			Files.ClearDirectory(BuildExportPath);
 
-			// copy all product files to build export folder:
-			DirectoryInfo productDir = new DirectoryInfo(productDirPath);
-			foreach ( FileInfo file in productDir.GetFiles() ) {
-				if ( file.Name.StartsWith(".") || file.Name.EndsWith(".meta") )
-					// skip files starting with "." and unity meta files:
+			Assets.ClearAssetFolder(BuildExportPath); 
+
+			Assets.CopyAssetsDir(productDirPath, BuildExportPath);
+
+			DirectoryInfo productDirInfo = new DirectoryInfo(productDirPath);
+
+			foreach ( DirectoryInfo dir in productDirInfo.GetDirectories() ) {
+				if ( dir.Name.StartsWith("_") )
 					continue;
-				FileInfo targetFile = new FileInfo(Files.CombinePath(BuildExportPath, file.Name));
-				if ( targetFile.Exists )
-					targetFile.Delete();
-				file.CopyTo(targetFile.FullName);
+				Assets.CreateSubfolder(BuildExportPath, dir.Name);
+
+				string originPath = Files.CombinePath(productDirPath, dir.Name);
+				string targetPath = Files.CombinePath(BuildExportPath, dir.Name);
+				Assets.CopyAssetsDir(originPath, targetPath);
 			}
 
-			foreach ( DirectoryInfo dir in productDir.GetDirectories() ) {
-				if ( "markers".Equals(dir.Name) ) {
-					Files.CopyDirectory(dir.FullName, Files.CombinePath(BuildExportPath, dir.Name));
-				}
-			}
-
-			AssetDatabase.ImportAsset(BuildExportPath, ImportAssetOptions.ImportRecursive);
 			AssetDatabase.Refresh();
 		}
+
 
 		#endregion
 
@@ -246,6 +243,7 @@ namespace GQ.Editor.Building {
 
 		#endregion
 	}
+
 
 
 }

@@ -24,11 +24,11 @@ namespace GQ.Editor.Building {
 				}
 				File.WriteAllText(ConfigurationManager.BUILD_TIME_FILE_PATH, DateTime.Now.ToString("G", culture));
 			} catch ( Exception exc ) {
-				Debug.LogWarning("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH);
+				Debug.LogWarning("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
 				return;
 			} 
 			// TODO sometimes too early, so it will not work.
-			AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate); 
+//			AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport); 
 		}
 	}
 
