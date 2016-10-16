@@ -61,9 +61,9 @@ namespace GQ.Editor.Building {
 
 		#region Access to Products
 
-		private Dictionary<string, Product> _productDict;
+		private Dictionary<string, ProductSpec> _productDict;
 
-		public ICollection<Product> AllProducts {
+		public ICollection<ProductSpec> AllProducts {
 			get {
 				return Instance._productDict.Values;
 			}
@@ -75,8 +75,8 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		public Product getProduct (string productID) {
-			Product found = null;
+		public ProductSpec getProduct (string productID) {
+			ProductSpec found = null;
 
 			if ( Instance._productDict.TryGetValue(productID, out found) )
 				return found;
@@ -106,14 +106,14 @@ namespace GQ.Editor.Building {
 		}
 
 		private void initProductDictionary () {
-			_productDict = new Dictionary<string, Product>();
+			_productDict = new Dictionary<string, ProductSpec>();
 
 			IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
 
 			foreach ( var productCandidatePath in productDirCandidates ) {
-				Product product;
+				ProductSpec product;
 				try {
-					product = new Product(productCandidatePath);
+					product = new ProductSpec(productCandidatePath);
 					_productDict.Add(product.Id, product);
 				} catch ( ArgumentException exc ) {
 					Errors.Add("Product Manager found invalid product directory: " + productCandidatePath + "\n" + exc.Message + "\n\n");
@@ -135,8 +135,8 @@ namespace GQ.Editor.Building {
 
 		#region Interaction API
 
-		public Product createNewProduct (string newProductID) {
-			if ( !Product.IsValidProductName(newProductID) ) {
+		public ProductSpec createNewProduct (string newProductID) {
+			if ( !ProductSpec.IsValidProductName(newProductID) ) {
 				throw new ArgumentException("Invalid product id: " + newProductID);
 			}
 
@@ -155,7 +155,7 @@ namespace GQ.Editor.Building {
 			// create Config, populate it with defaults and serialize it into the new product folder:
 			createConfigWithDefaults(newProductID);
 
-			Product newProduct = new Product(newProductDirPath);
+			ProductSpec newProduct = new ProductSpec(newProductDirPath);
 			// append a watermark to the blank AndroidManifest file:
 			string watermark = MakeXMLWatermark(newProduct.Id);
 			using ( StreamWriter sw = File.AppendText(newProduct.AndroidManifestPath) ) {
@@ -195,7 +195,7 @@ namespace GQ.Editor.Building {
 		/// </summary>
 		/// <param name="productID">Product I.</param>
 		public void SetProductForBuild (string productID) {
-			if ( !Product.IsValidProductName(productID) ) {
+			if ( !ProductSpec.IsValidProductName(productID) ) {
 				throw new ArgumentException("Invalid product id: " + productID);
 			}
 
@@ -229,7 +229,7 @@ namespace GQ.Editor.Building {
 
 			// copy AndroidManifest (additionally) to plugins/android directory:
 			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
-			string productAndroidManifestFilePath = Files.CombinePath(productDirPath, Product.ANDROID_MANIFEST);
+			string productAndroidManifestFilePath = Files.CombinePath(productDirPath, ProductSpec.ANDROID_MANIFEST);
 			AssetDatabase.CopyAsset(productAndroidManifestFilePath, ANDROID_MANIFEST_PATH);
 
 			AssetDatabase.Refresh();

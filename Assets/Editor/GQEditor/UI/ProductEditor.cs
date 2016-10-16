@@ -130,7 +130,7 @@ namespace GQ.Editor.UI {
 			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
 
-			// Build Selection Popup:
+			// Product Selection Popup:
 			string[] productIds = pm.AllProductIds.ToArray<string>();
 			int newIndex = EditorGUILayout.Popup("Available Products:", selectedProductIndex, productIds);
 			selectProduct(newIndex);
@@ -166,22 +166,9 @@ namespace GQ.Editor.UI {
 			}
 		}
 
-		void selectProduct (int index) {
-			if ( index.Equals(selectedProductIndex) ) {
-				return;
-			}
-
-			try {
-				selectedProductIndex = index;
-				EditorPrefs.SetInt("selectedProductIndex", selectedProductIndex);
-			} catch ( System.IndexOutOfRangeException e ) {
-				Debug.LogWarning(e.Message);
-			}
-		}
-
 		void gui4ProductDetails () {
 			GUILayout.Label("Product Details", EditorStyles.boldLabel);
-			Product p = pm.AllProducts.ElementAt(selectedProductIndex);
+			ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
 
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
@@ -268,6 +255,23 @@ namespace GQ.Editor.UI {
 		}
 
 		#endregion
+
+		void selectProduct (int index) {
+			if ( index.Equals(selectedProductIndex) ) {
+				return;
+			}
+
+			try {
+				selectedProductIndex = index;
+				EditorPrefs.SetInt("selectedProductIndex", selectedProductIndex);
+			} catch ( System.IndexOutOfRangeException e ) {
+				Debug.LogWarning(e.Message);
+			}
+
+			// TODO create a Product object and store it. So we can access errors and manipulate details.
+		}
+
+
 
 	}
 

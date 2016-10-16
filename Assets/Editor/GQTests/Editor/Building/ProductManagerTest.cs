@@ -58,10 +58,10 @@ namespace GQTests.Editor.Building {
 				"Directory for Product Default Template should be at " + ProductManager.TEMPLATE_PRODUCT_PATH);
 
 			// Graphic files:
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.APP_ICON)));
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.SPLASH_SCREEN)));
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.TOP_LOGO)));
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.ANDROID_MANIFEST)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, ProductSpec.APP_ICON)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, ProductSpec.SPLASH_SCREEN)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, ProductSpec.TOP_LOGO)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, ProductSpec.ANDROID_MANIFEST)));
 		
 			// TODO Loading Animation
 		}
@@ -86,7 +86,7 @@ namespace GQTests.Editor.Building {
 			///////////////////////////////////
 			// Assert:
 			Assert.AreEqual(1, testPM.AllProducts.Count);
-			Product product = testPM.getProduct(testProductID);
+			ProductSpec product = testPM.getProduct(testProductID);
 			Assert.AreEqual(testProductID, product.Id);
 			Assert.That(Directory.Exists(product.Dir), "Product dir should be ok for product " + product);
 
@@ -150,7 +150,7 @@ namespace GQTests.Editor.Building {
 			testPM.SetProductForBuild("product1");
 
 			// Assert:
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 			Assert.That(
 				buildProduct.IsValid(), 
 				"Product invalid (" + buildProduct.Errors.Count + " errors):\n" + buildProduct.AllErrorsAsString()
@@ -165,7 +165,7 @@ namespace GQTests.Editor.Building {
 			testPM.SetProductForBuild("product3");
 
 			// Assert:
-			buildProduct = new Product(testPM.BuildExportPath);
+			buildProduct = new ProductSpec(testPM.BuildExportPath);
 			Assert.That(
 				buildProduct.IsValid(), 
 				"Product invalid (" + buildProduct.Errors.Count + " errors):\n" + buildProduct.AllErrorsAsString()
@@ -190,7 +190,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("productWithMarkers");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.AreEqual("productWithMarkers", buildProduct.Id);
@@ -202,7 +202,7 @@ namespace GQTests.Editor.Building {
 			testPM.SetProductForBuild("productWithoutMarkers");
 
 			// Assert:
-			buildProduct = new Product(testPM.BuildExportPath);
+			buildProduct = new ProductSpec(testPM.BuildExportPath);
 			Assert.AreEqual("productWithoutMarkers", buildProduct.Id);
 			Assert.That(!Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "marker directory should not exist with this product set for build");
 
@@ -220,7 +220,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("productWithIgnoredSubdirs");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.AreEqual("productWithIgnoredSubdirs", buildProduct.Id);
@@ -245,7 +245,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("validProduct");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.That(
@@ -270,7 +270,7 @@ namespace GQTests.Editor.Building {
 
 			// Assert:
 			try {
-				new Product(testPM.BuildExportPath);
+				new ProductSpec(testPM.BuildExportPath);
 			} catch ( Exception e ) {
 				Assert.That(e.GetType().Name.Equals("ArgumentException"));
 				Assert.That(e.Message.Equals("Invalid product definition. Config file could not be read."));
@@ -296,7 +296,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("productWithMissingAppIcon");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.That(!buildProduct.IsValid());
@@ -315,7 +315,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("productMissingManifest");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.That(!buildProduct.IsValid());
@@ -334,7 +334,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("productWithMissingSplashScreen");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.That(!buildProduct.IsValid());
@@ -353,7 +353,7 @@ namespace GQTests.Editor.Building {
 
 			// Act:
 			testPM.SetProductForBuild("productWithMissingTopLogo");
-			Product buildProduct = new Product(testPM.BuildExportPath);
+			ProductSpec buildProduct = new ProductSpec(testPM.BuildExportPath);
 
 			// Assert:
 			Assert.That(!buildProduct.IsValid());

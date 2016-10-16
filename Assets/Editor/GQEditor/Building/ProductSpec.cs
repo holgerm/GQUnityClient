@@ -19,7 +19,7 @@ namespace GQ.Editor.Building {
 	/// These files reside in one folder (the product folder) which can have an arbitrary name. 
 	/// You create a Product instance by calling the Constructor with the product folder path as argument.
 	/// </summary>
-	public class Product {
+	public class ProductSpec {
 
 		#region Product Configuration Properties
 
@@ -112,7 +112,7 @@ namespace GQ.Editor.Building {
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <param name="dir">Dir.</param>
-		internal Product (string dirPath) {
+		internal ProductSpec (string dirPath) {
 			// Check path:
 			if ( !Directory.Exists(dirPath) )
 				throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
