@@ -49,3 +49,4 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
 </manifest>
+<!-- product id: spielpunkte -->
