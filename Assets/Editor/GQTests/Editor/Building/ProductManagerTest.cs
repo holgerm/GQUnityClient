@@ -12,7 +12,7 @@ namespace GQTests.Editor.Building {
 
 		protected string PRODUCTS_TEST_DIR = GQAssert.TEST_DATA_BASE_DIR + "TestProducts/";
 
-		[TearDown]
+		[SetUp, TearDown]
 		public void deleteProductManager () {
 			ProductManager._dispose();
 		}
@@ -58,9 +58,10 @@ namespace GQTests.Editor.Building {
 				"Directory for Product Default Template should be at " + ProductManager.TEMPLATE_PRODUCT_PATH);
 
 			// Graphic files:
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.APP_ICON_PATH)));
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.SPLASH_SCREEN_PATH)));
-			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.TOP_LOGO_PATH)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.APP_ICON)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.SPLASH_SCREEN)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.TOP_LOGO)));
+			Assert.That(File.Exists(Files.CombinePath(ProductManager.TEMPLATE_PRODUCT_PATH, Product.ANDROID_MANIFEST)));
 		
 			// TODO Loading Animation
 		}
@@ -68,16 +69,16 @@ namespace GQTests.Editor.Building {
 		[Test]
 		public void CreateNewProduct () {
 			// Arrange:
-			string testDir = PRODUCTS_TEST_DIR + "NewProducts";
+			string testDir = Files.CombinePath(PRODUCTS_TEST_DIR, "NewProducts");
 			if ( !Directory.Exists(testDir) )
-				Directory.CreateDirectory(testDir);
-
-			Files.ClearDirectory(testDir);
+				Assets.CreateSubfolder(PRODUCTS_TEST_DIR, "NewProducts");
+			Assets.ClearAssetFolder(testDir);
 
 			ProductManager.ProductsDirPath = testDir;
 			ProductManager testPM = ProductManager.Instance;
-
 			string testProductID = "testProduct";
+
+//			Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
 			testPM.createNewProduct(testProductID);
@@ -93,6 +94,11 @@ namespace GQTests.Editor.Building {
 			Assert.That(File.Exists(product.AppIconPath), "App icon file should exist at " + product.AppIconPath);
 			Assert.That(File.Exists(product.SplashScreenPath), "Splashscreen file should exist at " + product.SplashScreenPath);
 			Assert.That(File.Exists(product.TopLogoPath), "Top logo file should exist at " + product.TopLogoPath);
+			Assert.That(
+				product.IsValid(), 
+				"Newly created product " + product.Id + " is not valid (" +
+				product.Errors.Count + " errors):\n" + product.AllErrorsAsString()
+			);
 
 			// TODO Animation for loading logo
 
@@ -102,7 +108,7 @@ namespace GQTests.Editor.Building {
 			Assert.AreEqual(testProductID, product.Config.id);
 
 			// Clean:
-			Files.ClearDirectory(testDir);
+			Assets.ClearAssetFolder(testDir);
 		}
 
 		[Test]
@@ -137,29 +143,38 @@ namespace GQTests.Editor.Building {
 			ProductManager testPM = ProductManager.Instance;
 			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
 			if ( Directory.Exists(testPM.BuildExportPath) )
-				Files.ClearDirectory(testPM.BuildExportPath);
+				Assets.ClearAssetFolder(testPM.BuildExportPath);
+			
 
 			// Act:
 			testPM.SetProductForBuild("product1");
 
 			// Assert:
 			Product buildProduct = new Product(testPM.BuildExportPath);
-			Assert.That(File.Exists(buildProduct.AppIconPath), "App icon file should exist at " + buildProduct.AppIconPath);
-			Assert.That(File.Exists(buildProduct.SplashScreenPath), "Splashscreen file should exist at " + buildProduct.SplashScreenPath);
-			Assert.That(File.Exists(buildProduct.TopLogoPath), "Top logo file should exist at " + buildProduct.TopLogoPath);
-			Assert.That(File.Exists(buildProduct.ConfigPath), "Config file should exist at " + buildProduct.ConfigPath);
+			Assert.That(
+				buildProduct.IsValid(), 
+				"Product invalid (" + buildProduct.Errors.Count + " errors):\n" + buildProduct.AllErrorsAsString()
+			);
 			Assert.AreEqual("product1", buildProduct.Id);
+
+			// check watermark of android manifest (in plugins/android folder):
+			string idFoundInManifest = ProductManager.Extract_ID_FromXML_Watermark(ProductManager.ANDROID_MANIFEST_PATH);
+			Assert.AreEqual("product1", idFoundInManifest);
 
 			// Act:
 			testPM.SetProductForBuild("product3");
 
 			// Assert:
 			buildProduct = new Product(testPM.BuildExportPath);
-			Assert.That(File.Exists(buildProduct.AppIconPath), "App icon file should exist at " + buildProduct.AppIconPath);
-			Assert.That(File.Exists(buildProduct.SplashScreenPath), "Splashscreen file should exist at " + buildProduct.SplashScreenPath);
-			Assert.That(File.Exists(buildProduct.TopLogoPath), "Top logo file should exist at " + buildProduct.TopLogoPath);
-			Assert.That(File.Exists(buildProduct.ConfigPath), "Config file should exist at " + buildProduct.ConfigPath);
+			Assert.That(
+				buildProduct.IsValid(), 
+				"Product invalid (" + buildProduct.Errors.Count + " errors):\n" + buildProduct.AllErrorsAsString()
+			);
 			Assert.AreEqual("product3", buildProduct.Id);
+
+			// check watermark of android manifest (in plugins/android folder):
+			idFoundInManifest = ProductManager.Extract_ID_FromXML_Watermark(ProductManager.ANDROID_MANIFEST_PATH);
+			Assert.AreEqual("product3", idFoundInManifest);
 
 			// Clean:
 			Assets.ClearAssetFolder(testPM.BuildExportPath);
@@ -171,7 +186,7 @@ namespace GQTests.Editor.Building {
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
 			ProductManager testPM = ProductManager.Instance;
 			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
-			Files.ClearDirectory(testPM.BuildExportPath);
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
 			testPM.SetProductForBuild("productWithMarkers");
@@ -201,7 +216,7 @@ namespace GQTests.Editor.Building {
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
 			ProductManager testPM = ProductManager.Instance;
 			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
-			Files.ClearDirectory(testPM.BuildExportPath);
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
 			testPM.SetProductForBuild("productWithIgnoredSubdirs");
@@ -215,6 +230,133 @@ namespace GQTests.Editor.Building {
 			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "images", "IncludedImage.png")), "File images/IncludedImage.png should be included in build.");
 			Assert.That(Directory.Exists(Files.CombinePath(buildProduct.Dir, "texts")), "Directory images should be included in build.");
 			Assert.That(File.Exists(Files.CombinePath(buildProduct.Dir, "texts", "IncludedTextDoc.txt")), "File texts/IncludedTextDoc.txt should be included in build.");
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void ValidProduct () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ValidityOfProducts";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("validProduct");
+			Product buildProduct = new Product(testPM.BuildExportPath);
+
+			// Assert:
+			Assert.That(
+				buildProduct.IsValid(), 
+				"Product invalid (" + buildProduct.Errors.Count + " errors):\n" + buildProduct.AllErrorsAsString()
+			);
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void InvalidProductNoProductJSON () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ValidityOfProducts";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productWithMissingProductJSON");
+
+			// Assert:
+			try {
+				new Product(testPM.BuildExportPath);
+			} catch ( Exception e ) {
+				Assert.That(e.GetType().Name.Equals("ArgumentException"));
+				Assert.That(e.Message.Equals("Invalid product definition. Config file could not be read."));
+
+				Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+				return;
+			}
+
+			Assert.Fail("Reading invalid product without Product.JSON should have caused an ArgumentException to be thrown.");
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void InvalidProductNoAppIcon () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ValidityOfProducts";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productWithMissingAppIcon");
+			Product buildProduct = new Product(testPM.BuildExportPath);
+
+			// Assert:
+			Assert.That(!buildProduct.IsValid());
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void InvalidProductNoAndroidManifest () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ValidityOfProducts";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productMissingManifest");
+			Product buildProduct = new Product(testPM.BuildExportPath);
+
+			// Assert:
+			Assert.That(!buildProduct.IsValid());
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void InvalidProductNoSplashScreen () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ValidityOfProducts";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productWithMissingSplashScreen");
+			Product buildProduct = new Product(testPM.BuildExportPath);
+
+			// Assert:
+			Assert.That(!buildProduct.IsValid());
+
+			// Clean:
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+		}
+
+		[Test]
+		public void InvalidProductNoTopLogo () {
+			// Arrange:
+			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ValidityOfProducts";
+			ProductManager testPM = ProductManager.Instance;
+			testPM.BuildExportPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestBuildExport");
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
+
+			// Act:
+			testPM.SetProductForBuild("productWithMissingTopLogo");
+			Product buildProduct = new Product(testPM.BuildExportPath);
+
+			// Assert:
+			Assert.That(!buildProduct.IsValid());
 
 			// Clean:
 			Assets.ClearAssetFolder(testPM.BuildExportPath);

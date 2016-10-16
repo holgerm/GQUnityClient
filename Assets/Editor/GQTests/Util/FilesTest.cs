@@ -158,7 +158,7 @@ namespace GQTests.Util {
 				Directory.Delete(target, true);
 
 			// Act & Assert:
-			Assert.DoesNotThrow(() => Files.CopyDirectory(origin, target));
+			Assert.DoesNotThrow(() => Files.CopyDirectoryFiles(origin, target));
 			Assert.That(Directory.Exists(target));
 
 			// Clean:
@@ -174,7 +174,7 @@ namespace GQTests.Util {
 				Directory.Delete(target, true);
 
 			// Act & Assert:
-			Assert.DoesNotThrow(() => Files.CopyDirectory(origin, target));
+			Assert.DoesNotThrow(() => Files.CopyDirectoryFiles(origin, target));
 			Assert.That(Directory.Exists(target));
 			foreach ( string filePath in Directory.GetFiles(origin) ) {
 				string targetFile = target + Path.GetFileName(filePath);

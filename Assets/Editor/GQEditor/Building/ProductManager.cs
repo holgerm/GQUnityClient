@@ -9,11 +9,12 @@ using LitJson;
 using System.Linq;
 using System.Collections;
 using UnityEditor;
+using System.Text.RegularExpressions;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
 
-		#region Path and Storage
+		#region Paths and Storage
 
 		/// <summary>
 		/// In this directory all defined products are stored. This data is NOT included in the app build.
@@ -53,6 +54,8 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		public const string ANDROID_MANIFEST_PATH = "Assets/Plugins/Android/AndroidManifest.xml";
+
 		#endregion
 
 
@@ -62,20 +65,20 @@ namespace GQ.Editor.Building {
 
 		public ICollection<Product> AllProducts {
 			get {
-				return _productDict.Values;
+				return Instance._productDict.Values;
 			}
 		}
 
 		public ICollection<string> AllProductIds {
 			get {
-				return _productDict.Keys;
+				return Instance._productDict.Keys;
 			}
 		}
 
 		public Product getProduct (string productID) {
 			Product found = null;
 
-			if ( _productDict.TryGetValue(productID, out found) )
+			if ( Instance._productDict.TryGetValue(productID, out found) )
 				return found;
 			else
 				return null;
@@ -133,7 +136,7 @@ namespace GQ.Editor.Building {
 		#region Interaction API
 
 		public Product createNewProduct (string newProductID) {
-			if ( !Product.IsValid(newProductID) ) {
+			if ( !Product.IsValidProductName(newProductID) ) {
 				throw new ArgumentException("Invalid product id: " + newProductID);
 			}
 
@@ -144,13 +147,25 @@ namespace GQ.Editor.Building {
 			}
 
 			// copy default template files to a new product folder:
-			Files.CopyDirectory(TEMPLATE_PRODUCT_PATH, newProductDirPath);
+//			Files.CopyDirectoryFiles(TEMPLATE_PRODUCT_PATH, newProductDirPath);
+			Assets.CreateSubfolder(ProductsDirPath, newProductID);
+			AssetDatabase.Refresh();
+			Assets.CopyAssetsDir(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
 			// create Config, populate it with defaults and serialize it into the new product folder:
 			createConfigWithDefaults(newProductID);
 
 			Product newProduct = new Product(newProductDirPath);
-			_productDict.Add(newProduct.Id, newProduct);
+			// append a watermark to the blank AndroidManifest file:
+			string watermark = MakeXMLWatermark(newProduct.Id);
+			using ( StreamWriter sw = File.AppendText(newProduct.AndroidManifestPath) ) {
+				sw.WriteLine(watermark);
+				sw.Close();
+			}	
+
+
+
+			Instance._productDict.Add(newProduct.Id, newProduct);
 			return newProduct;
 		}
 
@@ -174,13 +189,13 @@ namespace GQ.Editor.Building {
 		/// The following file are copied:
 		/// 
 		/// 1. All files directly stored in the product dir into the config dir.
-		/// 2. AndroidManifest (in 'productDir/Android') to 'Assets/Plugins/Android/'
+		/// 2. AndroidManifest (in 'productDir') to 'Assets/Plugins/Android/'
 		/// 3. TODO: Player Preferences?
 		/// 
 		/// </summary>
 		/// <param name="productID">Product I.</param>
 		public void SetProductForBuild (string productID) {
-			if ( !Product.IsValid(productID) ) {
+			if ( !Product.IsValidProductName(productID) ) {
 				throw new ArgumentException("Invalid product id: " + productID);
 			}
 
@@ -212,6 +227,11 @@ namespace GQ.Editor.Building {
 				Assets.CopyAssetsDir(originPath, targetPath);
 			}
 
+			// copy AndroidManifest (additionally) to plugins/android directory:
+			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
+			string productAndroidManifestFilePath = Files.CombinePath(productDirPath, Product.ANDROID_MANIFEST);
+			AssetDatabase.CopyAsset(productAndroidManifestFilePath, ANDROID_MANIFEST_PATH);
+
 			AssetDatabase.Refresh();
 		}
 
@@ -240,6 +260,24 @@ namespace GQ.Editor.Building {
 
 			string configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
 			File.WriteAllText(configFilePath, sb.ToString());
+		}
+
+		/// <summary>
+		/// The watermark that is included in each products android manifest file to associate it with the product.
+		/// </summary>
+		/// <returns>The product manifest watermark.</returns>
+		/// <param name="productId">Product identifier.</param>
+		public static string MakeXMLWatermark (string id) {
+			return String.Format("<!-- product id: {0} -->", id);
+		}
+
+		public static string Extract_ID_FromXML_Watermark (string filepath) {
+			string xmlText = File.ReadAllText(filepath);
+			Match match = Regex.Match(xmlText, @"<!-- product id: ([-a-zA-Z0-9_]+) -->");
+			if ( match.Success )
+				return match.Groups[1].Value;
+			else
+				return null;
 		}
 
 		#endregion

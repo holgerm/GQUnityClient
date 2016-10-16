@@ -71,6 +71,17 @@ namespace GQ.Editor.UI {
 
 		#region GUI
 
+		/// <summary>
+		/// Creates the Editor GUI consisting of these parts:
+		/// 
+		/// 1. Product Manager Part: 
+		/// 	- Select Current Project
+		/// 	- Prepare Build
+		/// 2. Error Part (TODO)
+		/// 3. Product Details Part:
+		/// 	- Show all key avlue pairs of the product spec
+		/// 	- Editing option (TODO)
+		/// </summary>
 		void OnGUI () {
 			// adjust textarea style:
 			textareaGUIStyle = GUI.skin.textField;
@@ -80,7 +91,11 @@ namespace GQ.Editor.UI {
 
 			EditorGUILayout.Space();
 
+			// TODO showErrors
+
 			gui4ProductDetails();
+
+			// TODO Editing opions for Product Details
 		}
 
 		private string newProductID = "";
@@ -133,7 +148,6 @@ namespace GQ.Editor.UI {
 			}
 			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
-
 		}
 
 		private string currentBuild () {

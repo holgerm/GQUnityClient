@@ -180,7 +180,7 @@ namespace GQ.Util {
 		/// <returns><c>true</c>, if directory was copyed, <c>false</c> otherwise.</returns>
 		/// <param name="originalDirPath">Original dir path.</param>
 		/// <param name="targetPath">Target path must denote the path of the target dir that not exists yet.</param>
-		public static void CopyDirectory (string originalDirPath, string targetPath) {
+		public static void CopyDirectoryFiles (string originalDirPath, string targetPath) {
 			DirectoryInfo origin = new DirectoryInfo(originalDirPath);
 			if ( !origin.Exists ) {
 				throw new ArgumentException("Can not copy from the non existing directory path: " + originalDirPath);

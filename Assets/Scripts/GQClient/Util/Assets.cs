@@ -51,11 +51,18 @@ namespace GQ.Util {
 
 			// first delete all files / file assets:
 			foreach ( string file in Directory.GetFiles(pathToFolder) ) {
-				
-				if ( file.EndsWith(".meta") )
-					continue;
-				
 				FileInfo fileInfo = new FileInfo(file);
+
+				if ( fileInfo.Name.EndsWith(".meta") )
+					// ignore meta files, they will be deleted implicitly via AssetDatabase.DeleteAsset() later on ...
+					continue;
+
+				if ( fileInfo.Name.StartsWith(".") ) {
+					// delete hidden files - they are no assets and must be dealt as normal files
+					File.Delete(fileInfo.FullName);
+					continue;
+				}
+				
 				string filePathRel = Files.CombinePath(pathToFolder, fileInfo.Name);
 				cleared &= AssetDatabase.DeleteAsset(filePathRel);
 			}

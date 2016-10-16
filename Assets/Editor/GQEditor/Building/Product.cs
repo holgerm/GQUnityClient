@@ -5,11 +5,14 @@ using GQ.Util;
 using GQ.Client.Conf;
 using UnityEngine;
 using LitJson;
+using System.Text;
 
 namespace GQ.Editor.Building {
 
 	/// <summary>
-	/// The Product class represents a product specifiation of our app. Each Product instance refers to image files and resources directly 
+	/// The Product class represents a product specifiation of our app at edit time (not runtime!). 
+	/// 
+	/// Each Product instance refers to image files and resources directly 
 	/// and to all textual parameters via a Config object. Product instances are used by the ProductManager and can be edited in the ProductEditor view.
 	/// 
 	/// A product is backed on file by diverse graphic files and a configuration file (Product.json). 
@@ -41,28 +44,36 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		internal const string APP_ICON_PATH = "AppIcon.png";
+		internal const string APP_ICON = "AppIcon.png";
 
 		public string AppIconPath {
 			get {
-				return Files.CombinePath(Dir, APP_ICON_PATH);
+				return Files.CombinePath(Dir, APP_ICON);
 			}
 		}
 
-		internal const string SPLASH_SCREEN_PATH = "SplashScreen.jpg";
+		internal const string SPLASH_SCREEN = "SplashScreen.jpg";
 
 		public string SplashScreenPath {
 			get {
-				return Files.CombinePath(Dir, SPLASH_SCREEN_PATH);
+				return Files.CombinePath(Dir, SPLASH_SCREEN);
 			}
 		}
 
-		internal const string TOP_LOGO_PATH = "TopLogo.jpg";
+		internal const string TOP_LOGO = "TopLogo.jpg";
 
 		public string TopLogoPath {
 			get {
-				return Files.CombinePath(Dir, TOP_LOGO_PATH);
+				return Files.CombinePath(Dir, TOP_LOGO);
 			}	
+		}
+
+		internal const string ANDROID_MANIFEST = "AndroidManifest.xml";
+
+		public string AndroidManifestPath {
+			get {
+				return Files.CombinePath(Dir, ANDROID_MANIFEST);
+			}
 		}
 
 		/// <summary>
@@ -93,7 +104,7 @@ namespace GQ.Editor.Building {
 		#region Creating Product Intances
 
 		/// <summary>
-		/// Initializes a new Product instance by the given id and directory. 
+		/// Initializes a new Product instance by the given directory. 
 		/// It expects that all product files are contained in the directory. 
 		/// Among referring to image files etc. it also deserializes a Config object internally to read the Product.json specification of all textual parameters.
 		/// 
@@ -108,7 +119,7 @@ namespace GQ.Editor.Building {
 
 			// Init Dir:
 			if ( dirPath.EndsWith("/") )
-				dirPath = dirPath.Substring(0, dirPath.Length);
+				dirPath = dirPath.Substring(0, dirPath.Length - 1);
 			_dir = dirPath;
 
 			// init and check Config:
@@ -120,7 +131,7 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		static internal bool IsValid (string name) {
+		static internal bool IsValidProductName (string name) {
 			// TODO do we need to restrict the product names somehow?
 			return true;
 		}
@@ -128,8 +139,117 @@ namespace GQ.Editor.Building {
 		#endregion
 
 		public override string ToString () {
-			return string.Format("product {0}", Id);
+			return String.Format("product {0}", Id);
 		}
+
+		#region Validity and Errors
+
+		protected List<GQError> _errors = new List<GQError>();
+
+		public List<GQError> Errors {
+			get {
+				return _errors;
+			}
+		}
+
+		protected void StoreError (string message) {
+			Errors.Add(new GQError(message));
+		}
+
+		public string AllErrorsAsString () {
+			StringBuilder errorString = new StringBuilder();
+			foreach ( var error in Errors ) {
+				errorString.AppendLine(error.ToString());
+			}
+
+			return errorString.ToString();
+		}
+
+		/// <summary>
+		/// Validates this product.
+		/// </summary>
+		/// <returns><c>true</c>, if product was validated, <c>false</c> otherwise.</returns>
+		public bool IsValid () {
+			bool isValid = true;
+			bool productJSONFound = false;
+			bool appIconFound = false;
+			bool splashScreenFound = false;
+			bool topLogoFound = false;
+			bool androidManifestFound = false;
+
+			// Directory must exist:
+			DirectoryInfo productDir = new DirectoryInfo(Dir);
+			isValid &= productDir.Exists;
+
+			// Checking some basic files:
+			FileInfo[] files = productDir.GetFiles();
+			foreach ( FileInfo file in files ) {
+				// Product.json
+				if ( "Product.json".Equals(file.Name) ) {
+					productJSONFound = true;
+					// TODO do more detailed checks here (e.g. marker images)
+					continue;
+				}
+
+				// AppIcon.png
+				if ( "AppIcon.png".Equals(file.Name) ) {
+					appIconFound = true;// TODO do more detailed checks here
+					continue;
+				}
+
+				// SplashScreen.jpg
+				if ( "SplashScreen.jpg".Equals(file.Name) ) {
+					splashScreenFound = true;// TODO do more detailed checks here
+					continue;
+				}
+
+				// TopLogo.jpg
+				if ( "TopLogo.jpg".Equals(file.Name) ) {
+					topLogoFound = true;// TODO do more detailed checks here
+					continue;
+				}
+
+				// AndroidManifest.xml
+				if ( "AndroidManifest.xml".Equals(file.Name) ) {
+					androidManifestFound = true;
+					string foundID = ProductManager.Extract_ID_FromXML_Watermark(file.FullName);
+					if ( foundID == null ) {
+						StoreError("Android Manifest misses a product watermark.");
+					}
+					else {
+						if ( !Id.Equals(foundID) )
+							StoreError("Android Manifest watermark (" + foundID + ") does not correspond to this product (" + Id + ").");
+						continue;
+					}
+				}
+			} // end foreach file
+
+			if ( !productJSONFound ) {
+				StoreError("No Product.json file found.");
+			}
+
+			if ( !appIconFound ) {
+				StoreError("No AppIcon.png file found.");
+			}
+
+			if ( !splashScreenFound ) {
+				StoreError("No SplashScreen.jpg file found.");
+			}
+
+			if ( !topLogoFound ) {
+				StoreError("No TopLogo.jpg file found.");
+			}
+
+			if ( !androidManifestFound ) {
+				StoreError("No AndroidManifest.xml file found.");
+			}
+
+			isValid &= Errors.Count == 0;
+
+			return isValid;
+		}
+
+		#endregion
 
 	}
 }
