@@ -1,0 +1,16 @@
+
+{
+    "id" : "productWithMarkers",
+    "name" : "Product with markers tests that the markers dir is copied into build",
+    "portal" : 333,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 60,
+    "nameForQuest"           : "Quest",
+    "questVisualization"     : "list",
+    "questVisualizationChangeable" : true,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : true,
+    "showNetConnectionWarning"     : false,
+    "colorProfile"                 : "default"
+}
