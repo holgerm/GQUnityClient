@@ -26,29 +26,27 @@ namespace GQ.Editor.Building {
 
 		private static string PRODUCTS_DIR = "Production/products/";
 		private static string PRODUCT_ASSETS_DIR = "Assets/Editor/products/";
-		private static Dictionary<BuildTarget, List<int>> appIconSizes = new Dictionary<BuildTarget, List<int>>() {
-			{ 
+		private static Dictionary<BuildTarget, List<int>> appIconSizes = new Dictionary<BuildTarget, List<int>>() { { 
 				BuildTarget.Android, 
 				new List<int>() {
-						192,
-					144,
-						96,
-					72,
-						48,
-					36
+					192,
+						144,
+					96,
+						72,
+					48,
+						36
 				}
-			},
-			{ 
+			}, { 
 				BuildTarget.iOS, 
 				new List<int>() {
-						180,
-					152,
-						144,
-					120,
-						114,
-					76,
-						72,
-					57
+					180,
+						152,
+					144,
+						120,
+					114,
+						76,
+					72,
+						57
 				}
 			}
 		};
@@ -205,8 +203,11 @@ namespace GQ.Editor.Building {
 
 
 		[PostProcessBuildAttribute(1)]
-		public static void PrintBuildInfo (BuildTarget target, string pathToBuiltProject) {
+		public static void AmendUsageRightsInfosToPList_IOS_Only (BuildTarget target, string pathToBuiltProject) {
 			Debug.Log("Build done. Target was " + target.ToString() + "; build path is: " + pathToBuiltProject);
+			if ( !"iOS".Equals(target) )
+				// we only do this for iOS builds:
+				return;
 			PlistDocument infoPlist = new PlistDocument();
 			string infoPath = pathToBuiltProject + "/Info.plist";
 			infoPlist.ReadFromFile(infoPath);

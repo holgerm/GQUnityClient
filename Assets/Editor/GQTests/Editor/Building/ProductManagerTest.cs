@@ -5,6 +5,7 @@ using UnityEngine;
 using GQ.Util;
 using System;
 using GQ.Client.Conf;
+using GQ.Editor.Util;
 
 namespace GQTests.Editor.Building {
 

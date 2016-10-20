@@ -4,6 +4,7 @@ using NUnit.Framework;
 using GQ.Util;
 using System.IO;
 using System;
+using GQ.Editor.Util;
 
 namespace GQTests.Util {
 

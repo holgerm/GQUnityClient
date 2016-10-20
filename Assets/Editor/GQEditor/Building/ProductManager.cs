@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections;
 using UnityEditor;
 using System.Text.RegularExpressions;
+using GQ.Editor.Util;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {

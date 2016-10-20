@@ -3,8 +3,9 @@ using System.Collections;
 using System.IO;
 using System;
 using UnityEditor;
+using GQ.Util;
 
-namespace GQ.Util {
+namespace GQ.Editor.Util {
 
 	public static class Assets {
 
