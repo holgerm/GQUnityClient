@@ -2300,6 +2300,10 @@ public class actions : MonoBehaviour {
 
 	void showmessage (QuestAction action) {
 
+		if ( msgcanvas == null ) {
+			Debug.LogWarning("Action 'showMessage' can not execute, because the MessageCanvas is null.");
+		}
+
 		if ( action.hasAttribute("message") ) {
 			QuestMessage nqa = (QuestMessage)Instantiate(message_prefab, transform.position, Quaternion.identity);
 		
