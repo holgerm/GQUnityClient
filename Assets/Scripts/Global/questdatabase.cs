@@ -90,13 +90,6 @@ public class questdatabase : MonoBehaviour {
 
 	IEnumerator Start () {
 
-		Debug.Log("ORDINARY Debug.Log() called.");
-
-		#if GQ_DEBUG
-		Debug.Log("GQ_DEBUG HAS BEEN called.");
-		#else
-		Debug.Log("NO GQ_DEBUG called.");
-		#endif
 			
 //		PlayerPrefs.DeleteAll();
 
@@ -241,10 +234,9 @@ public class questdatabase : MonoBehaviour {
 
 	public void CheckForQuestVersion () {
 
-
 		string url = Configuration.instance.appVersionURL + "?version=" + Configuration.instance.appVersion;
-		Debug.Log(url);
 		Download download = new Download(url, timeout: 20000);
+
 		download.OnSuccess = (Download.SuccessCallback)((Download d) => {
 
 			string[] split = d.Www.text.Split(';');
@@ -477,25 +469,19 @@ public class questdatabase : MonoBehaviour {
 	void autoStartQuest () {
 
 		if ( Configuration.instance.autostartQuestID != 0 ) {
-			Debug.Log("Autostart: Starting quest " + Configuration.instance.autostartQuestID);
+
 			GameObject questListPanel = GameObject.Find("/Canvas");
 			if ( loadlogo != null ) {
-				Debug.Log("Autostart: loadlogo != null ");
 
 				loadlogo.enable();
 				webloadingmessage.enabled = true;
 			}
-			else {
-				Debug.Log("Autostart: loadlogo == null ");
-			}
 
 			if ( Configuration.instance.autostartIsPredeployed ) {
-				Debug.Log("Autostart: is predeployed ");
 				StartCoroutine(startPredeployedQuest(Configuration.instance.autostartQuestID));
 
 			}
 			else {
-				Debug.Log("Autostart: is NOT predeployed ");
 				StartQuest(Configuration.instance.autostartQuestID);
 			}
 		}
@@ -514,39 +500,32 @@ public class questdatabase : MonoBehaviour {
 	
 		yield return null;
 		
-		Debug.Log("InitPredeployedQuests 1, looking for predep zip: " + PREDEPLOYED_QUESTS_ZIP);
 		if ( PREDEPLOYED_QUESTS_ZIP.Contains("://") ) {
 			// on platforms which use an url type as asset path (e.g. Android):
-			Debug.Log("WWW questZIP = new WWW (PREDEPLOYED_QUESTS_ZIP);");
 			WWW questZIP = new WWW(PREDEPLOYED_QUESTS_ZIP); // this is the path to your StreamingAssets in android
 			yield return questZIP;
 			
-			Debug.Log("PDir3: LOADED BY WWW. questZIP.text: " + questZIP.text);
 			if ( questZIP.error != null && !questZIP.error.Equals("") ) {
 				Debug.Log("PDir3: LOADED BY WWW. questZIP.error: " + questZIP.error);
 			}
 			else {				
-				Debug.Log("PDir3: LOADED BY WWW. questZIP.bytesDownloaded: " + questZIP.bytesDownloaded);
 				if ( File.Exists(LOCAL_QUESTS_ZIP) ) {
 					Debug.LogWarning("Local copy of predeployment zip file was found. Should have been deleted at last initialization.");
 					File.Delete(LOCAL_QUESTS_ZIP);
 				}
 			}
 			File.WriteAllBytes(LOCAL_QUESTS_ZIP, questZIP.bytes);
-			Debug.Log("PDir3: ZIP FILE WRITTEN - ok? : " + File.Exists(LOCAL_QUESTS_ZIP));
 			predepzipfound = true;
 		}
 		else {
-			Debug.Log("Not running on platforms which use an url type as asset path (e.g. Android):");
 			initPreloadedQuestiOS();
 		}
-
 
 		if ( predepzipfound ) {
 		
 			ZipUtil.Unzip(LOCAL_QUESTS_ZIP, Application.persistentDataPath);
 			File.Delete(LOCAL_QUESTS_ZIP);
-			Debug.Log("ZIP FILE DELETED");
+
 			questmilllogo.enabled = false;
 			if ( webloadingmessage != null ) {
 
@@ -563,19 +542,12 @@ public class questdatabase : MonoBehaviour {
 	void initPreloadedQuestiOS () {
 
 		// on platforms which have a straight file path (e.g. iOS):
-		Debug.Log("InitPredeployedQuests: on IOS.");
 		if ( !File.Exists(PREDEPLOYED_QUESTS_ZIP) ) {
-			Debug.Log("InitPredeployedQuests: ZIP FILE NOT FOUND");
 			return;
 		}
 		File.Copy(PREDEPLOYED_QUESTS_ZIP, LOCAL_QUESTS_ZIP);
-		if ( !File.Exists(LOCAL_QUESTS_ZIP) ) {
-			Debug.Log("InitPredeployedQuests: LOCAL COPY NOT CREATED.");
-		}
 
 		predepzipfound = true;
-
-
 	}
 
 	private int reloadButtonPressed = 0;
@@ -643,8 +615,9 @@ public class questdatabase : MonoBehaviour {
 					accessData(j, kei + "_" + key);
 				}
 				break; 
+
 			case JSONObject.Type.ARRAY:
-			//			Debug.Log("ARRAY: "+kei);
+				
 				if ( kei == "quest_hotspots" ) {
 
 					currentquest = new Quest();
@@ -662,8 +635,6 @@ public class questdatabase : MonoBehaviour {
 				}
 				else
 				if ( kei == "quest" ) {
-					//Debug.Log("here");
-				
 				
 					foreach ( JSONObject j in obj.list ) {
 						accessData(j, kei);
@@ -703,18 +674,14 @@ public class questdatabase : MonoBehaviour {
 				}
 				else
 				if ( kei == "quest_hotspots_longitude" ) {
-					//Debug.Log("FOUND LONGITUDE");
 				
 					if ( currentquest.start_longitude == null || currentquest.start_longitude == 0 ) {
-						//	Debug.Log("SETTING LONGITUDE");
 						currentquest.start_longitude = obj.n;
 						
 					}
-					
 				}
-				
-				
 				break;
+
 			case JSONObject.Type.BOOL:
 				break;
 			case JSONObject.Type.NULL:
@@ -730,20 +697,16 @@ public class questdatabase : MonoBehaviour {
 			string key = (string)obj.keys[i];
 			JSONObject j = (JSONObject)obj.list[i];
 			
-			Debug.Log(key);
 			if ( key == "longitude" ) {
 				
-				Debug.Log("long found");
 				if ( currentquest.start_longitude == null || currentquest.start_longitude == 0 ) {
 					currentquest.start_longitude = obj.n;
-					Debug.Log("long set: " + obj.str);
 				}
 				
 			}
 			else
 			if ( key == "latitude" ) {
-				Debug.Log("lat found");
-				
+
 				if ( currentquest.start_latitude == null || currentquest.start_latitude == 0 ) {
 					currentquest.start_latitude = obj.n;
 				}
@@ -773,7 +736,6 @@ public class questdatabase : MonoBehaviour {
 			}
 			else
 			if ( key == "value" ) {
-				//				Debug.Log("Meta Value found");
 				meta.value = j.str;
 				
 			}
@@ -976,7 +938,6 @@ public class questdatabase : MonoBehaviour {
 					// update new versions of existing local quests:
 					// sorry for the 100sec increase - we have such a stuodi json parser TODO
 					if ( lq.getLastUpdate() + 100000 < q.getLastUpdate() ) {
-						Debug.Log("<color=yellow>id: " + q.id + " times: " + lq.getLastUpdate() + "=" + q.getLastUpdate() + "</color>");
 
 						removeQuest(lq);
 						downloadQuest(q);
@@ -992,9 +953,6 @@ public class questdatabase : MonoBehaviour {
 				foundChanges = true;
 				downloadQuest(q);
 				questsToLoad += 1;
-
-				Debug.Log("<color=yellow>Loading new: " + q.id + "</color>");
-
 			}
 
 		}
@@ -1084,7 +1042,6 @@ public class questdatabase : MonoBehaviour {
 
 		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
 
-		Debug.Log("PROBLEM: startPredeployedQuest");
 		currentquest = q;
 
 //		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
@@ -1104,12 +1061,7 @@ public class questdatabase : MonoBehaviour {
 			q.xmlcontent = UTF8Encoding.UTF8.GetString(wwwpdq.bytes); 
 
 		}
-		else {
 
-			Debug.Log("Error: " + wwwpdq.error + "www.url=" + www.url);
-		}
-
-		Debug.Log("PROBLEM: before LoadFromText (q.name = " + q.name + ", q.id = " + q.id + ")");
 		currentquest = q.LoadFromText(id, true);
 		localquests.Add(currentquest);
 		bool hasmorethanmetadata = true;
@@ -1173,14 +1125,12 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void StartQuest (int id) {
-		Debug.Log("StartQuest(): " + id);
 
 		// if the given quest is already intialized start it, otherwise download it first and start it:
 		List<Quest> localQuests = GetLocalQuests();
 		Quest q = null;
 		foreach ( Quest curQuest in localQuests ) {
 			
-			Debug.Log("StartQuest(): foreach cur=" + curQuest.id);
 			if ( curQuest.id == id ) {
 				q = curQuest;
 			}
@@ -1191,11 +1141,9 @@ public class questdatabase : MonoBehaviour {
 //			Debug.Log ("Problem 1 id: " + id);
 			q = new Quest();
 			q.id = id;
-			Debug.Log("StartQuest(): downloading quest " + q.name);
 			downloadQuest(q);
 		}
 		else {
-			Debug.Log("StartQuest(): starting quest " + q.name);
 			startQuest(q);
 		}
 
@@ -1215,11 +1163,8 @@ public class questdatabase : MonoBehaviour {
 
 		while ( msgsactive > 0 ) {
 			yield return 0;
-			//Debug.Log("messages active");
 		}
 
-
-//		Debug.Log ("CheckConnection(): before ping");
 		yield return new WaitForSeconds(0.1f);
 		if ( wwwTestConn.isDone ) {
 			bool ok = (wwwTestConn.error == null);
@@ -1314,7 +1259,6 @@ public class questdatabase : MonoBehaviour {
 						qh.attributes = new List<QuestAttribute>();
 						qh.attributes.Add(qa);
 						QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(qh, true, true, aq.start_latitude + "," + aq.start_longitude);
-						//Debug.Log("Longitude Latitude: "+aq.start_longitude+","+aq.start_latitude);
 
 						if ( aq.hasMeta("category") ) {
 
@@ -1374,7 +1318,6 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		if ( Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.O) && Input.GetKey(KeyCode.Q) ) {
-			Debug.Log("Destroying GameObject");
 
 			Destroy(gameObject);
 			endQuest();
@@ -1427,12 +1370,8 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void resetPlayer (string x) {
-		Debug.Log("Destroying GameObject");
 		Destroy(gameObject);
 		Application.LoadLevel(0);
-
-	
-		
 	}
 
 	IEnumerator waitForWebXml () {
@@ -1451,7 +1390,6 @@ public class questdatabase : MonoBehaviour {
 			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 			if ( !downloadingAll ) {
-				Debug.Log("PROBLEM: waitForWebXml");
 				currentquest = nq;
 			}
 
@@ -1547,22 +1485,14 @@ public class questdatabase : MonoBehaviour {
 		if ( currentquest != null ) {
 			if ( currentquest.id == q.id ) {
 
-				Debug.Log("PROBLEM: removeQuest()");
 				currentquest = null;
-
 			}
 		}
-
-		
-
 	
 		if ( buttoncontroller != null ) {
 
 			buttoncontroller.resetList();
-
 		}
-
-
 	}
 
 	public void endQuest () {
@@ -1602,7 +1532,6 @@ public class questdatabase : MonoBehaviour {
 
 	// TODO parameter should only be the id of the quest (hm)
 	public void downloadQuest (Quest q) {
-		Debug.Log("downloadQuest(Quest with id:" + q.id + ")");
 		if ( webloadingmessage != null ) {
 
 			webloadingmessage.enabled = true;
@@ -1670,17 +1599,11 @@ public class questdatabase : MonoBehaviour {
 		Quest q = new Quest();
 		q.id = id;
 
-		Debug.Log("PROBLEM: downloadQuest(" + id + ")");
 		currentquest = q;
 		downloadQuest(q);
 	}
 
 	public void downloadAsset (string url, string localTargetPath) {
-		Debug.Log("downloadAsset(" + url + ", " + localTargetPath + ")");
-		if ( filedownloads != null )
-			Debug.Log("filedownloads: " + filedownloads.Count);
-		else
-			Debug.Log("filedownloads: NULL ; url: " + url + " Local path: " + localTargetPath);
 		
 		if ( wanttoload == null ) {
 			wanttoload = new List<string>();
@@ -1702,12 +1625,6 @@ public class questdatabase : MonoBehaviour {
 		if ( filedownloads == null ) {
 			filedownloads = new List<WWW>();
 		}
-//		else {
-//			foreach ( WWW fileWWW in filedownloads ) {
-//				Debug.Log("FILE WWW LOADING " + fileWWW.url + " : " + fileWWW.progress + " isDone? :" + fileWWW.isDone);
-//			}
-//		}
-		//		Debug.Log("downloadAssetAsync(" + url + ", " + localTargetPath + ")" + " wanttoload# = " + wanttoload.Count + "; filedownloads# = " + filedownloads.Count);
 
 		bool done = true;
 		if ( filedownloads != null ) {
@@ -1726,7 +1643,6 @@ public class questdatabase : MonoBehaviour {
 
 
 		if ( done ) {
-//			Debug.Log("downloadAssetAsync##done new will be: " + url);
 
 			if ( !url.Contains("/clientxml") ) {
 
@@ -1739,38 +1655,27 @@ public class questdatabase : MonoBehaviour {
 					filedownloads = new List<WWW>();
 				}
 
-//				Debug.Log("Started new download for " + url + " in downloadAssetAsync(). Now we have: " + (filedownloads.Count + 1));
 
 				filedownloads.Add(wwwfile);
 				files_all += 1;
 				StartCoroutine(downloadAssetFinished(wwwfile, localTargetPath, 0f));
 			}
-//			else {
-//				Debug.Log("downloadAsset() with clientxml in url-arg called");
-//			}
-
 		}
 		else {
-//			Debug.Log("downloadAssetAsync##else(!done); not loading: " + url);
 
 			yield return new WaitForEndOfFrame();
 			downloadAsset(url, localTargetPath);
-
-			            
 		}
 	}
 
 	public IEnumerator downloadAssetFinished (WWW wwwfile, string filename, float timeout) {
-//		Debug.Log("downloadAssetFinished(" + filename + ", " + timeout + ")");
 
 		yield return new WaitForSeconds(0.3f);
 		timeout += 0.3f;
 
 		if ( wwwfile.error != null ) {
-			Debug.Log("error downloading " + wwwfile.url + " (" + wwwfile.error + ")");
 				
 			if ( wwwfile.error != "unsupported URL" ) {
-				Debug.Log("redoing www error: " + wwwfile.error);
 
 				downloadAsset(wwwfile.url, filename);
 			}
@@ -1780,8 +1685,6 @@ public class questdatabase : MonoBehaviour {
 		else {
 			if ( wwwfile.isDone ) {
 				if ( !Directory.Exists(Path.GetDirectoryName(filename)) ) {
-						
-//					Debug.Log("creating folder:" + Path.GetDirectoryName(filename));
 						
 					Directory.CreateDirectory(Path.GetDirectoryName(filename));
 				}
@@ -1897,20 +1800,14 @@ public class questdatabase : MonoBehaviour {
 			Screen.orientation = ScreenOrientation.AutoRotation;
 		}
 		else {
-
-			Debug.Log("rotatin' 1");
+			
 			if ( originalOrientation != null ) {
-				Debug.Log("rotatin' 1.5");
 
 				Screen.orientation = originalOrientation;
 			}
-			Debug.Log("rotatin' 2");
 
 			Screen.autorotateToLandscapeLeft = false;
 			Screen.autorotateToLandscapeRight = false;
-			Debug.Log("rotatin' 3");
-
-
 		}
 	}
 
@@ -1990,10 +1887,6 @@ public class questdatabase : MonoBehaviour {
 			currentquest = nq;
 		}
 
-		//q.deserializeAttributes ();
-//		Debug.Log ("done installing...");
-
-
 		// if not local load => set export location to fresh directory:
 		if ( !localload ) {
 
@@ -2070,7 +1963,6 @@ public class questdatabase : MonoBehaviour {
 			}
 		}
 		else {
-			Debug.Log("INVALID Quest Version. Quest: " + currentquest.id);
 			showmessage("Entschuldigung! Die Quest kann in dieser Version nicht abgespielt werden.");
 			if ( webloadingmessage != null ) {
 				webloadingmessage.enabled = false;
@@ -2230,7 +2122,6 @@ public class questdatabase : MonoBehaviour {
 		//Debug.Log ("trying to acces: " + myWWW.url);
 		
 		if ( myWWW.url == null || myWWW.url == "" ) {
-			Debug.Log("nothing to do");
 			sc.isDone = true;
 			yield return null;
 			
@@ -2313,26 +2204,14 @@ public class questdatabase : MonoBehaviour {
 						};
 					}
 
-
-
 					foreach ( QuestRuntimeHotspot subhs in hotspots ) {
-
-
-
-						Debug.Log("editing sub hotspot:" + subhs.hotspot.id);
-
-
 				
 						if ( subhs.hotspot.id != mainhs.hotspot.id ) {
-
-
 
 							subhs.lon -= mainhs.lon;
 							subhs.lon += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
 
-
 							subhs.lat -= mainhs.lat;
-	
 							subhs.lat += (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
 
 							string url = "http://www.yournavigation.org/api/1.0/gosmore.php?" +
@@ -2349,8 +2228,6 @@ public class questdatabase : MonoBehaviour {
 							
 							WWW routewww = new WWW(url);
 
-							Debug.Log(url);
-
 							if ( routewwws == null ) {
 
 								routewwws = new List<WWW>();
@@ -2365,14 +2242,10 @@ public class questdatabase : MonoBehaviour {
 
 					mainhs.lat = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[0];
 					mainhs.lon = (float)GameObject.Find("QuestDatabase").GetComponent<GPSPosition>().CoordinatesWGS84[1];
-
 				}
-
-
 			}
 
 			StartCoroutine(waitForTransferCompletion(pageid));
-
 		}
 	}
 
@@ -2433,7 +2306,6 @@ public class questdatabase : MonoBehaviour {
 
 
 					qrh.lon = float.Parse(co[1]);
-					Debug.Log("REARRANGED HOTSPOT:" + qrh.lat + "," + qrh.lon);
 
 				}
 				else {
@@ -2442,8 +2314,6 @@ public class questdatabase : MonoBehaviour {
 						savedmessages = new List<string>();
 					}
 					savedmessages.Add("An deinem Standort sind nicht genügend Weginformationen vorhanden. Manche Kartenobjekte könnten nicht erreichbar sein.");
-
-					Debug.Log("REARRANGING FAILED:" + qrh.lat + "," + qrh.lon);
 				}
 			}
 					
@@ -2456,8 +2326,6 @@ public class questdatabase : MonoBehaviour {
 	int waitedFor = 0;
 
 	IEnumerator waitforquestassets (int pageid, float timeout) {
-		// TODO (hm) timeout seems never be used, i.e. checked to take some action like ending the trial ... why (is it still here)?
-//		Debug.Log("waitforquestassets page: " + pageid + " wanttoload: " + wanttoload.Count + " filedownloads: " + filedownloads.Count);
 
 		if ( fakebytes == 0 ) {
 			fakebytes = 1;
@@ -2477,7 +2345,6 @@ public class questdatabase : MonoBehaviour {
 		}
 		else {
 			if ( filedownloads != null ) {
-				Debug.Log("WWW Objects" + filedownloads.Count);
 
 				foreach ( WWW www in filedownloads ) {
 
@@ -2490,9 +2357,6 @@ public class questdatabase : MonoBehaviour {
 						if ( www.url.StartsWith("http") ) {
 							done = false;
 							downloadsundone += 1;
-							Debug.Log("WWW ERROR: " + www.error + " (" + www.url + ")");
-
-							//error += www.url +"couldn't be downloaded.";
 						}
 					}
 				}
@@ -2517,14 +2381,10 @@ public class questdatabase : MonoBehaviour {
 
 			int d = 0;
 			foreach ( WWW awww in filedownloads ) {
-				//Debug.Log(awww.bytesDownloaded);
-
-				//bytescomplete += (int)(awww.bytesDownloaded);
 
 				openfileloads += awww.url + "; ";
 				d++;
 			}
-			//			Debug.Log (openfileloads);
 		}
 
 		if ( error == "" ) {
@@ -2532,7 +2392,6 @@ public class questdatabase : MonoBehaviour {
 			if ( webloadingmessage != null ) {
 
 				webloadingmessage.text = "Lade alle Medien vor.\n Das kann einige Minuten dauern. \n " + bytesloaded2 + " Bytes geladen";
-//				Debug.Log ("WEBLOADINGMESSAGE: " + webloadingmessage.text);
 			}
 		}
 		else {
@@ -2549,8 +2408,8 @@ public class questdatabase : MonoBehaviour {
 				StartCoroutine(waitForSpriteConversion(pageid));
 			}
 			else {
+				
 				waitedFor += 1;
-				Debug.Log(waitedFor);
 				if ( waitedFor >= questsToLoad ) {
 
 					foreach ( Quest q in downloadquests ) {
@@ -2651,8 +2510,6 @@ public class questdatabase : MonoBehaviour {
 
 	public void closeMap () {
 
-		Debug.Log("CLOSE_MAP");
-
 		if ( GameObject.Find("MapCanvas") != null ) {
 			Destroy(GameObject.Find("MapCanvas"));
 		}
@@ -2672,11 +2529,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void changePage (int id) {
 
-		Debug.Log("CHANGE PAGE to ID: " + id);
-
-
 		if ( GameObject.Find("MapHider") != null ) {
-
 
 			GameObject.Find("MapHider").GetComponent<Image>().enabled = true;
 		}
@@ -2689,14 +2542,11 @@ public class questdatabase : MonoBehaviour {
 		}
 
 
-		
-
-
 		if ( GameObject.Find("BgCam") ) {
+			
 			GameObject.Find("BgCam").GetComponent<Camera>().enabled = true;
 
 			GameObject.Find("BgCam").GetComponent<AudioListener>().enabled = true;
-
 		}
 
 
@@ -2709,13 +2559,10 @@ public class questdatabase : MonoBehaviour {
 		if ( GameObject.Find("PageController_Map") ) {
 
 			GameObject.Find("PageController_Map").GetComponent<page_map>().unDrawCurrentRoute();
-
 		}
-		   
-		//Debug.Log ("looking for page with id:" + id);
-		foreach ( QuestPage qp in currentquest.pages ) {
 
-//			Debug.Log (qp.id);
+		   
+		foreach ( QuestPage qp in currentquest.pages ) {
 
 			if ( qp.id.Equals(id) ) {
 
@@ -2732,46 +2579,34 @@ public class questdatabase : MonoBehaviour {
 					     && go.name != "NetworkManager" && !go.name.Contains("NetworkIdentity")
 					     && go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas" ) {
 
-						
-
 						bool des = true;
-
 
 						if ( GameObject.Find("VarOverlayCanvas") != null ) {
 						
 							if ( go.transform.IsChildOf(GameObject.Find("VarOverlayCanvas").transform) ) {
 								des = false;
-								//Debug.Log("is child of mapcanvas");
 							}
-						
 						}
 
 						if ( GameObject.Find("LanguageCanvas") != null ) {
 							
 							if ( go.transform.IsChildOf(GameObject.Find("LanguageCanvas").transform) ) {
 								des = false;
-								//Debug.Log("is child of mapcanvas");
 							}
-							
 						}
 
 						if ( GameObject.Find("MenuCanvas") != null ) {
 						
 							if ( go.transform.IsChildOf(GameObject.Find("MenuCanvas").transform) ) {
 								des = false;
-								//Debug.Log("is child of mapcanvas");
 							}
-						
 						}
-
 
 						if ( GameObject.Find("MapCanvas") != null ) {
 
 							if ( go.transform.IsChildOf(GameObject.Find("MapCanvas").transform) ) {
 								des = false;
-								//Debug.Log("is child of mapcanvas");
 							}
-
 						}
 
 						if ( GameObject.Find("[Map]") ) {
@@ -2779,11 +2614,7 @@ public class questdatabase : MonoBehaviour {
 							if ( go.transform.IsChildOf(GameObject.Find("[Map]").transform) ) {
 
 								des = false;
-
 							}
-							
-							
-							
 						}
 
 						if ( GameObject.Find("[location marker]") ) {
@@ -2791,11 +2622,7 @@ public class questdatabase : MonoBehaviour {
 							if ( go.transform.IsChildOf(GameObject.Find("[location marker]").transform) ) {
 							
 								des = false;
-							
 							}
-						
-						
-						
 						}
 
 						if ( GameObject.Find("PageController_Map") ) {
@@ -2803,9 +2630,7 @@ public class questdatabase : MonoBehaviour {
 							if ( go == GameObject.Find("PageController_Map").GetComponent<page_map>().map ) {
 
 								des = false;
-
 							}
-
 						} 
 
 						if ( des ) {
@@ -2881,21 +2706,11 @@ public class questdatabase : MonoBehaviour {
 				else
 				if ( qp.type == "MapOSM" || qp.type == "Navigation" ) {
 
-
-
-					//	Debug.Log ("trying to start map");
-
-
 					if ( GameObject.Find("MapCam") == null ) {
-//						Debug.Log ("MapCam not found");
-
 
 						StartCoroutine(loadMap());
-
 					}
 					else {
-
-						//	Debug.Log ("MapCam found");
 
 						if ( GameObject.Find("PageController_Map") != null ) {
 
@@ -2908,10 +2723,10 @@ public class questdatabase : MonoBehaviour {
 						}
 
 						if ( GameObject.Find("BgCam") ) {
+																				
 							GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
 
 							GameObject.Find("BgCam").GetComponent<AudioListener>().enabled = false;
-							
 						}
 
 						if ( GameObject.Find("MapCanvas") != null ) {
@@ -2926,16 +2741,8 @@ public class questdatabase : MonoBehaviour {
 							
 							GameObject.Find("[Map]").GetComponent<mapdisplaytoggle>().showMap();
 						}
-
 					}
-
-
-
-
-
 				}
-
-
 
 				if ( needsCamera ) {
 					if ( GameObject.Find("MapCanvas") != null ) {
@@ -2996,27 +2803,8 @@ public class questdatabase : MonoBehaviour {
 			
 		}
 	}
-	
-	//	public void showmessage (string text) {
-	//		Debug.Log("MSGSActive before:" + msgsactive);
-	//
-	//		msgsactive += 1;
-	//		Debug.Log("MSGSActive after:" + msgsactive);
-	//
-	//		QuestMessage nqa = (QuestMessage)Instantiate(message_prefab, transform.position, Quaternion.identity);
-	//
-	//
-	//		nqa.message = text;
-	//
-	//		nqa.transform.SetParent(GameObject.Find("MsgCanvas").transform, false);
-	//		nqa.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
-	//
-	//
-	//	}
-	//
+
 	public void showmessage (string text, string button = null, Action action = null) {
-		Debug.Log("showmessage(" + text + ")");
-		Debug.Log("MSGSActive before:" + msgsactive);
 
 		msgsactive += 1;
 

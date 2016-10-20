@@ -109,8 +109,6 @@ namespace GQ.Client.Conf {
 				Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
 			}
 
-			Debug.Log("Configuration: deserialized " + ConfigurationManager.Current.name);
-
 		}
 
 		#endregion
