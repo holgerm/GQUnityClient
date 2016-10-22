@@ -35,6 +35,8 @@ namespace UnitySlippyMap {
 	// A singleton class in charge of downloading, caching and serving tiles.
 	// </summary>
 	public class TileDownloader : MonoBehaviour {
+		private static int loadedTextures = 0;
+
 		#region Singleton implementation
 
 		private static TileDownloader instance = null;
@@ -133,7 +135,7 @@ namespace UnitySlippyMap {
 
 			public void StartDownload () {
 #if DEBUG_LOG
-			Debug.Log("DEBUG: TileEntry.StartDownload: " + url);
+				Debug.Log("DEBUG: TileEntry.StartDownload: " + url);
 #endif
 				job = new Job(DownloadCoroutine(), this);
 				job.JobComplete += jobCompleteHandler;
@@ -141,7 +143,7 @@ namespace UnitySlippyMap {
 
 			public void StopDownload () {
 #if DEBUG_LOG
-			Debug.Log("DEBUG: TileEntry.StopDownload: " + url);
+				Debug.Log("DEBUG: TileEntry.StopDownload: " + url);
 #endif
 				job.JobComplete -= jobCompleteHandler;
 				job.Kill();
@@ -156,7 +158,7 @@ namespace UnitySlippyMap {
 				if ( cached && File.Exists(Application.temporaryCachePath + "/" + this.guid + ext) ) {
 					www = new WWW("file:///" + Application.temporaryCachePath + "/" + this.guid + ext);
 #if DEBUG_LOG
-                Debug.Log("DEBUG: TileDownloader.DownloadCoroutine: loading tile from cache: url: " + www.url);
+					Debug.Log("DEBUG: TileDownloader.DownloadCoroutine: loading tile from cache: url: " + www.url);
 #endif
 				}
 				else
@@ -164,11 +166,11 @@ namespace UnitySlippyMap {
             {
 					www = new WWW(url);
 #if DEBUG_LOG
-                Debug.Log("DEBUG: TileDownloader.DownloadCoroutine: loading tile from provider: url: " + www.url
+					Debug.Log("DEBUG: TileDownloader.DownloadCoroutine: loading tile from provider: url: " + www.url
 #if !UNITY_WEBPLAYER
-                    + "(cached: " + cached + ")"
+					+ "(cached: " + cached + ")"
 #endif
-                    );
+					);
 #endif
 				}
 
@@ -191,6 +193,7 @@ namespace UnitySlippyMap {
 
 					Texture2D texture = new Texture2D(1, 1, TextureFormat.ARGB32, true);
 					www.LoadImageIntoTexture(texture);
+					Debug.Log("#TEXTURE loaded. COunted: " + ++loadedTextures);
 				
 #if DEBUG_PROFILE
 				UnitySlippyMap.Profiler.End("www.texture");
@@ -227,7 +230,7 @@ namespace UnitySlippyMap {
 #endif
 				
 #if DEBUG_LOG
-					Debug.Log("DEBUG: TileEntry.DownloadCoroutine: done loading: " + www.url + ", writing to cache: " + fs.Name);
+						Debug.Log("DEBUG: TileEntry.DownloadCoroutine: done loading: " + www.url + ", writing to cache: " + fs.Name);
 #endif
 					}
 					else {
@@ -235,7 +238,7 @@ namespace UnitySlippyMap {
 					UnitySlippyMap.Profiler.End("is cached?");
 #endif
 #if DEBUG_LOG
-	    			Debug.Log("DEBUG: TileEntry.DownloadCoroutine: done loading from cache: " + www.url + " [" + url + "]");
+						Debug.Log("DEBUG: TileEntry.DownloadCoroutine: done loading from cache: " + www.url + " [" + url + "]");
 #endif
 					}
 
@@ -256,7 +259,7 @@ namespace UnitySlippyMap {
 #endif
 					this.error = true;
 #if DEBUG_LOG
-				Debug.LogError("ERROR: TileEntry.DownloadCoroutine: done downloading: " + www.url + " with error: " + www.error);
+					Debug.LogError("ERROR: TileEntry.DownloadCoroutine: done downloading: " + www.url + " with error: " + www.error);
 #endif
 				}
 			
@@ -276,7 +279,7 @@ namespace UnitySlippyMap {
 				info.FS.Close();
 
 #if DEBUG_LOG
-			Debug.Log("DEBUG: TileEntry.EndWriteCallback: done writing: " + info.Entry.url + " [" + info.Entry.guid + "]");
+				Debug.Log("DEBUG: TileEntry.EndWriteCallback: done writing: " + info.Entry.url + " [" + info.Entry.guid + "]");
 #endif
 			}
 			#endif
@@ -326,21 +329,22 @@ namespace UnitySlippyMap {
 		// Gets a tile by its URL, the main texture of the material is assigned if successful.
 		// </summary>
 		public void Get (string url, Tile tile) {
+			Debug.Log("#TILES: " + Instance.tiles.Count);
 #if DEBUG_LOG
-        Debug.Log("DEBUG: TileDownloader.Get: url: " + url);
+			Debug.Log("DEBUG: TileDownloader.Get: url: " + url);
 #endif
         
 			tileURLLookedFor = url;
 			if ( tilesToLoad.Exists(tileURLMatchPredicate) ) {
 #if DEBUG_LOG
-			Debug.LogWarning("WARNING: TileDownloader.Get: already asked for url: " + url);
+				Debug.LogWarning("WARNING: TileDownloader.Get: already asked for url: " + url);
 #endif
 				return;
 			}
 		
 			if ( tilesLoading.Exists(tileURLMatchPredicate) ) {
 #if DEBUG_LOG
-			Debug.LogWarning("WARNING: TileDownloader.Get: already downloading url: " + url);
+				Debug.LogWarning("WARNING: TileDownloader.Get: already downloading url: " + url);
 #endif
 				return;
 			}
@@ -352,14 +356,14 @@ namespace UnitySlippyMap {
 #endif
         {
 #if DEBUG_LOG
-            Debug.Log("DEBUG: TileDownloader.Get: adding '" + url + "' to loading list");
+				Debug.Log("DEBUG: TileDownloader.Get: adding '" + url + "' to loading list");
 #endif
 				tilesToLoad.Add(new TileEntry(url, tile));
 			}
 #if !UNITY_WEBPLAYER
 		else {
 #if DEBUG_LOG
-            Debug.Log("DEBUG: TileDownloader.Get: adding '" + url + "' to loading list (cached)");
+				Debug.Log("DEBUG: TileDownloader.Get: adding '" + url + "' to loading list (cached)");
 #endif
 				cachedEntry.cached = true;
 				cachedEntry.tile = tile;
@@ -377,7 +381,7 @@ namespace UnitySlippyMap {
 			TileEntry entry = tilesToLoad.Find(tileURLMatchPredicate);
 			if ( entry != null ) {
 #if DEBUG_LOG
-			Debug.Log("DEBUG: TileDownloader.Cancel: remove download from schedule: " + url);
+				Debug.Log("DEBUG: TileDownloader.Cancel: remove download from schedule: " + url);
 #endif
 				tilesToLoad.Remove(entry);
 				return;
@@ -386,7 +390,7 @@ namespace UnitySlippyMap {
 			entry = tilesLoading.Find(tileURLMatchPredicate);
 			if ( entry != null ) {
 #if DEBUG_LOG
-			Debug.Log("DEBUG: TileDownloader.Cancel: stop downloading: " + url);
+				Debug.Log("DEBUG: TileDownloader.Cancel: stop downloading: " + url);
 #endif
 				tilesLoading.Remove(entry);
 				entry.StopDownload();
@@ -394,7 +398,7 @@ namespace UnitySlippyMap {
 			}
 
 #if DEBUG_LOG
-		Debug.LogWarning("WARNING: TileDownloader.Cancel: url not scheduled to be downloaded nor downloading: " + url);
+			Debug.LogWarning("WARNING: TileDownloader.Cancel: url not scheduled to be downloaded nor downloading: " + url);
 #endif
 		}
 	
@@ -403,7 +407,7 @@ namespace UnitySlippyMap {
 		// </summary>
 		public void JobTerminationEvent (object job, JobEventArgs e) {
 #if DEBUG_LOG
-		Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: Tile download complete, but was it murdered? " + e.WasKilled);
+			Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: Tile download complete, but was it murdered? " + e.WasKilled);
 #endif
 			TileEntry entry = e.Owner as TileEntry;
 			tilesLoading.Remove(entry);
@@ -413,16 +417,17 @@ namespace UnitySlippyMap {
 				if ( entry.error && entry.cached ) {
 					if ( entry.cached ) {
 #if DEBUG_LOG
-				    Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: loading cached tile failed, trying to download it: " + entry.url);
+						Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: loading cached tile failed, trying to download it: " + entry.url);
 #endif
 						// try downloading the tile again
 						entry.cached = false;
 						cacheSize -= entry.size;
 						tiles.Remove(entry);
+						Debug.Log("TEXTURES: Removed. Count: " + --loadedTextures);
 					}
 					else {
 #if DEBUG_LOG
-                     Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: downloading tile failed, trying to download it again: " + entry.url);
+						Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: downloading tile failed, trying to download it again: " + entry.url);
 #endif
 					}
 
@@ -435,11 +440,14 @@ namespace UnitySlippyMap {
 				TileEntry existingEntry = tiles.Find(tileURLMatchPredicate);
 				if ( existingEntry != null ) {
 					tiles.Remove(existingEntry);
+
+					Debug.Log("TEXTURES: Removed. Count: " + --loadedTextures);
 					cacheSize -= existingEntry.size;
 				}
 			
 				entry.timestamp = (DateTime.Now.ToLocalTime() - new DateTime(1970, 1, 1).ToLocalTime()).TotalSeconds;
 				tiles.Add(entry);
+				Debug.Log("TEXTURES: Added. Count: " + ++loadedTextures);
 				cacheSize += entry.size;
 			
 				// if the cache is full, erase the oldest entry
@@ -458,14 +466,14 @@ namespace UnitySlippyMap {
 					}
 					if ( entryToErase == null ) {
 #if DEBUG_LOG
-					Debug.LogWarning("WARNING: TileDownloader.JobTerminationEvent: no cache entry to erase (should not happen)");
+						Debug.LogWarning("WARNING: TileDownloader.JobTerminationEvent: no cache entry to erase (should not happen)");
 #endif
 						return;
 					}
 
 					DeleteCachedTile(entryToErase);
 #if DEBUG_LOG
-				Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: erased from cache: " + entryToErase.url + " [" + entryToErase.guid + "]");
+					Debug.Log("DEBUG: TileDownloader.JobTerminationEvent: erased from cache: " + entryToErase.url + " [" + entryToErase.guid + "]");
 #endif
 				}
 			}
@@ -499,7 +507,7 @@ namespace UnitySlippyMap {
 			}
         
 #if DEBUG_LOG
-        /*
+			/*
         if (tilesLoading.Count >= MaxSimultaneousDownloads)
         {
             Debug.Log("DEBUG: TileDownload.Update: tilesLoading.Count (" + tilesLoading.Count + ") > MaxSimultaneousDownloads (" + MaxSimultaneousDownloads + ")");
@@ -512,7 +520,7 @@ namespace UnitySlippyMap {
         }
          */
   
-        /*
+			/*
         {
             string dbg = "DEBUG: tilesToLoad entries:\n";
             foreach (TileEntry entry in tilesToLoad)
@@ -531,7 +539,7 @@ namespace UnitySlippyMap {
 			tilesLoading.Add(entry);
 		
 #if DEBUG_LOG
-        Debug.Log("DEBUG: TileDownloader.DownloadNextTile: entry.url: " + entry.url);
+			Debug.Log("DEBUG: TileDownloader.DownloadNextTile: entry.url: " + entry.url);
 #endif
         
 			entry.StartDownload();		
@@ -556,6 +564,7 @@ namespace UnitySlippyMap {
 			cacheSize -= t.size;
 			File.Delete(tilePath + "/" + t.guid + ".png");
 			tiles.Remove(t);
+			Debug.Log("TEXTURES: Removed. Count: " + --loadedTextures);
 		}
 
 		// <summary>
@@ -565,7 +574,7 @@ namespace UnitySlippyMap {
 			string filepath = tilePath + "/" + "tile_downloader.xml";
 		
 #if DEBUG_LOG
-		Debug.Log("DEBUG: TileDownloader.SaveTiles: file: " + filepath);
+			Debug.Log("DEBUG: TileDownloader.SaveTiles: file: " + filepath);
 #endif
 
 			XmlSerializer xs = new XmlSerializer(tiles.GetType());
@@ -582,13 +591,13 @@ namespace UnitySlippyMap {
 		
 			if ( File.Exists(filepath) == false ) {
 #if DEBUG_LOG
-			Debug.Log("DEBUG: TileDownloader.LoadTiles: file doesn't exist: " + filepath);
+				Debug.Log("DEBUG: TileDownloader.LoadTiles: file doesn't exist: " + filepath);
 #endif
 				return;
 			}
 		
 #if DEBUG_LOG
-		Debug.Log("DEBUG: TileDownloader.LoadTiles: file: " + filepath);
+			Debug.Log("DEBUG: TileDownloader.LoadTiles: file: " + filepath);
 #endif
 		
 			XmlSerializer xs = new XmlSerializer(tiles.GetType());

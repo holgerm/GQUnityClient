@@ -2279,11 +2279,7 @@ public class actions : MonoBehaviour {
 		
 		www = new WWW(url);
 
-
-		Debug.Log("test");
 		StartCoroutine(waitforAudio(nqa));
-
-
 	}
 
 	void showmessage (QuestAction action) {

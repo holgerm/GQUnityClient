@@ -16,7 +16,6 @@ using System.Xml.Serialization;
 using System.Text;
 using System.Globalization;
 using GQ.Client.Conf;
-using System.Diagnostics;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -443,7 +442,7 @@ public class page_map : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Updates the map marker in quest. Used within Quests and NOT in the App Foyer (altenative to quest list).
+	/// Updates the map marker within Quests and NOT in the App Foyer (altenative to quest list).
 	/// </summary>
 	public void updateMapMarkerInQuest () {
 
@@ -490,14 +489,14 @@ public class page_map : MonoBehaviour {
 				if ( markerImage != null )
 					createMarker(qrh, qrh.getMarkerImage().texture);
 				else
-					UnityEngine.Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
+					Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
 				
 			}
 		}
 	}
 
 	/// <summary>
-	/// Updates the map marker in quest. Used in the App Foyer (altenative to quest list) and NOT within Quests.
+	/// Updates the map marker in the App Foyer (altenative to quest list) and NOT within Quests.
 	/// </summary>
 	public void updateMapMarkerInFoyer () {
 
@@ -505,9 +504,9 @@ public class page_map : MonoBehaviour {
 
 			if ( qrh.category != null && qrh.category != "" ) {
 
-				foreach ( CategoryInfo mcs in ConfigurationManager.Current.markers ) {
+				foreach ( CategoryInfo catInfo in ConfigurationManager.Current.markers ) {
 
-					if ( mcs.ID == qrh.category ) {
+					if ( catInfo.ID == qrh.category ) {
 
 						if ( qrh.renderer == null ) {
 							// Lazy initialization of marker:
@@ -516,10 +515,10 @@ public class page_map : MonoBehaviour {
 							if ( markerImage != null )
 								createMarker(qrh, qrh.getMarkerImage().texture);
 							else
-								UnityEngine.Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
+								Debug.LogWarning("No marker found for hotspot " + qrh.hotspot.id);
 						}
 
-						qrh.renderer.enabled = mcs.showOnMap;
+						qrh.visible = catInfo.showOnMap;
 					}
 				}
 			}
@@ -564,7 +563,7 @@ public class page_map : MonoBehaviour {
 		
 				GameObject waypoint = new GameObject();
 				
-				Marker m1 = map.CreateMarker<Marker>("", new double[2] {
+				Marker m1 = map.CreateMarker<Marker>("Marker", new double[2] {
 					lat,
 					lon
 				}, waypoint);
@@ -672,18 +671,18 @@ public class page_map : MonoBehaviour {
 			go.AddComponent<CameraFacingBillboard>().Axis = Vector3.up;
 		
 			// Instantiate
-			GameObject markerGO;
-			markerGO = Instantiate(go) as GameObject;
-			qrh.renderer = markerGO.GetComponent<MeshRenderer>();
+//			GameObject markerGO;
+//			markerGO = Instantiate(go) as GameObject;
+			qrh.renderer = go.GetComponent<MeshRenderer>();
 		
 			// CreateMarker(Name,longlat,prefab)
 			map.CreateMarker<Marker>(qrh.hotspot.getAttribute("name"), new double[2] {
 				qrh.lat,
 				qrh.lon
-			}, markerGO);
+			}, go);
 		
 			// Destroy Prefab
-			DestroyImmediate(go);
+//			DestroyImmediate(go);
 		
 			if ( !qrh.visible ) {
 				qrh.renderer.enabled = false;

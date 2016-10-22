@@ -32,7 +32,6 @@ public class QuestConditionComparer {
 	public bool isFullfilled (string type) {
 
 		if ( type == "eq" ) {
-			Debug.Log("COmpare eq");
 
 			if ( stringcomponents().Count > 1 ) {
 				bool equals = true;
@@ -51,20 +50,12 @@ public class QuestConditionComparer {
 						}
 
 					}
-					Debug.Log("  current: " + current + ", equals: " + equals);
-
 				}
-				Debug.Log("  alltogether equals: " + equals);
-
 				return equals;
 			}
 			else {
-				Debug.Log("  alltogether equals: false");
-
 				return false;
-
 			}
-
 		}
 		else
 		if ( type == "lt" ) {

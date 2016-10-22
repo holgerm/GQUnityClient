@@ -26,27 +26,29 @@ namespace GQ.Editor.Building {
 
 		private static string PRODUCTS_DIR = "Production/products/";
 		private static string PRODUCT_ASSETS_DIR = "Assets/Editor/products/";
-		private static Dictionary<BuildTarget, List<int>> appIconSizes = new Dictionary<BuildTarget, List<int>>() { { 
+		private static Dictionary<BuildTarget, List<int>> appIconSizes = new Dictionary<BuildTarget, List<int>>() {
+			{ 
 				BuildTarget.Android, 
 				new List<int>() {
-					192,
-						144,
-					96,
-						72,
-					48,
-						36
+						192,
+					144,
+						96,
+					72,
+						48,
+					36
 				}
-			}, { 
+			},
+			{ 
 				BuildTarget.iOS, 
 				new List<int>() {
-					180,
-						152,
-					144,
-						120,
-					114,
-						76,
-					72,
-						57
+						180,
+					152,
+						144,
+					120,
+						114,
+					76,
+						72,
+					57
 				}
 			}
 		};
@@ -216,6 +218,8 @@ namespace GQ.Editor.Building {
 			infoPlist.root.SetString("NSCameraUsageDescription", "Photos can be used in interactive quests.");
 			infoPlist.root.SetString("NSPhotoLibraryUsageDescription", "In interactive quests photos that you take may be stored on your phone.");
 			infoPlist.WriteToFile(infoPath);
+
+			Debug.Log("Build for iOS: PList enhanced by usage strings about access rights.");
 		}
 	
 	}

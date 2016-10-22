@@ -1138,7 +1138,7 @@ public class questdatabase : MonoBehaviour {
 		}
 		
 		if ( q == null ) {
-//			Debug.Log ("Problem 1 id: " + id);
+			Debug.Log("StartQuest not lokal - id: " + id);
 			q = new Quest();
 			q.id = id;
 			downloadQuest(q);
