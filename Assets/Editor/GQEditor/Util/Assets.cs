@@ -18,23 +18,45 @@ namespace GQ.Editor.Util {
 
 		public static string AbsolutePath (string relativeAssetPath) {
 			string projectParentPath = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
-			return Files.CombinePath(projectParentPath, relativeAssetPath);
+			if ( !relativeAssetPath.StartsWith(projectParentPath) )
+				return Files.CombinePath(projectParentPath, relativeAssetPath);
+			else
+				return relativeAssetPath;
+		}
+
+		public static string RelativeAssetPath (string path) {
+			if ( path.StartsWith(Application.dataPath) ) {
+				string projectParentPath = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
+				return path.Substring(projectParentPath.Length + 1);
+			}
+			else
+				return path;
 		}
 
 		public static bool CopyAssetsDir (string fromDir, string toDir) {
 			bool copied = true;
 
 			DirectoryInfo fromDirInfo = new DirectoryInfo(fromDir);
+
 			foreach ( FileInfo file in fromDirInfo.GetFiles() ) {
 				if ( !file.Name.StartsWith(".") && !file.Name.EndsWith(".meta") ) {
 					string fromFilePath = Files.CombinePath(fromDir, file.Name);
 					string toFilePath = Files.CombinePath(toDir, file.Name);
+
 					copied &= AssetDatabase.CopyAsset(fromFilePath, toFilePath);
 				}
 			}
 
+			foreach ( DirectoryInfo dir in fromDirInfo.GetDirectories() ) {
+				string subDirFrom = Files.CombinePath(fromDir, dir.Name);
+				string subDirTo = Files.CombinePath(toDir, dir.Name);
+
+				AssetDatabase.CreateFolder(toDir, dir.Name);
+				copied &= CopyAssetsDir(subDirFrom, subDirTo);
+			}
+
 			AssetDatabase.Refresh();
-				
+
 			return copied;
 		}
 
