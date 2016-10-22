@@ -162,6 +162,8 @@ namespace GQTests.Editor.Building {
 			string idFoundInManifest = ProductManager.Extract_ID_FromXML_Watermark(ProductManager.ANDROID_MANIFEST_PATH);
 			Assert.AreEqual("product1", idFoundInManifest);
 
+
+
 			// Act:
 			testPM.SetProductForBuild("product3");
 

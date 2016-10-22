@@ -230,8 +230,8 @@ namespace GQ.Editor.Building {
 
 			// copy AndroidManifest (additionally) to plugins/android directory:
 			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
-			string productAndroidManifestFilePath = Files.CombinePath(productDirPath, ProductSpec.ANDROID_MANIFEST);
-			AssetDatabase.CopyAsset(productAndroidManifestFilePath, ANDROID_MANIFEST_PATH);
+			string productAndroidManifestFilePath = Files.CombinePath(BuildExportPath, ProductSpec.ANDROID_MANIFEST);
+			AssetDatabase.MoveAsset(productAndroidManifestFilePath, ANDROID_MANIFEST_PATH);
 
 			AssetDatabase.Refresh();
 		}

@@ -175,7 +175,6 @@ namespace GQ.Editor.Building {
 			bool appIconFound = false;
 			bool splashScreenFound = false;
 			bool topLogoFound = false;
-			bool androidManifestFound = false;
 
 			// Directory must exist:
 			DirectoryInfo productDir = new DirectoryInfo(Dir);
@@ -208,20 +207,6 @@ namespace GQ.Editor.Building {
 					topLogoFound = true;// TODO do more detailed checks here
 					continue;
 				}
-
-				// AndroidManifest.xml
-				if ( "AndroidManifest.xml".Equals(file.Name) ) {
-					androidManifestFound = true;
-					string foundID = ProductManager.Extract_ID_FromXML_Watermark(file.FullName);
-					if ( foundID == null ) {
-						StoreError("Android Manifest misses a product watermark.");
-					}
-					else {
-						if ( !Id.Equals(foundID) )
-							StoreError("Android Manifest watermark (" + foundID + ") does not correspond to this product (" + Id + ").");
-						continue;
-					}
-				}
 			} // end foreach file
 
 			if ( !productJSONFound ) {
@@ -238,10 +223,6 @@ namespace GQ.Editor.Building {
 
 			if ( !topLogoFound ) {
 				StoreError("No TopLogo.jpg file found.");
-			}
-
-			if ( !androidManifestFound ) {
-				StoreError("No AndroidManifest.xml file found.");
 			}
 
 			isValid &= Errors.Count == 0;
