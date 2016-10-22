@@ -9232,7 +9232,7 @@ MonoBehaviour:
   defaultLatitude: 8
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
-  useMapOffline: 1
+  useMapOffline: 0
   hasMenuWithinQuests: 1
   appVersion: 1
   subversionNumber: 16.10
