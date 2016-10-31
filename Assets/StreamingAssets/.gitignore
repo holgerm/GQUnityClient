@@ -1,9 +1,5 @@
-/prepackaged/
-/prepackaged.meta
-/Marktstrasse.mp4
-*.mp4.meta
-*.mp4
-/predeployed/
-/predeployed.meta
-/mapTiles/
-/mapTiles.meta
+# Ignore everything
+/*
+
+# But not these files...
+!.gitignore
