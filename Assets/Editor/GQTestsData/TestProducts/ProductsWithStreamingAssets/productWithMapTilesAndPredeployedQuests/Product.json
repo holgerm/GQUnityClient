@@ -1,7 +1,7 @@
 
 {
-    "id" : "productWithoutMarkers",
-    "name" : "Product without markers tests that the markers dir is not kept from other products",
+    "id" : "productWithMapTilesAndPredeployedQuests",
+    "name" : "Product with Streaming Assets",
     "portal" : 333,
     "autoStartQuestID" : 0,
     "autostartIsPredeployed" : false,
