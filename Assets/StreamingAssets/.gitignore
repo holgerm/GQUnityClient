@@ -1,5 +1,7 @@
-# Ignore everything
+# This file should be in folder Assets/StreamingAssets
+
+# Ingore all contents of StreamingAssets folder - they will be created by preparing a product build using the GQ Editor View
 /*
 
-# But not these files...
+# except this gitignore file:
 !.gitignore
