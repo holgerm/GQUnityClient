@@ -133,12 +133,19 @@ namespace GQ.Editor.Building {
 
 					_testInstance._buildExportPath = 
 						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "ConfigAssets", "Resources");
-					
+					if ( !Directory.Exists(_testInstance.BuildExportPath) )
+						Directory.CreateDirectory(_testInstance.BuildExportPath);
+
+					string androidPluginDirPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android");
 					_testInstance.ANDROID_MANIFEST_PATH = 
-						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android", "AndroidManifest.xml");
+						Files.CombinePath(androidPluginDirPath, "AndroidManifest.xml");
+					if ( !Directory.Exists(androidPluginDirPath) )
+						Directory.CreateDirectory(androidPluginDirPath);
 
 					_testInstance.STREAMING_ASSET_PATH = 
 						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "StreamingAssets");
+					if ( !Directory.Exists(_testInstance.STREAMING_ASSET_PATH) )
+						Directory.CreateDirectory(_testInstance.STREAMING_ASSET_PATH);
 				}
 				return _testInstance;
 			}
