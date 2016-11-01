@@ -59,9 +59,9 @@ public class QuestPage {
 	[XmlElement("onFail")]
 	public QuestTrigger
 		onFailure;
-	//	[XmlElement("onRead")]
-	//	public QuestTrigger
-	//		onRead;
+	[XmlElement("onRead")]
+	public QuestTrigger
+		onRead;
 	public string state;
 	public string result;
 
@@ -203,13 +203,16 @@ public class QuestPage {
 				qa.deserializeAttributes(id, redo);
 			}
 		}
+		if ( onRead != null ) {
+			foreach ( QuestAction qa in onRead.actions ) {
+				qa.deserializeAttributes(id, redo);
+			}
+		}
 //		}
 	}
 
 	public bool hasActionInChildren (string type1) {
 		
-		bool b = false;
-
 		if ( onTap != null && onTap.hasActionInChildren(type1) ) {
 			return true;
 		}
@@ -229,9 +232,12 @@ public class QuestPage {
 		if ( onFailure != null && onFailure.hasActionInChildren(type1) ) {
 			return true;
 		}
+		else
+		if ( onRead != null && onRead.hasActionInChildren(type1) ) {
+			return true;
+		}
 		
-		return b;
-		
+		return false;
 	}
 
 }

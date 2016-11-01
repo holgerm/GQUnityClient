@@ -249,7 +249,7 @@ namespace GQ.Client.UI.Pages {
 			nextbutton.interactable = true;
 			nextButtontext.text = "OK";
 
-			// page.onRead.Invoke();
+			page.onRead.Invoke();
 		}
 
 	}
