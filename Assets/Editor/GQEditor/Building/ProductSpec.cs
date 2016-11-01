@@ -10,14 +10,17 @@ using System.Text;
 namespace GQ.Editor.Building {
 
 	/// <summary>
-	/// The Product class represents a product specifiation of our app at edit time (not runtime!). 
+	/// The ProductSpec class represents a product specifiation of our app at edit time (not runtime!). 
 	/// 
-	/// Each Product instance refers to image files and resources directly 
+	/// Each ProductSpec instance refers to image files and resources directly 
 	/// and to all textual parameters via a Config object. Product instances are used by the ProductManager and can be edited in the ProductEditor view.
 	/// 
 	/// A product is backed on file by diverse graphic files and a configuration file (Product.json). 
 	/// These files reside in one folder (the product folder) which can have an arbitrary name. 
-	/// You create a Product instance by calling the Constructor with the product folder path as argument.
+	/// 
+	/// You create a ProductSpec instance by calling the Constructor with the product folder path as argument.
+	/// 
+	/// The ProductSpec is NOT the Build Setting, instead you use a ProductSpec to create the current build setting.
 	/// </summary>
 	public class ProductSpec {
 
@@ -76,6 +79,14 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		internal const string STREAMING_ASSETS = "StreamingAssets";
+
+		public string StreamingAssetPath {
+			get {
+				return Files.CombinePath(Dir, STREAMING_ASSETS);
+			}
+		}
+
 		/// <summary>
 		/// Gets the path to the config file Product.json.
 		/// </summary>
@@ -112,7 +123,7 @@ namespace GQ.Editor.Building {
 		/// </summary>
 		/// <param name="id">Identifier.</param>
 		/// <param name="dir">Dir.</param>
-		internal ProductSpec (string dirPath) {
+		public ProductSpec (string dirPath) {
 			// Check path:
 			if ( !Directory.Exists(dirPath) )
 				throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
@@ -175,6 +186,7 @@ namespace GQ.Editor.Building {
 			bool appIconFound = false;
 			bool splashScreenFound = false;
 			bool topLogoFound = false;
+			bool androidManifestFound = false;
 
 			// Directory must exist:
 			DirectoryInfo productDir = new DirectoryInfo(Dir);
@@ -207,6 +219,20 @@ namespace GQ.Editor.Building {
 					topLogoFound = true;// TODO do more detailed checks here
 					continue;
 				}
+
+				// AndroidManifest.xml
+				if ( "AndroidManifest.xml".Equals(file.Name) ) {
+					androidManifestFound = true;
+					string foundID = ProductManager.Extract_ID_FromXML_Watermark(file.FullName);
+					if ( foundID == null ) {
+						StoreError("Android Manifest misses a product watermark.");
+					}
+					else {
+						if ( !Id.Equals(foundID) )
+							StoreError("Android Manifest watermark (" + foundID + ") does not correspond to this product (" + Id + ").");
+						continue;
+					}
+				}
 			} // end foreach file
 
 			if ( !productJSONFound ) {
@@ -223,6 +249,10 @@ namespace GQ.Editor.Building {
 
 			if ( !topLogoFound ) {
 				StoreError("No TopLogo.jpg file found.");
+			}
+
+			if ( !androidManifestFound ) {
+				StoreError("No AndroidManifest.xml file found.");
 			}
 
 			isValid &= Errors.Count == 0;

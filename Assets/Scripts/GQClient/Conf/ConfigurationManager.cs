@@ -18,7 +18,7 @@ namespace GQ.Client.Conf {
 	/// </summary>
 	public class ConfigurationManager : MonoBehaviour {
 
-		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources/";
+		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
 		public const string RUNTIME_PRODUCT_FILE = RUNTIME_PRODUCT_DIR + "product";
 		public const string CONFIG_FILE = "Product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";

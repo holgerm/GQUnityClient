@@ -125,7 +125,7 @@ namespace GQ.Editor.UI {
 			EditorGUI.BeginDisabledGroup(selectedProductName.Equals(buildName));
 			if ( GUILayout.Button("Prepare Build") ) {
 				if ( !buildName.Equals(selectedProductName) )
-					pm.SetProductForBuild(selectedProductName);
+					pm.PrepareProductForBuild(selectedProductName);
 			}
 			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();

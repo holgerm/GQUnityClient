@@ -33,7 +33,7 @@ namespace GQ.Editor.Util {
 				return path;
 		}
 
-		public static bool CopyAssetsDir (string fromDir, string toDir) {
+		public static bool CopyAssetsDir (string fromDir, string toDir, bool recursive = true) {
 			bool copied = true;
 
 			DirectoryInfo fromDirInfo = new DirectoryInfo(fromDir);
@@ -47,13 +47,14 @@ namespace GQ.Editor.Util {
 				}
 			}
 
-			foreach ( DirectoryInfo dir in fromDirInfo.GetDirectories() ) {
-				string subDirFrom = Files.CombinePath(fromDir, dir.Name);
-				string subDirTo = Files.CombinePath(toDir, dir.Name);
+			if ( recursive )
+				foreach ( DirectoryInfo dir in fromDirInfo.GetDirectories() ) {
+					string subDirFrom = Files.CombinePath(fromDir, dir.Name);
+					string subDirTo = Files.CombinePath(toDir, dir.Name);
 
-				AssetDatabase.CreateFolder(toDir, dir.Name);
-				copied &= CopyAssetsDir(subDirFrom, subDirTo);
-			}
+					AssetDatabase.CreateFolder(toDir, dir.Name);
+					copied &= CopyAssetsDir(subDirFrom, subDirTo);
+				}
 
 			AssetDatabase.Refresh();
 
@@ -66,11 +67,20 @@ namespace GQ.Editor.Util {
 		/// </summary>
 		/// <returns><c>true</c>, if asset folder was cleared, i.e. if no file or directory remains, <c>false</c> otherwise.</returns>
 		/// <param name="pathToFolder">Path to folder.</param>
-		public static bool ClearAssetFolder (string pathToFolder) {
+		/// <param name="createIfNeeded">If true, an empty folder will be created if it not already exists.</param>
+		public static bool ClearAssetFolder (string pathToFolder, bool createIfNeeded = false) {
 			bool cleared = true;
 
-			if ( !Directory.Exists(pathToFolder) )
-				return cleared;
+			if ( !Directory.Exists(pathToFolder) ) {
+				if ( createIfNeeded ) {
+					DirectoryInfo parentInfo = Directory.GetParent(pathToFolder);
+					string dirName = Path.GetDirectoryName(pathToFolder);
+					Assets.CreateSubfolder(parentInfo.FullName, dirName);
+				}
+				else
+					return cleared;
+			}
+
 
 			// first delete all files / file assets:
 			foreach ( string file in Directory.GetFiles(pathToFolder) ) {
@@ -117,10 +127,7 @@ namespace GQ.Editor.Util {
 			while ( basePath.EndsWith("/") ) {
 				basePath = basePath.Substring(0, basePath.Length - 1);
 			}
-			string guid = AssetDatabase.CreateFolder(basePath, subfolderName);
-//			AssetDatabase.Refresh();
-
-			return guid;
+			return AssetDatabase.CreateFolder(basePath, subfolderName);
 		}
 
 	}

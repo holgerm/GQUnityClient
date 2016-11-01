@@ -11,6 +11,7 @@ using System.Collections;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using GQ.Editor.Util;
+using GQTests;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
@@ -55,7 +56,29 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		public const string ANDROID_MANIFEST_PATH = "Assets/Plugins/Android/AndroidManifest.xml";
+
+		public string _ANDROID_MANIFEST_PATH = "Assets/Plugins/Android/AndroidManifest.xml";
+
+		public string ANDROID_MANIFEST_PATH {
+			get {
+				return _ANDROID_MANIFEST_PATH;
+			}
+			private set {
+				_ANDROID_MANIFEST_PATH = value;
+			}
+		}
+
+
+		public string _STREAMING_ASSET_PATH = "Assets/StreamingAssets";
+
+		public string STREAMING_ASSET_PATH {
+			get {
+				return _STREAMING_ASSET_PATH;
+			}
+			private set {
+				_STREAMING_ASSET_PATH = value;
+			}
+		}
 
 		#endregion
 
@@ -76,7 +99,7 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		public ProductSpec getProduct (string productID) {
+		public ProductSpec GetProduct (string productID) {
 			ProductSpec found = null;
 
 			if ( Instance._productDict.TryGetValue(productID, out found) )
@@ -101,6 +124,26 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		static private ProductManager _testInstance;
+
+		public static ProductManager TestInstance {
+			get {
+				if ( _testInstance == null ) {
+					_testInstance = new ProductManager();
+
+					_testInstance._buildExportPath = 
+						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "ConfigAssets", "Resources");
+					
+					_testInstance.ANDROID_MANIFEST_PATH = 
+						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android", "AndroidManifest.xml");
+
+					_testInstance.STREAMING_ASSET_PATH = 
+						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "StreamingAssets");
+				}
+				return _testInstance;
+			}
+		}
+
 		private ProductManager () {
 			_errors = new List<string>();
 			initProductDictionary();
@@ -108,6 +151,7 @@ namespace GQ.Editor.Building {
 
 		private void initProductDictionary () {
 			_productDict = new Dictionary<string, ProductSpec>();
+			_currentProduct = null;
 
 			IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
 
@@ -182,6 +226,17 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		private ProductSpec _currentProduct;
+
+		public ProductSpec CurrentProduct {
+			get {
+				return _currentProduct;
+			}
+			private set {
+				_currentProduct = value;
+			}
+		}
+
 		/// <summary>
 		/// Sets the product for build, i.e. files are copied from the product dir to the client configuration dir. 
 		/// E.g. for 'wcc' the product dir is in 'Assets/Editor/products/wcc'. 
@@ -195,15 +250,18 @@ namespace GQ.Editor.Building {
 		/// 
 		/// </summary>
 		/// <param name="productID">Product I.</param>
-		public void SetProductForBuild (string productID) {
-			if ( !ProductSpec.IsValidProductName(productID) ) {
-				throw new ArgumentException("Invalid product id: " + productID);
-			}
-
+		public void PrepareProductForBuild (string productID) {
+			
 			string productDirPath = Files.CombinePath(ProductsDirPath, productID);
 
 			if ( !Directory.Exists(productDirPath) ) {
-				throw new ArgumentException("Product can not be build , since it does not exist: " + productID);
+				throw new ArgumentException("Product can not be build , since its Spec does not exist: " + productID);
+			}
+
+			ProductSpec product = new ProductSpec(productDirPath);
+
+			if ( !product.IsValid() ) {
+				throw new ArgumentException("Invalid product: " + product.Id + "\n" + product.AllErrorsAsString());
 			}
 
 			// clear build folder:
@@ -213,27 +271,36 @@ namespace GQ.Editor.Building {
 
 			Assets.ClearAssetFolder(BuildExportPath); 
 
-			Assets.CopyAssetsDir(productDirPath, BuildExportPath);
+			Assets.CopyAssetsDir(productDirPath, BuildExportPath, false);
 
 			DirectoryInfo productDirInfo = new DirectoryInfo(productDirPath);
 
 			foreach ( DirectoryInfo dir in productDirInfo.GetDirectories() ) {
-				if ( dir.Name.StartsWith("_") )
+				if ( dir.Name.StartsWith("_") || dir.Name.Equals("StreamingAssets") )
 					continue;
 				
 				Assets.CreateSubfolder(BuildExportPath, dir.Name);
 
-				string originPath = Files.CombinePath(productDirPath, dir.Name);
-				string targetPath = Files.CombinePath(BuildExportPath, dir.Name);
-				Assets.CopyAssetsDir(originPath, targetPath);
+				Assets.CopyAssetsDir(
+					Files.CombinePath(productDirPath, dir.Name), 
+					Files.CombinePath(BuildExportPath, dir.Name));
 			}
 
 			// copy AndroidManifest (additionally) to plugins/android directory:
 			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
-			string productAndroidManifestFilePath = Files.CombinePath(BuildExportPath, ProductSpec.ANDROID_MANIFEST);
-			AssetDatabase.MoveAsset(productAndroidManifestFilePath, ANDROID_MANIFEST_PATH);
+			AssetDatabase.MoveAsset(Files.CombinePath(BuildExportPath, ProductSpec.ANDROID_MANIFEST), ANDROID_MANIFEST_PATH);
+
+			// copy StreamingAssets:
+			Assets.ClearAssetFolder(STREAMING_ASSET_PATH, true);
+			if ( Directory.Exists(product.StreamingAssetPath) ) {
+				Assets.CopyAssetsDir(
+					product.StreamingAssetPath, 
+					STREAMING_ASSET_PATH);
+			}
 
 			AssetDatabase.Refresh();
+
+			CurrentProduct = product;
 		}
 
 
@@ -273,6 +340,8 @@ namespace GQ.Editor.Building {
 		}
 
 		public static string Extract_ID_FromXML_Watermark (string filepath) {
+			if ( !File.Exists(filepath) )
+				return null;
 			string xmlText = File.ReadAllText(filepath);
 			Match match = Regex.Match(xmlText, @"<!-- product id: ([-a-zA-Z0-9_]+) -->");
 			if ( match.Success )

@@ -144,8 +144,6 @@ namespace GQTests.Editor.Util {
 
 		private void AssertThatAllGivenAssetsExistInDir (string dir) {
 
-			Debug.Log("CHECKING_DIR: " + dir);
-
 			DirectoryInfo givenAssetsDir = new DirectoryInfo(GIVEN_ASSETS_DIR);
 			foreach ( FileInfo givenFile in givenAssetsDir.GetFiles() ) {
 				if ( givenFile.Name.EndsWith(".meta") )
