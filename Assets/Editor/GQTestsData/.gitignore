@@ -1,2 +1,5 @@
-/TestBuildExport/
-/TestBuildExport.meta
+# This file should be in folder Assets/Editor/GQTestData
+
+# Ingore Test output folder - will be created on clients when running tests:
+/Output/
+/Output.meta
