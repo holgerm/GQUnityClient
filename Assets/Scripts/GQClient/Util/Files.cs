@@ -207,6 +207,21 @@ namespace GQ.Util {
 
 		#endif
 
+		#region Directory Features
+
+		public static bool IsEmptyDir (string dirPath) {
+			
+			if ( !Directory.Exists(dirPath) )
+				return false;
+			
+			string[] files = Directory.GetFiles(dirPath);
+			string[] dirs = Directory.GetDirectories(dirPath);
+			return (files.Length == 0 && dirs.Length == 0);
+		}
+
+		#endregion
+
+
 	}
 
 
@@ -227,5 +242,6 @@ namespace GQ.Util {
 		}
 
 	}
+
 
 }

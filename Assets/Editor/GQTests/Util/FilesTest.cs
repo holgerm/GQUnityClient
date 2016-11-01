@@ -147,6 +147,24 @@ namespace GQTests.Util {
 
 		#endregion
 
+		#region Directory Features
+
+		[Test]
+		public void IsDirEmpty () {
+			// Arrange:
+			string emptyDirPath = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Origins/Empty";
+			string nonEmptyDirPath = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Origins/SomeFiles";
+			string nonExistingDirPath = GQAssert.TEST_DATA_BASE_DIR + "FilesTest/Origins/NonExistingDirectory";
+			Assert.That(!Directory.Exists(nonExistingDirPath), "ERROR in Test Data. This directory should not exist. " + nonExistingDirPath);
+
+			// Assert:
+			Assert.That(Files.IsEmptyDir(emptyDirPath), "Empty directory should have been detected correctly.");
+			Assert.That(!Files.IsEmptyDir(nonEmptyDirPath), "Non-empty directory should have been detected correctly.");
+			Assert.That(!Files.IsEmptyDir(nonExistingDirPath), "Non-existing directory should have not been detected as empty dir.");
+		}
+
+		#endregion
+
 		#region Copy Directory
 
 		[Test]
