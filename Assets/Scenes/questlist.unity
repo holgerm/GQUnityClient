@@ -9201,7 +9201,7 @@ MonoBehaviour:
   cloudQuestsVisible: 1
   showcloudquestsimmediately: 0
   downloadAllCloudQuestOnStart: 0
-  localQuestsDeletable: 1
+  localQuestsDeletable: 0
   showtextinloadinglogo: 1
   showinternetconnectionmessage: 0
   defaultlanguage: system
@@ -10168,7 +10168,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
