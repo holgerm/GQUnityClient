@@ -51,7 +51,7 @@ public class QuestHotspot {
 		return "";
 		
 	}
-	
+
 	public bool hasAttribute (string k) {
 		
 		bool h = false;
@@ -104,12 +104,12 @@ public class QuestHotspot {
 								
 					string filename = "files/" + splitted[splitted.Length - 1];
 								
-					int i = 0;
-					while ( questdb.loadedfiles.Contains(filename) ) {
-						i++;
-						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
-									
-					}
+//					int i = 0;
+//					while ( questdb.loadedfiles.Contains(filename) ) {
+//						i++;
+//						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
+//									
+//					}
 								
 					questdb.loadedfiles.Add(filename);
 								

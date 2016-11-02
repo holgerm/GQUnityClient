@@ -116,14 +116,14 @@ public class QuestPage {
 
 					string filename = "files/" + splitted[splitted.Length - 1];
 
-					int i = 0;
-					while ( questdb.loadedfiles.Contains(filename) ) {
-						i++;
-						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
-						
-					}
-
-					questdb.loadedfiles.Add(filename);
+//					int i = 0;
+//					while ( questdb.loadedfiles.Contains(filename) ) {
+//						i++;
+//						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
+//						
+//					}
+//
+//					questdb.loadedfiles.Add(filename);
 
 					if ( !Application.isWebPlayer ) {
 				
