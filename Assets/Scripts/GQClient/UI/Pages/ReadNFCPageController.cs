@@ -48,41 +48,40 @@ namespace GQ.Client.UI.Pages {
 
 			if ( page.getAttribute("image") != null && page.getAttribute("image") != "" ) {
 
-				if (
-					page.getAttribute("image").StartsWith("http://") ||
-					page.getAttribute("image").StartsWith("https://") ) {
+				if ( page.getAttribute("image").StartsWith("http://") ||
+				     page.getAttribute("image").StartsWith("https://") ) {
 
-					www = new WWW(page.getAttribute("image"));
+					string imageURL = page.getAttribute("image");
+					www = new WWW(imageURL);
 
 					StartCoroutine(waitforImage());
 
-				}
-				else
-				if ( page.getAttribute("image").StartsWith("@_") ) {
-				
-					foreach ( QuestRuntimeAsset qra in questactions.photos ) {
-					
-						if ( qra.key == page.getAttribute("image") ) {
-
-							image.texture = qra.texture;
-							float myX = (float)qra.texture.width;
-							float myY = (float)qra.texture.height;
-							float scaler = myY / 604f;
-							myX = myX / scaler;
-							myY = 604f;
-
-							image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX, myY);
-							
-						}
-					}
 				}
 				else {
+					if ( page.getAttribute("image").StartsWith("@_") ) {
+				
+						foreach ( QuestRuntimeAsset qra in questactions.photos ) {
+					
+							if ( qra.key == page.getAttribute("image") ) {
 
-					www = new WWW(pre + "" + page.getAttribute("image"));
-					StartCoroutine(waitforImage());
+								image.texture = qra.texture;
+								float myX = (float)qra.texture.width;
+								float myY = (float)qra.texture.height;
+								float scaler = myY / 604f;
+								myX = myX / scaler;
+								myY = 604f;
 
+								image.GetComponent<RectTransform>().sizeDelta = new Vector2(myX, myY);
+							}
+						}
+					}
+					else {
+						string imageURL = page.getAttribute("image");
+						www = new WWW(pre + "" + imageURL);
+
+						StartCoroutine(waitforImage());
+					}
 				}
-
 			}
 			else {
 				deactivateImage();
