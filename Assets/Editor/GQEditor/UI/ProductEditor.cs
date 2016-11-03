@@ -120,14 +120,13 @@ namespace GQ.Editor.UI {
 
 			// Prepare Build Button:
 			EditorGUILayout.BeginHorizontal();
-			// Disable build button if current build is the same as selectedProduct:
-			string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
-			EditorGUI.BeginDisabledGroup(selectedProductName.Equals(buildName));
-			if ( GUILayout.Button("Prepare Build") ) {
-				if ( !buildName.Equals(selectedProductName) )
-					pm.PrepareProductForBuild(selectedProductName);
+			{
+				string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
+				if ( GUILayout.Button("Prepare Build") ) {
+					if ( !buildName.Equals(selectedProductName) )
+						pm.PrepareProductForBuild(selectedProductName);
+				}
 			}
-			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
 
 			// Product Selection Popup:
@@ -276,58 +275,75 @@ namespace GQ.Editor.UI {
 	}
 
 
-	//	class MyAllPostprocessor : AssetPostprocessor {
-	//
-	//		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
-	//
-	//			foreach ( string str in importedAssets ) {
-	//				Debug.Log("AssetPostprocessor: Imported Asset: " + str);
-	//			}
-	//
-	//			foreach ( string str in deletedAssets ) {
-	//				Debug.Log("AssetPostprocessor: Deleted Asset: " + str);
-	//			}
-	//
-	//			for ( int i = 0; i < movedAssets.Length; i++ ) {
-	//				Debug.Log("AssetPostprocessor: Moved Asset: " + movedAssets[i] + " from: " + movedFromAssetPaths[i]);
-	//			}
-	//		}
-	//	}
-	//
-	//
-	//	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
-	//
-	//		static void OnWillCreateAsset (string assetPath) {
-	//
-	//			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
-	//		}
-	//
-	//
-	//		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
-	//
-	//			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
-	//		}
-	//
-	//
-	//		static void OnWillMoveAsset (string fromPath, string toPath) {
-	//
-	//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
-	//		}
-	//
-	//
-	//		static void OnWillSaveAssets (string[] assetPaths) {
-	//
-	//			foreach ( string str in assetPaths ) {
-	//				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
-	//			}
-	//
-	//		}
-	//
-	//
-	//		static void IsOpenForEdit (string s1, string s2) {
-	//
-	//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
-	//		}
-	//	}
+	class MyAllPostprocessor : AssetPostprocessor {
+	
+		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
+	
+			foreach ( string str in importedAssets ) {
+
+				if ( str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
+					// a product might have changed: refresh product list:
+					ProductManager.Instance.InitProductDictionary();
+					return; // doing this once is enough.
+				}
+			}
+	
+
+			foreach ( string str in deletedAssets ) {
+
+				if ( str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
+					// a product might have changed: refresh product list:
+					ProductManager.Instance.InitProductDictionary();
+					return; // doing this once is enough.
+				}
+			}
+	
+
+			for ( int i = 0; i < movedAssets.Length; i++ ) {
+
+				if ( movedAssets[i].StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) || movedFromAssetPaths[i].StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
+					// a product might have changed: refresh product list:
+					ProductManager.Instance.InitProductDictionary();
+					return; // doing this once is enough.
+				}
+			}
+		}
+	}
+
+
+	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
+	
+		static void OnWillCreateAsset (string assetPath) {
+	
+			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
+		}
+
+	
+		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
+	
+			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
+		}
+
+	
+		static void OnWillMoveAsset (string fromPath, string toPath) {
+	
+			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
+		}
+
+	
+		static void OnWillSaveAssets (string[] assetPaths) {
+	
+			foreach ( string str in assetPaths ) {
+				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
+			}
+	
+		}
+
+	
+		static void IsOpenForEdit (string s1, string s2) {
+	
+			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
+		}
+	}
 }
 

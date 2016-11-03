@@ -153,10 +153,10 @@ namespace GQ.Editor.Building {
 
 		private ProductManager () {
 			_errors = new List<string>();
-			initProductDictionary();
+			InitProductDictionary();
 		}
 
-		private void initProductDictionary () {
+		internal void InitProductDictionary () {
 			_productDict = new Dictionary<string, ProductSpec>();
 			_currentProduct = null;
 
@@ -307,7 +307,8 @@ namespace GQ.Editor.Building {
 
 			AssetDatabase.Refresh();
 
-			CurrentProduct = product;
+			CurrentProduct = product; // remember the new product for the editor time access point.
+			ConfigurationManager.reset(); // tell the runtime access point that the product has changed.
 		}
 
 

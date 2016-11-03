@@ -14,7 +14,7 @@ namespace GQ.Client.Conf {
 	/// I.e. everything the app needs for the specific product it is branded to.
 	/// 
 	/// This class will completely replace the currently still used class Configuration 
-	/// and additionally offer any information which is currently entered manuallly in the Unity Inspector View.
+	/// and additionally offer any information which is currently entered manually in the Unity Inspector View.
 	/// </summary>
 	public class ConfigurationManager : MonoBehaviour {
 
@@ -47,6 +47,10 @@ namespace GQ.Client.Conf {
 			set {
 				_current = value;
 			}
+		}
+
+		public static void reset () {
+			_current = null;
 		}
 
 		private static Sprite _topLogo;
