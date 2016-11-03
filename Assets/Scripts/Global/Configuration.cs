@@ -20,7 +20,8 @@ namespace GQ.Client.Conf {
 			Odysseum,
 			SLSSpiele,
 			Spielpunkte,
-			EduQuest
+			EduQuest,
+			Bienenlehrpfad
 		}
 
 		public ProductIDs product;
