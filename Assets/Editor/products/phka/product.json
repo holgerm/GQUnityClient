@@ -6,10 +6,16 @@
     "autoStartQuestID" : 0,
     "autostartIsPredeployed" : false,
     "downloadTimeOutSeconds" : 0,
+    "nameForQuest"           : "[null]",
     "questVisualization"     : "list",
-    "questVisualizationChangeable" : false,
-    "colorProfile"                 : null,
-    "mapboxKey"                    : null,
-    "mapboxMapID"                  : null,
-    "imprint"                      : null
+    "questVisualizationChangeable" : true,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : false,
+    "showNetConnectionWarning"     : false,
+    "colorProfile"                 : "default",
+    "mapboxKey"                    : "[null]",
+    "mapboxMapID"                  : "[null]",
+    "imprint"                      : "[null]",
+    "markers"                      : [
+    ]
 }
