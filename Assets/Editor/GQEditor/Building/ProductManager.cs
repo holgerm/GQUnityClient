@@ -164,13 +164,21 @@ namespace GQ.Editor.Building {
 			IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
 
 			foreach ( var productCandidatePath in productDirCandidates ) {
-				ProductSpec product;
-				try {
-					product = new ProductSpec(productCandidatePath);
-					_productDict.Add(product.Id, product);
-				} catch ( ArgumentException exc ) {
-					Errors.Add("Product Manager found invalid product directory: " + productCandidatePath + "\n" + exc.Message + "\n\n");
-				}
+				LoadProductSpec(productCandidatePath);
+			}
+		}
+
+		internal ProductSpec LoadProductSpec (string productCandidatePath) {
+			ProductSpec product;
+			try {
+				product = new ProductSpec(productCandidatePath);
+				if ( _productDict.ContainsKey(product.Id) )
+					_productDict.Remove(product.Id);
+				_productDict.Add(product.Id, product);
+				return product;
+			} catch ( ArgumentException exc ) {
+				Errors.Add("Product Manager found invalid product directory: " + productCandidatePath + "\n" + exc.Message + "\n\n");
+				return null;
 			}
 		}
 

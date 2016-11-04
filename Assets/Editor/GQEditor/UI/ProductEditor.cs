@@ -11,6 +11,7 @@ using GQ.Util;
 using GQ.Client.Conf;
 using GQ.Editor.Building;
 using GQ.Client.Util;
+using System.Collections.Generic;
 
 namespace GQ.Editor.UI {
 	public class ProductEditor : EditorWindow {
@@ -124,6 +125,8 @@ namespace GQ.Editor.UI {
 
 			gui4ProductEditPart();
 
+			EditorGUILayout.Space();
+
 			GUILayout.FlexibleSpace();
 
 		}
@@ -155,38 +158,65 @@ namespace GQ.Editor.UI {
 			}
 			EditorGUILayout.EndHorizontal();
 
-			// Prepare Build Button:
-			EditorGUILayout.BeginHorizontal();
-			{
-				string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
-				if ( GUILayout.Button("Prepare Build") ) {
-					pm.PrepareProductForBuild(selectedProductName);
-				}
+			if ( selectedProductIndex < 0 || selectedProductIndex >= pm.AllProductIds.Count )
+				selectedProductIndex = 0;
+			string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
+
+			GUIContent prepareBuildButtonGUIContent, availableProductsPopupGUIContent, newProductLabelGUIContent, createProductButtonGUIContent;
+
+			if ( configIsDirty ) {
+				// add tooltip to explain why these elements they are disabled:
+				string explanation = "You must Save or Revert your changes first.";
+				prepareBuildButtonGUIContent = new GUIContent("Prepare Build", explanation);
+				availableProductsPopupGUIContent = new GUIContent("Available Products:", explanation);
+				newProductLabelGUIContent = new GUIContent("New product (id):", explanation);
+				createProductButtonGUIContent = new GUIContent("Create", explanation);
 			}
-			EditorGUILayout.EndHorizontal();
+			else {
+				prepareBuildButtonGUIContent = new GUIContent("Prepare Build");
+				availableProductsPopupGUIContent = new GUIContent("Available Products:");
+				newProductLabelGUIContent = new GUIContent("New product (id):");
+				createProductButtonGUIContent = new GUIContent("Create");
+			}
 
-			// Product Selection Popup:
-			string[] productIds = pm.AllProductIds.ToArray<string>();
-			int newIndex = EditorGUILayout.Popup("Available Products:", selectedProductIndex, productIds);
-			selectProduct(newIndex);
-
-			// Create New Product row:
-			EditorGUILayout.BeginHorizontal();
-			{
-				GUILayout.Label("New product (id):");
-				newProductID = EditorGUILayout.TextField(
-					newProductID, 
-					GUILayout.Height(EditorGUIUtility.singleLineHeight));
-				bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
-				EditorGUI.BeginDisabledGroup(createButtonshouldBeDisabled);
+			using ( new EditorGUI.DisabledGroupScope((configIsDirty)) ) {
+				// Prepare Build Button:
+				EditorGUILayout.BeginHorizontal();
 				{
-					if ( GUILayout.Button("Create") ) {
-						pm.createNewProduct(newProductID);
+					if ( GUILayout.Button(prepareBuildButtonGUIContent) ) {
+						pm.PrepareProductForBuild(selectedProductName);
 					}
 				}
-				EditorGUI.EndDisabledGroup();
-			}
-			EditorGUILayout.EndHorizontal();
+				EditorGUILayout.EndHorizontal();
+
+				// Product Selection Popup:
+				string[] productIds = pm.AllProductIds.ToArray<string>();
+				// SORRY: This is to fulfill the not-so-flexible overloading scheme of Popup() here:
+				List<GUIContent> guiContentListOfProducts = new List<GUIContent>();
+				for ( int i = 0; i < productIds.Length; i++ ) {
+					guiContentListOfProducts.Add(new GUIContent(productIds[i]));
+				}
+
+				int newIndex = EditorGUILayout.Popup(availableProductsPopupGUIContent, selectedProductIndex, guiContentListOfProducts.ToArray());
+				selectProduct(newIndex);
+
+				// Create New Product row:
+				EditorGUILayout.BeginHorizontal();
+				{
+					GUILayout.Label(newProductLabelGUIContent);
+					newProductID = EditorGUILayout.TextField(
+						newProductID, 
+						GUILayout.Height(EditorGUIUtility.singleLineHeight));
+					bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
+					using ( new EditorGUI.DisabledGroupScope((createButtonshouldBeDisabled)) ) {
+						if ( GUILayout.Button(createProductButtonGUIContent) ) {
+							pm.createNewProduct(newProductID);
+						}
+					}
+				}
+				EditorGUILayout.EndHorizontal();
+
+			} // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
 		}
 
 		internal string currentBuild () {
@@ -205,10 +235,12 @@ namespace GQ.Editor.UI {
 			}
 		}
 
+		bool configIsDirty = false;
+
 		void gui4ProductDetails () {
 			GUILayout.Label("Product Details", EditorStyles.boldLabel);
 			ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
-			 
+
 			// Begin ScrollView:
 			using ( var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos /* , GUILayout.Width(100), GUILayout.Height(100) */) ) {
 				scrollPos = scrollView.scrollPosition;
@@ -265,44 +297,94 @@ namespace GQ.Editor.UI {
 							// Show only name without hover:
 							namePrefixGUIContent = new GUIContent(name + ":");
 
-						Debug.Log("Property found with proprtyType: " + curPropInfo.PropertyType.Name);
+						float valueMin, valueNeededWidth;
 
 						switch ( curPropInfo.PropertyType.Name ) {
 							case "Boolean":
 								// show checkbox:
 								EditorGUILayout.BeginHorizontal();
-								EditorGUILayout.PrefixLabel(namePrefixGUIContent);
-								EditorGUILayout.Toggle((bool)curPropInfo.GetValue(p.Config, null));
+								{
+									EditorGUILayout.PrefixLabel(namePrefixGUIContent);
+									bool oldBoolVal = (bool)curPropInfo.GetValue(p.Config, null);
+									bool newBoolVal = EditorGUILayout.Toggle(oldBoolVal);
+									if ( newBoolVal != oldBoolVal ) {
+										configIsDirty = true;
+									}
+									curPropInfo.SetValue(p.Config, newBoolVal, null);
+								}
 								EditorGUILayout.EndHorizontal();
 								break;
-							default:
-								string value = Objects.ToString(curPropInfo.GetValue(p.Config, null));
-								float valueMin, valueNeededWidth;
-								guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueNeededWidth);
+							case "String":
+								{
+									// show textfield or if value too long show textarea:
+									string oldStringVal = (string)curPropInfo.GetValue(p.Config, null);
+									oldStringVal = Objects.ToString(oldStringVal);
+									string newStringVal;
+									guiStyle.CalcMinMaxWidth(new GUIContent(oldStringVal), out valueMin, out valueNeededWidth);
 
-								if ( widthForValues < valueNeededWidth ) {
-									// show textarea if value does not fit within one line:
-									EditorGUILayout.BeginHorizontal();
-									EditorGUILayout.PrefixLabel(namePrefixGUIContent);
-									EditorGUILayout.TextArea(value, textareaGUIStyle);
-									EditorGUILayout.EndHorizontal();
-								}
-								else {
-									// show text field if value fits in one line:
-									EditorGUILayout.TextField(namePrefixGUIContent, value);
+									if ( widthForValues < valueNeededWidth ) {
+										// show textarea if value does not fit within one line:
+										EditorGUILayout.BeginHorizontal();
+										EditorGUILayout.PrefixLabel(namePrefixGUIContent);
+										newStringVal = EditorGUILayout.TextArea(oldStringVal, textareaGUIStyle);
+										newStringVal = Objects.ToString(newStringVal);
+										EditorGUILayout.EndHorizontal();
+									}
+									else {
+										// show text field if value fits in one line:
+										newStringVal = EditorGUILayout.TextField(namePrefixGUIContent, oldStringVal);
+										newStringVal = Objects.ToString(newStringVal);
+									}
+									if ( !newStringVal.Equals(oldStringVal) ) {
+										configIsDirty = true;
+									}
+									curPropInfo.SetValue(p.Config, newStringVal, null);
 								}
 								break;
+							case "Int32":
+								using ( new EditorGUI.DisabledGroupScope(curPropInfo.Name.Equals("id")) ) {
+									// id of products may not be altered.
+									if ( curPropInfo.Name.Equals("id") ) {
+										namePrefixGUIContent = new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
+									}
+									int oldIntVal = (int)curPropInfo.GetValue(p.Config, null);
+									int newIntVal = oldIntVal;
+									// show text field if value fits in one line:
+									newIntVal = EditorGUILayout.IntField(namePrefixGUIContent, oldIntVal);
+									if ( newIntVal != oldIntVal ) {
+										configIsDirty = true;
+									}
+									curPropInfo.SetValue(p.Config, newIntVal, null);
+								}
+								break;
+							case "List`1":
+								{
+									// We currently do not offer edit option for Lists! Sorry.
+									// show textfield or if value too long show textarea:
+									string oldStringVal = curPropInfo.GetValue(p.Config, null).ToString();
+									guiStyle.CalcMinMaxWidth(new GUIContent(oldStringVal), out valueMin, out valueNeededWidth);
+
+									if ( widthForValues < valueNeededWidth ) {
+										// show textarea if value does not fit within one line:
+										EditorGUILayout.BeginHorizontal();
+										EditorGUILayout.PrefixLabel(namePrefixGUIContent);
+										EditorGUILayout.TextArea(oldStringVal, textareaGUIStyle);
+										EditorGUILayout.EndHorizontal();
+									}
+									else {
+										// show text field if value fits in one line:
+										EditorGUILayout.TextField(namePrefixGUIContent, oldStringVal);
+									}
+								}
+								break;
+							default:
+								Debug.Log("Unhandled property Type: " + curPropInfo.PropertyType.Name);
+								break;
 						}
+
 					}
 				} // End Scope Disabled Group 
 			} // End Scope ScrollView 
-		}
-
-		private void createGUIElement4Value (PropertyInfo configProperty) {
-//			switch (configProperty.GetType()) {
-//				case String:
-//					
-//			}
 		}
 
 		private bool allowChanges = false;
@@ -323,12 +405,19 @@ namespace GQ.Editor.UI {
 					// siwtching allowChanges OFF:
 				}
 
-				EditorGUI.BeginDisabledGroup(!allowChanges);
+				EditorGUI.BeginDisabledGroup(!allowChanges || !configIsDirty);
 				{
 					if ( GUILayout.Button("Save") ) {
-						// TODO
 						ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
 						pm.serializeConfig(p.Config, Files.CombinePath(ProductManager.ProductsDirPath, p.Id));
+						configIsDirty = false;
+					}
+					if ( GUILayout.Button("Revert") ) {
+						ProductSpec p = pm.LoadProductSpec(pm.AllProducts.ElementAt(selectedProductIndex).Dir);
+//						Repaint();
+						GUIUtility.keyboardControl = 0;
+						GUIUtility.hotControl = 0;
+						configIsDirty = false;
 					}
 				}
 				EditorGUI.EndDisabledGroup();
@@ -407,8 +496,6 @@ namespace GQ.Editor.UI {
 			}
 			if ( str.StartsWith(ProductManager.Instance.BuildExportPath) && !str.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
 				// the build might be changed externally: signal that to the Product Editor:
-				Debug.Log("Set PE Dirty Flag due to change of " + str);
-
 				buildDirty = true;
 			}
 		}
