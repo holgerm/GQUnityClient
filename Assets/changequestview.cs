@@ -9,7 +9,8 @@ public class changequestview : MonoBehaviour {
 
 
 	void Start () {
-		gameObject.SetActive(Configuration.instance.questvisualizationchangable);
+		bool qvc = ConfigurationManager.Current.questVisualizationChangeable;
+		gameObject.SetActive(qvc);
 	}
 
 	public void switchQuestView () {
