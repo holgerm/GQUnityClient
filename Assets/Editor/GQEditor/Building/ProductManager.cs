@@ -12,6 +12,7 @@ using UnityEditor;
 using System.Text.RegularExpressions;
 using GQ.Editor.Util;
 using GQTests;
+using GQ.Editor.UI;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
@@ -307,8 +308,9 @@ namespace GQ.Editor.Building {
 
 			AssetDatabase.Refresh();
 
+			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = product; // remember the new product for the editor time access point.
-			ConfigurationManager.reset(); // tell the runtime access point that the product has changed.
+			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
 		}
 
 
@@ -322,13 +324,13 @@ namespace GQ.Editor.Building {
 
 			// set default values:
 			config.id = productID;
-			config.name = "QuestLab App " + productID;
+			config.name = "QuestMill App " + productID;
 
 			// serialize into new product folder:
 			serializeConfig(config, Files.CombinePath(ProductsDirPath, productID));
 		}
 
-		private void serializeConfig (Config config, string productDirPath) {
+		internal void serializeConfig (Config config, string productDirPath) {
 			StringBuilder sb = new StringBuilder();
 			JsonWriter jsonWriter = new JsonWriter(sb);
 			jsonWriter.PrettyPrint = true;

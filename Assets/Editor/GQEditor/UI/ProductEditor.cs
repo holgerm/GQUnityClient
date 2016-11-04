@@ -21,6 +21,30 @@ namespace GQ.Editor.UI {
 
 		internal const string WARN_ICON_PATH = "Assets/Editor/GQEditor/images/warn.png";
 
+		private static bool _buildIsDirty = false;
+
+		public static bool BuildIsDirty {
+			get {
+				return _buildIsDirty;
+			}
+			set {
+				_buildIsDirty = value;
+			}
+		}
+
+		private static ProductEditor _instance = null;
+
+		public static ProductEditor Instance {
+			get {
+				return _instance;
+			}
+			private set {
+				_instance = value;
+			}
+		}
+
+
+
 		[MenuItem("Window/QuestMill Product Editor")]
 		public static void  Init () {
 			Assembly editorAsm = typeof(UnityEditor.Editor).Assembly;
@@ -31,6 +55,7 @@ namespace GQ.Editor.UI {
 			else
 				editor = EditorWindow.GetWindow<ProductEditor>(typeof(ProductEditor));
 			editor.Show();
+			Instance = editor;
 		}
 
 		int selectedProductIndex;
@@ -38,6 +63,8 @@ namespace GQ.Editor.UI {
 		ProductManager pm;
 
 		public void OnEnable () {
+			Instance = this;
+
 			readStateFromEditorPrefs();
 			warnIcon = (Texture)AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
 
@@ -95,7 +122,10 @@ namespace GQ.Editor.UI {
 
 			gui4ProductDetails();
 
-			// TODO Editing opions for Product Details
+			gui4ProductEditPart();
+
+			GUILayout.FlexibleSpace();
+
 		}
 
 		private string newProductID = "";
@@ -108,14 +138,21 @@ namespace GQ.Editor.UI {
 			// Current Build:
 			string buildName = currentBuild();
 			EditorGUILayout.BeginHorizontal();
-			if ( buildName == null ) {
-				buildName = "missing";
-				EditorGUILayout.PrefixLabel(new GUIContent("Current Build:", warnIcon));
+			{
+				if ( buildName == null ) {
+					buildName = "missing";
+					EditorGUILayout.PrefixLabel(new GUIContent("Current Build:", warnIcon));
+				}
+				else {
+					if ( BuildIsDirty ) {
+						EditorGUILayout.PrefixLabel(new GUIContent("Current Build:", warnIcon));
+					}
+					else {
+						EditorGUILayout.PrefixLabel(new GUIContent("Current Build:"));
+					}
+				}
+				GUILayout.Label(buildName);
 			}
-			else {
-				EditorGUILayout.PrefixLabel(new GUIContent("Current Build:"));
-			}
-			GUILayout.Label(buildName);
 			EditorGUILayout.EndHorizontal();
 
 			// Prepare Build Button:
@@ -123,8 +160,7 @@ namespace GQ.Editor.UI {
 			{
 				string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
 				if ( GUILayout.Button("Prepare Build") ) {
-					if ( !buildName.Equals(selectedProductName) )
-						pm.PrepareProductForBuild(selectedProductName);
+					pm.PrepareProductForBuild(selectedProductName);
 				}
 			}
 			EditorGUILayout.EndHorizontal();
@@ -136,20 +172,24 @@ namespace GQ.Editor.UI {
 
 			// Create New Product row:
 			EditorGUILayout.BeginHorizontal();
-			GUILayout.Label("New product (id):");
-			newProductID = EditorGUILayout.TextField(
-				newProductID, 
-				GUILayout.Height(EditorGUIUtility.singleLineHeight));
-			bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
-			EditorGUI.BeginDisabledGroup(createButtonshouldBeDisabled);
-			if ( GUILayout.Button("Create") ) {
-				pm.createNewProduct(newProductID);
+			{
+				GUILayout.Label("New product (id):");
+				newProductID = EditorGUILayout.TextField(
+					newProductID, 
+					GUILayout.Height(EditorGUIUtility.singleLineHeight));
+				bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
+				EditorGUI.BeginDisabledGroup(createButtonshouldBeDisabled);
+				{
+					if ( GUILayout.Button("Create") ) {
+						pm.createNewProduct(newProductID);
+					}
+				}
+				EditorGUI.EndDisabledGroup();
 			}
-			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.EndHorizontal();
 		}
 
-		private string currentBuild () {
+		internal string currentBuild () {
 			string build = null;
 
 			try {
@@ -168,90 +208,135 @@ namespace GQ.Editor.UI {
 		void gui4ProductDetails () {
 			GUILayout.Label("Product Details", EditorStyles.boldLabel);
 			ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
+			 
+			// Begin ScrollView:
+			using ( var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos /* , GUILayout.Width(100), GUILayout.Height(100) */) ) {
+				scrollPos = scrollView.scrollPosition;
 
-			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-
-			GUI.enabled = false;
-
-			PropertyInfo[] propertyInfos = typeof(Config).GetProperties();
-
-			// get max widths for names and values:
-			float allNamesMax = 0f, allValuesMax = 0f;
-
-			foreach ( PropertyInfo curPropInfo in propertyInfos ) {
-				if ( !curPropInfo.CanRead )
-					continue;
-
-				string name = curPropInfo.Name + ":";
-				string value = Objects.ToString(curPropInfo.GetValue(p.Config, null));
-
-				float nameMin, nameMax;
-				float valueMin, valueMax;
-				GUIStyle guiStyle = new GUIStyle();
-
-				guiStyle.CalcMinMaxWidth(new GUIContent(name + ":"), out nameMin, out nameMax);
-				allNamesMax = Math.Max(allNamesMax, nameMax);
-				guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
-				allValuesMax = Math.Max(allValuesMax, valueMax);
-			}
-
-			// calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names.
-			// add left and right borders as given plus 3 for the middle:
-			float borders = new GUIStyle(GUI.skin.textField).margin.left + new GUIStyle(GUI.skin.textField).margin.horizontal + new GUIStyle(GUI.skin.textField).margin.right; 
-			// calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
-			float widthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
-			float widthForValues = position.width - (borders + widthForNames);
-
-			EditorGUIUtility.labelWidth = widthForNames;
-
-			// show all properties as textfields or textareas in fitting width:
-			foreach ( PropertyInfo curPropInfo in propertyInfos ) {
-				if ( !curPropInfo.CanRead )
-					continue;
-
-				string name = curPropInfo.Name;
-				string value = Objects.ToString(curPropInfo.GetValue(p.Config, null));
-
-				float nameMin, nameWidthNeed;
-				float valueMin, valueNeededWidth;
-				GUIStyle guiStyle = new GUIStyle();
-
-				guiStyle.CalcMinMaxWidth(new GUIContent(name + ":"), out nameMin, out nameWidthNeed);
-				guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueNeededWidth);
-
-				if ( widthForValues < valueNeededWidth ) {
-					// show textarea if value does not fit within one line:
-					if ( widthForNames < nameWidthNeed ) {
-						// show tooltip if not enough space for name:
-						EditorGUILayout.BeginHorizontal();
-						EditorGUILayout.PrefixLabel(new GUIContent(name + ":", name));
-						EditorGUILayout.TextArea(value, textareaGUIStyle);
-						EditorGUILayout.EndHorizontal();
-					}
-					else {
-						// show simply the name if it fits:
-						EditorGUILayout.BeginHorizontal();
-						EditorGUILayout.PrefixLabel(new GUIContent(name + ":"));
-						EditorGUILayout.TextArea(value, textareaGUIStyle);
-						EditorGUILayout.EndHorizontal();
-					}
-				}
-				else {
-					// show text field if value fits in one line:
-					if ( widthForNames < nameWidthNeed ) {
-						// show tooltip if not enough space for name:
-						EditorGUILayout.TextField(new GUIContent(name + ":", name), value);
-					}
-					else {
-						// show simply the name if it fits:
-						EditorGUILayout.TextField(new GUIContent(name + ":"), value);
-					}
-				}
-			}
+				using ( new EditorGUI.DisabledGroupScope((!allowChanges)) ) {
+					// ScrollView begins (optionally disabled):
 				
-			GUI.enabled = true;
-			EditorGUILayout.EndScrollView();
+					PropertyInfo[] propertyInfos = typeof(Config).GetProperties();
+
+					// get max widths for names and values:
+					float allNamesMax = 0f, allValuesMax = 0f;
+
+					foreach ( PropertyInfo curPropInfo in propertyInfos ) {
+						if ( !curPropInfo.CanRead )
+							continue;
+
+						string name = curPropInfo.Name + ":";
+						string value = Objects.ToString(curPropInfo.GetValue(p.Config, null));
+
+						float nameMin, nameMax;
+						float valueMin, valueMax;
+						GUIStyle guiStyle = new GUIStyle();
+
+						guiStyle.CalcMinMaxWidth(new GUIContent(name + ":"), out nameMin, out nameMax);
+						allNamesMax = Math.Max(allNamesMax, nameMax);
+						guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
+						allValuesMax = Math.Max(allValuesMax, valueMax);
+					}
+
+					// calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
+					// add left, middle and right borders as given:
+					float borders = new GUIStyle(GUI.skin.textField).margin.left + new GUIStyle(GUI.skin.textField).margin.horizontal + new GUIStyle(GUI.skin.textField).margin.right; 
+					// calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
+					float widthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
+					float widthForValues = position.width - (borders + widthForNames);
+
+					EditorGUIUtility.labelWidth = widthForNames;
+
+					// show all properties as textfields or textareas in fitting width:
+					foreach ( PropertyInfo curPropInfo in propertyInfos ) {
+						if ( !curPropInfo.CanRead )
+							continue;
+
+						GUIStyle guiStyle = new GUIStyle();
+
+						string name = curPropInfo.Name;
+						float nameMin, nameWidthNeed;
+						guiStyle.CalcMinMaxWidth(new GUIContent(name + ":"), out nameMin, out nameWidthNeed);
+						GUIContent namePrefixGUIContent;
+						if ( widthForNames < nameWidthNeed )
+							// Show hover over name because it is too long to be shown:
+							namePrefixGUIContent = new GUIContent(name + ":", name);
+						else
+							// Show only name without hover:
+							namePrefixGUIContent = new GUIContent(name + ":");
+
+						Debug.Log("Property found with proprtyType: " + curPropInfo.PropertyType.Name);
+
+						switch ( curPropInfo.PropertyType.Name ) {
+							case "Boolean":
+								// show checkbox:
+								EditorGUILayout.BeginHorizontal();
+								EditorGUILayout.PrefixLabel(namePrefixGUIContent);
+								EditorGUILayout.Toggle((bool)curPropInfo.GetValue(p.Config, null));
+								EditorGUILayout.EndHorizontal();
+								break;
+							default:
+								string value = Objects.ToString(curPropInfo.GetValue(p.Config, null));
+								float valueMin, valueNeededWidth;
+								guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueNeededWidth);
+
+								if ( widthForValues < valueNeededWidth ) {
+									// show textarea if value does not fit within one line:
+									EditorGUILayout.BeginHorizontal();
+									EditorGUILayout.PrefixLabel(namePrefixGUIContent);
+									EditorGUILayout.TextArea(value, textareaGUIStyle);
+									EditorGUILayout.EndHorizontal();
+								}
+								else {
+									// show text field if value fits in one line:
+									EditorGUILayout.TextField(namePrefixGUIContent, value);
+								}
+								break;
+						}
+					}
+				} // End Scope Disabled Group 
+			} // End Scope ScrollView 
 		}
+
+		private void createGUIElement4Value (PropertyInfo configProperty) {
+//			switch (configProperty.GetType()) {
+//				case String:
+//					
+//			}
+		}
+
+		private bool allowChanges = false;
+
+		void gui4ProductEditPart () {
+			GUILayout.Label("Editing Options", EditorStyles.boldLabel);
+
+			// Create New Product row:
+			EditorGUILayout.BeginHorizontal();
+			{
+
+				bool oldAllowChanges = allowChanges;
+				allowChanges = EditorGUILayout.Toggle("Allow To Edit ...", allowChanges);
+				if ( !oldAllowChanges && allowChanges ) {
+					// siwtching allowChanges ON:
+				}
+				if ( oldAllowChanges && !allowChanges ) {
+					// siwtching allowChanges OFF:
+				}
+
+				EditorGUI.BeginDisabledGroup(!allowChanges);
+				{
+					if ( GUILayout.Button("Save") ) {
+						// TODO
+						ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
+						pm.serializeConfig(p.Config, Files.CombinePath(ProductManager.ProductsDirPath, p.Id));
+					}
+				}
+				EditorGUI.EndDisabledGroup();
+
+			}
+			EditorGUILayout.EndHorizontal();
+		}
+
 
 		#endregion
 
@@ -269,81 +354,100 @@ namespace GQ.Editor.UI {
 
 			// TODO create a Product object and store it. So we can access errors and manipulate details.
 		}
-
-
-
 	}
 
 
 	class MyAllPostprocessor : AssetPostprocessor {
-	
+
+		static bool productDictionaryDirty;
+		static bool buildDirty;
+
 		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
 	
+			productDictionaryDirty = false;
+			buildDirty = false;
+
 			foreach ( string str in importedAssets ) {
 
-				if ( str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
-					// a product might have changed: refresh product list:
-					ProductManager.Instance.InitProductDictionary();
-					return; // doing this once is enough.
-				}
+				check4ExternalChanges(str);
 			}
 	
 
 			foreach ( string str in deletedAssets ) {
 
-				if ( str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
-					// a product might have changed: refresh product list:
-					ProductManager.Instance.InitProductDictionary();
-					return; // doing this once is enough.
-				}
+				check4ExternalChanges(str);
 			}
 	
 
-			for ( int i = 0; i < movedAssets.Length; i++ ) {
+			foreach ( string str in movedAssets ) {
 
-				if ( movedAssets[i].StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) || movedFromAssetPaths[i].StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
-					// a product might have changed: refresh product list:
-					ProductManager.Instance.InitProductDictionary();
-					return; // doing this once is enough.
-				}
+				check4ExternalChanges(str);
+			}
+
+
+			foreach ( string str in movedFromAssetPaths ) {
+
+				check4ExternalChanges(str);
+			}
+
+			if ( productDictionaryDirty ) {
+				ConfigurationManager.Reset();
+			}
+
+			ProductEditor.BuildIsDirty = buildDirty; 
+			if ( ProductEditor.Instance != null )
+				ProductEditor.Instance.Repaint();
+		}
+
+		private static void check4ExternalChanges (string str) {
+
+			if ( productDictionaryDirty == false && str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
+				// a product might have changed: refresh product list:
+				productDictionaryDirty = true;
+			}
+			if ( str.StartsWith(ProductManager.Instance.BuildExportPath) && !str.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
+				// the build might be changed externally: signal that to the Product Editor:
+				Debug.Log("Set PE Dirty Flag due to change of " + str);
+
+				buildDirty = true;
 			}
 		}
 	}
 
 
-	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
-	
-		static void OnWillCreateAsset (string assetPath) {
-	
-			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
-		}
-
-	
-		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
-	
-			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
-		}
-
-	
-		static void OnWillMoveAsset (string fromPath, string toPath) {
-	
-			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
-		}
-
-	
-		static void OnWillSaveAssets (string[] assetPaths) {
-	
-			foreach ( string str in assetPaths ) {
-				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
-			}
-	
-		}
-
-	
-		static void IsOpenForEdit (string s1, string s2) {
-	
-			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
-		}
-	}
+	//	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
+	//
+	//		static void OnWillCreateAsset (string assetPath) {
+	//
+	//			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
+	//		}
+	//
+	//
+	//		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
+	//
+	//			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
+	//		}
+	//
+	//
+	//		static void OnWillMoveAsset (string fromPath, string toPath) {
+	//
+	//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
+	//		}
+	//
+	//
+	//		static void OnWillSaveAssets (string[] assetPaths) {
+	//
+	//			foreach ( string str in assetPaths ) {
+	//				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
+	//			}
+	//
+	//		}
+	//
+	//
+	//		static void IsOpenForEdit (string s1, string s2) {
+	//
+	//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
+	//		}
+	//	}
 }
 
