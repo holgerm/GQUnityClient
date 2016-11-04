@@ -1,5 +1,21 @@
-{	
-	"id" : "spielpunkte",
-	"name" : "SpielPunkte",
-	"portal" : 441
+
+{
+    "id" : "spielpunkte",
+    "name" : "SpielPunkte",
+    "portal" : 441,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 0,
+    "nameForQuest"           : null,
+    "questVisualization"     : null,
+    "questVisualizationChangeable" : false,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : false,
+    "showNetConnectionWarning"     : false,
+    "colorProfile"                 : null,
+    "mapboxKey"                    : null,
+    "mapboxMapID"                  : null,
+    "imprint"                      : null,
+    "markers"                      : [
+    ]
 }
