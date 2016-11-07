@@ -9082,7 +9082,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   product: 9
   overrideProductSettingsInInspector: 0
-  portalID: 61
   autostartQuestID: 0
   autostartIsPredeployed: 0
   colorProfile: default
@@ -9235,7 +9234,7 @@ MonoBehaviour:
   useMapOffline: 0
   hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 16.10
+  subversionNumber: 16.11
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
