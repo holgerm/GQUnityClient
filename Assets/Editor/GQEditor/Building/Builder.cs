@@ -207,16 +207,18 @@ namespace GQ.Editor.Building {
 		[PostProcessBuildAttribute(1)]
 		public static void AmendUsageRightsInfosToPList_IOS_Only (BuildTarget target, string pathToBuiltProject) {
 			Debug.Log("Build done. Target was " + target.ToString() + "; build path is: " + pathToBuiltProject);
-			if ( !"iOS".Equals(target) )
+			if ( target != BuildTarget.iOS ) {
+				Debug.Log("Non iOS Build.");
 				// we only do this for iOS builds:
 				return;
+			}
 			PlistDocument infoPlist = new PlistDocument();
 			string infoPath = pathToBuiltProject + "/Info.plist";
 			infoPlist.ReadFromFile(infoPath);
-			infoPlist.root.SetString("NSPhotoLibraryUsageDescription", "FIRST CONTENT");
 			infoPlist.root.SetString("NSAppleMusicUsageDescription", "In interactive quests audio that you recorded may be stored on your phone.");
 			infoPlist.root.SetString("NSCameraUsageDescription", "Photos can be used in interactive quests.");
 			infoPlist.root.SetString("NSPhotoLibraryUsageDescription", "In interactive quests photos that you take may be stored on your phone.");
+			infoPlist.root.SetBoolean("ITSAppUsesNonExemptEncryption", false);
 			infoPlist.WriteToFile(infoPath);
 
 			Debug.Log("Build for iOS: PList enhanced by usage strings about access rights.");
