@@ -26,7 +26,6 @@ namespace GQ.Client.Conf {
 
 		public ProductIDs product;
 		public bool overrideProductSettingsInInspector = false;
-		public int portalID = 1;
 		public int autostartQuestID = 0;
 		public bool autostartIsPredeployed = false;
 		public string colorProfile = "default";
@@ -157,7 +156,6 @@ namespace GQ.Client.Conf {
 			switch ( product ) {
 				case ProductIDs.CarlBenz:
 					productName = "carlbenz";
-					portalID = 141;
 					autostartQuestID = 6088;
 					downloadTimeOutSeconds = 600;
 					colorProfile = "carlbenz";
@@ -167,7 +165,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.WikiCultureCity:
 					productName = "wcc";
-					portalID = 281;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "wcc";
@@ -179,7 +176,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.ErzbistumKoeln:
 					productName = "ebk";
-					portalID = 121;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 600;
 					colorProfile = "ebk";
@@ -191,7 +187,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.LWL:
 					productName = "lwl";
-					portalID = 402;
 					autostartQuestID = 0; // 7586;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "lwl";
@@ -201,7 +196,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.Public:
 					productName = "public";
-					portalID = 61;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "default";
@@ -213,7 +207,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.Demos:
 					productName = "demos";
-					portalID = 341;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "default";
@@ -225,7 +218,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.Odysseum:
 					productName = "odysseum";
-					portalID = 381;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "odysseum";
@@ -235,7 +227,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.SLSSpiele:
 					productName = "slspiele";
-					portalID = 421;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "default";
@@ -245,7 +236,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.EduQuest:
 					productName = "eduquest";
-					portalID = 141;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 600;
 					colorProfile = "eduquest";
@@ -257,7 +247,6 @@ namespace GQ.Client.Conf {
 					break;
 				case ProductIDs.Spielpunkte:
 					productName = "spielpunkte";
-					portalID = 441;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "default";
@@ -270,7 +259,6 @@ namespace GQ.Client.Conf {
 				case ProductIDs.Intern:
 				default:
 					productName = "intern";
-					portalID = 1;
 					autostartQuestID = 0;
 					downloadTimeOutSeconds = 60;
 					colorProfile = "default";

@@ -77,7 +77,7 @@ public class showimpressum : MonoBehaviour {
 
 	IEnumerator loadImpressum () {
 		
-		WWW www = new WWW("http://qeevee.org:9091/" + Configuration.instance.portalID + "/imprint");
+		WWW www = new WWW("http://qeevee.org:9091/" + ConfigurationManager.Current.portal + "/imprint");
 		yield return www;
 
 

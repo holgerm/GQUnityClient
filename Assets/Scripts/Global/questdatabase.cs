@@ -275,7 +275,7 @@ public class questdatabase : MonoBehaviour {
 	public void ReloadQuestListAndRefresh () {
 		allquests.Clear();
 //		Debug.Log ("starting showing quests immediately (and no autostart)");
-		string url = "http://qeevee.org:9091/json/" + Configuration.instance.portalID + "/publicgamesinfo";
+		string url = "http://qeevee.org:9091/json/" + ConfigurationManager.Current.portal + "/publicgamesinfo";
 		Download download = new Download(url, timeout: 20000);
 		download.OnStart = new Download.StartCallback(whenQuestListDownloadStarts);
 		download.OnProgress = new Download.ProgressUpdate(updateProgress);
@@ -316,7 +316,7 @@ public class questdatabase : MonoBehaviour {
 
 	IEnumerator showPrivacyAgreement () {
 
-		WWW www = new WWW("http://qeevee.org:9091/" + Configuration.instance.portalID + "/privacyagreement/version");
+		WWW www = new WWW("http://qeevee.org:9091/" + ConfigurationManager.Current.portal + "/privacyagreement/version");
 		yield return www;
 
 
@@ -353,7 +353,7 @@ public class questdatabase : MonoBehaviour {
 
 				if ( int.Parse(version) > Configuration.instance.privacyAgreementVersion ) {
 
-					WWW www2 = new WWW("http://qeevee.org:9091/" + Configuration.instance.portalID + "/privacyagreement");
+					WWW www2 = new WWW("http://qeevee.org:9091/" + ConfigurationManager.Current.portal + "/privacyagreement");
 					yield return www2;
 					agreement = www2.text;
 
@@ -396,7 +396,7 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator showAGBs () {
-		WWW www = new WWW("http://qeevee.org:9091/" + Configuration.instance.portalID + "/agbs/version");
+		WWW www = new WWW("http://qeevee.org:9091/" + ConfigurationManager.Current.portal + "/agbs/version");
 		yield return www;
 		
 		
@@ -427,7 +427,7 @@ public class questdatabase : MonoBehaviour {
 				
 				if ( int.Parse(version) > Configuration.instance.agbsVersion ) {
 					
-					WWW www2 = new WWW("http://qeevee.org:9091/" + Configuration.instance.portalID + "/agbs");
+					WWW www2 = new WWW("http://qeevee.org:9091/" + ConfigurationManager.Current.portal + "/agbs");
 					yield return www2;
 					// TODO use Download class instead. Here wo forget to check whether it is already done...
 					agreement = www2.text;
