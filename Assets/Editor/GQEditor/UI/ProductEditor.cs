@@ -12,6 +12,7 @@ using GQ.Client.Conf;
 using GQ.Editor.Building;
 using GQ.Client.Util;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace GQ.Editor.UI {
 	public class ProductEditor : EditorWindow {
@@ -453,6 +454,8 @@ namespace GQ.Editor.UI {
 
 		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
 	
+			writeBuildDate();
+
 			productDictionaryDirty = false;
 			buildDirty = false;
 
@@ -499,6 +502,24 @@ namespace GQ.Editor.UI {
 				buildDirty = true;
 			}
 		}
+
+		/// <summary>
+		/// Writes the current build date into a tiny file in the ConfigAssets. 
+		/// It will be read by the application on start and used as additional version number.
+		/// </summary>
+		static void writeBuildDate () {
+			try {
+				CultureInfo culture = new CultureInfo("de-DE"); 
+				if ( File.Exists(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
+					AssetDatabase.DeleteAsset(ConfigurationManager.BUILD_TIME_FILE_PATH);
+				}
+				File.WriteAllText(ConfigurationManager.BUILD_TIME_FILE_PATH, DateTime.Now.ToString("G", culture));
+			} catch ( Exception exc ) {
+				Debug.LogWarning("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
+				return;
+			} 
+		}
+
 	}
 
 
