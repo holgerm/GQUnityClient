@@ -195,7 +195,7 @@ public class questdatabase : MonoBehaviour {
 
 
 			
-			if ( Configuration.instance.downloadAllCloudQuestOnStart || (Configuration.instance.showcloudquestsimmediately && Configuration.instance.autostartQuestID == 0) ) {
+			if ( Configuration.instance.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && Configuration.instance.autostartQuestID == 0) ) {
 				buttoncontroller.DisplayList();
 
 				ReloadQuestListAndRefresh();
@@ -2016,10 +2016,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 					}
 					else {

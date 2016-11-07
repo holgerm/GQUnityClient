@@ -47,7 +47,6 @@ namespace GQ.Client.Conf {
 		public bool questvisualizationchangable = false;
 		public bool offlinePlayable = true;
 		public bool cloudQuestsVisible = true;
-		public bool showcloudquestsimmediately = false;
 		public bool downloadAllCloudQuestOnStart = false;
 		public bool localQuestsDeletable = true;
 
