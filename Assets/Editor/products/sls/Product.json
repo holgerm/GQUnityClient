@@ -1,0 +1,21 @@
+
+{
+    "id" : "sls",
+    "name" : "Spiellandschaft",
+    "portal" : 484,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 0,
+    "nameForQuest"           : "[null]",
+    "questVisualization"     : "[null]",
+    "questVisualizationChangeable" : false,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : true,
+    "showNetConnectionWarning"     : true,
+    "colorProfile"                 : "default",
+    "mapboxKey"                    : "[null]",
+    "mapboxMapID"                  : "[null]",
+    "imprint"                      : "[null]",
+    "markers"                      : [
+    ]
+}
