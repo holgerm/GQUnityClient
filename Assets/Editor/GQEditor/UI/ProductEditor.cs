@@ -397,7 +397,7 @@ namespace GQ.Editor.UI {
 			{
 
 				bool oldAllowChanges = allowChanges;
-				allowChanges = EditorGUILayout.Toggle("Allow To Edit ...", allowChanges);
+				allowChanges = EditorGUILayout.Toggle("Allow Editing ...", allowChanges);
 				if ( !oldAllowChanges && allowChanges ) {
 					// siwtching allowChanges ON:
 				}
