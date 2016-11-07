@@ -90,6 +90,10 @@ namespace GQ.Editor.Util {
 					// ignore meta files, they will be deleted implicitly via AssetDatabase.DeleteAsset() later on ...
 					continue;
 
+				if ( fileInfo.Name.EndsWith(".gitignore") )
+					// keep optional .gitignore file, it is used independently of the currently prepared product.
+					continue;
+
 				if ( fileInfo.Name.StartsWith(".") ) {
 					// delete hidden files - they are no assets and must be dealt as normal files
 					File.Delete(fileInfo.FullName);
