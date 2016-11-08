@@ -208,7 +208,6 @@ namespace GQ.Editor.Building {
 			}
 
 			// copy default template files to a new product folder:
-//			Files.CopyDirectoryFiles(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 			Assets.CreateSubfolder(ProductsDirPath, newProductID);
 			AssetDatabase.Refresh();
 			Assets.CopyAssetsDir(TEMPLATE_PRODUCT_PATH, newProductDirPath);
@@ -336,6 +335,8 @@ namespace GQ.Editor.Building {
 			// set default values:
 			config.id = productID;
 			config.name = "QuestMill App " + productID;
+			config.mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+			config.mapboxMapID = "mapbox.streets";
 
 			// serialize into new product folder:
 			serializeConfig(config, Files.CombinePath(ProductsDirPath, productID));

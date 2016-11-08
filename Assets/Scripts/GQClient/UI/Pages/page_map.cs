@@ -159,8 +159,8 @@ public class page_map : MonoBehaviour {
 
 			if ( !Configuration.instance.useMapOffline ) {
 
-				osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + Configuration.instance.mapboxMapID + "/";
-				osmLayer.TileImageExtension = "@2x.png?access_token=" + Configuration.instance.mapboxKey;
+				osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapboxMapID + "/";
+				osmLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapboxKey;
 
 
 			}
