@@ -274,10 +274,10 @@ namespace GQ.Editor.Building {
 				throw new ArgumentException("Product can not be build , since its Spec does not exist: " + productID);
 			}
 
-			ProductSpec product = new ProductSpec(productDirPath);
+			ProductSpec newProduct = new ProductSpec(productDirPath);
 
-			if ( !product.IsValid() ) {
-				throw new ArgumentException("Invalid product: " + product.Id + "\n" + product.AllErrorsAsString());
+			if ( !newProduct.IsValid() ) {
+				throw new ArgumentException("Invalid product: " + newProduct.Id + "\n" + newProduct.AllErrorsAsString());
 			}
 
 			// clear build folder:
@@ -308,16 +308,19 @@ namespace GQ.Editor.Building {
 
 			// copy StreamingAssets:
 			Assets.ClearAssetFolder(STREAMING_ASSET_PATH, true);
-			if ( Directory.Exists(product.StreamingAssetPath) ) {
+			if ( Directory.Exists(newProduct.StreamingAssetPath) ) {
 				Assets.CopyAssetsDir(
-					product.StreamingAssetPath, 
+					newProduct.StreamingAssetPath, 
 					STREAMING_ASSET_PATH);
 			}
+
+			PlayerSettings.productName = newProduct.Config.name;
+			PlayerSettings.bundleIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
 
 			AssetDatabase.Refresh();
 
 			ProductEditor.BuildIsDirty = false;
-			CurrentProduct = product; // remember the new product for the editor time access point.
+			CurrentProduct = newProduct; // remember the new product for the editor time access point.
 			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
 		}
 

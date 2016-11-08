@@ -87,6 +87,8 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		internal const string GQ_BUNDLE_ID_PREFIX = "com.questmill.geoquest";
+
 		/// <summary>
 		/// Gets the path to the config file Product.json.
 		/// </summary>
