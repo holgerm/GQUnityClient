@@ -1,5 +1,21 @@
-{	
-	"id" : "ebkwuppertal",
-	"name" : "Tap",
-	"portal" : 121
+
+{
+    "id" : "ebkwuppertal",
+    "name" : "Tap",
+    "portal" : 121,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 0,
+    "nameForQuest"           : "[null]",
+    "questVisualization"     : "[null]",
+    "questVisualizationChangeable" : false,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : false,
+    "showNetConnectionWarning"     : false,
+    "colorProfile"                 : "[null]",
+    "mapboxKey"                    : "pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ",
+    "mapboxMapID"                  : "gqebk.ed1de6df",
+    "imprint"                      : "[null]",
+    "markers"                      : [
+    ]
 }

@@ -12,8 +12,10 @@
     "showCloudQuestsImmediately"   : false,
     "showTextInLoadingLogo"        : false,
     "showNetConnectionWarning"     : false,
-    "colorProfile"                 : null,
-    "mapboxKey"                    : null,
-    "mapboxMapID"                  : null,
-    "imprint"                      : null
+    "colorProfile"                 : "[null]",
+    "mapboxKey"                    : "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
+    "mapboxMapID"                  : "mapbox.streets",
+    "imprint"                      : "[null]",
+    "markers"                      : [
+    ]
 }
