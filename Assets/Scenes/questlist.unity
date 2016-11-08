@@ -9089,7 +9089,7 @@ MonoBehaviour:
   mapboxMapID: mapbox.streets
   downloadTimeOutSeconds: 100
   impressum: 
-  toplogo: {fileID: 21300000, guid: 9ea3375d86c9842888bcae72b370a077, type: 3}
+  toplogo: {fileID: 21300000, guid: 16b8a1d566820410bb66d8f6732a365c, type: 3}
   nameForQuest: Quest
   questvisualization: list
   showMessageForDatasendAction: 0
@@ -9198,10 +9198,9 @@ MonoBehaviour:
   questvisualizationchangable: 0
   offlinePlayable: 1
   cloudQuestsVisible: 1
-  showcloudquestsimmediately: 0
   downloadAllCloudQuestOnStart: 0
   localQuestsDeletable: 1
-  showtextinloadinglogo: 1
+  showtextinloadinglogo: 0
   showinternetconnectionmessage: 0
   defaultlanguage: system
   languageChangableByUser: 0
