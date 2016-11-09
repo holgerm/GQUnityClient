@@ -36,7 +36,7 @@ public class beendenbutton : MonoBehaviour {
 			GetComponent<Button>().enabled = true;
 			GetComponentInChildren<Text>().enabled = true;
 
-			if ( Configuration.instance.questvisualization == "map" ) {
+			if ( ConfigurationManager.Current.questVisualization == "map" ) {
 				
 				GetComponentInChildren<Text>().text = "Zurück zur Karte";
 			}

@@ -9080,7 +9080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 1
+  product: 4
   overrideProductSettingsInInspector: 0
   autostartQuestID: 0
   autostartIsPredeployed: 0
@@ -9089,7 +9089,6 @@ MonoBehaviour:
   impressum: 
   toplogo: {fileID: 21300000, guid: 16b8a1d566820410bb66d8f6732a365c, type: 3}
   nameForQuest: Quest
-  questvisualization: list
   showMessageForDatasendAction: 0
   showPrivacyAgreement: 0
   privacyAgreement: "Wir freuen uns \xFCber Ihr Interesse an unserer App. Als Anbieter

@@ -33,7 +33,6 @@ namespace GQ.Client.Conf {
 		public string impressum = "";
 		public Sprite toplogo;
 		public string nameForQuest = "Quest";
-		public string questvisualization = "list";
 		public bool showMessageForDatasendAction = true;
 		public bool showPrivacyAgreement = true;
 		public string privacyAgreement = "";

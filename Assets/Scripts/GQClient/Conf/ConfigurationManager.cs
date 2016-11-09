@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using LitJson;
 using System.Text;
+using UnityEditor;
 
 namespace GQ.Client.Conf {
 

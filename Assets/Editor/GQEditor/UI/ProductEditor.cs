@@ -454,7 +454,11 @@ namespace GQ.Editor.UI {
 
 		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
 	
-			writeBuildDate();
+			// if the only change is buildtime.txt we ignore it:
+			if ( importedAssets.Length == 1 && importedAssets[0].Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
+				return;
+			else
+				writeBuildDate();
 
 			productDictionaryDirty = false;
 			buildDirty = false;
@@ -489,6 +493,7 @@ namespace GQ.Editor.UI {
 			ProductEditor.BuildIsDirty = buildDirty; 
 			if ( ProductEditor.Instance != null )
 				ProductEditor.Instance.Repaint();
+
 		}
 
 		private static void check4ExternalChanges (string str) {
@@ -514,6 +519,8 @@ namespace GQ.Editor.UI {
 					AssetDatabase.DeleteAsset(ConfigurationManager.BUILD_TIME_FILE_PATH);
 				}
 				File.WriteAllText(ConfigurationManager.BUILD_TIME_FILE_PATH, DateTime.Now.ToString("G", culture));
+				AssetDatabase.SaveAssets();
+				AssetDatabase.Refresh();
 			} catch ( Exception exc ) {
 				Debug.LogWarning("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
 				return;

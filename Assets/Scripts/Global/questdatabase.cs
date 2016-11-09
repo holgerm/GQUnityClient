@@ -188,7 +188,7 @@ public class questdatabase : MonoBehaviour {
 
 		if ( !Application.isWebPlayer ) {
 
-			if ( Configuration.instance.questvisualization != "list" ) {
+			if ( ConfigurationManager.Current.questVisualization != "list" ) {
 				GameObject.Find("ListPanel").SetActive(false);
 
 			}
@@ -765,13 +765,13 @@ public class questdatabase : MonoBehaviour {
 
 		currentquest = null;
 		
-		if ( Configuration.instance.questvisualization == "list" ) {
+		if ( ConfigurationManager.Current.questVisualization == "list" ) {
 			
 			buttoncontroller.DisplayList();
 			
 		}
 		else
-		if ( Configuration.instance.questvisualization == "map" ) {
+		if ( ConfigurationManager.Current.questVisualization == "map" ) {
 			
 			showQuestMap();
 			

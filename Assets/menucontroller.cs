@@ -40,7 +40,7 @@ public class menucontroller : MonoBehaviour {
 
 
 
-		if ( Configuration.instance.questvisualization == "map" ) {
+		if ( ConfigurationManager.Current.questVisualization == "map" ) {
 
 			showTopBar();
 
@@ -66,7 +66,7 @@ public class menucontroller : MonoBehaviour {
 
 		}
 		else {
-			if ( Configuration.instance.questvisualization == "map" ) {
+			if ( ConfigurationManager.Current.questVisualization == "map" ) {
 				//impressumbutton.SetActive(false);
 
 
@@ -163,7 +163,7 @@ public class menucontroller : MonoBehaviour {
 
 	public void endQuestAnimation () {
 
-		if ( Configuration.instance.questvisualization == "map" ) {
+		if ( ConfigurationManager.Current.questVisualization == "map" ) {
 			GetComponent<Animator>().SetTrigger("endquestbutnotmenu");
 
 		
@@ -223,7 +223,7 @@ public class menucontroller : MonoBehaviour {
 	public void hideTopBar () {
 
 
-		if ( Configuration.instance.questvisualization != "map" ) {
+		if ( ConfigurationManager.Current.questVisualization != "map" ) {
 
 			isActive = false;
 		}

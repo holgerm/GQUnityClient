@@ -16,14 +16,14 @@ public class changequestview : MonoBehaviour {
 	public void switchQuestView () {
 
 
-		if ( Configuration.instance.questvisualization == "map" ) {
-			Configuration.instance.questvisualization = "list";
+		if ( ConfigurationManager.Current.questVisualization == "map" ) {
+			ConfigurationManager.Current.questVisualization = "list";
 			GameObject.Find("MenuCanvas").GetComponent<Animator>().ResetTrigger("startMenu");
 			GameObject.Find("MenuCanvas").GetComponent<Animator>().SetTrigger("endmenu");
 		}
 		else
-		if ( Configuration.instance.questvisualization == "list" ) {
-			Configuration.instance.questvisualization = "map";
+		if ( ConfigurationManager.Current.questVisualization == "list" ) {
+			ConfigurationManager.Current.questVisualization = "map";
 		}
 
 		Application.LoadLevel(0);
