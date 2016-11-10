@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using GQ.Util;
-using LitJson;
 using UnityEngine.Networking;
+using Newtonsoft.Json;
 
-namespace GQ.Client.Net
-{
+namespace GQ.Client.Net {
 
 	[System.Serializable]
-	public class SendQueue : ISendQueue
-	{
+	public class SendQueue : ISendQueue {
 
 		public List<SendQueueEntry> _queue;
 		private int _idCounter;
@@ -22,15 +20,14 @@ namespace GQ.Client.Net
 		// TODO set directly in constructor via GameObject Find with Tag
 		public networkactions NetworkActionsObject {
 			set {
-				Debug.Log ("SENDQUEUE set networkactionsobject");
+				Debug.Log("SENDQUEUE set networkactionsobject");
 				_networkActionsObject = value;
 			}
 		}
 
-		public SendQueue (float timeout)
-		{
+		public SendQueue (float timeout) {
 			_timeout = timeout;
-			_queue = new List<SendQueueEntry> ();
+			_queue = new List<SendQueueEntry>();
 			_idCounter = -1;
 
 
@@ -42,14 +39,13 @@ namespace GQ.Client.Net
 			}
 		}
 
-		public void sendNext ()
-		{
+		public void sendNext () {
 			bool canSendMessage = true;
-			foreach (SendQueueEntry sqe in _queue.GetRange(0, _queue.Count)) {
-				if (canSendMessage) {
+			foreach ( SendQueueEntry sqe in _queue.GetRange(0, _queue.Count) ) {
+				if ( canSendMessage ) {
 					sqe.timeout -= Time.deltaTime;
-					if (sqe.timeout <= 0f) {
-						send (sqe);
+					if ( sqe.timeout <= 0f ) {
+						send(sqe);
 						canSendMessage = false;
 					}
 				}
@@ -57,35 +53,39 @@ namespace GQ.Client.Net
 
 		}
 
-		private void send (SendQueueEntry message)
-		{
-			Debug.Log ("SENDQUEUE: send() id:" + message.id);
+		private void send (SendQueueEntry message) {
+			Debug.Log("SENDQUEUE: send() id:" + message.id);
 
 			message.timeout = _timeout;
 
-			if (message.mode == SendQueueHelper.MODE_VALUE) {
-				_networkActionsObject.CmdSendVar (message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.value, message.resetid);
-			} else if (message.mode == SendQueueHelper.MODE_FILE_START) {
+			if ( message.mode == SendQueueHelper.MODE_VALUE ) {
+				_networkActionsObject.CmdSendVar(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.value, message.resetid);
+			}
+			else
+			if ( message.mode == SendQueueHelper.MODE_FILE_START ) {
 
-				_networkActionsObject.CmdSendFile (message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
+				_networkActionsObject.CmdSendFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
 
-			} else if (message.mode == SendQueueHelper.MODE_FILE_MID) {
+			}
+			else
+			if ( message.mode == SendQueueHelper.MODE_FILE_MID ) {
 
-				_networkActionsObject.CmdAddToFile (message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
+				_networkActionsObject.CmdAddToFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.file, message.resetid);
 
-			} else if (message.mode == SendQueueHelper.MODE_FILE_FINISH) {
+			}
+			else
+			if ( message.mode == SendQueueHelper.MODE_FILE_FINISH ) {
 
-				_networkActionsObject.CmdFinishFile (message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.resetid);
+				_networkActionsObject.CmdFinishFile(message.id, SystemInfo.deviceUniqueIdentifier, message.var, message.filetype, message.resetid);
 
 			}
 		}
 
-		public void addTextMessage (string ip, string var, string text, int questId)
-		{
+		public void addTextMessage (string ip, string var, string text, int questId) {
 
-			SendQueueEntry sqe = new SendQueueEntry ();
+			SendQueueEntry sqe = new SendQueueEntry();
 
-			initIDCounter (ip);
+			initIDCounter(ip);
 
 		
 
@@ -94,11 +94,11 @@ namespace GQ.Client.Net
 			_idCounter++;
 			sqe.questid = questId;
 
-			if (_idCounter == int.MaxValue) {
+			if ( _idCounter == int.MaxValue ) {
 				_idCounter = 0;
 			}
 
-			PlayerPrefs.SetInt ("nextmessage_" + ip, _idCounter);
+			PlayerPrefs.SetInt("nextmessage_" + ip, _idCounter);
 
 			sqe.mode = SendQueueHelper.MODE_VALUE;
 			sqe.timeout = 0f;
@@ -107,17 +107,16 @@ namespace GQ.Client.Net
 			sqe.var = var;
 			sqe.value = text;
 
-			_queue.Add (sqe);
-			sqe.serialize ();
+			_queue.Add(sqe);
+			sqe.serialize();
 		}
 
 
-		public void addFileMessage (string ip, string var, string filetype, byte[] bytes, int part, int questId)
-		{
+		public void addFileMessage (string ip, string var, string filetype, byte[] bytes, int part, int questId) {
 
-			SendQueueEntry sqe = new SendQueueEntry ();
+			SendQueueEntry sqe = new SendQueueEntry();
 
-			initIDCounter (ip);
+			initIDCounter(ip);
 
 
 			sqe.id = _idCounter;
@@ -125,11 +124,12 @@ namespace GQ.Client.Net
 			sqe.questid = questId;
 
 
-			if (part == 0) {
+			if ( part == 0 ) {
 
 				sqe.mode = SendQueueHelper.MODE_FILE_START;
 
-			} else {
+			}
+			else {
 
 				sqe.mode = SendQueueHelper.MODE_FILE_MID;
 
@@ -141,28 +141,27 @@ namespace GQ.Client.Net
 			sqe.filetype = filetype;
 			sqe.file = bytes;
 
-			_queue.Add (sqe);
-			sqe.serialize ();
+			_queue.Add(sqe);
+			sqe.serialize();
 		}
 
-		void initIDCounter (string ip)
-		{
-			if (_idCounter == -1) {
-				if (PlayerPrefs.HasKey ("nextmessage_" + ip)) {
-					_idCounter = PlayerPrefs.GetInt ("nextmessage_" + ip);
-				} else {
+		void initIDCounter (string ip) {
+			if ( _idCounter == -1 ) {
+				if ( PlayerPrefs.HasKey("nextmessage_" + ip) ) {
+					_idCounter = PlayerPrefs.GetInt("nextmessage_" + ip);
+				}
+				else {
 					_idCounter = 0;
 				}
 			}
 		}
 
-		public void addFileFinishMessage (string ip, string var, string filetype, int questId)
-		{
+		public void addFileFinishMessage (string ip, string var, string filetype, int questId) {
 
-			SendQueueEntry sqe = new SendQueueEntry ();
+			SendQueueEntry sqe = new SendQueueEntry();
 
 
-			initIDCounter (ip);
+			initIDCounter(ip);
 
 			sqe.id = _idCounter;
 			sqe.questid = questId;
@@ -174,36 +173,34 @@ namespace GQ.Client.Net
 
 			sqe.mode = SendQueueHelper.MODE_FILE_FINISH;
 
-			_queue.Add (sqe);
-			sqe.serialize ();
+			_queue.Add(sqe);
+			sqe.serialize();
 		}
 
 		private IEnumerationWorker enumerationWorker;
 
-		public void setEnumerationWorker (IEnumerationWorker worker)
-		{
+		public void setEnumerationWorker (IEnumerationWorker worker) {
 			this.enumerationWorker = worker;
 		}
 
-		public void reconstructSendQueue ()
-		{
+		public void reconstructSendQueue () {
 
-			if (Directory.Exists (Application.persistentDataPath + "/quests/")) {
+			if ( Directory.Exists(Application.persistentDataPath + "/quests/") ) {
 
-				foreach (string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/")) {
+				foreach ( string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/") ) {
 
-					if (Directory.Exists (quest + "/sendqueue/")) {
-						string FolderName = new DirectoryInfo (quest).Name;
+					if ( Directory.Exists(quest + "/sendqueue/") ) {
+						string FolderName = new DirectoryInfo(quest).Name;
 
-						foreach (string file in	Directory.GetFiles(quest + "/sendqueue/")) {
+						foreach ( string file in	Directory.GetFiles(quest + "/sendqueue/") ) {
 							int num1 = 0;
 							int num2 = 0;
 
-							if (int.TryParse (FolderName, out num1)) {
-								if (int.TryParse (Path.GetFileNameWithoutExtension (file), out num2)) {
-									if (File.Exists (Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json")) {
-										WWW www = LocalWWW.Create ("/quests/" + num1 + "/sendqueue/" + num2 + ".json");
-										enumerationWorker.enumerate (deserialize (www));
+							if ( int.TryParse(FolderName, out num1) ) {
+								if ( int.TryParse(Path.GetFileNameWithoutExtension(file), out num2) ) {
+									if ( File.Exists(Application.persistentDataPath + "/quests/" + num1 + "/sendqueue/" + num2 + ".json") ) {
+										WWW www = LocalWWW.Create("/quests/" + num1 + "/sendqueue/" + num2 + ".json");
+										enumerationWorker.enumerate(deserialize(www));
 
 									}
 								}
@@ -215,19 +212,18 @@ namespace GQ.Client.Net
 		}
 
 
-		public bool hasUnsendMessages ()
-		{
+		public bool hasUnsendMessages () {
 
 			bool b = false;
 
-			if (Directory.Exists (Application.persistentDataPath + "/quests/")) {
+			if ( Directory.Exists(Application.persistentDataPath + "/quests/") ) {
 
-				foreach (string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/")) {
+				foreach ( string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/") ) {
 
-					if (Directory.Exists (quest + "/sendqueue/")) {
-						string FolderName = new DirectoryInfo (quest).Name;
+					if ( Directory.Exists(quest + "/sendqueue/") ) {
+						string FolderName = new DirectoryInfo(quest).Name;
 
-						foreach (string file in	Directory.GetFiles(quest + "/sendqueue/")) {
+						foreach ( string file in	Directory.GetFiles(quest + "/sendqueue/") ) {
 							b = true;
 						}
 					}
@@ -238,16 +234,15 @@ namespace GQ.Client.Net
 		}
 
 
-		public void reset ()
-		{
+		public void reset () {
 
-			if (Directory.Exists (Application.persistentDataPath + "/quests/")) {
+			if ( Directory.Exists(Application.persistentDataPath + "/quests/") ) {
 
-				foreach (string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/")) {
+				foreach ( string quest in	Directory.GetDirectories(Application.persistentDataPath + "/quests/") ) {
 
-					if (Directory.Exists (quest + "/sendqueue/")) {
+					if ( Directory.Exists(quest + "/sendqueue/") ) {
 
-						Directory.Delete (quest + "/sendqueue/", true);
+						Directory.Delete(quest + "/sendqueue/", true);
 
 					}
 				}
@@ -258,17 +253,16 @@ namespace GQ.Client.Net
 
 
 
-		public int getMin ()
-		{
+		public int getMin () {
 
 
 			int min = int.MaxValue;
 
 
 
-			foreach (SendQueueEntry sqe in _queue) {
+			foreach ( SendQueueEntry sqe in _queue ) {
 
-				if (sqe.id < min) {
+				if ( sqe.id < min ) {
 
 					min = sqe.id;
 
@@ -281,15 +275,16 @@ namespace GQ.Client.Net
 
 
 
-			if (min == int.MaxValue) {
-				Debug.Log ("min value: " + _idCounter);
+			if ( min == int.MaxValue ) {
+				Debug.Log("min value: " + _idCounter);
 
 
 				return _idCounter;
 
-			} else {
+			}
+			else {
 
-				Debug.Log ("min value because found: " + min);
+				Debug.Log("min value because found: " + min);
 
 				return min;
 
@@ -299,44 +294,42 @@ namespace GQ.Client.Net
 
 		}
 
-		private IEnumerator deserialize (WWW www)
-		{
+		private IEnumerator deserialize (WWW www) {
 
 			yield return www;
 
-			if (www.error == null || www.error == "") {
-				SendQueueEntry sqe = JsonMapper.ToObject<SendQueueEntry> (www.text);
-				_queue.Add (sqe);
-			} else {
-				Debug.Log (www.error);
+			if ( www.error == null || www.error == "" ) {
+				SendQueueEntry sqe = JsonConvert.DeserializeObject<SendQueueEntry>(www.text);
+				_queue.Add(sqe);
+			}
+			else {
+				Debug.Log(www.error);
 			}
 		}
 
-		public bool startConnectingToServer ()
-		{
-			if (Count == 0)
+		public bool startConnectingToServer () {
+			if ( Count == 0 )
 				return false;
 
-			NetworkManager.singleton.networkAddress = _queue [0].ip;
+			NetworkManager.singleton.networkAddress = _queue[0].ip;
 			// TODO replace by something good. 
 			// Either set one fixed ip in constructor or create pool of cennections and ips in dictionary whenever we add a message with new ip.
 
 
 
-			if (!NetworkManager.singleton.IsClientConnected ())
-				NetworkManager.singleton.StartClient ();	
+			if ( !NetworkManager.singleton.IsClientConnected() )
+				NetworkManager.singleton.StartClient();	
 
 			return true;
 		}
 
-		public void removeMessage (int id)
-		{
-			foreach (SendQueueEntry sqe in _queue.GetRange(0, Count)) {
-				if (sqe.id == id) {
-					_queue.Remove (sqe);
+		public void removeMessage (int id) {
+			foreach ( SendQueueEntry sqe in _queue.GetRange(0, Count) ) {
+				if ( sqe.id == id ) {
+					_queue.Remove(sqe);
 
-					if (File.Exists (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json")) {
-						File.Delete (Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
+					if ( File.Exists(Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json") ) {
+						File.Delete(Application.persistentDataPath + "/quests/" + sqe.questid + "/sendqueue/" + sqe.id + ".json");
 					}
 				}
 			}

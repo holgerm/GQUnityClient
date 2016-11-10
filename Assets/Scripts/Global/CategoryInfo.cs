@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace GQ.Client.Conf {
 
@@ -27,6 +28,8 @@ namespace GQ.Client.Conf {
 
 
 		public string Name { get; set; }
+
+		[NonSerialized]
 
 		public Sprite sprite;
 		public bool showInList = true;

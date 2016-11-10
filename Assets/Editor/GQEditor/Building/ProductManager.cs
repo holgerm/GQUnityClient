@@ -5,7 +5,6 @@ using GQ.Util;
 using UnityEngine;
 using GQ.Client.Conf;
 using System.Text;
-using LitJson;
 using System.Linq;
 using System.Collections;
 using UnityEditor;
@@ -13,6 +12,7 @@ using System.Text.RegularExpressions;
 using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
+using Newtonsoft.Json;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
@@ -168,6 +168,11 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		/// <summary>
+		/// Loads the product spec from the given driectory. Any errors are stored in Errors.
+		/// </summary>
+		/// <returns>The product spec or null if an error occurred.</returns>
+		/// <param name="productCandidatePath">Product candidate path.</param>
 		internal ProductSpec LoadProductSpec (string productCandidatePath) {
 			ProductSpec product;
 			try {
@@ -344,13 +349,9 @@ namespace GQ.Editor.Building {
 		}
 
 		internal void serializeConfig (Config config, string productDirPath) {
-			StringBuilder sb = new StringBuilder();
-			JsonWriter jsonWriter = new JsonWriter(sb);
-			jsonWriter.PrettyPrint = true;
-			JsonMapper.ToJson(config, jsonWriter);
-
+			string json = JsonConvert.SerializeObject(config, Formatting.Indented);
 			string configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
-			File.WriteAllText(configFilePath, sb.ToString());
+			File.WriteAllText(configFilePath, json);
 		}
 
 		/// <summary>

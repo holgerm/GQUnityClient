@@ -4,10 +4,10 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using LitJson;
 using System.IO;
 using System;
 using GQ.Client.Net;
+using Newtonsoft.Json;
 
 namespace GQ.Client.Net {
 
@@ -29,10 +29,7 @@ namespace GQ.Client.Net {
 
 			#if !UNITY_WEBPLAYER
 			PlayerPrefs.SetInt("currentquestid", questid);
-			StringBuilder sb = new StringBuilder();
-			JsonWriter jsonWriter = new JsonWriter(sb);
-			jsonWriter.PrettyPrint = true;
-			JsonMapper.ToJson(this, jsonWriter);
+			string json = JsonConvert.SerializeObject(this);
 
 			string dirPath = Application.persistentDataPath + "/quests/" + questid + "/sendqueue/";
 			string filePath = dirPath + id + ".json";
@@ -45,7 +42,7 @@ namespace GQ.Client.Net {
 				File.Delete(filePath);
 			}
 
-			File.WriteAllText(filePath, sb.ToString());
+			File.WriteAllText(filePath, json);
 			#endif
 		}
 

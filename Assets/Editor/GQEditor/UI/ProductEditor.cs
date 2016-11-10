@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using System.IO;
 using System.Linq;
-using LitJson;
 using System;
 using System.Text;
 using System.Reflection;
@@ -13,6 +12,7 @@ using GQ.Editor.Building;
 using GQ.Client.Util;
 using System.Collections.Generic;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace GQ.Editor.UI {
 	public class ProductEditor : EditorWindow {
@@ -44,7 +44,6 @@ namespace GQ.Editor.UI {
 				_instance = value;
 			}
 		}
-
 
 
 		[MenuItem("Window/QuestMill Product Editor")]
@@ -228,7 +227,7 @@ namespace GQ.Editor.UI {
 				if ( !File.Exists(configFile) )
 					return build;
 				string configText = File.ReadAllText(configFile);
-				Config buildConfig = JsonMapper.ToObject<Config>(configText);
+				Config buildConfig = JsonConvert.DeserializeObject<Config>(configText);
 				return buildConfig.id;
 			} catch ( Exception exc ) {
 				Debug.LogWarning("ProductEditor.currentBuild() threw exception:\n" + exc.Message);
@@ -517,9 +516,8 @@ namespace GQ.Editor.UI {
 				CultureInfo culture = new CultureInfo("de-DE"); 
 				if ( File.Exists(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
 					AssetDatabase.DeleteAsset(ConfigurationManager.BUILD_TIME_FILE_PATH);
-				}
+				} 
 				File.WriteAllText(ConfigurationManager.BUILD_TIME_FILE_PATH, DateTime.Now.ToString("G", culture));
-				AssetDatabase.SaveAssets();
 				AssetDatabase.Refresh();
 			} catch ( Exception exc ) {
 				Debug.LogWarning("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);

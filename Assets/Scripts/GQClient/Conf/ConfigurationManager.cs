@@ -3,9 +3,9 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using LitJson;
 using System.Text;
 using UnityEditor;
+using Newtonsoft.Json;
 
 namespace GQ.Client.Conf {
 
@@ -100,6 +100,9 @@ namespace GQ.Client.Conf {
 			}
 		}
 
+		/// <summary>
+		/// Deserialize the Product.json file to the current config object that is used throughout the client.
+		/// </summary>
 		public static void deserialize () {
 
 			TextAsset configAsset = Resources.Load("Product") as TextAsset;
@@ -109,7 +112,7 @@ namespace GQ.Client.Conf {
 			}
 
 			try {
-				_current = JsonMapper.ToObject<Config>(configAsset.text);
+				_current = JsonConvert.DeserializeObject<Config>(configAsset.text);
 			} catch ( Exception e ) {
 				Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
 			}
