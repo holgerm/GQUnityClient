@@ -39,6 +39,8 @@ namespace GQ.Client.Conf {
 
 		public string 	mapboxMapID { get; set; }
 
+		public bool		useMapOffline { get; set; }
+
 		public string 	imprint  { get; set; }
 
 		public List<CategoryInfo> markers { get; set; }
@@ -49,6 +51,8 @@ namespace GQ.Client.Conf {
 		public Config () {
 			// prepare as an empty list:
 			markers = new List<CategoryInfo>();
+			useMapOffline = false;
+			questVisualization = "list";
 		}
 
 	}

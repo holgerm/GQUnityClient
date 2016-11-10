@@ -195,13 +195,13 @@ public class questdatabase : MonoBehaviour {
 
 
 			
-			if ( Configuration.instance.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && Configuration.instance.autostartQuestID == 0) ) {
+			if ( Configuration.instance.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && ConfigurationManager.Current.autoStartQuestID == 0) ) {
 				buttoncontroller.DisplayList();
 
 				ReloadQuestListAndRefresh();
 			}
 			else {
-				if ( Configuration.instance.autostartQuestID != 0 ) {
+				if ( ConfigurationManager.Current.autoStartQuestID != 0 ) {
 					buttoncontroller.DisplayList();
 				}
 
@@ -468,7 +468,7 @@ public class questdatabase : MonoBehaviour {
 
 	void autoStartQuest () {
 
-		if ( Configuration.instance.autostartQuestID != 0 ) {
+		if ( ConfigurationManager.Current.autoStartQuestID != 0 ) {
 
 			GameObject questListPanel = GameObject.Find("/Canvas");
 			if ( loadlogo != null ) {
@@ -477,12 +477,12 @@ public class questdatabase : MonoBehaviour {
 				webloadingmessage.enabled = true;
 			}
 
-			if ( Configuration.instance.autostartIsPredeployed ) {
-				StartCoroutine(startPredeployedQuest(Configuration.instance.autostartQuestID));
+			if ( ConfigurationManager.Current.autostartIsPredeployed ) {
+				StartCoroutine(startPredeployedQuest(ConfigurationManager.Current.autoStartQuestID));
 
 			}
 			else {
-				StartQuest(Configuration.instance.autostartQuestID);
+				StartQuest(ConfigurationManager.Current.autoStartQuestID);
 			}
 		}
 
@@ -2016,10 +2016,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {

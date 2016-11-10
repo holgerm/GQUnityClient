@@ -157,7 +157,7 @@ public class page_map : MonoBehaviour {
 			OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer>("OSM");
 			//osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
 
-			if ( !Configuration.instance.useMapOffline ) {
+			if ( !ConfigurationManager.Current.useMapOffline ) {
 
 				osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapboxMapID + "/";
 				osmLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapboxKey;
@@ -215,7 +215,7 @@ public class page_map : MonoBehaviour {
 		map.UseLocation = true;
 		map.UseOrientation = true; // TODO: should be false, shouldn't it?
 
-		if ( !Configuration.instance.useMapOffline ) {
+		if ( !ConfigurationManager.Current.useMapOffline ) {
 			map.MaxZoom = 20.0f;
 		}
 		else {

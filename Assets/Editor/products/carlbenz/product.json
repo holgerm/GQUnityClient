@@ -1,21 +1,19 @@
-
 {
-    "id" : "carlbenz",
-    "name" : "Carl Benz in Karlsruhe",
-    "portal" : 402,
-    "autoStartQuestID" : 6088,
-    "autostartIsPredeployed" : false,
-    "downloadTimeOutSeconds" : 0,
-    "nameForQuest"           : "Quest",
-    "questVisualization"     : "list",
-    "questVisualizationChangeable" : false,
-    "showCloudQuestsImmediately"   : false,
-    "showTextInLoadingLogo"        : false,
-    "showNetConnectionWarning"     : false,
-    "colorProfile"                 : "[null]",
-    "mapboxKey"                    : "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A",
-    "mapboxMapID"                  : "gqcarlbenz.ac1f8820",
-    "imprint"                      : "test",
-    "markers"                      : [
-    ]
+  "id": "carlbenz",
+  "name": "Carl Benz in Karlsruhe",
+  "portal": 402,
+  "autoStartQuestID": 6088,
+  "autostartIsPredeployed": true,
+  "downloadTimeOutSeconds": 0,
+  "nameForQuest": "Quest",
+  "questVisualization": "list",
+  "questVisualizationChangeable": false,
+  "showCloudQuestsImmediately": false,
+  "showTextInLoadingLogo": false,
+  "showNetConnectionWarning": false,
+  "colorProfile": "[null]",
+  "mapboxKey": "pk.eyJ1IjoiZ3FjYXJsYmVueiIsImEiOiIxY21SYWZZIn0.IHbffn5Xk5xh-cwoLOfB_A",
+  "mapboxMapID": "gqcarlbenz.ac1f8820",
+  "imprint": "test",
+  "markers": []
 }
