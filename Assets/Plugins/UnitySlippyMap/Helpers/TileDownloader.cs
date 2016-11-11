@@ -447,7 +447,7 @@ namespace UnitySlippyMap {
 			
 				entry.timestamp = (DateTime.Now.ToLocalTime() - new DateTime(1970, 1, 1).ToLocalTime()).TotalSeconds;
 				tiles.Add(entry);
-				Debug.Log("TEXTURES: Added. Count: " + ++loadedTextures);
+				Debug.Log("Tiles: Added. Count: " + tiles.Count);
 				cacheSize += entry.size;
 			
 				// if the cache is full, erase the oldest entry

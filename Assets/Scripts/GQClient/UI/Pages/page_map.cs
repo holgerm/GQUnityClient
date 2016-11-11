@@ -214,15 +214,9 @@ public class page_map : MonoBehaviour {
 
 		map.UseLocation = true;
 		map.UseOrientation = true; // TODO: should be false, shouldn't it?
-
-		if ( !ConfigurationManager.Current.useMapOffline ) {
-			map.MaxZoom = 20.0f;
-		}
-		else {
-			map.MaxZoom = 18.0f;
-		}
+		// offline map is currently only good enough up to zoom level 18:
+		map.MaxZoom = ConfigurationManager.Current.useMapOffline ? 18.0f : 20.0f;
 		map.MinZoom = 13.0f;
-		
 		map.InputsEnabled = true;
 		map.ShowGUIControls = true;
 		
