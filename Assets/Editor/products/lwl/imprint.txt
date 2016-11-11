@@ -1,4 +1,27 @@
-<b>Titel</b>\n LWL Quest\n <b>Beschreibung</b>\n Anbieterkennzeichnung des Landschaftsverband Westfalen-Lippe <b>Einrichtung / Institution</b>\n LWL-Industriemuseum Westfälisches Landesmuseum für Industriekultur\n <b>Rechtsform</b>\n Körperschaft des öffentlichen Rechts (KdöR)\n <b>Vertreten durch</b>\n LWL-Direktor Matthias Löb\n <b>Straße</b>\n Grubenweg 5\n <b>Ort</b>\n 44388 Dortmund\n <b>Telefon</b>\n 0049 (0)231 6961-152\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n lwl.org\n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Christiane Spänhoff\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n\n
+<b>Titel</b>
+LWL Quest
+<b>Beschreibung</b>
+Anbieterkennzeichnung des Landschaftsverband Westfalen-Lippe 
+<b>Einrichtung / Institution</b>
+LWL-Industriemuseum Westfälisches Landesmuseum für Industriekultur
+<b>Rechtsform</b>
+Körperschaft des öffentlichen Rechts (KdöR)
+<b>Vertreten durch</b>
+LWL-Direktor Matthias Löb
+<b>Straße</b>
+Grubenweg 5
+<b>Ort</b>
+44388 Dortmund
+<b>Telefon</b>
+0049 (0)231 6961-152
+<b>Land</b>
+Deutschland
+<b>Domain</b>
+lwl.org
+<b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>
+Christiane Spänhoff
+<b>Technisch verantwortlich</b>
+QuestMill GmbH
 
 1. Haftung Der Landschaftsverband Westfalen-Lippe ist als Dienstanbieter nach § 7 Abs. 1 Teledienstegesetz für die eigenen Inhalte, die er zur Nutzung bereit hält verantwortlich. Die Haftung für Schäden materieller oder ideeller Art, die durch die Nutzung der Inhalte verursacht werden, ist ausgeschlossen, sofern nicht Vorsatz oder grobe Fahrlässigkeit vorliegt. Der Landschaftsverband Westfalen-Lippe ist für den Inhalt fremder Websites, die er innerhalb seines Angebotes durch Hyperlinks zugänglich macht, entsprechend den Regelungen des § 8 Teledienstegesetz nicht verantwortlich.
  
