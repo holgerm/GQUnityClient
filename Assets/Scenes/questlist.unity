@@ -9080,14 +9080,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 4
+  product: 3
   overrideProductSettingsInInspector: 0
-  autostartQuestID: 0
-  autostartIsPredeployed: 0
   colorProfile: default
   downloadTimeOutSeconds: 100
   impressum: 
-  toplogo: {fileID: 21300000, guid: 16b8a1d566820410bb66d8f6732a365c, type: 3}
+  toplogo: {fileID: 21300000, guid: 34621d3c2a09a48c5979d6db9884d4d7, type: 3}
   nameForQuest: Quest
   showMessageForDatasendAction: 0
   showPrivacyAgreement: 0
@@ -9227,7 +9225,6 @@ MonoBehaviour:
   defaultLatitude: 8
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
-  useMapOffline: 0
   hasMenuWithinQuests: 1
   appVersion: 1
   subversionNumber: 16.11

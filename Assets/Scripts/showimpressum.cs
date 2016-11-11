@@ -38,7 +38,7 @@ public class showimpressum : MonoBehaviour {
 
 			StartCoroutine(loadImpressum());
 
-			impressum_text.text = Configuration.instance.impressum.Replace("\\n", "\n");
+			impressum_text.text = ConfigurationManager.Imprint.Replace("\\n", "\n");
 		}
 
 	}
@@ -76,6 +76,7 @@ public class showimpressum : MonoBehaviour {
 
 
 	IEnumerator loadImpressum () {
+		// TODO: move into getter of ConfigurationManager.Imprint
 		
 		WWW www = new WWW("http://qeevee.org:9091/" + ConfigurationManager.Current.portal + "/imprint");
 		yield return www;
@@ -83,11 +84,11 @@ public class showimpressum : MonoBehaviour {
 
 		if ( PlayerPrefs.HasKey("imprint") ) {
 
-			Configuration.instance.impressum = PlayerPrefs.GetString("imprint");
+			ConfigurationManager.Imprint = PlayerPrefs.GetString("imprint");
 
 		}
 
-		string imprint = Configuration.instance.impressum;
+		string imprint = ConfigurationManager.Imprint;
 
 		
 		if ( www.error != null && www.error != "" && www.text != "" ) {

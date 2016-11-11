@@ -76,7 +76,7 @@ namespace GQ.Client.Conf {
 			}
 		}
 
-		private static string _buildtime;
+		private static string _buildtime = null;
 
 		public static string Buildtime {
 			get {
@@ -99,6 +99,23 @@ namespace GQ.Client.Conf {
 				_buildtime = value;
 			}
 		}
+
+		private static string _imprint = null;
+
+		public static string Imprint {
+			get {
+				if ( _imprint == null ) {
+					TextAsset ta = Resources.Load("imprint") as TextAsset;
+					_imprint = ta.text;
+				}
+				return _imprint;
+				
+			}
+			set {
+				_imprint = value;
+			}
+		}
+
 
 		/// <summary>
 		/// Deserialize the Product.json file to the current config object that is used throughout the client.

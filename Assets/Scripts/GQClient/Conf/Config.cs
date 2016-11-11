@@ -41,8 +41,6 @@ namespace GQ.Client.Conf {
 
 		public bool		useMapOffline { get; set; }
 
-		public string 	imprint  { get; set; }
-
 		public List<CategoryInfo> markers { get; set; }
 
 		/// <summary>
