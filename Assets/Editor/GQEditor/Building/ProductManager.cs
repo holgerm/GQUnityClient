@@ -337,12 +337,9 @@ namespace GQ.Editor.Building {
 		private void createConfigWithDefaults (string productID) {
 			Config config = new Config();
 
-			// set default values:
+			// set product specific default values:
 			config.id = productID;
 			config.name = "QuestMill App " + productID;
-			config.mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
-			config.mapboxMapID = "mapbox.streets";
-			config.questVisualization = "list";
 
 			// serialize into new product folder:
 			serializeConfig(config, Files.CombinePath(ProductsDirPath, productID));

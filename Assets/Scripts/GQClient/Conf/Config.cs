@@ -46,10 +46,16 @@ namespace GQ.Client.Conf {
 		public List<CategoryInfo> markers { get; set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class.
+		/// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class and intializes it with generic default values.
+		/// 
+		/// This constructor is used by the ProductManager (explicit) as well as the JSON.Net deserialize method (via reflection).
 		/// </summary>
-		public Config () {
-			// prepare as an empty list:
+		public Config () {			
+			// set default values:
+			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+			mapboxMapID = "mapbox.streets";
+			questVisualization = "list";
+			// prepare markers as an empty list:
 			markers = new List<CategoryInfo>();
 			useMapOffline = false;
 			questVisualization = "list";
