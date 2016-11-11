@@ -1,1 +1,40 @@
-<b>Titel</b>\n GeoQuest\n <b>Beschreibung</b>\n Anbieterkennzeichnung der QuestMill GmbH,\n Clostermannstr. 1, \n51065 Köln <b>Einrichtung / Institution</b>\n QuestMill GmbH\n <b>Rechtsform</b>\n Gesellschaft mit beschränkter Haftung (GmbH)\n <b>Vertreten durch</b>\n Holger Mügge\n <b>Straße</b>\n Clostermannstr. 1\n <b>Ort</b>\n 51065 Köln\n <b>Telefon</b>\n 0049 (0)221 922 4343\n <b>Land</b>\n Deutschland\n <b>Domain</b>\n quest-mill.com\n <b>Umsatzsteuer-Identifikations-Nr.</b>\n DE298593210 \n <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>\n Holger Mügge\n <b>Technisch verantwortlich</b>\n QuestMill GmbH\n"
+<b>Titel</b>
+GeoQuest
+
+<b>Beschreibung</b>
+Anbieterkennzeichnung der QuestMill GmbH
+Clostermannstr. 1
+51065 Köln 
+
+<b>Einrichtung / Institution</b>
+QuestMill GmbH
+
+<b>Rechtsform</b>
+Gesellschaft mit beschränkter Haftung (GmbH)
+
+<b>Vertreten durch</b>
+Holger Mügge
+
+<b>Straße</b>
+Clostermannstr. 1
+
+<b>Ort</b>
+51065 Köln
+
+<b>Telefon</b>
+0049 (0)221 922 4343
+
+<b>Land</b>
+Deutschland
+
+<b>Domain</b>
+quest-mill.com
+
+<b>Umsatzsteuer-Identifikations-Nr.</b>
+DE298593210
+
+<b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>
+Holger Mügge
+
+<b>Technisch verantwortlich</b>
+QuestMill GmbH
