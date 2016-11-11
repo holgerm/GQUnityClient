@@ -9195,8 +9195,8 @@ MonoBehaviour:
   cloudQuestsVisible: 1
   downloadAllCloudQuestOnStart: 0
   localQuestsDeletable: 1
-  showtextinloadinglogo: 0
-  showinternetconnectionmessage: 0
+  showtextinloadinglogo: 1
+  showinternetconnectionmessage: 1
   defaultlanguage: system
   languageChangableByUser: 0
   languagesAvailable:

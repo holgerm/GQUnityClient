@@ -323,6 +323,9 @@ namespace GQ.Editor.Building {
 
 			AssetDatabase.Refresh();
 
+			// store current PlayerPrefs: TODO
+
+
 			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = newProduct; // remember the new product for the editor time access point.
 			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.

@@ -112,7 +112,7 @@ public class showimpressum : MonoBehaviour {
 
 		}
 		
-		imprint = GameObject.Find("QuestDatabase").GetComponent<actions>().formatString(imprint);
+//		imprint = GameObject.Find("QuestDatabase").GetComponent<actions>().formatString(imprint);
 		
 		
 		GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(imprint);
