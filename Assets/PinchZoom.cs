@@ -6,15 +6,84 @@ public class PinchZoom : MonoBehaviour
 	public float zoomSpeed = 0.05f;
 
 
+	public float doubleclickTimer = 0.5f;
+
+	public float deltaMoveForDoubleClick = 0.1f;
+
+	float doubleclickTimerSave = 0.5f;
+
+	bool resetOnNextClick = false;
+
+
+	float deltaMoved = 0f;
+
+	void Start()
+	{
+		doubleclickTimerSave = doubleclickTimer;
+
+	}
+
+
+	void resetPositionAndScale()
+	{
+
+		GetComponent<RectTransform>().localScale = Vector3.one;
+		GetComponent<RectTransform>().localPosition = Vector3.zero;
+
+
+	}
 
 	void Update()
 	{
-		// If there are two touches on the device...
-		if (Input.touchCount == 2)
+
+		if (doubleclickTimer >= 0)
+		{
+			doubleclickTimer -= Time.deltaTime;
+
+		} else
+		{
+
+			resetOnNextClick = false;
+
+		}
+
+
+		if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !resetOnNextClick)
+		{
+			deltaMoved = 0f;
+
+		} else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+		{
+
+			deltaMoved += (Mathf.Abs(Input.GetTouch(0).deltaPosition.x) + Mathf.Abs(Input.GetTouch(0).deltaPosition.y));
+
+		} else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended && deltaMoved < deltaMoveForDoubleClick)
+		{
+
+			if (resetOnNextClick && doubleclickTimer > 0f && deltaMoved < deltaMoveForDoubleClick)
+			{
+				resetPositionAndScale();
+
+			} else
+			{
+				doubleclickTimer = doubleclickTimerSave;
+				resetOnNextClick = true;
+
+			}
+
+
+
+		} else if (Input.touchCount == 2)
 		{
 			// Store both touches.
 			Touch touchZero = Input.GetTouch(0);
 			Touch touchOne = Input.GetTouch(1);
+
+
+
+			deltaMoved += Mathf.Abs(touchZero.deltaPosition.x) + Mathf.Abs(touchZero.deltaPosition.y);
+			deltaMoved += Mathf.Abs(touchOne.deltaPosition.x) + Mathf.Abs(touchOne.deltaPosition.y);
+
 
 			// Find the position in the previous frame of each touch.
 			Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;

@@ -167,7 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4aab0e712644cada2b0e6dfd5a99d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomSpeed: -0.03
+  zoomSpeed: -0.08
+  doubleclickTimer: 0.5
+  deltaMoveForDoubleClick: 2
 --- !u!114 &11447506
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -232,7 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.878}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.878}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
