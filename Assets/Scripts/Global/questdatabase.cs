@@ -1545,7 +1545,7 @@ public class questdatabase : MonoBehaviour {
 			loadlogo.enable();
 		}
 
-		if ( Configuration.instance.showinternetconnectionmessage &&
+		if ( ConfigurationManager.Current.showNetConnectionWarning &&
 		     (q.alternateDownloadLink == "" || q.alternateDownloadLink == null) &&
 		     msgsactive == 0 ) {
 			showmessage("Wir empfehlen eine gute WLAN Verbindung um alle Medien zu laden.", "OK"); // TODO anpassen z. Bsp. für DownloadAllQuest auto)
@@ -2016,10 +2016,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {
