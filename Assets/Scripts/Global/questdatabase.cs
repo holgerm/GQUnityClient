@@ -1246,7 +1246,7 @@ public class questdatabase : MonoBehaviour {
 				}
 			}
 
-			if ( Configuration.instance.cloudQuestsVisible )
+			if ( ConfigurationManager.Current.cloudQuestsVisible )
 				foreach ( Quest aq in allquests ) {
 					if ( visitedQuests.Contains(aq.id) )
 						continue;
@@ -2016,10 +2016,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 					}
 					else {

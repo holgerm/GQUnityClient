@@ -233,7 +233,7 @@ public class createquestbuttons : MonoBehaviour {
 		foreach ( Quest q in filteredOfflineList ) {
 			showoffline.Add(q);
 		}
-		if ( Configuration.instance.cloudQuestsVisible ) {
+		if ( ConfigurationManager.Current.cloudQuestsVisible ) {
 			foreach ( Quest q in filteredOnlineList ) {
 				showonline.Add(q);
 			}

@@ -29,6 +29,8 @@ namespace GQ.Client.Conf {
 
 		public bool 	showCloudQuestsImmediately  { get; set; }
 
+		public bool 	cloudQuestsVisible  { get; set; }
+
 		public bool 	showTextInLoadingLogo  { get; set; }
 
 		public bool 	showNetConnectionWarning  { get; set; }
@@ -57,6 +59,7 @@ namespace GQ.Client.Conf {
 			markers = new List<CategoryInfo>();
 			useMapOffline = false;
 			questVisualization = "list";
+			cloudQuestsVisible = true;
 		}
 
 	}

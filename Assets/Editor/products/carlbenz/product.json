@@ -9,6 +9,7 @@
   "questVisualization": "list",
   "questVisualizationChangeable": false,
   "showCloudQuestsImmediately": false,
+  "cloudQuestsVisible": true,
   "showTextInLoadingLogo": false,
   "showNetConnectionWarning": false,
   "colorProfile": "[null]",
