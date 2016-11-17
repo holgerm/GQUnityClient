@@ -60,6 +60,7 @@ namespace GQ.Client.Conf {
 			useMapOffline = false;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
+			downloadTimeOutSeconds = 300;
 		}
 
 	}

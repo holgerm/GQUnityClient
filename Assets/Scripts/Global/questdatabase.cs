@@ -1717,7 +1717,7 @@ public class questdatabase : MonoBehaviour {
 				
 			}
 			else {
-				if ( timeout > (float)Configuration.instance.downloadTimeOutSeconds ) {
+				if ( timeout > (float)ConfigurationManager.Current.downloadTimeOutSeconds ) {
 					showmessage("Download fehlgeschlagen.");
 					Application.LoadLevel(0);
 				}
@@ -2016,10 +2016,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 					}
 					else {
