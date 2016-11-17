@@ -105,13 +105,56 @@ namespace GQ.Client.Conf {
 			get {
 				if ( _imprint == null ) {
 					TextAsset ta = Resources.Load("imprint") as TextAsset;
-					_imprint = ta.text;
+					if ( ta == null )
+						_imprint = "";
+					else
+						_imprint = ta.text;
 				}
 				return _imprint;
 				
 			}
 			set {
 				_imprint = value;
+			}
+		}
+
+
+		private static string _terms = null;
+
+		public static string Terms {
+			get {
+				if ( _terms == null ) {
+					TextAsset ta = Resources.Load("terms") as TextAsset;
+					if ( ta == null )
+						_terms = "";
+					else
+						_terms = ta.text;
+				}
+				return _terms;
+
+			}
+			set {
+				_terms = value;
+			}
+		}
+
+
+		private static string _privacyStatement = null;
+
+		public static string PrivacyStatement {
+			get {
+				if ( _privacyStatement == null ) {
+					TextAsset ta = Resources.Load("privacy") as TextAsset;
+					if ( ta == null )
+						_privacyStatement = "";
+					else
+						_privacyStatement = ta.text;
+				}
+				return _privacyStatement;
+
+			}
+			set {
+				_privacyStatement = value;
 			}
 		}
 

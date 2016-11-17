@@ -98,7 +98,7 @@ public class questdatabase : MonoBehaviour {
 			if ( PlayerPrefs.GetInt("privacyagreementversion") > Configuration.instance.privacyAgreementVersion ) {
 
 				Configuration.instance.privacyAgreementVersion = PlayerPrefs.GetInt("privacyagreementversion");
-				Configuration.instance.privacyAgreement = PlayerPrefs.GetString("privacyagreement");
+				ConfigurationManager.PrivacyStatement = PlayerPrefs.GetString("privacyagreement");
 
 			}
 
@@ -109,7 +109,7 @@ public class questdatabase : MonoBehaviour {
 			if ( PlayerPrefs.GetInt("agbsversion") > Configuration.instance.privacyAgreementVersion ) {
 				
 				Configuration.instance.agbsVersion = PlayerPrefs.GetInt("agbsversion");
-				Configuration.instance.agbs = PlayerPrefs.GetString("agbs");
+				ConfigurationManager.Terms = PlayerPrefs.GetString("agbs");
 				
 			}
 			
@@ -330,8 +330,8 @@ public class questdatabase : MonoBehaviour {
 				privacyAgreementObject.gameObject.SetActive(true);
 				
 				
-				GetComponent<actions>().localizeStringToDictionary(Configuration.instance.privacyAgreement);
-				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(Configuration.instance.privacyAgreement));
+				GetComponent<actions>().localizeStringToDictionary(ConfigurationManager.PrivacyStatement);
+				privacyAgreementObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(ConfigurationManager.PrivacyStatement));
 				privacyAgreementObject.GetComponent<Animator>().SetTrigger("in");
 			}
 			hideBlackCanvas();
@@ -349,7 +349,7 @@ public class questdatabase : MonoBehaviour {
 			if ( int.Parse(version) > privacyAgreementVersionRead || Configuration.instance.privacyAgreementVersion > privacyAgreementVersionRead ) {
 
 
-				string agreement = Configuration.instance.privacyAgreement;
+				string agreement = ConfigurationManager.PrivacyStatement;
 
 				if ( int.Parse(version) > Configuration.instance.privacyAgreementVersion ) {
 
@@ -361,7 +361,7 @@ public class questdatabase : MonoBehaviour {
 					PlayerPrefs.SetString("privacyagreement", agreement);
 
 					Configuration.instance.privacyAgreementVersion = int.Parse(version);
-					Configuration.instance.privacyAgreement = agreement;
+					ConfigurationManager.PrivacyStatement = agreement;
 					GameObject.Find("ImpressumCanvas").GetComponent<showimpressum>().loadPrivacy();
 
 
@@ -369,7 +369,7 @@ public class questdatabase : MonoBehaviour {
 				}
 				else {
 					version = Configuration.instance.privacyAgreementVersion.ToString();
-					agreement = Configuration.instance.privacyAgreement;
+					agreement = ConfigurationManager.PrivacyStatement;
 				}
 
 
@@ -410,8 +410,8 @@ public class questdatabase : MonoBehaviour {
 				agbObject.gameObject.SetActive(true);
 				
 				
-				GetComponent<actions>().localizeStringToDictionary(Configuration.instance.agbs);
-				agbObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(Configuration.instance.agbs));
+				GetComponent<actions>().localizeStringToDictionary(ConfigurationManager.Terms);
+				agbObject.textObject.text = GetComponent<actions>().formatString(GetComponent<actions>().localizeString(ConfigurationManager.Terms));
 				agbObject.GetComponent<Animator>().SetTrigger("in");
 				
 				
@@ -423,7 +423,7 @@ public class questdatabase : MonoBehaviour {
 
 			if ( int.Parse(version) > agbVersionRead || Configuration.instance.agbsVersion > agbVersionRead ) {
 				
-				string agreement = Configuration.instance.agbs;
+				string agreement = ConfigurationManager.Terms;
 				
 				if ( int.Parse(version) > Configuration.instance.agbsVersion ) {
 					
@@ -435,7 +435,7 @@ public class questdatabase : MonoBehaviour {
 					PlayerPrefs.SetInt("agbsversion", int.Parse(version));
 					PlayerPrefs.SetString("agbs", agreement);
 					Configuration.instance.agbsVersion = int.Parse(version);
-					Configuration.instance.agbs = agreement;
+					ConfigurationManager.Terms = agreement;
 					GameObject.Find("ImpressumCanvas").GetComponent<showimpressum>().loadAGBs();
 
 					agbObject.version = int.Parse(version);

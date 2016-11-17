@@ -52,7 +52,7 @@ public class showimpressum : MonoBehaviour {
 
 
 	public void loadPrivacy () {
-		string s = Configuration.instance.privacyAgreement;
+		string s = ConfigurationManager.PrivacyStatement;
 
 		GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(s);
 		s = GameObject.Find("QuestDatabase").GetComponent<actions>().formatString(GameObject.Find("QuestDatabase").GetComponent<actions>().localizeString(s));
@@ -63,7 +63,7 @@ public class showimpressum : MonoBehaviour {
 	}
 
 	public void loadAGBs () {
-		string s = Configuration.instance.agbs;
+		string s = ConfigurationManager.Terms;
 
 		GameObject.Find("QuestDatabase").GetComponent<actions>().localizeStringToDictionary(s);
 		s = GameObject.Find("QuestDatabase").GetComponent<actions>().formatString(GameObject.Find("QuestDatabase").GetComponent<actions>().localizeString(s));
