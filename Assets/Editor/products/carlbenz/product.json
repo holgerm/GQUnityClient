@@ -3,7 +3,7 @@
   "name": "Carl Benz in Karlsruhe",
   "portal": 402,
   "autoStartQuestID": 6088,
-  "autostartIsPredeployed": true,
+  "autostartIsPredeployed": false,
   "downloadTimeOutSeconds": 0,
   "nameForQuest": "Quest",
   "questVisualization": "list",
