@@ -26,7 +26,7 @@ public class palette : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		foreach ( ColorPalette cp in profiles ) {
-			if ( cp.id == Configuration.instance.colorProfile ) {
+			if ( cp.id == ConfigurationManager.Current.colorProfile ) {
 				mainColor = cp.mainColor;
 				backgroundColor = cp.backgroundColor;
 				darkBG = cp.darkBG;

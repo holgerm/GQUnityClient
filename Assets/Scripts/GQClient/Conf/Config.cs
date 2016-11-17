@@ -55,12 +55,14 @@ namespace GQ.Client.Conf {
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
 			questVisualization = "list";
-			// prepare markers as an empty list:
 			markers = new List<CategoryInfo>();
 			useMapOffline = false;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
 			downloadTimeOutSeconds = 300;
+			showNetConnectionWarning = true;
+			showTextInLoadingLogo = true;
+			colorProfile = "default";
 		}
 
 	}
