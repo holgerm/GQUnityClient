@@ -41,8 +41,6 @@ namespace GQ.Client.Conf {
 		public bool offlinePlayable = true;
 		public bool downloadAllCloudQuestOnStart = false;
 		public bool localQuestsDeletable = true;
-
-		public bool showtextinloadinglogo = true;
 		public bool showinternetconnectionmessage = true;
 		public string defaultlanguage = "system";
 		public bool languageChangableByUser = true;

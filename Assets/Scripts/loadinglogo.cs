@@ -45,12 +45,8 @@ public class loadinglogo : MonoBehaviour {
 			
 			t.enabled = true;
 		}
-		if ( !Configuration.instance.showtextinloadinglogo ) {
 
-
-
-	 
-
+		if ( !ConfigurationManager.Current.showTextInLoadingLogo ) {
 			if ( GameObject.Find("QuestDatabase").GetComponent<questdatabase>() != null ) {
 				if ( GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage != null ) {
 					GameObject.Find("QuestDatabase").GetComponent<questdatabase>().webloadingmessage.enabled = false;
