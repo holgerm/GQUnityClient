@@ -1496,6 +1496,8 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void endQuest () {
+		Debug.Log("endQuest()");
+
 		if ( currentquestdata != null ) {
 			Destroy(currentquestdata.gameObject);
 		}
@@ -2529,6 +2531,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void changePage (int id) {
 
+
 		if ( GameObject.Find("MapHider") != null ) {
 
 			GameObject.Find("MapHider").GetComponent<Image>().enabled = true;
@@ -2571,7 +2574,20 @@ public class questdatabase : MonoBehaviour {
 
 				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
-				foreach ( GameObject go in allObjects )
+				Debug.Log("changePage(to: " + qp.id + " of type: )" + qp.type);
+				int foundTiles = 0;
+				int destroyedTiles = 0;
+
+				foreach ( GameObject go in allObjects ) {
+					if ( go.name.Contains("[Tile") ) {
+						foundTiles++;
+						TileDownloader td = go.GetComponent<TileDownloader>();
+						if ( td != null )
+							Debug.Log("SUCCESS");
+						//						Debug.Log("Tile found: " + go.name);
+					}
+
+
 					if ( go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 					     && go.name != "ImpressumCanvas" && go.name != "LanguageCanvas" && !go.transform.IsChildOf(GameObject.Find("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 					     && go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
@@ -2634,10 +2650,18 @@ public class questdatabase : MonoBehaviour {
 						} 
 
 						if ( des ) {
+							if ( go.name.Contains("[Tile") ) {
+								destroyedTiles++;
+								//						Debug.Log("Tile destroyed: " + go.name);
+							}
+
 							Destroy(go);
 						}
 
 					}
+				} // foreach go
+
+				Debug.Log("   tiles found: " + foundTiles + ", destroyed: " + destroyedTiles);
 
 				Resources.UnloadUnusedAssets();
 

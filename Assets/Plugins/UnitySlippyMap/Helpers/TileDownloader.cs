@@ -193,7 +193,7 @@ namespace UnitySlippyMap {
 
 					Texture2D texture = new Texture2D(1, 1, TextureFormat.ARGB32, true);
 					www.LoadImageIntoTexture(texture);
-					Debug.Log("#TEXTURE loaded. COunted: " + ++loadedTextures);
+//					Debug.Log("#TEXTURE loaded. COunted: " + ++loadedTextures);
 				
 #if DEBUG_PROFILE
 				UnitySlippyMap.Profiler.End("www.texture");
@@ -329,7 +329,7 @@ namespace UnitySlippyMap {
 		// Gets a tile by its URL, the main texture of the material is assigned if successful.
 		// </summary>
 		public void Get (string url, Tile tile) {
-			Debug.Log("#TILES: " + Instance.tiles.Count);
+//			Debug.Log("#TILES: " + Instance.tiles.Count);
 #if DEBUG_LOG
 			Debug.Log("DEBUG: TileDownloader.Get: url: " + url);
 #endif
@@ -441,13 +441,13 @@ namespace UnitySlippyMap {
 				if ( existingEntry != null ) {
 					tiles.Remove(existingEntry);
 
-					Debug.Log("TEXTURES: Removed. Count: " + --loadedTextures);
+//					Debug.Log("TEXTURES: Removed. Count: " + --loadedTextures);
 					cacheSize -= existingEntry.size;
 				}
 			
 				entry.timestamp = (DateTime.Now.ToLocalTime() - new DateTime(1970, 1, 1).ToLocalTime()).TotalSeconds;
 				tiles.Add(entry);
-				Debug.Log("Tiles: Added. Count: " + tiles.Count);
+//				Debug.Log("Tiles: Added. Count: " + tiles.Count);
 				cacheSize += entry.size;
 			
 				// if the cache is full, erase the oldest entry
