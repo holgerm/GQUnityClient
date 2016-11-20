@@ -2579,15 +2579,7 @@ public class questdatabase : MonoBehaviour {
 				int destroyedTiles = 0;
 
 				foreach ( GameObject go in allObjects ) {
-					if ( go.name.Contains("[Tile") ) {
-						foundTiles++;
-						TileDownloader td = go.GetComponent<TileDownloader>();
-						if ( td != null )
-							Debug.Log("SUCCESS");
-						//						Debug.Log("Tile found: " + go.name);
-					}
-
-
+			
 					if ( go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
 					     && go.name != "ImpressumCanvas" && go.name != "LanguageCanvas" && !go.transform.IsChildOf(GameObject.Find("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
 					     && go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
@@ -2628,8 +2620,8 @@ public class questdatabase : MonoBehaviour {
 						if ( GameObject.Find("[Map]") ) {
 
 							if ( go.transform.IsChildOf(GameObject.Find("[Map]").transform) ) {
-
-								des = false;
+								destroyedTiles++;
+//								des = false;
 							}
 						}
 
@@ -2649,12 +2641,17 @@ public class questdatabase : MonoBehaviour {
 							}
 						} 
 
-						if ( des ) {
-							if ( go.name.Contains("[Tile") ) {
-								destroyedTiles++;
-								//						Debug.Log("Tile destroyed: " + go.name);
+						if ( go.name.StartsWith("tile_") ) {
+							Tile t = go.GetComponent<Tile>();
+							if ( t != null ) {
+								Debug.Log("GOT IT");
+								t.material.mainTexture = null;
+								foundTiles++;
 							}
+						}
+						
 
+						if ( des ) {
 							Destroy(go);
 						}
 
