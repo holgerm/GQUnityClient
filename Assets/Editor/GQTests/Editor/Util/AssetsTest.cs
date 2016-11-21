@@ -91,6 +91,68 @@ namespace GQTests.Editor.Util {
 			Assert.That(!Assets.Exists(newAssetPath));
 		}
 
+		[Test]
+		public void IsAssetPath () {
+			// Arrange relative asset paths:
+			string relPathToExistingAssetsFile = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "GivenAssets", "Image.png");
+			string relPathToExistingAssetsDir = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "EmptyFolder");
+			string relPathToNonExistingAssetsFile = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "GivenAssets", "DoesNotExi.st");
+
+			// Assert:
+			Assert.That(
+				Assets.IsAssetPath(relPathToExistingAssetsFile), 
+				"Existing asset file should be validated by relative path.");
+			Assert.That(
+				Assets.IsAssetPath(relPathToExistingAssetsDir), 
+				"Existing asset dir should be validated by relative path.");
+			Assert.That(
+				!Assets.IsAssetPath(relPathToNonExistingAssetsFile), 
+				"Non-Existing asset file should NOT be validated by relative path.");
+
+
+			// Arrange absolute asset paths:
+			string absPathToExistingAssetsFile = 
+				Files.CombinePath(Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "GivenAssets", "Image.png");
+			string absPathToExistingAssetsDir = 
+				Files.CombinePath(Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "EmptyFolder");
+			string absPathToNonExistingAssetsFile = 
+				Files.CombinePath(Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "GivenAssets", "DoesNotExi.st");
+			
+			// Assert:
+			Assert.That(
+				Assets.IsAssetPath(absPathToExistingAssetsFile), 
+				"Existing asset file should be validated by absolute path.");
+			Assert.That(
+				Assets.IsAssetPath(absPathToExistingAssetsDir), 
+				"Existing asset dir should be validated by absolute path.");
+			Assert.That(
+				!Assets.IsAssetPath(absPathToNonExistingAssetsFile), 
+				"Non-Existing asset file should NOT be validated by absolute path.");
+					
+			// Arrange NON asset paths:
+			string PROJECT_PATH = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
+			string pathToExistingNonAssetsFile = 
+				Files.CombinePath(PROJECT_PATH, "TestsData", "NonEmptyDir", "Image.png");
+			string pathToExistingNonAssetsDir = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestsData", "EmptyDir");
+			string pathToNonExistingNonAssetsFile = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestsData", "EmptyDir", "DoesNotExi.st");
+
+			// Assert:
+			Assert.That(
+				!Assets.IsAssetPath(pathToExistingNonAssetsFile), 
+				"Existing non asset file should not be validated by path.");
+			Assert.That(
+				!Assets.IsAssetPath(pathToExistingNonAssetsDir), 
+				"Existing non asset dir should not be validated by path.");
+			Assert.That(
+				!Assets.IsAssetPath(pathToNonExistingNonAssetsFile), 
+				"Non-Existing non asset file should NOT be validated by path.");
+		}
+
 
 		[Test]
 		public void CopyFlatAssetsFolder () {

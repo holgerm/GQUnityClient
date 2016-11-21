@@ -9,11 +9,31 @@ namespace GQ.Editor.Util {
 
 	public static class Assets {
 
+		[Obsolete("Please use IsAssetPath instead.")]
 		public static bool Exists (string pathToAsset) {
-//			Debug.Log("ASSET EXISTS? " + pathToAsset + " : " + AssetDatabase.AssetPathToGUID(pathToAsset));
 			bool fileExists = File.Exists(pathToAsset) || Directory.Exists(pathToAsset);
 			bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(pathToAsset));
 			return fileExists && guidExists;
+		}
+
+		public static bool IsAssetPath (string path) {
+			Debug.Log(path + "     " + Application.dataPath);
+			if ( path.StartsWith("/") ) {
+				if ( !path.StartsWith(Application.dataPath) )
+					return false;
+				else {
+					// we have an absolute path within the assets dir:
+					bool fileExists = File.Exists(path) || Directory.Exists(path);
+					bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(RelativeAssetPath(path)));
+					return path.StartsWith(Application.dataPath) && fileExists && guidExists;
+				}
+			}
+			else {
+				// we have a relative path:
+				bool fileExists = File.Exists(AbsolutePath(path)) || Directory.Exists(AbsolutePath(path));
+				bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(path));
+				return path.StartsWith("Assets/") && fileExists && guidExists;
+			}
 		}
 
 		public static string AbsolutePath (string relativeAssetPath) {
