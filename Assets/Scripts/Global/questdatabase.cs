@@ -2018,10 +2018,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {
@@ -2580,12 +2580,31 @@ public class questdatabase : MonoBehaviour {
 
 				foreach ( GameObject go in allObjects ) {
 			
-					if ( go != null && go.transform != null && go.name != "MapCanvas" && go.name != "PageController_Map" && go.name != "QuestDatabase" && go.name != "MsgCanvas"
-					     && go.name != "ImpressumCanvas" && go.name != "LanguageCanvas" && !go.transform.IsChildOf(GameObject.Find("ImpressumCanvas").transform) && go.name != "MenuCanvas" && go.name != "EventSystem"
-					     && go.name != "Configuration" && go.name != "MapCam" && go.name != "[Map]" && go.name != "[location marker]"
-					     && go.name != "" && !go.name.Contains("[Tile") && go.name != "EventSystem_Map" && go.name != "BgCam" && go.name != "QuestData(Clone)"
-					     && go.name != "NetworkManager" && !go.name.Contains("NetworkIdentity")
-					     && go.name != "RouteRender" && go.name != "VectorCanvas" && go.name != "VarOverlayCanvas" ) {
+					if ( go != null &&
+					     go.transform != null &&
+					     go.name != "MapCanvas" &&
+					     go.name != "PageController_Map" &&
+					     go.name != "QuestDatabase" &&
+					     go.name != "MsgCanvas" &&
+					     go.name != "ImpressumCanvas" &&
+					     go.name != "LanguageCanvas" &&
+					     !go.transform.IsChildOf(GameObject.Find("ImpressumCanvas").transform) &&
+					     go.name != "MenuCanvas" &&
+					     go.name != "EventSystem" &&
+					     go.name != "Configuration" &&
+					     go.name != "MapCam" &&
+					     go.name != "[Map]" &&
+					     go.name != "[location marker]" &&
+					     go.name != "" &&
+					     !go.name.Contains("[Tile") &&
+					     go.name != "EventSystem_Map" &&
+					     go.name != "BgCam" &&
+					     go.name != "QuestData(Clone)" &&
+					     go.name != "NetworkManager" &&
+					     !go.name.Contains("NetworkIdentity") &&
+					     go.name != "RouteRender" &&
+					     go.name != "VectorCanvas" &&
+					     go.name != "VarOverlayCanvas" ) {
 
 						bool des = true;
 
@@ -2621,7 +2640,7 @@ public class questdatabase : MonoBehaviour {
 
 							if ( go.transform.IsChildOf(GameObject.Find("[Map]").transform) ) {
 								destroyedTiles++;
-//								des = false;
+								des = false;
 							}
 						}
 
@@ -2641,14 +2660,14 @@ public class questdatabase : MonoBehaviour {
 							}
 						} 
 
-						if ( go.name.StartsWith("tile_") ) {
-							Tile t = go.GetComponent<Tile>();
-							if ( t != null ) {
-								Debug.Log("GOT IT");
-								t.material.mainTexture = null;
-								foundTiles++;
-							}
-						}
+//						if ( go.name.StartsWith("tile_") ) {
+//							Tile t = go.GetComponent<Tile>();
+//							if ( t != null ) {
+//								Debug.Log("GOT IT");
+//								t.material.mainTexture = null;
+//								foundTiles++;
+//							}
+//						}
 						
 
 						if ( des ) {
