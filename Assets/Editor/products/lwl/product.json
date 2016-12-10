@@ -4,7 +4,7 @@
   "portal": 402,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
-  "downloadTimeOutSeconds": 0,
+  "downloadTimeOutSeconds": 180,
   "nameForQuest": "Quest",
   "questVisualization": "list",
   "questVisualizationChangeable": false,

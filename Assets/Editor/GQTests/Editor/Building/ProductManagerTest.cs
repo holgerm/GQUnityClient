@@ -13,8 +13,18 @@ namespace GQTests.Editor.Building {
 
 		protected string PRODUCTS_TEST_DIR = GQAssert.TEST_DATA_BASE_DIR + "TestProducts/";
 
-		[SetUp, TearDown]
-		public void deleteProductManager () {
+		ProductManager testPM, prodPM;
+
+		[SetUp]
+		public void initPM () {
+			ProductManager._dispose();
+			testPM = ProductManager.TestInstance;
+			prodPM = ProductManager.Instance;
+		}
+
+		[TearDown]
+		public void clean () {
+			Assets.ClearAssetFolder(testPM.BuildExportPath);
 			ProductManager._dispose();
 		}
 
@@ -33,16 +43,16 @@ namespace GQTests.Editor.Building {
 		[Test]
 		public void InitTestPM () {
 			// Arrange:
-			ProductManager testPM = null;
+			ProductManager pm = null;
 
 			// Act:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR;
-			testPM = ProductManager.Instance;
+			pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.IsNotNull(testPM);
+			Assert.IsNotNull(pm);
 			Assert.AreEqual(PRODUCTS_TEST_DIR, ProductManager.ProductsDirPath);
-			Assert.AreEqual(0, testPM.AllProducts.Count);
+			Assert.AreEqual(0, pm.AllProducts.Count);
 		}
 
 		[Test]
@@ -54,18 +64,16 @@ namespace GQTests.Editor.Building {
 			Assets.ClearAssetFolder(testDir);
 
 			ProductManager.ProductsDirPath = testDir;
-			ProductManager testPM = ProductManager.Instance;
+			ProductManager prodPM = ProductManager.Instance;
 			string testProductID = "testProduct";
 
-//			Assets.ClearAssetFolder(testPM.BuildExportPath);
-
 			// Act:
-			testPM.createNewProduct(testProductID);
+			prodPM.createNewProduct(testProductID);
 
 			///////////////////////////////////
 			// Assert:
-			Assert.AreEqual(1, testPM.AllProducts.Count);
-			ProductSpec product = testPM.GetProduct(testProductID);
+			Assert.AreEqual(1, prodPM.AllProducts.Count);
+			ProductSpec product = prodPM.GetProduct(testProductID);
 			Assert.AreEqual(testProductID, product.Id);
 			Assert.That(Directory.Exists(product.Dir), "Product dir should be ok for product " + product);
 
@@ -87,53 +95,53 @@ namespace GQTests.Editor.Building {
 			Assert.AreEqual(testProductID, product.Config.id);
 
 			// Clean:
-			Assets.ClearAssetFolder(testDir);
+			Files.ClearDir(testDir);
 		}
 
 		[Test]
 		public void EmptyProductList () {
 			// Act:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductListEmpty";
-			ProductManager testPM = ProductManager.Instance;
+			ProductManager pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.AreEqual(0, testPM.AllProducts.Count, "Product List should be empty.");
+			Assert.AreEqual(0, pm.AllProducts.Count, "Product List should be empty.");
 		}
 
 		[Test]
 		public void PopulatedProductList () {
 			// Act:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductListPopulated";
-			ProductManager testPM = ProductManager.Instance;
+			ProductManager pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.AreEqual(4, testPM.AllProducts.Count, "Product List should contain the 4 valid products.");
-			Assert.That(testPM.AllProductIds.Contains("product1"), "product1 missing");
-			Assert.That(testPM.AllProductIds.Contains("product2"), "product2 missing");
-			Assert.That(testPM.AllProductIds.Contains("product3"), "product3 missing");
-			Assert.That(testPM.AllProductIds.Contains("product4"), "product4 missing");
-			Assert.AreEqual(0, testPM.Errors.Count);
+			Assert.AreEqual(4, pm.AllProducts.Count, "Product List should contain the 4 valid products.");
+			Assert.That(pm.AllProductIds.Contains("product1"), "product1 missing");
+			Assert.That(pm.AllProductIds.Contains("product2"), "product2 missing");
+			Assert.That(pm.AllProductIds.Contains("product3"), "product3 missing");
+			Assert.That(pm.AllProductIds.Contains("product4"), "product4 missing");
+			Assert.AreEqual(0, pm.Errors.Count);
 		}
 
 		[Test]
 		public void Paths4RealProductManager () {
 			// Act:
-			ProductManager realPM = ProductManager.Instance;
+			// Already done in initPM() on SetUp.
 
 			// Assert:
-			Assert.That(realPM.BuildExportPath, Is.EqualTo("Assets/ConfigAssets/Resources"));
-			Assert.That(realPM.ANDROID_MANIFEST_PATH, Is.EqualTo("Assets/Plugins/Android/AndroidManifest.xml"));
-			Assert.That(realPM.STREAMING_ASSET_PATH, Is.EqualTo("Assets/StreamingAssets"));
+			Assert.That(prodPM.BuildExportPath, Is.EqualTo("Assets/ConfigAssets/Resources"));
+			Assert.That(prodPM.ANDROID_MANIFEST_FILE, Is.EqualTo("Assets/Plugins/Android/AndroidManifest.xml"));
+			Assert.That(prodPM.STREAMING_ASSET_PATH, Is.EqualTo("Assets/StreamingAssets"));
 		}
 
 		[Test]
 		public void Paths4TestProductManager () {
 			// Act:
-			ProductManager testPM = ProductManager.TestInstance;
+			// Already done in initPM() on SetUp.
 
 			// Assert:
 			Assert.That(testPM.BuildExportPath, Is.EqualTo("Assets/Editor/GQTestsData/Output/ConfigAssets/Resources"));
-			Assert.That(testPM.ANDROID_MANIFEST_PATH, Is.EqualTo("Assets/Editor/GQTestsData/Output/Plugins/Android/AndroidManifest.xml"));
+			Assert.That(testPM.ANDROID_MANIFEST_FILE, Is.EqualTo("Assets/Editor/GQTestsData/Output/Plugins/Android/AndroidManifest.xml"));
 			Assert.That(testPM.STREAMING_ASSET_PATH, Is.EqualTo("Assets/Editor/GQTestsData/Output/StreamingAssets"));
 		}
 
@@ -195,8 +203,8 @@ namespace GQTests.Editor.Building {
 
 
 			// check watermark of android manifest (in plugins/android folder):
-			Assert.That(File.Exists(pm.ANDROID_MANIFEST_PATH), "No Android Manifest found in build directory.");
-			string idFoundInManifest = ProductManager.Extract_ID_FromXML_Watermark(pm.ANDROID_MANIFEST_PATH);
+			Assert.That(File.Exists(pm.ANDROID_MANIFEST_FILE), "No Android Manifest found in build directory.");
+			string idFoundInManifest = ProductManager.Extract_ID_FromXML_Watermark(pm.ANDROID_MANIFEST_FILE);
 			Assert.AreEqual(productName, idFoundInManifest);
 		}
 
@@ -204,7 +212,7 @@ namespace GQTests.Editor.Building {
 		public void PrepareProductForBuild () {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductListPopulated";
-			ProductManager testPM = ProductManager.TestInstance;
+			testPM = ProductManager.TestInstance;
 
 			if ( Directory.Exists(testPM.BuildExportPath) )
 				Assets.ClearAssetFolder(testPM.BuildExportPath);
@@ -223,16 +231,13 @@ namespace GQTests.Editor.Building {
 
 			// Assert:
 			AssertBuildIsValid(testPM, "product3");
-
-			// Clean:
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
 		}
 
 		[Test]
 		public void PrepareProductWithMarkers () {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
-			ProductManager testPM = ProductManager.TestInstance;
+			testPM = ProductManager.TestInstance;
 			Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
@@ -252,16 +257,13 @@ namespace GQTests.Editor.Building {
 			buildProduct = new ProductSpec(testPM.BuildExportPath);
 			Assert.AreEqual("productWithoutMarkers", buildProduct.Id);
 			Assert.That(!Directory.Exists(Files.CombinePath(buildProduct.Dir, "markers")), "marker directory should not exist with this product set for build");
-
-			// Clean:
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
 		}
 
 		[Test]
 		public void PrepareProductWithIgnoredSubdirs () {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
-			ProductManager testPM = ProductManager.TestInstance;
+			testPM = ProductManager.TestInstance;
 			Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
@@ -289,9 +291,6 @@ namespace GQTests.Editor.Building {
 			Assert.That(
 				File.Exists(Files.CombinePath(testPM.BuildExportPath, "texts", "IncludedTextDoc.txt")), 
 				"File texts/IncludedTextDoc.txt should be included in build.");
-
-			// Clean:
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
 		}
 
 
@@ -299,7 +298,7 @@ namespace GQTests.Editor.Building {
 		public void PrepareProductWithStreamingAssets () {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithStreamingAssets";
-			ProductManager testPM = ProductManager.TestInstance;
+			testPM = ProductManager.TestInstance;
 			Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
@@ -318,9 +317,6 @@ namespace GQTests.Editor.Building {
 			Assert.That(
 				File.Exists(Files.CombinePath(testPM.STREAMING_ASSET_PATH, "predeployed", "quests", "6088", "game.xml")), 
 				"Directory 'StreamingAssets' should contain predeployed quest files, e.g. at predeployed/quests/6088/game.xml");
-
-			// Clean:
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
 		}
 	}
 

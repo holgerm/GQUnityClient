@@ -12,6 +12,7 @@ namespace GQTests.Editor.Util {
 
 		private static string ASSETS_TEST_DIR = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest");
 		private static string EMPTY_DIR = Files.CombinePath(ASSETS_TEST_DIR, "EmptyFolder");
+		private static string TARGET_DIR = Files.CombinePath(ASSETS_TEST_DIR, "Targets");
 		private static string GIVEN_ASSETS_DIR = Files.CombinePath(ASSETS_TEST_DIR, "GivenAssets");
 		private static string GIVEN_RECURSIVE_ASSETS_DIR = Files.CombinePath(ASSETS_TEST_DIR, "GivenRecursiveAssets");
 
@@ -24,20 +25,44 @@ namespace GQTests.Editor.Util {
 		[TearDown]
 		public void TearDown () {
 			Assets.ClearAssetFolder(EMPTY_DIR);
+			Assets.ClearAssetFolder(TARGET_DIR);
 		}
 
 
 
 		[Test]
-		public void AssetsRelAndAbsPaths () {
+		public void AbsolutePath () {
 			// Arrange:
+			string relPath = Files.CombinePath("Assets", "MySubdir", "FurtherSubDir");
+			string absPath = Files.CombinePath(Application.dataPath, "MySubdir", "FurtherSubDir");
 
-			// Act:
+			// Act & Assert:
+			Assert.AreEqual(absPath, Assets.AbsolutePath4Asset(relPath));
+			Assert.AreEqual(absPath, Assets.AbsolutePath4Asset(absPath), "AbsolutePath() should not change absolute paths.");
+		}
+
+
+
+		[Test]
+		public void RelativeAssetPath () {
+			// Arrange:
 			string relPath = Files.CombinePath("Assets", "MySubdir", "FurtherSubDir");
 			string absPath = Files.CombinePath(Application.dataPath, "MySubdir", "FurtherSubDir");
 
 			// Assert:
-			Assert.AreEqual(absPath, Assets.AbsolutePath(relPath));
+			Assert.AreEqual(
+				relPath,
+				Assets.RelativeAssetPath(absPath),
+				"RelativeAssetPath() should strip the Application.datapath part from an absolute asset path."
+			);
+			Assert.AreEqual(
+				"Assets/path/to/an/asset", 
+				Assets.RelativeAssetPath(Files.CombinePath(Application.dataPath, "path/to/an/asset")));
+			Assert.AreEqual(
+				"Assets/path/to/an/asset",
+				Assets.RelativeAssetPath("Assets/path/to/an/asset"),
+				"RelativeAssetPath() should not change relative assets paths."
+			);
 		}
 
 		[Test]
@@ -57,10 +82,13 @@ namespace GQTests.Editor.Util {
 			// Assert:
 			Assert.That(new System.IO.DirectoryInfo(emptyDir), Is.Not.Empty);
 			Assert.That(Directory.Exists(newDir));
-			Assert.That(Assets.Exists(newDir));
+			Assert.That(Assets.ExistsAssetAtPath(newDir));
 		}
 
 
+		/// <summary>
+		/// This test is made just to comprehend the AssetBatabase and its file creating functions.
+		/// </summary>
 		[Test]
 		public void ExistsAsset () {
 			// Arrange:
@@ -69,10 +97,11 @@ namespace GQTests.Editor.Util {
 
 			// Pre Assert:
 			Assert.That(!File.Exists(newAssetPath));
-			Assert.That(!Assets.Exists(newAssetPath));
+			Assert.That(!Assets.ExistsAssetAtPath(newAssetPath));
 
 			// Act Create:
-			using ( StreamWriter sw = File.CreateText(Assets.AbsolutePath(newAssetPath)) ) {
+			// TODO change to a real Method in Files
+			using ( StreamWriter sw = File.CreateText(Assets.AbsolutePath4Asset(newAssetPath)) ) {
 				sw.WriteLine("Some text content.");
 				sw.Close();
 			}
@@ -81,18 +110,18 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(File.Exists(newAssetPath));
-			Assert.That(Assets.Exists(newAssetPath));
+			Assert.That(Assets.ExistsAssetAtPath(newAssetPath));
 
 			// Act Delete:
 			AssetDatabase.DeleteAsset(newAssetPath);
 
 			// Post Assert:
 			Assert.That(!File.Exists(newAssetPath));
-			Assert.That(!Assets.Exists(newAssetPath));
+			Assert.That(!Assets.ExistsAssetAtPath(newAssetPath));
 		}
 
 		[Test]
-		public void IsAssetPath () {
+		public void ExistsAssetAtPath () {
 			// Arrange relative asset paths:
 			string relPathToExistingAssetsFile = 
 				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "GivenAssets", "Image.png");
@@ -103,13 +132,13 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(
-				Assets.IsAssetPath(relPathToExistingAssetsFile), 
+				Assets.ExistsAssetAtPath(relPathToExistingAssetsFile), 
 				"Existing asset file should be validated by relative path.");
 			Assert.That(
-				Assets.IsAssetPath(relPathToExistingAssetsDir), 
+				Assets.ExistsAssetAtPath(relPathToExistingAssetsDir), 
 				"Existing asset dir should be validated by relative path.");
 			Assert.That(
-				!Assets.IsAssetPath(relPathToNonExistingAssetsFile), 
+				!Assets.ExistsAssetAtPath(relPathToNonExistingAssetsFile), 
 				"Non-Existing asset file should NOT be validated by relative path.");
 
 
@@ -123,19 +152,18 @@ namespace GQTests.Editor.Util {
 			
 			// Assert:
 			Assert.That(
-				Assets.IsAssetPath(absPathToExistingAssetsFile), 
+				Assets.ExistsAssetAtPath(absPathToExistingAssetsFile), 
 				"Existing asset file should be validated by absolute path.");
 			Assert.That(
-				Assets.IsAssetPath(absPathToExistingAssetsDir), 
+				Assets.ExistsAssetAtPath(absPathToExistingAssetsDir), 
 				"Existing asset dir should be validated by absolute path.");
 			Assert.That(
-				!Assets.IsAssetPath(absPathToNonExistingAssetsFile), 
+				!Assets.ExistsAssetAtPath(absPathToNonExistingAssetsFile), 
 				"Non-Existing asset file should NOT be validated by absolute path.");
 					
 			// Arrange NON asset paths:
-			string PROJECT_PATH = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
 			string pathToExistingNonAssetsFile = 
-				Files.CombinePath(PROJECT_PATH, "TestsData", "NonEmptyDir", "Image.png");
+				Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "NonEmptyDir", "Image.png");
 			string pathToExistingNonAssetsDir = 
 				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "TestsData", "EmptyDir");
 			string pathToNonExistingNonAssetsFile = 
@@ -143,66 +171,60 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(
-				!Assets.IsAssetPath(pathToExistingNonAssetsFile), 
+				!Assets.ExistsAssetAtPath(pathToExistingNonAssetsFile), 
 				"Existing non asset file should not be validated by path.");
 			Assert.That(
-				!Assets.IsAssetPath(pathToExistingNonAssetsDir), 
+				!Assets.ExistsAssetAtPath(pathToExistingNonAssetsDir), 
 				"Existing non asset dir should not be validated by path.");
 			Assert.That(
-				!Assets.IsAssetPath(pathToNonExistingNonAssetsFile), 
+				!Assets.ExistsAssetAtPath(pathToNonExistingNonAssetsFile), 
 				"Non-Existing non asset file should NOT be validated by path.");
 		}
 
-
 		[Test]
-		public void CopyFlatAssetsFolder () {
-			// Arrange:
-			string newDir = Files.CombinePath(EMPTY_DIR, "newDir");
-			DirectoryInfo newDirInfo = new DirectoryInfo(newDir);
+		public void IsAssetPath () {
+			// Arrange relative asset paths:
+			string relPathToExistingAssetsFile = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "GivenAssets", "Image.png");
+			string relPathToExistingAssetsDir = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "EmptyFolder");
+			string relPathToNonExistingAssetsFile = 
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "GivenAssets", "DoesNotExi.st");
 
-			Directory.CreateDirectory(Assets.AbsolutePath(newDir));
+			// Assert:
+			Assert.That(Assets.IsAssetPath(relPathToExistingAssetsFile), "Relative path to an existing asset file should be recognized by IsAssetPath()");
+			Assert.That(Assets.IsAssetPath(relPathToExistingAssetsDir), "Relative path to an existing asset dir should be recognized by IsAssetPath()");
+			Assert.That(
+				Assets.IsAssetPath(relPathToNonExistingAssetsFile), 
+				"Relative path to a NON existing asset file should STILL be recognized by IsAssetPath(); " + relPathToNonExistingAssetsFile);
 
-			// Pre Assert:
-			Assert.That(newDirInfo, Is.Empty);
+			// Arrange absolute asset paths:
+			string absPathToExistingAssetsFile = 
+				Files.CombinePath(Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "GivenAssets", "Image.png");
+			string absPathToExistingAssetsDir = 
+				Files.CombinePath(Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "EmptyFolder");
+			string absPathToNonExistingAssetsFile = 
+				Files.CombinePath(Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "GivenAssets", "DoesNotExi.st");
 
-			// Act:
-			Assets.CopyAssetsDir(GIVEN_ASSETS_DIR, newDir);
+			// Assert:
+			Assert.That(Assets.IsAssetPath(absPathToExistingAssetsFile), "Absolute path to an existing asset file should be recognized by IsAssetPath()");
+			Assert.That(Assets.IsAssetPath(absPathToExistingAssetsDir), "Absolute path to an existing asset dir should be recognized by IsAssetPath()");
+			Assert.That(Assets.IsAssetPath(absPathToNonExistingAssetsFile), "Absolute path to a NON existing asset file should NOT be recognized by IsAssetPath()");
 
-			// Post Assert:
-			Assert.That(newDirInfo, Is.Not.Empty);
+			// Arrange NON-Asset paths:
+			string pathToExistingNonAssetsFile = 
+				Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "NonEmptyDir", "Image.png");
+			string pathToExistingNonAssetsDir = 
+				Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "EmptyDir");
+			string pathToNonExistingNonAssetPath = 
+				Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "EmptyDir", "DoesNotExi.st");
+			
 
-			AssertThatAllGivenAssetsExistInDir(newDir);
+			// Assert:
+			Assert.That(!Assets.IsAssetPath(pathToExistingNonAssetsFile), "Path to an existing file outside of Assets should NOT be recognized by IsAssetPath()");
+			Assert.That(!Assets.IsAssetPath(pathToExistingNonAssetsDir), "Path to an existing dir outside of Assets should NOT be recognized by IsAssetPath()");
+			Assert.That(!Assets.IsAssetPath(pathToNonExistingNonAssetPath), "Path to an non-existing file / dir outside of Assets should NOT be recognized by IsAssetPath()");
 		}
-
-		[Test]
-		public void CopyDeepAssetsFolder () {
-			string newDir = Files.CombinePath(EMPTY_DIR, "newDir");
-			DirectoryInfo newDirInfo = new DirectoryInfo(newDir);
-
-			Directory.CreateDirectory(Assets.AbsolutePath(newDir));
-
-			// Pre Assert:
-			Assert.That(newDirInfo, Is.Empty);
-
-			// Act:
-			Assets.CopyAssetsDir(GIVEN_RECURSIVE_ASSETS_DIR, newDir);
-
-			// Post Assert:
-			Assert.That(newDirInfo, Is.Not.Empty);
-
-			string pathToSubfolder = Files.CombinePath(newDirInfo.FullName, "Subfolder");
-			Assert.That(Directory.Exists(pathToSubfolder), "subfolder should have been copied to " + pathToSubfolder);
-			AssertThatAllGivenAssetsExistInDir(Assets.RelativeAssetPath(pathToSubfolder));
-
-			string pathToDeepSubfolder = Files.CombinePath(newDirInfo.FullName, "Subfolder", "DeepSubfolder");
-			Assert.That(Directory.Exists(pathToDeepSubfolder), "deep subfolder should have been copied to " + pathToDeepSubfolder);
-			AssertThatAllGivenAssetsExistInDir(Assets.RelativeAssetPath(pathToDeepSubfolder));
-
-			string pathToDeepSubfolder2 = Files.CombinePath(newDirInfo.FullName, "Subfolder", "DeepSubfolder2");
-			Assert.That(Directory.Exists(pathToDeepSubfolder2), "deep subfolder should have been copied to " + pathToDeepSubfolder2);
-			AssertThatAllGivenAssetsExistInDir(Assets.RelativeAssetPath(pathToDeepSubfolder2));
-		}
-
 
 		private void AssertThatAllGivenAssetsExistInDir (string dir) {
 
@@ -212,9 +234,9 @@ namespace GQTests.Editor.Util {
 					continue;
 
 				string targetFilePathRel = Files.CombinePath(dir, givenFile.Name);
-				string targetFilePathAbs = Assets.AbsolutePath(targetFilePathRel);
+				string targetFilePathAbs = Assets.AbsolutePath4Asset(targetFilePathRel);
 				Assert.That(File.Exists(targetFilePathAbs), "File should have been copied to: " + targetFilePathAbs);
-				Assert.That(Assets.Exists(targetFilePathRel), "Asset should have been copied to: " + targetFilePathRel);
+				Assert.That(Assets.ExistsAssetAtPath(targetFilePathRel), "Asset should have been copied to: " + targetFilePathRel);
 			}
 		}
 
@@ -225,8 +247,8 @@ namespace GQTests.Editor.Util {
 			string newDir = Files.CombinePath(EMPTY_DIR, "newDir");
 			DirectoryInfo newDirInfo = new DirectoryInfo(newDir);
 
-			Directory.CreateDirectory(Assets.AbsolutePath(newDir));
-			Assets.CopyAssetsDir(GIVEN_ASSETS_DIR, newDir);
+			Directory.CreateDirectory(Assets.AbsolutePath4Asset(newDir));
+			Assets.copyAssetsDir(GIVEN_ASSETS_DIR, newDir);
 
 			// Act:
 			Assets.ClearAssetFolder(newDir);
@@ -239,9 +261,9 @@ namespace GQTests.Editor.Util {
 					continue;
 
 				string targetFilePathRel = Files.CombinePath(newDir, givenFile.Name);
-				string targetFilePathAbs = Assets.AbsolutePath(targetFilePathRel);
+				string targetFilePathAbs = Assets.AbsolutePath4Asset(targetFilePathRel);
 				Assert.That(!File.Exists(targetFilePathAbs), "File should have been deleted: " + targetFilePathAbs);
-				Assert.That(!Assets.Exists(targetFilePathRel), "Asset should have been deleted: " + targetFilePathRel);
+				Assert.That(!Assets.ExistsAssetAtPath(targetFilePathRel), "Asset should have been deleted: " + targetFilePathRel);
 			}
 		}
 

@@ -9,34 +9,48 @@ namespace GQ.Editor.Util {
 
 	public static class Assets {
 
-		[Obsolete("Please use IsAssetPath instead.")]
-		public static bool Exists (string pathToAsset) {
-			bool fileExists = File.Exists(pathToAsset) || Directory.Exists(pathToAsset);
-			bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(pathToAsset));
-			return fileExists && guidExists;
-		}
+		/// <summary>
+		/// Determines if the specified path points to an existing asset.
+		/// </summary>
+		/// <returns><c>true</c> if is asset path the specified path; otherwise, <c>false</c>.</returns>
+		/// <param name="path">Path.</param>
+		public static bool ExistsAssetAtPath (string path) {
+			if ( !IsAssetPath(path) )
+				return false;
 
-		public static bool IsAssetPath (string path) {
-			Debug.Log(path + "     " + Application.dataPath);
 			if ( path.StartsWith("/") ) {
-				if ( !path.StartsWith(Application.dataPath) )
-					return false;
-				else {
-					// we have an absolute path within the assets dir:
-					bool fileExists = File.Exists(path) || Directory.Exists(path);
-					bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(RelativeAssetPath(path)));
-					return path.StartsWith(Application.dataPath) && fileExists && guidExists;
-				}
+				// we have an absolute path within the assets dir:
+				bool fileExists = File.Exists(path) || Directory.Exists(path);
+				bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(RelativeAssetPath(path)));
+				return fileExists && guidExists;
 			}
 			else {
 				// we have a relative path:
-				bool fileExists = File.Exists(AbsolutePath(path)) || Directory.Exists(AbsolutePath(path));
+				bool fileExists = File.Exists(AbsolutePath4Asset(path)) || Directory.Exists(AbsolutePath4Asset(path));
 				bool guidExists = !String.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(path));
-				return path.StartsWith("Assets/") && fileExists && guidExists;
+				return fileExists && guidExists;
 			}
 		}
 
-		public static string AbsolutePath (string relativeAssetPath) {
+		public static bool IsAssetPath (string path) {
+			if ( !Files.IsValidPath(path) )
+				return false;
+			
+			if ( path.StartsWith("/") ) {
+				// we have an absolute path:
+				return path.StartsWith(Application.dataPath);
+			}
+			else {
+				// we have a relative path:
+				return path.StartsWith("Assets/");
+			}
+
+		}
+
+		public static string AbsolutePath4Asset (string relativeAssetPath) {
+			if ( !IsAssetPath(relativeAssetPath) )
+				throw new ArgumentException("Given path is not a valid asset path.");
+			
 			string projectParentPath = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
 			if ( !relativeAssetPath.StartsWith(projectParentPath) )
 				return Files.CombinePath(projectParentPath, relativeAssetPath);
@@ -49,31 +63,86 @@ namespace GQ.Editor.Util {
 				string projectParentPath = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
 				return path.Substring(projectParentPath.Length + 1);
 			}
-			else
+			if ( path.StartsWith("Assets") ) {
 				return path;
+			}
+				
+			throw new ArgumentException("Non asset path can not be normalized (" + path + ")");
 		}
 
-		public static bool CopyAssetsDir (string fromDir, string toDir, bool recursive = true) {
+		/// <summary>
+		/// Copies the assets dir fromDir into the  existing dir toDir. 
+		/// Afterwards a similarly named dir as fromDir exists within toDir and contains all files and subdirs as fromDir does.
+		/// </summary>
+		/// <returns><c>true</c>, if assets dir was copyed, <c>false</c> otherwise.</returns>
+		/// <param name="fromDir">From dir.</param>
+		/// <param name="toDir">To dir.</param>
+		/// <param name="recursive">If set to <c>true</c> recursive.</param>
+		[Obsolete("Use Files.CopyDir() instead. This method will only be kept as private implmentation.")]
+		public static bool copyAssetsDir (string fromDir, string toDir, bool recursive = true) {
+			if ( !Assets.IsAssetPath(fromDir) || !Assets.IsAssetPath(toDir) )
+				return false;
+
+			fromDir = Assets.RelativeAssetPath(fromDir);
+			toDir = Assets.RelativeAssetPath(toDir);
+
+			bool copied = true;
+
+			DirectoryInfo fromDirInfo = new DirectoryInfo(fromDir);
+			DirectoryInfo toDirInfo = new DirectoryInfo(toDir);
+			string guid = AssetDatabase.CreateFolder(toDir, fromDirInfo.Name);
+			string createdFolderPath = AssetDatabase.GUIDToAssetPath(guid);
+			string targetDir = Files.CombinePath(toDirInfo.FullName, fromDirInfo.Name);
+			copied &= Assets.ExistsAssetAtPath(targetDir); // copied dir should now exist in fromDir. 
+
+			foreach ( FileInfo file in fromDirInfo.GetFiles() ) {
+			
+				if ( !file.Name.StartsWith(".") && !file.Name.EndsWith(".meta") ) {
+
+					string fileRelPath = RelativeAssetPath(file.FullName);
+					string targetFilePath = Files.CombinePath(targetDir, file.Name);
+					string targetRelPath = RelativeAssetPath(targetFilePath);
+					copied &= AssetDatabase.CopyAsset(fileRelPath, targetRelPath);
+				}
+			}
+
+			if ( recursive )
+				foreach ( DirectoryInfo subDir in fromDirInfo.GetDirectories() ) {
+
+					copied &= copyAssetsDir(subDir.FullName, targetDir);
+				}
+
+			AssetDatabase.Refresh();
+
+			return copied;
+		}
+
+		public static bool CopyAssetsDirContents (string fromDir, string toDir, bool recursive = true) {
+			if ( !Assets.IsAssetPath(fromDir) || !Assets.IsAssetPath(toDir) )
+				return false;
+
+			fromDir = Assets.RelativeAssetPath(fromDir);
+			toDir = Assets.RelativeAssetPath(toDir);
+
 			bool copied = true;
 
 			DirectoryInfo fromDirInfo = new DirectoryInfo(fromDir);
 
 			foreach ( FileInfo file in fromDirInfo.GetFiles() ) {
-				if ( !file.Name.StartsWith(".") && !file.Name.EndsWith(".meta") ) {
-					string fromFilePath = Files.CombinePath(fromDir, file.Name);
-					string toFilePath = Files.CombinePath(toDir, file.Name);
 
-					copied &= AssetDatabase.CopyAsset(fromFilePath, toFilePath);
+				if ( !file.Name.StartsWith(".") && !file.Name.EndsWith(".meta") ) {
+
+					string fileRelPath = RelativeAssetPath(file.FullName);
+					string targetFilePath = Files.CombinePath(toDir, file.Name);
+					string targetRelPath = RelativeAssetPath(targetFilePath);
+					copied &= AssetDatabase.CopyAsset(fileRelPath, targetFilePath);
 				}
 			}
 
 			if ( recursive )
-				foreach ( DirectoryInfo dir in fromDirInfo.GetDirectories() ) {
-					string subDirFrom = Files.CombinePath(fromDir, dir.Name);
-					string subDirTo = Files.CombinePath(toDir, dir.Name);
+				foreach ( DirectoryInfo subDir in fromDirInfo.GetDirectories() ) {
 
-					AssetDatabase.CreateFolder(toDir, dir.Name);
-					copied &= CopyAssetsDir(subDirFrom, subDirTo);
+					copied &= copyAssetsDir(subDir.FullName, toDir);
 				}
 
 			AssetDatabase.Refresh();
@@ -88,6 +157,7 @@ namespace GQ.Editor.Util {
 		/// <returns><c>true</c>, if asset folder was cleared, i.e. if no file or directory remains, <c>false</c> otherwise.</returns>
 		/// <param name="pathToFolder">Path to folder.</param>
 		/// <param name="createIfNeeded">If true, an empty folder will be created if it not already exists.</param>
+		[Obsolete("Use Files.ClearDir() instead. This method will be internal soon.")]
 		public static bool ClearAssetFolder (string pathToFolder, bool createIfNeeded = false) {
 			bool cleared = true;
 
@@ -147,9 +217,10 @@ namespace GQ.Editor.Util {
 		/// <returns>The guid of the new subfolder asset.</returns>
 		/// <param name="basePath">Base path.</param>
 		/// <param name="subfolderName">Subfolder name.</param>
+		[Obsolete("Use Files.CreateDir() instead.")]
 		public static string CreateSubfolder (string basePath, string subfolderName) {
 			while ( basePath.EndsWith("/") ) {
-				basePath = basePath.Substring(0, basePath.Length - 1);
+				basePath = basePath.Substring(0, basePath.Length - 2);
 			}
 			return AssetDatabase.CreateFolder(basePath, subfolderName);
 		}

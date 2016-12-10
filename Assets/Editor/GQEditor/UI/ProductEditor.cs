@@ -13,6 +13,8 @@ using GQ.Client.Util;
 using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
+using GQ.Editor.Util;
+using GQTests;
 
 namespace GQ.Editor.UI {
 	public class ProductEditor : EditorWindow {
@@ -413,8 +415,6 @@ namespace GQ.Editor.UI {
 						configIsDirty = false;
 					}
 					if ( GUILayout.Button("Revert") ) {
-						ProductSpec p = pm.LoadProductSpec(pm.AllProducts.ElementAt(selectedProductIndex).Dir);
-//						Repaint();
 						GUIUtility.keyboardControl = 0;
 						GUIUtility.hotControl = 0;
 						configIsDirty = false;
@@ -456,8 +456,16 @@ namespace GQ.Editor.UI {
 			// if the only change is buildtime.txt we ignore it:
 			if ( importedAssets.Length == 1 && importedAssets[0].Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
 				return;
-			else
-				writeBuildDate();
+
+			// if we have a real change in the code, we update the buildtime:
+			for ( int i = 0; i < importedAssets.Length; i++ ) {
+				if ( isRealAsset(importedAssets[0]) ) {
+					Debug.Log("Imported REAL Assets: " + importedAssets[i]);
+
+					writeBuildDate();
+					break;
+				}
+			}
 
 			productDictionaryDirty = false;
 			buildDirty = false;
@@ -492,7 +500,18 @@ namespace GQ.Editor.UI {
 			ProductEditor.BuildIsDirty = buildDirty; 
 			if ( ProductEditor.Instance != null )
 				ProductEditor.Instance.Repaint();
+		}
 
+		private static bool isRealAsset (string assetPath) {
+			if ( assetPath.StartsWith(GQAssert.TEST_DATA_BASE_DIR) )
+				// test asstes are NOT REAL assets:
+				return false;
+
+			if ( assetPath.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
+				// buildtime.txt is NOT a REAL asset:
+				return false;
+
+			return true;
 		}
 
 		private static void check4ExternalChanges (string str) {
@@ -501,28 +520,42 @@ namespace GQ.Editor.UI {
 				// a product might have changed: refresh product list:
 				productDictionaryDirty = true;
 			}
-			if ( str.StartsWith(ProductManager.Instance.BuildExportPath) && !str.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
+			if ( buildDirty == false && str.StartsWith(ProductManager.Instance.BuildExportPath) && !str.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
 				// the build might be changed externally: signal that to the Product Editor:
 				buildDirty = true;
 			}
 		}
+
+		private static bool isWritingBuildTime = false;
 
 		/// <summary>
 		/// Writes the current build date into a tiny file in the ConfigAssets. 
 		/// It will be read by the application on start and used as additional version number.
 		/// </summary>
 		static void writeBuildDate () {
+//			if ( isWritingBuildTime ) {
+//				// prevent loops of writing buildtime due to buildtime.txt file asset changes
+//				Debug.Log("buildtime left because of monitor is active");
+//				return;
+//			}
+//
+//			isWritingBuildTime = true;
 			try {
 				CultureInfo culture = new CultureInfo("de-DE"); 
 				if ( File.Exists(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
 					AssetDatabase.DeleteAsset(ConfigurationManager.BUILD_TIME_FILE_PATH);
 				} 
-				File.WriteAllText(ConfigurationManager.BUILD_TIME_FILE_PATH, DateTime.Now.ToString("G", culture));
+				string buildtime = DateTime.Now.ToString("G", culture);
+				File.WriteAllText(ConfigurationManager.BUILD_TIME_FILE_PATH, buildtime);
 				AssetDatabase.Refresh();
+				Debug.Log("Wrote buldtime to " + buildtime);
 			} catch ( Exception exc ) {
 				Debug.LogWarning("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
 				return;
 			} 
+//			Debug.Log("Resetting buildtime monitor flag.");
+//			isWritingBuildTime = false;
+
 		}
 
 	}

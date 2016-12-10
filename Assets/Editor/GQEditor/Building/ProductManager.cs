@@ -58,14 +58,20 @@ namespace GQ.Editor.Building {
 		}
 
 
-		public string _ANDROID_MANIFEST_PATH = "Assets/Plugins/Android/AndroidManifest.xml";
+		public string _ANDROID_MANIFEST_DIR = "Assets/Plugins/Android";
 
-		public string ANDROID_MANIFEST_PATH {
+		public string ANDROID_MANIFEST_DIR {
 			get {
-				return _ANDROID_MANIFEST_PATH;
+				return _ANDROID_MANIFEST_DIR;
 			}
 			private set {
-				_ANDROID_MANIFEST_PATH = value;
+				_ANDROID_MANIFEST_DIR = value;
+			}
+		}
+
+		public string ANDROID_MANIFEST_FILE {
+			get {
+				return Files.CombinePath(ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST);
 			}
 		}
 
@@ -138,8 +144,8 @@ namespace GQ.Editor.Building {
 						Directory.CreateDirectory(_testInstance.BuildExportPath);
 
 					string androidPluginDirPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android");
-					_testInstance.ANDROID_MANIFEST_PATH = 
-						Files.CombinePath(androidPluginDirPath, "AndroidManifest.xml");
+					_testInstance.ANDROID_MANIFEST_DIR = 
+						Files.CombinePath(androidPluginDirPath);
 					if ( !Directory.Exists(androidPluginDirPath) )
 						Directory.CreateDirectory(androidPluginDirPath);
 
@@ -215,7 +221,7 @@ namespace GQ.Editor.Building {
 			// copy default template files to a new product folder:
 			Assets.CreateSubfolder(ProductsDirPath, newProductID);
 			AssetDatabase.Refresh();
-			Assets.CopyAssetsDir(TEMPLATE_PRODUCT_PATH, newProductDirPath);
+			Assets.CopyAssetsDirContents(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
 			// create Config, populate it with defaults and serialize it into the new product folder:
 			createConfigWithDefaults(newProductID);
@@ -289,39 +295,60 @@ namespace GQ.Editor.Building {
 				Directory.CreateDirectory(BuildExportPath);
 			}
 
-			Assets.ClearAssetFolder(BuildExportPath); 
-
-			Assets.CopyAssetsDir(productDirPath, BuildExportPath, false);
+			Files.ClearDir(BuildExportPath); 
 
 			DirectoryInfo productDirInfo = new DirectoryInfo(productDirPath);
+
+			foreach ( FileInfo file in productDirInfo.GetFiles() ) {
+				if ( file.Name.StartsWith(".") || file.Name.EndsWith(".meta") )
+					continue;
+
+				Files.CopyFile(
+					Files.CombinePath(productDirPath, file.Name), 
+					BuildExportPath
+				);
+			}
 
 			foreach ( DirectoryInfo dir in productDirInfo.GetDirectories() ) {
 				if ( dir.Name.StartsWith("_") || dir.Name.Equals("StreamingAssets") )
 					continue;
-				
-				Assets.CreateSubfolder(BuildExportPath, dir.Name);
 
-				Assets.CopyAssetsDir(
+				Files.CopyDir(
 					Files.CombinePath(productDirPath, dir.Name), 
-					Files.CombinePath(BuildExportPath, dir.Name));
+					BuildExportPath
+				);
 			}
 
 			// copy AndroidManifest (additionally) to plugins/android directory:
-			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
-			AssetDatabase.MoveAsset(Files.CombinePath(BuildExportPath, ProductSpec.ANDROID_MANIFEST), ANDROID_MANIFEST_PATH);
+			Files.CopyFile(
+				Files.CombinePath(
+					BuildExportPath, 
+					ProductSpec.ANDROID_MANIFEST
+				), 
+				ANDROID_MANIFEST_DIR
+			);
+//			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
+//			AssetDatabase.MoveAsset(
+//				Files.CombinePath(
+//					BuildExportPath, 
+//					ProductSpec.ANDROID_MANIFEST
+//				), 
+//				ANDROID_MANIFEST_PATH);
 
 			// copy StreamingAssets:
-			Assets.ClearAssetFolder(STREAMING_ASSET_PATH, true);
+			if ( Files.ExistsDir(STREAMING_ASSET_PATH) )
+				Files.ClearDir(STREAMING_ASSET_PATH);
+			else
+				Files.CreateDir(STREAMING_ASSET_PATH);
+
 			if ( Directory.Exists(newProduct.StreamingAssetPath) ) {
-				Assets.CopyAssetsDir(
+				Files.CopyDirContents(
 					newProduct.StreamingAssetPath, 
 					STREAMING_ASSET_PATH);
 			}
 
 			PlayerSettings.productName = newProduct.Config.name;
 			PlayerSettings.bundleIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
-
-			AssetDatabase.Refresh();
 
 			// store current PlayerPrefs: TODO
 

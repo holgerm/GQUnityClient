@@ -4,6 +4,7 @@ using System;
 using System.Security;
 using GQ.Util;
 using UnityEngine;
+using GQ.Editor.Util;
 
 namespace GQTests {
 
@@ -14,6 +15,14 @@ namespace GQTests {
 		static public string TEST_DATA_BASE_DIR {
 			get {
 				return _TEST_DATA_BASE_DIR;
+			}
+		}
+
+		static private string _PROJECT_PATH = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
+
+		public static string PROJECT_PATH {
+			get {
+				return _PROJECT_PATH;
 			}
 		}
 
