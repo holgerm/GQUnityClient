@@ -1,0 +1,44 @@
+#!/bin/bash
+
+echo "Welcome to gq_resize_images!"
+
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+
+if [ ! "$#" -eq 4 ]; then
+	echo "  usage: gq_resize_images <sourceImageDirPath> <targetImageDirPath> <width> <height>"
+	exit 1
+fi
+
+if [ -d "$1" ]; then
+	dir="$1/*"
+elif [ -f "$1" ]; then
+	dir="$1"
+else
+	echo "  first argument (sourceImageDirPath) does not seem to be an existing readable directory."
+	exit 1
+fi
+
+if [ ! -d "$2" ]; then
+	echo "  creating target dir ..."
+	mkdir -p $2
+else
+	if [ "$(ls -A $2)" ]; then
+     	echo "  WARNING: target dir is not empty. We are overwriting. Please check output carefully."
+     	# exit 1
+	fi
+fi 
+
+
+
+
+
+for f in $dir
+	do
+		filename=$(basename "$f")
+		echo "  convert ${f} -resize $3x$4 $2/${filename}"
+		convert ${f} -resize $3x$4 $2/${filename}	
+	done
+
+
+IFS=$SAVEIFS
