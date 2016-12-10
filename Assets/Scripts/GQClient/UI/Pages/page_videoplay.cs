@@ -3,31 +3,29 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 
-public class page_videoplay : MonoBehaviour
-{
+public class page_videoplay : MonoBehaviour {
 	
 	
 	private WWW www;
 	public questdatabase questdb;
 	public Quest quest;
 	public QuestPage npctalk;
-//	public YoutubeVideo youtube;
+	//	public YoutubeVideo youtube;
 	private bool videoplayed = false;
 
 	static string filepath;
 
 
 
-	IEnumerator Start ()
-	{
+	IEnumerator Start () {
 
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		npctalk = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
+		npctalk = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
 
-		if (npctalk.onStart != null) {
+		if ( npctalk.onStart != null ) {
 			
-			npctalk.onStart.Invoke ();
+			npctalk.onStart.Invoke();
 		}
 		
 		
@@ -39,32 +37,34 @@ public class page_videoplay : MonoBehaviour
 		
 		
 
-		string url = npctalk.getAttribute ("file");
-		Debug.Log ("We want to play video url = " + url);
+		string url = npctalk.getAttribute("file");
+		Debug.Log("We want to play video url = " + url);
 
-		if (!url.StartsWith ("http:") && !url.StartsWith ("https:")) {
+		if ( !url.StartsWith("http:") && !url.StartsWith("https:") ) {
 
-			Debug.Log ("Starting video url = " + url);
+			Debug.Log("Starting video url = " + url);
 
-			if(Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed){
-
-
-
-				 url = url.Replace(questdb.PATH_2_PREDEPLOYED_QUESTS,"predeployed/quests");
+			if ( Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed ) {
 
 
 
-				Handheld.PlayFullScreenMovie (url);
+				url = url.Replace(questdb.PATH_2_PREDEPLOYED_QUESTS, "predeployed/quests");
 
-			} else {
-			Handheld.PlayFullScreenMovie ("file://" + url);
+				 
+
+				Handheld.PlayFullScreenMovie(url);
+
+			}
+			else {
+				Handheld.PlayFullScreenMovie("file://" + url);
 			}
 
-			yield return new WaitForEndOfFrame ();
-			yield return new WaitForEndOfFrame ();
+			yield return new WaitForEndOfFrame();
+			yield return new WaitForEndOfFrame();
 			videoplayed = true;
 
-		} else {
+		}
+		else {
 
 
 			// YOUTUBE OR URL
@@ -126,70 +126,68 @@ public class page_videoplay : MonoBehaviour
 
 	}
 
-	private IEnumerator PlayStreamingVideo (string url)
-	{
+	private IEnumerator PlayStreamingVideo (string url) {
 		//        Handheld.PlayFullScreenMovie(url, Color.black, FullScreenMovieControlMode.Full);
-		yield return new WaitForSeconds (1.0f);
+		yield return new WaitForSeconds(1.0f);
 
 		#if !UNITY_WEBPLAYER && !UNITY_STANDALONE_OSX
 
-		Handheld.PlayFullScreenMovie (url);
+		Handheld.PlayFullScreenMovie(url);
 
 #endif
 
-		yield return new WaitForEndOfFrame ();
-		yield return new WaitForEndOfFrame ();
-		StartCoroutine (onEnd ());
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
+		StartCoroutine(onEnd());
 	}
 
-	void Update ()
-	{
+	void Update () {
 
 
-		if (videoplayed) {
+		if ( videoplayed ) {
 
 
-			StartCoroutine (onEnd ());
+			StartCoroutine(onEnd());
 
 		}
 
 	}
 		
-//	public void playMovie (string x)
-//	{
-//
-//		StartCoroutine (playMovieFullscreen (x));
-//		//onEnd();
-//		videoplayed = true;
-//		
-//	}
-//
-//	public IEnumerator playMovieFullscreen (string x)
-//	{
-//
-//#if !UNITY_WEBPLAYER
-//		Handheld.PlayFullScreenMovie (x, Color.black, FullScreenMovieControlMode.Full);
-//#endif
-//		yield return 0;
-//	}
+	//	public void playMovie (string x)
+	//	{
+	//
+	//		StartCoroutine (playMovieFullscreen (x));
+	//		//onEnd();
+	//		videoplayed = true;
+	//
+	//	}
+	//
+	//	public IEnumerator playMovieFullscreen (string x)
+	//	{
+	//
+	//#if !UNITY_WEBPLAYER
+	//		Handheld.PlayFullScreenMovie (x, Color.black, FullScreenMovieControlMode.Full);
+	//#endif
+	//		yield return 0;
+	//	}
 
-	public IEnumerator onEnd ()
-	{
-		yield return new WaitForSeconds (0.1f);
+	public IEnumerator onEnd () {
+		yield return new WaitForSeconds(0.1f);
 		Screen.orientation = ScreenOrientation.Portrait;
-		yield return new WaitForSeconds (0.1f);
+		yield return new WaitForSeconds(0.1f);
 
 
 		npctalk.state = "succeeded";
 		//questdb.AllowAutoRotation (false);
 
 		
-		if (npctalk.onEnd != null) {
-			Debug.Log ("onEnd");
-			npctalk.onEnd.Invoke ();
-		} else {
+		if ( npctalk.onEnd != null ) {
+			Debug.Log("onEnd");
+			npctalk.onEnd.Invoke();
+		}
+		else {
 			
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
 			
 		}
 
