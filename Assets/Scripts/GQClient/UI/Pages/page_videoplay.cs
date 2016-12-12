@@ -15,6 +15,8 @@ public class page_videoplay : MonoBehaviour {
 
 	static string filepath;
 
+	public const string YOUTUBE_URL_PREFIX = "https://www.youtube.com/watch?v=";
+
 
 
 	IEnumerator Start () {
@@ -46,17 +48,24 @@ public class page_videoplay : MonoBehaviour {
 
 			if ( Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed ) {
 
-
-
-				url = url.Replace(questdb.PATH_2_PREDEPLOYED_QUESTS, "predeployed/quests");
-
-				 
-
-				Handheld.PlayFullScreenMovie(url);
-
+				if ( url.StartsWith(YOUTUBE_URL_PREFIX) ) {
+					PlayYoutubeVideo(url);
+				}
+				else {
+					url = url.Replace(questdb.PATH_2_PREDEPLOYED_QUESTS, "predeployed/quests");
+					Debug.Log("We will play an ordinary Video link: " + url);
+					Handheld.PlayFullScreenMovie(url);
+				}
 			}
 			else {
-				Handheld.PlayFullScreenMovie("file://" + url);
+				if ( url.StartsWith(YOUTUBE_URL_PREFIX) ) {
+					PlayYoutubeVideo(url);
+
+				}
+				else {
+					Debug.Log("We will play an ordinary Video link: " + url);
+					Handheld.PlayFullScreenMovie("file://" + url);
+				}
 			}
 
 			yield return new WaitForEndOfFrame();
@@ -65,6 +74,9 @@ public class page_videoplay : MonoBehaviour {
 
 		}
 		else {
+			if ( url.StartsWith(YOUTUBE_URL_PREFIX) ) {
+				PlayYoutubeVideo(url);
+			}
 
 
 			// YOUTUBE OR URL
@@ -140,6 +152,22 @@ public class page_videoplay : MonoBehaviour {
 		yield return new WaitForEndOfFrame();
 		StartCoroutine(onEnd());
 	}
+
+	private void PlayYoutubeVideo (string url) {
+		// YouTube Videos
+		string id = url.Substring(YOUTUBE_URL_PREFIX.Length);
+		// cut off rest of url if there is more than the vid id, e.g. language etc.:
+		int endIndex = id.IndexOf('&');
+		if ( endIndex > 0 ) {
+			id = id.Substring(0, endIndex);
+		}
+		Debug.Log("We will play a YouTube Video id = " + id);
+		Handheld.PlayFullScreenMovie(YoutubeVideo.Instance.RequestVideo(id, 720));
+
+		// TODO catch VideoNotAvailableException
+	}
+
+
 
 	void Update () {
 

@@ -109,8 +109,17 @@ public class QuestPage {
 
 		if ( help_attributes != null ) {
 			foreach ( XmlAttribute xmla in help_attributes ) {
+
+				Debug.Log("deserializing attr: " + xmla.Name + "orig val = " + xmla.Value);
+
+				if ( xmla.Name.Equals("file") && xmla.Value.StartsWith(page_videoplay.YOUTUBE_URL_PREFIX) ) {
+					Debug.Log("storing attr: " + xmla.Name + "stored val = " + xmla.Value);
+					attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
+
+					return;
+				}
 							
-				if ( xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://") && !(type == "WebPage" && xmla.Name.ToLower() == "url") ) {
+				if ( (xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://")) && !(type == "WebPage" && xmla.Name.ToLower() == "url") ) {
 
 					string[] splitted = xmla.Value.Split('/');
 
@@ -150,6 +159,7 @@ public class QuestPage {
 
 				}	
 								
+				Debug.Log("storing attr: " + xmla.Name + "stored val = " + xmla.Value);
 				attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
 			
 			}

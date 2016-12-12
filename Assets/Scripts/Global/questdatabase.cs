@@ -1606,6 +1606,11 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	public void downloadAsset (string url, string localTargetPath) {
+
+		if ( url.StartsWith(page_videoplay.YOUTUBE_URL_PREFIX) ) {
+			Debug.Log("YouTube Video Link found. Not loaded as Asset");
+			return;
+		}
 		
 		if ( wanttoload == null ) {
 			wanttoload = new List<string>();
@@ -1646,7 +1651,7 @@ public class questdatabase : MonoBehaviour {
 
 		if ( done ) {
 
-			if ( !url.Contains("/clientxml") ) {
+			if ( !url.Contains("/clientxml") || !url.StartsWith(page_videoplay.YOUTUBE_URL_PREFIX) ) {
 
 				time = Time.time;
 
