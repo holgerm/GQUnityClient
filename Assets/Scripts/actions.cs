@@ -12,8 +12,6 @@ using GQ.Client.Util;
 
 public class actions : MonoBehaviour {
 
-
-
 	public questaudio audio_prefab;
 	public QuestMessage message_prefab;
 	public Canvas msgcanvas;
@@ -24,7 +22,6 @@ public class actions : MonoBehaviour {
 	public int loopcount = 0;
 	public List<QuestVariable> variables;
 	public List<questaudio> questaudiosources;
-	// TODO check for null objects e.g. by changing scenes and destroying objects
 	public questaudio npcaudio;
 	public List<AudioSource> audiosources;
 	public List<QuestRuntimeAsset> photos;
@@ -34,11 +31,11 @@ public class actions : MonoBehaviour {
 	private bool updateGPSRoute = false;
 	public float gPSRouteUpdateInterval = 10f;
 	private float gPSRouteUpdateInterval_save = 10f;
+	public bool test;
 
 	public string lastServerIp;
 
 	void Update () {
-
 
 		if ( updateGPSRoute && questdb.currentquest.currentpage.type == "MapOSM" ) {
 
@@ -49,11 +46,9 @@ public class actions : MonoBehaviour {
 
 				gPSRouteUpdateInterval = gPSRouteUpdateInterval_save;
 
-
 				addRoute(gpsRoute);
 
 			}
-
 
 		}
 
