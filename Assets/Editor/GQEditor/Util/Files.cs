@@ -40,6 +40,7 @@ namespace GQ.Editor.Util {
 				dirPath = dirPath.Substring(0, dirPath.Length - 2);
 
 			if ( Assets.IsAssetPath(dirPath) ) {
+				dirPath = Assets.RelativeAssetPath(dirPath);
 				if ( Assets.ExistsAssetAtPath(dirPath) )
 					// asset dir already exists:
 					return false;

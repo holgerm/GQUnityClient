@@ -17,6 +17,18 @@ namespace GQTests.Editor.Building {
 
 		[SetUp]
 		public void initPM () {
+			string newProductsDir = Files.CombinePath(PRODUCTS_TEST_DIR, "NewProducts");
+			if ( !Files.ExistsDir(newProductsDir) )
+				Files.CreateDir(newProductsDir);
+
+			string dirWithEmptyProductList = Files.CombinePath(PRODUCTS_TEST_DIR, "ProductListEmpty");
+			if ( !Files.ExistsDir(dirWithEmptyProductList) )
+				Files.CreateDir(dirWithEmptyProductList);
+
+			string configResourcesDir = Files.CombinePath(PRODUCTS_TEST_DIR, "Output/ConfigAssets/Resources");
+			if ( !Files.ExistsDir(configResourcesDir) )
+				Files.CreateDir(configResourcesDir);
+			
 			ProductManager._dispose();
 			testPM = ProductManager.TestInstance;
 			prodPM = ProductManager.Instance;
@@ -59,9 +71,10 @@ namespace GQTests.Editor.Building {
 		public void CreateNewProduct () {
 			// Arrange:
 			string testDir = Files.CombinePath(PRODUCTS_TEST_DIR, "NewProducts");
-			if ( !Directory.Exists(testDir) )
-				Assets.CreateSubfolder(PRODUCTS_TEST_DIR, "NewProducts");
-			Assets.ClearAssetFolder(testDir);
+			if ( !Files.ExistsDir(testDir) )
+				Files.CreateDir(testDir);
+			Files.ClearDir(testDir);
+
 
 			ProductManager.ProductsDirPath = testDir;
 			ProductManager prodPM = ProductManager.Instance;

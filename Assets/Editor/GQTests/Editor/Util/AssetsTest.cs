@@ -19,7 +19,13 @@ namespace GQTests.Editor.Util {
 
 		[SetUp]
 		public void SetUp () {
+			if ( !Files.ExistsDir(EMPTY_DIR) )
+				Files.CreateDir(EMPTY_DIR);
 			Assets.ClearAssetFolder(EMPTY_DIR);
+
+			if ( !Files.ExistsDir(TARGET_DIR) )
+				Files.CreateDir(TARGET_DIR);
+			Assets.ClearAssetFolder(TARGET_DIR);
 		}
 
 		[TearDown]

@@ -41,6 +41,8 @@ namespace GQ.Editor.Building {
 				return _productsDirPath;
 			}
 			set {
+//				if ( Assets.IsAssetPath(value) )
+//					value = Assets.AbsolutePath4Asset(value);
 				_productsDirPath = value;
 				_instance = new ProductManager();
 			}
@@ -219,9 +221,8 @@ namespace GQ.Editor.Building {
 			}
 
 			// copy default template files to a new product folder:
-			Assets.CreateSubfolder(ProductsDirPath, newProductID);
-			AssetDatabase.Refresh();
-			Assets.CopyAssetsDirContents(TEMPLATE_PRODUCT_PATH, newProductDirPath);
+			Files.CreateDir(newProductDirPath);
+			Files.CopyDirContents(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
 			// create Config, populate it with defaults and serialize it into the new product folder:
 			createConfigWithDefaults(newProductID);
