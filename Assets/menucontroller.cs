@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using GQ.Client.Conf;
+using UnityEngine.SceneManagement;
 
 public class menucontroller : MonoBehaviour {
 
@@ -188,8 +189,7 @@ public class menucontroller : MonoBehaviour {
 
 		isActive = false;
 
-		Application.LoadLevel(0);
-
+		SceneManager.LoadScene("questlist");
 	}
 
 

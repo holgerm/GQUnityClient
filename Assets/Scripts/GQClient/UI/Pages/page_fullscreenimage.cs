@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 using System.Collections;
 using GQ.Util;
+using UnityEngine.SceneManagement;
 
-public class page_fullscreenimage : MonoBehaviour
-{
+public class page_fullscreenimage : MonoBehaviour {
 
 
 	public RawImage imagev;
@@ -20,34 +20,33 @@ public class page_fullscreenimage : MonoBehaviour
 
 
 	// Use this for initialization
-	void Start ()
-	{
+	void Start () {
 
 
-		if (GameObject.Find ("QuestDatabase") == null) {
+		if ( GameObject.Find("QuestDatabase") == null ) {
 
-			Application.LoadLevel (0);
+			SceneManager.LoadScene("questlist");
+		}
+		else {
+			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
-		} else {
-			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-
-			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
-			quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-			fullscreenimage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+			questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();
+			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
+			fullscreenimage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
 			string pre = "file: /";
 
-			if (fullscreenimage.onStart != null) {
+			if ( fullscreenimage.onStart != null ) {
 			
-				fullscreenimage.onStart.Invoke ();
+				fullscreenimage.onStart.Invoke();
 			}
 		
 		
-			if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+			if ( Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ) {
 			
 				pre = "file:";
 			}
 
-			if(Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed){
+			if ( Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed ) {
 
 				pre = "";
 			}
@@ -57,36 +56,38 @@ public class page_fullscreenimage : MonoBehaviour
 
 
 			if (
-			fullscreenimage.getAttribute ("image").StartsWith ("http://") ||
-				fullscreenimage.getAttribute ("image").StartsWith ("https://")
-			) {
+				fullscreenimage.getAttribute("image").StartsWith("http://") ||
+				fullscreenimage.getAttribute("image").StartsWith("https://") ) {
 			
-				www = new WWW (fullscreenimage.getAttribute ("image"));
+				www = new WWW(fullscreenimage.getAttribute("image"));
 			
-				StartCoroutine (waitforImage ());
+				StartCoroutine(waitforImage());
 			
 			
-			} else if (fullscreenimage.getAttribute ("image").StartsWith ("@_")) {
+			}
+			else
+			if ( fullscreenimage.getAttribute("image").StartsWith("@_") ) {
 
 
 			
 
 
-				foreach (QuestRuntimeAsset qra in	questactions.photos) {
+				foreach ( QuestRuntimeAsset qra in	questactions.photos ) {
 
 
 
-					if (qra.key == fullscreenimage.getAttribute ("image")) {
+					if ( qra.key == fullscreenimage.getAttribute("image") ) {
 
 
-						Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
+						Sprite s = Sprite.Create(qra.texture, new Rect(0, 0, qra.texture.width, qra.texture.height), new Vector2(0.5f, 0.5f));
 
-						if (s.texture.width < s.texture.height) {
+						if ( s.texture.width < s.texture.height ) {
 				
 							imagev.texture = s.texture;
 							imagev.enabled = true;
 							imageh.enabled = false;
-						} else {
+						}
+						else {
 							imageh.texture = s.texture;
 							imageh.enabled = true;
 							imagev.enabled = false;
@@ -99,15 +100,16 @@ public class page_fullscreenimage : MonoBehaviour
 
 
 
-			} else {
+			}
+			else {
 
 
 
 
 
-				www = new WWW (pre + ""+fullscreenimage.getAttribute ("image"));
+				www = new WWW(pre + "" + fullscreenimage.getAttribute("image"));
 				
-				StartCoroutine (waitforImage ());
+				StartCoroutine(waitforImage());
 
 
 
@@ -191,36 +193,35 @@ public class page_fullscreenimage : MonoBehaviour
 
 
 
-			if (fullscreenimage.getAttribute ("duration") == "interactive") {
+			if ( fullscreenimage.getAttribute("duration") == "interactive" ) {
 				imagebuttonv.interactable = true;
 				imagebuttonh.interactable = true;
 
 				//Debug.Log("interactive");
-			} else {
+			}
+			else {
 				//Debug.Log(int.Parse(fullscreenimage.getAttribute ("duration")));
-				StartCoroutine (duration ((float)(int.Parse (fullscreenimage.getAttribute ("duration")) / 1000)));
+				StartCoroutine(duration((float)(int.Parse(fullscreenimage.getAttribute("duration")) / 1000)));
 			}
 
 
 		}
 	}
 
-	IEnumerator duration (float s)
-	{
+	IEnumerator duration (float s) {
 
 		//Debug.Log ("waiting " + s + " seconds");
-		yield return new WaitForSeconds (s);
+		yield return new WaitForSeconds(s);
 
 
-		onEnd ();
+		onEnd();
 	}
 
-	IEnumerator waitforImage ()
-	{
+	IEnumerator waitforImage () {
 		
 		yield return www;
 		
-		if (www.error == null) {
+		if ( www.error == null ) {
 
 
 
@@ -230,26 +231,26 @@ public class page_fullscreenimage : MonoBehaviour
 			//Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 
 
-				imagev.texture = www.texture;
-				imagev.enabled = true;
-				imageh.enabled = false;
+			imagev.texture = www.texture;
+			imagev.enabled = true;
+			imageh.enabled = false;
 				
 				
 				
 				
-				float myX = (float)www.texture.width;
+			float myX = (float)www.texture.width;
 				
 				
-				float myY = (float)www.texture.height;
+			float myY = (float)www.texture.height;
 				
 				
-			float scaler = myY/1837f;
+			float scaler = myY / 1837f;
 				
-				myX = myX / scaler;
+			myX = myX / scaler;
 			myY = 1837f;
 				
 				
-				imagev.GetComponent<RectTransform>().sizeDelta = new Vector2(myX , myY);
+			imagev.GetComponent<RectTransform>().sizeDelta = new Vector2(myX, myY);
 
 
 			
@@ -257,23 +258,24 @@ public class page_fullscreenimage : MonoBehaviour
 
 
 
-		} else {
-			Debug.Log (www.error);
+		}
+		else {
+			Debug.Log(www.error);
 		}
 		
 	}
 
-	public void onEnd ()
-	{
+	public void onEnd () {
 		
 		fullscreenimage.state = "succeeded";
 		
-		if (fullscreenimage.onEnd != null) {
+		if ( fullscreenimage.onEnd != null ) {
 			
-			fullscreenimage.onEnd.Invoke ();
-		} else {
+			fullscreenimage.onEnd.Invoke();
+		}
+		else {
 			
-			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
+			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
 
 		}
 		

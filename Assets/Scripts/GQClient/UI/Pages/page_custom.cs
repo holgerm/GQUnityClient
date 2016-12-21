@@ -9,6 +9,7 @@ using System;
 using GQ.Util;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 public class page_custom : MonoBehaviour {
 
@@ -40,8 +41,7 @@ public class page_custom : MonoBehaviour {
 	void Start () { 
 		if ( GameObject.Find("QuestDatabase") == null ) {
 
-			Application.LoadLevel(0);
-
+			SceneManager.LoadScene("questlist");
 		}
 		else {
 

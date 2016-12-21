@@ -89,9 +89,10 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	IEnumerator Start () {
-
 			
 //		PlayerPrefs.DeleteAll();
+
+		Debug.Log("START");
 
 		if ( PlayerPrefs.HasKey("privacyagreementversion") ) {
 
@@ -274,7 +275,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void ReloadQuestListAndRefresh () {
 		allquests.Clear();
-//		Debug.Log ("starting showing quests immediately (and no autostart)");
+		Debug.Log("ReloadQuestListAndRefresh()");
 		string url = "http://qeevee.org:9091/json/" + ConfigurationManager.Current.portal + "/publicgamesinfo";
 		Download download = new Download(url, timeout: 20000);
 		download.OnStart = new Download.StartCallback(whenQuestListDownloadStarts);
@@ -287,6 +288,7 @@ public class questdatabase : MonoBehaviour {
 	}
 
 	void retryAfterDownloadError (Download download, string msg) {
+		Debug.Log("Retrying after download error: " + msg);
 		if ( Configuration.instance.offlinePlayable && localquests != null && localquests.Count > 0 ) {
 			webloadingmessage.enabled = false;
 			loadlogo.disable();
@@ -572,25 +574,14 @@ public class questdatabase : MonoBehaviour {
 		alllocalquests.AddRange(localquests);
 
 		foreach ( Quest lq in alllocalquests ) {
-
-				
 				
 			removeQuest(lq);
-				
-				
-
 		}
 
 		localquests.Clear();
 
-
-
-		Application.LoadLevel(0);
-	
+		SceneManager.LoadScene("questlist");
 		GameObject.Find("ImpressumCanvas").GetComponent<showimpressum>().closeImpressum();
-
-
-
 	}
 
 	bool IsQuestInitialized (int id) {
@@ -614,7 +605,7 @@ public class questdatabase : MonoBehaviour {
 			case JSONObject.Type.ARRAY:
 				
 				if ( kei == "quest_hotspots" ) {
-
+					Debug.Log("CURRENTQUEST set to new Quest()!");
 					currentquest = new Quest();
 					if ( allquests == null ) {
 						allquests = new List<Quest>();
@@ -758,6 +749,7 @@ public class questdatabase : MonoBehaviour {
 			buttoncontroller.filteredOnlineList.Add(q);
 		}
 
+		Debug.Log("CURRENTQUEST set to null!");
 		currentquest = null;
 		
 		if ( ConfigurationManager.Current.questVisualization == "list" ) {
@@ -1037,6 +1029,7 @@ public class questdatabase : MonoBehaviour {
 
 		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
 
+		Debug.Log("CURRENTQUEST set to " + q.name + " l: 1046");
 		currentquest = q;
 
 //		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
@@ -1057,6 +1050,7 @@ public class questdatabase : MonoBehaviour {
 
 		}
 
+		Debug.Log("CURRENTQUEST set to loadFromText() on " + q.name + " l: 1067");
 		currentquest = q.LoadFromText(id, true);
 		localquests.Add(currentquest);
 		bool hasmorethanmetadata = true;
@@ -1111,7 +1105,7 @@ public class questdatabase : MonoBehaviour {
 
 		GameObject.Find("MenuCanvas").GetComponent<Animator>().SetTrigger("startMenu");
 		GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
-		SceneManager.LoadScene("page_map", LoadSceneMode.Additive);
+		SceneManager.LoadScene("map", LoadSceneMode.Additive);
 	
 		if ( webloadingmessage != null ) {
 			webloadingmessage.enabled = false;
@@ -1366,7 +1360,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void resetPlayer (string x) {
 		Destroy(gameObject);
-		Application.LoadLevel(0);
+		SceneManager.LoadScene("questlist");
 	}
 
 	IEnumerator waitForWebXml () {
@@ -1385,6 +1379,7 @@ public class questdatabase : MonoBehaviour {
 			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 			if ( !downloadingAll ) {
+				Debug.Log("CURRENTQUEST set to " + nq.name + " l: 1396");
 				currentquest = nq;
 			}
 
@@ -1436,6 +1431,7 @@ public class questdatabase : MonoBehaviour {
 
 		}
 
+		Debug.Log("CURRENTQUEST set to " + q.name + " l: 1448");
 		currentquest = q;
 
 		if ( !islocal ) {
@@ -1510,9 +1506,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void returnToMainMenu () {
 
-		Application.LoadLevel(0);
-
-
+		SceneManager.LoadScene("questlist");
 	}
 
 	public void retryAllOpenWWW () {
@@ -1596,6 +1590,7 @@ public class questdatabase : MonoBehaviour {
 		Quest q = new Quest();
 		q.id = id;
 
+		Debug.Log("CURRENTQUEST set to " + q.name + " l: 1609");
 		currentquest = q;
 		downloadQuest(q);
 	}
@@ -1721,7 +1716,7 @@ public class questdatabase : MonoBehaviour {
 			else {
 				if ( timeout > (float)ConfigurationManager.Current.downloadTimeOutSeconds ) {
 					showmessage("Download fehlgeschlagen.");
-					Application.LoadLevel(0);
+					SceneManager.LoadScene("questlist");
 				}
 				else
 				if ( timeout > 60f && wwwfile.progress < 0.1f ) {
@@ -1886,6 +1881,7 @@ public class questdatabase : MonoBehaviour {
 
 		}
 		else {
+			Debug.Log("CURRENTQUEST set to " + nq.name + " l: 1901");
 			currentquest = nq;
 		}
 
@@ -2684,61 +2680,51 @@ public class questdatabase : MonoBehaviour {
 					menu.showTopBar();
 				}
 				
-				if ( qp.type == "NPCTalk" ) {
-					SceneManager.LoadScene(1, LoadSceneMode.Additive);
-				}
-				else
-				if ( qp.type == "ImageWithText" ) {
-					SceneManager.LoadScene(1, LoadSceneMode.Additive);
+				if ( qp.type == "NPCTalk" || qp.type == "ImageWithText" ) {
+					SceneManager.LoadScene("npctalk", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "StartAndExitScreen" ) {
-					SceneManager.LoadScene(2, LoadSceneMode.Additive);
-
+					SceneManager.LoadScene("fullscreen", LoadSceneMode.Additive);
 				}
 				else
-				if ( qp.type == "MultipleChoiceQuestion" ) {
-					SceneManager.LoadScene(3, LoadSceneMode.Additive);
-				}
-				else
-				if ( qp.type == "Menu" ) {
-					SceneManager.LoadScene(3, LoadSceneMode.Additive);
-					
+				if ( qp.type == "MultipleChoiceQuestion" || qp.type == "Menu" ) {
+					SceneManager.LoadScene("multiplechoicequestion", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "VideoPlay" ) {
-					SceneManager.LoadScene(4, LoadSceneMode.Additive);
+					SceneManager.LoadScene("videoplay", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "TagScanner" ) {
 					needsCamera = true;
-					SceneManager.LoadScene(5, LoadSceneMode.Additive);
+					SceneManager.LoadScene("qrcodereader", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "ImageCapture" ) {
 					needsCamera = true;
-					SceneManager.LoadScene(6, LoadSceneMode.Additive);
+					SceneManager.LoadScene("imagecapture", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "TextQuestion" ) {
-					SceneManager.LoadScene(7, LoadSceneMode.Additive);
+					SceneManager.LoadScene("textquestion", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "AudioRecord" ) {
 					needsCamera = true;
-					SceneManager.LoadScene(8, LoadSceneMode.Additive);
+					SceneManager.LoadScene("audiorecord", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "WebPage" ) {
-					SceneManager.LoadScene(10, LoadSceneMode.Additive);
+					SceneManager.LoadScene("website", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "Custom" ) {
-					SceneManager.LoadScene(11, LoadSceneMode.Additive);
+					SceneManager.LoadScene("custom", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "ReadNFC" ) {
-					SceneManager.LoadScene(12, LoadSceneMode.Additive);
+					SceneManager.LoadScene("readnfc", LoadSceneMode.Additive);
 				}
 				else
 				if ( qp.type == "MapOSM" || qp.type == "Navigation" ) {
@@ -2940,6 +2926,7 @@ public class questdatabase : MonoBehaviour {
 			}
 
 			if ( !downloadingAll ) {
+				Debug.Log("CURRENTQUEST set to " + nq.name + " l: 2958");
 				currentquest = nq;
 			}
 

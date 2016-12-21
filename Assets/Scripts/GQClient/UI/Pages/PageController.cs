@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Client.UI.Pages {
 
@@ -16,7 +17,7 @@ namespace GQ.Client.UI.Pages {
 		protected virtual void Start () { 
 
 			if ( GameObject.Find("QuestDatabase") == null ) {
-				Application.LoadLevel(0);
+				SceneManager.LoadScene("questlist");
 				return;
 			}
 

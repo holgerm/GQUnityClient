@@ -113,7 +113,6 @@ public class QuestPage {
 //				Debug.Log("deserializing attr: " + xmla.Name + "orig val = " + xmla.Value);
 
 				if ( xmla.Name.Equals("file") && xmla.Value.StartsWith(page_videoplay.YOUTUBE_URL_PREFIX) ) {
-					Debug.Log("storing attr: " + xmla.Name + "stored val = " + xmla.Value);
 					attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
 
 					continue;

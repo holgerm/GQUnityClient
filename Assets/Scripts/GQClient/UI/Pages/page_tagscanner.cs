@@ -7,6 +7,7 @@ using System.Collections;
 using System.Threading;
 
 using ZXing;
+using UnityEngine.SceneManagement;
 
 public class page_tagscanner : MonoBehaviour {
 	
@@ -76,8 +77,7 @@ public class page_tagscanner : MonoBehaviour {
 
 		if ( GameObject.Find("QuestDatabase") == null ) {
 
-			Application.LoadLevel(0);
-
+			SceneManager.LoadScene("questlist");
 		}
 		else {
 

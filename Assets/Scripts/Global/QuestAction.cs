@@ -198,17 +198,13 @@ public class QuestAction {
 									
 					string filename = "files/" + splitted[splitted.Length - 1];
 									
-//					int i = 0;
-//					while ( questdb.loadedfiles.Contains(filename) ) {
-//						i++;
-//						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
-//										
-//					}
-									
 					questdb.loadedfiles.Add(filename);
 									
 					if ( !Application.isWebPlayer ) {
 										
+						Debug.Log("questdb: " + (questdb != null ? "non null" : "null"));
+						Debug.Log("questdb.currentquest: " + (questdb.currentquest != null ? "non null" : "null"));
+						Debug.Log("filename: " + (filename != null ? "non null" : "null"));
 						if ( !redo || (questdb.currentquest.predeployed && filename.ToLower().Contains(".mp3")) ) {
 							questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}

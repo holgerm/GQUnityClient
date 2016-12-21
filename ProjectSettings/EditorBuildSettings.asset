@@ -6,30 +6,32 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/StartScene.unity
+  - enabled: 1
     path: Assets/Scenes/questlist.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_npctalk.unity
+    path: Assets/Scenes/Pages/npctalk.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_fullscreen.unity
+    path: Assets/Scenes/Pages/fullscreen.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_multiplechoicequestion.unity
+    path: Assets/Scenes/Pages/multiplechoicequestion.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_videoplay.unity
+    path: Assets/Scenes/Pages/videoplay.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_qrcodereader.unity
+    path: Assets/Scenes/Pages/qrcodereader.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_imagecapture.unity
+    path: Assets/Scenes/Pages/imagecapture.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_textquestion.unity
+    path: Assets/Scenes/Pages/textquestion.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_audiorecord.unity
+    path: Assets/Scenes/Pages/audiorecord.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_map.unity
+    path: Assets/Scenes/Pages/map.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_website.unity
+    path: Assets/Scenes/Pages/website.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_custom.unity
+    path: Assets/Scenes/Pages/custom.unity
   - enabled: 1
-    path: Assets/Scenes/Pages/page_readnfc.unity
+    path: Assets/Scenes/Pages/readnfc.unity
   - enabled: 0
     path: Assets/Scenes/mediaserver.unity

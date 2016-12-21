@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 using System.Collections;
 using GQ.Client.Conf;
+using UnityEngine.SceneManagement;
 
 public class changequestview : MonoBehaviour {
 
@@ -26,8 +27,7 @@ public class changequestview : MonoBehaviour {
 			ConfigurationManager.Current.questVisualization = "map";
 		}
 
-		Application.LoadLevel(0);
-
+		SceneManager.LoadScene("questlist");
 	}
 
 	//	void Update () {
