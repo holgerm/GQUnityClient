@@ -22,7 +22,8 @@ namespace GQ.Editor.Building {
 		/// <summary>
 		/// In this directory all defined products are stored. This data is NOT included in the app build.
 		/// </summary>
-		public const string PRODUCTS_DIR_PATH_DEFAULT = "Assets/Editor/products/";
+		//		private static string PRODUCTS_DIR_PATH_DEFAULT = "Assets/Editor/products/";
+		private static string PRODUCTS_DIR_PATH_DEFAULT = Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
 
 		/// <summary>
 		/// This is the template for new products which is copied when we create a new product. It should contain a complete product definition.
@@ -41,8 +42,6 @@ namespace GQ.Editor.Building {
 				return _productsDirPath;
 			}
 			set {
-//				if ( Assets.IsAssetPath(value) )
-//					value = Assets.AbsolutePath4Asset(value);
 				_productsDirPath = value;
 				_instance = new ProductManager();
 			}

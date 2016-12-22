@@ -696,6 +696,28 @@ namespace GQ.Editor.Util {
 		#endregion
 
 
+		#region Asset Database Related
+
+		public static void StripAssetMetadata (string dir) {
+			
+			if ( Assets.IsAssetPath(dir) )
+				throw new ArgumentException("DO NOT strip metadata from asset files and directories as " + dir);
+			
+			string[] files = Directory.GetFiles(dir);
+			foreach ( var file in files ) {
+				if ( file.EndsWith(".meta") )
+					File.Delete(file);
+			}
+
+			string[] subdirs = Directory.GetDirectories(dir);
+
+			foreach ( var subdir in subdirs ) {
+				StripAssetMetadata(subdir);
+			}
+		}
+
+		#endregion
+
 	}
 
 

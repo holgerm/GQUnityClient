@@ -48,7 +48,7 @@ namespace GQTests.Editor.Building {
 			ProductManager pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.AreEqual(ProductManager.PRODUCTS_DIR_PATH_DEFAULT, ProductManager.ProductsDirPath);
+			Assert.AreEqual(ProductManager.ProductsDirPath, ProductManager.ProductsDirPath);
 			Assert.AreEqual(0, pm.Errors.Count, pm.Errors.Count > 0 ? "Unexpected errors. The first is: " + pm.Errors[0].ToString() : "No errors as expected.");
 		}
 
@@ -100,7 +100,7 @@ namespace GQTests.Editor.Building {
 				product.Errors.Count + " errors):\n" + product.AllErrorsAsString()
 			);
 
-			// TODO Animation for loading logo
+			// TODO Loading Canvas (copy default when creating new product)
 
 			// Config file:
 			Assert.That(File.Exists(product.ConfigPath), "Config file should exist at " + product.ConfigPath);

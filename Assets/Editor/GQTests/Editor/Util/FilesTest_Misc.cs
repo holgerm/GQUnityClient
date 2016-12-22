@@ -391,5 +391,21 @@ namespace GQTests.Editor.Util {
 
 		#endregion
 
+		#region Asset Database Related
+
+		[Test]
+		public void StripAssetMetadata () {
+			// Arrange:
+			// TODO test a method that strips all asset metadata from a directory's contained files and subdirs.
+
+			// Act:
+			// TODO
+
+			// Assert:
+			// TODO
+			Assert.Fail("Test not yet implemented!");
+		}
+
+		#endregion
 	}
 }

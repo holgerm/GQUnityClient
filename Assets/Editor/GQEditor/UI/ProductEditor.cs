@@ -516,7 +516,7 @@ namespace GQ.Editor.UI {
 
 		private static void check4ExternalChanges (string str) {
 
-			if ( productDictionaryDirty == false && str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
+			if ( productDictionaryDirty == false && str.StartsWith(ProductManager.ProductsDirPath) ) {
 				// a product might have changed: refresh product list:
 				productDictionaryDirty = true;
 			}
