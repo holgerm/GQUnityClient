@@ -92,8 +92,6 @@ public class questdatabase : MonoBehaviour {
 			
 //		PlayerPrefs.DeleteAll();
 
-		Debug.Log("START");
-
 		if ( PlayerPrefs.HasKey("privacyagreementversion") ) {
 
 			if ( PlayerPrefs.GetInt("privacyagreementversion") > Configuration.instance.privacyAgreementVersion ) {
@@ -275,7 +273,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void ReloadQuestListAndRefresh () {
 		allquests.Clear();
-		Debug.Log("ReloadQuestListAndRefresh()");
+
 		string url = "http://qeevee.org:9091/json/" + ConfigurationManager.Current.portal + "/publicgamesinfo";
 		Download download = new Download(url, timeout: 20000);
 		download.OnStart = new Download.StartCallback(whenQuestListDownloadStarts);

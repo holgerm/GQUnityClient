@@ -13,16 +13,16 @@ using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
 
-		#region Paths and Storage
+		#region Names, Paths and Storage
 
 		/// <summary>
 		/// In this directory all defined products are stored. This data is NOT included in the app build.
 		/// </summary>
-		//		private static string PRODUCTS_DIR_PATH_DEFAULT = "Assets/Editor/products/";
 		private static string PRODUCTS_DIR_PATH_DEFAULT = Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
 
 		/// <summary>
@@ -87,6 +87,10 @@ namespace GQ.Editor.Building {
 				_STREAMING_ASSET_PATH = value;
 			}
 		}
+
+		public const string START_SCENE_NAME = "StartScene";
+		public const string LOADING_LOGO_CANVAS_NAME = "LoadingCanvas";
+		public const string LOADING_CANVAS_PREFAB = "prefabs/LoadingCanvas";
 
 		#endregion
 
@@ -327,13 +331,6 @@ namespace GQ.Editor.Building {
 				), 
 				ANDROID_MANIFEST_DIR
 			);
-//			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
-//			AssetDatabase.MoveAsset(
-//				Files.CombinePath(
-//					BuildExportPath, 
-//					ProductSpec.ANDROID_MANIFEST
-//				), 
-//				ANDROID_MANIFEST_PATH);
 
 			// copy StreamingAssets:
 			if ( Files.ExistsDir(STREAMING_ASSET_PATH) )
@@ -350,14 +347,41 @@ namespace GQ.Editor.Building {
 			PlayerSettings.productName = newProduct.Config.name;
 			PlayerSettings.bundleIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
 
-			// store current PlayerPrefs: TODO
-
+			replaceLoadingLogoInStartScene();
 
 			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = newProduct; // remember the new product for the editor time access point.
 			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
 		}
 
+		private void replaceLoadingLogoInStartScene () {
+			// set loading logo in start scene:
+			Scene startScene = SceneManager.GetSceneByName(START_SCENE_NAME);
+
+			if ( !startScene.IsValid() ) {
+				Errors.Add("Start scene is not valid or not found.");
+				return;
+			}
+
+			// destroy old canvas if exists:
+			foreach ( var go in startScene.GetRootGameObjects() ) {
+				if ( go.name.Equals(LOADING_LOGO_CANVAS_NAME) ) {
+					UnityEngine.Object.DestroyImmediate(go);
+				}
+			}
+
+			GameObject loadingCanvasPrefab = Resources.Load<GameObject>(LOADING_CANVAS_PREFAB);
+			if ( loadingCanvasPrefab == null ) {
+				Errors.Add("Product misses LoadingCanvas prefab.");
+				return;
+			}
+			GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab);
+			if ( loadingCanvas == null ) {
+				Errors.Add("Unable to create LoadingCanvas.");
+				return;
+			}
+			loadingCanvas.name = LOADING_LOGO_CANVAS_NAME;
+		}
 
 		#endregion
 

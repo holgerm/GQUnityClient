@@ -202,9 +202,6 @@ public class QuestAction {
 									
 					if ( !Application.isWebPlayer ) {
 										
-						Debug.Log("questdb: " + (questdb != null ? "non null" : "null"));
-						Debug.Log("questdb.currentquest: " + (questdb.currentquest != null ? "non null" : "null"));
-						Debug.Log("filename: " + (filename != null ? "non null" : "null"));
 						if ( !redo || (questdb.currentquest.predeployed && filename.ToLower().Contains(".mp3")) ) {
 							questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
