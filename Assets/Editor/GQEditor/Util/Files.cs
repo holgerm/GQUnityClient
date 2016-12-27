@@ -284,12 +284,12 @@ namespace GQ.Editor.Util {
 				return Assets.copyAssetsDir(fromDirPath, toDirPath);
 			}
 			else {
-				return copyNonAssetsDir(fromDirPath, toDirPath);  
+				return copyToNonAssetsDir(fromDirPath, toDirPath);  
 			}
 			return false;
 		}
 
-		private static bool copyNonAssetsDir (string fromDirPath, string toDirPath, bool recursive = true) {
+		private static bool copyToNonAssetsDir (string fromDirPath, string toDirPath, bool recursive = true) {
 			bool copied = true;
 
 			// create this folder within the target path:
@@ -309,7 +309,7 @@ namespace GQ.Editor.Util {
 			if ( recursive )
 				foreach ( string subDir in Directory.GetDirectories(fromDirPath) ) {
 
-					copied &= copyNonAssetsDir(subDir, copiedFolder.FullName);
+					copied &= copyToNonAssetsDir(subDir, copiedFolder.FullName);
 				}
 
 			AssetDatabase.Refresh();
@@ -338,9 +338,9 @@ namespace GQ.Editor.Util {
 				// case Asset -> Asset
 				return Assets.CopyAssetsDirContents(fromDirPath, toDirPath, true);
 			}
-			if ( !Assets.IsAssetPath(fromDirPath) && !Assets.IsAssetPath(toDirPath) ) {
-				// case Non-Asset -> Non-Asset
-				return copyNonAssetsDir(fromDirPath, toDirPath, replace);  
+			if ( !Assets.IsAssetPath(toDirPath) ) {
+				// case Asset or Non-Asset -> Non-Asset
+				return copyToNonAssetsDir(fromDirPath, toDirPath, replace);  
 			}
 			return false;
 		}
@@ -398,6 +398,10 @@ namespace GQ.Editor.Util {
 			else
 				return ".";
 		}
+
+		#endregion
+
+		#region Paths
 
 		/// <summary>
 		/// Combines the path segments given. The first argument can be an absolute path, the follwing are always treated as relative: leading "/" are ignored.
@@ -468,7 +472,57 @@ namespace GQ.Editor.Util {
 
 			// the "normal" case - return the last segment of the path:
 			return pathSegments[lastIndex];
+		}
+
+		/// <summary>
+		/// Returns the path to the parent dir of the given filePath. If the given filePath denotes the root dir, an argument Exception is thrown.
+		/// </summary>
+		/// <returns>The dir.</returns>
+		/// <param name="filePath">File path.</param>
+		public static string ParentDir (string filePath) {
+			// eliminate trailing slash:
+			if ( filePath.EndsWith("/") || filePath.EndsWith("/.") )
+				filePath = filePath.Substring(0, filePath.Length - 1);
 			
+			// eliminate multi slashes:
+			filePath = Regex.Replace(filePath, "/+", PATH_ELEMENT_SEPARATOR);
+
+			// eliminate dot segments:
+			filePath = Regex.Replace(filePath, "^.\\./", "");
+
+			// reduce path for double dot segments:
+			Debug.Log("before: " + filePath);
+			filePath = Regex.Replace(filePath, "(/?)\\w+/\\.\\.", "");
+			Debug.Log("after: " + filePath);
+
+			// short cut to simple pathological cases:
+			if ( filePath.Equals("/") ||
+			     filePath.Equals("") ||
+			     filePath.Equals(".") ||
+			     filePath.Equals("/.") ||
+			     filePath.Equals("..") ||
+			     filePath.Equals("/..") )
+				throw new ArgumentException("No parent exists for given filePath.");
+
+			string[] pathSegments = filePath.Split(SEPARATORS, StringSplitOptions.RemoveEmptyEntries);
+
+			if ( pathSegments.Length == 0 )
+				throw new ArgumentException("No parent exists for given filePath.");
+
+			if ( pathSegments.Length == 1 )
+				return "/";
+
+			StringBuilder result = new StringBuilder();
+
+			if ( filePath.StartsWith("/") )
+				result.Append("/");
+
+			for ( int i = 0; i < pathSegments.Length - 1; i++ ) {
+				result.Append(pathSegments[i]);
+				result.Append(PATH_ELEMENT_SEPARATOR);
+			}
+
+			return result.ToString();
 		}
 
 		#endregion

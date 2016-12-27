@@ -3,6 +3,7 @@ using UnityEditor;
 using NUnit.Framework;
 using GQ.Editor.Util;
 using System.IO;
+using System;
 
 namespace GQTests.Editor.Util {
 
@@ -335,6 +336,55 @@ namespace GQTests.Editor.Util {
 			Assert.AreEqual(".justAHiddenDir", Files.DirName(".justAHiddenDir"));
 		}
 
+		[Test]
+		public void ParentDir () {
+			// Assert:
+			Assert.AreEqual("relative/path/to/a/", Files.ParentDir("relative/path/to/a/dir"));
+			Assert.AreEqual("/absolute/path/to/a/", Files.ParentDir("/absolute/path/to/a/dir"));
+			Assert.AreEqual("short/", Files.ParentDir("short/path"));
+			Assert.AreEqual("/short/", Files.ParentDir("/short/path"));
+			Assert.AreEqual("/", Files.ParentDir("shortestpath"));
+			Assert.AreEqual("/", Files.ParentDir("/shortestpath"));
+			Assert.AreEqual("relative/path/ending/with/a/", Files.ParentDir("relative/path/ending/with/a/dot/."));
+			Assert.AreEqual("/absolute/path/ending/with/a/", Files.ParentDir("/absolute/path/ending/with/a/dot/."));
+			Assert.AreEqual("relative/path/ending/with/", Files.ParentDir("relative/path/ending/with/two/dots/.."));
+			Assert.AreEqual("/absolute/path/ending/with/", Files.ParentDir("/absolute/path/ending/with/two/dots/.."));
+			Assert.AreEqual("relative/path/two/", Files.ParentDir("relative/path/containing/../two/dots"));
+			Assert.AreEqual("/absolute/path/and/ending/with/", Files.ParentDir("/absolute/path/containing/../and/ending/with/two/dots/.."));
+			Assert.AreEqual("relative/path/to/a/hidden/", Files.ParentDir("relative/path/to/a/hidden/.dir"));
+			Assert.AreEqual("/absolute/path/to/a/hidden/", Files.ParentDir("/absolute/path/to/a/hidden/.dir"));
+
+			Assert.Throws<ArgumentException>(
+				delegate {
+					Files.ParentDir("");
+				}, 
+				"Calling ParentDir on empty path should throw ArgumentException.");
+			Assert.Throws<ArgumentException>(
+				delegate {
+					Files.ParentDir(".");
+				}, 
+				"Calling ParentDir on dot should throw ArgumentException.");
+			Assert.Throws<ArgumentException>(
+				delegate {
+					Files.ParentDir("/.");
+				}, 
+				"Calling ParentDir on dot should throw ArgumentException.");
+			Assert.Throws<ArgumentException>(
+				delegate {
+					Files.ParentDir("..");
+				}, 
+				"Calling ParentDir on double dot should throw ArgumentException.");
+			Assert.Throws<ArgumentException>(
+				delegate {
+					Files.ParentDir("/..");
+				}, 
+				"Calling ParentDir on double dot should throw ArgumentException.");
+			Assert.Throws<ArgumentException>(
+				delegate {
+					Files.ParentDir("/");
+				}, 
+				"Calling ParentDir on root should throw ArgumentException.");
+		}
 
 		#endregion
 
