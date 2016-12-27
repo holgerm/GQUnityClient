@@ -14,6 +14,7 @@ using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
@@ -89,6 +90,7 @@ namespace GQ.Editor.Building {
 		}
 
 		public const string START_SCENE_NAME = "StartScene";
+		public const string START_SCENE_PATH = "Assets/Scenes/StartScene.unity";
 		public const string LOADING_LOGO_CANVAS_NAME = "LoadingCanvas";
 		public const string LOADING_CANVAS_PREFAB = "prefabs/LoadingCanvas";
 
@@ -136,6 +138,7 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		// TODO move test instance stuff into a testable subclass?
 		static private ProductManager _testInstance;
 
 		public static ProductManager TestInstance {
@@ -169,14 +172,23 @@ namespace GQ.Editor.Building {
 		}
 
 		internal void InitProductDictionary () {
+			string oldSelectedProductID = null;
+			if ( _currentProduct != null )
+				oldSelectedProductID = _currentProduct.Id;
+			
 			_productDict = new Dictionary<string, ProductSpec>();
-			_currentProduct = null;
 
 			IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
 
 			foreach ( var productCandidatePath in productDirCandidates ) {
 				LoadProductSpec(productCandidatePath);
 			}
+
+			if ( oldSelectedProductID != null ) {
+				_productDict.TryGetValue(oldSelectedProductID, out _currentProduct);
+			}
+			else
+				_currentProduct = null;
 		}
 
 		/// <summary>
@@ -282,6 +294,8 @@ namespace GQ.Editor.Building {
 		/// <param name="productID">Product I.</param>
 		public void PrepareProductForBuild (string productID) {
 			
+			ProductEditor.IsCurrentlyPreparingProduct = true;
+
 			string productDirPath = Files.CombinePath(ProductsDirPath, productID);
 
 			if ( !Directory.Exists(productDirPath) ) {
@@ -352,11 +366,16 @@ namespace GQ.Editor.Building {
 			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = newProduct; // remember the new product for the editor time access point.
 			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
+
+			ProductEditor.IsCurrentlyPreparingProduct = false;
+			GQAssetChangePostprocessor.writeBuildDate();
 		}
 
 		private void replaceLoadingLogoInStartScene () {
 			// set loading logo in start scene:
-			Scene startScene = SceneManager.GetSceneByName(START_SCENE_NAME);
+			EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+			EditorSceneManager.OpenScene(START_SCENE_PATH); 
+			Scene startScene = SceneManager.GetSceneByPath(START_SCENE_PATH);
 
 			if ( !startScene.IsValid() ) {
 				Errors.Add("Start scene is not valid or not found.");
@@ -364,9 +383,15 @@ namespace GQ.Editor.Building {
 			}
 
 			// destroy old canvas if exists:
+			Debug.Log("SEARCHING FOR LOADING_CANVAS ...");
+
 			foreach ( var go in startScene.GetRootGameObjects() ) {
 				if ( go.name.Equals(LOADING_LOGO_CANVAS_NAME) ) {
+					Debug.Log("  LOADING_CANVAS found!");
 					UnityEngine.Object.DestroyImmediate(go);
+				}
+				else {
+					Debug.Log("  wrong object named: " + go.name);
 				}
 			}
 
@@ -375,7 +400,7 @@ namespace GQ.Editor.Building {
 				Errors.Add("Product misses LoadingCanvas prefab.");
 				return;
 			}
-			GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab);
+			GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab, startScene);
 			if ( loadingCanvas == null ) {
 				Errors.Add("Unable to create LoadingCanvas.");
 				return;
@@ -403,6 +428,8 @@ namespace GQ.Editor.Building {
 			string json = JsonConvert.SerializeObject(config, Formatting.Indented);
 			string configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
 			File.WriteAllText(configFilePath, json);
+			if ( Assets.IsAssetPath(configFilePath) )
+				AssetDatabase.Refresh();
 		}
 
 		/// <summary>

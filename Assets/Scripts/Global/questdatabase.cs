@@ -603,7 +603,6 @@ public class questdatabase : MonoBehaviour {
 			case JSONObject.Type.ARRAY:
 				
 				if ( kei == "quest_hotspots" ) {
-					Debug.Log("CURRENTQUEST set to new Quest()!");
 					currentquest = new Quest();
 					if ( allquests == null ) {
 						allquests = new List<Quest>();
@@ -747,7 +746,6 @@ public class questdatabase : MonoBehaviour {
 			buttoncontroller.filteredOnlineList.Add(q);
 		}
 
-		Debug.Log("CURRENTQUEST set to null!");
 		currentquest = null;
 		
 		if ( ConfigurationManager.Current.questVisualization == "list" ) {

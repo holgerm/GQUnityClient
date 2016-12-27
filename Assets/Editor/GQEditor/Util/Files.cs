@@ -491,9 +491,7 @@ namespace GQ.Editor.Util {
 			filePath = Regex.Replace(filePath, "^.\\./", "");
 
 			// reduce path for double dot segments:
-			Debug.Log("before: " + filePath);
 			filePath = Regex.Replace(filePath, "(/?)\\w+/\\.\\.", "");
-			Debug.Log("after: " + filePath);
 
 			// short cut to simple pathological cases:
 			if ( filePath.Equals("/") ||
