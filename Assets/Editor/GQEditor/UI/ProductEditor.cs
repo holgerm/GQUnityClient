@@ -23,7 +23,19 @@ namespace GQ.Editor.UI {
 		private Texture warnIcon;
 		Vector2 scrollPos;
 
-		public static string CurrentBuildName = null;
+		private static string _currentBuildName = null;
+
+		public static string CurrentBuildName {
+			get {
+				if ( _currentBuildName == null ) {
+					_currentBuildName = currentBuild();
+				}
+				return _currentBuildName;
+			}
+			set {
+				_currentBuildName = value;
+			}
+		}
 
 		internal const string WARN_ICON_PATH = "Assets/Editor/GQEditor/images/warn.png";
 
@@ -76,41 +88,30 @@ namespace GQ.Editor.UI {
 
 		int selectedProductIndex;
 
-		ProductManager pm;
+		ProductManager _pm;
+
+		public ProductManager Pm {
+			get {
+				if ( _pm == null )
+					_pm = ProductManager.Instance;
+				return _pm;
+			}
+			set {
+				_pm = value;
+			}
+		}
 
 		public void OnEnable () {
 			Instance = this;
 
 			readStateFromEditorPrefs();
 			warnIcon = (Texture)AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
-
-			pm = ProductManager.Instance;
 		}
 
 		void readStateFromEditorPrefs () {
 			selectedProductIndex = EditorPrefs.HasKey("selectedProductIndex") ? EditorPrefs.GetInt("selectedProductIndex") : 0;
+			Pm.ConfigFilesHaveChanges = EditorPrefs.HasKey("configDirty") ? EditorPrefs.GetBool("configDirty") : false;
 		}
-
-		//		public void OnDisable () {
-		//			// make some saves?
-		////			Debug.Log("EDITOR.OnDisable() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
-		//		public void OnFocus () {
-		//			// make some saves?
-		//			Debug.Log("EDITOR.OnFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
-		//		public void OnLostFocus () {
-		//			// make some saves?
-		//			Debug.Log("EDITOR.OnLostFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
-		//		public void OnProjectChange () {
-		//			// TODO: rescan products folder and build folder
-		//			Debug.Log("EDITOR.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
 
 		#region GUI
 
@@ -156,8 +157,6 @@ namespace GQ.Editor.UI {
 			// Current Build:
 			CurrentBuildName = currentBuild();
 
-			Debug.Log("CurrentBuild = " + CurrentBuildName);
-
 			string shownBuildName; 
 			EditorGUILayout.BeginHorizontal();
 			{
@@ -175,17 +174,28 @@ namespace GQ.Editor.UI {
 					}
 				}
 				GUILayout.Label(shownBuildName);
+
+				if ( Pm.ConfigFilesHaveChanges ) {
+					if ( GUILayout.Button("Persist Changes") ) {
+						Files.CopyDirContents(
+							ConfigurationManager.RUNTIME_PRODUCT_DIR, 
+							Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
+							copyContentsOnly: true
+						);
+						Pm.ConfigFilesHaveChanges = false;
+					}
+				}
 			}
 			EditorGUILayout.EndHorizontal();
 
-			if ( selectedProductIndex < 0 || selectedProductIndex >= pm.AllProductIds.Count )
+			if ( selectedProductIndex < 0 || selectedProductIndex >= Pm.AllProductIds.Count )
 				selectedProductIndex = 0;
-			string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
+			string selectedProductName = Pm.AllProductIds.ElementAt(selectedProductIndex);
 
 			GUIContent prepareBuildButtonGUIContent, availableProductsPopupGUIContent, newProductLabelGUIContent, createProductButtonGUIContent;
 
 			if ( configIsDirty ) {
-				// add tooltip to explain why these elements they are disabled:
+				// adding tooltip to explain why these elements are disabled:
 				string explanation = "You must Save or Revert your changes first.";
 				prepareBuildButtonGUIContent = new GUIContent("Prepare Build", explanation);
 				availableProductsPopupGUIContent = new GUIContent("Available Products:", explanation);
@@ -204,13 +214,13 @@ namespace GQ.Editor.UI {
 				EditorGUILayout.BeginHorizontal();
 				{
 					if ( GUILayout.Button(prepareBuildButtonGUIContent) ) {
-						pm.PrepareProductForBuild(selectedProductName);
+						Pm.PrepareProductForBuild(selectedProductName);
 					}
 				}
 				EditorGUILayout.EndHorizontal();
 
 				// Product Selection Popup:
-				string[] productIds = pm.AllProductIds.ToArray<string>();
+				string[] productIds = Pm.AllProductIds.ToArray<string>();
 				// SORRY: This is to fulfill the not-so-flexible overloading scheme of Popup() here:
 				List<GUIContent> guiContentListOfProducts = new List<GUIContent>();
 				for ( int i = 0; i < productIds.Length; i++ ) {
@@ -227,10 +237,10 @@ namespace GQ.Editor.UI {
 					newProductID = EditorGUILayout.TextField(
 						newProductID, 
 						GUILayout.Height(EditorGUIUtility.singleLineHeight));
-					bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
+					bool createButtonshouldBeDisabled = newProductID.Equals("") || Pm.AllProductIds.Contains(newProductID);
 					using ( new EditorGUI.DisabledGroupScope((createButtonshouldBeDisabled)) ) {
 						if ( GUILayout.Button(createProductButtonGUIContent) ) {
-							pm.createNewProduct(newProductID);
+							Pm.createNewProduct(newProductID);
 						}
 					}
 				}
@@ -239,11 +249,11 @@ namespace GQ.Editor.UI {
 			} // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
 		}
 
-		internal string currentBuild () {
+		internal static string currentBuild () {
 			string build = null;
 
 			try {
-				string configFile = Files.CombinePath(pm.BuildExportPath, ConfigurationManager.CONFIG_FILE);
+				string configFile = Files.CombinePath(ProductManager.Instance.BuildExportPath, ConfigurationManager.CONFIG_FILE);
 				if ( !File.Exists(configFile) )
 					return build;
 				string configText = File.ReadAllText(configFile);
@@ -259,7 +269,7 @@ namespace GQ.Editor.UI {
 
 		void gui4ProductDetails () {
 			GUILayout.Label("Product Details", EditorStyles.boldLabel);
-			ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
+			ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
 
 			// Begin ScrollView:
 			using ( var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos /* , GUILayout.Width(100), GUILayout.Height(100) */) ) {
@@ -335,7 +345,11 @@ namespace GQ.Editor.UI {
 								EditorGUILayout.EndHorizontal();
 								break;
 							case "String":
-								{
+								using ( new EditorGUI.DisabledGroupScope(curPropInfo.Name.Equals("id")) ) {
+									// id of products may not be altered.
+									if ( curPropInfo.Name.Equals("id") ) {
+										namePrefixGUIContent = new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
+									}
 									// show textfield or if value too long show textarea:
 									string oldStringVal = (string)curPropInfo.GetValue(p.Config, null);
 									oldStringVal = Objects.ToString(oldStringVal);
@@ -369,6 +383,7 @@ namespace GQ.Editor.UI {
 									}
 									int oldIntVal = (int)curPropInfo.GetValue(p.Config, null);
 									int newIntVal = oldIntVal;
+
 									// show text field if value fits in one line:
 									newIntVal = EditorGUILayout.IntField(namePrefixGUIContent, oldIntVal);
 									if ( newIntVal != oldIntVal ) {
@@ -428,11 +443,13 @@ namespace GQ.Editor.UI {
 				EditorGUI.BeginDisabledGroup(!allowChanges || !configIsDirty);
 				{
 					if ( GUILayout.Button("Save") ) {
-						ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
-						pm.serializeConfig(p.Config, ConfigurationManager.RUNTIME_PRODUCT_DIR);
+						ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+						Pm.serializeConfig(p.Config, ConfigurationManager.RUNTIME_PRODUCT_DIR);
 						configIsDirty = false;
 					}
 					if ( GUILayout.Button("Revert") ) {
+						ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+						p.initConfig();
 						GUIUtility.keyboardControl = 0;
 						GUIUtility.hotControl = 0;
 						configIsDirty = false;
@@ -480,36 +497,6 @@ namespace GQ.Editor.UI {
 			if ( importedAssets.Length == 1 && importedAssets[0].Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
 				return;
 
-			// if we have a real change in the code, we update the buildtime:
-			for ( int i = 0; i < importedAssets.Length; i++ ) {
-				if ( isRealAsset(importedAssets[i]) ) {
-
-					Debug.Log("Real asset changed: " + importedAssets[i]);
-
-					if ( importedAssets[i].StartsWith(ProductManager.Instance.BuildExportPath) ) {
-						configHasChanged = true;
-
-						Debug.Log("   It is a config asset (build name : " + ProductEditor.CurrentBuildName + ")");
-
-
-						if ( !ProductEditor.IsCurrentlyPreparingProduct && ProductEditor.CurrentBuildName != null ) {
-							// copy changed config file back to product dir:
-							string relativeFilePath = importedAssets[i].Substring(ProductManager.Instance.BuildExportPath.Length);
-							string targetFilePath = Files.CombinePath(ProductManager.ProductsDirPath, ProductEditor.CurrentBuildName, relativeFilePath);
-							string targetDirPath = Files.ParentDir(targetFilePath);
-							Files.CopyFile(
-								importedAssets[i],
-								targetDirPath
-							);
-							Debug.Log("Saved " + importedAssets[i] + " to " + targetDirPath);
-						}
-					}
-
-					buildTimeChanged = true;
-					break;
-				}
-			}
-
 			foreach ( string str in importedAssets ) {
 
 				setChangeFlags(str);
@@ -538,6 +525,7 @@ namespace GQ.Editor.UI {
 			}
 
 			if ( configHasChanged ) {
+				ProductManager.Instance.ConfigFilesHaveChanges = true;
 				ConfigurationManager.Reset();
 				configHasChanged = false;
 			}
@@ -549,7 +537,7 @@ namespace GQ.Editor.UI {
 
 		private static bool isRealAsset (string assetPath) {
 			if ( assetPath.StartsWith(GQAssert.TEST_DATA_BASE_DIR) )
-				// test asstes are NOT REAL assets:
+				// test assets are NOT REAL assets:
 				return false;
 
 			if ( assetPath.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
@@ -564,6 +552,17 @@ namespace GQ.Editor.UI {
 			if ( productDirHasChanges == false && str.StartsWith(ProductManager.ProductsDirPath) ) {
 				// a product might have changed: refresh product list:
 				productDirHasChanges = true;
+			}
+
+			if ( !buildTimeChanged && isRealAsset(str) ) {
+				buildTimeChanged = true;
+			}
+
+			if ( !configHasChanged &&
+			     !ProductEditor.IsCurrentlyPreparingProduct &&
+			     isRealAsset(str) &&
+			     str.StartsWith(ProductManager.Instance.BuildExportPath) ) {
+				configHasChanged = true;
 			}
 		}
 
@@ -629,7 +628,7 @@ namespace GQ.Editor.UI {
 		//			}
 		//
 		//		}
-	
+		//
 		//
 		//		static void IsOpenForEdit (string s1, string s2) {
 		//

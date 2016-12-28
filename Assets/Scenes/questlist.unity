@@ -3604,7 +3604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &325989057
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20493,6 +20493,7 @@ MonoBehaviour:
   audioclips: []
   networkActionsObject: {fileID: 0}
   gPSRouteUpdateInterval: 10
+  test: 0
   lastServerIp: 
 --- !u!114 &1756337061
 MonoBehaviour:

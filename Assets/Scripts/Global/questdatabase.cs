@@ -2010,10 +2010,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 					}
 					else {
@@ -2708,6 +2708,7 @@ public class questdatabase : MonoBehaviour {
 				else
 				if ( qp.type == "AudioRecord" ) {
 					needsCamera = true;
+					Debug.Log("Starting AudioRecord");
 					SceneManager.LoadScene("audiorecord", LoadSceneMode.Additive);
 				}
 				else

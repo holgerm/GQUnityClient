@@ -78,7 +78,7 @@ public class page_map : MonoBehaviour {
 	private void Start () {
 		if ( GameObject.Find("QuestDatabase") == null ) {
 			
-			SceneManager.LoadScene(0, LoadSceneMode.Single);
+			SceneManager.LoadScene("questlist", LoadSceneMode.Single);
 			return;
 			
 		} 

@@ -89,10 +89,34 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		public const string START_SCENE_NAME = "StartScene";
-		public const string START_SCENE_PATH = "Assets/Scenes/StartScene.unity";
+		public const string START_SCENE = "Assets/Scenes/StartScene.unity";
 		public const string LOADING_LOGO_CANVAS_NAME = "LoadingCanvas";
 		public const string LOADING_CANVAS_PREFAB = "prefabs/LoadingCanvas";
+		public const string LOADING_CANVAS_CONTAINER_TAG = "LoadingCanvasContainer";
+
+		#endregion
+
+		#region State
+
+
+		private bool _configFilesHaveChanges;
+
+		/// <summary>
+		/// True if current configuration has changes that are not persistantly stored in the product specifications. 
+		/// Any change of files within the ConfigAssets/Resources folder will set this flag to true. 
+		/// Pressing the persist button in the GQ Product Editor will set it to false.
+		/// </summary>
+		public bool ConfigFilesHaveChanges {
+			get {
+				return _configFilesHaveChanges;
+			}
+			set {
+				if ( _configFilesHaveChanges != value ) {
+					_configFilesHaveChanges = value;
+					EditorPrefs.SetBool("configDirty", _configFilesHaveChanges);
+				}
+			}
+		}
 
 		#endregion
 
@@ -361,7 +385,7 @@ namespace GQ.Editor.Building {
 			PlayerSettings.productName = newProduct.Config.name;
 			PlayerSettings.bundleIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
 
-			replaceLoadingLogoInStartScene();
+			replaceLoadingLogoInScene(START_SCENE);
 
 			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = newProduct; // remember the new product for the editor time access point.
@@ -371,41 +395,48 @@ namespace GQ.Editor.Building {
 			GQAssetChangePostprocessor.writeBuildDate();
 		}
 
-		private void replaceLoadingLogoInStartScene () {
-			// set loading logo in start scene:
+		private void replaceLoadingLogoInScene (string scenePath) {
+			// save currently open scenes and open start scene:
 			EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-			EditorSceneManager.OpenScene(START_SCENE_PATH); 
-			Scene startScene = SceneManager.GetSceneByPath(START_SCENE_PATH);
+			EditorSceneManager.OpenScene(scenePath); 
+			Scene startScene = SceneManager.GetSceneByPath(scenePath);
 
 			if ( !startScene.IsValid() ) {
 				Errors.Add("Start scene is not valid or not found.");
 				return;
 			}
 
-			// destroy old canvas if exists:
-			Debug.Log("SEARCHING FOR LOADING_CANVAS ...");
-
-			foreach ( var go in startScene.GetRootGameObjects() ) {
-				if ( go.name.Equals(LOADING_LOGO_CANVAS_NAME) ) {
-					Debug.Log("  LOADING_CANVAS found!");
-					UnityEngine.Object.DestroyImmediate(go);
-				}
-				else {
-					Debug.Log("  wrong object named: " + go.name);
+			// destroy old loading canvas if exists:
+			foreach ( GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG) ) {
+				foreach ( Transform child in lcc.transform ) {
+					UnityEngine.Object.DestroyImmediate(child.gameObject);
 				}
 			}
 
+
+			// load prefab for loading canvas:
 			GameObject loadingCanvasPrefab = Resources.Load<GameObject>(LOADING_CANVAS_PREFAB);
 			if ( loadingCanvasPrefab == null ) {
 				Errors.Add("Product misses LoadingCanvas prefab.");
 				return;
 			}
-			GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab, startScene);
-			if ( loadingCanvas == null ) {
-				Errors.Add("Unable to create LoadingCanvas.");
-				return;
+
+			// instantiate new loading canvas(es) from prefab into all LCCs:
+			foreach ( GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG) ) {
+				foreach ( Transform child in lcc.transform ) {
+					UnityEngine.Object.DestroyImmediate(child.gameObject);
+				}
+
+				GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab, startScene);
+				if ( loadingCanvas == null ) {
+					Errors.Add("Unable to create LoadingCanvas.");
+					return;
+				}
+				loadingCanvas.transform.parent = lcc.transform;
+				loadingCanvas.name = LOADING_LOGO_CANVAS_NAME;
+
+				LoadingCanvas.Init(loadingCanvas);
 			}
-			loadingCanvas.name = LOADING_LOGO_CANVAS_NAME;
 		}
 
 		#endregion
