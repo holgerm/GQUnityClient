@@ -1,0 +1,21 @@
+
+{
+    "id" : "eduquest",
+    "name" : "EduQuest",
+    "portal" : 141,
+    "autoStartQuestID" : 0,
+    "autostartIsPredeployed" : false,
+    "downloadTimeOutSeconds" : 0,
+    "nameForQuest"           : "[null]",
+    "questVisualization"     : "[null]",
+    "questVisualizationChangeable" : false,
+    "showCloudQuestsImmediately"   : false,
+    "showTextInLoadingLogo"        : false,
+    "showNetConnectionWarning"     : false,
+    "colorProfile"                 : "[null]",
+    "mapboxKey"                    : "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
+    "mapboxMapID"                  : "mapbox.streets",
+    "imprint"                      : "[null]",
+    "markers"                      : [
+    ]
+}
