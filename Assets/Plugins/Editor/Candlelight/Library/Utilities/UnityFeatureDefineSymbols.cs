@@ -26,21 +26,17 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Candlelight
-{
+namespace Candlelight {
 	/// <summary>
 	/// A class to register define symbols for Unity features.
 	/// </summary>
 	[InitializeOnLoad]
-	public sealed class UnityFeatureDefineSymbols
-	{
+	public sealed class UnityFeatureDefineSymbols {
 		/// <summary>
 		/// Initializes the <see cref="UnityFeatureDefineSymbols"/> class.
 		/// </summary>
-		static UnityFeatureDefineSymbols()
-		{
-			foreach (KeyValuePair<string, string[]> featureClasses in s_FeatureAvailabilityClasses)
-			{
+		static UnityFeatureDefineSymbols () {
+			foreach ( KeyValuePair<string, string[]> featureClasses in s_FeatureAvailabilityClasses ) {
 				SetSymbolForAllBuildTargets(
 					featureClasses.Key,
 					target => featureClasses.Value.Any(
@@ -52,30 +48,41 @@ namespace Candlelight
 		}
 
 		#region Preferences
+
 		private static readonly EditorPreference<bool, UnityFeatureDefineSymbols> s_AutoProductRegistrationPreference =
 			EditorPreference<bool, UnityFeatureDefineSymbols>.ForToggle("autoRegistration", true);
+
 		#endregion
 
 		/// <summary>
 		/// For each feature availability symbol, an array of class names whose presence indicates the feature.
 		/// </summary>
 		private static readonly Dictionary<string, string[]> s_FeatureAvailabilityClasses =
-			new Dictionary<string, string[]>()
-		{
-			{ "IS_UNITYEDITOR_ANIMATIONS_AVAILABLE", new [] { "UnityEditor.Animations.AnimatorController" } }
-		};
+			new Dictionary<string, string[]>() {
+				{
+					"IS_UNITYEDITOR_ANIMATIONS_AVAILABLE",
+					new [] {
+						"UnityEditor.Animations.AnimatorController"
+					}
+				}
+			};
 		/// <summary>
 		/// For each product availability symbol, an array of class names whose presence indicates the feature.
 		/// </summary>
 		private static readonly Dictionary<string, string[]> s_ProductAvailabilityClasses =
-			new Dictionary<string, string[]>()
-		{
-			{
-				"IS_CANDLELIGHT_CUSTOM_HANDLES_AVAILABLE",
-				new [] { "Candlelight.FalloffHandles", "Candlelight.HelixHandles" }
-			},
-			{ "IS_CANDLELIGHT_HYPERTEXT_AVAILABLE", new [] { "Candlelight.UI.HyperText" } },
-			{ "IS_CANDLELIGHT_RAGDOLL_AVAILABLE", new [] { "Candlelight.Physics.RagdollAnimator", } },
+			new Dictionary<string, string[]>() { {
+					"IS_CANDLELIGHT_CUSTOM_HANDLES_AVAILABLE",
+					new [] {
+						"Candlelight.FalloffHandles",
+						"Candlelight.HelixHandles"
+					}
+				},
+				{
+					"IS_CANDLELIGHT_HYPERTEXT_AVAILABLE",
+					new [] {
+						"Candlelight.UI.HyperText"
+					}
+				}, { "IS_CANDLELIGHT_RAGDOLL_AVAILABLE", new [] { "Candlelight.Physics.RagdollAnimator", } },
 			{ "IS_ROOTMOTION_FINAL_IK_AVAILABLE", new [] { "RootMotion.FinalIK.IKSolver" } }
 		};
 
@@ -115,7 +122,7 @@ namespace Candlelight
 			foreach (BuildTargetGroup target in System.Enum.GetValues(typeof(BuildTargetGroup)))
 			{
 				// prevent editor spam in Unity 5.x
-				if (target == BuildTargetGroup.Unknown)
+				if (target == BuildTargetGroup.Unknown || target == BuildTargetGroup.WP8 || target == BuildTargetGroup.BlackBerry)
 				{
 					continue;
 				}
