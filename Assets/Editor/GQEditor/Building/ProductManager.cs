@@ -15,6 +15,7 @@ using GQ.Editor.UI;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
+using System.Reflection;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
@@ -435,7 +436,28 @@ namespace GQ.Editor.Building {
 				loadingCanvas.transform.parent = lcc.transform;
 				loadingCanvas.name = LOADING_LOGO_CANVAS_NAME;
 
-				LoadingCanvas.Init(loadingCanvas);
+				// if product has initializer call it:
+				Type loadingCanvasType = null;
+				try {
+					loadingCanvasType = Type.GetType("GQ.Client.Conf.LoadingCanvas");
+				} catch ( Exception e ) {
+					Debug.Log("Exception: " + e.Message);
+					loadingCanvasType = null;
+				}
+				if ( loadingCanvasType != null ) {
+					Debug.Log("found type: " + loadingCanvasType.FullName);
+					MethodInfo initMethod = 
+						loadingCanvasType.GetMethod(
+							"Init", 
+							new Type[] {
+								typeof(UnityEngine.GameObject) 
+							}
+						);
+					if ( initMethod != null )
+						initMethod.Invoke(null, new GameObject[] {
+							loadingCanvas
+						});
+				}
 			}
 		}
 
