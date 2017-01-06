@@ -91,8 +91,8 @@ namespace GQ.Editor.Building {
 		}
 
 		public const string START_SCENE = "Assets/Scenes/StartScene.unity";
-		public const string LOADING_LOGO_CANVAS_NAME = "LoadingCanvas";
-		public const string LOADING_CANVAS_PREFAB = "prefabs/LoadingCanvas";
+		public const string LOADING_CANVAS_NAME = "LoadingCanvas";
+		public const string LOADING_CANVAS_PREFAB = "loadingCanvas/LoadingCanvas";
 		public const string LOADING_CANVAS_CONTAINER_TAG = "LoadingCanvasContainer";
 
 		#endregion
@@ -434,7 +434,7 @@ namespace GQ.Editor.Building {
 					return;
 				}
 				loadingCanvas.transform.parent = lcc.transform;
-				loadingCanvas.name = LOADING_LOGO_CANVAS_NAME;
+				loadingCanvas.name = LOADING_CANVAS_NAME;
 
 				// if product has initializer call it:
 				Type loadingCanvasType = null;

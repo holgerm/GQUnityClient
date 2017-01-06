@@ -8,14 +8,12 @@ namespace GQ.Client.Conf {
 
 		public static void Init (GameObject loadingCanvas) {
 
-			Debug.Log("Initializing WCC LOading Canvas ...");
-
 			UnityEngine.Animator anim = loadingCanvas.GetComponent<UnityEngine.Animator>();
 
-			AnimatorController loadedCtrl = Resources.Load<AnimatorController>("animations/LoadingController");
+			AnimatorController loadedCtrl = Resources.Load<AnimatorController>("loadingCanvas/LoadingController");
 
 			// ensure that state contains right animation motion:
-			Motion loadedMotion = Resources.Load<Motion>("animations/LoadingAnimation");
+			Motion loadedMotion = Resources.Load<Motion>("loadingCanvas/LoadingAnimation");
 			bool hasLink = hasMotionLink(loadedCtrl, loadedMotion);
 
 			if ( !hasMotionLink(loadedCtrl, loadedMotion) )
