@@ -443,7 +443,7 @@ namespace GQTests.Editor.Util {
 
 		#region Asset Database Related
 
-		[Test]
+		[Test, Ignore]
 		public void StripAssetMetadata () {
 			// Arrange:
 			// TODO test a method that strips all asset metadata from a directory's contained files and subdirs.
