@@ -22,6 +22,7 @@ namespace GQ.Client.Conf {
 		public const string CONFIG_FILE = "Product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
+		public const string GQ_SERVER_BASE_URL = "http://qeevee.org:9091";
 
 		#region Initialize
 

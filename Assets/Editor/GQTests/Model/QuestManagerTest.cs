@@ -12,6 +12,9 @@ namespace GQTests.Model {
 
 	public class QuestManagerTest {
 
+		static readonly string PUBLIC_GAMES_JSON_PATH = 
+			Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Server/JSON/publicgamesinfo.json");
+
 		[SetUp]
 		public void ResetQMInstance () {
 			QuestManager.Reset();
@@ -30,20 +33,43 @@ namespace GQTests.Model {
 			Assert.AreEqual(0, qm.Count);
 		}
 
+		[Test]
+		public void ImportNull () {
+			// Arrange:
+			QuestManager qm = QuestManager.Instance;
+			QuestInfo[] quests = null;
+
+			// Act:
+			qm.Import(quests);
+
+			// Assert:
+			IEnumerable<QuestInfo> questInfos = 
+				from entry in qm.QuestDict
+				select entry.Value;
+			Assert.AreEqual(0, questInfos.Count());
+		}
+
 
 		[Test]
 		public void ImportFromTestFile () {
 			// Arrange:
 			QuestManager qm = QuestManager.Instance;
+			QuestInfo[] quests = null;
+			TestQuestImporter mockImporter = new TestQuestImporter();
+			Assert.False(mockImporter.IsDone);
+			Assert.Null(mockImporter.ImportedQuests);
 
 			// Act:
-			qm.ImportQuestInfo(new TestQuestImporter());
+			mockImporter.StartExtractQuestInfosFromFile(PUBLIC_GAMES_JSON_PATH);
+			qm.Import(mockImporter.ImportedQuests);
 
 			// Assert:
 			IEnumerable<QuestInfo> questInfos = 
 				from entry in qm.QuestDict
 				select entry.Value;
 			Assert.AreEqual(52, questInfos.Count());
+			Assert.True(mockImporter.IsDone);
+			Assert.NotNull(mockImporter.ImportedQuests);
 		}
 
 	}
@@ -52,17 +78,14 @@ namespace GQTests.Model {
 
 	class TestQuestImporter : QuestImporter_I {
 
-		static readonly string PUBLIC_GAMES_JSON_PATH = 
-			Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Server/JSON/publicgamesinfo.json");
+		public QuestInfo[] ImportedQuests = null;
 
-		public QuestInfo[] import () {
+		public bool IsDone = false;
+
+		public void ImportDone (QuestInfo[] quests) {
 			
-			FileInfo file = new FileInfo(PUBLIC_GAMES_JSON_PATH);
-			StreamReader reader = file.OpenText();
-			string json = reader.ReadToEnd();
-			reader.Close();
-
-			return JsonConvert.DeserializeObject<QuestInfo[]>(json);
+			IsDone = true;
+			ImportedQuests = quests;
 		}
 
 	}

@@ -34,10 +34,10 @@ namespace GQ.Client.Model {
 
 		#region import functions
 
-		public void ImportQuestInfo (QuestImporter_I importer) {
+		public void Import (QuestInfo[] quests) {
+			if ( quests == null )
+				return;
 			
-			QuestInfo[] quests = importer.import();
-
 			foreach ( var q in quests ) {
 				if ( q.id == null )
 					continue;
