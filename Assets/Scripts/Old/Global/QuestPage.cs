@@ -12,9 +12,10 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
+using GQ.Client.Model;
 
 [System.Serializable]
-[XmlRoot("mission")]
+[XmlRoot(GQML.PAGE)]
 public class QuestPage {
 
 	[XmlAttribute("id")]

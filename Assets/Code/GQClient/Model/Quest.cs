@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using System;
 using System.Linq;
 using System.Text;
 using GQ.Geo;
@@ -15,11 +14,12 @@ using UnitySlippyMap;
 using GQ.Client.Conf;
 using System.ComponentModel;
 using System.Xml.Schema;
+using System;
 
 namespace GQ.Client.Model {
 
 	[System.Serializable]
-	[XmlRoot("game")]
+	[XmlRoot(GQML.QUEST)]
 	public class Quest  : IComparable<Quest>, IXmlSerializable {
 
 		#region Attributes
@@ -38,13 +38,25 @@ namespace GQ.Client.Model {
 
 		#endregion
 
-		#region Mission aka Pages
+		#region Pages aka missions
 
 		// TODO: Get rid of this List:
 		public List<QuestPage>
 			PageList = new List<QuestPage>();
 
 		protected Dictionary<int, QuestPage> pageDict = new Dictionary<int, QuestPage>();
+
+		#endregion
+
+
+		#region Hotspots
+
+		public string filepath;
+
+		public List<QuestHotspot>
+			hotspotList = new List<QuestHotspot>();
+
+		protected Dictionary<int, QuestHotspot> hotspotDict = new Dictionary<int, QuestHotspot>();
 
 		#endregion
 
@@ -59,7 +71,11 @@ namespace GQ.Client.Model {
 			Debug.Log("ReadXML called on " + GetType().Name);
 
 			reader.MoveToContent();
+
+			// Name:
 			Name = reader.GetAttribute("name");
+
+			// Id:
 			int id;
 			if ( !Int32.TryParse(reader.GetAttribute("id"), out id) ) {
 				Debug.LogWarning("Id for quest " + Name + " could not be parsed, we find: " + reader.GetAttribute("id"));
@@ -67,17 +83,41 @@ namespace GQ.Client.Model {
 			else {
 				Id = id;
 			}
-			Boolean isEmptyElement = reader.IsEmptyElement; 
-			reader.ReadStartElement();
-			if ( !isEmptyElement ) { 
-				if ( "mission".Equals(reader.LocalName) ) {
-					XmlSerializer xs = new XmlSerializer(typeof(QuestPage));
-					QuestPage page = (QuestPage)xs.Deserialize(reader);
-					pageDict.Add(page.id, page);
-					// TODO: get rid:
-					PageList.Add(page);
-				}
 
+			// Content:
+			XmlSerializer pageSerializer = new XmlSerializer(typeof(QuestPage));
+			XmlSerializer hotspotSerializer = new XmlSerializer(typeof(QuestHotspot));
+
+			bool read = false;
+			while ( read || reader.Read() ) {
+				read = false;
+				Debug.Log("Node Type is: " + reader.NodeType.ToString());
+				switch ( reader.NodeType ) {
+					case XmlNodeType.Element:
+						switch ( reader.LocalName ) {
+							case GQML.PAGE:
+								QuestPage page = (QuestPage)pageSerializer.Deserialize(reader);
+								read = true;
+								pageDict.Add(page.id, page);
+								Debug.Log("Added page id: " + page.id);
+
+								// TODO: get rid:
+								PageList.Add(page);
+								break;
+							case GQML.HOTSPOT:
+								QuestHotspot hotspot = (QuestHotspot)hotspotSerializer.Deserialize(reader);
+								read = true;
+								hotspotDict.Add(hotspot.id, hotspot);
+								Debug.Log("Added hotspot id: " + hotspot.id);
+
+								// TODO: get rid:
+								hotspotList.Add(hotspot);
+								break;
+						}
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
@@ -87,10 +127,7 @@ namespace GQ.Client.Model {
 
 		#endregion
 
-		public string filepath;
-		[XmlElement("hotspot")]
-		public List<QuestHotspot>
-			hotspotList;
+
 		[XmlAnyAttribute()]
 		public XmlAttribute[]
 			help_attributes;

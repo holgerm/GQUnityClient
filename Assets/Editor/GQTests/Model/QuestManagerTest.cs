@@ -49,5 +49,20 @@ namespace GQTests.Model {
 			Assert.AreEqual(1, q.PageList.Count);
 			Assert.AreEqual(0, q.hotspotList.Count);
 		}
+
+		[Test]
+		public void ImportOnlyHotspots () {
+			// Arrange:
+			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OnlyHotspots/game.xml"));
+
+			// Act:
+			Quest q = qm.Import(xml);
+
+			// Assert:
+			Assert.AreEqual("OnlyHotspots", q.Name);
+			Assert.AreEqual(9803, q.Id);
+			Assert.AreEqual(0, q.PageList.Count);
+			Assert.AreEqual(3, q.hotspotList.Count);
+		}
 	}
 }
