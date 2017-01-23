@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 
 namespace GQ.Editor.Util {
+	
 	public static class Files {
 
 		#region Asset Agnostic API
@@ -627,7 +628,6 @@ namespace GQ.Editor.Util {
 
 		#endregion
 
-
 		#region Asset Database Related
 
 		public static void StripAssetMetadata (string dir) {
@@ -650,9 +650,19 @@ namespace GQ.Editor.Util {
 
 		#endregion
 
+
+		#region Access File Contents
+
+		public static string ReadText (string path) {
+			FileInfo file = new FileInfo(path);
+			StreamReader reader = file.OpenText();
+			string stringRead = reader.ReadToEnd();
+			reader.Close();
+			return stringRead;
+		}
+
+		#endregion
+
 	}
-
-
-
 
 }

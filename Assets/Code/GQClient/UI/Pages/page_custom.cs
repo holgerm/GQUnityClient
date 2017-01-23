@@ -10,6 +10,7 @@ using GQ.Util;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 public class page_custom : MonoBehaviour {
 

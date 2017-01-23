@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 public class page_multiplechoicequestion : MonoBehaviour {
 
@@ -231,8 +232,8 @@ public class page_multiplechoicequestion : MonoBehaviour {
 			}
 			else
 			if ( (multiplechoicequestion.onSuccess == null && multiplechoicequestion.onFailure == null)
-			            ||
-			            (multiplechoicequestion.onSuccess != null && !multiplechoicequestion.onSuccess.hasMissionAction() && multiplechoicequestion.onFailure != null && !multiplechoicequestion.onFailure.hasMissionAction()) ) {
+			     ||
+			     (multiplechoicequestion.onSuccess != null && !multiplechoicequestion.onSuccess.hasMissionAction() && multiplechoicequestion.onFailure != null && !multiplechoicequestion.onFailure.hasMissionAction()) ) {
 			
 				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
 			

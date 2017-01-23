@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 using System.Collections;
 using System.Text.RegularExpressions;
+using GQ.Client.Model;
 
 public class page_textquestion : MonoBehaviour {
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 namespace GQ.Client.UI.Pages {
 

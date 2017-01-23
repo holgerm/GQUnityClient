@@ -9,6 +9,7 @@ using GQ.Client.Net;
 using GQ.Client.Conf;
 using QM.NFC;
 using GQ.Client.Util;
+using GQ.Client.Model;
 
 public class actions : MonoBehaviour {
 
@@ -279,17 +280,17 @@ public class actions : MonoBehaviour {
 
 		// Start part:
 		GetComponent<ConnectionClient>().addFileMessage(ip, var, filetype, sendbytes[0], 0,
-			questdb.currentquest.id);
+			questdb.currentquest.Id);
 
 		// Middle Parts:
 		for ( int i = 1; i < sendbytes.Count; i++ ) {
 			GetComponent<ConnectionClient>().addFileMessage(ip, var, filetype, sendbytes[i], i,
-				questdb.currentquest.id);
+				questdb.currentquest.Id);
 		}
 
 		// FINISH Part:
 		GetComponent<ConnectionClient>().addFileFinishMessage(ip, var, filetype,
-			questdb.currentquest.id);
+			questdb.currentquest.Id);
 	}
 
 
@@ -318,7 +319,7 @@ public class actions : MonoBehaviour {
 						getServerIp(action.getAttribute("ip")), 
 						action.getAttribute("var"), 
 						getVariable(action.getAttribute("var")).getStringValue(),
-						questdb.currentquest.id);
+						questdb.currentquest.Id);
 				}
 				else {
 					bool filefound = false;
@@ -1526,7 +1527,7 @@ public class actions : MonoBehaviour {
 		string varname = key;
 		varname = new String(varname.Where(Char.IsLetter).ToArray());
 		
-		varname = questdb.currentquest.id + "_" + varname;
+		varname = questdb.currentquest.Id + "_" + varname;
 
 
 
@@ -1591,7 +1592,7 @@ public class actions : MonoBehaviour {
 		string varname = action.getAttribute("var");
 		varname = new String(varname.Where(Char.IsLetter).ToArray());
 
-		varname = questdb.currentquest.id + "_" + varname;
+		varname = questdb.currentquest.Id + "_" + varname;
 
 
 
@@ -2032,7 +2033,7 @@ public class actions : MonoBehaviour {
 			if ( k == "quest.name" ) {
 
 
-				return new QuestVariable("quest.name", questdb.currentquest.name);
+				return new QuestVariable("quest.name", questdb.currentquest.Name);
 
 
 			}

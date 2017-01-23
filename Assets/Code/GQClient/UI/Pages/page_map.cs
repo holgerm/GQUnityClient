@@ -17,6 +17,7 @@ using System.Text;
 using System.Globalization;
 using GQ.Client.Conf;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 /// <summary>
 /// Caution: We use the order (LATITUDE, LONGITUDE) throughout our implementation here! 
@@ -87,7 +88,7 @@ public class page_map : MonoBehaviour {
 
 		gpsdata = questdb.GetComponent<GPSPosition>();
 
-		if ( questdb.currentquest != null && questdb.currentquest.id != 0 ) {
+		if ( questdb.currentquest != null && questdb.currentquest.Id != 0 ) {
 
 			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
 			mappage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
@@ -650,7 +651,7 @@ public class page_map : MonoBehaviour {
 			// TODO do not draw radius circles on real devices:
 #if (UNITY_WEBPLAYER || UNITY_EDITOR) 
 
-			if ( questdb.currentquest != null && questdb.currentquest.id != 0 ) {
+			if ( questdb.currentquest != null && questdb.currentquest.Id != 0 ) {
 				go.AddComponent<circletests>();
 		
 				if ( qrh.hotspot.hasAttribute("radius") ) {

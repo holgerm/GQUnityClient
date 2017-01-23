@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 public class page_webpage : MonoBehaviour {
 	

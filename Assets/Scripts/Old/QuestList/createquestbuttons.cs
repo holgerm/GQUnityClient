@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 
 public class createquestbuttons : MonoBehaviour {
 
@@ -112,7 +113,7 @@ public class createquestbuttons : MonoBehaviour {
 				if ( questdb.allquests.Count > 0 ) {
 					foreach ( Quest q in questdb.allquests ) {
 
-						if ( q.name.ToUpper().Contains(s.ToUpper()) ) {
+						if ( q.Name.ToUpper().Contains(s.ToUpper()) ) {
 							filteredOnlineList.Add(q);
 						}
 					}
@@ -289,7 +290,7 @@ public class createquestbuttons : MonoBehaviour {
 		foreach ( var item in showoffline ) {
 			GameObject newButton = Instantiate(sampleButton) as GameObject;
 			SampleButton button = newButton.GetComponent <SampleButton>();
-			button.nameLabel.text = item.name;
+			button.nameLabel.text = item.Name;
 			button.q = item;
 			newButton.transform.SetParent(transform);
 			newButton.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -306,7 +307,7 @@ public class createquestbuttons : MonoBehaviour {
 		foreach ( var item in showonline ) {
 			GameObject newButton = Instantiate(sampleButton) as GameObject;
 			SampleButton button = newButton.GetComponent <SampleButton>();
-			button.nameLabel.text = item.name;
+			button.nameLabel.text = item.Name;
 			button.q = item;
 			newButton.transform.SetParent(transform);
 			newButton.transform.localScale = new Vector3(1f, 1f, 1f);

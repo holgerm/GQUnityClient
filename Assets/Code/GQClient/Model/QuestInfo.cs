@@ -17,8 +17,6 @@ namespace GQ.Client.Model {
 
 		public int? 			typeID 				{ get; set; }
 
-		public int? 			version 			{ get; set; }
-
 		public string 			iconPath			{ get; set; }
 
 		public long? 			lastUpdate 			{ get; set; }
@@ -27,6 +25,9 @@ namespace GQ.Client.Model {
 
 		public MetaDataInfo[] 	metadata			{ get; set; }
 
+		private int? lastUpdateOnDevice = null;
+
+		private int playedTimes = 0;
 
 		public string ToString () {
 			StringBuilder sb = new StringBuilder();
@@ -34,7 +35,6 @@ namespace GQ.Client.Model {
 			sb.AppendFormat("{0} (id: {1})\n", name, id);
 			sb.AppendFormat("\t last update: {0}", lastUpdate);
 			sb.AppendFormat("\t type id: {0}", typeID);
-			sb.AppendFormat("\t version: {0}", version);
 			sb.AppendFormat("\t icon path: {0}", iconPath);
 			sb.AppendFormat("\t featured image path: {0}", featuredImagePath);
 			sb.AppendFormat("\t with {0} hotspots.", hotspots == null ? 0 : hotspots.Length);
@@ -52,6 +52,36 @@ namespace GQ.Client.Model {
 			}
 
 			return null;
+		}
+
+		public bool IsLocallyAvailable () {
+			return lastUpdateOnDevice != null;
+		}
+
+		public bool IsNew () {
+			return playedTimes == 0;
+		}
+
+		public bool IsDownloadable () {
+			return lastUpdateOnDevice == null && lastUpdate != null;
+		}
+
+		public bool IsUpdatable () {
+			return (
+			    // exists on both device and server:
+			    lastUpdateOnDevice != null
+			    && lastUpdate != null
+				// server update is newer (bigger number):
+			    && lastUpdate > lastUpdateOnDevice);
+		}
+
+		public bool IsDeletable () {
+			// TODO different for predeployed quests
+			return lastUpdateOnDevice != null;
+		}
+
+		public bool WarnBeforeDeletion () {
+			return IsDeletable() && lastUpdate == null;
 		}
 	}
 

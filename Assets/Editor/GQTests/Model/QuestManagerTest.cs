@@ -1,93 +1,53 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
 using GQ.Editor.Util;
-using System.IO;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
+using GQTests;
+using GQ.Client.Model;
 
 namespace GQTests.Model {
 
 	public class QuestManagerTest {
 
-		static readonly string PUBLIC_GAMES_JSON_PATH = 
-			Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Server/JSON/publicgamesinfo.json");
+		string xml;
+		QuestManager qm;
 
 		[SetUp]
-		public void ResetQMInstance () {
+		public void Init () { 
+		
 			QuestManager.Reset();
-		}
-
-		[Test]
-		public void InitQM () {
-			// Arrange:
-			QuestManager qm = null;
-
-			// Act:
 			qm = QuestManager.Instance;
-
-			// Assert:
-			Assert.NotNull(qm);
-			Assert.AreEqual(0, qm.Count);
-		}
-
-		[Test]
-		public void ImportNull () {
-			// Arrange:
-			QuestManager qm = QuestManager.Instance;
-			QuestInfo[] quests = null;
-
-			// Act:
-			qm.Import(quests);
-
-			// Assert:
-			IEnumerable<QuestInfo> questInfos = 
-				from entry in qm.QuestDict
-				select entry.Value;
-			Assert.AreEqual(0, questInfos.Count());
 		}
 
 
 		[Test]
-		public void ImportFromTestFile () {
+		public void ImportMinimalQuest () {
 			// Arrange:
-			QuestManager qm = QuestManager.Instance;
-			QuestInfo[] quests = null;
-			TestQuestImporter mockImporter = new TestQuestImporter();
-			Assert.False(mockImporter.IsDone);
-			Assert.Null(mockImporter.ImportedQuests);
+			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/MinimalQuest/game.xml"));
 
 			// Act:
-			mockImporter.StartExtractQuestInfosFromFile(PUBLIC_GAMES_JSON_PATH);
-			qm.Import(mockImporter.ImportedQuests);
+			Quest q = qm.Import(xml);
 
 			// Assert:
-			IEnumerable<QuestInfo> questInfos = 
-				from entry in qm.QuestDict
-				select entry.Value;
-			Assert.AreEqual(52, questInfos.Count());
-			Assert.True(mockImporter.IsDone);
-			Assert.NotNull(mockImporter.ImportedQuests);
+			Assert.AreEqual("Minimal Quest", q.Name);
+			Assert.AreEqual(9801, q.Id);
+			Assert.AreEqual(0, q.PageList.Count);
+			Assert.AreEqual(0, q.hotspotList.Count);
 		}
 
-	}
+		[Test]
+		public void ImportQuestWithNPCTalk () {
+			// Arrange:
+			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWithNPCTalk/game.xml"));
 
+			// Act:
+			Quest q = qm.Import(xml);
 
-
-	class TestQuestImporter : QuestImporter_I {
-
-		public QuestInfo[] ImportedQuests = null;
-
-		public bool IsDone = false;
-
-		public void ImportDone (QuestInfo[] quests) {
-			
-			IsDone = true;
-			ImportedQuests = quests;
+			// Assert:
+			Assert.AreEqual("QuestWithNPCTalk", q.Name);
+			Assert.AreEqual(9802, q.Id);
+			Assert.AreEqual(1, q.PageList.Count);
+			Assert.AreEqual(0, q.hotspotList.Count);
 		}
-
 	}
-
 }

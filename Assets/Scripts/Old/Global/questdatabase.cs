@@ -634,12 +634,12 @@ public class questdatabase : MonoBehaviour {
 				break;
 			case JSONObject.Type.STRING:
 				if ( kei == "quest_name" ) {
-					currentquest.name = obj.str;
+					currentquest.Name = obj.str;
 				}
 				break;
 			case JSONObject.Type.NUMBER:
 				if ( kei == "quest_id" ) {
-					currentquest.id = (int)obj.n;
+					currentquest.Id = (int)obj.n;
 				}
 				else
 				if ( kei == "quest_lastUpdate" ) {
@@ -899,7 +899,7 @@ public class questdatabase : MonoBehaviour {
 		/////////////////////////
 		// 1. delete quests locally that are no more on the server:
 		foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
-			if ( allquests.FindIndex(x => x.id == lq.id) == -1 ) {
+			if ( allquests.FindIndex(x => x.Id == lq.Id) == -1 ) {
 				// lq was not loaded from server, ehnce we delete it locally:
 				removeQuest(lq);
 			}
@@ -915,7 +915,7 @@ public class questdatabase : MonoBehaviour {
 			bool alreadyLocal = false;
 		
 			foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
-				if ( lq.id == q.id ) {
+				if ( lq.Id == q.Id ) {
 					alreadyLocal = true;
 
 					// update new versions of existing local quests:
@@ -966,7 +966,7 @@ public class questdatabase : MonoBehaviour {
 		/////////////////////////
 		// 1. delete quests locally that are no more on the server:
 		foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
-			if ( allquests.FindIndex(x => x.id == lq.id) == -1 ) {
+			if ( allquests.FindIndex(x => x.Id == lq.Id) == -1 ) {
 				// lq was not loaded from server, ehnce we delete it locally:
 				foundChanges = true;
 				return foundChanges;
@@ -983,7 +983,7 @@ public class questdatabase : MonoBehaviour {
 			bool alreadyLocal = false;
 
 			foreach ( Quest lq in localquests.GetRange(0, localquests.Count) ) {
-				if ( lq.id == q.id ) {
+				if ( lq.Id == q.Id ) {
 					alreadyLocal = true;
 
 					// update new versions of existing local quests:
@@ -1020,12 +1020,12 @@ public class questdatabase : MonoBehaviour {
 
 		Quest q = new Quest();
 
-		q.id = id;
+		q.Id = id;
 		q.predeployed = true;
 
 		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
 
-		Debug.Log("CURRENTQUEST set to " + q.name + " l: 1046");
+		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1046");
 		currentquest = q;
 
 //		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
@@ -1046,16 +1046,16 @@ public class questdatabase : MonoBehaviour {
 
 		}
 
-		Debug.Log("CURRENTQUEST set to loadFromText() on " + q.name + " l: 1067");
+		Debug.Log("CURRENTQUEST set to loadFromText() on " + q.Name + " l: 1067");
 		currentquest = q.LoadFromText(id, true);
 		localquests.Add(currentquest);
 		bool hasmorethanmetadata = true;
-		currentquest.currentpage = currentquest.pages.First();
+		currentquest.currentpage = currentquest.PageList.First();
 		int c = 0;
 		while ( currentquest.currentpage.type == "MetaData" ) {
 			
-			if ( currentquest.pages.Count >= c - 1 ) {
-				currentquest.currentpage = currentquest.pages[c];
+			if ( currentquest.PageList.Count >= c - 1 ) {
+				currentquest.currentpage = currentquest.PageList[c];
 				c++;
 			}
 			else {
@@ -1066,7 +1066,7 @@ public class questdatabase : MonoBehaviour {
 		}
 		
 		hotspots = new List<QuestRuntimeHotspot>();
-		foreach ( QuestHotspot qh in currentquest.hotspots ) {
+		foreach ( QuestHotspot qh in currentquest.hotspotList ) {
 			bool initialActivity = qh.hasAttribute("initialActivity") && qh.getAttribute("initialActivity") == "true";
 			bool initialVisibility = qh.hasAttribute("initialVisibility") && qh.getAttribute("initialVisibility") == "true";
 			
@@ -1116,7 +1116,7 @@ public class questdatabase : MonoBehaviour {
 		Quest q = null;
 		foreach ( Quest curQuest in localQuests ) {
 			
-			if ( curQuest.id == id ) {
+			if ( curQuest.Id == id ) {
 				q = curQuest;
 			}
 			
@@ -1125,7 +1125,7 @@ public class questdatabase : MonoBehaviour {
 		if ( q == null ) {
 			Debug.Log("StartQuest not lokal - id: " + id);
 			q = new Quest();
-			q.id = id;
+			q.Id = id;
 			downloadQuest(q);
 		}
 		else {
@@ -1195,7 +1195,7 @@ public class questdatabase : MonoBehaviour {
 
 //		Debug.Log ("Current Quest: "+currentquest.id);
 
-		if ( currentquest != null && currentquest.id != 0 ) {
+		if ( currentquest != null && currentquest.Id != 0 ) {
 			// In Foyer:
 
 			foreach ( QuestRuntimeHotspot qrh in hotspots ) {
@@ -1216,8 +1216,8 @@ public class questdatabase : MonoBehaviour {
 			List<int> visitedQuests = new List<int>();
 
 			foreach ( Quest aq in localquests ) {
-				if ( aq.hotspots != null && aq.hotspots.Count > 0 ) {
-					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(aq.hotspots[0], true, true, aq.hotspots[0].latlon);
+				if ( aq.hotspotList != null && aq.hotspotList.Count > 0 ) {
+					QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(aq.hotspotList[0], true, true, aq.hotspotList[0].latlon);
 					if ( aq.hasMeta("category") ) {
 
 						qrh.category = aq.getMeta("category");
@@ -1227,13 +1227,13 @@ public class questdatabase : MonoBehaviour {
 					qrh.startquest = aq;
 
 					activehs.Add(qrh);
-					visitedQuests.Add(aq.id);
+					visitedQuests.Add(aq.Id);
 				}
 			}
 
 			if ( ConfigurationManager.Current.cloudQuestsVisible )
 				foreach ( Quest aq in allquests ) {
-					if ( visitedQuests.Contains(aq.id) )
+					if ( visitedQuests.Contains(aq.Id) )
 						continue;
 				
 					if ( aq.start_longitude != 0f ) {
@@ -1375,7 +1375,7 @@ public class questdatabase : MonoBehaviour {
 			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 			if ( !downloadingAll ) {
-				Debug.Log("CURRENTQUEST set to " + nq.name + " l: 1396");
+				Debug.Log("CURRENTQUEST set to " + nq.Name + " l: 1396");
 				currentquest = nq;
 			}
 
@@ -1420,14 +1420,14 @@ public class questdatabase : MonoBehaviour {
 
 		foreach ( Quest lq in localquests ) {
 		
-			if ( lq.id == q.id ) {
+			if ( lq.Id == q.Id ) {
 				islocal = true;
 				q = lq;
 			}
 
 		}
 
-		Debug.Log("CURRENTQUEST set to " + q.name + " l: 1448");
+		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1448");
 		currentquest = q;
 
 		if ( !islocal ) {
@@ -1454,15 +1454,15 @@ public class questdatabase : MonoBehaviour {
 			Debug.Log("cannot remove on web");
 
 		# else 
-		if ( Directory.Exists(Application.persistentDataPath + "/quests/" + q.id) ) {
-			Directory.Delete(Application.persistentDataPath + "/quests/" + q.id, true);
+		if ( Directory.Exists(Application.persistentDataPath + "/quests/" + q.Id) ) {
+			Directory.Delete(Application.persistentDataPath + "/quests/" + q.Id, true);
 
 
 		}
 #endif
 		localquests.Remove(q);
 		foreach ( QuestRuntimeHotspot curH in hotspots.GetRange(0, hotspots.Count) ) {
-			if ( curH.startquest != null && curH.startquest.id == q.id ) {
+			if ( curH.startquest != null && curH.startquest.Id == q.Id ) {
 				if ( curH.renderer != null )
 					Destroy(curH.renderer.gameObject);
 				hotspots.Remove(curH);
@@ -1470,7 +1470,7 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		if ( currentquest != null ) {
-			if ( currentquest.id == q.id ) {
+			if ( currentquest.Id == q.Id ) {
 
 				currentquest = null;
 			}
@@ -1546,11 +1546,11 @@ public class questdatabase : MonoBehaviour {
 		if ( connected ) {
 			if ( webloadingmessage != null ) {
 
-				webloadingmessage.text = "Lade Quest ... " + q.name;
+				webloadingmessage.text = "Lade Quest ... " + q.Name;
 			}
 
 
-			string url = "http://www.qeevee.org:9091/editor/" + q.id + "/clientxml";
+			string url = "http://www.qeevee.org:9091/editor/" + q.Id + "/clientxml";
 
 			if ( q.alternateDownloadLink != null && q.alternateDownloadLink != "" ) {
 
@@ -1584,9 +1584,9 @@ public class questdatabase : MonoBehaviour {
 	// TODO delete this method.
 	public void downloadQuest (int id) {
 		Quest q = new Quest();
-		q.id = id;
+		q.Id = id;
 
-		Debug.Log("CURRENTQUEST set to " + q.name + " l: 1609");
+		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1609");
 		currentquest = q;
 		downloadQuest(q);
 	}
@@ -1764,7 +1764,7 @@ public class questdatabase : MonoBehaviour {
 				if ( File.Exists(folder.ToString() + "/game.xml") ) {
 					Quest n = new Quest();
 					string[] splitted = folder.ToString().Split('/');
-					n.id = int.Parse(splitted[splitted.Length - 1]);
+					n.Id = int.Parse(splitted[splitted.Length - 1]);
 					n.filepath = folder.ToString() + "/";
 					n = n.LoadFromText(int.Parse(splitted[splitted.Length - 1]), true);
 					if ( n != null ) {
@@ -1814,7 +1814,7 @@ public class questdatabase : MonoBehaviour {
 	/// <param name="reload">If set to <c>true</c> reload.</param>
 	/// <param name="localload">If set to <c>true</c> localload.</param>
 	public void installQuest (Quest q, bool reload, bool localload) {
-		Debug.Log("installQuest(" + q.id + ") -> " + q.xmlcontent);
+		Debug.Log("installQuest(" + q.Id + ") -> " + q.xmlcontent);
 
 		if ( filedownloads != null ) {
 			filedownloads.Clear();
@@ -1828,15 +1828,15 @@ public class questdatabase : MonoBehaviour {
 		// TODO: Here we create the THIRD Quest object (in download case). 
 		// We can only assume that q has an id here. Is this really a good idea? (hm)
 //		Debug.Log("XXXXX VORHER");
-		Quest nq = q.LoadFromText(q.id, localload);
+		Quest nq = q.LoadFromText(q.Id, localload);
 
 		// store timestamp for old quests that miss lastUpdate in XML to prevent relaoding them always:
 		if ( nq.lastUpdate == 0 && !reload && !localload ) {
 			foreach ( Quest curQ in allquests ) {
-				if ( curQ.id == nq.id ) {
+				if ( curQ.Id == nq.Id ) {
 					nq.lastUpdate = curQ.lastUpdate;
-					PlayerPrefs.SetString(curQ.id + "_lastUpdate", curQ.lastUpdate.ToString());
-					Debug.Log("<color=red>TIMESTAMP stored in PLAYER_PREFS for quest id = " + curQ.id + "</color>");
+					PlayerPrefs.SetString(curQ.Id + "_lastUpdate", curQ.lastUpdate.ToString());
+					Debug.Log("<color=red>TIMESTAMP stored in PLAYER_PREFS for quest id = " + curQ.Id + "</color>");
 				}
 			}
 		}
@@ -1844,7 +1844,7 @@ public class questdatabase : MonoBehaviour {
 
 		bool alreadyStoredInLocalQuests = false;
 		foreach ( Quest quest in localquests ) {
-			if ( quest.id == nq.id ) {
+			if ( quest.Id == nq.Id ) {
 				alreadyStoredInLocalQuests = true;
 				break;
 			}
@@ -1853,7 +1853,7 @@ public class questdatabase : MonoBehaviour {
 			localquests.Add(nq);
 
 
-		nq.id = q.id;
+		nq.Id = q.Id;
 		if ( nq == null ) {
 			questmilllogo.enabled = false;
 			if ( webloadingmessage != null ) {
@@ -1877,7 +1877,7 @@ public class questdatabase : MonoBehaviour {
 
 		}
 		else {
-			Debug.Log("CURRENTQUEST set to " + nq.name + " l: 1901");
+			Debug.Log("CURRENTQUEST set to " + nq.Name + " l: 1901");
 			currentquest = nq;
 		}
 
@@ -1885,7 +1885,7 @@ public class questdatabase : MonoBehaviour {
 		if ( !localload ) {
 
 			// resave xml
-			string exportLocation = Application.persistentDataPath + "/quests/" + nq.id + "/";
+			string exportLocation = Application.persistentDataPath + "/quests/" + nq.Id + "/";
 
 #if !UNITY_WEBPLAYER
 
@@ -1908,15 +1908,15 @@ public class questdatabase : MonoBehaviour {
 
 	void initiateQuestStart (bool localload, Quest nq) {
 		bool hasmorethanmetadata = false;
-		if ( nq.pages != null && nq.pages.Count > 0 ) {
+		if ( nq.PageList != null && nq.PageList.Count > 0 ) {
 			// check if game has more than just metadata and set flag:
-			nq.currentpage = nq.pages.First();
+			nq.currentpage = nq.PageList.First();
 			int c = 0;
 			while ( nq.currentpage.type == "MetaData" ) {
 				// TODO I guess this is a bug and will crash if we have e.g. a quest with a single page of type meta data
 				// TODO at least it will leave currentquest.currentpage being null.
-				if ( nq.pages.Count >= c - 1 ) {
-					nq.currentpage = nq.pages[c];
+				if ( nq.PageList.Count >= c - 1 ) {
+					nq.currentpage = nq.PageList[c];
 					c++;
 				}
 				else {
@@ -1928,9 +1928,9 @@ public class questdatabase : MonoBehaviour {
 				hasmorethanmetadata = true;
 			}
 		}
-		if ( currentquest != null && currentquest.hotspots != null ) {
+		if ( currentquest != null && currentquest.hotspotList != null ) {
 			hotspots = new List<QuestRuntimeHotspot>();
-			foreach ( QuestHotspot qh in currentquest.hotspots ) {
+			foreach ( QuestHotspot qh in currentquest.hotspotList ) {
 				bool initialActivity = qh.hasAttribute("initialActivity") && qh.getAttribute("initialActivity") == "true";
 				bool initialVisibility = qh.hasAttribute("initialVisibility") && qh.getAttribute("initialVisibility") == "true";
 				hotspots.Add(new QuestRuntimeHotspot(qh, initialActivity, initialVisibility, qh.latlon));
@@ -2443,7 +2443,7 @@ public class questdatabase : MonoBehaviour {
 
 	public void writeQuestXML (Quest q) {
 
-		string exportLocation = Application.persistentDataPath + "/quests/" + q.id + "/";
+		string exportLocation = Application.persistentDataPath + "/quests/" + q.Id + "/";
 
 		if ( !File.Exists(exportLocation + "game.xml") ) {
 
@@ -2485,7 +2485,7 @@ public class questdatabase : MonoBehaviour {
 
 
 
-		foreach ( QuestPage qp in currentquest.pages ) {
+		foreach ( QuestPage qp in currentquest.PageList ) {
 			
 			
 			if ( qp.id == id ) {
@@ -2557,7 +2557,7 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		   
-		foreach ( QuestPage qp in currentquest.pages ) {
+		foreach ( QuestPage qp in currentquest.PageList ) {
 
 			if ( qp.id.Equals(id) ) {
 
@@ -2846,7 +2846,7 @@ public class questdatabase : MonoBehaviour {
 
 	public QuestHotspot getHotspotObject (int i) {
 
-		foreach ( QuestHotspot qh in currentquest.hotspots ) {
+		foreach ( QuestHotspot qh in currentquest.hotspotList ) {
 
 			if ( qh.id == i ) {
 
@@ -2906,7 +2906,7 @@ public class questdatabase : MonoBehaviour {
 
 			Quest nq = new Quest();
 				
-			nq.id = q.id;
+			nq.Id = q.Id;
 				
 //			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 //				
@@ -2917,13 +2917,13 @@ public class questdatabase : MonoBehaviour {
 
 			// TODO: what is this good for? We already know that it is in the list, since we put it in there. (hm)
 			foreach ( Quest lq in localquests ) {
-				if ( lq.id == q.id ) {
+				if ( lq.Id == q.Id ) {
 					isLocal = true;
 				}
 			}
 
 			if ( !downloadingAll ) {
-				Debug.Log("CURRENTQUEST set to " + nq.name + " l: 2958");
+				Debug.Log("CURRENTQUEST set to " + nq.Name + " l: 2958");
 				currentquest = nq;
 			}
 

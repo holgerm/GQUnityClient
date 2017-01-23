@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using GQ.Util;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 public class page_fullscreenimage : MonoBehaviour {
 

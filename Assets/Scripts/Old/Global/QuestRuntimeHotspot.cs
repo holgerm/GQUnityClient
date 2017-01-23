@@ -13,6 +13,7 @@ using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 
 [System.Serializable]
 public class QuestRuntimeHotspot {

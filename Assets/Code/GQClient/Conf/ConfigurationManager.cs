@@ -18,16 +18,29 @@ namespace GQ.Client.Conf {
 	/// </summary>
 	public class ConfigurationManager : MonoBehaviour {
 
+		#region Initialize
+
+		void Awake () {
+			deserialize();
+		}
+
+		#endregion
+
+		#region Paths and general Resources
+
 		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
 		public const string CONFIG_FILE = "Product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
 		public const string GQ_SERVER_BASE_URL = "http://qeevee.org:9091";
 
-		#region Initialize
-
-		void Awake () {
-			deserialize();
+		public static string url_PublicQuestsJSON () {
+			return 
+				String.Format(
+				"{0}/json/{1}/publicgamesinfo", 
+				ConfigurationManager.GQ_SERVER_BASE_URL,
+				ConfigurationManager.Current.portal
+			);
 		}
 
 		#endregion

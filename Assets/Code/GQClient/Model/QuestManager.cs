@@ -1,63 +1,51 @@
 ﻿using UnityEngine;
+using System.Xml;
+using System.Xml.Serialization;
 using System.Collections;
-using System.Collections.Generic;
-
+using GQ.Client.Model;
+using System.IO;
 
 namespace GQ.Client.Model {
 
 
 	public class QuestManager {
 
-		#region store & access data
+		#region quest management functions
 
-		private Dictionary <int, QuestInfo> _questDict = new Dictionary <int, QuestInfo>();
-
-		public Dictionary<int, QuestInfo> QuestDict {
-			get {
-				return _questDict;
-			}
-		}
-
-		public int Count {
-			get {
-				return _questDict.Count;
-			}
-		}
-
-		public QuestInfo GetQuestInfo (int id) {
-			QuestInfo questInfo;
-			return (_questDict.TryGetValue(id, out questInfo) ? questInfo : null);
-		}
-
-		#endregion
-
-
-		#region import functions
-
-		public void Import (QuestInfo[] quests) {
-			if ( quests == null )
-				return;
+		public Quest Import (string xml) {
 			
-			foreach ( var q in quests ) {
-				if ( q.id == null )
-					continue;
-				
-				_questDict.Add((int)q.id, q);
+			// Creates an instance of the XmlSerializer class;
+			// specifies the type of object to be deserialized.
+			XmlSerializer serializer = new XmlSerializer(typeof(Quest));
+
+			// If the XML document has been altered with unknown 
+			// nodes or attributes, handles them with the 
+			// UnknownNode and UnknownAttribute events.
+			serializer.UnknownNode += new 
+				XmlNodeEventHandler(serializer_UnknownNode);
+			serializer.UnknownAttribute += new 
+				XmlAttributeEventHandler(serializer_UnknownAttribute);
+
+			Quest quest;
+
+			using ( TextReader reader = new StringReader(xml) ) {
+				quest = (Quest)serializer.Deserialize(reader);
 			}
+
+			return quest;
 		}
 
 		#endregion
+
 
 
 		#region singleton
-
-		private static QuestManager _instance = null;
 
 		public static QuestManager Instance {
 			get {
 				if ( _instance == null ) {
 					_instance = new QuestManager();
-				}
+				} 
 				return _instance;
 			}
 			set {
@@ -69,7 +57,29 @@ namespace GQ.Client.Model {
 			_instance = null;
 		}
 
+		private static QuestManager _instance = null;
+
+		private QuestManager () {
+			
+		}
+
+		#endregion
+
+		#region Parsing
+
+		protected void serializer_UnknownNode
+		(object sender, XmlNodeEventArgs e) {
+			Debug.LogWarning("Unknown XML Node found in Quest XML:" + e.Name + "\t" + e.Text);
+		}
+
+		protected void serializer_UnknownAttribute
+		(object sender, XmlAttributeEventArgs e) {
+			System.Xml.XmlAttribute attr = e.Attr;
+			Debug.LogWarning("Unknown XML Attribute found in Quest XML:" +
+			attr.Name + "='" + attr.Value + "'");
+		}
+
+
 		#endregion
 	}
-
 }

@@ -8,6 +8,7 @@ using System.Threading;
 
 using ZXing;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 public class page_tagscanner : MonoBehaviour {
 	

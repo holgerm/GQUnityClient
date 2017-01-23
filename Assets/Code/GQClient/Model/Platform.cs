@@ -15,7 +15,7 @@ namespace GQ.Client.Model {
 			// TODO check for Android that NFC is availabe if NFCRead page is used
 
 			bool playable = true;
-			foreach ( QuestPage qp in q.pages ) {
+			foreach ( QuestPage qp in q.PageList ) {
 
 
 				if ( qp.type != "StartAndExitScreen" &&

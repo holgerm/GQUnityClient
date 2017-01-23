@@ -6,6 +6,11 @@ using GQ.Editor.Util;
 using Newtonsoft.Json;
 using GQ.Client.Model;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+
+
+using System.Collections.Generic;
 
 namespace GQTests.Model {
 
@@ -16,34 +21,57 @@ namespace GQTests.Model {
 		/// <summary>
 		/// The path to the JSON file with some quests (from WCC):
 		/// </summary>
-		static readonly string PUBLIC_GAMES_JSON_PATH = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Server/JSON/publicgamesinfo.json");
+		static public readonly string JSON_InitFromServer = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "JSON/QuestInfos/initialFromServer.json");
+
 
 		[SetUp]
-		public void ReadJSON () {
-			FileInfo file = new FileInfo(PUBLIC_GAMES_JSON_PATH);
-			StreamReader reader = file.OpenText();
-			publicGamesJson = reader.ReadToEnd();
-			reader.Close();
+		public void ResetQMInstance () {
+			QuestInfoManager.Reset();
 		}
 
+		#region Main Use Cases:
+
 		[Test]
-		public void ShowReadQuests () {
+		public void InitialImport () {
 			// Arrange:
+			QuestInfoManager qm = QuestInfoManager.Instance;
 			QuestInfo[] quests = null;
 
 			// Act:
-			try {
-				quests = JsonConvert.DeserializeObject<QuestInfo[]>(publicGamesJson);
-			} catch ( Exception e ) {
-				Debug.LogWarning("Exception occurred while reading public games json: " + e.Message);
-			}
+			string serverJSON = Files.ReadText(JSON_InitFromServer);
+			qm.Import(QuestInfoImportExtension.ParseQuestInfoJSON(serverJSON));
 
-			foreach ( QuestInfo qi in quests ) {
-				Debug.Log(qi.ToString());
+			// Assert:
+			IEnumerable<QuestInfo> questInfos = 
+				from entry in qm.QuestDict
+				select entry.Value;
+			foreach ( QuestInfo qi in questInfos ) {
+				Assert.False(qi.IsLocallyAvailable());
+				Assert.True(qi.IsNew());
+				Assert.True(qi.IsDownloadable());
+				Assert.False(qi.IsUpdatable());
+				Assert.False(qi.IsDeletable());
+				Assert.False(qi.WarnBeforeDeletion());
 			}
-
-			Debug.Log(String.Format("We have read {0} quests.", quests != null ? quests.Length : 0));
 		}
+
+		[Test]
+		public void WhenNewQuestIsLoaded () {
+			// Arrange:
+			QuestInfoManager qm = QuestInfoManager.Instance;
+			QuestInfo[] quests = null;
+			string serverJSON = Files.ReadText(JSON_InitFromServer);
+			qm.Import(QuestInfoImportExtension.ParseQuestInfoJSON(serverJSON));
+
+			// Act:
+			// TODO
+
+			// Assert:
+			// TODO
+			Assert.Fail("Test not yet implemented!");
+		}
+
+		#endregion
 
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using System.Collections.Generic;
+using GQ.Client.Model;
 
 public class page_videoplay : MonoBehaviour {
 	

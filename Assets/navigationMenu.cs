@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GQ.Client.Model;
 
-public class navigationMenu : MonoBehaviour
-{
+public class navigationMenu : MonoBehaviour {
 
 
 	public GameObject number;
@@ -31,111 +31,118 @@ public class navigationMenu : MonoBehaviour
 	questdatabase questdb;
 
 	// Use this for initialization
-	void Start ()
-	{
-		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+	void Start () {
+		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
-		if (questdb.currentquest != null && questdb.currentquest.id != 0) {
+		if ( questdb.currentquest != null && questdb.currentquest.Id != 0 ) {
 
-			Quest	quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-			QuestPage	mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+			Quest	quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
+			QuestPage	mappage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
 		
 		
 		
-			if (mappage.type.Equals ("Navigation")) {
+			if ( mappage.type.Equals("Navigation") ) {
 
 
 				bool defaultFound = false;
 
 
 
-				if (mappage.getAttribute ("map") == "true") {
-					if (!defaultFound) {
+				if ( mappage.getAttribute("map") == "true" ) {
+					if ( !defaultFound ) {
 						defaultFound = true;
 					}
-					button_map.SetActive (true);
+					button_map.SetActive(true);
 
-				} else {
-					button_map.SetActive (false);
+				}
+				else {
+					button_map.SetActive(false);
 
-					number.SetActive (false);
+					number.SetActive(false);
 
 				}
 
 
 
 
-				if (ibeacon != null) {
-					if (mappage.getAttribute ("ibeacon") == "true") {
+				if ( ibeacon != null ) {
+					if ( mappage.getAttribute("ibeacon") == "true" ) {
 
-						if (!defaultFound) {
-							ibeacon.SetActive (true);
+						if ( !defaultFound ) {
+							ibeacon.SetActive(true);
 							defaultFound = true;
 						}
-						button_ibeacon.SetActive (true);
+						button_ibeacon.SetActive(true);
 
-
-					} else {
-						button_ibeacon.SetActive (false);
-
-						ibeacon.SetActive (false);
 
 					}
-				} else {
-					button_ibeacon.SetActive (false);
+					else {
+						button_ibeacon.SetActive(false);
+
+						ibeacon.SetActive(false);
+
+					}
+				}
+				else {
+					button_ibeacon.SetActive(false);
 
 
 				}
 
 			
 
-				if (qr != null) {
-					if (mappage.getAttribute ("qr") == "true") {
-						if (!defaultFound) {
+				if ( qr != null ) {
+					if ( mappage.getAttribute("qr") == "true" ) {
+						if ( !defaultFound ) {
 							
-							qr.SetActive (true);
+							qr.SetActive(true);
 							defaultFound = true;
 						}
-						button_qr.SetActive (true);
-
-					} else {
-						button_qr.SetActive (false);
-
-						qr.SetActive (false);
+						button_qr.SetActive(true);
 
 					}
-				} else {
+					else {
+						button_qr.SetActive(false);
 
-					button_qr.SetActive (false);
+						qr.SetActive(false);
+
+					}
+				}
+				else {
+
+					button_qr.SetActive(false);
 
 
 				}
 
 
 
-				if (nfc != null) {
-					if (Application.platform == RuntimePlatform.Android) {
+				if ( nfc != null ) {
+					if ( Application.platform == RuntimePlatform.Android ) {
 						
-						if (mappage.getAttribute ("nfc") == "true") {
-							if (!defaultFound) {
-								nfc.SetActive (true);
+						if ( mappage.getAttribute("nfc") == "true" ) {
+							if ( !defaultFound ) {
+								nfc.SetActive(true);
 								defaultFound = true;
 							}
-							button_nfc.SetActive (true);
-						} else {
-							button_nfc.SetActive (false);
+							button_nfc.SetActive(true);
+						}
+						else {
+							button_nfc.SetActive(false);
 
-							nfc.SetActive (false);
+							nfc.SetActive(false);
 
 						}
-					} else {
-						nfc.SetActive (false);
-						button_nfc.SetActive (false);
+					}
+					else {
+						nfc.SetActive(false);
+						button_nfc.SetActive(false);
 
 					}
-				} else {
+				}
+				else {
 
-					button_nfc.SetActive (false);
+					button_nfc.SetActive(false);
 
 				}
 
@@ -143,24 +150,26 @@ public class navigationMenu : MonoBehaviour
 
 
 
-				if (number != null) {
-					if (mappage.getAttribute ("number") == "true") {
-						if (!defaultFound) {
+				if ( number != null ) {
+					if ( mappage.getAttribute("number") == "true" ) {
+						if ( !defaultFound ) {
 									
-							number.SetActive (true);
+							number.SetActive(true);
 							defaultFound = true;
 						}
-						button_number.SetActive (true);
-
-					} else {
-						button_number.SetActive (false);
-
-						number.SetActive (false);
+						button_number.SetActive(true);
 
 					}
-				} else {
+					else {
+						button_number.SetActive(false);
 
-					button_number.SetActive (false);
+						number.SetActive(false);
+
+					}
+				}
+				else {
+
+					button_number.SetActive(false);
 
 				}
 
@@ -180,49 +189,56 @@ public class navigationMenu : MonoBehaviour
 
 
 
-	public void goTo (string s)
-	{
+	public void goTo (string s) {
 
 
-		if (s == "number" && number != null) {
+		if ( s == "number" && number != null ) {
 
-			number.SetActive (true);
+			number.SetActive(true);
 			//map.SetActive (false);
-			ibeacon.SetActive (false);
-			qr.SetActive (false);
-			nfc.SetActive (false);
+			ibeacon.SetActive(false);
+			qr.SetActive(false);
+			nfc.SetActive(false);
 
-		} else if (s == "map") {
+		}
+		else
+		if ( s == "map" ) {
 
-			number.SetActive (false);
+			number.SetActive(false);
 			//map.SetActive (true);
-			ibeacon.SetActive (false);
-			qr.SetActive (false);
-			nfc.SetActive (false);
+			ibeacon.SetActive(false);
+			qr.SetActive(false);
+			nfc.SetActive(false);
 
-		} else if (s == "ibeacon" && ibeacon != null) {
+		}
+		else
+		if ( s == "ibeacon" && ibeacon != null ) {
 
-			number.SetActive (false);
+			number.SetActive(false);
 			//map.SetActive (false);
-			ibeacon.SetActive (true);
-			qr.SetActive (false);
-			nfc.SetActive (false);
+			ibeacon.SetActive(true);
+			qr.SetActive(false);
+			nfc.SetActive(false);
 
-		} else if (s == "qr" && qr != null) {
+		}
+		else
+		if ( s == "qr" && qr != null ) {
 
-			number.SetActive (false);
+			number.SetActive(false);
 			//map.SetActive (false);
-			ibeacon.SetActive (false);
-			qr.SetActive (true);
-			nfc.SetActive (false);
+			ibeacon.SetActive(false);
+			qr.SetActive(true);
+			nfc.SetActive(false);
 
-		} else if (s == "nfc" && nfc != null) {
+		}
+		else
+		if ( s == "nfc" && nfc != null ) {
 
-			number.SetActive (false);
+			number.SetActive(false);
 			//map.SetActive (false);
-			ibeacon.SetActive (false);
-			qr.SetActive (false);
-			nfc.SetActive (true);
+			ibeacon.SetActive(false);
+			qr.SetActive(false);
+			nfc.SetActive(true);
 
 		} 
 
