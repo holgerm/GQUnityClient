@@ -13,6 +13,11 @@ namespace GQTests.Model {
 	 
 	public class QuestInfoImporterTest {
 
+		[SetUp]
+		public void ResetQM () {
+			QuestInfoManager.Reset();
+		}
+
 		[Test]
 		public void ShowReadQuests () {
 			// Arrange:

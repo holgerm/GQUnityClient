@@ -51,6 +51,21 @@ namespace GQTests.Model {
 		}
 
 		[Test]
+		public void ImportQuestWith5NPCTalks () {
+			// Arrange:
+			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith5NPCTalks/game.xml"));
+
+			// Act:
+			Quest q = qm.Import(xml);
+
+			// Assert:
+			Assert.AreEqual("QuestWith5NPCTalks", q.Name);
+			Assert.AreEqual(9804, q.Id);
+			Assert.AreEqual(5, q.PageList.Count);
+			Assert.AreEqual(0, q.hotspotList.Count);
+		}
+
+		[Test]
 		public void ImportOnlyHotspots () {
 			// Arrange:
 			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OnlyHotspots/game.xml"));

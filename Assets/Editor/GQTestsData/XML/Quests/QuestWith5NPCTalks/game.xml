@@ -1,0 +1,42 @@
+<game id="9804" lastUpdate="1485246400830" name="QuestWith5NPCTalks" xmlformat="5">
+	<mission endbuttontext="&gt;" id="26824" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onEnd>
+			<rule>
+				<action allowReturn="0" id="26829" type="StartMission"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="29787">Erster Text</dialogitem>
+	</mission>
+	<mission endbuttontext="&gt;" id="26829" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onEnd>
+			<rule>
+				<action allowReturn="0" id="26830" type="StartMission"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="29792">2. Text</dialogitem>
+	</mission>
+	<mission endbuttontext="&gt;" id="26830" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onEnd>
+			<rule>
+				<action allowReturn="0" id="26831" type="StartMission"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="29793">3. Text</dialogitem>
+	</mission>
+	<mission endbuttontext="&gt;" id="26831" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onEnd>
+			<rule>
+				<action allowReturn="0" id="26832" type="StartMission"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="29794">4. Text</dialogitem>
+	</mission>
+	<mission endbuttontext="&gt;" id="26832" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onEnd>
+			<rule>
+				<action allowReturn="0" type="EndGame"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="29795">5. und letzter Text</dialogitem>
+	</mission>
+</game>
