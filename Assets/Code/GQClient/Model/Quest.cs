@@ -40,23 +40,34 @@ namespace GQ.Client.Model {
 
 		#region Pages aka missions
 
-		// TODO: Get rid of this List:
+		[Obsolete]
 		public List<QuestPage>
 			PageList = new List<QuestPage>();
 
 		protected Dictionary<int, QuestPage> pageDict = new Dictionary<int, QuestPage>();
+
+		public QuestPage GetPageWithID (int id) {
+			QuestPage page;
+			pageDict.TryGetValue(id, out page);
+			return page;
+		}
 
 		#endregion
 
 
 		#region Hotspots
 
-		public string filepath;
-
+		[Obsolete]
 		public List<QuestHotspot>
 			hotspotList = new List<QuestHotspot>();
 
 		protected Dictionary<int, QuestHotspot> hotspotDict = new Dictionary<int, QuestHotspot>();
+
+		public QuestHotspot GetHotspotWithID (int id) {
+			QuestHotspot hotspot;
+			hotspotDict.TryGetValue(id, out hotspot);
+			return hotspot;
+		}
 
 		#endregion
 
@@ -96,13 +107,22 @@ namespace GQ.Client.Model {
 					case XmlNodeType.Element:
 						switch ( reader.LocalName ) {
 							case GQML.PAGE:
-								QuestPage page = (QuestPage)pageSerializer.Deserialize(reader);
-								read = true;
-								pageDict.Add(page.id, page);
-								Debug.Log("Added page id: " + page.id);
+								QuestPage page;
+								string pageType = reader.GetAttribute(GQML.PAGE_TYPE);
+								switch ( pageType ) {
+									case GQML.PAGE_TYPE_NPCTALK:
+										page = (QuestPage)pageSerializer.Deserialize(reader);
+										read = true;
+										pageDict.Add(page.id, page);
+										Debug.Log("Added NPCTalk page id: " + page.id);
 
-								// TODO: get rid:
-								PageList.Add(page);
+										// TODO: get rid:
+										PageList.Add(page);
+										break;
+									default:
+										Debug.LogWarning("Unknown page type found: " + pageType);
+										break;
+								}
 								break;
 							case GQML.HOTSPOT:
 								QuestHotspot hotspot = (QuestHotspot)hotspotSerializer.Deserialize(reader);
@@ -126,6 +146,12 @@ namespace GQ.Client.Model {
 		}
 
 		#endregion
+
+
+		#region Old Stuff TODO Reorganize
+
+		public string filepath;
+
 
 
 		[XmlAnyAttribute()]
@@ -564,6 +590,8 @@ namespace GQ.Client.Model {
 			return b;
 
 		}
+
+		#endregion
 
 	}
 

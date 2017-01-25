@@ -18,16 +18,50 @@ using GQ.Client.Model;
 [XmlRoot(GQML.HOTSPOT)]
 public class QuestHotspot {
 
+	#region Attributes
+
 	[XmlAttribute("id")]
-	public int
-		id;
+	public int id;
+
+	[XmlAttribute("iBeacon")]
+	public int iBeacon;
+
+	[XmlAttribute("number")]
+	public int number;
+
+	[XmlAttribute("qrcode")]
+	public int qrcode;
+
+	[XmlAttribute("nfc")]
+	public int nfc;
+
+	[XmlAttribute("initialActivity")]
+	public bool initialActivity;
+
+	[XmlAttribute("initialVisibility")]
+	public bool initialVisibility;
+
+	[XmlAttribute("img")]
+	public string imageURI;
+
+	[XmlAttribute("radius")]
+	public double radius;
+
 	[XmlAttribute("latlong")]
-	public string
-		latlon;
-	[XmlAnyAttribute()]
+	public string latlon;
+
+	#endregion
+
+
+	#region Old Stuff Needs Rework
+
+	[XmlAnyAttribute(), Obsolete]
 	public XmlAttribute[]
 		help_attributes;
+
+	[Obsolete]
 	public List<QuestAttribute> attributes;
+
 	[XmlElement("onEnter")]
 	public QuestTrigger
 		onEnter;
@@ -160,5 +194,7 @@ public class QuestHotspot {
 		}
 		
 	}
+
+	#endregion
 	
 }

@@ -18,52 +18,70 @@ using GQ.Client.Model;
 [XmlRoot(GQML.PAGE)]
 public class QuestPage {
 
+	#region Old Stuff needs Rework
+
 	[XmlAttribute("id")]
 	public int
 		id;
+
 	[XmlAttribute("type")]
 	public string
 		type;
+
 	[XmlAnyAttribute()]
 	public XmlAttribute[]
 		help_attributes;
+
 	public List<QuestAttribute> attributes;
+
 	[XmlElement("dialogitem")]
 	public List<QuestContent>
 		contents_dialogitems;
+
 	[XmlElement("expectedCode")]
 	public List<QuestContent>
 		contents_expectedcode;
+
 	[XmlElement("answer")]
 	public List<QuestContent>
 		contents_answers;
+
 	[XmlElement("question")]
 	public QuestContent
 		contents_question;
+
 	[XmlElement("answers")]
 	public List<QuestContent>
 		contents_answersgroup;
+
 	[XmlElement("stringmeta")]
 	public List<QuestContent>
 		contents_stringmeta;
+
 	[XmlElement("onEnd")]
 	public QuestTrigger
 		onEnd;
+
 	[XmlElement("onStart")]
 	public QuestTrigger
 		onStart;
+
 	[XmlElement("onTap")]
 	public QuestTrigger
 		onTap;
+
 	[XmlElement("onSuccess")]
 	public QuestTrigger
 		onSuccess;
+
 	[XmlElement("onFail")]
 	public QuestTrigger
 		onFailure;
+
 	[XmlElement("onRead")]
 	public QuestTrigger
 		onRead;
+
 	public string state;
 	public string result;
 
@@ -239,5 +257,7 @@ public class QuestPage {
 		
 		return false;
 	}
+
+	#endregion
 
 }

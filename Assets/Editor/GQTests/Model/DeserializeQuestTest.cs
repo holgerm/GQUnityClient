@@ -7,21 +7,10 @@ using GQ.Client.Model;
 
 namespace GQTests.Model {
 
-	public class QuestManagerTest {
-
-		string xml;
-		QuestManager qm;
-
-		[SetUp]
-		public void Init () { 
-		
-			QuestManager.Reset();
-			qm = QuestManager.Instance;
-		}
-
+	public class DeserializeQuestTest : DeserializationTest {
 
 		[Test]
-		public void ImportMinimalQuest () {
+		public void MinimalQuest () {
 			// Arrange:
 			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/MinimalQuest/game.xml"));
 
@@ -31,53 +20,68 @@ namespace GQTests.Model {
 			// Assert:
 			Assert.AreEqual("Minimal Quest", q.Name);
 			Assert.AreEqual(9801, q.Id);
-			Assert.AreEqual(0, q.PageList.Count);
-			Assert.AreEqual(0, q.hotspotList.Count);
 		}
 
 		[Test]
-		public void ImportQuestWith1NPCTalk () {
-			// Arrange:
-			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith1NPCTalk/game.xml"));
-
-			// Act:
-			Quest q = qm.Import(xml);
-
-			// Assert:
-			Assert.AreEqual("QuestWith1NPCTalk", q.Name);
-			Assert.AreEqual(9802, q.Id);
-			Assert.AreEqual(1, q.PageList.Count);
-			Assert.AreEqual(0, q.hotspotList.Count);
-		}
-
-		[Test]
-		public void ImportQuestWith5NPCTalks () {
+		public void QuestWith5NPCTalks () {
 			// Arrange:
 			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith5NPCTalks/game.xml"));
 
 			// Act:
 			Quest q = qm.Import(xml);
+			// Get pages:
+			int[] ids = new int[] {
+				26824,
+				26829,
+				26830,
+				26831,
+				26832
+			};
+			QuestPage[] pages = new QuestPage[ids.Length];
+
+			int i = 0;
+			foreach ( int id in ids ) {
+				pages[i++] = q.GetPageWithID(id);
+			}
 
 			// Assert:
 			Assert.AreEqual("QuestWith5NPCTalks", q.Name);
 			Assert.AreEqual(9804, q.Id);
-			Assert.AreEqual(5, q.PageList.Count);
-			Assert.AreEqual(0, q.hotspotList.Count);
+			i = 0;
+			foreach ( var p in pages ) {
+				Assert.NotNull(p, "Page with id " + ids[i] + " should not be null.");
+				i++;
+			}
 		}
 
 		[Test]
-		public void ImportOnlyHotspots () {
+		public void OnlyHotspots () {
 			// Arrange:
 			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OnlyHotspots/game.xml"));
 
 			// Act:
 			Quest q = qm.Import(xml);
+			// Get hotspots:
+			int[] ids = new int[] {
+				11541,
+				11542,
+				11543
+			};
+			QuestHotspot[] hotspots = new QuestHotspot[ids.Length];
+			int i = 0;
+			foreach ( int id in ids ) {
+				hotspots[i++] = q.GetHotspotWithID(id);
+			}
 
 			// Assert:
 			Assert.AreEqual("OnlyHotspots", q.Name);
 			Assert.AreEqual(9803, q.Id);
-			Assert.AreEqual(0, q.PageList.Count);
-			Assert.AreEqual(3, q.hotspotList.Count);
+			i = 0;
+			foreach ( var h in hotspots ) {
+				Assert.NotNull(h, "Hotspot with id " + ids[i] + " should not be null.");
+				i++;
+			}
 		}
+
 	}
 }
