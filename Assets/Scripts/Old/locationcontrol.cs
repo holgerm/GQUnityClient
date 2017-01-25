@@ -36,7 +36,7 @@ public class Locationcontrol : MonoBehaviour {
 
 			if ( qrh.entered ) {
 
-				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') > int.Parse(qrh.hotspot.getAttribute("radius")) ) {
+				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') > qrh.hotspot.radius ) {
 					qrh.hotspot.onLeave.Invoke();
 					
 					qrh.entered = false;
@@ -46,7 +46,7 @@ public class Locationcontrol : MonoBehaviour {
 			}
 			else {
 
-				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') < int.Parse(qrh.hotspot.getAttribute("radius")) ) {
+				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') < qrh.hotspot.radius ) {
 
 					if ( qrh.hotspot.onEnter != null ) {
 						qrh.hotspot.onEnter.Invoke();
@@ -135,13 +135,13 @@ public class Locationcontrol : MonoBehaviour {
 		return (dist);
 		
 	}
-	
+
 	private double deg2rad (double deg) {
 		
 		return (deg * Math.PI / 180.0);
 		
 	}
-	
+
 	private double rad2deg (double rad) {
 		
 		return (rad / Math.PI * 180.0);

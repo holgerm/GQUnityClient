@@ -409,7 +409,7 @@ public class page_map : MonoBehaviour {
 		// divide it by 360 so we get the length of one longitunal degree on the latitude of the hotspot:
 		double lengthOfOneLongitudeDegree = latitudeCircumference / 360d;
 		// we need to go the defined hotspot radius plus some 50 meters further west:
-		double distanceToGoWestFromHotspotCenter = double.Parse(hotspot.hotspot.getAttribute("radius")) + 50d;
+		double distanceToGoWestFromHotspotCenter = hotspot.hotspot.radius + 50d;
 		// get the delta longitude angle that we need to go further west:
 		double deltaLongitude = distanceToGoWestFromHotspotCenter / lengthOfOneLongitudeDegree;
 		// subtract the delat longitude from the hotspot longitude:
@@ -653,10 +653,7 @@ public class page_map : MonoBehaviour {
 
 			if ( questdb.currentquest != null && questdb.currentquest.Id != 0 ) {
 				go.AddComponent<circletests>();
-		
-				if ( qrh.hotspot.hasAttribute("radius") ) {
-					go.GetComponent<circletests>().radius = int.Parse(qrh.hotspot.getAttribute("radius"));
-				}
+				go.GetComponent<circletests>().radius = qrh.hotspot.radius;
 			}
 
 #endif

@@ -5,7 +5,7 @@ using UnitySlippyMap;
 using Vectrosity;
 
 public class circletests : MonoBehaviour {
-	public float radius = 20;
+	public double radius = 20.0d;
 	public questdatabase questdb;
 	public Map map;
 	public Vector3 up;
