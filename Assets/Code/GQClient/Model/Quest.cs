@@ -28,13 +28,9 @@ namespace GQ.Client.Model {
 
 		public int Id { get; set; }
 
-		[XmlAttribute("lastUpdate")]
-		public long
-			lastUpdate;
+		public long LastUpdate { get; set; }
 
-		[XmlAttribute("xmlformat")]
-		public int
-			xmlformat;
+		public string XmlFormat { get; set; }
 
 		#endregion
 
@@ -84,19 +80,25 @@ namespace GQ.Client.Model {
 			reader.MoveToContent();
 
 			// Name:
-			Name = reader.GetAttribute("name");
+			Name = reader.GetAttribute(GQML.QUEST_NAME);
 
 			// Id:
 			int id;
-			if ( !Int32.TryParse(reader.GetAttribute("id"), out id) ) {
-				Debug.LogWarning("Id for quest " + Name + " could not be parsed, we find: " + reader.GetAttribute("id"));
-			}
-			else {
+			if ( Int32.TryParse(reader.GetAttribute(GQML.QUEST_ID), out id) ) {
 				Id = id;
 			}
+			else {
+				Debug.LogWarning("Id for quest " + Name + " could not be parsed, we find: " + reader.GetAttribute(GQML.QUEST_ID));
+			}
 
+			// XML Format:
+			XmlFormat = reader.GetAttribute(GQML.QUEST_XMLFORMAT);
+
+			// LastUpdate:
+			long lu;
+			LastUpdate = long.TryParse(reader.GetAttribute(GQML.QUEST_LASTUPDATE), out lu) ? lu : 0;
 			// Content:
-			XmlSerializer pageSerializer = new XmlSerializer(typeof(QuestPage));
+			XmlSerializer pageSerializer;
 			XmlSerializer hotspotSerializer = new XmlSerializer(typeof(QuestHotspot));
 
 			bool read = false;
@@ -108,6 +110,7 @@ namespace GQ.Client.Model {
 						switch ( reader.LocalName ) {
 							case GQML.PAGE:
 								QuestPage page;
+								pageSerializer = new XmlSerializer(typeof(QuestPage));
 								string pageType = reader.GetAttribute(GQML.PAGE_TYPE);
 								switch ( pageType ) {
 									case GQML.PAGE_TYPE_NPCTALK:
@@ -182,7 +185,7 @@ namespace GQ.Client.Model {
 		}
 
 		public long getLastUpdate () {
-			if ( lastUpdate == 0 ) {
+			if ( LastUpdate == 0 ) {
 				long result;
 				if ( PlayerPrefs.HasKey(Id + "_lastUpdate") && long.TryParse(PlayerPrefs.GetString(Id + "_lastUpdate"), out result) ) {
 					return result;
@@ -191,7 +194,7 @@ namespace GQ.Client.Model {
 					return 0;
 			}
 			else
-				return lastUpdate;
+				return LastUpdate;
 		}
 
 		public static Quest CreateQuest (int id) {

@@ -643,7 +643,7 @@ public class questdatabase : MonoBehaviour {
 				}
 				else
 				if ( kei == "quest_lastUpdate" ) {
-					currentquest.lastUpdate = (long)obj.n;
+					currentquest.LastUpdate = (long)obj.n;
 				}
 				else
 				if ( kei == "quest_hotspots_latitude" ) {
@@ -1831,11 +1831,11 @@ public class questdatabase : MonoBehaviour {
 		Quest nq = q.LoadFromText(q.Id, localload);
 
 		// store timestamp for old quests that miss lastUpdate in XML to prevent relaoding them always:
-		if ( nq.lastUpdate == 0 && !reload && !localload ) {
+		if ( nq.LastUpdate == 0 && !reload && !localload ) {
 			foreach ( Quest curQ in allquests ) {
 				if ( curQ.Id == nq.Id ) {
-					nq.lastUpdate = curQ.lastUpdate;
-					PlayerPrefs.SetString(curQ.Id + "_lastUpdate", curQ.lastUpdate.ToString());
+					nq.LastUpdate = curQ.LastUpdate;
+					PlayerPrefs.SetString(curQ.Id + "_lastUpdate", curQ.LastUpdate.ToString());
 					Debug.Log("<color=red>TIMESTAMP stored in PLAYER_PREFS for quest id = " + curQ.Id + "</color>");
 				}
 			}
@@ -2010,10 +2010,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {

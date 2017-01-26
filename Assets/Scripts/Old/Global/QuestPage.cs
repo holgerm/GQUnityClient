@@ -18,7 +18,7 @@ using GQ.Client.Model;
 [XmlRoot(GQML.PAGE)]
 public class QuestPage {
 
-	#region Old Stuff needs Rework
+	#region Attributes
 
 	[XmlAttribute("id")]
 	public int
@@ -27,6 +27,12 @@ public class QuestPage {
 	[XmlAttribute("type")]
 	public string
 		type;
+
+	#endregion
+
+
+
+	#region Old Stuff needs Rework
 
 	[XmlAnyAttribute()]
 	public XmlAttribute[]

@@ -10,7 +10,19 @@ namespace GQTests.Model {
 	public class DeserializeQuestTest : DeserializationTest {
 
 		[Test]
-		public void MinimalQuest () {
+		public void Quest_1_to_5 () {
+			// Arrange:
+			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/Quest_1_to_5/game.xml"));
+
+			// Act:
+			Quest q = qm.Import(xml);
+
+			// Assert:
+			Assert.AreEqual(0, q.LastUpdate);
+		}
+
+		[Test]
+		public void EmptyQuest () {
 			// Arrange:
 			xml = Files.ReadText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/MinimalQuest/game.xml"));
 

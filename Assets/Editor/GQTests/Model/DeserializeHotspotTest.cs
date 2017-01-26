@@ -4,6 +4,7 @@ using NUnit.Framework;
 using GQ.Editor.Util;
 using GQTests;
 using GQ.Client.Model;
+using System;
 
 namespace GQTests.Model {
 
@@ -23,6 +24,8 @@ namespace GQTests.Model {
 			QuestHotspot hotspot = q.GetHotspotWithID(11544);
 
 			// Assert:
+			Assert.That(String.Compare(q.XmlFormat, "5.0") <= 0, "XML Format should be at most 5.0");
+			Assert.That(String.Compare("1.0", q.XmlFormat) <= 0, "XML Format should be at least 1.0");
 			Assert.NotNull(hotspot, "Hotspot with id 11544 should not be null.");
 			Assert.AreEqual(0, hotspot.iBeacon);
 			Assert.AreEqual(0, hotspot.number);

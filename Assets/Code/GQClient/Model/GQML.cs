@@ -6,6 +6,12 @@ namespace GQ.Client.Model {
 	public class GQML {
 
 		public const string QUEST = "game";
+		public const string QUEST_ID = "id";
+		public const string QUEST_NAME = "name";
+		public const string QUEST_LASTUPDATE = "lastUpdate";
+		public const string QUEST_XMLFORMAT = "xmlformat";
+
+
 		public const string PAGE = "mission";
 		public const string PAGE_TYPE = "type";
 		public const string PAGE_TYPE_NPCTALK = "NPCTalk";
