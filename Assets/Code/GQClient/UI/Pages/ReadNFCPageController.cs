@@ -10,6 +10,7 @@ using GQ.Util;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
 using QM.NFC;
+using GQ.Client.Model;
 
 namespace GQ.Client.UI.Pages {
 
@@ -228,7 +229,7 @@ namespace GQ.Client.UI.Pages {
 		}
 
 		public void backButton () {
-			QuestPage show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
+			Page show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
 			questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
 			questdb.changePage(show.id);
 		}

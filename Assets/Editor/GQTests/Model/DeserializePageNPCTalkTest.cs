@@ -20,7 +20,7 @@ namespace GQTests.Model {
 			// Assert:
 			Assert.AreEqual("QuestWith1NPCTalk", q.Name);
 			Assert.AreEqual(9802, q.Id);
-			QuestPage npcPage = q.GetPageWithID(26821);
+			Page npcPage = q.GetPageWithID(26821);
 			Assert.NotNull(npcPage);
 		}
 

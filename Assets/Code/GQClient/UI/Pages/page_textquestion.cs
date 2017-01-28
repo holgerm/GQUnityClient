@@ -11,7 +11,7 @@ public class page_textquestion : MonoBehaviour {
 	
 	public questdatabase questdb;
 	public Quest quest;
-	public QuestPage textquestion;
+	public Page textquestion;
 	public Text questiontext;
 	public Button submitbutton;
 	public InputField input;

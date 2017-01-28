@@ -15,7 +15,7 @@ public class page_imagecapture : MonoBehaviour {
 	public actions actioncontroller;
 
 	public Quest quest;
-	public QuestPage imagecapture;
+	public Page imagecapture;
 	
 	public Text text;
 	public Image textbg;

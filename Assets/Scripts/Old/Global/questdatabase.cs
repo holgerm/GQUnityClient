@@ -2010,10 +2010,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 					}
 					else {
@@ -2480,12 +2480,12 @@ public class questdatabase : MonoBehaviour {
 
 	}
 
-	public QuestPage getPage (int id) {
-		QuestPage resultpage = null;
+	public Page getPage (int id) {
+		Page resultpage = null;
 
 
 
-		foreach ( QuestPage qp in currentquest.PageList ) {
+		foreach ( Page qp in currentquest.PageList ) {
 			
 			
 			if ( qp.id == id ) {
@@ -2557,7 +2557,7 @@ public class questdatabase : MonoBehaviour {
 		}
 
 		   
-		foreach ( QuestPage qp in currentquest.PageList ) {
+		foreach ( Page qp in currentquest.PageList ) {
 
 			if ( qp.id.Equals(id) ) {
 

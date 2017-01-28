@@ -37,7 +37,7 @@ public class navigationMenu : MonoBehaviour {
 		if ( questdb.currentquest != null && questdb.currentquest.Id != 0 ) {
 
 			Quest	quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-			QuestPage	mappage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
+			Page	mappage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
 		
 		
 		

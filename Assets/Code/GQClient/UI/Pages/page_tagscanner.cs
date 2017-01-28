@@ -14,7 +14,7 @@ public class page_tagscanner : MonoBehaviour {
 	
 	public questdatabase questdb;
 	public Quest quest;
-	public QuestPage tagscanner;
+	public Page tagscanner;
 
 	public Text text;
 	public Image textbg;

@@ -16,7 +16,7 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 	
 	public Quest quest;
-	public QuestPage multiplechoicequestion;
+	public Page multiplechoicequestion;
 	private WWW www;
 
 	public Text questiontext;

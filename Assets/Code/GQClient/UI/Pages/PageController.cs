@@ -10,7 +10,7 @@ namespace GQ.Client.UI.Pages {
 
 		private const int DEFAULT_FONT_SIZE = 20;
 
-		public QuestPage page;
+		public Page page;
 		public questdatabase questdb;
 		public Quest quest;
 		public actions questactions;

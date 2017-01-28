@@ -15,7 +15,7 @@ public class page_fullscreenimage : MonoBehaviour {
 	public Button imagebuttonh;
 	private WWW www;
 	public Quest quest;
-	public QuestPage fullscreenimage;
+	public Page fullscreenimage;
 	public actions questactions;
 	public questdatabase questdb;
 

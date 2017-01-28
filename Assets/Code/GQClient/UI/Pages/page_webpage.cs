@@ -8,7 +8,7 @@ public class page_webpage : MonoBehaviour {
 	public questdatabase questdb;
 	public actions actioncontroller;
 	public Quest quest;
-	public QuestPage webpage;
+	public Page webpage;
 
 
 
@@ -37,7 +37,7 @@ public class page_webpage : MonoBehaviour {
 		
 		
 		
-		QuestPage show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
+		Page show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
 		questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
 		questdb.changePage(show.id);
 		

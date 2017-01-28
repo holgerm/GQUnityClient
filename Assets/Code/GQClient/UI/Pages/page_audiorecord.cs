@@ -20,7 +20,7 @@ public class page_audiorecord : MonoBehaviour {
 	public actions actioncontroller;
 	
 	public Quest quest;
-	public QuestPage audiorecord;
+	public Page audiorecord;
 	
 	public Text text;
 	public Image textbg;

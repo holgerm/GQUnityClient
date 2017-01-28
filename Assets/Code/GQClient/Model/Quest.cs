@@ -37,13 +37,13 @@ namespace GQ.Client.Model {
 		#region Pages aka missions
 
 		[Obsolete]
-		public List<QuestPage>
-			PageList = new List<QuestPage>();
+		public List<Page>
+			PageList = new List<Page>();
 
-		protected Dictionary<int, QuestPage> pageDict = new Dictionary<int, QuestPage>();
+		protected Dictionary<int, Page> pageDict = new Dictionary<int, Page>();
 
-		public QuestPage GetPageWithID (int id) {
-			QuestPage page;
+		public Page GetPageWithID (int id) {
+			Page page;
 			pageDict.TryGetValue(id, out page);
 			return page;
 		}
@@ -109,12 +109,12 @@ namespace GQ.Client.Model {
 					case XmlNodeType.Element:
 						switch ( reader.LocalName ) {
 							case GQML.PAGE:
-								QuestPage page;
-								pageSerializer = new XmlSerializer(typeof(QuestPage));
+								Page page;
+								pageSerializer = new XmlSerializer(typeof(Page));
 								string pageType = reader.GetAttribute(GQML.PAGE_TYPE);
 								switch ( pageType ) {
 									case GQML.PAGE_TYPE_NPCTALK:
-										page = (QuestPage)pageSerializer.Deserialize(reader);
+										page = (Page)pageSerializer.Deserialize(reader);
 										read = true;
 										pageDict.Add(page.id, page);
 										Debug.Log("Added NPCTalk page id: " + page.id);
@@ -163,8 +163,8 @@ namespace GQ.Client.Model {
 		public List<QuestAttribute> attributes;
 		public List<QuestMetaData> metadata;
 		public bool hasData = false;
-		public QuestPage currentpage;
-		public List<QuestPage> previouspages = new List<QuestPage>();
+		public Page currentpage;
+		public List<Page> previouspages = new List<Page>();
 		public string xmlcontent;
 		public float start_longitude;
 		public float start_latitude;
@@ -311,7 +311,7 @@ namespace GQ.Client.Model {
 
 			}
 
-			foreach ( QuestPage qp in q.PageList ) {
+			foreach ( Page qp in q.PageList ) {
 				if ( qp.type == "MetaData" ) {
 
 					foreach ( QuestContent qc in qp.contents_stringmeta ) {
@@ -469,7 +469,7 @@ namespace GQ.Client.Model {
 			}
 
 			if ( PageList != null ) {
-				foreach ( QuestPage qp in PageList ) {
+				foreach ( Page qp in PageList ) {
 					qp.deserializeAttributes(Id, redo);
 				}
 			}
@@ -575,7 +575,7 @@ namespace GQ.Client.Model {
 
 			bool b = false;
 
-			foreach ( QuestPage qp in PageList ) {
+			foreach ( Page qp in PageList ) {
 				if ( !b ) {
 					if ( qp.hasActionInChildren(type1) ) {
 						b = true;

@@ -19,7 +19,7 @@ public class page_custom : MonoBehaviour {
 
 	public questdatabase questdb;
 	public Quest quest;
-	public QuestPage questpage;
+	public Page questpage;
 	public actions questactions;
 
 

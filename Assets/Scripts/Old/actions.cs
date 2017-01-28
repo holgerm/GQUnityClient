@@ -2059,7 +2059,7 @@ public class actions : MonoBehaviour {
 
 					k = k.Replace(".result", "");
 
-					QuestPage qp = questdb.getPage(int.Parse(k));
+					Page qp = questdb.getPage(int.Parse(k));
 
 
 					if ( qp != null && qp.result != null && qp.result.Length > 0 ) {
@@ -2082,7 +2082,7 @@ public class actions : MonoBehaviour {
 				if ( k.EndsWith(".state") ) {
 
 					k = k.Replace(".state", "");
-					QuestPage qp = questdb.getPage(int.Parse(k));
+					Page qp = questdb.getPage(int.Parse(k));
 
 
 

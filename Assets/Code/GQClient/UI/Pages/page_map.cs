@@ -34,7 +34,7 @@ public class page_map : MonoBehaviour {
 	public Map map;
 	public questdatabase questdb;
 	public Quest quest;
-	public QuestPage mappage;
+	public Page mappage;
 	public actions questactions;
 	Locationcontrol locationController;
 	public GPSPosition gpsdata;
