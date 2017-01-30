@@ -110,11 +110,11 @@ namespace GQ.Client.Model {
 						switch ( reader.LocalName ) {
 							case GQML.PAGE:
 								Page page;
-								pageSerializer = new XmlSerializer(typeof(Page));
 								string pageType = reader.GetAttribute(GQML.PAGE_TYPE);
 								switch ( pageType ) {
 									case GQML.PAGE_TYPE_NPCTALK:
-										page = (Page)pageSerializer.Deserialize(reader);
+										pageSerializer = new XmlSerializer(typeof(PageNPCTalk));
+										page = (PageNPCTalk)pageSerializer.Deserialize(reader);
 										read = true;
 										pageDict.Add(page.id, page);
 										Debug.Log("Added NPCTalk page id: " + page.id);
@@ -123,6 +123,14 @@ namespace GQ.Client.Model {
 										PageList.Add(page);
 										break;
 									default:
+										pageSerializer = new XmlSerializer(typeof(Page));
+										page = (Page)pageSerializer.Deserialize(reader);
+										read = true;
+										pageDict.Add(page.id, page);
+										Debug.Log("Added another page with id: " + page.id);
+
+										// TODO: get rid:
+										PageList.Add(page);
 										Debug.LogWarning("Unknown page type found: " + pageType);
 										break;
 								}

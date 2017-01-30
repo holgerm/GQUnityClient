@@ -47,6 +47,8 @@ namespace GQ.Client.Model {
 		public List<QuestContent>
 			contents_dialogitems;
 
+
+
 		[XmlElement("expectedCode")]
 		public List<QuestContent>
 			contents_expectedcode;

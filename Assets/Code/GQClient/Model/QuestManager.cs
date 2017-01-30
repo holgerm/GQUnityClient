@@ -7,7 +7,6 @@ using System.IO;
 
 namespace GQ.Client.Model {
 
-
 	public class QuestManager {
 
 		#region quest management functions
