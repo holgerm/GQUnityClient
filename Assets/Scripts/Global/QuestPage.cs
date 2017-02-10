@@ -110,13 +110,13 @@ public class QuestPage {
 		if ( help_attributes != null ) {
 			foreach ( XmlAttribute xmla in help_attributes ) {
 
-				Debug.Log("deserializing attr: " + xmla.Name + "orig val = " + xmla.Value);
+//				Debug.Log("deserializing attr: " + xmla.Name + "orig val = " + xmla.Value);
 
 				if ( xmla.Name.Equals("file") && xmla.Value.StartsWith(page_videoplay.YOUTUBE_URL_PREFIX) ) {
 					Debug.Log("storing attr: " + xmla.Name + "stored val = " + xmla.Value);
 					attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
 
-					return;
+					continue;
 				}
 							
 				if ( (xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://")) && !(type == "WebPage" && xmla.Name.ToLower() == "url") ) {
@@ -142,7 +142,7 @@ public class QuestPage {
 						if ( splitted.Length > 3 ) {
 
 							if ( questdb.currentquest != null && questdb.currentquest.predeployed ) {
-								Debug.Log("is predeployed file: " + filename);
+//								Debug.Log("is predeployed file: " + filename);
 
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
@@ -159,7 +159,7 @@ public class QuestPage {
 
 				}	
 								
-				Debug.Log("storing attr: " + xmla.Name + "stored val = " + xmla.Value);
+				Debug.Log("DESERIALIZE ATTR: in page " + this.id + " attr: " + xmla.Name + " stored val = " + xmla.Value);
 				attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
 			
 			}
