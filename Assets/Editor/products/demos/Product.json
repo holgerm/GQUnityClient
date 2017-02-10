@@ -7,7 +7,7 @@
   "downloadTimeOutSeconds": 300,
   "nameForQuest": "Quest",
   "questVisualization": "list",
-  "questVisualizationChangeable": true,
+  "questVisualizationChangeable": false,
   "showCloudQuestsImmediately": false,
   "cloudQuestsVisible": true,
   "showTextInLoadingLogo": true,
