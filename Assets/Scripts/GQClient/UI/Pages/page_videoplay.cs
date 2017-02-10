@@ -138,16 +138,18 @@ public class page_videoplay : MonoBehaviour {
 		Debug.Log("We will play an HTTP Video link: " + url);
 
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
-
+		yield return new WaitForEndOfFrame();
 		Handheld.PlayFullScreenMovie(url);
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 
 		Debug.Log("Finished the HTTP Video from url: " + url);
 
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 		Screen.orientation = ScreenOrientation.Portrait;
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 
 		OnEnd();
 	}
@@ -157,16 +159,18 @@ public class page_videoplay : MonoBehaviour {
 		Debug.Log("We will play a LOCAL Video from file: " + url);
 
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
-
+		yield return new WaitForEndOfFrame();
 		Handheld.PlayFullScreenMovie("file://" + url);
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 
 		Debug.Log("Finished the LOCAL Video from url: " + url);
 
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 		Screen.orientation = ScreenOrientation.Portrait;
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
 
 		OnEnd();
 	}
