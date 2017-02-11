@@ -1,6 +1,6 @@
 {
   "id": "demos",
-  "name": "GeoQuest Demos",
+  "name": "GeoQuest Showcase",
   "portal": 341,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
