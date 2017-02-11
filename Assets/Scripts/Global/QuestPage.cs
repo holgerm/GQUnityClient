@@ -159,7 +159,6 @@ public class QuestPage {
 
 				}	
 								
-				Debug.Log("DESERIALIZE ATTR: in page " + this.id + " attr: " + xmla.Name + " stored val = " + xmla.Value);
 				attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
 			
 			}

@@ -322,7 +322,6 @@ public class questdatabase : MonoBehaviour {
 
 		if ( www.error != null && www.error != "" ) {
 
-			Debug.Log("Couldn't load privacy agreement: " + www.error);
 			if ( Configuration.instance.privacyAgreementVersion > privacyAgreementVersionRead ) {
 				GameObject.Find("ImpressumCanvas").GetComponent<showimpressum>().loadPrivacy();
 				
@@ -341,10 +340,6 @@ public class questdatabase : MonoBehaviour {
 
 		
 			string version = www.text;
-			Debug.Log("Privacy Agreement Version: " + version);
-
-
-
 
 			if ( int.Parse(version) > privacyAgreementVersionRead || Configuration.instance.privacyAgreementVersion > privacyAgreementVersionRead ) {
 
@@ -2579,7 +2574,6 @@ public class questdatabase : MonoBehaviour {
 
 				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
-				Debug.Log("changePage(to: " + qp.id + " of type: )" + qp.type);
 				int foundTiles = 0;
 				int destroyedTiles = 0;
 
@@ -2681,8 +2675,6 @@ public class questdatabase : MonoBehaviour {
 
 					}
 				} // foreach go
-
-				Debug.Log("   tiles found: " + foundTiles + ", destroyed: " + destroyedTiles);
 
 				Resources.UnloadUnusedAssets();
 
