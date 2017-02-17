@@ -13,7 +13,7 @@ SceneSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -37,12 +37,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 1
-  m_LightmapsMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -53,17 +53,22 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 3
+    serializedVersion: 4
     m_Resolution: 1
     m_BakeResolution: 50
     m_TextureWidth: 1024
     m_TextureHeight: 1024
+    m_AO: 0
     m_AOMaxDistance: 1
-    m_Padding: 2
     m_CompAOExponent: 0
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
     m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
     m_TextureCompression: 0
+    m_DirectLightInLightProbes: 1
     m_FinalGather: 0
+    m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 1024
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
@@ -184,6 +189,7 @@ GameObject:
   - 114: {fileID: 158477765}
   - 114: {fileID: 158477764}
   - 114: {fileID: 158477767}
+  - 114: {fileID: 158477768}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -308,11 +314,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 180
+  m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 3
+  m_FlexibleHeight: 2
+--- !u!114 &158477768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 158477762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aafac337e5fe47b5a9bb767661a90a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applications:
+  - title: Button
+    color: button
+    canvasimage: {fileID: 0}
+    canvastext: {fileID: 0}
+    camera: {fileID: 0}
+    button: {fileID: 158477764}
+  questdb: {fileID: 0}
+  hasbutton: 0
 --- !u!1 &359467588
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +588,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 2
-  m_HideMobileInput: 1
+  m_HideMobileInput: 0
   m_CharacterValidation: 0
   m_CharacterLimit: 0
   m_OnEndEdit:
@@ -580,7 +606,7 @@ MonoBehaviour:
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
   m_CaretBlinkRate: 1.7
-  m_CaretWidth: 1
+  m_CaretWidth: 2
   m_ReadOnly: 0
 --- !u!114 &1195603756
 MonoBehaviour:
@@ -632,7 +658,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 3
+  m_FlexibleHeight: 4
 --- !u!1 &1488814026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1010,13 +1036,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questdb: {fileID: 0}
   quest:
-    name: 
-    id: 0
-    lastUpdate: 0
-    xmlformat: 0
+    PageList: []
+    hotspotList: []
     filepath: 
-    pages: []
-    hotspots: []
     attributes: []
     metadata: []
     hasData: 0
@@ -1042,6 +1064,8 @@ MonoBehaviour:
       onSuccess:
         actions: []
       onFailure:
+        actions: []
+      onRead:
         actions: []
       state: new
       result: 
@@ -1077,6 +1101,8 @@ MonoBehaviour:
     onSuccess:
       actions: []
     onFailure:
+      actions: []
+    onRead:
       actions: []
     state: new
     result: 
