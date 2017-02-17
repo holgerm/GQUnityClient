@@ -8,8 +8,10 @@ using UnityEngine.SceneManagement;
 
 public class page_textquestion : MonoBehaviour {
 
-	
-	
+	private string feedbackTextOnRepeat = "X";
+	public GameObject feedbackPanel;
+	public GameObject questionPanel;
+
 	public questdatabase questdb;
 	public Quest quest;
 	public Page textquestion;
@@ -31,6 +33,15 @@ public class page_textquestion : MonoBehaviour {
 		questdb = questdbGO.GetComponent<questdatabase>();
 		quest = questdbGO.GetComponent<questdatabase>().currentquest;
 		textquestion = questdbGO.GetComponent<questdatabase>().currentquest.currentpage;
+
+		feedbackPanel.SetActive(false);
+		questionPanel.SetActive(true);
+		if ( textquestion.hasAttribute("loopText") )
+			feedbackTextOnRepeat = textquestion.getAttribute("loopText");
+		Text feedbackText = feedbackPanel.transform.FindChild("Text").gameObject.GetComponent<Text>();
+		if ( feedbackText != null )
+			feedbackText.text = feedbackTextOnRepeat;
+		
 
 		if ( textquestion.onStart != null ) {
 			
@@ -54,7 +65,7 @@ public class page_textquestion : MonoBehaviour {
 
 		if ( textquestion.contents_answers.Count > 0 ) {
 
-			bool b = false;
+			bool correct = false;
 			bool match;
 
 			foreach ( QuestContent y in textquestion.contents_answers ) {
@@ -68,28 +79,29 @@ public class page_textquestion : MonoBehaviour {
 				questdb.debug("REGEXP " + x + " MATCH " + y.content + " -> " + match);
 
 				if ( questdb.GetComponent<actions>().formatString(y.content) == x || match ) {
-					b = true;
+					correct = true;
 					Debug.Log("TextQuestion: MATCHED");
 				}
-
-
 			}
 
-			if ( b ) {
+			if ( correct ) {
 
 				textquestion.state = "succeeded";
 				onSuccess();
 			}
 			else {
 				
-				if ( !repeat ) {
+				if ( repeat ) {
+
+					questionPanel.SetActive(false);
+					feedbackPanel.SetActive(true);
+				}
+				else {
 					
 					textquestion.state = "failed";
 					onFailure();
 				}
-
 			}
-	
 		}
 		else {
 
@@ -125,7 +137,6 @@ public class page_textquestion : MonoBehaviour {
 		
 		textquestion.state = "succeeded";
 		
-		
 		if ( textquestion.onSuccess != null ) {
 			
 			textquestion.onSuccess.Invoke();
@@ -136,10 +147,16 @@ public class page_textquestion : MonoBehaviour {
 		
 		textquestion.state = "failed";
 		
-		
 		if ( textquestion.onFailure != null ) {
 			
 			textquestion.onFailure.Invoke();
 		} 
 	}
+
+	public void FeedbackButtonPressed () {
+		feedbackPanel.SetActive(false);
+		questionPanel.SetActive(true);
+	}
+
+
 }
