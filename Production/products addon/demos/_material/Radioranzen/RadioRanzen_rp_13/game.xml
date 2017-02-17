@@ -1,0 +1,1452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game name="RadioRanzen 2014-01" xmlformat="5" bgcolor="#FF1EA2FF">
+	<mission type="StartAndExitScreen" id="startscreen" image="drawable/Startseite.png"
+		duration="interactive">
+		<onEnd>
+			<rule>
+				<action type="StartMission" id="M_StartScan" />
+			</rule>
+		</onEnd>
+	</mission>
+
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 0 -->
+
+	<mission id="M_StartScan"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#Start"
+		if_right="Guter Start!" if_wrong="Dieser Code ist nicht der richtige!"
+		initial_image="drawable/logo_02_roboter.png" mode="product"
+		taskdescription="Scannt den QR-Code ein." type="QRTagReading"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/scannt_den_qrcode.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action id="M_S0_0" type="StartMission" />
+			</rule>
+		</onSuccess>
+	</mission>
+	<mission id="M_S0_0" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S0_enter_name" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/0_0_1.mp3">Hallo ich bin der Radiobot! Herzlich
+			Willkommen in der Mission „Rettet die Frequenz des
+			Radioranzens“!
+		</dialogitem>
+		<dialogitem sound="sound/0_0_2.mp3">Findet ihr ein Radiogerät mit einem QR
+			Code, dann müsst ihr diesen Code scannen.
+		</dialogitem>
+		<dialogitem sound="sound/0_0_3.mp3">Hinter jedem Code steckt eine Aufgabe.
+			Löst ihr die Aufgabe bekommt ihr eine Kanalzahl der Frequenz des
+			Radioranzens.
+		</dialogitem>
+		<dialogitem sound="sound/0_0_4.mp3">Je nachdem, wie gut ihr die Aufgabe
+			gemeistert habt, bekommt ihr Punkte.
+		</dialogitem>
+		<dialogitem sound="sound/0_0_4b.mp3">Euer Score wird auf unserer Blogseite
+			gepostet. Gebt dazu
+			jetzt gleich bitte einen Nicknamen an.
+		</dialogitem>
+	</mission>
+	<mission type="TextQuestion" id="M_S0_enter_name"
+		storeAcceptedAnswerInVariable="user_name" loopUntilSuccess="true"
+		question="Bitte gebt jetzt einen Namen für euer Redaktionsteam ein. Ihr könnt ihn frei wählen."
+		prompt="Dein Nickname ..."
+		replyOnWrong="Bitte verwende nur normale Buchstaben. Dein Name darf auch aus mehreren Wörtern bestehen."
+		replyOnCorrect="OK. Unter diesem Namen posten wir nachher deinen Score."
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="PlayAudio" file="sound/1_entername.mp3" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="PlayAudio" file="sound/1_entername_ok.mp3" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action type="PlayAudio" file="sound/1_entername_fail.mp3" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action type="StartMission" id="M_S0_1" />
+			</rule>
+		</onEnd>
+		<answers>
+			<answer>(\w+\s*)+</answer>
+		</answers>
+	</mission>
+	<mission id="M_S0_1" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S0_S1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/0_0_5.mp3">Am Ende der Mission seht ihr welches
+			Redaktionsteam am erfolgreichsten war.
+		</dialogitem>
+	</mission>
+	<mission id="M_S0_S1" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_0_1.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S1_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Los geht’s. Das erste Radio findet ihr
+				einige Meter
+				links vom Radioranzen. Habt ihr die Station gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S1_0" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S1_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/1_0_1.mp3">Radio gibt es schon ziemlich lange,
+			länger als Fernsehen oder den Computer. Findet heraus wann die erste
+			Radiosendung in Deutschland ausgestrahlt wurde!
+		</dialogitem>
+	</mission>
+	<mission id="M_S1_1"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S1_Radio_Eins"
+		if_right="Jetzt hört ihr die erste Radiosendung, die in Deutschland gesendet wurde."
+		if_wrong="Dieser Code ist nicht der richtige!" initial_image="drawable/logo_02_roboter.png"
+		mode="product"
+		taskdescription="Scannt den QR-Code von dem Radio der Marke Phillips ein und hört gut zu."
+		type="QRTagReading" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="PlayAudio" file="sound/1_1_1.mp3" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/erste_sendung.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onEnd>
+			<rule>
+				<action id="M_S0_qa_radio_1" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S0_qa_radio_1" loopUntilSuccess="true"
+		type="MultipleChoiceQuestion" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/radiobot_station1_frage1.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="PlayAudio" file="sound/radiobot_richtig_kanalzahl1.mp3" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<if>
+					<eq>
+						<var>$_M_S0_qa_radio_1.result</var>
+						<string>Noch einmal hören</string>
+					</eq>
+				</if>
+				<action type="PlayAudio" file="sound/erste_sendung.mp3" />
+			</rule>
+			<rule>
+				<if>
+					<not>
+						<eq>
+							<var>$_M_S0_qa_radio_1.result</var>
+							<string>Noch einmal hören</string>
+						</eq>
+					</not>
+				</if>
+				<action type="PlayAudio" file="sound/radiobot_falsch_geraten.mp3" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S1_S2" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Das war die Moderation der allerersten Radiosendung in
+				Deutschland. In welchem Jahr wurde die erste Sendung in Deutschland
+				ausgestrahlt?
+			</questiontext>
+			<answer correct="0" onChoose="Nein, so früh noch nicht."> 1908
+			</answer>
+			<answer correct="1" onChoose="Ja, richtig. Die erste Kanalzahl lautet 1."> 1923
+			</answer>
+			<answer correct="0" onChoose="Nein, schon einige Jahre früher.">
+				1936
+			</answer>
+			<answer correct="0" onChoose="OK, ihr könnt es gerne noch einmal hören."
+				nextbuttontext="Wieder zur Frage"> Noch einmal hören
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S1_S2" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_1_2.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S2_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Das nächste Radiogerät das euch
+				weiterhilft findet ihr
+				am Haupteingang. Also los! Habt ihr die
+				Station gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 2 -->
+
+	<mission id="M_S2_1" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S2_2" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/2_1_1.mp3">Hier seht ihr ein neues Digitalradio.
+		</dialogitem>
+		<dialogitem sound="sound/2_1_2.mp3"> Hört euch die Radiosender auf den
+			Programmplätzen 1 – 2 und 3 an!
+		</dialogitem>
+		<dialogitem sound="sound/2_1_3.mp3">Ihr hört auf dem Programmplatz 1 einen
+			öffentlich-rechtlichen Radiosender.
+		</dialogitem>
+		<dialogitem sound="sound/2_1_4.mp3">Auf dem Programmplatz 2 hört ihr einen
+			Privatradiosender.
+		</dialogitem>
+		<dialogitem sound="sound/2_1_5.mp3">Den privaten Lokalradiosender, hört ihr
+			auf Programmplatz 3.
+		</dialogitem>
+		<dialogitem sound="sound/2_1_6.mp3" nextdialogbuttontext="Ja, genug ...">Genug
+			gehört?
+		</dialogitem>
+	</mission>
+	<mission id="M_S2_2" loopUntilSuccess="true" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/radiobot_station1_frage2.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="PlayAudio" file="sound/2_2_richtig.mp3" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_nein.mp3" type="PlayAudio" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S2_S3" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Worin besteht der Unterschied zwischen dem
+				öffentlich-rechtlichen Rundfunk und dem privaten Rundfunk?
+			</questiontext>
+			<answer correct="0"
+				onChoose="Hör doch noch mal zu, da gibt es schon Unterschiede."> Es
+				gibt keinen Unterschied.
+			</answer>
+			<answer correct="1" onChoose="Ja, richtig! Die nächste Kanalzahl lautet 0."> Der öffentlich
+				rechtliche Sender
+				finanziert sich über die GEZ, der
+				private Rundfunk
+				über Werbung.
+			</answer>
+			<answer correct="0" onChoose="Nein, so ist das nicht."> Der
+				private Rundfunk sendet mehr
+				Musik und die öffentlich
+				rechtlichen
+				Sender mehr Werbung.
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S2_S3" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_2_3.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S3_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Das nächste Radiogerät das euch
+				weiter
+				hilft findet ihr
+				draußen im Hof. Also los! Habt ihr die
+				Station gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 3 -->
+
+	<mission id="M_S3_1" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S3_select_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/3_1_1.mp3">Ihr hört Töne aus dem Radio, aber wie
+			funktioniert das eigentlich?
+		</dialogitem>
+		<dialogitem sound="sound/3_1_2.mp3"> Die Tonaufzeichnung hat sich in den
+			letzten Jahren sehr verändert. Vor euch seht ihr drei verschiedene
+			Aufnahmegeräte.
+		</dialogitem>
+		<dialogitem sound="sound/3_1_3.mp3">Eure Aufgabe ist, die Aufnahmegeräte in
+			die richtige zeitliche Reihenfolge zu bringen.
+		</dialogitem>
+		<dialogitem sound="sound/radiobot_station6_frage_teil_4.mp3"> Scannt die Geräte in der richtigen
+			zeitlichen Reihenfolge ein.
+		</dialogitem>
+	</mission>
+	<mission id="M_S3_select_1"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S5_Bandmaschine"
+		if_right="Richtig!" if_wrong="Ne ne, das stimmt nicht." initial_image="drawable/logo_02_roboter.png"
+		mode="product"
+		taskdescription="Scannt den QR Code vom ältesten Aufnahmegerät. Ich sage euch dann, ob ihr richtig liegt."
+		type="QRTagReading" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action file="sound/radiobot_station6_qr_1_aufforderung.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/3_1_richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="60" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_nein.mp3" type="PlayAudio" />
+				<action type="Score" value="-10" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S3_select_2" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S3_select_2"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S5_Kassettengerät"
+		if_right="Richtig!" if_wrong="Ne ne, das stimmt nicht." initial_image="drawable/logo_02_roboter.png"
+		mode="product" taskdescription="Und mit welchen Gerät wurde als nächstes Aufgenommen? "
+		type="QRTagReading" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action file="sound/radiobot_station6_qr_2_aufforderung.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S3_select_3" type="StartMission" />
+			</rule>
+		</onEnd>
+		<onSuccess>
+			<rule>
+				<action file="sound/radiobot_richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="40" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_nein.mp3" type="PlayAudio" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+	</mission>
+	<mission id="M_S3_select_3"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S5_DigitalRecorder"
+		if_right="Richtig!" if_wrong="Ne ne, das stimmt nicht." initial_image="drawable/logo_02_roboter.png"
+		mode="product" taskdescription="Und mit welchen Gerät wird heutzutage aufgenommen? "
+		type="QRTagReading" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action file="sound/radiobot_station6_qr_3_aufforderung.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S3_outro" type="StartMission" />
+			</rule>
+		</onEnd>
+		<onSuccess>
+			<rule>
+				<action file="sound/radiobot_richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="25" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_nein.mp3" type="PlayAudio" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+	</mission>
+	<mission id="M_S3_outro" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S3_S4" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/2_outro_1.mp3">Gut gemacht, damit bekommt ihr die
+			Kanalzahl 3.
+		</dialogitem>
+		<dialogitem sound="sound/2_outro_2.mp3">Drei Zahlen der Frequenz habt ihr nun
+			schon.
+		</dialogitem>
+	</mission>
+	<mission id="M_S3_S4" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_3_4.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S4_0" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Das nächste Radiogerät das euch
+				weiterhilft findet ihr
+				am Eingang zum Treppenhaus. Viel Erfolg! Habt ihr die
+				Station
+				gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 4 -->
+	<mission id="M_S4_0"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S4_UKW"
+		if_right="Habt ihr vorhin beim Radioranzen aufgepasst?" if_wrong="Das ist nicht der richtige QR Code."
+		initial_image="drawable/logo_02_roboter.png" mode="product"
+		taskdescription="Scannt auch hier den Code ..." type="QRTagReading"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/5_1_1.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/4_0_1.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onEnd>
+			<rule>
+				<action id="M_S4_1" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S4_1" loopUntilSuccess="true" type="TextQuestion"
+		question="Na, wisst ihr noch was UKW bedeutet?" replyOnCorrect="Richtig! Aber ich habe noch eine Aufgabe für Euch!"
+		replyOnWrong="Leider falsch. Probiert es noch mal." bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/4_1_1.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="PlayAudio" file="sound/4_1_richtig.mp3" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action type="Score" value="-10" />
+				<action type="PlayAudio" file="sound/radiobot_leider_falsch.mp3" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S4_2" type="StartMission" />
+			</rule>
+		</onEnd>
+		<answers>
+			<answer>Ultrakurzwelle
+			</answer>
+			<answer>ultrakurzwelle
+			</answer>
+		</answers>
+	</mission>
+	<mission id="M_S4_2" endbutton="Zur Aufnahme ..." image="drawable/ploppschutz.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S4_record_ploppschutz" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/4_2_1.mp3"> So bei dieser Aufgabe sollt ihr
+			herausfinden, was das auf dem Bild ist.
+		</dialogitem>
+		<dialogitem sound="sound/4_2_2.mp3"> Aber dazu müsst ihr erstmal eine
+			Audioaufnahme machen.
+		</dialogitem>
+		<dialogitem sound="sound/4_2_3.mp3" nextdialogbuttontext="Ja, haben wir.">Wählt
+			nun einen Vertreter aus eurem Redaktionsteam aus.
+		</dialogitem>
+		<dialogitem sound="sound/4_2_4.mp3">Sehr
+			gut. Du drückst auf Record und sagst
+			mir laut und deutlich den Satz:
+			„Die Pusteblume pfiff laut
+			Papperlapapp“.
+		</dialogitem>
+		<dialogitem sound="sound/4_2_5.mp3" nextdialogbuttontext="Zum Rekorder">Bitte
+			halte mich dabei richtig nah an deinen Mund. Los geht’s!
+		</dialogitem>
+	</mission>
+	<mission id="M_S4_record_ploppschutz" type="AudioRecord"
+		task="Na dann startet eure Aufnahme mal. Bitte sprecht: 'Die Pusteblume pfiff laut Papperlapapp'"
+		file="recorded_pappelapapp.3gp" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/radiobot_M_S5_record_ploppschutz.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S4_replay_ploppschutz" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S4_replay_ploppschutz" endbutton="Zur Frage ..."
+		image="drawable/ploppschutz.png" type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S4_qa_ploppschutz" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/radiobot_M_S5_replay_ploppschutz_teil_1.mp3"> Und? Wisst ihr schon wozu das
+			abgebildete Ding gut ist?
+		</dialogitem>
+		<dialogitem nextdialogbuttontext="Anhören"
+			sound="sound/radiobot_M_S5_replay_ploppschutz_teil_2.mp3"> Ein Tipp:
+			Hört euch mal eure eigene Aufnahme an.
+		</dialogitem>
+		<dialogitem sound="@_recorded_pappelapapp.3gp">
+			Das habt
+			ihr aufgenommen.
+		</dialogitem>
+	</mission>
+	<mission id="M_S4_qa_ploppschutz" loopUntilSuccess="true"
+		type="MultipleChoiceQuestion" bgcolor="#FF1EA2FF">
+		<onSuccess>
+			<rule>
+				<action type="PlayAudio" file="sound/radiobot_richtig.mp3" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<if>
+					<eq>
+						<var>$_M_S4_qa_ploppschutz.result</var>
+						<string>Noch einmal hören</string>
+					</eq>
+				</if>
+				<action file="@_recorded_pappelapapp.3gp" type="PlayAudio" />
+			</rule>
+			<rule>
+				<if>
+					<not>
+						<eq>
+							<var>$_M_S4_qa_ploppschutz.result</var>
+							<string>Noch einmal hören</string>
+						</eq>
+					</not>
+				</if>
+				<action type="PlayAudio" file="sound/radiobot_falsch_geraten.mp3" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S4_outro" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext> Und, was war auf dem Bild zu sehen?
+			</questiontext>
+			<answer correct="0" onChoose="Nein, sieht bloss ähnlich aus.">
+				Eine Clownnase
+			</answer>
+			<answer correct="0" onChoose="Ach wo. Viel zu klein."> Eine
+				Babymütze
+			</answer>
+			<answer correct="1" onChoose="Richtig!"> Ein Ploppschutz
+			</answer>
+			<answer correct="0"
+				onChoose="OK, ihr könnt eure Aufnahme gerne noch einmal hören."
+				nextbuttontext="Wieder zur Frage"> Noch einmal hören
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S4_outro" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action type="StartMission" id="M_S4_S5"></action>
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/4_out_1.mp3">Das Bild zeigt einen Ploppschutz. Ein
+			Ploppschutz verhindert das der Wind oder Zisch- und Plopplaute die
+			Aufnahme unbrauchbar machen.
+		</dialogitem>
+		<dialogitem sound="sound/4_out_2.mp3">Und schon habt ihr die nächste Kanalzahl
+			für die Frequenz des Radioranzens: Sie lautet: 0.
+		</dialogitem>
+	</mission>
+	<mission id="M_S4_S5" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_4_5.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S5_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Auch Radiomoderatoren müssen mal auf die
+				Toilette.
+				Vielleicht lohnt sich der Weg? Habt ihr die
+				Station gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 5 -->
+
+	<mission id="M_S5_1"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S3_Pannen"
+		if_right="Hört was alles passieren kann  ..." if_wrong="Hmmm, das ist nicht der richtige Code."
+		initial_image="drawable/logo_02_roboter.png" mode="product"
+		taskdescription="Scannt auch hier den Code ..." type="QRTagReading"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action file="sound/5_1_1.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/pannen.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_nein.mp3" type="PlayAudio" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S5_outro" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S5_outro" endbuttontext="Im Treppenhaus ..."
+		image="drawable/logo_02_roboter.png" type="NPCTalk">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S5_S6" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/5_out_1.mp3"> Ups da ist wohl was schief gegangen.
+			Naja auch richtige Radioprofis machen mal Fehler.
+		</dialogitem>
+	</mission>
+	<mission id="M_S5_S6" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_5_6.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S6_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Geht lieber schnell zum nächsten
+				Radiogerät das euch
+				weiterhilft. Ihr findet es im Cafe. Habt ihr die
+				Station
+				gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 6 -->
+	<mission id="M_S6_1" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S3_qr_hörspiel" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/6_1_1.mp3"> Im Radio gibt es nicht nur Musik und
+			Moderatoren, sondern
+			auch Geschichten mit Geräuschen.
+		</dialogitem>
+	</mission>
+	<mission id="M_S3_qr_hörspiel"
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S3_Hörspiel"
+		if_right="Achtet neben den Stimmen auch auf die Geräusche und Klänge."
+		if_wrong="Hmmm, das ist nicht der richtige Code." initial_image="drawable/logo_02_roboter.png"
+		mode="product" taskdescription="Scannt den QR Code ein und lauscht der Hörspielgeschichte."
+		type="QRTagReading" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action file="sound/radiobot_station3_qrTask.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/hoerspiel.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_klapptnicht.mp3" type="PlayAudio" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S3_nach_hörspiel" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S3_nach_hörspiel" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S3_qa_hufgetrappel" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/radiobot_station3_frage1_teil1.mp3"> Bei jedem Hörspiel sind neben der Stimme
+			auch Klänge und Geräusche extrem wichtig um das „Bild im Kopf“
+			entstehen zu lassen.
+		</dialogitem>
+		<dialogitem sound="sound/radiobot_station3_frage1_teil2.mp3"> Bei Hörspielproduktionen kommen manchmal
+			komische Gegenstände zum Einsatz, um Geräusche herzustellen.
+		</dialogitem>
+		<dialogitem sound="sound/radiobot_station3_frage1_teil3.mp3"> Vor euch liegen verschiedene
+			Gegenstände, mit denen man Geräusche machen kann. Probiert sie aus
+			und sagt mir wie folgendes Geräusch hergestellt werden kann.
+		</dialogitem>
+	</mission>
+	<mission id="M_S3_qa_hufgetrappel" loopUntilSuccess="true"
+		type="TextQuestion" question="Womit kann man Hufgetrappel gut nachmachen?"
+		prompt="Statt echter Pferde ..." replyOnWrong="Das klappt nicht."
+		replyOnCorrect="Richtig. Mit Kokosnüssen könnt ihr Hufgetrappel ziemlich gut nachmachen."
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/hufgetrappel.mp3" type="PlayAudio" />
+				<action type="ShowAlert" message="Probiert es selbst aus!"
+					image="drawable/radiobot_small_transparent.png" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/radiobot_richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_klapptnicht.mp3" type="PlayAudio" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S3_qa_pistolenschuss" type="StartMission" />
+			</rule>
+		</onEnd>
+		<answers>
+			<answer>[Kk]okosnuss</answer>
+			<answer>[Kk]okosnuß</answer>
+			<answer>[Kk]okosnüsse</answer>
+			<answer>[Kk]okosnüße</answer>
+		</answers>
+	</mission>
+	<mission id="M_S3_qa_pistolenschuss" loopUntilSuccess="true"
+		type="TextQuestion" question="Und wie kann man einen Pistolenschuss gut nachmachen?"
+		prompt="Was würdet ihr nehmen ..." replyOnWrong="Das klappt nicht."
+		replyOnCorrect="Richtig. Mit einem Lineal kann man einen ganz ordentlichen Schuss knallen lassen."
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action type="ShowAlert" message="Probiert es selbst aus!"
+					image="drawable/radiobot_small_transparent.png" />
+				<action file="sound/radiobot_station3_frage_pistolenschuss.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="Score" value="100" />
+				<action file="sound/radiobot_richtig.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action type="Score" value="-20" />
+				<action file="sound/radiobot_falsch_klapptnicht.mp3" type="PlayAudio" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S6_outro" type="StartMission" />
+			</rule>
+		</onEnd>
+		<answers>
+			<answer>[Ll]ineal</answer>
+		</answers>
+	</mission>
+	<mission id="M_S6_outro" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/radiobot_wegbeschreibungstation3.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S6_S7" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/radiobot_weg_3_4_teil_1.mp3"> Ihr wart super Geräuschemacher und habt
+			das Rätsel gelöst!
+		</dialogitem>
+		<dialogitem sound="sound/6_out_2.mp3"> Die richtige Kanalzahl für die Frequenz
+			des Radioranzens lautet 7.
+		</dialogitem>
+	</mission>
+	<mission id="M_S6_S7" loopUntilSuccess="false" type="MultipleChoiceQuestion"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/weg_6_7.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S7_0" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Nun schnell zurück zum Radioranzen
+				(Startpunkt). Sucht
+				dort das nächste Radio, das euch
+				weiter hilft. Habt ihr
+				die
+				Station
+				gefunden?
+			</questiontext>
+			<answer correct="1" onChoose="Prima.">Ja, angekommen
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S7_0" image="drawable/logo_02_roboter.png" type="NPCTalk"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/radiobot_wegbeschreibungstation3.mp3"
+					type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S7_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/6_out_4.mp3">Glückwunsch!! Ihr habt es geschafft und
+			alle Zahlen für die Frequenz des Radioranzens zurückerobert.
+		</dialogitem>
+		<dialogitem sound="sound/6_out_5.mp3">Bevor ich euch alle Kanalzahlen anzeige,
+			müsst ihr noch eine Aufgabe erfüllen. Der Radioranzen benötigt
+			natürlich auch etwas zum Senden...
+		</dialogitem>
+	</mission>
+
+	<!-- ################################################################ -->
+
+	<!-- STATION 7 -->
+
+	<mission id="M_S7_1" endbuttontext="Zum QR Code ..."
+		image="drawable/logo_02_roboter.png" type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S7_qr_interview" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/radiobot_station2_teil1.mp3"> Im Programm von Radioranzen gibt es
+			verschiedene journalistische Elemente. Aber welche?
+		</dialogitem>
+		<dialogitem sound="sound/radiobot_station2_teil2.mp3"> Zu einem guten Radio gehören
+			journalistische Elemente wie: Umfrage, Interview, Kommentar, Feature,
+			gebauter Beitrag und Reportage.
+		</dialogitem>
+		<dialogitem sound="sound/radiobot_station2_teil3.mp3"> Aber was ist was? Scannt den QR Code
+			EINS ein
+			und ordnet das Hörbeispiel richtig zu.
+		</dialogitem>
+	</mission>
+	<mission id="M_S7_qr_interview" buttontext="QRCode scannen ..."
+		endbuttontext="Zur Frage ..."
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S2_Interview"
+		if_right="Erkennt ihr diese journalistische Form? Drücke den Button unten um zur Frage zu kommen ..."
+		if_wrong="Das ist nicht der richtige! Bitte scanne jetzt Code EINS."
+		initial_image="drawable/logo_02_roboter.png" mode="product"
+		taskdescription="Scanne den Code 1" type="QRTagReading"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/7_scanne_code_eins.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S7_qa_interview" type="StartMission" />
+			</rule>
+		</onEnd>
+		<onSuccess>
+			<rule>
+				<action file="sound/interview.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_klapptnicht.mp3" type="PlayAudio" />
+			</rule>
+		</onFail>
+	</mission>
+	<mission id="M_S7_qa_interview" loopUntilSuccess="true"
+		type="MultipleChoiceQuestion" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/7_interview_frage.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<if>
+					<eq>
+						<var>$_M_S7_qa_interview.result</var>
+						<string>Noch einmal hören</string>
+					</eq>
+				</if>
+				<action file="sound/interview.mp3" type="PlayAudio" />
+			</rule>
+			<rule>
+				<if>
+					<not>
+						<eq>
+							<var>$_M_S7_qa_interview.result</var>
+							<string>Noch einmal hören</string>
+						</eq>
+					</not>
+				</if>
+				<action type="PlayAudio" file="sound/radiobot_falsch_geraten.mp3" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S7_qr_jingle" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext>Was für eine journalistische Darstellungsform habt ihr
+				nun gehört?
+			</questiontext>
+			<answer correct="0" onChoose="Nein, das war keine Umfrage.">
+				Umfrage
+			</answer>
+			<answer correct="1" onChoose="Richtig!"> Interview
+			</answer>
+			<answer correct="0" onChoose="Nein, das war kein Kommentar.">
+				Kommentar
+			</answer>
+			<answer correct="0" onChoose="OK, ihr könnt es gerne noch einmal hören."
+				nextbuttontext="Wieder zur Frage"> Noch einmal hören
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S7_qr_jingle" buttontext="QRCode scannen ..."
+		endbuttontext="Zur Frage ..."
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S2_Jingle"
+		if_right="Was für ein akustisches Element habt ihr gehört? Drücke den Button unten um zur Frage zu kommen ..."
+		if_wrong="Das ist nicht der richtige! Bitte scanne jetzt Code ZWEI."
+		initial_image="drawable/logo_02_roboter.png" mode="product"
+		taskdescription="Scanne den Code 2" type="QRTagReading"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/7_scanne_code_zwei.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S7_qa_jingle" type="StartMission" />
+			</rule>
+		</onEnd>
+		<onSuccess>
+			<rule>
+				<action file="sound/jingle.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_nein.mp3" type="PlayAudio" />
+			</rule>
+		</onFail>
+	</mission>
+	<mission id="M_S7_qa_jingle" loopUntilSuccess="true"
+		type="MultipleChoiceQuestion" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/7_jingle_frage.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<if>
+					<eq>
+						<var>$_M_S7_qa_jingle.result</var>
+						<string>Noch einmal hören</string>
+					</eq>
+				</if>
+				<action file="sound/jingle.mp3" type="PlayAudio" />
+			</rule>
+			<rule>
+				<if>
+					<not>
+						<eq>
+							<var>$_M_S7_qa_jingle.result</var>
+							<string>Noch einmal hören</string>
+						</eq>
+					</not>
+				</if>
+				<action type="PlayAudio" file="sound/radiobot_falsch_geraten.mp3" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S7_qr_umfrage" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext> Was für ein akustisches Element habt ihr gehört?
+			</questiontext>
+			<answer correct="0" onChoose="Nein, das war keine Werbung.">
+				Werbung
+			</answer>
+			<answer correct="1" onChoose="Richtig!"> Jingle / Promo
+			</answer>
+			<answer correct="0" onChoose="Nein, das war kein Feature.">
+				Feature
+			</answer>
+			<answer correct="0" onChoose="OK, ihr könnt es gerne noch einmal hören."
+				nextbuttontext="Wieder zur Frage"> Noch einmal hören
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S7_qr_umfrage" buttontext="QRCode scannen ..."
+		endbuttontext="Zur Frage ..."
+		expected_content="http://www.audiokombinat.de/radioranzen/die-app-der-radioranzen/#S2_Umfrage"
+		if_right="Erkennt ihr diese journalistische Form? Drücke den Button unten um zur Frage zu kommen ..."
+		if_wrong="Das ist nicht der richtige! Bitte scanne jetzt Code DREI."
+		initial_image="drawable/logo_02_roboter.png" mode="product"
+		taskdescription="Scanne den Code 3" type="QRTagReading"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/7_scanne_code_drei.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action id="M_S7_qa_umfrage" type="StartMission" />
+			</rule>
+		</onEnd>
+		<onSuccess>
+			<rule>
+				<action file="sound/umfrage.mp3" type="PlayAudio" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<action file="sound/radiobot_falsch_klapptnicht.mp3" type="PlayAudio" />
+			</rule>
+		</onFail>
+	</mission>
+	<mission id="M_S7_qa_umfrage" loopUntilSuccess="true"
+		type="MultipleChoiceQuestion" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action file="sound/7_umfrage_frage.mp3" type="PlayAudio" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action file="sound/7_umfrage_richtig.mp3" type="PlayAudio" />
+				<action type="Score" value="100" />
+			</rule>
+		</onSuccess>
+		<onFail>
+			<rule>
+				<if>
+					<eq>
+						<var>$_M_S7_qa_umfrage.result</var>
+						<string>Noch einmal hören</string>
+					</eq>
+				</if>
+				<action file="sound/umfrage.mp3" type="PlayAudio" />
+			</rule>
+			<rule>
+				<if>
+					<not>
+						<eq>
+							<var>$_M_S7_qa_umfrage.result</var>
+							<string>Noch einmal hören</string>
+						</eq>
+					</not>
+				</if>
+				<action type="PlayAudio" file="sound/radiobot_falsch_geraten.mp3" />
+				<action type="Score" value="-20" />
+			</rule>
+		</onFail>
+		<onEnd>
+			<rule>
+				<action id="M_S7_aufnahme" type="StartMission" />
+			</rule>
+		</onEnd>
+		<question>
+			<questiontext> Was für eine journalistische Darstellungsform habt ihr
+				jetzt
+				gehört?
+			</questiontext>
+			<answer correct="1" onChoose="Ja, genau."> Umfrage
+			</answer>
+			<answer correct="0" onChoose="Nein, das war keine Nachricht.">
+				Nachricht
+			</answer>
+			<answer correct="0" onChoose="Nein, das war keine Reportage.">
+				Reportage
+			</answer>
+			<answer correct="0" onChoose="OK, ihr könnt es gerne noch einmal hören."
+				nextbuttontext="Wieder zur Frage"> Noch einmal hören
+			</answer>
+		</question>
+	</mission>
+	<mission id="M_S7_aufnahme" endbuttontext="Zum Recorder ..."
+		image="drawable/logo_02_roboter.png" type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S7_aufnahme_1" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/7_aufnahme_1.mp3">Damit der Radioranzen auch Programm zum
+			Senden hat, nehmt selbst eine Umfrage auf.
+		</dialogitem>
+		<dialogitem sound="sound/7_aufnahme_3.mp3">Achtung bitte haltet mich jetzt als euer
+			Aufnahmegerät
+			nicht zu nah an den Mund.
+			Denkt an die Ploppgeräusche!
+		</dialogitem>
+		<dialogitem sound="sound/7_aufnahme_4.mp3">Haltet mich ca. eine Faustbreite vom Mund
+			weg.
+		</dialogitem>
+	</mission>
+	<mission id="M_S7_aufnahme_1" type="AudioRecord"
+		task="Bereit das erste Statement aufzunehmen?" file="umfrage_1.3gp"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="Score" value="50" />
+			</rule>
+		</onSuccess>
+		<onEnd>
+			<rule>
+				<action id="M_S7_aufnahme_2" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S7_aufnahme_2" type="AudioRecord"
+		task="Bereit das zweite Statement aufzunehmen?" file="umfrage_2.3gp"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="Score" value="50" />
+			</rule>
+		</onSuccess>
+		<onEnd>
+			<rule>
+				<action id="M_S7_aufnahme_3" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S7_aufnahme_3" type="AudioRecord"
+		task="Bereit das dritte Statement aufzunehmen?" file="umfrage_3.3gp"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="Score" value="50" />
+			</rule>
+		</onSuccess>
+		<onEnd>
+			<rule>
+				<action id="M_S7_aufnahme_4" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S7_aufnahme_4" type="AudioRecord"
+		task="Bereit das vierte Statement aufzunehmen?" file="umfrage_4.3gp"
+		bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onSuccess>
+			<rule>
+				<action type="Score" value="50" />
+			</rule>
+		</onSuccess>
+		<onEnd>
+			<rule>
+				<action id="M_S7_aufnahme_fertig" type="StartMission" />
+			</rule>
+		</onEnd>
+	</mission>
+	<mission id="M_S7_aufnahme_fertig" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onEnd>
+			<rule>
+				<action id="M_S7_kanalzahlen" type="StartMission" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/7_fertig.mp3">Glückwunsch!! Ihr habt es geschafft und alle Zahlen für
+			die Frequenz des Radioranzens zurückerobert und auch einen kleinen
+			Beitrag produziert.
+		</dialogitem>
+	</mission>
+	<mission id="M_S7_kanalzahlen" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action type="StartMission" id="M_S7_ende" />
+			</rule>
+		</onEnd>
+		<dialogitem sound="sound/7_kanal_1.mp3"> Jetzt müsst ihr nur noch die Kanalzahlen
+			in die richtige Reihenfolge bringen.
+		</dialogitem>
+		<dialogitem sound="sound/7_kanal_2.mp3"> Denkt an das was ihr über den UKW –
+			Bereich gelernt habt. Die Frequenz liegt zwischen 87,5 – 108 MHZ. Los
+			geht’s.
+		</dialogitem>
+		<dialogitem sound="sound/7_kanal_3.mp3"> Tippt die Frequenz in den Radioranzen
+			ein.
+		</dialogitem>
+	</mission>
+	<mission id="M_S7_ende" image="drawable/logo_02_roboter.png"
+		type="NPCTalk" bgcolor="#FF1EA2FF">
+		<onStart>
+			<rule>
+				<action type="Vibrate" />
+				<action type="ShowAlert"
+					message="Ihr habt die Kanalzahlen 1, 0, 3, 0 und 7 gesammelt."
+					image="drawable/radiobot_small_transparent.png" />
+				<action type="Score" value="75" /> <!-- TODO remove line -->
+				<action type="PostScore"
+					script_url="http://www.audiokombinat.de/radioranzen/wp-content/plugins/" />
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action type="EndGame" />
+			</rule>
+		</onEnd>
+		<dialogitem> Ihr wart prima. Unter allen Teams bisher, mit @score@
+			von
+			1300 möglichen Punkten belegt ihr Rang
+			@user_score_rank@. Ihr
+			könnt
+			euch
+			das Ranking hier gleich auf unserem Blog ansehen.
+		</dialogitem>
+		<dialogitem sound="sound/tschuess.mp3"> Ich hoffe, dass ich euch helfen konnte
+			und sag schon mal
+			tschüss.
+		</dialogitem>
+	</mission>
+
+</game>
