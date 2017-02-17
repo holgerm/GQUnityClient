@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Text.RegularExpressions;
 using GQ.Client.Model;
+using UnityEngine.SceneManagement;
 
 public class page_textquestion : MonoBehaviour {
 
@@ -18,27 +19,28 @@ public class page_textquestion : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
-		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-		textquestion = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
-		
-		
+		GameObject questdbGO = GameObject.Find("QuestDatabase");
+
+		if ( questdbGO == null ) {
+
+			SceneManager.LoadScene("questlist");
+			return;
+		}
+
+		questdb = questdbGO.GetComponent<questdatabase>();
+		quest = questdbGO.GetComponent<questdatabase>().currentquest;
+		textquestion = questdbGO.GetComponent<questdatabase>().currentquest.currentpage;
+
 		if ( textquestion.onStart != null ) {
 			
 			textquestion.onStart.Invoke();
 		}
 		
-		
-		
-		
 		questiontext.text = questdb.GetComponent<actions>().formatString(textquestion.getAttribute("question"));
-		
-
 	}
 
 	public void checkAnswerFinal () {
-		Debug.Log("TextQuestion: START");
 		
 		string x = input.text;
 
@@ -74,20 +76,15 @@ public class page_textquestion : MonoBehaviour {
 			}
 
 			if ( b ) {
-				Debug.Log("TextQuestion: SUCCESS");
 
 				textquestion.state = "succeeded";
-
 				onSuccess();
 			}
 			else {
-
-				Debug.Log("TextQuestion: FAILURE");
-
 				
 				if ( !repeat ) {
+					
 					textquestion.state = "failed";
-
 					onFailure();
 				}
 
@@ -97,28 +94,20 @@ public class page_textquestion : MonoBehaviour {
 		else {
 
 			textquestion.state = "succeeded";
-
-
 		}
 		textquestion.result = x;
-
 
 		if ( textquestion.state == "succeeded" || !repeat ) {
 
 			onEnd();
-
 		}
-
-
-
-
 	}
 
 	public void onEnd () {
 		
 		if ( textquestion.state != "failed" ) {
+
 			textquestion.state = "succeeded";
-			
 		}
 		
 		if ( textquestion.onEnd != null ) {
@@ -128,11 +117,8 @@ public class page_textquestion : MonoBehaviour {
 		else
 		if ( !textquestion.onSuccess.hasMissionAction() && !textquestion.onFailure.hasMissionAction() ) {
 			
-			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
-			
+			questdb.endQuest();
 		}
-		
-		
 	}
 
 	public void onSuccess () {
@@ -144,8 +130,6 @@ public class page_textquestion : MonoBehaviour {
 			
 			textquestion.onSuccess.Invoke();
 		} 
-		
-		
 	}
 
 	public void onFailure () {
@@ -157,7 +141,5 @@ public class page_textquestion : MonoBehaviour {
 			
 			textquestion.onFailure.Invoke();
 		} 
-		
-		
 	}
 }
