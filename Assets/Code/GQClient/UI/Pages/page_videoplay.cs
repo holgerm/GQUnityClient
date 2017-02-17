@@ -9,7 +9,7 @@ public class page_videoplay : MonoBehaviour {
 	
 	public questdatabase questdb;
 	public Quest quest;
-	public QuestPage page;
+	public Page page;
 
 	public Texture2D bgImage;
 
