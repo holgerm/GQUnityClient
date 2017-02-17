@@ -2010,10 +2010,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {
@@ -2591,6 +2591,7 @@ public class questdatabase : MonoBehaviour {
 					     go.name != "EventSystem_Map" &&
 					     go.name != "BgCam" &&
 					     go.name != "QuestData(Clone)" &&
+					     go.name != "Audio Source(Clone)" &&
 					     go.name != "NetworkManager" &&
 					     !go.name.Contains("NetworkIdentity") &&
 					     go.name != "RouteRender" &&
