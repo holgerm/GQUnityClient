@@ -3604,7 +3604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &325989057
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9086,7 +9086,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   product: 6
-  toplogo: {fileID: 21300000, guid: b76e1c9a847c7478db32b922c17f512a, type: 3}
+  toplogo: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
   nameForQuest: Quest
   showMessageForDatasendAction: 1
   showPrivacyAgreement: 1
@@ -11648,13 +11648,9 @@ MonoBehaviour:
   filterinput: {fileID: 1039130551}
   downloadmsg: {fileID: 238289913}
   currentquest:
-    name: 
-    id: 0
-    lastUpdate: 0
-    xmlformat: 0
+    PageList: []
+    hotspotList: []
     filepath: 
-    pages: []
-    hotspots: []
     attributes: []
     metadata: []
     hasData: 0
@@ -13368,7 +13364,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: 0.00012207031}
+  m_AnchoredPosition: {x: 540.00006, y: 0}
   m_SizeDelta: {x: 1080, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1080246903
@@ -20318,13 +20314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentquest:
-    name: 
-    id: 0
-    lastUpdate: 0
-    xmlformat: 0
+    PageList: []
+    hotspotList: []
     filepath: 
-    pages: []
-    hotspots: []
     attributes: []
     metadata: []
     hasData: 0
@@ -20435,13 +20427,9 @@ MonoBehaviour:
   message_prefab: {fileID: 11441554, guid: 5f4326f904afd488eb75e6e7fabc9bd9, type: 2}
   msgcanvas: {fileID: 543903914}
   quest:
-    name: 
-    id: 0
-    lastUpdate: 0
-    xmlformat: 0
+    PageList: []
+    hotspotList: []
     filepath: 
-    pages: []
-    hotspots: []
     attributes: []
     metadata: []
     hasData: 0

@@ -75,7 +75,7 @@ namespace GQ.Client.Model {
 		}
 
 		public void ReadXml (System.Xml.XmlReader reader) {
-			Debug.Log("ReadXML called on " + GetType().Name);
+//			Debug.Log("ReadXML called on " + GetType().Name);
 
 			reader.MoveToContent();
 
@@ -104,7 +104,7 @@ namespace GQ.Client.Model {
 			bool read = false;
 			while ( read || reader.Read() ) {
 				read = false;
-				Debug.Log("Node Type is: " + reader.NodeType.ToString());
+//				Debug.Log("Node Type is: " + reader.NodeType.ToString());
 				switch ( reader.NodeType ) {
 					case XmlNodeType.Element:
 						switch ( reader.LocalName ) {
@@ -117,7 +117,7 @@ namespace GQ.Client.Model {
 										page = (PageNPCTalk)pageSerializer.Deserialize(reader);
 										read = true;
 										pageDict.Add(page.id, page);
-										Debug.Log("Added NPCTalk page id: " + page.id);
+//										Debug.Log("Added NPCTalk page id: " + page.id);
 
 										// TODO: get rid:
 										PageList.Add(page);
@@ -127,7 +127,7 @@ namespace GQ.Client.Model {
 										page = (Page)pageSerializer.Deserialize(reader);
 										read = true;
 										pageDict.Add(page.id, page);
-										Debug.Log("Added another page with id: " + page.id);
+//										Debug.Log("Added another page with id: " + page.id);
 
 										// TODO: get rid:
 										PageList.Add(page);
@@ -139,7 +139,7 @@ namespace GQ.Client.Model {
 								QuestHotspot hotspot = (QuestHotspot)hotspotSerializer.Deserialize(reader);
 								read = true;
 								hotspotDict.Add(hotspot.id, hotspot);
-								Debug.Log("Added hotspot id: " + hotspot.id);
+//								Debug.Log("Added hotspot id: " + hotspot.id);
 
 								// TODO: get rid:
 								hotspotList.Add(hotspot);

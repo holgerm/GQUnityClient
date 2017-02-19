@@ -43,7 +43,7 @@ public class onTapMarker : MonoBehaviour {
 			}
 			else {
 
-				Debug.Log("RETURN: marker,onMouseUp() -> hotspot.onTap.Invoke()");
+//				Debug.Log("RETURN: marker,onMouseUp() -> hotspot.onTap.Invoke()");
 
 				hotspot.hotspot.onTap.Invoke();
 			}
@@ -59,19 +59,19 @@ public class onTapMarker : MonoBehaviour {
 		if ( map.InputsEnabled ) {
 			GameObject qdbGO = GameObject.Find("QuestDatabase");
 			if ( qdbGO == null ) {
-				Debug.Log("Cannot find QuestDataBase GameObject");
+//				Debug.Log("Cannot find QuestDataBase GameObject");
 				return;
 			}
 			questdatabase qdb = qdbGO.GetComponent<questdatabase>();
 			if ( qdb == null ) {
-				Debug.Log("Cannot get component questdatabase");
+//				Debug.Log("Cannot get component questdatabase");
 				return;
 			}
 
 			if ( hotspot == null || hotspot.hotspot == null ) {
 				QuestRuntimeHotspot rtHotspot = qdb.getHotspot("" + hotspot.hotspot.id);
 				if ( rtHotspot == null ) {
-					Debug.Log("Cannot find hotspot with id: " + hotspot.hotspot.id);
+//					Debug.Log("Cannot find hotspot with id: " + hotspot.hotspot.id);
 					return;
 				}
 				hotspot = rtHotspot;

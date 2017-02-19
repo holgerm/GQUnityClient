@@ -1239,10 +1239,7 @@ public class questdatabase : MonoBehaviour {
 					if ( aq.start_longitude != 0f ) {
 						QuestHotspot qh = new QuestHotspot();
 				
-						QuestAttribute qa = new QuestAttribute("radius", "20");
-
-						qh.attributes = new List<QuestAttribute>();
-						qh.attributes.Add(qa);
+						qh.radius = 20;
 						QuestRuntimeHotspot qrh = new QuestRuntimeHotspot(qh, true, true, aq.start_latitude + "," + aq.start_longitude);
 
 						if ( aq.hasMeta("category") ) {
@@ -1427,7 +1424,7 @@ public class questdatabase : MonoBehaviour {
 
 		}
 
-		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1448");
+//		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1448");
 		currentquest = q;
 
 		if ( !islocal ) {
@@ -1931,8 +1928,8 @@ public class questdatabase : MonoBehaviour {
 		if ( currentquest != null && currentquest.hotspotList != null ) {
 			hotspots = new List<QuestRuntimeHotspot>();
 			foreach ( QuestHotspot qh in currentquest.hotspotList ) {
-				bool initialActivity = qh.hasAttribute("initialActivity") && qh.getAttribute("initialActivity") == "true";
-				bool initialVisibility = qh.hasAttribute("initialVisibility") && qh.getAttribute("initialVisibility") == "true";
+				bool initialActivity = qh.initialActivity;
+				bool initialVisibility = qh.initialVisibility;
 				hotspots.Add(new QuestRuntimeHotspot(qh, initialActivity, initialVisibility, qh.latlon));
 			}
 		}
@@ -2010,10 +2007,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-								".jpg",
-								".jpeg",
-								".gif",
-								".png"
+							".jpg",
+							".jpeg",
+							".gif",
+							".png"
 						};
 					}
 					else {

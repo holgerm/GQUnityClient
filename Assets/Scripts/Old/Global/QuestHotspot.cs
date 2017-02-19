@@ -73,6 +73,7 @@ public class QuestHotspot {
 		onTap;
 	public int startquest = 0;
 
+	[Obsolete]
 	public string getAttribute (string k) {
 		if ( attributes != null ) {
 			foreach ( QuestAttribute qa in attributes ) {
@@ -88,6 +89,7 @@ public class QuestHotspot {
 		
 	}
 
+	[Obsolete]
 	public bool hasAttribute (string k) {
 		
 		bool h = false;
@@ -127,8 +129,6 @@ public class QuestHotspot {
 		
 		attributes = new List<QuestAttribute>();
 		
-		attributes = new List<QuestAttribute>();
-		
 		if ( help_attributes != null ) {
 			foreach ( XmlAttribute xmla in help_attributes ) {
 				
@@ -139,13 +139,6 @@ public class QuestHotspot {
 					questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 								
 					string filename = "files/" + splitted[splitted.Length - 1];
-								
-//					int i = 0;
-//					while ( questdb.loadedfiles.Contains(filename) ) {
-//						i++;
-//						filename = "files/" + i + "_" + splitted[splitted.Length - 1];
-//									
-//					}
 								
 					questdb.loadedfiles.Add(filename);
 								
