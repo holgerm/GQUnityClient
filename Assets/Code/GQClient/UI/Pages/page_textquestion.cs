@@ -127,10 +127,22 @@ public class page_textquestion : MonoBehaviour {
 			textquestion.onEnd.Invoke();
 		}
 		else
-		if ( !textquestion.onSuccess.hasMissionAction() && !textquestion.onFailure.hasMissionAction() ) {
+		if ( !hasMissionAction(textquestion.onSuccess) && !hasMissionAction(textquestion.onFailure) ) {
 			
 			questdb.endQuest();
 		}
+	}
+
+	protected bool hasMissionAction (QuestTrigger evt) {
+		if ( evt == null )
+			return false;
+
+		foreach ( QuestAction a in evt.actions ) {
+			if ( a.hasMissionAction() ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void onSuccess () {

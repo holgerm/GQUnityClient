@@ -36,9 +36,9 @@ public class QuestTrigger {
 
 		bool b = false;
 			
-		if (actions != null) {
-			foreach (QuestAction a in actions) {
-				if (a.hasActionInChildren (type1)) {
+		if ( actions != null ) {
+			foreach ( QuestAction a in actions ) {
+				if ( a.hasActionInChildren(type1) ) {
 					b = true;
 				}
 			}
@@ -50,18 +50,17 @@ public class QuestTrigger {
 
 	public bool hasMissionAction () {
 		
-		bool b = false;
 		foreach ( QuestAction a in actions ) {
 
 			if ( a.hasMissionAction() ) {
 
-				b = true;
+				return true;
 
 			}
 
 		}
 
-		return b;
+		return false;
 
 	}
 	
