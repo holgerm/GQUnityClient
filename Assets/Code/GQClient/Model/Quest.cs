@@ -167,13 +167,26 @@ namespace GQ.Client.Model {
 
 		#region Runtime API
 
-		private bool _allowReturn = false;
+		public void GoBackOnePage () {
+			Page show = previouspages[previouspages.Count - 1];
+			previouspages.Remove(previouspages[previouspages.Count - 1]);
+
+			if ( _allowReturn > 0 )
+				_allowReturn--;
+
+			questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			questdb.changePage(show.id);
+
+		}
+
+		[SerializeField]
+		private int _allowReturn = 0;
 
 		public bool AllowReturn {
 			get {
 				if ( IndividualReturnDefinitions ) {
 					return (
-					    _allowReturn
+					    _allowReturn > 0
 					    && previouspages.Count > 0
 					    && previouspages[previouspages.Count - 1] != null
 					);
@@ -188,7 +201,10 @@ namespace GQ.Client.Model {
 				}
 			}
 			set { 
-				_allowReturn = value; 
+				if ( value == false )
+					_allowReturn = 0;
+				else
+					_allowReturn++;
 			}
 		}
 

@@ -422,15 +422,10 @@ namespace GQ.Client.UI.Pages {
 		}
 
 		public void backButton () {
-			
-			Page show = quest.previouspages[questdb.currentquest.previouspages.Count - 1];
-			quest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
+			quest.GoBackOnePage();
 
 			Destroy(image.texture);
 			Destroy(image);
-
-			questdb.changePage(show.id);
-		
 		}
 
 	}

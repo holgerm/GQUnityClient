@@ -84,11 +84,6 @@ public class actions : MonoBehaviour {
 
 	}
 
-	public void startWebXml (string x) {
-
-
-	}
-
 	public void sendVartoWeb () {
 
 		if ( Application.isWebPlayer ) {
@@ -941,10 +936,10 @@ public class actions : MonoBehaviour {
 		quest.previouspages.Add(quest.currentpage);
 
 		if ( action.hasAttribute("allowReturn") ) {
-			questdb.currentquest.AllowReturn = action.getBoolAttribute("allowReturn");
+			quest.AllowReturn = action.getBoolAttribute("allowReturn");
 		}
 		else {
-			questdb.currentquest.AllowReturn = false;
+			quest.AllowReturn = false;
 		}
 
 		questdb.changePage(int.Parse(action.getAttribute("id")));
