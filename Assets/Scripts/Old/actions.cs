@@ -940,11 +940,12 @@ public class actions : MonoBehaviour {
 
 		quest.previouspages.Add(quest.currentpage);
 
-		if ( questdb.currentquest.hasAttribute("individualReturnDefinitions") )
-			questdb.individualReturnDefinitions = questdb.currentquest.getBoolAttribute("individualReturnDefinitions");
-
-		if ( action.hasAttribute("allowReturn") )
-			questdb.allowReturn = action.getBoolAttribute("allowReturn");
+		if ( action.hasAttribute("allowReturn") ) {
+			questdb.currentquest.AllowReturn = action.getBoolAttribute("allowReturn");
+		}
+		else {
+			questdb.currentquest.AllowReturn = false;
+		}
 
 		questdb.changePage(int.Parse(action.getAttribute("id")));
 	}

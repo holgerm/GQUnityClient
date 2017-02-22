@@ -15,8 +15,6 @@ public class page_videoplay : MonoBehaviour {
 
 	public const int RESOLUTION = 720;
 
-	private bool videoplayed = false;
-
 	static string filepath;
 
 	public const string YOUTUBE_URL_PREFIX = "https://www.youtube.com/watch?v=";

@@ -423,8 +423,8 @@ namespace GQ.Client.UI.Pages {
 
 		public void backButton () {
 			
-			Page show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
-			questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
+			Page show = quest.previouspages[questdb.currentquest.previouspages.Count - 1];
+			quest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
 
 			Destroy(image.texture);
 			Destroy(image);

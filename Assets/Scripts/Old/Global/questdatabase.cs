@@ -60,8 +60,6 @@ public class questdatabase : MonoBehaviour {
 	public List<string> savedmessages;
 	public List<WWW> routewwws;
 	public createquestbuttons buttoncontroller;
-	public bool individualReturnDefinitions = false;
-	public bool allowReturn = false;
 	public RectTransform messageCanvas;
 	public privacyAgreement privacyAgreementObject;
 	public int privacyAgreementVersionRead = -1;

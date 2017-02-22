@@ -23,11 +23,11 @@ namespace GQ.Client.UI.Pages {
 			}
 
 			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-			page = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
+			quest = questdb.currentquest;
+			page = quest.currentpage;
 			questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();
 
-			InitBackButton(shouldShowBackButton);
+			InitBackButton(quest.AllowReturn);
 
 			TriggerOnStart();
 		}
@@ -35,32 +35,6 @@ namespace GQ.Client.UI.Pages {
 		protected void TriggerOnStart () {
 			if ( page.onStart != null ) {
 				page.onStart.Invoke();
-			}
-		}
-
-		/// <summary>
-		/// Each page should show a back button with function to go back to the last page, if adequate. 
-		/// Depends on global quest setting individualReturnDefinitions and action attribute allowReturn.
-		/// </summary>
-		private bool shouldShowBackButton {
-			get {
-				bool allowReturn = false;
-				if ( questdb.individualReturnDefinitions ) {
-					allowReturn = 
-					questdb.allowReturn
-					&& questdb.currentquest.previouspages.Count > 0
-					&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null;
-				}
-				else {
-
-					allowReturn = 
-					questdb.currentquest.previouspages.Count > 0
-					&& questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1] != null
-					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("MultipleChoiceQuestion")
-					&& !questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1].type.Equals("TextQuestion");
-				}
-
-				return allowReturn;
 			}
 		}
 

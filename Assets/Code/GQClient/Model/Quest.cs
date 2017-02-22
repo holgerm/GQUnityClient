@@ -32,6 +32,8 @@ namespace GQ.Client.Model {
 
 		public string XmlFormat { get; set; }
 
+		public bool IndividualReturnDefinitions { get; set; }
+
 		#endregion
 
 		#region Pages aka missions
@@ -97,6 +99,11 @@ namespace GQ.Client.Model {
 			// LastUpdate:
 			long lu;
 			LastUpdate = long.TryParse(reader.GetAttribute(GQML.QUEST_LASTUPDATE), out lu) ? lu : 0;
+
+			// IndividualReturnDefinitions:
+			bool ird;
+			IndividualReturnDefinitions = bool.TryParse(reader.GetAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS), out ird) ? ird : false;
+
 			// Content:
 			XmlSerializer pageSerializer;
 			XmlSerializer hotspotSerializer = new XmlSerializer(typeof(QuestHotspot));
@@ -154,6 +161,35 @@ namespace GQ.Client.Model {
 
 		public void WriteXml (System.Xml.XmlWriter writer) {
 			Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
+		}
+
+		#endregion
+
+		#region Runtime API
+
+		private bool _allowReturn = false;
+
+		public bool AllowReturn {
+			get {
+				if ( IndividualReturnDefinitions ) {
+					return (
+					    _allowReturn
+					    && previouspages.Count > 0
+					    && previouspages[previouspages.Count - 1] != null
+					);
+				}
+				else {
+					return (
+					    previouspages.Count > 0
+					    && previouspages[previouspages.Count - 1] != null
+					    && !previouspages[previouspages.Count - 1].type.Equals(GQML.PAGE_TYPE_TEXT_QUESTION)
+					    && !previouspages[previouspages.Count - 1].type.Equals(GQML.PAGE_TYPE_MULTIPLE_CHOICE_QUESTION)
+					);
+				}
+			}
+			set { 
+				_allowReturn = value; 
+			}
 		}
 
 		#endregion
