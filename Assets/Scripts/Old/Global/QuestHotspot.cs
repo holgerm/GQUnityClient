@@ -41,8 +41,9 @@ public class QuestHotspot {
 	[XmlAttribute("initialVisibility")]
 	public bool initialVisibility;
 
-	[XmlAttribute("img")]
-	public string imageURI;
+	// TODO: Do the loading of image files in the new version.
+	//	[XmlAttribute("img")]
+	//	public string imageURI;
 
 	[XmlAttribute("radius")]
 	public double radius;
@@ -131,7 +132,7 @@ public class QuestHotspot {
 		
 		if ( help_attributes != null ) {
 			foreach ( XmlAttribute xmla in help_attributes ) {
-				
+
 				if ( xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://") ) {
 								
 					string[] splitted = xmla.Value.Split('/');

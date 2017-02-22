@@ -37,10 +37,9 @@ public class Locationcontrol : MonoBehaviour {
 			if ( qrh.entered ) {
 
 				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') > qrh.hotspot.radius ) {
-					qrh.hotspot.onLeave.Invoke();
-					
-					qrh.entered = false;
 
+					qrh.hotspot.onLeave.Invoke();
+					qrh.entered = false;
 				}
 
 			}
@@ -49,6 +48,7 @@ public class Locationcontrol : MonoBehaviour {
 				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') < qrh.hotspot.radius ) {
 
 					if ( qrh.hotspot.onEnter != null ) {
+
 						qrh.hotspot.onEnter.Invoke();
 					}
 					qrh.entered = true;

@@ -21,7 +21,6 @@ public class QuestTrigger {
 		actions;
 
 	public void Invoke () {
-
 		if ( actions != null ) {
 			foreach ( QuestAction qa in actions ) {
 

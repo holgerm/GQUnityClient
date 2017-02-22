@@ -4,8 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NumberInputToHotspotOnEnd : MonoBehaviour
-{
+public class NumberInputToHotspotOnEnd : MonoBehaviour {
 
 
 
@@ -16,32 +15,33 @@ public class NumberInputToHotspotOnEnd : MonoBehaviour
 
 
 
-	public void triggerOnEnter ()
-	{
+	public void triggerOnEnter () {
 
 		noresult.enabled = false;
 
 		int x = 0;
-		int.TryParse (field.text, out x);
+		int.TryParse(field.text, out x);
 
 		x -= 200;
 
-		if (x > 0) {
+		if ( x > 0 ) {
 
 		
-			List<QuestRuntimeHotspot> list =	GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().getActiveHotspots ();
+			List<QuestRuntimeHotspot> list =	GameObject.Find("QuestDatabase").GetComponent<questdatabase>().getActiveHotspots();
 
-			if (list.Count > x) {
+			if ( list.Count > x ) {
 
-				list [x].hotspot.onEnter.Invoke ();
+				list[x].hotspot.onEnter.Invoke();
 
-			} else {
+			}
+			else {
 				noresult.enabled = true;
 
 
 			}
 
-		} else {
+		}
+		else {
 
 
 

@@ -9126,7 +9126,7 @@ MonoBehaviour:
   appVersionURL: https://quest-mill.com/appversion/121.html
   hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 17.1
+  subversionNumber: 17.2
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -10059,7 +10059,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

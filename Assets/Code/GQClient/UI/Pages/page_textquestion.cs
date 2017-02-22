@@ -54,6 +54,8 @@ public class page_textquestion : MonoBehaviour {
 	public void checkAnswerFinal () {
 		
 		string x = input.text;
+		textquestion.result = x;
+
 
 		bool repeat = false;
 		
@@ -69,16 +71,14 @@ public class page_textquestion : MonoBehaviour {
 			bool match;
 
 			foreach ( QuestContent y in textquestion.contents_answers ) {
-				if ( x == null || y == null || y.content == null )
+				if ( textquestion.result == null || y == null || y.content == null )
 					continue;
 				
-				match = Regex.IsMatch(x, y.content, RegexOptions.IgnoreCase);
+				match = Regex.IsMatch(textquestion.result, y.content, RegexOptions.IgnoreCase);
 
-				Debug.Log("TextQuestion: REGEXP " + x + " MATCH " + y.content + " -> " + match);
+				questdb.debug("REGEXP " + textquestion.result + " MATCH " + y.content + " -> " + match);
 
-				questdb.debug("REGEXP " + x + " MATCH " + y.content + " -> " + match);
-
-				if ( questdb.GetComponent<actions>().formatString(y.content) == x || match ) {
+				if ( match || questdb.GetComponent<actions>().formatString(y.content).Equals(textquestion.result) ) {
 					correct = true;
 					Debug.Log("TextQuestion: MATCHED");
 				}
@@ -107,7 +107,6 @@ public class page_textquestion : MonoBehaviour {
 
 			textquestion.state = "succeeded";
 		}
-		textquestion.result = x;
 
 		if ( textquestion.state == "succeeded" || !repeat ) {
 
