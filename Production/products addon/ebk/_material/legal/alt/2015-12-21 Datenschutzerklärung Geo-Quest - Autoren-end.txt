@@ -1,0 +1,41 @@
+Datenschutzerklärung und Einwilligung 
+Wir, das Erzbistum Köln, Körperschaft des öffentlichen Rechts (KdöR), Marzellenstraße 32, 50668 Köln, Deutschland, freuen uns über Ihr Interesse Tap-Erlebnis. Als Anbieter ist uns der sichere Umgang mit Ihren Daten besonders wichtig. Die Erhebung, Verarbeitung und Nutzung Ihrer personenbezogenen Daten geschieht ausschließlich unter Beachtung der geltenden datenschutzrechtlichen Bestimmungen und des Telemediengesetzes (TMG). Ohne Ihre Zustimmung werden wir Ihre personenbezogenen Daten nicht auf anderem Wege nutzen, als er sich aus oder im Zusammenhang mit dieser Datenschutzerklärung ergibt. Diese Datenschutzerklärung kann jederzeit auf der Webseite www.erzbistum.koeln.de abgerufen, abgespeichert und ausgedruckt werden. Wir möchten Ihnen nachfolgend erläutern, welche Daten wir wann und zu welchem Zweck erheben, verarbeiten und nutzen.
+
+1. Erhebung, Verarbeitung und Nutzung personenbezogener Daten
+Personenbezogene Daten sind Einzelangaben über persönliche und sachliche Verhältnisse einer bestimmten oder bestimmbaren Person also Daten die Rückschlüsse über eine Person zulassen. 
+Mit der Installation von Tap-Erlebnis erheben wir folgende Daten:
+a. Registrierung und Nutzung 
+Für die Erstellung von GeoQuests, ist eine Registrierung als Autor erforderlich. Mit der Registrierung erheben wir folgende Daten: 
+•	Name und 
+•	Email-Adresse.
+Diese Angaben werden benötigt, damit von Ihnen erstellte GeoQuests und hochgeladenen Medien Ihnen zugeordnet werden und Sie von anderen Autoren den Zugriff auf deren GeoQuests und Daten erhalten können, z. B. um gemeinsam an deren GeoQuests zu arbeiten. Ihre Mailadresse wird für alle Autoren sichtbar sein.
+b. Speicherdauer
+Der Namen und die E-Mail-Adresse des Autors werden solange gespeichert, bis alle GeoQuests und von ihm gespeicherten Medien gelöscht wurden. 
+1I. Weitergabe personenbezogener Daten an Dritte
+Wir werden personenbezogene Daten darüber hinaus nicht ohne Ihr ausdrückliches Einverständnis weitergeben, es sei denn, dass wir gesetzlich zur Herausgabe von Daten verpflichtet sind (Auskunft an Strafverfolgungsbehörden und Gerichte; Auskunft an öffentliche Stellen, die Daten aufgrund gesetzlicher Vorschriften erhalten, z.B. Sozialversicherungsträger, Finanzbehörden usw.) oder dass wir zur Durchsetzung unserer Forderungen zur Berufsverschwiegenheit verpflichtete Dritte einschalten.
+III. Datensicherheit
+Wir sichern unsere Systeme durch technische und organisatorische Maßnahmen gegen Verlust, Zerstörung, Zugriff, Veränderung oder Verbreitung Ihrer Daten durch unbefugte Personen. Trotz regelmäßiger Kontrollen ist ein vollständiger Schutz gegen alle Gefahren jedoch nicht möglich.
+GeoQuest verwendet an manchen Stellen zur Verschlüsselung den Industriestandard SSL (Secure Sockets Layer). Dadurch wird die Vertraulichkeit Ihrer persönlichen Angaben über das Internet gewährleistet.
+IV. Bekanntmachung von Veränderungen
+Gesetzesänderungen oder Änderungen unserer unternehmensinternen Prozesse können eine Anpassung dieser Datenschutzerklärung erforderlich machen. Für den Fall einer solchen Änderung werden wir Ihnen dies spätestens sechs Wochen vor Inkrafttreten der Änderung per E-Mail mitteilen.
+Ihnen steht generell ein Widerrufsrecht hinsichtlich Ihrer erteilten Einwilligungen zu. Bitte beachten Sie, dass (sofern Sie keinen Gebrauch von Ihrem Widerrufsrecht machen) die jeweils aktuelle Version der Datenschutzerklärung die gültige ist.
+
+V. Aktualisierung/ Löschung Ihrer persönlichen Daten
+
+Sie haben jederzeit die Möglichkeit, die uns zur Verfügung gestellten persönlichen Daten zu überprüfen, zu ändern oder selbst zu löschen. Eine Löschung Ihrer Daten ist jedoch nur dann möglich, wenn alle von Ihnen erstellten Quests und Medien bereits gelöscht sind.
+
+Ebenso haben Sie das Recht, einmal erteilte Einwilligungen mit Wirkung für die Zukunft jederzeit zu widerrufen.
+
+VI. Auskunftsrecht
+
+Sie haben ein Recht auf unentgeltliche Auskunft über Ihre gespeicherten Daten sowie ggf. ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten.
+
+VII. Ansprechpartner für Datenschutz
+
+Bei Fragen zur Erhebung, Verarbeitung oder Nutzung Ihrer personenbezogenen Daten, bei Auskünften, Berichtigung, Sperrung oder Löschung von Daten wenden Sie sich bitte an den betrieblichen Datenschutzbeauftragten 
+
+Erzbistum Köln
+Körperschaft des öffentlichen Rechts (KdöR)
+Marzellenstraße 32, 50668 Köln
+datenschutzbeauftragte@erzbistum-koeln.de
+gerne zur Verfügung.

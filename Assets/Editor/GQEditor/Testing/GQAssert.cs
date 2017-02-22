@@ -10,6 +10,8 @@ namespace GQTests {
 
 	public class GQAssert {
 
+		// TODO move these paths to Files class:
+
 		static private string _TEST_DATA_BASE_DIR = "Assets/Editor/GQTestsData/";
 
 		static public string TEST_DATA_BASE_DIR {

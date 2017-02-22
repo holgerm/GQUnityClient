@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 
 namespace GQ.Editor.Util {
+	
 	public static class Files {
 
 		#region Asset Agnostic API
@@ -40,6 +41,7 @@ namespace GQ.Editor.Util {
 				dirPath = dirPath.Substring(0, dirPath.Length - 2);
 
 			if ( Assets.IsAssetPath(dirPath) ) {
+				dirPath = Assets.RelativeAssetPath(dirPath);
 				if ( Assets.ExistsAssetAtPath(dirPath) )
 					// asset dir already exists:
 					return false;
@@ -283,17 +285,25 @@ namespace GQ.Editor.Util {
 				return Assets.copyAssetsDir(fromDirPath, toDirPath);
 			}
 			else {
-				return copyNonAssetsDir(fromDirPath, toDirPath);  
+				return copyDirToNonAssetsDir(fromDirPath, toDirPath);  
 			}
 			return false;
 		}
 
-		private static bool copyNonAssetsDir (string fromDirPath, string toDirPath, bool recursive = true) {
+		private static bool copyDirToNonAssetsDir (string fromDirPath, string toDirPath, bool recursive = true, bool copyContentsOnly = false) {
 			bool copied = true;
 
 			// create this folder within the target path:
-			DirectoryInfo copiedFolder = Directory.CreateDirectory(Files.CombinePath(toDirPath, Files.DirName(fromDirPath)));
-			copied &= copiedFolder.Exists; // copied dir should now exist in fromDir. 
+			string targetFolder;
+
+			if ( copyContentsOnly ) {
+				targetFolder = toDirPath;
+			}
+			else {
+				targetFolder = Files.CombinePath(toDirPath, Files.DirName(fromDirPath));
+				Directory.CreateDirectory(targetFolder);
+				copied &= Directory.Exists(targetFolder); // copied dir should now exist in fromDir. 
+			}
 
 			foreach ( string file in Directory.GetFiles(fromDirPath) ) {
 
@@ -301,14 +311,14 @@ namespace GQ.Editor.Util {
 
 				if ( !fileName.StartsWith(".") && !fileName.EndsWith(".meta") ) {
 
-					File.Copy(file, Files.CombinePath(copiedFolder.FullName, fileName));
+					File.Copy(file, Files.CombinePath(targetFolder, fileName));
 				}
 			}
 
 			if ( recursive )
 				foreach ( string subDir in Directory.GetDirectories(fromDirPath) ) {
 
-					copied &= copyNonAssetsDir(subDir, copiedFolder.FullName);
+					copied &= copyDirToNonAssetsDir(subDir, targetFolder, copyContentsOnly: false);
 				}
 
 			AssetDatabase.Refresh();
@@ -317,7 +327,7 @@ namespace GQ.Editor.Util {
 		}
 
 		// TODO additional parameter used as filter for excluded content (files and dirs)
-		public static bool CopyDirContents (string fromDirPath, string toDirPath, bool replace = true) {
+		public static bool CopyDirContents (string fromDirPath, string toDirPath, bool replace = true, bool copyContentsOnly = false) {
 			if ( !ExistsDir(fromDirPath) )
 				// nothing to copy:
 				return false;
@@ -337,9 +347,9 @@ namespace GQ.Editor.Util {
 				// case Asset -> Asset
 				return Assets.CopyAssetsDirContents(fromDirPath, toDirPath, true);
 			}
-			if ( !Assets.IsAssetPath(fromDirPath) && !Assets.IsAssetPath(toDirPath) ) {
-				// case Non-Asset -> Non-Asset
-				return copyNonAssetsDir(fromDirPath, toDirPath, replace);  
+			if ( !Assets.IsAssetPath(toDirPath) ) {
+				// case Asset or Non-Asset -> Non-Asset
+				return copyDirToNonAssetsDir(fromDirPath, toDirPath, replace, copyContentsOnly);  
 			}
 			return false;
 		}
@@ -397,6 +407,10 @@ namespace GQ.Editor.Util {
 			else
 				return ".";
 		}
+
+		#endregion
+
+		#region Paths
 
 		/// <summary>
 		/// Combines the path segments given. The first argument can be an absolute path, the follwing are always treated as relative: leading "/" are ignored.
@@ -467,138 +481,58 @@ namespace GQ.Editor.Util {
 
 			// the "normal" case - return the last segment of the path:
 			return pathSegments[lastIndex];
+		}
+
+		/// <summary>
+		/// Returns the path to the parent dir of the given filePath. If the given filePath denotes the root dir, an argument Exception is thrown.
+		/// </summary>
+		/// <returns>The dir.</returns>
+		/// <param name="filePath">File path.</param>
+		public static string ParentDir (string filePath) {
+			// eliminate trailing slash:
+			if ( filePath.EndsWith("/") || filePath.EndsWith("/.") )
+				filePath = filePath.Substring(0, filePath.Length - 1);
 			
+			// eliminate multi slashes:
+			filePath = Regex.Replace(filePath, "/+", PATH_ELEMENT_SEPARATOR);
+
+			// eliminate dot segments:
+			filePath = Regex.Replace(filePath, "^.\\./", "");
+
+			// reduce path for double dot segments:
+			filePath = Regex.Replace(filePath, "(/?)\\w+/\\.\\.", "");
+
+			// short cut to simple pathological cases:
+			if ( filePath.Equals("/") ||
+			     filePath.Equals("") ||
+			     filePath.Equals(".") ||
+			     filePath.Equals("/.") ||
+			     filePath.Equals("..") ||
+			     filePath.Equals("/..") )
+				throw new ArgumentException("No parent exists for given filePath.");
+
+			string[] pathSegments = filePath.Split(SEPARATORS, StringSplitOptions.RemoveEmptyEntries);
+
+			if ( pathSegments.Length == 0 )
+				throw new ArgumentException("No parent exists for given filePath.");
+
+			if ( pathSegments.Length == 1 )
+				return "/";
+
+			StringBuilder result = new StringBuilder();
+
+			if ( filePath.StartsWith("/") )
+				result.Append("/");
+
+			for ( int i = 0; i < pathSegments.Length - 1; i++ ) {
+				result.Append(pathSegments[i]);
+				result.Append(PATH_ELEMENT_SEPARATOR);
+			}
+
+			return result.ToString();
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Clears the directory, i.e. deletes all contained files including subdirectories. 
-		/// The directory itself remains empty but is not deleted.
-		/// </summary>
-		/// <param name="dirPath">Dir path.</param>
-		[Obsolete("Use ClearDir() instead which is Asset agnostic.")]
-		public static void ClearDirectory (string dirPath) {
-			DirectoryInfo downloadedMessageInfo = new DirectoryInfo(dirPath);
-			
-			foreach ( FileInfo file in downloadedMessageInfo.GetFiles() ) {
-				file.Delete(); 
-			}
-
-			foreach ( DirectoryInfo dir in downloadedMessageInfo.GetDirectories() ) {
-				dir.Delete(true); 
-			}
-		}
-
-		/// <summary>
-		/// Checks whether the given file exists with at least one of the given extensions. 
-		/// The argument filePath has to be given WITHOUT any extension.
-		/// </summary>
-		/// <param name="filePath">File path.</param>
-		/// <param name="allowedExtensions">Allowed extensions.</param>
-		[Obsolete("Do we really need these image specific functions?")]
-		public static bool Exists (string filePath, string[] allowedExtensions) {
-			bool exists = false;
-			int i = 0;
-			while ( !exists && i < allowedExtensions.Length ) {
-				exists |= File.Exists(filePath + allowedExtensions[i]);
-				i++;
-			}
-			return exists;
-		}
-
-		/// <summary>
-		/// Checks whether the given image file exists with at least one of the allowed extensions (cf. ImageExtension). 
-		/// The argument filePath has to be given WITHOUT any extension.
-		/// </summary>
-		/// <param name="filePath">File path.</param>
-		[Obsolete("Do we really need these image specific functions?")]
-		public static bool ExistsImage (string filePath) {
-			return Exists(filePath, ImageExtensions);
-		}
-
-		/// <summary>
-		/// Delete the specified file (with any of the given extensions).
-		/// </summary>
-		/// <param name="filePath">File path.</param>
-		/// <param name="extensions">Extensions.</param>
-		[Obsolete("Do we really need these image specific functions?")]
-		public static void Delete (string filePath, string[] extensions) {
-			foreach ( string ext in extensions ) {
-				if ( File.Exists(filePath + ext) ) {
-					File.Delete(filePath + ext);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Deletes the image file (with any extension, cf.ImageExtensions).
-		/// </summary>
-		/// <param name="filePath">File path.</param>
-		[Obsolete("Do we really need these image specific functions?")]
-		public static void DeleteImage (string filePath) {
-			Delete(filePath, ImageExtensions);
-		}
-
-		/// <summary>
-		/// Copy the specified file from sourceFilePath to targetFilePath. Any given extensions will be copied.
-		/// </summary>
-		/// <param name="sourceFilePath">Source file path.</param>
-		/// <param name="targetFilePath">Target file path.</param>
-		/// <param name="extensions">Extensions.</param>
-		[Obsolete("Do we really need these image specific functions?")]
-		public static void Copy (string sourceFilePath, string targetFilePath, string[] extensions) {
-			if ( !Exists(sourceFilePath, extensions) ) {
-				// if source file not exists ignore the copy call:
-				return;
-			}
-
-			// delete all matching target files:
-			Delete(targetFilePath, extensions);
-			bool copied = false;
-			int i = 0;
-			while ( !copied && i < extensions.Length ) {
-				// copy file with all found extensions:
-				if ( File.Exists(sourceFilePath + extensions[i]) ) {
-					File.Copy(sourceFilePath + extensions[i], targetFilePath + extensions[i], true);
-					copied = true;
-				}
-				i++;
-			}
-		}
-
-		/// <summary>
-		/// Copies the directory and overwrites if target already exists.
-		/// </summary>
-		/// <returns><c>true</c>, if directory was copyed, <c>false</c> otherwise.</returns>
-		/// <param name="originalDirPath">Original dir path.</param>
-		/// <param name="targetPath">Target path must denote the path of the target dir that not exists yet.</param>
-		[Obsolete("Use Files.CopyDir() instead.")]
-		public static void CopyDirectoryFiles (string originalDirPath, string targetPath) {
-			DirectoryInfo origin = new DirectoryInfo(originalDirPath);
-			if ( !origin.Exists ) {
-				throw new ArgumentException("Can not copy from the non existing directory path: " + originalDirPath);
-			}
-			DirectoryInfo target = new DirectoryInfo(targetPath);
-			if ( target.Exists ) {
-				target.Delete(true);
-			}
-
-			target.Create();
-			foreach ( var file in origin.GetFiles() ) {
-				file.CopyTo(target.FullName + PATH_ELEMENT_SEPARATOR + file.Name);
-			}
-		}
-
-		/// <summary>
-		/// Copies the image file from sourceFilePath to targetFilePath. Keeps any allowed extension (cf. ImageExtensions).
-		/// </summary>
-		/// <param name="sourceFilePath">Source file path.</param>
-		/// <param name="targetFilePath">Target file path.</param>
-		[Obsolete("Do we really need these image specific functions?")]
-		public static void CopyImage (string sourceFilePath, string targetFilePath) {
-			Copy(sourceFilePath, targetFilePath, ImageExtensions);
-		}
 
 		#region Directory Features
 
@@ -694,10 +628,41 @@ namespace GQ.Editor.Util {
 
 		#endregion
 
+		#region Asset Database Related
+
+		public static void StripAssetMetadata (string dir) {
+			
+			if ( Assets.IsAssetPath(dir) )
+				throw new ArgumentException("DO NOT strip metadata from asset files and directories as " + dir);
+			
+			string[] files = Directory.GetFiles(dir);
+			foreach ( var file in files ) {
+				if ( file.EndsWith(".meta") )
+					File.Delete(file);
+			}
+
+			string[] subdirs = Directory.GetDirectories(dir);
+
+			foreach ( var subdir in subdirs ) {
+				StripAssetMetadata(subdir);
+			}
+		}
+
+		#endregion
+
+
+		#region Access File Contents
+
+		public static string ReadText (string path) {
+			FileInfo file = new FileInfo(path);
+			StreamReader reader = file.OpenText();
+			string stringRead = reader.ReadToEnd();
+			reader.Close();
+			return stringRead;
+		}
+
+		#endregion
 
 	}
-
-
-
 
 }

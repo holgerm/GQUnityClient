@@ -1,0 +1,2403 @@
+[
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.717705,
+                "longitude": 7.082507
+            },
+            {
+                "latitude": 50.717705,
+                "longitude": 7.082507
+            }
+        ],
+        "iconPath": null,
+        "id": 9675,
+        "lastUpdate": 1476209502727,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Letzte Schicht",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.717014,
+                "longitude": 7.08263
+            },
+            {
+                "latitude": 50.717014,
+                "longitude": 7.08263
+            }
+        ],
+        "iconPath": null,
+        "id": 9674,
+        "lastUpdate": 1476209559719,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Soennecken Mausoleum",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.735363,
+                "longitude": 7.099769
+            }
+        ],
+        "iconPath": "",
+        "id": 9668,
+        "lastUpdate": 1474546344204,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Dreick 6 ehmals 210",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.736076,
+                "longitude": 7.106631
+            }
+        ],
+        "iconPath": "",
+        "id": 9667,
+        "lastUpdate": 1474469380764,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Ein Pult für LvB",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.734272,
+                "longitude": 7.0991473
+            }
+        ],
+        "iconPath": "",
+        "id": 9666,
+        "lastUpdate": 1474467708487,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethovendenkmal tour",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.735462,
+                "longitude": 7.1018724
+            },
+            {
+                "latitude": 50.735462,
+                "longitude": 7.1018724
+            }
+        ],
+        "iconPath": null,
+        "id": 9662,
+        "lastUpdate": 1473495151353,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Markt",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.735367,
+                "longitude": 7.1020765
+            },
+            {
+                "latitude": 50.735367,
+                "longitude": 7.1020765
+            }
+        ],
+        "iconPath": null,
+        "id": 9661,
+        "lastUpdate": 1473494838499,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Marktfontaine mit Obelisk",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.7346,
+                "longitude": 7.1139426
+            },
+            {
+                "latitude": 50.7346,
+                "longitude": 7.1139426
+            }
+        ],
+        "iconPath": null,
+        "id": 9660,
+        "lastUpdate": 1475235031144,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.special"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Rheinnixe",
+        "typeID": 3186,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.7332,
+                "longitude": 7.09911
+            }
+        ],
+        "iconPath": "",
+        "id": 9664,
+        "lastUpdate": 1474466020744,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Kapitelhaus des Cassius-Stifts",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.732346,
+                "longitude": 7.109882
+            },
+            {
+                "latitude": 50.732346,
+                "longitude": 7.109882
+            }
+        ],
+        "iconPath": null,
+        "id": 9659,
+        "lastUpdate": 1475234950520,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.special"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Rheinnixe ",
+        "typeID": 3186,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73276,
+                "longitude": 7.101063
+            },
+            {
+                "latitude": 50.73276,
+                "longitude": 7.101063
+            }
+        ],
+        "iconPath": null,
+        "id": 9658,
+        "lastUpdate": 1473496604091,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.special"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "HARIBO Store",
+        "typeID": 3186,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.735085,
+                "longitude": 7.102166
+            }
+        ],
+        "iconPath": "",
+        "id": 9536,
+        "lastUpdate": 1472842129903,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Gasthaus Zehrgarten",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.714317,
+                "longitude": 7.0805707
+            },
+            {
+                "latitude": 50.714317,
+                "longitude": 7.0805707
+            }
+        ],
+        "iconPath": null,
+        "id": 9501,
+        "lastUpdate": 1473498365630,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Heilige Stiege",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.793667,
+                "longitude": 6.9106417
+            },
+            {
+                "latitude": 50.793667,
+                "longitude": 6.9106417
+            }
+        ],
+        "iconPath": null,
+        "id": 9471,
+        "lastUpdate": 1472370839818,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Pfarrkirche St. Walburga",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.79402,
+                "longitude": 6.9098477
+            },
+            {
+                "latitude": 50.79402,
+                "longitude": 6.9098477
+            }
+        ],
+        "iconPath": null,
+        "id": 9467,
+        "lastUpdate": 1472045276406,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Walberberger Hexenturm",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.72048,
+                "longitude": 7.121014
+            },
+            {
+                "latitude": 50.72048,
+                "longitude": 7.121014
+            }
+        ],
+        "iconPath": null,
+        "id": 9465,
+        "lastUpdate": 1470242837266,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Landesvertretung NRW",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.734173,
+                "longitude": 7.107049
+            },
+            {
+                "latitude": 50.734173,
+                "longitude": 7.107049
+            }
+        ],
+        "iconPath": null,
+        "id": 9317,
+        "lastUpdate": 1469374931585,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethovendenkmal Lüpertz",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.6837,
+                "longitude": 7.17547
+            },
+            {
+                "latitude": 50.6837,
+                "longitude": 7.17547
+            }
+        ],
+        "iconPath": null,
+        "id": 8944,
+        "lastUpdate": 1455182669158,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.restaurant"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Rheinhotel Dreesen",
+        "typeID": 2005,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.740456,
+                "longitude": 7.103074
+            }
+        ],
+        "iconPath": "",
+        "id": 9155,
+        "lastUpdate": 1472496167340,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethon",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73689,
+                "longitude": 7.09477
+            },
+            {
+                "latitude": 50.73689,
+                "longitude": 7.09477
+            }
+        ],
+        "iconPath": null,
+        "id": 8907,
+        "lastUpdate": 1454350795356,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Stadthaus",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.736973,
+                "longitude": 7.1012073
+            }
+        ],
+        "iconPath": "",
+        "id": 9143,
+        "lastUpdate": 1463575750861,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Kammemusiksaal",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.733997,
+                "longitude": 7.102929
+            }
+        ],
+        "iconPath": "",
+        "id": 9139,
+        "lastUpdate": 1472839812944,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Schloßkirche",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+
+        ],
+        "iconPath": "",
+        "id": 9137,
+        "lastUpdate": 1474466521361,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Denkmal",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.722836,
+                "longitude": 7.0931716
+            },
+            {
+                "latitude": 50.722836,
+                "longitude": 7.0931716
+            }
+        ],
+        "iconPath": null,
+        "id": 9672,
+        "lastUpdate": 1476034295567,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Villa Soennecken",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.72648,
+                "longitude": 7.0975647
+            },
+            {
+                "latitude": 50.72648,
+                "longitude": 7.0975647
+            }
+        ],
+        "iconPath": null,
+        "id": 9671,
+        "lastUpdate": 1475090704882,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Robert Schuman - ein wahrer Europäer ",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73506,
+                "longitude": 7.1028543
+            },
+            {
+                "latitude": 50.73506,
+                "longitude": 7.1028543
+            }
+        ],
+        "iconPath": null,
+        "id": 9670,
+        "lastUpdate": 1474622652612,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Altes Rathaus",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.735252,
+                "longitude": 7.102414
+            },
+            {
+                "latitude": 50.735252,
+                "longitude": 7.102414
+            }
+        ],
+        "iconPath": null,
+        "id": 9650,
+        "lastUpdate": 1473348767508,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.beethovenfest"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Bühne frei für Beethoven: Auf dem Marktplatz",
+        "typeID": 3184,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73568,
+                "longitude": 7.1013355
+            },
+            {
+                "latitude": 50.73568,
+                "longitude": 7.1013355
+            }
+        ],
+        "iconPath": null,
+        "id": 9525,
+        "lastUpdate": 1472477313045,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.cafe"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Café Müller-Langhardt",
+        "typeID": 2001,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.7264,
+                "longitude": 7.09381
+            },
+            {
+                "latitude": 50.7264,
+                "longitude": 7.09381
+            }
+        ],
+        "iconPath": null,
+        "id": 9524,
+        "lastUpdate": 1472492377706,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.cafe"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Kaffeerad",
+        "typeID": 2001,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.734497,
+                "longitude": 7.098158
+            },
+            {
+                "latitude": 50.734497,
+                "longitude": 7.098158
+            }
+        ],
+        "iconPath": null,
+        "id": 9466,
+        "lastUpdate": 1472495614763,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.info"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Bonn Information",
+        "typeID": 2003,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.736202,
+                "longitude": 7.0921416
+            }
+        ],
+        "iconPath": "",
+        "id": 9154,
+        "lastUpdate": 1472496282284,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Grab Mutter Beethovens",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.740818,
+                "longitude": 7.1045976
+            }
+        ],
+        "iconPath": "",
+        "id": 9153,
+        "lastUpdate": 1472496433844,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethovenhalle",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.735977,
+                "longitude": 7.1066794
+            }
+        ],
+        "iconPath": "",
+        "id": 9144,
+        "lastUpdate": 1472054952518,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Rheingasse 24",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.73478,
+                "longitude": 7.101449
+            }
+        ],
+        "iconPath": "",
+        "id": 9141,
+        "lastUpdate": 1472496912799,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Alte Remigiuskirche",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.734108,
+                "longitude": 7.1001773
+            }
+        ],
+        "iconPath": "",
+        "id": 9138,
+        "lastUpdate": 1463575145140,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Breuningsches Haus",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.67114,
+                "longitude": 7.185021
+            },
+            {
+                "latitude": 50.67114,
+                "longitude": 7.185021
+            }
+        ],
+        "iconPath": null,
+        "id": 9785,
+        "lastUpdate": 1481541103855,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Ehemaliges Schloss Deichmanns Aue",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.73688,
+                "longitude": 7.1011753
+            }
+        ],
+        "iconPath": "",
+        "id": 9142,
+        "lastUpdate": 1472496765650,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethovenhaus",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": "",
+        "hotspots": [
+            {
+                "latitude": 50.681515,
+                "longitude": 7.153017
+            }
+        ],
+        "iconPath": "",
+        "id": 9140,
+        "lastUpdate": 1472839586876,
+        "metadata": [
+            {
+                "key": "author",
+                "value": ""
+            },
+            {
+                "key": "age",
+                "value": "0"
+            },
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethoven Redoute",
+        "typeID": 2942,
+        "version": ""
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.717575,
+                "longitude": 7.1190333
+            },
+            {
+                "latitude": 50.717575,
+                "longitude": 7.1190333
+            }
+        ],
+        "iconPath": null,
+        "id": 6904,
+        "lastUpdate": 1439469978937,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.culture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Haus der Geschichte",
+        "typeID": 1985,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.7185,
+                "longitude": 7.1243763
+            },
+            {
+                "latitude": 50.7185,
+                "longitude": 7.1243763
+            }
+        ],
+        "iconPath": null,
+        "id": 7007,
+        "lastUpdate": 1439481348302,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Vicus Bonnensis",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.707085,
+                "longitude": 7.145362
+            },
+            {
+                "latitude": 50.707085,
+                "longitude": 7.145362
+            }
+        ],
+        "iconPath": null,
+        "id": 7006,
+        "lastUpdate": 1439480695460,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.nature"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Rheinaue",
+        "typeID": 2004,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.733994,
+                "longitude": 7.0995173
+            },
+            {
+                "latitude": 50.733994,
+                "longitude": 7.0995173
+            }
+        ],
+        "iconPath": null,
+        "id": 7024,
+        "lastUpdate": 1473498706606,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Münsterplatz",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73336,
+                "longitude": 7.1002474
+            },
+            {
+                "latitude": 50.73336,
+                "longitude": 7.1002474
+            }
+        ],
+        "iconPath": null,
+        "id": 7026,
+        "lastUpdate": 1472493421827,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Cassius und Florentius ",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73487,
+                "longitude": 7.101524
+            },
+            {
+                "latitude": 50.73487,
+                "longitude": 7.101524
+            }
+        ],
+        "iconPath": null,
+        "id": 7023,
+        "lastUpdate": 1439727779557,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Skulptur Mean Average",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.733837,
+                "longitude": 7.100086
+            },
+            {
+                "latitude": 50.733837,
+                "longitude": 7.100086
+            }
+        ],
+        "iconPath": null,
+        "id": 7021,
+        "lastUpdate": 1472493315329,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Historische Stadtansicht",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73337,
+                "longitude": 7.099539
+            },
+            {
+                "latitude": 50.73337,
+                "longitude": 7.099539
+            }
+        ],
+        "iconPath": null,
+        "id": 7016,
+        "lastUpdate": 1472494897664,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Bonner Münster",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.734467,
+                "longitude": 7.0992975
+            },
+            {
+                "latitude": 50.734467,
+                "longitude": 7.0992975
+            }
+        ],
+        "iconPath": null,
+        "id": 7015,
+        "lastUpdate": 1439642839694,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.restaurant"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Restaurant MIDI",
+        "typeID": 2005,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.735558,
+                "longitude": 7.09146
+            },
+            {
+                "latitude": 50.735558,
+                "longitude": 7.09146
+            }
+        ],
+        "iconPath": null,
+        "id": 7027,
+        "lastUpdate": 1439728602656,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.nature"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Alter Friedhof",
+        "typeID": 2004,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.734447,
+                "longitude": 7.098718
+            },
+            {
+                "latitude": 50.734447,
+                "longitude": 7.098718
+            }
+        ],
+        "iconPath": null,
+        "id": 7025,
+        "lastUpdate": 1439728178377,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Dechanten- und Fürstenberg-Palais ",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73471,
+                "longitude": 7.1015077
+            },
+            {
+                "latitude": 50.73471,
+                "longitude": 7.1015077
+            }
+        ],
+        "iconPath": null,
+        "id": 7022,
+        "lastUpdate": 1472493192290,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.history"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Remigiusplatz",
+        "typeID": 2002,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.734215,
+                "longitude": 7.0991583
+            },
+            {
+                "latitude": 50.734215,
+                "longitude": 7.0991583
+            }
+        ],
+        "iconPath": null,
+        "id": 7017,
+        "lastUpdate": 1472493694613,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Beethovendenkmal",
+        "typeID": 1986,
+        "version": null
+    },
+    {
+        "featuredImagePath": null,
+        "hotspots": [
+            {
+                "latitude": 50.73357,
+                "longitude": 7.102699
+            },
+            {
+                "latitude": 50.73357,
+                "longitude": 7.102699
+            }
+        ],
+        "iconPath": null,
+        "id": 7008,
+        "lastUpdate": 1472494746930,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.architecture"
+            },
+            {
+                "key": "city",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Bonn"
+            },
+            {
+                "key": "administrative",
+                "value": "Regierungsbezirk Köln"
+            },
+            {
+                "key": "state",
+                "value": "Nordrhein-Westfalen"
+            },
+            {
+                "key": "country",
+                "value": "Deutschland"
+            }
+        ],
+        "name": "Kurfürstliches Schloß",
+        "typeID": 1986,
+        "version": null
+    }
+]

@@ -1,0 +1,44 @@
+<game id="8944" name="Rheinhotel Dreesen" xmlformat="5">
+	<mission endbuttontext="Zurück zur Karte" id="23433" image="http://qeevee.org:9091/uploadedassets/281/editor/8944/1_dreesen3.jpg" mode="Komplett anzeigen" nextdialogbuttontext="Zurück zur Karte" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onStart>
+			<rule>
+				<action type="SetVariable" var="content">
+					<value>
+						<string>Das Hotel Dressen ist mit seiner exponierten Lage am Rhein, mit Blick auf das Siebengebirge und seiner Geschichte eines der bekanntesten Hotels am Rhein. Das Haus beherbergte schon Anfang des 20. Jahrhunderts bekannte Persönlichkeiten aus Politik und Kultur. So Kronprinz Wilhelm, die Reichspräsidenten Friedrich Ebert und Paul von Hindenburg. Bekannte Filmschauspieler der der frühen Filmgeschichte waren Charlie Chaplin, Hans Albers und Marlene Dietrich. Adolf Hitler traf sich hier mit dem Britischen Premierminister Chamberlain um über die „Sudentenfrage“ zu verhandeln. Das Haus überstand die Wirren des zweiten Weltkrieges in vielerlei Funktionen. So wurde es bis Kriegsende u.a als Sitz des Armee Oberkommandos und als Unterkunft für Diplomaten die bei der französischen Vichy-Regierung genutzt. Mit Ende des Krieges im Rheinland war es kurz Quartier des Amerikanischen Oberkommandierenden und späteren US Präsidenten Dwight David „Ike“ Eisenhower, dann Erholungseinrichtung der Britischen Royal Air Force und anschließen stand es belgischen Truppen zur Verfügung. Ab 1949 war das Hotel zunächst Hauptquartier der Hohen Kommissare der Besatzungsmächte. Im November 1952 nahm das Hotel seinen Betrieb wieder auf und war in der jungen Bundesrepublik Gastgeber vieler Politiker, Diplomaten und Journalisten.&lt;br&gt;Das Haus bietet für seien Gäste einen gehoben Komfort sowohl im Hotel- wie auch im Restaurantbereich an. Besonders ist der herrliche Blick auf den Rhein und das Siebengebirge und die einzigartige Außengastronomie mit dem Kastaniengarten zu nennen.</string>
+					</value>
+				</action>
+				<action type="SetVariable" var="link">
+					<value>
+						<string>http://www.rheinhoteldreesen.de</string>
+					</value>
+				</action>
+			</rule>
+		</onStart>
+		<onEnd>
+			<rule>
+				<action type="EndGame"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="24829">&lt;b&gt;@quest.name@&lt;/b&gt;&lt;br&gt;@content@&lt;br&gt;&lt;br&gt;&lt;a href=&quot;@link@&quot;&gt;@link@&lt;/a&gt;&lt;br&gt;</dialogitem>
+	</mission>
+	<mission id="23434" type="MetaData">
+		<stringmeta id="24830" key="category" value="wcc.restaurant"/>
+		<stringmeta id="24831" key="city" value="Bonn"/>
+		<stringmeta id="24832" key="administrative" value="Bonn"/>
+		<stringmeta id="24833" key="administrative" value="Regierungsbezirk Köln"/>
+		<stringmeta id="24834" key="state" value="Nordrhein-Westfalen"/>
+		<stringmeta id="24835" key="country" value="Deutschland"/>
+	</mission>
+	<hotspot id="10547" img="http://qeevee.org:9091/uploadedassets/281/editor/7005/1_restaurant.png" initialActivity="true" initialVisibility="true" latlong="50.6837,7.17547" radius="20">
+		<onTap>
+			<rule>
+				<action allowReturn="0" id="23433" type="StartMission"/>
+			</rule>
+		</onTap>
+		<onEnter>
+			<rule>
+				<action allowReturn="0" id="23433" type="StartMission"/>
+			</rule>
+		</onEnter>
+	</hotspot>
+</game>

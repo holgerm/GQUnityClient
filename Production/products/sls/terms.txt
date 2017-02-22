@@ -1,0 +1,30 @@
+Anbieter dieser App ist die QuestMill GmbH, CLostermannstr. 1, 51065 Köln, Deutschland. Der Anbieter dieser App betreibt ein Webportal, auf dem registrierte Mitglieder (nachfolgend „Autoren“) mithilfe des Global Position Systems (GPS) interaktive Touren zu verschiedenen Themenbereichen erstellen können (nachfolgend „GeoQuests“). Hierzu erstellt der Autor anhand von GPS-Koordinaten eine Route die sich unter Zuhilfenahme von Bildern, Texten, Videoclips und Voice-Messages mit verschiedenen Themenbereichen auseinandersetzt. Die GeoQuests werden sowohl registrierten, als auch nicht registrierten Nutzern über eine Smartphone-Applikation (nachfolgend „App“) zur Verfügung gestellt.
+
+1.	Geltungsbereich der Nutzungsbedingungen
+Diese Nutzungsbedingungen gelten für alle Inhalte und Dienste, die der Anbieter im Rahmen des Webportals und der App angeboten werden. Die Nutzungsbedingungen sind jederzeit abrufbar. Entgegenstehende oder diesen Nutzungsbedingungen abweichende Bedingungen des Nutzer haben keine Geltung.
+
+2.	Bereitstellungsbedingungen
+2.1.	Durch die unentgeltliche Bereitstellung sowie durch einen entsprechenden Abruf der GeoQuests seitens der nicht registrierten Nutzer wird kein Vertragsverhältnis zwischen dem Anbieter und dem jeweiligen Nutzer begründet.
+2.2.	Der Anbieter ist bemüht, einen ordnungsgemäßen Betrieb des Webportals sicherzustellen, steht jedoch nicht für die ununterbrochene Nutzbarkeit bzw. Erreichbarkeit des Webportals ein. Dies gilt insbesondere für technisch bedingte Verzögerungen im Rahmen von Wartungsarbeiten oder Weiterentwicklungen, Unterbrechungen oder Ausfälle der Angebote, des Internets oder des Zugangs zum Internet.
+2.3.	Der Anbieter behält sich vor, Teile der Angebote, einzelne Angebote oder alle Angebote als Ganzes ohne gesonderte Vorankündigung zu verändern oder die Veröffentlichung zeitweise oder endgültig einzustellen. Entschädigungsansprüche des Nutzers entstehen hieraus nicht.
+
+3.	Haftung und Haftungsbeschränkung
+3.1.	Der Anbieter ist nicht verpflichtet und auch nicht in der Lage, die Rechtmäßigkeit der von Nutzern oder den Autoren hochgeladenen oder publizierten Inhalte umfassend zu prüfen, zu überwachen und/oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Das gleiche gilt, wenn und soweit von den Angeboten des Anbieters auf Webseiten Dritter verlinkt oder verwiesen wird. Der Anbieter macht sich die von Nutzern hochgeladenen oder publizierten Inhalte sowie die auf den Webseiten Dritter liegenden, durch Link verknüpften Inhalte nicht zu Eigen. Der Anbieter steht nicht dafür ein, dass diese Inhalte rechtmäßig, korrekt, aktuell und/oder vollständig sind. Für Schäden, die Aufgrund der Nutzung dieser Inhalte entstehen haftet der Anbieter nicht.
+3.2.	Wenn der Anbieter Hinweise auf Gesetzesverstöße oder Rechtsverletzungen durch fremde oder verlinkte Inhalte erhält, wird der Anbieter soweit eine Pflicht besteht die Inhalte überprüfen und erforderlichenfalls sperren und löschen.
+3.3.	Der Anbieter haftet für Schadensersatz oder Ersatz vergeblicher Aufwendungen unbeschränkt bei Vorsatz oder grober Fahrlässigkeit, für die Verletzung von Leben, Leib oder Gesundheit, nach den Vorschriften des Produkthaftungsgesetzes.
+3.4.	Bei leicht fahrlässiger Verletzung einer Pflicht, die wesentlich für die Erreichung des Vertragszwecks ist (Kardinalpflicht), ist die Haftung des Anbieters der Höhe nach begrenzt auf den Schaden, der nach der Art des fraglichen Geschäfts vorhersehbar und typisch ist.
+3.5.	Die vorstehende Haftungsbeschränkung der Ziff. 3.3. – 3.4. gilt auch für die persönliche Haftung der Mitarbeiter, Vertreter und Organe des Anbieters.
+3.6.	Eine darüber hinausgehende Haftung besteht nicht.
+
+4.	Offenlegung von Informationen
+Der Anbieter ist berechtigt, vorhandene Informationen von und über Nutzer ohne dessen ausdrückliches Einverständnis an Dritte herauszugeben, soweit er hierzu verpflichtet oder dies nach pflichtgemäßen Ermessen notwendig und rechtlich zulässig ist, um gesetzliche Bestimmungen oder richterliche oder behördliche Anordnungen zu erfüllen.
+
+5.	Anwendbares Recht, Gerichtsstand
+5.1.	Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss der Normen des Kollisionsrechts und des UN-Kaufrechts.
+5.2.	Gerichtsstand für alle Streitigkeiten ist – soweit gesetzlich zulässig – der Sitz des Anbieters.
+
+6.	Salvatorische Klausel
+Sollten einzelne Regelungen der Nutzungsbedingungen unwirksam sein oder werden, wird dadurch die Wirksamkeit der übrigen Regelungen nicht berührt. Sofern Teile der Nutzungsbedingungen der geltenden Rechtslage nicht, nicht mehr oder nicht vollständig entsprechen sollten, bleiben die übrigen Teile in ihrem Inhalt und ihrer Gültigkeit davon unberührt und der ungültige Teil gilt als durch einen solchen ersetzt, der dem Sinn und Zweck des unwirksamen Teils bzw. dem Parteiwillen in rechtswirksamer Weise wirtschaftlich am nächsten kommt.
+
+7.	Änderungsvorbehalt
+Der Anbieter hat das Recht, Bestimmungen dieser Nutzungsbedingungen zu ändern, wenn ein wichtiger Grund hierfür vorliegt.

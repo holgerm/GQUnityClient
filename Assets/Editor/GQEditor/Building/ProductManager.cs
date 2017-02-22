@@ -13,16 +13,19 @@ using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
+using System.Reflection;
 
 namespace GQ.Editor.Building {
 	public class ProductManager {
 
-		#region Paths and Storage
+		#region Names, Paths and Storage
 
 		/// <summary>
 		/// In this directory all defined products are stored. This data is NOT included in the app build.
 		/// </summary>
-		public const string PRODUCTS_DIR_PATH_DEFAULT = "Assets/Editor/products/";
+		private static string PRODUCTS_DIR_PATH_DEFAULT = Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
 
 		/// <summary>
 		/// This is the template for new products which is copied when we create a new product. It should contain a complete product definition.
@@ -87,6 +90,35 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		public const string START_SCENE = "Assets/Scenes/StartScene.unity";
+		public const string LOADING_CANVAS_NAME = "LoadingCanvas";
+		public const string LOADING_CANVAS_PREFAB = "loadingCanvas/LoadingCanvas";
+		public const string LOADING_CANVAS_CONTAINER_TAG = "LoadingCanvasContainer";
+
+		#endregion
+
+		#region State
+
+
+		private bool _configFilesHaveChanges;
+
+		/// <summary>
+		/// True if current configuration has changes that are not persistantly stored in the product specifications. 
+		/// Any change of files within the ConfigAssets/Resources folder will set this flag to true. 
+		/// Pressing the persist button in the GQ Product Editor will set it to false.
+		/// </summary>
+		public bool ConfigFilesHaveChanges {
+			get {
+				return _configFilesHaveChanges;
+			}
+			set {
+				if ( _configFilesHaveChanges != value ) {
+					_configFilesHaveChanges = value;
+					EditorPrefs.SetBool("configDirty", _configFilesHaveChanges);
+				}
+			}
+		}
+
 		#endregion
 
 
@@ -131,6 +163,7 @@ namespace GQ.Editor.Building {
 			}
 		}
 
+		// TODO move test instance stuff into a testable subclass?
 		static private ProductManager _testInstance;
 
 		public static ProductManager TestInstance {
@@ -164,14 +197,23 @@ namespace GQ.Editor.Building {
 		}
 
 		internal void InitProductDictionary () {
+			string oldSelectedProductID = null;
+			if ( _currentProduct != null )
+				oldSelectedProductID = _currentProduct.Id;
+			
 			_productDict = new Dictionary<string, ProductSpec>();
-			_currentProduct = null;
 
 			IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
 
 			foreach ( var productCandidatePath in productDirCandidates ) {
 				LoadProductSpec(productCandidatePath);
 			}
+
+			if ( oldSelectedProductID != null ) {
+				_productDict.TryGetValue(oldSelectedProductID, out _currentProduct);
+			}
+			else
+				_currentProduct = null;
 		}
 
 		/// <summary>
@@ -219,9 +261,8 @@ namespace GQ.Editor.Building {
 			}
 
 			// copy default template files to a new product folder:
-			Assets.CreateSubfolder(ProductsDirPath, newProductID);
-			AssetDatabase.Refresh();
-			Assets.CopyAssetsDirContents(TEMPLATE_PRODUCT_PATH, newProductDirPath);
+			Files.CreateDir(newProductDirPath);
+			Files.CopyDirContents(TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
 			// create Config, populate it with defaults and serialize it into the new product folder:
 			createConfigWithDefaults(newProductID);
@@ -278,6 +319,8 @@ namespace GQ.Editor.Building {
 		/// <param name="productID">Product I.</param>
 		public void PrepareProductForBuild (string productID) {
 			
+			ProductEditor.IsCurrentlyPreparingProduct = true;
+
 			string productDirPath = Files.CombinePath(ProductsDirPath, productID);
 
 			if ( !Directory.Exists(productDirPath) ) {
@@ -327,13 +370,6 @@ namespace GQ.Editor.Building {
 				), 
 				ANDROID_MANIFEST_DIR
 			);
-//			AssetDatabase.DeleteAsset(ANDROID_MANIFEST_PATH);
-//			AssetDatabase.MoveAsset(
-//				Files.CombinePath(
-//					BuildExportPath, 
-//					ProductSpec.ANDROID_MANIFEST
-//				), 
-//				ANDROID_MANIFEST_PATH);
 
 			// copy StreamingAssets:
 			if ( Files.ExistsDir(STREAMING_ASSET_PATH) )
@@ -350,14 +386,80 @@ namespace GQ.Editor.Building {
 			PlayerSettings.productName = newProduct.Config.name;
 			PlayerSettings.bundleIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
 
-			// store current PlayerPrefs: TODO
-
+			replaceLoadingLogoInScene(START_SCENE);
 
 			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = newProduct; // remember the new product for the editor time access point.
 			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
+
+			ProductEditor.IsCurrentlyPreparingProduct = false;
+			GQAssetChangePostprocessor.writeBuildDate();
 		}
 
+		private void replaceLoadingLogoInScene (string scenePath) {
+			// save currently open scenes and open start scene:
+			EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+			EditorSceneManager.OpenScene(scenePath); 
+			Scene startScene = SceneManager.GetSceneByPath(scenePath);
+
+			if ( !startScene.IsValid() ) {
+				Errors.Add("Start scene is not valid or not found.");
+				return;
+			}
+
+			// destroy old loading canvas if exists:
+			foreach ( GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG) ) {
+				foreach ( Transform child in lcc.transform ) {
+					UnityEngine.Object.DestroyImmediate(child.gameObject);
+				}
+			}
+
+
+			// load prefab for loading canvas:
+			GameObject loadingCanvasPrefab = Resources.Load<GameObject>(LOADING_CANVAS_PREFAB);
+			if ( loadingCanvasPrefab == null ) {
+				Errors.Add("Product misses LoadingCanvas prefab.");
+				return;
+			}
+
+			// instantiate new loading canvas(es) from prefab into all LCCs:
+			foreach ( GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG) ) {
+				foreach ( Transform child in lcc.transform ) {
+					UnityEngine.Object.DestroyImmediate(child.gameObject);
+				}
+
+				GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab, startScene);
+				if ( loadingCanvas == null ) {
+					Errors.Add("Unable to create LoadingCanvas.");
+					return;
+				}
+				loadingCanvas.transform.parent = lcc.transform;
+				loadingCanvas.name = LOADING_CANVAS_NAME;
+
+				// if product has initializer call it:
+				Type loadingCanvasType = null;
+				try {
+					loadingCanvasType = Type.GetType("GQ.Client.Conf.LoadingCanvas");
+				} catch ( Exception e ) {
+					Debug.Log("Exception: " + e.Message);
+					loadingCanvasType = null;
+				}
+				if ( loadingCanvasType != null ) {
+					Debug.Log("found type: " + loadingCanvasType.FullName);
+					MethodInfo initMethod = 
+						loadingCanvasType.GetMethod(
+							"Init", 
+							new Type[] {
+								typeof(UnityEngine.GameObject) 
+							}
+						);
+					if ( initMethod != null )
+						initMethod.Invoke(null, new GameObject[] {
+							loadingCanvas
+						});
+				}
+			}
+		}
 
 		#endregion
 
@@ -379,6 +481,8 @@ namespace GQ.Editor.Building {
 			string json = JsonConvert.SerializeObject(config, Formatting.Indented);
 			string configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
 			File.WriteAllText(configFilePath, json);
+			if ( Assets.IsAssetPath(configFilePath) )
+				AssetDatabase.Refresh();
 		}
 
 		/// <summary>

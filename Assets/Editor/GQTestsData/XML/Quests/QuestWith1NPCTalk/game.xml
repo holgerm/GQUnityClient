@@ -1,0 +1,5 @@
+<game id="9802" lastUpdate="1485246286886" name="QuestWith1NPCTalk" xmlformat="5">
+	<mission endbuttontext="&gt;" id="26821" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<dialogitem blocking="false" id="29781">Erster Text</dialogitem>
+	</mission>
+</game>

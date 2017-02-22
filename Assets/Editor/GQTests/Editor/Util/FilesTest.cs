@@ -32,6 +32,21 @@ namespace GQTests.Editor.Util {
 		protected static string targetNonAssetDirPath =
 			Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "Targets");
 
+		[SetUp]
+		public void ensureEmptyDirs () {
+			if ( !Files.ExistsDir(originAssetDirEmptyPath) )
+				Files.CreateDir(originAssetDirEmptyPath);
+
+			if ( !Files.ExistsDir(targetAssetDirPath) )
+				Files.CreateDir(targetAssetDirPath);
+			
+			if ( !Files.ExistsDir(originNonAssetDirEmptyPath) )
+				Files.CreateDir(originNonAssetDirEmptyPath);
+
+			if ( !Files.ExistsDir(targetNonAssetDirPath) )
+				Files.CreateDir(targetNonAssetDirPath);
+		}
+
 
 		#region Assertion Helpers
 

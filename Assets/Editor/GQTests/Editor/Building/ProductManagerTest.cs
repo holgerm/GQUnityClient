@@ -17,6 +17,18 @@ namespace GQTests.Editor.Building {
 
 		[SetUp]
 		public void initPM () {
+			string newProductsDir = Files.CombinePath(PRODUCTS_TEST_DIR, "NewProducts");
+			if ( !Files.ExistsDir(newProductsDir) )
+				Files.CreateDir(newProductsDir);
+
+			string dirWithEmptyProductList = Files.CombinePath(PRODUCTS_TEST_DIR, "ProductListEmpty");
+			if ( !Files.ExistsDir(dirWithEmptyProductList) )
+				Files.CreateDir(dirWithEmptyProductList);
+
+			string configResourcesDir = Files.CombinePath(PRODUCTS_TEST_DIR, "Output/ConfigAssets/Resources");
+			if ( !Files.ExistsDir(configResourcesDir) )
+				Files.CreateDir(configResourcesDir);
+			
 			ProductManager._dispose();
 			testPM = ProductManager.TestInstance;
 			prodPM = ProductManager.Instance;
@@ -36,7 +48,7 @@ namespace GQTests.Editor.Building {
 			ProductManager pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.AreEqual(ProductManager.PRODUCTS_DIR_PATH_DEFAULT, ProductManager.ProductsDirPath);
+			Assert.AreEqual(ProductManager.ProductsDirPath, ProductManager.ProductsDirPath);
 			Assert.AreEqual(0, pm.Errors.Count, pm.Errors.Count > 0 ? "Unexpected errors. The first is: " + pm.Errors[0].ToString() : "No errors as expected.");
 		}
 
@@ -59,9 +71,10 @@ namespace GQTests.Editor.Building {
 		public void CreateNewProduct () {
 			// Arrange:
 			string testDir = Files.CombinePath(PRODUCTS_TEST_DIR, "NewProducts");
-			if ( !Directory.Exists(testDir) )
-				Assets.CreateSubfolder(PRODUCTS_TEST_DIR, "NewProducts");
-			Assets.ClearAssetFolder(testDir);
+			if ( !Files.ExistsDir(testDir) )
+				Files.CreateDir(testDir);
+			Files.ClearDir(testDir);
+
 
 			ProductManager.ProductsDirPath = testDir;
 			ProductManager prodPM = ProductManager.Instance;
@@ -87,7 +100,7 @@ namespace GQTests.Editor.Building {
 				product.Errors.Count + " errors):\n" + product.AllErrorsAsString()
 			);
 
-			// TODO Animation for loading logo
+			// TODO Loading Canvas (copy default when creating new product)
 
 			// Config file:
 			Assert.That(File.Exists(product.ConfigPath), "Config file should exist at " + product.ConfigPath);

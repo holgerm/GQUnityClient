@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using System.Collections;
+using GQ.Client.Model;
 
 public class EditorPairing : MonoBehaviour {
 
@@ -69,7 +70,7 @@ public class EditorPairing : MonoBehaviour {
 			if ( www.text != "" ) {
 
 				Quest q = new Quest();
-				q.id = int.Parse(www.text);
+				q.Id = int.Parse(www.text);
 				q.alternateDownloadLink = "http://qeevee.org:9091/device/" + SystemInfo.deviceUniqueIdentifier + "/getxml";
 
 				GetComponent<questdatabase>().downloadQuest(q);
@@ -163,9 +164,9 @@ public class EditorPairing : MonoBehaviour {
 	public void getKey () {
 		if ( !hasPairingKey ) {
 
-			string keyURL = "http://qeevee.org:9091/devices/pair/" 
-				+ SystemInfo.deviceModel +
-				"/" + SystemInfo.deviceUniqueIdentifier;
+			string keyURL = "http://qeevee.org:9091/devices/pair/"
+			                + SystemInfo.deviceModel +
+			                "/" + SystemInfo.deviceUniqueIdentifier;
 			keyURL = keyURL.Replace(" ", string.Empty);
 			WWW kwww = new WWW(keyURL);
 

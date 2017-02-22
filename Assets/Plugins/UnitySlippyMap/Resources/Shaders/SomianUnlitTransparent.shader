@@ -13,9 +13,10 @@ Shader "Somian/Unlit/Transparent" {
 	 
 	    SubShader {Pass {
 	        GLSLPROGRAM
-	        varying mediump vec2 uv;
-	        
+
+
 	        #ifdef VERTEX
+	        varying mediump vec2 uv;
 	        uniform mediump vec4 _MainTex_ST;
 	        void main() {
 	            gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
@@ -24,6 +25,7 @@ Shader "Somian/Unlit/Transparent" {
 	        #endif
 	        
 	        #ifdef FRAGMENT
+	        varying mediump vec2 uv;
 	        uniform lowp sampler2D _MainTex;
 	        uniform lowp vec4 _Color;
 	        void main() {

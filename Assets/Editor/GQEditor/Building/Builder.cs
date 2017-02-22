@@ -6,7 +6,10 @@ using System;
 using System.IO;
 using GQ.Client.Conf;
 using UnityEditor.Callbacks;
+
+#if UNITY_IOS
 using UnityEditor.iOS.Xcode;
+#endif
 
 namespace GQ.Editor.Building {
 	public class Builder {
@@ -202,6 +205,8 @@ namespace GQ.Editor.Building {
 		}
 
 
+		#if UNITY_IOS
+		
 		[PostProcessBuildAttribute(1)]
 		public static void AmendUsageRightsInfosToPList_IOS_Only (BuildTarget target, string pathToBuiltProject) {
 			Debug.Log("Build done. Target was " + target.ToString() + "; build path is: " + pathToBuiltProject);
@@ -216,11 +221,14 @@ namespace GQ.Editor.Building {
 			infoPlist.root.SetString("NSAppleMusicUsageDescription", "In interactive quests audio that you recorded may be stored on your phone.");
 			infoPlist.root.SetString("NSCameraUsageDescription", "Photos can be used in interactive quests.");
 			infoPlist.root.SetString("NSPhotoLibraryUsageDescription", "In interactive quests photos that you take may be stored on your phone.");
+			infoPlist.root.SetString("NSMicrophoneUsageDescription", "In interactive quests microphone can be used to let you record audio.");
 			infoPlist.root.SetBoolean("ITSAppUsesNonExemptEncryption", false);
 			infoPlist.WriteToFile(infoPath);
 
 			Debug.Log("Build for iOS: PList enhanced by usage strings about access rights.");
 		}
+
+		#endif
 	
 	}
 

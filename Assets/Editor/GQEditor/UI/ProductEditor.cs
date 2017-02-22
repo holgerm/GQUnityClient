@@ -23,6 +23,20 @@ namespace GQ.Editor.UI {
 		private Texture warnIcon;
 		Vector2 scrollPos;
 
+		private static string _currentBuildName = null;
+
+		public static string CurrentBuildName {
+			get {
+				if ( _currentBuildName == null ) {
+					_currentBuildName = currentBuild();
+				}
+				return _currentBuildName;
+			}
+			set {
+				_currentBuildName = value;
+			}
+		}
+
 		internal const string WARN_ICON_PATH = "Assets/Editor/GQEditor/images/warn.png";
 
 		private static bool _buildIsDirty = false;
@@ -47,6 +61,17 @@ namespace GQ.Editor.UI {
 			}
 		}
 
+		private static bool _isCurrentlyPreparingProduct = false;
+
+		public static bool IsCurrentlyPreparingProduct {
+			get {
+				return _isCurrentlyPreparingProduct;
+			}
+			set {
+				_isCurrentlyPreparingProduct = value;
+			}
+		}
+
 
 		[MenuItem("Window/QuestMill Product Editor")]
 		public static void  Init () {
@@ -63,41 +88,30 @@ namespace GQ.Editor.UI {
 
 		int selectedProductIndex;
 
-		ProductManager pm;
+		ProductManager _pm;
+
+		public ProductManager Pm {
+			get {
+				if ( _pm == null )
+					_pm = ProductManager.Instance;
+				return _pm;
+			}
+			set {
+				_pm = value;
+			}
+		}
 
 		public void OnEnable () {
 			Instance = this;
 
 			readStateFromEditorPrefs();
 			warnIcon = (Texture)AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
-
-			pm = ProductManager.Instance;
 		}
 
 		void readStateFromEditorPrefs () {
 			selectedProductIndex = EditorPrefs.HasKey("selectedProductIndex") ? EditorPrefs.GetInt("selectedProductIndex") : 0;
+			Pm.ConfigFilesHaveChanges = EditorPrefs.HasKey("configDirty") ? EditorPrefs.GetBool("configDirty") : false;
 		}
-
-		//		public void OnDisable () {
-		//			// make some saves?
-		////			Debug.Log("EDITOR.OnDisable() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
-		//		public void OnFocus () {
-		//			// make some saves?
-		//			Debug.Log("EDITOR.OnFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
-		//		public void OnLostFocus () {
-		//			// make some saves?
-		//			Debug.Log("EDITOR.OnLostFocus() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
-		//		public void OnProjectChange () {
-		//			// TODO: rescan products folder and build folder
-		//			Debug.Log("EDITOR.OnProjectChange() " + DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff tt"));
-		//		}
-		//
 
 		#region GUI
 
@@ -141,14 +155,17 @@ namespace GQ.Editor.UI {
 			GUILayout.Label("Product Manager", EditorStyles.boldLabel);
 
 			// Current Build:
-			string buildName = currentBuild();
+			CurrentBuildName = currentBuild();
+
+			string shownBuildName; 
 			EditorGUILayout.BeginHorizontal();
 			{
-				if ( buildName == null ) {
-					buildName = "missing";
+				if ( CurrentBuildName == null ) {
+					shownBuildName = "missing";
 					EditorGUILayout.PrefixLabel(new GUIContent("Current Build:", warnIcon));
 				}
 				else {
+					shownBuildName = CurrentBuildName;
 					if ( BuildIsDirty ) {
 						EditorGUILayout.PrefixLabel(new GUIContent("Current Build:", warnIcon));
 					}
@@ -156,18 +173,29 @@ namespace GQ.Editor.UI {
 						EditorGUILayout.PrefixLabel(new GUIContent("Current Build:"));
 					}
 				}
-				GUILayout.Label(buildName);
+				GUILayout.Label(shownBuildName);
+
+				if ( Pm.ConfigFilesHaveChanges ) {
+					if ( GUILayout.Button("Persist Changes") ) {
+						Files.CopyDirContents(
+							ConfigurationManager.RUNTIME_PRODUCT_DIR, 
+							Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
+							copyContentsOnly: true
+						);
+						Pm.ConfigFilesHaveChanges = false;
+					}
+				}
 			}
 			EditorGUILayout.EndHorizontal();
 
-			if ( selectedProductIndex < 0 || selectedProductIndex >= pm.AllProductIds.Count )
+			if ( selectedProductIndex < 0 || selectedProductIndex >= Pm.AllProductIds.Count )
 				selectedProductIndex = 0;
-			string selectedProductName = pm.AllProductIds.ElementAt(selectedProductIndex);
+			string selectedProductName = Pm.AllProductIds.ElementAt(selectedProductIndex);
 
 			GUIContent prepareBuildButtonGUIContent, availableProductsPopupGUIContent, newProductLabelGUIContent, createProductButtonGUIContent;
 
 			if ( configIsDirty ) {
-				// add tooltip to explain why these elements they are disabled:
+				// adding tooltip to explain why these elements are disabled:
 				string explanation = "You must Save or Revert your changes first.";
 				prepareBuildButtonGUIContent = new GUIContent("Prepare Build", explanation);
 				availableProductsPopupGUIContent = new GUIContent("Available Products:", explanation);
@@ -186,13 +214,13 @@ namespace GQ.Editor.UI {
 				EditorGUILayout.BeginHorizontal();
 				{
 					if ( GUILayout.Button(prepareBuildButtonGUIContent) ) {
-						pm.PrepareProductForBuild(selectedProductName);
+						Pm.PrepareProductForBuild(selectedProductName);
 					}
 				}
 				EditorGUILayout.EndHorizontal();
 
 				// Product Selection Popup:
-				string[] productIds = pm.AllProductIds.ToArray<string>();
+				string[] productIds = Pm.AllProductIds.ToArray<string>();
 				// SORRY: This is to fulfill the not-so-flexible overloading scheme of Popup() here:
 				List<GUIContent> guiContentListOfProducts = new List<GUIContent>();
 				for ( int i = 0; i < productIds.Length; i++ ) {
@@ -209,10 +237,10 @@ namespace GQ.Editor.UI {
 					newProductID = EditorGUILayout.TextField(
 						newProductID, 
 						GUILayout.Height(EditorGUIUtility.singleLineHeight));
-					bool createButtonshouldBeDisabled = newProductID.Equals("") || pm.AllProductIds.Contains(newProductID);
+					bool createButtonshouldBeDisabled = newProductID.Equals("") || Pm.AllProductIds.Contains(newProductID);
 					using ( new EditorGUI.DisabledGroupScope((createButtonshouldBeDisabled)) ) {
 						if ( GUILayout.Button(createProductButtonGUIContent) ) {
-							pm.createNewProduct(newProductID);
+							Pm.createNewProduct(newProductID);
 						}
 					}
 				}
@@ -221,11 +249,11 @@ namespace GQ.Editor.UI {
 			} // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
 		}
 
-		internal string currentBuild () {
+		internal static string currentBuild () {
 			string build = null;
 
 			try {
-				string configFile = Files.CombinePath(pm.BuildExportPath, ConfigurationManager.CONFIG_FILE);
+				string configFile = Files.CombinePath(ProductManager.Instance.BuildExportPath, ConfigurationManager.CONFIG_FILE);
 				if ( !File.Exists(configFile) )
 					return build;
 				string configText = File.ReadAllText(configFile);
@@ -241,7 +269,7 @@ namespace GQ.Editor.UI {
 
 		void gui4ProductDetails () {
 			GUILayout.Label("Product Details", EditorStyles.boldLabel);
-			ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
+			ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
 
 			// Begin ScrollView:
 			using ( var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos /* , GUILayout.Width(100), GUILayout.Height(100) */) ) {
@@ -317,7 +345,11 @@ namespace GQ.Editor.UI {
 								EditorGUILayout.EndHorizontal();
 								break;
 							case "String":
-								{
+								using ( new EditorGUI.DisabledGroupScope(curPropInfo.Name.Equals("id")) ) {
+									// id of products may not be altered.
+									if ( curPropInfo.Name.Equals("id") ) {
+										namePrefixGUIContent = new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
+									}
 									// show textfield or if value too long show textarea:
 									string oldStringVal = (string)curPropInfo.GetValue(p.Config, null);
 									oldStringVal = Objects.ToString(oldStringVal);
@@ -351,6 +383,7 @@ namespace GQ.Editor.UI {
 									}
 									int oldIntVal = (int)curPropInfo.GetValue(p.Config, null);
 									int newIntVal = oldIntVal;
+
 									// show text field if value fits in one line:
 									newIntVal = EditorGUILayout.IntField(namePrefixGUIContent, oldIntVal);
 									if ( newIntVal != oldIntVal ) {
@@ -410,11 +443,13 @@ namespace GQ.Editor.UI {
 				EditorGUI.BeginDisabledGroup(!allowChanges || !configIsDirty);
 				{
 					if ( GUILayout.Button("Save") ) {
-						ProductSpec p = pm.AllProducts.ElementAt(selectedProductIndex);
-						pm.serializeConfig(p.Config, Files.CombinePath(ProductManager.ProductsDirPath, p.Id));
+						ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+						Pm.serializeConfig(p.Config, ConfigurationManager.RUNTIME_PRODUCT_DIR);
 						configIsDirty = false;
 					}
 					if ( GUILayout.Button("Revert") ) {
+						ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+						p.initConfig();
 						GUIUtility.keyboardControl = 0;
 						GUIUtility.hotControl = 0;
 						configIsDirty = false;
@@ -446,65 +481,63 @@ namespace GQ.Editor.UI {
 	}
 
 
-	class MyAllPostprocessor : AssetPostprocessor {
+	class GQAssetChangePostprocessor : AssetPostprocessor {
 
-		static bool productDictionaryDirty;
-		static bool buildDirty;
+		static bool productDirHasChanges;
+		static bool configHasChanged;
+		static bool buildTimeChanged;
 
 		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths) {
+	
+			productDirHasChanges = false;
+			configHasChanged = false;
+			buildTimeChanged = false;
 	
 			// if the only change is buildtime.txt we ignore it:
 			if ( importedAssets.Length == 1 && importedAssets[0].Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
 				return;
 
-			// if we have a real change in the code, we update the buildtime:
-			for ( int i = 0; i < importedAssets.Length; i++ ) {
-				if ( isRealAsset(importedAssets[0]) ) {
-					Debug.Log("Imported REAL Assets: " + importedAssets[i]);
-
-					writeBuildDate();
-					break;
-				}
-			}
-
-			productDictionaryDirty = false;
-			buildDirty = false;
-
 			foreach ( string str in importedAssets ) {
 
-				check4ExternalChanges(str);
+				setChangeFlags(str);
 			}
 	
 
 			foreach ( string str in deletedAssets ) {
 
-				check4ExternalChanges(str);
+				setChangeFlags(str);
 			}
 	
 
 			foreach ( string str in movedAssets ) {
 
-				check4ExternalChanges(str);
+				setChangeFlags(str);
 			}
 
 
 			foreach ( string str in movedFromAssetPaths ) {
 
-				check4ExternalChanges(str);
+				setChangeFlags(str);
 			}
 
-			if ( productDictionaryDirty ) {
+			if ( buildTimeChanged && !ProductEditor.IsCurrentlyPreparingProduct ) {
+				writeBuildDate();
+			}
+
+			if ( configHasChanged ) {
+				ProductManager.Instance.ConfigFilesHaveChanges = true;
 				ConfigurationManager.Reset();
+				configHasChanged = false;
 			}
 
-			ProductEditor.BuildIsDirty = buildDirty; 
+			ProductEditor.BuildIsDirty = productDirHasChanges; 
 			if ( ProductEditor.Instance != null )
 				ProductEditor.Instance.Repaint();
 		}
 
 		private static bool isRealAsset (string assetPath) {
 			if ( assetPath.StartsWith(GQAssert.TEST_DATA_BASE_DIR) )
-				// test asstes are NOT REAL assets:
+				// test assets are NOT REAL assets:
 				return false;
 
 			if ( assetPath.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) )
@@ -514,15 +547,22 @@ namespace GQ.Editor.UI {
 			return true;
 		}
 
-		private static void check4ExternalChanges (string str) {
+		private static void setChangeFlags (string str) {
 
-			if ( productDictionaryDirty == false && str.StartsWith(ProductManager.PRODUCTS_DIR_PATH_DEFAULT) ) {
+			if ( productDirHasChanges == false && str.StartsWith(ProductManager.ProductsDirPath) ) {
 				// a product might have changed: refresh product list:
-				productDictionaryDirty = true;
+				productDirHasChanges = true;
 			}
-			if ( buildDirty == false && str.StartsWith(ProductManager.Instance.BuildExportPath) && !str.Equals(ConfigurationManager.BUILD_TIME_FILE_PATH) ) {
-				// the build might be changed externally: signal that to the Product Editor:
-				buildDirty = true;
+
+			if ( !buildTimeChanged && isRealAsset(str) ) {
+				buildTimeChanged = true;
+			}
+
+			if ( !configHasChanged &&
+			     !ProductEditor.IsCurrentlyPreparingProduct &&
+			     isRealAsset(str) &&
+			     str.StartsWith(ProductManager.Instance.BuildExportPath) ) {
+				configHasChanged = true;
 			}
 		}
 
@@ -532,7 +572,7 @@ namespace GQ.Editor.UI {
 		/// Writes the current build date into a tiny file in the ConfigAssets. 
 		/// It will be read by the application on start and used as additional version number.
 		/// </summary>
-		static void writeBuildDate () {
+		static internal void writeBuildDate () {
 //			if ( isWritingBuildTime ) {
 //				// prevent loops of writing buildtime due to buildtime.txt file asset changes
 //				Debug.Log("buildtime left because of monitor is active");
@@ -561,39 +601,39 @@ namespace GQ.Editor.UI {
 	}
 
 
-	//	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
-	//
-	//		static void OnWillCreateAsset (string assetPath) {
-	//
-	//			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
-	//		}
-	//
-	//
-	//		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
-	//
-	//			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
-	//		}
-	//
-	//
-	//		static void OnWillMoveAsset (string fromPath, string toPath) {
-	//
-	//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
-	//		}
-	//
-	//
-	//		static void OnWillSaveAssets (string[] assetPaths) {
-	//
-	//			foreach ( string str in assetPaths ) {
-	//				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
-	//			}
-	//
-	//		}
-	//
-	//
-	//		static void IsOpenForEdit (string s1, string s2) {
-	//
-	//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
-	//		}
-	//	}
+	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
+		//
+		//		static void OnWillCreateAsset (string assetPath) {
+		//
+		//			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
+		//		}
+		//
+		//
+		//		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
+		//
+		//			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
+		//		}
+		//
+		//
+		//		static void OnWillMoveAsset (string fromPath, string toPath) {
+		//
+		//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
+		//		}
+		//
+		//
+		//		static void OnWillSaveAssets (string[] assetPaths) {
+		//
+		//			foreach ( string str in assetPaths ) {
+		//				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
+		//			}
+		//
+		//		}
+		//
+		//
+		//		static void IsOpenForEdit (string s1, string s2) {
+		//
+		//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
+		//		}
+	}
 }
 

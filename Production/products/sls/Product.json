@@ -1,0 +1,20 @@
+{
+  "id": "sls",
+  "name": "Spiellandschaft",
+  "portal": 484,
+  "autoStartQuestID": 0,
+  "autostartIsPredeployed": false,
+  "downloadTimeOutSeconds": 44,
+  "nameForQuest": "Quest",
+  "questVisualization": "list",
+  "questVisualizationChangeable": true,
+  "showCloudQuestsImmediately": true,
+  "cloudQuestsVisible": true,
+  "showTextInLoadingLogo": true,
+  "showNetConnectionWarning": true,
+  "colorProfile": "default",
+  "mapboxKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
+  "mapboxMapID": "mapbox.streets",
+  "useMapOffline": false,
+  "markers": []
+}

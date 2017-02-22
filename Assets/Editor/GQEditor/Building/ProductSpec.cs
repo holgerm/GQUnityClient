@@ -136,6 +136,10 @@ namespace GQ.Editor.Building {
 				dirPath = dirPath.Substring(0, dirPath.Length - 1);
 			_dir = dirPath;
 
+			initConfig();
+		}
+
+		internal void initConfig () {
 			// init and check Config:
 			try {
 				string configJSON = File.ReadAllText(ConfigPath);
