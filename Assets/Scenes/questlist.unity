@@ -9126,7 +9126,7 @@ MonoBehaviour:
   appVersionURL: https://quest-mill.com/appversion/121.html
   hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 17.2
+  subversionNumber: 17.2 b8
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -11650,6 +11650,7 @@ MonoBehaviour:
   currentquest:
     PageList: []
     hotspotList: []
+    _allowReturn: 0
     filepath: 
     attributes: []
     metadata: []
@@ -20316,6 +20317,7 @@ MonoBehaviour:
   currentquest:
     PageList: []
     hotspotList: []
+    _allowReturn: 0
     filepath: 
     attributes: []
     metadata: []
@@ -20389,8 +20391,6 @@ MonoBehaviour:
   menu: {fileID: 1822233847}
   savedmessages: []
   buttoncontroller: {fileID: 948390058}
-  individualReturnDefinitions: 0
-  allowReturn: 0
   messageCanvas: {fileID: 543903915}
   privacyAgreementObject: {fileID: 2052913817}
   privacyAgreementVersionRead: -1
@@ -20429,6 +20429,7 @@ MonoBehaviour:
   quest:
     PageList: []
     hotspotList: []
+    _allowReturn: 0
     filepath: 
     attributes: []
     metadata: []
