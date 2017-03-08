@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 using System.Collections;
 
-//using CielaSpike.Unity.Barcode;
 using System.Threading;
 
 using ZXing;
@@ -20,35 +19,21 @@ public class page_tagscanner : MonoBehaviour {
 	public Image textbg;
 	public Text ergebnis_text;
 	public Image ergebnis_textbg;
-
-
 	public string qrresult = "";
 	public bool showresult = false;
-
-
-
 	WebCamTexture camTexture;
 	WebCamTexture camTexture2;
-
 	private Thread qrThread;
-	
 	private Color32[] c;
 	private sbyte[] d;
 	private int W, H, WxH;
 	private int x, y, z;
-	
 	Material cameraMat;
 	public MeshRenderer plane;
-	
-	
 	private string qrcontent;
-	WebCamDecoder decoder;
-
-
 	public MessageReceiver receiver;
 
 	void Update () {
-
 
 		if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
 			qrcontent = receiver.QRInfo;
@@ -79,126 +64,93 @@ public class page_tagscanner : MonoBehaviour {
 		if ( GameObject.Find("QuestDatabase") == null ) {
 
 			SceneManager.LoadScene("questlist");
+			return;
+		}
+
+		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
+		tagscanner = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
+
+
+		
+		if ( tagscanner.onStart != null ) {
+			
+			tagscanner.onStart.Invoke();
+		}
+		
+		if ( tagscanner.hasAttribute("taskdescription") ) {
+			text.text = questdb.GetComponent<actions>().formatString(tagscanner.getAttribute("taskdescription"));
+		}
+		else {
+			
+			text.enabled = false;
+			textbg.enabled = false;
+			
+		}
+
+
+
+		if ( tagscanner.hasAttribute("showTagContent") ) {
+
+			if ( tagscanner.getAttribute("showTagContent") == "true" ) {
+
+				showresult = true;
+			}
+			else {
+
+				showresult = false;
+
+			}
+
+		}
+		else {
+			showresult = false;
+		}
+
+		if ( Application.platform != RuntimePlatform.IPhonePlayer ) {
+			// init web cam;
+			if ( Application.isWebPlayer ) {
+				yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
+			}
+		
+			var devices = WebCamTexture.devices;
+
+			string debugdevices = "WEBCAMDEVICES: ";
+
+			foreach ( WebCamDevice wcd in devices ) {
+
+				debugdevices += wcd.name + ", ";
+
+
+			}
+
+			Debug.Log(debugdevices);
+
+			var deviceName = devices[0].name;
+			camTexture = new WebCamTexture(deviceName);
+			camTexture.requestedHeight = Screen.height; // 480;
+			camTexture.requestedWidth = Screen.width; //640;
+			plane.material.mainTexture = camTexture;
+
+			camTexture.Play();
+
+			StartCoroutine(OnEnableCam());
+
+			qrThread = new Thread(DecodeQR);
+			qrThread.Start();
 		}
 		else {
 
-			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-			tagscanner = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
-
-
-		
-			if ( tagscanner.onStart != null ) {
-			
-				tagscanner.onStart.Invoke();
-			}
-		
-			if ( tagscanner.hasAttribute("taskdescription") ) {
-				text.text = questdb.GetComponent<actions>().formatString(tagscanner.getAttribute("taskdescription"));
-			}
-			else {
-			
-				text.enabled = false;
-				textbg.enabled = false;
-			
-			}
-
-
-
-			if ( tagscanner.hasAttribute("showTagContent") ) {
-
-				if ( tagscanner.getAttribute("showTagContent") == "true" ) {
-
-					showresult = true;
-				}
-				else {
-
-					showresult = false;
-
-				}
-
-			}
-			else {
-				showresult = false;
-			}
-
-
-			// get render target;
-			//plane = GameObject.Find("Plane");
-			//cameraMat = plane.GetComponent<MeshRenderer>().material;
-		
-			// get a reference to web cam decoder component;
-			//decoder = GetComponent<WebCamDecoder>();
-		
-		
-
-
-			if ( Application.platform != RuntimePlatform.IPhonePlayer ) {
-				// init web cam;
-				if ( Application.isWebPlayer ) {
-					yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
-				}
-		
-				var devices = WebCamTexture.devices;
-
-				string debugdevices = "WEBCAMDEVICES: ";
-
-				foreach ( WebCamDevice wcd in devices ) {
-
-					debugdevices += wcd.name + ", ";
-
-
-				}
-
-				Debug.Log(debugdevices);
-
-				var deviceName = devices[0].name;
-				camTexture = new WebCamTexture(deviceName);
-				camTexture.requestedHeight = Screen.height; // 480;
-				camTexture.requestedWidth = Screen.width; //640;
-				plane.material.mainTexture = camTexture;
-
-				camTexture.Play();
-
-				// old tagscanner
-				//yield return StartCoroutine(decoder.StartDecoding(camTexture));
-	
-
-				//image.renderer.material.mainTexture = cameraTexture;
-		
-				StartCoroutine(OnEnableCam());
-
-				qrThread = new Thread(DecodeQR);
-				qrThread.Start();
-		
-		
-				// adjust texture orientation;
-				// plane.transform.rotation = plane.transform.rotation * 
-				//   Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.up);
-	
-
-
-
-			}
-			else {
-
-				UZBarReaderViewController zBar = new UZBarReaderViewController();
-				zBar.cameraDevice = kCameraDevice.ZBAR_CAMERA_DEVICE_REAR;
-				zBar.symbolType = kScanSymbolType.ZBAR_I25;
-				zBar.configSymbolValue = 0;
-				zBar.cameraFlashMode = kCameraFlashMode.ZBAR_CAMERA_FLASH_MODE_AUTO;
-				zBar.showsZBarControls = true;
-				UIBinding.ActivateUI(zBar.getZBarInfos());
-
-				//onEnd();
-
-
-			}
+			UZBarReaderViewController zBar = new UZBarReaderViewController();
+			zBar.cameraDevice = kCameraDevice.ZBAR_CAMERA_DEVICE_REAR;
+			zBar.symbolType = kScanSymbolType.ZBAR_I25;
+			zBar.configSymbolValue = 0;
+			zBar.cameraFlashMode = kCameraFlashMode.ZBAR_CAMERA_FLASH_MODE_AUTO;
+			zBar.showsZBarControls = true;
+			UIBinding.ActivateUI(zBar.getZBarInfos());
 		}
-
-
-
 	}
+
 
 
 
@@ -213,26 +165,13 @@ public class page_tagscanner : MonoBehaviour {
 				W = camTexture.width;
 				H = camTexture.height;
 				WxH = W * H;
-				
-				
-				//Debug.Log ("WebcamTexture: " + W + ":" + H + "=" + WxH);
-
-
-				if ( c != null ) {
-					//	Debug.Log ("Webcam actual pixels: " + c.Length);
-
-				}
 			}
 			else {
 				yield return new WaitForEndOfFrame();
 				yield return new WaitForEndOfFrame();
 
 				StartCoroutine(OnEnableCam());
-
 			}
-
-
-
 		}
 	}
 
