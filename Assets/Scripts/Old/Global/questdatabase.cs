@@ -1967,6 +1967,8 @@ public class questdatabase : MonoBehaviour {
 
 	public void performSpriteConversion (string value) {
 
+		return;
+
 		if ( !Application.isWebPlayer ) {
 
 			if ( convertToSprites ) {
@@ -2005,10 +2007,10 @@ public class questdatabase : MonoBehaviour {
 						FileInfo fi = new FileInfo(value);
 
 						List<string> imageextensions = new List<string>() {
-							".jpg",
-							".jpeg",
-							".gif",
-							".png"
+								".jpg",
+								".jpeg",
+								".gif",
+								".png"
 						};
 					}
 					else {
