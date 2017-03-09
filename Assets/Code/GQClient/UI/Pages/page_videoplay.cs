@@ -88,6 +88,11 @@ public class page_videoplay : MonoBehaviour {
 
 
 	IEnumerator PlayYoutubeVideo (string url) {
+#if UNITY_STANDALONE
+		Debug.LogWarning("VideoPlay Page not yet supported on Desktop Version of GeoQuest.");
+		OnEnd();
+		yield break;
+#elif UNITY_IOS || UNITY_ANDROID
 		yield return new WaitForEndOfFrame();
 
 		// Extract youtube id from url:
@@ -131,9 +136,16 @@ public class page_videoplay : MonoBehaviour {
 		yield return new WaitForEndOfFrame();
 
 		OnEnd();
+#endif
 	}
 
 	IEnumerator PlayHTTPVideo (string url) {
+#if UNITY_STANDALONE
+		Debug.LogWarning("VideoPlay Page not yet supported on Desktop Version of GeoQuest.");
+		OnEnd();
+		yield break;
+
+#elif UNITY_IOS || UNITY_ANDROID
 		Debug.Log("We will play an HTTP Video link: " + url);
 
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -151,10 +163,17 @@ public class page_videoplay : MonoBehaviour {
 		yield return new WaitForEndOfFrame();
 
 		OnEnd();
+#endif
 	}
 
 
 	IEnumerator PlayLocalVideo (string url) {
+#if UNITY_STANDALONE
+		Debug.LogWarning("VideoPlay Page not yet supported on Desktop Version of GeoQuest.");
+		OnEnd();
+		yield break;
+
+#elif UNITY_IOS || UNITY_ANDROID
 		Debug.Log("We will play a LOCAL Video from file: " + url);
 
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -172,6 +191,7 @@ public class page_videoplay : MonoBehaviour {
 		yield return new WaitForEndOfFrame();
 
 		OnEnd();
+#endif
 	}
 
 
