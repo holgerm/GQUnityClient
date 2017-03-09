@@ -2296,20 +2296,16 @@ public class actions : MonoBehaviour {
 
 	IEnumerator waitforAudio (questaudio audios) {
 		
-		yield return www;
+		while ( !www.isDone ) {
+			yield return null;
+		}
 
-		if ( www.isDone ) {
-			if ( www.error == null ) {
-
-				audios.setAudio(www.GetAudioClip(false));
-				audios.Play();
-			}
-			else {
-				Debug.Log("geoquest audio error: " + www.error);
-			}
+		if ( www.error == null ) {
+			audios.setAudio(www.GetAudioClip(false));
+			audios.Play();
 		}
 		else {
-			StartCoroutine(waitforAudio(audios));
+			Debug.Log("geoquest audio error: " + www.error);
 		}
 	}
 
