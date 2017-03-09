@@ -113,17 +113,16 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 54984535}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children:
-  - {fileID: 379437871}
-  m_Father: {fileID: 1792935475}
-  m_RootOrder: 1
+  m_Children: []
+  m_Father: {fileID: 379437871}
+  m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015258789, y: -729}
+  m_AnchoredPosition: {x: -0.000015258789, y: -8.375}
   m_SizeDelta: {x: 0, y: 364}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &54984537
@@ -353,12 +352,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 54984536}
-  m_RootOrder: 0
+  m_Children:
+  - {fileID: 54984536}
+  m_Father: {fileID: 1792935475}
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015258789, y: 8.3750105}
+  m_AnchoredPosition: {x: -0.000015258789, y: -720.62506}
   m_SizeDelta: {x: 0, y: 363.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &379437872
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.61960787}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.988}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -615,10 +615,10 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1792935475}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_AnchorMin: {x: 0.5, y: 0.36372983}
   m_AnchorMax: {x: 0.5, y: 0.36372983}
-  m_AnchoredPosition: {x: -0.0000076294, y: 216.03}
+  m_AnchoredPosition: {x: -0.000070528, y: 225.86}
   m_SizeDelta: {x: 1080, y: 1029.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1750957258
@@ -748,8 +748,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1462797390}
-  - {fileID: 54984536}
   - {fileID: 1480872943}
+  - {fileID: 379437871}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
@@ -941,8 +941,6 @@ MonoBehaviour:
   showresult: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 0}
   camQRImage: {fileID: 1480872941}
-  plane: {fileID: 798526959}
-  receiver: {fileID: 1750957259}
 --- !u!4 &1953851292
 Transform:
   m_ObjectHideFlags: 0
