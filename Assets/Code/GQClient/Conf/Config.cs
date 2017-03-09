@@ -27,9 +27,11 @@ namespace GQ.Client.Conf {
 
 		public bool 	questVisualizationChangeable  { get; set; }
 
+		public bool 	cloudQuestsVisible  { get; set; }
+
 		public bool 	showCloudQuestsImmediately  { get; set; }
 
-		public bool 	cloudQuestsVisible  { get; set; }
+		public bool 	localQuestsDeletable  { get; set; }
 
 		public bool 	showTextInLoadingLogo  { get; set; }
 
@@ -59,6 +61,7 @@ namespace GQ.Client.Conf {
 			useMapOffline = false;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
+			localQuestsDeletable = true;
 			downloadTimeOutSeconds = 300;
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;
