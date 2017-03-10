@@ -22,7 +22,6 @@ public class page_tagscanner : MonoBehaviour {
 	public string qrresult = "";
 	public bool showresult = false;
 	WebCamTexture camTexture;
-	public Quaternion baseRotation;
 
 	public RawImage camQRImage;
 
@@ -48,40 +47,28 @@ public class page_tagscanner : MonoBehaviour {
 		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
 		tagscanner = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
 
-
-
 		if ( tagscanner.onStart != null ) {
 
 			tagscanner.onStart.Invoke();
 		}
 
 		if ( tagscanner.hasAttribute("taskdescription") ) {
+			
 			text.text = questdb.GetComponent<actions>().formatString(tagscanner.getAttribute("taskdescription"));
 		}
 		else {
-
+			
 			text.enabled = false;
 			textbg.enabled = false;
-
 		}
 
-
-
+		showresult = false;
 		if ( tagscanner.hasAttribute("showTagContent") ) {
 
 			if ( tagscanner.getAttribute("showTagContent") == "true" ) {
 
 				showresult = true;
 			}
-			else {
-
-				showresult = false;
-
-			}
-
-		}
-		else {
-			showresult = false;
 		}
 
 		// init web cam;
@@ -89,87 +76,47 @@ public class page_tagscanner : MonoBehaviour {
 			yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
 		}
 
-		var devices = WebCamTexture.devices;
-
-		string debugdevices = "WEBCAMDEVICES: ";
-
-		foreach ( WebCamDevice wcd in devices ) {
-
-			debugdevices += wcd.name + "(" + wcd.isFrontFacing + "), ";
-
-
+		string deviceName = null;
+		foreach ( WebCamDevice wcd in WebCamTexture.devices ) {
+			if ( !wcd.isFrontFacing ) {
+				deviceName = wcd.name;
+				break;
+			}
 		}
 
-		Debug.Log(debugdevices);
-
-		var deviceName = devices[0].name;
 		camTexture = new WebCamTexture(deviceName);
 		camTexture.requestedHeight = 480;
 		camTexture.requestedWidth = 640;
-//		plane.material.mainTexture = camTexture;
 
 		camTexture.Play();
 
+		// wait for web cam to be ready:
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 
+		// correct shown texture according to webcam details:
 		camQRImage.transform.rotation *= Quaternion.AngleAxis(camTexture.videoRotationAngle, Vector3.back);
-		float xScale = camTexture.videoVerticallyMirrored ? -1.0F : 1.0F;
-		float yScale = ((float)camTexture.height / (float)camTexture.width) * (camTexture.videoVerticallyMirrored ? -1.0F : 1.0F);
-		camQRImage.transform.localScale = new Vector3(1, yScale, 1.0F);
+		float yScale = ((float)camTexture.height / (float)camTexture.width) * (camTexture.videoVerticallyMirrored ? -1F : 1F);
+		camQRImage.transform.localScale = new Vector3(1F, yScale, 1F);
 
-//		Debug.Log(
-//			string.Format(
-//				"ROTATION: ({ 0}, { 1}, { 2}), Angle: { 3}, Mirrored: { 4}, isPLaying: { 5}, xScale: { 6}, yScale: { 7}", 
-//				camQRImage.transform.rotation.x, 
-//				camQRImage.transform.rotation.y, 
-//				camQRImage.transform.rotation.z,
-//				camTexture.videoRotationAngle,
-//				camTexture.videoVerticallyMirrored,
-//				camTexture.isPlaying,
-//				xScale,
-//				yScale
-//			)
-//		);
 		camQRImage.texture = camTexture;
 		W = camTexture.width;
 		H = camTexture.height;
-
-		StartCoroutine(OnEnableCam());
 
 		qrThread = new Thread(DecodeQR);
 		qrThread.Start();
 	}
 
 	void Update () {
-		if ( camTexture != null )
+		if ( camTexture != null && camTexture.didUpdateThisFrame ) {
 			c = camTexture.GetPixels32();
+		}
 
 		if ( qrcontent != null && qrcontent != "" && qrcontent != "!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012" ) {
 			checkResult(qrcontent);
-		}
-	}
-
-	IEnumerator OnEnableCam () {
-		if ( camTexture != null ) {
-			//camTexture.Play ();
-
-
-
-			if ( camTexture.didUpdateThisFrame && c != null ) {
-
-//				W = camTexture.width;
-//				H = camTexture.height;
-			}
-			else {
-				yield return new WaitForEndOfFrame();
-				yield return new WaitForEndOfFrame();
-
-				StartCoroutine(OnEnableCam());
-			}
 		}
 	}
 
@@ -184,8 +131,7 @@ public class page_tagscanner : MonoBehaviour {
 		Debug.Log("OnDestroy()");
 
 		if ( qrThread != null ) {
-			qrThread.Abort();
-			Debug.Log("QR Decoder THREAD ABORTED");
+			decoderRunning = false;
 		}
 
 		if ( camTexture != null ) {
@@ -195,7 +141,7 @@ public class page_tagscanner : MonoBehaviour {
 	}
 
 
-
+	private bool decoderRunning = false;
 
 	void DecodeQR () {  
 		// create a reader with a custom luminance source
@@ -204,24 +150,28 @@ public class page_tagscanner : MonoBehaviour {
 			AutoRotate = false,
 			TryHarder = false
 		};
+				
+		decoderRunning = true;
 
-		while ( true ) {
+		while ( decoderRunning ) {
 
 
 			try {
 				string result = ""; 
 
+				Debug.Log("decode thread running");
+
 				// decode the current frame
 
 				if ( c != null ) {
 
-					result = barcodeReader.Decode(c, W, H).Text; //This line of code is generating unknown exceptions for some arcane reason
-					Debug.Log("THREAD: DecodeQR() result given.");
+					result = barcodeReader.Decode(c, W, H).Text; 
+					Debug.Log("THREAD: DecodeQR() ##1 result given: >" + result + "<");
 				}        
 				if ( result != null ) {           
 					qrcontent = result;   
 
-					print(result);
+					Debug.Log("THREAD: DecodeQR() result given: >" + result + "<");
 				}
 				// Sleep a little bit and set the signal to get the next frame
 				c = null;
@@ -231,6 +181,8 @@ public class page_tagscanner : MonoBehaviour {
 			}
 
 		}
+
+		Debug.Log("THREAD: DecodeQR() ENDED");
 	}
 
 
@@ -245,7 +197,6 @@ public class page_tagscanner : MonoBehaviour {
 			if ( r.Length > 0 ) {
 				questdb.debug("QR CODE gescannt:" + r);
 
-
 				tagscanner.result = r;
 
 				if ( showresult ) {
@@ -255,62 +206,39 @@ public class page_tagscanner : MonoBehaviour {
 				}
 
 
-				bool didit = false;
 				if ( tagscanner.contents_expectedcode != null && tagscanner.contents_expectedcode.Count > 0 ) {
 
-
+					bool foundCorrectResult = false;
 
 					foreach ( QuestContent qc in tagscanner.contents_expectedcode ) {
 
 						if ( qc.content == r ) {
 
-							//// TODO: go on
-
-							didit = true;
+							foundCorrectResult = true;
 
 							text.enabled = false;
 							textbg.enabled = false;
 
-
-
-
-
+							break;
 						}
-
-
 					}
 
+					if ( foundCorrectResult ) {
 
-
-					if ( didit ) {
-
-
-						StartCoroutine(onSuccess());
-
-
+						onSuccess();
 					}
 					else {
 
-						StartCoroutine(onFailure());
-
+						onFailure();
 					}
-
 				}
-
 				StartCoroutine(onEnd());
 			}
-
 		}
 	}
 
 
-
-
-
-	IEnumerator onSuccess () {
-
-		yield return new WaitForSeconds(0f);
-
+	void onSuccess () {
 
 		if ( tagscanner.onSuccess != null ) {
 
@@ -321,55 +249,46 @@ public class page_tagscanner : MonoBehaviour {
 
 	}
 
-	IEnumerator onFailure () {
 
-		yield return new WaitForSeconds(0f);
+	void onFailure () {
 
 		if ( tagscanner.onFailure != null ) {
+		
 			tagscanner.state = "failed";
-
 			tagscanner.onFailure.Invoke();
 		}  
-
-
 	}
 
 
 
 	IEnumerator  onEnd () {
 
-
 		yield return new WaitForSeconds(0.2f);
 
+		if ( !GQML.RESULT_FAILED.Equals(tagscanner.state) ) {
 
-		if ( tagscanner.state != "failed" ) {
-			tagscanner.state = "succeeded";
-
+			tagscanner.state = GQML.RESULT_SUCCEEDED;
 		}
 
 		if ( tagscanner.onEnd != null ) {
-			Debug.Log("onEnd");
+			
 			tagscanner.onEnd.Invoke();
 		}
 		else
 		if ( !tagscanner.onSuccess.hasMissionAction() && !tagscanner.onFailure.hasMissionAction() ) {
 
-			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
-
+			questdb.endQuest();
+			// TODO looks like an ERROR
+			Debug.LogWarning("A QR Scan page did neither have onSucceed nor onFail change page actions, so we end the quest. Shouldn't we simply perform onEnd()?");
 		}
 		else {
-
 
 			if ( showresult ) {
 
 				ergebnis_text.enabled = false;
 				ergebnis_textbg.enabled = false;
 			}
-
-
 		}
-
-
 	}
 }
 
