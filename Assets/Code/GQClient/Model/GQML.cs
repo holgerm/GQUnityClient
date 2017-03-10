@@ -22,5 +22,11 @@ namespace GQ.Client.Model {
 
 		public const string HOTSPOT = "hotspot";
 
+		public const string RESULT_NEW = "new";
+		public const string RESULT_SUCCEEDED = "succeeded";
+		public const string RESULT_FAILED = "failed";
+		public const string RESULT_RUNNING = "running";
+
+
 	}
 }
