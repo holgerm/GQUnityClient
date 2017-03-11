@@ -85,22 +85,22 @@ public class page_tagscanner : MonoBehaviour {
 		}
 
 		camTexture = new WebCamTexture(deviceName);
+		// request a resolution that is enough to scan qr codes reliably:
 		camTexture.requestedHeight = 480;
 		camTexture.requestedWidth = 640;
 
 		camTexture.Play();
 
-		// wait for web cam to be ready:
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
+		// wait for web cam to be ready which is guaranteed after first image update:
+		while ( !camTexture.didUpdateThisFrame )
+			yield return null;
 
 		// correct shown texture according to webcam details:
 		camQRImage.transform.rotation *= Quaternion.AngleAxis(camTexture.videoRotationAngle, Vector3.back);
 		float yScale = ((float)camTexture.height / (float)camTexture.width) * (camTexture.videoVerticallyMirrored ? -1F : 1F);
 		camQRImage.transform.localScale = new Vector3(1F, yScale, 1F);
+
+		Debug.Log("QR Start(): Cam h: " + camTexture.height + ", w: " + camTexture.width + ", name: " + camTexture.name + " angle: " + camTexture.videoRotationAngle + ", yscale: " + yScale);
 
 		camQRImage.texture = camTexture;
 		W = camTexture.width;
@@ -114,6 +114,9 @@ public class page_tagscanner : MonoBehaviour {
 		if ( camTexture != null && camTexture.didUpdateThisFrame ) {
 			c = camTexture.GetPixels32();
 		}
+
+		if ( camTexture != null )
+			Debug.Log("QR Update(): Cam updated: " + camTexture.didUpdateThisFrame + ", w: " + camTexture.width + ", h: " + camTexture.height);
 
 		if ( qrcontent != null && qrcontent != "" && qrcontent != "!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012" ) {
 			checkResult(qrcontent);
@@ -179,10 +182,7 @@ public class page_tagscanner : MonoBehaviour {
 			} catch {   
 				continue;
 			}
-
 		}
-
-		Debug.Log("THREAD: DecodeQR() ENDED");
 	}
 
 
