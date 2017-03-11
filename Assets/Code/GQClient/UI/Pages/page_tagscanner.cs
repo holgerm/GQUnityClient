@@ -95,12 +95,34 @@ public class page_tagscanner : MonoBehaviour {
 		while ( !camTexture.didUpdateThisFrame )
 			yield return null;
 
+		// scale height according to camera aspect ratio:
+		float xScale = 1F;
+		float yScale = ((float)camTexture.height / (float)camTexture.width) * (camTexture.videoVerticallyMirrored ? -1F : 1F);
+
+		// scale to fill:
+		float fillScale = 1;
+		float minHeight = ((RectTransform)camQRImage.transform.parent).rect.height;
+		float minWidth = ((RectTransform)camQRImage.transform.parent).rect.width;
+		float isHeight = camQRImage.rectTransform.rect.height * yScale;
+		float isWidth = camQRImage.rectTransform.rect.width;
+		if ( minHeight > isHeight )
+			fillScale = Mathf.Max(minHeight / isHeight, fillScale);
+		if ( minWidth > isWidth )
+			fillScale = Mathf.Max(minWidth / isWidth, fillScale);
+		xScale *= fillScale;
+		yScale *= fillScale;
+		
 		// correct shown texture according to webcam details:
 		camQRImage.transform.rotation *= Quaternion.AngleAxis(camTexture.videoRotationAngle, Vector3.back);
-		float yScale = ((float)camTexture.height / (float)camTexture.width) * (camTexture.videoVerticallyMirrored ? -1F : 1F);
-		camQRImage.transform.localScale = new Vector3(1F, yScale, 1F);
+		camQRImage.transform.localScale = new Vector3(xScale, yScale, 1F);
 
-		Debug.Log("QR Start(): Cam h: " + camTexture.height + ", w: " + camTexture.width + ", name: " + camTexture.name + " angle: " + camTexture.videoRotationAngle + ", yscale: " + yScale);
+		Debug.Log(
+			"QR Start(): Cam h: " + camTexture.height + ", w: " + camTexture.width +
+			", isH: " + isHeight + " isW: " + isWidth +
+			", minH: " + minHeight + " minW: " + minWidth +
+			", yscale: " + yScale +
+			", fillScale: " + fillScale
+		);
 
 		camQRImage.texture = camTexture;
 		W = camTexture.width;

@@ -1430,6 +1430,7 @@ MonoBehaviour:
   quest:
     PageList: []
     hotspotList: []
+    _allowReturn: 0
     filepath: 
     attributes: []
     metadata: []
@@ -1621,6 +1622,100 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1953851291}
+    - target: {fileID: 1000013194335464, guid: 66b3d4b1940eb41a1828813700a131fa, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000012308182078, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000012308182078, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000012308182078, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 540
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000012308182078, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -288.67294
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000012308182078, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000012308182078, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 567.3459
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011362369226, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011362369226, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011362369226, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 540
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011362369226, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -1138.2375
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011362369226, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011362369226, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 1111.7834
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011005627548, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011005627548, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011005627548, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 540
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011005627548, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -1780.0476
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011005627548, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011005627548, guid: 66b3d4b1940eb41a1828813700a131fa,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 151.83647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 66b3d4b1940eb41a1828813700a131fa, type: 2}
   m_IsPrefabParent: 0
