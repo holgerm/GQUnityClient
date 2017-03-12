@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using GQ.Client.Model;
+using UnityEngine.SceneManagement;
 
 public class navigationMenu : MonoBehaviour {
 
@@ -32,6 +33,12 @@ public class navigationMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if ( GameObject.Find("QuestDatabase") == null ) {
+
+			SceneManager.LoadScene("questlist");
+			return;
+		}
+
 		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
 
 		if ( questdb.currentquest != null && questdb.currentquest.Id != 0 ) {
