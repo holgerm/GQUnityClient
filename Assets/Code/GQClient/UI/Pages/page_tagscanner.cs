@@ -27,10 +27,10 @@ public class page_tagscanner : MonoBehaviour {
 
 	private Thread qrThread;
 	private Color32[] c;
-	private sbyte[] d;
+	//	private sbyte[] d;
 	private int W, H;
-	private int x, y, z;
-	Material cameraMat;
+	//	private int x, y, z;
+	//	Material cameraMat;
 	//	public MeshRenderer plane;
 	private string qrcontent;
 	//	public MessageReceiver receiver;
