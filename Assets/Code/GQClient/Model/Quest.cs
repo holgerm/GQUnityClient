@@ -34,6 +34,12 @@ namespace GQ.Client.Model {
 
 		public bool IndividualReturnDefinitions { get; set; }
 
+		public bool IsHidden {
+			get {
+				return false; // (Name != null && Name.StartsWith("---"));
+			}
+		}
+
 		#endregion
 
 		#region Pages aka missions

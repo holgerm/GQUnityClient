@@ -46,7 +46,9 @@ public class createquestbuttons : MonoBehaviour {
 
 	public void loadLocalQuests () {
 		foreach ( Quest q in questdb.GetLocalQuests () ) {
-			filteredOfflineList.Add(q);
+			if ( !q.IsHidden ) {
+				filteredOfflineList.Add(q);
+			}
 		}
 	}
 
