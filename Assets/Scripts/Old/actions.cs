@@ -21,6 +21,7 @@ public class actions : MonoBehaviour {
 	public questdatabase questdb;
 	public int score = 0;
 	public int loopcount = 0;
+	// TODO move to Variables into Instance
 	public List<QuestVariable> variables;
 	public List<questaudio> questaudiosources;
 	public questaudio npcaudio;
@@ -139,13 +140,7 @@ public class actions : MonoBehaviour {
 		}
 		else
 		if ( action.type == "SetVariable" ) {
-//			Debug.Log("setting var");
 			setVariable(action);
-			sendVartoWeb();
-		}
-		else
-		if ( action.type == "LoadVariable" ) {
-			loadVariable(action);
 			sendVartoWeb();
 		}
 		else
@@ -193,11 +188,27 @@ public class actions : MonoBehaviour {
 		}
 		else
 		if ( action.type == "LoadVar" ) {
-			loadVariable(action);
+			string varName = action.getAttribute("var");
+			QuestVariable questVar = Variables.LoadVariableFromStore(varName);
+			if ( questVar != null ) {
+				variables.Remove(questVar);
+				variables.Add(questVar);
+			}
+		}
+		else
+		if ( action.type == "LoadVariable" ) {
+			string varName = action.getAttribute("var");
+			QuestVariable questVar = Variables.LoadVariableFromStore(varName);
+			if ( questVar != null ) {
+				variables.Remove(questVar);
+				variables.Add(questVar);
+				sendVartoWeb();
+			}
 		}
 		else
 		if ( action.type == "SaveVar" ) {
-			saveVariable(action);
+			QuestVariable qv = getVariable(action.getAttribute("var"));
+			Variables.SaveVariableToStore(qv);
 		}
 		else
 		if ( action.type == "ShowVar" ) {
@@ -229,9 +240,29 @@ public class actions : MonoBehaviour {
 
 	public void startQuest (QuestAction action) {
 
-		if ( action.hasAttribute("quest") ) {
-			questdb.StartQuest(int.Parse(action.getAttribute("quest")));
+		if ( !action.hasAttribute("quest") )
+			return;
+				
+		int questID;
+
+		Debug.Log("Going to start quest: >" + action.getAttribute("quest") + "<");
+
+		try {
+			questID = int.Parse(action.getAttribute("quest"));
+		} catch ( Exception exc ) {
+			Debug.Log("Catched: " + exc.Message);
+			QuestVariable questVar = getVariable(action.getAttribute("quest"));
+			if ( questVar != null ) {
+				Debug.Log("StartQuest: Read Variable: " + questVar.key + ", type: " + questVar.type);
+				questID = (int)questVar.getNumValue();
+			}
+			else {
+				Debug.Log("StartQuest action can not be executed with attribute quest = " + action.getAttribute("quest"));
+				return;
+			}
 		}
+		Debug.Log("StartQuest id: " + questID);
+		questdb.StartQuest(questID);
 
 	}
 
@@ -1513,55 +1544,6 @@ public class actions : MonoBehaviour {
 
 	}
 
-	public void saveVariable (QuestAction action) {
-		
-	
-		
-		
-		string key = action.getAttribute("var");
-
-		string varname = key;
-		varname = new String(varname.Where(Char.IsLetter).ToArray());
-		
-		varname = questdb.currentquest.Id + "_" + varname;
-
-
-
-
-		QuestVariable qv = getVariable(key);
-
-
-		if ( qv != null ) {
-			if ( qv.type == "num" ) {
-
-				PlayerPrefs.SetString(varname, "[GQ_NUM_VALUE]" + qv.num_value[0]);
-
-			}
-			else
-			if ( qv.type == "string" ) {
-
-				PlayerPrefs.SetString(varname, qv.string_value[0]);
-
-			}
-			else
-			if ( qv.type == "bool" ) {
-
-
-				if ( qv.bool_value[0] ) {
-					PlayerPrefs.SetInt(varname, 1);
-				}
-				else {
-					PlayerPrefs.SetInt(varname, 0);
-
-				}
-
-			}
-
-
-		}
-
-	}
-
 	void removeVariable (string key) {
 
 		
@@ -1576,59 +1558,6 @@ public class actions : MonoBehaviour {
 			}
 		}
 
-
-	}
-
-	void loadVariable (QuestAction action) {
-
-
-
-//		Debug.Log ("loading vars");
-
-		string varname = action.getAttribute("var");
-		varname = new String(varname.Where(Char.IsLetter).ToArray());
-
-		varname = questdb.currentquest.Id + "_" + varname;
-
-
-
-
-	
-
-		if ( PlayerPrefs.GetString(varname, "[GEOQUEST_NO_VALUE]") != "[GEOQUEST_NO_VALUE]" ) {
-		
-
-
-
-
-			removeVariable(action.getAttribute("var"));
-
-
-
-			if ( PlayerPrefs.GetString(varname).StartsWith("[GQ_NUM_VALUE]") ) {
-
-
-				string s = PlayerPrefs.GetString(varname).Replace("[GQ_NUM_VALUE]", "");
-				double n = double.Parse(s);
-				variables.Add(new QuestVariable(action.getAttribute("var"), n));
-
-				
-			}
-			else {
-
-				variables.Add(new QuestVariable(action.getAttribute("var"), PlayerPrefs.GetString(varname)));
-		
-
-			}
-
-		}
-		else
-		if ( PlayerPrefs.GetInt(varname, -99999) != -99999 ) {
-			removeVariable(action.getAttribute("var"));
-
-			variables.Add(new QuestVariable(action.getAttribute("var"), PlayerPrefs.GetInt(varname)));
-
-		}
 
 	}
 
@@ -2322,156 +2251,4 @@ public class actions : MonoBehaviour {
 		}
 		
 	}
-
-
-
-
-
-
-}
-
-
-[System.Serializable]
-public class QuestVariable {
-
-
-	public string key;
-	public string type;
-	public List<string> string_value;
-	public List<double> num_value;
-	public List<bool> bool_value;
-	public List<double> double_value;
-
-	public QuestVariable (string k, string s) {
-		string_value = new List<string>();
-		string_value.Add(s);
-		type = "string";
-		key = k;
-	}
-
-	public QuestVariable (string k, double n) {
-
-		num_value = new List<double>();
-		num_value.Add(n);
-		type = "num";
-		key = k;
-	}
-
-	public QuestVariable (string k, bool b) {
-		bool_value = new List<bool>();
-		bool_value.Add(b);
-		type = "bool";
-		key = k;
-	}
-
-	public string getStringValue () {
-
-		if ( string_value != null && string_value.Count > 0 ) {
-			return string_value[0];
-		}
-		else
-		if ( bool_value != null && bool_value.Count > 0 ) {
-			if ( bool_value[0] ) {
-				return "true";
-			}
-			else {
-				return "false";
-			}
-		}
-		else
-		if ( num_value != null && num_value.Count > 0 ) {
-
-			return num_value[0] + "";
-
-		}
-		else {
-
-			return "[null]";
-
-		}
-
-
-	}
-
-	public override string ToString () {
-
-		if ( type == "bool" ) {
-
-			return bool_value[0].ToString();
-		}
-		else
-		if ( type == "num" ) {
-			
-			return num_value[0].ToString();
-		}
-		else
-		if ( type == "string" ) {
-			
-			return string_value[0];
-		} 
-
-		return "";
-
-
-	}
-
-	public bool isNull () {
-
-		if ( string_value != null && string_value.Count > 0 ) {
-
-			if ( string_value[0] == "[null]" ) {
-
-				return true;
-			}
-			else {
-
-				return false;
-
-			}
-
-
-		}
-		else {
-
-			return false;
-		}
-
-	}
-
-	public double getNumValue () {
-
-
-		if ( num_value != null && num_value.Count > 0 ) {
-			
-			return num_value[0];
-			
-		}
-
-		return 0f;
-
-	}
-	
-	
-}
-
-
-[System.Serializable]
-public class QuestRuntimeAsset {
-
-	public Texture2D texture;
-	public AudioClip clip;
-	public string key;
-
-	public QuestRuntimeAsset (string k, Texture2D t2d) {
-		key = k;
-		texture = t2d;
-	}
-
-	public QuestRuntimeAsset (string k, AudioClip aclip) {
-		key = k;
-		clip = aclip;
-	}
-
-
-
 }
