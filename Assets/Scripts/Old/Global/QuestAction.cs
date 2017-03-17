@@ -141,12 +141,9 @@ public class QuestAction {
 
 		actions action = dbGO.GetComponent<actions>();
 
-		if ( action == null ) {
-			Debug.Log("dbGO.action is null");
+		if ( action != null ) {
+			action.doAction(this);
 		}
-
-		action.doAction(this);
-
 	}
 
 	public void InvokeThen () {
