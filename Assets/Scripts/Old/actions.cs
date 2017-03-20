@@ -22,7 +22,7 @@ public class actions : MonoBehaviour {
 	public int score = 0;
 	public int loopcount = 0;
 	// TODO move to Variables into Instance
-	public List<QuestVariable> variables;
+	public Dictionary<string, QuestVariable> variables;
 	public List<questaudio> questaudiosources;
 	public questaudio npcaudio;
 	public List<AudioSource> audiosources;
@@ -61,7 +61,7 @@ public class actions : MonoBehaviour {
 		gPSRouteUpdateInterval_save = gPSRouteUpdateInterval;
 
 		questdb = GetComponent<questdatabase>();
-		variables = new List<QuestVariable>();
+		variables = new Dictionary<string, QuestVariable>();
 		questaudiosources = new List<questaudio>();
 		photos = new List<QuestRuntimeAsset>();
 		audioclips = new List<QuestRuntimeAsset>();
@@ -76,7 +76,7 @@ public class actions : MonoBehaviour {
 
 	public void reset () {
 
-		variables = new List<QuestVariable>();
+		variables = new Dictionary<string, QuestVariable>();
 		questaudiosources = new List<questaudio>();
 		photos = new List<QuestRuntimeAsset>();
 
@@ -91,7 +91,7 @@ public class actions : MonoBehaviour {
 
 			string myvars = "";
 			if ( variables != null && variables.Count > 0 ) {
-				foreach ( QuestVariable qv in variables ) {
+				foreach ( QuestVariable qv in variables.Values ) {
 
 				
 					if ( qv.string_value != null && qv.string_value.Count > 0 ) {
@@ -191,8 +191,7 @@ public class actions : MonoBehaviour {
 			string varName = action.getAttribute("var");
 			QuestVariable questVar = Variables.LoadVariableFromStore(varName);
 			if ( questVar != null ) {
-				variables.Remove(questVar);
-				variables.Add(questVar);
+				variables[questVar.key] = questVar;
 			}
 		}
 		else
@@ -200,8 +199,7 @@ public class actions : MonoBehaviour {
 			string varName = action.getAttribute("var");
 			QuestVariable questVar = Variables.LoadVariableFromStore(varName);
 			if ( questVar != null ) {
-				variables.Remove(questVar);
-				variables.Add(questVar);
+				variables[questVar.key] = questVar;
 				sendVartoWeb();
 			}
 		}
@@ -1148,7 +1146,8 @@ public class actions : MonoBehaviour {
 		if ( action.hasAttribute("var") ) {
 
 
-			QuestVariable qv = getVariable(action.getAttribute("var"));
+			string varName = action.getAttribute("var");
+			QuestVariable qv = getVariable(varName);
 
 			if ( qv.type == "num" ) {
 
@@ -1156,9 +1155,7 @@ public class actions : MonoBehaviour {
 
 				value += 1;
 
-				variables.Remove(qv);
-
-				variables.Add(new QuestVariable(action.getAttribute("var"), value));
+				variables[varName] = new QuestVariable(varName, value);
 
 			}
 
@@ -1170,18 +1167,17 @@ public class actions : MonoBehaviour {
 		if ( action.hasAttribute("var") ) {
 			
 			
-			QuestVariable qv = getVariable(action.getAttribute("var"));
+			string varName = action.getAttribute("var");
+			QuestVariable qv = getVariable(varName);
 			
 			if ( qv.type == "num" ) {
 				
 				double value = qv.getNumValue();
 				
 				value -= 1;
-				
-				variables.Remove(qv);
-				
-				variables.Add(new QuestVariable(action.getAttribute("var"), value));
-				
+
+				variables[varName] = new QuestVariable(varName, value);
+
 			}
 			
 		}
@@ -1544,114 +1540,61 @@ public class actions : MonoBehaviour {
 
 	}
 
-	void removeVariable (string key) {
-
-		
-		List<QuestVariable> helplist = new List<QuestVariable>();
-		foreach ( QuestVariable qa in variables ) {
-			helplist.Add(qa);
-		}
-		
-		foreach ( QuestVariable qa in helplist ) { 
-			if ( qa.key == key ) {
-				variables.Remove(qa);
-			}
-		}
-
-
-	}
+	//	void removeVariable (string key) {
+	//
+	//
+	//		List<QuestVariable> helplist = new List<QuestVariable>();
+	//		foreach ( QuestVariable qa in variables ) {
+	//			helplist.Add(qa);
+	//		}
+	//
+	//		foreach ( QuestVariable qa in helplist ) {
+	//			if ( qa.key == key ) {
+	//				variables.Remove(qa);
+	//			}
+	//		}
+	//
+	//
+	//	}
 
 	public void setVariable (string key, float f) {
 
-
-		Debug.Log("setting var " + key + " to " + f);
-
-		List<QuestVariable> helplist = new List<QuestVariable>();
-		foreach ( QuestVariable qa in variables ) {
-			helplist.Add(qa);
-		}
-		
-		foreach ( QuestVariable qa in helplist ) { 
-			if ( qa.key == key ) {
-				variables.Remove(qa);
-			}
-		}
-
-
-		variables.Add(new QuestVariable(key, f));
-
+		variables[key] = new QuestVariable(key, f);
 	}
 
 	public void setVariable (string key, string s) {
 			
-		List<QuestVariable> helplist = new List<QuestVariable>();
-		foreach ( QuestVariable qa in variables ) {
-			helplist.Add(qa);
-		}
-			
-		foreach ( QuestVariable qa in helplist ) { 
-			if ( qa.key == key ) {
-				variables.Remove(qa);
-			}
-		}
-			
-			
-		variables.Add(new QuestVariable(key, s));
-			               
+		variables[key] = new QuestVariable(key, s);
 	}
 
 	public void setVariable (string key, bool b) {
 				
-		List<QuestVariable> helplist = new List<QuestVariable>();
-		foreach ( QuestVariable qa in variables ) {
-			helplist.Add(qa);
-		}
-				
-		foreach ( QuestVariable qa in helplist ) { 
-			if ( qa.key == key ) {
-				variables.Remove(qa);
-			}
-		}
-				
-				
-		variables.Add(new QuestVariable(key, b));
-				               
+		variables[key] = new QuestVariable(key, b);
 	}
 
 	public void setVariable (QuestAction action) {
-
-		List<QuestVariable> helplist = new List<QuestVariable>();
-		foreach ( QuestVariable qa in variables ) {
-			helplist.Add(qa);
-		}
-
-
-
-			
 
 		string key = action.getAttribute("var");
 
 		if ( action.value != null ) {
 
-
 			if ( key == "score" && action.value.num_value != null && action.value.num_value.Count > 0 ) {
 
 				score = (int)action.value.num_value[0];
-
 			}
 			else
 			if ( action.value.bool_value != null && action.value.bool_value.Count > 0 ) {
-				variables.Add(new QuestVariable(key, action.value.bool_value[0]));
+				variables[key] = new QuestVariable(key, action.value.bool_value[0]);
 			}
 			else
 			if ( action.value.num_value != null && action.value.num_value.Count > 0 ) {
-				variables.Add(new QuestVariable(key, action.value.num_value[0]));
+				variables[key] = new QuestVariable(key, action.value.num_value[0]);
 			}
 			else
 			if ( action.value.string_value != null && action.value.string_value.Count > 0 ) {
 				string unformattedContent = action.value.string_value[0];
 				string formattedContent = TextHelper.makeReplacements(unformattedContent);
-				variables.Add(new QuestVariable(key, formattedContent));
+				variables[key] = new QuestVariable(key, formattedContent);
 			}
 			else
 			if ( action.value.var_value != null && action.value.var_value.Count > 0 ) {
@@ -1662,25 +1605,11 @@ public class actions : MonoBehaviour {
 
 				}
 				else {
-				
-					variables.Add(new QuestVariable(key, mathVariable(action.value.var_value[0])));
 
-
-				}
-			}
-
-
-
-			bool oneremoved = false;
-			foreach ( QuestVariable qa in helplist ) { 
-				if ( qa.key == action.getAttribute("var") && !oneremoved ) {
-					variables.Remove(qa);
-					oneremoved = true;
+					variables[key] = new QuestVariable(key, mathVariable(action.value.var_value[0]));
 				}
 			}
 		}
-
-
 	}
 
 	public double mathVariable (string input) {
@@ -1798,263 +1727,187 @@ public class actions : MonoBehaviour {
 
 	public void setVariable (string key, QuestVariable vari) {
 
-		key = new string(key.ToCharArray()
-		                       .Where(c => !Char.IsWhiteSpace(c))
-		                       .ToArray());
-
-		List<QuestVariable> helplist = new List<QuestVariable>();
-		foreach ( QuestVariable qa in variables ) {
-			helplist.Add(qa);
-		}
-		
-		foreach ( QuestVariable qa in helplist ) { 
-			if ( qa.key == key ) {
-				variables.Remove(qa);
-			}
-		}
-
-
-
-
-
 		if ( vari.bool_value != null && vari.bool_value.Count > 0 ) {
-			//Debug.Log(key+" has bool value");
-			variables.Add(new QuestVariable(key, vari.bool_value[0]));
+			variables[key] = new QuestVariable(key, vari.bool_value[0]);
 		}
 		else
 		if ( vari.num_value != null && vari.num_value.Count > 0 ) {
-			variables.Add(new QuestVariable(key, vari.num_value[0]));
-			//Debug.Log(key+" has num value");
-
+			variables[key] = new QuestVariable(key, vari.num_value[0]);
 		} 
 		if ( vari.string_value != null && vari.string_value.Count > 0 ) {
-			variables.Add(new QuestVariable(key, vari.string_value[0]));
-			//Debug.Log(key+" has string value");
-
+			variables[key] = new QuestVariable(key, vari.string_value[0]);
 		} 
 	}
 
-	public QuestVariable getVariable (string k) {
+	public QuestVariable getVariable (string varName) {
+		string originalVarName = varName;
 
-		if ( k != null ) {
+		if ( varName == null ) {
+			questdb.debug("Variable " + varName + " wurde nicht gefunden.");
+			return new QuestVariable(varName, "[null]");
+		}
 
 
-
-			string k2 = k;
-			k = new string(k.ToCharArray()
+		string k2 = varName;
+		varName = new string(varName.ToCharArray()
 		                 .Where(c => !Char.IsWhiteSpace(c))
 		                 .ToArray());
 
 
-			if ( k.StartsWith("date(") ) {
+		if ( varName.StartsWith("date(") ) {
 
-
-				string d = k;
-				d = d.Replace("date(", "");
-				d = d.Replace(")", "");
-
-			
-				if ( getVariable(d).num_value != null ) {
-
-				
-					double ergebnis = getVariable(d).num_value[0];
-//					Debug.Log (ergebnis);
-					TimeSpan time = TimeSpan.FromSeconds(ergebnis);
-				
-					double seconds = time.Seconds;
-					string seconds_str = seconds.ToString();
-				
-					if ( seconds < 10 ) {
-						seconds_str = "0" + seconds;
-					}
-				
-				
-					double minutes = time.Minutes;
-					string minutes_str = minutes.ToString();
-				
-					if ( minutes < 10 ) {
-						minutes_str = "0" + (int)minutes;
-					}
-					if ( minutes < 0 ) {
-						minutes_str = "00";
-					}
-				
-					int hours = time.Hours;
-					string hours_str = hours.ToString();
-				
-					if ( hours < 10 ) {
-						hours_str = "0" + hours;
-					}
-					if ( hours < 0 ) {
-						hours_str = "00";
-					}
-				
-				
-					int days = (int)time.TotalDays;
-					string days_str = days.ToString();
-				
-					if ( days < 0 ) {
-						days_str = "0";
-					}
-				
-				
-				
-					string finaldate = "";
-				
-					if ( days > 0 ) {
-					
-						finaldate = days_str + ":";
-					
-					}
-				
-					if ( hours > 0 ) {
-					
-						finaldate = finaldate + "" + hours_str + ":";
-					}
-				
-					finaldate = finaldate + "" + minutes_str + ":" + seconds_str;
-				
-				
-				
-					return new QuestVariable(k, finaldate);
-
-				
-				
-			
-				}
-				else {
-
-					return new QuestVariable(k, "[null]");
-
-				}
-
-
-
-			}
-			else
-
-				// XML Tags filtered out with "<" and ">"
-		if ( !(k.Contains("<") && k.Contains(">")) && (k.Contains("+") || k.Contains("-") || k.Contains("*") || k.Contains(":") || k.Contains("/")) ) {
-
-
-				return new QuestVariable(k, mathVariable(k));
-
-
-			}
-			else
-			if ( k == "$date.now" ) {
-
-//				Debug.Log ("looking for date");
-				DateTime Jan1St1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-				double unixTime = ((DateTime.UtcNow - Jan1St1970).TotalSeconds);
-				unixTime = Math.Round(unixTime, 0);
-				return new QuestVariable("$date.now", unixTime);
-
-
-
-			}
-			else
-			if ( k == "quest.name" ) {
-
-
-				return new QuestVariable("quest.name", questdb.currentquest.Name);
-
-
-			}
-			else
-			if ( k == "score" ) {
-
-
-
-				return new QuestVariable("score", (float)score);
-
-			
-			
-			
-			}
-			else
-			if ( k.StartsWith("$_mission_") || k.StartsWith("$_") ) {
-
-
-				k = k.Replace("$_mission_", "");
-				k = k.Replace("$_", "");
-
-				if ( k.EndsWith(".result") ) {
-
-					k = k.Replace(".result", "");
-
-					Page qp = questdb.getPage(int.Parse(k));
-
-
-					if ( qp != null && qp.result != null && qp.result.Length > 0 ) {
-						return new QuestVariable(k2, qp.result);
-					}
-					else
-					if ( Application.isWebPlayer ) {
-
-						return new QuestVariable(k2, "[MISSIONRESULT: " + k2 + " ]");
-					
-					}
-					else {
-
-						return new QuestVariable(k2, "");
-
-					}
-
-				}
-				else
-				if ( k.EndsWith(".state") ) {
-
-					k = k.Replace(".state", "");
-					Page qp = questdb.getPage(int.Parse(k));
-
-
-
-					if ( qp != null && qp.state != null && qp.state.Length > 0 ) {
-						return new QuestVariable(k2, qp.state);
-					}
-					else
-					if ( Application.isWebPlayer ) {
-						return new QuestVariable(k2, "[MISSIONSTATE: " + k2 + " ]");
-					
-					}
-					else {
-						return new QuestVariable(k2, "");
-
-
-					}
-
-
-				}
-
-
-
-			}
-			else {
-
-
-
-				//Debug.Log("searching '"+k+"'");
-				foreach ( QuestVariable qa in variables ) {
-					//Debug.Log("found '"+qa.key+"'");
-					if ( qa.key == k ) {
-
-						return qa;
-					}
-
-
-				}
-
-			}
-
+			return getDateVariable(varName);
 		}
 
-		questdb.debug("Variable " + k + " wurde nicht gefunden.");
-		return new QuestVariable(k, "[null]");
+		// XML Tags filtered out with "<" and ">"
+		if ( !(varName.Contains("<") && varName.Contains(">")) && (varName.Contains("+") || varName.Contains("-") || varName.Contains("*") || varName.Contains(":") || varName.Contains("/")) ) {
 
+			return new QuestVariable(varName, mathVariable(varName));
+		}
 
+		if ( varName == "$date.now" ) {
+
+			// Debug.Log ("looking for date");
+			DateTime Jan1St1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			double unixTime = ((DateTime.UtcNow - Jan1St1970).TotalSeconds);
+			unixTime = Math.Round(unixTime, 0);
+			return new QuestVariable("$date.now", unixTime);
+		}
+
+		if ( varName == "quest.name" ) {
+
+			return new QuestVariable("quest.name", questdb.currentquest.Name);
+		}
+
+		if ( varName == "score" ) {
+
+			return new QuestVariable("score", (float)score);
+		}
+
+		if ( varName.StartsWith("$_mission_") || varName.StartsWith("$_") ) {
+
+			varName = varName.Replace("$_mission_", "");
+			varName = varName.Replace("$_", "");
+
+			if ( varName.EndsWith(".result") ) {
+
+				varName = varName.Replace(".result", "");
+
+				Page qp = questdb.getPage(int.Parse(varName));
+
+				if ( qp != null && qp.result != null && qp.result.Length > 0 ) {
+					return new QuestVariable(k2, qp.result);
+				}
+				if ( Application.isWebPlayer ) {
+
+					return new QuestVariable(k2, "[MISSIONRESULT: " + k2 + " ]");
+				}
+
+				return new QuestVariable(k2, "");
+			}
+
+			if ( varName.EndsWith(".state") ) {
+
+				varName = varName.Replace(".state", "");
+				Page qp = questdb.getPage(int.Parse(varName));
+
+				if ( qp != null && qp.state != null && qp.state.Length > 0 ) {
+					return new QuestVariable(k2, qp.state);
+				}
+
+				if ( Application.isWebPlayer ) {
+					return new QuestVariable(k2, "[MISSIONSTATE: " + k2 + " ]");
+					
+				}
+				return new QuestVariable(k2, "");
+			}
+
+			Debug.LogWarning("Unknown mission variable type: " + originalVarName);
+			return null;
+		}
+
+		// STANDARD CASE:
+		QuestVariable resultVar;
+		if ( variables.TryGetValue(varName, out resultVar) ) {
+			return resultVar;
+		}
+		else {
+			resultVar = new QuestVariable(varName, "[null]");
+
+			questdb.debug("Variable " + varName + " wurde nicht gefunden.");
+			return new QuestVariable(varName, "[null]");
+
+		}
 	}
+
+	private QuestVariable getDateVariable (string varName) {
+
+		string d = varName;
+		d = d.Replace("date(", "");
+		d = d.Replace(")", "");
+
+		if ( getVariable(d).num_value != null ) {
+
+			double ergebnis = getVariable(d).num_value[0];
+			TimeSpan time = TimeSpan.FromSeconds(ergebnis);
+
+			double seconds = time.Seconds;
+			string seconds_str = seconds.ToString();
+
+			if ( seconds < 10 ) {
+				seconds_str = "0" + seconds;
+			}
+
+			double minutes = time.Minutes;
+			string minutes_str = minutes.ToString();
+
+			if ( minutes < 10 ) {
+				minutes_str = "0" + (int)minutes;
+			}
+			if ( minutes < 0 ) {
+				minutes_str = "00";
+			}
+
+			int hours = time.Hours;
+			string hours_str = hours.ToString();
+
+			if ( hours < 10 ) {
+				hours_str = "0" + hours;
+			}
+			if ( hours < 0 ) {
+				hours_str = "00";
+			}
+
+			int days = (int)time.TotalDays;
+			string days_str = days.ToString();
+
+			if ( days < 0 ) {
+				days_str = "0";
+			}
+
+			string finaldate = "";
+
+			if ( days > 0 ) {
+
+				finaldate = days_str + ":";
+			}
+
+			if ( hours > 0 ) {
+
+				finaldate = finaldate + "" + hours_str + ":";
+			}
+
+			finaldate = finaldate + "" + minutes_str + ":" + seconds_str;
+
+			return new QuestVariable(varName, finaldate);
+		}
+		else {
+
+			return new QuestVariable(varName, "[null]");
+		}
+	}
+
 
 	public void PlayNPCAudio (string path) {
 
