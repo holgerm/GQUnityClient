@@ -26,9 +26,11 @@ public class Locationcontrol : MonoBehaviour {
 		gpsdata = mapcontroller.questdb.GetComponent<GPSPosition>();
 
 	}
+		
 	// Update is called once per frame
 	void Update () {
 
+		Debug.Log("LocationControl.Update(): " + this.ToString());
 
 		foreach ( QuestRuntimeHotspot qrh in mapcontroller.questdb.getActiveHotspots() ) {
 
@@ -37,8 +39,8 @@ public class Locationcontrol : MonoBehaviour {
 			if ( qrh.entered ) {
 
 				if ( distance(location.CoordinatesWGS84[0], location.CoordinatesWGS84[1], (double)qrh.lat, (double)qrh.lon, 'M') > qrh.hotspot.radius ) {
-
-					qrh.hotspot.onLeave.Invoke();
+					if ( qrh.hotspot.onLeave != null )
+						qrh.hotspot.onLeave.Invoke();
 					qrh.entered = false;
 				}
 
