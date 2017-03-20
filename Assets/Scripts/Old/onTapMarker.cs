@@ -29,8 +29,8 @@ public class onTapMarker : MonoBehaviour {
 				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuestAtEndOfFrame(hotspot.startquest);
 			}
 			else {
-
-				hotspot.hotspot.onTap.Invoke();
+				if ( hotspot.hotspot.onTap != null )
+					hotspot.hotspot.onTap.Invoke();
 			}
 
 			GetComponent<MeshRenderer>().material.color = Color.white;
