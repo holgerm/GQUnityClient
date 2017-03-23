@@ -9124,9 +9124,9 @@ MonoBehaviour:
   defaultLatitude: 8
   checkForAppversion: 0
   appVersionURL: https://quest-mill.com/appversion/121.html
-  hasMenuWithinQuests: 1
+  hasMenuWithinQuests: 0
   appVersion: 1
-  subversionNumber: 17.2 b8
+  subversionNumber: 17.3 b8
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -11562,7 +11562,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: -0.00012207031}
+  m_AnchoredPosition: {x: 540.00006, y: 0.00005512852}
   m_SizeDelta: {x: 1080, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &948390054
@@ -20474,7 +20474,6 @@ MonoBehaviour:
   questdb: {fileID: 0}
   score: 0
   loopcount: 0
-  variables: []
   questaudiosources: []
   npcaudio: {fileID: 0}
   audiosources: []
