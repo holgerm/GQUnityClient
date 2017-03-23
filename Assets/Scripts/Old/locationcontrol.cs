@@ -30,8 +30,6 @@ public class Locationcontrol : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Debug.Log("LocationControl.Update(): " + this.ToString());
-
 		foreach ( QuestRuntimeHotspot qrh in mapcontroller.questdb.getActiveHotspots() ) {
 
 
