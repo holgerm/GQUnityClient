@@ -6,9 +6,12 @@ using System.IO;
 using System;
 using System.Globalization;
 using GQ.Client.Model;
+using UnityEngine.SceneManagement;
+using GQ.Client.Util;
 
 
-public class page_imagecapture : MonoBehaviour {
+public class page_imagecapture : MonoBehaviour
+{
 
 	
 	public questdatabase questdb;
@@ -20,221 +23,176 @@ public class page_imagecapture : MonoBehaviour {
 	public Text text;
 	public Image textbg;
 
-	
-	
-	
-	
-	
-	
-	WebCamTexture cameraTexture;
-	
-	Material cameraMat;
-	GameObject plane;
-	
+	public WebCamTexture cameraTexture;
+	bool camIsRotated;
+	public RawImage camRawImage;
 
-
-	
 	// Use this for initialization
-	IEnumerator Start () {
-		
-		
-		
-		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-		actioncontroller = GameObject.Find("QuestDatabase").GetComponent<actions>();
-		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-		imagecapture = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
+	IEnumerator Start ()
+	{
+		GameObject questdbGO = GameObject.Find ("QuestDatabase");
+		if (questdbGO != null) {
+			questdb = questdbGO.GetComponent<questdatabase> ();
+			actioncontroller = questdbGO.GetComponent<actions> ();
+			quest = questdbGO.GetComponent<questdatabase> ().currentquest;
+			imagecapture = questdbGO.GetComponent<questdatabase> ().currentquest.currentpage;
+		} else {
+			SceneManager.LoadScene ("questlist");
+			yield break;
+		}
 
-
-
-
-		if ( imagecapture.onStart != null ) {
+		if (imagecapture.onStart != null) {
 			
-			imagecapture.onStart.Invoke();
+			imagecapture.onStart.Invoke ();
 		}
 		
-		if ( imagecapture.hasAttribute("task") && imagecapture.getAttribute("task").Length > 1 ) {
-			text.text = questdb.GetComponent<actions>().formatString(imagecapture.getAttribute("task"));
-		}
-		else {
+		if (imagecapture.hasAttribute ("task") && imagecapture.getAttribute ("task").Length > 1) {
+			text.text = questdb.GetComponent<actions> ().formatString (imagecapture.getAttribute ("task"));
+		} else {
 			
 			text.enabled = false;
 			textbg.enabled = false;
-			
 		}
-
-
-
-
-		// get render target;
-		plane = GameObject.Find("Plane");
-		cameraMat = plane.GetComponent<MeshRenderer>().material;
-		
 
 		// init web cam;
-		if ( Application.platform == RuntimePlatform.OSXWebPlayer ||
-		     Application.platform == RuntimePlatform.WindowsWebPlayer ) {
-			yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
+		if (Application.platform == RuntimePlatform.OSXWebPlayer ||
+		    Application.platform == RuntimePlatform.WindowsWebPlayer ||
+		    Application.isWebPlayer) {
+			yield return Application.RequestUserAuthorization (UserAuthorization.WebCam);
 		}
 		
-		var devices = WebCamTexture.devices;
-		var deviceName = devices[0].name;
-
-
-		if ( Application.platform == RuntimePlatform.Android ) {
-			cameraTexture = new WebCamTexture(deviceName, 1280, 720);
-
-			
-		}
-		else {
-			cameraTexture = new WebCamTexture(deviceName, 1920, 1080);
-		}
-
-
-
-		cameraTexture.Play();
-		
-
-		cameraMat.mainTexture = cameraTexture;
-		
-
-	}
-
-
-
-
-
-	IEnumerator takeSnapshotAndroid (WebCamTexture cameraTexture2) {
-
-
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-
-
-
-		Texture2D snap = new Texture2D(cameraTexture2.width, cameraTexture2.height);
-		snap.SetPixels(cameraTexture2.GetPixels());
-		snap.Apply();
-		
-		cameraTexture2.Stop();
-		
-		cameraMat.mainTexture = snap;
-		
-		QuestRuntimeAsset qra = new QuestRuntimeAsset("@_" + imagecapture.getAttribute("file"), snap);
-
-
-
-		GetComponent<AndroidCamera>().OnImageSaved += OnImageSaved;
-
-		DateTime now = DateTime.Now;
-		string text = now.ToString("yyyy_MM_dd_HH_mm_ss_fff",
-			              CultureInfo.InvariantCulture);
-		
-		GetComponent<AndroidCamera>().SaveImageToGallery(snap, text);
-
-
-		actioncontroller.addPhoto(qra);
-		onEnd();
-
-
-	}
-
-
-	void OnImageSaved (GallerySaveResult result) {
-		AndroidCamera.instance.OnImageSaved -= OnImageSaved;
-		if ( result.IsSucceeded ) {
-			Debug.Log("Image saved to gallery " + "Path: " + result.imagePath);
-		}
-		else {
-			Debug.Log("Image save to gallery failed");
-		}
-	}
-
-
-	public void TakeSnapshot () {
-
-
-		Debug.Log("starting photo");
-
-		if ( Application.platform == RuntimePlatform.Android ) {
-			var devices = WebCamTexture.devices;
-			var deviceName = devices[0].name;
-			WebCamTexture cameraTexture2 = new WebCamTexture(deviceName, 1920, 1080);
-			cameraTexture.Stop();
-			cameraTexture2.Play();
-
-			StartCoroutine(takeSnapshotAndroid(cameraTexture2));
-
-
-		}
-		else {
-		
-			Texture2D snap = new Texture2D(cameraTexture.width, cameraTexture.height);
-			snap.SetPixels(cameraTexture.GetPixels());
-			snap.Apply();
-	
-			cameraTexture.Stop();
-
-			cameraMat.mainTexture = snap;
-			QuestRuntimeAsset qra = new QuestRuntimeAsset("@_" + imagecapture.getAttribute("file"), snap);
-
-
-
-			if ( Application.platform == RuntimePlatform.IPhonePlayer ) {
-
-				GetComponent<IOSCamera>().SaveTextureToCameraRoll(snap);
-
+		string deviceName = null;
+		foreach (WebCamDevice wcd in WebCamTexture.devices) {
+			if (!wcd.isFrontFacing) {
+				deviceName = wcd.name;
+				break;
 			}
-
-			actioncontroller.addPhoto(qra);
-
-
-			onEnd();
-
-
 		}
-	
-	
 
+		cameraTexture = new WebCamTexture (deviceName);
 
+		cameraTexture.requestedHeight = 2000;
+		cameraTexture.requestedWidth = 3000;
 
+		cameraTexture.Play ();
 
+		// wait for web cam to be ready which is guaranteed after first image update:
+		while (!cameraTexture.didUpdateThisFrame)
+			yield return null;
 
-	
+		// rotate if needed:
+		camRawImage.transform.rotation *= Quaternion.AngleAxis (cameraTexture.videoRotationAngle, Vector3.back);
 
+		camIsRotated = Math.Abs (cameraTexture.videoRotationAngle) == 90 || Math.Abs (cameraTexture.videoRotationAngle) == 270;
+		float camHeight = (camIsRotated ? cameraTexture.width : cameraTexture.height);
+		float camWidth = (camIsRotated ? cameraTexture.height : cameraTexture.width);
 
+		float panelHeight = camRawImage.rectTransform.rect.height;
+		float panelWidth = camRawImage.rectTransform.rect.width;
 
+		float heightScale = panelHeight / camHeight;
+		float widthScale = panelWidth / camWidth;
+		float fitScale = Math.Min (heightScale, widthScale);
 
+		float goalHeight = cameraTexture.height * fitScale;
+		float goalWidth = cameraTexture.width * fitScale;
+
+		heightScale = goalHeight / panelHeight;
+		widthScale = goalWidth / panelWidth;
+
+		float mirrorAdjustment = cameraTexture.videoVerticallyMirrored ? -1F : 1F;
+		// TODO adjust mirror also correct if cam is not rotated:
+		camRawImage.transform.localScale = new Vector3 (widthScale, heightScale * mirrorAdjustment, 1F);
+
+		camRawImage.texture = cameraTexture;
 	}
 
 
-	
-	
-	
+	public void TakeSnapshot ()
+	{
 
-	
-	
-	void onEnd () {
+		Texture2D photo;
 
+		// we add 360 degrees to avoid any negative values:
+		int rotatedClockwiseQuarters = 360 - cameraTexture.videoRotationAngle;
 
-	
+		switch (Input.deviceOrientation) {
+		case DeviceOrientation.LandscapeLeft:
+			rotatedClockwiseQuarters += 90;
+			break;
+		case DeviceOrientation.PortraitUpsideDown:
+			rotatedClockwiseQuarters += 180;
+			break;
+		case DeviceOrientation.LandscapeRight:
+			rotatedClockwiseQuarters += 270;
+			break;
+		case DeviceOrientation.Portrait:
+		case DeviceOrientation.FaceUp:
+		case DeviceOrientation.FaceDown:
+		default:
+			break;
+		}
+
+		rotatedClockwiseQuarters /= 90;  // going from degrees to quarters
+		rotatedClockwiseQuarters %= 4; // reducing to 0, 1 ,2 or 3 quarters
+
+		Color[] pixels = cameraTexture.GetPixels ();
+
+		switch (rotatedClockwiseQuarters) {
+		case 1:
+			photo = new Texture2D (cameraTexture.height, cameraTexture.width);
+			photo.SetPixels (pixels.Rotate90 (cameraTexture.height, cameraTexture.width));
+			break;
+		case 2:
+			photo = new Texture2D (cameraTexture.width, cameraTexture.height);
+			photo.SetPixels (pixels.Rotate180 (cameraTexture.width, cameraTexture.height));
+			break;
+		case 3:
+			photo = new Texture2D (cameraTexture.height, cameraTexture.width);
+			photo.SetPixels (pixels.Rotate270 (cameraTexture.height, cameraTexture.width));
+			break;
+		case 0:
+		default:
+			photo = new Texture2D (cameraTexture.width, cameraTexture.height);
+			photo.SetPixels (pixels);
+			break;
+		}
+		photo.Apply ();
+
+		cameraTexture.Stop ();
+
+		QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + imagecapture.getAttribute ("file"), photo);
+		actioncontroller.addPhoto (qra);
+
+		SaveTextureToCamera (photo);
+
+		onEnd ();
+	}
+
+	void SaveTextureToCamera (Texture2D texture)
+	{
+		DateTime now = DateTime.Now;
+		string filename = now.ToString ("yyyy_MM_dd_HH_mm_ss_fff", CultureInfo.InvariantCulture);
+		if (Application.platform == RuntimePlatform.Android) {
+			GetComponent<AndroidCamera> ().SaveImageToGallery (texture, filename);
+		}
+		if (Application.platform == RuntimePlatform.IPhonePlayer) {
+			GetComponent<IOSCamera> ().SaveTextureToCameraRoll (texture);
+		}
+	}
+
+	void onEnd ()
+	{
 
 		imagecapture.state = "succeeded";
 
-		
-		if ( imagecapture.onEnd != null ) {
-			Debug.Log("onEnd");
-			imagecapture.onEnd.Invoke();
-		}
-		else {
+		if (imagecapture.onEnd != null) {
+			imagecapture.onEnd.Invoke ();
+		} else {
 			
-			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
-			
+			questdb.endQuest ();
 		}
-		
-		
 	}
+
+
 }
