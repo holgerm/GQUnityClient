@@ -4,7 +4,7 @@
   "portal": 502,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
-  "downloadTimeOutSeconds": 300,
+  "downloadTimeOutSeconds": 60,
   "nameForQuest": "Quest",
   "questVisualization": "list",
   "questVisualizationChangeable": false,
@@ -13,9 +13,9 @@
   "localQuestsDeletable": true,
   "showTextInLoadingLogo": true,
   "showNetConnectionWarning": true,
-  "colorProfile": "default",
+  "colorProfile": "radioranzen",
   "mapboxKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
   "mapboxMapID": "mapbox.streets",
-  "useMapOffline": false,
+  "useMapOffline": true,
   "markers": []
 }
