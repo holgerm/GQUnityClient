@@ -782,7 +782,6 @@ namespace UnitySlippyMap
 					    && layer.enabled == true
 					    && CurrentZoom >= layer.MinZoom
 					    && CurrentZoom <= layer.MaxZoom) {
-						Debug.Log ("MAP.update(): layer.UpdateContent()");
 						layer.UpdateContent ();
 					}
 					

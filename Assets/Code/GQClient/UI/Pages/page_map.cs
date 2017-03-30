@@ -797,6 +797,8 @@ public class page_map : PageController
 			}
 			map.HasMoved = true;
 		}
+
+		InitBackButton (quest.AllowReturn);
 	}
 	
 	#if DEBUG_PROFILE
@@ -848,13 +850,17 @@ public class page_map : PageController
 
 	protected override void InitBackButton (bool show)
 	{
-		if (!show) {
-			Destroy (backbutton.gameObject);
+		if (backbutton != null) {
+			backbutton.gameObject.SetActive (show);
 		}
 
-		if (page.onEnd == null || page.onEnd.actions == null || page.onEnd.actions.Count == 0) {
-			forthbutton.gameObject.SetActive (false);
-		}
+		bool showForthButton = 
+			questdb.currentquest.currentpage.onEnd != null
+			&& questdb.currentquest.currentpage.onEnd.actions != null
+			&& questdb.currentquest.currentpage.onEnd.actions.Count > 0;
+		
+		if (forthbutton != null)
+			forthbutton.gameObject.SetActive (showForthButton);
 	}
 
 	public void backButton ()

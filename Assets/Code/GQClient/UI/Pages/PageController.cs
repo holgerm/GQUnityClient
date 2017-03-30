@@ -4,9 +4,11 @@ using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
 
-namespace GQ.Client.UI.Pages {
+namespace GQ.Client.UI.Pages
+{
 
-	public abstract class PageController : MonoBehaviour {
+	public abstract class PageController : MonoBehaviour
+	{
 
 		private const int DEFAULT_FONT_SIZE = 20;
 
@@ -15,26 +17,28 @@ namespace GQ.Client.UI.Pages {
 		public Quest quest;
 		public actions questactions;
 
-		protected virtual void Start () { 
+		protected virtual void Start ()
+		{ 
 
-			if ( GameObject.Find("QuestDatabase") == null ) {
-				SceneManager.LoadScene("questlist");
+			if (GameObject.Find ("QuestDatabase") == null) {
+				SceneManager.LoadScene ("questlist");
 				return;
 			}
 
-			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 			quest = questdb.currentquest;
 			page = quest.currentpage;
-			questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();
+			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 
-			InitBackButton(quest.AllowReturn);
+			InitBackButton (quest.AllowReturn);
 
-			TriggerOnStart();
+			TriggerOnStart ();
 		}
 
-		protected void TriggerOnStart () {
-			if ( page.onStart != null ) {
-				page.onStart.Invoke();
+		protected void TriggerOnStart ()
+		{
+			if (page.onStart != null) {
+				page.onStart.Invoke ();
 			}
 		}
 
@@ -57,24 +61,23 @@ namespace GQ.Client.UI.Pages {
 			}
 		}
 
-		protected void onEnd () {
+		protected void onEnd ()
+		{
 			page.state = PageStateOnEnd;
 
-			if ( page.onEnd != null && page.onEnd.actions != null && page.onEnd.actions.Count > 0 ) {
+			if (page.onEnd != null && page.onEnd.actions != null && page.onEnd.actions.Count > 0) {
 
-				page.onEnd.Invoke();
+				page.onEnd.Invoke ();
 
-			}
-			else {
+			} else {
 				//Debug.Log ("ending");
-				GameObject questDBGO = GameObject.Find("QuestDatabase");
-				if ( questDBGO != null ) {
-					questDBGO.GetComponent<questdatabase>().endQuest();
+				GameObject questDBGO = GameObject.Find ("QuestDatabase");
+				if (questDBGO != null) {
+					questDBGO.GetComponent<questdatabase> ().endQuest ();
 				}
 
 			}
 		}
-
 
 	}
 
