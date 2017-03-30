@@ -13365,7 +13365,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: 0.000061035156}
+  m_AnchoredPosition: {x: 540.00006, y: -0.000061035156}
   m_SizeDelta: {x: 1080, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1080246903
@@ -20547,8 +20547,8 @@ MonoBehaviour:
     secondCompColor: {r: 0.34901962, g: 0.27450982, b: 0.38431376, a: 1}
   - id: radioranzen
     mainColor: {r: 0.052278474, g: 0.23263922, b: 0.413, a: 1}
-    backgroundColor: {r: 0.43144464, g: 0.5009247, b: 0.5147059, a: 1}
-    darkBG: 1
+    backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    darkBG: 0
     buttonColor: {r: 0.07720588, g: 0.34928992, b: 0.61764705, a: 1}
     darkButton: 1
     buttonDisabledColor: {r: 0.30422747, g: 0.46191767, b: 0.61960787, a: 0.9882353}
