@@ -798,7 +798,7 @@ public class page_map : PageController
 			map.HasMoved = true;
 		}
 
-		InitBackButton (quest.AllowReturn);
+		InitBackButton (questdb.currentquest.AllowReturn);
 	}
 	
 	#if DEBUG_PROFILE
