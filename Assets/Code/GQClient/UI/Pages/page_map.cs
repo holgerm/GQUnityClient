@@ -18,25 +18,18 @@ using System.Globalization;
 using GQ.Client.Conf;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
+using GQ.Client.UI.Pages;
 
 /// <summary>
 /// Caution: We use the order (LATITUDE, LONGITUDE) throughout our implementation here! 
 /// 
 /// </summary>
-public class page_map : MonoBehaviour
+public class page_map : PageController
 {
-
-
-
-
 	public RectTransform navigationMenu;
 	public RectTransform numberInputPanel;
 
 	public Map map;
-	public questdatabase questdb;
-	public Quest quest;
-	public Page mappage;
-	public actions questactions;
 	Locationcontrol locationController;
 	public GPSPosition gpsdata;
 	public Texture	LocationTexture;
@@ -79,8 +72,11 @@ public class page_map : MonoBehaviour
 		map.CenterWGS84 = position;
 	}
 
-	private void Start ()
-	{
+	protected override void Start ()
+	{ 
+
+		base.Start ();
+
 		if (GameObject.Find ("QuestDatabase") == null) {
 			
 			SceneManager.LoadScene ("questlist", LoadSceneMode.Single);
@@ -95,17 +91,17 @@ public class page_map : MonoBehaviour
 		if (questdb.currentquest != null && questdb.currentquest.Id != 0) {
 
 			quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-			mappage = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+			page = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 		}
 
 		bool showMap = true;
 
-		if (mappage.type.Equals ("Navigation")) {
+		if (page.type.Equals ("Navigation")) {
 			
 			showMap = false;
 
-			if (mappage.getAttribute ("map") == "true") {
+			if (page.getAttribute ("map") == "true") {
 
 				showMap = true;
 
@@ -755,10 +751,10 @@ public class page_map : MonoBehaviour
 
 	void Update ()
 	{
-		if (!onStartInvoked && mappage != null) {
+		if (!onStartInvoked && page != null) {
 
-			if (mappage.onStart != null) {
-				mappage.onStart.Invoke ();
+			if (page.onStart != null) {
+				page.onStart.Invoke ();
 				onStartInvoked = true;
 			}
 
@@ -846,9 +842,32 @@ public class page_map : MonoBehaviour
 			Configuration.instance.storedMapPositionModeIsCentering = positionToggle.isOn;
 		}
 	}
-	
-	
-	
+
+	public Button backbutton;
+	public Button forthbutton;
+
+	protected override void InitBackButton (bool show)
+	{
+		if (!show) {
+			Destroy (backbutton.gameObject);
+		}
+
+		if (page.onEnd == null || page.onEnd.actions == null || page.onEnd.actions.Count == 0) {
+			forthbutton.gameObject.SetActive (false);
+		}
+	}
+
+	public void backButton ()
+	{
+		quest.GoBackOnePage ();
+	}
+
+
+	public void nextButton ()
+	{
+		onEnd ();
+	}
+
 }
 
 
