@@ -9126,7 +9126,7 @@ MonoBehaviour:
   appVersionURL: https://quest-mill.com/appversion/121.html
   hasMenuWithinQuests: 1
   appVersion: 1
-  subversionNumber: 17.3 b8
+  subversionNumber: 17.4 b1
 --- !u!4 &714240441
 Transform:
   m_ObjectHideFlags: 0
@@ -16656,7 +16656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1464306180
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20546,13 +20546,13 @@ MonoBehaviour:
     compColor: {r: 0.6117647, g: 0.3019608, b: 0.3529412, a: 1}
     secondCompColor: {r: 0.34901962, g: 0.27450982, b: 0.38431376, a: 1}
   - id: radioranzen
-    mainColor: {r: 0, g: 0.69803923, b: 1, a: 1}
-    backgroundColor: {r: 0.78676474, g: 0.78676474, b: 0.78676474, a: 1}
-    darkBG: 0
-    buttonColor: {r: 0, g: 0.69803923, b: 1, a: 1}
+    mainColor: {r: 0.052278474, g: 0.23263922, b: 0.413, a: 1}
+    backgroundColor: {r: 0.43144464, g: 0.5009247, b: 0.5147059, a: 1}
+    darkBG: 1
+    buttonColor: {r: 0.07720588, g: 0.34928992, b: 0.61764705, a: 1}
     darkButton: 1
-    buttonDisabledColor: {r: 0.5686275, g: 0.8509804, b: 1, a: 0.9882353}
-    compColor: {r: 1, g: 0.20784314, b: 0, a: 1}
+    buttonDisabledColor: {r: 0.30422747, g: 0.46191767, b: 0.61960787, a: 0.9882353}
+    compColor: {r: 0.078431375, g: 0.53, b: 0.566, a: 1}
     secondCompColor: {r: 1, g: 0.72156864, b: 0, a: 1}
   - id: wcc
     mainColor: {r: 0, g: 0.69803923, b: 1, a: 1}
