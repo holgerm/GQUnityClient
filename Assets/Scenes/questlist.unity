@@ -3604,7 +3604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &325989057
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9095,7 +9095,6 @@ MonoBehaviour:
   agbsVersion: 1
   offlinePlayable: 1
   downloadAllCloudQuestOnStart: 0
-  localQuestsDeletable: 1
   defaultlanguage: system
   languageChangableByUser: 0
   languagesAvailable:
@@ -10878,7 +10877,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &888984966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18636,7 +18635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1587095776
 RectTransform:
   m_ObjectHideFlags: 0

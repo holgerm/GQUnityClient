@@ -4,12 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GQ.Client.Conf {
+namespace GQ.Client.Conf
+{
 
-	public class Configuration : MonoBehaviour {
+	public class Configuration : MonoBehaviour
+	{
 		private static Configuration _instance;
 
-		public enum ProductIDs {
+		public enum ProductIDs
+		{
 			Public,
 			CarlBenz,
 			ErzbistumKoeln,
@@ -34,7 +37,6 @@ namespace GQ.Client.Conf {
 		public int agbsVersion = -1;
 		public bool offlinePlayable = true;
 		public bool downloadAllCloudQuestOnStart = false;
-		public bool localQuestsDeletable = true;
 		public string defaultlanguage = "system";
 		public bool languageChangableByUser = true;
 		public List<Language> languagesAvailable;
@@ -90,28 +92,28 @@ namespace GQ.Client.Conf {
 
 		public static Configuration instance {
 			get {
-				if ( _instance == null ) {
-					_instance = GameObject.FindObjectOfType<Configuration>();
+				if (_instance == null) {
+					_instance = GameObject.FindObjectOfType<Configuration> ();
 				
 					//Tell unity not to destroy this object when loading a new scene!
-					DontDestroyOnLoad(_instance.gameObject);
+					DontDestroyOnLoad (_instance.gameObject);
 				}
 			
 				return _instance;
 			}
 		}
 
-		void Awake () {
-			if ( _instance == null ) {
+		void Awake ()
+		{
+			if (_instance == null) {
 				//If I am the first instance, make me the Singleton
 				_instance = this;
-				DontDestroyOnLoad(this);
-			}
-			else {
+				DontDestroyOnLoad (this);
+			} else {
 				//If a Singleton already exists and you find
 				//another reference in scene, destroy it!
-				if ( this != _instance ) {
-					Destroy(this.gameObject);
+				if (this != _instance) {
+					Destroy (this.gameObject);
 				}
 			}
 
@@ -121,19 +123,21 @@ namespace GQ.Client.Conf {
 		
 		}
 
-		public void Start () {
+		public void Start ()
+		{
 //		if (!overrideProductSettingsInInspector)
 //			initProductDefinitions ();
 		}
 
 
-		public bool metaCategoryIsSearchable (string category) {
+		public bool metaCategoryIsSearchable (string category)
+		{
 
-			if ( metaCategoryUsage != null && metaCategoryUsage.Count > 0 ) {
+			if (metaCategoryUsage != null && metaCategoryUsage.Count > 0) {
 
-				foreach ( QuestMetaCategory qmc in metaCategoryUsage ) {
+				foreach (QuestMetaCategory qmc in metaCategoryUsage) {
 
-					if ( qmc.name.ToUpper().Equals(category.ToUpper()) && qmc.considerInSearch ) {
+					if (qmc.name.ToUpper ().Equals (category.ToUpper ()) && qmc.considerInSearch) {
 
 						return true;
 
@@ -148,13 +152,14 @@ namespace GQ.Client.Conf {
 
 
 
-		public QuestMetaCategory getMetaCategory (string category) {
+		public QuestMetaCategory getMetaCategory (string category)
+		{
 
-			if ( metaCategoryUsage != null && metaCategoryUsage.Count > 0 ) {
+			if (metaCategoryUsage != null && metaCategoryUsage.Count > 0) {
 
-				foreach ( QuestMetaCategory qmc in metaCategoryUsage ) {
+				foreach (QuestMetaCategory qmc in metaCategoryUsage) {
 
-					if ( qmc.name.ToUpper().Equals(category.ToUpper()) && qmc.considerInSearch ) {
+					if (qmc.name.ToUpper ().Equals (category.ToUpper ()) && qmc.considerInSearch) {
 
 						return qmc;
 
@@ -175,7 +180,8 @@ namespace GQ.Client.Conf {
 
 
 	[System.Serializable]
-	public class Language {
+	public class Language
+	{
 	
 		public string bezeichnung;
 		public string anzeigename_de;
@@ -188,7 +194,8 @@ namespace GQ.Client.Conf {
 
 
 	[System.Serializable]
-	public class QuestMetaCategory {
+	public class QuestMetaCategory
+	{
 		public string name;
 
 		public bool considerInSearch;
@@ -199,30 +206,30 @@ namespace GQ.Client.Conf {
 		public List<string> chosenValues;
 
 
-		public void addPossibleValues (string values) {
+		public void addPossibleValues (string values)
+		{
 
-			Debug.Log(values);
-
-
-			if ( values.Contains(",") ) {
+			Debug.Log (values);
 
 
-				List<string> split = new List<string>();
-				split.AddRange(values.Split(','));
+			if (values.Contains (",")) {
 
 
-				foreach ( string s1 in split ) {
+				List<string> split = new List<string> ();
+				split.AddRange (values.Split (','));
 
-					if ( split.Any(s => s.ToUpper().Equals(s1.ToUpper())) ) {
+
+				foreach (string s1 in split) {
+
+					if (split.Any (s => s.ToUpper ().Equals (s1.ToUpper ()))) {
 
 						// is in already
 
-					}
-					else {
+					} else {
 
-						if ( !s1.Equals("") ) {
+						if (!s1.Equals ("")) {
 
-							possibleValues.Add(s1);
+							possibleValues.Add (s1);
 						}
 
 					}
@@ -230,12 +237,11 @@ namespace GQ.Client.Conf {
 
 				}
 
-			}
-			else {
+			} else {
 
-				if ( !values.Equals("") ) {
+				if (!values.Equals ("")) {
 
-					possibleValues.Add(values);
+					possibleValues.Add (values);
 
 				}
 
@@ -245,8 +251,9 @@ namespace GQ.Client.Conf {
 		}
 
 
-		public bool isChosen (string s1) {
-			if ( chosenValues.Any(s => s.Equals(s1, StringComparison.OrdinalIgnoreCase)) ) {
+		public bool isChosen (string s1)
+		{
+			if (chosenValues.Any (s => s.Equals (s1, StringComparison.OrdinalIgnoreCase))) {
 
 				return true;
 
@@ -257,18 +264,18 @@ namespace GQ.Client.Conf {
 
 
 
-		public void chooseValue (string s1) {
+		public void chooseValue (string s1)
+		{
 
 
-			if ( chosenValues.Any(s => s.Equals(s1, StringComparison.OrdinalIgnoreCase)) ) {
+			if (chosenValues.Any (s => s.Equals (s1, StringComparison.OrdinalIgnoreCase))) {
 
 				// is in already
 
-			}
-			else {
+			} else {
 
 
-				chosenValues.Add(s1);
+				chosenValues.Add (s1);
 
 
 			}
@@ -276,15 +283,16 @@ namespace GQ.Client.Conf {
 		}
 
 
-		public void unchooseValue (string s1) {
+		public void unchooseValue (string s1)
+		{
 
-			foreach ( string s in chosenValues.GetRange(0,chosenValues.Count) ) {
-
-
-				if ( s.ToUpper().Equals(s1.ToUpper()) ) {
+			foreach (string s in chosenValues.GetRange(0,chosenValues.Count)) {
 
 
-					chosenValues.Remove(s);
+				if (s.ToUpper ().Equals (s1.ToUpper ())) {
+
+
+					chosenValues.Remove (s);
 
 				}
 
