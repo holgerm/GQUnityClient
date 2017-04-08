@@ -9,7 +9,8 @@ using ZXing;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
 
-public class page_tagscanner : MonoBehaviour {
+public class page_tagscanner : MonoBehaviour
+{
 
 	public questdatabase questdb;
 	public Quest quest;
@@ -35,64 +36,64 @@ public class page_tagscanner : MonoBehaviour {
 	private string qrcontent;
 	//	public MessageReceiver receiver;
 
-	IEnumerator Start () {
+	IEnumerator Start ()
+	{
 
-		if ( GameObject.Find("QuestDatabase") == null ) {
+		if (GameObject.Find ("QuestDatabase") == null) {
 
-			SceneManager.LoadScene("questlist");
+			SceneManager.LoadScene ("questlist");
 			yield break;
 		}
 
-		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-		tagscanner = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
+		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+		tagscanner = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
 
-		if ( tagscanner.onStart != null ) {
+		if (tagscanner.onStart != null) {
 
-			tagscanner.onStart.Invoke();
+			tagscanner.onStart.Invoke ();
 		}
 
-		if ( tagscanner.hasAttribute("taskdescription") ) {
+		if (tagscanner.hasAttribute ("taskdescription")) {
 			
-			text.text = questdb.GetComponent<actions>().formatString(tagscanner.getAttribute("taskdescription"));
-		}
-		else {
+			text.text = questdb.GetComponent<actions> ().formatString (tagscanner.getAttribute ("taskdescription"));
+		} else {
 			
 			text.enabled = false;
 			textbg.enabled = false;
 		}
 
 		showresult = false;
-		if ( tagscanner.hasAttribute("showTagContent") ) {
+		if (tagscanner.hasAttribute ("showTagContent")) {
 
-			if ( tagscanner.getAttribute("showTagContent") == "true" ) {
+			if (tagscanner.getAttribute ("showTagContent") == "true") {
 
 				showresult = true;
 			}
 		}
 
 		// init web cam;
-		if ( Application.isWebPlayer ) {
-			yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
+		if (Application.isWebPlayer) {
+			yield return Application.RequestUserAuthorization (UserAuthorization.WebCam);
 		}
 
 		string deviceName = null;
-		foreach ( WebCamDevice wcd in WebCamTexture.devices ) {
-			if ( !wcd.isFrontFacing ) {
+		foreach (WebCamDevice wcd in WebCamTexture.devices) {
+			if (!wcd.isFrontFacing) {
 				deviceName = wcd.name;
 				break;
 			}
 		}
 
-		camTexture = new WebCamTexture(deviceName);
+		camTexture = new WebCamTexture (deviceName);
 		// request a resolution that is enough to scan qr codes reliably:
 		camTexture.requestedHeight = 480;
 		camTexture.requestedWidth = 640;
 
-		camTexture.Play();
+		camTexture.Play ();
 
 		// wait for web cam to be ready which is guaranteed after first image update:
-		while ( !camTexture.didUpdateThisFrame )
+		while (!camTexture.didUpdateThisFrame)
 			yield return null;
 
 		// scale height according to camera aspect ratio:
@@ -105,18 +106,18 @@ public class page_tagscanner : MonoBehaviour {
 		float minWidth = ((RectTransform)camQRImage.transform.parent).rect.width;
 		float isHeight = camQRImage.rectTransform.rect.height * yScale;
 		float isWidth = camQRImage.rectTransform.rect.width;
-		if ( minHeight > isHeight )
-			fillScale = Mathf.Max(minHeight / isHeight, fillScale);
-		if ( minWidth > isWidth )
-			fillScale = Mathf.Max(minWidth / isWidth, fillScale);
+		if (minHeight > isHeight)
+			fillScale = Mathf.Max (minHeight / isHeight, fillScale);
+		if (minWidth > isWidth)
+			fillScale = Mathf.Max (minWidth / isWidth, fillScale);
 		xScale *= fillScale;
 		yScale *= fillScale;
 		
 		// correct shown texture according to webcam details:
-		camQRImage.transform.rotation *= Quaternion.AngleAxis(camTexture.videoRotationAngle, Vector3.back);
-		camQRImage.transform.localScale = new Vector3(xScale, yScale, 1F);
+		camQRImage.transform.rotation *= Quaternion.AngleAxis (camTexture.videoRotationAngle, Vector3.back);
+		camQRImage.transform.localScale = new Vector3 (xScale, yScale, 1F);
 
-		Debug.Log(
+		Debug.Log (
 			"QR Start(): Cam h: " + camTexture.height + ", w: " + camTexture.width +
 			", isH: " + isHeight + " isW: " + isWidth +
 			", minH: " + minHeight + " minW: " + minWidth +
@@ -128,47 +129,48 @@ public class page_tagscanner : MonoBehaviour {
 		W = camTexture.width;
 		H = camTexture.height;
 
-		qrThread = new Thread(DecodeQR);
-		qrThread.Start();
+		qrThread = new Thread (DecodeQR);
+		qrThread.Start ();
 	}
 
-	void Update () {
-		if ( camTexture != null && camTexture.didUpdateThisFrame ) {
-			c = camTexture.GetPixels32();
+	void Update ()
+	{
+		if (camTexture != null && camTexture.didUpdateThisFrame) {
+			c = camTexture.GetPixels32 ();
 		}
 
-		if ( camTexture != null )
-			Debug.Log("QR Update(): Cam updated: " + camTexture.didUpdateThisFrame + ", w: " + camTexture.width + ", h: " + camTexture.height);
-
-		if ( qrcontent != null && qrcontent != "" && qrcontent != "!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012" ) {
-			checkResult(qrcontent);
+		if (qrcontent != null && qrcontent != "" && qrcontent != "!XEMPTY_GEOQUEST_QRCODEX!28913890123891281283012") {
+			checkResult (qrcontent);
 		}
 	}
 
-	void OnDisable () {
-		Debug.Log("OnDisable()");
-		if ( camTexture != null ) {
-			camTexture.Pause();
+	void OnDisable ()
+	{
+		Debug.Log ("OnDisable()");
+		if (camTexture != null) {
+			camTexture.Pause ();
 		}
 	}
 
-	void OnDestroy () {
-		Debug.Log("OnDestroy()");
+	void OnDestroy ()
+	{
+		Debug.Log ("OnDestroy()");
 
-		if ( qrThread != null ) {
+		if (qrThread != null) {
 			decoderRunning = false;
 		}
 
-		if ( camTexture != null ) {
+		if (camTexture != null) {
 
-			camTexture.Stop();
+			camTexture.Stop ();
 		}
 	}
 
 
 	private bool decoderRunning = false;
 
-	void DecodeQR () {  
+	void DecodeQR ()
+	{  
 		// create a reader with a custom luminance source
 
 		var barcodeReader = new BarcodeReader {
@@ -178,29 +180,29 @@ public class page_tagscanner : MonoBehaviour {
 				
 		decoderRunning = true;
 
-		while ( decoderRunning ) {
+		while (decoderRunning) {
 
 
 			try {
 				string result = ""; 
 
-				Debug.Log("decode thread running");
+				Debug.Log ("decode thread running");
 
 				// decode the current frame
 
-				if ( c != null ) {
+				if (c != null) {
 
-					result = barcodeReader.Decode(c, W, H).Text; 
-					Debug.Log("THREAD: DecodeQR() ##1 result given: >" + result + "<");
+					result = barcodeReader.Decode (c, W, H).Text; 
+					Debug.Log ("THREAD: DecodeQR() ##1 result given: >" + result + "<");
 				}        
-				if ( result != null ) {           
+				if (result != null) {           
 					qrcontent = result;   
 
-					Debug.Log("THREAD: DecodeQR() result given: >" + result + "<");
+					Debug.Log ("THREAD: DecodeQR() result given: >" + result + "<");
 				}
 				// Sleep a little bit and set the signal to get the next frame
 				c = null;
-				Thread.Sleep(200); 
+				Thread.Sleep (200); 
 			} catch {   
 				continue;
 			}
@@ -211,30 +213,31 @@ public class page_tagscanner : MonoBehaviour {
 	//old
 
 
-	void checkResult (string r) {
+	void checkResult (string r)
+	{
 
-		if ( r != qrresult ) {
+		if (r != qrresult) {
 			qrresult = r;
 
-			if ( r.Length > 0 ) {
-				questdb.debug("QR CODE gescannt:" + r);
+			if (r.Length > 0) {
+				questdb.debug ("QR CODE gescannt:" + r);
 
 				tagscanner.result = r;
 
-				if ( showresult ) {
+				if (showresult) {
 					ergebnis_text.text = r;
 					ergebnis_text.enabled = true;
 					ergebnis_textbg.enabled = true;
 				}
 
 
-				if ( tagscanner.contents_expectedcode != null && tagscanner.contents_expectedcode.Count > 0 ) {
+				if (tagscanner.contents_expectedcode != null && tagscanner.contents_expectedcode.Count > 0) {
 
 					bool foundCorrectResult = false;
 
-					foreach ( QuestContent qc in tagscanner.contents_expectedcode ) {
+					foreach (QuestContent qc in tagscanner.contents_expectedcode) {
 
-						if ( qc.content == r ) {
+						if (qc.content == r) {
 
 							foundCorrectResult = true;
 
@@ -245,67 +248,66 @@ public class page_tagscanner : MonoBehaviour {
 						}
 					}
 
-					if ( foundCorrectResult ) {
+					if (foundCorrectResult) {
 
-						onSuccess();
-					}
-					else {
+						onSuccess ();
+					} else {
 
-						onFailure();
+						onFailure ();
 					}
 				}
-				StartCoroutine(onEnd());
+				StartCoroutine (onEnd ());
 			}
 		}
 	}
 
 
-	void onSuccess () {
+	void onSuccess ()
+	{
 
-		if ( tagscanner.onSuccess != null ) {
+		if (tagscanner.onSuccess != null) {
 
 			tagscanner.state = "succeeded";
-			tagscanner.onSuccess.Invoke();
+			tagscanner.onSuccess.Invoke ();
 		}  
 
 
 	}
 
 
-	void onFailure () {
+	void onFailure ()
+	{
 
-		if ( tagscanner.onFailure != null ) {
+		if (tagscanner.onFailure != null) {
 		
 			tagscanner.state = "failed";
-			tagscanner.onFailure.Invoke();
+			tagscanner.onFailure.Invoke ();
 		}  
 	}
 
 
 
-	IEnumerator  onEnd () {
+	IEnumerator  onEnd ()
+	{
 
-		yield return new WaitForSeconds(0.2f);
+		yield return new WaitForSeconds (0.2f);
 
-		if ( !GQML.RESULT_FAILED.Equals(tagscanner.state) ) {
+		if (!GQML.RESULT_FAILED.Equals (tagscanner.state)) {
 
 			tagscanner.state = GQML.RESULT_SUCCEEDED;
 		}
 
-		if ( tagscanner.onEnd != null ) {
+		if (tagscanner.onEnd != null) {
 			
-			tagscanner.onEnd.Invoke();
-		}
-		else
-		if ( !tagscanner.onSuccess.hasMissionAction() && !tagscanner.onFailure.hasMissionAction() ) {
+			tagscanner.onEnd.Invoke ();
+		} else if (!tagscanner.onSuccess.hasMissionAction () && !tagscanner.onFailure.hasMissionAction ()) {
 
-			questdb.endQuest();
+			questdb.endQuest ();
 			// TODO looks like an ERROR
-			Debug.LogWarning("A QR Scan page did neither have onSucceed nor onFail change page actions, so we end the quest. Shouldn't we simply perform onEnd()?");
-		}
-		else {
+			Debug.LogWarning ("A QR Scan page did neither have onSucceed nor onFail change page actions, so we end the quest. Shouldn't we simply perform onEnd()?");
+		} else {
 
-			if ( showresult ) {
+			if (showresult) {
 
 				ergebnis_text.enabled = false;
 				ergebnis_textbg.enabled = false;
