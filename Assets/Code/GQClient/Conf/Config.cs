@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 
-namespace GQ.Client.Conf {
+namespace GQ.Client.Conf
+{
 	/// <summary>
 	/// Config class specifies textual parameters of a product. It is used both at runtime to initilize the app's branding details from and 
 	/// at editor time to back the product editor view and store the parameters while we use the editor.
 	/// </summary>
-	public class Config {
+	public class Config
+	{
 		//////////////////////////////////
 		// THE ACTUAL PRODUCT CONFIG DATA:	
 		
@@ -33,6 +35,8 @@ namespace GQ.Client.Conf {
 
 		public bool 	localQuestsDeletable  { get; set; }
 
+		public bool 	hideHiddenQuests  { get; set; }
+
 		public bool 	showTextInLoadingLogo  { get; set; }
 
 		public bool 	showNetConnectionWarning  { get; set; }
@@ -52,16 +56,18 @@ namespace GQ.Client.Conf {
 		/// 
 		/// This constructor is used by the ProductManager (explicit) as well as the JSON.Net deserialize method (via reflection).
 		/// </summary>
-		public Config () {			
+		public Config ()
+		{			
 			// set default values:
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
 			questVisualization = "list";
-			markers = new List<CategoryInfo>();
+			markers = new List<CategoryInfo> ();
 			useMapOffline = false;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
 			localQuestsDeletable = true;
+			hideHiddenQuests = false;
 			downloadTimeOutSeconds = 300;
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;

@@ -16,11 +16,13 @@ using System.ComponentModel;
 using System.Xml.Schema;
 using System;
 
-namespace GQ.Client.Model {
+namespace GQ.Client.Model
+{
 
 	[System.Serializable]
-	[XmlRoot(GQML.QUEST)]
-	public class Quest  : IComparable<Quest>, IXmlSerializable {
+	[XmlRoot (GQML.QUEST)]
+	public class Quest  : IComparable<Quest>, IXmlSerializable
+	{
 
 		#region Attributes
 
@@ -36,7 +38,8 @@ namespace GQ.Client.Model {
 
 		public bool IsHidden {
 			get {
-				return false; // (Name != null && Name.StartsWith("---"));
+				// TODO change the latter two checks to test a flag stored in game.xml base element as an attribute
+				return (ConfigurationManager.Current.hideHiddenQuests && Name != null && Name.StartsWith ("---"));
 			}
 		}
 
@@ -46,13 +49,14 @@ namespace GQ.Client.Model {
 
 		[Obsolete]
 		public List<Page>
-			PageList = new List<Page>();
+			PageList = new List<Page> ();
 
-		protected Dictionary<int, Page> pageDict = new Dictionary<int, Page>();
+		protected Dictionary<int, Page> pageDict = new Dictionary<int, Page> ();
 
-		public Page GetPageWithID (int id) {
+		public Page GetPageWithID (int id)
+		{
 			Page page;
-			pageDict.TryGetValue(id, out page);
+			pageDict.TryGetValue (id, out page);
 			return page;
 		}
 
@@ -63,13 +67,14 @@ namespace GQ.Client.Model {
 
 		[Obsolete]
 		public List<QuestHotspot>
-			hotspotList = new List<QuestHotspot>();
+			hotspotList = new List<QuestHotspot> ();
 
-		protected Dictionary<int, QuestHotspot> hotspotDict = new Dictionary<int, QuestHotspot>();
+		protected Dictionary<int, QuestHotspot> hotspotDict = new Dictionary<int, QuestHotspot> ();
 
-		public QuestHotspot GetHotspotWithID (int id) {
+		public QuestHotspot GetHotspotWithID (int id)
+		{
 			QuestHotspot hotspot;
-			hotspotDict.TryGetValue(id, out hotspot);
+			hotspotDict.TryGetValue (id, out hotspot);
 			return hotspot;
 		}
 
@@ -78,110 +83,113 @@ namespace GQ.Client.Model {
 
 		#region IXmlSerializable
 
-		public System.Xml.Schema.XmlSchema GetSchema () {
+		public System.Xml.Schema.XmlSchema GetSchema ()
+		{
 			return null;
 		}
 
-		public void ReadXml (System.Xml.XmlReader reader) {
+		public void ReadXml (System.Xml.XmlReader reader)
+		{
 //			Debug.Log("ReadXML called on " + GetType().Name);
 
-			reader.MoveToContent();
+			reader.MoveToContent ();
 
 			// Name:
-			Name = reader.GetAttribute(GQML.QUEST_NAME);
+			Name = reader.GetAttribute (GQML.QUEST_NAME);
 
 			// Id:
 			int id;
-			if ( Int32.TryParse(reader.GetAttribute(GQML.QUEST_ID), out id) ) {
+			if (Int32.TryParse (reader.GetAttribute (GQML.QUEST_ID), out id)) {
 				Id = id;
-			}
-			else {
-				Debug.LogWarning("Id for quest " + Name + " could not be parsed, we find: " + reader.GetAttribute(GQML.QUEST_ID));
+			} else {
+				Debug.LogWarning ("Id for quest " + Name + " could not be parsed, we find: " + reader.GetAttribute (GQML.QUEST_ID));
 			}
 
 			// XML Format:
-			XmlFormat = reader.GetAttribute(GQML.QUEST_XMLFORMAT);
+			XmlFormat = reader.GetAttribute (GQML.QUEST_XMLFORMAT);
 
 			// LastUpdate:
 			long lu;
-			LastUpdate = long.TryParse(reader.GetAttribute(GQML.QUEST_LASTUPDATE), out lu) ? lu : 0;
+			LastUpdate = long.TryParse (reader.GetAttribute (GQML.QUEST_LASTUPDATE), out lu) ? lu : 0;
 
 			// IndividualReturnDefinitions:
 			bool ird;
-			IndividualReturnDefinitions = bool.TryParse(reader.GetAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS), out ird) ? ird : false;
+			IndividualReturnDefinitions = bool.TryParse (reader.GetAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS), out ird) ? ird : false;
 
 			// Content:
 			XmlSerializer pageSerializer;
-			XmlSerializer hotspotSerializer = new XmlSerializer(typeof(QuestHotspot));
+			XmlSerializer hotspotSerializer = new XmlSerializer (typeof(QuestHotspot));
 
 			bool read = false;
-			while ( read || reader.Read() ) {
+			while (read || reader.Read ()) {
 				read = false;
 //				Debug.Log("Node Type is: " + reader.NodeType.ToString());
-				switch ( reader.NodeType ) {
-					case XmlNodeType.Element:
-						switch ( reader.LocalName ) {
-							case GQML.PAGE:
-								Page page;
-								string pageType = reader.GetAttribute(GQML.PAGE_TYPE);
-								switch ( pageType ) {
-									case GQML.PAGE_TYPE_NPCTALK:
-										pageSerializer = new XmlSerializer(typeof(PageNPCTalk));
-										page = (PageNPCTalk)pageSerializer.Deserialize(reader);
-										read = true;
-										pageDict.Add(page.id, page);
+				switch (reader.NodeType) {
+				case XmlNodeType.Element:
+					switch (reader.LocalName) {
+					case GQML.PAGE:
+						Page page;
+						string pageType = reader.GetAttribute (GQML.PAGE_TYPE);
+						switch (pageType) {
+						case GQML.PAGE_TYPE_NPCTALK:
+							pageSerializer = new XmlSerializer (typeof(PageNPCTalk));
+							page = (PageNPCTalk)pageSerializer.Deserialize (reader);
+							read = true;
+							pageDict.Add (page.id, page);
 //										Debug.Log("Added NPCTalk page id: " + page.id);
 
 										// TODO: get rid:
-										PageList.Add(page);
-										break;
-									default:
-										pageSerializer = new XmlSerializer(typeof(Page));
-										page = (Page)pageSerializer.Deserialize(reader);
-										read = true;
-										pageDict.Add(page.id, page);
+							PageList.Add (page);
+							break;
+						default:
+							pageSerializer = new XmlSerializer (typeof(Page));
+							page = (Page)pageSerializer.Deserialize (reader);
+							read = true;
+							pageDict.Add (page.id, page);
 //										Debug.Log("Added another page with id: " + page.id);
 
 										// TODO: get rid:
-										PageList.Add(page);
-										Debug.LogWarning("Unknown page type found: " + pageType);
-										break;
-								}
-								break;
-							case GQML.HOTSPOT:
-								QuestHotspot hotspot = (QuestHotspot)hotspotSerializer.Deserialize(reader);
-								read = true;
-								hotspotDict.Add(hotspot.id, hotspot);
+							PageList.Add (page);
+							Debug.LogWarning ("Unknown page type found: " + pageType);
+							break;
+						}
+						break;
+					case GQML.HOTSPOT:
+						QuestHotspot hotspot = (QuestHotspot)hotspotSerializer.Deserialize (reader);
+						read = true;
+						hotspotDict.Add (hotspot.id, hotspot);
 //								Debug.Log("Added hotspot id: " + hotspot.id);
 
 								// TODO: get rid:
-								hotspotList.Add(hotspot);
-								break;
-						}
+						hotspotList.Add (hotspot);
 						break;
-					default:
-						break;
+					}
+					break;
+				default:
+					break;
 				}
 			}
 		}
 
-		public void WriteXml (System.Xml.XmlWriter writer) {
-			Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
+		public void WriteXml (System.Xml.XmlWriter writer)
+		{
+			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
 
 		#endregion
 
 		#region Runtime API
 
-		public void GoBackOnePage () {
-			Page show = previouspages[previouspages.Count - 1];
-			previouspages.Remove(previouspages[previouspages.Count - 1]);
+		public void GoBackOnePage ()
+		{
+			Page show = previouspages [previouspages.Count - 1];
+			previouspages.Remove (previouspages [previouspages.Count - 1]);
 
-			if ( _allowReturn > 0 )
+			if (_allowReturn > 0)
 				_allowReturn--;
 
-			questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-			questdb.changePage(show.id);
+			questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+			questdb.changePage (show.id);
 
 		}
 
@@ -190,24 +198,23 @@ namespace GQ.Client.Model {
 
 		public bool AllowReturn {
 			get {
-				if ( IndividualReturnDefinitions ) {
+				if (IndividualReturnDefinitions) {
 					return (
 					    _allowReturn > 0
 					    && previouspages.Count > 0
-					    && previouspages[previouspages.Count - 1] != null
+					    && previouspages [previouspages.Count - 1] != null
 					);
-				}
-				else {
+				} else {
 					return (
 					    previouspages.Count > 0
-					    && previouspages[previouspages.Count - 1] != null
-					    && !previouspages[previouspages.Count - 1].type.Equals(GQML.PAGE_TYPE_TEXT_QUESTION)
-					    && !previouspages[previouspages.Count - 1].type.Equals(GQML.PAGE_TYPE_MULTIPLE_CHOICE_QUESTION)
+					    && previouspages [previouspages.Count - 1] != null
+					    && !previouspages [previouspages.Count - 1].type.Equals (GQML.PAGE_TYPE_TEXT_QUESTION)
+					    && !previouspages [previouspages.Count - 1].type.Equals (GQML.PAGE_TYPE_MULTIPLE_CHOICE_QUESTION)
 					);
 				}
 			}
 			set { 
-				if ( value == false )
+				if (value == false)
 					_allowReturn = 0;
 				else
 					_allowReturn++;
@@ -223,14 +230,14 @@ namespace GQ.Client.Model {
 
 
 
-		[XmlAnyAttribute()]
+		[XmlAnyAttribute ()]
 		public XmlAttribute[]
 			help_attributes;
 		public List<QuestAttribute> attributes;
 		public List<QuestMetaData> metadata;
 		public bool hasData = false;
 		public Page currentpage;
-		public List<Page> previouspages = new List<Page>();
+		public List<Page> previouspages = new List<Page> ();
 		public string xmlcontent;
 		public float start_longitude;
 		public float start_latitude;
@@ -246,35 +253,37 @@ namespace GQ.Client.Model {
 
 		public string alternateDownloadLink;
 
-		public Quest () {
+		public Quest ()
+		{
 			predeployed = false;
 		}
 
-		public long getLastUpdate () {
-			if ( LastUpdate == 0 ) {
+		public long getLastUpdate ()
+		{
+			if (LastUpdate == 0) {
 				long result;
-				if ( PlayerPrefs.HasKey(Id + "_lastUpdate") && long.TryParse(PlayerPrefs.GetString(Id + "_lastUpdate"), out result) ) {
+				if (PlayerPrefs.HasKey (Id + "_lastUpdate") && long.TryParse (PlayerPrefs.GetString (Id + "_lastUpdate"), out result)) {
 					return result;
-				}
-				else
+				} else
 					return 0;
-			}
-			else
+			} else
 				return LastUpdate;
 		}
 
-		public static Quest CreateQuest (int id) {
-			Quest q = new Quest();
-			return q.LoadFromText(id, true);
+		public static Quest CreateQuest (int id)
+		{
+			Quest q = new Quest ();
+			return q.LoadFromText (id, true);
 		}
 
-		public string getCategory () {
+		public string getCategory ()
+		{
 
 			string x = "";
 
-			if ( hasMeta("category") ) {
+			if (hasMeta ("category")) {
 
-				x = getMeta("category");
+				x = getMeta ("category");
 
 			}
 
@@ -282,14 +291,14 @@ namespace GQ.Client.Model {
 
 		}
 
-		public int CompareTo (Quest q) {
+		public int CompareTo (Quest q)
+		{
 
-			if ( q == null ) {
+			if (q == null) {
 				return 1;
-			}
-			else {
+			} else {
 
-				return this.Name.ToUpper().CompareTo(q.Name.ToUpper());
+				return this.Name.ToUpper ().CompareTo (q.Name.ToUpper ());
 			}
 
 		}
@@ -300,49 +309,50 @@ namespace GQ.Client.Model {
 		/// <returns>The from text.</returns>
 		/// <param name="id">Identifier.</param>
 		/// <param name="redo">If set to <c>true</c> redo.</param>
-		public  Quest LoadFromText (int id, bool redo) {
+		public  Quest LoadFromText (int id, bool redo)
+		{
 			string fp = filepath;
 			string xmlfilepath = filepath;
 			string xmlcontent_copy = xmlcontent;
 
-			if ( xmlcontent_copy != null && xmlcontent_copy.StartsWith("<error>") ) {
+			if (xmlcontent_copy != null && xmlcontent_copy.StartsWith ("<error>")) {
 				string errMsg = xmlcontent_copy;
 
-				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().showmessage(errMsg);
+				GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().showmessage (errMsg);
 				return null;
 			}
 
-			if ( filepath == null ) {
+			if (filepath == null) {
 				xmlfilepath = " ";
 
 			}
 
-			if ( xmlcontent_copy == null ) {
+			if (xmlcontent_copy == null) {
 
 				xmlcontent_copy = " ";
 			}
 
 			Encoding enc = System.Text.Encoding.UTF8;
 
-			TextReader txr = new StringReader(xmlcontent_copy);
+			TextReader txr = new StringReader (xmlcontent_copy);
 
 			//		Debug.Log ("XML:"+xmlcontent_copy);
 
-			if ( !predeployed && xmlfilepath != null && xmlfilepath.Length > 9 ) {
+			if (!predeployed && xmlfilepath != null && xmlfilepath.Length > 9) {
 
 				//			Debug.Log(xmlfilepath);
 
-				if ( !xmlfilepath.Contains("game.xml") ) {
+				if (!xmlfilepath.Contains ("game.xml")) {
 
 					xmlfilepath = xmlfilepath + "game.xml";
 
 				}
-				txr = new StreamReader(xmlfilepath, enc);
+				txr = new StreamReader (xmlfilepath, enc);
 
 			}
-			XmlSerializer serializer = new XmlSerializer(typeof(Quest));
+			XmlSerializer serializer = new XmlSerializer (typeof(Quest));
 
-			Quest q = serializer.Deserialize(txr) as Quest; 
+			Quest q = serializer.Deserialize (txr) as Quest; 
 			q.xmlcontent = xmlcontent;
 			q.predeployed = predeployed;
 
@@ -351,41 +361,40 @@ namespace GQ.Client.Model {
 
 			//q.id = id;
 			//		Debug.Log ("my id is " + id + " -> " + q.id);
-			q.deserializeAttributes(redo);
+			q.deserializeAttributes (redo);
 			q.meta_Search_Combined += q.Name + "; ";
 			q.meta_combined += q.Name;
 
 
-			if ( metadata != null ) {
+			if (metadata != null) {
 
-				metadata.Clear();
-			}
-			else {
+				metadata.Clear ();
+			} else {
 
-				metadata = new List<QuestMetaData>();
-			}
-
-			if ( q.hasAttribute("author") ) {
-
-				q.addMetaData(new QuestMetaData("author", q.getAttribute("author")));
-
+				metadata = new List<QuestMetaData> ();
 			}
 
-			if ( q.hasAttribute("version") ) {
+			if (q.hasAttribute ("author")) {
 
-				q.addMetaData(new QuestMetaData("version", q.getAttribute("version")));
+				q.addMetaData (new QuestMetaData ("author", q.getAttribute ("author")));
 
 			}
 
-			foreach ( Page qp in q.PageList ) {
-				if ( qp.type == "MetaData" ) {
+			if (q.hasAttribute ("version")) {
 
-					foreach ( QuestContent qc in qp.contents_stringmeta ) {
-						if ( qc.hasAttribute("key") && qc.hasAttribute("value") ) {
-							QuestMetaData newmeta = new QuestMetaData();
-							newmeta.key = qc.getAttribute("key");
-							newmeta.value = qc.getAttribute("value");
-							q.addMetaData(newmeta);
+				q.addMetaData (new QuestMetaData ("version", q.getAttribute ("version")));
+
+			}
+
+			foreach (Page qp in q.PageList) {
+				if (qp.type == "MetaData") {
+
+					foreach (QuestContent qc in qp.contents_stringmeta) {
+						if (qc.hasAttribute ("key") && qc.hasAttribute ("value")) {
+							QuestMetaData newmeta = new QuestMetaData ();
+							newmeta.key = qc.getAttribute ("key");
+							newmeta.value = qc.getAttribute ("value");
+							q.addMetaData (newmeta);
 
 						}
 
@@ -394,28 +403,27 @@ namespace GQ.Client.Model {
 				}
 			}
 
-			if ( q.PageList != null &&
-			     q.PageList.Count > 0 &&
-			     q.PageList[0].onStart != null &&
-			     q.PageList[0].onStart.actions != null &&
-			     q.PageList[0].onStart.actions.Count > 0 ) {
+			if (q.PageList != null &&
+			    q.PageList.Count > 0 &&
+			    q.PageList [0].onStart != null &&
+			    q.PageList [0].onStart.actions != null &&
+			    q.PageList [0].onStart.actions.Count > 0) {
 
-				foreach ( QuestAction qameta in q.PageList[0].onStart.actions ) {
+				foreach (QuestAction qameta in q.PageList[0].onStart.actions) {
 
-					if ( qameta.type == "SetVariable" ) {
+					if (qameta.type == "SetVariable") {
 						//	Debug.Log ("found setVar");
-						if ( qameta.hasAttribute("var") ) {
+						if (qameta.hasAttribute ("var")) {
 
-							QuestMetaData newmeta = new QuestMetaData();
-							newmeta.key = qameta.getAttribute("var");
-							if ( qameta.value != null && qameta.value.string_value != null && qameta.value.string_value.Count > 0 ) {
-								newmeta.value = qameta.value.string_value[0];
-							}
-							else {
+							QuestMetaData newmeta = new QuestMetaData ();
+							newmeta.key = qameta.getAttribute ("var");
+							if (qameta.value != null && qameta.value.string_value != null && qameta.value.string_value.Count > 0) {
+								newmeta.value = qameta.value.string_value [0];
+							} else {
 								continue;
 							}
 
-							q.addMetaData(newmeta);
+							q.addMetaData (newmeta);
 						}
 
 					}
@@ -427,74 +435,75 @@ namespace GQ.Client.Model {
 			return q;
 		}
 
-		public void addMetaData (QuestMetaData meta) {
+		public void addMetaData (QuestMetaData meta)
+		{
 
 			string key = meta.key;
 
-			List<QuestMetaData> todelete = new List<QuestMetaData>();
+			List<QuestMetaData> todelete = new List<QuestMetaData> ();
 
-			if ( metadata == null ) {
+			if (metadata == null) {
 
-				metadata = new List<QuestMetaData>();
+				metadata = new List<QuestMetaData> ();
 
-			}
-			else {
-				foreach ( QuestMetaData qmd in metadata ) {
+			} else {
+				foreach (QuestMetaData qmd in metadata) {
 
-					if ( qmd.key == key ) {
-						todelete.Add(qmd);
+					if (qmd.key == key) {
+						todelete.Add (qmd);
 					}
 
 				}
 
-				foreach ( QuestMetaData qmd in todelete ) {
-					metadata.Remove(qmd);
+				foreach (QuestMetaData qmd in todelete) {
+					metadata.Remove (qmd);
 				}
 
 			}
 
-			metadata.Add(meta);
+			metadata.Add (meta);
 
 
 
-			if ( Configuration.instance.metaCategoryIsSearchable(meta.key) ) {
+			if (Configuration.instance.metaCategoryIsSearchable (meta.key)) {
 
 				meta_Search_Combined += " " + meta.value;
 
 
 			}
-			if ( Configuration.instance.getMetaCategory(meta.key) != null ) {
+			if (Configuration.instance.getMetaCategory (meta.key) != null) {
 
-				Configuration.instance.getMetaCategory(meta.key).addPossibleValues(meta.value);
+				Configuration.instance.getMetaCategory (meta.key).addPossibleValues (meta.value);
 
 			}
 
 
 			meta_combined += ";" + meta.value;
 
-			questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 
-			if ( !questdb.allmetakeys.Contains(meta.key) ) {
+			if (!questdb.allmetakeys.Contains (meta.key)) {
 
-				questdb.allmetakeys.Add(meta.key);
+				questdb.allmetakeys.Add (meta.key);
 			}
 
 		}
 
-		public void deserializeAttributes (bool redo) {
+		public void deserializeAttributes (bool redo)
+		{
 
-			attributes = new List<QuestAttribute>();
+			attributes = new List<QuestAttribute> ();
 
-			if ( help_attributes != null ) {
-				foreach ( XmlAttribute xmla in help_attributes ) {
+			if (help_attributes != null) {
+				foreach (XmlAttribute xmla in help_attributes) {
 
-					if ( xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://") ) {
+					if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
 
-						string[] splitted = xmla.Value.Split('/');
+						string[] splitted = xmla.Value.Split ('/');
 
-						questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+						questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 
-						string filename = "files/" + splitted[splitted.Length - 1];
+						string filename = "files/" + splitted [splitted.Length - 1];
 
 						//					int i = 0;
 						//					while ( questdb.loadedfiles.Contains(filename) ) {
@@ -505,58 +514,57 @@ namespace GQ.Client.Model {
 						//					
 						//					questdb.loadedfiles.Add(filename);
 
-						if ( !Application.isWebPlayer ) {
+						if (!Application.isWebPlayer) {
 
-							if ( !redo ) {
-								Debug.Log("GETTING Image for: " + Id + " in " + filename);
-								questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + Id + "/" + filename);
+							if (!redo) {
+								Debug.Log ("GETTING Image for: " + Id + " in " + filename);
+								questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + Id + "/" + filename);
 							}
-							if ( splitted.Length > 3 ) {
+							if (splitted.Length > 3) {
 
-								if ( predeployed ) {
+								if (predeployed) {
 									xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + Id + "/" + filename;
 
-								}
-								else {
+								} else {
 
 									xmla.Value = Application.persistentDataPath + "/quests/" + Id + "/" + filename;
 
 								}
-								questdb.performSpriteConversion(xmla.Value);
+								questdb.performSpriteConversion (xmla.Value);
 
 							}
 						}
 
 					}	
 
-					attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
+					attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 
 				}
 			}
 
-			if ( PageList != null ) {
-				foreach ( Page qp in PageList ) {
-					qp.deserializeAttributes(Id, redo);
+			if (PageList != null) {
+				foreach (Page qp in PageList) {
+					qp.deserializeAttributes (Id, redo);
 				}
-			}
-			else {
+			} else {
 
-				Debug.Log("no pages");
+				Debug.Log ("no pages");
 			}
-			if ( hotspotList != null ) {
+			if (hotspotList != null) {
 
-				foreach ( QuestHotspot qh in hotspotList ) {
-					qh.deserializeAttributes(Id, redo);
+				foreach (QuestHotspot qh in hotspotList) {
+					qh.deserializeAttributes (Id, redo);
 				}
 			}
 
 		}
 
-		public string getAttribute (string k) {
+		public string getAttribute (string k)
+		{
 
-			foreach ( QuestAttribute qa in attributes ) {
+			foreach (QuestAttribute qa in attributes) {
 
-				if ( qa.key.Equals(k) ) {
+				if (qa.key.Equals (k)) {
 					return qa.value;
 				}
 
@@ -566,19 +574,21 @@ namespace GQ.Client.Model {
 
 		}
 
-		public bool getBoolAttribute (string attName) {
-			string attValue = getAttribute(attName);
-			if ( attValue.Trim().Equals("") || attValue.Equals("0") || attValue.ToLower().Equals("false") )
+		public bool getBoolAttribute (string attName)
+		{
+			string attValue = getAttribute (attName);
+			if (attValue.Trim ().Equals ("") || attValue.Equals ("0") || attValue.ToLower ().Equals ("false"))
 				return false;
 			else
 				return true;
 		}
 
-		public string getMeta (string k) {
-			if ( metadata != null ) {
-				foreach ( QuestMetaData qa in metadata ) {
+		public string getMeta (string k)
+		{
+			if (metadata != null) {
+				foreach (QuestMetaData qa in metadata) {
 
-					if ( qa.key.Equals(k) ) {
+					if (qa.key.Equals (k)) {
 						return qa.value;
 					}
 
@@ -589,29 +599,31 @@ namespace GQ.Client.Model {
 
 		}
 
-		public string getMetaComparer (string k) {
-			if ( metadata != null ) {
-				foreach ( QuestMetaData qa in metadata ) {
+		public string getMetaComparer (string k)
+		{
+			if (metadata != null) {
+				foreach (QuestMetaData qa in metadata) {
 
-					if ( qa.key.Equals(k) ) {
+					if (qa.key.Equals (k)) {
 						return qa.value;
 					}
 
 				}
 			}
 
-			return ((char)0xFF).ToString();
+			return ((char)0xFF).ToString ();
 
 		}
 
-		public bool hasMeta (string k) {
+		public bool hasMeta (string k)
+		{
 
 			bool h = false;
-			if ( metadata != null ) {
-				foreach ( QuestMetaData qa in metadata ) {
+			if (metadata != null) {
+				foreach (QuestMetaData qa in metadata) {
 
-					if ( qa.key != null ) {
-						if ( qa.key.Equals(k) ) {
+					if (qa.key != null) {
+						if (qa.key.Equals (k)) {
 							h = true;
 						}
 					}
@@ -622,12 +634,13 @@ namespace GQ.Client.Model {
 
 		}
 
-		public bool hasAttribute (string k) {
+		public bool hasAttribute (string k)
+		{
 
 			bool h = false;
-			foreach ( QuestAttribute qa in attributes ) {
+			foreach (QuestAttribute qa in attributes) {
 
-				if ( qa.key.Equals(k) ) {
+				if (qa.key.Equals (k)) {
 					h = true;
 				}
 
@@ -637,20 +650,21 @@ namespace GQ.Client.Model {
 
 		}
 
-		public bool hasActionInChildren (string type1) {
+		public bool hasActionInChildren (string type1)
+		{
 
 			bool b = false;
 
-			foreach ( Page qp in PageList ) {
-				if ( !b ) {
-					if ( qp.hasActionInChildren(type1) ) {
+			foreach (Page qp in PageList) {
+				if (!b) {
+					if (qp.hasActionInChildren (type1)) {
 						b = true;
 					}
 				}
 			}
-			foreach ( QuestHotspot qh in hotspotList ) {
-				if ( !b ) {
-					if ( qh.hasActionInChildren(type1) ) {
+			foreach (QuestHotspot qh in hotspotList) {
+				if (!b) {
+					if (qh.hasActionInChildren (type1)) {
 						b = true;
 					}
 				}
