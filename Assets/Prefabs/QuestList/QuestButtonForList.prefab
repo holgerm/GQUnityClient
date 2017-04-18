@@ -71,7 +71,7 @@ GameObject:
   - 95: {fileID: 9511756}
   - 114: {fileID: 11494488}
   m_Layer: 5
-  m_Name: Button
+  m_Name: QuestButtonForList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -495,12 +495,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameLabel: {fileID: 11466820}
   q:
-    name: 
-    id: 0
-    xmlformat: 0
+    PageList: []
+    hotspotList: []
+    _allowReturn: 0
     filepath: 
-    pages: []
-    hotspots: []
     attributes: []
     metadata: []
     hasData: 0
@@ -527,6 +525,8 @@ MonoBehaviour:
         actions: []
       onFailure:
         actions: []
+      onRead:
+        actions: []
       state: 
       result: 
     previouspages: []
@@ -534,6 +534,7 @@ MonoBehaviour:
     start_longitude: 0
     start_latitude: 0
     meta_combined: 
+    meta_Search_Combined: 
     predeployed: 0
     version: 
     acceptedDS: 0
@@ -580,6 +581,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22408020}
   m_RootOrder: 0
@@ -597,6 +599,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22408018}
   m_Father: {fileID: 22466820}
@@ -615,6 +618,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22466820}
   m_RootOrder: 0
@@ -632,6 +636,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22420174}
   - {fileID: 22466822}
@@ -652,6 +657,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22466820}
   m_RootOrder: 1

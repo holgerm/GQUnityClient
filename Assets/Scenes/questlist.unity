@@ -8447,7 +8447,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &642861461
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9085,7 +9085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84443a03f26104dad958285a87d6b9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  product: 9
+  product: 2
   toplogo: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
   nameForQuest: Quest
   showMessageForDatasendAction: 1
@@ -10058,7 +10058,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502199320}
   m_HandleRect: {fileID: 1502199319}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -10809,7 +10809,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &880149211
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10877,7 +10877,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &888984966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11561,7 +11561,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: -0.000061035156}
+  m_AnchoredPosition: {x: 540.00006, y: 0.000061035156}
   m_SizeDelta: {x: 1080, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &948390054
@@ -11697,7 +11697,6 @@ MonoBehaviour:
   sortbyname: 0
   portal_id: 141
   namefilter: 
-  sortedby: Erstellungsdatum
 --- !u!1 &950268821
 GameObject:
   m_ObjectHideFlags: 0
@@ -13364,7 +13363,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: -0.000061035156}
+  m_AnchoredPosition: {x: 540.00006, y: 0}
   m_SizeDelta: {x: 1080, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1080246903
@@ -15720,7 +15719,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1383468337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19115,7 +19114,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 812067346}
   m_HandleRect: {fileID: 812067345}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -21480,7 +21479,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1801878627
 RectTransform:
   m_ObjectHideFlags: 0
