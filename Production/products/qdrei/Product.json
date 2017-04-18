@@ -11,6 +11,7 @@
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "localQuestsDeletable": true,
+  "hideHiddenQuests": true,
   "showTextInLoadingLogo": true,
   "showNetConnectionWarning": true,
   "colorProfile": "radioranzen",
