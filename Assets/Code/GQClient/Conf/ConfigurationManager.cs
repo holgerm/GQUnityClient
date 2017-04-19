@@ -24,7 +24,19 @@ namespace GQ.Client.Conf
 
 		void Awake ()
 		{
-			deserialize ();
+			deserializeConfig ();
+		}
+
+		private static string _version = null;
+
+		public static string Version {
+			get {
+				if (_version == null) {
+					// get the string part before the first dot:
+					_version = Buildtime.Substring (0, Buildtime.IndexOf ('.'));
+				}
+				return _version;
+			}
 		}
 
 		#endregion
@@ -59,7 +71,7 @@ namespace GQ.Client.Conf
 		public static Config Current {
 			get {
 				if (_current == null) {
-					deserialize ();
+					deserializeConfig ();
 				}
 			
 				return _current;
@@ -184,7 +196,7 @@ namespace GQ.Client.Conf
 		/// <summary>
 		/// Deserialize the Product.json file to the current config object that is used throughout the client.
 		/// </summary>
-		public static void deserialize ()
+		public static void deserializeConfig ()
 		{
 
 			TextAsset configAsset = Resources.Load ("Product") as TextAsset;

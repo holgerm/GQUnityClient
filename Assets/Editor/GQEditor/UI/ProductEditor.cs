@@ -90,6 +90,10 @@ namespace GQ.Editor.UI
 		}
 
 		int selectedProductIndex;
+		int mainVersionNumber;
+		int yearVersionNumber;
+		int monthVersionNumber;
+		int buildVersionNumber;
 
 		ProductManager _pm;
 
@@ -104,6 +108,8 @@ namespace GQ.Editor.UI
 			}
 		}
 
+		#region Initialization
+
 		public void OnEnable ()
 		{
 			Instance = this;
@@ -116,7 +122,14 @@ namespace GQ.Editor.UI
 		{
 			selectedProductIndex = EditorPrefs.HasKey ("selectedProductIndex") ? EditorPrefs.GetInt ("selectedProductIndex") : 0;
 			Pm.ConfigFilesHaveChanges = EditorPrefs.HasKey ("configDirty") ? EditorPrefs.GetBool ("configDirty") : false;
+			mainVersionNumber = EditorPrefs.HasKey ("mainVersionNumber") ? EditorPrefs.GetInt ("mainVersionNumber") : 0;
+			yearVersionNumber = EditorPrefs.HasKey ("yearVersionNumber") ? EditorPrefs.GetInt ("yearVersionNumber") : DateTime.Now.Year;
+			monthVersionNumber = EditorPrefs.HasKey ("monthVersionNumber") ? EditorPrefs.GetInt ("monthVersionNumber") : DateTime.Now.Month;
+			buildVersionNumber = EditorPrefs.HasKey ("buildVersionNumber") ? EditorPrefs.GetInt ("buildVersionNumber") : 1;
+			updateVersionText ();
 		}
+
+		#endregion
 
 		#region GUI
 
@@ -146,6 +159,10 @@ namespace GQ.Editor.UI
 			gui4ProductDetails ();
 
 			gui4ProductEditPart ();
+
+			EditorGUILayout.Space ();
+
+			gui4Versioning ();
 
 			EditorGUILayout.Space ();
 
@@ -471,8 +488,132 @@ namespace GQ.Editor.UI
 			EditorGUILayout.EndHorizontal ();
 		}
 
+		bool allowVersionChanges = false;
+
+		void gui4Versioning ()
+		{
+			GUILayout.Label ("Versioning Options", EditorStyles.boldLabel);
+			EditorGUILayout.LabelField ("Current Version", version);
+
+			// Create New Product row:
+			EditorGUILayout.BeginHorizontal ();
+			{
+
+				bool oldAllowVersionChanges = allowVersionChanges;
+				allowVersionChanges = EditorGUILayout.Toggle ("Allow Editing ...", allowVersionChanges);
+				if (!oldAllowVersionChanges && allowVersionChanges) {
+					// siwtching allowChanges ON:
+				}
+				if (oldAllowVersionChanges && !allowVersionChanges) {
+					// siwtching allowChanges OFF:
+				}
+					
+			}
+			EditorGUILayout.EndHorizontal ();
+
+			if (allowVersionChanges) {
+				EditorGUILayout.BeginHorizontal ();
+				{
+					if (GUILayout.Button ("Build +")) {
+						if (EditorUtility.DisplayDialog (
+							    "Really increase Build Version Number?", 
+							    "It will then be " + (buildVersionNumber + 1), 
+							    "Yes, increase!", 
+							    "Cancel")) {
+							buildVersionNumber++;
+							EditorPrefs.SetInt ("buildVersionNumber", buildVersionNumber);
+							updateVersionText ();
+						}
+					}
+					if (GUILayout.Button ("Main +")) {
+						if (EditorUtility.DisplayDialog (
+							    "Really increase Main Version Number?", 
+							    "It will then be " + (mainVersionNumber + 1), 
+							    "Yes, increase!", 
+							    "Cancel")) {
+							mainVersionNumber++;
+							EditorPrefs.SetInt ("mainVersionNumber", mainVersionNumber);
+							updateVersionText ();
+						}
+					}
+				}
+				EditorGUILayout.EndHorizontal ();
+
+				EditorGUILayout.BeginHorizontal ();
+				{
+					if (buildVersionNumber > 0 && GUILayout.Button ("Build -")) {
+						if (EditorUtility.DisplayDialog (
+							    "Really decrease Build Version Number?", 
+							    "It will then be " + (buildVersionNumber - 1), 
+							    "Yes, decrease!", 
+							    "Cancel")) {
+							buildVersionNumber--;
+							EditorPrefs.SetInt ("buildVersionNumber", buildVersionNumber);
+							updateVersionText ();
+						}
+					}
+					if (GUILayout.Button ("Main -")) {
+						if (EditorUtility.DisplayDialog (
+							    "Really decrease Main Version Number?", 
+							    "It will then be " + (mainVersionNumber - 1), 
+							    "Yes, decrease!", 
+							    "Cancel")) {
+							mainVersionNumber--;
+							EditorPrefs.SetInt ("mainVersionNumber", mainVersionNumber);
+							updateVersionText ();
+						}
+					}
+				}
+				EditorGUILayout.EndHorizontal ();
+			}
+
+		}
 
 		#endregion
+
+		string version;
+
+		private void updateVersionText ()
+		{
+			// internal version number:
+			version = String.Format (
+				"{0}.{1}.{2:D2}.{3:D2}", 
+				mainVersionNumber,
+				yearVersionNumber - 2000, 
+				monthVersionNumber,
+				buildVersionNumber
+			);
+
+			// bundle version for iOS and Android:
+			PlayerSettings.bundleVersion = String.Format (
+				"{0}.{1}.{2:D2}", 
+				mainVersionNumber,
+				yearVersionNumber - 2000, 
+				monthVersionNumber
+			);
+
+			// bundle version code for Android:
+			int bundleVersionCode;
+			string bundleVersionCodeString = String.Format (
+				                                 "{0}{1:D3}{2:D2}{3:D2}", 
+				                                 mainVersionNumber,
+				                                 yearVersionNumber - 2000, 
+				                                 monthVersionNumber,
+				                                 buildVersionNumber
+			                                 );
+			if (Int32.TryParse (bundleVersionCodeString, out bundleVersionCode))
+				PlayerSettings.Android.bundleVersionCode = bundleVersionCode;
+			else {
+				Debug.LogError ("Bundle Version Code not valid as Int32: " + bundleVersionCodeString);
+			}
+
+			// build for iOS:
+			PlayerSettings.iOS.buildNumber = buildVersionNumber.ToString ();
+
+			allowVersionChanges = false;
+		}
+
+
 
 		void selectProduct (int index)
 		{
@@ -492,129 +633,6 @@ namespace GQ.Editor.UI
 	}
 
 
-	class GQAssetChangePostprocessor : AssetPostprocessor
-	{
-
-		static bool productDirHasChanges;
-		static bool configHasChanged;
-		static bool buildTimeChanged;
-
-		static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
-		{
-	
-			productDirHasChanges = false;
-			configHasChanged = false;
-			buildTimeChanged = false;
-	
-			// if the only change is buildtime.txt we ignore it:
-			if (importedAssets.Length == 1 && importedAssets [0].Equals (ConfigurationManager.BUILD_TIME_FILE_PATH))
-				return;
-
-			foreach (string str in importedAssets) {
-
-				setChangeFlags (str);
-			}
-	
-
-			foreach (string str in deletedAssets) {
-
-				setChangeFlags (str);
-			}
-	
-
-			foreach (string str in movedAssets) {
-
-				setChangeFlags (str);
-			}
-
-
-			foreach (string str in movedFromAssetPaths) {
-
-				setChangeFlags (str);
-			}
-
-			if (buildTimeChanged && !ProductEditor.IsCurrentlyPreparingProduct) {
-				writeBuildDate ();
-			}
-
-			if (configHasChanged) {
-				ProductManager.Instance.ConfigFilesHaveChanges = true;
-				ConfigurationManager.Reset ();
-				configHasChanged = false;
-			}
-
-			ProductEditor.BuildIsDirty = productDirHasChanges; 
-			if (ProductEditor.Instance != null)
-				ProductEditor.Instance.Repaint ();
-		}
-
-		private static bool isRealAsset (string assetPath)
-		{
-			if (assetPath.StartsWith (GQAssert.TEST_DATA_BASE_DIR))
-				// test assets are NOT REAL assets:
-				return false;
-
-			if (assetPath.Equals (ConfigurationManager.BUILD_TIME_FILE_PATH))
-				// buildtime.txt is NOT a REAL asset:
-				return false;
-
-			return true;
-		}
-
-		private static void setChangeFlags (string str)
-		{
-
-			if (productDirHasChanges == false && str.StartsWith (ProductManager.ProductsDirPath)) {
-				// a product might have changed: refresh product list:
-				productDirHasChanges = true;
-			}
-
-			if (!buildTimeChanged && isRealAsset (str)) {
-				buildTimeChanged = true;
-			}
-
-			if (!configHasChanged &&
-			    !ProductEditor.IsCurrentlyPreparingProduct &&
-			    isRealAsset (str) &&
-			    str.StartsWith (ProductManager.Instance.BuildExportPath)) {
-				configHasChanged = true;
-			}
-		}
-
-		private static bool isWritingBuildTime = false;
-
-		/// <summary>
-		/// Writes the current build date into a tiny file in the ConfigAssets. 
-		/// It will be read by the application on start and used as additional version number.
-		/// </summary>
-		static internal void writeBuildDate ()
-		{
-//			if ( isWritingBuildTime ) {
-//				// prevent loops of writing buildtime due to buildtime.txt file asset changes
-//				Debug.Log("buildtime left because of monitor is active");
-//				return;
-//			}
-//
-//			isWritingBuildTime = true;
-			try {
-				CultureInfo culture = new CultureInfo ("de-DE"); 
-				if (File.Exists (ConfigurationManager.BUILD_TIME_FILE_PATH)) {
-					AssetDatabase.DeleteAsset (ConfigurationManager.BUILD_TIME_FILE_PATH);
-				} 
-				string buildtime = DateTime.Now.ToString ("G", culture);
-				File.WriteAllText (ConfigurationManager.BUILD_TIME_FILE_PATH, buildtime);
-				AssetDatabase.Refresh ();
-				Debug.Log ("Wrote buldtime to " + buildtime);
-			} catch (Exception exc) {
-				Debug.LogWarning ("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
-				return;
-			} 
-//			Debug.Log("Resetting buildtime monitor flag.");
-//			isWritingBuildTime = false;
-
-		}
-
-	}
 
 
 	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor

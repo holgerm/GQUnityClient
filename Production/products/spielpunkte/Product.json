@@ -12,6 +12,7 @@
   "showCloudQuestsImmediately": false,
   "localQuestsDeletable": true,
   "hideHiddenQuests": false,
+  "hasMenuWithinQuests": true,
   "showTextInLoadingLogo": false,
   "showNetConnectionWarning": false,
   "colorProfile": "spielpunkte",

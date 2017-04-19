@@ -9,19 +9,17 @@ using GQ.Client.Conf;
 /// time stamp from the last build time in a text component which must be added to the same gameobject 
 /// to which it is added too.
 /// </summary>
-public class ShowVersion : MonoBehaviour {
+public class ShowVersion : MonoBehaviour
+{
 
 	// Use this for initialization
-	void Start () {
-		Text text = GetComponent<Text>();
-		if ( text != null ) {
-			text.text = String.Format("{0}.{1} ({2})", 
-				Configuration.instance.appVersion.ToString(), 
-				Configuration.instance.subversionNumber,
-				ConfigurationManager.Buildtime);
-		}
-		else {
-			Debug.LogError("Text component missing or not initialized (should be used for showing version number)");
+	void Start ()
+	{
+		Text text = GetComponent<Text> ();
+		if (text != null) {
+			text.text = ConfigurationManager.Buildtime;
+		} else {
+			Debug.LogError ("Text component missing or not initialized (should be used for showing version number)");
 		}
 	}
 	

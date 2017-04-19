@@ -37,6 +37,8 @@ namespace GQ.Client.Conf
 
 		public bool 	hideHiddenQuests  { get; set; }
 
+		public bool 	hasMenuWithinQuests  { get; set; }
+
 		public bool 	showTextInLoadingLogo  { get; set; }
 
 		public bool 	showNetConnectionWarning  { get; set; }
@@ -68,6 +70,7 @@ namespace GQ.Client.Conf
 			cloudQuestsVisible = true;
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
+			hasMenuWithinQuests = true;
 			downloadTimeOutSeconds = 300;
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;

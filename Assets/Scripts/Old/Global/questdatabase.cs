@@ -78,7 +78,7 @@ public class questdatabase : MonoBehaviour
 	public void OnEnable ()
 	{
 
-		if (!Configuration.instance.hasMenuWithinQuests) {
+		if (!ConfigurationManager.Current.hasMenuWithinQuests) {
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MenuButton");
 			if (gos != null && gos.Length > 0) {
 				menuButton = gos [0];
@@ -151,17 +151,6 @@ public class questdatabase : MonoBehaviour
 
 		}
 
-
-
-		if (Configuration.instance.checkForAppversion) {
-
-
-			CheckForQuestVersion ();
-
-		}
-
-
-
 		PATH_2_PREDEPLOYED_QUESTS = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests");
 		PREDEPLOYED_QUESTS_ZIP = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests.zip");
 		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
@@ -224,49 +213,6 @@ public class questdatabase : MonoBehaviour
 			menu = GameObject.Find ("MenuCanvas").GetComponent<menucontroller> ();
 			
 		}
-
-	}
-
-	
-
-	public void CheckForQuestVersion ()
-	{
-
-		string url = Configuration.instance.appVersionURL + "?version=" + Configuration.instance.appVersion;
-		Download download = new Download (url, timeout: 20000);
-
-		download.OnSuccess = (Download.SuccessCallback)((Download d) => {
-
-			string[] split = d.Www.text.Split (';');
-
-			int num;
-			if (int.TryParse (split [0], out num)) {
-				
-				if (num > Configuration.instance.appVersion) {
-
-					if (split [1].Equals ("true")) {
-						showmessage (split [2], "Okay");
-					} else {
-
-						StartCoroutine (blockApp (split [2]));
-
-					}
-
-				}
-			}
-		});
-
-		StartCoroutine (download.startDownload ());
-	}
-
-
-	IEnumerator blockApp (string s)
-	{
-		yield return null;
-		loadlogo.enable ();
-		webloadingmessage.enabled = true;
-		webloadingmessage.text = s;
-		StartCoroutine (blockApp (s));
 
 	}
 
@@ -1404,7 +1350,7 @@ public class questdatabase : MonoBehaviour
 
 	public void startQuest (Quest q)
 	{
-		if (!Configuration.instance.hasMenuWithinQuests) {
+		if (!ConfigurationManager.Current.hasMenuWithinQuests) {
 			if (menuButton != null) {
 				menuButton.GetComponent<Image> ().enabled = false;
 				menuButton.GetComponent<Button> ().enabled = false;

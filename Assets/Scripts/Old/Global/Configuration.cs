@@ -50,25 +50,7 @@ namespace GQ.Client.Conf
 		public double defaultLongitude = 51.0d;
 		// TODO make available in portal
 		public double defaultLatitude = 8.0d;
-		// TODO make available in portal
-		public bool checkForAppversion = true;
-		public string appVersionURL = "";
-		public bool hasMenuWithinQuests = true;
 
-		/// <summary>
-		/// This version numbers controls wether the app is compatible with the portal. 
-		/// If it is lower than the numer provided by the appVersionURL the app shall or 
-		/// even can not be used without updating it.
-		/// </summary>
-		public int appVersion = 0;
-
-		/// <summary>
-		/// This version number is the subversion numbering that we as developers give to the build. 
-		/// The user is shown the apVersion number and this subversionNumber additionally to the .
-		/// </summary>
-		public string subversionNumber = "0.1";
-
-	
 		public double[] storedSimulatedPosition {
 			get;
 			set;
