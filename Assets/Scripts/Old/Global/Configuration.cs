@@ -11,24 +11,6 @@ namespace GQ.Client.Conf
 	{
 		private static Configuration _instance;
 
-		public enum ProductIDs
-		{
-			Public,
-			CarlBenz,
-			ErzbistumKoeln,
-			LWL,
-			WikiCultureCity,
-			Intern,
-			Demos,
-			Odysseum,
-			SLSSpiele,
-			Spielpunkte,
-			EduQuest,
-			Bienenlehrpfad
-		}
-
-		public ProductIDs product;
-		public string nameForQuest = "Quest";
 		public bool showMessageForDatasendAction = true;
 		public bool showPrivacyAgreement = true;
 		public int privacyAgreementVersion = -1;
