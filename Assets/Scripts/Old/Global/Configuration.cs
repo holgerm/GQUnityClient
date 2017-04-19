@@ -28,7 +28,6 @@ namespace GQ.Client.Conf
 		}
 
 		public ProductIDs product;
-		public Sprite toplogo;
 		public string nameForQuest = "Quest";
 		public bool showMessageForDatasendAction = true;
 		public bool showPrivacyAgreement = true;

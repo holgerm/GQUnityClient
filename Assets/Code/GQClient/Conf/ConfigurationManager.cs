@@ -6,7 +6,8 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace GQ.Client.Conf {
+namespace GQ.Client.Conf
+{
 
 	/// <summary>
 	/// The Configuration manager is the runtime access point to information about the build configuration, 
@@ -16,12 +17,14 @@ namespace GQ.Client.Conf {
 	/// This class will completely replace the currently still used class Configuration 
 	/// and additionally offer any information which is currently entered manually in the Unity Inspector View.
 	/// </summary>
-	public class ConfigurationManager : MonoBehaviour {
+	public class ConfigurationManager : MonoBehaviour
+	{
 
 		#region Initialize
 
-		void Awake () {
-			deserialize();
+		void Awake ()
+		{
+			deserialize ();
 		}
 
 		#endregion
@@ -32,11 +35,15 @@ namespace GQ.Client.Conf {
 		public const string CONFIG_FILE = "Product.json";
 		public const string BUILD_TIME_FILE_NAME = "buildtime";
 		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
+		public const string TOPLOGO_FILE_NAME = "TopLogo";
+		public const string TOPLOGO_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + TOPLOGO_FILE_NAME;
+
 		public const string GQ_SERVER_BASE_URL = "http://qeevee.org:9091";
 
-		public static string url_PublicQuestsJSON () {
+		public static string url_PublicQuestsJSON ()
+		{
 			return 
-				String.Format(
+				String.Format (
 				"{0}/json/{1}/publicgamesinfo", 
 				ConfigurationManager.GQ_SERVER_BASE_URL,
 				ConfigurationManager.Current.portal
@@ -51,8 +58,8 @@ namespace GQ.Client.Conf {
 
 		public static Config Current {
 			get {
-				if ( _current == null ) {
-					deserialize();
+				if (_current == null) {
+					deserialize ();
 				}
 			
 				return _current;
@@ -62,7 +69,8 @@ namespace GQ.Client.Conf {
 			}
 		}
 
-		public static void Reset () {
+		public static void Reset ()
+		{
 			_current = null;
 		}
 
@@ -70,6 +78,7 @@ namespace GQ.Client.Conf {
 
 		public static Sprite TopLogo {
 			get {
+				_topLogo = Resources.Load <Sprite> (TOPLOGO_FILE_NAME);
 				return _topLogo;
 			}
 			set {
@@ -92,16 +101,16 @@ namespace GQ.Client.Conf {
 
 		public static string Buildtime {
 			get {
-				if ( _buildtime == null ) {
+				if (_buildtime == null) {
 					try {
-						TextAsset buildTimeAsset = Resources.Load(BUILD_TIME_FILE_NAME) as TextAsset;
+						TextAsset buildTimeAsset = Resources.Load (BUILD_TIME_FILE_NAME) as TextAsset;
 
-						if ( buildTimeAsset == null ) {
-							throw new ArgumentException("Buildtime File does not represent a loadable asset. Cf. " + BUILD_TIME_FILE_NAME);
+						if (buildTimeAsset == null) {
+							throw new ArgumentException ("Buildtime File does not represent a loadable asset. Cf. " + BUILD_TIME_FILE_NAME);
 						}
 						_buildtime = buildTimeAsset.text;
-					} catch ( Exception exc ) {
-						Debug.LogWarning("Could not read build time file at " + BUILD_TIME_FILE_PATH + " " + exc.Message);
+					} catch (Exception exc) {
+						Debug.LogWarning ("Could not read build time file at " + BUILD_TIME_FILE_PATH + " " + exc.Message);
 						_buildtime = "unknown";
 					}
 				}
@@ -116,9 +125,9 @@ namespace GQ.Client.Conf {
 
 		public static string Imprint {
 			get {
-				if ( _imprint == null ) {
-					TextAsset ta = Resources.Load("imprint") as TextAsset;
-					if ( ta == null )
+				if (_imprint == null) {
+					TextAsset ta = Resources.Load ("imprint") as TextAsset;
+					if (ta == null)
 						_imprint = "";
 					else
 						_imprint = ta.text;
@@ -136,9 +145,9 @@ namespace GQ.Client.Conf {
 
 		public static string Terms {
 			get {
-				if ( _terms == null ) {
-					TextAsset ta = Resources.Load("terms") as TextAsset;
-					if ( ta == null )
+				if (_terms == null) {
+					TextAsset ta = Resources.Load ("terms") as TextAsset;
+					if (ta == null)
 						_terms = "";
 					else
 						_terms = ta.text;
@@ -156,9 +165,9 @@ namespace GQ.Client.Conf {
 
 		public static string PrivacyStatement {
 			get {
-				if ( _privacyStatement == null ) {
-					TextAsset ta = Resources.Load("privacy") as TextAsset;
-					if ( ta == null )
+				if (_privacyStatement == null) {
+					TextAsset ta = Resources.Load ("privacy") as TextAsset;
+					if (ta == null)
 						_privacyStatement = "";
 					else
 						_privacyStatement = ta.text;
@@ -175,18 +184,19 @@ namespace GQ.Client.Conf {
 		/// <summary>
 		/// Deserialize the Product.json file to the current config object that is used throughout the client.
 		/// </summary>
-		public static void deserialize () {
+		public static void deserialize ()
+		{
 
-			TextAsset configAsset = Resources.Load("Product") as TextAsset;
+			TextAsset configAsset = Resources.Load ("Product") as TextAsset;
 
-			if ( configAsset == null ) {
-				throw new ArgumentException("Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
+			if (configAsset == null) {
+				throw new ArgumentException ("Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
 			}
 
 			try {
-				_current = JsonConvert.DeserializeObject<Config>(configAsset.text);
-			} catch ( Exception e ) {
-				Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
+				_current = JsonConvert.DeserializeObject<Config> (configAsset.text);
+			} catch (Exception e) {
+				Debug.LogWarning ("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
 			}
 
 		}
@@ -196,7 +206,8 @@ namespace GQ.Client.Conf {
 	}
 
 
-	public enum QuestVisualizationMethod {
+	public enum QuestVisualizationMethod
+	{
 		list,
 		map
 	}
