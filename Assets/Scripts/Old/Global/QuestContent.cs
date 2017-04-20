@@ -14,43 +14,46 @@ using GQ.Util;
 using UnitySlippyMap;
 
 [System.Serializable]
-public class QuestContent {
+public class QuestContent
+{
 
-	[XmlAttribute("id")]
+	[XmlAttribute ("id")]
 	public int
 		id;
-	[XmlText()]
+	[XmlText ()]
 	public string
 		content;
-	[XmlAnyAttribute()]
+	[XmlAnyAttribute ()]
 	public XmlAttribute[]
 		help_attributes;
 	public List<QuestAttribute> attributes;
-	[System.NonSerialized()]
-	[XmlElement("questiontext")]
+	[System.NonSerialized ()]
+	[XmlElement ("questiontext")]
 	public QuestContent
 		questiontext;
-	[System.NonSerialized()]
-	[XmlElement("answer")]
+	[System.NonSerialized ()]
+	[XmlElement ("answer")]
 	public List<QuestContent>
 		answers;
 
-	public string getAttribute (string k) {
+	public string getAttribute (string k)
+	{
 		
-		foreach ( QuestAttribute qa in attributes ) {
-			if ( qa.key.Equals(k) ) {
+		foreach (QuestAttribute qa in attributes) {
+			if (qa.key.Equals (k)) {
 				return qa.value;
 			}
 		}
 		return "";
 	}
 
-	public bool hasAttribute (string k) {
+	public bool hasAttribute (string k)
+	{
 		
 		bool h = false;
-		foreach ( QuestAttribute qa in attributes ) {
+		foreach (QuestAttribute qa in attributes) {
 			
-			if ( qa.key.Equals(k) ) {
+			if (qa.key.Equals (k)) {
 				h = true;
 			}
 			
@@ -60,28 +63,29 @@ public class QuestContent {
 		
 	}
 
-	public void deserializeAttributes (int id, bool redo) {
+	public void deserializeAttributes (int id, bool redo)
+	{
 
-		foreach ( QuestContent qcdi in answers ) {
-			qcdi.deserializeAttributes(id, redo);
+		foreach (QuestContent qcdi in answers) {
+			qcdi.deserializeAttributes (id, redo);
 		}
 
-		if ( questiontext != null ) {
-			questiontext.deserializeAttributes(id, redo);
+		if (questiontext != null) {
+			questiontext.deserializeAttributes (id, redo);
 		}
 		
-		attributes = new List<QuestAttribute>();
+		attributes = new List<QuestAttribute> ();
 		
-		if ( help_attributes != null ) {
-			foreach ( XmlAttribute xmla in help_attributes ) {
+		if (help_attributes != null) {
+			foreach (XmlAttribute xmla in help_attributes) {
 
-				if ( xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://") ) {
+				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
 									
-					string[] splitted = xmla.Value.Split('/');
+					string[] splitted = xmla.Value.Split ('/');
 									
-					questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 									
-					string filename = "files/" + splitted[splitted.Length - 1];
+					string filename = "files/" + splitted [splitted.Length - 1];
 									
 //					int i = 0;
 //					while ( questdb.loadedfiles.Contains(filename) ) {
@@ -90,33 +94,32 @@ public class QuestContent {
 //										
 //					}
 									
-					questdb.loadedfiles.Add(filename);
+					questdb.loadedfiles.Add (filename);
 									
-					if ( !Application.isWebPlayer ) {
+					if (!Application.isWebPlayer) {
 
-						if ( !redo || (questdb.currentquest.predeployed && filename.ToLower().Contains(".mp3")) ) {
-							questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						if (!redo || (questdb.currentquest != null && questdb.currentquest.predeployed && filename.ToLower ().Contains (".mp3"))) {
+							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
-						if ( splitted.Length > 3 ) {
+						if (splitted.Length > 3) {
 							
-							if ( questdb.currentquest.predeployed && !filename.ToLower().Contains(".mp3") ) {
+							if (questdb.currentquest != null && questdb.currentquest.predeployed && !filename.ToLower ().Contains (".mp3")) {
 								
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
-							}
-							else {
+							} else {
 								
 								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 								
 							}
-							questdb.performSpriteConversion(xmla.Value);
+							questdb.performSpriteConversion (xmla.Value);
 							
 						}
 					}
 									
 				}
 				
-				attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
+				attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 				
 			}
 		}

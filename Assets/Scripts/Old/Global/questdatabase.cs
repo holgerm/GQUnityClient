@@ -183,7 +183,7 @@ public class questdatabase : MonoBehaviour
 
 
 			
-			if (Configuration.instance.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && ConfigurationManager.Current.autoStartQuestID == 0)) {
+			if (ConfigurationManager.Current.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && ConfigurationManager.Current.autoStartQuestID == 0)) {
 				buttoncontroller.DisplayList ();
 
 				ReloadQuestListAndRefresh ();
@@ -732,7 +732,7 @@ public class questdatabase : MonoBehaviour
 			hasNoLocalQuestsYet = false;
 		}
 
-		if (!downloadedAll && Configuration.instance.downloadAllCloudQuestOnStart) {
+		if (!downloadedAll && ConfigurationManager.Current.downloadAllCloudQuestOnStart) {
 			downloadingAll = true;
 
 			if (hasNoLocalQuestsYet) {
@@ -784,7 +784,7 @@ public class questdatabase : MonoBehaviour
 			downloadedAll = true;
 
 
-		} else if (Configuration.instance.downloadAllCloudQuestOnStart) {
+		} else if (ConfigurationManager.Current.downloadAllCloudQuestOnStart) {
 
 			if (webloadingmessage != null) {
 

@@ -33,6 +33,8 @@ namespace GQ.Client.Conf
 
 		public bool 	showCloudQuestsImmediately  { get; set; }
 
+		public bool 	downloadAllCloudQuestOnStart  { get; set; }
+
 		public bool 	localQuestsDeletable  { get; set; }
 
 		public bool 	hideHiddenQuests  { get; set; }
@@ -68,6 +70,8 @@ namespace GQ.Client.Conf
 			useMapOffline = false;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
+			showCloudQuestsImmediately = false;
+			downloadAllCloudQuestOnStart = false;
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
 			hasMenuWithinQuests = true;

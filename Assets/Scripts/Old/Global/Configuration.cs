@@ -17,7 +17,6 @@ namespace GQ.Client.Conf
 		public bool showAGBs = true;
 		public int agbsVersion = -1;
 		public bool offlinePlayable = true;
-		public bool downloadAllCloudQuestOnStart = false;
 		public string defaultlanguage = "system";
 		public bool languageChangableByUser = true;
 		public List<Language> languagesAvailable;

@@ -2,23 +2,25 @@
 using System.Collections;
 using GQ.Client.Conf;
 
-public class deactivateGameObjectInDownloadAllQuestsMode : MonoBehaviour {
+public class deactivateGameObjectInDownloadAllQuestsMode : MonoBehaviour
+{
 
 
 
 
 	public GameObject elseActivate;
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 
-		if ( Configuration.instance.downloadAllCloudQuestOnStart ) {
+		if (ConfigurationManager.Current.downloadAllCloudQuestOnStart) {
 
 
-			gameObject.SetActive(false);
+			gameObject.SetActive (false);
 
-			if ( elseActivate != null ) {
+			if (elseActivate != null) {
 
-				elseActivate.SetActive(true);
+				elseActivate.SetActive (true);
 
 			}
 
