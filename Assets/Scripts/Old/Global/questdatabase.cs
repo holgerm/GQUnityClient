@@ -1774,7 +1774,7 @@ public class questdatabase : MonoBehaviour
 		Quest nq = q.LoadFromText (q.Id, localload);
 
 		// store timestamp for old quests that miss lastUpdate in XML to prevent relaoding them always:
-		if (nq.LastUpdate == 0 && !reload && !localload) {
+		if (nq != null && nq.LastUpdate == 0 && !reload && !localload) {
 			foreach (Quest curQ in allquests) {
 				if (curQ.Id == nq.Id) {
 					nq.LastUpdate = curQ.LastUpdate;
@@ -1786,15 +1786,15 @@ public class questdatabase : MonoBehaviour
 //		Debug.Log("XXXXX NACHHER");
 
 		bool alreadyStoredInLocalQuests = false;
-		foreach (Quest quest in localquests) {
-			if (quest.Id == nq.Id) {
-				alreadyStoredInLocalQuests = true;
-				break;
+		if (nq != null)
+			foreach (Quest quest in localquests) {
+				if (quest.Id == nq.Id) {
+					alreadyStoredInLocalQuests = true;
+					break;
+				}
 			}
-		}
 		if (!alreadyStoredInLocalQuests)
 			localquests.Add (nq);
-
 
 		nq.Id = q.Id;
 		if (nq == null) {
