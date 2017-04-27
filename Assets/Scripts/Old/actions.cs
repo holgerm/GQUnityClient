@@ -1986,7 +1986,7 @@ public class actions : MonoBehaviour
 		if (action.hasAttribute ("message")) {
 			QuestMessage nqa = (QuestMessage)Instantiate (message_prefab, transform.position, Quaternion.identity);
 		
-			nqa.message = action.getAttribute ("message");
+			nqa.message = formatString (action.getAttribute ("message"));
 
 			if (action.hasAttribute ("buttontext") && action.getAttribute ("buttontext").Length > 0) {
 				nqa.setButtonText (action.getAttribute ("buttontext"));
