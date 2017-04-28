@@ -961,16 +961,27 @@ public class questdatabase : MonoBehaviour
 		q.Id = id;
 		q.predeployed = true;
 
-		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
+//		q.filepath = PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/game.xml";
+		Debug.Log ("STREAMING ASSET PATH: " + Application.streamingAssetsPath);
+		q.filepath = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests/" + id + "/game.xml");
 
-		Debug.Log ("CURRENTQUEST set to " + q.Name + " l: 1046");
 		currentquest = q;
 
-//		currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+		string pre = "file: /";
+
+		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer) {
+
+			pre = "file:";
+		}
+
+		if (Application.platform == RuntimePlatform.Android) {
+
+			pre = "";
+		}
 
 
-
-		WWW wwwpdq = LocalWWW.Create (q.filepath);
+		Debug.Log ("Predeployed quest searched at: " + pre + q.filepath);
+		WWW wwwpdq = new WWW (pre + q.filepath);
 
 		yield return wwwpdq;
 
@@ -1426,7 +1437,6 @@ public class questdatabase : MonoBehaviour
 
 	public void endQuest ()
 	{
-		Debug.Log ("endQuest()");
 
 		if (currentquestdata != null) {
 			Destroy (currentquestdata.gameObject);
@@ -1692,13 +1702,15 @@ public class questdatabase : MonoBehaviour
 
 		if (!Application.isWebPlayer) {
 			localquests.Clear (); 
+
+			// collect all LOCAL quests:
+
 			DirectoryInfo info = new DirectoryInfo (Application.persistentDataPath + "/quests/");
 			if (!info.Exists) {
 				info.Create ();
 				return localquests;
 			}
 			var fileInfo = info.GetDirectories ();
-
 
 			downloadingAll = false;
 
@@ -1714,6 +1726,42 @@ public class questdatabase : MonoBehaviour
 					}
 				}
 			}
+
+//			// collect all PREDEPLOYED quests:
+//
+//			info = new DirectoryInfo (PATH_2_PREDEPLOYED_QUESTS + "/");
+//			if (!info.Exists) {
+//				info.Create ();
+//				return localquests;
+//			}
+//			fileInfo = info.GetDirectories ();
+//
+//			downloadingAll = false;
+//
+//			foreach (DirectoryInfo folder in fileInfo) { 
+//				if (File.Exists (folder.ToString () + "/game.xml")) {
+//					Quest n = new Quest ();
+//					string[] splitted = folder.ToString ().Split ('/');
+//					n.Id = int.Parse (splitted [splitted.Length - 1]);
+//
+//					// is this predelpoyed quest (n) already in our list as a local quest?
+//					bool alreadyAsLocalQuestInList = false;
+//					foreach (Quest lq in localquests) {
+//						if (n.Id.Equals (lq.Id)) {
+//							alreadyAsLocalQuestInList = true;
+//							break;
+//						}
+//					}
+//
+//					if (!alreadyAsLocalQuestInList) {
+//						n.filepath = folder.ToString () + "/";
+//						n = n.LoadFromText (int.Parse (splitted [splitted.Length - 1]), true);
+//						if (n != null) {
+//							localquests.Add (n);
+//						}
+//					}
+//				}
+//			}
 
 			GameObject.Find ("[FILTERLIST]").GetComponent<categoryFilterList> ().reInstantiateFilter ();
 
@@ -1757,7 +1805,6 @@ public class questdatabase : MonoBehaviour
 	/// <param name="localload">If set to <c>true</c> localload.</param>
 	public void installQuest (Quest q, bool reload, bool localload)
 	{
-		Debug.Log ("installQuest(" + q.Id + ") -> " + q.xmlcontent);
 
 		if (filedownloads != null) {
 			filedownloads.Clear ();
@@ -1819,7 +1866,6 @@ public class questdatabase : MonoBehaviour
 			downloadquests.Add (nq);
 
 		} else {
-			Debug.Log ("CURRENTQUEST set to " + nq.Name + " l: 1901");
 			currentquest = nq;
 		}
 
@@ -2509,6 +2555,16 @@ public class questdatabase : MonoBehaviour
 				int foundTiles = 0;
 				int destroyedTiles = 0;
 
+				GameObject[] pcs = GameObject.FindGameObjectsWithTag ("PageController");
+				if (pcs.Length > 0) {
+					Debug.Log ("CHANGE_PAGE: Found PageControllers: " + pcs.Length);
+					foreach (var pc in pcs) {
+						Debug.Log ("  - " + pc.name + " (" + pc.GetType ().ToString () + " #: " + pc.GetHashCode ());
+					}
+				}
+
+
+
 				foreach (GameObject go in allObjects) {
 			
 					if (go != null &&
@@ -2587,20 +2643,10 @@ public class questdatabase : MonoBehaviour
 						if (GameObject.Find ("PageController_Map")) {
 
 							if (go == GameObject.Find ("PageController_Map").GetComponent<page_map> ().map) {
-
+									
 								des = false;
 							}
 						} 
-
-//						if ( go.name.StartsWith("tile_") ) {
-//							Tile t = go.GetComponent<Tile>();
-//							if ( t != null ) {
-//								Debug.Log("GOT IT");
-//								t.material.mainTexture = null;
-//								foundTiles++;
-//							}
-//						}
-						
 
 						if (des) {
 							Destroy (go);
@@ -2617,33 +2663,7 @@ public class questdatabase : MonoBehaviour
 					menu.showTopBar ();
 				}
 				
-				if (qp.type == "NPCTalk" || qp.type == "ImageWithText") {
-					SceneManager.LoadScene ("npctalk", LoadSceneMode.Additive);
-				} else if (qp.type == "StartAndExitScreen") {
-					SceneManager.LoadScene ("fullscreen", LoadSceneMode.Additive);
-				} else if (qp.type == "MultipleChoiceQuestion" || qp.type == "Menu") {
-					SceneManager.LoadScene ("multiplechoicequestion", LoadSceneMode.Additive);
-				} else if (qp.type == "VideoPlay") {
-					SceneManager.LoadScene ("videoplay", LoadSceneMode.Additive);
-				} else if (qp.type == "TagScanner") {
-					needsCamera = true;
-					SceneManager.LoadScene ("qrcodereader", LoadSceneMode.Additive);
-				} else if (qp.type == "ImageCapture") {
-					needsCamera = true;
-					SceneManager.LoadScene ("imagecapture", LoadSceneMode.Additive);
-				} else if (qp.type == "TextQuestion") {
-					SceneManager.LoadScene ("textquestion", LoadSceneMode.Additive);
-				} else if (qp.type == "AudioRecord") {
-					needsCamera = true;
-					Debug.Log ("Starting AudioRecord");
-					SceneManager.LoadScene ("audiorecord", LoadSceneMode.Additive);
-				} else if (qp.type == "WebPage") {
-					SceneManager.LoadScene ("website", LoadSceneMode.Additive);
-				} else if (qp.type == "Custom") {
-					SceneManager.LoadScene ("custom", LoadSceneMode.Additive);
-				} else if (qp.type == "ReadNFC") {
-					SceneManager.LoadScene ("readnfc", LoadSceneMode.Additive);
-				} else if (qp.type == "MapOSM" || qp.type == "Navigation") {
+				if (qp.type == "MapOSM" || qp.type == "Navigation") {
 
 					if (GameObject.Find ("MapCam") == null) {
 
@@ -2680,30 +2700,13 @@ public class questdatabase : MonoBehaviour
 							GameObject.Find ("[Map]").GetComponent<mapdisplaytoggle> ().showMap ();
 						}
 					}
+				} else {
+					// we sometimes have to wait for the end of the frame to destroy the latest page controller etc. 
+					// before we start the next one. Cf. a problem with onRead on NFCReader page when switching to a
+					// multiplechoicequestion page.
+					StartCoroutine (LoadPage (qp.type));
 				}
-
-				if (needsCamera) {
-					if (GameObject.Find ("MapCanvas") != null) {
-						Debug.Log ("Disabling Map Canvas");
-						GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
-					}
-
-					Debug.Log ("needs Camera");
-//					GameObject.Find ("BgCam").GetComponent<Camera> ().enabled = false;
-//					if (GameObject.Find ("MapCam") != null) {
-//						GameObject.Find ("MapCam").GetComponent<Camera> ().enabled = false;
-//						GameObject.Find ("MapCam").GetComponent<AudioListener> ().enabled = false;
-//
-//					}
-//					GameObject.Find ("BgCam").GetComponent<AudioListener> ().enabled = false;
-//
-				}
-				
-				//GameObject.Find("BgCam").GetComponent<Camera>().enabled = false;
-
-				
 			}
-		
 		}
 		
 
@@ -2721,6 +2724,68 @@ public class questdatabase : MonoBehaviour
 		}
 		savedmessages.Clear ();
 
+	}
+
+	IEnumerator LoadPage (string pageName)
+	{
+		yield return new WaitForEndOfFrame ();
+
+		string pageTypeXML = "";
+		bool needsCamera = false;
+
+		switch (pageName) {
+		case "NPCTalk":
+			pageTypeXML = "npctalk";
+			break;
+		case "ImageWithText":
+			pageTypeXML = "npctalk";
+			break;
+		case "StartAndExitScreen":
+			pageTypeXML = "fullscreen";
+			break;
+		case "MultipleChoiceQuestion":
+		case "Menu":
+			pageTypeXML = "multiplechoicequestion";
+			break;
+		case "VideoPlay":
+			pageTypeXML = "videoplay";
+			break;
+		case "TagScanner":
+			pageTypeXML = "qrcodereader";
+			needsCamera = true;
+			break;
+		case "ImageCapture":
+			pageTypeXML = "imagecapture";
+			needsCamera = true;
+			break;
+		case "TextQuestion":
+			pageTypeXML = "textquestion";
+			break;
+		case "AudioRecord":
+			pageTypeXML = "audiorecord";
+			needsCamera = true; // TODO why???
+			break;
+		case "WebPage":
+			pageTypeXML = "website";
+			break;
+		case "Custom":
+			pageTypeXML = "custom";
+			break;
+		case "ReadNFC":
+			pageTypeXML = "readnfc";
+			break;
+		default:
+			Debug.LogError ("Can not change to page of unknown type name: " + pageName);
+			yield break;
+		}
+
+		if (needsCamera) {
+			if (GameObject.Find ("MapCanvas") != null) {
+				GameObject.Find ("MapCanvas").GetComponent<Canvas> ().enabled = false;
+			}
+		}
+
+		SceneManager.LoadScene (pageTypeXML, LoadSceneMode.Additive);
 	}
 
 	IEnumerator loadMap ()
@@ -2846,7 +2911,6 @@ public class questdatabase : MonoBehaviour
 			}
 
 			if (!downloadingAll) {
-				Debug.Log ("CURRENTQUEST set to " + nq.Name + " l: 2958");
 				currentquest = nq;
 			}
 
