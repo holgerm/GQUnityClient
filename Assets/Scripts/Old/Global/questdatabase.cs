@@ -2555,16 +2555,6 @@ public class questdatabase : MonoBehaviour
 				int foundTiles = 0;
 				int destroyedTiles = 0;
 
-				GameObject[] pcs = GameObject.FindGameObjectsWithTag ("PageController");
-				if (pcs.Length > 0) {
-					Debug.Log ("CHANGE_PAGE: Found PageControllers: " + pcs.Length);
-					foreach (var pc in pcs) {
-						Debug.Log ("  - " + pc.name + " (" + pc.GetType ().ToString () + " #: " + pc.GetHashCode ());
-					}
-				}
-
-
-
 				foreach (GameObject go in allObjects) {
 			
 					if (go != null &&
@@ -2728,6 +2718,7 @@ public class questdatabase : MonoBehaviour
 
 	IEnumerator LoadPage (string pageName)
 	{
+		yield return new WaitForEndOfFrame ();
 		yield return new WaitForEndOfFrame ();
 
 		string pageTypeXML = "";
