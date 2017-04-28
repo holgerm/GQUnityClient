@@ -5,25 +5,24 @@ using System;
 using GQ.Client.Conf;
 using GQ.Util;
 
-namespace GQScripts {
+namespace GQScripts
+{
 
-	public class InitQuestManager : MonoBehaviour, QuestInfoImporter_I {
+	public class InitQuestManager : MonoBehaviour, QuestInfoImporter_I
+	{
 
 		public QuestInfoManager qm;
 
 		// Use this for initialization
-		void Start () {
+		void Start ()
+		{
 			qm = QuestInfoManager.Instance;
-			this.StartImportQuestInfos(new QuestInfoLoaderFromServer());
-		}
-	
-		// Update is called once per frame
-		void Update () {
-			Debug.Log(String.Format("QM has {0} quests.", qm.Count));
+			this.StartImportQuestInfos (new QuestInfoLoaderFromServer ());
 		}
 
-		public void ImportQuestInfoDone () { 
-			Debug.Log(String.Format("Import Done. QM has {0} quests.", qm.Count));
+		public void ImportQuestInfoDone ()
+		{ 
+			Debug.Log (String.Format ("Import Done. QM has {0} quests.", qm.Count));
 		}
 	}
 }

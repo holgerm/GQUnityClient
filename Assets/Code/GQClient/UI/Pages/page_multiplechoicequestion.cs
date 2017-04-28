@@ -9,7 +9,8 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
 
-public class page_multiplechoicequestion : MonoBehaviour {
+public class page_multiplechoicequestion : MonoBehaviour
+{
 
 
 
@@ -32,109 +33,103 @@ public class page_multiplechoicequestion : MonoBehaviour {
 	public Image image;
 
 	// Use this for initialization
-	void Start () {
-
-		if ( GameObject.Find("QuestDatabase") == null ) {
+	void Start ()
+	{
+		if (GameObject.Find ("QuestDatabase") == null) {
 			
-			SceneManager.LoadScene("questlist");
+			SceneManager.LoadScene ("questlist");
 			return;
 		}
 
-		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-		quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-		multiplechoicequestion = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
-		questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();
+		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+		multiplechoicequestion = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 
-		feedbackPanel.SetActive(false);
-		questionPanel.SetActive(true);
-		if ( multiplechoicequestion.hasAttribute("loopText") )
-			feedbackTextOnRepeat = multiplechoicequestion.getAttribute("loopText");
-		Text feedbackText = feedbackPanel.transform.FindChild("Text").gameObject.GetComponent<Text>();
-		if ( feedbackText != null )
+		feedbackPanel.SetActive (false);
+		questionPanel.SetActive (true);
+		if (multiplechoicequestion.hasAttribute ("loopText"))
+			feedbackTextOnRepeat = multiplechoicequestion.getAttribute ("loopText");
+		Text feedbackText = feedbackPanel.transform.FindChild ("Text").gameObject.GetComponent<Text> ();
+		if (feedbackText != null)
 			feedbackText.text = feedbackTextOnRepeat;
 
-		if ( multiplechoicequestion.onStart != null ) {
+		if (multiplechoicequestion.onStart != null) {
 			
-			multiplechoicequestion.onStart.Invoke();
+			multiplechoicequestion.onStart.Invoke ();
 		}
 
-		questiontext.text = questdb.GetComponent<actions>().formatString(multiplechoicequestion.getAttribute("question"));
+		questiontext.text = questdb.GetComponent<actions> ().formatString (multiplechoicequestion.getAttribute ("question"));
 
 		List<QuestContent> answers = multiplechoicequestion.contents_answers;
 
-		if ( multiplechoicequestion.hasAttribute("shuffle") && multiplechoicequestion.getAttribute("shuffle") == "true" ) {
+		if (multiplechoicequestion.hasAttribute ("shuffle") && multiplechoicequestion.getAttribute ("shuffle") == "true") {
 
 			int n = answers.Count;
-			System.Random rnd = new System.Random();
-			while ( n > 1 ) {
-				int k = (rnd.Next(0, n) % n);
+			System.Random rnd = new System.Random ();
+			while (n > 1) {
+				int k = (rnd.Next (0, n) % n);
 				n--;
-				QuestContent value = answers[k];
-				answers[k] = answers[n];
-				answers[n] = value;
+				QuestContent value = answers [k];
+				answers [k] = answers [n];
+				answers [n] = value;
 			}
 		}
 			
-		foreach ( QuestContent qc in multiplechoicequestion.contents_answers ) {
+		foreach (QuestContent qc in multiplechoicequestion.contents_answers) {
 
-			multiplechoiceanswerbutton btn = (multiplechoiceanswerbutton)Instantiate(answerbuttonprefab, transform.position, Quaternion.identity);
-			btn.transform.SetParent(list.transform);
-			btn.transform.localScale = new Vector3(1f, 1f, 1f);
-			btn.setText(qc.content);
+			multiplechoiceanswerbutton btn = (multiplechoiceanswerbutton)Instantiate (answerbuttonprefab, transform.position, Quaternion.identity);
+			btn.transform.SetParent (list.transform);
+			btn.transform.localScale = new Vector3 (1f, 1f, 1f);
+			btn.setText (qc.content);
 
-			if ( qc.getAttribute("correct") == "1" ) {
+			if (qc.getAttribute ("correct") == "1") {
 				btn.correct = true; 
-			}
-			else {
+			} else {
 				btn.correct = false;
 
 			}
 		}
 
-		if ( multiplechoicequestion.getAttribute("bg") != "" ) {
+		if (multiplechoicequestion.getAttribute ("bg") != "") {
 			
 			if (
-				multiplechoicequestion.getAttribute("bg").StartsWith("http://") ||
-				multiplechoicequestion.getAttribute("bg").StartsWith("https://") ) {
+				multiplechoicequestion.getAttribute ("bg").StartsWith ("http://") ||
+				multiplechoicequestion.getAttribute ("bg").StartsWith ("https://")) {
 					
-				www = new WWW(multiplechoicequestion.getAttribute("bg"));
+				www = new WWW (multiplechoicequestion.getAttribute ("bg"));
 					
-				StartCoroutine(waitforImage());
-			}
-			else
-			if ( multiplechoicequestion.getAttribute("bg").StartsWith("@_") ) {
+				StartCoroutine (waitforImage ());
+			} else if (multiplechoicequestion.getAttribute ("bg").StartsWith ("@_")) {
 
-				foreach ( QuestRuntimeAsset qra in questactions.photos ) {
+				foreach (QuestRuntimeAsset qra in questactions.photos) {
 
-					if ( qra.key == multiplechoicequestion.getAttribute("bg") ) {
+					if (qra.key == multiplechoicequestion.getAttribute ("bg")) {
 
-						Sprite s = Sprite.Create(qra.texture, new Rect(0, 0, qra.texture.width, qra.texture.height), new Vector2(0.5f, 0.5f));
+						Sprite s = Sprite.Create (qra.texture, new Rect (0, 0, qra.texture.width, qra.texture.height), new Vector2 (0.5f, 0.5f));
 
 						image.sprite = s;
 						image.enabled = true;
 					}
 				}
-			}
-			else {
+			} else {
 
-				foreach ( SpriteConverter sc in questdb.convertedSprites ) {
+				foreach (SpriteConverter sc in questdb.convertedSprites) {
 
-					if ( sc.filename == multiplechoicequestion.getAttribute("bg") ) {
+					if (sc.filename == multiplechoicequestion.getAttribute ("bg")) {
 						
-						if ( sc.isDone ) {
-							if ( sc.sprite != null ) {
+						if (sc.isDone) {
+							if (sc.sprite != null) {
 						
 								image.sprite = sc.sprite;
 								image.enabled = true;
-							}
-							else {
+							} else {
 								
-								Debug.Log("Sprite was null");
+								Debug.Log ("Sprite was null");
 							}
-						}
-						else {
+						} else {
 							
-							Debug.Log("SpriteConverter was not done.");
+							Debug.Log ("SpriteConverter was not done.");
 							
 						}
 					}
@@ -143,16 +138,17 @@ public class page_multiplechoicequestion : MonoBehaviour {
 		}
 	}
 
-	public void onEnd () {
+	public void onEnd ()
+	{
 
 
 		bool repeatQuestion = false;
 
 
 
-		if ( multiplechoicequestion.hasAttribute("loopUntilSuccess")
-		     && multiplechoicequestion.getAttribute("loopUntilSuccess") == "true"
-		     && multiplechoicequestion.state.Equals("failed") ) {
+		if (multiplechoicequestion.hasAttribute ("loopUntilSuccess")
+		    && multiplechoicequestion.getAttribute ("loopUntilSuccess") == "true"
+		    && multiplechoicequestion.state.Equals (GQML.RESULT_FAILED)) {
 
 
 			repeatQuestion = true;
@@ -161,29 +157,26 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 
 
-		if ( repeatQuestion ) {
-			questionPanel.SetActive(false);
-			feedbackPanel.SetActive(true);
-		}
-		else {
+		if (repeatQuestion) {
+			questionPanel.SetActive (false);
+			feedbackPanel.SetActive (true);
+		} else {
 
 
 
-			if ( multiplechoicequestion.state != "failed" ) {
-				multiplechoicequestion.state = "succeeded";
+			if (multiplechoicequestion.state != GQML.RESULT_FAILED) {
+				multiplechoicequestion.state = GQML.RESULT_SUCCEEDED;
 			
 			}
 		
-			if ( multiplechoicequestion.onEnd != null ) {
+			if (multiplechoicequestion.onEnd != null) {
 			
-				multiplechoicequestion.onEnd.Invoke();
-			}
-			else
-			if ( (multiplechoicequestion.onSuccess == null && multiplechoicequestion.onFailure == null)
-			     ||
-			     (multiplechoicequestion.onSuccess != null && !multiplechoicequestion.onSuccess.hasMissionAction() && multiplechoicequestion.onFailure != null && !multiplechoicequestion.onFailure.hasMissionAction()) ) {
+				multiplechoicequestion.onEnd.Invoke ();
+			} else if ((multiplechoicequestion.onSuccess == null && multiplechoicequestion.onFailure == null)
+			           ||
+			           (multiplechoicequestion.onSuccess != null && !multiplechoicequestion.onSuccess.hasMissionAction () && multiplechoicequestion.onFailure != null && !multiplechoicequestion.onFailure.hasMissionAction ())) {
 			
-				GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
+				GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
 			
 			}
 
@@ -192,22 +185,24 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 	}
 
-	public void FeedbackButtonPressed () {
-		feedbackPanel.SetActive(false);
-		questionPanel.SetActive(true);
+	public void FeedbackButtonPressed ()
+	{
+		feedbackPanel.SetActive (false);
+		questionPanel.SetActive (true);
 	}
 
-	IEnumerator waitforImage () {
+	IEnumerator waitforImage ()
+	{
 		
 		DateTime startWWW = DateTime.Now;
 		
 		yield return www;
 		
-		if ( www.error == null ) {
+		if (www.error == null) {
 			
 			DateTime start = DateTime.Now;
 			
-			Sprite s = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+			Sprite s = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 
 				
 			image.sprite = s;
@@ -217,12 +212,11 @@ public class page_multiplechoicequestion : MonoBehaviour {
 			
 			
 			
-		}
-		else {
+		} else {
 			
 			
 			
-			Debug.Log(www.error);
+			Debug.Log (www.error);
 			
 			image.enabled = false;
 		}
@@ -234,27 +228,29 @@ public class page_multiplechoicequestion : MonoBehaviour {
 
 
 
-	public void onSuccess () {
+	public void onSuccess ()
+	{
 		
-		multiplechoicequestion.state = "succeeded";
+		multiplechoicequestion.state = GQML.RESULT_SUCCEEDED;
 
 		
-		if ( multiplechoicequestion.onSuccess != null ) {
+		if (multiplechoicequestion.onSuccess != null) {
 			
-			multiplechoicequestion.onSuccess.Invoke();
+			multiplechoicequestion.onSuccess.Invoke ();
 		} 
 		
 		
 	}
 
-	public void onFailure () {
+	public void onFailure ()
+	{
 		
-		multiplechoicequestion.state = "failed";
+		multiplechoicequestion.state = GQML.RESULT_FAILED;
 
 		
-		if ( multiplechoicequestion.onFailure != null ) {
+		if (multiplechoicequestion.onFailure != null) {
 			
-			multiplechoicequestion.onFailure.Invoke();
+			multiplechoicequestion.onFailure.Invoke ();
 		} 
 		
 		

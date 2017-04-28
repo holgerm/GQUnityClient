@@ -50,12 +50,6 @@ namespace QM.NFC
 			NFC_Connector.Connector.unregisterReaderUI (this);
 		}
 
-		// Update is called once per frame
-		void Update ()
-		{
-	
-		}
-
 		/// <summary>
 		/// Called by Android Java Plugin when an NFC Tag is read. The read payload is given as parameter. Called via NFC_Connector.
 		/// </summary>

@@ -19,7 +19,6 @@ namespace GQ.Client.UI.Pages
 
 		protected virtual void Start ()
 		{ 
-
 			if (GameObject.Find ("QuestDatabase") == null) {
 				SceneManager.LoadScene ("questlist");
 				return;
@@ -57,7 +56,7 @@ namespace GQ.Client.UI.Pages
 		/// <value>The page state on end.</value>
 		protected virtual string PageStateOnEnd { 
 			get { 
-				return "succeeded";
+				return GQML.RESULT_SUCCEEDED;
 			}
 		}
 
@@ -70,10 +69,9 @@ namespace GQ.Client.UI.Pages
 				page.onEnd.Invoke ();
 
 			} else {
-				//Debug.Log ("ending");
-				GameObject questDBGO = GameObject.Find ("QuestDatabase");
-				if (questDBGO != null) {
-					questDBGO.GetComponent<questdatabase> ().endQuest ();
+				
+				if (questdb != null) {
+					questdb.endQuest ();
 				}
 
 			}

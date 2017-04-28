@@ -218,8 +218,6 @@ public class createquestbuttons : MonoBehaviour
 	public void  DisplayList ()
 	{
 
-		Debug.Log ("DISPLAY_LIST()");
-
 		foreach (RectTransform go in GetComponentsInChildren<RectTransform>()) {
 			if (go != transform) {
 				Destroy (go.gameObject);

@@ -203,25 +203,19 @@ public class actions : MonoBehaviour
 				
 		int questID;
 
-		Debug.Log ("Going to start quest: >" + action.getAttribute ("quest") + "<");
-
 		try {
 			questID = int.Parse (action.getAttribute ("quest"));
 		} catch (Exception exc) {
-			Debug.Log ("Catched: " + exc.Message);
 			QuestVariable questVar = getVariable (action.getAttribute ("quest"));
 			if (questVar != null) {
-				Debug.Log ("StartQuest: Read Variable: " + questVar.key + ", type: " + questVar.type + ", string val: " + questVar.getStringValue ());
 
 				questID = (int)questVar.getNumValue ();
 			} else {
-				Debug.Log ("StartQuest action can not be executed with attribute quest = " + action.getAttribute ("quest"));
 				return;
 			}
 		}
-		Debug.Log ("StartQuest id: " + questID);
-		questdb.StartQuest (questID);
 
+		questdb.StartQuest (questID);
 	}
 
 	public string getServerIp (string s)
@@ -288,11 +282,7 @@ public class actions : MonoBehaviour
 
 		}
 
-		if (!doit) {
-
-			Debug.Log ("skipped Datasend Action");
-
-		} else {
+		if (doit) {
 
 			if (action.hasAttribute ("var")) {
 				
