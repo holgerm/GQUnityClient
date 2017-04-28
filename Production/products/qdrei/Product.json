@@ -1,6 +1,6 @@
 {
   "id": "qdrei",
-  "name": "Digitale Lernpfade",
+  "name": "Digitale Lehrpfade",
   "portal": 502,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
@@ -9,8 +9,8 @@
   "questVisualization": "list",
   "questVisualizationChangeable": false,
   "cloudQuestsVisible": true,
-  "downloadAllCloudQuestOnStart": true,
   "showCloudQuestsImmediately": false,
+  "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
   "hasMenuWithinQuests": true,
