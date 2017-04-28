@@ -35,6 +35,8 @@ public class page_multiplechoicequestion : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		tag = "PageController";
+
 		if (GameObject.Find ("QuestDatabase") == null) {
 			
 			SceneManager.LoadScene ("questlist");

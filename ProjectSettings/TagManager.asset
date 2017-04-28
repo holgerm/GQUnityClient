@@ -8,6 +8,7 @@ TagManager:
   - ProductSpecific
   - MenuButton
   - LoadingCanvasContainer
+  - PageController
   layers:
   - Default
   - TransparentFX

@@ -19,6 +19,8 @@ namespace GQ.Client.UI.Pages
 
 		protected virtual void Start ()
 		{ 
+			tag = "PageController";
+
 			if (GameObject.Find ("QuestDatabase") == null) {
 				SceneManager.LoadScene ("questlist");
 				return;
