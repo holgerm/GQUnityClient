@@ -17,6 +17,8 @@ public class page_tagscanner : MonoBehaviour
 	public Page tagscanner;
 
 	public Text text;
+
+	private const string TASKDESCRIPTION_DEFAULT = "QR Code Scannen";
 	public Image textbg;
 	public Text ergebnis_text;
 	public Image ergebnis_textbg;
@@ -58,9 +60,9 @@ public class page_tagscanner : MonoBehaviour
 			
 			text.text = questdb.GetComponent<actions> ().formatString (tagscanner.getAttribute ("taskdescription"));
 		} else {
-			
-			text.enabled = false;
-			textbg.enabled = false;
+			text.text = TASKDESCRIPTION_DEFAULT;
+//			text.enabled = false;
+//			textbg.enabled = false;
 		}
 
 		showresult = false;
