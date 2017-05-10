@@ -185,9 +185,12 @@ public class page_map : PageController
 				}
 			}
 				
-			if (questdb.currentquest == null)
+			if (questdb.currentquest == null) {
 				updateMapMarkerInFoyer ();
-			else
+				GameObject forthAndBackButtonsPanel = GameObject.Find ("ForthAndBackButtons");
+				if (forthAndBackButtonsPanel != null)
+					forthAndBackButtonsPanel.SetActive (false);
+			} else
 				updateMapMarkerInQuest ();
 
 		}
@@ -798,7 +801,8 @@ public class page_map : PageController
 			map.HasMoved = true;
 		}
 
-		InitBackButton (questdb.currentquest.AllowReturn);
+		if (questdb != null && questdb.currentquest != null)
+			InitBackButton (questdb.currentquest.AllowReturn);
 	}
 	
 	#if DEBUG_PROFILE
