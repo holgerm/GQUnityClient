@@ -854,7 +854,7 @@ public class actions : MonoBehaviour
 
 				mapcontroller.currentroute = new Route ();
 
-				Debug.Log ("doing new oute");
+				Debug.Log ("doing new Route");
 
 
 				string[] coordinates = routefile.Split (new string[] {

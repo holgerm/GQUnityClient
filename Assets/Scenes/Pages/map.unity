@@ -740,22 +740,22 @@ Prefab:
     - target: {fileID: 224000012562517110, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 268.75
+      value: 269.65
       objectReference: {fileID: 0}
     - target: {fileID: 224000012562517110, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -82.96834
+      value: -83.085144
       objectReference: {fileID: 0}
     - target: {fileID: 224000012562517110, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 537.5
+      value: 539.3
       objectReference: {fileID: 0}
     - target: {fileID: 224000012562517110, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 165.93668
+      value: 166.17029
       objectReference: {fileID: 0}
     - target: {fileID: 224000010097187606, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
@@ -770,22 +770,22 @@ Prefab:
     - target: {fileID: 224000010097187606, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 268.75
+      value: 267.85
       objectReference: {fileID: 0}
     - target: {fileID: 224000010097187606, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -82.96834
+      value: -83.085144
       objectReference: {fileID: 0}
     - target: {fileID: 224000010097187606, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 537.5
+      value: 535.7
       objectReference: {fileID: 0}
     - target: {fileID: 224000010097187606, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 165.93668
+      value: 166.17029
       objectReference: {fileID: 0}
     - target: {fileID: 224000011860136736, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
@@ -800,22 +800,22 @@ Prefab:
     - target: {fileID: 224000011860136736, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 268.75
+      value: 269.65
       objectReference: {fileID: 0}
     - target: {fileID: 224000011860136736, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -82.96834
+      value: -83.085144
       objectReference: {fileID: 0}
     - target: {fileID: 224000011860136736, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 537.5
+      value: 539.3
       objectReference: {fileID: 0}
     - target: {fileID: 224000011860136736, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 165.93668
+      value: 166.17029
       objectReference: {fileID: 0}
     - target: {fileID: 224000012542337664, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
@@ -830,22 +830,22 @@ Prefab:
     - target: {fileID: 224000012542337664, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 811.25
+      value: 812.15
       objectReference: {fileID: 0}
     - target: {fileID: 224000012542337664, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -82.96834
+      value: -83.085144
       objectReference: {fileID: 0}
     - target: {fileID: 224000012542337664, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 537.5
+      value: 535.7
       objectReference: {fileID: 0}
     - target: {fileID: 224000012542337664, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 165.93668
+      value: 166.17029
       objectReference: {fileID: 0}
     - target: {fileID: 114000013853719256, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
@@ -7503,7 +7503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 1
   on: {r: 0, g: 0, b: 0, a: 1}
-  off: {r: 0.6985294, g: 0.6985294, b: 0.6985294, a: 1}
+  off: {r: 0.99264705, g: 0.99264705, b: 0.99264705, a: 1}
 --- !u!1 &1833218873
 GameObject:
   m_ObjectHideFlags: 0
