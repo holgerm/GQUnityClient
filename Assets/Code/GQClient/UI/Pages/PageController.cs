@@ -26,14 +26,16 @@ namespace GQ.Client.UI.Pages
 				return;
 			}
 
+			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 			quest = questdb.currentquest;
-			page = quest.currentpage;
-			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
+			if (quest != null) {
+				page = quest.currentpage;
 
-			InitBackButton (quest.AllowReturn);
+				InitBackButton (quest.AllowReturn);
 
-			TriggerOnStart ();
+				TriggerOnStart ();
+			}
 		}
 
 		protected void TriggerOnStart ()
