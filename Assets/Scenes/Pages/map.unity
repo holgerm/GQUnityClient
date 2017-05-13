@@ -685,7 +685,7 @@ Prefab:
     - target: {fileID: 224000011685983856, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -1349.9031
+      value: -1760.1147
       objectReference: {fileID: 0}
     - target: {fileID: 224000011685983856, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
@@ -695,7 +695,7 @@ Prefab:
     - target: {fileID: 224000011685983856, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 165.93668
+      value: 166.17029
       objectReference: {fileID: 0}
     - target: {fileID: 224000011685983856, guid: 7acfd2a1ae10247c6a4527317efc0f3c,
         type: 2}
@@ -7469,7 +7469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7502,7 +7502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 1
-  on: {r: 0, g: 0, b: 0, a: 1}
+  on: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   off: {r: 0.99264705, g: 0.99264705, b: 0.99264705, a: 1}
 --- !u!1 &1833218873
 GameObject:
