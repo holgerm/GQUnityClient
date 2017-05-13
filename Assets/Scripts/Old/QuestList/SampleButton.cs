@@ -4,7 +4,8 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using GQ.Client.Model;
 
-public class SampleButton : MonoBehaviour {
+public class SampleButton : MonoBehaviour
+{
 	
 	public Text nameLabel;
 	public Quest q;
@@ -22,22 +23,22 @@ public class SampleButton : MonoBehaviour {
 
 
 
-	void Start () {
+	void Start ()
+	{
 
-		if ( q.hasData ) {
+		if (q.hasData) {
 
 			removeButton.enabled = true;
-			removeButton.GetComponent<Image>().enabled = true;
-			foreach ( Image i in	removeButton.GetComponentsInChildren<Image> () ) {
+			removeButton.GetComponent<Image> ().enabled = true;
+			foreach (Image i in	removeButton.GetComponentsInChildren<Image> ()) {
 				i.enabled = true;
 			}
 
-		}
-		else {
+		} else {
 
 			removeButton.enabled = false;
-			removeButton.GetComponent<Image>().enabled = false;
-			foreach ( Image i in	removeButton.GetComponentsInChildren<Image> () ) {
+			removeButton.GetComponent<Image> ().enabled = false;
+			foreach (Image i in	removeButton.GetComponentsInChildren<Image> ()) {
 				i.enabled = false;
 			}
 
@@ -45,19 +46,21 @@ public class SampleButton : MonoBehaviour {
 
 	}
 
-	public void startquest () {
+	public void startquest ()
+	{
 
-		GameObject.Find("QuestDatabase").GetComponent<questdatabase>().startQuest(q);
+		StartCoroutine (GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().startQuest (q));
 		//Debug.Log ("starting");
 
 	}
 
 
 
-	public void removeQuest () {
+	public void removeQuest ()
+	{
 
 
-		GameObject.Find("QuestDatabase").GetComponent<questdatabase>().removeQuest(q);
+		GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().removeQuest (q);
 
 	}
 

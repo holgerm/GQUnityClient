@@ -1077,7 +1077,7 @@ public class questdatabase : MonoBehaviour
 			q.Id = id;
 			downloadQuest (q);
 		} else {
-			startQuest (q);
+			StartCoroutine (startQuest (q));
 		}
 
 	}
@@ -1355,11 +1355,11 @@ public class questdatabase : MonoBehaviour
 
 		yield return new WaitForEndOfFrame ();
 
-		startQuest (q);
+		StartCoroutine (startQuest (q));
 
 	}
 
-	public void startQuest (Quest q)
+	public IEnumerator startQuest (Quest q)
 	{
 		if (!ConfigurationManager.Current.hasMenuWithinQuests) {
 			if (menuButton != null) {
@@ -1383,6 +1383,26 @@ public class questdatabase : MonoBehaviour
 
 //		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1448");
 		currentquest = q;
+
+		if (q.UsesLocation && Input.location.status != LocationServiceStatus.Running) {
+			Input.location.Start ();
+
+			if (!Input.location.isEnabledByUser) {
+				Debug.Log ("Location Service is disabled by user.");
+			}
+
+			while (Input.location.status == LocationServiceStatus.Initializing) {
+				Debug.Log ("Waiting for LocationService fo another second ...");
+				yield return new WaitForSeconds (1f);
+			}
+
+			if (Input.location.status == LocationServiceStatus.Failed) {
+				Debug.LogWarning ("Location Service failed to start.");
+			}
+			if (Input.location.status == LocationServiceStatus.Stopped) {
+				Debug.LogWarning ("Location Service stopped.");
+			}
+		}
 
 		if (!islocal) {
 			downloadQuest (q);

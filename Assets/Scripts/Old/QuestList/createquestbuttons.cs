@@ -65,6 +65,19 @@ public class createquestbuttons : MonoBehaviour
 		showHiddenQuests = showHidden;
 	}
 
+	public bool showQuest (Quest q)
+	{
+		bool show = true;
+		show &= (showHiddenQuests || !q.IsHidden);
+//		show &= (!showRegionalQuestsOnly || currentRegions.ContainQuest(q)); TODO
+
+		return show;
+	}
+
+	bool showRegionalQuestsOnly = false;
+
+
+
 	public void filterForName (string s)
 	{
 		namefilter = s;
