@@ -221,6 +221,13 @@ namespace GQ.Client.Model
 			}
 		}
 
+		public bool UsesLocation {
+			get {
+				return true;
+				// TODO check wether this quest contains map page or uses location system variables
+			}
+		}
+
 		#endregion
 
 
