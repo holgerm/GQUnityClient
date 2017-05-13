@@ -53,6 +53,8 @@ namespace GQ.Client.Conf
 
 		public bool		useMapOffline { get; set; }
 
+		public float	mapMinimalZoom { get; set; }
+
 		public List<CategoryInfo> markers { get; set; }
 
 		/// <summary>
@@ -68,6 +70,7 @@ namespace GQ.Client.Conf
 			questVisualization = "list";
 			markers = new List<CategoryInfo> ();
 			useMapOffline = false;
+			mapMinimalZoom = 7.0f;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
 			showCloudQuestsImmediately = false;

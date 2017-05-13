@@ -218,7 +218,7 @@ public class page_map : PageController
 		map.UseOrientation = true; // TODO: should be false, shouldn't it?
 		// offline map is currently only good enough up to zoom level 18:
 		map.MaxZoom = ConfigurationManager.Current.useMapOffline ? 19.0f : 20.0f;
-		map.MinZoom = 13.0f;
+		map.MinZoom = ConfigurationManager.Current.mapMinimalZoom;
 		map.InputsEnabled = true;
 		map.ShowGUIControls = true;
 		
