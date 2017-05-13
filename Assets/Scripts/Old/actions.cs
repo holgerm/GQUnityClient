@@ -1654,6 +1654,8 @@ public class actions : MonoBehaviour
 
 	public QuestVariable getVariable (string varName)
 	{
+		Debug.Log ("looking up var: " + varName);
+
 		string originalVarName = varName;
 
 		if (varName == null) {
@@ -1739,6 +1741,25 @@ public class actions : MonoBehaviour
 
 			Debug.LogWarning ("Unknown mission variable type: " + originalVarName);
 			return null;
+		}
+
+		// Location:
+		if (varName.Equals ("$location.lat") || varName.Equals ("$location.long")) {
+			if (Input.location.status != LocationServiceStatus.Running) {
+				Debug.LogWarning ("Location DETECTION not Running!");
+				return new QuestVariable (varName, "0");
+			} else {
+				if (varName.Equals ("$location.lat")) {			
+					Debug.LogWarning ("$location.lat: " + Input.location.lastData.latitude);
+					return new QuestVariable ("$location.lat", Convert.ToString (Input.location.lastData.latitude));
+				}
+				if (varName.Equals ("$location.long")) {
+					Debug.LogWarning ("$location.long: " + Input.location.lastData.longitude);
+					return new QuestVariable ("$location.long", Convert.ToString (Input.location.lastData.longitude));
+				}
+				Debug.LogWarning ("Unknown location system varibale: " + varName);
+				return new QuestVariable (varName, "[null]");
+			}
 		}
 
 		// STANDARD CASE:
