@@ -419,6 +419,19 @@ namespace GQ.Editor.UI
 								curPropInfo.SetValue (p.Config, newIntVal, null);
 							}
 							break;
+						case "Single": // aka float
+							{
+								float oldFloatVal = (float)curPropInfo.GetValue (p.Config, null);
+								float newFloatVal = oldFloatVal;
+
+								// show text field if value fits in one line:
+								newFloatVal = EditorGUILayout.FloatField (namePrefixGUIContent, oldFloatVal);
+								if (newFloatVal != oldFloatVal) {
+									configIsDirty = true;
+								}
+								curPropInfo.SetValue (p.Config, newFloatVal, null);
+							}
+							break;
 						case "List`1":
 							{
 								// We currently do not offer edit option for Lists! Sorry.
