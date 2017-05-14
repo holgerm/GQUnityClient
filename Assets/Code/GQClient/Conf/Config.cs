@@ -21,6 +21,8 @@ namespace GQ.Client.Conf
 
 		public bool 	autostartIsPredeployed  { get; set; }
 
+		public bool 	keepAutoStarting  { get; set; }
+
 		public int   	downloadTimeOutSeconds   { get; set; }
 
 		public string 	nameForQuest { get; set; }
@@ -65,6 +67,9 @@ namespace GQ.Client.Conf
 		public Config ()
 		{			
 			// set default values:
+			autoStartQuestID = 0;
+			autostartIsPredeployed = false;
+			keepAutoStarting = true;
 			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
 			mapboxMapID = "mapbox.streets";
 			questVisualization = "list";
