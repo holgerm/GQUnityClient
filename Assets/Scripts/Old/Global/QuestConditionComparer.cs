@@ -14,36 +14,37 @@ using GQ.Util;
 using UnitySlippyMap;
 
 [System.Serializable]
-public class QuestConditionComparer {
+public class QuestConditionComparer
+{
 
-	[XmlElement("string")]
+	[XmlElement ("string")]
 	public List<string>
 		string_value;
-	[XmlElement("num")]
+	[XmlElement ("num")]
 	public List<double>
 		num_value;
-	[XmlElement("boolean")]
+	[XmlElement ("boolean")]
 	public List<bool>
 		bool_value;
-	[XmlElement("var")]
+	[XmlElement ("var")]
 	public List<string>
 		var_value;
 
-	public bool isFullfilled (string type) {
+	public bool isFullfilled (string type)
+	{
 
-		if ( type == "eq" ) {
+		if (type == "eq") {
 
-			if ( stringcomponents().Count > 1 ) {
+			if (stringcomponents ().Count > 1) {
 				bool equals = true;
 				string last = null;
-				foreach ( string current in stringcomponents() ) {
+				foreach (string current in stringcomponents()) {
 
-					if ( last == null ) {
+					if (last == null) {
 						last = current;
-					}
-					else {
+					} else {
 
-						if ( current != last ) {
+						if (current != last) {
 
 							equals = false;
 
@@ -52,22 +53,23 @@ public class QuestConditionComparer {
 					}
 				}
 				return equals;
-			}
-			else {
+			} else {
 				return false;
 			}
-		}
-		else
-		if ( type == "lt" ) {
+		} else if (type == "lt") {
 
-			if ( intcomponents().Count > 1 ) {
+			if (intcomponents ().Count > 1) {
 
 				bool lessthan = true;
-				int last = int.MinValue;
+//				int last = int.MinValue;
+				double last = double.MinValue;
 
-				foreach ( int i in intcomponents() ) {
 
-					if ( last >= i ) {
+				foreach (double i in intcomponents()) {
+
+					Debug.Log ("LT: comparing last: " + last + " and i: " + i);
+
+					if (last >= i) {
 						lessthan = false;
 					}
 
@@ -75,27 +77,26 @@ public class QuestConditionComparer {
 
 				}
 
+				Debug.Log ("LT Result: " + lessthan);
+
 				return lessthan;
 
-			}
-			else {
+			} else {
 
 				return false;
 
 			}
 
-		}
-		else
-		if ( type == "leq" ) {
+		} else if (type == "leq") {
 					
-			if ( intcomponents().Count > 1 ) {
+			if (intcomponents ().Count > 1) {
 						
 				bool lessthan = true;
 				int last = int.MinValue;
 						
-				foreach ( int i in intcomponents() ) {
+				foreach (int i in intcomponents()) {
 							
-					if ( last > i ) {
+					if (last > i) {
 						lessthan = false;
 					}
 							
@@ -105,25 +106,22 @@ public class QuestConditionComparer {
 						
 				return lessthan;
 				
-			}
-			else {
+			} else {
 				
 				return false;
 				
 			}
 
-		}
-		else
-		if ( type == "gt" ) {
+		} else if (type == "gt") {
 
-			if ( intcomponents().Count > 1 ) {
+			if (intcomponents ().Count > 1) {
 							
 				bool greaterthan = true;
-				int last = int.MaxValue;
+				double last = double.MaxValue;
 							
-				foreach ( int i in intcomponents() ) {
+				foreach (double i in intcomponents()) {
 									
-					if ( last <= i ) {
+					if (last <= i) {
 						greaterthan = false;
 					}
 								
@@ -133,25 +131,22 @@ public class QuestConditionComparer {
 							
 				return greaterthan;
 							
-			}
-			else {
+			} else {
 							
 				return false;
 							
 			}
 
-		}
-		else
-		if ( type == "geq" ) {
+		} else if (type == "geq") {
 			
-			if ( intcomponents().Count > 1 ) {
+			if (intcomponents ().Count > 1) {
 				
 				bool greaterthan = true;
 				int last = int.MaxValue;
 				
-				foreach ( int i in intcomponents() ) {
+				foreach (int i in intcomponents()) {
 					
-					if ( last < i ) {
+					if (last < i) {
 						greaterthan = false;
 					}
 					
@@ -161,15 +156,13 @@ public class QuestConditionComparer {
 				
 				return greaterthan;
 				
-			}
-			else {
+			} else {
 				
 				return false;
 				
 			}
 				
-		}
-		else {
+		} else {
 
 			return false;
 
@@ -177,30 +170,32 @@ public class QuestConditionComparer {
 	
 	}
 
-	public List<double> intcomponents () {
+	public List<double> intcomponents ()
+	{ // TODO check for floats
 
-		List<double> comp = new List<double>();
+		List<double> comp = new List<double> ();
 
-		if ( var_value != null ) {
+		if (var_value != null) {
 
-			foreach ( string s in var_value ) {
+			foreach (string s in var_value) {
 
-				if ( !s.Contains("+") && !s.Contains("-") && !s.Contains("*") && !s.Contains("/") && !s.Contains(":") ) {
+				if (!s.Contains ("+") && !s.Contains ("-") && !s.Contains ("*") && !s.Contains ("/") && !s.Contains (":")) {
 
-					QuestVariable qv = GameObject.Find("QuestDatabase").GetComponent<actions>().getVariable(s);
+					QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (s);
 					
-					if ( qv != null ) {
-						if ( qv.num_value != null && qv.num_value.Count > 0 ) {
-							comp.Add(qv.num_value[0]);
+					if (qv != null) {
+						if (qv.num_value != null && qv.num_value.Count > 0) {
+							Debug.Log ("intcomponents() #1 comp.Add:" + qv.num_value [0]);
+
+							comp.Add (qv.num_value [0]);
 						}
 					}
 					
-				}
-				else {
+				} else {
 					
-					double ergebnis = GameObject.Find("QuestDatabase").GetComponent<actions>().mathVariable(s);
-					Debug.Log("IF MATH" + ergebnis);
-					comp.Add(ergebnis);
+					double ergebnis = GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable (s);
+					Debug.Log ("intcomponents() #2 comp.Add:" + ergebnis);
+					comp.Add (ergebnis);
 					
 				}
 
@@ -208,76 +203,75 @@ public class QuestConditionComparer {
 
 		} 
 
-		if ( num_value != null ) {
+		if (num_value != null) {
+			Debug.Log ("intcomponents() #3 comp.Add:" + num_value [0]);
 
-			comp.AddRange(num_value);
+			comp.AddRange (num_value);
 		} 
 
 		return comp;
 	}
 
-	public List<string> stringcomponents () {
+	public List<string> stringcomponents ()
+	{
 		
-		List<string> comp = new List<string>();
+		List<string> comp = new List<string> ();
 
-		if ( string_value != null ) {
-			comp.AddRange(string_value);
+		if (string_value != null) {
+			comp.AddRange (string_value);
 		}
-		if ( num_value != null ) {
-			foreach ( float n in num_value ) {
-				comp.Add("" + n);
+		if (num_value != null) {
+			foreach (float n in num_value) {
+				comp.Add ("" + n);
 			}
 		}
-		if ( bool_value != null ) {
+		if (bool_value != null) {
 
-			foreach ( bool b in bool_value ) {
+			foreach (bool b in bool_value) {
 					
-				if ( b ) {
-					comp.Add("true"); 
-				}
-				else {
-					comp.Add("false");
+				if (b) {
+					comp.Add ("true"); 
+				} else {
+					comp.Add ("false");
 				}
 
 			}
 		}
-		if ( var_value != null && var_value.Count > 0 ) {
+		if (var_value != null && var_value.Count > 0) {
 
 //			Debug.Log ("looking for var values");
 
-			foreach ( string k in var_value ) {
+			foreach (string k in var_value) {
 
 				//	Debug.Log ("looking vor var " + k);
 
-				string kk = new string(k.ToCharArray()
-				                       .Where(c => !Char.IsWhiteSpace(c))
-				                       .ToArray());
+				string kk = new string (k.ToCharArray ()
+				                       .Where (c => !Char.IsWhiteSpace (c))
+				                       .ToArray ());
 
 				//Debug.Log("-----starting to look for '"+kk+"'");
 
-				if ( !kk.Contains("+") && !kk.Contains("-") && !kk.Contains("*") && !kk.Contains("/") && !kk.Contains(":") ) {
-					QuestVariable qv = GameObject.Find("QuestDatabase").GetComponent<actions>().getVariable(kk);
+				if (!kk.Contains ("+") && !kk.Contains ("-") && !kk.Contains ("*") && !kk.Contains ("/") && !kk.Contains (":")) {
+					QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (kk);
 
-					if ( qv != null ) {
+					if (qv != null) {
 
 						//Debug.Log("found");
-						if ( qv.getStringValue() != null ) {
-							comp.Add(qv.getStringValue());
+						if (qv.getStringValue () != null) {
+							comp.Add (qv.getStringValue ());
 						}
 
+					} else {
+
+						Debug.Log ("couldn't find var " + kk);
+
 					}
-					else {
 
-						Debug.Log("couldn't find var " + kk);
+				} else {
 
-					}
-
-				}
-				else {
-
-					double ergebnis = GameObject.Find("QuestDatabase").GetComponent<actions>().mathVariable(kk);
-					Debug.Log("IF MATH" + ergebnis);
-					comp.Add(ergebnis.ToString());
+					double ergebnis = GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable (kk);
+					Debug.Log ("IF MATH" + ergebnis);
+					comp.Add (ergebnis.ToString ());
 					
 				}
 
@@ -289,36 +283,37 @@ public class QuestConditionComparer {
 		
 	}
 
-	public double mathVariable (string input) {
+	public double mathVariable (string input)
+	{
 		
 		double currentvalue = 0.0d;
 		bool needsstartvalue = true;
-		input = new string(input.ToCharArray()
-		                    .Where(c => !Char.IsWhiteSpace(c))
-		                    .ToArray());
+		input = new string (input.ToCharArray ()
+		                    .Where (c => !Char.IsWhiteSpace (c))
+		                    .ToArray ());
 		//	Debug.Log ("Rechnung:"+input);
 		
 		string arithmetics = "";
 		
-		foreach ( Char c in input.ToCharArray() ) {
+		foreach (Char c in input.ToCharArray()) {
 			
-			if ( c == '+' ) {
+			if (c == '+') {
 				
 				arithmetics = arithmetics + "+";
 			}
-			if ( c == '-' ) {
+			if (c == '-') {
 				
 				arithmetics = arithmetics + "-";
 			}
-			if ( c == '*' ) {
+			if (c == '*') {
 				
 				arithmetics = arithmetics + "*";
 			}
-			if ( c == '/' ) {
+			if (c == '/') {
 				
 				arithmetics = arithmetics + "/";
 			}
-			if ( c == ':' ) {
+			if (c == ':') {
 				
 				arithmetics = arithmetics + ":";
 			}
@@ -327,76 +322,61 @@ public class QuestConditionComparer {
 		
 		//Debug.Log ("Rechnung:"+arithmetics);
 		
-		char[] splitter = "+-/*:".ToCharArray();
-		string[] splitted = input.Split(splitter);
+		char[] splitter = "+-/*:".ToCharArray ();
+		string[] splitted = input.Split (splitter);
 		
 		int count = 0;
 		
-		foreach ( string s in splitted ) {
+		foreach (string s in splitted) {
 			
 			double n;
-			bool isNumeric = double.TryParse(s, out n);
-			if ( isNumeric ) {
+			bool isNumeric = double.TryParse (s, out n);
+			if (isNumeric) {
 				
-				if ( needsstartvalue ) {
+				if (needsstartvalue) {
 					
 					currentvalue = n;
 					needsstartvalue = false;
-				}
-				else {
+				} else {
 					
-					if ( arithmetics.Substring(count, 1) == "+" ) {
+					if (arithmetics.Substring (count, 1) == "+") {
 						currentvalue += n;
-					}
-					else
-					if ( arithmetics.Substring(count, 1) == "-" ) {
+					} else if (arithmetics.Substring (count, 1) == "-") {
 						currentvalue -= n;
-					}
-					else
-					if ( arithmetics.Substring(count, 1) == "*" ) {
+					} else if (arithmetics.Substring (count, 1) == "*") {
 						currentvalue *= n;
-					}
-					else
-					if ( (arithmetics.Substring(count, 1) == "/") || (arithmetics.Substring(count, 1) == ":") ) {
+					} else if ((arithmetics.Substring (count, 1) == "/") || (arithmetics.Substring (count, 1) == ":")) {
 						
 						currentvalue = currentvalue / n;
 					} 
 					
 				}
 				
-			}
-			else {
+			} else {
 				
-				QuestVariable qv = GameObject.Find("QuestDatabase").GetComponent<actions>().getVariable(s);
-				if ( !qv.isNull() ) {
-					if ( qv.num_value != null && qv.num_value.Count > 0 ) {
-						if ( needsstartvalue ) {
+				QuestVariable qv = GameObject.Find ("QuestDatabase").GetComponent<actions> ().getVariable (s);
+				if (!qv.isNull ()) {
+					if (qv.num_value != null && qv.num_value.Count > 0) {
+						if (needsstartvalue) {
 							
-							currentvalue = qv.num_value[0];
-							Debug.Log(s + ":" + currentvalue.ToString("F10"));
+							currentvalue = qv.num_value [0];
+							Debug.Log (s + ":" + currentvalue.ToString ("F10"));
 							
 							needsstartvalue = false;
 							
-						}
-						else {
+						} else {
 							
-							n = qv.num_value[0];
+							n = qv.num_value [0];
 							
-							Debug.Log(n);
-							if ( arithmetics.Substring(count, 1) == "+" ) {
+							Debug.Log (n);
+							if (arithmetics.Substring (count, 1) == "+") {
 								currentvalue += n;
-							}
-							else
-							if ( arithmetics.Substring(count, 1) == "-" ) {
+							} else if (arithmetics.Substring (count, 1) == "-") {
 								currentvalue -= n;
 								//								Debug.Log(currentvalue);
-							}
-							else
-							if ( arithmetics.Substring(count, 1) == "*" ) {
+							} else if (arithmetics.Substring (count, 1) == "*") {
 								currentvalue *= n;
-							}
-							else
-							if ( (arithmetics.Substring(count, 1) == "/") || (arithmetics.Substring(count, 1) == ":") ) {
+							} else if ((arithmetics.Substring (count, 1) == "/") || (arithmetics.Substring (count, 1) == ":")) {
 								
 								currentvalue = currentvalue / n;
 							}

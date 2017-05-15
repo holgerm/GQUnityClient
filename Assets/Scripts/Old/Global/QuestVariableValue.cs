@@ -14,18 +14,19 @@ using GQ.Util;
 using UnitySlippyMap;
 
 [System.Serializable]
-public class QuestVariableValue {
+public class QuestVariableValue
+{
 
-	[XmlElement("string")]
+	[XmlElement ("string")]
 	public List<string>
 		string_value;
-	[XmlElement("num")]
-	public List<float>
+	[XmlElement ("num")]
+	public List<double>
 		num_value;
-	[XmlElement("bool")]
+	[XmlElement ("bool")]
 	public List<bool>
 		bool_value;
-	[XmlElement("var")]
+	[XmlElement ("var")]
 	public List<string>
 		var_value;
 	public List<double>

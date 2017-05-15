@@ -383,7 +383,7 @@ public class actions : MonoBehaviour
 
 	/// <summary>
 	/// Parses the variable in case it has a canonical key-value form like this: key:value,key:value,... 
-	/// into separate veraibles with the keys as names and the values as values.
+	/// into separate variables with the keys as names and the values as values.
 	/// 
 	/// KEYS MUST ONLY CONTAIN A SINGLE ALPHANUMERIC CHARACTER.
 	/// 
