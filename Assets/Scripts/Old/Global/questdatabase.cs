@@ -91,6 +91,8 @@ public class questdatabase : MonoBehaviour
 	IEnumerator Start ()
 	{
 			
+		Debug.Log ("questdatabase.Start()");
+
 //		PlayerPrefs.DeleteAll();
 
 		if (PlayerPrefs.HasKey ("privacyagreementversion")) {
@@ -156,14 +158,11 @@ public class questdatabase : MonoBehaviour
 		LOCAL_QUESTS_ZIP = System.IO.Path.Combine (Application.persistentDataPath, "tmp_predeployed_quests.zip");
 		PATH_2_LOCAL_QUESTS = System.IO.Path.Combine (Application.persistentDataPath, "quests");
 
-		//msgsactive = 0;
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
 
 		PREDEPLOYED_QUESTS_ZIP = "jar:file://" + Application.dataPath + "!/assets/" + "/predeployed/quests.zip";
 		PATH_2_PREDEPLOYED_QUESTS = "jar:file://" + Application.dataPath + "!/assets/predeployed/quests";
-
-		// PATH_2_PREDEPLOYED_QUESTS = "file:///android_asset/predeployed/quests"; NOT WORKING
 
 #endif
 
@@ -183,12 +182,12 @@ public class questdatabase : MonoBehaviour
 
 
 			
-			if (ConfigurationManager.Current.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && ConfigurationManager.Current.autoStartQuestID == 0)) {
+			if (ConfigurationManager.Current.downloadAllCloudQuestOnStart || (ConfigurationManager.Current.showCloudQuestsImmediately && !shouldPerformAutoStart ())) {
 				buttoncontroller.DisplayList ();
 
 				ReloadQuestListAndRefresh ();
 			} else {
-				if (ConfigurationManager.Current.autoStartQuestID != 0) {
+				if (shouldPerformAutoStart ()) {
 					buttoncontroller.DisplayList ();
 				}
 
@@ -203,7 +202,9 @@ public class questdatabase : MonoBehaviour
 			loadlogo.enable ();
 		} 
 
-		autoStartQuest ();
+		if (shouldPerformAutoStart ()) {
+			performAutoStart ();
+		}
 
 		yield return new WaitForEndOfFrame ();
 		yield return new WaitForEndOfFrame ();
@@ -214,6 +215,11 @@ public class questdatabase : MonoBehaviour
 			
 		}
 
+	}
+
+	public static bool shouldPerformAutoStart ()
+	{
+		return ConfigurationManager.Current.autoStartQuestID != 0 && (ConfigurationManager.Current.keepAutoStarting || !autoStartPerformed);
 	}
 
 	public void ReloadQuestListAndRefresh ()
@@ -395,35 +401,27 @@ public class questdatabase : MonoBehaviour
 				hideBlackCanvas ();
 				
 			}
-
-			
-			
-			
-			
 		}
-		
 	}
 
-	void autoStartQuest ()
+	private static bool autoStartPerformed = false;
+
+	void performAutoStart ()
 	{
+		if (loadlogo != null) {
 
-		if (ConfigurationManager.Current.autoStartQuestID != 0) {
-
-			GameObject questListPanel = GameObject.Find ("/Canvas");
-			if (loadlogo != null) {
-
-				loadlogo.enable ();
-				webloadingmessage.enabled = true;
-			}
-
-			if (ConfigurationManager.Current.autostartIsPredeployed) {
-				StartCoroutine (startPredeployedQuest (ConfigurationManager.Current.autoStartQuestID));
-
-			} else {
-				StartQuest (ConfigurationManager.Current.autoStartQuestID);
-			}
+			loadlogo.enable ();
+			webloadingmessage.enabled = true;
 		}
 
+		if (ConfigurationManager.Current.autostartIsPredeployed) {
+			StartCoroutine (startPredeployedQuest (ConfigurationManager.Current.autoStartQuestID));
+
+		} else {
+			StartQuest (ConfigurationManager.Current.autoStartQuestID);
+		}
+
+		autoStartPerformed = true;
 	}
 
 	IEnumerator InitPredeployedQuests ()
@@ -468,7 +466,9 @@ public class questdatabase : MonoBehaviour
 
 				webloadingmessage.enabled = false;
 			}
-			autoStartQuest ();
+			if (shouldPerformAutoStart ()) {
+				performAutoStart ();
+			}
 		}
 
 #else
@@ -670,7 +670,7 @@ public class questdatabase : MonoBehaviour
 	void updateAndShowQuestList (Download download)
 	{
 
-//		Debug.Log ("UPDATE AND SHOW QUEST LIST");
+		Debug.Log ("UPDATE AND SHOW QUEST LIST");
 
 		WWW www = download.Www;
 

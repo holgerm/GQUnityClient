@@ -2,20 +2,22 @@
 using System.Collections;
 using GQ.Client.Conf;
 
-public class deactivateGameObjectInAutoStartMode : MonoBehaviour {
+public class deactivateGameObjectInAutoStartMode : MonoBehaviour
+{
 
 
 
 	public bool orActivate = false;
 
 
-	void Start () {
+	void Start ()
+	{
 
 
-		if ( ConfigurationManager.Current.autoStartQuestID != 0 ) {
+		if (questdatabase.shouldPerformAutoStart ()) {
 
 
-			gameObject.SetActive(orActivate);
+			gameObject.SetActive (orActivate);
 
 
 		}
