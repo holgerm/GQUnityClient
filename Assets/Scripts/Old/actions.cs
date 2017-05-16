@@ -1747,7 +1747,7 @@ public class actions : MonoBehaviour
 		if (varName.Equals ("$location.lat") || varName.Equals ("$location.long")) {
 			if (Input.location.status != LocationServiceStatus.Running) {
 				Debug.LogWarning ("Location DETECTION not Running!");
-				return new QuestVariable (varName, "0");
+				return new QuestVariable (varName, 0d);
 			} else {
 				if (varName.Equals ("$location.lat")) {			
 					Debug.LogWarning ("$location.lat: " + Input.location.lastData.latitude);
@@ -1765,6 +1765,7 @@ public class actions : MonoBehaviour
 		// STANDARD CASE:
 		QuestVariable resultVar;
 		if (variables.TryGetValue (varName, out resultVar)) {
+			Debug.Log ("getVariable(" + varName + ") --> " + resultVar.ToString ());
 			return resultVar;
 		} else {
 			resultVar = new QuestVariable (varName, "[null]");

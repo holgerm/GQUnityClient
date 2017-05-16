@@ -102,7 +102,7 @@ namespace GQ.Client.Model
 			if (Int32.TryParse (reader.GetAttribute (GQML.QUEST_ID), out id)) {
 				Id = id;
 			} else {
-				Debug.LogWarning ("Id for quest " + Name + " could not be parsed, we find: " + reader.GetAttribute (GQML.QUEST_ID));
+				Debug.LogWarning ("Id for quest " + Name + " could not be parsed. We found: " + reader.GetAttribute (GQML.QUEST_ID));
 			}
 
 			// XML Format:

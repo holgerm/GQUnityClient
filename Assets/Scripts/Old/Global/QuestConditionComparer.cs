@@ -40,6 +40,8 @@ public class QuestConditionComparer
 				string last = null;
 				foreach (string current in stringcomponents()) {
 
+					Debug.Log ("EQ: comparing: " + last + " and " + current);
+
 					if (last == null) {
 						last = current;
 					} else {
@@ -52,12 +54,15 @@ public class QuestConditionComparer
 
 					}
 				}
+				Debug.Log ("EQ Result: " + equals);
 				return equals;
 			} else {
+				Debug.Log ("EQ Result: false");
 				return false;
 			}
 		} else if (type == "lt") {
 
+			Debug.Log ("COMPARE LT start:");
 			if (intcomponents ().Count > 1) {
 
 				bool lessthan = true;
@@ -67,7 +72,7 @@ public class QuestConditionComparer
 
 				foreach (double i in intcomponents()) {
 
-					Debug.Log ("LT: comparing last: " + last + " and i: " + i);
+					Debug.Log ("LT: comparing last: " + last + " < " + i);
 
 					if (last >= i) {
 						lessthan = false;
@@ -82,6 +87,7 @@ public class QuestConditionComparer
 				return lessthan;
 
 			} else {
+				Debug.Log ("LT Result: " + false);
 
 				return false;
 
@@ -114,13 +120,17 @@ public class QuestConditionComparer
 
 		} else if (type == "gt") {
 
-			if (intcomponents ().Count > 1) {
+
+			List<double> comps = intcomponents ();
+			Debug.Log ("### COMPARE GT start: (count: " + comps.Count);
+			if (comps.Count > 1) {
 							
 				bool greaterthan = true;
 				double last = double.MaxValue;
 							
 				foreach (double i in intcomponents()) {
-									
+					Debug.Log ("### GT: comparing: " + last + " > " + i);
+							
 					if (last <= i) {
 						greaterthan = false;
 					}
@@ -128,11 +138,13 @@ public class QuestConditionComparer
 					last = i;
 								
 				}
-							
+				Debug.Log ("### GT Result: " + greaterthan);
+					
 				return greaterthan;
 							
 			} else {
 							
+				Debug.Log ("### GT Result (only 1): " + false);
 				return false;
 							
 			}
@@ -172,9 +184,11 @@ public class QuestConditionComparer
 
 	public List<double> intcomponents ()
 	{ // TODO check for floats
+		Debug.Log ("### intcomponents() Started");
 
 		List<double> comp = new List<double> ();
 
+		Debug.Log ("### intcomponents() var_value.Count: " + (var_value == null ? -1 : var_value.Count));
 		if (var_value != null) {
 
 			foreach (string s in var_value) {
@@ -185,7 +199,7 @@ public class QuestConditionComparer
 					
 					if (qv != null) {
 						if (qv.num_value != null && qv.num_value.Count > 0) {
-							Debug.Log ("intcomponents() #1 comp.Add:" + qv.num_value [0]);
+							Debug.Log ("### intcomponents() #1 comp.Add:" + qv.num_value [0]);
 
 							comp.Add (qv.num_value [0]);
 						}
@@ -194,7 +208,7 @@ public class QuestConditionComparer
 				} else {
 					
 					double ergebnis = GameObject.Find ("QuestDatabase").GetComponent<actions> ().mathVariable (s);
-					Debug.Log ("intcomponents() #2 comp.Add:" + ergebnis);
+					Debug.Log ("### intcomponents() #2 comp.Add:" + ergebnis);
 					comp.Add (ergebnis);
 					
 				}
@@ -203,6 +217,7 @@ public class QuestConditionComparer
 
 		} 
 
+		Debug.Log ("### intcomponents() num_value.Count: " + (num_value == null ? -1 : num_value.Count));
 		if (num_value != null) {
 			Debug.Log ("intcomponents() #3 comp.Add:" + num_value [0]);
 
@@ -221,7 +236,7 @@ public class QuestConditionComparer
 			comp.AddRange (string_value);
 		}
 		if (num_value != null) {
-			foreach (float n in num_value) {
+			foreach (double n in num_value) {
 				comp.Add ("" + n);
 			}
 		}

@@ -2,7 +2,7 @@
   "id": "wcc",
   "name": "WCC Regio Bonn",
   "portal": 281,
-  "autoStartQuestID": 0,
+  "autoStartQuestID": 10304,
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
   "downloadTimeOutSeconds": 80,

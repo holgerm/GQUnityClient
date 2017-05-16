@@ -14,128 +14,132 @@ using GQ.Util;
 using UnitySlippyMap;
 
 [System.Serializable]
-public class QuestConditionGrouper {
+public class QuestConditionGrouper
+{
 
-	[XmlElement("and")]
+	[XmlElement ("and")]
 	public QuestConditionGrouper
 		and;
-	[XmlElement("or")]
+	[XmlElement ("or")]
 	public QuestConditionGrouper
 		or;
-	[XmlElement("not")]
+	[XmlElement ("not")]
 	public QuestConditionGrouper
 		not;
-	[XmlElement("lt")]
+	[XmlElement ("lt")]
 	public List<QuestConditionComparer>
 		lt;
-	[XmlElement("gt")]
+	[XmlElement ("gt")]
 	public List<QuestConditionComparer>
 		gt;
-	[XmlElement("leq")]
+	[XmlElement ("leq")]
 	public List<QuestConditionComparer>
 		leq;
-	[XmlElement("geq")]
+	[XmlElement ("geq")]
 	public List<QuestConditionComparer>
 		geq;
-	[XmlElement("eq")]
+	[XmlElement ("eq")]
 	public List<QuestConditionComparer>
 		eq;
 
-	public bool isfullfilled () {
+	public bool isfullfilled ()
+	{
 
-		return isfullfilled("and");
+		return isfullfilled ("and");
 
 	}
 
-	public bool isfullfilled (string type) {
+	public bool isfullfilled (string type)
+	{
+		Debug.Log ("#### Called isfulfilled(" + type + ") ...");
 
-		List<bool> allbools = new List<bool>();
+		List<bool> allbools = new List<bool> ();
+		bool result;
 
-		if ( and != null ) {
-			allbools.Add(and.isfullfilled("and"));
+		if (and != null) {
+			allbools.Add (and.isfullfilled ("and"));
 		}
 
-		if ( or != null ) {
-			allbools.Add(or.isfullfilled("or"));
+		if (or != null) {
+			allbools.Add (or.isfullfilled ("or"));
 		}
 
-		if ( not != null ) {
-			allbools.Add(not.isfullfilled("not"));
+		if (not != null) {
+			allbools.Add (not.isfullfilled ("not"));
 		}
 
-		if ( eq != null ) {
+		if (eq != null) {
 
-			foreach ( QuestConditionComparer qcc in eq ) {
-
-				allbools.Add(qcc.isFullfilled("eq"));
+			foreach (QuestConditionComparer qcc in eq) {
+				result = qcc.isFullfilled ("eq");
+				allbools.Add (result);
+				Debug.Log ("#### EG allbools.Add( " + result + ")");
 			}
 
 		}
 
-		if ( lt != null ) {
+		if (lt != null) {
 				
-			foreach ( QuestConditionComparer qcc in lt ) {
+			foreach (QuestConditionComparer qcc in lt) {
 					
-				allbools.Add(qcc.isFullfilled("lt"));
+				allbools.Add (qcc.isFullfilled ("lt"));
 					
 			}
 
 		}
 
-		if ( gt != null ) {
+		if (gt != null) {
 				
-			foreach ( QuestConditionComparer qcc in gt ) {
+			foreach (QuestConditionComparer qcc in gt) {
 					
-				allbools.Add(qcc.isFullfilled("gt"));
+				allbools.Add (qcc.isFullfilled ("gt"));
 					
 			}
 				
 		}
 
-		if ( leq != null ) {
+		if (leq != null) {
 					
-			foreach ( QuestConditionComparer qcc in leq ) {
+			foreach (QuestConditionComparer qcc in leq) {
 						
-				allbools.Add(qcc.isFullfilled("leq"));
+				allbools.Add (qcc.isFullfilled ("leq"));
 						
 			}
 					
 		}
 				
-		if ( geq != null ) {
+		if (geq != null) {
 					
-			foreach ( QuestConditionComparer qcc in geq ) {
+			foreach (QuestConditionComparer qcc in geq) {
 						
-				allbools.Add(qcc.isFullfilled("geq"));
+				allbools.Add (qcc.isFullfilled ("geq"));
 						
 			}
 					
 		}
 			
-		if ( allbools.Count > 0 ) {
+		if (allbools.Count > 0) {
 
-			if ( type == "and" ) {
+			if (type == "and") {
 
 				bool ands = true;
 
-				foreach ( bool b in allbools ) {
+				foreach (bool b in allbools) {
 
-					if ( !b ) {
+					if (!b) {
 						ands = false;
 					}
 
 				}
 				return ands;
 
-			}
-			else
-			if ( type == "or" ) {
+			} else if (type == "or") {
 
 				bool ors = false;
 						
-				foreach ( bool b in allbools ) {
+				foreach (bool b in allbools) {
 							
-					if ( b ) {
+					if (b) {
 						ors = true;
 					}
 							
@@ -143,15 +147,15 @@ public class QuestConditionGrouper {
 						
 				return ors;
 
-			}
-			else
-			if ( type == "not" ) {
+			} else if (type == "not") {
 						
 				bool nots = true;
 						
-				foreach ( bool b in allbools ) {
+				foreach (bool b in allbools) {
+
+					Debug.Log ("ComparisonGroup: NOT b: " + b);
 							
-					if ( !b ) {
+					if (!b) {
 						nots = false;
 					}
 							
@@ -163,6 +167,7 @@ public class QuestConditionGrouper {
 
 		} 
 
+		// default return value for unused objects of this type: (hm: I guess ...???)
 		return true;
 
 	}
