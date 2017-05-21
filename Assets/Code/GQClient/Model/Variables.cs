@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GQ.Client.Model.XML;
+using System.Text.RegularExpressions;
+using System;
 
 namespace GQ.Client.Model
 {
@@ -7,11 +10,10 @@ namespace GQ.Client.Model
 	public class Variables
 	{
 	
+		#region Persistence
+
 		public static readonly string GQ_VAR_PREFIX = Definitions.GQ_PREFIX + ".var.";
 		public const char VAR_TYPE_DELIMITER = ':';
-		public const string VARTYPE_NUM = "num";
-		public const string VARTYPE_STRING = "string";
-		public const string VARTYPE_BOOL = "bool";
 
 		public static void SaveVariableToStore (QuestVariable questVar)
 		{
@@ -50,13 +52,13 @@ namespace GQ.Client.Model
 			QuestVariable resultVar = null;
 
 			switch (type) {
-			case VARTYPE_NUM:
+			case GQML.NUMBER:
 				resultVar = new QuestVariable (varName, double.Parse (value));
 				break;
-			case VARTYPE_STRING:
+			case GQML.STRING:
 				resultVar = new QuestVariable (varName, value);
 				break;
-			case VARTYPE_BOOL:
+			case GQML.BOOL:
 				resultVar = new QuestVariable (varName, bool.Parse (value));
 				break;
 			default:
@@ -68,6 +70,46 @@ namespace GQ.Client.Model
 			return resultVar;
 		}
 
+		#endregion
+
+
+		#region Runtime Registry
+
+		public static Value getVariableValue (string varName)
+		{
+			return null; // TODO
+		}
+
+		#endregion
+
+		#region Util Functions
+
+		private const string VARNAME_REGEXP = @"(?!$)[a-zA-Z]+[a-zA-Z0-9_]*";
+		private const string REGEXP_START = @"^";
+		private const string REGEXP_END = @"$";
+
+		public static bool IsValidVariableName (string name)
+		{
+			Regex regex = new Regex (REGEXP_START + VARNAME_REGEXP + REGEXP_END);
+			Match match = regex.Match (name);
+			return match.Success;
+		}
+
+		/// <summary>
+		/// Returns the longest valid name contained in the given nameCandidate starting from the beginning.
+		/// </summary>
+		/// <returns>The valid variable name from start.</returns>
+		/// <param name="nameCandidate">Name candidate.</param>
+		public static string LongestValidVariableNameFromStart (string nameCandidate)
+		{
+			Regex regex = new Regex (REGEXP_START + VARNAME_REGEXP);
+			Match match = regex.Match (nameCandidate);
+			if (!match.Success)
+				throw new ArgumentException ("\"" + nameCandidate + "\" does not start with a valid variable name.");
+			return match.Value;
+		}
+
+		#endregion
 	}
 
 }
