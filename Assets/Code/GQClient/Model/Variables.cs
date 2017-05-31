@@ -88,6 +88,8 @@ namespace GQ.Client.Model
 		private const string REGEXP_START = @"^";
 		private const string REGEXP_END = @"$";
 
+		public const string UNDEFINED_VAR = "_undefined";
+
 		public static bool IsValidVariableName (string name)
 		{
 			Regex regex = new Regex (REGEXP_START + VARNAME_REGEXP + REGEXP_END);
