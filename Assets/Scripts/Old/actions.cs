@@ -1163,7 +1163,7 @@ public class actions : MonoBehaviour
 
 
 
-		if (action.condition.isfullfilled ()) {
+		if (action.condition.IsFulfilled ()) {
 
 			action.InvokeThen ();
 
@@ -1230,7 +1230,7 @@ public class actions : MonoBehaviour
 			// WHILE LOOP
 
 
-			while (action.condition.isfullfilled () && counter < 1000 && loopcount >= loopnumber) {
+			while (action.condition.IsFulfilled () && counter < 1000 && loopcount >= loopnumber) {
 
 
 				action.InvokeThen ();

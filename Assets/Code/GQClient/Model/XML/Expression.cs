@@ -6,6 +6,9 @@ using System.Xml;
 namespace GQ.Client.Model.XML
 {
 
+	/// <summary>
+	/// Simple expression. Covers num, bool, var and string expressions.
+	/// </summary>
 	public abstract class Expression : IExpression
 	{
 
@@ -24,7 +27,7 @@ namespace GQ.Client.Model.XML
 		protected Value value;
 
 		/// <summary>
-		/// Reader should be at the bool element when called.
+		/// Reader should be at the bool, num, string or var element when called.
 		/// </summary>
 		/// <param name="reader">Reader.</param>
 		public void ReadXml (System.Xml.XmlReader reader)
