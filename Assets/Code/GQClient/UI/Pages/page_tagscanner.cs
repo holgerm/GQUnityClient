@@ -294,9 +294,9 @@ public class page_tagscanner : MonoBehaviour
 
 		yield return new WaitForSeconds (0.2f);
 
-		if (!GQML.RESULT_FAILED.Equals (tagscanner.state)) {
+		if (!GQML.STATE_FAILED.Equals (tagscanner.state)) {
 
-			tagscanner.state = GQML.RESULT_SUCCEEDED;
+			tagscanner.state = GQML.STATE_SUCCEEDED;
 		}
 
 		if (tagscanner.onEnd != null) {

@@ -62,7 +62,6 @@ namespace GQ.Client.Model
 
 		#endregion
 
-
 		#region Hotspots
 
 		[Obsolete]
@@ -80,6 +79,23 @@ namespace GQ.Client.Model
 
 		#endregion
 
+		#region Move to QuestImporter
+
+		private static Quest currentlyParsingQuest;
+
+		public static Quest CurrentlyParsingQuest {
+			get {
+				if (currentlyParsingQuest == null)
+					currentlyParsingQuest = Quest.Null;
+				return currentlyParsingQuest;
+			}
+			private set {
+				currentlyParsingQuest = value;
+			}
+		}
+
+		#endregion
+
 
 		#region IXmlSerializable
 
@@ -90,8 +106,6 @@ namespace GQ.Client.Model
 
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-//			Debug.Log("ReadXML called on " + GetType().Name);
-
 			reader.MoveToContent ();
 
 			// Name:
@@ -104,6 +118,8 @@ namespace GQ.Client.Model
 			} else {
 				Debug.LogWarning ("Id for quest " + Name + " could not be parsed. We found: " + reader.GetAttribute (GQML.QUEST_ID));
 			}
+
+			CurrentlyParsingQuest = this;
 
 			// XML Format:
 			XmlFormat = reader.GetAttribute (GQML.QUEST_XMLFORMAT);
@@ -169,6 +185,8 @@ namespace GQ.Client.Model
 					break;
 				}
 			}
+
+			CurrentlyParsingQuest = Null;
 		}
 
 		public void WriteXml (System.Xml.XmlWriter writer)
@@ -229,6 +247,23 @@ namespace GQ.Client.Model
 		}
 
 		#endregion
+
+		public static readonly Quest Null = new NullQuest ();
+
+		private class NullQuest : Quest
+		{
+
+			public NullQuest ()
+				: base ()
+			{
+				Name = "Null Quest";
+				Id = 0;
+				LastUpdate = 0;
+				XmlFormat = "0";
+				IndividualReturnDefinitions = false;
+			}
+
+		}
 
 
 		#region Old Stuff TODO Reorganize
@@ -360,6 +395,8 @@ namespace GQ.Client.Model
 			XmlSerializer serializer = new XmlSerializer (typeof(Quest));
 
 			Quest q = serializer.Deserialize (txr) as Quest; 
+			QuestManager.Instance.Add (q);
+
 			q.xmlcontent = xmlcontent;
 			q.predeployed = predeployed;
 

@@ -10,6 +10,24 @@ namespace GQTests.Model
 	{
 
 		[Test]
+		public void IsValidUserDefinedVariableName ()
+		{
+			// Assert positive:
+			Assert.That (Variables.IsValidUserDefinedVariableName ("x"));
+			Assert.That (Variables.IsValidUserDefinedVariableName ("X"));
+			Assert.That (Variables.IsValidUserDefinedVariableName ("ABC"));
+			Assert.That (Variables.IsValidUserDefinedVariableName ("ABC_12"));
+
+			// Assert negative:
+			Assert.IsFalse (Variables.IsValidUserDefinedVariableName ("AB-D"));
+			Assert.IsFalse (Variables.IsValidUserDefinedVariableName ("$x"));
+			Assert.IsFalse (Variables.IsValidUserDefinedVariableName ("1X"));
+			Assert.IsFalse (Variables.IsValidUserDefinedVariableName ("AB+D"));
+			Assert.IsFalse (Variables.IsValidUserDefinedVariableName ("AB*D"));
+			Assert.IsFalse (Variables.IsValidUserDefinedVariableName ("AB/D"));
+		}
+
+		[Test]
 		public void IsValidVariableName ()
 		{
 			// Assert positive:
@@ -17,15 +35,17 @@ namespace GQTests.Model
 			Assert.That (Variables.IsValidVariableName ("X"));
 			Assert.That (Variables.IsValidVariableName ("ABC"));
 			Assert.That (Variables.IsValidVariableName ("ABC_12"));
+			Assert.IsTrue (Variables.IsValidVariableName ("$x"));
+			Assert.IsTrue (Variables.IsValidVariableName ("$_x"));
+			Assert.IsTrue (Variables.IsValidVariableName ("$longitude"));
+			Assert.IsTrue (Variables.IsValidVariableName ("$quest.name"));
 
 			// Assert negative:
 			Assert.IsFalse (Variables.IsValidVariableName ("AB-D"));
-			Assert.IsFalse (Variables.IsValidVariableName ("$x"));
 			Assert.IsFalse (Variables.IsValidVariableName ("1X"));
 			Assert.IsFalse (Variables.IsValidVariableName ("AB+D"));
 			Assert.IsFalse (Variables.IsValidVariableName ("AB*D"));
 			Assert.IsFalse (Variables.IsValidVariableName ("AB/D"));
-
 		}
 
 
@@ -36,6 +56,20 @@ namespace GQTests.Model
 			Assert.AreEqual ("x", Variables.LongestValidVariableNameFromStart ("x"));
 			Assert.AreEqual ("AB", Variables.LongestValidVariableNameFromStart ("AB*D"));
 			Assert.AreEqual ("xyz", Variables.LongestValidVariableNameFromStart ("xyz 123"));
+		}
+
+		[Test]
+		public void UnknownVariableGetsNullValue ()
+		{
+			// Arrange:
+			Variables.ClearAll ();
+
+			// Act:
+			Value notExistingVariableValue = Variables.GetValue ("X");
+
+			// Assert:
+			Assert.NotNull (notExistingVariableValue);
+			Assert.AreEqual (Value.Null, notExistingVariableValue);
 		}
 	}
 }

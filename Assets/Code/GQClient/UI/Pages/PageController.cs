@@ -60,7 +60,7 @@ namespace GQ.Client.UI.Pages
 		/// <value>The page state on end.</value>
 		protected virtual string PageStateOnEnd { 
 			get { 
-				return GQML.RESULT_SUCCEEDED;
+				return GQML.STATE_SUCCEEDED;
 			}
 		}
 

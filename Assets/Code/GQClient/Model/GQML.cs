@@ -17,18 +17,20 @@ namespace GQ.Client.Model
 		public const string QUEST_XMLFORMAT = "xmlformat";
 		public const string QUEST_INDIVIDUAL_RETURN_DEFINITIONS = "individualReturnDefinitions";
 
-		// PAGES (aka Missions):
+		// PAGES:
 		public const string PAGE = "mission";
 		public const string PAGE_TYPE = "type";
 		public const string PAGE_TYPE_NPCTALK = "NPCTalk";
 		public const string PAGE_TYPE_MULTIPLE_CHOICE_QUESTION = "MultipleChoiceQuestion";
 		public const string PAGE_TYPE_TEXT_QUESTION = "TextQuestion";
 
-		// PAGE RESULTS:
-		public const string RESULT_NEW = "new";
-		public const string RESULT_SUCCEEDED = "succeeded";
-		public const string RESULT_FAILED = "failed";
-		public const string RESULT_RUNNING = "running";
+		// RULES & ACTIONS:
+		public const string RULE = "rule";
+		public const string ACTION = "action";
+		public const string ACTION_TYPE = "type";
+		public const string ACTION_ATTRIBUTE_VARNAME = "var";
+		public const string ACTION_ATTRIBUTE_FROMVARNAME = "FromVar";
+		public const string ACTION_SETVARIABLE_VALUE = "value";
 
 		//CONDITIONS:
 		public const string CONDITION = "condition";
@@ -49,6 +51,24 @@ namespace GQ.Client.Model
 
 		// HOTSPOTS:
 		public const string HOTSPOT = "hotspot";
+
+		#endregion
+
+
+		#region Predefined Values
+
+		// PAGE STATES:
+		public const string STATE_NEW = "new";
+		public const string STATE_SUCCEEDED = "succeeded";
+		public const string STATE_FAILED = "failed";
+		public const string STATE_RUNNING = "running";
+
+		// SYSTEM VARIABLE NAME PREFIXES:
+		public const string VAR_PAGE_PREFIX = "$_mission_";
+
+		// SYSTEM VARIABLE NAME PARTS:
+		public const string VAR_PAGE_STATE = ".state";
+		public const string VAR_PAGE_RESULT = ".result";
 
 		#endregion
 

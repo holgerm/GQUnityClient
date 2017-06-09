@@ -14,20 +14,22 @@ using GQ.Util;
 using UnitySlippyMap;
 using GQ.Client.Model;
 
-namespace GQ.Client.Model {
+namespace GQ.Client.Model
+{
 	
 
 	[System.Serializable]
-	[XmlRoot(GQML.PAGE)]
-	public class Page {
+	[XmlRoot (GQML.PAGE)]
+	public class Page
+	{
 
 		#region Attributes
 
-		[XmlAttribute("id")]
+		[XmlAttribute ("id")]
 		public int
 			id;
 
-		[XmlAttribute("type")]
+		[XmlAttribute ("type")]
 		public string
 			type;
 
@@ -37,76 +39,78 @@ namespace GQ.Client.Model {
 
 		#region Old Stuff needs Rework
 
-		[XmlAnyAttribute()]
+		[XmlAnyAttribute ()]
 		public XmlAttribute[]
 			help_attributes;
 
 		public List<QuestAttribute> attributes;
 
-		[XmlElement("dialogitem")]
+		[XmlElement ("dialogitem")]
 		public List<QuestContent>
 			contents_dialogitems;
 
 
 
-		[XmlElement("expectedCode")]
+		[XmlElement ("expectedCode")]
 		public List<QuestContent>
 			contents_expectedcode;
 
-		[XmlElement("answer")]
+		[XmlElement ("answer")]
 		public List<QuestContent>
 			contents_answers;
 
-		[XmlElement("question")]
+		[XmlElement ("question")]
 		public QuestContent
 			contents_question;
 
-		[XmlElement("answers")]
+		[XmlElement ("answers")]
 		public List<QuestContent>
 			contents_answersgroup;
 
-		[XmlElement("stringmeta")]
+		[XmlElement ("stringmeta")]
 		public List<QuestContent>
 			contents_stringmeta;
 
-		[XmlElement("onEnd")]
+		[XmlElement ("onEnd")]
 		public QuestTrigger
 			onEnd;
 
-		[XmlElement("onStart")]
+		[XmlElement ("onStart")]
 		public QuestTrigger
 			onStart;
 
-		[XmlElement("onTap")]
+		[XmlElement ("onTap")]
 		public QuestTrigger
 			onTap;
 
-		[XmlElement("onSuccess")]
+		[XmlElement ("onSuccess")]
 		public QuestTrigger
 			onSuccess;
 
-		[XmlElement("onFail")]
+		[XmlElement ("onFail")]
 		public QuestTrigger
 			onFailure;
 
-		[XmlElement("onRead")]
+		[XmlElement ("onRead")]
 		public QuestTrigger
 			onRead;
 
 		public string state;
 		public string result;
 
-		public Page () {
+		public Page ()
+		{
 
-			state = "new";
+			state = GQML.STATE_NEW;
 			result = null;
 		}
 
-		public string getAttribute (string k) {
+		public string getAttribute (string k)
+		{
 		
-			foreach ( QuestAttribute qa in attributes ) {
+			foreach (QuestAttribute qa in attributes) {
 
-				if ( qa.key.Equals(k) ) {
+				if (qa.key.Equals (k)) {
 					return qa.value;
 				}
 			
@@ -116,12 +120,13 @@ namespace GQ.Client.Model {
 		
 		}
 
-		public bool hasAttribute (string k) {
+		public bool hasAttribute (string k)
+		{
 
 			bool h = false;
-			foreach ( QuestAttribute qa in attributes ) {
+			foreach (QuestAttribute qa in attributes) {
 			
-				if ( qa.key.Equals(k) ) {
+				if (qa.key.Equals (k)) {
 					h = true;
 				}
 			
@@ -131,135 +136,126 @@ namespace GQ.Client.Model {
 		
 		}
 
-		public void deserializeAttributes (int id, bool redo) {
+		public void deserializeAttributes (int id, bool redo)
+		{
 
-			questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 
 //		if ( questdb.currentquest != null ) {
-			attributes = new List<QuestAttribute>();
+			attributes = new List<QuestAttribute> ();
 
-			if ( help_attributes != null ) {
-				foreach ( XmlAttribute xmla in help_attributes ) {
+			if (help_attributes != null) {
+				foreach (XmlAttribute xmla in help_attributes) {
 
-					if ( xmla.Name.Equals("file") && xmla.Value.StartsWith(page_videoplay.YOUTUBE_URL_PREFIX) ) {
-						attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
+					if (xmla.Name.Equals ("file") && xmla.Value.StartsWith (page_videoplay.YOUTUBE_URL_PREFIX)) {
+						attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 
 						return;
 					}
 							
-					if ( (xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://")) && !(type == "WebPage" && xmla.Name.ToLower() == "url") ) {
+					if ((xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) && !(type == "WebPage" && xmla.Name.ToLower () == "url")) {
 
-						string[] splitted = xmla.Value.Split('/');
+						string[] splitted = xmla.Value.Split ('/');
 
-						string filename = "files/" + splitted[splitted.Length - 1];
+						string filename = "files/" + splitted [splitted.Length - 1];
 
-						if ( !Application.isWebPlayer ) {
+						if (!Application.isWebPlayer) {
 				
-							if ( !redo ) {
-								questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+							if (!redo) {
+								questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 							}
-							if ( splitted.Length > 3 ) {
+							if (splitted.Length > 3) {
 
-								if ( questdb.currentquest != null && questdb.currentquest.predeployed ) {
+								if (questdb.currentquest != null && questdb.currentquest.predeployed) {
 
 									xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
-								}
-								else {
+								} else {
 								
 									xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 								
 								}						
-								questdb.performSpriteConversion(xmla.Value);
+								questdb.performSpriteConversion (xmla.Value);
 
 							}
 						}
 
 					}	
 								
-					attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
+					attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 			
 				}
 			}
 
-			foreach ( QuestContent qcdi in contents_dialogitems ) {
-				qcdi.deserializeAttributes(id, redo);
+			foreach (QuestContent qcdi in contents_dialogitems) {
+				qcdi.deserializeAttributes (id, redo);
 			}
 
-			foreach ( QuestContent qcdi in contents_answers ) {
-				qcdi.deserializeAttributes(id, redo);
+			foreach (QuestContent qcdi in contents_answers) {
+				qcdi.deserializeAttributes (id, redo);
 			}
 
-			if ( contents_question != null ) {
-				contents_question.deserializeAttributes(id, redo);
+			if (contents_question != null) {
+				contents_question.deserializeAttributes (id, redo);
 			}
-			foreach ( QuestContent qcdi in contents_answersgroup ) {
-				qcdi.deserializeAttributes(id, redo);
-			}
-
-			foreach ( QuestContent qcdi in contents_stringmeta ) {
-				qcdi.deserializeAttributes(id, redo);
+			foreach (QuestContent qcdi in contents_answersgroup) {
+				qcdi.deserializeAttributes (id, redo);
 			}
 
-			foreach ( QuestContent qcdi in contents_expectedcode ) {
-				qcdi.deserializeAttributes(id, redo);
+			foreach (QuestContent qcdi in contents_stringmeta) {
+				qcdi.deserializeAttributes (id, redo);
 			}
 
-			if ( onEnd != null ) {
-				foreach ( QuestAction qa in onEnd.actions ) {
-					qa.deserializeAttributes(id, redo);
+			foreach (QuestContent qcdi in contents_expectedcode) {
+				qcdi.deserializeAttributes (id, redo);
+			}
+
+			if (onEnd != null) {
+				foreach (QuestAction qa in onEnd.actions) {
+					qa.deserializeAttributes (id, redo);
 				}
 			}
-			if ( onStart != null ) {
-				foreach ( QuestAction qa in onStart.actions ) {
-					qa.deserializeAttributes(id, redo);
+			if (onStart != null) {
+				foreach (QuestAction qa in onStart.actions) {
+					qa.deserializeAttributes (id, redo);
 				}
 			}
-			if ( onTap != null ) {
-				foreach ( QuestAction qa in onTap.actions ) {
-					qa.deserializeAttributes(id, redo);
+			if (onTap != null) {
+				foreach (QuestAction qa in onTap.actions) {
+					qa.deserializeAttributes (id, redo);
 				}
 			}
-			if ( onSuccess != null ) {
-				foreach ( QuestAction qa in onSuccess.actions ) {
-					qa.deserializeAttributes(id, redo);
+			if (onSuccess != null) {
+				foreach (QuestAction qa in onSuccess.actions) {
+					qa.deserializeAttributes (id, redo);
 				}
 			}
-			if ( onFailure != null ) {
-				foreach ( QuestAction qa in onFailure.actions ) {
-					qa.deserializeAttributes(id, redo);
+			if (onFailure != null) {
+				foreach (QuestAction qa in onFailure.actions) {
+					qa.deserializeAttributes (id, redo);
 				}
 			}
-			if ( onRead != null ) {
-				foreach ( QuestAction qa in onRead.actions ) {
-					qa.deserializeAttributes(id, redo);
+			if (onRead != null) {
+				foreach (QuestAction qa in onRead.actions) {
+					qa.deserializeAttributes (id, redo);
 				}
 			}
 		}
 
-		public bool hasActionInChildren (string type1) {
+		public bool hasActionInChildren (string type1)
+		{
 		
-			if ( onTap != null && onTap.hasActionInChildren(type1) ) {
+			if (onTap != null && onTap.hasActionInChildren (type1)) {
 				return true;
-			}
-			else
-			if ( onEnd != null && onEnd.hasActionInChildren(type1) ) {
+			} else if (onEnd != null && onEnd.hasActionInChildren (type1)) {
 				return true;
-			}
-			else
-			if ( onStart != null && onStart.hasActionInChildren(type1) ) {
+			} else if (onStart != null && onStart.hasActionInChildren (type1)) {
 				return true;
-			}
-			else
-			if ( onSuccess != null && onSuccess.hasActionInChildren(type1) ) {
+			} else if (onSuccess != null && onSuccess.hasActionInChildren (type1)) {
 				return true;
-			}
-			else
-			if ( onFailure != null && onFailure.hasActionInChildren(type1) ) {
+			} else if (onFailure != null && onFailure.hasActionInChildren (type1)) {
 				return true;
-			}
-			else
-			if ( onRead != null && onRead.hasActionInChildren(type1) ) {
+			} else if (onRead != null && onRead.hasActionInChildren (type1)) {
 				return true;
 			}
 		

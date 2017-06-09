@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using GQ.Client.Model;
 
 namespace GQ.Client.Err
 {
@@ -15,7 +16,34 @@ namespace GQ.Client.Err
 
 		public static void File (string message, Level level, Recipient recipient)
 		{
-			stack.Push (new Problem (message, level, recipient));
+			Problem problem = new Problem (message, level, recipient);
+			stack.Push (problem);
+
+			#if UNITY_EDITOR
+			string logtext = 
+				string.Format (
+					"{0}. {1} for {2} in quest {3} ({4})", 
+					stack.Count, 
+					message, 
+					recipient,
+					problem.QuestName,
+					problem.QuestID
+				);
+			switch (level) {
+			case Level.Info:
+				Debug.Log (logtext);
+				break;
+			case Level.Warning:
+				Debug.LogWarning (logtext);
+				break;
+			case Level.Error:
+			case Level.FatalError:
+				Debug.LogError (logtext);
+				break;
+			default:
+				break;
+			}
+			#endif		
 		}
 
 
@@ -37,6 +65,19 @@ namespace GQ.Client.Err
 		}
 
 
+
+		public static void SignalErrorToAuthor (string message)
+		{
+			File (message, Level.Error, Recipient.Author);
+		}
+
+
+		public static void SignalErrorToAuthor (string formatString, params object[] values)
+		{
+			SignalErrorToAuthor (String.Format (formatString, values));
+		}
+
+
 		public static void WarnDeveloper (string message)
 		{
 			File (message, Level.Warning, Recipient.Developer);
@@ -46,6 +87,18 @@ namespace GQ.Client.Err
 		public static void WarnDeveloper (string formatString, params object[] values)
 		{
 			WarnDeveloper (String.Format (formatString, values));
+		}
+
+
+		public static void SignalErrorToDeveloper (string message)
+		{
+			File (message, Level.Error, Recipient.Developer);
+		}
+
+
+		public static void SignalErrorToDeveloper (string formatString, params object[] values)
+		{
+			SignalErrorToDeveloper (String.Format (formatString, values));
 		}
 
 		#endregion
@@ -89,12 +142,30 @@ namespace GQ.Client.Err
 			}
 		}
 
+		int questID;
+
+		public int QuestID {
+			get {
+				return questID;
+			}
+		}
+
+		string questName;
+
+		public string QuestName {
+			get {
+				return questName;
+			}
+		}
+
 		public Problem (string message, Level level, Recipient recipient)
 		{
 			this.message = message;
 			this.level = level;
 			this.recipient = recipient;
 			this.timestamp = DateTime.Now;
+			this.questID = Quest.CurrentlyParsingQuest.Id;
+			this.questName = Quest.CurrentlyParsingQuest.Name;
 		}
 	}
 

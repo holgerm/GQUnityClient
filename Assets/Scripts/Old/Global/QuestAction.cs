@@ -12,6 +12,7 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
+using GQ.Client.Model;
 
 [System.Serializable]
 public class QuestAction
@@ -36,7 +37,8 @@ public class QuestAction
 	public List<QuestAction>
 		elseactions;
 	[XmlElement ("condition")]
-	public QuestConditionGrouper
+	//	public QuestConditionGrouper
+	public CompoundCondition
 		condition;
 
 	public string getAttribute (string k)

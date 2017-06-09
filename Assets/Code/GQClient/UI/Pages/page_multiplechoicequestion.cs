@@ -150,7 +150,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 
 		if (multiplechoicequestion.hasAttribute ("loopUntilSuccess")
 		    && multiplechoicequestion.getAttribute ("loopUntilSuccess") == "true"
-		    && multiplechoicequestion.state.Equals (GQML.RESULT_FAILED)) {
+		    && multiplechoicequestion.state.Equals (GQML.STATE_FAILED)) {
 
 
 			repeatQuestion = true;
@@ -166,8 +166,8 @@ public class page_multiplechoicequestion : MonoBehaviour
 
 
 
-			if (multiplechoicequestion.state != GQML.RESULT_FAILED) {
-				multiplechoicequestion.state = GQML.RESULT_SUCCEEDED;
+			if (multiplechoicequestion.state != GQML.STATE_FAILED) {
+				multiplechoicequestion.state = GQML.STATE_SUCCEEDED;
 			
 			}
 		
@@ -233,7 +233,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 	public void onSuccess ()
 	{
 		
-		multiplechoicequestion.state = GQML.RESULT_SUCCEEDED;
+		multiplechoicequestion.state = GQML.STATE_SUCCEEDED;
 
 		
 		if (multiplechoicequestion.onSuccess != null) {
@@ -247,7 +247,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 	public void onFailure ()
 	{
 		
-		multiplechoicequestion.state = GQML.RESULT_FAILED;
+		multiplechoicequestion.state = GQML.STATE_FAILED;
 
 		
 		if (multiplechoicequestion.onFailure != null) {

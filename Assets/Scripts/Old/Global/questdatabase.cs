@@ -1359,6 +1359,11 @@ public class questdatabase : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// This is the method that is called when you press a quest button in the foyer.
+	/// </summary>
+	/// <returns>The quest.</returns>
+	/// <param name="q">Q.</param>
 	public IEnumerator startQuest (Quest q)
 	{
 		if (!ConfigurationManager.Current.hasMenuWithinQuests) {
@@ -1392,7 +1397,7 @@ public class questdatabase : MonoBehaviour
 			}
 
 			while (Input.location.status == LocationServiceStatus.Initializing) {
-				Debug.Log ("Waiting for LocationService fo another second ...");
+				Debug.Log ("Waiting for LocationService for another second ...");
 				yield return new WaitForSeconds (1f);
 			}
 
@@ -1946,7 +1951,7 @@ public class questdatabase : MonoBehaviour
 		}
 		if (canPlayQuest (currentquest) && hasmorethanmetadata) {
 			if (Application.isWebPlayer) {
-				transferQuestHotspots (currentquest.currentpage.id);
+				reallyStartQuest (currentquest.currentpage.id);
 			} else {
 				if (!localload) {
 					//				Debug.Log ("WAITING FOR QUEST ASSETS");
@@ -2046,7 +2051,7 @@ public class questdatabase : MonoBehaviour
 
 		currentquest.acceptedDS = true;
 
-		transferQuestHotspots (pageid);
+		reallyStartQuest (pageid);
 
 
 
@@ -2060,7 +2065,7 @@ public class questdatabase : MonoBehaviour
 
 		//TODO: can I start the quest?
 
-		transferQuestHotspots (pageid);
+		reallyStartQuest (pageid);
 		
 		
 		
@@ -2083,10 +2088,7 @@ public class questdatabase : MonoBehaviour
 
 
 		} else {
-			transferQuestHotspots (pageid);
-
-			// TODO FRAGE (hm): Warum wird das hier aufgerufen? Ich habe das woanders speziell für den Webplayer gesehen.
-
+			reallyStartQuest (pageid);
 		}
 	
 	}
@@ -2171,7 +2173,7 @@ public class questdatabase : MonoBehaviour
 	
 	}
 
-	void transferQuestHotspots (int pageid)
+	void reallyStartQuest (int pageid)
 	{
 
 		// instatiate a quest clone at any start. This function is always called at quest start.

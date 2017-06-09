@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using GQ.Client.Model.XML;
 using System.Text.RegularExpressions;
 using System;
+using System.Collections.Generic;
+using GQ.Client.Model;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -73,22 +75,114 @@ namespace GQ.Client.Model
 		#endregion
 
 
-		#region Runtime Registry
+		#region Registry
 
-		public static Value getVariableValue (string varName)
+		private static Dictionary<string, Value> variables = new Dictionary<string, Value> ();
+
+		#endregion
+
+
+		#region API
+
+		/// <summary>
+		/// Get the Value of the Variables with the specified varName or Value.Null if no such variable is found. This method will never return null.
+		/// </summary>
+		/// <param name="varName">Variable name.</param>
+		public static Value GetValue (string varName)
 		{
-			return null; // TODO
+			if (!IsValidVariableName (varName)) {
+				Log.WarnAuthor ("Assess to Variable named {0} is not possible. This is not a valid variable name.", varName);
+				return Value.Null;
+			}
+
+			if (varName.StartsWith ("$")) {
+				return GetReadOnlyVariableValue (varName);
+			}
+
+			Value foundValue;
+			if (variables.TryGetValue (varName, out foundValue)) {
+				return foundValue;
+			} else {
+				Log.WarnAuthor ("Variable {0} was not found.", varName);
+				return Value.Null;
+			}
+		}
+
+		public static void ClearAll ()
+		{
+			variables.Clear ();
+		}
+
+		/// <summary>
+		/// Stores the newValue in Variable named varName. If this variable contained a value previously that gets replaced by the newValue.
+		/// </summary>
+		/// <returns><c>true</c>, if variable value replaced a previously given value, <c>false</c> otherwise.</returns>
+		/// <param name="varName">Variable name.</param>
+		/// <param name="newValue">New value.</param>
+		public static bool SetVariableValue (string varName, Value newValue)
+		{
+			if (!IsValidUserDefinedVariableName (varName)) {
+				Log.SignalErrorToAuthor ("Variable Name may not start with '$' Symbol, so you may not use {0} as you did in a SetVariable action.", varName);
+				return false;
+			}
+
+			bool existedAlready = variables.ContainsKey (varName);
+			if (existedAlready) {
+				variables.Remove (varName);
+			}
+			variables.Add (varName, newValue);
+			return existedAlready;
 		}
 
 		#endregion
 
+
+		#region Access Read Only Variables
+
+		private static Value GetReadOnlyVariableValue (string varName)
+		{
+			if (varName.StartsWith (GQML.VAR_PAGE_PREFIX)) {
+				string pageID;
+				if (varName.EndsWith (GQML.VAR_PAGE_RESULT)) {
+					pageID = varName.Substring (
+						GQML.VAR_PAGE_PREFIX.Length, 
+						varName.Length - (GQML.VAR_PAGE_PREFIX.Length + GQML.VAR_PAGE_RESULT.Length)
+					);
+				} else if (varName.EndsWith (GQML.VAR_PAGE_STATE)) {
+					pageID = varName.Substring (
+						GQML.VAR_PAGE_PREFIX.Length, 
+						varName.Length - (GQML.VAR_PAGE_PREFIX.Length + GQML.VAR_PAGE_STATE.Length)
+					);
+				} else {
+					Log.WarnAuthor ("Page feature used in system variable named {0} is unknown.", varName);
+					return Value.Null;
+				}
+
+			}
+
+			// TODO
+			return Value.Null;
+
+		}
+
+		#endregion
+
+
 		#region Util Functions
 
-		private const string VARNAME_REGEXP = @"(?!$)[a-zA-Z]+[a-zA-Z0-9_]*";
+		private const string VARNAME_USERDEFINED_REGEXP = @"(?!$)[a-zA-Z]+[a-zA-Z0-9_.]*";
+		private const string VARNAME_REGEXP = @"(\$?|\$\_)?[a-zA-Z]+[a-zA-Z0-9_.]*";
 		private const string REGEXP_START = @"^";
 		private const string REGEXP_END = @"$";
 
 		public const string UNDEFINED_VAR = "_undefined";
+
+		public static bool IsValidUserDefinedVariableName (string name)
+		{
+			Regex regex = new Regex (REGEXP_START + VARNAME_USERDEFINED_REGEXP + REGEXP_END);
+			Match match = regex.Match (name);
+			return match.Success;
+		}
 
 		public static bool IsValidVariableName (string name)
 		{
