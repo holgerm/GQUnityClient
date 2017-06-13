@@ -82,7 +82,7 @@ public class Dictionary : MonoBehaviour
 		translations.Add (new Translation ("Es ist ein Fehler aufgetreten.", "An error occured."));
 		translations.Add (new Translation ("Nochmal aufnehmen", "Record again"));
 		translations.Add (new Translation ("Abspielen", "Play"));
-		translations.Add (new Translation ("Aufname starten", "Start recording"));
+		translations.Add (new Translation ("Aufnahme starten", "Start recording"));
 		translations.Add (new Translation ("Foto machen!", "Take photo!"));
 		translations.Add (new Translation ("Zurück", "Back"));
 		translations.Add (new Translation ("Antwort eingeben...", "Type answer..."));

@@ -633,7 +633,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Aufname starten
+  m_Text: Aufnahme starten
 --- !u!222 &965551162
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1130,41 +1130,12 @@ MonoBehaviour:
   questdb: {fileID: 0}
   actioncontroller: {fileID: 0}
   quest:
-    PageList: []
     hotspotList: []
     _allowReturn: 0
     filepath: 
     attributes: []
     metadata: []
     hasData: 0
-    currentpage:
-      id: 0
-      type: 
-      attributes: []
-      contents_dialogitems: []
-      contents_expectedcode: []
-      contents_answers: []
-      contents_question:
-        id: 0
-        content: 
-        attributes: []
-      contents_answersgroup: []
-      contents_stringmeta: []
-      onEnd:
-        actions: []
-      onStart:
-        actions: []
-      onTap:
-        actions: []
-      onSuccess:
-        actions: []
-      onFailure:
-        actions: []
-      onRead:
-        actions: []
-      state: new
-      result: 
-    previouspages: []
     xmlcontent: 
     start_longitude: 0
     start_latitude: 0
@@ -1174,33 +1145,6 @@ MonoBehaviour:
     version: 
     acceptedDS: 0
     alternateDownloadLink: 
-  audiorecord:
-    id: 0
-    type: 
-    attributes: []
-    contents_dialogitems: []
-    contents_expectedcode: []
-    contents_answers: []
-    contents_question:
-      id: 0
-      content: 
-      attributes: []
-    contents_answersgroup: []
-    contents_stringmeta: []
-    onEnd:
-      actions: []
-    onStart:
-      actions: []
-    onTap:
-      actions: []
-    onSuccess:
-      actions: []
-    onFailure:
-      actions: []
-    onRead:
-      actions: []
-    state: new
-    result: 
   text: {fileID: 2062105395}
   textbg: {fileID: 442149081}
   recordbutton: {fileID: 939975276}
