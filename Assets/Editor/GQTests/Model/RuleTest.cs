@@ -5,13 +5,13 @@ using GQ.Client.Model;
 
 namespace GQTests.Model
 {
-	public class RuleTest : XMLTest
+	public class RuleTest : GQMLTest
 	{
 
 		[SetUp]
 		public void Init ()
 		{
-			XmlRoot = "rule";
+			XmlRoot = GQML.RULE;
 		}
 
 		[Test]

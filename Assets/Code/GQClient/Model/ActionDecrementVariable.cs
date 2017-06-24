@@ -8,30 +8,8 @@ using System.Xml;
 namespace GQ.Client.Model
 {
 
-	public class DecrementVariableAction : AbstractAction
+	public class ActionDecrementVariable : ActionAbstractWithVar
 	{
-		#region Structure
-
-		protected string varName = null;
-
-		/// <summary>
-		/// Reader must be at the action element (start).
-		/// </summary>
-		/// <param name="reader">Reader.</param>
-		public override void ReadXml (System.Xml.XmlReader reader)
-		{
-			// read the var attribute:
-			varName = reader.GetAttribute (GQML.ACTION_ATTRIBUTE_VARNAME);
-			if (varName == null) {
-				Log.SignalErrorToDeveloper ("DecrementVariableAction Action without var attribute found.");
-			}
-
-			reader.Skip ();
-		}
-
-		#endregion
-
-
 		#region Functions
 
 		public override void Execute ()

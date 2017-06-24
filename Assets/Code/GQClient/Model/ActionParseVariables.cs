@@ -9,26 +9,26 @@ using System;
 namespace GQ.Client.Model
 {
 
-	public class ParseVariablesAction : AbstractAction
+	public class ActionParseVariables : ActionAbstract
 	{
 		#region Structure
 
 		protected string fromVarName = null;
 
-
-		/// <summary>
-		/// Reader must be at the action element (start).
-		/// </summary>
-		/// <param name="reader">Reader.</param>
-		public override void ReadXml (System.Xml.XmlReader reader)
-		{
-			// read the fromvar attribute:
-			fromVarName = reader.GetAttribute (GQML.ACTION_ATTRIBUTE_FROMVARNAME);
-			if (fromVarName == null) {
-				Log.SignalErrorToDeveloper ("ParseVariableAction Action without FromVar attribute found.");
+		public string FromVarName {
+			get {
+				return fromVarName;
 			}
+			protected set {
+				fromVarName = value;
+			}
+		}
 
-			reader.Skip ();
+		protected override void ReadAttributes (XmlReader reader)
+		{
+			base.ReadAttributes (reader);
+
+			FromVarName = GQML.GetStringAttribute (GQML.ACTION_ATTRIBUTE_FROMVARNAME, reader);
 		}
 
 		#endregion

@@ -142,14 +142,14 @@ namespace GQ.Client.Model
 		private static Value GetReadOnlyVariableValue (string varName)
 		{
 			if (varName.StartsWith (GQML.VAR_PAGE_PREFIX)) {
-				string pageID;
+				string pageIdString;
 				if (varName.EndsWith (GQML.VAR_PAGE_RESULT)) {
-					pageID = varName.Substring (
+					pageIdString = varName.Substring (
 						GQML.VAR_PAGE_PREFIX.Length, 
 						varName.Length - (GQML.VAR_PAGE_PREFIX.Length + GQML.VAR_PAGE_RESULT.Length)
 					);
 				} else if (varName.EndsWith (GQML.VAR_PAGE_STATE)) {
-					pageID = varName.Substring (
+					pageIdString = varName.Substring (
 						GQML.VAR_PAGE_PREFIX.Length, 
 						varName.Length - (GQML.VAR_PAGE_PREFIX.Length + GQML.VAR_PAGE_STATE.Length)
 					);
@@ -158,9 +158,24 @@ namespace GQ.Client.Model
 					return Value.Null;
 				}
 
+				int pageId;
+				if (Int32.TryParse (pageIdString, out pageId) == false) {
+					Log.WarnDeveloper ("Page ID {0} cannot be interpreted.", pageIdString);
+					return Value.Null;
+				}
+				IPage page = QuestManager.Instance.CurrentQuest.GetPageWithID (pageId);
+				if (page == null) {
+					Log.WarnDeveloper ("Page with id {0} not found in quest.", pageId);
+					return Value.Null;
+				}
+
+				if (varName.EndsWith (GQML.VAR_PAGE_RESULT)) {
+					return new Value (page.Result, Value.Type.Text);
+				} else if (varName.EndsWith (GQML.VAR_PAGE_STATE)) {
+					return new Value (page.State, Value.Type.Text);
+				} 
 			}
 
-			// TODO
 			return Value.Null;
 
 		}

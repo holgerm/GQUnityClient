@@ -15,6 +15,7 @@ using GQ.Client.Conf;
 using System.ComponentModel;
 using System.Xml.Schema;
 using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -26,15 +27,16 @@ namespace GQ.Client.Model
 
 		#region Attributes
 
-		public string Name { get; set; }
+		public string Name { get; protected set; }
 
 		public int Id { get; set; }
+		// TODO: make setter protected
 
-		public long LastUpdate { get; set; }
+		public long LastUpdate { get; protected set; }
 
-		public string XmlFormat { get; set; }
+		public string XmlFormat { get; protected set; }
 
-		public bool IndividualReturnDefinitions { get; set; }
+		public bool IndividualReturnDefinitions { get; protected set; }
 
 		public bool IsHidden {
 			get {
@@ -45,19 +47,45 @@ namespace GQ.Client.Model
 
 		#endregion
 
-		#region Pages aka missions
+		#region State Pages
 
 		[Obsolete]
 		public List<Page>
 			PageList = new List<Page> ();
 
-		protected Dictionary<int, Page> pageDict = new Dictionary<int, Page> ();
+		protected Dictionary<int, IPage> pageDict = new Dictionary<int, IPage> ();
 
-		public Page GetPageWithID (int id)
+		public IPage GetPageWithID (int id)
 		{
-			Page page;
+			IPage page;
 			pageDict.TryGetValue (id, out page);
 			return page;
+		}
+
+		protected IPage startPage;
+
+		public IPage StartPage {
+			get {
+				if (startPage == null) {
+					Log.SignalErrorToDeveloper ("Quest {0}({1}) can not be started, sonce start page is not set.", Name, Id);
+					return null;
+				} else
+					return startPage;
+			}
+			set {
+				startPage = value;
+			}
+		}
+
+		protected IPage currentPage;
+
+		public IPage CurrentPage {
+			get {
+				return currentPage;
+			}
+			internal set {
+				currentPage = value;
+			}
 		}
 
 		#endregion
@@ -79,7 +107,7 @@ namespace GQ.Client.Model
 
 		#endregion
 
-		#region Move to QuestImporter
+		#region Move to QuestImporter // TODO use event system instead
 
 		private static Quest currentlyParsingQuest;
 
@@ -106,87 +134,93 @@ namespace GQ.Client.Model
 
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-			reader.MoveToContent ();
+			CurrentlyParsingQuest = this; // TODO use event system instead
 
-			// Name:
-			Name = reader.GetAttribute (GQML.QUEST_NAME);
-
-			// Id:
-			int id;
-			if (Int32.TryParse (reader.GetAttribute (GQML.QUEST_ID), out id)) {
-				Id = id;
-			} else {
-				Debug.LogWarning ("Id for quest " + Name + " could not be parsed. We found: " + reader.GetAttribute (GQML.QUEST_ID));
+			// proceed to quest start element:
+			while (!GQML.IsReaderAtStart (reader, GQML.QUEST)) {
+				reader.Read ();
 			}
 
-			CurrentlyParsingQuest = this;
+			ReadAttributes (reader);
 
-			// XML Format:
-			XmlFormat = reader.GetAttribute (GQML.QUEST_XMLFORMAT);
-
-			// LastUpdate:
-			long lu;
-			LastUpdate = long.TryParse (reader.GetAttribute (GQML.QUEST_LASTUPDATE), out lu) ? lu : 0;
-
-			// IndividualReturnDefinitions:
-			bool ird;
-			IndividualReturnDefinitions = bool.TryParse (reader.GetAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS), out ird) ? ird : false;
+			// consume the begin quest element:
+			reader.Read ();
 
 			// Content:
-			XmlSerializer pageSerializer;
-			XmlSerializer hotspotSerializer = new XmlSerializer (typeof(QuestHotspot));
+			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
+			xmlRootAttr.IsNullable = true;
+			XmlSerializer serializer;
 
-			bool read = false;
-			while (read || reader.Read ()) {
-				read = false;
-//				Debug.Log("Node Type is: " + reader.NodeType.ToString());
-				switch (reader.NodeType) {
-				case XmlNodeType.Element:
-					switch (reader.LocalName) {
-					case GQML.PAGE:
-						Page page;
-						string pageType = reader.GetAttribute (GQML.PAGE_TYPE);
-						switch (pageType) {
-						case GQML.PAGE_TYPE_NPCTALK:
-							pageSerializer = new XmlSerializer (typeof(PageNPCTalk));
-							page = (PageNPCTalk)pageSerializer.Deserialize (reader);
-							read = true;
-							pageDict.Add (page.id, page);
-//										Debug.Log("Added NPCTalk page id: " + page.id);
+			while (!GQML.IsReaderAtEnd (reader, GQML.QUEST)) {
 
-										// TODO: get rid:
-							PageList.Add (page);
-							break;
-						default:
-							pageSerializer = new XmlSerializer (typeof(Page));
-							page = (Page)pageSerializer.Deserialize (reader);
-							read = true;
-							pageDict.Add (page.id, page);
-//										Debug.Log("Added another page with id: " + page.id);
+				if (reader.NodeType != XmlNodeType.Element && !reader.Read ()) {
+					return;
+				}
 
-										// TODO: get rid:
-							PageList.Add (page);
-							Debug.LogWarning ("Unknown page type found: " + pageType);
-							break;
-						}
-						break;
-					case GQML.HOTSPOT:
-						QuestHotspot hotspot = (QuestHotspot)hotspotSerializer.Deserialize (reader);
-						read = true;
-						hotspotDict.Add (hotspot.id, hotspot);
-//								Debug.Log("Added hotspot id: " + hotspot.id);
+				// now we are at an element:
 
-								// TODO: get rid:
-						hotspotList.Add (hotspot);
-						break;
-					}
+				switch (reader.LocalName) {
+				case GQML.PAGE:
+					ReadPage (reader, xmlRootAttr);
 					break;
-				default:
+				case GQML.HOTSPOT:
+					xmlRootAttr.ElementName = GQML.HOTSPOT;
+					serializer = new XmlSerializer (typeof(QuestHotspot), xmlRootAttr);
+					QuestHotspot hotspot = (QuestHotspot)serializer.Deserialize (reader);
+					hotspotDict.Add (hotspot.id, hotspot);
+
+					// TODO: get rid:
+					hotspotList.Add (hotspot);
 					break;
 				}
 			}
 
 			CurrentlyParsingQuest = Null;
+		}
+
+		void ReadAttributes (XmlReader reader)
+		{
+			Name = GQML.GetStringAttribute (GQML.QUEST_NAME, reader);
+			Id = GQML.GetIntAttribute (GQML.QUEST_ID, reader);
+			XmlFormat = GQML.GetStringAttribute (GQML.QUEST_XMLFORMAT, reader);
+			LastUpdate = GQML.GetLongAttribute (GQML.QUEST_LASTUPDATE, reader);
+			IndividualReturnDefinitions = GQML.GetBoolAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader);
+		}
+
+		void ReadPage (XmlReader reader, XmlRootAttribute xmlRootAttr)
+		{
+			XmlSerializer serializer;
+
+			// now the reader is at a page element:
+			string pageTypeName = reader.GetAttribute (GQML.PAGE_TYPE);
+			if (pageTypeName == null) {
+				Log.SignalErrorToDeveloper ("Page without type attribute found.");
+				reader.Skip ();
+				return;
+			}
+
+			// Determine the full name of the according page type (e.g. GQ.Client.Model.XML.PageNPCTalk) 
+			//		where SetVariable is taken form ath type attribute of the xml action element.
+			string ruleTypeFullName = this.GetType ().FullName;
+			int lastDotIndex = ruleTypeFullName.LastIndexOf (".");
+			string modelNamespace = ruleTypeFullName.Substring (0, lastDotIndex);
+			Type pageType = Type.GetType (string.Format ("{0}.Page{1}", modelNamespace, pageTypeName));
+
+			if (pageType == null) {
+				Log.SignalErrorToDeveloper ("No Implementation for Page Type {0} found.", pageTypeName);
+				reader.Skip ();
+				return;
+			}
+
+			xmlRootAttr.ElementName = GQML.PAGE;
+			serializer = new XmlSerializer (pageType, xmlRootAttr);
+			IPage page = (IPage)serializer.Deserialize (reader);
+			if (pageDict.Count == 0)
+				StartPage = page;
+			pageDict.Add (page.Id, page);
+
+			// TODO: get rid:
+			PageList.Add ((Page)page);
 		}
 
 		public void WriteXml (System.Xml.XmlWriter writer)
@@ -196,7 +230,16 @@ namespace GQ.Client.Model
 
 		#endregion
 
+
 		#region Runtime API
+
+		public void Start ()
+		{
+			if (StartPage == null)
+				return;
+
+			StartPage.Start (this);
+		}
 
 		public void GoBackOnePage ()
 		{
@@ -248,6 +291,9 @@ namespace GQ.Client.Model
 
 		#endregion
 
+
+		#region Null Object
+
 		public static readonly Quest Null = new NullQuest ();
 
 		private class NullQuest : Quest
@@ -264,6 +310,8 @@ namespace GQ.Client.Model
 			}
 
 		}
+
+		#endregion
 
 
 		#region Old Stuff TODO Reorganize

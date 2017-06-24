@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Xml.Serialization;
 using System.Xml;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -27,31 +28,35 @@ namespace GQ.Client.Model
 		protected Value value;
 
 		/// <summary>
-		/// Reader should be at the bool, num, string or var element when called.
+		/// Reader should be at the bool, num, string or var element when called. It completely consumes that node incl the end element.
 		/// </summary>
 		/// <param name="reader">Reader.</param>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-			XmlSerializer serializer;
+			if (reader.NodeType != XmlNodeType.Element || !ExpressionHelper.isExpressionType (reader.LocalName)) {
+				Log.SignalErrorToDeveloper (
+					"Instead of an xml element of an expression we got an {0} with name {1}", 
+					reader.NodeType.ToString (),
+					reader.LocalName
+				);
+			}
 
 			string expressionName = reader.LocalName;
 
 			reader.MoveToContent ();
 
-			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-			xmlRootAttr.IsNullable = true;
-
-			while (reader.Read ()) {
-
-				// if we reach the end of this condition element we are ready to leave this method.
-				if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (expressionName)) {
-					break;
-				}
-
-				if (reader.NodeType == XmlNodeType.Text) {
-					setValue (reader.Value);
-				}
+			while (reader.NodeType != XmlNodeType.Text) {
+				reader.Read ();
 			}
+
+			setValue (reader.Value);
+
+			while (reader.NodeType != XmlNodeType.EndElement) {
+				reader.Read ();
+			}
+
+			GQML.AssertReaderAtEnd (reader, expressionName);
+			reader.Read ();
 		}
 
 		protected abstract void setValue (string valueAsString);

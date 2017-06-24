@@ -6,7 +6,7 @@ using GQ.Client.Model;
 namespace GQTests.Model
 {
 
-	public class ConditionTest : XMLTest
+	public class ConditionTest : GQMLTest
 	{
 
 		[SetUp]

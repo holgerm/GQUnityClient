@@ -108,7 +108,7 @@ namespace GQ.Client.Err
 	}
 
 
-	public class Problem : MonoBehaviour
+	public class Problem
 	{
 		string message;
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using GQ.Client.Conf;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
 public class menucontroller : MonoBehaviour
 {
@@ -72,7 +73,7 @@ public class menucontroller : MonoBehaviour
 				//impressumbutton.SetActive(false);
 
 
-				if (questdb.currentquest == null) {
+				if (QuestManager.Instance.CurrentQuest == null) {
 					deletedatabutton.SetActive (true);
 					quitquestbutton.SetActive (false);
 					categoriesformap.SetActive (true);
@@ -89,7 +90,7 @@ public class menucontroller : MonoBehaviour
 
 			} else {
 				impressumbutton.SetActive (true);
-				if (questdb.currentquest == null) {
+				if (QuestManager.Instance.CurrentQuest == null) {
 					quitquestbutton.SetActive (false);
 					deletedatabutton.SetActive (true);
 				} else {
@@ -134,7 +135,7 @@ public class menucontroller : MonoBehaviour
 	{
 
 
-		if (questdb.currentquest != null && questdb.currentquest.currentpage.type == "WebPage") {
+		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
 
 			GameObject.Find ("PageController").GetComponent<page_webpage> ().deactivateWebView ();
 
@@ -146,7 +147,7 @@ public class menucontroller : MonoBehaviour
 	public void hideMenu ()
 	{
 
-		if (questdb.currentquest != null && questdb.currentquest.currentpage.type == "WebPage") {
+		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
 			
 			GameObject.Find ("PageController").GetComponent<page_webpage> ().activateWebView ();
 			

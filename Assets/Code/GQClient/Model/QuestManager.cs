@@ -15,7 +15,7 @@ namespace GQ.Client.Model
 
 		#region quest management functions
 
-		private Dictionary<string, Quest> quests;
+		private Dictionary<int, Quest> quests;
 
 		protected Quest currentQuest;
 
@@ -40,6 +40,7 @@ namespace GQ.Client.Model
 				return false;
 			} else {
 				quests.Add (quest.Id, quest);
+				return true;
 			}
 		}
 
@@ -93,7 +94,7 @@ namespace GQ.Client.Model
 
 		private QuestManager ()
 		{
-			quests = new Dictionary<string, Quest> ();
+			quests = new Dictionary<int, Quest> ();
 		}
 
 		#endregion

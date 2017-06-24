@@ -8,7 +8,7 @@ using GQ.Client.Err;
 namespace GQTests.Model
 {
 
-	public class ActionSetVariableTest : XMLTest
+	public class ActionSetVariableTest : GQMLTest
 	{
 
 		[SetUp]
@@ -21,7 +21,7 @@ namespace GQTests.Model
 		public void SetNewVariable ()
 		{
 			// Arrange:
-			SetVariableAction action = parseXML<SetVariableAction> 
+			ActionSetVariable action = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<num>20.23</num>
@@ -43,14 +43,14 @@ namespace GQTests.Model
 		public void OverwriteExistingVariable ()
 		{
 			// Arrange:
-			SetVariableAction action1 = parseXML<SetVariableAction> 
+			ActionSetVariable action1 = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<bool>true</bool>
 						</value>
 					</action>");
 			
-			SetVariableAction action2 = parseXML<SetVariableAction> 
+			ActionSetVariable action2 = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>Hallo</string>
@@ -75,7 +75,7 @@ namespace GQTests.Model
 		{
 			// Arrange:
 			// $ may not be used as start of a varibale name:
-			SetVariableAction action1 = parseXML<SetVariableAction> 
+			ActionSetVariable action1 = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""$x"">
 						<value>
 							<bool>true</bool>

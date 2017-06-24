@@ -15,40 +15,41 @@ using UnitySlippyMap;
 using GQ.Client.Model;
 
 [System.Serializable]
-[XmlRoot(GQML.HOTSPOT)]
-public class QuestHotspot {
+[XmlRoot (GQML.HOTSPOT)]
+public class QuestHotspot
+{
 
 	#region Attributes
 
-	[XmlAttribute("id")]
+	[XmlAttribute ("id")]
 	public int id;
 
-	[XmlAttribute("iBeacon")]
+	[XmlAttribute ("iBeacon")]
 	public int iBeacon;
 
-	[XmlAttribute("number")]
+	[XmlAttribute ("number")]
 	public int number;
 
-	[XmlAttribute("qrcode")]
+	[XmlAttribute ("qrcode")]
 	public int qrcode;
 
-	[XmlAttribute("nfc")]
+	[XmlAttribute ("nfc")]
 	public int nfc;
 
-	[XmlAttribute("initialActivity")]
+	[XmlAttribute ("initialActivity")]
 	public bool initialActivity;
 
-	[XmlAttribute("initialVisibility")]
+	[XmlAttribute ("initialVisibility")]
 	public bool initialVisibility;
 
 	// TODO: Do the loading of image files in the new version.
 	//	[XmlAttribute("img")]
 	//	public string imageURI;
 
-	[XmlAttribute("radius")]
+	[XmlAttribute ("radius")]
 	public double radius;
 
-	[XmlAttribute("latlong")]
+	[XmlAttribute ("latlong")]
 	public string latlon;
 
 	#endregion
@@ -56,30 +57,31 @@ public class QuestHotspot {
 
 	#region Old Stuff Needs Rework
 
-	[XmlAnyAttribute(), Obsolete]
+	[XmlAnyAttribute (), Obsolete]
 	public XmlAttribute[]
 		help_attributes;
 
 	[Obsolete]
 	public List<QuestAttribute> attributes;
 
-	[XmlElement("onEnter")]
+	[XmlElement ("onEnter")]
 	public QuestTrigger
 		onEnter;
-	[XmlElement("onLeave")]
+	[XmlElement ("onLeave")]
 	public QuestTrigger
 		onLeave;
-	[XmlElement("onTap")]
+	[XmlElement ("onTap")]
 	public QuestTrigger
 		onTap;
 	public int startquest = 0;
 
 	[Obsolete]
-	public string getAttribute (string k) {
-		if ( attributes != null ) {
-			foreach ( QuestAttribute qa in attributes ) {
+	public string getAttribute (string k)
+	{
+		if (attributes != null) {
+			foreach (QuestAttribute qa in attributes) {
 			
-				if ( qa.key.Equals(k) ) {
+				if (qa.key.Equals (k)) {
 					return qa.value;
 				}
 			
@@ -91,12 +93,13 @@ public class QuestHotspot {
 	}
 
 	[Obsolete]
-	public bool hasAttribute (string k) {
+	public bool hasAttribute (string k)
+	{
 		
 		bool h = false;
-		foreach ( QuestAttribute qa in attributes ) {
+		foreach (QuestAttribute qa in attributes) {
 			
-			if ( qa.key.Equals(k) ) {
+			if (qa.key.Equals (k)) {
 				h = true;
 			}
 			
@@ -106,19 +109,16 @@ public class QuestHotspot {
 		
 	}
 
-	public bool hasActionInChildren (string type1) {
+	public bool hasActionInChildren (string type1)
+	{
 		
 		bool b = false;
 		
-		if ( onTap != null && onTap.hasActionInChildren(type1) ) {
+		if (onTap != null && onTap.hasActionInChildren (type1)) {
 			return true;
-		}
-		else
-		if ( onEnter != null && onEnter.hasActionInChildren(type1) ) {
+		} else if (onEnter != null && onEnter.hasActionInChildren (type1)) {
 			return true;
-		}
-		else
-		if ( onLeave != null && onLeave.hasActionInChildren(type1) ) {
+		} else if (onLeave != null && onLeave.hasActionInChildren (type1)) {
 			return true;
 		} 
 		
@@ -126,40 +126,40 @@ public class QuestHotspot {
 		
 	}
 
-	public void deserializeAttributes (int id, bool redo) {
+	public void deserializeAttributes (int id, bool redo)
+	{
 		
-		attributes = new List<QuestAttribute>();
+		attributes = new List<QuestAttribute> ();
 		
-		if ( help_attributes != null ) {
-			foreach ( XmlAttribute xmla in help_attributes ) {
+		if (help_attributes != null) {
+			foreach (XmlAttribute xmla in help_attributes) {
 
-				if ( xmla.Value.StartsWith("http://") || xmla.Value.StartsWith("https://") ) {
+				if (xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) {
 								
-					string[] splitted = xmla.Value.Split('/');
+					string[] splitted = xmla.Value.Split ('/');
 								
-					questdatabase questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+					questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 								
-					string filename = "files/" + splitted[splitted.Length - 1];
+					string filename = "files/" + splitted [splitted.Length - 1];
 								
-					questdb.loadedfiles.Add(filename);
+					questdb.loadedfiles.Add (filename);
 								
-					if ( !Application.isWebPlayer ) {
+					if (!Application.isWebPlayer) {
 									
-						if ( !redo ) {
-							questdb.downloadAsset(xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
+						if (!redo) {
+							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
-						if ( splitted.Length > 3 ) {
+						if (splitted.Length > 3) {
 										
-							if ( questdb != null && questdb.currentquest != null && questdb.currentquest.predeployed ) {
+							if (questdb != null && QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.predeployed) {
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								
-							}
-							else {
+							} else {
 								
 								xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
 								
 							}
-							questdb.performSpriteConversion(xmla.Value);
+							questdb.performSpriteConversion (xmla.Value);
 
 						}							
 
@@ -167,23 +167,23 @@ public class QuestHotspot {
 								
 				}
 
-				attributes.Add(new QuestAttribute(xmla.Name, xmla.Value));
+				attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
 				
 			}
 		}
-		if ( onEnter != null ) {
-			foreach ( QuestAction qa in onEnter.actions ) {
-				qa.deserializeAttributes(id, redo);
+		if (onEnter != null) {
+			foreach (QuestAction qa in onEnter.actions) {
+				qa.deserializeAttributes (id, redo);
 			}
 		}
-		if ( onLeave != null ) {
-			foreach ( QuestAction qa in onLeave.actions ) {
-				qa.deserializeAttributes(id, redo);
+		if (onLeave != null) {
+			foreach (QuestAction qa in onLeave.actions) {
+				qa.deserializeAttributes (id, redo);
 			}
 		}
-		if ( onTap != null ) {
-			foreach ( QuestAction qa in onTap.actions ) {
-				qa.deserializeAttributes(id, redo);
+		if (onTap != null) {
+			foreach (QuestAction qa in onTap.actions) {
+				qa.deserializeAttributes (id, redo);
 			}
 		}
 		

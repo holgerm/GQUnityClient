@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using GQ.Client.Model;
 
-public class filtercontroller : MonoBehaviour {
+public class filtercontroller : MonoBehaviour
+{
 	
 	
 	
@@ -15,81 +17,90 @@ public class filtercontroller : MonoBehaviour {
 
 	
 	
-	public void showMenu () {
+	public void showMenu ()
+	{
 		
-		if ( GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage.type == "WebPage" ) {
+		if (QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
 			
-			GameObject.Find("PageController").GetComponent<page_webpage>().deactivateWebView();
+			GameObject.Find ("PageController").GetComponent<page_webpage> ().deactivateWebView ();
 			
 		}
 		
 	}
 
 	
-	public void hideMenu () {
+	public void hideMenu ()
+	{
 		
-		if ( GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage.type == "WebPage" ) {
+		if (QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
 			
-			GameObject.Find("PageController").GetComponent<page_webpage>().activateWebView();
+			GameObject.Find ("PageController").GetComponent<page_webpage> ().activateWebView ();
 			
 		}
 		
 		
 	}
 
-	public void showImpressum () {
+	public void showImpressum ()
+	{
 		
-		GameObject.Find("ImpressumCanvas").GetComponent<showimpressum>().toggleImpressum();
+		GameObject.Find ("ImpressumCanvas").GetComponent<showimpressum> ().toggleImpressum ();
 		
 	}
 
 	
-	public void endQuestAnimation () {
+	public void endQuestAnimation ()
+	{
 		
-		GetComponent<Animator>().SetTrigger("endmenu");
+		GetComponent<Animator> ().SetTrigger ("endmenu");
 		isActive = false;
 		
 	}
 
 	
-	public void enQuest () {
+	public void enQuest ()
+	{
 		
-		GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
+		GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
 		
 		
 	}
 
-	public void returntoMainMenu () {
+	public void returntoMainMenu ()
+	{
 		
 		isActive = false;
 		
-		SceneManager.LoadScene("questlist");
+		SceneManager.LoadScene ("questlist");
 		
 	}
 
 	
 	
-	public void reloadAllData () {
+	public void reloadAllData ()
+	{
 		
 		
-		bool b =	GameObject.Find("QuestDatabase").GetComponent<questdatabase>().ReloadButtonPressed();
+		bool b =	GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().ReloadButtonPressed ();
 
 
 		
 	}
 
-	public void showTopBar () {
+	public void showTopBar ()
+	{
 		isActive = true;
 		
 		
-		if ( this != null ) {
-			GetComponent<Animator>().SetTrigger("startMenu");
+		if (this != null) {
+			GetComponent<Animator> ().SetTrigger ("startMenu");
 		}
 	}
 
 	
 	
-	public void hideTopBar () {
+	public void hideTopBar ()
+	{
 		isActive = false;
 		
 		

@@ -12,6 +12,7 @@ using System.Text;
 using GQ.Geo;
 using GQ.Util;
 using UnitySlippyMap;
+using GQ.Client.Model;
 
 [System.Serializable]
 public class QuestContent
@@ -98,12 +99,12 @@ public class QuestContent
 									
 					if (!Application.isWebPlayer) {
 
-						if (!redo || (questdb.currentquest != null && questdb.currentquest.predeployed && filename.ToLower ().Contains (".mp3"))) {
+						if (!redo || (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.predeployed && filename.ToLower ().Contains (".mp3"))) {
 							questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
 						}
 						if (splitted.Length > 3) {
 							
-							if (questdb.currentquest != null && questdb.currentquest.predeployed && !filename.ToLower ().Contains (".mp3")) {
+							if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.predeployed && !filename.ToLower ().Contains (".mp3")) {
 								
 								xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
 								

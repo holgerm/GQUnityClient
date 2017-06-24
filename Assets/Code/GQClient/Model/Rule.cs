@@ -35,60 +35,62 @@ namespace GQ.Client.Model
 		/// </summary>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
+			GQML.AssertReaderAtStart (reader, GQML.RULE);
+
 			XmlSerializer serializer;
 
 			string ruleName = reader.LocalName;
-
-			reader.MoveToContent ();
 
 			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
 			xmlRootAttr.IsNullable = true;
 			xmlRootAttr.ElementName = GQML.ACTION;
 
-			bool currentNodeStillToBeConsumed = false;
-
-			while (currentNodeStillToBeConsumed || reader.Read ()) {
-				currentNodeStillToBeConsumed = false;
-
-				// if we reach the end of this condition element we are ready to leave this method.
-				if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (ruleName)) {
-					break;
-				}
-
-				if (reader.NodeType == XmlNodeType.Element && reader.LocalName != GQML.ACTION) {
-					Log.SignalErrorToDeveloper ("Unexcpected xml {0} named {1} inside rule found.", reader.NodeType.ToString (), reader.LocalName);
-					reader.Skip ();
-					currentNodeStillToBeConsumed = true;
-					continue;
-				}
-
-				// now the reader is at an action element:
-				string actionName = reader.GetAttribute (GQML.ACTION_TYPE);
-				if (actionName == null) {
-					Log.SignalErrorToDeveloper ("Action without type attribute found.");
-					reader.Skip ();
-					currentNodeStillToBeConsumed = true;
-					continue;
-				}
-
-				// Determine the full name of the according action sub type (e.g. GQ.Client.Model.XML.SetVariableAction) 
-				//		where SetVariable is taken form ath type attribute of the xml action element.
-				string ruleTypeFullName = this.GetType ().FullName;
-				int lastDotIndex = ruleTypeFullName.LastIndexOf (".");
-				string modelNamespace = ruleTypeFullName.Substring (0, lastDotIndex);
-				Type actionType = Type.GetType (string.Format ("{0}.{1}Action", modelNamespace, actionName));
-
-				if (actionType == null) {
-					Log.SignalErrorToDeveloper ("No Implementation for Action Type {0} found.", actionName);
-					reader.Skip ();
-					currentNodeStillToBeConsumed = true;
-					continue;
-				}
-
-				serializer = new XmlSerializer (actionType, xmlRootAttr);
-				containedActions.Add ((IAction)serializer.Deserialize (reader));
-				currentNodeStillToBeConsumed = true;
+			if (reader.IsEmptyElement) {
+				reader.Read ();
+				return;
 			}
+
+			// consume the starting rule element:
+			reader.Read ();
+
+			while (!GQML.IsReaderAtEnd (reader, GQML.RULE)) {
+				
+				if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.ACTION)) {
+					string actionName = reader.GetAttribute (GQML.ACTION_TYPE);
+					Debug.Log (string.Format ("<action type=\"{0}\"> found", actionName));
+					if (actionName == null) {
+						Log.SignalErrorToDeveloper ("Action without type attribute found.");
+						reader.Skip ();
+						continue;
+					}
+
+					// Determine the full name of the according action sub type (e.g. GQ.Client.Model.XML.SetVariableAction) 
+					//		where SetVariable is taken form ath type attribute of the xml action element.
+					string ruleTypeFullName = this.GetType ().FullName;
+					int lastDotIndex = ruleTypeFullName.LastIndexOf (".");
+					string modelNamespace = ruleTypeFullName.Substring (0, lastDotIndex);
+					Type actionType = Type.GetType (string.Format ("{0}.Action{1}", modelNamespace, actionName));
+
+					if (actionType == null) {
+						Log.SignalErrorToDeveloper ("No Implementation for Action Type {0} found.", actionName);
+						reader.Skip ();
+						continue;
+					}
+
+					serializer = new XmlSerializer (actionType, xmlRootAttr);
+					Debug.Log ("Before Action in Rule name: " + reader.LocalName + " type: " + reader.NodeType);
+					containedActions.Add ((IAction)serializer.Deserialize (reader));
+					Debug.Log ("After Adding to containedActions in Rule : " + reader.LocalName + " type: " + reader.NodeType);
+
+				} else {
+					Log.SignalErrorToDeveloper ("Unexcpected xml {0} named {1} inside rule found.", reader.NodeType, reader.LocalName);
+					reader.Read ();
+				}
+				
+			} 
+
+			GQML.AssertReaderAtEnd (reader, GQML.RULE);
+			reader.Read ();
 		}
 
 		#endregion

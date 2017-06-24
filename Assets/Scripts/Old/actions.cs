@@ -41,7 +41,7 @@ public class actions : MonoBehaviour
 	void Update ()
 	{
 
-		if (updateGPSRoute && questdb.currentquest.currentpage.type == "MapOSM") {
+		if (updateGPSRoute && QuestManager.Instance.CurrentQuest.currentpage.type == "MapOSM") {
 
 			gPSRouteUpdateInterval -= Time.deltaTime;
 
@@ -127,7 +127,7 @@ public class actions : MonoBehaviour
 	public void doAction (QuestAction action)
 	{
 
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
+		quest = QuestManager.Instance.CurrentQuest;
 
 		if (action.type == "StartMission") {
 			changePage (action);
@@ -257,17 +257,17 @@ public class actions : MonoBehaviour
 
 		// Start part:
 		GetComponent<ConnectionClient> ().addFileMessage (ip, var, filetype, sendbytes [0], 0,
-			questdb.currentquest.Id);
+			QuestManager.Instance.CurrentQuest.Id);
 
 		// Middle Parts:
 		for (int i = 1; i < sendbytes.Count; i++) {
 			GetComponent<ConnectionClient> ().addFileMessage (ip, var, filetype, sendbytes [i], i,
-				questdb.currentquest.Id);
+				QuestManager.Instance.CurrentQuest.Id);
 		}
 
 		// FINISH Part:
 		GetComponent<ConnectionClient> ().addFileFinishMessage (ip, var, filetype,
-			questdb.currentquest.Id);
+			QuestManager.Instance.CurrentQuest.Id);
 	}
 
 
@@ -276,7 +276,7 @@ public class actions : MonoBehaviour
 
 		bool doit = true;
 
-		if (Configuration.instance.showMessageForDatasendAction && !questdb.currentquest.acceptedDS) {
+		if (Configuration.instance.showMessageForDatasendAction && !QuestManager.Instance.CurrentQuest.acceptedDS) {
 
 			doit = false;
 
@@ -292,7 +292,7 @@ public class actions : MonoBehaviour
 						getServerIp (action.getAttribute ("ip")), 
 						action.getAttribute ("var"), 
 						getVariable (action.getAttribute ("var")).getStringValue (),
-						questdb.currentquest.Id);
+						QuestManager.Instance.CurrentQuest.Id);
 				} else {
 					bool filefound = false;
 					string deviceid = SystemInfo.deviceUniqueIdentifier;
@@ -1693,7 +1693,7 @@ public class actions : MonoBehaviour
 
 		if (varName == "quest.name") {
 
-			return new QuestVariable ("quest.name", questdb.currentquest.Name);
+			return new QuestVariable ("quest.name", QuestManager.Instance.CurrentQuest.Name);
 		}
 
 		if (varName == "score") {
@@ -1728,8 +1728,8 @@ public class actions : MonoBehaviour
 				varName = varName.Replace (".state", "");
 				Page qp = questdb.getPage (int.Parse (varName));
 
-				if (qp != null && qp.state != null && qp.state.Length > 0) {
-					return new QuestVariable (k2, qp.state);
+				if (qp != null && qp.stateOld != null && qp.stateOld.Length > 0) {
+					return new QuestVariable (k2, qp.stateOld);
 				}
 
 				if (Application.isWebPlayer) {
@@ -1954,7 +1954,7 @@ public class actions : MonoBehaviour
 		Debug.Log ("nqa:" + nqa);
 		Debug.Log ("nqa.transform:" + nqa.transform);
 		Debug.Log ("questdb:" + questdb);
-		Debug.Log ("questdb.currentquestdata:" + questdb.currentquestdata);
+		Debug.Log ("CurrentQuestdata:" + questdb.currentquestdata);
 
 		nqa.transform.parent = questdb.currentquestdata.transform;
 		bool looping = false;

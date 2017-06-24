@@ -9,26 +9,36 @@ using System;
 namespace GQTests.Model
 {
 
-	public class HotspotTest : DeserializationTest
+	public class HotspotTest : GQMLTest
 	{
+
+		[SetUp]
+		public void Init ()
+		{
+			XmlRoot = GQML.HOTSPOT;
+		}
+
 
 		/// <summary>
 		/// Tests deserializing old hotspot xml that do not have attributes for iBeacon etc.
 		/// </summary>
 		[Test]
-		public void Hotspot_1_to_5 ()
+		public void Hotspot_1_to_5_PLEASE_RENAME ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/Hotspot_1_to_5/game.xml"));
-
-			// Act:
-			Quest q = qm.Import (xml);
-			// Get hotspots:
-			QuestHotspot hotspot = q.GetHotspotWithID (11544);
-
+			QuestHotspot hotspot = parseXML<QuestHotspot> 
+				(@"	<hotspot 
+						id=""11544"" 
+						img=""http://qeevee.org:9091/assets/img/erzbistummarker.png"" 
+						initialActivity=""true"" 
+						initialVisibility=""true"" 
+						latlong=""50.9606,7.01079"" 
+						radius=""20""
+					/>");
+			
 			// Assert:
-			Assert.That (String.Compare (q.XmlFormat, "5.0") <= 0, "XML Format should be at most 5.0");
-			Assert.That (String.Compare ("1.0", q.XmlFormat) <= 0, "XML Format should be at least 1.0");
+//			Assert.That (String.Compare (q.XmlFormat, "5.0") <= 0, "XML Format should be at most 5.0");
+//			Assert.That (String.Compare ("1.0", q.XmlFormat) <= 0, "XML Format should be at least 1.0");
 			Assert.NotNull (hotspot, "Hotspot with id 11544 should not be null.");
 			Assert.AreEqual (0, hotspot.iBeacon);
 			Assert.AreEqual (0, hotspot.number);
@@ -44,16 +54,21 @@ namespace GQTests.Model
 
 
 		[Test]
-		public void Hotspot_5_1 ()
+		public void Hotspot_5_1_PLEASE_RENAME ()
 		{
-			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OneHotspot/game.xml"));
-
-			// Act:
-			Quest q = qm.Import (xml);
-			// Get hotspots:
-			QuestHotspot hotspot = q.GetHotspotWithID (11544);
-
+			QuestHotspot hotspot = parseXML<QuestHotspot> 
+				(@"	<hotspot 
+						iBeacon=""123"" 
+						id=""11544"" 
+						img=""http://qeevee.org:9091/assets/img/erzbistummarker.png"" 
+						initialActivity=""true"" 
+						initialVisibility=""true"" 
+						latlong=""50.9606,7.01079""  
+						nfc=""123"" number=""123""  
+						qrcode=""123""  
+						radius=""20"" 
+					/>");
+			
 			// Assert:
 			Assert.NotNull (hotspot, "Hotspot with id 11544 should not be null.");
 			Assert.AreEqual (123, hotspot.iBeacon);

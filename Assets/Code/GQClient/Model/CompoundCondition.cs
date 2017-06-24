@@ -3,6 +3,7 @@ using System.Collections;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Xml;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -29,22 +30,28 @@ namespace GQ.Client.Model
 		protected List<ICondition> containedConditions = new List<ICondition> ();
 
 		/// <summary>
+		/// Reader is at the condition element when we call this method. 
 		/// Reads the xml within a given condition element until it has consumed all elements witihn the condition including the ending element.
 		/// </summary>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-			XmlSerializer serializer;
+			if (reader.IsEmptyElement) {
+				reader.Read ();
+				return;
+			}
 
 			string conditionName = reader.LocalName;
 
-			reader.MoveToContent ();
-
+			XmlSerializer serializer;
 			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
 			xmlRootAttr.IsNullable = true;
 
-			bool currentNodeStillToBeConsumed = false;
+			// consume the begin of this compound condition
+			reader.Read ();
 
-			while (currentNodeStillToBeConsumed || reader.Read ()) {
+			// and start reading the contained conditions:
+			while (!GQML.IsReaderAtEnd (reader, conditionName)) {
+				Debug.Log ("CC-Loop: node: " + reader.NodeType + " name: " + reader.LocalName);
 
 				// if we reach the end of this condition element we are ready to leave this method.
 				if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (conditionName)) {
@@ -61,43 +68,35 @@ namespace GQ.Client.Model
 				case GQML.AND:
 					serializer = new XmlSerializer (typeof(AndCondition), xmlRootAttr);
 					containedConditions.Add ((AndCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				case GQML.OR:
 					serializer = new XmlSerializer (typeof(OrCondition), xmlRootAttr);
 					containedConditions.Add ((OrCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				case GQML.NOT:
 					serializer = new XmlSerializer (typeof(NotCondition), xmlRootAttr);
 					containedConditions.Add ((NotCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				// COMPARING CONDITIONS:
 				case GQML.EQUAL:
 					serializer = new XmlSerializer (typeof(EqualCondition), xmlRootAttr);
 					containedConditions.Add ((EqualCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				case GQML.GREATER_THAN:
 					serializer = new XmlSerializer (typeof(GreaterCondition), xmlRootAttr);
 					containedConditions.Add ((GreaterCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				case GQML.GREATER_EQUAL:
 					serializer = new XmlSerializer (typeof(GreaterEqualCondition), xmlRootAttr);
 					containedConditions.Add ((GreaterEqualCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				case GQML.LESS_THAN:
 					serializer = new XmlSerializer (typeof(LessCondition), xmlRootAttr);
 					containedConditions.Add ((LessCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				case GQML.LESS_EQUAL:
 					serializer = new XmlSerializer (typeof(LessEqualCondition), xmlRootAttr);
 					containedConditions.Add ((LessEqualCondition)serializer.Deserialize (reader));
-					currentNodeStillToBeConsumed = true;
 					break;
 				// UNKOWN CASE:
 				default:
@@ -106,7 +105,8 @@ namespace GQ.Client.Model
 				}
 			}
 
-			return;
+			// consume end element of this compound condition:
+			reader.Read ();
 		}
 
 		#endregion
@@ -114,9 +114,6 @@ namespace GQ.Client.Model
 
 		#region Function
 
-		/// <summary>
-		/// True if all contained condition are fulfilled (which is also the case if no condition at all is included). Computed in a lazy manner.
-		/// </summary>
 		public virtual bool IsFulfilled ()
 		{
 			bool allFulfilled = true;
@@ -127,7 +124,6 @@ namespace GQ.Client.Model
 			}
 			return allFulfilled;
 		}
-
 
 		#endregion
 	}

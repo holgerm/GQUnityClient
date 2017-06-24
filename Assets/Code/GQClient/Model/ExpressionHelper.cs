@@ -24,76 +24,53 @@ namespace GQ.Client.Model
 		}
 
 		/// <summary>
+		/// Reader is at the surrounding element that contains a list of expressions.
+		/// 
 		/// Reads one xml element surrounding a list of expressions, for example a comparative condition, like equal, greaterthan or lessorequal. 
 		/// It consumes the whole surrounding element with all contents including the closing end_element.
 		/// </summary>
 		/// <param name="reader">Reader.</param>
 		public static List<IExpression> ParseExpressionListFromXML (System.Xml.XmlReader reader)
 		{
+			string surroundingElementName = reader.LocalName;
+			GQML.AssertReaderAtStart (reader, surroundingElementName);
+
 			List<IExpression> containedExpressions = new List<IExpression> ();
 
-			string surroundingElementName = reader.LocalName;
-
-			reader.MoveToContent ();
-
-			bool currentNodeStillToBeConsumed = false;
-
-			while (currentNodeStillToBeConsumed || reader.Read ()) {
-				currentNodeStillToBeConsumed = false;
-
-				// if we reach the end of this condition element we are ready to leave this method.
-				if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (surroundingElementName)) {
-					break;
-				}
-
-				if (reader.NodeType != XmlNodeType.Element) {
+			while (!GQML.IsReaderAtEnd (reader, surroundingElementName)) {
+				if (reader.NodeType == XmlNodeType.Element && isExpressionType (reader.LocalName)) {
+					IExpression expr = ParseSingleExpressionFromXML (reader);
+					if (expr != null) {
+						containedExpressions.Add (expr);
+					}
+				} else {
+					// skip this unexpected inner node
+					Log.WarnDeveloper ("Unexpected xml {0} {1} found in expression list.", reader.NodeType, reader.LocalName);
+					reader.Read ();
 					continue;
 				}
-
-				IExpression expr = parseExpression (reader);
-				if (expr != null) {
-					containedExpressions.Add (expr);
-					currentNodeStillToBeConsumed = true;
-				}
-			}
+			} 
 
 			return containedExpressions;
 		}
 
-		/// <summary>
-		/// Reads one xml element surrounding a single expression, for example the value element in a SetVariable Action. 
-		/// It consumes the whole surrounding element with its content including the closing end_element.
-		/// </summary>
-		/// <param name="reader">Reader.</param>
-		public static IExpression ParseSingleExpressionFromXML (System.Xml.XmlReader reader)
+		/// Is called with the reader at the expression element.
+		/// This method consumes the complete expression xml subtree and puts the reader directly after that.
+		public static IExpression ParseSingleExpressionFromXML (XmlReader reader)
 		{
-			XmlSerializer serializer;
-			IExpression containedExpression = null;
+			string expressionName = reader.LocalName;
 
-			string surroundingElementName = reader.LocalName;
-
-			reader.MoveToContent ();
-
-			while (containedExpression == null && reader.Read ()) {
-
-				// if we reach the end of this condition element we are ready to leave this method.
-				if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (surroundingElementName)) {
-					break;
-				}
-
-				if (reader.NodeType != XmlNodeType.Element) {
-					continue;
-				}
-
-
-				containedExpression = parseExpression (reader);
+			if (reader.NodeType != XmlNodeType.Element || !isExpressionType (reader.LocalName)) {
+				Log.SignalErrorToDeveloper (
+					"Instead of an xml element of an expression we got an {0} with name {1}", 
+					reader.NodeType.ToString (),
+					reader.LocalName
+				);
+				reader.Skip ();
+				return null;
 			}
 
-			return containedExpression;
-		}
-
-		protected static IExpression parseExpression (XmlReader reader)
-		{
+			Debug.Log ("Helper.parseExpression: " + reader.LocalName);
 			XmlRootAttr.ElementName = reader.LocalName;
 
 			XmlSerializer serializer;
@@ -125,5 +102,16 @@ namespace GQ.Client.Model
 
 			return resultExpression;
 		}
+
+		private static List<string> expressionNodeNames = 
+			new List<string> (
+				new string[] { GQML.NUMBER, GQML.STRING, GQML.BOOL, GQML.VARIABLE });
+
+
+		internal static bool isExpressionType (string xmlExpressionCandidate)
+		{
+			return expressionNodeNames.Contains (xmlExpressionCandidate);
+		}
+
 	}
 }

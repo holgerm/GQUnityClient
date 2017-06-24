@@ -8,7 +8,7 @@ using GQ.Client.Err;
 namespace GQTests.Model
 {
 
-	public class ActionIncrementVariableTest : XMLTest
+	public class ActionIncrementVariableTest : GQMLTest
 	{
 
 		[SetUp]
@@ -21,7 +21,7 @@ namespace GQTests.Model
 		public void IncExistingIntegerVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<num>10</num>
@@ -33,7 +33,7 @@ namespace GQTests.Model
 			Assert.AreEqual (10, Variables.GetValue ("x").AsInt ()); 
 
 			// Act:
-			IncrementVariableAction actIncVar = parseXML<IncrementVariableAction> 
+			ActionIncrementVariable actIncVar = parseXML<ActionIncrementVariable> 
 				(@"	<action type=""IncrementVariable"" var=""x""/>");
 			actIncVar.Execute ();
 
@@ -50,7 +50,7 @@ namespace GQTests.Model
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:
-			IncrementVariableAction actIncVar = parseXML<IncrementVariableAction> 
+			ActionIncrementVariable actIncVar = parseXML<ActionIncrementVariable> 
 				(@"	<action type=""IncrementVariable"" var=""x""/>");
 			actIncVar.Execute ();
 
@@ -63,13 +63,13 @@ namespace GQTests.Model
 		public void IncBoolVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVarF = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVarF = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""f"">
 						<value>
 							<bool>false</bool>
 						</value>
 					</action>");
-			SetVariableAction actSetVarT = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVarT = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""t"">
 						<value>
 							<bool>true</bool>
@@ -83,9 +83,9 @@ namespace GQTests.Model
 			Assert.IsTrue (Variables.GetValue ("t").AsBool ()); 
 
 			// Act:
-			IncrementVariableAction actIncVarF = parseXML<IncrementVariableAction> 
+			ActionIncrementVariable actIncVarF = parseXML<ActionIncrementVariable> 
 				(@"	<action type=""IncrementVariable"" var=""f""/>");
-			IncrementVariableAction actIncVarT = parseXML<IncrementVariableAction> 
+			ActionIncrementVariable actIncVarT = parseXML<ActionIncrementVariable> 
 				(@"	<action type=""IncrementVariable"" var=""t""/>");
 			actIncVarF.Execute ();
 			actIncVarT.Execute ();
@@ -101,7 +101,7 @@ namespace GQTests.Model
 		public void IncDoubleVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<num>10.05</num>
@@ -113,7 +113,7 @@ namespace GQTests.Model
 			Assert.That (Values.NearlyEqual (10.05d, Variables.GetValue ("x").AsDouble ())); 
 
 			// Act:
-			IncrementVariableAction actIncVar = parseXML<IncrementVariableAction> 
+			ActionIncrementVariable actIncVar = parseXML<ActionIncrementVariable> 
 				(@"	<action type=""IncrementVariable"" var=""x""/>");
 			actIncVar.Execute ();
 
@@ -127,7 +127,7 @@ namespace GQTests.Model
 		public void IncStringVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>Hallo</string>
@@ -140,7 +140,7 @@ namespace GQTests.Model
 			Assert.AreEqual ("Hallo", Variables.GetValue ("x").AsString ()); 
 
 			// Act:
-			IncrementVariableAction actIncVar = parseXML<IncrementVariableAction> 
+			ActionIncrementVariable actIncVar = parseXML<ActionIncrementVariable> 
 				(@"	<action type=""IncrementVariable"" var=""x""/>");
 			actIncVar.Execute ();
 

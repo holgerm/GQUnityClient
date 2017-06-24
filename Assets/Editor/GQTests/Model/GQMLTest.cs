@@ -4,11 +4,13 @@ using System.IO;
 using System.Xml.Serialization;
 using GQ.Client.Model;
 using GQ.Client.Err;
+using GQ.Editor.Util;
+using NUnit.Framework;
 
 namespace GQTests.Model
 {
 
-	public abstract class XMLTest
+	public abstract class GQMLTest
 	{
 
 		protected virtual T parseXML<T> (string xml)
@@ -23,7 +25,12 @@ namespace GQTests.Model
 			}
 		}
 
-		protected string xmlRoot;
+		protected string parseXmlFromFile (string relativeFilePath)
+		{
+			return Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, relativeFilePath));
+		}
+
+		protected string xmlRoot = GQML.QUEST;
 
 		protected string XmlRoot {
 			get {
@@ -37,6 +44,18 @@ namespace GQTests.Model
 				xmlRoot = value;
 			}
 		}
+
+		protected string xml;
+		protected QuestManager qm;
+
+		[SetUp]
+		public void InitQuestManager ()
+		{ 
+
+			QuestManager.Reset ();
+			qm = QuestManager.Instance;
+		}
+
 
 	}
 }

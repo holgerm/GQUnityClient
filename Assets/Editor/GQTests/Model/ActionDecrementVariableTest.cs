@@ -8,7 +8,7 @@ using GQ.Client.Err;
 namespace GQTests.Model
 {
 
-	public class ActionDecrementVariableTest : XMLTest
+	public class ActionDecrementVariableTest : GQMLTest
 	{
 
 		[SetUp]
@@ -21,7 +21,7 @@ namespace GQTests.Model
 		public void DecExistingIntegerVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<num>10</num>
@@ -33,7 +33,7 @@ namespace GQTests.Model
 			Assert.AreEqual (10, Variables.GetValue ("x").AsInt ()); 
 
 			// Act:
-			DecrementVariableAction actDecVar = parseXML<DecrementVariableAction> 
+			ActionDecrementVariable actDecVar = parseXML<ActionDecrementVariable> 
 				(@"	<action type=""DecrementVariable"" var=""x""/>");
 			actDecVar.Execute ();
 
@@ -50,7 +50,7 @@ namespace GQTests.Model
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:
-			DecrementVariableAction actDecVar = parseXML<DecrementVariableAction> 
+			ActionDecrementVariable actDecVar = parseXML<ActionDecrementVariable> 
 				(@"	<action type=""DecrementVariable"" var=""x""/>");
 			actDecVar.Execute ();
 
@@ -63,13 +63,13 @@ namespace GQTests.Model
 		public void DecBoolVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVarF = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVarF = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""f"">
 						<value>
 							<bool>false</bool>
 						</value>
 					</action>");
-			SetVariableAction actSetVarT = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVarT = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""t"">
 						<value>
 							<bool>true</bool>
@@ -83,9 +83,9 @@ namespace GQTests.Model
 			Assert.IsTrue (Variables.GetValue ("t").AsBool ()); 
 
 			// Act:
-			DecrementVariableAction actDecVarF = parseXML<DecrementVariableAction> 
+			ActionDecrementVariable actDecVarF = parseXML<ActionDecrementVariable> 
 				(@"	<action type=""DecrementVariable"" var=""f""/>");
-			DecrementVariableAction actDecVarT = parseXML<DecrementVariableAction> 
+			ActionDecrementVariable actDecVarT = parseXML<ActionDecrementVariable> 
 				(@"	<action type=""DecrementVariable"" var=""t""/>");
 			actDecVarF.Execute ();
 			actDecVarT.Execute ();
@@ -101,7 +101,7 @@ namespace GQTests.Model
 		public void DecDoubleVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<num>10.05</num>
@@ -113,7 +113,7 @@ namespace GQTests.Model
 			Assert.That (Values.NearlyEqual (10.05d, Variables.GetValue ("x").AsDouble ())); 
 
 			// Act:
-			DecrementVariableAction actDecVar = parseXML<DecrementVariableAction> 
+			ActionDecrementVariable actDecVar = parseXML<ActionDecrementVariable> 
 				(@"	<action type=""DecrementVariable"" var=""x""/>");
 			actDecVar.Execute ();
 
@@ -127,7 +127,7 @@ namespace GQTests.Model
 		public void DecStringVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>Hallo</string>
@@ -140,7 +140,7 @@ namespace GQTests.Model
 			Assert.AreEqual ("Hallo", Variables.GetValue ("x").AsString ()); 
 
 			// Act:
-			DecrementVariableAction actDecVar = parseXML<DecrementVariableAction> 
+			ActionDecrementVariable actDecVar = parseXML<ActionDecrementVariable> 
 				(@"	<action type=""DecrementVariable"" var=""x""/>");
 			actDecVar.Execute ();
 
@@ -156,12 +156,12 @@ namespace GQTests.Model
 			XmlRoot = "rule";
 			Rule rule = parseXML<Rule> 
 				(@"	<rule>
-						<action type=""SetVariable"" var=""x"">
+						<action type=""SetVariable"" var=""x"" id=""1"">
 							<value>
 								<num>10</num>
 							</value>
 						</action>
-						<action type=""DecrementVariable"" var=""x""/>
+						<action type=""DecrementVariable"" var=""x"" id=""2""></action>
 					</rule>");
 			Variables.ClearAll ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 

@@ -3,8 +3,10 @@ using UnityEngine.UI;
 
 using System.Collections;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 
-public class beendenbutton : MonoBehaviour {
+public class beendenbutton : MonoBehaviour
+{
 
 
 	public questdatabase questdb;
@@ -13,43 +15,41 @@ public class beendenbutton : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
-		questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+	void Start ()
+	{
+		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 
 
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 	
-		if ( questdb == null ) {
+		if (questdb == null) {
 
-			if ( GameObject.Find("QuestDatabase") != null ) {
-				questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
+			if (GameObject.Find ("QuestDatabase") != null) {
+				questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 			}
 
-		}
-		else
-		if ( questdb.currentquest != null ) {
+		} else if (QuestManager.Instance.CurrentQuest != null) {
 
-			GetComponent<Image>().enabled = true;
-			GetComponent<Button>().enabled = true;
-			GetComponentInChildren<Text>().enabled = true;
+			GetComponent<Image> ().enabled = true;
+			GetComponent<Button> ().enabled = true;
+			GetComponentInChildren<Text> ().enabled = true;
 
-			if ( ConfigurationManager.Current.questVisualization == "map" ) {
+			if (ConfigurationManager.Current.questVisualization == "map") {
 				
-				GetComponentInChildren<Text>().text = "Zurück zur Karte";
-			}
-			else {
-				GetComponentInChildren<Text>().text = "Beenden";
+				GetComponentInChildren<Text> ().text = "Zurück zur Karte";
+			} else {
+				GetComponentInChildren<Text> ().text = "Beenden";
 
 			}
-		}
-		else {
+		} else {
 
-			GetComponent<Image>().enabled = false;
-			GetComponent<Button>().enabled = false;
-			GetComponentInChildren<Text>().enabled = false;
+			GetComponent<Image> ().enabled = false;
+			GetComponent<Button> ().enabled = false;
+			GetComponentInChildren<Text> ().enabled = false;
 
 		}
 

@@ -11,7 +11,7 @@ using System;
 namespace GQTests.Model
 {
 
-	public class ExpressionNumberTest : XMLTest
+	public class ExpressionNumberTest : GQMLTest
 	{
 
 		[SetUp]

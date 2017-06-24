@@ -18,7 +18,6 @@ using UnityEngine.SceneManagement;
 
 public class questdatabase : MonoBehaviour
 {
-	public Quest currentquest;
 	public Transform questdataprefab;
 	public Transform currentquestdata;
 	public List<Quest> allquests;
@@ -549,11 +548,11 @@ public class questdatabase : MonoBehaviour
 		case JSONObject.Type.ARRAY:
 				
 			if (kei == "quest_hotspots") {
-				currentquest = new Quest ();
+				QuestManager.Instance.CurrentQuest = new Quest ();
 				if (allquests == null) {
 					allquests = new List<Quest> ();
 				}
-				allquests.Add (currentquest);
+				allquests.Add (QuestManager.Instance.CurrentQuest);
 				
 				foreach (JSONObject j in obj.list) {
 					accessData (j, kei);
@@ -578,26 +577,26 @@ public class questdatabase : MonoBehaviour
 			break;
 		case JSONObject.Type.STRING:
 			if (kei == "quest_name") {
-				currentquest.Name = obj.str;
+				QuestManager.Instance.CurrentQuest.Name = obj.str;
 			}
 			break;
 		case JSONObject.Type.NUMBER:
 			if (kei == "quest_id") {
-				currentquest.Id = (int)obj.n;
+				QuestManager.Instance.CurrentQuest.Id = (int)obj.n;
 			} else if (kei == "quest_lastUpdate") {
-				currentquest.LastUpdate = (long)obj.n;
+				QuestManager.Instance.CurrentQuest.LastUpdate = (long)obj.n;
 			} else if (kei == "quest_hotspots_latitude") {
 				
-				if (currentquest.start_latitude == null || currentquest.start_latitude == 0) {
+				if (QuestManager.Instance.CurrentQuest.start_latitude == null || QuestManager.Instance.CurrentQuest.start_latitude == 0) {
 					
-					currentquest.start_latitude = obj.n;
+					QuestManager.Instance.CurrentQuest.start_latitude = obj.n;
 					
 				}
 				
 			} else if (kei == "quest_hotspots_longitude") {
 				
-				if (currentquest.start_longitude == null || currentquest.start_longitude == 0) {
-					currentquest.start_longitude = obj.n;
+				if (QuestManager.Instance.CurrentQuest.start_longitude == null || QuestManager.Instance.CurrentQuest.start_longitude == 0) {
+					QuestManager.Instance.CurrentQuest.start_longitude = obj.n;
 						
 				}
 			}
@@ -621,14 +620,14 @@ public class questdatabase : MonoBehaviour
 			
 			if (key == "longitude") {
 				
-				if (currentquest.start_longitude == null || currentquest.start_longitude == 0) {
-					currentquest.start_longitude = obj.n;
+				if (QuestManager.Instance.CurrentQuest.start_longitude == null || QuestManager.Instance.CurrentQuest.start_longitude == 0) {
+					QuestManager.Instance.CurrentQuest.start_longitude = obj.n;
 				}
 				
 			} else if (key == "latitude") {
 
-				if (currentquest.start_latitude == null || currentquest.start_latitude == 0) {
-					currentquest.start_latitude = obj.n;
+				if (QuestManager.Instance.CurrentQuest.start_latitude == null || QuestManager.Instance.CurrentQuest.start_latitude == 0) {
+					QuestManager.Instance.CurrentQuest.start_latitude = obj.n;
 				}
 				
 			}
@@ -661,7 +660,7 @@ public class questdatabase : MonoBehaviour
 			
 			
 		}
-		currentquest.addMetaData (meta);
+		QuestManager.Instance.CurrentQuest.addMetaData (meta);
 		
 		
 	}
@@ -683,7 +682,7 @@ public class questdatabase : MonoBehaviour
 			buttoncontroller.filteredOnlineList.Add (q);
 		}
 
-		currentquest = null;
+		QuestManager.Instance.CurrentQuest = null;
 		
 		if (ConfigurationManager.Current.questVisualization == "list") {
 			
@@ -965,7 +964,7 @@ public class questdatabase : MonoBehaviour
 		Debug.Log ("STREAMING ASSET PATH: " + Application.streamingAssetsPath);
 		q.filepath = System.IO.Path.Combine (Application.streamingAssetsPath, "predeployed/quests/" + id + "/game.xml");
 
-		currentquest = q;
+		QuestManager.Instance.CurrentQuest = q;
 
 		string pre = "file: /";
 
@@ -990,21 +989,21 @@ public class questdatabase : MonoBehaviour
 
 			
 			
-			//currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
+			//QuestManager.Instance.CurrentQuestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 			q.xmlcontent = UTF8Encoding.UTF8.GetString (wwwpdq.bytes); 
 
 		}
 
-		Debug.Log ("CURRENTQUEST set to loadFromText() on " + q.Name + " l: 1067");
-		currentquest = q.LoadFromText (id, true);
-		localquests.Add (currentquest);
+		Debug.Log ("QuestManager.Instance.CurrentQuest set to loadFromText() on " + q.Name + " l: 1067");
+		QuestManager.Instance.CurrentQuest = q.LoadFromText (id, true);
+		localquests.Add (QuestManager.Instance.CurrentQuest);
 		bool hasmorethanmetadata = true;
-		currentquest.currentpage = currentquest.PageList.First ();
+		QuestManager.Instance.CurrentQuest.currentpage = QuestManager.Instance.CurrentQuest.PageList.First ();
 		int c = 0;
-		while (currentquest.currentpage.type == "MetaData") {
+		while (QuestManager.Instance.CurrentQuest.currentpage.type == "MetaData") {
 			
-			if (currentquest.PageList.Count >= c - 1) {
-				currentquest.currentpage = currentquest.PageList [c];
+			if (QuestManager.Instance.CurrentQuest.PageList.Count >= c - 1) {
+				QuestManager.Instance.CurrentQuest.currentpage = QuestManager.Instance.CurrentQuest.PageList [c];
 				c++;
 			} else {
 				
@@ -1014,16 +1013,16 @@ public class questdatabase : MonoBehaviour
 		}
 		
 		hotspots = new List<QuestRuntimeHotspot> ();
-		foreach (QuestHotspot qh in currentquest.hotspotList) {
+		foreach (QuestHotspot qh in QuestManager.Instance.CurrentQuest.hotspotList) {
 			bool initialActivity = qh.hasAttribute ("initialActivity") && qh.getAttribute ("initialActivity") == "true";
 			bool initialVisibility = qh.hasAttribute ("initialVisibility") && qh.getAttribute ("initialVisibility") == "true";
 			
 			hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
 		}
 		
-		if (canPlayQuest (currentquest) && hasmorethanmetadata) {
+		if (canPlayQuest (QuestManager.Instance.CurrentQuest) && hasmorethanmetadata) {
 
-			StartCoroutine (waitForSpriteConversion (currentquest.currentpage.id));
+			StartCoroutine (waitForSpriteConversion (QuestManager.Instance.CurrentQuest.currentpage.id));
 
 		} else {
 			
@@ -1142,9 +1141,9 @@ public class questdatabase : MonoBehaviour
 
 
 
-//		Debug.Log ("Current Quest: "+currentquest.id);
+//		Debug.Log ("Current Quest: "+QuestManager.Instance.CurrentQuest.id);
 
-		if (currentquest != null && currentquest.Id != 0) {
+		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.Id != 0) {
 			// In Foyer:
 
 			foreach (QuestRuntimeHotspot qrh in hotspots) {
@@ -1321,14 +1320,14 @@ public class questdatabase : MonoBehaviour
 
 
 		
-//			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+//			QuestManager.Instance.CurrentQuestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 
 			nq.xmlcontent = UTF8Encoding.UTF8.GetString (www.bytes); 
 			//ASCIIEncoding.ASCII.GetString (Encoding.Convert (Encoding.UTF32, Encoding.ASCII, www.bytes)); 
 
 			if (!downloadingAll) {
-				Debug.Log ("CURRENTQUEST set to " + nq.Name + " l: 1396");
-				currentquest = nq;
+				Debug.Log ("QuestManager.Instance.CurrentQuest set to " + nq.Name + " l: 1396");
+				QuestManager.Instance.CurrentQuest = nq;
 			}
 
 			installQuest (nq, false, false);
@@ -1386,8 +1385,8 @@ public class questdatabase : MonoBehaviour
 
 		}
 
-//		Debug.Log("CURRENTQUEST set to " + q.Name + " l: 1448");
-		currentquest = q;
+//		Debug.Log("QuestManager.Instance.CurrentQuest set to " + q.Name + " l: 1448");
+		QuestManager.Instance.CurrentQuest = q;
 
 		if (q.UsesLocation && Input.location.status != LocationServiceStatus.Running) {
 			Input.location.Start ();
@@ -1447,10 +1446,10 @@ public class questdatabase : MonoBehaviour
 			}
 		}
 
-		if (currentquest != null) {
-			if (currentquest.Id == q.Id) {
+		if (QuestManager.Instance.CurrentQuest != null) {
+			if (QuestManager.Instance.CurrentQuest.Id == q.Id) {
 
-				currentquest = null;
+				QuestManager.Instance.CurrentQuest = null;
 			}
 		}
 	
@@ -1567,8 +1566,8 @@ public class questdatabase : MonoBehaviour
 		Quest q = new Quest ();
 		q.Id = id;
 
-		Debug.Log ("CURRENTQUEST set to " + q.Name + " l: 1609");
-		currentquest = q;
+		Debug.Log ("QuestManager.Instance.CurrentQuest set to " + q.Name + " l: 1609");
+		QuestManager.Instance.CurrentQuest = q;
 		downloadQuest (q);
 	}
 
@@ -1891,7 +1890,7 @@ public class questdatabase : MonoBehaviour
 			downloadquests.Add (nq);
 
 		} else {
-			currentquest = nq;
+			QuestManager.Instance.CurrentQuest = nq;
 		}
 
 		// if not local load => set export location to fresh directory:
@@ -1928,7 +1927,7 @@ public class questdatabase : MonoBehaviour
 			int c = 0;
 			while (nq.currentpage.type == "MetaData") {
 				// TODO I guess this is a bug and will crash if we have e.g. a quest with a single page of type meta data
-				// TODO at least it will leave currentquest.currentpage being null.
+				// TODO at least it will leave QuestManager.Instance.CurrentQuest.currentpage being null.
 				if (nq.PageList.Count >= c - 1) {
 					nq.currentpage = nq.PageList [c];
 					c++;
@@ -1941,17 +1940,17 @@ public class questdatabase : MonoBehaviour
 				hasmorethanmetadata = true;
 			}
 		}
-		if (currentquest != null && currentquest.hotspotList != null) {
+		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.hotspotList != null) {
 			hotspots = new List<QuestRuntimeHotspot> ();
-			foreach (QuestHotspot qh in currentquest.hotspotList) {
+			foreach (QuestHotspot qh in QuestManager.Instance.CurrentQuest.hotspotList) {
 				bool initialActivity = qh.initialActivity;
 				bool initialVisibility = qh.initialVisibility;
 				hotspots.Add (new QuestRuntimeHotspot (qh, initialActivity, initialVisibility, qh.latlon));
 			}
 		}
-		if (canPlayQuest (currentquest) && hasmorethanmetadata) {
+		if (canPlayQuest (QuestManager.Instance.CurrentQuest) && hasmorethanmetadata) {
 			if (Application.isWebPlayer) {
-				reallyStartQuest (currentquest.currentpage.id);
+				reallyStartQuest (QuestManager.Instance.CurrentQuest.currentpage.id);
 			} else {
 				if (!localload) {
 					//				Debug.Log ("WAITING FOR QUEST ASSETS");
@@ -2049,7 +2048,7 @@ public class questdatabase : MonoBehaviour
 	{
 
 
-		currentquest.acceptedDS = true;
+		QuestManager.Instance.CurrentQuest.acceptedDS = true;
 
 		reallyStartQuest (pageid);
 
@@ -2061,7 +2060,7 @@ public class questdatabase : MonoBehaviour
 	{
 		
 		
-		currentquest.acceptedDS = false;
+		QuestManager.Instance.CurrentQuest.acceptedDS = false;
 
 		//TODO: can I start the quest?
 
@@ -2075,8 +2074,8 @@ public class questdatabase : MonoBehaviour
 	{
 
 	
-		if (Configuration.instance.showMessageForDatasendAction && !currentquest.acceptedDS &&
-		    currentquest.hasActionInChildren ("SendVarToServer")) {
+		if (Configuration.instance.showMessageForDatasendAction && !QuestManager.Instance.CurrentQuest.acceptedDS &&
+		    QuestManager.Instance.CurrentQuest.hasActionInChildren ("SendVarToServer")) {
 
 			// TODO FRAGE: Warum wird das für jede Seite aufgerufen, wo es doch eh immer das ganze Quest durchsucht? (hm) Erst Test schreiben dann refactoren!
 
@@ -2179,7 +2178,7 @@ public class questdatabase : MonoBehaviour
 		// instatiate a quest clone at any start. This function is always called at quest start.
 		currentquestdata = (Transform)Instantiate (questdataprefab, transform.position, Quaternion.identity);
 		
-		if (currentquest.getAttribute ("transferToUserPosition") != "true") {
+		if (QuestManager.Instance.CurrentQuest.getAttribute ("transferToUserPosition") != "true") {
 		
 			changePage (pageid);
 		
@@ -2188,7 +2187,7 @@ public class questdatabase : MonoBehaviour
 			foreach (QuestRuntimeHotspot mainhs in hotspots) {
 
 
-				if (mainhs.hotspot.id == int.Parse (currentquest.getAttribute ("transferHotspot"))) {
+				if (mainhs.hotspot.id == int.Parse (QuestManager.Instance.CurrentQuest.getAttribute ("transferHotspot"))) {
 
 					
 				
@@ -2402,7 +2401,7 @@ public class questdatabase : MonoBehaviour
 			
 			if (!downloadingAll) {
 
-				writeQuestXML (currentquest);
+				writeQuestXML (QuestManager.Instance.CurrentQuest);
 				StartCoroutine (waitForSpriteConversion (pageid));
 			} else {
 				
@@ -2491,7 +2490,7 @@ public class questdatabase : MonoBehaviour
 
 
 
-		foreach (Page qp in currentquest.PageList) {
+		foreach (Page qp in QuestManager.Instance.CurrentQuest.PageList) {
 			
 			
 			if (qp.id == id) {
@@ -2565,12 +2564,12 @@ public class questdatabase : MonoBehaviour
 		}
 
 		   
-		foreach (Page qp in currentquest.PageList) {
+		foreach (Page qp in QuestManager.Instance.CurrentQuest.PageList) {
 
 			if (qp.id.Equals (id)) {
 
-				currentquest.currentpage = qp;
-				currentquest.currentpage.state = "running";
+				QuestManager.Instance.CurrentQuest.currentpage = qp;
+				QuestManager.Instance.CurrentQuest.currentpage.stateOld = "running";
 
 				GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject> ();
 
@@ -2845,7 +2844,7 @@ public class questdatabase : MonoBehaviour
 	public QuestHotspot getHotspotObject (int i)
 	{
 
-		foreach (QuestHotspot qh in currentquest.hotspotList) {
+		foreach (QuestHotspot qh in QuestManager.Instance.CurrentQuest.hotspotList) {
 
 			if (qh.id == i) {
 
@@ -2909,7 +2908,7 @@ public class questdatabase : MonoBehaviour
 				
 			nq.Id = q.Id;
 				
-//			currentquestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
+//			QuestManager.Instance.CurrentQuestdata = (Transform)Instantiate(questdataprefab, transform.position, Quaternion.identity);
 //				
 			nq.xmlcontent = UTF8Encoding.UTF8.GetString (q.www.bytes); 
 //			Debug.Log ("XML:" + nq.xmlcontent);
@@ -2924,7 +2923,7 @@ public class questdatabase : MonoBehaviour
 			}
 
 			if (!downloadingAll) {
-				currentquest = nq;
+				QuestManager.Instance.CurrentQuest = nq;
 			}
 
 			// TODO: here b is always true! So we can elimiate the foreach loop above! (hm again ;-) )

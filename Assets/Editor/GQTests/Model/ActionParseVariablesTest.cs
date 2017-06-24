@@ -8,7 +8,7 @@ using GQ.Client.Err;
 namespace GQTests.Model
 {
 
-	public class ActionParseVariablesTest : XMLTest
+	public class ActionParseVariablesTest : GQMLTest
 	{
 
 		[SetUp]
@@ -22,7 +22,7 @@ namespace GQTests.Model
 		public void ParseSingleNumVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:10</string>
@@ -31,7 +31,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -44,7 +44,7 @@ namespace GQTests.Model
 		public void ParseSingleFloatVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:10.06</string>
@@ -53,7 +53,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -66,7 +66,7 @@ namespace GQTests.Model
 		public void ParseSingleBoolVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:true</string>
@@ -75,7 +75,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -88,7 +88,7 @@ namespace GQTests.Model
 		public void ParseSingleTextVar ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:hallo</string>
@@ -97,7 +97,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -110,7 +110,7 @@ namespace GQTests.Model
 		public void ParseTextVarWithMaskedComma ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:hallo,, this is a comma in a sentence.</string>
@@ -119,7 +119,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -132,7 +132,7 @@ namespace GQTests.Model
 		public void ParseTextVarWithColon ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:hallo: this is a colon in a sentence.</string>
@@ -141,7 +141,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -154,7 +154,7 @@ namespace GQTests.Model
 		public void ParseTextVarWithQuotes ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:""hallo""</string>
@@ -163,7 +163,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 
@@ -176,7 +176,7 @@ namespace GQTests.Model
 		public void ParseMultipleMixedVars ()
 		{
 			// Arrange:
-			SetVariableAction actSetVar = parseXML<SetVariableAction> 
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
 				(@"	<action type=""SetVariable"" var=""x"">
 						<value>
 							<string>a:""hallo"",b:10.02,c:true,d:,,,,</string>
@@ -185,7 +185,7 @@ namespace GQTests.Model
 			actSetVar.Execute ();
 
 			// Act:
-			ParseVariablesAction actParseVars = parseXML<ParseVariablesAction> 
+			ActionParseVariables actParseVars = parseXML<ActionParseVariables> 
 				(@"	<action FromVar=""x"" type=""ParseVariables""/>");
 			actParseVars.Execute ();
 

@@ -10,7 +10,7 @@ using GQ.Client.Util;
 namespace GQTests.Model
 {
 
-	public class ExpressionBoolTest : XMLTest
+	public class ExpressionBoolTest : GQMLTest
 	{
 
 		[SetUp]

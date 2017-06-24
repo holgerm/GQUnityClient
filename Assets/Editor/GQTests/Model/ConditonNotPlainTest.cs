@@ -7,7 +7,7 @@ using GQ.Client.Err;
 namespace GQTests.Model
 {
 
-	public class ConditonNotPlainTest : XMLTest
+	public class ConditonNotPlainTest : GQMLTest
 	{
 
 		[SetUp]
