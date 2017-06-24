@@ -47,8 +47,8 @@ public class page_videoplay : MonoBehaviour
 		yield return new WaitForEndOfFrame ();
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		page = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		quest = QuestManager.Instance.CurrentQuest;
+		page = QuestManager.Instance.CurrentQuest.currentpage;
 
 		if (page.onStart != null) {
 			page.onStart.Invoke ();
@@ -207,7 +207,7 @@ public class page_videoplay : MonoBehaviour
 	{
 		Debug.Log ("VIDEO: ON_END()");
 		Screen.orientation = ScreenOrientation.Portrait;
-		page.state = "succeeded";
+		page.stateOld = "succeeded";
 		//questdb.AllowAutoRotation (false);
 
 

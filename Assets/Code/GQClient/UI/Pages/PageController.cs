@@ -28,7 +28,7 @@ namespace GQ.Client.UI.Pages
 
 			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-			quest = questdb.currentquest;
+			quest = QuestManager.Instance.CurrentQuest;
 			if (quest != null) {
 				page = quest.currentpage;
 
@@ -66,7 +66,7 @@ namespace GQ.Client.UI.Pages
 
 		protected void onEnd ()
 		{
-			page.state = PageStateOnEnd;
+			page.stateOld = PageStateOnEnd;
 
 			if (page.onEnd != null && page.onEnd.actions != null && page.onEnd.actions.Count > 0) {
 

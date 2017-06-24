@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
 
-public class page_webpage : MonoBehaviour {
+public class page_webpage : MonoBehaviour
+{
 	
 	public questdatabase questdb;
 	public actions actioncontroller;
@@ -33,63 +34,65 @@ public class page_webpage : MonoBehaviour {
 	};
 	#endif
 
-	public void backButton () {
+	public void backButton ()
+	{
 		
 		
 		
-		Page show = questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1];
-		questdb.currentquest.previouspages.Remove(questdb.currentquest.previouspages[questdb.currentquest.previouspages.Count - 1]);
-		questdb.changePage(show.id);
+		Page show = QuestManager.Instance.CurrentQuest.previouspages [QuestManager.Instance.CurrentQuest.previouspages.Count - 1];
+		QuestManager.Instance.CurrentQuest.previouspages.Remove (QuestManager.Instance.CurrentQuest.previouspages [QuestManager.Instance.CurrentQuest.previouspages.Count - 1]);
+		questdb.changePage (show.id);
 		
 		
 		
 	}
 
-	public void nextButton () {
+	public void nextButton ()
+	{
 		
 		
-		onEnd();
+		onEnd ();
 		
 		
 		
 	}
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 
 
-		if ( GameObject.Find("QuestDatabase") != null ) {
-			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-			actioncontroller = GameObject.Find("QuestDatabase").GetComponent<actions>();
-			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-			webpage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
-		}
-		else {
+		if (GameObject.Find ("QuestDatabase") != null) {
+			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+			actioncontroller = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
+			quest = QuestManager.Instance.CurrentQuest;
+			webpage = QuestManager.Instance.CurrentQuest.currentpage;
+		} else {
 		
-			SceneManager.LoadScene("questlist");
+			SceneManager.LoadScene ("questlist");
 		}
 
 
-		if ( questdb.currentquest.previouspages.Count == 0 ) {
+		if (QuestManager.Instance.CurrentQuest.previouspages.Count == 0) {
 
-			Destroy(nextButtonObject);
+			Destroy (nextButtonObject);
 		}
 
 
-		if ( webpage.onStart != null ) {
+		if (webpage.onStart != null) {
 			
-			webpage.onStart.Invoke();
+			webpage.onStart.Invoke ();
 		}
 		
 		
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 
 	
-		webView = GetComponent<UniWebView>();
-		if ( webView == null ) {
+		webView = GetComponent<UniWebView> ();
+		if (webView == null) {
 
 
-			GameObject go = new GameObject("web_");
-			webView = go.AddComponent<UniWebView>();
+			GameObject go = new GameObject ("web_");
+			webView = go.AddComponent<UniWebView> ();
 			webView.OnReceivedMessage += OnReceivedMessage;
 			webView.OnLoadComplete += OnLoadComplete;
 			webView.OnWebViewShouldClose += OnWebViewShouldClose;
@@ -100,17 +103,16 @@ public class page_webpage : MonoBehaviour {
 		
 
 
-		if ( webpage.getAttribute("url") != null && webpage.getAttribute("url") != "" ) {
+		if (webpage.getAttribute ("url") != null && webpage.getAttribute ("url") != "") {
 
-			Debug.Log("URL:" + webpage.getAttribute("url"));
-			webView.url = webpage.getAttribute("url");
-			webView.Load();
+			Debug.Log ("URL:" + webpage.getAttribute ("url"));
+			webView.url = webpage.getAttribute ("url");
+			webView.Load ();
 		
 			_errorMessage = null;
-		}
-		else {
+		} else {
 
-			onEnd();
+			onEnd ();
 
 		}
 #else
@@ -124,7 +126,8 @@ public class page_webpage : MonoBehaviour {
 	}
 
 	
-	public void deactivateWebView () {
+	public void deactivateWebView ()
+	{
 
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 
@@ -132,7 +135,8 @@ public class page_webpage : MonoBehaviour {
 #endif
 	}
 
-	public void activateWebView () {
+	public void activateWebView ()
+	{
 
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 
@@ -141,23 +145,23 @@ public class page_webpage : MonoBehaviour {
 	}
 
 	
-	public void onEnd () {
+	public void onEnd ()
+	{
 
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8
 
 		webView.enabled = false;
 #endif
 
-		webpage.state = "succeeded";
+		webpage.stateOld = "succeeded";
 		
 		
-		if ( webpage.onEnd != null ) {
+		if (webpage.onEnd != null) {
 			
-			webpage.onEnd.Invoke();
-		}
-		else {
+			webpage.onEnd.Invoke ();
+		} else {
 			
-			GameObject.Find("QuestDatabase").GetComponent<questdatabase>().endQuest();
+			GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().endQuest ();
 			
 		}
 		
@@ -171,21 +175,22 @@ public class page_webpage : MonoBehaviour {
 	
 	//5. When the webView complete loading the url sucessfully, you can show it.
 	//   You can also set the autoShowWhenLoadComplete of UniWebView to show it automatically when it loads finished.
-	void OnLoadComplete (UniWebView webView, bool success, string errorMessage) {
-		if ( success ) {
-			webView.Show();
-		}
-		else {
-			Debug.Log("Something wrong in webview loading: " + errorMessage);
+	void OnLoadComplete (UniWebView webView, bool success, string errorMessage)
+	{
+		if (success) {
+			webView.Show ();
+		} else {
+			Debug.Log ("Something wrong in webview loading: " + errorMessage);
 			_errorMessage = errorMessage;
 		}
 	}
 	
 	//6. The webview can talk to Unity by a url with scheme of "uniwebview". See the webpage for more
 	//   Every time a url with this scheme clicked, OnReceivedMessage of webview event get raised.
-	void OnReceivedMessage (UniWebView webView, UniWebViewMessage message) {
-		Debug.Log("Received a message from native");
-		Debug.Log(message.rawMessage);
+	void OnReceivedMessage (UniWebView webView, UniWebViewMessage message)
+	{
+		Debug.Log ("Received a message from native");
+		Debug.Log (message.rawMessage);
 		//7. You can get the information out from the url path and query in the UniWebViewMessage
 		//For example, a url of "uniwebview://move?direction=up&distance=1" in the web page will 
 		//be parsed to a UniWebViewMessage object with:
@@ -213,27 +218,30 @@ public class page_webpage : MonoBehaviour {
 	//9. By using EvaluatingJavaScript method, you can talk to webview from Unity.
 	//It can evel a javascript or run a js method in the web page.
 	//(In the demo, it will be called when the cube hits the sphere)
-	public void ShowAlertInWebview (float time, bool first) {
+	public void ShowAlertInWebview (float time, bool first)
+	{
 		_moveVector = Vector3.zero;
-		if ( first ) {
+		if (first) {
 			//Eval the js and wait for the OnEvalJavaScriptFinished event to be raised.
 			//The sample(float time) is written in the js in webpage, in which we pop 
 			//up an alert and return a demo string.
 			//When the js excute finished, OnEvalJavaScriptFinished will be raised.
-			webView.EvaluatingJavaScript("sample(" + time + ")");
+			webView.EvaluatingJavaScript ("sample(" + time + ")");
 		}
 	}
 	
 	//In this demo, we set the text to the return value from js.
-	void OnEvalJavaScriptFinished (UniWebView webView, string result) {
-		Debug.Log("js result: " + result);
+	void OnEvalJavaScriptFinished (UniWebView webView, string result)
+	{
+		Debug.Log ("js result: " + result);
 	}
 	
 	//10. If the user close the webview by tap back button (Android) or toolbar Done button (iOS),
 	//    we should set your reference to null to release it.
 	//    Then we can return true here to tell the webview to dismiss.
-	bool OnWebViewShouldClose (UniWebView webView) {
-		if ( webView == webView ) {
+	bool OnWebViewShouldClose (UniWebView webView)
+	{
+		if (webView == webView) {
 			webView = null;
 			return true;
 		}
@@ -243,15 +251,16 @@ public class page_webpage : MonoBehaviour {
 	// This method will be called when the screen orientation changed. Here we returned UniWebViewEdgeInsets(5,5,bottomInset,5)
 	// for both situation. Although they seem to be the same, screenHeight was changed, leading a difference between the result.
 	// eg. on iPhone 5, bottomInset is 284 (568 * 0.5) in portrait mode while it is 160 (320 * 0.5) in landscape.
-	UniWebViewEdgeInsets InsetsForScreenOreitation (UniWebView webView, UniWebViewOrientation orientation) {
+	UniWebViewEdgeInsets InsetsForScreenOreitation (UniWebView webView, UniWebViewOrientation orientation)
+	{
 
-		int topInset = (int)(UniWebViewHelper.screenHeight * insets[0]);
-		int bottomInset = (int)(UniWebViewHelper.screenHeight * insets[1]);
+		int topInset = (int)(UniWebViewHelper.screenHeight * insets [0]);
+		int bottomInset = (int)(UniWebViewHelper.screenHeight * insets [1]);
 
-		int rightInset = (int)(UniWebViewHelper.screenWidth * insets[2]);
-		int leftInset = (int)(UniWebViewHelper.screenWidth * insets[3]);
+		int rightInset = (int)(UniWebViewHelper.screenWidth * insets [2]);
+		int leftInset = (int)(UniWebViewHelper.screenWidth * insets [3]);
 
-		return new UniWebViewEdgeInsets(topInset, leftInset, bottomInset, rightInset);
+		return new UniWebViewEdgeInsets (topInset, leftInset, bottomInset, rightInset);
 		
 	}
 

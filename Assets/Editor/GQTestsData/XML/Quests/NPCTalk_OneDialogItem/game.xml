@@ -1,0 +1,5 @@
+<game id="10370" lastUpdate="1497349624979" name="NPCTalk_OneDialogItem" xmlformat="5">
+	<mission endbuttontext="Ende" id="30198" image="http://qeevee.org:9091/uploadedassets/21/editor/10370/1_bibliothekneuaubing.jpg" mode="Komplett anzeigen" nextdialogbuttontext="Weiter" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<dialogitem blocking="true" id="34494" sound="http://qeevee.org:9091/uploadedassets/21/editor/10370/1_ausweis_einscannen_bitte.mp3" speaker="Napoleon">DialogItem Nummer 1</dialogitem>
+	</mission>
+</game>

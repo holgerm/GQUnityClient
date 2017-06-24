@@ -34,8 +34,8 @@ public class page_imagecapture : MonoBehaviour
 		if (questdbGO != null) {
 			questdb = questdbGO.GetComponent<questdatabase> ();
 			actioncontroller = questdbGO.GetComponent<actions> ();
-			quest = questdbGO.GetComponent<questdatabase> ().currentquest;
-			imagecapture = questdbGO.GetComponent<questdatabase> ().currentquest.currentpage;
+			quest = QuestManager.Instance.CurrentQuest;
+			imagecapture = QuestManager.Instance.CurrentQuest.currentpage;
 		} else {
 			SceneManager.LoadScene ("questlist");
 			yield break;
@@ -184,7 +184,7 @@ public class page_imagecapture : MonoBehaviour
 	void onEnd ()
 	{
 
-		imagecapture.state = "succeeded";
+		imagecapture.stateOld = "succeeded";
 
 		if (imagecapture.onEnd != null) {
 			imagecapture.onEnd.Invoke ();

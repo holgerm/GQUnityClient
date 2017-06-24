@@ -44,8 +44,8 @@ public class page_multiplechoicequestion : MonoBehaviour
 		}
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		multiplechoicequestion = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		quest = QuestManager.Instance.CurrentQuest;
+		multiplechoicequestion = QuestManager.Instance.CurrentQuest.currentpage;
 		questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 
 		feedbackPanel.SetActive (false);
@@ -150,7 +150,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 
 		if (multiplechoicequestion.hasAttribute ("loopUntilSuccess")
 		    && multiplechoicequestion.getAttribute ("loopUntilSuccess") == "true"
-		    && multiplechoicequestion.state.Equals (GQML.STATE_FAILED)) {
+		    && multiplechoicequestion.stateOld.Equals (GQML.STATE_FAILED)) {
 
 
 			repeatQuestion = true;
@@ -166,8 +166,8 @@ public class page_multiplechoicequestion : MonoBehaviour
 
 
 
-			if (multiplechoicequestion.state != GQML.STATE_FAILED) {
-				multiplechoicequestion.state = GQML.STATE_SUCCEEDED;
+			if (multiplechoicequestion.stateOld != GQML.STATE_FAILED) {
+				multiplechoicequestion.stateOld = GQML.STATE_SUCCEEDED;
 			
 			}
 		
@@ -233,7 +233,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 	public void onSuccess ()
 	{
 		
-		multiplechoicequestion.state = GQML.STATE_SUCCEEDED;
+		multiplechoicequestion.stateOld = GQML.STATE_SUCCEEDED;
 
 		
 		if (multiplechoicequestion.onSuccess != null) {
@@ -247,7 +247,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 	public void onFailure ()
 	{
 		
-		multiplechoicequestion.state = GQML.STATE_FAILED;
+		multiplechoicequestion.stateOld = GQML.STATE_FAILED;
 
 		
 		if (multiplechoicequestion.onFailure != null) {

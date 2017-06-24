@@ -60,8 +60,8 @@ public class page_audiorecord : MonoBehaviour
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
 		actioncontroller = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		audiorecord = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		quest = QuestManager.Instance.CurrentQuest;
+		audiorecord = QuestManager.Instance.CurrentQuest.currentpage;
 		
 		
 		if (audiorecord.onStart != null) {
@@ -256,7 +256,7 @@ public class page_audiorecord : MonoBehaviour
 	void onEnd ()
 	{
 		
-		audiorecord.state = "succeeded";
+		audiorecord.stateOld = "succeeded";
 		
 		
 		

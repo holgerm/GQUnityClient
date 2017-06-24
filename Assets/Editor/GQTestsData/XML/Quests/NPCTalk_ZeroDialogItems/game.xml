@@ -1,0 +1,3 @@
+<game id="10372" lastUpdate="1497349666661" name="NPCTalk_ZeroDialogItems" xmlformat="5">
+	<mission endbuttontext="Ende" id="30224" image="http://qeevee.org:9091/uploadedassets/21/editor/10370/1_bibliothekneuaubing.jpg" mode="Komplett anzeigen" nextdialogbuttontext="Weiter" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk"/>
+</game>

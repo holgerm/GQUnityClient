@@ -43,7 +43,7 @@ namespace GQ.Client.UI.Pages
 				pre = "file:";
 			}
 
-			if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
+			if (Application.platform == RuntimePlatform.Android && QuestManager.Instance.CurrentQuest.predeployed) {
 
 				pre = "";
 			}

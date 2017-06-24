@@ -41,7 +41,7 @@ namespace GQ.Client.UI.Pages
 				pre = "file:";
 			}
 
-			if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
+			if (Application.platform == RuntimePlatform.Android && QuestManager.Instance.CurrentQuest.predeployed) {
 				
 				pre = "";
 			}
@@ -232,8 +232,8 @@ namespace GQ.Client.UI.Pages
 
 		public void backButton ()
 		{
-			Page show = questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1];
-			questdb.currentquest.previouspages.Remove (questdb.currentquest.previouspages [questdb.currentquest.previouspages.Count - 1]);
+			Page show = QuestManager.Instance.CurrentQuest.previouspages [QuestManager.Instance.CurrentQuest.previouspages.Count - 1];
+			QuestManager.Instance.CurrentQuest.previouspages.Remove (QuestManager.Instance.CurrentQuest.previouspages [QuestManager.Instance.CurrentQuest.previouspages.Count - 1]);
 			questdb.changePage (show.id);
 		}
 
@@ -254,7 +254,7 @@ namespace GQ.Client.UI.Pages
 			nextbutton.interactable = true;
 			nextButtontext.text = "OK";
 
-			page.state = PageStateOnEnd;
+			page.stateOld = PageStateOnEnd;
 
 			if (page.onRead != null)
 				page.onRead.Invoke ();

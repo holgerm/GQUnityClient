@@ -48,8 +48,8 @@ public class page_tagscanner : MonoBehaviour
 		}
 
 		questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-		tagscanner = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+		quest = QuestManager.Instance.CurrentQuest;
+		tagscanner = QuestManager.Instance.CurrentQuest.currentpage;
 
 		if (tagscanner.onStart != null) {
 
@@ -269,7 +269,7 @@ public class page_tagscanner : MonoBehaviour
 
 		if (tagscanner.onSuccess != null) {
 
-			tagscanner.state = "succeeded";
+			tagscanner.stateOld = "succeeded";
 			tagscanner.onSuccess.Invoke ();
 		}  
 
@@ -282,7 +282,7 @@ public class page_tagscanner : MonoBehaviour
 
 		if (tagscanner.onFailure != null) {
 		
-			tagscanner.state = "failed";
+			tagscanner.stateOld = "failed";
 			tagscanner.onFailure.Invoke ();
 		}  
 	}
@@ -294,9 +294,9 @@ public class page_tagscanner : MonoBehaviour
 
 		yield return new WaitForSeconds (0.2f);
 
-		if (!GQML.STATE_FAILED.Equals (tagscanner.state)) {
+		if (!GQML.STATE_FAILED.Equals (tagscanner.stateOld)) {
 
-			tagscanner.state = GQML.STATE_SUCCEEDED;
+			tagscanner.stateOld = GQML.STATE_SUCCEEDED;
 		}
 
 		if (tagscanner.onEnd != null) {

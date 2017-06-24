@@ -12,7 +12,8 @@ using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
 
-public class page_custom : MonoBehaviour {
+public class page_custom : MonoBehaviour
+{
 
 
 
@@ -39,49 +40,49 @@ public class page_custom : MonoBehaviour {
 
 
 
-	void Start () { 
-		if ( GameObject.Find("QuestDatabase") == null ) {
+	void Start ()
+	{ 
+		if (GameObject.Find ("QuestDatabase") == null) {
 
-			SceneManager.LoadScene("questlist");
-		}
-		else {
-
-
-			questdb = GameObject.Find("QuestDatabase").GetComponent<questdatabase>();
-			quest = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest;
-			questpage = GameObject.Find("QuestDatabase").GetComponent<questdatabase>().currentquest.currentpage;
-			questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();
+			SceneManager.LoadScene ("questlist");
+		} else {
 
 
+			questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
+			quest = QuestManager.Instance.CurrentQuest;
+			questpage = QuestManager.Instance.CurrentQuest.currentpage;
+			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 
 
-			param1 = questpage.getAttribute("param1");
-			param2 = questpage.getAttribute("param2");
-			param3 = questpage.getAttribute("param3");
-			param4 = questpage.getAttribute("param4");
-			param5 = questpage.getAttribute("param5");
-			param6 = questpage.getAttribute("param6");
-			param7 = questpage.getAttribute("param7");
-			param8 = questpage.getAttribute("param8");
-			param9 = questpage.getAttribute("param9");
-			param10 = questpage.getAttribute("param10");
+
+
+			param1 = questpage.getAttribute ("param1");
+			param2 = questpage.getAttribute ("param2");
+			param3 = questpage.getAttribute ("param3");
+			param4 = questpage.getAttribute ("param4");
+			param5 = questpage.getAttribute ("param5");
+			param6 = questpage.getAttribute ("param6");
+			param7 = questpage.getAttribute ("param7");
+			param8 = questpage.getAttribute ("param8");
+			param9 = questpage.getAttribute ("param9");
+			param10 = questpage.getAttribute ("param10");
 
 			// Set prefab from ressources instead manually.
-			switch ( questpage.getAttribute("modul") ) {
-				case "farbspiel":
-					prefab = Resources.Load("customPageTypes/farbspiel/farbspiel") as GameObject;
-					break;
-				case "nfcgainpoints":
-					prefab = Resources.Load("customPageTypes/nfcgainpoints/nfcgainpoints") as GameObject;
-					break;
-				default:
-					break;
+			switch (questpage.getAttribute ("modul")) {
+			case "farbspiel":
+				prefab = Resources.Load ("customPageTypes/farbspiel/farbspiel") as GameObject;
+				break;
+			case "nfcgainpoints":
+				prefab = Resources.Load ("customPageTypes/nfcgainpoints/nfcgainpoints") as GameObject;
+				break;
+			default:
+				break;
 			}
 
-			GameObject go = Instantiate(prefab);
+			GameObject go = Instantiate (prefab);
 
-			if ( go.GetComponent<LinkToPageController>() != null ) {
-				go.GetComponent<LinkToPageController>().controller = this;
+			if (go.GetComponent<LinkToPageController> () != null) {
+				go.GetComponent<LinkToPageController> ().controller = this;
 			}
 
 		}
@@ -91,20 +92,20 @@ public class page_custom : MonoBehaviour {
 
 
 
-	public void onEnd () {
+	public void onEnd ()
+	{
 
-		questpage.state = "succeeded";
+		questpage.stateOld = "succeeded";
 
-		if ( questpage.onEnd != null && questpage.onEnd.actions != null && questpage.onEnd.actions.Count > 0 ) {
+		if (questpage.onEnd != null && questpage.onEnd.actions != null && questpage.onEnd.actions.Count > 0) {
 
-			questpage.onEnd.Invoke();
+			questpage.onEnd.Invoke ();
 
-		}
-		else {
+		} else {
 			//Debug.Log ("ending");
-			GameObject questDBGO = GameObject.Find("QuestDatabase");
-			if ( questDBGO != null ) {
-				questDBGO.GetComponent<questdatabase>().endQuest();
+			GameObject questDBGO = GameObject.Find ("QuestDatabase");
+			if (questDBGO != null) {
+				questDBGO.GetComponent<questdatabase> ().endQuest ();
 			}
 
 		}

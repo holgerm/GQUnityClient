@@ -1,0 +1,13 @@
+<game id="10368" lastUpdate="1497125849811" name="TwoPages" xmlformat="5">
+	<mission endbuttontext="&gt;" id="30194" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onEnd>
+			<rule>
+				<action allowReturn="0" id="30195" type="StartMission"/>
+			</rule>
+		</onEnd>
+		<dialogitem blocking="false" id="34485">This is page 1</dialogitem>
+	</mission>
+	<mission endbuttontext="&gt;" id="30195" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<dialogitem blocking="false" id="34486">This is page 2</dialogitem>
+	</mission>
+</game>

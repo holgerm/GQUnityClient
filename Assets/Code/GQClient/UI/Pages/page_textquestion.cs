@@ -6,7 +6,8 @@ using System.Text.RegularExpressions;
 using GQ.Client.Model;
 using UnityEngine.SceneManagement;
 
-public class page_textquestion : MonoBehaviour {
+public class page_textquestion : MonoBehaviour
+{
 
 	private string feedbackTextOnRepeat = "X";
 	public GameObject feedbackPanel;
@@ -20,38 +21,40 @@ public class page_textquestion : MonoBehaviour {
 	public InputField input;
 	
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 
-		GameObject questdbGO = GameObject.Find("QuestDatabase");
+		GameObject questdbGO = GameObject.Find ("QuestDatabase");
 
-		if ( questdbGO == null ) {
+		if (questdbGO == null) {
 
-			SceneManager.LoadScene("questlist");
+			SceneManager.LoadScene ("questlist");
 			return;
 		}
 
-		questdb = questdbGO.GetComponent<questdatabase>();
-		quest = questdbGO.GetComponent<questdatabase>().currentquest;
-		textquestion = questdbGO.GetComponent<questdatabase>().currentquest.currentpage;
+		questdb = questdbGO.GetComponent<questdatabase> ();
+		quest = QuestManager.Instance.CurrentQuest;
+		textquestion = QuestManager.Instance.CurrentQuest.currentpage;
 
-		feedbackPanel.SetActive(false);
-		questionPanel.SetActive(true);
-		if ( textquestion.hasAttribute("loopText") )
-			feedbackTextOnRepeat = textquestion.getAttribute("loopText");
-		Text feedbackText = feedbackPanel.transform.FindChild("Text").gameObject.GetComponent<Text>();
-		if ( feedbackText != null )
+		feedbackPanel.SetActive (false);
+		questionPanel.SetActive (true);
+		if (textquestion.hasAttribute ("loopText"))
+			feedbackTextOnRepeat = textquestion.getAttribute ("loopText");
+		Text feedbackText = feedbackPanel.transform.FindChild ("Text").gameObject.GetComponent<Text> ();
+		if (feedbackText != null)
 			feedbackText.text = feedbackTextOnRepeat;
 		
 
-		if ( textquestion.onStart != null ) {
+		if (textquestion.onStart != null) {
 			
-			textquestion.onStart.Invoke();
+			textquestion.onStart.Invoke ();
 		}
 		
-		questiontext.text = questdb.GetComponent<actions>().formatString(textquestion.getAttribute("question"));
+		questiontext.text = questdb.GetComponent<actions> ().formatString (textquestion.getAttribute ("question"));
 	}
 
-	public void checkAnswerFinal () {
+	public void checkAnswerFinal ()
+	{
 		
 		string x = input.text;
 		textquestion.result = x;
@@ -59,114 +62,114 @@ public class page_textquestion : MonoBehaviour {
 
 		bool repeat = false;
 		
-		if ( textquestion.hasAttribute("loopUntilSuccess") ) {
-			if ( textquestion.getAttribute("loopUntilSuccess") == "true" ) {
+		if (textquestion.hasAttribute ("loopUntilSuccess")) {
+			if (textquestion.getAttribute ("loopUntilSuccess") == "true") {
 				repeat = true;
 			} 
 		}
 
-		if ( textquestion.contents_answers.Count > 0 ) {
+		if (textquestion.contents_answers.Count > 0) {
 
 			bool correct = false;
 			bool match;
 
-			foreach ( QuestContent y in textquestion.contents_answers ) {
-				if ( textquestion.result == null || y == null || y.content == null )
+			foreach (QuestContent y in textquestion.contents_answers) {
+				if (textquestion.result == null || y == null || y.content == null)
 					continue;
 				
-				match = Regex.IsMatch(textquestion.result, y.content, RegexOptions.IgnoreCase);
+				match = Regex.IsMatch (textquestion.result, y.content, RegexOptions.IgnoreCase);
 
-				questdb.debug("REGEXP " + textquestion.result + " MATCH " + y.content + " -> " + match);
+				questdb.debug ("REGEXP " + textquestion.result + " MATCH " + y.content + " -> " + match);
 
-				if ( match || questdb.GetComponent<actions>().formatString(y.content).Equals(textquestion.result) ) {
+				if (match || questdb.GetComponent<actions> ().formatString (y.content).Equals (textquestion.result)) {
 					correct = true;
-					Debug.Log("TextQuestion: MATCHED");
+					Debug.Log ("TextQuestion: MATCHED");
 				}
 			}
 
-			if ( correct ) {
+			if (correct) {
 
-				textquestion.state = "succeeded";
-				onSuccess();
-			}
-			else {
+				textquestion.stateOld = "succeeded";
+				onSuccess ();
+			} else {
 				
-				if ( repeat ) {
+				if (repeat) {
 
-					questionPanel.SetActive(false);
-					feedbackPanel.SetActive(true);
-				}
-				else {
+					questionPanel.SetActive (false);
+					feedbackPanel.SetActive (true);
+				} else {
 					
-					textquestion.state = "failed";
-					onFailure();
+					textquestion.stateOld = "failed";
+					onFailure ();
 				}
 			}
-		}
-		else {
+		} else {
 
-			textquestion.state = "succeeded";
+			textquestion.stateOld = "succeeded";
 		}
 
-		if ( textquestion.state == "succeeded" || !repeat ) {
+		if (textquestion.stateOld == "succeeded" || !repeat) {
 
-			onEnd();
-		}
-	}
-
-	public void onEnd () {
-		
-		if ( textquestion.state != "failed" ) {
-
-			textquestion.state = "succeeded";
-		}
-		
-		if ( textquestion.onEnd != null ) {
-			
-			textquestion.onEnd.Invoke();
-		}
-		else
-		if ( !hasMissionAction(textquestion.onSuccess) && !hasMissionAction(textquestion.onFailure) ) {
-			
-			questdb.endQuest();
+			onEnd ();
 		}
 	}
 
-	protected bool hasMissionAction (QuestTrigger evt) {
-		if ( evt == null )
+	public void onEnd ()
+	{
+		
+		if (textquestion.stateOld != "failed") {
+
+			textquestion.stateOld = "succeeded";
+		}
+		
+		if (textquestion.onEnd != null) {
+			
+			textquestion.onEnd.Invoke ();
+		} else if (!hasMissionAction (textquestion.onSuccess) && !hasMissionAction (textquestion.onFailure)) {
+			
+			questdb.endQuest ();
+		}
+	}
+
+	protected bool hasMissionAction (QuestTrigger evt)
+	{
+		if (evt == null)
 			return false;
 
-		foreach ( QuestAction a in evt.actions ) {
-			if ( a.hasMissionAction() ) {
+		foreach (QuestAction a in evt.actions) {
+			if (a.hasMissionAction ()) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public void onSuccess () {
+	public void onSuccess ()
+	{
 		
-		textquestion.state = "succeeded";
+		textquestion.stateOld = "succeeded";
 		
-		if ( textquestion.onSuccess != null ) {
+		if (textquestion.onSuccess != null) {
 			
-			textquestion.onSuccess.Invoke();
+			textquestion.onSuccess.Invoke ();
 		} 
 	}
 
-	public void onFailure () {
+	public void onFailure ()
+	{
 		
-		textquestion.state = "failed";
+		textquestion.stateOld = "failed";
 		
-		if ( textquestion.onFailure != null ) {
+		if (textquestion.onFailure != null) {
 			
-			textquestion.onFailure.Invoke();
+			textquestion.onFailure.Invoke ();
 		} 
 	}
 
-	public void FeedbackButtonPressed () {
-		feedbackPanel.SetActive(false);
-		questionPanel.SetActive(true);
+	public void FeedbackButtonPressed ()
+	{
+		feedbackPanel.SetActive (false);
+		questionPanel.SetActive (true);
 	}
 
 

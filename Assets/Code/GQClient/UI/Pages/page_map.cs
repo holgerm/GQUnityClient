@@ -88,10 +88,10 @@ public class page_map : PageController
 
 		gpsdata = questdb.GetComponent<GPSPosition> ();
 
-		if (questdb.currentquest != null && questdb.currentquest.Id != 0) {
+		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.Id != 0) {
 
-			quest = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest;
-			page = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ().currentquest.currentpage;
+			quest = QuestManager.Instance.CurrentQuest;
+			page = QuestManager.Instance.CurrentQuest.currentpage;
 			questactions = GameObject.Find ("QuestDatabase").GetComponent<actions> ();
 		}
 
@@ -128,8 +128,8 @@ public class page_map : PageController
 
 
 
-			if (questdb.currentquest != null) {
-				if (Application.platform == RuntimePlatform.Android && questdb.currentquest.predeployed) {
+			if (QuestManager.Instance.CurrentQuest != null) {
+				if (Application.platform == RuntimePlatform.Android && QuestManager.Instance.CurrentQuest.predeployed) {
 			
 					pre = "";
 				}
@@ -185,7 +185,7 @@ public class page_map : PageController
 				}
 			}
 				
-			if (questdb.currentquest == null) {
+			if (QuestManager.Instance.CurrentQuest == null) {
 				updateMapMarkerInFoyer ();
 				GameObject forthAndBackButtonsPanel = GameObject.Find ("ForthAndBackButtons");
 				if (forthAndBackButtonsPanel != null)
@@ -473,7 +473,7 @@ public class page_map : PageController
 				} else if (File.Exists (qrh.hotspot.getAttribute ("img"))) {
 					www = new WWW (url);
 					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
-				} else if (questdb.currentquest != null && questdb.currentquest.predeployed) {
+				} else if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.predeployed) {
 					www = new WWW (url);
 					StartCoroutine (createMarkerAfterImageLoaded (www, qrh));
 				}
@@ -542,8 +542,8 @@ public class page_map : PageController
 	{
 
 
-//		Debug.Log (questdb.currentquest.currentpage.type);
-		if (questdb.currentquest.currentpage.type == "MapOSM") {
+//		Debug.Log (QuestManager.Instance.CurrentQuest.currentpage.type);
+		if (QuestManager.Instance.CurrentQuest.currentpage.type == "MapOSM") {
 
 
 			foreach (RoutePoint rp in currentroute.points) {
@@ -655,7 +655,7 @@ public class page_map : PageController
 			// TODO do not draw radius circles on real devices:
 #if (UNITY_WEBPLAYER || UNITY_EDITOR) 
 
-			if (questdb.currentquest != null && questdb.currentquest.Id != 0) {
+			if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.Id != 0) {
 				go.AddComponent<circletests> ();
 				go.GetComponent<circletests> ().radius = qrh.hotspot.radius;
 			}
@@ -801,8 +801,8 @@ public class page_map : PageController
 			map.HasMoved = true;
 		}
 
-		if (questdb != null && questdb.currentquest != null)
-			InitBackButton (questdb.currentquest.AllowReturn);
+		if (questdb != null && QuestManager.Instance.CurrentQuest != null)
+			InitBackButton (QuestManager.Instance.CurrentQuest.AllowReturn);
 	}
 	
 	#if DEBUG_PROFILE
@@ -859,9 +859,9 @@ public class page_map : PageController
 		}
 
 		bool showForthButton = 
-			questdb.currentquest.currentpage.onEnd != null
-			&& questdb.currentquest.currentpage.onEnd.actions != null
-			&& questdb.currentquest.currentpage.onEnd.actions.Count > 0;
+			QuestManager.Instance.CurrentQuest.currentpage.onEnd != null
+			&& QuestManager.Instance.CurrentQuest.currentpage.onEnd.actions != null
+			&& QuestManager.Instance.CurrentQuest.currentpage.onEnd.actions.Count > 0;
 		
 		if (forthbutton != null)
 			forthbutton.gameObject.SetActive (showForthButton);
