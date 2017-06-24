@@ -27,16 +27,16 @@ namespace GQ.Client.Model
 
 		#region Attributes
 
-		public string Name { get; protected set; }
+		public string Name { get; set; }
 
 		public int Id { get; set; }
 		// TODO: make setter protected
 
-		public long LastUpdate { get; protected set; }
+		public long LastUpdate { get; set; }
 
-		public string XmlFormat { get; protected set; }
+		public string XmlFormat { get; set; }
 
-		public bool IndividualReturnDefinitions { get; protected set; }
+		public bool IndividualReturnDefinitions { get; set; }
 
 		public bool IsHidden {
 			get {
