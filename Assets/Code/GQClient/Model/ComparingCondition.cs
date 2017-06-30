@@ -12,6 +12,8 @@ namespace GQ.Client.Model
 
 		#region Structure
 
+		public I_GQML Parent { get; set; }
+
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;

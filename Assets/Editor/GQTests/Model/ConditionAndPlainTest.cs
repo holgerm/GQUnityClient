@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 					</and>");
 
@@ -32,7 +32,7 @@ namespace GQTests.Model
 		public void Single_EQ_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<eq>
 							<bool>true</bool>
@@ -49,7 +49,7 @@ namespace GQTests.Model
 		public void Single_LT_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<lt>
 							<num>10</num>
@@ -66,7 +66,7 @@ namespace GQTests.Model
 		public void Single_GT_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<gt>
 							<num>10</num>
@@ -83,7 +83,7 @@ namespace GQTests.Model
 		public void Mixed_4_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<leq>
 							<num>10.8</num>
@@ -112,7 +112,7 @@ namespace GQTests.Model
 		public void Mixed_T_F_T_F_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<eq>
 							<num>10</num>
@@ -141,7 +141,7 @@ namespace GQTests.Model
 		public void Mixed_T_T_F_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<eq>
 							<num>10</num>

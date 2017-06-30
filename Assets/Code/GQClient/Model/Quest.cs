@@ -58,8 +58,11 @@ namespace GQ.Client.Model
 		public IPage GetPageWithID (int id)
 		{
 			IPage page;
-			pageDict.TryGetValue (id, out page);
-			return page;
+			if (pageDict.TryGetValue (id, out page)) {
+				return page;
+			} else {
+				return Page.Null;
+			}
 		}
 
 		protected IPage startPage;
@@ -125,7 +128,7 @@ namespace GQ.Client.Model
 		#endregion
 
 
-		#region IXmlSerializable
+		#region Structure
 
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
@@ -184,7 +187,7 @@ namespace GQ.Client.Model
 			Id = GQML.GetIntAttribute (GQML.QUEST_ID, reader);
 			XmlFormat = GQML.GetStringAttribute (GQML.QUEST_XMLFORMAT, reader);
 			LastUpdate = GQML.GetLongAttribute (GQML.QUEST_LASTUPDATE, reader);
-			IndividualReturnDefinitions = GQML.GetBoolAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader);
+			IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader);
 		}
 
 		void ReadPage (XmlReader reader, XmlRootAttribute xmlRootAttr)
@@ -215,6 +218,7 @@ namespace GQ.Client.Model
 			xmlRootAttr.ElementName = GQML.PAGE;
 			serializer = new XmlSerializer (pageType, xmlRootAttr);
 			IPage page = (IPage)serializer.Deserialize (reader);
+			page.Parent = this;
 			if (pageDict.Count == 0)
 				StartPage = page;
 			pageDict.Add (page.Id, page);
@@ -233,12 +237,12 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
-		public void Start ()
+		public virtual void Start ()
 		{
 			if (StartPage == null)
 				return;
 
-			StartPage.Start (this);
+			StartPage.Start ();
 		}
 
 		public void GoBackOnePage ()
@@ -250,7 +254,7 @@ namespace GQ.Client.Model
 				_allowReturn--;
 
 			questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-			questdb.changePage (show.id);
+			questdb.changePage (show.Id);
 
 		}
 
@@ -309,6 +313,10 @@ namespace GQ.Client.Model
 				IndividualReturnDefinitions = false;
 			}
 
+			public override void Start ()
+			{
+				Log.WarnDeveloper ("Null Quest started.");
+			}
 		}
 
 		#endregion

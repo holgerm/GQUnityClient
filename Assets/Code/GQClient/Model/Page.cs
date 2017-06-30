@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Runtime.Serialization;
 using System;
 using System.Linq;
 using System.Text;
@@ -19,12 +18,11 @@ namespace GQ.Client.Model
 {
 	
 
-	[System.Serializable]
 	[XmlRoot (GQML.PAGE)]
 	public abstract class Page : IPage
 	{
 
-		#region XML Serialization
+		#region Structure
 
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
@@ -34,6 +32,12 @@ namespace GQ.Client.Model
 		public void WriteXml (System.Xml.XmlWriter writer)
 		{
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
+		}
+
+		public virtual Quest Quest {
+			get {
+				return Parent;
+			}
 		}
 
 		/// <summary>
@@ -88,21 +92,23 @@ namespace GQ.Client.Model
 			XmlSerializer serializer;
 
 			switch (reader.LocalName) {
-			case GQML.ON_START:
-				xmlRootAttr.ElementName = GQML.ON_START;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				StartTrigger = (Trigger)serializer.Deserialize (reader);
+				case GQML.ON_START:
+					xmlRootAttr.ElementName = GQML.ON_START;
+					serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
+					StartTrigger = (Trigger)serializer.Deserialize(reader);
+					StartTrigger.Parent = this;
 				break;
-			case GQML.ON_END:
-				xmlRootAttr.ElementName = GQML.ON_END;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				EndTrigger = (Trigger)serializer.Deserialize (reader);
-				break;
-			// UNKOWN CASE:
-			default:
-				Log.WarnDeveloper ("Page has additional unknown {0} element. (Ignored)", reader.LocalName);
-				reader.Skip ();
-				break;
+				case GQML.ON_END:
+					xmlRootAttr.ElementName = GQML.ON_END;
+					serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
+					EndTrigger = (Trigger)serializer.Deserialize (reader);
+					EndTrigger.Parent = this;
+					break;
+				// UNKOWN CASE:
+				default:
+					Log.WarnDeveloper ("Page has additional unknown {0} element. (Ignored)", reader.LocalName);
+					reader.Skip ();
+					break;
 			}
 		}
 
@@ -123,28 +129,9 @@ namespace GQ.Client.Model
 			result = null;
 		}
 
-		Quest quest;
+		public virtual Quest Parent { get; set; }
 
-		public Quest Quest {
-			get {
-				return quest;
-			}
-			protected set {
-				quest = value;
-			}
-		}
-
-		[XmlAttribute ("id")]
-		public int id;
-
-		public int Id {
-			get {
-				return id;
-			}
-			protected set {
-				id = value;
-			}
-		}
+		public int Id { get; protected set; }
 
 		[XmlAttribute ("type"), Obsolete]
 		public string
@@ -177,10 +164,9 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
-		public virtual void Start (Quest quest)
+		public virtual void Start ()
 		{
-			Quest = quest;
-			Quest.CurrentPage = this;
+			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
 			StartTrigger.Initiate ();
 		}
@@ -189,6 +175,38 @@ namespace GQ.Client.Model
 		{
 			State = GQML.STATE_SUCCEEDED;
 			EndTrigger.Initiate ();
+		}
+
+		#endregion
+
+
+		#region Null Object
+
+		public static readonly Page Null = new NullPage ();
+
+		private class NullPage : Page
+		{
+
+			public NullPage ()
+				: base ()
+			{
+				Id = 0;
+				State = GQML.STATE_NEW;
+			}
+
+			public override Quest Parent { 
+				get {
+					return Quest.Null;
+				}
+			}
+
+			public override void Start ()
+			{
+				Log.WarnDeveloper ("Null Page started in quest {0} (id: {1})", Parent.Name, Parent.Id);
+				Parent.CurrentPage = this;
+				State = GQML.STATE_RUNNING;
+				StartTrigger.Initiate ();
+			}
 		}
 
 		#endregion

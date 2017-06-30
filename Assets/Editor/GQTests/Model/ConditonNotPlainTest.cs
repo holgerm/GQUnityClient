@@ -20,21 +20,21 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			NotCondition condition = parseXML<NotCondition> 
+			ConditionNot condition = parseXML<ConditionNot> 
 				(@"	<not>
 					</not>");
 
 			// Assert:
 			Assert.IsNotNull (condition);
 			Assert.IsFalse (condition.IsFulfilled ());
-			Assert.AreEqual (NotCondition.NOT_CONDITION_PROBLEM_EMPTY, Log.GetLastProblem ().Message);
+			Assert.AreEqual (ConditionNot.NOT_CONDITION_PROBLEM_EMPTY, Log.GetLastProblem ().Message);
 		}
 
 		[Test]
 		public void Single_True ()
 		{
 			// Act:
-			NotCondition condition = parseXML<NotCondition> 
+			ConditionNot condition = parseXML<ConditionNot> 
 				(@"	<not>
 						<eq>
 							<bool>true</bool>
@@ -51,7 +51,7 @@ namespace GQTests.Model
 		public void Single_False ()
 		{
 			// Act:
-			NotCondition condition = parseXML<NotCondition> 
+			ConditionNot condition = parseXML<ConditionNot> 
 				(@"	<not>
 						<lt>
 							<num>10</num>
@@ -68,7 +68,7 @@ namespace GQTests.Model
 		public void TwoAtomicCond_NotAllowed ()
 		{
 			// Act:
-			NotCondition condition = parseXML<NotCondition> 
+			ConditionNot condition = parseXML<ConditionNot> 
 				(@"	<not>
 						<eq>
 							<bool>true</bool>
@@ -83,14 +83,14 @@ namespace GQTests.Model
 			// Assert:
 			Assert.IsNotNull (condition);
 			Assert.IsFalse (condition.IsFulfilled ());
-			Assert.AreEqual (NotCondition.NOT_CONDITION_PROBLEM_TOO_MANY_ATOMIC_CONIDITIONS, Log.GetLastProblem ().Message);
+			Assert.AreEqual (ConditionNot.NOT_CONDITION_PROBLEM_TOO_MANY_ATOMIC_CONIDITIONS, Log.GetLastProblem ().Message);
 		}
 
 		[Test]
 		public void FourAtomicCond_NotAllowed ()
 		{
 			// Act:
-			NotCondition condition = parseXML<NotCondition> 
+			ConditionNot condition = parseXML<ConditionNot> 
 				(@"	<not>
 						<lt>
 							<num>110</num>
@@ -113,7 +113,7 @@ namespace GQTests.Model
 			// Assert:
 			Assert.IsNotNull (condition);
 			Assert.IsFalse (condition.IsFulfilled ());
-			Assert.AreEqual (NotCondition.NOT_CONDITION_PROBLEM_TOO_MANY_ATOMIC_CONIDITIONS, Log.GetLastProblem ().Message);
+			Assert.AreEqual (ConditionNot.NOT_CONDITION_PROBLEM_TOO_MANY_ATOMIC_CONIDITIONS, Log.GetLastProblem ().Message);
 		}
 
 	}

@@ -1022,7 +1022,7 @@ public class questdatabase : MonoBehaviour
 		
 		if (canPlayQuest (QuestManager.Instance.CurrentQuest) && hasmorethanmetadata) {
 
-			StartCoroutine (waitForSpriteConversion (QuestManager.Instance.CurrentQuest.currentpage.id));
+			StartCoroutine (waitForSpriteConversion (QuestManager.Instance.CurrentQuest.currentpage.Id));
 
 		} else {
 			
@@ -1950,7 +1950,7 @@ public class questdatabase : MonoBehaviour
 		}
 		if (canPlayQuest (QuestManager.Instance.CurrentQuest) && hasmorethanmetadata) {
 			if (Application.isWebPlayer) {
-				reallyStartQuest (QuestManager.Instance.CurrentQuest.currentpage.id);
+				reallyStartQuest (QuestManager.Instance.CurrentQuest.currentpage.Id);
 			} else {
 				if (!localload) {
 					//				Debug.Log ("WAITING FOR QUEST ASSETS");
@@ -1960,9 +1960,9 @@ public class questdatabase : MonoBehaviour
 					if (loadlogo != null) {
 						loadlogo.enable ();
 					}
-					StartCoroutine (waitforquestassets (nq.currentpage.id, 0f));
+					StartCoroutine (waitforquestassets (nq.currentpage.Id, 0f));
 				} else {
-					StartCoroutine (waitForSpriteConversion (nq.currentpage.id));
+					StartCoroutine (waitForSpriteConversion (nq.currentpage.Id));
 				}
 			}
 		} else {
@@ -2493,7 +2493,7 @@ public class questdatabase : MonoBehaviour
 		foreach (Page qp in QuestManager.Instance.CurrentQuest.PageList) {
 			
 			
-			if (qp.id == id) {
+			if (qp.Id == id) {
 
 				resultpage = qp;
 
@@ -2566,7 +2566,7 @@ public class questdatabase : MonoBehaviour
 		   
 		foreach (Page qp in QuestManager.Instance.CurrentQuest.PageList) {
 
-			if (qp.id.Equals (id)) {
+			if (qp.Id.Equals (id)) {
 
 				QuestManager.Instance.CurrentQuest.currentpage = qp;
 				QuestManager.Instance.CurrentQuest.currentpage.stateOld = "running";

@@ -64,6 +64,12 @@ namespace GQ.Client.Model
 		public const string ACTION_ATTRIBUTE_VARNAME = "var";
 		public const string ACTION_ATTRIBUTE_FROMVARNAME = "FromVar";
 		public const string ACTION_SETVARIABLE_VALUE = "value";
+		public const string ACTION_STARTMISSION_ALLOWRETURN = "allowReturn";
+
+		// IF ACTION:
+		public const string IF = "if";
+		public const string THEN = "then";
+		public const string ELSE = "else";
 
 		//CONDITIONS:
 		public const string CONDITION = "condition";
@@ -136,10 +142,18 @@ namespace GQ.Client.Model
 			return val;
 		}
 
-		public static bool GetBoolAttribute (string attributeName, XmlReader reader, bool defaultVal = false)
+		public static bool GetOptionalBoolAttribute (string attributeName, XmlReader reader, bool defaultVal = false)
 		{
 			string attString = getAttr (attributeName, "Bool", reader);
 			bool val = defaultVal;
+			bool.TryParse (attString, out val);
+			return val;
+		}
+
+		public static bool GetRequiredBoolAttribute (string attributeName, XmlReader reader)
+		{
+			string attString = getAttr (attributeName, "Bool", reader);
+			bool val = false;
 			if (!bool.TryParse (attString, out val)) {
 				Log.SignalErrorToDeveloper (
 					"Bool attribute {0} for a page could not be parsed. We found: {1}.", 
@@ -176,6 +190,28 @@ namespace GQ.Client.Model
 
 			return reader.GetAttribute (attributeName);
 		}
+
+		private static List<string> expressionNodeNames = 
+			new List<string> (
+				new string[] { NUMBER, STRING, BOOL, VARIABLE });
+
+
+		internal static bool IsExpressionType (string xmlExpressionCandidate)
+		{
+			return expressionNodeNames.Contains (xmlExpressionCandidate);
+		}
+
+		private static List<string> conditionNodeNames = 
+			new List<string> (
+				new string[] { AND, OR, NOT, GREATER_THAN, GREATER_EQUAL, EQUAL, LESS_EQUAL, LESS_THAN });
+
+
+		internal static bool IsConditionType (string xmlConditionCandidate)
+		{
+			return conditionNodeNames.Contains (xmlConditionCandidate);
+		}
+
+
 
 		#endregion
 

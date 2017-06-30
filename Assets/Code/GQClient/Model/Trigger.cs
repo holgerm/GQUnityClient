@@ -7,10 +7,10 @@ using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
-	public class Trigger : IXmlSerializable
+	public class Trigger : IXmlSerializable, IActionListContainer
 	{
 
-		#region XML Serialization
+		#region Structure
 
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
@@ -20,6 +20,15 @@ namespace GQ.Client.Model
 		public void WriteXml (System.Xml.XmlWriter writer)
 		{
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
+		}
+
+
+		public ITriggerContainer Parent { get; internal set; }
+
+		public Quest Quest {
+			get {
+				return Parent.Quest;
+			}
 		}
 
 		/// <summary>
@@ -38,11 +47,11 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			if (reader.NodeType != XmlNodeType.Element || !isTriggerType (reader.LocalName)) {
+			while (reader.NodeType != XmlNodeType.Element || !isTriggerType (reader.LocalName)) {
 				// skip this unexpected inner node
-				Log.SignalErrorToDeveloper ("Unexpected xml {0} {1} found in expression list.", reader.NodeType, reader.LocalName);
+				Log.SignalErrorToDeveloper ("Unexpected xml {0} {1} found where trigger was expected.", 
+					reader.NodeType, reader.LocalName);
 				reader.Read ();
-				return;
 			}
 
 			string triggerName = reader.LocalName;
@@ -51,7 +60,7 @@ namespace GQ.Client.Model
 			xmlRootAttr.IsNullable = true;
 			XmlSerializer serializer;
 
-			// consume starting Trigger element:
+			// consume starting Trigger element:				
 			reader.Read ();
 
 			while (!GQML.IsReaderAtEnd (reader, triggerName)) {
@@ -62,6 +71,9 @@ namespace GQ.Client.Model
 				if (GQML.IsReaderAtStart (reader, GQML.RULE)) {
 					xmlRootAttr.ElementName = GQML.RULE;
 					serializer = new XmlSerializer (typeof(Rule), xmlRootAttr);
+					Rule rule = (Rule)serializer.Deserialize (reader);
+					rule.Parent = this;
+					containedRules.Add(rule);
 				} else if (reader.NodeType == XmlNodeType.None) {
 					Log.WarnDeveloper ("Trigger {0} has incorrect xml.", triggerName);
 					return;
@@ -89,7 +101,6 @@ namespace GQ.Client.Model
 
 		public virtual void Initiate ()
 		{
-			Debug.Log ("Trigger.Perform: #" + containedRules.Count);
 			foreach (Rule rule in containedRules) {
 				rule.Apply ();
 			}

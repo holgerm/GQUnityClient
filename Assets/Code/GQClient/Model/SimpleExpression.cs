@@ -33,7 +33,7 @@ namespace GQ.Client.Model
 		/// <param name="reader">Reader.</param>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-			if (reader.NodeType != XmlNodeType.Element || !ExpressionHelper.isExpressionType (reader.LocalName)) {
+			if (reader.NodeType != XmlNodeType.Element || !GQML.IsExpressionType (reader.LocalName)) {
 				Log.SignalErrorToDeveloper (
 					"Instead of an xml element of an expression we got an {0} with name {1}", 
 					reader.NodeType.ToString (),

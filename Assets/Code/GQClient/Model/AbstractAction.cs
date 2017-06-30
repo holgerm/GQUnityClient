@@ -21,12 +21,20 @@ namespace GQ.Client.Model
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
 
+		public I_GQML Parent { get;  set; }
+
+		public Quest Quest {
+			get {
+				return Parent.Quest;
+			}
+		}
+
 		/// <summary>
 		/// Reader is at action element when we call this method. 
 		/// The complete action node incl. the end element is consumed when we leave.
 		/// </summary>
 		/// <param name="reader">Reader.</param>
-		public void ReadXml (XmlReader reader)
+		public virtual void ReadXml (XmlReader reader)
 		{
 			GQML.AssertReaderAtStart (reader, GQML.ACTION);
 

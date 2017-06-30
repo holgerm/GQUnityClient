@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> (@"<leq></leq>");
+			ConditionLeq condition = parseXML<ConditionLeq> (@"<leq></leq>");
 
 			// Assert:
 			Assert.IsNotNull (condition);
@@ -30,7 +30,7 @@ namespace GQTests.Model
 		public void Bool_True ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<bool>
 							true
@@ -46,7 +46,7 @@ namespace GQTests.Model
 		public void Bool_True_False ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<bool>
 							true
@@ -65,7 +65,7 @@ namespace GQTests.Model
 		public void Bool_False_True ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<bool>
 							false
@@ -84,7 +84,7 @@ namespace GQTests.Model
 		public void Num_13 ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>
 							13
@@ -100,7 +100,7 @@ namespace GQTests.Model
 		public void Num_2_1 ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>2</num>
 						<num>1</num>
@@ -115,7 +115,7 @@ namespace GQTests.Model
 		public void Num_1_2 ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>1</num>
 						<num>2</num>
@@ -130,7 +130,7 @@ namespace GQTests.Model
 		public void Num_4_3_2_1 ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>4</num>
 						<num>3</num>
@@ -147,7 +147,7 @@ namespace GQTests.Model
 		public void Num_4_3_3_2_1 ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>4</num>
 						<num>3</num>
@@ -165,7 +165,7 @@ namespace GQTests.Model
 		public void Num_Floats_True ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>2.01</num>
 						<num>2.003</num>
@@ -180,7 +180,7 @@ namespace GQTests.Model
 		public void Num_Floats_False ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>2.01</num>
 						<num>2.013</num>
@@ -195,7 +195,7 @@ namespace GQTests.Model
 		public void Num_Floats_Equal ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>2.013</num>
 						<num>2.013</num>
@@ -210,7 +210,7 @@ namespace GQTests.Model
 		public void Num_Floats_5_False ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<num>17.07</num>
 						<num>16.01</num>
@@ -228,7 +228,7 @@ namespace GQTests.Model
 		public void Text_Single ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<string>
 							abc
@@ -244,7 +244,7 @@ namespace GQTests.Model
 		public void Text_4_False ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<string>
 							zora
@@ -269,7 +269,7 @@ namespace GQTests.Model
 		public void Text_5_True ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<string>
 							die
@@ -297,7 +297,7 @@ namespace GQTests.Model
 		public void Var_X ()
 		{
 			// Act:
-			LessEqualCondition condition = parseXML<LessEqualCondition> 
+			ConditionLeq condition = parseXML<ConditionLeq> 
 				(@"	<leq>
 						<var>
 							x

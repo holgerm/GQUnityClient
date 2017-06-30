@@ -13,99 +13,21 @@ namespace GQ.Client.Model
 	public class PageNPCTalk : Page
 	{
 
-		#region Null
-
-		public static NullDialogItem Null = new NullDialogItem ();
-
-		public class NullDialogItem : DialogItem
-		{
-
-			internal NullDialogItem ()
-			{
-				
-			}
-		}
-
-		#endregion
-
 		#region State
 
-		protected string endButtonText;
+		public string EndButtonText { get; set ; }
 
-		public string EndButtonText {
-			get {
-				return endButtonText;
-			}
-			protected set {
-				endButtonText = value;
-			}
-		}
+		public string ImageUrl { get; set; }
 
-		protected string imageUrl;
+		public string NextDialogButtonText { get; set; }
 
-		public string ImageUrl {
-			get {
-				return imageUrl;
-			}
-			protected set {
-				imageUrl = value;
-			}
-		}
+		public string DisplayMode { get; set; }
 
-		protected string nextDialogButtonText;
+		public bool SkipWordTicker { get; set; }
 
-		public string NextDialogButtonText {
-			get {
-				return nextDialogButtonText;
-			}
-			protected set {
-				nextDialogButtonText = value;
-			}
-		}
+		public int TextSize { get; set; }
 
-		protected string displayMode;
-
-		public string DisplayMode {
-			get {
-				return displayMode;
-			}
-			protected set {
-				displayMode = value;
-			}
-		}
-
-		protected bool skipWordTicker;
-
-		public bool SkipWordTicker {
-			get {
-				return skipWordTicker;
-			}
-			protected set {
-				skipWordTicker = value;
-			}
-		}
-
-		protected int textSize;
-
-		public int TextSize {
-			get {
-				return textSize;
-			}
-			protected set {
-				textSize = value;
-			}
-		}
-
-		protected int tickerSpeed;
-
-		public int TickerSpeed {
-			get {
-				return tickerSpeed;
-			}
-			protected set {
-				tickerSpeed = value;
-			}
-		}
+		public int TickerSpeed { get; set; }
 
 		protected List<DialogItem> dialogItems = new List<DialogItem> ();
 
@@ -113,7 +35,7 @@ namespace GQ.Client.Model
 			get {
 				if (CurDialogItemNo == 0) 
 				// cannot be negative or beyond limit cf. property setter.
-				return Null;
+					return DialogItem.Null;
 				else
 					return dialogItems [CurDialogItemNo - 1];
 			}
@@ -140,9 +62,9 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
-		public override void Start (Quest quest)
+		public override void Start ()
 		{
-			base.Start (quest);
+			base.Start ();
 			CurDialogItemNo++;
 		}
 
@@ -150,14 +72,6 @@ namespace GQ.Client.Model
 		{
 			CurDialogItemNo++;
 		}
-
-		public override void End ()
-		{
-			State = GQML.STATE_SUCCEEDED;
-			// TODO: Invoke onEnd Trigger ...
-
-		}
-
 
 		#endregion
 
@@ -172,7 +86,7 @@ namespace GQ.Client.Model
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_IMAGEURL, reader);
 			DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
 			NextDialogButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
-			SkipWordTicker = GQML.GetBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader);
+			SkipWordTicker = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader);
 			TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
 			TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader);
 		}

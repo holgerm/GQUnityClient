@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> (@"<lt></lt>");
+			ConditionLt condition = parseXML<ConditionLt> (@"<lt></lt>");
 
 			// Assert:
 			Assert.IsNotNull (condition);
@@ -30,7 +30,7 @@ namespace GQTests.Model
 		public void Bool_True ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<bool>
 							true
@@ -46,7 +46,7 @@ namespace GQTests.Model
 		public void Bool_True_False ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<bool>
 							true
@@ -65,7 +65,7 @@ namespace GQTests.Model
 		public void Bool_False_True ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<bool>
 							false
@@ -84,7 +84,7 @@ namespace GQTests.Model
 		public void Num_13 ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>
 							13
@@ -100,7 +100,7 @@ namespace GQTests.Model
 		public void Num_2_1 ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>2</num>
 						<num>1</num>
@@ -115,7 +115,7 @@ namespace GQTests.Model
 		public void Num_1_2 ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>1</num>
 						<num>2</num>
@@ -130,7 +130,7 @@ namespace GQTests.Model
 		public void Num_4_3_2_1 ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>4</num>
 						<num>3</num>
@@ -147,7 +147,7 @@ namespace GQTests.Model
 		public void Num_4_3_3_2_1 ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>4</num>
 						<num>3</num>
@@ -165,7 +165,7 @@ namespace GQTests.Model
 		public void Num_Floats_True ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>2.01</num>
 						<num>2.003</num>
@@ -180,7 +180,7 @@ namespace GQTests.Model
 		public void Num_Floats_False ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>2.01</num>
 						<num>2.013</num>
@@ -195,7 +195,7 @@ namespace GQTests.Model
 		public void Num_Floats_Equal ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>2.013</num>
 						<num>2.013</num>
@@ -210,7 +210,7 @@ namespace GQTests.Model
 		public void Num_Floats_5_False ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<num>17.07</num>
 						<num>16.01</num>
@@ -228,7 +228,7 @@ namespace GQTests.Model
 		public void Text_Single ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<string>
 							abc
@@ -244,7 +244,7 @@ namespace GQTests.Model
 		public void Text_4_False ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<string>
 							zora
@@ -269,7 +269,7 @@ namespace GQTests.Model
 		public void Text_3_True ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<string>
 							die
@@ -291,7 +291,7 @@ namespace GQTests.Model
 		public void Var_X ()
 		{
 			// Act:
-			LessCondition condition = parseXML<LessCondition> 
+			ConditionLt condition = parseXML<ConditionLt> 
 				(@"	<lt>
 						<var>
 							x

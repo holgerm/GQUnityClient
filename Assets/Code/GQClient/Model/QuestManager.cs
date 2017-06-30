@@ -17,15 +17,11 @@ namespace GQ.Client.Model
 
 		private Dictionary<int, Quest> quests;
 
-		protected Quest currentQuest;
+		public Quest CurrentQuest { get; set; }
 
-		public Quest CurrentQuest {
-			get {
-				return currentQuest;
-			}
-			set {
-				currentQuest = value;
-			}
+		public Page CurrentPage { 
+			get; 
+			set;
 		}
 
 		/// <summary>

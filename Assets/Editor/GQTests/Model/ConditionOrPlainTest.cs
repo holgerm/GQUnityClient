@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 					</or>");
 
@@ -32,7 +32,7 @@ namespace GQTests.Model
 		public void Single_EQ_True ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<eq>
 							<bool>true</bool>
@@ -49,7 +49,7 @@ namespace GQTests.Model
 		public void Single_LT_True ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<lt>
 							<num>10</num>
@@ -66,7 +66,7 @@ namespace GQTests.Model
 		public void Single_GT_False ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<gt>
 							<num>10</num>
@@ -83,7 +83,7 @@ namespace GQTests.Model
 		public void Mixed_T_F_F_F_True ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<leq>
 							<num>10.8</num>
@@ -112,7 +112,7 @@ namespace GQTests.Model
 		public void Mixed_F_F_T_False ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<eq>
 							<num>10</num>
@@ -137,7 +137,7 @@ namespace GQTests.Model
 		public void Mixed_F_F_F_F_False ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<eq>
 							<num>10</num>

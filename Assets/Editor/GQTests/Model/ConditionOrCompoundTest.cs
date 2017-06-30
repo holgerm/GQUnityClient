@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void O_Oft_True ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<or>
 							<eq>
@@ -42,7 +42,7 @@ namespace GQTests.Model
 		public void O_Off_Off_Off_Off_False ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<or>
 							<eq>
@@ -95,7 +95,7 @@ namespace GQTests.Model
 		public void O__A_Otf_Oft__A_Oft_Oft__A_Otf_Oft__True ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<and>
 							<or>
@@ -174,7 +174,7 @@ namespace GQTests.Model
 		public void O__A_Off_Oft__A_Off_Oft__A_Off_Off__True ()
 		{
 			// Act:
-			OrCondition condition = parseXML<OrCondition> 
+			ConditionOr condition = parseXML<ConditionOr> 
 				(@"	<or>
 						<and>
 							<or>

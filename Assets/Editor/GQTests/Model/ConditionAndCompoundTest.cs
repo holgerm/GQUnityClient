@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void A_A_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<and>
 							<eq>
@@ -42,7 +42,7 @@ namespace GQTests.Model
 		public void A_A_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<and>
 							<eq>
@@ -65,7 +65,7 @@ namespace GQTests.Model
 		public void A_A_A_A_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<and>
 							<and>
@@ -92,7 +92,7 @@ namespace GQTests.Model
 		public void A_AA_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<and>
 							<eq>
@@ -125,7 +125,7 @@ namespace GQTests.Model
 		public void A_AAAA_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<and>
 							<eq>
@@ -178,7 +178,7 @@ namespace GQTests.Model
 		public void A_AAAA_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<and>
 							<eq>
@@ -231,7 +231,7 @@ namespace GQTests.Model
 		public void A_O_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<or>
 							<eq>
@@ -254,7 +254,7 @@ namespace GQTests.Model
 		public void A_O_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<or>
 							<eq>
@@ -277,7 +277,7 @@ namespace GQTests.Model
 		public void A_Ot_Of_False ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<or>
 							<eq>
@@ -310,7 +310,7 @@ namespace GQTests.Model
 		public void A_Ot_Ot_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<or>
 							<eq>
@@ -343,7 +343,7 @@ namespace GQTests.Model
 		public void A_Ot_A_Ot_A_True ()
 		{
 			// Act:
-			AndCondition condition = parseXML<AndCondition> 
+			ConditionAnd condition = parseXML<ConditionAnd> 
 				(@"	<and>
 						<or>
 							<and>

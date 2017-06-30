@@ -17,26 +17,17 @@ using GQ.Client.Model;
 namespace GQ.Client.Model
 {
 	
-
-	public interface IPage : IXmlSerializable
+	public interface IPage : IXmlSerializable, ITriggerContainer
 	{
-		int Id {
-			get;
-		}
+		int Id { get; }
 
-		string Result {
-			get;
-		}
+		string Result { get; }
 
-		string State {
-			get;
-		}
+		string State { get; }
 
-		Quest Quest { 
-			get; 
-		}
+		Quest Parent { get; set; }
 
-		void Start (Quest quest);
+		void Start ();
 
 		void End ();
 	}

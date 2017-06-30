@@ -11,7 +11,7 @@ namespace GQ.Client.Model
 
 		protected override void setValue (string valueAsString)
 		{
-			value = new Value (valueAsString, Value.Type.VariableName);
+			value = new Value (valueAsString.Trim(), Value.Type.VariableName);
 		}
 
 		#endregion

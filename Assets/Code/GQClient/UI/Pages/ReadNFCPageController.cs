@@ -234,7 +234,7 @@ namespace GQ.Client.UI.Pages
 		{
 			Page show = QuestManager.Instance.CurrentQuest.previouspages [QuestManager.Instance.CurrentQuest.previouspages.Count - 1];
 			QuestManager.Instance.CurrentQuest.previouspages.Remove (QuestManager.Instance.CurrentQuest.previouspages [QuestManager.Instance.CurrentQuest.previouspages.Count - 1]);
-			questdb.changePage (show.id);
+			questdb.changePage (show.Id);
 		}
 
 		public void nextButton ()

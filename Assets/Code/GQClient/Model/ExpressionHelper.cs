@@ -38,7 +38,7 @@ namespace GQ.Client.Model
 			List<IExpression> containedExpressions = new List<IExpression> ();
 
 			while (!GQML.IsReaderAtEnd (reader, surroundingElementName)) {
-				if (reader.NodeType == XmlNodeType.Element && isExpressionType (reader.LocalName)) {
+				if (reader.NodeType == XmlNodeType.Element && GQML.IsExpressionType (reader.LocalName)) {
 					IExpression expr = ParseSingleExpressionFromXML (reader);
 					if (expr != null) {
 						containedExpressions.Add (expr);
@@ -60,7 +60,7 @@ namespace GQ.Client.Model
 		{
 			string expressionName = reader.LocalName;
 
-			if (reader.NodeType != XmlNodeType.Element || !isExpressionType (reader.LocalName)) {
+			if (reader.NodeType != XmlNodeType.Element || !GQML.IsExpressionType (reader.LocalName)) {
 				Log.SignalErrorToDeveloper (
 					"Instead of an xml element of an expression we got an {0} with name {1}", 
 					reader.NodeType.ToString (),
@@ -102,16 +102,5 @@ namespace GQ.Client.Model
 
 			return resultExpression;
 		}
-
-		private static List<string> expressionNodeNames = 
-			new List<string> (
-				new string[] { GQML.NUMBER, GQML.STRING, GQML.BOOL, GQML.VARIABLE });
-
-
-		internal static bool isExpressionType (string xmlExpressionCandidate)
-		{
-			return expressionNodeNames.Contains (xmlExpressionCandidate);
-		}
-
 	}
 }

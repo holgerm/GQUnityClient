@@ -58,7 +58,7 @@ namespace GQTests.Model.Deserialization
 			Assert.IsNotNull (page);
 
 			// Act 2:
-			page.Start (Quest.Null);
+			page.Start ();
 
 			// Assert:
 			Value varA = Variables.GetValue ("A");
@@ -119,7 +119,7 @@ namespace GQTests.Model.Deserialization
 			Assert.IsNotNull (page);
 
 			// Act 2:
-			page.Start (Quest.Null);
+			page.Start ();
 
 			// Assert:
 			Value varA = Variables.GetValue ("A");
@@ -165,7 +165,7 @@ namespace GQTests.Model.Deserialization
 			Assert.NotNull (npcPage);
 
 			// Act: Start Page:
-			npcPage.Start (q);
+			npcPage.Start ();
 
 			// Assert:
 			Assert.AreEqual (0, npcPage.CurDialogItemNo);
@@ -192,7 +192,7 @@ namespace GQTests.Model.Deserialization
 			Assert.NotNull (npcPage);
 
 			// Act: Start Page:
-			npcPage.Start (q);
+			npcPage.Start ();
 
 			// Assert:
 			Assert.AreEqual (1, npcPage.CurDialogItemNo);
@@ -224,7 +224,7 @@ namespace GQTests.Model.Deserialization
 			Assert.NotNull (npcPage);
 
 			// Act: Start Page:
-			npcPage.Start (q);
+			npcPage.Start ();
 
 			// Assert:
 			Assert.AreEqual (1, npcPage.CurDialogItemNo);
@@ -289,20 +289,17 @@ namespace GQTests.Model.Deserialization
 			q.Start ();
 
 			// Assert:
-			// TODO
-			Assert.AreEqual (30194, q.CurrentPage.Id);
-			Assert.AreEqual (GQML.STATE_RUNNING, q.CurrentPage.State);
+			Assert.AreEqual (30194, QuestManager.Instance.CurrentPage.Id);
+			Assert.AreEqual (GQML.STATE_RUNNING, QuestManager.Instance.CurrentPage.State);
 			Assert.AreEqual (GQML.STATE_NEW, p2.State);
 
 			// Act:
 			p1.End ();
 
 			// Assert:
-			// TODO
-			Assert.AreEqual (30195, q.CurrentPage.Id);
-			Assert.AreEqual (GQML.STATE_RUNNING, q.CurrentPage.State);
+			Assert.AreEqual (30195, QuestManager.Instance.CurrentPage.Id);
+			Assert.AreEqual (GQML.STATE_RUNNING, QuestManager.Instance.CurrentPage.State);
 			Assert.AreEqual (GQML.STATE_SUCCEEDED, p1.State);
 		}
-
 	}
 }

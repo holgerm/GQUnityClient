@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> (@"<eq></eq>");
+			ConditionEq condition = parseXML<ConditionEq> (@"<eq></eq>");
 
 			// Assert:
 			Assert.IsNotNull (condition);
@@ -30,7 +30,7 @@ namespace GQTests.Model
 		public void SingleBool ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<bool>
 							true
@@ -46,7 +46,7 @@ namespace GQTests.Model
 		public void Num_Float_True ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<num>
 							13.02
@@ -62,7 +62,7 @@ namespace GQTests.Model
 		public void Num_Float_4_True ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<num>
 							13.02
@@ -87,7 +87,7 @@ namespace GQTests.Model
 		public void Num_Int_4_False ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<num>
 							13
@@ -112,7 +112,7 @@ namespace GQTests.Model
 		public void Text_Single ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<string>
 							hallo
@@ -128,7 +128,7 @@ namespace GQTests.Model
 		public void Text_4_WithWhiteSpace_Equal ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<string>
 							hallo
@@ -153,7 +153,7 @@ namespace GQTests.Model
 		public void Text_4_NoWhiteSpace_Equal ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<string>hallo</string>
 						<string>hallo</string>
@@ -170,7 +170,7 @@ namespace GQTests.Model
 		public void Text_4_False ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<string>
 							hallo
@@ -195,7 +195,7 @@ namespace GQTests.Model
 		public void Text_4_SpecialChars_True ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<string>
 							°!§$%&#038;/()=?,.-:;
@@ -220,7 +220,7 @@ namespace GQTests.Model
 		public void SingleVar ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<var>
 							x
@@ -236,7 +236,7 @@ namespace GQTests.Model
 		public void Bool_True_True ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<bool>true</bool>
 						<bool>true</bool>
@@ -251,7 +251,7 @@ namespace GQTests.Model
 		public void Bool_False_False_False_False ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<bool>false</bool>
 						<bool>false</bool>
@@ -268,7 +268,7 @@ namespace GQTests.Model
 		public void Bool_True_False ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<bool>true</bool>
 						<bool>false</bool>
@@ -283,7 +283,7 @@ namespace GQTests.Model
 		public void Bool_False_False_False_True ()
 		{
 			// Act:
-			EqualCondition condition = parseXML<EqualCondition> 
+			ConditionEq condition = parseXML<ConditionEq> 
 				(@"	<eq>
 						<bool>false</bool>
 						<bool>false</bool>

@@ -10,29 +10,20 @@ namespace GQ.Client.Model
 
 	public class ActionStartMission : ActionAbstract
 	{
+		#region State
+
+		public int Id { get; set; }
+
+		public bool AllowReturn { get; set;	}
+
+		#endregion
+
+
 		#region Structure
 
-		protected int id;
-
-		public int Id {
-			get {
-				return id;
-			}
-			protected set {
-				id = value;
-			}
-		}
-
-
-		protected bool allowReturn;
-
-		public bool AllowReturn {
-			get {
-				return allowReturn;
-			}
-			protected set {
-				allowReturn = value;
-			}
+		protected override void ReadAttributes(XmlReader reader) {
+			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
+			AllowReturn = GQML.GetOptionalBoolAttribute (GQML.ACTION_STARTMISSION_ALLOWRETURN, reader, false);
 		}
 
 		#endregion
@@ -42,6 +33,7 @@ namespace GQ.Client.Model
 
 		public override void Execute ()
 		{
+			Quest.GetPageWithID(Id).Start();
 		}
 
 		#endregion

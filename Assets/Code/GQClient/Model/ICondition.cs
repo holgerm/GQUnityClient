@@ -7,10 +7,10 @@ using System.Xml;
 namespace GQ.Client.Model
 {
 
-	public interface ICondition
+	public interface ICondition : IParentedXml
 	{
-
 		bool IsFulfilled ();
+
 	}
 
 }

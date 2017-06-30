@@ -28,7 +28,7 @@ namespace GQ.Client.Model
 			switch (reader.LocalName) {
 			case GQML.ACTION_SETVARIABLE_VALUE:
 				// go into the content to the next element which is the expression:
-				while (!ExpressionHelper.isExpressionType (reader.LocalName)) {
+				while (!GQML.IsExpressionType (reader.LocalName)) {
 					reader.Read ();
 				}
 				Debug.Log ("   Before Expression Read: " + reader.NodeType + " name:" + reader.LocalName + " type: " + reader.NodeType);

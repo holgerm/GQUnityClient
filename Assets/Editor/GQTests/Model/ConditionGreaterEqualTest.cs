@@ -19,7 +19,7 @@ namespace GQTests.Model
 		public void Empty ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> (@"<geq></geq>");
+			ConditionGeq condition = parseXML<ConditionGeq> (@"<geq></geq>");
 
 			// Assert:
 			Assert.IsNotNull (condition);
@@ -30,7 +30,7 @@ namespace GQTests.Model
 		public void Bool_True ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<bool>
 							true
@@ -46,7 +46,7 @@ namespace GQTests.Model
 		public void Bool_True_False ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<bool>
 							true
@@ -65,7 +65,7 @@ namespace GQTests.Model
 		public void Bool_False_True ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<bool>
 							false
@@ -84,7 +84,7 @@ namespace GQTests.Model
 		public void Bool_3_True ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<bool>
 							true
@@ -106,7 +106,7 @@ namespace GQTests.Model
 		public void Num_13 ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>
 							13
@@ -122,7 +122,7 @@ namespace GQTests.Model
 		public void Num_2_1 ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>2</num>
 						<num>1</num>
@@ -137,7 +137,7 @@ namespace GQTests.Model
 		public void Num_1_2 ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>1</num>
 						<num>2</num>
@@ -152,7 +152,7 @@ namespace GQTests.Model
 		public void Num_2_2_2 ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>2</num>
 						<num>2</num>
@@ -168,7 +168,7 @@ namespace GQTests.Model
 		public void Num_4_3_2_1 ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>4</num>
 						<num>3</num>
@@ -185,7 +185,7 @@ namespace GQTests.Model
 		public void Num_4_3_3_2_1 ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>4</num>
 						<num>3</num>
@@ -203,7 +203,7 @@ namespace GQTests.Model
 		public void Num_Floats_True ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>2.01</num>
 						<num>2.003</num>
@@ -218,7 +218,7 @@ namespace GQTests.Model
 		public void Num_Floats_False ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>2.01</num>
 						<num>2.013</num>
@@ -233,7 +233,7 @@ namespace GQTests.Model
 		public void Num_Floats_Equal ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>2.013</num>
 						<num>2.013</num>
@@ -248,7 +248,7 @@ namespace GQTests.Model
 		public void Num_Floats_5_True ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<num>17.07</num>
 						<num>16.01</num>
@@ -266,7 +266,7 @@ namespace GQTests.Model
 		public void Text_Single ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<string>
 							abc
@@ -282,7 +282,7 @@ namespace GQTests.Model
 		public void Text_3_WithWhitespace_Equal ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<string>
 							abc
@@ -304,7 +304,7 @@ namespace GQTests.Model
 		public void Text_3_NoWhitespace_Equal ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<string>abc</string>
 						<string>abc</string>
@@ -320,7 +320,7 @@ namespace GQTests.Model
 		public void Text_4_True ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<string>
 							zora
@@ -345,7 +345,7 @@ namespace GQTests.Model
 		public void Text_3_False ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<string>
 							die
@@ -367,7 +367,7 @@ namespace GQTests.Model
 		public void Var_X ()
 		{
 			// Act:
-			GreaterEqualCondition condition = parseXML<GreaterEqualCondition> 
+			ConditionGeq condition = parseXML<ConditionGeq> 
 				(@"	<geq>
 						<var>
 							x

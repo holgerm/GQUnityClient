@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Xml;
 using GQ.Client.Err;
 using System;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
-	[XmlRoot (GQML.RULE)]
-	public class Rule : IXmlSerializable
+	public class Rule : ActionList, IXmlSerializable
 	{
 
 		#region Structure
@@ -23,11 +23,6 @@ namespace GQ.Client.Model
 		{
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
-
-		/// <summary>
-		/// The contained actions.
-		/// </summary>
-		protected List<IAction> containedActions = new List<IAction> ();
 
 		/// <summary>
 		/// Reads the xml within a given rule element until it finds an action element. 
@@ -55,8 +50,9 @@ namespace GQ.Client.Model
 
 			while (!GQML.IsReaderAtEnd (reader, GQML.RULE)) {
 				
-				if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.ACTION)) {
+				if (GQML.IsReaderAtStart (reader, GQML.ACTION)) {
 					string actionName = reader.GetAttribute (GQML.ACTION_TYPE);
+					actionName = TextHelper.FirstLetterToUpper (actionName);
 					Debug.Log (string.Format ("<action type=\"{0}\"> found", actionName));
 					if (actionName == null) {
 						Log.SignalErrorToDeveloper ("Action without type attribute found.");
@@ -79,7 +75,9 @@ namespace GQ.Client.Model
 
 					serializer = new XmlSerializer (actionType, xmlRootAttr);
 					Debug.Log ("Before Action in Rule name: " + reader.LocalName + " type: " + reader.NodeType);
-					containedActions.Add ((IAction)serializer.Deserialize (reader));
+					IAction action = (IAction)serializer.Deserialize (reader);
+					action.Parent = this;
+					containedActions.Add (action);
 					Debug.Log ("After Adding to containedActions in Rule : " + reader.LocalName + " type: " + reader.NodeType);
 
 				} else {
@@ -96,16 +94,5 @@ namespace GQ.Client.Model
 		#endregion
 
 
-		#region Functions
-
-		public void Apply ()
-		{
-			foreach (var action in containedActions) {
-				action.Execute ();
-			}
-		}
-
-		#endregion
-	
 	}
 }

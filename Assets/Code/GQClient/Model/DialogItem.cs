@@ -59,7 +59,7 @@ namespace GQ.Client.Model
 
 			// Read Attributes:
 			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
-			IsBlocking = GQML.GetBoolAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
+			IsBlocking = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
 			Speaker = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_SPEAKER, reader);
 			AudioURL = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL, reader);
 
@@ -69,5 +69,20 @@ namespace GQ.Client.Model
 
 		#endregion
 	
+		#region Null
+
+		public static NullDialogItem Null = new NullDialogItem ();
+
+		public class NullDialogItem : DialogItem
+		{
+
+			internal NullDialogItem ()
+			{
+
+			}
+		}
+
+		#endregion
+
 	}
 }
