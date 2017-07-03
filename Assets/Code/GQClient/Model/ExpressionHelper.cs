@@ -70,7 +70,6 @@ namespace GQ.Client.Model
 				return null;
 			}
 
-			Debug.Log ("Helper.parseExpression: " + reader.LocalName);
 			XmlRootAttr.ElementName = reader.LocalName;
 
 			XmlSerializer serializer;

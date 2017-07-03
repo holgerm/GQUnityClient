@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
+using GQ.Client.Err;
 
 namespace GQ.Editor.Building
 {
@@ -114,13 +115,6 @@ namespace GQ.Editor.Building
 		/// </summary>
 		static internal void writeBuildDate ()
 		{
-//			if ( isWritingBuildTime ) {
-//				// prevent loops of writing buildtime due to buildtime.txt file asset changes
-//				Debug.Log("buildtime left because of monitor is active");
-//				return;
-//			}
-//
-//			isWritingBuildTime = true;
 			try {
 				CultureInfo culture = new CultureInfo ("de-DE"); 
 				if (File.Exists (ConfigurationManager.BUILD_TIME_FILE_PATH)) {
@@ -143,16 +137,11 @@ namespace GQ.Editor.Building
 
 				File.WriteAllText (ConfigurationManager.BUILD_TIME_FILE_PATH, versionString);
 				AssetDatabase.Refresh ();
-				Debug.Log ("Wrote buldtime to " + versionString);
 			} catch (Exception exc) {
-				Debug.LogWarning ("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
+				Log.SignalErrorToDeveloper ("Could not write build time file at " + ConfigurationManager.BUILD_TIME_FILE_PATH + "\n" + exc.Message);
 				return;
 			} 
-//			Debug.Log("Resetting buildtime monitor flag.");
-//			isWritingBuildTime = false;
-
 		}
-
 	}
 	
 }

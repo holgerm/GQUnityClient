@@ -21,7 +21,7 @@ namespace GQ.Client.Model
 
 		public void WriteXml (System.Xml.XmlWriter writer)
 		{
-			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
+			Log.SignalErrorToDeveloper ("WriteXML not implemented for " + GetType ().Name);
 		}
 
 		/// <summary>
@@ -53,7 +53,6 @@ namespace GQ.Client.Model
 				if (GQML.IsReaderAtStart (reader, GQML.ACTION)) {
 					string actionName = reader.GetAttribute (GQML.ACTION_TYPE);
 					actionName = TextHelper.FirstLetterToUpper (actionName);
-					Debug.Log (string.Format ("<action type=\"{0}\"> found", actionName));
 					if (actionName == null) {
 						Log.SignalErrorToDeveloper ("Action without type attribute found.");
 						reader.Skip ();
@@ -74,17 +73,13 @@ namespace GQ.Client.Model
 					}
 
 					serializer = new XmlSerializer (actionType, xmlRootAttr);
-					Debug.Log ("Before Action in Rule name: " + reader.LocalName + " type: " + reader.NodeType);
 					IAction action = (IAction)serializer.Deserialize (reader);
 					action.Parent = this;
 					containedActions.Add (action);
-					Debug.Log ("After Adding to containedActions in Rule : " + reader.LocalName + " type: " + reader.NodeType);
-
 				} else {
 					Log.SignalErrorToDeveloper ("Unexcpected xml {0} named {1} inside rule found.", reader.NodeType, reader.LocalName);
 					reader.Read ();
 				}
-				
 			} 
 
 			GQML.AssertReaderAtEnd (reader, GQML.RULE);

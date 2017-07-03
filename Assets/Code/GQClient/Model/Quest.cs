@@ -99,15 +99,21 @@ namespace GQ.Client.Model
 		public List<QuestHotspot>
 			hotspotList = new List<QuestHotspot> ();
 
-		protected Dictionary<int, QuestHotspot> hotspotDict = new Dictionary<int, QuestHotspot> ();
+		protected Dictionary<int, Hotspot> hotspotDict = new Dictionary<int, Hotspot> ();
 
-		public QuestHotspot GetHotspotWithID (int id)
+		public Hotspot GetHotspotWithID (int id)
 		{
-			QuestHotspot hotspot;
+			Hotspot hotspot;
 			hotspotDict.TryGetValue (id, out hotspot);
 			return hotspot;
 		}
 
+		public Dictionary<int, Hotspot>.ValueCollection AllHotspots {
+			get {
+				return hotspotDict.Values;
+			}
+		}
+			
 		#endregion
 
 		#region Move to QuestImporter // TODO use event system instead
@@ -164,16 +170,10 @@ namespace GQ.Client.Model
 
 				switch (reader.LocalName) {
 				case GQML.PAGE:
-					ReadPage (reader, xmlRootAttr);
+					ReadPage (reader);
 					break;
 				case GQML.HOTSPOT:
-					xmlRootAttr.ElementName = GQML.HOTSPOT;
-					serializer = new XmlSerializer (typeof(QuestHotspot), xmlRootAttr);
-					QuestHotspot hotspot = (QuestHotspot)serializer.Deserialize (reader);
-					hotspotDict.Add (hotspot.id, hotspot);
-
-					// TODO: get rid:
-					hotspotList.Add (hotspot);
+					ReadHotspot (reader);
 					break;
 				}
 			}
@@ -181,7 +181,7 @@ namespace GQ.Client.Model
 			CurrentlyParsingQuest = Null;
 		}
 
-		void ReadAttributes (XmlReader reader)
+		private void ReadAttributes (XmlReader reader)
 		{
 			Name = GQML.GetStringAttribute (GQML.QUEST_NAME, reader);
 			Id = GQML.GetIntAttribute (GQML.QUEST_ID, reader);
@@ -190,10 +190,8 @@ namespace GQ.Client.Model
 			IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader);
 		}
 
-		void ReadPage (XmlReader reader, XmlRootAttribute xmlRootAttr)
+		private void ReadPage (XmlReader reader)
 		{
-			XmlSerializer serializer;
-
 			// now the reader is at a page element:
 			string pageTypeName = reader.GetAttribute (GQML.PAGE_TYPE);
 			if (pageTypeName == null) {
@@ -215,8 +213,7 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			xmlRootAttr.ElementName = GQML.PAGE;
-			serializer = new XmlSerializer (pageType, xmlRootAttr);
+			XmlSerializer serializer = new XmlSerializer (pageType);
 			IPage page = (IPage)serializer.Deserialize (reader);
 			page.Parent = this;
 			if (pageDict.Count == 0)
@@ -226,6 +223,17 @@ namespace GQ.Client.Model
 			// TODO: get rid:
 			PageList.Add ((Page)page);
 		}
+
+		private void ReadHotspot (XmlReader reader)
+		{
+			XmlSerializer serializer = new XmlSerializer (typeof(Hotspot));
+			Hotspot hotspot = (Hotspot)serializer.Deserialize (reader);
+			hotspotDict.Add (hotspot.Id, hotspot);
+
+			// TODO: get rid:
+//			hotspotList.Add (hotspot);
+		}
+			
 
 		public void WriteXml (System.Xml.XmlWriter writer)
 		{
@@ -288,8 +296,15 @@ namespace GQ.Client.Model
 
 		public bool UsesLocation {
 			get {
-				return true;
-				// TODO check wether this quest contains map page or uses location system variables
+				return hotspotDict.Count > 0;
+				// TODO check whether this quest contains map page or uses location system variables
+			}
+		}
+
+		public bool SendsDataToServer {
+			get {
+				return false;
+				// TODO check whether this quest contains map page or uses location system variables
 			}
 		}
 

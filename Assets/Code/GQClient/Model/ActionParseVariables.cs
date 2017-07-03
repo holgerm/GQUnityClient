@@ -45,8 +45,6 @@ namespace GQ.Client.Model
 
 			string originalText = Variables.GetValue (fromVarName).AsString ();
 
-			Debug.Log ("ParseVariablesAction.Execute: fromVarName: " + fromVarName + ", content: " + originalText);
-
 			const char DELIMITER = ',';
 
 			char[] receivedChars = originalText.ToCharArray ();

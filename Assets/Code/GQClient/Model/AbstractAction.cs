@@ -71,22 +71,18 @@ namespace GQ.Client.Model
 
 		protected void tryThis (XmlReader reader)
 		{
-			Debug.Log ("******: " + !reader.IsEmptyElement);
 			if (!reader.IsEmptyElement) {
 				// consume the starting action element, when there is content
 				reader.Read (); 
-				Debug.Log ("******: " + !reader.IsEmptyElement);
 			}
 		}
 
 		protected virtual void ReadAttributes (XmlReader reader)
 		{
-			Debug.Log ("ReadAttributes() in ActionAbstract" + " we are a " + GetType ());
 		}
 
 		protected virtual void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
 		{
-			Debug.Log ("ReadContent() in ActionAbstract" + " we are a " + GetType ());
 			switch (reader.LocalName) {
 			// UNKOWN CASE:
 			default:

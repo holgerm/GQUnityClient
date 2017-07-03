@@ -75,7 +75,7 @@ namespace GQTests.Model
 		public void OnlyHotspots ()
 		{
 			// Arrange:
-			xml = parseXmlFromFile ("XML/Quests/OnlyHotspots/game.xml");
+			xml = parseXmlFromFile ("XML/Quests/OnlyThreeHotspots/game.xml");
 
 			// Act:
 			Quest q = qm.Import (xml);
@@ -85,14 +85,14 @@ namespace GQTests.Model
 				11542,
 				11543
 			};
-			QuestHotspot[] hotspots = new QuestHotspot[ids.Length];
+			Hotspot[] hotspots = new Hotspot[ids.Length];
 			int i = 0;
 			foreach (int id in ids) {
 				hotspots [i++] = q.GetHotspotWithID (id);
 			}
 
 			// Assert:
-			Assert.AreEqual ("OnlyHotspots", q.Name);
+			Assert.AreEqual ("OnlyThreeHotspots", q.Name);
 			Assert.AreEqual (9803, q.Id);
 			i = 0;
 			foreach (var h in hotspots) {

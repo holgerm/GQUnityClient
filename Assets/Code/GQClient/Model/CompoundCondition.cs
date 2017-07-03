@@ -59,8 +59,6 @@ namespace GQ.Client.Model
 
 			// and start reading the contained conditions:
 			while (!GQML.IsReaderAtEnd (reader, conditionName)) {
-				Debug.Log ("CC-Loop: node: " + reader.NodeType + " name: " + reader.LocalName);
-
 				// if we reach the end of this condition element we are ready to leave this method.
 				if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (conditionName)) {
 					break;
@@ -108,7 +106,7 @@ namespace GQ.Client.Model
 					break;
 				// UNKOWN CASE:
 				default:
-					Debug.LogError ("Unknown condition type found: " + reader.LocalName);
+					Log.SignalErrorToDeveloper ("Unknown condition type found: " + reader.LocalName);
 					break;
 				}
 			}

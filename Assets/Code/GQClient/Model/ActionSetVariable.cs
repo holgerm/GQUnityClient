@@ -24,16 +24,13 @@ namespace GQ.Client.Model
 			GQML.AssertReaderAtStart (reader, GQML.ACTION_SETVARIABLE_VALUE);
 
 			string containingElementName = reader.LocalName;
-			Debug.Log ("ReadContent() in ActionSetVariable name " + reader.LocalName + " we are a " + GetType ());
 			switch (reader.LocalName) {
 			case GQML.ACTION_SETVARIABLE_VALUE:
 				// go into the content to the next element which is the expression:
 				while (!GQML.IsExpressionType (reader.LocalName)) {
 					reader.Read ();
 				}
-				Debug.Log ("   Before Expression Read: " + reader.NodeType + " name:" + reader.LocalName + " type: " + reader.NodeType);
 				valueExpression = ExpressionHelper.ParseSingleExpressionFromXML (reader);
-				Debug.Log ("   After Expression Read: " + reader.NodeType + " name:" + reader.LocalName + " type: " + reader.NodeType);
 				break;
 			default:
 				base.ReadContent (reader, xmlRootAttr);

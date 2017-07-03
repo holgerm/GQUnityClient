@@ -19,26 +19,6 @@ namespace GQTests.Model {
 		}
 
 		[Test]
-		public void ShowReadQuests () {
-			// Arrange:
-			QuestInfo[] quests = null;
-			string publicGamesJson = Files.ReadText(QuestInfoTest.JSON_InitFromServer);
-
-			// Act:
-			try {
-				quests = QuestInfoImportExtension.ParseQuestInfoJSON(publicGamesJson);
-			} catch ( Exception e ) {
-				Debug.LogWarning("Exception occurred while reading public games json: " + e.Message);
-			}
-
-			foreach ( QuestInfo qi in quests ) {
-				Debug.Log(qi.ToString());
-			}
-
-			Debug.Log(String.Format("We have read {0} quests.", quests != null ? quests.Length : 0));
-		}
-
-		[Test]
 		public void ParseJSONString () {
 			// Arrange:
 			// TODO

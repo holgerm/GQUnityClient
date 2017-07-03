@@ -53,9 +53,6 @@ public class FlexibleWeightCorrection : MonoBehaviour
 			}
 		}
 		
-		
-		Debug.Log ("imageWidth : imageHeight  " + imageWidth + " : " + imageHeight);
-		
 		float thisHeightShare = 
 			//			(parentRect.width / parentRect.height) * 
 			(parentWidth / parentHeighth) * 

@@ -29,7 +29,7 @@ namespace GQ.Client.Model {
 
 		private int playedTimes = 0;
 
-		public string ToString () {
+		public override string ToString () {
 			StringBuilder sb = new StringBuilder();
 
 			sb.AppendFormat("{0} (id: {1})\n", name, id);

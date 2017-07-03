@@ -23,12 +23,16 @@ namespace GQ.Client.Model
 	{
 		#region Structure
 
-		protected Type type;
+		protected Type ValType {
+			get;
+			set;
+		}
+
 		protected string internalValue;
 
 		public Value (string valueAsText, Type type)
 		{
-			this.type = type;
+			this.ValType = type;
 			internalValue = valueAsText;
 		}
 
@@ -46,7 +50,7 @@ namespace GQ.Client.Model
 				return false;
 			
 			return (
-			    this.type == otherValue.type
+			    this.ValType == otherValue.ValType
 			    && this.internalValue.Equals (otherValue.internalValue)
 			);
 		}
@@ -142,7 +146,7 @@ namespace GQ.Client.Model
 
 		public Type GetType ()
 		{
-			return type;
+			return ValType;
 		}
 
 		public bool AsBool ()
@@ -150,14 +154,14 @@ namespace GQ.Client.Model
 			bool result = false;
 
 			try {
-				if (type == Type.Bool || type == Type.Text) {
+				if (ValType == Type.Bool || ValType == Type.Text) {
 					result = Convert.ToBoolean (internalValue);
 				}
-				if (type == Type.Integer) {
+				if (ValType == Type.Integer) {
 					int asInt = Convert.ToInt32 (internalValue);
 					result = Convert.ToBoolean (asInt);
 				}
-				if (type == Type.Float) {
+				if (ValType == Type.Float) {
 					double asDouble = Convert.ToDouble (internalValue);
 					result = Convert.ToBoolean (asDouble);
 				}
@@ -168,12 +172,12 @@ namespace GQ.Client.Model
 				return result;
 			} 
 
-			if (type == Type.VariableName) {
+			if (ValType == Type.VariableName) {
 				return Variables.GetValue (internalValue).AsBool ();
 			}
 
 			result = false;
-			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Bool so {2} was used instead.", internalValue, type, result);
+			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Bool so {2} was used instead.", internalValue, ValType, result);
 			return result;
 		}
 
@@ -199,10 +203,10 @@ namespace GQ.Client.Model
 			double result = 0d;
 
 			try {
-				if (type == Type.Bool || type == Type.Text) {
+				if (ValType == Type.Bool || ValType == Type.Text) {
 					result = Convert.ToDouble (internalValue);
 				}
-				if (type == Type.Integer || type == Type.Float) {
+				if (ValType == Type.Integer || ValType == Type.Float) {
 					result = Convert.ToDouble (extractNumberString (internalValue));
 				}
 				return result;
@@ -216,12 +220,12 @@ namespace GQ.Client.Model
 				return result;
 			} 
 
-			if (type == Type.VariableName) {
+			if (ValType == Type.VariableName) {
 				return Variables.GetValue (internalValue).AsDouble ();
 			}
 				
 			result = 0d;
-			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Double so {2} was used instead.", internalValue, type, result);
+			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Double so {2} was used instead.", internalValue, ValType, result);
 			return result;
 		}
 
@@ -230,10 +234,10 @@ namespace GQ.Client.Model
 			int result = 0;
 
 			try {
-				if (type == Type.Bool || type == Type.Text) {
+				if (ValType == Type.Bool || ValType == Type.Text) {
 					result = Convert.ToInt32 (internalValue);
 				}
-				if (type == Type.Integer || type == Type.Float) {
+				if (ValType == Type.Integer || ValType == Type.Float) {
 					result = Convert.ToInt32 (Convert.ToDouble (extractNumberString (internalValue)));
 				}
 				return result;
@@ -247,12 +251,12 @@ namespace GQ.Client.Model
 				return result;
 			} 
 
-			if (type == Type.VariableName) {
+			if (ValType == Type.VariableName) {
 				return Variables.GetValue (internalValue).AsInt ();
 			}
 
 			result = 0;
-			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Int so {2} was used instead.", internalValue, type, result);
+			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Int so {2} was used instead.", internalValue, ValType, result);
 			return result;
 		}
 
@@ -286,47 +290,47 @@ namespace GQ.Client.Model
 
 		public bool IsEqual (Value other)
 		{
-			if (this.type == Type.Bool) {
-				if (other.type != Type.Bool) {
-					Log.WarnAuthor ("You cannot compare Bool with " + other.type.ToString ());
+			if (this.ValType == Type.Bool) {
+				if (other.ValType != Type.Bool) {
+					Log.WarnAuthor ("You cannot compare Bool with " + other.ValType.ToString ());
 					return false;
 				} else
 					return this.internalValue.Equals (other.internalValue);
 			}
 
-			if (this.type == Type.Text) {
-				if (other.type != Type.Text) {
-					Log.WarnAuthor ("You cannot compare Text with " + other.type.ToString ());
+			if (this.ValType == Type.Text) {
+				if (other.ValType != Type.Text) {
+					Log.WarnAuthor ("You cannot compare Text with " + other.ValType.ToString ());
 					return false;
 				} else
 					return this.internalValue.Equals (other.internalValue);
 			}
 
-			if (this.type == Type.Integer) {
-				if (other.type == Type.Integer)
+			if (this.ValType == Type.Integer) {
+				if (other.ValType == Type.Integer)
 					return this.internalValue == other.internalValue;
-				else if (other.type == Type.Float)
+				else if (other.ValType == Type.Float)
 					return Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
 				else {
-					Log.WarnAuthor ("You cannot compare Number with " + other.type.ToString ());
+					Log.WarnAuthor ("You cannot compare Number with " + other.ValType.ToString ());
 					return false;
 				} 
 			}
 
-			if (this.type == Type.Float) {
-				if (other.type == Type.Float) {
+			if (this.ValType == Type.Float) {
+				if (other.ValType == Type.Float) {
 					return Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
-				} else if (other.type == Type.Integer) {
+				} else if (other.ValType == Type.Integer) {
 					return Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
 				} else {
-					Log.WarnAuthor ("You cannot compare Number with " + other.type.ToString ());
+					Log.WarnAuthor ("You cannot compare Number with " + other.ValType.ToString ());
 					return false;
 				} 
 			}
 
-			if (this.type == Type.VariableName) {
+			if (this.ValType == Type.VariableName) {
 				Value thisValue = Variables.GetValue (this.internalValue);
-				if (other.type == Type.VariableName) {
+				if (other.ValType == Type.VariableName) {
 					Value otherValue = Variables.GetValue (other.internalValue);
 					return thisValue.IsEqual (otherValue);
 				} else {
@@ -334,15 +338,15 @@ namespace GQ.Client.Model
 				}
 			}
 
-			Log.WarnDeveloper ("Unknown Value Type found when checking if isEqual between " + type.ToString () + " and " + other.type.ToString ());
+			Log.WarnDeveloper ("Unknown Value Type found when checking if isEqual between " + ValType.ToString () + " and " + other.ValType.ToString ());
 			return false;
 		}
 
 		public bool IsGreaterThan (Value other)
 		{
-			if (this.type == Type.Bool) {
-				if (other.type != Type.Bool) {
-					Log.WarnAuthor ("You cannot compare Bool with " + other.type.ToString ());
+			if (this.ValType == Type.Bool) {
+				if (other.ValType != Type.Bool) {
+					Log.WarnAuthor ("You cannot compare Bool with " + other.ValType.ToString ());
 					return false;
 				} else {
 					// true > false is the only way this can be greater than other:
@@ -350,37 +354,37 @@ namespace GQ.Client.Model
 				}
 			}
 
-			if (this.type == Type.Text) {
-				if (other.type != Type.Text) {
-					Log.WarnAuthor ("You cannot compare Text with " + other.type.ToString ());
+			if (this.ValType == Type.Text) {
+				if (other.ValType != Type.Text) {
+					Log.WarnAuthor ("You cannot compare Text with " + other.ValType.ToString ());
 					return false;
 				} else
 					return this.internalValue.CompareTo (other.internalValue) > 0;
 			}
 
-			if (this.type == Type.Integer) {
-				if (other.type == Type.Integer)
+			if (this.ValType == Type.Integer) {
+				if (other.ValType == Type.Integer)
 					return this.AsInt () > other.AsInt ();
-				else if (other.type == Type.Float)
+				else if (other.ValType == Type.Float)
 					return Values.GreaterThan (this.AsDouble (), other.AsDouble ());
 				else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.Float) {
-				if (other.type == Type.Float || other.type == Type.Integer) {
+			if (this.ValType == Type.Float) {
+				if (other.ValType == Type.Float || other.ValType == Type.Integer) {
 					return Values.GreaterThan (this.AsDouble (), other.AsDouble ());
 				} else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.VariableName) {
+			if (this.ValType == Type.VariableName) {
 				Value thisValue = Variables.GetValue (this.internalValue);
-				if (other.type == Type.VariableName) {
+				if (other.ValType == Type.VariableName) {
 					Value otherValue = Variables.GetValue (other.internalValue);
 					return thisValue.IsGreaterThan (otherValue);
 				} else {
@@ -388,15 +392,15 @@ namespace GQ.Client.Model
 				}
 			}
 
-			Log.WarnDeveloper ("Unknown Value Type found when checking if IsGreaterThan between " + this.type + " and " + other.type);
+			Log.WarnDeveloper ("Unknown Value Type found when checking if IsGreaterThan between " + this.ValType + " and " + other.ValType);
 			return false;
 		}
 
 		public bool IsGreaterOrEqual (Value other)
 		{
-			if (this.type == Type.Bool) {
-				if (other.type != Type.Bool) {
-					Log.WarnAuthor ("You cannot compare Bool with " + other.type.ToString ());
+			if (this.ValType == Type.Bool) {
+				if (other.ValType != Type.Bool) {
+					Log.WarnAuthor ("You cannot compare Bool with " + other.ValType.ToString ());
 					return false;
 				} else {
 					// true > false is the only way this can be greater than other:
@@ -404,39 +408,38 @@ namespace GQ.Client.Model
 				}
 			}
 
-			if (this.type == Type.Text) {
-				if (other.type != Type.Text) {
-					Log.WarnAuthor ("You cannot compare Text with " + other.type.ToString ());
+			if (this.ValType == Type.Text) {
+				if (other.ValType != Type.Text) {
+					Log.WarnAuthor ("You cannot compare Text with " + other.ValType.ToString ());
 					return false;
 				} else {
-					Debug.Log ("COMPARE Strings: " + internalValue + " : " + other.internalValue + " => " + this.internalValue.CompareTo (other.internalValue));
 					return this.internalValue.CompareTo (other.internalValue) >= 0;
 				}
 			}
 
-			if (this.type == Type.Integer) {
-				if (other.type == Type.Integer)
+			if (this.ValType == Type.Integer) {
+				if (other.ValType == Type.Integer)
 					return this.AsInt () >= other.AsInt ();
-				else if (other.type == Type.Float)
+				else if (other.ValType == Type.Float)
 					return Values.GreaterThan (this.AsDouble (), other.AsDouble ()) || Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
 				else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.Float) {
-				if (other.type == Type.Float || other.type == Type.Integer) {
+			if (this.ValType == Type.Float) {
+				if (other.ValType == Type.Float || other.ValType == Type.Integer) {
 					return Values.GreaterThan (this.AsDouble (), other.AsDouble ()) || Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
 				} else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.VariableName) {
+			if (this.ValType == Type.VariableName) {
 				Value thisValue = Variables.GetValue (this.internalValue);
-				if (other.type == Type.VariableName) {
+				if (other.ValType == Type.VariableName) {
 					Value otherValue = Variables.GetValue (other.internalValue);
 					return thisValue.IsGreaterOrEqual (otherValue);
 				} else {
@@ -444,15 +447,15 @@ namespace GQ.Client.Model
 				}
 			}
 
-			Log.WarnDeveloper ("Unknown Value Type found when checking if IsGreaterOrEqual between " + this.type + " and " + other.type);
+			Log.WarnDeveloper ("Unknown Value Type found when checking if IsGreaterOrEqual between " + this.ValType + " and " + other.ValType);
 			return false;
 		}
 
 		public bool IsLessThan (Value other)
 		{
-			if (this.type == Type.Bool) {
-				if (other.type != Type.Bool) {
-					Log.WarnAuthor ("You cannot compare Bool with " + other.type.ToString ());
+			if (this.ValType == Type.Bool) {
+				if (other.ValType != Type.Bool) {
+					Log.WarnAuthor ("You cannot compare Bool with " + other.ValType.ToString ());
 					return false;
 				} else {
 					// false < true is the only way this can be greater than other:
@@ -460,37 +463,37 @@ namespace GQ.Client.Model
 				}
 			}
 
-			if (this.type == Type.Text) {
-				if (other.type != Type.Text) {
-					Log.WarnAuthor ("You cannot compare Text with " + other.type.ToString ());
+			if (this.ValType == Type.Text) {
+				if (other.ValType != Type.Text) {
+					Log.WarnAuthor ("You cannot compare Text with " + other.ValType.ToString ());
 					return false;
 				} else
 					return this.internalValue.CompareTo (other.internalValue) < 0;
 			}
 
-			if (this.type == Type.Integer) {
-				if (other.type == Type.Integer)
+			if (this.ValType == Type.Integer) {
+				if (other.ValType == Type.Integer)
 					return this.AsInt () < other.AsInt ();
-				else if (other.type == Type.Float)
+				else if (other.ValType == Type.Float)
 					return Values.GreaterThan (other.AsDouble (), this.AsDouble ());
 				else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.Float) {
-				if (other.type == Type.Float || other.type == Type.Integer) {
+			if (this.ValType == Type.Float) {
+				if (other.ValType == Type.Float || other.ValType == Type.Integer) {
 					return Values.GreaterThan (other.AsDouble (), this.AsDouble ());
 				} else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.VariableName) {
+			if (this.ValType == Type.VariableName) {
 				Value thisValue = Variables.GetValue (this.internalValue);
-				if (other.type == Type.VariableName) {
+				if (other.ValType == Type.VariableName) {
 					Value otherValue = Variables.GetValue (other.internalValue);
 					return thisValue.IsLessThan (otherValue);
 				} else {
@@ -498,15 +501,15 @@ namespace GQ.Client.Model
 				}
 			}
 
-			Log.WarnDeveloper ("Unknown Value Type found when checking if IsLessThan between " + this.type + " and " + other.type);
+			Log.WarnDeveloper ("Unknown Value Type found when checking if IsLessThan between " + this.ValType + " and " + other.ValType);
 			return false;
 		}
 
 		public bool IsLessOrEqual (Value other)
 		{
-			if (this.type == Type.Bool) {
-				if (other.type != Type.Bool) {
-					Log.WarnAuthor ("You cannot compare Bool with " + other.type.ToString ());
+			if (this.ValType == Type.Bool) {
+				if (other.ValType != Type.Bool) {
+					Log.WarnAuthor ("You cannot compare Bool with " + other.ValType.ToString ());
 					return false;
 				} else {
 					// false < true is the only way this can be greater than other:
@@ -514,37 +517,37 @@ namespace GQ.Client.Model
 				}
 			}
 
-			if (this.type == Type.Text) {
-				if (other.type != Type.Text) {
-					Log.WarnAuthor ("You cannot compare Text with " + other.type.ToString ());
+			if (this.ValType == Type.Text) {
+				if (other.ValType != Type.Text) {
+					Log.WarnAuthor ("You cannot compare Text with " + other.ValType.ToString ());
 					return false;
 				} else
 					return this.internalValue.CompareTo (other.internalValue) <= 0;
 			}
 
-			if (this.type == Type.Integer) {
-				if (other.type == Type.Integer)
+			if (this.ValType == Type.Integer) {
+				if (other.ValType == Type.Integer)
 					return this.AsInt () <= other.AsInt ();
-				else if (other.type == Type.Float)
+				else if (other.ValType == Type.Float)
 					return Values.GreaterThan (other.AsDouble (), this.AsDouble ()) || Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
 				else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.Float) {
-				if (other.type == Type.Float || other.type == Type.Integer) {
+			if (this.ValType == Type.Float) {
+				if (other.ValType == Type.Float || other.ValType == Type.Integer) {
 					return Values.GreaterThan (other.AsDouble (), this.AsDouble ()) || Values.NearlyEqual (this.AsDouble (), other.AsDouble ());
 				} else {
-					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.type, other.type);
+					Log.WarnAuthor ("You cannot compare values of type {0} with values of type {1}.", this.ValType, other.ValType);
 					return false;
 				}
 			}
 
-			if (this.type == Type.VariableName) {
+			if (this.ValType == Type.VariableName) {
 				Value thisValue = Variables.GetValue (this.internalValue);
-				if (other.type == Type.VariableName) {
+				if (other.ValType == Type.VariableName) {
 					Value otherValue = Variables.GetValue (other.internalValue);
 					return thisValue.IsLessOrEqual (otherValue);
 				} else {
@@ -552,7 +555,7 @@ namespace GQ.Client.Model
 				}
 			}
 
-			Log.WarnDeveloper ("Unknown Value Type found when checking if IsLessOrEqual between " + this.type + " and " + other.type);
+			Log.WarnDeveloper ("Unknown Value Type found when checking if IsLessOrEqual between " + this.ValType + " and " + other.ValType);
 			return false;
 		}
 
@@ -562,7 +565,7 @@ namespace GQ.Client.Model
 
 		public override string ToString ()
 		{
-			return String.Format ("{0} ({1})", internalValue, type);
+			return String.Format ("{0} ({1})", internalValue, ValType);
 		}
 
 		#endregion

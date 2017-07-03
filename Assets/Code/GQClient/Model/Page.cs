@@ -16,8 +16,6 @@ using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
-	
-
 	[XmlRoot (GQML.PAGE)]
 	public abstract class Page : IPage
 	{
@@ -55,7 +53,7 @@ namespace GQ.Client.Model
 
 			if (reader.IsEmptyElement) {
 				reader.Read ();
-				Log.SignalErrorToDeveloper ("Empty ml page element found.");
+				Log.SignalErrorToDeveloper ("Empty xml page element found.");
 				return;
 			}
 
