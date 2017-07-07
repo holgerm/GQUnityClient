@@ -466,7 +466,7 @@ namespace GQ.Client.Model
 			XmlSerializer serializer = new XmlSerializer (typeof(Quest));
 
 			Quest q = serializer.Deserialize (txr) as Quest; 
-			QuestManager.Instance.Add (q);
+			QuestManager.Instance.CurrentQuest = q;
 
 			q.xmlcontent = xmlcontent;
 			q.predeployed = predeployed;

@@ -6,29 +6,40 @@ using System.Collections.Generic;
 namespace GQ.Client.Model {
 
 	/// <summary>
-	/// Manages the meta data for all quests avalibale as well locally on the device as remotely on the server.
+	/// Manages the meta data for all quests available: locally on the device as well as remotely on the server.
 	/// </summary>
-	public class QuestInfoManager {
+	public class QuestInfoManager : IEnumerable<QuestInfo> {
 
 		#region store & access data
 
-		private Dictionary <int, QuestInfo> _questDict = new Dictionary <int, QuestInfo>();
+		protected Dictionary<int, QuestInfo> QuestDict {
+			get;
+			set;
+		}
 
-		public Dictionary<int, QuestInfo> QuestDict {
-			get {
-				return _questDict;
-			}
+		public IEnumerator<QuestInfo> GetEnumerator() {
+			return QuestDict.Values.GetEnumerator();
+		}
+
+		IEnumerator<QuestInfo> IEnumerable<QuestInfo>.GetEnumerator() {
+			return QuestDict.Values.GetEnumerator();
+		}
+
+		// Must also implement IEnumerable.GetEnumerator, but implement as a private method.
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return QuestDict.Values.GetEnumerator();
 		}
 
 		public int Count {
 			get {
-				return _questDict.Count;
+				return QuestDict.Count;
 			}
 		}
 
 		public QuestInfo GetQuestInfo (int id) {
 			QuestInfo questInfo;
-			return (_questDict.TryGetValue(id, out questInfo) ? questInfo : null);
+			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
 		}
 
 		#endregion
@@ -41,10 +52,10 @@ namespace GQ.Client.Model {
 				return;
 			
 			foreach ( var q in quests ) {
-				if ( q.id == null )
+				if ( q.Id == null )
 					continue;
 				
-				_questDict.Add((int)q.id, q);
+				QuestDict.Add((int)q.Id, q);
 			}
 		}
 
@@ -69,6 +80,10 @@ namespace GQ.Client.Model {
 
 		public static void Reset () {
 			_instance = null;
+		}
+
+		public QuestInfoManager() {
+			QuestDict = new Dictionary<int, QuestInfo> ();
 		}
 
 		#endregion

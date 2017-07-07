@@ -40,10 +40,11 @@ namespace GQTests.Model {
 			qm.Import(quests);
 
 			// Assert:
-			IEnumerable<QuestInfo> questInfos = 
-				from entry in qm.QuestDict
-				select entry.Value;
-			Assert.AreEqual(0, questInfos.Count());
+			Assert.AreEqual(0, qm.Count());
+			IEnumerator<QuestInfo> questInfos = 
+				qm.GetEnumerator ();
+			Assert.IsFalse (questInfos.MoveNext ());
+				
 		}
 
 

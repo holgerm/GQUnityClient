@@ -43,10 +43,9 @@ namespace GQTests.Model
 			qm.Import (QuestInfoImportExtension.ParseQuestInfoJSON (serverJSON));
 
 			// Assert:
-			IEnumerable<QuestInfo> questInfos = 
-				from entry in qm.QuestDict
-				select entry.Value;
-			foreach (QuestInfo qi in questInfos) {
+			IEnumerator<QuestInfo> questInfos = qm.GetEnumerator();
+			while (questInfos.MoveNext()) {
+				QuestInfo qi = questInfos.Current;
 				Assert.False (qi.IsLocallyAvailable ());
 				Assert.True (qi.IsNew ());
 				Assert.True (qi.IsDownloadable ());

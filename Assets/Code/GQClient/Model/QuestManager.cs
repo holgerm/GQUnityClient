@@ -15,34 +15,12 @@ namespace GQ.Client.Model
 
 		#region quest management functions
 
-		private Dictionary<int, Quest> quests;
-
 		public Quest CurrentQuest { get; set; }
 
-		public Page CurrentPage { 
-			get; 
-			set;
-		}
-
-		/// <summary>
-		/// Add the given quest to the internal dictionary of quests. In case there was already a quest with the given ID, it returns false.
-		/// 
-		/// </summary>
-		/// <param name="quest">Quest.</param>
-		public bool Add (Quest quest)
-		{
-			Quest q;
-			if (quests.TryGetValue (quest.Id, out q)) {
-				return false;
-			} else {
-				quests.Add (quest.Id, quest);
-				return true;
-			}
-		}
+		public Page CurrentPage { get; set; }
 
 		public Quest Import (string xml)
 		{
-			
 			// Creates an instance of the XmlSerializer class;
 			// specifies the type of object to be deserialized.
 			XmlSerializer serializer = new XmlSerializer (typeof(Quest));
@@ -90,7 +68,8 @@ namespace GQ.Client.Model
 
 		private QuestManager ()
 		{
-			quests = new Dictionary<int, Quest> ();
+			CurrentQuest = Quest.Null;
+			CurrentPage = Page.Null;
 		}
 
 		#endregion
