@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using System;
+using GQ.Util;
+using GQ.Client.Conf;
 
 
 namespace GQ.Client.Model {
@@ -25,7 +29,6 @@ namespace GQ.Client.Model {
 			return QuestDict.Values.GetEnumerator();
 		}
 
-		// Must also implement IEnumerable.GetEnumerator, but implement as a private method.
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return QuestDict.Values.GetEnumerator();
@@ -42,11 +45,6 @@ namespace GQ.Client.Model {
 			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
 		}
 
-		#endregion
-
-
-		#region quest info functions
-
 		public void Import (QuestInfo[] quests) {
 			if ( quests == null )
 				return;
@@ -57,6 +55,94 @@ namespace GQ.Client.Model {
 				
 				QuestDict.Add((int)q.Id, q);
 			}
+		}
+
+		#endregion
+
+
+		#region Quest Info Changed Event
+
+		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
+
+		public event ChangeCallback OnChange;
+
+		#endregion
+
+
+		#region Update Quest Infos
+
+		public delegate void Callback (object sender, UpdateQuestInfoEventArgs e);
+
+		public event Callback OnUpdateStart;
+		public event Callback OnUpdateProgress;
+		public event Callback OnUpdateStep;
+		public event Callback OnUpdateTimeout;
+		public event Callback OnUpdateSuccess;
+		public event Callback OnUpdateError;
+
+		/// <summary>
+		/// Updates the quest info list, i.e. gets all quest infos locally stores plus all quest infos on the server. 
+		/// This method can optionally receive several callback delegate methods to give feedback 
+		/// in paticular about downloading the server data.
+		/// </summary>
+		public void UpdateQuestInfoList(
+			Callback onStart = null, 
+			Callback onProgress = null,
+			Callback onStep = null,
+			Callback onTimeout = null,
+			Callback onSuccess = null,
+			Callback onError = null) 
+		{
+			if (onStart != null)
+				OnUpdateStart += onStart;
+			if (onProgress != null)
+				OnUpdateProgress += onProgress;
+			if (onStep != null)
+				OnUpdateStep += onStep;
+			if (onTimeout != null)
+				OnUpdateTimeout += onTimeout;
+			if (onSuccess != null)
+				OnUpdateSuccess += onSuccess;
+			if (onError != null)
+				OnUpdateError += onError;
+
+			// TODO implement behavior of getting local and remote quest infos ...
+
+			// Start the gathering:
+			OnUpdateStart(this, new UpdateQuestInfoEventArgs("Loading Quest Information"));
+
+			// 1. Get locally stored quest infos
+
+			// 2. Download Server-based quest infos
+			Download jsonDownload = 
+				new Download(
+					ConfigurationManager.UrlPublicQuestsJSON, 
+					120000
+				);
+
+			jsonDownload.OnProgress += 
+				(Download downloader, float percentLoaded) => 
+				{
+					OnUpdateProgress(this, new UpdateQuestInfoEventArgs(progress: percentLoaded));
+				};
+
+			jsonDownload.OnSuccess += 
+				(Download downloader) => 
+				{
+					OnUpdateSuccess(this, new UpdateQuestInfoEventArgs());
+				};
+
+
+			jsonDownload.OnError += 
+				(Download downloader, string msg) => 
+				{
+					OnUpdateError(this, new UpdateQuestInfoEventArgs(message: msg));
+				};
+
+			Base.Instance.StartCoroutine(jsonDownload.StartDownload());
+
+			// 3. Mix both
+
 		}
 
 		#endregion
@@ -88,5 +174,43 @@ namespace GQ.Client.Model {
 
 		#endregion
 	}
+
+	public class UpdateQuestInfoEventArgs : EventArgs 
+	{
+		public string Message { get; protected set; }
+		public float Progress { get; protected set; }
+
+		public UpdateQuestInfoEventArgs(string message = "", float progress = 0f)
+		{
+			Message = message;
+			Progress = progress;
+		}
+			
+	}
+
+	public class QuestInfoChangedEvent : EventArgs 
+	{
+		public string Message { get; protected set; }
+		public ChangeType ChangeType { get; protected set; }
+		public QuestInfo NewQuestInfo { get; protected set; }
+		public QuestInfo OldQuestInfo { get; protected set; }
+
+		public QuestInfoChangedEvent(
+			string message = "", 
+			ChangeType type = ChangeType.Changed, 
+			QuestInfo NewQuestInfo = null, 
+			QuestInfo OldQuestInfo = null
+		)
+		{
+			Message = message;
+			ChangeType = type;
+		}
+
+	}
+
+	public enum ChangeType {
+		Added, Removed, Changed
+	}
+		
 
 }

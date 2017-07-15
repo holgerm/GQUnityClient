@@ -18,7 +18,7 @@ namespace GQ.Client.Model {
 		/// 
 		/// 1. Loading the Infos JSON file from the server or locally - which is done by the given loader.
 		/// 2. Parsing the JSON string and creating the QuestInfo objects
-		/// 3. Importing the QuestIfno objects into the QuestManager
+		/// 3. Importing the QuestInfo objects into the QuestManager
 		/// 
 		/// The first is done asynchonously via the Start... method. The second and third steps are done in a callback 
 		/// that is called on success of step 1.
@@ -45,8 +45,6 @@ namespace GQ.Client.Model {
 			
 			return JsonConvert.DeserializeObject<QuestInfo[]>(jsonString);
 		}
-
-
 	}
 
 
@@ -82,8 +80,7 @@ namespace GQ.Client.Model {
 				importer.QuestInfoLoaded(d.Www.text);				
 			});
 
-			Base.Instance.StartCoroutine(jsonDownload.startDownload());
-	
+			Base.Instance.StartCoroutine(jsonDownload.StartDownload());
 		}
 	}
 }

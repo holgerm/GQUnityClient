@@ -227,13 +227,13 @@ public class questdatabase : MonoBehaviour
 
 		string url = "http://qeevee.org:9091/json/" + ConfigurationManager.Current.portal + "/publicgamesinfo";
 		Download download = new Download (url, timeout: 20000);
-		download.OnStart = new Download.StartCallback (whenQuestListDownloadStarts);
-		download.OnProgress = new Download.ProgressUpdate (updateProgress);
-		download.OnSuccess = new Download.SuccessCallback (updateAndShowQuestList) +
+		download.OnStart += new Download.StartCallback (whenQuestListDownloadStarts);
+		download.OnProgress += new Download.ProgressUpdate (updateProgress);
+		download.OnSuccess += new Download.SuccessCallback (updateAndShowQuestList) +
 		new Download.SuccessCallback (whenQuestListDownloadSucceeds) +
 		new Download.SuccessCallback (downloadAllQuests);
-		download.OnError = new Download.ErrorCallback (retryAfterDownloadError);
-		StartCoroutine (download.startDownload ());
+		download.OnError += new Download.ErrorCallback (retryAfterDownloadError);
+		StartCoroutine (download.StartDownload ());
 	}
 
 	void retryAfterDownloadError (Download download, string msg)

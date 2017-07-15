@@ -52,14 +52,16 @@ namespace GQ.Client.Conf
 
 		public const string GQ_SERVER_BASE_URL = "http://qeevee.org:9091";
 
-		public static string url_PublicQuestsJSON ()
+		public static string UrlPublicQuestsJSON 
 		{
-			return 
-				String.Format (
-				"{0}/json/{1}/publicgamesinfo", 
-				ConfigurationManager.GQ_SERVER_BASE_URL,
-				ConfigurationManager.Current.portal
-			);
+			get {
+				return 
+					String.Format (
+					"{0}/json/{1}/publicgamesinfo", 
+					GQ_SERVER_BASE_URL,
+					Current.portal
+				);
+			}
 		}
 
 		#endregion

@@ -10,12 +10,26 @@ namespace GQ.Client.Err
 	public class Log
 	{
 
+		private static Stack<Problem> stack;
+
 		#region Public API
 
-		static Stack<Problem> stack = new Stack<Problem> ();
+		/// <summary>
+		/// Log only logs problems with a level equal or higher than the current ReportLevel.
+		/// </summary>
+		/// <value>The report level.</value>
+		public static Level ReportLevel { get; set; }
+
+		static Log() {
+			ReportLevel = Level.Warning;
+			stack = new Stack<Problem> ();
+		}
 
 		public static void File (string message, Level level, Recipient recipient)
 		{
+			if (level < ReportLevel)
+				return;
+			
 			Problem problem = new Problem (message, level, recipient);
 			stack.Push (problem);
 
@@ -53,11 +67,32 @@ namespace GQ.Client.Err
 		}
 
 
+		public static void InformUser (string message)
+		{
+			File (message, Level.Info, Recipient.User);
+		}
+
+		public static void InformUser (string formatString, params object[] values)
+		{
+			InformUser (String.Format (formatString, values));
+		}
+
+
+		public static void SignalErrorToUser (string message)
+		{
+			File (message, Level.Error, Recipient.User);
+		}
+
+		public static void SignalErrorToUser (string formatString, params object[] values)
+		{
+			SignalErrorToUser (String.Format (formatString, values));
+		}
+
+
 		public static void WarnAuthor (string message)
 		{
 			File (message, Level.Warning, Recipient.Author);
 		}
-
 
 		public static void WarnAuthor (string formatString, params object[] values)
 		{
@@ -71,7 +106,6 @@ namespace GQ.Client.Err
 			File (message, Level.Error, Recipient.Author);
 		}
 
-
 		public static void SignalErrorToAuthor (string formatString, params object[] values)
 		{
 			SignalErrorToAuthor (String.Format (formatString, values));
@@ -83,7 +117,6 @@ namespace GQ.Client.Err
 			File (message, Level.Warning, Recipient.Developer);
 		}
 
-
 		public static void WarnDeveloper (string formatString, params object[] values)
 		{
 			WarnDeveloper (String.Format (formatString, values));
@@ -94,7 +127,6 @@ namespace GQ.Client.Err
 		{
 			File (message, Level.Error, Recipient.Developer);
 		}
-
 
 		public static void SignalErrorToDeveloper (string formatString, params object[] values)
 		{
@@ -110,62 +142,21 @@ namespace GQ.Client.Err
 
 	public class Problem
 	{
-		string message;
-
-		public string Message {
-			get {
-				return message;
-			}
-		}
-
-		Recipient recipient;
-
-		public Recipient Recipient {
-			get {
-				return recipient;
-			}
-		}
-
-		Level level;
-
-		public Level Level {
-			get {
-				return level;
-			}
-		}
-
-		DateTime timestamp;
-
-		public DateTime Timestamp {
-			get {
-				return timestamp;
-			}
-		}
-
-		int questID;
-
-		public int QuestID {
-			get {
-				return questID;
-			}
-		}
-
-		string questName;
-
-		public string QuestName {
-			get {
-				return questName;
-			}
-		}
+		public string Message { get; private set; }
+		public Recipient Recipient { get; private set; }
+		public Level Level { get; private set; } 
+		public DateTime Timestamp { get; private set; }
+		public int QuestID { get; private set; }
+		public string QuestName { get; private set; }
 
 		public Problem (string message, Level level, Recipient recipient)
 		{
-			this.message = message;
-			this.level = level;
-			this.recipient = recipient;
-			this.timestamp = DateTime.Now;
-			this.questID = Quest.CurrentlyParsingQuest.Id;
-			this.questName = Quest.CurrentlyParsingQuest.Name;
+			Message = message;
+			Level = level;
+			Recipient = recipient;
+			Timestamp = DateTime.Now;
+			QuestID = Quest.CurrentlyParsingQuest.Id;
+			QuestName = Quest.CurrentlyParsingQuest.Name;
 		}
 	}
 

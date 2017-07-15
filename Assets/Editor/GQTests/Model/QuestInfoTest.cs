@@ -20,7 +20,8 @@ namespace GQTests.Model
 		/// <summary>
 		/// The path to the JSON file with some quests (from WCC):
 		/// </summary>
-		static public readonly string JSON_InitFromServer = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "JSON/QuestInfos/initialFromServer.json");
+		static public readonly string JSON_InitFromServer = 
+			Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "JSON/QuestInfos/initialFromServer.json");
 
 
 		[SetUp]

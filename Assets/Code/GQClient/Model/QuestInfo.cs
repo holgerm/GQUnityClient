@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Text;
 using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model {
 
@@ -100,8 +101,5 @@ namespace GQ.Client.Model {
 
 		public string Value { get; set; }
 	}
-
-
-
 
 }
