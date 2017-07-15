@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "MediaKit/TransparentVideoOutput" 
 {
     Properties 
@@ -68,7 +70,7 @@ Shader "MediaKit/TransparentVideoOutput"
 			v2f vert (appdata_base v)
 			{
 				v2f o;
-				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos (v.vertex);
 				o.uvY = TRANSFORM_TEX (v.texcoord, _YTex);
 				o.uvY.x = 1 - o.uvY.x;
 				return o;

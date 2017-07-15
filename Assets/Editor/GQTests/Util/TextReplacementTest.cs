@@ -24,7 +24,7 @@ namespace GQTests.Util {
 		}
 
 		// TODO refactor Variables so that they can be tested and used for testing too.
-		[Test, Ignore]
+		[Test, Ignore("todo")]
 		public void ReplaceVarnameByValue () {
 			// Arrange:
 			actions questactions = GameObject.Find("QuestDatabase").GetComponent<actions>();

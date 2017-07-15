@@ -40,7 +40,7 @@ public class page_textquestion : MonoBehaviour
 		questionPanel.SetActive (true);
 		if (textquestion.hasAttribute ("loopText"))
 			feedbackTextOnRepeat = textquestion.getAttribute ("loopText");
-		Text feedbackText = feedbackPanel.transform.FindChild ("Text").gameObject.GetComponent<Text> ();
+		Text feedbackText = feedbackPanel.transform.Find ("Text").gameObject.GetComponent<Text> ();
 		if (feedbackText != null)
 			feedbackText.text = feedbackTextOnRepeat;
 		

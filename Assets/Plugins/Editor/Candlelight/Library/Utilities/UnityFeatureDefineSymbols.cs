@@ -122,7 +122,12 @@ namespace Candlelight {
 			foreach (BuildTargetGroup target in System.Enum.GetValues(typeof(BuildTargetGroup)))
 			{
 				// prevent editor spam in Unity 5.x
-				if (target == BuildTargetGroup.Unknown || target == BuildTargetGroup.WP8 || target == BuildTargetGroup.BlackBerry)
+				if (target == BuildTargetGroup.Unknown || 
+					target == BuildTargetGroup.WP8 || 
+					target == BuildTargetGroup.BlackBerry ||
+					target == BuildTargetGroup.PS3 ||
+					target == BuildTargetGroup.XBOX360
+				)
 				{
 					continue;
 				}

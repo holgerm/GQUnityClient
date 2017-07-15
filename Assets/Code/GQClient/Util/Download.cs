@@ -153,7 +153,7 @@ namespace GQ.Util {
 			} 
 			stopwatch.Stop();
 			
-			if ( Www.error != null ) {
+			if ( Www.error != null && Www.error != "" ) {
 				if ( OnError != null ) {
 					OnError(this, Www.error);
 				}

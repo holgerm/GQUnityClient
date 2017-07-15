@@ -384,7 +384,7 @@ namespace GQ.Editor.Building {
 			}
 
 			PlayerSettings.productName = newProduct.Config.name;
-			PlayerSettings.bundleIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
+			PlayerSettings.applicationIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
 
 			replaceLoadingLogoInScene(START_SCENE);
 

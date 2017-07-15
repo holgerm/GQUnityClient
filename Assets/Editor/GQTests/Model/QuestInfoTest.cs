@@ -56,7 +56,7 @@ namespace GQTests.Model
 			}
 		}
 
-		[Test, Ignore]
+		[Test, Ignore("todo?")]
 		public void WhenNewQuestIsLoaded ()
 		{
 			// Arrange:

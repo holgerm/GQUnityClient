@@ -52,7 +52,7 @@ public class page_multiplechoicequestion : MonoBehaviour
 		questionPanel.SetActive (true);
 		if (multiplechoicequestion.hasAttribute ("loopText"))
 			feedbackTextOnRepeat = multiplechoicequestion.getAttribute ("loopText");
-		Text feedbackText = feedbackPanel.transform.FindChild ("Text").gameObject.GetComponent<Text> ();
+		Text feedbackText = feedbackPanel.transform.Find ("Text").gameObject.GetComponent<Text> ();
 		if (feedbackText != null)
 			feedbackText.text = feedbackTextOnRepeat;
 

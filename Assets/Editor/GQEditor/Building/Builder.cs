@@ -80,7 +80,7 @@ namespace GQ.Editor.Building {
 
 			changeAndSavePlayerSettings();
 
-			Debug.Log("Building product " + PlayerSettings.productName + " (" + PlayerSettings.bundleIdentifier + ")");
+			Debug.Log("Building product " + PlayerSettings.productName + " (" + PlayerSettings.applicationIdentifier + ")");
 
 			BuildAndroidPlayer();
 			BuildIOSPlayer();
@@ -144,8 +144,8 @@ namespace GQ.Editor.Building {
 		static Texture2D[] savedSettingsIcons4iOS;
 
 		static void changeAndSavePlayerSettings () {
-			savedSettingsBundleIdentifier = PlayerSettings.bundleIdentifier;
-			PlayerSettings.bundleIdentifier = GetBundleIdentifier();
+			savedSettingsBundleIdentifier = PlayerSettings.applicationIdentifier;
+			PlayerSettings.applicationIdentifier = GetBundleIdentifier();
 
 			savedSettingsProductName = PlayerSettings.productName;
 			PlayerSettings.productName = ConfigurationManager.Current.name;
@@ -155,7 +155,7 @@ namespace GQ.Editor.Building {
 		}
 
 		static void restoreSavedPlayerSettings () {
-			PlayerSettings.bundleIdentifier = savedSettingsBundleIdentifier;
+			PlayerSettings.applicationIdentifier = savedSettingsBundleIdentifier;
 			PlayerSettings.productName = savedSettingsProductName;
 			PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, savedSettingsIcons4Android);
 			PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.iOS, savedSettingsIcons4iOS);

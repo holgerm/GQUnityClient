@@ -122,7 +122,7 @@ namespace GQTests.Model
 			Assert.AreEqual (true, numberExpr.Evaluate ().AsBool ());
 		}
 
-		[Test, Ignore]
+		[Test, Ignore("only english so far")]
 		public void Number_XML_IntWithThousandsSepDE_Test ()
 		{
 			// Act:

@@ -759,7 +759,7 @@ public class AndroidNativeSettingsEditor : Editor {
 
 		AN_PropertyTemplate GcmBroadcastReceiver = application.GetOrCreatePropertyWithName("receiver",  "com.androidnative.gcm.GcmBroadcastReceiver");
 		AN_PropertyTemplate GcmIntentService = application.GetOrCreatePropertyWithName("service",  "com.androidnative.gcm.GcmIntentService");
-		AN_PropertyTemplate permission_C2D_MESSAGE = Manifest.GetOrCreatePropertyWithName("permission", PlayerSettings.bundleIdentifier + ".permission.C2D_MESSAGE");
+		AN_PropertyTemplate permission_C2D_MESSAGE = Manifest.GetOrCreatePropertyWithName("permission", PlayerSettings.applicationIdentifier + ".permission.C2D_MESSAGE");
 
 		AN_PropertyTemplate ParseBroadcastReceiver = application.GetOrCreatePropertyWithName ("receiver",  "com.parse.ParsePushBroadcastReceiver");
 		
@@ -768,7 +768,7 @@ public class AndroidNativeSettingsEditor : Editor {
 			
 			AN_PropertyTemplate intent_filter = GcmBroadcastReceiver.GetOrCreateIntentFilterWithName("com.google.android.c2dm.intent.RECEIVE");
 			AN_PropertyTemplate category = intent_filter.GetOrCreatePropertyWithTag("category");
-			category.SetValue("android:name", PlayerSettings.bundleIdentifier);
+			category.SetValue("android:name", PlayerSettings.applicationIdentifier);
 
 			permission_C2D_MESSAGE.SetValue("android:protectionLevel", "signature");
 		} else {
@@ -786,7 +786,7 @@ public class AndroidNativeSettingsEditor : Editor {
 
 			gameThriveReceiver.SetValue("android:permission", "com.google.android.c2dm.permission.SEND");
 			AN_PropertyTemplate gameThriveIntentFilter = gameThriveReceiver.GetOrCreateIntentFilterWithName("com.google.android.c2dm.intent.RECEIVE");
-			gameThriveIntentFilter.GetOrCreatePropertyWithName("category", PlayerSettings.bundleIdentifier);
+			gameThriveIntentFilter.GetOrCreatePropertyWithName("category", PlayerSettings.applicationIdentifier);
 
 			//Remove GcmBroadcastReceiver from AndroidManifest if it exists
 			AN_PropertyTemplate property = application.GetOrCreatePropertyWithName("receiver",  "com.androidnative.gcm.GcmBroadcastReceiver");
@@ -949,7 +949,7 @@ public class AndroidNativeSettingsEditor : Editor {
 			List<AN_PropertyTemplate> properties = Manifest.Properties["permission"];
 			foreach (AN_PropertyTemplate permission in properties) {
 				if (permission.Name.EndsWith(".permission.C2D_MESSAGE")
-				    && !permission.Name.Equals(PlayerSettings.bundleIdentifier + ".permission.C2D_MESSAGE")) {
+				    && !permission.Name.Equals(PlayerSettings.applicationIdentifier + ".permission.C2D_MESSAGE")) {
 					properties.Remove(permission);
 					duplicated = true;
 					break;
@@ -966,7 +966,7 @@ public class AndroidNativeSettingsEditor : Editor {
 			List<AN_PropertyTemplate> properties = Manifest.Permissions;
 			foreach (AN_PropertyTemplate permission in properties) {
 				if (permission.Name.EndsWith(".permission.C2D_MESSAGE")
-				    && !permission.Name.Equals(PlayerSettings.bundleIdentifier + ".permission.C2D_MESSAGE")) {
+				    && !permission.Name.Equals(PlayerSettings.applicationIdentifier + ".permission.C2D_MESSAGE")) {
 					properties.Remove(permission);
 					duplicated = true;
 					break;
@@ -995,7 +995,7 @@ public class AndroidNativeSettingsEditor : Editor {
 
 		if(AndroidNativeSettings.Instance.PushNotificationsAPI) {
 			permissions.Add("com.google.android.c2dm.permission.RECEIVE");
-			permissions.Add(PlayerSettings.bundleIdentifier + ".permission.C2D_MESSAGE");
+			permissions.Add(PlayerSettings.applicationIdentifier + ".permission.C2D_MESSAGE");
 			permissions.Add("android.permission.WAKE_LOCK");
 		}
 

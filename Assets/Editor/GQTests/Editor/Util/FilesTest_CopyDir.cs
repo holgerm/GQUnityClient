@@ -292,7 +292,7 @@ namespace GQTests.Editor.Util {
 
 		#endregion
 
-		[Test, Ignore]
+		[Test, Ignore("todo")]
 		public void CopyDirKeepsSisterDirs () {
 			// Arrange:
 			// TODO
