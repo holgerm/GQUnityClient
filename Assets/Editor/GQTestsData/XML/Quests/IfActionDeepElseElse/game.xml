@@ -1,0 +1,74 @@
+<game id="10409" lastUpdate="1498683772205" name="IfActionDeepElseElse" xmlformat="5">
+	<mission endbuttontext="&gt;" id="30368" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onStart>
+			<rule>
+				<action type="SetVariable" var="A">
+					<value>
+						<num>22</num>
+					</value>
+				</action>
+				<action type="SetVariable" var="B">
+					<value>
+						<num>22</num>
+					</value>
+				</action>
+				<action type="If">
+					<condition>
+						<eq>
+							<var>A </var>
+							<num>1</num>
+						</eq>
+					</condition>
+					<then>
+						<action type="If">
+							<condition>
+								<eq>
+									<var>B</var>
+									<num>1</num>
+								</eq>
+							</condition>
+							<then>
+								<action type="SetVariable" var="C">
+									<value>
+										<string>Reached a wrong branch (then, then) but (A=22, B=22)</string>
+									</value>
+								</action>
+							</then>
+							<else>
+								<action type="SetVariable" var="C">
+									<value>
+										<string>Reached a wrong branch (then, else) but (A=22, B=22)</string>
+									</value>
+								</action>
+							</else>
+						</action>
+					</then>
+					<else>
+						<action type="If">
+							<condition>
+								<eq>
+									<var>B</var>
+									<num>1</num>
+								</eq>
+							</condition>
+							<then>
+								<action type="SetVariable" var="C">
+									<value>
+										<string>Reached a wrong branch (else, then) but (A=22, B=22)</string>
+									</value>
+								</action>
+							</then>
+							<else>
+								<action type="SetVariable" var="C">
+									<value>
+										<string>Reached the right branch (else, else) since (A=22, B=22)</string>
+									</value>
+								</action>
+							</else>
+						</action>
+					</else>
+				</action>
+			</rule>
+		</onStart>
+	</mission>
+</game>

@@ -21,7 +21,7 @@ namespace GQ.Client.Err
 		public static Level ReportLevel { get; set; }
 
 		static Log() {
-			ReportLevel = Level.Warning;
+			ReportLevel = Level.Info;
 			stack = new Stack<Problem> ();
 		}
 

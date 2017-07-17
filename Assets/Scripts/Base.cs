@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Globalization;
 using System.Threading;
+using GQ.Client.Err;
 
 public class Base : MonoBehaviour
 {

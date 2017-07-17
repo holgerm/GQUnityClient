@@ -1,0 +1,35 @@
+<game id="10409" lastUpdate="1498683772205" name="IfActionCallElse" xmlformat="5">
+	<mission endbuttontext="&gt;" id="30368" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+		<onStart>
+			<rule>
+				<action type="SetVariable" var="A">
+					<value>
+						<num>1</num>
+					</value>
+				</action>
+				<action type="If">
+					<condition>
+						<eq>
+							<var>A </var>
+							<num>22</num>
+						</eq>
+					</condition>
+					<then>
+						<action type="SetVariable" var="B">
+							<value>
+								<string>Then called. Wrong.</string>
+							</value>
+						</action>
+					</then>
+					<else>
+						<action type="SetVariable" var="B">
+							<value>
+								<string>Else Called. Good.</string>
+							</value>
+						</action>
+					</else>
+				</action>
+			</rule>
+		</onStart>
+	</mission>
+</game>

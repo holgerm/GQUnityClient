@@ -1,0 +1,35 @@
+<game id="10435" lastUpdate="1499066475846" name="HotspotTrigger" xmlformat="5">
+	<hotspot iBeacon="123" id="12182" img="http://qeevee.org:9091/assets/img/erzbistummarker.png" initialActivity="true" initialVisibility="true" latlong="50.9606,7.01079" nfc="123" number="123" qrcode="123" radius="20">
+		<onLeave>
+			<rule>
+				<action type="SetVariable" var="MyState">
+					<value>
+						<var>Left</var>
+					</value>
+				</action>
+			</rule>
+		</onLeave>
+	</hotspot>
+	<hotspot iBeacon="123" id="12183" img="http://qeevee.org:9091/assets/img/erzbistummarker.png" initialActivity="true" initialVisibility="true" latlong="50.95959,7.0084567" nfc="123" number="123" qrcode="123" radius="20">
+		<onEnter>
+			<rule>
+				<action type="SetVariable" var="MyState">
+					<value>
+						<var>Entered</var>
+					</value>
+				</action>
+			</rule>
+		</onEnter>
+	</hotspot>
+	<hotspot iBeacon="123" id="12184" img="http://qeevee.org:9091/assets/img/erzbistummarker.png" initialActivity="true" initialVisibility="true" latlong="50.96163,7.004943" nfc="123" number="123" qrcode="123" radius="20">
+		<onTap>
+			<rule>
+				<action type="SetVariable" var="MyState">
+					<value>
+						<var>Touched</var>
+					</value>
+				</action>
+			</rule>
+		</onTap>
+	</hotspot>
+</game>

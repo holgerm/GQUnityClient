@@ -1,0 +1,5 @@
+<game id="9803" lastUpdate="1499067302694" name="OnlyThreeHotspots" xmlformat="5">
+	<hotspot iBeacon="123" id="11541" img="http://qeevee.org:9091/assets/img/erzbistummarker.png" initialActivity="true" initialVisibility="true" latlong="50.9606,7.01079" nfc="123" number="123" qrcode="123" radius="20"/>
+	<hotspot iBeacon="123" id="11542" img="http://qeevee.org:9091/assets/img/erzbistummarker.png" initialActivity="true" initialVisibility="true" latlong="50.95959,7.0084567" nfc="123" number="123" qrcode="123" radius="20"/>
+	<hotspot iBeacon="123" id="11543" img="http://qeevee.org:9091/assets/img/erzbistummarker.png" initialActivity="true" initialVisibility="true" latlong="50.96163,7.004943" nfc="123" number="123" qrcode="123" radius="20"/>
+</game>
