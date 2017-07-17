@@ -45,7 +45,7 @@ namespace GQ.Util {
 		public event SuccessCallback OnSuccess;
 		public event ProgressUpdate OnProgress;
 
-		public static void debugStartHandling (Download downloader) {
+		public static void defaultStartHandling (Download downloader) {
 			string msg = String.Format("Start to download url {0}", 
 				downloader.url);
 			if ( downloader._timeout > 0 ) {
@@ -118,7 +118,7 @@ namespace GQ.Util {
 			this.url = url;
 			Timeout = timeout;
 			stopwatch = new Stopwatch();
-			OnStart += debugStartHandling;
+			OnStart += defaultStartHandling;
 			OnError += defaultErrorHandling;
 			OnTimeout += defaultTimeoutHandling;
 			OnSuccess += defaultSuccessHandling;
@@ -154,10 +154,11 @@ namespace GQ.Util {
 			stopwatch.Stop();
 			
 			if ( Www.error != null && Www.error != "" ) {
-				if ( OnError != null ) {
-					OnError(this, Www.error);
-				}
+				string errMsg = Www.error;
 				Www.Dispose();
+				if ( OnError != null ) {
+					OnError(this, errMsg);
+				}
 			}
 			else {
 				if ( OnProgress != null ) {

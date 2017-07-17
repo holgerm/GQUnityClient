@@ -12,28 +12,40 @@ namespace GQ.Client.UI.Controller {
 
 		protected override void OnEnable()
 		{
-			base.OnEnable ();
+			InitializeDialogListeners();
+
+			QuestInfoManager.Instance.UpdateQuestInfoList ();
+		}
+
+		protected override void InitializeDialogListeners ()
+		{
+			base.InitializeDialogListeners ();
 
 			// Initally we do not need Buttons:
 			YesButton.gameObject.SetActive(false);
 			NoButton.gameObject.SetActive(false);
 
-			// Start Upadte Quest Info List
-			QuestInfoManager.Instance.UpdateQuestInfoList(
-				onStart: InitializeLoadingScreen,
-				onProgress: UpdateLoadingScreenProgress,
-				onSuccess: UpdateLoadingScreenSucceeded,
-				onError: UpdateLoadingScreenError
-			);
+			attachUpdateListeners ();
 		}
-			
+
+		void attachUpdateListeners ()
+		{
+			QuestInfoManager.Instance.OnUpdateStart += InitializeLoadingScreen;
+			QuestInfoManager.Instance.OnUpdateProgress += UpdateLoadingScreenProgress;
+			QuestInfoManager.Instance.OnUpdateSuccess += CloseDialog;
+			QuestInfoManager.Instance.OnUpdateError += UpdateLoadingScreenError;
+		}			
 
 		void OnDisable()
 		{
-			/// Detach all registered listener methods:
+			detachUpdateListeners ();
+		}
+
+		void detachUpdateListeners ()
+		{
 			QuestInfoManager.Instance.OnUpdateStart -= InitializeLoadingScreen;
 			QuestInfoManager.Instance.OnUpdateProgress -= UpdateLoadingScreenProgress;
-			QuestInfoManager.Instance.OnUpdateSuccess -= UpdateLoadingScreenSucceeded;
+			QuestInfoManager.Instance.OnUpdateSuccess -= CloseDialog;
 			QuestInfoManager.Instance.OnUpdateError -= UpdateLoadingScreenError;
 		}
 
@@ -58,17 +70,6 @@ namespace GQ.Client.UI.Controller {
 			Details.text = String.Format ("{0:#0.0}% done", args.Progress * 100);
 			Debug.Log ("Progress: " + args.Progress);
 		}
-
-		/// <summary>
-		/// Callbakc for the OnUpdateSuccess event.
-		/// </summary>
-		/// <param name="callbackSender">Callback sender.</param>
-		/// <param name="args">Arguments.</param>
-		public void UpdateLoadingScreenSucceeded(object callbackSender, UpdateQuestInfoEventArgs args)
-		{
-			gameObject.SetActive (false);
-		}
-
 		/// <summary>
 		/// Callback for the OnUpdateError event.
 		/// </summary>
@@ -78,14 +79,29 @@ namespace GQ.Client.UI.Controller {
 		{
 			Details.text = String.Format ("Error: {0}", args.Message);
 
-			Text buttonText = YesButton.transform.Find ("Text").GetComponent<Text>();
-			buttonText.text = "Ok";
-			OnYesButtonClicked += (GameObject sender, EventArgs e) => 
-			{
-				// in error case when user clicks the ok button, we just close the dialog:
-				gameObject.SetActive (false);
-			};
-			YesButton.gameObject.SetActive (true);
+			// Use No button for Giving Up:
+			SetNoButton(
+				"Give Up",
+				(GameObject sender, EventArgs e) => {
+					// in error case when user clicks the give up button, we just close the dialog:
+					CloseDialog(sender, new UpdateQuestInfoEventArgs ());
+				}
+			);
+
+			// Use Yes button for Retry:
+			SetYesButton (
+				"Retry",
+				(GameObject sender, EventArgs e) => {
+					// inhibit multiple clicks by disabling the button first:
+					YesButton.interactable = false;
+					YesButton.gameObject.SetActive(false);
+
+					// in error case when user clicks the retry button, we start the update again:
+					detachUpdateListeners();
+					InitializeDialogListeners();
+					QuestInfoManager.Instance.UpdateQuestInfoList ();
+				}
+			);
 		}
 	}
 }

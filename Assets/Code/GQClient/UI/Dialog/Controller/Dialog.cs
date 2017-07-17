@@ -31,9 +31,7 @@ namespace GQ.Client.UI.Controller {
 			{
 				Transform textGo = transform.Find (DETAILS_PATH);
 				if (textGo == null) {
-					Debug.LogError (
-						String.Format("Dialog must contain a Panel with a DetailsText inside (at path {0}).", DETAILS_PATH)
-					);
+					Debug.LogErrorFormat ("Dialog must contain a Panel with a DetailsText inside (at path {0}).", DETAILS_PATH);
 					return;
 				}
 
@@ -45,9 +43,7 @@ namespace GQ.Client.UI.Controller {
 			{
 				Transform textGo = transform.Find (TITLE_PATH);
 				if (textGo == null) {
-					Debug.LogError (
-						String.Format("Dialog must contain a Panel with a TitleText inside (at path {0}).", TITLE_PATH)
-					);
+					Debug.LogErrorFormat ("Dialog must contain a Panel with a TitleText inside (at path {0}).", TITLE_PATH);
 					return;
 				}
 
@@ -59,9 +55,7 @@ namespace GQ.Client.UI.Controller {
 			{
 				Transform buttonT = transform.Find (YES_BUTTON_PATH);
 				if (buttonT == null) {
-					Debug.LogError (
-						String.Format("Dialog must contain an Image with a Yes-Button inside (at path {0}).", YES_BUTTON_PATH)
-					);
+					Debug.LogErrorFormat ("Dialog must contain an Image with a Yes-Button inside (at path {0}).", YES_BUTTON_PATH);
 					return;
 				}
 
@@ -73,9 +67,7 @@ namespace GQ.Client.UI.Controller {
 			{
 				Transform buttonT = transform.Find (NO_BUTTON_PATH);
 				if (buttonT == null) {
-					Debug.LogError (
-						String.Format("Dialog must contain an Image with a No-Button inside (at path {0}).", NO_BUTTON_PATH)
-					);
+					Debug.LogErrorFormat ("Dialog must contain an Image with a No-Button inside (at path {0}).", NO_BUTTON_PATH);
 					return;
 				}
 
@@ -85,19 +77,57 @@ namespace GQ.Client.UI.Controller {
 
 		protected virtual void OnEnable()
 		{
-			YesButton.onClick.AddListener(YesButtonClicked);
+			InitializeDialogListeners ();
+		}
+
+		protected virtual void InitializeDialogListeners ()
+		{
+			YesButton.onClick.AddListener (YesButtonClicked);
 			OnYesButtonClicked = null;
 
-			NoButton.onClick.AddListener(NoButtonClicked);
+			NoButton.onClick.AddListener (NoButtonClicked);
 			OnNoButtonClicked = null;
 		}
 
 		public void YesButtonClicked() {
-			OnYesButtonClicked (YesButton.gameObject, EventArgs.Empty);
+			if (OnYesButtonClicked != null)
+				OnYesButtonClicked (YesButton.gameObject, EventArgs.Empty);
 		}
 
 		public void NoButtonClicked() {
-			OnYesButtonClicked (NoButton.gameObject, EventArgs.Empty);
+			if (OnNoButtonClicked != null)
+				OnNoButtonClicked (NoButton.gameObject, EventArgs.Empty);
 		}
+
+		protected void SetYesButton(string description, ClickCallBack yesButtonClicked) {
+			Text buttonText = YesButton.transform.Find ("Text").GetComponent<Text>();
+			buttonText.text = description;
+
+			OnYesButtonClicked += yesButtonClicked;
+			YesButton.gameObject.SetActive (true);	
+			YesButton.interactable = true;
+		}
+
+		protected void SetNoButton(string description, ClickCallBack noButtonClicked) {
+			Text buttonText = NoButton.transform.Find ("Text").GetComponent<Text>();
+			buttonText.text = description;
+
+			OnNoButtonClicked += noButtonClicked;
+			NoButton.gameObject.SetActive (true);
+			NoButton.interactable = true;
+		}
+
+
+		/// <summary>
+		/// Callback for the OnUpdateSuccess event.
+		/// </summary>
+		/// <param name="callbackSender">Callback sender.</param>
+		/// <param name="args">Arguments.</param>
+		public void CloseDialog(object callbackSender, UpdateQuestInfoEventArgs args)
+		{
+			gameObject.SetActive (false);
+		}
+
+
 	}
 }

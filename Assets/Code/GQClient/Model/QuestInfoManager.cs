@@ -80,32 +80,7 @@ namespace GQ.Client.Model {
 		public event Callback OnUpdateSuccess;
 		public event Callback OnUpdateError;
 
-		/// <summary>
-		/// Updates the quest info list, i.e. gets all quest infos locally stores plus all quest infos on the server. 
-		/// This method can optionally receive several callback delegate methods to give feedback 
-		/// in paticular about downloading the server data.
-		/// </summary>
-		public void UpdateQuestInfoList(
-			Callback onStart = null, 
-			Callback onProgress = null,
-			Callback onStep = null,
-			Callback onTimeout = null,
-			Callback onSuccess = null,
-			Callback onError = null) 
-		{
-			if (onStart != null)
-				OnUpdateStart += onStart;
-			if (onProgress != null)
-				OnUpdateProgress += onProgress;
-			if (onStep != null)
-				OnUpdateStep += onStep;
-			if (onTimeout != null)
-				OnUpdateTimeout += onTimeout;
-			if (onSuccess != null)
-				OnUpdateSuccess += onSuccess;
-			if (onError != null)
-				OnUpdateError += onError;
-
+		public void UpdateQuestInfoList() {
 			// TODO implement behavior of getting local and remote quest infos ...
 
 			// Start the gathering:
@@ -185,7 +160,6 @@ namespace GQ.Client.Model {
 			Message = message;
 			Progress = progress;
 		}
-			
 	}
 
 	public class QuestInfoChangedEvent : EventArgs 
