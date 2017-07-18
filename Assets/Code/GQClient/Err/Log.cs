@@ -52,7 +52,7 @@ namespace GQ.Client.Err
 				break;
 			case Level.Error:
 			case Level.FatalError:
-				Debug.LogError (logtext);
+				Debug.LogWarning ("ERROR: " + logtext);
 				break;
 			default:
 				break;

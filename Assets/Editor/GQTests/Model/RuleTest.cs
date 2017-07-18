@@ -35,7 +35,7 @@ namespace GQTests.Model
 			rule.Apply ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("A").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("A").ValType);
 			Assert.AreEqual (true, Variables.GetValue ("A").AsBool ());
 		}
 
@@ -72,13 +72,13 @@ namespace GQTests.Model
 			rule.Apply ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("A").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("A").ValType);
 			Assert.AreEqual (true, Variables.GetValue ("A").AsBool ());
 
-			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("B").GetType ());
+			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("B").ValType);
 			Assert.AreEqual (100, Variables.GetValue ("B").AsInt ());
 
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("C").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("C").ValType);
 			Assert.AreEqual ("Hallo", Variables.GetValue ("C").AsString ());
 		}
 	}

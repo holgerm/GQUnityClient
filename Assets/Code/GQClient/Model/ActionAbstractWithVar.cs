@@ -44,7 +44,7 @@ namespace GQ.Client.Model
 
 			Value previousVal = Variables.GetValue (varName);
 
-			switch (previousVal.GetType ()) {
+			switch (previousVal.ValType) {
 			case Value.Type.NULL:
 				Variables.SetVariableValue (varName, new Value (-1));
 				break;
@@ -58,7 +58,7 @@ namespace GQ.Client.Model
 				Variables.SetVariableValue (varName, new Value (false));
 				break;
 			case Value.Type.VariableName:
-				Log.SignalErrorToAuthor ("IncrementVariable must not be used on Variables representing Variable Names.", previousVal.GetType ());
+				Log.SignalErrorToAuthor ("IncrementVariable must not be used on Variables representing Variable Names.", previousVal.ValType);
 				break;
 			case Value.Type.Text:
 				string previousText = previousVal.AsString ();
@@ -69,7 +69,7 @@ namespace GQ.Client.Model
 				Variables.SetVariableValue (varName, new Value (newText));
 				break;
 			default:
-				Log.SignalErrorToDeveloper ("IncrementVariable not implemented for value type {0}.", previousVal.GetType ());
+				Log.SignalErrorToDeveloper ("IncrementVariable not implemented for value type {0}.", previousVal.ValType);
 				break;
 			}
 		}

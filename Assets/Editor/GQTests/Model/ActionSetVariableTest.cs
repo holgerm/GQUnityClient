@@ -59,14 +59,14 @@ namespace GQTests.Model
 			
 			Variables.ClearAll ();
 			action1.Execute ();
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("x").ValType);
 			Assert.AreEqual (true, Variables.GetValue ("x").AsBool ());
 
 			// Act:
 			action2.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").ValType);
 			Assert.AreEqual ("Hallo", Variables.GetValue ("x").AsString ());
 		}
 

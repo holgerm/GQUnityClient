@@ -23,9 +23,9 @@ namespace GQ.Client.Model
 	{
 		#region Structure
 
-		protected Type ValType {
+		public Type ValType {
 			get;
-			set;
+			protected set;
 		}
 
 		protected string internalValue;
@@ -143,11 +143,6 @@ namespace GQ.Client.Model
 
 
 		#region Access Functions for different Types
-
-		public Type GetType ()
-		{
-			return ValType;
-		}
 
 		public bool AsBool ()
 		{

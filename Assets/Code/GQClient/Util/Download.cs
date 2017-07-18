@@ -7,16 +7,8 @@ using GQ.Client.Err;
 namespace GQ.Util {
 	public class Download {
 		string url;
-		long _timeout;
 
-		public long Timeout {
-			get {
-				return _timeout;
-			}
-			set {
-				_timeout = value;
-			}
-		}
+		public long Timeout { get; set; }
 
 		Stopwatch stopwatch;
 		WWW _www;
@@ -24,60 +16,53 @@ namespace GQ.Util {
 
 		#region Callback Delegates
 
-		public delegate void StartCallback (Download downloader);
+		public delegate void DownloadCallback (Download d, DownloadEvent e);
 
-		public delegate void ErrorCallback (Download downloader,string msg);
-
-		public delegate bool TimeoutCallback (Download downloader,long elapsedTime);
-
-		public delegate void SuccessCallback (Download downloader);
-
-		public delegate void ProgressUpdate (Download downloader,float percentLoaded);
-
-		public event StartCallback OnStart;
-		public event ErrorCallback OnError;
+		public event DownloadCallback OnStart;
+		public event DownloadCallback OnError;
+		public event DownloadCallback OnTimeout;
+		public event DownloadCallback OnSuccess;
+		public event DownloadCallback OnProgress;
 
 		/// <summary>
-		/// Gets or sets the on timeout. Your timeout callback bool response is used to either do the timeout and stop the download (true) or ignore the timeout (false).
+		/// Raises an event based on DownloadCallback delegate type, e.g. OnUpdateStart, OnUpdateProgress, etc.
 		/// </summary>
-		/// <value>The on timeout.</value>
-		public event TimeoutCallback OnTimeout;
-		public event SuccessCallback OnSuccess;
-		public event ProgressUpdate OnProgress;
+		/// <param name="callback">Callback.</param>
+		/// <param name="e">E.</param>
+		protected virtual void Raise (DownloadCallback callback, DownloadEvent e = DownloadEvent.EMPTY)
+		{
+			if (callback != null)
+				callback (this, e);
+		}
 
-		public static void defaultStartHandling (Download downloader) {
+
+		public static void defaultStartHandling (Download d, DownloadEvent e) {
 			string msg = String.Format("Start to download url {0}", 
-				downloader.url);
-			if ( downloader._timeout > 0 ) {
-				msg += String.Format(", timout set to {0} ms.", downloader._timeout);
+				d.url);
+			if ( d.Timeout > 0 ) {
+				msg += String.Format(", timout set to {0} ms.", d.Timeout);
 			}
 			Log.InformUser (msg);
 		}
 
-		public static void defaultErrorHandling (Download downloader, string msg) {
+		public static void defaultErrorHandling (Download d, DownloadEvent e) {
 			Log.SignalErrorToUser("Encountered a problem during download of url {0}: {1}", 
-				downloader.url, msg);
+				d.url, e.Message);
 		}
 
-		/// <summary>
-		/// Default timeout handler. Logs a message and does not try again but stops the download.
-		/// </summary>
-		/// <param name="url">URL.</param>
-		/// <param name="elapsedTime">Elapsed time.</param>
-		public static bool defaultTimeoutHandling (Download downloader, long elapsedTime) {
+		public static void defaultTimeoutHandling (Download d, DownloadEvent e) {
 			Log.InformUser("Timeout: already {1} ms elapsed while trying to download url {0}", 
-				downloader.url, elapsedTime);
-			return true; // do timeout
+				d.url, e.ElapsedTime);
 		}
 
-		public static void defaultSuccessHandling (Download downloader) {
+		public static void defaultSuccessHandling (Download d, DownloadEvent e) {
 			Log.InformUser("Download completed. (URL: {0})", 
-				downloader.url);
+				d.url);
 		}
 
-		public static void defaultProgressHandling (Download downloader, float progress) {
+		public static void defaultProgressHandling (Download d, DownloadEvent e) {
 			Log.InformUser("Downloading: URL {0}, got {1:N2}%", 
-				downloader.url, progress * 100);
+				d.url, e.Progress * 100);
 		}
 
 		#endregion
@@ -128,26 +113,19 @@ namespace GQ.Util {
 		public IEnumerator StartDownload () {
 			Www = new WWW(url);
 			stopwatch.Start();
-			if ( OnStart != null ) {
-				OnStart(this);
-			}
+			Raise(OnStart, DownloadEvent.EMPTY);
 
 			float progress = 0f;
 			while ( !Www.isDone ) {
-				if ( OnProgress != null && progress < Www.progress ) {
+				if ( progress < Www.progress ) {
 					progress = Www.progress;
-					OnProgress(this, progress);
+					Raise(OnProgress, new DownloadEvent(progress: progress));
 				}
 				if ( Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout ) {
-					if ( OnTimeout != null ) {
-						if ( OnTimeout(this, stopwatch.ElapsedMilliseconds) ) {
-							stopwatch.Stop();
-							OnError(this, String.Format("Client side timeout. Download not completed after {0} ms", 
-								Timeout));
-							Www.Dispose();
-							yield break;
-						}
-					}
+					stopwatch.Stop();
+					Raise(OnTimeout, new DownloadEvent(elapsedTime: Timeout));
+					Www.Dispose();
+					yield break;
 				}
 				yield return null;
 			} 
@@ -156,18 +134,12 @@ namespace GQ.Util {
 			if ( Www.error != null && Www.error != "" ) {
 				string errMsg = Www.error;
 				Www.Dispose();
-				if ( OnError != null ) {
-					OnError(this, errMsg);
-				}
+				Raise(OnError, new DownloadEvent(message: errMsg));
 			}
 			else {
-				if ( OnProgress != null ) {
-					OnProgress(this, Www.progress);
-				}
+				Raise(OnProgress, new DownloadEvent(progress: Www.progress));
 				yield return null;
-				if ( OnSuccess != null ) {
-					OnSuccess(this);
-				}
+				Raise(OnSuccess);
 			}
 
 			yield break;
@@ -175,6 +147,32 @@ namespace GQ.Util {
 
 		#endregion
 
+	}
+
+	public class DownloadEvent : EventArgs 
+	{
+		public string Message { get; protected set; }
+		public float Progress { get; protected set; }
+		public long ElapsedTime { get; protected set; }
+		public DownloadEventType ChangeType { get; protected set; }
+
+		public DownloadEvent(
+			string message = "", 
+			float progress = 0f, 
+			long elapsedTime = 0,
+			DownloadEventType Type = DownloadEventType.Start
+		)
+		{
+			Message = message;
+			Progress = progress;
+			ElapsedTime = elapsedTime;
+		}
+
+		public const DownloadEvent EMPTY = null;
+	}
+
+	public enum DownloadEventType {
+		Start, Progress, Timeout, Error
 	}
 
 }

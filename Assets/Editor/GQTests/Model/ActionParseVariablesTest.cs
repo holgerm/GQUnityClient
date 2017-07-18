@@ -36,7 +36,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("a").ValType);
 			Assert.AreEqual (10, Variables.GetValue ("a").AsInt ()); 
 		}
 
@@ -58,7 +58,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("a").ValType);
 			Assert.AreEqual (10.06d, Variables.GetValue ("a").AsDouble ()); 
 		}
 
@@ -80,7 +80,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("a").ValType);
 			Assert.AreEqual (true, Variables.GetValue ("a").AsBool ()); 
 		}
 
@@ -102,7 +102,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").ValType);
 			Assert.AreEqual ("hallo", Variables.GetValue ("a").AsString ()); 
 		}
 
@@ -124,7 +124,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").ValType);
 			Assert.AreEqual ("hallo, this is a comma in a sentence.", Variables.GetValue ("a").AsString ()); 
 		}
 
@@ -146,7 +146,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").ValType);
 			Assert.AreEqual ("hallo: this is a colon in a sentence.", Variables.GetValue ("a").AsString ()); 
 		}
 
@@ -168,7 +168,7 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").ValType);
 			Assert.AreEqual (@"""hallo""", Variables.GetValue ("a").AsString ()); 
 		}
 
@@ -190,13 +190,13 @@ namespace GQTests.Model
 			actParseVars.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("a").ValType);
 			Assert.AreEqual (@"""hallo""", Variables.GetValue ("a").AsString ()); 
-			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("b").GetType ());
+			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("b").ValType);
 			Assert.AreEqual (10.02d, Variables.GetValue ("b").AsDouble ()); 
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("c").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("c").ValType);
 			Assert.AreEqual (true, Variables.GetValue ("c").AsBool ()); 
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("d").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("d").ValType);
 			Assert.AreEqual (@",,", Variables.GetValue ("d").AsString ()); 
 		}
 
@@ -219,7 +219,7 @@ namespace GQTests.Model
 			rule.Apply ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("a").GetType ());
+			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("a").ValType);
 			Assert.AreEqual (10.02d, Variables.GetValue ("a").AsDouble ()); 
 		}
 

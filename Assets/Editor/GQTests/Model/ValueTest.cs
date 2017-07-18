@@ -11,7 +11,7 @@ namespace GQTests.Model
 		public void NullValueType ()
 		{
 			// Assert:
-			Assert.AreEqual (Value.Type.NULL, Value.Null.GetType ());
+			Assert.AreEqual (Value.Type.NULL, Value.Null.ValType);
 			Assert.AreEqual ("", Value.Null.AsString ());
 			Assert.AreEqual (0, Value.Null.AsInt ());
 			Assert.AreEqual (0d, Value.Null.AsDouble ());

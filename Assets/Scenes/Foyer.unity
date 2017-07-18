@@ -700,7 +700,7 @@ Prefab:
     - target: {fileID: 224000011601966930, guid: df910b3e0b2ca47eea6421d99a439a54,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 124
+      value: 140.5
       objectReference: {fileID: 0}
     - target: {fileID: 224000011601966930, guid: df910b3e0b2ca47eea6421d99a439a54,
         type: 2}
@@ -710,7 +710,7 @@ Prefab:
     - target: {fileID: 224000011601966930, guid: df910b3e0b2ca47eea6421d99a439a54,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 248
+      value: 281
       objectReference: {fileID: 0}
     - target: {fileID: 224000011601966930, guid: df910b3e0b2ca47eea6421d99a439a54,
         type: 2}
@@ -1998,7 +1998,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0

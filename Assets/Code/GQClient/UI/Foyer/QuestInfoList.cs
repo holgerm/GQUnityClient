@@ -4,6 +4,7 @@ using GQ.Client.Model;
 using System.Collections.Generic;
 using System;
 using GQ.Util;
+using GQ.Client.UI.Controller;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -39,21 +40,17 @@ namespace GQ.Client.UI.Foyer {
 		{
 			qm = QuestInfoManager.Instance;
 
-			ShowLoadingScreen ();
+			LoadQuestInfos.Show ();
 		}
-
-		GameObject loadingScreenGO;
-
+			
 		public void ShowLoadingScreen()
 		{
-			Debug.Log("TODO: Show Loading Screen ...");
 			GameObject rootCanvas = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
-			loadingScreenGO = 
-				(GameObject) Instantiate(
-					Resources.Load(Res.DIALOG_SCREEN),
-					rootCanvas.transform,
-					false
-				);
+			Instantiate(
+				Resources.Load(Res.DIALOG_SCREEN),
+				rootCanvas.transform,
+				false
+			);
 		}
 
 		private void RefreshList()

@@ -38,7 +38,7 @@ namespace GQTests.Model
 			actDecVar.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("x").ValType);
 			Assert.AreEqual (9, Variables.GetValue ("x").AsInt ()); 
 		}
 
@@ -55,7 +55,7 @@ namespace GQTests.Model
 			actDecVar.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("x").ValType);
 			Assert.AreEqual (-1, Variables.GetValue ("x").AsInt ()); 
 		}
 
@@ -91,9 +91,9 @@ namespace GQTests.Model
 			actDecVarT.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("f").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("f").ValType);
 			Assert.IsFalse (Variables.GetValue ("f").AsBool (), "Decrementing a bool var 'false' should keep the value 'false'"); 
-			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("t").GetType ());
+			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("t").ValType);
 			Assert.IsFalse (Variables.GetValue ("t").AsBool (), "Decrementing a bool var 'true' should change value to 'false'"); 
 		}
 
@@ -118,7 +118,7 @@ namespace GQTests.Model
 			actDecVar.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Float, Variables.GetValue ("x").ValType);
 			Assert.That (Values.NearlyEqual (9.05, Variables.GetValue ("x").AsDouble ())); 
 		}
 
@@ -136,7 +136,7 @@ namespace GQTests.Model
 
 			Variables.ClearAll ();
 			actSetVar.Execute ();
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").ValType);
 			Assert.AreEqual ("Hallo", Variables.GetValue ("x").AsString ()); 
 
 			// Act:
@@ -145,7 +145,7 @@ namespace GQTests.Model
 			actDecVar.Execute ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").ValType);
 			Assert.AreEqual ("Halln", Variables.GetValue ("x").AsString ()); 
 		}
 
@@ -170,7 +170,7 @@ namespace GQTests.Model
 			rule.Apply ();
 
 			// Assert:
-			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("x").GetType ());
+			Assert.AreEqual (Value.Type.Integer, Variables.GetValue ("x").ValType);
 			Assert.AreEqual (9, Variables.GetValue ("x").AsInt ());
 		}
 

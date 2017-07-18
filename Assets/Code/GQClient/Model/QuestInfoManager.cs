@@ -46,13 +46,17 @@ namespace GQ.Client.Model {
 		}
 
 		public void Import (QuestInfo[] quests) {
-			if ( quests == null )
+			if ( quests == null || quests.Length == 0)
 				return;
 			
 			foreach ( var q in quests ) {
 				if ( q.Id == null )
 					continue;
-				
+
+				if (QuestDict.ContainsKey(q.Id)) {
+					// override:
+					QuestDict [q.Id] = q;
+				}
 				QuestDict.Add((int)q.Id, q);
 			}
 		}
@@ -65,6 +69,13 @@ namespace GQ.Client.Model {
 		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
 
 		public event ChangeCallback OnChange;
+
+		protected virtual void RaiseChange (QuestInfoChangedEvent e)
+		{
+			var handler = OnChange;
+			if (handler != null)
+				handler (this, e);
+		}
 
 		#endregion
 
@@ -80,11 +91,22 @@ namespace GQ.Client.Model {
 		public event Callback OnUpdateSuccess;
 		public event Callback OnUpdateError;
 
+		/// <summary>
+		/// Use this method to raise an event based on Callback delegate type, e.g. OnUpdateStart, OnUpdateProgress, etc.
+		/// </summary>
+		/// <param name="callback">Callback.</param>
+		/// <param name="e">E.</param>
+		protected virtual void Raise (Callback callback, UpdateQuestInfoEventArgs e)
+		{
+			if (callback != null)
+				callback (this, e);
+		}
+			
 		public void UpdateQuestInfoList() {
 			// TODO implement behavior of getting local and remote quest infos ...
 
 			// Start the gathering:
-			OnUpdateStart(this, new UpdateQuestInfoEventArgs("Loading Quest Information"));
+			Raise(OnUpdateStart, new UpdateQuestInfoEventArgs("Loading Quest Information"));
 
 			// 1. Get locally stored quest infos
 
@@ -96,22 +118,22 @@ namespace GQ.Client.Model {
 				);
 
 			jsonDownload.OnProgress += 
-				(Download downloader, float percentLoaded) => 
+				(Download downloader, DownloadEvent e) => 
 				{
-					OnUpdateProgress(this, new UpdateQuestInfoEventArgs(progress: percentLoaded));
+				Raise(OnUpdateProgress, new UpdateQuestInfoEventArgs(progress: e.Progress));
 				};
 
 			jsonDownload.OnSuccess += 
-				(Download downloader) => 
+				(Download downloader, DownloadEvent e) => 
 				{
-					OnUpdateSuccess(this, new UpdateQuestInfoEventArgs());
+					Raise(OnUpdateSuccess, new UpdateQuestInfoEventArgs());
 				};
 
 
 			jsonDownload.OnError += 
-				(Download downloader, string msg) => 
+				(Download downloader, DownloadEvent e) => 
 				{
-					OnUpdateError(this, new UpdateQuestInfoEventArgs(message: msg));
+				Raise(OnUpdateError, new UpdateQuestInfoEventArgs(message: e.Message));
 				};
 
 			Base.Instance.StartCoroutine(jsonDownload.StartDownload());
@@ -165,13 +187,13 @@ namespace GQ.Client.Model {
 	public class QuestInfoChangedEvent : EventArgs 
 	{
 		public string Message { get; protected set; }
-		public ChangeType ChangeType { get; protected set; }
+		public ChangeEventType ChangeType { get; protected set; }
 		public QuestInfo NewQuestInfo { get; protected set; }
 		public QuestInfo OldQuestInfo { get; protected set; }
 
 		public QuestInfoChangedEvent(
 			string message = "", 
-			ChangeType type = ChangeType.Changed, 
+			ChangeEventType type = ChangeEventType.Changed, 
 			QuestInfo NewQuestInfo = null, 
 			QuestInfo OldQuestInfo = null
 		)
@@ -182,7 +204,7 @@ namespace GQ.Client.Model {
 
 	}
 
-	public enum ChangeType {
+	public enum ChangeEventType {
 		Added, Removed, Changed
 	}
 		

@@ -227,24 +227,24 @@ public class questdatabase : MonoBehaviour
 
 		string url = "http://qeevee.org:9091/json/" + ConfigurationManager.Current.portal + "/publicgamesinfo";
 		Download download = new Download (url, timeout: 20000);
-		download.OnStart += new Download.StartCallback (whenQuestListDownloadStarts);
-		download.OnProgress += new Download.ProgressUpdate (updateProgress);
-		download.OnSuccess += new Download.SuccessCallback (updateAndShowQuestList) +
-		new Download.SuccessCallback (whenQuestListDownloadSucceeds) +
-		new Download.SuccessCallback (downloadAllQuests);
-		download.OnError += new Download.ErrorCallback (retryAfterDownloadError);
+		download.OnStart += whenQuestListDownloadStarts;
+		download.OnProgress += updateProgress;
+		download.OnSuccess +=  updateAndShowQuestList;
+		download.OnSuccess +=  whenQuestListDownloadSucceeds;
+		download.OnSuccess += downloadAllQuests;
+		download.OnError += retryAfterDownloadError;
 		StartCoroutine (download.StartDownload ());
 	}
 
-	void retryAfterDownloadError (Download download, string msg)
+	void retryAfterDownloadError (Download d, DownloadEvent e)
 	{
-		Debug.Log ("Retrying after download error: " + msg);
+		Debug.Log ("Retrying after download error: " + e.Message);
 		if (Configuration.instance.offlinePlayable && localquests != null && localquests.Count > 0) {
 			webloadingmessage.enabled = false;
 			loadlogo.disable ();
-			updateAndShowQuestList (download);
-			whenQuestListDownloadSucceeds (download);
-			downloadAllQuests (download);
+			updateAndShowQuestList (d, e);
+			whenQuestListDownloadSucceeds (d, e);
+			downloadAllQuests (d, e);
 		} else {
 			Action retryAction = new Action (() => { 
 				webloadingmessage.enabled = true;
@@ -666,7 +666,7 @@ public class questdatabase : MonoBehaviour
 	}
 
 
-	void updateAndShowQuestList (Download download)
+	void updateAndShowQuestList (Download download, DownloadEvent e)
 	{
 
 		Debug.Log ("UPDATE AND SHOW QUEST LIST");
@@ -699,7 +699,7 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-	void whenQuestListDownloadStarts (Download d)
+	void whenQuestListDownloadStarts (Download d, DownloadEvent e)
 	{
 		//Debug.Log ("DOWNLOAD of QUEST LIST STARTED");
 		if (loadlogo != null) {
@@ -710,7 +710,7 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-	void whenQuestListDownloadSucceeds (Download d)
+	void whenQuestListDownloadSucceeds (Download d, DownloadEvent e)
 	{
 		if (loadlogo != null) {
 			loadlogo.disable ();
@@ -720,7 +720,7 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-	void downloadAllQuests (Download d)
+	void downloadAllQuests (Download d, DownloadEvent e)
 	{
 
 		bool hasNoLocalQuestsYet = true;
@@ -944,10 +944,10 @@ public class questdatabase : MonoBehaviour
 	}
 
 
-	void updateProgress (Download download, float progress)
+	void updateProgress (Download download, DownloadEvent e)
 	{
 		if (webloadingmessage != null) {
-			webloadingmessage.text = String.Format ("{0:N2}% loaded", progress * 100f);
+			webloadingmessage.text = String.Format ("{0:N2}% loaded", e.Progress * 100f);
 		}
 	}
 

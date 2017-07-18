@@ -20,8 +20,29 @@ namespace GQ.Client.UI.Controller {
 		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
 		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
 
-		public delegate void ClickCallBack (GameObject sender, EventArgs e);
+		/// <summary>
+		/// Shows the loading dialog. Instatiates the prefab lazily and simply enables it if already existing.
+		/// </summary>
+		public static void Show()
+		{
+			if (instance != null) {
+				Debug.Log ("Re-Enable Existing");
+				instance.SetActive (true);
+			} 
+			else {
+				Debug.Log ("Loading and Instatiating New");
+				GameObject rootCanvas = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
+				instance = (GameObject) Instantiate (
+					Resources.Load (Res.DIALOG_SCREEN),
+					rootCanvas.transform,
+					false
+				);
+			}
+		}
 
+		private static GameObject instance = null;
+
+		public delegate void ClickCallBack (GameObject sender, EventArgs e);
 		public event ClickCallBack OnYesButtonClicked;
 		public event ClickCallBack OnNoButtonClicked;
 
