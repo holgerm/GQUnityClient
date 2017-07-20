@@ -44,7 +44,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// This method works somewhat like a constructor as it creates an object of 
 		/// the Dialog Component class and intializes this objects connection to the behaviour object given.
 		/// 
-		/// If a ui had already been created before it will be reused.
+		/// The UI Gameobjects are as a singleton: If a ui had already been created before it will be reused.
 		/// </summary>
 		public static void Show (DialogBehaviour behaviour)
 		{
