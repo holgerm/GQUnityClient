@@ -6,26 +6,27 @@ using GQ.Util;
 using UnityEngine.UI;
 using GQ.Client.Model;
 
-namespace GQ.Client.UI.Controller {
+namespace GQ.Client.UI.Dialogs {
 	
-	public class LoadQuestInfos : Dialog {
+	public class LoadInfoDialogBehaviour : DialogBehaviour {
 
-		protected override void OnEnable()
+		/// <summary>
+		/// Idempotent init method that hides both buttons and ensures that our behaviour callback are registered with the InfoManager exactly once.
+		/// </summary>
+		public override void Initialize ()
 		{
-			InitializeDialogListeners();
+			base.Initialize ();
 
-			QuestInfoManager.Instance.UpdateQuestInfoList ();
+			// to prevent registering the same listeners multiple times, in case we initialize multiple times ...
+			detachUpdateListeners ();
+			attachUpdateListeners ();
 		}
 
-		protected override void InitializeDialogListeners ()
+		public override void TearDown()
 		{
-			base.InitializeDialogListeners ();
+			base.TearDown ();
 
-			// Initally we do not need Buttons:
-			YesButton.gameObject.SetActive(false);
-			NoButton.gameObject.SetActive(false);
-
-			attachUpdateListeners ();
+			detachUpdateListeners ();
 		}
 
 		void attachUpdateListeners ()
@@ -35,11 +36,6 @@ namespace GQ.Client.UI.Controller {
 			QuestInfoManager.Instance.OnUpdateSuccess += CloseDialog;
 			QuestInfoManager.Instance.OnUpdateError += UpdateLoadingScreenError;
 		}			
-
-		void OnDisable()
-		{
-			detachUpdateListeners ();
-		}
 
 		void detachUpdateListeners ()
 		{
@@ -56,8 +52,11 @@ namespace GQ.Client.UI.Controller {
 		/// <param name="args">Arguments.</param>
 		public void InitializeLoadingScreen(object callbackSender, UpdateQuestInfoEventArgs args)
 		{
-			Title.text = args.Message;
-			Details.text = "Starting ...";
+			Dialog.Title.text = args.Message;
+			Dialog.Details.text = "Starting ...";
+
+			// now we show the dialog:
+			Dialog.gameObject.SetActive(true);
 		}	
 
 		/// <summary>
@@ -67,8 +66,7 @@ namespace GQ.Client.UI.Controller {
 		/// <param name="args">Arguments.</param>
 		public void UpdateLoadingScreenProgress(object callbackSender, UpdateQuestInfoEventArgs args)
 		{
-			Details.text = String.Format ("{0:#0.0}% done", args.Progress * 100);
-			Debug.Log ("Progress: " + args.Progress);
+			Dialog.Details.text = String.Format ("{0:#0.0}% done", args.Progress * 100);
 		}
 		/// <summary>
 		/// Callback for the OnUpdateError event.
@@ -77,7 +75,7 @@ namespace GQ.Client.UI.Controller {
 		/// <param name="args">Arguments.</param>
 		public void UpdateLoadingScreenError(object callbackSender, UpdateQuestInfoEventArgs args)
 		{
-			Details.text = String.Format ("Error: {0}", args.Message);
+			Dialog.Details.text = String.Format ("Error: {0}", args.Message);
 
 			// Use No button for Giving Up:
 			SetNoButton(
@@ -91,14 +89,16 @@ namespace GQ.Client.UI.Controller {
 			// Use Yes button for Retry:
 			SetYesButton (
 				"Retry",
-				(GameObject sender, EventArgs e) => {
-					// inhibit multiple clicks by disabling the button first:
-					YesButton.interactable = false;
-					YesButton.gameObject.SetActive(false);
+				(GameObject yesButton, EventArgs e) => {
+//					// inhibit multiple clicks by disabling the button first:
+//					Dialog.YesButton.interactable = false;
+//					Dialog.YesButton.gameObject.SetActive(false);
+//
+//					// hide No Button, too:
+//					Dialog.NoButton.gameObject.SetActive(false);
 
-					// in error case when user clicks the retry button, we start the update again:
-					detachUpdateListeners();
-					InitializeDialogListeners();
+					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
+					Initialize();
 					QuestInfoManager.Instance.UpdateQuestInfoList ();
 				}
 			);

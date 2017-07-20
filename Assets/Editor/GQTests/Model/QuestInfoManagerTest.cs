@@ -44,7 +44,6 @@ namespace GQTests.Model {
 			IEnumerator<QuestInfo> questInfos = 
 				qm.GetEnumerator ();
 			Assert.IsFalse (questInfos.MoveNext ());
-				
 		}
 
 

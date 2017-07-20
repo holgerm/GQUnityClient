@@ -4,24 +4,24 @@ using GQ.Client.Model;
 using System.Collections.Generic;
 using System;
 using GQ.Util;
-using GQ.Client.UI.Controller;
+using GQ.Client.UI.Dialogs;
 
 namespace GQ.Client.UI.Foyer {
 
 	/// <summary>
-	/// Shows all Quest Info objects, e.g. in a scrollable list within the foyer.
+	/// Shows all Quest Info objects, e.g. in a scrollable list within the foyer. Drives a dialog while refreshing its content.
 	/// </summary>
-	public class QuestInfoList : MonoBehaviour {
+	public class InfoListController : MonoBehaviour {
 
-		public Transform Content;
+		public Transform InfoList;
 		public GameObject QuestInfoUIPrefab;
 
 		private QuestInfoManager qm;
 
 		void Reset()
 		{
-			if (Content == null) {
-				Content = transform;
+			if (InfoList == null) {
+				InfoList = transform;
 			}
 
 			if (QuestInfoUIPrefab == null) 
@@ -40,19 +40,10 @@ namespace GQ.Client.UI.Foyer {
 		{
 			qm = QuestInfoManager.Instance;
 
-			LoadQuestInfos.Show ();
+			Dialog.Show (new LoadInfoDialogBehaviour());
+			QuestInfoManager.Instance.UpdateQuestInfoList ();
 		}
 			
-		public void ShowLoadingScreen()
-		{
-			GameObject rootCanvas = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
-			Instantiate(
-				Resources.Load(Res.DIALOG_SCREEN),
-				rootCanvas.transform,
-				false
-			);
-		}
-
 		private void RefreshList()
 		{
 			IEnumerator<QuestInfo> infos = qm.GetEnumerator ();

@@ -445,6 +445,19 @@ namespace GQ.Editor.Util
 			return Regex.Replace (combinedPath.ToString (), "/+", PATH_ELEMENT_SEPARATOR);
 		}
 
+		public static string LocalPath4WWW(string assetRelativePath) 
+		{
+			string path;
+
+			if (assetRelativePath.StartsWith ("Assets"))
+				assetRelativePath = assetRelativePath.Substring ("Assets".Length);
+
+			if (!assetRelativePath.StartsWith ("/"))
+				assetRelativePath = "/" + assetRelativePath;
+
+			return "file://" + Application.dataPath + assetRelativePath;
+		}
+
 		public static string FileName (string filePath)
 		{
 			string filename = "";

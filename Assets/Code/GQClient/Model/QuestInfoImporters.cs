@@ -77,7 +77,7 @@ namespace GQ.Client.Model {
 			Download jsonDownload = new Download(url, 120000);
 
 			jsonDownload.OnSuccess += (Download d, DownloadEvent e) => {
-				importer.QuestInfoLoaded(d.Www.text);				
+				importer.QuestInfoLoaded(e.Message);				
 			};
 
 			Base.Instance.StartCoroutine(jsonDownload.StartDownload());

@@ -70,12 +70,15 @@ namespace GQ.Util {
 
 		#region Public Interface
 
-		public WWW Www {
+		public WWW Www { get; set; }
+
+		public string Response {
 			get {
-				return _www;
-			}
-			private set {
-				_www = value;
+				if (Www.isDone)
+					return Www.text;
+				else {
+					return "";
+				}
 			}
 		}
 
@@ -113,7 +116,7 @@ namespace GQ.Util {
 		public IEnumerator StartDownload () {
 			Www = new WWW(url);
 			stopwatch.Start();
-			Raise(OnStart, DownloadEvent.EMPTY);
+			Raise(OnStart);
 
 			float progress = 0f;
 			while ( !Www.isDone ) {
@@ -139,7 +142,7 @@ namespace GQ.Util {
 			else {
 				Raise(OnProgress, new DownloadEvent(progress: Www.progress));
 				yield return null;
-				Raise(OnSuccess);
+				Raise(OnSuccess, new DownloadEvent(message: Www.text));
 			}
 
 			yield break;

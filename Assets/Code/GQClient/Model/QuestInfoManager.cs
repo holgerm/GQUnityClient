@@ -133,7 +133,7 @@ namespace GQ.Client.Model {
 			jsonDownload.OnError += 
 				(Download downloader, DownloadEvent e) => 
 				{
-				Raise(OnUpdateError, new UpdateQuestInfoEventArgs(message: e.Message));
+					Raise(OnUpdateError, new UpdateQuestInfoEventArgs(message: e.Message));
 				};
 
 			Base.Instance.StartCoroutine(jsonDownload.StartDownload());
