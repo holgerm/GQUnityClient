@@ -8,7 +8,7 @@ using GQ.Client.Model;
 
 namespace GQ.Client.UI.Dialogs {
 	
-	public class LoadInfoDialogBehaviour : DialogBehaviour {
+	public class UpdateQuestInfoDialogBehaviour : DialogBehaviour {
 
 		/// <summary>
 		/// Idempotent init method that hides both buttons and ensures that our behaviour callback are registered with the InfoManager exactly once.
@@ -31,7 +31,7 @@ namespace GQ.Client.UI.Dialogs {
 
 		void attachUpdateListeners ()
 		{
-			QuestInfoManager.Instance.OnUpdateStart += InitializeLoadingScreen;
+			QuestInfoManager.Instance.OnUpdateStep += InitializeLoadingScreen;
 			QuestInfoManager.Instance.OnUpdateProgress += UpdateLoadingScreenProgress;
 			QuestInfoManager.Instance.OnUpdateSuccess += CloseDialog;
 			QuestInfoManager.Instance.OnUpdateError += UpdateLoadingScreenError;
@@ -39,7 +39,7 @@ namespace GQ.Client.UI.Dialogs {
 
 		void detachUpdateListeners ()
 		{
-			QuestInfoManager.Instance.OnUpdateStart -= InitializeLoadingScreen;
+			QuestInfoManager.Instance.OnUpdateStep -= InitializeLoadingScreen;
 			QuestInfoManager.Instance.OnUpdateProgress -= UpdateLoadingScreenProgress;
 			QuestInfoManager.Instance.OnUpdateSuccess -= CloseDialog;
 			QuestInfoManager.Instance.OnUpdateError -= UpdateLoadingScreenError;
@@ -90,16 +90,9 @@ namespace GQ.Client.UI.Dialogs {
 			SetYesButton (
 				"Retry",
 				(GameObject yesButton, EventArgs e) => {
-//					// inhibit multiple clicks by disabling the button first:
-//					Dialog.YesButton.interactable = false;
-//					Dialog.YesButton.gameObject.SetActive(false);
-//
-//					// hide No Button, too:
-//					Dialog.NoButton.gameObject.SetActive(false);
-
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
 					Initialize();
-					QuestInfoManager.Instance.UpdateQuestInfoList ();
+					new ServerQuestInfoLoader().Start();
 				}
 			);
 		}

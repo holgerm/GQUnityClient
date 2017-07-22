@@ -40,27 +40,14 @@ namespace GQ.Client.UI.Foyer {
 		{
 			qm = QuestInfoManager.Instance;
 
-			Dialog.Show (new LoadInfoDialogBehaviour());
-			QuestInfoManager.Instance.UpdateQuestInfoList ();
+			Dialog.Show (new UpdateQuestInfoDialogBehaviour());
+			qm.UpdateQuestInfos(
+				new InfoLoader []
+				{ 
+					new ServerQuestInfoLoader() 
+				}
+			);
 		}
-			
-		private void RefreshList()
-		{
-			IEnumerator<QuestInfo> infos = qm.GetEnumerator ();
-			while (infos.MoveNext ()) {
-				Debug.Log ("in while ... " + infos.Current.Name);
-
-				// create a new instance of the quest info prefab:
-				GameObject currentQuestInfoUI = (GameObject)Instantiate (QuestInfoUIPrefab);
-				// make it a child of this object (the content)
-				currentQuestInfoUI.transform.SetParent (transform);
-				// get the controller for the new UI element:
-				QuestInfoPanel qiController = currentQuestInfoUI.GetComponent<QuestInfoPanel>();
-				// initialize it with the data form the current quest info model object:
-				qiController.SetUp(infos.Current);
-			}
-		}
-
 			
 	}
 }

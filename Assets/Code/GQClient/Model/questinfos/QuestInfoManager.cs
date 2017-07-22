@@ -72,9 +72,8 @@ namespace GQ.Client.Model {
 
 		protected virtual void RaiseChange (QuestInfoChangedEvent e)
 		{
-			var handler = OnChange;
-			if (handler != null)
-				handler (this, e);
+			if (OnChange != null)
+				OnChange (this, e);
 		}
 
 		#endregion
@@ -84,10 +83,10 @@ namespace GQ.Client.Model {
 
 		public delegate void Callback (object sender, UpdateQuestInfoEventArgs e);
 
-		public event Callback OnUpdateStart;
+		public event Callback OnUpdateStart; 
 		public event Callback OnUpdateProgress;
 		public event Callback OnUpdateStep;
-		public event Callback OnUpdateTimeout;
+		public event Callback OnUpdateTimeout; // TODO replace by Error
 		public event Callback OnUpdateSuccess;
 		public event Callback OnUpdateError;
 
@@ -101,47 +100,46 @@ namespace GQ.Client.Model {
 			if (callback != null)
 				callback (this, e);
 		}
-			
-		public void UpdateQuestInfoList() {
-			// TODO implement behavior of getting local and remote quest infos ...
 
-			// Start the gathering:
-			Raise(OnUpdateStart, new UpdateQuestInfoEventArgs("Loading Quest Information"));
-
-			// 1. Get locally stored quest infos
-
-			// 2. Download Server-based quest infos
-			Download jsonDownload = 
-				new Download(
-					ConfigurationManager.UrlPublicQuestsJSON, 
-					120000
-				);
-
-			jsonDownload.OnProgress += 
-				(Download downloader, DownloadEvent e) => 
-				{
-				Raise(OnUpdateProgress, new UpdateQuestInfoEventArgs(progress: e.Progress));
-				};
-
-			jsonDownload.OnSuccess += 
-				(Download downloader, DownloadEvent e) => 
-				{
-					Raise(OnUpdateSuccess, new UpdateQuestInfoEventArgs());
-				};
-
-
-			jsonDownload.OnError += 
-				(Download downloader, DownloadEvent e) => 
-				{
-					Raise(OnUpdateError, new UpdateQuestInfoEventArgs(message: e.Message));
-				};
-
-			Base.Instance.StartCoroutine(jsonDownload.StartDownload());
-
-			// 3. Mix both
-
+		public void RaiseUpdateStart(UpdateQuestInfoEventArgs e) {
+			Raise (OnUpdateStart, e); 
 		}
 
+		public void RaiseUpdateProgress(UpdateQuestInfoEventArgs e) {
+			Raise (OnUpdateProgress, e);
+		}
+
+		public void RaiseUpdateStep(UpdateQuestInfoEventArgs e) {
+			Raise (OnUpdateStep, e);
+		}
+
+		public void RaiseUpdateSuccess(UpdateQuestInfoEventArgs e) {
+			Raise (OnUpdateSuccess, e);
+		}
+
+		public void RaiseUpdateError(UpdateQuestInfoEventArgs e) {
+			Raise (OnUpdateError, e);
+		}
+
+		/// <summary>
+		/// Updates the quest infos successively from different sources: 
+		/// typically locally from the device and then from the connected server. 
+		/// 
+		/// This method is executed mostly as Coroutine, hence feedback is given
+		/// in form of raised events in between the execution steps.
+		/// </summary>
+		public void UpdateQuestInfos(InfoLoader[] loaders) 
+		{
+			int totalSteps = loaders.Length + 1;
+			int currentStep = 1;
+
+			// new LocalInfoLoader ().Start(currentStep++, totalSteps));
+			foreach(InfoLoader loader in loaders) 
+			{
+				loader.Start();
+			}
+		}
+			
 		#endregion
 
 
@@ -176,11 +174,19 @@ namespace GQ.Client.Model {
 	{
 		public string Message { get; protected set; }
 		public float Progress { get; protected set; }
+		public int Step { get; protected set; }
+		public int StepsTotal { get; protected set; }
 
-		public UpdateQuestInfoEventArgs(string message = "", float progress = 0f)
+		public UpdateQuestInfoEventArgs(
+			string message = "", 
+			float progress = 0f, 
+			int step = 0, 
+			int stepsTotal = 0)
 		{
 			Message = message;
 			Progress = progress;
+			Step = step;
+			StepsTotal = stepsTotal;
 		}
 	}
 

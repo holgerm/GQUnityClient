@@ -121,41 +121,5 @@ namespace GQ.Client.UI.Dialogs {
 			}
 		}
 		 
-//		/// <summary>
-//		/// When the dialog is enabled (i.e. activated, shown, started), we connect the behaviour events with the button click unity events. 
-//		/// And we initialize the behaviour.
-//		/// </summary>
-//		protected void OnEnable()
-//		{
-//			/// UI 2 CONTROLLER:
-//			/// connect the behaviour to the ui buttons, i.e. make sure controller events are called when ui button pressed:
-//			YesButton.onClick.RemoveAllListeners();
-//			YesButton.onClick.AddListener (YesButtonClicked);
-//
-//			NoButton.onClick.RemoveAllListeners ();
-//			NoButton.onClick.AddListener (NoButtonClicked);
-//
-//			/// CONTROLLER FUNCTIONS:
-//			/// make sure we start clean, i.e. with no mvc listeners at all:
-//			if (Behaviour != null)
-//				Behaviour.Initialize ();
-//		}
-
-//		protected void OnDisable() 
-//		{
-//			YesButton.onClick.RemoveAllListeners();
-//			NoButton.onClick.RemoveAllListeners ();
-//
-//			Behaviour.TearDown ();
-//		}
-
-//		protected void YesButtonClicked() {
-//			Behaviour.RaiseYesButtonClicked();
-//		}
-//
-//		protected void NoButtonClicked() {
-//			Behaviour.RaiseNoButtonClicked();
-//		}
-
 	}
 }
