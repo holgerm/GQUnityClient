@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using GQ.Util;
 using GQ.Client.Conf;
+using GQ.Client.Util;
 
 
 namespace GQ.Client.Model {
@@ -53,11 +54,13 @@ namespace GQ.Client.Model {
 				if ( q.Id == null )
 					continue;
 
-				if (QuestDict.ContainsKey(q.Id)) {
+				if (QuestDict.ContainsKey (q.Id)) {
 					// override:
 					QuestDict [q.Id] = q;
+				} 
+				else {
+					QuestDict.Add ((int)q.Id, q);
 				}
-				QuestDict.Add((int)q.Id, q);
 			}
 		}
 
@@ -85,7 +88,6 @@ namespace GQ.Client.Model {
 
 		public event Callback OnUpdateStart; 
 		public event Callback OnUpdateProgress;
-		public event Callback OnUpdateStep;
 		public event Callback OnUpdateTimeout; // TODO replace by Error
 		public event Callback OnUpdateSuccess;
 		public event Callback OnUpdateError;
@@ -109,10 +111,6 @@ namespace GQ.Client.Model {
 			Raise (OnUpdateProgress, e);
 		}
 
-		public void RaiseUpdateStep(UpdateQuestInfoEventArgs e) {
-			Raise (OnUpdateStep, e);
-		}
-
 		public void RaiseUpdateSuccess(UpdateQuestInfoEventArgs e) {
 			Raise (OnUpdateSuccess, e);
 		}
@@ -128,18 +126,19 @@ namespace GQ.Client.Model {
 		/// This method is executed mostly as Coroutine, hence feedback is given
 		/// in form of raised events in between the execution steps.
 		/// </summary>
-		public void UpdateQuestInfos(InfoLoader[] loaders) 
+		public void UpdateQuestInfos(params Task[] loaders) 
 		{
-			int totalSteps = loaders.Length + 1;
-			int currentStep = 1;
-
-			// new LocalInfoLoader ().Start(currentStep++, totalSteps));
-			foreach(InfoLoader loader in loaders) 
+			int step = 1;
+			foreach(Task loader in loaders) 
 			{
-				loader.Start();
+				if (loaders.Length > 1)
+					// use steps only when multiple loaders are used.
+					loader.Start (step++);
+				else
+					loader.Start ();
 			}
 		}
-			
+
 		#endregion
 
 
@@ -175,18 +174,18 @@ namespace GQ.Client.Model {
 		public string Message { get; protected set; }
 		public float Progress { get; protected set; }
 		public int Step { get; protected set; }
-		public int StepsTotal { get; protected set; }
+		public Task NextTask { get; protected set; }
 
 		public UpdateQuestInfoEventArgs(
 			string message = "", 
 			float progress = 0f, 
-			int step = 0, 
-			int stepsTotal = 0)
+			int step = 0,
+			Task nextTask = null)
 		{
 			Message = message;
 			Progress = progress;
 			Step = step;
-			StepsTotal = stepsTotal;
+			NextTask = nextTask;
 		}
 	}
 

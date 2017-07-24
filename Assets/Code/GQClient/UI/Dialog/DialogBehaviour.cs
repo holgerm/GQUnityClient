@@ -16,6 +16,11 @@ namespace GQ.Client.UI.Dialogs {
 		public event ClickCallBack OnNoButtonClicked;
 
 		/// <summary>
+		/// Step counter that can be used
+		/// </summary>
+		protected int step;
+
+		/// <summary>
 		/// Initialize this instance. 
 		/// This method is called by Show() just before the dialog will be made visible (aka enabled, SetActive).
 		/// </summary>
@@ -33,7 +38,6 @@ namespace GQ.Client.UI.Dialogs {
 
 			Dialog.NoButton.onClick.RemoveAllListeners ();
 			Dialog.NoButton.onClick.AddListener (RaiseNoButtonClicked);
-
 		}
 
 		/// <summary>

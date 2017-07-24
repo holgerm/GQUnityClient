@@ -11,7 +11,8 @@ namespace GQ.Client.UI.Dialogs {
 	public class UpdateQuestInfoDialogBehaviour : DialogBehaviour {
 
 		/// <summary>
-		/// Idempotent init method that hides both buttons and ensures that our behaviour callback are registered with the InfoManager exactly once.
+		/// Idempotent init method that hides both buttons and ensures that our 
+		/// behaviour callback are registered with the InfoManager exactly once.
 		/// </summary>
 		public override void Initialize ()
 		{
@@ -31,7 +32,7 @@ namespace GQ.Client.UI.Dialogs {
 
 		void attachUpdateListeners ()
 		{
-			QuestInfoManager.Instance.OnUpdateStep += InitializeLoadingScreen;
+			QuestInfoManager.Instance.OnUpdateStart += InitializeLoadingScreen;
 			QuestInfoManager.Instance.OnUpdateProgress += UpdateLoadingScreenProgress;
 			QuestInfoManager.Instance.OnUpdateSuccess += CloseDialog;
 			QuestInfoManager.Instance.OnUpdateError += UpdateLoadingScreenError;
@@ -39,11 +40,13 @@ namespace GQ.Client.UI.Dialogs {
 
 		void detachUpdateListeners ()
 		{
-			QuestInfoManager.Instance.OnUpdateStep -= InitializeLoadingScreen;
+			QuestInfoManager.Instance.OnUpdateStart -= InitializeLoadingScreen;
 			QuestInfoManager.Instance.OnUpdateProgress -= UpdateLoadingScreenProgress;
 			QuestInfoManager.Instance.OnUpdateSuccess -= CloseDialog;
 			QuestInfoManager.Instance.OnUpdateError -= UpdateLoadingScreenError;
 		}
+
+		const string BASIC_TITLE = "Updating quests";
 
 		/// <summary>
 		/// Callback for the OnUpdateStart event.
@@ -52,8 +55,16 @@ namespace GQ.Client.UI.Dialogs {
 		/// <param name="args">Arguments.</param>
 		public void InitializeLoadingScreen(object callbackSender, UpdateQuestInfoEventArgs args)
 		{
-			Dialog.Title.text = args.Message;
-			Dialog.Details.text = "Starting ...";
+			if (args.Step != 0) {
+				Dialog.Title.text = 
+					string.Format ("{0} (step {1})", BASIC_TITLE, args.Step);
+				step = args.Step;
+			}
+			else {
+				Dialog.Title.text = 
+					string.Format (BASIC_TITLE);
+			}
+			Dialog.Details.text = args.Message;
 
 			// now we show the dialog:
 			Dialog.gameObject.SetActive(true);
@@ -92,7 +103,7 @@ namespace GQ.Client.UI.Dialogs {
 				(GameObject yesButton, EventArgs e) => {
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
 					Initialize();
-					new ServerQuestInfoLoader().Start();
+					new ServerQuestInfoLoader().Start(step);
 				}
 			);
 		}

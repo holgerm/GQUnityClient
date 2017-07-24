@@ -4,35 +4,37 @@ using UnityEngine;
 using GQ.Util;
 using GQ.Client.Conf;
 using Newtonsoft.Json;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model {
 
-	public class ServerQuestInfoLoader : InfoLoader {
+	public class ServerQuestInfoLoader : Task {
 
 		QuestInfoManager qm = QuestInfoManager.Instance;
 
-		public override void Start() {
+		public override void Start(int step = 0) {
 			// Start the gathering:
-			qm.RaiseUpdateStep(
+			qm.RaiseUpdateStart(
 				new UpdateQuestInfoEventArgs (
-					message: "Gathering local Quests from Device")
+					message: "Gathering Quests from Server",
+					step: step
+				)
 			);
 
-			// 1. Get locally stored quest infos
-
-			// 2. Download Server-based quest infos
 			Download jsonDownload = 
 				new Download(
 					ConfigurationManager.UrlPublicQuestsJSON, 
 					120000
 				);
 
+			//ON PROGRESS:
 			jsonDownload.OnProgress += 
 				(Download downloader, DownloadEvent e) => 
 			{
 				qm.RaiseUpdateProgress(new UpdateQuestInfoEventArgs(progress: e.Progress));
 			};
 
+			// ON SUCCESS:
 			jsonDownload.OnSuccess += 
 				(Download downloader, DownloadEvent e) => 
 			{
@@ -41,9 +43,12 @@ namespace GQ.Client.Model {
 
 				// extract and import the loaded quests:
 				extractQuestInfosFromJSON(downloader, e);
+
+				// Task completed:
+				RaiseTaskCompleted();
 			};
 
-
+			// ON ERROR:
 			jsonDownload.OnError += 
 				(Download downloader, DownloadEvent e) => 
 			{

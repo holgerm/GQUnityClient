@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using GQ.Util;
 using GQ.Client.UI.Dialogs;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -41,12 +42,9 @@ namespace GQ.Client.UI.Foyer {
 			qm = QuestInfoManager.Instance;
 
 			Dialog.Show (new UpdateQuestInfoDialogBehaviour());
-			qm.UpdateQuestInfos(
-				new InfoLoader []
-				{ 
-					new ServerQuestInfoLoader() 
-				}
-			);
+
+			Task t = new TaskSequence(new ServerQuestInfoLoader (), new ServerQuestInfoLoader ());
+			t.Start ();
 		}
 			
 	}

@@ -30,7 +30,7 @@ namespace GQ.Client.UI.Dialogs {
 		public Button YesButton;
 		public Button NoButton;
 
-		public DialogBehaviour Behaviour { get; protected set; }
+		public DialogBehaviour Behaviour { get; set; }
 
 		protected const string DIALOG_PREFAB = "Dialog";
 		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
