@@ -38,6 +38,29 @@ namespace GQ.Client.UI.Dialogs {
 		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
 		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
 
+		private static GameObject instance = null;
+
+		/// <summary>
+		/// Gets the instance. If the instance is used for the first time, 
+		/// it will be created from the prefab and will be inactive.
+		/// </summary>
+		/// <value>The instance.</value>
+		public static Dialog Instance {
+			get {
+				if (instance == null) {
+					GameObject rootCanvas = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
+					instance = (GameObject) Instantiate (
+						Resources.Load (DIALOG_PREFAB),
+						rootCanvas.transform,
+						false
+					);
+					instance.SetActive (false);
+					DontDestroyOnLoad (instance);
+				}
+				return instance.GetComponent<Dialog> ();
+			}
+		}
+
 		/// <summary>
 		/// Shows the loading dialog ui and connects it with the given behaviour. 
 		/// 
@@ -48,28 +71,17 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		public static void Show (DialogBehaviour behaviour)
 		{
-			if (instance != null) {
-				Debug.Log ("Re-Enable Existing");
-				instance.SetActive (true);
-			} 
-			else {
-				Debug.Log ("Loading and Instatiating New");
-				GameObject rootCanvas = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
-				instance = (GameObject) Instantiate (
-					Resources.Load (DIALOG_PREFAB),
-					rootCanvas.transform,
-					false
-				);
-			}
+			Instance.gameObject.SetActive (true);
 
 			// Connect this controller with the given behaviour:
-			behaviour.Dialog = instance.GetComponent<Dialog> ();
+			behaviour.Dialog = Instance;
 			behaviour.Dialog.Behaviour = behaviour;
 
 			behaviour.Initialize ();
 		}
 
-		private static GameObject instance = null;
+
+		#region Initialization in Editor
 
 		public virtual void Reset()
 		{
@@ -120,6 +132,8 @@ namespace GQ.Client.UI.Dialogs {
 				NoButton = buttonT.GetComponent<Button>();
 			}
 		}
+
+		#endregion
 		 
 	}
 }
