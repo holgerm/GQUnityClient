@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GQ.Client.UI;
 
 namespace GQ.Client.Util {
 
@@ -8,7 +9,8 @@ namespace GQ.Client.Util {
 
 		protected List<Task> tasks;
 
-		public TaskSequence(params Task[] tasks) {
+		public TaskSequence(params Task[] tasks) : base() 
+		{
 			this.tasks = new List<Task>(tasks);
 			concatenateTasks ();
 		}
@@ -26,10 +28,14 @@ namespace GQ.Client.Util {
 			}
 		}
 
-		public override void Start (int step = 0)
+		public override void Start (int step = 1)
 		{
+			Debug.Log ("TaskSequenz.Start() step: " + step);
+			base.Start(step);
 			if (tasks != null && tasks.Count > 0) {
-				tasks [0].Start (step);
+				if (Step == 0 && tasks.Count > 1)
+					Step = 1;
+				tasks [0].Start (Step);
 			}
 		}
 

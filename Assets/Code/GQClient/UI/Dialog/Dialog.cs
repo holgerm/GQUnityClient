@@ -30,13 +30,15 @@ namespace GQ.Client.UI.Dialogs {
 		public Button YesButton;
 		public Button NoButton;
 
-		public DialogBehaviour Behaviour { get; set; }
+		public DialogBehaviour Behaviour { get; set; } 
 
 		protected const string DIALOG_PREFAB = "Dialog";
 		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
 		protected const string TITLE_PATH = "Panel/TitleText";
 		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
 		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
+
+		#region Singleton
 
 		private static GameObject instance = null;
 
@@ -55,30 +57,53 @@ namespace GQ.Client.UI.Dialogs {
 						false
 					);
 					instance.SetActive (false);
-					DontDestroyOnLoad (instance);
 				}
 				return instance.GetComponent<Dialog> ();
 			}
 		}
+			
+		#endregion
+
+
+		#region Runtime API
+
+		public void Show() {
+			gameObject.SetActive (true);
+		}
+
+		public void Hide() {
+			gameObject.SetActive (false);
+		}
 
 		/// <summary>
-		/// Shows the loading dialog ui and connects it with the given behaviour. 
-		/// 
-		/// This method works somewhat like a constructor as it creates an object of 
-		/// the Dialog Component class and intializes this objects connection to the behaviour object given.
-		/// 
-		/// The UI prefab is used like a singleton: If a ui had already been created before it will be reused.
+		/// Sets the yes button with text and callback method.
 		/// </summary>
-		public static void Show (DialogBehaviour behaviour)
-		{
-			Instance.gameObject.SetActive (true);
+		/// <param name="description">Description.</param>
+		/// <param name="yesButtonClicked">Yes button clicked.</param>
+		public void SetYesButton(string description, ClickCallBack yesButtonClicked) {
+			Text buttonText = YesButton.transform.Find ("Text").GetComponent<Text>();
+			buttonText.text = description;
 
-			// Connect this controller with the given behaviour:
-			behaviour.Dialog = Instance;
-			behaviour.Dialog.Behaviour = behaviour;
-
-			behaviour.Initialize ();
+			Behaviour.OnYesButtonClicked += yesButtonClicked;
+			YesButton.gameObject.SetActive (true);	
+			YesButton.interactable = true;
 		}
+
+		/// <summary>
+		/// Sets the no button with text and callback method.
+		/// </summary>
+		/// <param name="description">Description.</param>
+		/// <param name="noButtonClicked">No button clicked.</param>
+		public void SetNoButton(string description, ClickCallBack noButtonClicked) {
+			Text buttonText = NoButton.transform.Find ("Text").GetComponent<Text>();
+			buttonText.text = description;
+
+			Behaviour.OnNoButtonClicked += noButtonClicked;
+			NoButton.gameObject.SetActive (true);
+			NoButton.interactable = true;
+		}
+
+		#endregion
 
 
 		#region Initialization in Editor

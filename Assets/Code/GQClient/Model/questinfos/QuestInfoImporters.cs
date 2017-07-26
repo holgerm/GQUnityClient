@@ -74,7 +74,7 @@ namespace GQ.Client.Model {
 					ConfigurationManager.Current.portal
 				);
 
-			Download jsonDownload = new Download(url, 120000);
+			Download jsonDownload = new Download(url: url, timeout: 120000);
 
 			jsonDownload.OnSuccess += (Download d, DownloadEvent e) => {
 				importer.QuestInfoLoaded(e.Message);				

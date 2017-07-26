@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 using System;
 using GQ.Util;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 using GQ.Client.Util;
+using Newtonsoft.Json;
 
 
 namespace GQ.Client.Model {
@@ -46,6 +48,11 @@ namespace GQ.Client.Model {
 			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
 		}
 
+		public void OnQuestInfoJSONLoaded(object task, TaskEventArgs e) {
+			QuestInfo[] quests = JsonConvert.DeserializeObject<QuestInfo[]>(((DownloadEvent)e).Message);
+			Import (quests);
+		}
+
 		public void Import (QuestInfo[] quests) {
 			if ( quests == null || quests.Length == 0)
 				return;
@@ -84,61 +91,41 @@ namespace GQ.Client.Model {
 
 		#region Update Quest Infos
 
-		public delegate void Callback (object sender, UpdateQuestInfoEventArgs e);
+//		public delegate void Callback (object sender, UpdateQuestInfoEventArgs e);
+//
+//		public event Callback OnUpdateStart; 
+//		public event Callback OnUpdateProgress;
+//		public event Callback OnUpdateTimeout; // TODO replace by Error
+//		public event Callback OnUpdateSuccess;
+//		public event Callback OnUpdateError;
 
-		public event Callback OnUpdateStart; 
-		public event Callback OnUpdateProgress;
-		public event Callback OnUpdateTimeout; // TODO replace by Error
-		public event Callback OnUpdateSuccess;
-		public event Callback OnUpdateError;
-
-		/// <summary>
-		/// Use this method to raise an event based on Callback delegate type, e.g. OnUpdateStart, OnUpdateProgress, etc.
-		/// </summary>
-		/// <param name="callback">Callback.</param>
-		/// <param name="e">E.</param>
-		protected virtual void Raise (Callback callback, UpdateQuestInfoEventArgs e)
-		{
-			if (callback != null)
-				callback (this, e);
-		}
-
-		public void RaiseUpdateStart(UpdateQuestInfoEventArgs e) {
-			Raise (OnUpdateStart, e); 
-		}
-
-		public void RaiseUpdateProgress(UpdateQuestInfoEventArgs e) {
-			Raise (OnUpdateProgress, e);
-		}
-
-		public void RaiseUpdateSuccess(UpdateQuestInfoEventArgs e) {
-			Raise (OnUpdateSuccess, e);
-		}
-
-		public void RaiseUpdateError(UpdateQuestInfoEventArgs e) {
-			Raise (OnUpdateError, e);
-		}
-
-		/// <summary>
-		/// Updates the quest infos successively from different sources: 
-		/// typically locally from the device and then from the connected server. 
-		/// 
-		/// This method is executed mostly as Coroutine, hence feedback is given
-		/// in form of raised events in between the execution steps.
-		/// </summary>
-		public void UpdateQuestInfos(params Task[] loaders) 
-		{
-			int step = 1;
-			foreach(Task loader in loaders) 
-			{
-				if (loaders.Length > 1)
-					// use steps only when multiple loaders are used.
-					loader.Start (step++);
-				else
-					loader.Start ();
-			}
-		}
-
+//		/// <summary>
+//		/// Use this method to raise an event based on Callback delegate type, e.g. OnUpdateStart, OnUpdateProgress, etc.
+//		/// </summary>
+//		/// <param name="callback">Callback.</param>
+//		/// <param name="e">E.</param>
+//		protected virtual void Raise (Callback callback, UpdateQuestInfoEventArgs e)
+//		{
+//			if (callback != null)
+//				callback (this, e);
+//		}
+//
+//		public void RaiseUpdateStart(UpdateQuestInfoEventArgs e) {
+//			Raise (OnUpdateStart, e); 
+//		}
+//
+//		public void RaiseUpdateProgress(UpdateQuestInfoEventArgs e) {
+//			Raise (OnUpdateProgress, e);
+//		}
+//
+//		public void RaiseUpdateSuccess(UpdateQuestInfoEventArgs e) {
+//			Raise (OnUpdateSuccess, e);
+//		}
+//
+//		public void RaiseUpdateError(UpdateQuestInfoEventArgs e) {
+//			Raise (OnUpdateError, e);
+//		}
+//
 		#endregion
 
 
@@ -169,26 +156,26 @@ namespace GQ.Client.Model {
 		#endregion
 	}
 
-	public class UpdateQuestInfoEventArgs : EventArgs 
-	{
-		public string Message { get; protected set; }
-		public float Progress { get; protected set; }
-		public int Step { get; protected set; }
-		public Task NextTask { get; protected set; }
-
-		public UpdateQuestInfoEventArgs(
-			string message = "", 
-			float progress = 0f, 
-			int step = 0,
-			Task nextTask = null)
-		{
-			Message = message;
-			Progress = progress;
-			Step = step;
-			NextTask = nextTask;
-		}
-	}
-
+//	public class UpdateQuestInfoEventArgs : EventArgs 
+//	{
+//		public string Message { get; protected set; }
+//		public float Progress { get; protected set; }
+//		public int Step { get; protected set; }
+//		public Task NextTask { get; protected set; }
+//
+//		public UpdateQuestInfoEventArgs(
+//			string message = "", 
+//			float progress = 0f, 
+//			int step = 0,
+//			Task nextTask = null)
+//		{
+//			Message = message;
+//			Progress = progress;
+//			Step = step;
+//			NextTask = nextTask;
+//		}
+//	}
+//
 	public class QuestInfoChangedEvent : EventArgs 
 	{
 		public string Message { get; protected set; }

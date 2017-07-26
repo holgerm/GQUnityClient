@@ -3,9 +3,11 @@ using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
 using GQ.Client.Err;
+using GQ.Client.Util;
+using GQ.Client.UI;
 
 namespace GQ.Util {
-	public class Download {
+	public class Download : Task {
 		string url;
 
 		public long Timeout { get; set; }
@@ -102,7 +104,8 @@ namespace GQ.Util {
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
 		public Download (
 			string url, 
-			long timeout = 0) {
+			long timeout = 0) : base()
+		{
 			this.url = url;
 			Timeout = timeout;
 			stopwatch = new Stopwatch();
@@ -113,7 +116,15 @@ namespace GQ.Util {
 			OnProgress += defaultProgressHandling;
 		}
 
-		public IEnumerator StartDownload () {
+		public override void Start(int step = 0) 
+		{
+			base.Start(step);
+
+			Base.Instance.StartCoroutine(StartDownload());
+		}
+
+		public IEnumerator StartDownload () 
+		{
 			Www = new WWW(url);
 			stopwatch.Start();
 			Raise(OnStart);
@@ -127,6 +138,7 @@ namespace GQ.Util {
 				if ( Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout ) {
 					stopwatch.Stop();
 					Raise(OnTimeout, new DownloadEvent(elapsedTime: Timeout));
+					RaiseTaskFailed ();
 					Www.Dispose();
 					yield break;
 				}
@@ -138,11 +150,13 @@ namespace GQ.Util {
 				string errMsg = Www.error;
 				Www.Dispose();
 				Raise(OnError, new DownloadEvent(message: errMsg));
+				RaiseTaskFailed ();
 			}
 			else {
 				Raise(OnProgress, new DownloadEvent(progress: Www.progress));
 				yield return null;
 				Raise(OnSuccess, new DownloadEvent(message: Www.text));
+				RaiseTaskCompleted ();
 			}
 
 			yield break;
@@ -152,7 +166,7 @@ namespace GQ.Util {
 
 	}
 
-	public class DownloadEvent : EventArgs 
+	public class DownloadEvent : TaskEventArgs 
 	{
 		public string Message { get; protected set; }
 		public float Progress { get; protected set; }

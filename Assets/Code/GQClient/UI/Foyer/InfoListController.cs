@@ -41,9 +41,13 @@ namespace GQ.Client.UI.Foyer {
 		{
 			qm = QuestInfoManager.Instance;
 
-			Dialog.Show (new UpdateQuestInfoDialogBehaviour());
+			ServerQuestInfoLoader loader1 = new ServerQuestInfoLoader ();
+			UIBehaviour behaviour1 = new UpdateQuestInfoDialogBehaviour (loader1);
 
-			Task t = new TaskSequence(new ServerQuestInfoLoader (), new ServerQuestInfoLoader ());
+			ServerQuestInfoLoader loader2 = new ServerQuestInfoLoader ();
+			UIBehaviour behaviour2 = new UpdateQuestInfoDialogBehaviour (loader2);
+
+			TaskSequence t = new TaskSequence(loader1, loader2);
 			t.Start ();
 		}
 			
