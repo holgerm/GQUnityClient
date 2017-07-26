@@ -18,25 +18,22 @@ namespace GQ.Client.UI.Dialogs {
 			if (Task is Download) {
 				DownloadTask = Task as Download;
 			}
+		} 
+
+		public override void Start() 
+		{
+			base.Start ();
 
 			// to prevent registering the same listeners multiple times, in case we initialize multiple times ...
 			detachUpdateListeners ();
+
+			// attach listeners before the task gets started:
 			attachUpdateListeners ();
-		} 
-
-//		/// <summary>
-//		/// Idempotent init method that hides both buttons and ensures that our 
-//		/// behaviour callback are registered with the InfoManager exactly once.
-//		/// </summary>
-//		/// TODO: Initialize überdenken!
-//		public override void Initialize ()
-//		{
-//			base.Initialize ();
-//		}
-
-		public override void TearDown()
+		}
+			
+		public override void Stop()
 		{
-			base.TearDown ();
+			base.Stop ();
 
 			detachUpdateListeners ();
 		}

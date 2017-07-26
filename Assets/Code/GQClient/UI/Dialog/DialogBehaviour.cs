@@ -23,10 +23,11 @@ namespace GQ.Client.UI.Dialogs {
 			OnYesButtonClicked = null;
 			OnNoButtonClicked = null;
 
-			// Initally we do not need Buttons:
+			// Initally we hide Buttons:
 			Dialog.YesButton.gameObject.SetActive(false);
 			Dialog.NoButton.gameObject.SetActive(false);
 
+			// Initally both Buttons are connected to our standard events:
 			Dialog.YesButton.onClick.RemoveAllListeners();
 			Dialog.YesButton.onClick.AddListener (RaiseYesButtonClicked);
 
@@ -45,29 +46,9 @@ namespace GQ.Client.UI.Dialogs {
 		protected int step;
 
 		/// <summary>
-		/// Initialize this instance. 
-		/// This method is called by Show() just before the dialog will be made visible (aka enabled, SetActive).
-		/// </summary>
-//		public override void Initialize () {
-////			// initially we do not have listeners:
-////			OnYesButtonClicked = null;
-////			OnNoButtonClicked = null;
-////
-////			// Initally we do not need Buttons:
-////			Dialog.YesButton.gameObject.SetActive(false);
-////			Dialog.NoButton.gameObject.SetActive(false);
-////
-////			Dialog.YesButton.onClick.RemoveAllListeners();
-////			Dialog.YesButton.onClick.AddListener (RaiseYesButtonClicked);
-////
-////			Dialog.NoButton.onClick.RemoveAllListeners ();
-////			Dialog.NoButton.onClick.AddListener (RaiseNoButtonClicked);
-//		}
-
-		/// <summary>
 		/// Should be called before the dialog is made invisible or disposed.
 		/// </summary>
-		public virtual void TearDown() 
+		public virtual void Stop() 
 		{
 			// initially we do not have listeners:
 			OnYesButtonClicked = null;
@@ -105,7 +86,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// TODO move to Dialog class and change event args to some more generic type
 		protected void CloseDialog(object callbackSender, DownloadEvent args)
 		{
-			TearDown ();
+			Stop ();
 			Dialog.Hide();
 		}
 

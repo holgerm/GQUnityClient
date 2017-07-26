@@ -14,10 +14,16 @@ namespace GQ.Client.UI {
 		public UIBehaviour (Task task) 
 		{
 			Task = task;
-			task.Behaviour = this;
+			task.AddBehaviour(this);
 		}
 
 		public Task Task { get; set; }
+
+		/// <summary>
+		/// This method should only be called by the associated task and not directly from other classes.
+		/// </summary>
+		public virtual void Start () {}
+
 
 	}
 }

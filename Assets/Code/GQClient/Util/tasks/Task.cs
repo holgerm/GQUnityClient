@@ -9,9 +9,21 @@ namespace GQ.Client.Util {
 	public abstract class Task {
 
 		public Task() {
+			behaviours = new List<UIBehaviour> ();
 		}
 
-		public UIBehaviour Behaviour { get; set; } 
+
+		#region Link to Behavious
+
+		protected List<UIBehaviour> behaviours;
+
+		public void AddBehaviour(UIBehaviour behaviour) 
+		{
+			behaviours.Add (behaviour);
+		}
+
+		#endregion
+
 
 		public int Step { get; protected set; }
 
@@ -23,6 +35,9 @@ namespace GQ.Client.Util {
 		/// </summary>
 		public virtual void Start (int step = 0) {
 			Step = step;
+			behaviours.ForEach (
+				(UIBehaviour behaviour) => behaviour.Start ()
+			);
 		}
 
 		public void StartCallback(object sender, TaskEventArgs e) {
