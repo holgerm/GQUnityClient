@@ -30,12 +30,19 @@ namespace GQ.Client.Util {
 
 		public override void Start (int step = 1)
 		{
-			Debug.Log ("TaskSequenz.Start() step: " + step);
 			base.Start(step);
 			if (tasks != null && tasks.Count > 0) {
 				if (Step == 0 && tasks.Count > 1)
 					Step = 1;
 				tasks [0].Start (Step);
+			}
+		}
+
+		public override object Result {
+			get {
+				// TODO return the result of the last task if that is already completed. 
+				// 		Hence we need an IsCompleted for Tasks.
+				return "";
 			}
 		}
 

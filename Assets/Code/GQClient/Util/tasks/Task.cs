@@ -40,18 +40,20 @@ namespace GQ.Client.Util {
 			);
 		}
 
-		public void StartCallback(object sender, TaskEventArgs e) {
+		public virtual void StartCallback(object sender, TaskEventArgs e) {
 			this.Start(e.Step + 1);
 		}
+
+		public abstract object Result { get; }
 
 		public delegate void TaskCallback (object sender, TaskEventArgs e);
 
 		public event TaskCallback OnTaskCompleted; 
 		public event TaskCallback OnTaskFailed; 
 
-		protected virtual void RaiseTaskCompleted() {
+		protected virtual void RaiseTaskCompleted(object content = null) {
 			if (OnTaskCompleted != null)
-				OnTaskCompleted (this, new TaskEventArgs (step: Step));
+				OnTaskCompleted (this, new TaskEventArgs (step: Step, content: content));
 		}
 
 		protected virtual void RaiseTaskFailed() {
@@ -64,11 +66,14 @@ namespace GQ.Client.Util {
 	public class TaskEventArgs : EventArgs 
 	{
 		public int Step { get; protected set; }
+		public object Content { get; protected set; }
 
 		public TaskEventArgs(
-			int step = 0)
+			int step = 0,
+			object content = null)
 		{
 			Step = step;
+			Content = content;
 		}
 	}
 

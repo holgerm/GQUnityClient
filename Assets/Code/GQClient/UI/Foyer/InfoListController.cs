@@ -6,6 +6,7 @@ using System;
 using GQ.Util;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -41,13 +42,22 @@ namespace GQ.Client.UI.Foyer {
 		{
 			qm = QuestInfoManager.Instance;
 
-			ServerQuestInfoLoader loader1 = new ServerQuestInfoLoader ();
-			UIBehaviour behaviour1 = new UpdateQuestInfoDialogBehaviour (loader1);
+			Download downloader = 
+				new Download (
+					url: ConfigurationManager.UrlPublicQuestsJSON, 
+					timeout: 120000);
+			UIBehaviour behaviour1 = new UpdateQuestInfoDialogBehaviour (downloader);
 
-			ServerQuestInfoLoader loader2 = new ServerQuestInfoLoader ();
-			UIBehaviour behaviour2 = new UpdateQuestInfoDialogBehaviour (loader2);
+			ImportQuestInfosFromJSON importer = 
+				new ImportQuestInfosFromJSON ();
+			UIBehaviour behaviour2 = 
+				new SimpleDialogBehaviour (
+					importer, 
+					"Importing Quest Data",
+					"Reading all found quests into the local data store."
+				);
 
-			TaskSequence t = new TaskSequence(loader1, loader2);
+			TaskSequence t = new TaskSequence(downloader, importer);
 			t.Start ();
 		}
 			

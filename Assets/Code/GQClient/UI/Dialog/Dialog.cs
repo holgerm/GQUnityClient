@@ -22,6 +22,9 @@ namespace GQ.Client.UI.Dialogs {
 	/// 
 	/// Anyway, we typically drive the dialog by calling some functionality, 
 	/// hence it should be dynamically initialized and setup by script anyway
+	/// 
+	/// For details on how to link UI elements like this Dialog to Tasks cf. @ref TasksAndUI
+
 	/// </summary>
 	public class Dialog : MonoBehaviour {
 
@@ -68,11 +71,17 @@ namespace GQ.Client.UI.Dialogs {
 		#region Runtime API
 
 		public void Show() {
-			gameObject.SetActive (true);
+			Base.Instance.StartCoroutine (showAsCoroutine(true));
 		}
 
 		public void Hide() {
-			gameObject.SetActive (false);
+			Base.Instance.StartCoroutine (showAsCoroutine(false));
+		}
+
+		private IEnumerator showAsCoroutine(bool show) {
+			yield return new WaitForEndOfFrame ();
+			gameObject.SetActive (show);
+			yield return new WaitForEndOfFrame ();
 		}
 
 		/// <summary>

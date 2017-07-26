@@ -17,6 +17,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		public DialogBehaviour(Task task) : base(task) {
 			Dialog = Dialog.Instance;
+			Debug.Log ("DIalogBehaviour(): Dialog: " + Dialog);
 			Dialog.Instance.Behaviour = this;
 
 			// initially we do not have listeners:
@@ -44,6 +45,11 @@ namespace GQ.Client.UI.Dialogs {
 		/// Step counter that can be used
 		/// </summary>
 		protected int step;
+
+		public override void Start() 
+		{
+			base.Start ();
+		}
 
 		/// <summary>
 		/// Should be called before the dialog is made invisible or disposed.
@@ -84,8 +90,9 @@ namespace GQ.Client.UI.Dialogs {
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
 		/// TODO move to Dialog class and change event args to some more generic type
-		protected void CloseDialog(object callbackSender, DownloadEvent args)
+		protected void CloseDialog(object callbackSender, EventArgs args)
 		{
+			Debug.Log ("CLoseDisplay");
 			Stop ();
 			Dialog.Hide();
 		}

@@ -69,7 +69,7 @@ namespace GQTests.Util {
 			Assert.IsTrue (started , "Should have started the download.");
 			Assert.IsTrue (succeeded , "Should have succeeded in downloading.");
 
-			Assert.AreEqual ("Hello!", downloader.Response);
+			Assert.AreEqual ("Hello!", downloader.Result);
 
 		}
 

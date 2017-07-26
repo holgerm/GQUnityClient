@@ -74,7 +74,7 @@ namespace GQ.Util {
 
 		public WWW Www { get; set; }
 
-		public string Response {
+		public override object Result {
 			get {
 				if (Www.isDone)
 					return Www.text;
@@ -156,7 +156,7 @@ namespace GQ.Util {
 				Raise(OnProgress, new DownloadEvent(progress: Www.progress));
 				yield return null;
 				Raise(OnSuccess, new DownloadEvent(message: Www.text));
-				RaiseTaskCompleted ();
+				RaiseTaskCompleted (Result);
 			}
 
 			yield break;

@@ -63,7 +63,6 @@ namespace GQ.Client.UI.Dialogs {
 		/// <param name="args">Arguments.</param>
 		public void InitializeLoadingScreen(object callbackSender, DownloadEvent args)
 		{
-			Debug.Log ("STEP: " + DownloadTask.Step);
 			if (DownloadTask.Step == 0) {
 				Dialog.Title.text = 
 					string.Format (BASIC_TITLE);

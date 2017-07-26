@@ -5,10 +5,17 @@ using GQ.Client.Util;
 
 namespace GQ.Client.UI {
 
+	/// <summary>
+	/// The base class for UI Behaviours, the glue between long running tasks and their optional UI representation.
+	/// 
+	/// For details cf. @ref TasksAndUI
+	/// 
+	/// Overview: @image html UpdateQuestInfoDialogOverview.png width=8cm
+	/// </summary>
 	public abstract class UIBehaviour {
 
 		/// <summary>
-		/// Connectes thsi Behaviour mutually with the given Task.
+		/// Connectes this Behaviour mutually with the given Task.
 		/// </summary>
 		/// <param name="task">Task.</param>
 		public UIBehaviour (Task task) 
