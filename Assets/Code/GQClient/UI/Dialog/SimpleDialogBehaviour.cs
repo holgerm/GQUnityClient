@@ -5,6 +5,13 @@ using GQ.Client.Util;
 
 namespace GQ.Client.UI.Dialogs {
 
+	/// <summary>
+	/// Simple dialog behaviour usable just by giving title and details text to the constructor. 
+	/// 
+	/// Standard behaviour will start the dialog without buttons and show the title and details. 
+	/// 
+	/// When the task is completed the dialog will be closed. It will be shown for at least one frame.
+	/// </summary>
 	public class SimpleDialogBehaviour : DialogBehaviour {
 
 		private string title;

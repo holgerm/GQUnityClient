@@ -70,10 +70,16 @@ namespace GQ.Client.UI.Dialogs {
 
 		#region Runtime API
 
+		/// <summary>
+		/// Shows the dialog for at least one frame duration.
+		/// </summary>
 		public void Show() {
 			Base.Instance.StartCoroutine (showAsCoroutine(true));
 		}
 
+		/// <summary>
+		/// Hides the dialog for at least one frame duration.
+		/// </summary>
 		public void Hide() {
 			Base.Instance.StartCoroutine (showAsCoroutine(false));
 		}
