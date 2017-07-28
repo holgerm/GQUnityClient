@@ -17,7 +17,6 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		public DialogBehaviour(Task task) : base(task) {
 			Dialog = Dialog.Instance;
-			Debug.Log ("DIalogBehaviour(): Dialog: " + Dialog);
 			Dialog.Instance.Behaviour = this;
 
 			// initially we do not have listeners:
@@ -92,7 +91,6 @@ namespace GQ.Client.UI.Dialogs {
 		/// TODO move to Dialog class and change event args to some more generic type
 		protected void CloseDialog(object callbackSender, EventArgs args)
 		{
-			Debug.Log ("CLoseDisplay");
 			Stop ();
 			Dialog.Hide();
 		}

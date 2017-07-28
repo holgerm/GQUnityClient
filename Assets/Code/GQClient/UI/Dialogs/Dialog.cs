@@ -76,26 +76,6 @@ namespace GQ.Client.UI.Dialogs {
 		#region Runtime API
 
 		/// <summary>
-		/// Shows the dialog for at least one frame duration.
-		/// </summary>
-		public void Show() {
-			Base.Instance.StartCoroutine (showAsCoroutine(true));
-		}
-
-		/// <summary>
-		/// Hides the dialog for at least one frame duration.
-		/// </summary>
-		public void Hide() {
-			Base.Instance.StartCoroutine (showAsCoroutine(false));
-		}
-
-		private IEnumerator showAsCoroutine(bool show) {
-			yield return new WaitForEndOfFrame ();
-			gameObject.SetActive (show);
-			yield return new WaitForEndOfFrame ();
-		}
-
-		/// <summary>
 		/// Sets the yes button with text and callback method.
 		/// </summary>
 		/// <param name="description">Description.</param>
