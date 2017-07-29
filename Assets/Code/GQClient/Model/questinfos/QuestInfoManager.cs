@@ -58,15 +58,32 @@ namespace GQ.Client.Model {
 				return;
 			
 			foreach ( var q in quests ) {
-				if ( q.Id == null )
+				if ( q.Id <= 0 )
 					continue;
 
 				if (QuestDict.ContainsKey (q.Id)) {
 					// override:
+					QuestInfo oldQ = QuestDict [q.Id];
 					QuestDict [q.Id] = q;
+					RaiseChange (
+						new QuestInfoChangedEvent (
+							String.Format ("Info for quest {0} changed.", q.Name),
+							ChangeType.Changed,
+							newQuestInfo: q,
+							oldQuestInfo: oldQ
+						)
+					);
 				} 
 				else {
 					QuestDict.Add ((int)q.Id, q);
+					RaiseChange (
+						new QuestInfoChangedEvent (
+							String.Format ("Info for quest {0} added.", q.Name),
+							ChangeType.Added,
+							newQuestInfo: q,
+							oldQuestInfo: null
+						)
+					);
 				}
 			}
 		}
@@ -86,46 +103,6 @@ namespace GQ.Client.Model {
 				OnChange (this, e);
 		}
 
-		#endregion
-
-
-		#region Update Quest Infos
-
-//		public delegate void Callback (object sender, UpdateQuestInfoEventArgs e);
-//
-//		public event Callback OnUpdateStart; 
-//		public event Callback OnUpdateProgress;
-//		public event Callback OnUpdateTimeout; // TODO replace by Error
-//		public event Callback OnUpdateSuccess;
-//		public event Callback OnUpdateError;
-
-//		/// <summary>
-//		/// Use this method to raise an event based on Callback delegate type, e.g. OnUpdateStart, OnUpdateProgress, etc.
-//		/// </summary>
-//		/// <param name="callback">Callback.</param>
-//		/// <param name="e">E.</param>
-//		protected virtual void Raise (Callback callback, UpdateQuestInfoEventArgs e)
-//		{
-//			if (callback != null)
-//				callback (this, e);
-//		}
-//
-//		public void RaiseUpdateStart(UpdateQuestInfoEventArgs e) {
-//			Raise (OnUpdateStart, e); 
-//		}
-//
-//		public void RaiseUpdateProgress(UpdateQuestInfoEventArgs e) {
-//			Raise (OnUpdateProgress, e);
-//		}
-//
-//		public void RaiseUpdateSuccess(UpdateQuestInfoEventArgs e) {
-//			Raise (OnUpdateSuccess, e);
-//		}
-//
-//		public void RaiseUpdateError(UpdateQuestInfoEventArgs e) {
-//			Raise (OnUpdateError, e);
-//		}
-//
 		#endregion
 
 
@@ -156,47 +133,29 @@ namespace GQ.Client.Model {
 		#endregion
 	}
 
-//	public class UpdateQuestInfoEventArgs : EventArgs 
-//	{
-//		public string Message { get; protected set; }
-//		public float Progress { get; protected set; }
-//		public int Step { get; protected set; }
-//		public Task NextTask { get; protected set; }
-//
-//		public UpdateQuestInfoEventArgs(
-//			string message = "", 
-//			float progress = 0f, 
-//			int step = 0,
-//			Task nextTask = null)
-//		{
-//			Message = message;
-//			Progress = progress;
-//			Step = step;
-//			NextTask = nextTask;
-//		}
-//	}
-//
 	public class QuestInfoChangedEvent : EventArgs 
 	{
 		public string Message { get; protected set; }
-		public ChangeEventType ChangeType { get; protected set; }
+		public ChangeType ChangeType { get; protected set; }
 		public QuestInfo NewQuestInfo { get; protected set; }
 		public QuestInfo OldQuestInfo { get; protected set; }
 
 		public QuestInfoChangedEvent(
 			string message = "", 
-			ChangeEventType type = ChangeEventType.Changed, 
-			QuestInfo NewQuestInfo = null, 
-			QuestInfo OldQuestInfo = null
+			ChangeType type = ChangeType.Changed, 
+			QuestInfo newQuestInfo = null, 
+			QuestInfo oldQuestInfo = null
 		)
 		{
 			Message = message;
 			ChangeType = type;
+			NewQuestInfo = newQuestInfo;
+			OldQuestInfo = oldQuestInfo;
 		}
 
 	}
 
-	public enum ChangeEventType {
+	public enum ChangeType {
 		Added, Removed, Changed
 	}
 		

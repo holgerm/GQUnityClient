@@ -17,7 +17,6 @@ namespace GQ.Client.Model {
 		private string InputJSON { get; set; }
 
 		public override void StartCallback(object sender, TaskEventArgs e) {
-			Debug.Log ("StartCallback(): " + e.Content);
 			if (e.Content is string) {
 				InputJSON = e.Content as string;
 			}
@@ -28,10 +27,8 @@ namespace GQ.Client.Model {
 		{
 			base.Start(step);
 
-			Debug.Log ("Before Import: " + InputJSON);
 			QuestInfo[] quests = JsonConvert.DeserializeObject<QuestInfo[]>(InputJSON);
 			QuestInfoManager.Instance.Import (quests);
-			Debug.Log ("Import done: " + QuestInfoManager.Instance.Count);
 			RaiseTaskCompleted ();
 		}
 

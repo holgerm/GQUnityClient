@@ -30,25 +30,25 @@ namespace GQ.Client.UI.Dialogs {
 
 		#region Content and Structure
 
+		protected static readonly string PREFAB = "Dialog";
+
 		public Text Details;
+		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
 		public Text Title;
+		protected const string TITLE_PATH = "Panel/TitleText";
 		public Button YesButton;
+		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
 		public Button NoButton;
+		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
 
 		public DialogBehaviour Behaviour { get; set; } 
-
-		protected const string DIALOG_PREFAB = "Dialog";
-		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
-		protected const string TITLE_PATH = "Panel/TitleText";
-		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
-		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
 
 		#endregion
 
 
 		#region Singleton
 
-		private static GameObject instance = null;
+		private static GameObject go = null;
 
 		/// <summary>
 		/// Gets the instance. If the instance is used for the first time, 
@@ -57,16 +57,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// <value>The instance.</value>
 		public static Dialog Instance {
 			get {
-				if (instance == null) {
-					GameObject rootCanvas = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
-					instance = (GameObject) Instantiate (
-						Resources.Load (DIALOG_PREFAB),
-						rootCanvas.transform,
-						false
-					);
-					instance.SetActive (false);
-				}
-				return instance.GetComponent<Dialog> ();
+				return Create(PREFAB).GetComponent<Dialog> ();
 			}
 		}
 			
@@ -85,7 +76,7 @@ namespace GQ.Client.UI.Dialogs {
 			buttonText.text = description;
 
 			Behaviour.OnYesButtonClicked += yesButtonClicked;
-			YesButton.gameObject.SetActive (true);	
+			YesButton.gameObject.SetActive (true);
 			YesButton.interactable = true;
 		}
 
