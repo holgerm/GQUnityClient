@@ -25,8 +25,6 @@ public class Base : MonoBehaviour
 					baseGO.AddComponent (typeof(Base));
 
 				_instance = (Base)baseGO.GetComponent (typeof(Base));
-
-				Debug.Log ("BASE loaded.");
 			}
 			return _instance;
 		}

@@ -17,15 +17,9 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		public DialogBehaviour(Task task) : base(task) {
 			Dialog = Dialog.Instance;
-			Dialog.Instance.Behaviour = this;
+			Dialog.Behaviour = this;
 
-			// initially we do not have listeners:
-			OnYesButtonClicked = null;
-			OnNoButtonClicked = null;
-
-			// Initally we hide Buttons:
-			Dialog.YesButton.gameObject.SetActive(false);
-			Dialog.NoButton.gameObject.SetActive(false);
+			HideAndClearButtons ();
 
 			// Initally both Buttons are connected to our standard events:
 			Dialog.YesButton.onClick.RemoveAllListeners();
@@ -33,6 +27,17 @@ namespace GQ.Client.UI.Dialogs {
 
 			Dialog.NoButton.onClick.RemoveAllListeners ();
 			Dialog.NoButton.onClick.AddListener (RaiseNoButtonClicked);
+		}
+
+		// Basic setting for all modes, buttons have no events and are hidden. Modes must set them afterwards appropriately.
+		protected void HideAndClearButtons ()
+		{
+			// initially we do not have listeners:
+			OnYesButtonClicked = null;
+			OnNoButtonClicked = null;
+			// Initally we hide Buttons:
+			Dialog.YesButton.gameObject.SetActive (false);
+			Dialog.NoButton.gameObject.SetActive (false);
 		}
 
 		public Dialog Dialog { get; set; }
@@ -55,13 +60,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		public virtual void Stop() 
 		{
-			// initially we do not have listeners:
-			OnYesButtonClicked = null;
-			OnNoButtonClicked = null;
-
-			// Initally we do not need Buttons:
-			Dialog.YesButton.gameObject.SetActive(false);
-			Dialog.NoButton.gameObject.SetActive(false);
+			HideAndClearButtons ();
 
 			Dialog.YesButton.onClick.RemoveAllListeners();
 			Dialog.NoButton.onClick.RemoveAllListeners ();
