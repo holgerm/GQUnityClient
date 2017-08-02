@@ -26,11 +26,11 @@ namespace GQ.Client.UI.Dialogs {
 		{
 			base.Start ();
 
-//			// to prevent registering the same listeners multiple times, in case we initialize multiple times ...
-//			detachUpdateListeners ();
-//
-//			// attach listeners before the task gets started:
-//			attachUpdateListeners ();
+			// to prevent registering the same listeners multiple times, in case we initialize multiple times ...
+			detachUpdateListeners ();
+
+			// attach listeners before the task gets started:
+			attachUpdateListeners ();
 		}
 			
 		public override void Stop()
