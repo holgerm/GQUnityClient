@@ -9,26 +9,28 @@ using GQ.Client.Util;
 
 namespace GQ.Client.UI.Dialogs {
 	
-	public class UpdateQuestInfoDialogBehaviour : DialogBehaviour {
+	public class DownloadDialogBehaviour : DialogBehaviour {
 
 		Download DownloadTask { get; set; }
 
-		public UpdateQuestInfoDialogBehaviour(Task task) : base(task) {
+		public DownloadDialogBehaviour(Task task, string title = "Downloading ...") : base(task) {
 
 			if (Task is Download) {
 				DownloadTask = Task as Download;
 			}
+
+			this.title = title;
 		} 
 
 		public override void Start() 
 		{
 			base.Start ();
 
-			// to prevent registering the same listeners multiple times, in case we initialize multiple times ...
-			detachUpdateListeners ();
-
-			// attach listeners before the task gets started:
-			attachUpdateListeners ();
+//			// to prevent registering the same listeners multiple times, in case we initialize multiple times ...
+//			detachUpdateListeners ();
+//
+//			// attach listeners before the task gets started:
+//			attachUpdateListeners ();
 		}
 			
 		public override void Stop()
@@ -40,7 +42,7 @@ namespace GQ.Client.UI.Dialogs {
 
 		void attachUpdateListeners ()
 		{
-			DownloadTask.OnStart += InitializeLoadingScreen;
+			DownloadTask.OnStart += OnDownloadStarted;
 			DownloadTask.OnProgress += UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess += CloseDialog;
 			DownloadTask.OnError += UpdateLoadingScreenError;
@@ -48,33 +50,38 @@ namespace GQ.Client.UI.Dialogs {
 
 		void detachUpdateListeners ()
 		{
-			DownloadTask.OnStart -= InitializeLoadingScreen;
+			DownloadTask.OnStart -= OnDownloadStarted;
 			DownloadTask.OnProgress -= UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess -= CloseDialog;
 			DownloadTask.OnError -= UpdateLoadingScreenError;
 		}
 
-		const string BASIC_TITLE = "Updating quests";
+		private string title;
 
 		/// <summary>
 		/// Callback for the OnUpdateStart event.
 		/// </summary>
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
-		public void InitializeLoadingScreen(object callbackSender, DownloadEvent args)
+		public void OnDownloadStarted(object callbackSender, DownloadEvent args)
 		{
+			EnterDownloadMode ();
+		}	
+
+		void EnterDownloadMode ()
+		{
+			HideAndClearButtons ();
+
 			if (DownloadTask.Step == 0) {
-				Dialog.Title.text = 
-					string.Format (BASIC_TITLE);
-			} else {
-				Dialog.Title.text = 
-				string.Format (BASIC_TITLE + " (step {0})", DownloadTask.Step);
+				Dialog.Title.text = string.Format (title);
+			}
+			else {
+				Dialog.Title.text = string.Format (title + " (step {0})", DownloadTask.Step);
 			}
 			Dialog.Details.text = "Start downloading data ...";
-
 			// now we show the dialog:
-			Dialog.Show();
-		}	
+			Dialog.Show ();
+		}
 
 		/// <summary>
 		/// Callback for the OnUpdateProgress event.
@@ -109,10 +116,8 @@ namespace GQ.Client.UI.Dialogs {
 				"Retry",
 				(GameObject yesButton, EventArgs e) => {
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
-//					Initialize();
-//					ServerQuestInfoLoader retryLoader = new ServerQuestInfoLoader();
-//					retryLoader.Behaviour = new UpdateQuestInfoDialogBehaviour ();
-					DownloadTask.Start();
+					EnterDownloadMode();
+					DownloadTask.Restart();
 				}
 			);
 		}
