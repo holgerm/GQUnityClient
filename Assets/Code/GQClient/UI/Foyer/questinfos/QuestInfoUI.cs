@@ -32,11 +32,7 @@ namespace GQ.Client.UI.Foyer {
 
 		public void SetContent(QuestInfo q) 
 		{
-			if (q.Name.Length > MAX_NAME_LENGTH) {
-				Name.text = q.Name.Substring (0, MAX_NAME_LENGTH - 3) + "...";
-			} else {
-				Name.text = q.Name;
-			}
+			Name.text = q.Name;
 		}
 
 		#endregion

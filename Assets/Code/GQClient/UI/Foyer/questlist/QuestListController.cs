@@ -7,6 +7,7 @@ using GQ.Util;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
 using GQ.Client.Conf;
+using UnityEngine.UI;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -36,8 +37,6 @@ namespace GQ.Client.UI.Foyer {
 			qm.OnChange += 
 				(object sender, QuestInfoChangedEvent e) => 
 			{
-				Debug.Log(e.Message + "  width:" + Screen.width);
-
 				switch (e.ChangeType) {
 				case ChangeType.Added:
 					QuestInfoUI qiui = QuestInfoUI.Create (root: InfoList.gameObject).GetComponent<QuestInfoUI>();
@@ -57,7 +56,7 @@ namespace GQ.Client.UI.Foyer {
 				new Download (
 					url: ConfigurationManager.UrlPublicQuestsJSON, 
 					timeout: 120000);
-			new UpdateQuestInfoDialogBehaviour (downloader);
+			new DownloadDialogBehaviour (downloader, "Updating quests");
 
 			ImportQuestInfosFromJSON importer = 
 				new ImportQuestInfosFromJSON ();
