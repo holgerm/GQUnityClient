@@ -7,31 +7,49 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: Assets/Scenes/StartScene.unity
-  - enabled: 1
+    guid: a7c07f937db7a476ea2d035181090db0
+  - enabled: 0
     path: Assets/Scenes/questlist.unity
-  - enabled: 1
+    guid: d961061f3dab241318b4d862f06daa94
+  - enabled: 0
     path: Assets/Scenes/Pages/npctalk.unity
-  - enabled: 1
+    guid: d218c0b6c50ac49a0bee8152b53cb971
+  - enabled: 0
     path: Assets/Scenes/Pages/fullscreen.unity
-  - enabled: 1
+    guid: 579948b3594dd416d956a31b34cbf8a1
+  - enabled: 0
     path: Assets/Scenes/Pages/multiplechoicequestion.unity
-  - enabled: 1
+    guid: f80cc11def25446aaa3959f6958f960d
+  - enabled: 0
     path: Assets/Scenes/Pages/videoplay.unity
-  - enabled: 1
+    guid: c8a78804fccba4883bc1295d3eb88519
+  - enabled: 0
     path: Assets/Scenes/Pages/qrcodereader.unity
-  - enabled: 1
+    guid: a253286e532b64ee1b46b2e4d1518890
+  - enabled: 0
     path: Assets/Scenes/Pages/imagecapture.unity
-  - enabled: 1
+    guid: 911b6a399c8934a90b5048259dd257e0
+  - enabled: 0
     path: Assets/Scenes/Pages/textquestion.unity
-  - enabled: 1
+    guid: fc53691df3f2248658aee2b9c7c7fe3f
+  - enabled: 0
     path: Assets/Scenes/Pages/audiorecord.unity
-  - enabled: 1
+    guid: 914307533f9084a8782228ae3e382212
+  - enabled: 0
     path: Assets/Scenes/Pages/map.unity
-  - enabled: 1
+    guid: d77b54aaaf54f40a09e72d97fcccb670
+  - enabled: 0
     path: Assets/Scenes/Pages/website.unity
-  - enabled: 1
+    guid: 67a8fb51ceea048769bbf5f97fbf98b1
+  - enabled: 0
     path: Assets/Scenes/Pages/custom.unity
-  - enabled: 1
+    guid: 8ef8798c6d2c5498f8d5d21558afcf98
+  - enabled: 0
     path: Assets/Scenes/Pages/readnfc.unity
+    guid: ed1323bc053ca40a5951cc4d1940168b
   - enabled: 0
     path: Assets/Scenes/mediaserver.unity
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Foyer.unity
+    guid: 4d551cc36556f4ca2bad53f82276aede
