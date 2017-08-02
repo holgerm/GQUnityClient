@@ -44,6 +44,7 @@ namespace GQ.Client.Util {
 				// 		Hence we need an IsCompleted for Tasks.
 				return "";
 			}
+			protected set { }
 		}
 
 	}

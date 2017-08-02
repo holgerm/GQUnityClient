@@ -35,7 +35,8 @@ namespace GQ.Client.Model {
 		public override object Result {
 			get {
 				return null;
-				}
+			}
+			protected set { }
 		}
 	}
 }

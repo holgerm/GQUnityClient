@@ -74,15 +74,7 @@ namespace GQ.Util {
 
 		public WWW Www { get; set; }
 
-		public override object Result {
-			get {
-				if (Www.isDone)
-					return Www.text;
-				else {
-					return "";
-				}
-			}
-		}
+		public override object Result { get; protected set; }
 
 		/// <summary>
 		/// The elapsed time the download is/was active in milliseconds.
@@ -106,6 +98,7 @@ namespace GQ.Util {
 			string url, 
 			long timeout = 0) : base()
 		{
+			Result = "";
 			this.url = url;
 			Timeout = timeout;
 			stopwatch = new Stopwatch();
@@ -123,6 +116,10 @@ namespace GQ.Util {
 			Base.Instance.StartCoroutine(StartDownload());
 		}
 
+		public void Restart() {
+			Base.Instance.StartCoroutine(StartDownload());
+		}
+			
 		public IEnumerator StartDownload () 
 		{
 			Www = new WWW(url);
@@ -137,28 +134,31 @@ namespace GQ.Util {
 				}
 				if ( Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout ) {
 					stopwatch.Stop();
-					Raise(OnTimeout, new DownloadEvent(elapsedTime: Timeout));
-					RaiseTaskFailed ();
 					Www.Dispose();
+					Raise(OnTimeout, new DownloadEvent(elapsedTime: Timeout));
+					RaiseTaskFailed (); 
 					yield break;
 				}
+				if (Www == null)
+					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
 				yield return null;
 			} 
 			stopwatch.Stop();
 			
 			if ( Www.error != null && Www.error != "" ) {
 				string errMsg = Www.error;
-				Www.Dispose();
 				Raise(OnError, new DownloadEvent(message: errMsg));
 				RaiseTaskFailed ();
 			}
 			else {
+				Result = Www.text;
 				Raise(OnProgress, new DownloadEvent(progress: Www.progress));
 				yield return null;
 				Raise(OnSuccess, new DownloadEvent(message: Www.text));
 				RaiseTaskCompleted (Result);
 			}
 
+			Www.Dispose();
 			yield break;
 		}
 

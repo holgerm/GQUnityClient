@@ -44,7 +44,7 @@ namespace GQ.Client.Util {
 			this.Start(e.Step + 1);
 		}
 
-		public abstract object Result { get; }
+		public abstract object Result { get; protected set; }
 
 		public delegate void TaskCallback (object sender, TaskEventArgs e);
 
