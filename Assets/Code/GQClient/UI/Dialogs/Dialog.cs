@@ -50,6 +50,7 @@ namespace GQ.Client.UI.Dialogs {
 
 		private static GameObject go = null;
 
+		private static Dialog instance = null;
 		/// <summary>
 		/// Gets the instance. If the instance is used for the first time, 
 		/// it will be created from the prefab and will be inactive.
@@ -57,7 +58,10 @@ namespace GQ.Client.UI.Dialogs {
 		/// <value>The instance.</value>
 		public static Dialog Instance {
 			get {
-				return Create(PREFAB).GetComponent<Dialog> ();
+				if (instance == null)
+					return Create(PREFAB).GetComponent<Dialog> ();
+				else
+					return instance;
 			}
 		}
 			
