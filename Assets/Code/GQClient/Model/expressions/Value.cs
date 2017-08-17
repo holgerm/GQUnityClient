@@ -151,14 +151,20 @@ namespace GQ.Client.Model
 			try {
 				if (ValType == Type.Bool || ValType == Type.Text) {
 					result = Convert.ToBoolean (internalValue);
-				}
+				} else
 				if (ValType == Type.Integer) {
 					int asInt = Convert.ToInt32 (internalValue);
 					result = Convert.ToBoolean (asInt);
-				}
+				} else
 				if (ValType == Type.Float) {
 					double asDouble = Convert.ToDouble (internalValue);
 					result = Convert.ToBoolean (asDouble);
+				} else 
+				if (ValType == Type.VariableName) {
+					result = Variables.GetValue (internalValue).AsBool ();
+				} else {
+					result = false;
+					Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Bool so {2} was used instead.", internalValue, ValType, result);
 				}
 				return result;
 			} catch (FormatException) {
@@ -167,13 +173,6 @@ namespace GQ.Client.Model
 				return result;
 			} 
 
-			if (ValType == Type.VariableName) {
-				return Variables.GetValue (internalValue).AsBool ();
-			}
-
-			result = false;
-			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Bool so {2} was used instead.", internalValue, ValType, result);
-			return result;
 		}
 
 		protected static Regex RegExpNumber = new Regex (@"^(?<Sign>-?)[\s]*(?<NumPreComma>[0-9]*)(?<Comma>[.,]?)(?<NumPostComma>[0-9]*)");
