@@ -6,6 +6,7 @@ using GQ.Client.Model;
 using System.IO;
 using GQ.Client.Err;
 using System.Collections.Generic;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Model
 {
@@ -71,6 +72,30 @@ namespace GQ.Client.Model
 			CurrentQuest = Quest.Null;
 			CurrentPage = Page.Null;
 		}
+
+		#endregion
+
+
+		#region Quest Access
+
+		public static string GetQuestURI(int questID) {
+			string uri = string.Format ("{0}/editor/{1}/clientxml",
+				             ConfigurationManager.GQ_SERVER_BASE_URL,
+				             questID
+			             );
+			return uri;
+		}
+
+		/// <summary>
+		/// Gets the local quest dir path.
+		/// </summary>
+		/// <returns>The local quest dir path.</returns>
+		/// <param name="questID">Quest I.</param>
+		public static string GetLocalQuestDirPath(int questID) {
+			return Application.persistentDataPath + "/quests/" + questID + "/";
+		}
+
+		public const string QUEST_FILE_NAME = "game.xml";
 
 		#endregion
 

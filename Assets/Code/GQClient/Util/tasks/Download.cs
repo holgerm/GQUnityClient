@@ -5,12 +5,15 @@ using System.Diagnostics;
 using GQ.Client.Err;
 using GQ.Client.Util;
 using GQ.Client.UI;
+using System.IO;
 
 namespace GQ.Util {
 	public class Download : Task {
 		string url;
 
 		public long Timeout { get; set; }
+
+		public string TargetPath { get; set; }
 
 		Stopwatch stopwatch;
 		WWW _www;
@@ -94,13 +97,16 @@ namespace GQ.Util {
 		/// </summary>
 		/// <param name="url">URL.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
+		/// <param name="timeout">Taregt path where the downloaded file will be stored (optional).</param>
 		public Download (
 			string url, 
-			long timeout = 0) : base()
+			long timeout = 0,
+			string targetPath = null) : base()
 		{
 			Result = "";
 			this.url = url;
 			Timeout = timeout;
+			TargetPath = targetPath;
 			stopwatch = new Stopwatch();
 			OnStart += defaultStartHandling;
 			OnError += defaultErrorHandling;
@@ -143,6 +149,24 @@ namespace GQ.Util {
 					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
 				yield return null;
 			} 
+
+			if (TargetPath != null) {
+				// we have to store the loaded file:
+				try {
+					UnityEngine.Debug.Log("Writing the file");
+					string targetDir = Directory.GetParent(TargetPath).FullName;
+					if (!Directory.Exists (targetDir))
+						Directory.CreateDirectory (targetDir);
+					if (File.Exists (TargetPath))
+						File.Delete (TargetPath);
+					File.WriteAllBytes(TargetPath, Www.bytes);
+				}
+				catch (Exception e) {
+					Raise(OnError, new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
+					RaiseTaskFailed ();
+				}
+			}
+
 			stopwatch.Stop();
 			
 			if ( Www.error != null && Www.error != "" ) {

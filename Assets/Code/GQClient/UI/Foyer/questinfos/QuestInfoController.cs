@@ -8,6 +8,9 @@ using GQ.Client.Err;
 using GQ.Client.Event;
 using UnityEngine.Events;
 using UnityEditor.Events;
+using GQ.Client.Conf;
+using GQ.Client.UI.Dialogs;
+using System.IO;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -65,14 +68,26 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		public void Download() {
-			// TODO
-			Debug.Log("TODO: Implement download method! Trying to download quest " + data.Name);
+			Download downloader = 
+				new Download (
+					url: QuestManager.GetQuestURI(data.Id), 
+					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
+					targetPath: QuestManager.GetLocalQuestDirPath(data.Id) + QuestManager.QUEST_FILE_NAME
+				);
+			new DownloadDialogBehaviour (downloader, "Loading quest");
+
+			downloader.Start ();
+
+			// TODO download all media files
+
 			CurrentMode = Mode.Deletable;
 		}
 
 		public void Delete() {
 			// TODO in case we are in DeleteWithWarning state we show a dialog with awarning and two options: Delete and Cancel.
 			Debug.Log("TODO: Implement delete method! Trying to delete quest " + data.Name);
+
+			Directories.DeleteDirCompletely (QuestManager.GetLocalQuestDirPath (data.Id));
 			CurrentMode = Mode.OnServer;
 		}
 

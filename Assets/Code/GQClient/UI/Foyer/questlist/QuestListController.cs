@@ -55,7 +55,7 @@ namespace GQ.Client.UI.Foyer {
 			Download downloader = 
 				new Download (
 					url: ConfigurationManager.UrlPublicQuestsJSON, 
-					timeout: 120000);
+					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000);
 			new DownloadDialogBehaviour (downloader, "Updating quests");
 
 			ImportQuestInfosFromJSON importer = 
