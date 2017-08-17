@@ -21,6 +21,7 @@ namespace GQ.Client.UI {
 				root = GameObject.FindGameObjectWithTag(Tags.ROOT_CANVAS);
 			}
 
+			Debug.Log ("Instantiate a questinfoUI");
 			GameObject go = (GameObject) Instantiate (
 				prefab,
 				root.transform,

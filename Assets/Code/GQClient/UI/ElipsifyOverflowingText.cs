@@ -8,6 +8,11 @@ public class ElipsifyOverflowingText : MonoBehaviour {
 
 	public Text Text;
 
+	public string FullText {
+		get;
+		set;
+	}
+
 	void Reset () {
 		Text foundText = gameObject.GetComponent<Text> ();
 		if (foundText != null) {
@@ -20,20 +25,33 @@ public class ElipsifyOverflowingText : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Canvas.ForceUpdateCanvases();
+		ElipsifyText ();
+	}
 
-		if (LayoutUtility.GetPreferredWidth(Text.rectTransform) <= Text.rectTransform.rect.width) {
+	public void ElipsifyText ()
+	{
+		// init FullText here lazily because Start() is called too late for prefab initalizations
+		if (FullText == null)
+			FullText = Text.text;
+		
+		// start with the original full text:
+		Text.text = FullText;
+
+
+		Canvas.ForceUpdateCanvases ();
+		if (LayoutUtility.GetPreferredWidth (Text.rectTransform) <= Text.rectTransform.rect.width) {
 			// text just fits well:
 			return;
 		}
-
 		// we have to elipsify the text:
-		int reduceLastChars = 2; // maybe if the text ends with two long characters like "mm" we just need to replace these with the elipse ("...").
+		int reduceLastChars = 2;
 
+		// maybe if the text ends with two long characters like "mm" we just need to replace these with the elipse ("...").
 		do {
 			Text.text = Text.text.Substring (0, Text.text.Length - reduceLastChars) + "...";
-			reduceLastChars++; // already increase for next round in this loop.
-		} while (LayoutUtility.GetPreferredWidth (Text.rectTransform) > Text.rectTransform.rect.width);
+			reduceLastChars++;
+			// already increase for next round in this loop.
+		}
+		while (LayoutUtility.GetPreferredWidth (Text.rectTransform) > Text.rectTransform.rect.width);
 	}
-
 }

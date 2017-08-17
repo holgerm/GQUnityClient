@@ -26,7 +26,7 @@ namespace GQ.Client.UI.Dialogs {
 	/// For details on how to link UI elements like this Dialog to Tasks cf. @ref TasksAndUI
 
 	/// </summary>
-	public class Dialog : PrefabController {
+	public class DialogController : PrefabController {
 
 		#region Content and Structure
 
@@ -48,18 +48,16 @@ namespace GQ.Client.UI.Dialogs {
 
 		#region Singleton
 
-		private static GameObject go = null;
-
-		private static Dialog instance = null;
+		private static DialogController instance = null;
 		/// <summary>
 		/// Gets the instance. If the instance is used for the first time, 
 		/// it will be created from the prefab and will be inactive.
 		/// </summary>
 		/// <value>The instance.</value>
-		public static Dialog Instance {
+		public static DialogController Instance {
 			get {
 				if (instance == null)
-					return Create(PREFAB).GetComponent<Dialog> ();
+					return Create(PREFAB).GetComponent<DialogController> ();
 				else
 					return instance;
 			}

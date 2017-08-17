@@ -16,7 +16,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// Mutually connects this Behaviour with a Dialog Controller and initliazes the behaviour.
 		/// </summary>
 		public DialogBehaviour(Task task) : base(task) {
-			Dialog = Dialog.Instance;
+			Dialog = DialogController.Instance;
 			Dialog.Behaviour = this;
 
 			HideAndClearButtons ();
@@ -40,7 +40,7 @@ namespace GQ.Client.UI.Dialogs {
 			Dialog.NoButton.gameObject.SetActive (false);
 		}
 
-		public Dialog Dialog { get; set; }
+		public DialogController Dialog { get; set; }
 
 		public event ClickCallBack OnYesButtonClicked;
 		public event ClickCallBack OnNoButtonClicked;

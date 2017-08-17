@@ -39,7 +39,7 @@ namespace GQ.Client.UI.Foyer {
 			{
 				switch (e.ChangeType) {
 				case ChangeType.Added:
-					QuestInfoUI qiui = QuestInfoUI.Create (root: InfoList.gameObject).GetComponent<QuestInfoUI>();
+					QuestInfoController qiui = QuestInfoController.Create (root: InfoList.gameObject).GetComponent<QuestInfoController>();
 					qiui.SetContent(e.NewQuestInfo);
 					qiui.Show();
 					break;

@@ -47,12 +47,11 @@ namespace GQTests.Model
 			IEnumerator<QuestInfo> questInfos = qm.GetEnumerator();
 			while (questInfos.MoveNext()) {
 				QuestInfo qi = questInfos.Current;
-				Assert.False (qi.IsLocallyAvailable ());
+				Assert.False (qi.IsLocallyStored ());
 				Assert.True (qi.IsNew ());
 				Assert.True (qi.IsDownloadable ());
 				Assert.False (qi.IsUpdatable ());
-				Assert.False (qi.IsDeletable ());
-				Assert.False (qi.WarnBeforeDeletion ());
+				Assert.AreEqual (GQ.Client.Model.QuestInfo.Deletability.CanNotDelete, qi.GetDeletability ());
 			}
 		}
 
