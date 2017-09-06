@@ -31,7 +31,7 @@ namespace GQTests.Model
 			xml = parseXmlFromFile ("XML/Quests/MinimalQuest/game.xml");
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert:
 			Assert.AreEqual ("Minimal Quest", q.Name);
@@ -45,7 +45,7 @@ namespace GQTests.Model
 			xml = parseXmlFromFile ("XML/Quests/QuestWith5NPCTalks/game.xml");
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 			// Get pages:
 			int[] ids = new int[] {
 				26824,
@@ -78,7 +78,7 @@ namespace GQTests.Model
 			xml = parseXmlFromFile ("XML/Quests/OnlyThreeHotspots/game.xml");
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 			// Get hotspots:
 			int[] ids = new int[] {
 				11541,

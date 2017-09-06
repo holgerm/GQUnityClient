@@ -19,6 +19,9 @@ using GQ.Client.Err;
 namespace GQ.Client.Model
 {
 
+	/// <summary>
+	/// The root object of a quests model at runtime. It represents all details of the quest at runtime.
+	/// </summary>
 	[System.Serializable]
 	[XmlRoot (GQML.QUEST)]
 	public class Quest  : IComparable<Quest>, IXmlSerializable
@@ -39,7 +42,7 @@ namespace GQ.Client.Model
 
 		public bool IsHidden {
 			get {
-				// TODO change the latter two checks to test a flag stored in game.xml base element as an attribute
+				// TODO change the latter two checks to test a flag stored in game.xml base element as an attribute and move to QuestInfo
 				return (ConfigurationManager.Current.hideHiddenQuests && Name != null && Name.StartsWith ("---"));
 			}
 		}
@@ -115,6 +118,12 @@ namespace GQ.Client.Model
 			
 		#endregion
 
+		#region Media
+
+		public Dictionary<string, string> MediaFiles;
+
+		#endregion
+
 		#region Move to QuestImporter // TODO use event system instead
 
 		private static Quest currentlyParsingQuest;
@@ -140,8 +149,16 @@ namespace GQ.Client.Model
 			return null;
 		}
 
+		/// <summary>
+		/// This method should only be called from the XML Serialization Framework. 
+		/// It will be indirectly used by the QuestManager method DeserializeQuest().
+		/// </summary>
+		/// <returns>The xml.</returns>
+		/// <param name="reader">Reader.</param>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
+			MediaFiles = new Dictionary<string, string> ();
+
 			CurrentlyParsingQuest = this; // TODO use event system instead
 
 			// proceed to quest start element:

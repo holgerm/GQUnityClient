@@ -141,7 +141,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert:
 			Assert.AreEqual ("QuestWith1NPCTalk", q.Name);
@@ -158,7 +158,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30224);
@@ -185,7 +185,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30198);
@@ -217,7 +217,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30223);
@@ -254,7 +254,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30198);
@@ -275,7 +275,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 
 			// Assert before started:
 			IPage p1 = q.GetPageWithID (30194);

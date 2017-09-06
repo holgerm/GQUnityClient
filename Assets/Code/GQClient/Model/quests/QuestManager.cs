@@ -20,7 +20,13 @@ namespace GQ.Client.Model
 
 		public Page CurrentPage { get; set; }
 
-		public Quest Import (string xml)
+		/// <summary>
+		/// Reads the quest from its game.xml file and creates a complete model hierarchy in memory and 
+		/// returns its root the quest object.
+		/// </summary>
+		/// <returns>The quest model object.</returns>
+		/// <param name="xml">Xml.</param>
+		public Quest DeserializeQuest (string xml)
 		{
 			// Creates an instance of the XmlSerializer class;
 			// specifies the type of object to be deserialized.

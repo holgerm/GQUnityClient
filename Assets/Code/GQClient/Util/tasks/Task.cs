@@ -6,6 +6,14 @@ using GQ.Client.UI;
 
 namespace GQ.Client.Util {
 
+	/// <summary>
+	/// 	
+	/// The base class for background activities that can be accompanied by some foreground reflection, 
+	/// e.g. a dialog etc..
+	/// 
+	/// For details cf. @ref TasksAndUI
+	///
+	/// </summary>
 	public abstract class Task {
 
 		public Task() {

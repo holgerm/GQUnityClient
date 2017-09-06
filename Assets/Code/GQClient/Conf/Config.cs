@@ -23,6 +23,8 @@ namespace GQ.Client.Conf
 
 		public bool 	keepAutoStarting  { get; set; }
 
+		public DownloadStrategy downloadStrategy { get; set; }
+
 		public int   	downloadTimeOutSeconds   { get; set; }
 
 		public string 	nameForQuest { get; set; }
@@ -83,12 +85,19 @@ namespace GQ.Client.Conf
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
 			hasMenuWithinQuests = true;
+			downloadStrategy = DownloadStrategy.UPFRONT;
 			downloadTimeOutSeconds = 300;
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;
 			colorProfile = "default";
 		}
 
+	}
+
+	public enum DownloadStrategy {
+		UPFRONT,
+		LAZY,
+		BACKGROUND
 	}
 
 

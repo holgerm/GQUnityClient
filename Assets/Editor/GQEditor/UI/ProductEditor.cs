@@ -95,6 +95,12 @@ namespace GQ.Editor.UI
 		int monthVersionNumber;
 		int buildVersionNumber;
 
+		int selectedDownloadStrategy;
+		string[] downloadStrategyNames = Enum.GetValues (typeof(DownloadStrategy))
+			.Cast<int> ()
+			.Select (x => x.ToString ())
+			.ToArray ();
+
 		ProductManager _pm;
 
 		public ProductManager Pm {
@@ -430,6 +436,17 @@ namespace GQ.Editor.UI
 									configIsDirty = true;
 								}
 								curPropInfo.SetValue (p.Config, newFloatVal, null);
+							}
+							break;
+						case "DownloadStrategy":
+							{
+								Debug.Log ("Implement selection list here.");
+								selectedDownloadStrategy = 
+									EditorGUILayout.Popup (
+										"Download Strategy", 
+										selectedDownloadStrategy, 
+										downloadStrategyNames
+									);
 							}
 							break;
 						case "List`1":

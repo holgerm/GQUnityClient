@@ -16,7 +16,7 @@ namespace GQTests.Model
 			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallThen/game.xml"));
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 			q.Start ();
 
 			// Assert:
@@ -31,7 +31,7 @@ namespace GQTests.Model
 			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallElse/game.xml"));
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 			q.Start ();
 
 			// Assert:
@@ -46,7 +46,7 @@ namespace GQTests.Model
 			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepThenThen/game.xml"));
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 			q.Start ();
 
 			// Assert:
@@ -60,7 +60,7 @@ namespace GQTests.Model
 			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepElseElse/game.xml"));
 
 			// Act:
-			Quest q = qm.Import (xml);
+			Quest q = qm.DeserializeQuest (xml);
 			q.Start ();
 
 			// Assert:
