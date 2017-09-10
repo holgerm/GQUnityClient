@@ -1,4 +1,4 @@
-﻿using GQ.Util;
+﻿using GQ.Client.Util;
 
 
 namespace GQ.Client.Net {

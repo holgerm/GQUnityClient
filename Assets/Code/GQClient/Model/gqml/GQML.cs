@@ -164,10 +164,10 @@ namespace GQ.Client.Model
 			return val;
 		}
 
-		public static string GetStringAttribute (string attributeName, XmlReader reader, string defaulVal = "")
+		public static string GetStringAttribute (string attributeName, XmlReader reader, string defaultVal = "")
 		{
 			string val = getAttr (attributeName, "String", reader);
-			return (val == null ? defaulVal : val);
+			return (val == null ? defaultVal : val);
 		}
 
 		/// <summary>

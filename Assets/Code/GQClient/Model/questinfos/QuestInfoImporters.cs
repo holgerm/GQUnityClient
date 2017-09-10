@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.IO;
 using GQ.Client.Conf;
 using System;
-using GQ.Util;
+using GQ.Client.Util;
 
 
 namespace GQ.Client.Model {
@@ -76,7 +76,7 @@ namespace GQ.Client.Model {
 
 			Download jsonDownload = new Download(url: url, timeout: 120000);
 
-			jsonDownload.OnSuccess += (Download d, DownloadEvent e) => {
+			jsonDownload.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
 				importer.QuestInfoLoaded(e.Message);				
 			};
 

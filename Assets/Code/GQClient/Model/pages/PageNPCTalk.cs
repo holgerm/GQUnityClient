@@ -83,11 +83,19 @@ namespace GQ.Client.Model
 			base.ReadAttributes (reader);
 
 			EndButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_ENDBUTTONTEXT, reader);
+
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_IMAGEURL, reader);
+			if (ImageUrl != "")
+				QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+
 			DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
+
 			NextDialogButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
+
 			SkipWordTicker = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader);
+
 			TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
+
 			TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader);
 		}
 

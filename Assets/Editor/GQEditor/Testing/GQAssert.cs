@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Security;
-using GQ.Util;
+using GQ.Client.Util;
 using UnityEngine;
 using GQ.Editor.Util;
 

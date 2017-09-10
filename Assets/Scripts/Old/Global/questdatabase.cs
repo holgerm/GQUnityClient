@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Text;
 using GQ.Geo;
-using GQ.Util;
+using GQ.Client.Util;
 using UnitySlippyMap;
 using GQ.Client.Conf;
 using GQ.Client.Model;
@@ -236,7 +236,7 @@ public class questdatabase : MonoBehaviour
 		StartCoroutine (download.StartDownload ());
 	}
 
-	void retryAfterDownloadError (Download d, DownloadEvent e)
+	void retryAfterDownloadError (AbstractDownloader d, DownloadEvent e)
 	{
 		Debug.Log ("Retrying after download error: " + e.Message);
 		if (Configuration.instance.offlinePlayable && localquests != null && localquests.Count > 0) {
@@ -666,10 +666,12 @@ public class questdatabase : MonoBehaviour
 	}
 
 
-	void updateAndShowQuestList (Download download, DownloadEvent e)
+	void updateAndShowQuestList (AbstractDownloader ad, DownloadEvent e)
 	{
 
 		Debug.Log ("UPDATE AND SHOW QUEST LIST");
+
+		Download download = (Download)ad;
 
 		WWW www = download.Www;
 
@@ -699,7 +701,7 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-	void whenQuestListDownloadStarts (Download d, DownloadEvent e)
+	void whenQuestListDownloadStarts (AbstractDownloader d, DownloadEvent e)
 	{
 		//Debug.Log ("DOWNLOAD of QUEST LIST STARTED");
 		if (loadlogo != null) {
@@ -710,7 +712,7 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-	void whenQuestListDownloadSucceeds (Download d, DownloadEvent e)
+	void whenQuestListDownloadSucceeds (AbstractDownloader d, DownloadEvent e)
 	{
 		if (loadlogo != null) {
 			loadlogo.disable ();
@@ -720,7 +722,7 @@ public class questdatabase : MonoBehaviour
 		}
 	}
 
-	void downloadAllQuests (Download d, DownloadEvent e)
+	void downloadAllQuests (AbstractDownloader d, DownloadEvent e)
 	{
 
 		bool hasNoLocalQuestsYet = true;
@@ -944,7 +946,7 @@ public class questdatabase : MonoBehaviour
 	}
 
 
-	void updateProgress (Download download, DownloadEvent e)
+	void updateProgress (AbstractDownloader download, DownloadEvent e)
 	{
 		if (webloadingmessage != null) {
 			webloadingmessage.text = String.Format ("{0:N2}% loaded", e.Progress * 100f);

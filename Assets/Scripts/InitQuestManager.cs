@@ -3,7 +3,7 @@ using System.Collections;
 using GQ.Client.Model;
 using System;
 using GQ.Client.Conf;
-using GQ.Util;
+using GQ.Client.Util;
 
 namespace GQScripts
 {

@@ -155,8 +155,8 @@ namespace GQ.Client.Err
 			Level = level;
 			Recipient = recipient;
 			Timestamp = DateTime.Now;
-			QuestID = Quest.CurrentlyParsingQuest.Id;
-			QuestName = Quest.CurrentlyParsingQuest.Name;
+			QuestID = QuestManager.CurrentlyParsingQuest.Id;
+			QuestName = QuestManager.CurrentlyParsingQuest.Name;
 		}
 	}
 

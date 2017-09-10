@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Err;
-using GQ.Util;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI {
 	

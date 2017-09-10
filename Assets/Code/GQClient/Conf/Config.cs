@@ -23,6 +23,7 @@ namespace GQ.Client.Conf
 
 		public bool 	keepAutoStarting  { get; set; }
 
+		// TODO change to string
 		public DownloadStrategy downloadStrategy { get; set; }
 
 		public int   	downloadTimeOutSeconds   { get; set; }

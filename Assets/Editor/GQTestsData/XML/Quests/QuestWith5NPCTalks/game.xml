@@ -1,5 +1,5 @@
-<game id="9804" lastUpdate="1485246400830" name="QuestWith5NPCTalks" xmlformat="5">
-	<mission endbuttontext="&gt;" id="26824" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+<game id="9804" lastUpdate="1504816187211" name="QuestWith5NPCTalks" xmlformat="5">
+	<mission endbuttontext="&gt;" id="26824" image="http://qeevee.org:9091/uploadedassets/21/editor/9804/1_shadow.png" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
 		<onEnd>
 			<rule>
 				<action allowReturn="0" id="26829" type="StartMission"/>
@@ -7,7 +7,7 @@
 		</onEnd>
 		<dialogitem blocking="false" id="29787">Erster Text</dialogitem>
 	</mission>
-	<mission endbuttontext="&gt;" id="26829" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+	<mission endbuttontext="&gt;" id="26829" image="http://qeevee.org:9091/uploadedassets/21/editor/9804/1_delete.png" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
 		<onEnd>
 			<rule>
 				<action allowReturn="0" id="26830" type="StartMission"/>
@@ -15,7 +15,7 @@
 		</onEnd>
 		<dialogitem blocking="false" id="29792">2. Text</dialogitem>
 	</mission>
-	<mission endbuttontext="&gt;" id="26830" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+	<mission endbuttontext="&gt;" id="26830" image="http://qeevee.org:9091/uploadedassets/21/editor/9804/1_download.png" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
 		<onEnd>
 			<rule>
 				<action allowReturn="0" id="26831" type="StartMission"/>
@@ -23,7 +23,7 @@
 		</onEnd>
 		<dialogitem blocking="false" id="29793">3. Text</dialogitem>
 	</mission>
-	<mission endbuttontext="&gt;" id="26831" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+	<mission endbuttontext="&gt;" id="26831" image="http://qeevee.org:9091/uploadedassets/21/editor/9804/1_info.png" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
 		<onEnd>
 			<rule>
 				<action allowReturn="0" id="26832" type="StartMission"/>
@@ -31,7 +31,7 @@
 		</onEnd>
 		<dialogitem blocking="false" id="29794">4. Text</dialogitem>
 	</mission>
-	<mission endbuttontext="&gt;" id="26832" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
+	<mission endbuttontext="&gt;" id="26832" image="http://qeevee.org:9091/uploadedassets/21/editor/9804/1_shadow.png" mode="Komplett anzeigen" nextdialogbuttontext="&gt;" skipwordticker="true" textsize="20" tickerspeed="50" type="NPCTalk">
 		<onEnd>
 			<rule>
 				<action allowReturn="0" type="EndGame"/>

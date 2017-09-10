@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GQ.Util;
+using GQ.Client.Util;
 using GQ.Client.Conf;
 using Newtonsoft.Json;
 using GQ.Client.Util;

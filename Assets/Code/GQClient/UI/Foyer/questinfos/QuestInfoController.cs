@@ -3,7 +3,7 @@ using System.Collections;
 using GQ.Client.Model;
 using UnityEngine.UI;
 using System;
-using GQ.Util;
+using GQ.Client.Util;
 using GQ.Client.Err;
 using GQ.Client.Event;
 using UnityEngine.Events;
@@ -11,6 +11,7 @@ using UnityEditor.Events;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using System.IO;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -76,9 +77,16 @@ namespace GQ.Client.UI.Foyer {
 				);
 			new DownloadDialogBehaviour (downloader, "Loading quest");
 
-			downloader.Start ();
+			SyncQuestData questSnychronizer = 
+				new SyncQuestData ();
+			new SimpleDialogBehaviour (
+				questSnychronizer,
+				"Synching Quest Data",
+				"Loading and updating all media files."
+			);
 
-			// TODO download all media files
+			TaskSequence t = new TaskSequence(downloader, questSnychronizer);
+			t.Start ();
 
 			CurrentMode = Mode.Deletable;
 		}

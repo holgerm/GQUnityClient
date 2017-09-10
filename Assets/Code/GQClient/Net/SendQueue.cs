@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using GQ.Util;
+using GQ.Client.Util;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 

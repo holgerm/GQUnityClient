@@ -5,7 +5,7 @@ using System.Collections;
 using System.IO;
 
 
-namespace GQ.Util
+namespace GQ.Client.Util
 {
 	[System.Serializable]
 	public class SpriteConverter

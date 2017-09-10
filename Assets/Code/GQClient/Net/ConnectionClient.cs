@@ -8,7 +8,7 @@ using System.Text;
 using System.IO;
 using System;
 using GQ.Client.Net;
-using GQ.Util;
+using GQ.Client.Util;
 
 namespace GQ.Client.Net {
 	

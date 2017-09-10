@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 using System.Collections;
-using GQ.Util;
+using GQ.Client.Util;
 using UnityEngine.SceneManagement;
 using GQ.Client.Model;
 

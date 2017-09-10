@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System;
 using UnityEditor;
-using GQ.Util;
+using GQ.Client.Util;
 
 namespace GQ.Editor.Util {
 

@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Text;
 using GQ.Geo;
-using GQ.Util;
+using GQ.Client.Util;
 using UnitySlippyMap;
 using GQ.Client.Model;
 

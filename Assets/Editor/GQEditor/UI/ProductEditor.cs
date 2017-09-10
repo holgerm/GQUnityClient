@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 using System.Text;
 using System.Reflection;
-using GQ.Util;
+using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Editor.Building;
 using GQ.Client.Util;
@@ -96,10 +96,7 @@ namespace GQ.Editor.UI
 		int buildVersionNumber;
 
 		int selectedDownloadStrategy;
-		string[] downloadStrategyNames = Enum.GetValues (typeof(DownloadStrategy))
-			.Cast<int> ()
-			.Select (x => x.ToString ())
-			.ToArray ();
+		string[] downloadStrategyNames = Enum.GetNames (typeof(DownloadStrategy));
 
 		ProductManager _pm;
 
@@ -440,7 +437,8 @@ namespace GQ.Editor.UI
 							break;
 						case "DownloadStrategy":
 							{
-								Debug.Log ("Implement selection list here.");
+								// TODO implement all three strategies
+//								Debug.Log ("Implement selection list here.");
 								selectedDownloadStrategy = 
 									EditorGUILayout.Popup (
 										"Download Strategy", 

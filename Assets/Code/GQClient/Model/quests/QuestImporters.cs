@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace GQ.Client.Model {
 
-
+	[Obsolete]
 	public static class QuestImportExtension {
 
 		/// <summary>

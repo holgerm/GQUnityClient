@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-namespace GQ.Util {
+namespace GQ.Client.Util {
 
 	public class Directories {
 

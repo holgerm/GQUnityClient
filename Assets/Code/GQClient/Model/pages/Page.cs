@@ -9,7 +9,7 @@ using System;
 using System.Linq;
 using System.Text;
 using GQ.Geo;
-using GQ.Util;
+using GQ.Client.Util;
 using GQ.Client.Model;
 using GQ.Client.Err;
 
@@ -189,6 +189,7 @@ namespace GQ.Client.Model
 			{
 				Id = 0;
 				State = GQML.STATE_NEW;
+				Parent.CurrentPage = this;
 			}
 
 			public override Quest Parent { 

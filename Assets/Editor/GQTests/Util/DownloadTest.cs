@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System.Collections;
 using GQTests;
 using GQ.Editor.Util;
-using GQ.Util;
+using GQ.Client.Util;
 
 namespace GQTests.Util {
 

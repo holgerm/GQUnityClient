@@ -194,16 +194,15 @@ namespace GQ.Client.Model
 
 		public double AsDouble ()
 		{
-			double result = 0d;
+			double result;
 
 			try {
 				if (ValType == Type.Bool || ValType == Type.Text) {
-					result = Convert.ToDouble (internalValue);
+					return Convert.ToDouble (internalValue);
 				}
 				if (ValType == Type.Integer || ValType == Type.Float) {
-					result = Convert.ToDouble (extractNumberString (internalValue));
+					return Convert.ToDouble (extractNumberString (internalValue));
 				}
-				return result;
 			} catch (OverflowException) {
 				result = (internalValue.StartsWith ("-") ? Double.MinValue : Double.MaxValue);
 				Log.WarnAuthor ("Tried to read value {0} as Double but value exceeded limits so {1} was used instead.", internalValue, result);

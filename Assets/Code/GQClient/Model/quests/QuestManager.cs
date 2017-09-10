@@ -20,9 +20,25 @@ namespace GQ.Client.Model
 
 		public Page CurrentPage { get; set; }
 
+
+		private static Quest currentlyParsingQuest;
+
+		public static Quest CurrentlyParsingQuest {
+			get {
+				if (currentlyParsingQuest == null)
+					currentlyParsingQuest = Quest.Null;
+				return currentlyParsingQuest;
+			}
+			set {
+				currentlyParsingQuest = value;
+			}
+		}
+			
 		/// <summary>
 		/// Reads the quest from its game.xml file and creates a complete model hierarchy in memory and 
 		/// returns its root the quest object.
+		/// 
+		/// TODO move this to Quest as a static function?
 		/// </summary>
 		/// <returns>The quest model object.</returns>
 		/// <param name="xml">Xml.</param>
@@ -123,5 +139,105 @@ namespace GQ.Client.Model
 		}
 
 		#endregion
+	}
+
+	public class MediaInfo {
+
+		string url;
+		public string Url {
+			get {
+				return url;
+			}
+			private set {
+				url = value;
+			}
+		}
+
+
+		string localPath;
+		public string LocalPath {
+			get {
+				return localPath;
+			}
+			set {
+				localPath = value;
+			}
+		}
+
+
+		long localTimestamp;
+		public long LocalTimestamp {
+			get {
+				return localTimestamp;
+			}
+			set {
+				localTimestamp = value;
+			}
+		}
+
+		long remoteTimestamp;
+		public long RemoteTimestamp {
+			get {
+				return remoteTimestamp;
+			}
+			set {
+				remoteTimestamp = value;
+			}
+		}
+
+		public const long NOT_AVAILABLE = -1L;
+		public const long UNKNOWN = -2L;
+
+		long localSize;
+		public long LocalSize {
+			get {
+				return localSize;
+			}
+			set {
+				localSize = value;
+			}
+		}
+
+		long remoteSize;
+		public long RemoteSize {
+			get {
+				return remoteSize;
+			}
+			set {
+				remoteSize = value;
+			}
+		}
+
+
+		public MediaInfo(string url) {
+			this.Url = url;
+			this.LocalTimestamp = 0L;
+			this.LocalSize = NOT_AVAILABLE;
+			this.RemoteTimestamp = 0L;
+			this.RemoteSize = UNKNOWN;
+		}
+
+		public bool IsLocallyAvailable {
+			get {
+				return !(LocalSize == NOT_AVAILABLE);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Media Info about the local game media that is persisted in JSON file game-media.json in the quest folder.
+	/// </summary>
+	public struct LocalMediaInfo {
+		public string url;
+		public string path;
+		public long size;
+		public long time;
+
+		public LocalMediaInfo(string url, string path, long size, long time) {
+			this.url = url;
+			this.path = path;
+			this.size = size;
+			this.time = time;
+		}
 	}
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 using System.IO;
 using System;
-using GQ.Util;
+using GQ.Client.Util;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
 using GQ.Client.Model;

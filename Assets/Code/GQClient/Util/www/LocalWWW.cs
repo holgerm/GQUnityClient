@@ -4,7 +4,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace GQ.Util {
+namespace GQ.Client.Util {
 
 	public static class LocalWWW {
 

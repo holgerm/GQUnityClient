@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 using System.Text;
 using System.Reflection;
-using GQ.Util;
+using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Editor.Building;
 using GQ.Client.Util;

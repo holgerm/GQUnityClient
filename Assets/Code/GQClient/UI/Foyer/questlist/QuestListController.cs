@@ -3,7 +3,7 @@ using System.Collections;
 using GQ.Client.Model;
 using System.Collections.Generic;
 using System;
-using GQ.Util;
+using GQ.Client.Util;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
 using GQ.Client.Conf;

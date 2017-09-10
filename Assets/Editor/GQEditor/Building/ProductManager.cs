@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System;
 using System.Collections.Generic;
-using GQ.Util;
+using GQ.Client.Util;
 using UnityEngine;
 using GQ.Client.Conf;
 using System.Text;
