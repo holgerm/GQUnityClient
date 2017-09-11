@@ -5,6 +5,7 @@ using GQ.Editor.Util;
 using GQTests;
 using GQ.Client.Model;
 using System;
+using System.IO;
 
 namespace GQTests.Model
 {
@@ -81,7 +82,7 @@ namespace GQTests.Model
 		[Test]
 		public void OnlyHotspots() {
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OnlyThreeHotspots/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OnlyThreeHotspots/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);
@@ -105,7 +106,7 @@ namespace GQTests.Model
 		[Test]
 		public void HotspotTriggers() {
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/HotspotTrigger/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/HotspotTrigger/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);
@@ -136,7 +137,7 @@ namespace GQTests.Model
 		[Test]
 		public void HotspotEmptyTriggers() {
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/HotspotTrigger/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/HotspotTrigger/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);

@@ -50,7 +50,7 @@ namespace GQTests.Util {
 
 			Assert.IsTrue (Files.ExistsFile (filePath), "File should exist at " + filePath);
 
-			Download downloader = new Download (Files.LocalPath4WWW(filePath));
+			Downloader downloader = new Downloader (Files.LocalPath4WWW(filePath));
 			downloader.OnStart += (d, e) => {
 				started = true;
 			};

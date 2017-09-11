@@ -226,7 +226,7 @@ public class questdatabase : MonoBehaviour
 		allquests.Clear ();
 
 		string url = "http://qeevee.org:9091/json/" + ConfigurationManager.Current.portal + "/publicgamesinfo";
-		Download download = new Download (url, timeout: 20000);
+		Downloader download = new Downloader (url, timeout: 20000);
 		download.OnStart += whenQuestListDownloadStarts;
 		download.OnProgress += updateProgress;
 		download.OnSuccess +=  updateAndShowQuestList;
@@ -671,7 +671,7 @@ public class questdatabase : MonoBehaviour
 
 		Debug.Log ("UPDATE AND SHOW QUEST LIST");
 
-		Download download = (Download)ad;
+		Downloader download = (Downloader)ad;
 
 		WWW www = download.Www;
 

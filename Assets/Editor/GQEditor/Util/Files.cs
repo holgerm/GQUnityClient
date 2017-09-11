@@ -680,20 +680,6 @@ namespace GQ.Editor.Util
 
 		#endregion
 
-
-		#region Access File Contents
-
-		public static string ReadText (string path)
-		{
-			FileInfo file = new FileInfo (path);
-			StreamReader reader = file.OpenText ();
-			string stringRead = reader.ReadToEnd ();
-			reader.Close ();
-			return stringRead;
-		}
-
-		#endregion
-
 	}
 
 }

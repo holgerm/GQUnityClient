@@ -3,6 +3,7 @@ using UnityEditor;
 using NUnit.Framework;
 using GQ.Client.Model;
 using GQ.Editor.Util;
+using System.IO;
 
 namespace GQTests.Model.Deserialization
 {
@@ -137,7 +138,7 @@ namespace GQTests.Model.Deserialization
 		public void QuestWith1NPCTalk ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith1NPCTalk/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith1NPCTalk/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -154,7 +155,7 @@ namespace GQTests.Model.Deserialization
 		public void ZeroDialogItems ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_ZeroDialogItems/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_ZeroDialogItems/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -181,7 +182,7 @@ namespace GQTests.Model.Deserialization
 		public void OneDialogItem ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_OneDialogItem/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_OneDialogItem/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -213,7 +214,7 @@ namespace GQTests.Model.Deserialization
 		public void ThreeDialogItems ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_ThreeDialogItems/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_ThreeDialogItems/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -250,7 +251,7 @@ namespace GQTests.Model.Deserialization
 		public void NPCTalk_AllAttributes ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_OneDialogItem/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_OneDialogItem/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -271,7 +272,7 @@ namespace GQTests.Model.Deserialization
 		[Test]
 		public void TwoNPCTalkPages_States ()
 		{
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/TwoPages/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/TwoPages/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -306,7 +307,7 @@ namespace GQTests.Model.Deserialization
 		public void MediaInfoGatherSingle ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_ZeroDialogItems/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/NPCTalk_ZeroDialogItems/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:
@@ -324,7 +325,7 @@ namespace GQTests.Model.Deserialization
 		public void MediaInfoGatherMultiple ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith5NPCTalks/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/QuestWith5NPCTalks/game.xml"));
 			XmlRoot = GQML.QUEST;
 
 			// Act:

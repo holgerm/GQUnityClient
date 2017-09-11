@@ -11,12 +11,12 @@ namespace GQ.Client.UI.Dialogs {
 	
 	public class DownloadDialogBehaviour : DialogBehaviour {
 
-		Download DownloadTask { get; set; }
+		Downloader DownloadTask { get; set; }
 
 		public DownloadDialogBehaviour(Task task, string title = "Downloading ...") : base(task) {
 
-			if (Task is Download) {
-				DownloadTask = Task as Download;
+			if (Task is Downloader) {
+				DownloadTask = Task as Downloader;
 			}
 
 			this.title = title;

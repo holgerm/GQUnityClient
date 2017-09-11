@@ -22,7 +22,7 @@ namespace GQTests.Model {
 		public void ParseJSONString () {
 			// Arrange:
 			// TODO
-			string json52 = Files.ReadText(QuestInfoTest.JSON_InitFromServer);
+			string json52 = File.ReadAllText(QuestInfoTest.JSON_InitFromServer);
 			QuestInfo[] quests = null;
 
 			// Act:
@@ -54,7 +54,7 @@ namespace GQTests.Model {
 
 		public void StartLoadingJSON (QuestInfoImporter_I importer) {
 
-			string json = Files.ReadText(QuestInfoTest.JSON_InitFromServer);
+			string json = File.ReadAllText(QuestInfoTest.JSON_InitFromServer);
 
 			importer.QuestInfoLoaded(json);				
 		}

@@ -3,6 +3,7 @@ using UnityEditor;
 using NUnit.Framework;
 using GQ.Editor.Util;
 using GQ.Client.Model;
+using System.IO;
 
 namespace GQTests.Model
 {
@@ -13,7 +14,7 @@ namespace GQTests.Model
 		public void CallThenBranch ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallThen/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallThen/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);
@@ -28,7 +29,7 @@ namespace GQTests.Model
 		public void CallElseBranch ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallElse/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallElse/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);
@@ -43,7 +44,7 @@ namespace GQTests.Model
 		public void CallThenThenBranch ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepThenThen/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepThenThen/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);
@@ -57,7 +58,7 @@ namespace GQTests.Model
 		public void CallElseElseBranch ()
 		{
 			// Arrange:
-			xml = Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepElseElse/game.xml"));
+			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepElseElse/game.xml"));
 
 			// Act:
 			Quest q = qm.DeserializeQuest (xml);

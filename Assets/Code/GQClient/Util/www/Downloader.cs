@@ -7,7 +7,7 @@ using GQ.Client.UI;
 using System.IO;
 
 namespace GQ.Client.Util {
-	public class Download : AbstractDownloader {
+	public class Downloader : AbstractDownloader {
 		protected string url;
 
 		public string TargetPath { get; set; }
@@ -53,7 +53,7 @@ namespace GQ.Client.Util {
 		/// <param name="url">URL.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
 		/// <param name="timeout">Target path where the downloaded file will be stored (optional).</param>
-		public Download (
+		public Downloader (
 			string url, 
 			long timeout = 0,
 			string targetPath = null) 

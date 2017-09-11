@@ -31,8 +31,6 @@ namespace GQ.Client.Util {
 			stopwatch = new Stopwatch();
 		}
 
-		private int MaxParallelDownloads  { get; set; }
-
 
 		List<MediaInfo> FileInfoList;
 
@@ -43,26 +41,24 @@ namespace GQ.Client.Util {
 			this.Start(e.Step + 1);
 		}
 
+
+		#region Parallelization Limits
+
+		private int MaxParallelDownloads  { get; set; }
+
+		private int CurrentlyRunningDownloads { get; set; }
+
 		private bool LimitOfParallelDownloadsExceeded {
 			get {
-				// TODO calculate based on some limit and counter
-				return true;
+				return (CurrentlyRunningDownloads >= MaxParallelDownloads);
 			}
 		}
+
+		#endregion
 
 		private bool TimeIsUp {
 			get {
 				return (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout);
-			}
-		}
-
-		private int _crd;
-		private int CurrentlyRunningDownloads {
-			get {
-				return _crd;
-			}
-			set {
-				_crd = value;
 			}
 		}
 
@@ -88,9 +84,21 @@ namespace GQ.Client.Util {
 					yield break;
 				}
 
+				// now we can start the next file downloader:
+				Downloader d = new Downloader(info.Url, targetPath: MakeLocalFileNameFromUrl(info.Url));
 
 			}
 
+		}
+
+		/// <summary>
+		/// Makes the local file name from the given URL, 
+		/// so that the file name is unique and reflects the filename within the url.
+		/// </summary>
+		/// <returns>The local file name from URL.</returns>
+		/// <param name="url">URL.</param>
+		public string MakeLocalFileNameFromUrl(string url) {
+			return url; // TODO
 		}
 
 		public override object Result { get; protected set; }

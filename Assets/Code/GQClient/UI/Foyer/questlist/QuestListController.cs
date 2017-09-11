@@ -52,8 +52,8 @@ namespace GQ.Client.UI.Foyer {
 				}
 			};
 
-			Download downloader = 
-				new Download (
+			Downloader downloader = 
+				new Downloader (
 					url: ConfigurationManager.UrlPublicQuestsJSON, 
 					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000);
 			new DownloadDialogBehaviour (downloader, "Updating quests");

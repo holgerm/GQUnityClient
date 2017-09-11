@@ -69,8 +69,8 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		public void Download() {
-			Download downloader = 
-				new Download (
+			Downloader downloader = 
+				new Downloader (
 					url: QuestManager.GetQuestURI(data.Id), 
 					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
 					targetPath: QuestManager.GetLocalQuestDirPath(data.Id) + QuestManager.QUEST_FILE_NAME

@@ -27,7 +27,7 @@ namespace GQTests.Model
 
 		protected string parseXmlFromFile (string relativeFilePath)
 		{
-			return Files.ReadText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, relativeFilePath));
+			return File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, relativeFilePath));
 		}
 
 		protected string xmlRoot = GQML.QUEST;
