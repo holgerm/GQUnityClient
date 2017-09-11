@@ -5,10 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEditor;
 
-namespace GQ.Client.Util
+namespace GQ.Client.Util.Files
 {
 	
-	public static class Files1
+	public class Files
 	{
 
 		#region Extensions and Separators
@@ -228,7 +228,7 @@ namespace GQ.Client.Util
 		/// </summary>
 		/// <returns><c>true</c>, if hidden file was ised, <c>false</c> otherwise.</returns>
 		/// <param name="filePath">File path.</param>
-		internal static bool IsNormalFile (string filePath)
+		public static bool IsNormalFile (string filePath)
 		{
 			string fileName = FileName (filePath);
 
@@ -305,6 +305,24 @@ namespace GQ.Client.Util
 				isParent &= childDirPathSegments [i].Equals (parentDirPathSegments [i]);
 			}
 			return isParent;
+		}
+
+		public static void DeleteDirCompletely(string path) {
+
+			DirectoryInfo dir = new DirectoryInfo(path);
+
+			foreach(FileInfo file in dir.GetFiles())
+			{
+				file.Delete();
+			}
+
+			foreach (DirectoryInfo subdir in dir.GetDirectories())
+			{
+				DeleteDirCompletely(subdir.FullName);
+				subdir.Delete();
+			}
+
+			dir.Delete ();
 		}
 
 		#endregion

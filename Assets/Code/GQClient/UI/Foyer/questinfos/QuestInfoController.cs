@@ -12,6 +12,7 @@ using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using System.IO;
 using GQ.Client.Util;
+using GQ.Client.Util.Files;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -95,7 +96,7 @@ namespace GQ.Client.UI.Foyer {
 			// TODO in case we are in DeleteWithWarning state we show a dialog with awarning and two options: Delete and Cancel.
 			Debug.Log("TODO: Implement delete method! Trying to delete quest " + data.Name);
 
-			Directories.DeleteDirCompletely (QuestManager.GetLocalQuestDirPath (data.Id));
+			Files.DeleteDirCompletely (QuestManager.GetLocalQuestDirPath (data.Id));
 			CurrentMode = Mode.OnServer;
 		}
 
