@@ -10,7 +10,7 @@ using GQ.Client.Model;
 
 namespace GQ.Client.Util {
 	
-	public class SerialDownloader : AbstractDownloader {
+	public class MultiDownloader : AbstractDownloader {
 
 		/// <summary>
 		/// Initializes a new Downloader object. 
@@ -23,7 +23,7 @@ namespace GQ.Client.Util {
 		/// </summary>
 		/// <param name="maxParallelDownloads">Maximal number of parallel downloads.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
-		public SerialDownloader (int maxParallelDownloads, long timeout = 0) 
+		public MultiDownloader (int maxParallelDownloads, long timeout = 0) 
 		{
 			Result = "";
 			MaxParallelDownloads = maxParallelDownloads;
