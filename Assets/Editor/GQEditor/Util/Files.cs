@@ -8,7 +8,7 @@ using UnityEditor;
 namespace GQ.Editor.Util
 {
 	
-	public class Files : GQ.Client.Util.Files.Files
+	public class Files : GQ.Client.FileIO.Files
 	{
 
 		#region Asset Agnostic API

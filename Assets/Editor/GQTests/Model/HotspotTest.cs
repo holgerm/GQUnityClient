@@ -85,7 +85,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/OnlyThreeHotspots/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			Assert.AreEqual(3, q.AllHotspots.Count);
@@ -109,7 +110,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/HotspotTrigger/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			Assert.AreEqual(3, q.AllHotspots.Count);
@@ -140,7 +142,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/HotspotTrigger/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			Assert.AreEqual(3, q.AllHotspots.Count);

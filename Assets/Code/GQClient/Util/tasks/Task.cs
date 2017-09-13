@@ -52,21 +52,26 @@ namespace GQ.Client.Util {
 			this.Start(e.Step + 1);
 		}
 
-		public abstract object Result { get; protected set; }
+		public virtual object Result { get; protected set; }
 
 		public delegate void TaskCallback (object sender, TaskEventArgs e);
 
 		public event TaskCallback OnTaskCompleted; 
-		public event TaskCallback OnTaskFailed; 
+		public event TaskCallback OnTaskFailed;
+		public event TaskCallback OnTaskEnded;
 
 		protected virtual void RaiseTaskCompleted(object content = null) {
 			if (OnTaskCompleted != null)
 				OnTaskCompleted (this, new TaskEventArgs (step: Step, content: content));
+			if (OnTaskEnded != null)
+				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
 
 		protected virtual void RaiseTaskFailed() {
 			if (OnTaskFailed != null)
 				OnTaskFailed (this, new TaskEventArgs (step: Step));
+			if (OnTaskEnded != null)
+				OnTaskEnded (this, new TaskEventArgs (step: Step));
 		}
 	}
 

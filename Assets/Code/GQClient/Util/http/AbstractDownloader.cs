@@ -57,7 +57,20 @@ namespace GQ.Client.Util {
 
 		#endregion
 
+
+		#region Starting
+
+		public override void Start(int step = 0) 
+		{
+			base.Start(step);
+
+			Base.Instance.StartCoroutine(StartDownload());
+		}
+
 		public abstract IEnumerator StartDownload ();
+
+		#endregion
+
 	}
 
 

@@ -12,7 +12,7 @@ using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using System.IO;
 using GQ.Client.Util;
-using GQ.Client.Util.Files;
+using GQ.Client.FileIO;
 
 namespace GQ.Client.UI.Foyer {
 
@@ -78,15 +78,36 @@ namespace GQ.Client.UI.Foyer {
 				);
 			new DownloadDialogBehaviour (downloader, "Loading quest");
 
-			SyncQuestData questSnychronizer = 
-				new SyncQuestData ();
+			PrepareMediaInfoList mediaInfoListPreparation = 
+				new PrepareMediaInfoList ();
 			new SimpleDialogBehaviour (
-				questSnychronizer,
+				mediaInfoListPreparation,
 				"Synching Quest Data",
-				"Loading and updating all media files."
+				"Preparing media information."
 			);
 
-			TaskSequence t = new TaskSequence(downloader, questSnychronizer);
+			MultiDownloader mediaFileDownloader =
+				new MultiDownloader (1);
+			new SimpleDialogBehaviour (
+				mediaFileDownloader,
+				"Synching Quest Data",
+				"Loading media files."
+			);
+
+			ExportMediaInfoList mediaInfoListExporter =
+				new ExportMediaInfoList ();
+			new SimpleDialogBehaviour (
+				mediaInfoListExporter,
+				"Synching Quest Data",
+				"Saving updated media info."
+			);
+
+			TaskSequence t = 
+				new TaskSequence(
+					downloader, 
+					mediaInfoListPreparation, 
+					mediaFileDownloader,
+					mediaInfoListExporter);
 			t.Start ();
 
 			CurrentMode = Mode.Deletable;
@@ -94,8 +115,8 @@ namespace GQ.Client.UI.Foyer {
 
 		public void Delete() {
 			// TODO in case we are in DeleteWithWarning state we show a dialog with awarning and two options: Delete and Cancel.
-			Debug.Log("TODO: Implement delete method! Trying to delete quest " + data.Name);
 
+			Debug.Log ("Want to delete: " + QuestManager.GetLocalQuestDirPath (data.Id));
 			Files.DeleteDirCompletely (QuestManager.GetLocalQuestDirPath (data.Id));
 			CurrentMode = Mode.OnServer;
 		}

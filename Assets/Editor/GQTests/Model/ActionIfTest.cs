@@ -17,8 +17,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallThen/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
-			q.Start ();
+			qm.DeserializeQuest (xml);
+			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
 			Assert.AreEqual (30309, QuestManager.Instance.CurrentPage.Id);
@@ -32,8 +32,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallElse/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
-			q.Start ();
+			qm.DeserializeQuest (xml);
+			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
 			Assert.AreEqual (30368, QuestManager.Instance.CurrentPage.Id);
@@ -47,8 +47,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepThenThen/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
-			q.Start ();
+			qm.DeserializeQuest (xml);
+			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
 			Assert.AreEqual ("Reached the right branch (then, then) since (A=1, B=1).", Variables.GetValue("C").AsString());
@@ -61,8 +61,8 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepElseElse/game.xml"));
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
-			q.Start ();
+			qm.DeserializeQuest (xml);
+			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
 			Assert.AreEqual ("Reached the right branch (else, else) since (A=22, B=22)", Variables.GetValue("C").AsString());

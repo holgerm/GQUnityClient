@@ -15,15 +15,22 @@ namespace GQ.Client.Util {
 			concatenateTasks ();
 		}
 
+		/// <summary>
+		/// Append the specified task to the end of the sequence and concatenates it, 
+		/// so that it gets started after the former last has ended.. 
+		/// </summary>
+		/// <param name="task">Task.</param>
 		public void Append(Task task) {
 			tasks.Add (task);
-			concatenateTasks ();
+			if (tasks.Count > 1) {
+				tasks [tasks.Count - 2].OnTaskEnded += tasks [tasks.Count - 1].StartCallback;
+			}
 		}
 
 		void concatenateTasks () {
 			for (int i= 0; i < tasks.Count; i++) {
 				if (tasks.Count - 1 > i) {
-					tasks [i].OnTaskCompleted += tasks [i + 1].StartCallback;
+					tasks [i].OnTaskEnded += tasks [i + 1].StartCallback;
 				}
 			}
 		}

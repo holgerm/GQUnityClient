@@ -32,8 +32,6 @@ namespace GQ.Client.Util {
 
 		public WWW Www { get; set; }
 
-		public override object Result { get; protected set; }
-
 		/// <summary>
 		/// The elapsed time the download is/was active in milliseconds.
 		/// </summary>
@@ -68,13 +66,6 @@ namespace GQ.Client.Util {
 			OnTimeout += defaultLogErrorHandler;
 			OnSuccess += defaultLogInformationHandler;
 			OnProgress += defaultLogInformationHandler;
-		}
-
-		public override void Start(int step = 0) 
-		{
-			base.Start(step);
-
-			Base.Instance.StartCoroutine(StartDownload());
 		}
 
 		public void Restart() {

@@ -7,6 +7,7 @@ using GQ.Client.UI;
 using System.IO;
 using System.Collections.Generic;
 using GQ.Client.Model;
+using GQ.Client.FileIO;
 
 namespace GQ.Client.Util {
 	
@@ -23,24 +24,25 @@ namespace GQ.Client.Util {
 		/// </summary>
 		/// <param name="maxParallelDownloads">Maximal number of parallel downloads.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
-		public MultiDownloader (int maxParallelDownloads, long timeout = 0) 
+		public MultiDownloader (int maxParallelDownloads, long timeout = 0, List<MediaInfo> files = null) 
 		{
+			if (files != null) {
+				FileInfoList = files;
+			}
 			Result = "";
 			MaxParallelDownloads = maxParallelDownloads;
 			Timeout = timeout;
 			stopwatch = new Stopwatch();
 		}
 
-
 		List<MediaInfo> FileInfoList;
 
 		public override void StartCallback(object sender, TaskEventArgs e) {
-			if (e.Content is string) {
+			if (e.Content is List<MediaInfo>) {
 				FileInfoList = e.Content as List<MediaInfo>;
 			}
 			this.Start(e.Step + 1);
 		}
-
 
 		#region Parallelization Limits
 
@@ -68,14 +70,17 @@ namespace GQ.Client.Util {
 		/// <returns>The download.</returns>
 		public override IEnumerator StartDownload () 
 		{
+			CurrentlyRunningDownloads = 0;
+
 			if (FileInfoList == null || FileInfoList.Count == 0) {
 				yield break;
 			}
 
 			foreach (MediaInfo info in FileInfoList) {
 				// wait until a place for download is free:
-				while (LimitOfParallelDownloadsExceeded && !TimeIsUp)
+				while (LimitOfParallelDownloadsExceeded && !TimeIsUp) {
 					yield return null;
+				}
 
 				if (TimeIsUp) {
 					stopwatch.Stop();
@@ -85,20 +90,27 @@ namespace GQ.Client.Util {
 				}
 
 				// now we can start the next file downloader:
-				Downloader d = new Downloader(info.Url, targetPath: MakeLocalFileNameFromUrl(info.Url));
-
+				info.LocalFileName = QuestManager.MakeLocalFileNameFromUrl(info.Url);
+				Downloader d = new Downloader(info.Url, targetPath: info.LocalPath);
+				CurrentlyRunningDownloads++;
+				d.OnTaskEnded += (object sender, TaskEventArgs e) => {
+					CurrentlyRunningDownloads--;
+					UnityEngine.Debug.Log("downloader freed");
+				};
+				d.OnTaskCompleted += (object sender, TaskEventArgs e) => {
+					info.LocalSize = info.RemoteSize;
+					info.LocalTimestamp = info.RemoteTimestamp;
+					UnityEngine.Debug.Log("size and time updated: new time: " + info.LocalTimestamp);
+				};
+				d.Start ();
 			}
 
-		}
+			// wait until the last download is finished:
+			while (CurrentlyRunningDownloads > 0) {
+				yield return null;
+			}
 
-		/// <summary>
-		/// Makes the local file name from the given URL, 
-		/// so that the file name is unique and reflects the filename within the url.
-		/// </summary>
-		/// <returns>The local file name from URL.</returns>
-		/// <param name="url">URL.</param>
-		public string MakeLocalFileNameFromUrl(string url) {
-			return url; // TODO
+			RaiseTaskCompleted ();
 		}
 
 		public override object Result { get; protected set; }

@@ -16,6 +16,7 @@ using System.Xml.Schema;
 using System;
 using GQ.Client.Err;
 using Newtonsoft.Json;
+using GQ.Client.FileIO;
 
 namespace GQ.Client.Model
 {
@@ -122,124 +123,15 @@ namespace GQ.Client.Model
 		public void AddMedia(string url) {
 			Debug.Log ("Adding media url: " + url);
 			if (!MediaStore.ContainsKey(url)) {
-				MediaInfo info = new MediaInfo (url);
+				MediaInfo info = new MediaInfo (Id, url);
 				MediaStore.Add (url, info);
 			}
 		}
 
-		protected string MediaJsonPath {
+		public string MediaJsonPath {
 			get {
 				return QuestManager.GetLocalQuestDirPath (Id) + "/media.json";
 			}
-		}
-
-		/// <summary>
-		/// Imports the local media infos fomr the game-media.json file and updates the existing media store. 
-		/// This is step 2 of 4 in media sync (download or uodate of a quest).
-		/// </summary>
-		public void ImportLocalMediaInfos() {
-			string mediaJSON = "";
-			try {
-				mediaJSON = File.ReadAllText (MediaJsonPath);
-			}
-			catch (FileNotFoundException e) {
-				mediaJSON = @"[]"; // we use an empty list then
-			}
-			catch (Exception e) {
-				Log.SignalErrorToDeveloper ("Error reading media.json for quest " + Id + ": " + e.Message);
-				mediaJSON = @"[]"; // we use an empty list then
-			}
-
-			List<LocalMediaInfo> localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>> (mediaJSON);
-
-			Debug.Log ("Found " + localInfos.Count + " local media infos.");
-			Debug.Log ("Found " + MediaStore.Count + " urls in game.xml.");
-
-			foreach (LocalMediaInfo localInfo in localInfos) {
-				MediaInfo info;
-				if (MediaStore.TryGetValue(localInfo.url, out info)) {
-					// add local information to media store:
-					info.LocalPath = localInfo.path;
-					info.LocalSize = localInfo.size;
-					info.LocalTimestamp = localInfo.time;
-				}
-				else {
-					// this media file is not useful anymore, we delete it:
-					string filePath = QuestManager.GetLocalQuestDirPath(Id) + "/files/" + localInfo.path;
-					try {
-						File.Delete(filePath);
-					}
-					catch (Exception e) {
-						Log.SignalErrorToDeveloper(
-							"Error while deleting media file " + filePath + 
-							" : " + e.Message);
-					}
-	 			}
-			}
-		}
-
-		/// <summary>
-		/// This is step 3 of 4 during quest media sync. Downloads or updates the media files needed for this quest.
-		/// </summary>
-		public void DownloadOrUpdateMedia() {
-			// 1. we create a list of files to be downloaded / updated (as Dictionary with all neeeded data for multi downloader:
-			List<MediaInfo> filesToDownload = new List<MediaInfo>();
-
-			MediaInfo info;
-			foreach (KeyValuePair<string,MediaInfo> kvpEntry in MediaStore) {
-				info = kvpEntry.Value;
-
-				// Request file header
-				Dictionary<string, string> headers = HTTP.GetRequestHeaders(info.Url);
-
-				string headerValue;
-				if (!headers.TryGetValue(HTTP.CONTENT_LENGTH, out headerValue)) {
-					Log.SignalErrorToDeveloper ("{0} header missing for url {1}", HTTP.CONTENT_LENGTH, info.Url);
-					info.RemoteSize = MediaInfo.UNKNOWN;
-				}
-				else {
-					info.RemoteSize = long.Parse (headerValue);
-				}
-
-				if (!headers.TryGetValue(HTTP.LAST_MODIFIED, out headerValue)) {
-					Log.SignalErrorToDeveloper ("{0} header missing for url {1}", HTTP.LAST_MODIFIED, info.Url);
-					info.RemoteTimestamp = MediaInfo.UNKNOWN;
-					// Since we do not know the timestamp of this file we load it:
-					filesToDownload.Add (info);
-				}
-				else {
-					info.RemoteTimestamp = long.Parse (headerValue);
-
-					// if the remote file is newer we update: 
-					// or if media is not locally available we load it:
-					if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable) {
-						filesToDownload.Add (info);
-					}								
-				}
-			}
-
-			// 2. we perform the update / download for all needed mdeia files:
-			// Initialize a Sequential MultiDownloader, transfer the filesToDownload list to it and start it.
-			// TODO
-		}
-
-		/// <summary>
-		/// This is step 4 of 4 during quest media sync. 
-		/// It saves the local media info into a json file media.json within the quest folder.
-		/// </summary>
-		public void PersistLocalMediaInfo() {
-			List<LocalMediaInfo> localInfos = new List<LocalMediaInfo> ();
-			foreach (KeyValuePair<string,MediaInfo> kvpEntry in MediaStore) {
-				localInfos.Add (
-					new LocalMediaInfo (
-						kvpEntry.Value.Url,
-						kvpEntry.Value.LocalPath,
-						kvpEntry.Value.LocalSize,
-						kvpEntry.Value.LocalTimestamp)
-				);
-			}
-			string mediaJSON = JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
-			File.WriteAllText(MediaJsonPath, mediaJSON);
 		}
 
 		#endregion

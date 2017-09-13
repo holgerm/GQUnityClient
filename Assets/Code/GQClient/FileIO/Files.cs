@@ -4,8 +4,9 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEditor;
+using GQ.Client.Err;
 
-namespace GQ.Client.Util.Files
+namespace GQ.Client.FileIO
 {
 	
 	public class Files
@@ -308,6 +309,10 @@ namespace GQ.Client.Util.Files
 		}
 
 		public static void DeleteDirCompletely(string path) {
+			if (!Directory.Exists(path)) {
+				Log.WarnDeveloper ("Trying to delete non existing directory " + path);
+				return;
+			}
 
 			DirectoryInfo dir = new DirectoryInfo(path);
 
@@ -319,7 +324,6 @@ namespace GQ.Client.Util.Files
 			foreach (DirectoryInfo subdir in dir.GetDirectories())
 			{
 				DeleteDirCompletely(subdir.FullName);
-				subdir.Delete();
 			}
 
 			dir.Delete ();

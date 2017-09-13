@@ -142,7 +142,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			Assert.AreEqual ("QuestWith1NPCTalk", q.Name);
@@ -159,7 +160,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30224);
@@ -186,7 +188,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30198);
@@ -218,7 +221,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30223);
@@ -255,7 +259,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			PageNPCTalk npcPage = (PageNPCTalk)q.GetPageWithID (30198);
@@ -276,7 +281,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert before started:
 			IPage p1 = q.GetPageWithID (30194);
@@ -311,7 +317,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			Assert.AreEqual (1, q.MediaStore.Count);
@@ -329,7 +336,8 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			Quest q = qm.DeserializeQuest (xml);
+			qm.DeserializeQuest (xml);
+			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
 			Assert.AreEqual (4, q.MediaStore.Count);
