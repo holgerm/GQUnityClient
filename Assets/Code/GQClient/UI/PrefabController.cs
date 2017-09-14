@@ -33,14 +33,14 @@ namespace GQ.Client.UI {
 
 
 		/// <summary>
-		/// Shows the dialog for at least one frame duration.
+		/// Shows the prefab for at least one frame duration.
 		/// </summary>
 		public void Show() {
 			Base.Instance.StartCoroutine (showAsCoroutine(true));
 		}
 
 		/// <summary>
-		/// Hides the dialog for at least one frame duration.
+		/// Hides the prefab for at least one frame duration.
 		/// </summary>
 		public void Hide() {
 			Base.Instance.StartCoroutine (showAsCoroutine(false));
@@ -49,7 +49,20 @@ namespace GQ.Client.UI {
 		private IEnumerator showAsCoroutine(bool show) {
 			yield return new WaitForEndOfFrame ();
 			gameObject.SetActive (show);
+		}
+
+		/// <summary>
+		/// Deletes the prefab from the hierarchy.
+		/// </summary>
+		public void Destroy() {
+			Base.Instance.StartCoroutine (destroyAsCoroutine());
+		}
+
+		private IEnumerator destroyAsCoroutine() {
 			yield return new WaitForEndOfFrame ();
+			yield return new WaitForEndOfFrame ();
+			gameObject.SetActive (false);
+			Destroy (gameObject);
 		}
 
 		#endregion

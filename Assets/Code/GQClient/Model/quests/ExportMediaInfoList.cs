@@ -37,7 +37,10 @@ namespace GQ.Client.Model {
 						kvpEntry.Value.LocalTimestamp)
 				);
 			}
-			string mediaJSON = JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
+			string mediaJSON = 
+				(localInfos.Count == 0) 
+				? "[]"
+				: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
 			File.WriteAllText(QuestManager.Instance.CurrentMediaJSONPath, mediaJSON);
 
 			RaiseTaskCompleted();

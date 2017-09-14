@@ -35,8 +35,6 @@ namespace GQ.Client.Model {
 		{
 			base.Start(step);
 
-			// TODO perfrom steps 1 to 4 of synching quest data between client and server.
-
 			// step 1 deserialize game.xml:
 			QuestManager.Instance.DeserializeQuest(gameXML);
 

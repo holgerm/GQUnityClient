@@ -91,7 +91,7 @@ namespace GQ.Client.UI.Dialogs {
 		protected void CloseDialog(object callbackSender, EventArgs args)
 		{
 			Stop ();
-			Dialog.Hide();
+			Dialog.Destroy ();
 		}
 
 	}

@@ -73,6 +73,7 @@ namespace GQ.Client.Util {
 			CurrentlyRunningDownloads = 0;
 
 			if (FileInfoList == null || FileInfoList.Count == 0) {
+				RaiseTaskCompleted ();
 				yield break;
 			}
 

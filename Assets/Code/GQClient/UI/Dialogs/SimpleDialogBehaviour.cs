@@ -36,7 +36,7 @@ namespace GQ.Client.UI.Dialogs {
 			Dialog.Details.text = details;
 
 			// make completion close this dialog:
-			Task.OnTaskCompleted += CloseDialog;
+			Task.OnTaskEnded += CloseDialog;
 
 			// show the dialog:
 			Dialog.Show ();
