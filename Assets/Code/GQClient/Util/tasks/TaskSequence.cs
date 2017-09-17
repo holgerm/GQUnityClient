@@ -22,9 +22,12 @@ namespace GQ.Client.Util {
 		/// <param name="task">Task.</param>
 		public void Append(Task task) {
 			tasks.Add (task);
+
 			if (tasks.Count > 1) {
 				tasks [tasks.Count - 2].OnTaskEnded += tasks [tasks.Count - 1].StartCallback;
 			}
+
+			RunsAsCoroutine |= task.RunsAsCoroutine;
 		}
 
 		/// <summary>
@@ -38,25 +41,31 @@ namespace GQ.Client.Util {
 			tasks.Add (task);
 			if (tasks.Count > 1) {
 				tasks [tasks.Count - 2].OnTaskCompleted += tasks [tasks.Count - 1].StartCallback;
+
+				RunsAsCoroutine |= task.RunsAsCoroutine;
 			}
 		}
 
 		void concatenateTasks () {
+			RunsAsCoroutine = false;
+
 			for (int i= 0; i < tasks.Count; i++) {
 				if (tasks.Count - 1 > i) {
 					tasks [i].OnTaskEnded += tasks [i + 1].StartCallback;
 				}
+				RunsAsCoroutine |= tasks [i].RunsAsCoroutine;
 			}
 		}
 
-		public override void Start (int step = 1)
+		public override bool Run ()
 		{
-			base.Start(step);
 			if (tasks != null && tasks.Count > 0) {
 				if (Step == 0 && tasks.Count > 1)
 					Step = 1;
 				tasks [0].Start (Step);
 			}
+
+			return true;
 		}
 
 		public override object Result {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using GQ.Client.UI;
+using GQ.Client.Err;
 
 namespace GQ.Client.Util {
 
@@ -16,7 +17,8 @@ namespace GQ.Client.Util {
 	/// </summary>
 	public abstract class Task {
 
-		public Task() {
+		public Task(bool runsAsCoroutine = false) {
+			RunsAsCoroutine = runsAsCoroutine;
 			behaviours = new List<UIBehaviour> ();
 		}
 
@@ -35,18 +37,53 @@ namespace GQ.Client.Util {
 
 		public int Step { get; protected set; }
 
+		public bool RunsAsCoroutine { get; internal set; }
+
 		/// <summary>
 		/// Start the loading process and inform the QuestInfoManager about feedback via callbacks.
 		/// 
 		/// The parameters step and totalSteps signal which step of how many steps this loading 
 		/// within a larger process currently is.
 		/// </summary>
-		public virtual void Start (int step = 0) {
+		public void Start (int step = 1) {
 			Step = step;
 			Debug.Log ("START Task step " + step + " type: " + GetType().Name);
 			behaviours.ForEach (
 				(UIBehaviour behaviour) => behaviour.Start ()
 			);
+
+			if (!RunsAsCoroutine) {
+				if (Run ())
+					RaiseTaskCompleted (Result);
+				else
+					RaiseTaskFailed ();
+			}
+			else {
+				Base.Instance.StartCoroutine (RunAsCoroutine());
+			}
+		}
+
+		/// <summary>
+		/// Overrride this method to implement behaviour of your task subclass. 
+		/// Return either true od false to signal that this task has succeeded or failed.
+		/// 
+		/// In order to give the tasks result to potential following tasks, 
+		/// store it in the Result property before leaving this method.
+		/// </summary>
+		public virtual bool Run() {
+			return true;
+		}
+
+		/// <summary>
+		/// Override this method implementing the behaviour of your task, if it should run as coroutine. 
+		/// In this case you must signal success or failure by calling RaiseTaskComplete() or RaiseTaskFailed() 
+		/// and optional give the result as parameter (or store in in advance in the Result property).
+		/// </summary>
+		/// <returns>The as coroutine.</returns>
+		public virtual IEnumerator RunAsCoroutine () {
+			yield return null;
+			RaiseTaskCompleted ();
+			yield break;
 		}
 
 		public void StartCallback(object sender, TaskEventArgs e) {
@@ -74,7 +111,14 @@ namespace GQ.Client.Util {
 		public event TaskCallback OnTaskFailed;
 		public event TaskCallback OnTaskEnded;
 
-		public virtual void RaiseTaskCompleted(object content = null) {
+		private bool hasEnded = false;
+
+		public void RaiseTaskCompleted(object content = null) {
+			if (hasEnded)
+				return;
+			else
+				hasEnded = true;
+
 			Debug.Log ("Task COMPLETED step: " + Step + " type: " + GetType().Name);
 
 			if (OnTaskCompleted != null)
@@ -84,6 +128,11 @@ namespace GQ.Client.Util {
 		}
 
 		public virtual void RaiseTaskFailed(object content = null) {
+			if (hasEnded)
+				return;
+			else
+				hasEnded = true;
+			
 			Debug.Log ("Task FAILED step: " + Step + " type: " + GetType().Name);
 
 			if (OnTaskFailed != null)
@@ -91,6 +140,23 @@ namespace GQ.Client.Util {
 			if (OnTaskEnded != null)
 				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
+
+		#region Test Access
+
+		public Delegate[] GetOnEndedInvocationList() {
+			return OnTaskEnded != null ? OnTaskEnded.GetInvocationList () : null;
+		}
+
+		public Delegate[] GetOnCompletedInvocationList() {
+			return OnTaskCompleted != null ? OnTaskCompleted.GetInvocationList () : null;
+		}
+
+		public Delegate[] GetOnFailedInvocationList() {
+			return OnTaskFailed != null ? OnTaskFailed.GetInvocationList () : null;
+		}
+
+		#endregion
+
 	}
 
 
@@ -107,5 +173,7 @@ namespace GQ.Client.Util {
 			Content = content;
 		}
 	}
+
+	public enum TaskState { Started, Succeded, Failed, RunningAsCoroutine };
 
 }

@@ -61,12 +61,10 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		public override void Start(int step = 0) 
+		public override bool Run() 
 		{
-			base.Start(step);
-
 			QuestInfoManager.Instance.Update (InputJSON);
-			RaiseTaskCompleted ();
+			return true;
 		}
 
 		public override object Result {

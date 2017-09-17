@@ -21,10 +21,8 @@ namespace GQ.Client.Model {
 		public ExportMediaInfoList() : base() { 
 		}
 			
-		public override void Start(int step = 0) 
+		public override bool Run() 
 		{
-			base.Start(step);
-
 			// step 4 persist the updated local media info:
 			List<LocalMediaInfo> localInfos = new List<LocalMediaInfo> ();
 			foreach (KeyValuePair<string,MediaInfo> kvpEntry in QuestManager.Instance.CurrentQuest.MediaStore) {
@@ -47,11 +45,10 @@ namespace GQ.Client.Model {
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export media info json file: " + e.Message);
-				RaiseTaskFailed ();
-				return;
+				return false;
 			}
 
-			RaiseTaskCompleted();
+			return true;
 		}
 	}
 }

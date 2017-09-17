@@ -35,10 +35,8 @@ namespace GQ.Client.Model {
 			}
 		}
 			
-		public override void Start(int step = 0) 
+		public override bool Run() 
 		{
-			base.Start(step);
-
 			// step 1 deserialize game.xml:
 			QuestManager.Instance.DeserializeQuest(gameXML);
 
@@ -48,7 +46,7 @@ namespace GQ.Client.Model {
 			// step 3 include remote media info:
 			Result = QuestManager.Instance.GetListOfFilesNeedDownload();
 
-			RaiseTaskCompleted(Result);
+			return true;
 		}
 	}
 }

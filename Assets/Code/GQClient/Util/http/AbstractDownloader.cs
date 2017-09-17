@@ -50,7 +50,7 @@ namespace GQ.Client.Util {
 				Raise (OnSuccess, e);
 				break;
 			default:
-				Log.SignalErrorToDeveloper ("Tried to raise unknow event type in Downloader.");
+				Log.SignalErrorToDeveloper ("Tried to raise unknown event type in Downloader.");
 				break;
 			}
 		}
@@ -60,11 +60,11 @@ namespace GQ.Client.Util {
 
 		#region Starting
 
-		public override void Start(int step = 0) 
+		public override bool Run() 
 		{
-			base.Start(step);
-
 			Base.Instance.StartCoroutine(StartDownload());
+
+			return true;
 		}
 
 		public abstract IEnumerator StartDownload ();
