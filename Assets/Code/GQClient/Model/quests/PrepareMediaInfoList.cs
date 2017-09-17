@@ -18,7 +18,12 @@ namespace GQ.Client.Model {
 
 		private string gameXML { get; set; } 
 
-		public override void StartCallback(object sender, TaskEventArgs e) {
+		public override void InitAfterPreviousTask(object sender, TaskEventArgs e) {
+			if (e == null || e.Content == null) {
+				RaiseTaskFailed ();
+				return;
+			}
+
 			if (e.Content is string) {
 				gameXML = e.Content as string;
 			}
@@ -28,7 +33,6 @@ namespace GQ.Client.Model {
 					"Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " + 
 					e.Content.GetType().Name);
 			}
-			this.Start(e.Step + 1);
 		}
 			
 		public override void Start(int step = 0) 

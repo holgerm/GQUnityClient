@@ -43,13 +43,27 @@ namespace GQ.Client.Util {
 		/// </summary>
 		public virtual void Start (int step = 0) {
 			Step = step;
+			Debug.Log ("START Task step " + step + " type: " + GetType().Name);
 			behaviours.ForEach (
 				(UIBehaviour behaviour) => behaviour.Start ()
 			);
 		}
 
-		public virtual void StartCallback(object sender, TaskEventArgs e) {
-			this.Start(e.Step + 1);
+		public void StartCallback(object sender, TaskEventArgs e) {
+			Step = e.Step + 1;
+
+			InitAfterPreviousTask (sender, e);
+
+			this.Start(Step);
+		}
+
+		/// <summary>
+		/// Override this method to initialize this task based on the result of the previous tasks, 
+		/// e.g. read specific input. This method is called when this task is chained after another task 
+		/// within a TaskSequence and before the Start() method is called.
+		/// </summary>
+		public virtual void InitAfterPreviousTask (object sender, TaskEventArgs e) {
+			return;
 		}
 
 		public virtual object Result { get; protected set; }
@@ -60,18 +74,22 @@ namespace GQ.Client.Util {
 		public event TaskCallback OnTaskFailed;
 		public event TaskCallback OnTaskEnded;
 
-		protected virtual void RaiseTaskCompleted(object content = null) {
+		public virtual void RaiseTaskCompleted(object content = null) {
+			Debug.Log ("Task COMPLETED step: " + Step + " type: " + GetType().Name);
+
 			if (OnTaskCompleted != null)
 				OnTaskCompleted (this, new TaskEventArgs (step: Step, content: content));
 			if (OnTaskEnded != null)
 				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
 
-		protected virtual void RaiseTaskFailed() {
+		public virtual void RaiseTaskFailed(object content = null) {
+			Debug.Log ("Task FAILED step: " + Step + " type: " + GetType().Name);
+
 			if (OnTaskFailed != null)
-				OnTaskFailed (this, new TaskEventArgs (step: Step));
+				OnTaskFailed (this, new TaskEventArgs (step: Step, content: content));
 			if (OnTaskEnded != null)
-				OnTaskEnded (this, new TaskEventArgs (step: Step));
+				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
 	}
 

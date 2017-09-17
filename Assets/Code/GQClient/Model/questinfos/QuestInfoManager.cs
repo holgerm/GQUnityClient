@@ -8,6 +8,8 @@ using GQ.Client.Conf;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using Newtonsoft.Json;
+using System.IO;
+using GQ.Client.Err;
 
 
 namespace GQ.Client.Model {
@@ -19,7 +21,22 @@ namespace GQ.Client.Model {
 
 		#region store & access data
 
-		protected Dictionary<int, QuestInfo> QuestDict {
+		public static string LocalQuestsPath {
+			get {
+				if (!Directory.Exists(Application.persistentDataPath + "/quests/")) {
+					Directory.CreateDirectory(Application.persistentDataPath + "/quests/");
+				}
+				return Application.persistentDataPath + "/quests/";
+			}
+		}
+
+		public static string LocalQuestInfoJSONPath {
+			get {
+				return LocalQuestsPath + "infos.json";
+			}
+		}
+
+		public Dictionary<int, QuestInfo> QuestDict {
 			get;
 			set;
 		}
@@ -48,12 +65,21 @@ namespace GQ.Client.Model {
 			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
 		}
 
-		public void OnQuestInfoJSONLoaded(object task, TaskEventArgs e) {
-			QuestInfo[] quests = JsonConvert.DeserializeObject<QuestInfo[]>(((DownloadEvent)e).Message);
-			Import (quests);
-		}
+		public void Update (string json) {
+			QuestInfo[] quests;
 
-		public void Import (QuestInfo[] quests) {
+			try {
+				quests = JsonConvert.DeserializeObject<QuestInfo[]>(json);
+			}
+			catch (Exception e) {
+				Log.SignalErrorToDeveloper(
+					"Error in JSON while trying to update quest infos: {0}\nJSON:\n{1}",
+					e.Message,
+					json
+				);
+				return;
+			}
+
 			if ( quests == null || quests.Length == 0)
 				return;
 			
@@ -73,7 +99,7 @@ namespace GQ.Client.Model {
 							oldQuestInfo: oldQ
 						)
 					);
-				} 
+				}
 				else {
 					QuestDict.Add ((int)q.Id, q);
 					RaiseChange (
@@ -86,6 +112,15 @@ namespace GQ.Client.Model {
 					);
 				}
 			}
+
+			// persist the quest infos from the update QuestDict:
+			List<QuestInfo> questInfoList = new List<QuestInfo>(QuestDict.Values);
+			string questInfosJSON = 
+				(questInfoList.Count == 0) 
+				? "[]"
+				: JsonConvert.SerializeObject(questInfoList, Newtonsoft.Json.Formatting.Indented);
+			File.WriteAllText(QuestInfoManager.LocalQuestInfoJSONPath, questInfosJSON);
+
 		}
 
 		#endregion

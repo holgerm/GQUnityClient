@@ -27,6 +27,20 @@ namespace GQ.Client.Util {
 			}
 		}
 
+		/// <summary>
+		/// Append the specified task to the end of the sequence and concatenates it, 
+		/// so that it gets started after the former last has been successfully completed .. 
+		/// 
+		/// If the previous task has not been completed the whole sequence is ended.
+		/// </summary>
+		/// <param name="task">Task.</param>
+		public void AppendIfCompleted(Task task) {
+			tasks.Add (task);
+			if (tasks.Count > 1) {
+				tasks [tasks.Count - 2].OnTaskCompleted += tasks [tasks.Count - 1].StartCallback;
+			}
+		}
+
 		void concatenateTasks () {
 			for (int i= 0; i < tasks.Count; i++) {
 				if (tasks.Count - 1 > i) {

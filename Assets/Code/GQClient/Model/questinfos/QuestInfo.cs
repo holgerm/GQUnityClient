@@ -3,6 +3,7 @@ using System.Collections;
 using System.Text;
 using System;
 using GQ.Client.Err;
+using Newtonsoft.Json;
 
 namespace GQ.Client.Model {
 
@@ -78,6 +79,8 @@ namespace GQ.Client.Model {
 		/// </summary>
 		/// <value>The last update.</value>
 		public long? 			LastUpdate 			{ get; set; }
+
+		[JsonIgnore]
 		public long? LastUpdateOnServer {
 			get {
 				return LastUpdate;
@@ -91,11 +94,11 @@ namespace GQ.Client.Model {
 		/// <summary>
 		/// Client-side update timestamp;
 		/// </summary>
-		private long? lastUpdateOnDevice = null;
+		public long? LastUpdateOnDevice = null;
 
-		public long? LastUpdatePersistentLocalStore = null;
+		public long? TimestampOfPredeployedVersion = null;
 
-		private int playedTimes = 0;
+		public int PlayedTimes = 0;
 
 		public override string ToString () {
 			StringBuilder sb = new StringBuilder();
@@ -126,7 +129,7 @@ namespace GQ.Client.Model {
 		/// </summary>
 		/// <returns><c>true</c> if this instance is locally available; otherwise, <c>false</c>.</returns>
 		public bool IsLocallyStored () {
-			return lastUpdateOnDevice != null || LastUpdatePersistentLocalStore != null;
+			return LastUpdateOnDevice != null || TimestampOfPredeployedVersion != null;
 		}
 
 		/// <summary>
@@ -134,20 +137,20 @@ namespace GQ.Client.Model {
 		/// </summary>
 		/// <returns><c>true</c> if this instance is new; otherwise, <c>false</c>.</returns>
 		public bool IsNew () {
-			return playedTimes == 0;
+			return PlayedTimes == 0;
 		}
 
 		public bool IsDownloadable () {
-			return lastUpdateOnDevice == null && LastUpdateOnServer != null;
+			return LastUpdateOnDevice == null && LastUpdateOnServer != null;
 		}
 
 		public bool IsUpdatable () {
 			return (
 			    // exists on both device and server:
-			    lastUpdateOnDevice != null
+			    LastUpdateOnDevice != null
 				&& LastUpdateOnServer != null
 				// server update is newer (bigger number):
-				&& LastUpdateOnServer > lastUpdateOnDevice);
+				&& LastUpdateOnServer > LastUpdateOnDevice);
 		}
 
 		public enum Deletability { Delete, CanNotDelete, DeleleWithWarning, Downgrade }
@@ -156,15 +159,15 @@ namespace GQ.Client.Model {
 			if (!IsLocallyStored ())
 				return Deletability.CanNotDelete;
 
-			if (LastUpdatePersistentLocalStore != null &&
-			   		lastUpdateOnDevice != null &&
-			    	LastUpdatePersistentLocalStore > lastUpdateOnDevice) {
+			if (TimestampOfPredeployedVersion != null &&
+			   		LastUpdateOnDevice != null &&
+			    	TimestampOfPredeployedVersion > LastUpdateOnDevice) {
 				return Deletability.Downgrade;
 			}
 
-			if (lastUpdateOnDevice != null && 
+			if (LastUpdateOnDevice != null && 
 					LastUpdateOnServer != null &&
-					lastUpdateOnDevice > LastUpdateOnServer) {
+					LastUpdateOnDevice > LastUpdateOnServer) {
 				return Deletability.DeleleWithWarning;
 			}
 

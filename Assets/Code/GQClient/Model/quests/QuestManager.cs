@@ -72,8 +72,8 @@ namespace GQ.Client.Model
 		/// </summary>
 		/// <returns>The local quest dir path.</returns>
 		/// <param name="questID">Quest I.</param>
-		public static string GetLocalQuestDirPath(int questID) {
-			return Application.persistentDataPath + "/quests/" + questID + "/";
+		public static string GetLocalPath4Quest(int questID) {
+			return QuestInfoManager.LocalQuestsPath + questID + "/";
 		}
 
 		public const string QUEST_FILE_NAME = "game.xml";
@@ -93,7 +93,7 @@ namespace GQ.Client.Model
 
 		public string CurrentMediaJSONPath {
 			get {
-				return GetLocalQuestDirPath (CurrentQuest.Id) + "/media.json";
+				return GetLocalPath4Quest (CurrentQuest.Id) + "/media.json";
 			}
 		}
 
@@ -354,7 +354,7 @@ namespace GQ.Client.Model
 
 		public MediaInfo(int questID, string url) {
 			this.Url = url;
-			this.LocalDir = Files.CombinePath(QuestManager.GetLocalQuestDirPath (questID), "files");
+			this.LocalDir = Files.CombinePath(QuestManager.GetLocalPath4Quest (questID), "files");
 			this.LocalFileName = null;
 			this.LocalTimestamp = 0L;
 			this.LocalSize = NOT_AVAILABLE;

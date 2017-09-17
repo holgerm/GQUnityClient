@@ -40,8 +40,7 @@ namespace GQTests.Model
 			QuestInfo[] quests = null;
 
 			// Act:
-			string serverJSON = File.ReadAllText (JSON_InitFromServer);
-			qm.Import (QuestInfoImportExtension.ParseQuestInfoJSON (serverJSON));
+			qm.Update (JSON_InitFromServer);
 
 			// Assert:
 			IEnumerator<QuestInfo> questInfos = qm.GetEnumerator();
@@ -61,8 +60,7 @@ namespace GQTests.Model
 			// Arrange:
 			QuestInfoManager qm = QuestInfoManager.Instance;
 			QuestInfo[] quests = null;
-			string serverJSON = File.ReadAllText (JSON_InitFromServer);
-			qm.Import (QuestInfoImportExtension.ParseQuestInfoJSON (serverJSON));
+			qm.Update (JSON_InitFromServer);
 
 			// Act:
 			// TODO

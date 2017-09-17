@@ -97,29 +97,12 @@ namespace GQ.Client.Util {
 					msg = string.Format ("Timeout: already {1} ms elapsed while trying to download url {0}", 
 							url, stopwatch.ElapsedMilliseconds);
 					Raise(DownloadEventType.Timeout, new DownloadEvent(elapsedTime: Timeout, message: msg));
-					RaiseTaskFailed (); 
 					yield break;
 				}
 				if (Www == null)
 					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
 				yield return null;
 			} 
-
-			if (TargetPath != null) {
-				// we have to store the loaded file:
-				try {
-					string targetDir = Directory.GetParent(TargetPath).FullName;
-					if (!Directory.Exists (targetDir))
-						Directory.CreateDirectory (targetDir);
-					if (File.Exists (TargetPath))
-						File.Delete (TargetPath);
-					File.WriteAllBytes(TargetPath, Www.bytes);
-				}
-				catch (Exception e) {
-					Raise(DownloadEventType.Error, new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
-					RaiseTaskFailed ();
-				}
-			}
 
 			stopwatch.Stop();
 			
@@ -134,6 +117,28 @@ namespace GQ.Client.Util {
 				Raise(DownloadEventType.Progress, new DownloadEvent(progress: Www.progress, message: msg));
 
 				yield return null;
+
+				msg = string.Format ("Saving file ...");
+				Raise(DownloadEventType.Progress, new DownloadEvent(progress: Www.progress, message: msg));
+
+				if (TargetPath != null) {
+					// we have to store the loaded file:
+					try {
+						string targetDir = Directory.GetParent(TargetPath).FullName;
+						if (!Directory.Exists (targetDir))
+							Directory.CreateDirectory (targetDir);
+						if (File.Exists (TargetPath))
+							File.Delete (TargetPath);
+						File.WriteAllBytes(TargetPath, Www.bytes);
+					}
+					catch (Exception e) {
+						Raise(DownloadEventType.Error, new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
+						RaiseTaskFailed ();
+
+						Www.Dispose();
+						yield break;
+					}
+				}
 
 				msg = string.Format ("Download completed. (URL: {0})", 
 					url);

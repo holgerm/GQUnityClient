@@ -37,11 +37,10 @@ namespace GQ.Client.Util {
 
 		List<MediaInfo> FileInfoList;
 
-		public override void StartCallback(object sender, TaskEventArgs e) {
+		public override void InitAfterPreviousTask(object sender, TaskEventArgs e) {
 			if (e.Content is List<MediaInfo>) {
 				FileInfoList = e.Content as List<MediaInfo>;
 			}
-			this.Start(e.Step + 1);
 		}
 
 		#region Parallelization Limits

@@ -130,7 +130,7 @@ namespace GQ.Client.Model
 
 		public string MediaJsonPath {
 			get {
-				return QuestManager.GetLocalQuestDirPath (Id) + "/media.json";
+				return QuestManager.GetLocalPath4Quest (Id) + "/media.json";
 			}
 		}
 

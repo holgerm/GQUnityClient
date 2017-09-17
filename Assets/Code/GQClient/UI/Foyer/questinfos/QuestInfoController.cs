@@ -70,44 +70,47 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		public void Download() {
-			Downloader downloader = 
+			// Load quest data: game.xml
+			Downloader downloadGameXML = 
 				new Downloader (
 					url: QuestManager.GetQuestURI(data.Id), 
 					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
-					targetPath: QuestManager.GetLocalQuestDirPath(data.Id) + QuestManager.QUEST_FILE_NAME
+					targetPath: QuestManager.GetLocalPath4Quest(data.Id) + QuestManager.QUEST_FILE_NAME
 				);
-			new DownloadDialogBehaviour (downloader, "Loading quest");
+			new DownloadDialogBehaviour (downloadGameXML, "Loading quest");
 
-			PrepareMediaInfoList mediaInfoListPreparation = 
+			// analyze game.xml, gather all media info compare to local media info and detect missing media
+			PrepareMediaInfoList prepareMediaInfosToDownload = 
 				new PrepareMediaInfoList ();
 			new SimpleDialogBehaviour (
-				mediaInfoListPreparation,
+				prepareMediaInfosToDownload,
 				"Synching Quest Data",
 				"Preparing media information."
 			);
 
-			MultiDownloader mediaFileDownloader =
+			// download all missing media info
+			MultiDownloader downloadMediaFiles =
 				new MultiDownloader (1);
 			new SimpleDialogBehaviour (
-				mediaFileDownloader,
+				downloadMediaFiles,
 				"Synching Quest Data",
 				"Loading media files."
 			);
 
-			ExportMediaInfoList mediaInfoListExporter =
+			// store current media info locally
+			ExportMediaInfoList exportLocalMediaInfo =
 				new ExportMediaInfoList ();
 			new SimpleDialogBehaviour (
-				mediaInfoListExporter,
+				exportLocalMediaInfo,
 				"Synching Quest Data",
 				"Saving updated media info."
 			);
 
 			TaskSequence t = 
-				new TaskSequence(
-					downloader, 
-					mediaInfoListPreparation, 
-					mediaFileDownloader,
-					mediaInfoListExporter);
+				new TaskSequence (downloadGameXML);
+			t.AppendIfCompleted (prepareMediaInfosToDownload);
+			t.Append (downloadMediaFiles);
+			t.Append (exportLocalMediaInfo);
 			t.Start ();
 
 			CurrentMode = Mode.Deletable;
@@ -116,8 +119,8 @@ namespace GQ.Client.UI.Foyer {
 		public void Delete() {
 			// TODO in case we are in DeleteWithWarning state we show a dialog with awarning and two options: Delete and Cancel.
 
-			Debug.Log ("Want to delete: " + QuestManager.GetLocalQuestDirPath (data.Id));
-			Files.DeleteDirCompletely (QuestManager.GetLocalQuestDirPath (data.Id));
+			Debug.Log ("Want to delete: " + QuestManager.GetLocalPath4Quest (data.Id));
+			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
 			CurrentMode = Mode.OnServer;
 		}
 

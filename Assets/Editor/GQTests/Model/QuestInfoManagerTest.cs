@@ -34,10 +34,9 @@ namespace GQTests.Model {
 		public void ImportNull () {
 			// Arrange:
 			QuestInfoManager qm = QuestInfoManager.Instance;
-			QuestInfo[] quests = null;
 
 			// Act:
-			qm.Import(quests);
+			qm.Update("[]");
 
 			// Assert:
 			Assert.AreEqual(0, qm.Count());

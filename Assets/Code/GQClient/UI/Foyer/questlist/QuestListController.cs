@@ -52,21 +52,37 @@ namespace GQ.Client.UI.Foyer {
 				}
 			};
 
+			ImportQuestInfosFromJSON importLocal = 
+				new ImportQuestInfosFromJSON (false);
+			new SimpleDialogBehaviour (
+				importLocal,
+				"Updating quests",
+				"Reading local quests."
+			);
+
 			Downloader downloader = 
 				new Downloader (
 					url: ConfigurationManager.UrlPublicQuestsJSON, 
 					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000);
 			new DownloadDialogBehaviour (downloader, "Updating quests");
 
-			ImportQuestInfosFromJSON importer = 
-				new ImportQuestInfosFromJSON ();
+			ImportQuestInfosFromJSON importFromServer = 
+				new ImportQuestInfosFromJSON (true);
 			new SimpleDialogBehaviour (
-				importer,
-				"Importing Quest Data",
+				importFromServer,
+				"Updating quests",
 				"Reading all found quests into the local data store."
 			);
 
-			TaskSequence t = new TaskSequence(downloader, importer);
+			ExportQuestInfosToJSON exporter = 
+				new ExportQuestInfosToJSON ();
+			new SimpleDialogBehaviour (
+				exporter,
+				"Updating quests",
+				"Saving Quest Data"
+			);
+
+			TaskSequence t = new TaskSequence(importLocal, downloader, importFromServer, exporter);
 			t.Start ();
 		}
 

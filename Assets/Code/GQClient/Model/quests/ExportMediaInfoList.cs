@@ -37,11 +37,19 @@ namespace GQ.Client.Model {
 						kvpEntry.Value.LocalTimestamp)
 				);
 			}
-			string mediaJSON = 
-				(localInfos.Count == 0) 
-				? "[]"
-				: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
-			File.WriteAllText(QuestManager.Instance.CurrentMediaJSONPath, mediaJSON);
+
+			try {
+				string mediaJSON = 
+					(localInfos.Count == 0) 
+					? "[]"
+					: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
+				File.WriteAllText(QuestManager.Instance.CurrentMediaJSONPath, mediaJSON);
+			}
+			catch (Exception e) {
+				Log.SignalErrorToDeveloper ("Error while trying to export media info json file: " + e.Message);
+				RaiseTaskFailed ();
+				return;
+			}
 
 			RaiseTaskCompleted();
 		}

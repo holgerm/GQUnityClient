@@ -84,7 +84,7 @@ namespace GQ.Client.UI.Dialogs {
 		}
 
 		/// <summary>
-		/// Callback for the OnUpdateProgress event.
+		/// Callback for the OnProgress event.
 		/// </summary>
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
@@ -94,7 +94,7 @@ namespace GQ.Client.UI.Dialogs {
 		}
 
 		/// <summary>
-		/// Callback for the OnUpdateError event.
+		/// Callback for the OnError event.
 		/// </summary>
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
@@ -108,6 +108,7 @@ namespace GQ.Client.UI.Dialogs {
 				(GameObject sender, EventArgs e) => {
 					// in error case when user clicks the give up button, we just close the dialog:
 					CloseDialog(sender, new DownloadEvent ());
+					Task.RaiseTaskFailed();
 				}
 			);
 
