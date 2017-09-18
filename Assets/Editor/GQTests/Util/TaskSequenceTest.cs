@@ -91,7 +91,12 @@ namespace GQTests.Util
 			Assert.AreEqual (t2.GetOnCompletedInvocationList() [0].Target, t3);
 			Assert.AreEqual (t2.GetOnCompletedInvocationList() [0].Method.Name, "StartCallback");
 
-			Assert.Null (t3.GetOnCompletedInvocationList ());
+			Assert.AreEqual (1, t3.GetOnCompletedInvocationList ().Length);
+			Assert.AreEqual (t3.GetOnCompletedInvocationList() [0].Target, ts);
+			Assert.AreEqual (t3.GetOnCompletedInvocationList() [0].Method.Name, "CompletedCallback");
+			Assert.AreEqual (1, t3.GetOnFailedInvocationList ().Length);
+			Assert.AreEqual (t3.GetOnFailedInvocationList() [0].Target, ts);
+			Assert.AreEqual (t3.GetOnFailedInvocationList() [0].Method.Name, "FailedCallback");
 
 			Assert.IsTrue (t1.started);
 			Assert.IsTrue (t2.started);
@@ -120,7 +125,12 @@ namespace GQTests.Util
 			Assert.AreEqual (t2.GetOnCompletedInvocationList() [0].Target, t3);
 			Assert.AreEqual (t2.GetOnCompletedInvocationList() [0].Method.Name, "StartCallback");
 
-			Assert.Null (t3.GetOnCompletedInvocationList ());
+			Assert.AreEqual (1, t3.GetOnCompletedInvocationList ().Length);
+			Assert.AreEqual (t3.GetOnCompletedInvocationList() [0].Target, ts);
+			Assert.AreEqual (t3.GetOnCompletedInvocationList() [0].Method.Name, "CompletedCallback");
+			Assert.AreEqual (1, t3.GetOnFailedInvocationList ().Length);
+			Assert.AreEqual (t3.GetOnFailedInvocationList() [0].Target, ts);
+			Assert.AreEqual (t3.GetOnFailedInvocationList() [0].Method.Name, "FailedCallback");
 
 			Assert.IsTrue (t1.started);
 			Assert.IsTrue (t1.completed);
@@ -130,6 +140,35 @@ namespace GQTests.Util
 			Assert.IsFalse (t3.completed);
 			Assert.IsFalse (t3.failed);
 		}
+
+		[Test]
+		public void SucceedingTaskSequence() {
+			TestSequence ts = new TestSequence ();
+			ts.Append(new SucceedingTask());
+			ts.Append(new SucceedingTask());
+			ts.Append(new SucceedingTask());
+				
+			ts.Start ();
+
+			Assert.IsTrue (ts.completed);
+			Assert.IsFalse (ts.failed);
+		}
+
+		[Test]
+		public void FailingTaskSequence() {
+			TestSequence ts = new TestSequence ();
+			ts.Append(new SucceedingTask());
+			ts.Append(new SucceedingTask());
+			ts.Append(new FailingTask());
+
+			ts.Start ();
+
+			Assert.IsFalse (ts.completed);
+			Assert.IsTrue (ts.failed);
+		}
+
+
+		#region Helper Classes
 
 		class SucceedingTask : Task {
 
@@ -168,5 +207,20 @@ namespace GQTests.Util
 
 		}
 
+		class TestSequence : TaskSequence {
+
+			public bool completed = false;
+			public bool failed = false;
+
+			protected override void BeforeFailed () {
+				failed = true;
+			}
+
+			protected override void BeforeCompleted() {
+				completed = true;
+			}
+		}
+
+		#endregion
 	}
 }
