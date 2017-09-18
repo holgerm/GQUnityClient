@@ -24,7 +24,10 @@ namespace GQ.Client.Util {
 		/// </summary>
 		/// <param name="maxParallelDownloads">Maximal number of parallel downloads.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
-		public MultiDownloader (int maxParallelDownloads, long timeout = 0, List<MediaInfo> files = null) 
+		public MultiDownloader (
+			int maxParallelDownloads = 1, 
+			long timeout = 0, 
+			List<MediaInfo> files = null) : base(true)
 		{
 			if (files != null) {
 				FileInfoList = files;
@@ -67,7 +70,7 @@ namespace GQ.Client.Util {
 		/// Actually starts the download.
 		/// </summary>
 		/// <returns>The download.</returns>
-		public override IEnumerator StartDownload () 
+		public override IEnumerator RunAsCoroutine () 
 		{
 			CurrentlyRunningDownloads = 0;
 

@@ -233,7 +233,7 @@ public class questdatabase : MonoBehaviour
 		download.OnSuccess +=  whenQuestListDownloadSucceeds;
 		download.OnSuccess += downloadAllQuests;
 		download.OnError += retryAfterDownloadError;
-		StartCoroutine (download.StartDownload ());
+//		StartCoroutine (download.StartDownload ());
 	}
 
 	void retryAfterDownloadError (AbstractDownloader d, DownloadEvent e)

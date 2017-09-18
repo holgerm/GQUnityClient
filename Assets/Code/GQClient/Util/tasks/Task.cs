@@ -116,10 +116,14 @@ namespace GQ.Client.Util {
 		public void RaiseTaskCompleted(object content = null) {
 			if (hasEnded)
 				return;
-			else
+			else {
 				hasEnded = true;
+				Debug.Log ("Task " + GetType ().Name + " has ended.");
+			}
 
 			Debug.Log ("Task COMPLETED step: " + Step + " type: " + GetType().Name);
+
+			BeforeCompleted ();
 
 			if (OnTaskCompleted != null)
 				OnTaskCompleted (this, new TaskEventArgs (step: Step, content: content));
@@ -127,18 +131,30 @@ namespace GQ.Client.Util {
 				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
 
+		protected virtual void BeforeCompleted() {
+			return;
+		}
+
 		public virtual void RaiseTaskFailed(object content = null) {
 			if (hasEnded)
 				return;
-			else
+			else {
 				hasEnded = true;
+				Debug.Log ("Task " + GetType ().Name + " has ended.");
+			}
 			
 			Debug.Log ("Task FAILED step: " + Step + " type: " + GetType().Name);
+
+			BeforeFailed ();
 
 			if (OnTaskFailed != null)
 				OnTaskFailed (this, new TaskEventArgs (step: Step, content: content));
 			if (OnTaskEnded != null)
 				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
+		}
+
+		protected virtual void BeforeFailed() {
+			return;
 		}
 
 		#region Test Access

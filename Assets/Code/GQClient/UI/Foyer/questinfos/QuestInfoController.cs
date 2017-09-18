@@ -109,8 +109,6 @@ namespace GQ.Client.UI.Foyer {
 			TaskSequence t = 
 				new TaskSequence (downloadGameXML);
 			t.AppendIfCompleted (prepareMediaInfosToDownload);
-//			t.Append (prepareMediaInfosToDownload);
-
 			t.Append (downloadMediaFiles);
 			t.Append (exportLocalMediaInfo);
 			t.Start ();

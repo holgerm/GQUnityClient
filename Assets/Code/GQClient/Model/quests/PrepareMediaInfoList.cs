@@ -41,7 +41,7 @@ namespace GQ.Client.Model {
 			QuestManager.Instance.DeserializeQuest(gameXML);
 
 			// step 2 import local media info:
-			QuestManager.Instance.ImportLocalMediaInfos();
+			QuestManager.Instance.ImportLocalMediaInfo();
 
 			// step 3 include remote media info:
 			Result = QuestManager.Instance.GetListOfFilesNeedDownload();

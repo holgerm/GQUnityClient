@@ -61,7 +61,7 @@ namespace GQTests.Util {
 				Assert.Fail("Download Error: " + e.Message);
 			};
 
-			IEnumerator enumerator = downloader.StartDownload ();
+			IEnumerator enumerator = downloader.RunAsCoroutine ();
 			while (enumerator.MoveNext()) {
 				Debug.Log ("in while ... " + (enumerator.Current == null ? "null" : enumerator.Current.ToString()));
 			}
@@ -70,9 +70,23 @@ namespace GQTests.Util {
 			Assert.IsTrue (succeeded , "Should have succeeded in downloading.");
 
 			Assert.AreEqual ("Hello!", downloader.Result);
-
 		}
 
+		[Test]
+		public void DownloaderUsesCoroutine() {
+
+			Downloader d = new Downloader ("some.url", 60000);
+
+			Assert.IsTrue (d.RunsAsCoroutine);
+		}
+
+		[Test]
+		public void MultiDownloaderUsesCoroutine() {
+
+			MultiDownloader md = new MultiDownloader ();
+
+			Assert.IsTrue (md.RunsAsCoroutine);
+		}
 	}
 
 }

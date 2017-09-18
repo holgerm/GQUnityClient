@@ -54,7 +54,7 @@ namespace GQ.Client.Util {
 		public Downloader (
 			string url, 
 			long timeout = 0,
-			string targetPath = null) 
+			string targetPath = null) : base(true)
 		{
 			Result = "";
 			this.url = url;
@@ -69,12 +69,14 @@ namespace GQ.Client.Util {
 		}
 
 		public void Restart() {
-			Base.Instance.StartCoroutine(StartDownload());
+			Base.Instance.StartCoroutine(RunAsCoroutine ());
+			// TODO: isn't a call to Start() enough?
 		}
 			
-		// TODO reduce accessibility to protected and make test use it by reflection.
-		public override IEnumerator StartDownload () 
+		public override IEnumerator RunAsCoroutine () 
 		{
+			UnityEngine.Debug.Log ("Downloader started.");
+
 			Www = new WWW(url);
 			stopwatch.Start();
 
@@ -105,6 +107,9 @@ namespace GQ.Client.Util {
 			} 
 
 			stopwatch.Stop();
+
+			UnityEngine.Debug.Log ("Downloader stopped.");
+
 			
 			if ( Www.error != null && Www.error != "" ) {
 				Raise(DownloadEventType.Error, new DownloadEvent(message: Www.error));
@@ -129,7 +134,11 @@ namespace GQ.Client.Util {
 							Directory.CreateDirectory (targetDir);
 						if (File.Exists (TargetPath))
 							File.Delete (TargetPath);
+						UnityEngine.Debug.Log("Before writing File");
+
 						File.WriteAllBytes(TargetPath, Www.bytes);
+
+						UnityEngine.Debug.Log("File wirtten");
 					}
 					catch (Exception e) {
 						Raise(DownloadEventType.Error, new DownloadEvent(message: "Could not save downloaded file: " + e.Message));

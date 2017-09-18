@@ -60,12 +60,16 @@ namespace GQ.Client.Util {
 		public override bool Run ()
 		{
 			if (tasks != null && tasks.Count > 0) {
-				if (Step == 0 && tasks.Count > 1)
-					Step = 1;
 				tasks [0].Start (Step);
 			}
 
 			return true;
+		}
+
+		public override IEnumerator RunAsCoroutine() {
+			Run ();
+
+			yield break;
 		}
 
 		public override object Result {

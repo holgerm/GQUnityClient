@@ -92,5 +92,49 @@ namespace GQTests.Model
 			Assert.AreEqual ("Variable Name may not start with '$' Symbol, so you may not use $x as you did in a SetVariable action.", Log.GetLastProblem ().Message);
 		}
 
+		[Test]
+		public void SetVariableWithEmptyString ()
+		{
+			// Arrange:
+			ActionSetVariable action = parseXML<ActionSetVariable> 
+				(@"	<action type=""SetVariable"" var=""x"">
+						<value>
+							<string></string>
+						</value>
+					</action>");
+
+			Variables.ClearAll ();
+			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
+
+			// Act:
+			action.Execute ();
+
+			// Assert:
+			Assert.AreNotEqual (Value.Null, Variables.GetValue ("x"));
+			Assert.AreEqual ("", Variables.GetValue ("x").AsString ());
+		}
+
+		[Test]
+		public void SetVariableWithEmptyStringTag ()
+		{
+			// Arrange:
+			ActionSetVariable action = parseXML<ActionSetVariable> 
+				(@"	<action type=""SetVariable"" var=""x"">
+						<value>
+							<string/>
+						</value>
+					</action>");
+
+			Variables.ClearAll ();
+			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
+
+			// Act:
+			action.Execute ();
+
+			// Assert:
+			Assert.AreNotEqual (Value.Null, Variables.GetValue ("x"));
+			Assert.AreEqual ("", Variables.GetValue ("x").AsString ());
+		}
+
 	}
 }

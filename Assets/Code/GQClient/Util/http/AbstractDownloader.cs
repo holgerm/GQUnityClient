@@ -7,6 +7,8 @@ using GQ.Client.Err;
 namespace GQ.Client.Util {
 	public abstract class AbstractDownloader : Task {
 
+		public AbstractDownloader(bool runsAsCoroutine = true) : base(true) {}
+
 		public long Timeout { get; set; }
 
 		protected Stopwatch stopwatch;
@@ -54,20 +56,6 @@ namespace GQ.Client.Util {
 				break;
 			}
 		}
-
-		#endregion
-
-
-		#region Starting
-
-		public override bool Run() 
-		{
-			Base.Instance.StartCoroutine(StartDownload());
-
-			return true;
-		}
-
-		public abstract IEnumerator StartDownload ();
 
 		#endregion
 

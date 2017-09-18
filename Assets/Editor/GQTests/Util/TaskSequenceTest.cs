@@ -33,8 +33,11 @@ namespace GQTests.Util
 			Assert.Null (t3.GetOnEndedInvocationList ());
 
 			Assert.IsTrue (t1.started);
+			Assert.IsTrue (t1.completed);
 			Assert.IsTrue (t2.started);
+			Assert.IsTrue (t2.completed);
 			Assert.IsTrue (t3.started);
+			Assert.IsTrue (t3.completed);
 		}
 
 		[Test]
@@ -120,8 +123,12 @@ namespace GQTests.Util
 			Assert.Null (t3.GetOnCompletedInvocationList ());
 
 			Assert.IsTrue (t1.started);
+			Assert.IsTrue (t1.completed);
 			Assert.IsTrue (t2.started);
+			Assert.IsTrue (t2.failed);
 			Assert.IsFalse (t3.started);
+			Assert.IsFalse (t3.completed);
+			Assert.IsFalse (t3.failed);
 		}
 
 		class SucceedingTask : Task {
@@ -132,6 +139,13 @@ namespace GQTests.Util
 				started = true;
 
 				return true;
+			}
+
+			public bool completed = false;
+			public bool failed = false;
+
+			protected override void BeforeCompleted() {
+				completed = true;
 			}
 		}
 
@@ -144,7 +158,15 @@ namespace GQTests.Util
 
 				return false;
 			}
-		}
+
+			public bool completed = false;
+			public bool failed = false;
+
+			protected override void BeforeFailed () {
+				failed = true;
+			}
+
 		}
 
+	}
 }

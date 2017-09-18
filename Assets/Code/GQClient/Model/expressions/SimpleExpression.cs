@@ -45,13 +45,18 @@ namespace GQ.Client.Model
 
 			reader.MoveToContent ();
 
-			while (reader.NodeType != XmlNodeType.Text) {
+			while (
+				reader.NodeType != XmlNodeType.Text && 
+				reader.NodeType != XmlNodeType.EndElement && 
+				reader.NodeType != XmlNodeType.None &&
+				!reader.IsEmptyElement
+			) {
 				reader.Read ();
 			}
 
 			setValue (reader.Value);
 
-			while (reader.NodeType != XmlNodeType.EndElement) {
+			while (!reader.IsEmptyElement && reader.NodeType != XmlNodeType.EndElement) {
 				reader.Read ();
 			}
 

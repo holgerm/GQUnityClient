@@ -161,7 +161,7 @@ namespace GQ.Client.Model
 		/// Imports the local media infos fomr the game-media.json file and updates the existing media store. 
 		/// This is step 2 of 4 in media sync (download or update of a quest).
 		/// </summary>
-		public void ImportLocalMediaInfos() {
+		public void ImportLocalMediaInfo() {
 			string mediaJSON = "";
 			try {
 				mediaJSON = File.ReadAllText (CurrentQuest.MediaJsonPath);
