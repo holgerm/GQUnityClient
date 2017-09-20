@@ -40,7 +40,7 @@ namespace GQ.Client.Util {
 		public bool RunsAsCoroutine { get; internal set; }
 
 		/// <summary>
-		/// Start the loading process and inform the QuestInfoManager about feedback via callbacks.
+		/// Starts the loading process and inform the QuestInfoManager about feedback via callbacks.
 		/// 
 		/// The parameters step and totalSteps signal which step of how many steps this loading 
 		/// within a larger process currently is.
@@ -89,7 +89,7 @@ namespace GQ.Client.Util {
 		public void StartCallback(object sender, TaskEventArgs e) {
 			Step = e.Step + 1;
 
-			InitAfterPreviousTask (sender, e);
+			ReadInput (sender, e);
 
 			this.Start(Step);
 		}
@@ -99,7 +99,7 @@ namespace GQ.Client.Util {
 		/// e.g. read specific input. This method is called when this task is chained after another task 
 		/// within a TaskSequence and before the Start() method is called.
 		/// </summary>
-		public virtual void InitAfterPreviousTask (object sender, TaskEventArgs e) {
+		public virtual void ReadInput (object sender, TaskEventArgs e) {
 			return;
 		}
 

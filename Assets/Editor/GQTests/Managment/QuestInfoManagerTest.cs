@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GQTests.Model {
+namespace GQTests.Managent {
 
 	public class QuestInfoManagerTest {
 
@@ -29,24 +29,6 @@ namespace GQTests.Model {
 			Assert.NotNull(qm);
 			Assert.AreEqual(0, qm.Count);
 		}
-
-		[Test]
-		public void ImportNull () {
-			// Arrange:
-			QuestInfoManager qm = QuestInfoManager.Instance;
-
-			// Act:
-			qm.Update("[]");
-
-			// Assert:
-			Assert.AreEqual(0, qm.Count());
-			IEnumerator<QuestInfo> questInfos = 
-				qm.GetEnumerator ();
-			Assert.IsFalse (questInfos.MoveNext ());
-		}
-
-
-
 	}
 
 

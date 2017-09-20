@@ -40,7 +40,7 @@ namespace GQ.Client.Util {
 
 		List<MediaInfo> FileInfoList;
 
-		public override void InitAfterPreviousTask(object sender, TaskEventArgs e) {
+		public override void ReadInput(object sender, TaskEventArgs e) {
 			if (e.Content is List<MediaInfo>) {
 				FileInfoList = e.Content as List<MediaInfo>;
 			}

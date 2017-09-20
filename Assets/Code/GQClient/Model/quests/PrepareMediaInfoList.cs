@@ -18,7 +18,7 @@ namespace GQ.Client.Model {
 
 		private string gameXML { get; set; } 
 
-		public override void InitAfterPreviousTask(object sender, TaskEventArgs e) {
+		public override void ReadInput(object sender, TaskEventArgs e) {
 			if (e == null || e.Content == null) {
 				RaiseTaskFailed ();
 				return;

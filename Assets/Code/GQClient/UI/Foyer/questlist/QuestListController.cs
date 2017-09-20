@@ -16,74 +16,60 @@ namespace GQ.Client.UI.Foyer {
 	/// </summary>
 	public class QuestListController : PrefabController {
 
+		#region Fields
+
 		public Transform InfoList;
 		private string INFOLIST_PATH = "Viewport/InfoList";
 
-		protected List<GameObject> questInfoElements; 
+		protected QuestInfoManager qim;
 
-		private QuestInfoManager qm;
+		protected Dictionary<int, QuestInfoController> questInfoControllers;
+
+		#endregion
+
+
+		#region Editor Setup
 
 		void Reset()
 		{
 			InfoList = EnsurePrefabVariableIsSet<Transform> (InfoList, "InfoList", INFOLIST_PATH);
 		}	
 
+		#endregion
+
 		// Use this for initialization
 		void Start () 
 		{
-			questInfoElements = new List<GameObject> ();
-			qm = QuestInfoManager.Instance;
+			qim = QuestInfoManager.Instance;
 
-			qm.OnChange += 
-				(object sender, QuestInfoChangedEvent e) => 
-			{
-				switch (e.ChangeType) {
-				case ChangeType.Added:
-					QuestInfoController qiui = QuestInfoController.Create (root: InfoList.gameObject).GetComponent<QuestInfoController>();
-					qiui.SetContent(e.NewQuestInfo);
-					qiui.Show();
-					break;
-				case ChangeType.Changed:
-					// TODO
-					break;
-				case ChangeType.Removed:
-					// TODO
-					break;							
-				}
-			};
+			qim.OnChange += OnQuestInfoChanged;
 
-			ImportQuestInfosFromJSON importLocal = 
-				new ImportQuestInfosFromJSON (false);
-			new SimpleDialogBehaviour (
-				importLocal,
-				"Updating quests",
-				"Reading local quests."
-			);
+			if (questInfoControllers == null) {
+				questInfoControllers = new Dictionary<int, QuestInfoController> ();
+			}
 
-			Downloader downloader = 
-				new Downloader (
-					url: ConfigurationManager.UrlPublicQuestsJSON, 
-					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000);
-			new DownloadDialogBehaviour (downloader, "Updating quests");
+			qim.UpdateQuestInfos ();
 
-			ImportQuestInfosFromJSON importFromServer = 
-				new ImportQuestInfosFromJSON (true);
-			new SimpleDialogBehaviour (
-				importFromServer,
-				"Updating quests",
-				"Reading all found quests into the local data store."
-			);
+		}
 
-			ExportQuestInfosToJSON exporter = 
-				new ExportQuestInfosToJSON ();
-			new SimpleDialogBehaviour (
-				exporter,
-				"Updating quests",
-				"Saving Quest Data"
-			);
-
-			TaskSequence t = new TaskSequence(importLocal, downloader, importFromServer, exporter);
-			t.Start ();
+		public void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e) {
+			switch (e.ChangeType) {
+			case ChangeType.Added:
+				QuestInfoController qiCtrl = 
+					QuestInfoController.Create (
+						root: InfoList.gameObject
+					).GetComponent<QuestInfoController> ();
+				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
+				qiCtrl.SetContent(e.NewQuestInfo);
+				qiCtrl.Show();
+				break;
+			case ChangeType.Changed:
+				// TODO
+				break;
+			case ChangeType.Removed:
+				// TODO
+				break;							
+			}
 		}
 
 	}

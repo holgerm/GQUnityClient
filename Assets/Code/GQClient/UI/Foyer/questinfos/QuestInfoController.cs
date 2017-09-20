@@ -96,6 +96,12 @@ namespace GQ.Client.UI.Foyer {
 				"Synching Quest Data",
 				"Loading media files."
 			);
+			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
+				Debug.Log("UPDATED QUEST INFO: " + data.LastUpdateOnServer);
+				data.LastUpdateOnDevice = data.LastUpdateOnServer;
+				QuestInfo i = QuestInfoManager.Instance.GetQuestInfo(data.Id);
+				Debug.Log("NOW LASTUPDATEONDEVICE: " + (i!= null ? "" + i.LastUpdateOnDevice : "null"));
+			};
 
 			// store current media info locally
 			ExportMediaInfoList exportLocalMediaInfo =
@@ -106,14 +112,28 @@ namespace GQ.Client.UI.Foyer {
 				"Saving updated media info."
 			);
 
+			ExportQuestInfosToJSON exportQuestsInfoJSON = 
+				new ExportQuestInfosToJSON ();
+			new SimpleDialogBehaviour (
+				exportQuestsInfoJSON,
+				"Updating quests",
+				"Saving Quest Data"
+			);
+
+
 			TaskSequence t = 
 				new TaskSequence (downloadGameXML);
 			t.AppendIfCompleted (prepareMediaInfosToDownload);
 			t.Append (downloadMediaFiles);
-			t.Append (exportLocalMediaInfo);
+			t.AppendIfCompleted (exportLocalMediaInfo);
+			t.Append (exportQuestsInfoJSON);
+
+			t.OnTaskCompleted += (object sender, TaskEventArgs e) => {
+				CurrentMode = Mode.Deletable;
+			};
+
 			t.Start ();
 
-			CurrentMode = Mode.Deletable;
 		}
 
 		public void Delete() {

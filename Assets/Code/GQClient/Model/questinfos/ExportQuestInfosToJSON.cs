@@ -18,7 +18,7 @@ namespace GQ.Client.Model {
 
 		public override bool Run() 
 		{
-			List<QuestInfo> questInfoList = new List<QuestInfo> (QuestInfoManager.Instance.QuestDict.Values);
+			List<QuestInfo> questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
 
 			try {
 				string questInfoJSON = 

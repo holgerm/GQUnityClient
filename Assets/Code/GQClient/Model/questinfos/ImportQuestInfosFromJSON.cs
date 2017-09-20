@@ -28,10 +28,13 @@ namespace GQ.Client.Model {
 		/// Initializes a new instance of the <see cref="GQ.Client.Model.ImportQuestInfosFromJSON"/> class.
 		/// </summary>
 		/// <param name="importFromServer">If set to <c>true</c> import from server otherwise use the local infos.json file.</param>
-		public ImportQuestInfosFromJSON(bool importFromServer) : base() { 
-			this.importFromServer = importFromServer;
+		public ImportQuestInfosFromJSON(bool useInputTextAsJSON) : base() { 
+			this.importFromServer = useInputTextAsJSON;
 
-			if (!importFromServer) {
+			InputJSON = "[]";
+			qim = QuestInfoManager.Instance;
+
+			if (!useInputTextAsJSON) {
 				// import from local quest json file:
 				if (File.Exists (QuestInfoManager.LocalQuestInfoJSONPath)) {
 					try {
@@ -40,20 +43,18 @@ namespace GQ.Client.Model {
 					catch (Exception e) {
 						Log.SignalErrorToDeveloper ("Error while trying to import local quest info json file: " + e.Message);
 						InputJSON = "[]";
-						return;
 					}
-				}
-				else {
-					InputJSON = "[]";
 				}
 			}
 		}
 
 		private bool importFromServer;
+		private QuestInfoManager qim;
+		private Dictionary<int, QuestInfo> qimDict;
 
 		private string InputJSON { get; set; }
 
-		public override void InitAfterPreviousTask(object sender, TaskEventArgs e) {
+		public override void ReadInput(object sender, TaskEventArgs e) {
 			if (importFromServer) {
 				if (e != null && e.Content != null && e.Content is string) {
 					InputJSON = e.Content as string;
@@ -63,9 +64,39 @@ namespace GQ.Client.Model {
 
 		public override bool Run() 
 		{
-			QuestInfoManager.Instance.Update (InputJSON);
+			QuestInfo[] quests;
+
+			try {
+				quests = JsonConvert.DeserializeObject<QuestInfo[]>(InputJSON);
+			}
+			catch (Exception e) {
+				Log.SignalErrorToDeveloper(
+					"Error in JSON while trying to update quest infos: {0}\nJSON:\n{1}",
+					e.Message,
+					InputJSON
+				);
+				return false;
+			}
+
+			if ( quests == null || quests.Length == 0)
+				return true;
+
+			foreach ( var q in quests ) {
+				if ( q.Id <= 0 )
+					continue;
+
+				if (qim.ContainsQuestInfo (q.Id)) {
+					qim.ChangeInfo (q);
+				}
+				else {
+					qim.AddInfo (q);
+				}
+			}
+				
 			return true;
 		}
+
+
 
 		public override object Result {
 			get {

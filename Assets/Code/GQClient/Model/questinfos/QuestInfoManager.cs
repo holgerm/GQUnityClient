@@ -10,6 +10,7 @@ using GQ.Client.Util;
 using Newtonsoft.Json;
 using System.IO;
 using GQ.Client.Err;
+using GQ.Client.UI.Dialogs;
 
 
 namespace GQ.Client.Model {
@@ -17,7 +18,7 @@ namespace GQ.Client.Model {
 	/// <summary>
 	/// Manages the meta data for all quests available: locally on the device as well as remotely on the server.
 	/// </summary>
-	public class QuestInfoManager : IEnumerable<QuestInfo> {
+	public class QuestInfoManager {
 
 		#region store & access data
 
@@ -36,22 +37,17 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		public Dictionary<int, QuestInfo> QuestDict {
+		protected Dictionary<int, QuestInfo> QuestDict {
 			get;
 			set;
 		}
 
-		public IEnumerator<QuestInfo> GetEnumerator() {
-			return QuestDict.Values.GetEnumerator();
+		public List<QuestInfo> GetListOfQuestInfos() {
+			return new List<QuestInfo> (QuestDict.Values);
 		}
 
-		IEnumerator<QuestInfo> IEnumerable<QuestInfo>.GetEnumerator() {
-			return QuestDict.Values.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return QuestDict.Values.GetEnumerator();
+		public bool ContainsQuestInfo(int id) {
+			return QuestDict.ContainsKey (id);
 		}
 
 		public int Count {
@@ -65,74 +61,106 @@ namespace GQ.Client.Model {
 			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
 		}
 
-		public void Update (string json) {
-			QuestInfo[] quests;
+		#endregion
 
-			try {
-				quests = JsonConvert.DeserializeObject<QuestInfo[]>(json);
-			}
-			catch (Exception e) {
-				Log.SignalErrorToDeveloper(
-					"Error in JSON while trying to update quest infos: {0}\nJSON:\n{1}",
-					e.Message,
-					json
+
+		#region Quest Info Changes
+
+		public void AddInfo(QuestInfo newInfo) {
+			QuestDict.Add (newInfo.Id, newInfo);
+
+			// TODO Run through filter and raise event if involved
+
+			raiseChange (
+				new QuestInfoChangedEvent (
+					String.Format ("Info for quest {0} added.", newInfo.Name),
+					ChangeType.Added,
+					newQuestInfo: newInfo
+				)
+			);
+		}
+
+		public void RemoveInfo(QuestInfo oldInfo) {
+			QuestDict.Remove (oldInfo.Id);
+
+			// TODO Run through filter and raise event if involved
+
+			raiseChange (
+				new QuestInfoChangedEvent (
+					String.Format ("Info for quest {0} removed.", oldInfo.Name),
+					ChangeType.Removed,
+					oldQuestInfo: oldInfo
+				)
+			);
+		}
+
+		public void ChangeInfo(QuestInfo info) {
+			QuestInfo oldInfo;
+			if (!QuestDict.TryGetValue (info.Id, out oldInfo)) {
+				Log.SignalErrorToDeveloper (
+					"Trying to change quest info {0} but it deos not exist in QuestInfoManager.", 
+					info.Id.ToString()
 				);
 				return;
 			}
 
-			if ( quests == null || quests.Length == 0)
-				return;
-			
-			foreach ( var q in quests ) {
-				if ( q.Id <= 0 )
-					continue;
+			QuestDict.Remove (info.Id);
+			QuestDict.Add (info.Id, info);
 
-				if (QuestDict.ContainsKey (q.Id)) {
-					// override:
-					QuestInfo oldQ = QuestDict [q.Id];
-					QuestDict [q.Id] = q;
-					RaiseChange (
-						new QuestInfoChangedEvent (
-							String.Format ("Info for quest {0} changed.", q.Name),
-							ChangeType.Changed,
-							newQuestInfo: q,
-							oldQuestInfo: oldQ
-						)
-					);
-				}
-				else {
-					QuestDict.Add ((int)q.Id, q);
-					RaiseChange (
-						new QuestInfoChangedEvent (
-							String.Format ("Info for quest {0} added.", q.Name),
-							ChangeType.Added,
-							newQuestInfo: q,
-							oldQuestInfo: null
-						)
-					);
-				}
-			}
+			// TODO Run through filter and raise event if involved
 
-			// persist the quest infos from the update QuestDict:
-			List<QuestInfo> questInfoList = new List<QuestInfo>(QuestDict.Values);
-			string questInfosJSON = 
-				(questInfoList.Count == 0) 
-				? "[]"
-				: JsonConvert.SerializeObject(questInfoList, Newtonsoft.Json.Formatting.Indented);
-			File.WriteAllText(QuestInfoManager.LocalQuestInfoJSONPath, questInfosJSON);
-
+			raiseChange (
+				new QuestInfoChangedEvent (
+					String.Format ("Info for quest {0} changed.", info.Name),
+					ChangeType.Changed,
+					newQuestInfo: info,
+					oldQuestInfo: oldInfo
+				)
+			);
 		}
 
-		#endregion
+		public void UpdateQuestInfos() {
+			ImportQuestInfosFromJSON importLocal = 
+				new ImportQuestInfosFromJSON (false);
+			new SimpleDialogBehaviour (
+				importLocal,
+				"Updating quests",
+				"Reading local quests."
+			);
 
+			Downloader downloader = 
+				new Downloader (
+					url: ConfigurationManager.UrlPublicQuestsJSON, 
+					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000);
+			new DownloadDialogBehaviour (downloader, "Updating quests");
 
-		#region Quest Info Changed Event
+			ImportQuestInfosFromJSON importFromServer = 
+				new ImportQuestInfosFromJSON (true);
+			new SimpleDialogBehaviour (
+				importFromServer,
+				"Updating quests",
+				"Reading all found quests into the local data store."
+			);
+
+			ExportQuestInfosToJSON exporter = 
+				new ExportQuestInfosToJSON ();
+			new SimpleDialogBehaviour (
+				exporter,
+				"Updating quests",
+				"Saving Quest Data"
+			);
+
+			TaskSequence t = new TaskSequence (importLocal, downloader);
+			t.AppendIfCompleted (importFromServer);
+			t.Append(exporter);
+			t.Start ();
+		}
 
 		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
 
 		public event ChangeCallback OnChange;
 
-		protected virtual void RaiseChange (QuestInfoChangedEvent e)
+		protected virtual void raiseChange (QuestInfoChangedEvent e)
 		{
 			if (OnChange != null)
 				OnChange (this, e);
