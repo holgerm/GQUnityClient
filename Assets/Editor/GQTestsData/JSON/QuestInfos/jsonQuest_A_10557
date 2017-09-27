@@ -1,0 +1,20 @@
+[
+    {
+        "hotspots": [
+            {
+                "latitude": 50.73447,
+                "longitude": 7.104104
+            }
+        ],
+        "id": 10557,
+        "lastUpdate": 1505465979827,
+        "metadata": [
+            {
+                "key": "category",
+                "value": "wcc.tour.beethoven"
+            }
+        ],
+        "name": "A",
+        "typeID": 3318
+    }
+]

@@ -34,7 +34,7 @@ namespace GQ.Client.Model {
 			InputJSON = "[]";
 			qim = QuestInfoManager.Instance;
 
-			if (!useInputTextAsJSON) {
+			if (!importFromServer) {
 				// import from local quest json file:
 				if (File.Exists (QuestInfoManager.LocalQuestInfoJSONPath)) {
 					try {
@@ -92,6 +92,10 @@ namespace GQ.Client.Model {
 					qim.AddInfo (q);
 				}
 			}
+
+			// TODO: If we receive JSON from server and a quest is missing, 
+			// we either need to remove it (when it was only downloadable)
+			// or we need to change its info, so that it can oonly be deleted with a warning.
 				
 			return true;
 		}

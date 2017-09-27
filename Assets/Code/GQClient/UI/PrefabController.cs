@@ -53,7 +53,7 @@ namespace GQ.Client.UI {
 		/// <summary>
 		/// Deletes the prefab from the hierarchy.
 		/// </summary>
-		public void Destroy() {
+		public virtual void Destroy() {
 			Base.Instance.StartCoroutine (destroyAsCoroutine());
 		}
 

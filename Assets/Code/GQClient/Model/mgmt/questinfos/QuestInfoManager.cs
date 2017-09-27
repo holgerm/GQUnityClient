@@ -61,6 +61,25 @@ namespace GQ.Client.Model {
 			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
 		}
 
+		private QuestInfoFilter _filter;
+		public QuestInfoFilter Filter {
+			get { 
+				return _filter;
+			}
+			protected set {
+				if (_filter != value) {
+					_filter = value;
+					raiseChange (
+						new QuestInfoChangedEvent (
+							String.Format ("Quest Info Filter changed to {0}.", _filter.ToString()),
+							ChangeType.ListChanged
+						)
+					);
+
+				}
+			}
+		}
+
 		#endregion
 
 
@@ -69,29 +88,34 @@ namespace GQ.Client.Model {
 		public void AddInfo(QuestInfo newInfo) {
 			QuestDict.Add (newInfo.Id, newInfo);
 
-			// TODO Run through filter and raise event if involved
+			if (Filter.accept (newInfo)) {
+				// Run through filter and raise event if involved:
 
-			raiseChange (
-				new QuestInfoChangedEvent (
-					String.Format ("Info for quest {0} added.", newInfo.Name),
-					ChangeType.Added,
-					newQuestInfo: newInfo
-				)
-			);
+				raiseChange (
+					new QuestInfoChangedEvent (
+						String.Format ("Info for quest {0} added.", newInfo.Name),
+						ChangeType.AddedInfo,
+						newQuestInfo: newInfo
+					)
+				);
+			}
 		}
 
 		public void RemoveInfo(QuestInfo oldInfo) {
+			oldInfo.Dispose ();
 			QuestDict.Remove (oldInfo.Id);
 
-			// TODO Run through filter and raise event if involved
+			if (Filter.accept (oldInfo)) {
+				// Run through filter and raise event if involved
 
-			raiseChange (
-				new QuestInfoChangedEvent (
-					String.Format ("Info for quest {0} removed.", oldInfo.Name),
-					ChangeType.Removed,
-					oldQuestInfo: oldInfo
-				)
-			);
+				raiseChange (
+					new QuestInfoChangedEvent (
+						String.Format ("Info for quest {0} removed.", oldInfo.Name),
+						ChangeType.RemovedInfo,
+						oldQuestInfo: oldInfo
+					)
+				);
+			}
 		}
 
 		public void ChangeInfo(QuestInfo info) {
@@ -107,18 +131,26 @@ namespace GQ.Client.Model {
 			QuestDict.Remove (info.Id);
 			QuestDict.Add (info.Id, info);
 
-			// TODO Run through filter and raise event if involved
+			if (Filter.accept (oldInfo) || Filter.accept (info)) {
+				// Run through filter and raise event if involved
 
-			raiseChange (
-				new QuestInfoChangedEvent (
-					String.Format ("Info for quest {0} changed.", info.Name),
-					ChangeType.Changed,
-					newQuestInfo: info,
-					oldQuestInfo: oldInfo
-				)
-			);
+				raiseChange (
+					new QuestInfoChangedEvent (
+						String.Format ("Info for quest {0} changed.", info.Name),
+						ChangeType.ChangedInfo,
+						newQuestInfo: info,
+						oldQuestInfo: oldInfo
+					)
+				);
+			}
 		}
 
+		/// <summary>
+		/// Updates the quest infos from the server and intergrates the gathered data into the local data. 
+		/// 
+		/// Should be called in cases like the list is shown again (or first time), 
+		/// the server connection is gained back, the last update is long ago or the user demands an update.
+		/// </summary>
 		public void UpdateQuestInfos() {
 			ImportQuestInfosFromJSON importLocal = 
 				new ImportQuestInfosFromJSON (false);
@@ -191,6 +223,7 @@ namespace GQ.Client.Model {
 
 		public QuestInfoManager() {
 			QuestDict = new Dictionary<int, QuestInfo> ();
+			Filter = new AllQuests ();
 		}
 
 		#endregion
@@ -205,7 +238,7 @@ namespace GQ.Client.Model {
 
 		public QuestInfoChangedEvent(
 			string message = "", 
-			ChangeType type = ChangeType.Changed, 
+			ChangeType type = ChangeType.ChangedInfo, 
 			QuestInfo newQuestInfo = null, 
 			QuestInfo oldQuestInfo = null
 		)
@@ -219,7 +252,7 @@ namespace GQ.Client.Model {
 	}
 
 	public enum ChangeType {
-		Added, Removed, Changed
+		AddedInfo, RemovedInfo, ChangedInfo, ListChanged
 	}
 		
 

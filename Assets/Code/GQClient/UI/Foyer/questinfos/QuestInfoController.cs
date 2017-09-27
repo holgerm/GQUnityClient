@@ -11,7 +11,6 @@ using UnityEditor.Events;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using System.IO;
-using GQ.Client.Util;
 using GQ.Client.FileIO;
 
 namespace GQ.Client.UI.Foyer {
@@ -19,7 +18,7 @@ namespace GQ.Client.UI.Foyer {
 	/// <summary>
 	/// Represents one quest info object in a list within the foyer.
 	/// </summary>
-	public class QuestInfoController : PrefabController {
+	public class QuestInfoController : PrefabController, IComparable<QuestInfoController> {
 
 		#region Content and Structure
 
@@ -69,6 +68,21 @@ namespace GQ.Client.UI.Foyer {
 			}
 		}
 
+		/// <summary>
+		/// Returns a value greater than zero in case this object is considered greater than the given other. 
+		/// A return value of 0 signals that both objects are equal and 
+		/// a value less than zero means that this object is less than the given other one.
+		/// </summary>
+		/// <param name="otherCtrl">Other ctrl.</param>
+		public int CompareTo(QuestInfoController otherCtrl) {
+			return data.CompareTo (otherCtrl.data);
+		}
+
+		#endregion
+
+
+		#region Event Reaction Methods
+
 		public void Download() {
 			// Load quest data: game.xml
 			Downloader downloadGameXML = 
@@ -97,10 +111,8 @@ namespace GQ.Client.UI.Foyer {
 				"Loading media files."
 			);
 			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
-				Debug.Log("UPDATED QUEST INFO: " + data.LastUpdateOnServer);
 				data.LastUpdateOnDevice = data.LastUpdateOnServer;
 				QuestInfo i = QuestInfoManager.Instance.GetQuestInfo(data.Id);
-				Debug.Log("NOW LASTUPDATEONDEVICE: " + (i!= null ? "" + i.LastUpdateOnDevice : "null"));
 			};
 
 			// store current media info locally
@@ -129,7 +141,7 @@ namespace GQ.Client.UI.Foyer {
 			t.Append (exportQuestsInfoJSON);
 
 			t.OnTaskCompleted += (object sender, TaskEventArgs e) => {
-				CurrentMode = Mode.Deletable;
+				data.CurrentMode = QuestInfo.Mode.Deletable;
 			};
 
 			t.Start ();
@@ -141,7 +153,7 @@ namespace GQ.Client.UI.Foyer {
 
 			Debug.Log ("Want to delete: " + QuestManager.GetLocalPath4Quest (data.Id));
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
-			CurrentMode = Mode.OnServer;
+			data.CurrentMode = QuestInfo.Mode.OnServer;
 		}
 
 		public void Play() {
@@ -158,52 +170,29 @@ namespace GQ.Client.UI.Foyer {
 		public void Downgrade() {
 			// TODO
 			Debug.Log("TODO: Implement downgrade method! Trying to downgrade quest " + data.Name);
-			CurrentMode = Mode.Predeployed;
+			data.CurrentMode = QuestInfo.Mode.Predeployed;
 		}
 
-
-		#endregion
-
-
-		#region States
-
-		/// <summary>
-		/// Mode that determines the UI as depcited here: @ref QuestsFromServerLifeCycle 
-		/// and @ref QuestsPredeployedLifeCycle.
-		/// </summary>
-		protected enum Mode {
-			OnServer,
-			Deletable,
-			Updatable,
-			DeletableWithWarning,
-			Predeployed,
-			PredeployedUpdatabale,
-			PredeployedDowngrade
-		}
-
-		private Mode currentMode;
-		protected Mode CurrentMode {
-			get {
-				return currentMode;
-			}
-			set {
-				Mode oldValue = currentMode;
-				currentMode = value;
-				if (oldValue != currentMode)
-					UpdateView ();
-			}
-		}
 
 		#endregion
 
 
 		#region Runtime API
 
-		public static GameObject Create(GameObject root) 
+		public static GameObject Create(GameObject root, QuestInfo qInfo) 
 		{
+			// CReate the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
-			go.GetComponent<QuestInfoController> ().CurrentMode = Mode.OnServer;
+			QuestInfoController ctrl = go.GetComponent<QuestInfoController> ();
+			ctrl.data = qInfo;
+			ctrl.data.OnStateChanged += ctrl.UpdateView;
+			ctrl.data.CurrentMode = QuestInfo.Mode.OnServer;
 			return go;
+		}
+
+		public override void Destroy() {
+			data.OnStateChanged -= UpdateView;
+			base.Destroy ();
 		}
 
 		public void SetContent(QuestInfo q) 
@@ -219,34 +208,40 @@ namespace GQ.Client.UI.Foyer {
 
 		void UpdateView ()
 		{
-			switch (CurrentMode) {
-			case Mode.OnServer:
+			// TODO: enable Info dialog
+
+			// Show Name:
+			Name.text = data.Name;
+
+			// Show Buttons:
+			switch (data.CurrentMode) {
+			case QuestInfo.Mode.OnServer:
 				HideAllButtons ();
 				SetButtons (DownloadButton);
 				break;
-			case Mode.Deletable:
-			case Mode.DeletableWithWarning:
+			case QuestInfo.Mode.Deletable:
+			case QuestInfo.Mode.DeletableWithWarning:
 				HideAllButtons ();
 				SetButtons (StartButton, DeleteButton);
 				break;
-			case Mode.Updatable:
+			case QuestInfo.Mode.Updatable:
 				HideAllButtons ();
 				SetButtons (StartButton, UpdateButton, DeleteButton);
 				break;
-			case Mode.Predeployed:
+			case QuestInfo.Mode.Predeployed:
 				HideAllButtons ();
 				SetButtons (StartButton);
 				break;
-			case Mode.PredeployedUpdatabale:
+			case QuestInfo.Mode.PredeployedUpdatabale:
 				HideAllButtons ();
 				SetButtons (StartButton, UpdateButton);
 				break;
-			case Mode.PredeployedDowngrade:
+			case QuestInfo.Mode.PredeployedDowngrade:
 				HideAllButtons ();
 				SetButtons (StartButton, DowngradeButton);
 				break;
 			default:
-				Log.SignalErrorToDeveloper ("QuestInfo Controller has undefined state: " + CurrentMode.ToString ());
+				Log.SignalErrorToDeveloper ("QuestInfo Controller has undefined state: " + data.CurrentMode.ToString ());
 				break;
 			}
 
@@ -254,6 +249,7 @@ namespace GQ.Client.UI.Foyer {
 			if (elipsify != null) {
 				elipsify.ElipsifyText ();
 			}
+			// TODO make elipsify automatic when content of name text changes....???!!!
 		}
 
 		#endregion

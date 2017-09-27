@@ -47,7 +47,7 @@ namespace GQ.Client.Util {
 		/// </summary>
 		public void Start (int step = 1) {
 			Step = step;
-			Debug.Log ("START Task step " + step + " type: " + GetType().Name);
+
 			behaviours.ForEach (
 				(UIBehaviour behaviour) => behaviour.Start ()
 			);
@@ -118,10 +118,7 @@ namespace GQ.Client.Util {
 				return;
 			else {
 				hasEnded = true;
-				Debug.Log ("Task " + GetType ().Name + " has ended.");
 			}
-
-			Debug.Log ("Task COMPLETED step: " + Step + " type: " + GetType().Name);
 
 			BeforeCompleted ();
 

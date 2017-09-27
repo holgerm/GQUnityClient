@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace GQTests.Managent {
 
-	public class QuestInfoManagerTest {
+	public class QuestInfoManagerChangeEventsTest {
 
 		[SetUp]
 		public void ResetQMInstance () {
