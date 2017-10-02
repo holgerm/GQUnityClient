@@ -27,12 +27,53 @@ namespace GQ.Client.UI.Foyer {
 		protected QuestInfo data;
 		public Text Name;
 		protected const string NAME_PATH = "Name";
+
+		/// <summary>
+		/// The download button is available WHEN this quest is on server but not on device.
+		/// (IsOnServer && !IsOnDevice)
+		/// </summary>
 		public Button DownloadButton;
+
+		/// <summary>
+		/// The start button is available WHEN this quest is on device.
+		/// (IsOnDevice)
+		/// </summary>
 		public Button StartButton;
-		public Button DeleteButton;
-		public Button DeleteWarnButton;
+		
+		/// <summary>
+		/// The update button is available WHEN this quest is on device and a newer version is on server.
+		/// (HasUpdate)
+		/// </summary>
 		public Button UpdateButton;
-		public Button DowngradeButton;
+
+		/// <summary>
+		/// The delete button is available WHEN this quest is locally on device.
+		/// (IsOnDevice)
+		/// If it is not on server a warning is issued before deletion will be executed.
+		/// (&& !IsOnServer)
+		/// If this quest is also predeployed, an information is issued that the predeployed and older version
+		/// will remain in the list. That version is always older, since only a newer version can ever 
+		/// have been loaded as an update of the original predeployed version.
+		/// (&& IsPredeployed)
+		/// </summary>
+		// TODO what happens if we take predeployed into account.
+		public Button DeleteButton;
+
+		private enum DeletionWarning {
+			NoWarning, WarningNotOnServer, InfoPredeployedSurvivesDelete
+		}
+
+		private DeletionWarning DeletionWarnState {
+			get {
+				if (!data.IsOnServer) {
+					return DeletionWarning.WarningNotOnServer;
+				}
+				if (data.IsPredeployed) {
+					return DeletionWarning.InfoPredeployedSurvivesDelete;
+				}
+				return DeletionWarning.NoWarning;
+			}
+		}
 
 		#endregion
 
@@ -44,16 +85,14 @@ namespace GQ.Client.UI.Foyer {
 			StartButton.gameObject.SetActive (false);
 			DeleteButton.gameObject.SetActive (false);
 			UpdateButton.gameObject.SetActive (false);
-			DowngradeButton.gameObject.SetActive (false);
 		}
 
 		/// <summary>
-		/// Shows the button and add the given method to the onClick listener.
+		/// Shows (additionally) the given buttons and add the given method to the onClick listener.
 		/// </summary>
 		/// <param name="button">Button.</param>
 		/// <param name="actionCallback">Action callback.</param>
-		protected void SetButtons(params Button[] buttons) {
-			HideAllButtons ();
+		protected void ShowButtons(params Button[] buttons) {
 			foreach (Button button in buttons) {
 				button.gameObject.SetActive (true);
 				button.interactable = true;
@@ -112,7 +151,6 @@ namespace GQ.Client.UI.Foyer {
 			);
 			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
 				data.LastUpdateOnDevice = data.LastUpdateOnServer;
-				QuestInfo i = QuestInfoManager.Instance.GetQuestInfo(data.Id);
 			};
 
 			// store current media info locally
@@ -140,10 +178,6 @@ namespace GQ.Client.UI.Foyer {
 			t.AppendIfCompleted (exportLocalMediaInfo);
 			t.Append (exportQuestsInfoJSON);
 
-			t.OnTaskCompleted += (object sender, TaskEventArgs e) => {
-				data.CurrentMode = QuestInfo.Mode.Deletable;
-			};
-
 			t.Start ();
 
 		}
@@ -153,7 +187,6 @@ namespace GQ.Client.UI.Foyer {
 
 			Debug.Log ("Want to delete: " + QuestManager.GetLocalPath4Quest (data.Id));
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
-			data.CurrentMode = QuestInfo.Mode.OnServer;
 		}
 
 		public void Play() {
@@ -167,13 +200,6 @@ namespace GQ.Client.UI.Foyer {
 			Debug.Log("TODO: Implement update method! Trying to update quest " + data.Name);
 		}
 
-		public void Downgrade() {
-			// TODO
-			Debug.Log("TODO: Implement downgrade method! Trying to downgrade quest " + data.Name);
-			data.CurrentMode = QuestInfo.Mode.Predeployed;
-		}
-
-
 		#endregion
 
 
@@ -185,71 +211,71 @@ namespace GQ.Client.UI.Foyer {
 			GameObject go = PrefabController.Create (PREFAB, root);
 			QuestInfoController ctrl = go.GetComponent<QuestInfoController> ();
 			ctrl.data = qInfo;
-			ctrl.data.OnStateChanged += ctrl.UpdateView;
-			ctrl.data.CurrentMode = QuestInfo.Mode.OnServer;
+			ctrl.data.OnChanged += ctrl.UpdateView;
+			ctrl.UpdateView ();
 			return go;
 		}
 
 		public override void Destroy() {
-			data.OnStateChanged -= UpdateView;
+			data.OnChanged -= UpdateView;
 			base.Destroy ();
 		}
 
-		public void SetContent(QuestInfo q) 
+		public void UpdateView ()
 		{
-			data = q;
-
-			Name.text = q.Name;
-
+			// Update Info-Icon:
 			// TODO: enable Info dialog
 
-			UpdateView ();
-		}
-
-		void UpdateView ()
-		{
-			// TODO: enable Info dialog
-
-			// Show Name:
+			// Update Name:
 			Name.text = data.Name;
-
-			// Show Buttons:
-			switch (data.CurrentMode) {
-			case QuestInfo.Mode.OnServer:
-				HideAllButtons ();
-				SetButtons (DownloadButton);
-				break;
-			case QuestInfo.Mode.Deletable:
-			case QuestInfo.Mode.DeletableWithWarning:
-				HideAllButtons ();
-				SetButtons (StartButton, DeleteButton);
-				break;
-			case QuestInfo.Mode.Updatable:
-				HideAllButtons ();
-				SetButtons (StartButton, UpdateButton, DeleteButton);
-				break;
-			case QuestInfo.Mode.Predeployed:
-				HideAllButtons ();
-				SetButtons (StartButton);
-				break;
-			case QuestInfo.Mode.PredeployedUpdatabale:
-				HideAllButtons ();
-				SetButtons (StartButton, UpdateButton);
-				break;
-			case QuestInfo.Mode.PredeployedDowngrade:
-				HideAllButtons ();
-				SetButtons (StartButton, DowngradeButton);
-				break;
-			default:
-				Log.SignalErrorToDeveloper ("QuestInfo Controller has undefined state: " + data.CurrentMode.ToString ());
-				break;
+			// Set Name button for download or play or nothing:
+			Button nameButton = Name.gameObject.GetComponent<Button> ();
+			Button.ButtonClickedEvent namebuttonEvent = nameButton.onClick;
+			namebuttonEvent.RemoveAllListeners ();
+			if (data.IsOnServer && !data.IsOnDevice) {
+				Debug.Log ("----- NAME BUTTON Set DOWNLOAD");
+				namebuttonEvent.AddListener (() => {
+					Download();
+				});
+			}
+			if (data.IsOnDevice) {
+				Debug.Log ("----- NAME BUTTON Set PLAY");
+				namebuttonEvent.AddListener (() => {
+					Play();
+				});
 			}
 
-			ElipsifyOverflowingText elipsify = Name.GetComponent<ElipsifyOverflowingText> ();
-			if (elipsify != null) {
-				elipsify.ElipsifyText ();
+
+			// Update Buttons:
+			HideAllButtons();
+			// Show DOWNLOAD button if needed:
+			if (data.IsOnServer && !data.IsOnDevice) {
+				DownloadButton.gameObject.SetActive (true);
+				DownloadButton.interactable = true;
 			}
+			// Show START button if needed:
+			if (data.IsOnDevice) {
+				StartButton.gameObject.SetActive (true);
+				StartButton.interactable = true;
+			}
+			// Show UPDATE button if needed:
+			if (data.HasUpdate) {
+				UpdateButton.gameObject.SetActive (true);
+				UpdateButton.interactable = true;
+			}
+			// Show DELETE button if needed:
+			if (data.IsOnDevice) {
+				DeleteButton.gameObject.SetActive (true);
+				DeleteButton.interactable = true;
+			}
+
+//			ElipsifyOverflowingText elipsify = Name.GetComponent<ElipsifyOverflowingText> ();
+//			if (elipsify != null) {
+//				elipsify.ElipsifyText ();
+//			}
 			// TODO make elipsify automatic when content of name text changes....???!!!
+
+			// TODO call the lists sorter ...
 		}
 
 		#endregion
@@ -276,10 +302,6 @@ namespace GQ.Client.UI.Foyer {
 			UpdateButton = EnsurePrefabVariableIsSet<Button> (UpdateButton, "Update Button", "UpdateButton");
 			if (UpdateButton.onClick.GetPersistentEventCount() == 0)
 				UnityEventTools.AddPersistentListener (UpdateButton.onClick, UpdateQuest);
-			
-			DowngradeButton = EnsurePrefabVariableIsSet<Button> (DowngradeButton, "Downgrade Button", "DowngradeButton");
-			if (DowngradeButton.onClick.GetPersistentEventCount() == 0)
-				UnityEventTools.AddPersistentListener (DowngradeButton.onClick, Downgrade);
 		}
 
 		#endregion

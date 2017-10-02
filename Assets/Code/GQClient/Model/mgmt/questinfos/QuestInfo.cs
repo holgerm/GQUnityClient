@@ -142,7 +142,19 @@ namespace GQ.Client.Model {
 				return _lastUpdateOnDevice;
 			}
 			set {
-				_lastUpdateOnDevice = value;
+				if (value != _lastUpdateOnDevice) {
+					QuestInfo oldInfo = (QuestInfo) this.MemberwiseClone ();
+					_lastUpdateOnDevice = value;
+					QuestInfoManager.Instance.raiseChange (
+						new QuestInfoChangedEvent (
+							String.Format ("Info for quest {0} changed.", Name),
+							ChangeType.ChangedInfo,
+							newQuestInfo: this,
+							oldQuestInfo: oldInfo
+						)
+					);
+
+				}
 			}
 		}
 
@@ -165,7 +177,19 @@ namespace GQ.Client.Model {
 				return _playedTimes;
 			}
 			set {
-				_playedTimes = value;
+				if (value != _playedTimes) {
+					QuestInfo oldInfo = (QuestInfo) this.MemberwiseClone ();
+					_playedTimes = value;
+					QuestInfoManager.Instance.raiseChange (
+						new QuestInfoChangedEvent (
+							String.Format ("Info for quest {0} changed.", Name),
+							ChangeType.ChangedInfo,
+							newQuestInfo: this,
+							oldQuestInfo: oldInfo
+						)
+					);
+
+				}
 			}
 		}
 
@@ -174,14 +198,36 @@ namespace GQ.Client.Model {
 
 		#region Derived features
 
-		/// <summary>
-		/// Determines whether this quest is locally available. This feature will be used in the UI in future versions.
-		/// </summary>
-		/// <returns><c>true</c> if this instance is locally available; otherwise, <c>false</c>.</returns>
 		[JsonIgnore]
-		public bool IsLocallyStored {
+		public bool IsOnServer {
 			get {
-				return LastUpdateOnDevice != null || TimestampOfPredeployedVersion != null;
+				return (LastUpdateOnServer != null);
+			}
+		}
+
+		[JsonIgnore]
+		public bool IsOnDevice {
+			get {
+				return (LastUpdateOnDevice != null);
+			}
+		}
+
+		[JsonIgnore]
+		public bool IsPredeployed {
+			get {
+				return (TimestampOfPredeployedVersion != null);
+			}
+		}
+
+		[JsonIgnore]
+		public bool HasUpdate {
+			get {
+				return (
+					// exists on both device and server:
+					IsOnDevice && IsOnServer 
+					// server update is newer (bigger number):
+					&& LastUpdateOnServer > LastUpdateOnDevice
+				);
 			}
 		}
 
@@ -196,50 +242,6 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		[JsonIgnore]
-		public bool IsDownloadable {
-			get {
-				return LastUpdateOnDevice == null && LastUpdateOnServer != null;
-			}
-		}
-
-		[JsonIgnore]
-		public bool IsUpdatable {
-			get {
-				return (
-				    // exists on both device and server:
-				    LastUpdateOnDevice != null
-				    && LastUpdateOnServer != null
-					// server update is newer (bigger number):
-				    && LastUpdateOnServer > LastUpdateOnDevice
-				);
-			}
-		}
-
-		public enum Deletability { Delete, CanNotDelete, DeleleWithWarning, Downgrade }
-
-		[JsonIgnore]
-		public Deletability Deletable {
-			get {
-				if (!IsLocallyStored)
-					return Deletability.CanNotDelete;
-
-				if (TimestampOfPredeployedVersion != null &&
-				   LastUpdateOnDevice != null &&
-				   TimestampOfPredeployedVersion > LastUpdateOnDevice) {
-					return Deletability.Downgrade;
-				}
-
-				if (LastUpdateOnDevice != null &&
-				   LastUpdateOnServer != null &&
-				   LastUpdateOnDevice > LastUpdateOnServer) {
-					return Deletability.DeleleWithWarning;
-				}
-
-				return Deletability.Delete;
-			}
-		}
-			
 		[JsonIgnore]
 		private List<string> _categories;
 
@@ -260,51 +262,11 @@ namespace GQ.Client.Model {
 		#endregion
 
 
-		#region States
-
-		/// <summary>
-		/// Mode that determines the UI as depcited here: @ref QuestsFromServerLifeCycle 
-		/// and @ref QuestsPredeployedLifeCycle.
-		/// </summary>
-		public enum Mode {
-			OnServer,
-			Deletable,
-			Updatable,
-			DeletableWithWarning,
-			Predeployed,
-			PredeployedUpdatabale,
-			PredeployedDowngrade
-		}
-
-		private Mode currentMode;
-		public Mode CurrentMode {
-			get {
-				return currentMode;
-			}
-			// TODO: keine setter methode hier. 
-			// Statt dessen im Getter stets den Modus neu berechnen mithilfe der aggregerten features.
-			// TODO: Aber wer ruft dann noch OnStateChanged auf? Jede Datenänderung?!
-			// Wir hätten dann laso drei Schichten von Daten: 
-			// - Direkte Daten, die gespeichert werden und sich als getter property direkt aus den Daten berechnen.
-			// - Aggregierte Features, die einige Daten nutzen und als reine Getter Property bereitstellen
-			// - Status, ein ebenfalls als getter property aus den aggregierten Features berechneter Gesamtzustand.
-			set {
-				Mode oldValue = currentMode;
-				currentMode = value;
-				if (oldValue != currentMode)
-					OnStateChanged ();
-			}
-		}
-
-		public delegate void StateChangeHandler();
-
-		public event StateChangeHandler OnStateChanged;
-
-		#endregion
-
-
-
 		#region Runtime API
+
+		public delegate void ChangeHandler();
+
+		public event ChangeHandler OnChanged;
 
 		public override string ToString () {
 			StringBuilder sb = new StringBuilder();
@@ -331,7 +293,7 @@ namespace GQ.Client.Model {
 		}
 
 		public void Dispose() {
-			OnStateChanged = null;
+			OnChanged = null;
 		}
 
 		#endregion

@@ -63,15 +63,15 @@ namespace GQ.Client.UI.Foyer {
 			QuestInfoController qiCtrl;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
+				Debug.Log ("	Raised Add event.");
 				qiCtrl = 
 					QuestInfoController.Create (
 						root: InfoList.gameObject,
 						qInfo: e.NewQuestInfo
 					).GetComponent<QuestInfoController> ();
 				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
-				qiCtrl.SetContent (e.NewQuestInfo);
 				qiCtrl.Show ();
-				UpdateView ();
+				SortView ();
 				break;
 			case ChangeType.ChangedInfo:
 				if (!questInfoControllers.TryGetValue(e.OldQuestInfo.Id, out qiCtrl)) {
@@ -81,9 +81,9 @@ namespace GQ.Client.UI.Foyer {
 					);
 					break;
 				}
-				qiCtrl.SetContent (e.NewQuestInfo);
+				qiCtrl.UpdateView();
 				qiCtrl.Show ();
-				UpdateView ();
+				SortView ();
 				break;
 			case ChangeType.RemovedInfo:
 				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
@@ -111,9 +111,8 @@ namespace GQ.Client.UI.Foyer {
 							qInfo: info
 						).GetComponent<QuestInfoController> ();
 						questInfoControllers.Add (info.Id, qiCtrl);
-						qiCtrl.SetContent (info);
 						qiCtrl.Show ();
-						UpdateView ();
+						SortView ();
 					}
 				}
 				break;							
@@ -121,9 +120,9 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		/// <summary>
-		/// Updates the view. Takes the current sorter into account to move the gameobjects in the right order.
+		/// Sorts the list. Takes the current sorter into account to move the gameobjects in the right order.
 		/// </summary>
-		public void UpdateView() {
+		public void SortView() {
 			List<QuestInfoController> qcList = new List<QuestInfoController> (questInfoControllers.Values);
 			qcList.Sort ();
 			for (int i = 0; i < qcList.Count; i++) {

@@ -29,12 +29,12 @@ namespace GQ.Client.Model {
 		/// </summary>
 		/// <param name="importFromServer">If set to <c>true</c> import from server otherwise use the local infos.json file.</param>
 		public ImportQuestInfosFromJSON(bool useInputTextAsJSON) : base() { 
-			this.importFromServer = useInputTextAsJSON;
+			this.importFromInputString = useInputTextAsJSON;
 
 			InputJSON = "[]";
 			qim = QuestInfoManager.Instance;
 
-			if (!importFromServer) {
+			if (!importFromInputString) {
 				// import from local quest json file:
 				if (File.Exists (QuestInfoManager.LocalQuestInfoJSONPath)) {
 					try {
@@ -48,14 +48,14 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		private bool importFromServer;
+		private bool importFromInputString;
 		private QuestInfoManager qim;
 		private Dictionary<int, QuestInfo> qimDict;
 
 		private string InputJSON { get; set; }
 
 		public override void ReadInput(object sender, TaskEventArgs e) {
-			if (importFromServer) {
+			if (importFromInputString) {
 				if (e != null && e.Content != null && e.Content is string) {
 					InputJSON = e.Content as string;
 				}
@@ -85,17 +85,12 @@ namespace GQ.Client.Model {
 				if ( q.Id <= 0 )
 					continue;
 
-				if (qim.ContainsQuestInfo (q.Id)) {
-					qim.ChangeInfo (q);
-				}
-				else {
-					qim.AddInfo (q);
-				}
+				qim.AddInfo (q);
 			}
 
 			// TODO: If we receive JSON from server and a quest is missing, 
 			// we either need to remove it (when it was only downloadable)
-			// or we need to change its info, so that it can oonly be deleted with a warning.
+			// or we need to change its info, so that it can only be deleted with a warning.
 				
 			return true;
 		}

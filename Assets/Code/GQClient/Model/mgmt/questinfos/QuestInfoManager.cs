@@ -86,18 +86,29 @@ namespace GQ.Client.Model {
 		#region Quest Info Changes
 
 		public void AddInfo(QuestInfo newInfo) {
-			QuestDict.Add (newInfo.Id, newInfo);
+			Debug.Log ("QM: Adding QI: " + newInfo.Name);
 
-			if (Filter.accept (newInfo)) {
-				// Run through filter and raise event if involved:
+			if (QuestDict.ContainsKey(newInfo.Id)) {
+				// A questInfo with this ID already exists: this is a CHANGE:
+				// TODO
+				Debug.Log ("	Already conatined id.");
+			}
+			else {
+				// this is a NEW quest info:
+				QuestDict.Add (newInfo.Id, newInfo);
 
-				raiseChange (
-					new QuestInfoChangedEvent (
-						String.Format ("Info for quest {0} added.", newInfo.Name),
-						ChangeType.AddedInfo,
-						newQuestInfo: newInfo
-					)
-				);
+				if (Filter.accept (newInfo)) {
+					// Run through filter and raise event if involved:
+
+					Debug.Log ("	New id. Raising event.");
+					raiseChange (
+						new QuestInfoChangedEvent (
+							String.Format ("Info for quest {0} added.", newInfo.Name),
+							ChangeType.AddedInfo,
+							newQuestInfo: newInfo
+						)
+					);
+				}
 			}
 		}
 
@@ -192,7 +203,7 @@ namespace GQ.Client.Model {
 
 		public event ChangeCallback OnChange;
 
-		protected virtual void raiseChange (QuestInfoChangedEvent e)
+		public virtual void raiseChange (QuestInfoChangedEvent e)
 		{
 			if (OnChange != null)
 				OnChange (this, e);
