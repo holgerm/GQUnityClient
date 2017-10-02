@@ -183,10 +183,6 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		public void Delete() {
-
-			Debug.Log (
-				"Want to delete: " + QuestManager.GetLocalPath4Quest (data.Id) + 
-				" warn level: " + DeletionWarnState.ToString());
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
 			data.LastUpdateOnDevice = null;
 
