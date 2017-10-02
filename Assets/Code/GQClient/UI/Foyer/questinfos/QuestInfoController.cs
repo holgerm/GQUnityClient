@@ -277,10 +277,10 @@ namespace GQ.Client.UI.Foyer {
 				DeleteButton.interactable = true;
 			}
 
-//			ElipsifyOverflowingText elipsify = Name.GetComponent<ElipsifyOverflowingText> ();
-//			if (elipsify != null) {
-//				elipsify.ElipsifyText ();
-//			}
+			ElipsifyOverflowingText elipsify = Name.GetComponent<ElipsifyOverflowingText> ();
+			if (elipsify != null) {
+				elipsify.ElipsifyText ();
+			}
 			// TODO make elipsify automatic when content of name text changes....???!!!
 
 			// TODO call the lists sorter ...
