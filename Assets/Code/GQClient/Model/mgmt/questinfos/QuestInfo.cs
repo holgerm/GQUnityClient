@@ -143,17 +143,9 @@ namespace GQ.Client.Model {
 			}
 			set {
 				if (value != _lastUpdateOnDevice) {
-					QuestInfo oldInfo = (QuestInfo) this.MemberwiseClone ();
 					_lastUpdateOnDevice = value;
-					QuestInfoManager.Instance.raiseChange (
-						new QuestInfoChangedEvent (
-							String.Format ("Info for quest {0} changed.", Name),
-							ChangeType.ChangedInfo,
-							newQuestInfo: this,
-							oldQuestInfo: oldInfo
-						)
-					);
-
+					if (OnChanged != null)
+						OnChanged ();
 				}
 			}
 		}

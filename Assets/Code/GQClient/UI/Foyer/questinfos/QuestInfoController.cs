@@ -183,10 +183,22 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		public void Delete() {
-			// TODO in case we are in DeleteWithWarning state we show a dialog with awarning and two options: Delete and Cancel.
 
-			Debug.Log ("Want to delete: " + QuestManager.GetLocalPath4Quest (data.Id));
+			Debug.Log (
+				"Want to delete: " + QuestManager.GetLocalPath4Quest (data.Id) + 
+				" warn level: " + DeletionWarnState.ToString());
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
+			data.LastUpdateOnDevice = null;
+
+			ExportQuestInfosToJSON exportQuestsInfoJSON = 
+				new ExportQuestInfosToJSON ();
+			new SimpleDialogBehaviour (
+				exportQuestsInfoJSON,
+				"Updating quests",
+				"Saving Quest Data"
+			);
+
+			exportQuestsInfoJSON.Start ();
 		}
 
 		public void Play() {
