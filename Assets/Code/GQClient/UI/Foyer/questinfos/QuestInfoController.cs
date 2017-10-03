@@ -241,13 +241,11 @@ namespace GQ.Client.UI.Foyer {
 			Button.ButtonClickedEvent namebuttonEvent = nameButton.onClick;
 			namebuttonEvent.RemoveAllListeners ();
 			if (data.IsOnServer && !data.IsOnDevice) {
-				Debug.Log ("----- NAME BUTTON Set DOWNLOAD");
 				namebuttonEvent.AddListener (() => {
 					Download();
 				});
 			}
 			if (data.IsOnDevice) {
-				Debug.Log ("----- NAME BUTTON Set PLAY");
 				namebuttonEvent.AddListener (() => {
 					Play();
 				});

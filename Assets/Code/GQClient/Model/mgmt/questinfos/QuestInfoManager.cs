@@ -86,12 +86,9 @@ namespace GQ.Client.Model {
 		#region Quest Info Changes
 
 		public void AddInfo(QuestInfo newInfo) {
-			Debug.Log ("QM: Adding QI: " + newInfo.Name);
-
 			if (QuestDict.ContainsKey(newInfo.Id)) {
 				// A questInfo with this ID already exists: this is a CHANGE:
 				// TODO
-				Debug.Log ("	Already conatined id.");
 			}
 			else {
 				// this is a NEW quest info:
@@ -99,8 +96,6 @@ namespace GQ.Client.Model {
 
 				if (Filter.accept (newInfo)) {
 					// Run through filter and raise event if involved:
-
-					Debug.Log ("	New id. Raising event.");
 					raiseChange (
 						new QuestInfoChangedEvent (
 							String.Format ("Info for quest {0} added.", newInfo.Name),

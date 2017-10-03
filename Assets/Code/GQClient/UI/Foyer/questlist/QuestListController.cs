@@ -63,7 +63,6 @@ namespace GQ.Client.UI.Foyer {
 			QuestInfoController qiCtrl;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
-				Debug.Log ("	Raised Add event.");
 				qiCtrl = 
 					QuestInfoController.Create (
 						root: InfoList.gameObject,
