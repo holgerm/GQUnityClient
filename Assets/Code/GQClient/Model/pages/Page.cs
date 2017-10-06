@@ -12,6 +12,7 @@ using GQ.Geo;
 using GQ.Client.Util;
 using GQ.Client.Model;
 using GQ.Client.Err;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Client.Model
 {
@@ -161,10 +162,25 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
+		private string PageScenePath {
+			get {
+				return "Scenes/Pages/" + GetType ().Name.Substring (4);
+			}
+		}
+
 		public virtual void Start ()
 		{
+			// ensure that the adequate scene is loaded:
+			Scene scene = SceneManager.GetActiveScene();
+			if (!scene.path.Equals(PageScenePath)) {
+				SceneManager.LoadScene (PageScenePath);
+			}
+
+			// set this page as current in QM
 			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
+
+			// Trigger OnStart Actions of this page:
 			StartTrigger.Initiate ();
 		}
 

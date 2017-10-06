@@ -68,11 +68,6 @@ namespace GQ.Client.Util {
 			OnProgress += defaultLogInformationHandler;
 		}
 
-		public void Restart() {
-			Base.Instance.StartCoroutine(RunAsCoroutine ());
-			// TODO: isn't a call to Start() enough?
-		}
-			
 		public override IEnumerator RunAsCoroutine () 
 		{
 			UnityEngine.Debug.Log ("Downloader started.");

@@ -13,6 +13,11 @@ namespace GQ.Client.Util {
 
 		protected Stopwatch stopwatch;
 
+		public void Restart() {
+			Base.Instance.StartCoroutine(RunAsCoroutine ());
+			// TODO: isn't a call to Start() enough?
+		}
+
 		#region Callback Delegates
 
 		public delegate void DownloadCallback (AbstractDownloader d, DownloadEvent e);

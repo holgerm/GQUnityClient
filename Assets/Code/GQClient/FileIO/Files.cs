@@ -100,15 +100,16 @@ namespace GQ.Client.FileIO
 
 		public static string LocalPath4WWW(string assetRelativePath) 
 		{
-			string path;
-
 			if (assetRelativePath.StartsWith ("Assets"))
 				assetRelativePath = assetRelativePath.Substring ("Assets".Length);
 
 			if (!assetRelativePath.StartsWith ("/"))
 				assetRelativePath = "/" + assetRelativePath;
 
-			return "file://" + Application.dataPath + assetRelativePath;
+			if (!assetRelativePath.StartsWith(Application.dataPath))
+				assetRelativePath = Application.dataPath + assetRelativePath;
+
+			return "file://" + assetRelativePath;
 		}
 
 		public static string FileName (string filePath)

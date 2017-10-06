@@ -4,7 +4,6 @@ using UnityEngine;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using Newtonsoft.Json;
-using GQ.Client.Util;
 using System;
 using GQ.Client.UI;
 using System.IO;

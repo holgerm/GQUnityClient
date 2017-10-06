@@ -70,7 +70,7 @@ namespace GQ.Client.Model
 		public IPage StartPage {
 			get {
 				if (startPage == null) {
-					Log.SignalErrorToDeveloper ("Quest {0}({1}) can not be started, sonce start page is not set.", Name, Id);
+					Log.SignalErrorToDeveloper ("Quest {0}({1}) can not be started, since start page is not set.", Name, Id);
 					return null;
 				} else
 					return startPage;
@@ -230,9 +230,6 @@ namespace GQ.Client.Model
 			if (pageDict.Count == 0)
 				StartPage = page;
 			pageDict.Add (page.Id, page);
-
-			// TODO: get rid:
-			PageList.Add ((Page)page);
 		}
 
 		private void ReadHotspot (XmlReader reader)
@@ -240,9 +237,6 @@ namespace GQ.Client.Model
 			XmlSerializer serializer = new XmlSerializer (typeof(Hotspot));
 			Hotspot hotspot = (Hotspot)serializer.Deserialize (reader);
 			hotspotDict.Add (hotspot.Id, hotspot);
-
-			// TODO: get rid:
-//			hotspotList.Add (hotspot);
 		}
 			
 
@@ -258,8 +252,13 @@ namespace GQ.Client.Model
 
 		public virtual void Start ()
 		{
-			if (StartPage == null)
+			if (StartPage == null) {
+				Log.SignalErrorToDeveloper (
+					"Quest {0} can not be started, since the StartPage is null",
+					Id
+				);
 				return;
+			}
 
 			StartPage.Start ();
 		}

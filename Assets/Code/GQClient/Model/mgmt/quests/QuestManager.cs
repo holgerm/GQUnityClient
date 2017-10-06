@@ -52,6 +52,10 @@ namespace GQ.Client.Model
 
 		public Quest CurrentQuest { get; set; }
 
+		public void StartQuest(int id) {
+			// TODO
+		}
+
 		public Page CurrentPage { get; set; }
 
 		#endregion

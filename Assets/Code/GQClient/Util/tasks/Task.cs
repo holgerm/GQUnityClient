@@ -65,7 +65,7 @@ namespace GQ.Client.Util {
 
 		/// <summary>
 		/// Overrride this method to implement behaviour of your task subclass. 
-		/// Return either true od false to signal that this task has succeeded or failed.
+		/// Return either true or false to signal that this task has succeeded or failed.
 		/// 
 		/// In order to give the tasks result to potential following tasks, 
 		/// store it in the Result property before leaving this method.

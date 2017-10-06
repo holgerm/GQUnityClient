@@ -87,6 +87,19 @@ namespace GQTests.Util {
 
 			Assert.IsTrue (md.RunsAsCoroutine);
 		}
+
+		[Test]
+		public void LocalFileLoader() {
+			string filePath = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "Util/Downloader/hello.txt");
+
+			LocalFileLoader fileLoader = new LocalFileLoader (
+				filePath: filePath
+			);
+
+			fileLoader.Start ();
+
+			Assert.AreEqual ("Hello!", fileLoader.Result);
+		}
 	}
 
 }

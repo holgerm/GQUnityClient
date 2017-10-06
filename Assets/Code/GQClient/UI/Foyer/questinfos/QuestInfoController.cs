@@ -170,7 +170,6 @@ namespace GQ.Client.UI.Foyer {
 				"Saving Quest Data"
 			);
 
-
 			TaskSequence t = 
 				new TaskSequence (downloadGameXML);
 			t.AppendIfCompleted (prepareMediaInfosToDownload);
@@ -179,7 +178,6 @@ namespace GQ.Client.UI.Foyer {
 			t.Append (exportQuestsInfoJSON);
 
 			t.Start ();
-
 		}
 
 		public void Delete() {
@@ -198,8 +196,24 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 		public void Play() {
-			// TODO
-			Debug.Log("TODO: Implement play method! Trying to start quest " + data.Name);
+			// Load quest data: game.xml
+			LocalFileLoader loadGameXML = 
+				new LocalFileLoader (
+					filePath: QuestManager.GetLocalPath4Quest(data.Id) + QuestManager.QUEST_FILE_NAME
+				);
+			new DownloadDialogBehaviour (loadGameXML, "Loading quest");
+
+			QuestStarter questStarter = new QuestStarter ();
+			new SimpleDialogBehaviour (
+				questStarter,
+				"Starting quests",
+				"Preparing Quest Data"
+			);
+
+			TaskSequence t = 
+				new TaskSequence (loadGameXML, questStarter);
+
+			t.Start ();
 		}
 
 
