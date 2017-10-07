@@ -1,7 +1,7 @@
 ﻿// 
 // KeywordsGlossary.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -18,6 +18,7 @@ namespace Candlelight
 	/// </summary>
 	public class KeywordsGlossary : KeywordCollection
 	{
+		#region Enumerations
 		/// <summary>
 		/// A possible part of speech for a word.
 		/// </summary>
@@ -40,7 +41,9 @@ namespace Candlelight
 			/// </summary>
 			Adverb
 		}
+		#endregion
 
+		#region Data Types
 		/// <summary>
 		/// An inflected form for a word.
 		/// </summary>
@@ -71,7 +74,7 @@ namespace Candlelight
 			/// <param name="partOfSpeech">Part of speech.</param>
 			public InflectedForm(string word, PartOfSpeech partOfSpeech) : this()
 			{
-				m_Word = word ?? "";
+				m_Word = word ?? string.Empty;
 				m_PartOfSpeech = partOfSpeech;
 			}
 
@@ -98,7 +101,7 @@ namespace Candlelight
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is InflectedForm)) ? false : Equals((InflectedForm)obj);
 			}
 
 			/// <summary>
@@ -115,7 +118,7 @@ namespace Candlelight
 			/// </returns>
 			public bool Equals(InflectedForm other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return m_PartOfSpeech == other.m_PartOfSpeech && string.Equals(this.Word, other.Word);
 			}
 
 			/// <summary>
@@ -173,7 +176,7 @@ namespace Candlelight
 			public Entry(InflectedForm mainForm, string definition)
 			{
 				m_MainForm = mainForm;
-				m_Definition = definition ?? "";
+				m_Definition = definition ?? string.Empty;
 				m_OtherForms = new List<InflectedForm>();
 			}
 
@@ -183,9 +186,8 @@ namespace Candlelight
 			/// <param name="mainForm">Main form.</param>
 			/// <param name="definition">Definition.</param>
 			/// <param name="otherForms">Other forms.</param>
-			public Entry(
-				InflectedForm mainForm, string definition, IEnumerable<InflectedForm> otherForms
-			) : this(mainForm, definition)
+			public Entry(InflectedForm mainForm, string definition, IList<InflectedForm> otherForms) :
+				this(mainForm, definition)
 			{
 				if (otherForms != null)
 				{
@@ -215,7 +217,7 @@ namespace Candlelight
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is Entry)) ? false : Equals((Entry)obj);
 			}
 
 			/// <summary>
@@ -232,7 +234,9 @@ namespace Candlelight
 			/// </returns>
 			public bool Equals(Entry other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return m_MainForm.Equals(other.m_MainForm) &&
+					string.Equals(this.Definition, other.Definition) &&
+					ObjectX.AreStructSequencesEqual(m_OtherForms, other.m_OtherForms);
 			}
 
 			/// <summary>
@@ -244,28 +248,17 @@ namespace Candlelight
 			/// </returns>
 			public override int GetHashCode()
 			{
-				int result = ObjectX.GenerateHashCode(
-					m_Definition.GetHashCode(),
-					m_MainForm.GetHashCode(),
-					(m_OtherForms == null ? 0 : m_OtherForms.Count).GetHashCode()
+				return ObjectX.GenerateHashCode(
+					m_Definition.GetHashCode(), m_MainForm.GetHashCode(), ObjectX.GenerateHashCode(m_OtherForms)
 				);
-				if (m_OtherForms != null)
-				{
-					for (int i = 0; i < m_OtherForms.Count; ++i)
-					{
-						result = ObjectX.GenerateHashCode(result, m_OtherForms[i].GetHashCode());
-					}
-				}
-				return result;
 			}
 
 			/// <summary>
 			/// Gets the other forms.
 			/// </summary>
 			/// <param name="otherForms">Other forms.</param>
-			public void GetOtherForms(ref List<InflectedForm> otherForms)
+			public void GetOtherForms(List<InflectedForm> otherForms)
 			{
-				otherForms = otherForms ?? new List<InflectedForm>(m_OtherForms.Count);
 				otherForms.Clear();
 				if (m_OtherForms != null)
 				{
@@ -281,10 +274,12 @@ namespace Candlelight
 			{
 				return GetHashCode();
 			}
-		}
 
-		#region Shared Allocations
-		private static List<InflectedForm> s_OtherForms = new List<InflectedForm>(16);
+			#region Obsolete
+			[System.Obsolete("Use Entry.GetOtherForms(List<InflectedForm>)", true)]
+			public void GetOtherForms(ref List<InflectedForm> otherForms) {}
+			#endregion
+		}
 		#endregion
 
 		/// <summary>
@@ -297,16 +292,23 @@ namespace Candlelight
 		private List<Entry> m_Entries = new List<Entry>();
 		#endregion
 
-		/// <summary>
-		/// Gets the entries.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The entries.</returns>
+		#region Constructors
+		protected KeywordsGlossary() {}
+		#endregion
+
+		#region Inspector Properties
 		private Entry[] GetEntries()
 		{
 			return m_Entries.ToArray();
 		}
 
+		private void SetEntries(Entry[] value)
+		{
+			SetEntries(value as IList<Entry>);
+		}
+		#endregion
+
+		#region Public Properties
 		/// <summary>
 		/// Gets the entries.
 		/// </summary>
@@ -333,6 +335,26 @@ namespace Candlelight
 		}
 
 		/// <summary>
+		/// Sets the entries.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public void SetEntries(IList<Entry> value)
+		{
+			List<Entry> newValue = new List<Entry>();
+			if (value != null)
+			{
+				newValue.AddRange(value);
+			}
+			if (!newValue.SequenceEqual(m_Entries))
+			{
+				m_Entries.Clear();
+				m_Entries.AddRange(newValue);
+				RebuildKeywords();
+			}
+		}
+		#endregion
+
+		/// <summary>
 		/// Opens the API reference page.
 		/// </summary>
 		[ContextMenu("API Reference")]
@@ -350,10 +372,13 @@ namespace Candlelight
 			for (int i = 0; i < m_Entries.Count; ++i)
 			{
 				keywordList.Add(m_Entries[i].MainForm.Word);
-				m_Entries[i].GetOtherForms(ref s_OtherForms);
-				for (int j = 0; j < s_OtherForms.Count; ++j)
+				using (var otherForms = new ListPool<InflectedForm>.Scope())
 				{
-					keywordList.Add(s_OtherForms[j].Word);
+					m_Entries[i].GetOtherForms(otherForms.List);
+					for (int j = 0; j < otherForms.List.Count; ++j)
+					{
+						keywordList.Add(otherForms.List[j].Word);
+					}
 				}
 			}
 			RebuildEntryTable(ref m_EntryTable);
@@ -376,46 +401,35 @@ namespace Candlelight
 					keyword = keyword.ToLower();
 				}
 				entryTable[keyword] = i;
-				m_Entries[i].GetOtherForms(ref s_OtherForms);
-				for (int j = s_OtherForms.Count - 1; j >= 0; --j)
+				using (var otherForms = new ListPool<InflectedForm>.Scope())
 				{
-					keyword = s_OtherForms[j].Word;
-					if (ignoreCase)
+					m_Entries[i].GetOtherForms(otherForms.List);
+					for (int j = otherForms.List.Count - 1; j >= 0; --j)
 					{
-						keyword = keyword.ToLower();
+						keyword = otherForms.List[j].Word;
+						if (ignoreCase)
+						{
+							keyword = keyword.ToLower();
+						}
+						entryTable[keyword] = i;
 					}
-					entryTable[keyword] = i;
 				}
 			}
 		}
 
+#if CANDLELIGHT_MONO_AOT
 		/// <summary>
-		/// Sets the entries.
+		/// Provides a hint to the Mono AOT compiler to generate conrete generic types required at run-time.
 		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="value">Value.</param>
-		private void SetEntries(Entry[] value)
+		private void MonoAOTHint()
 		{
-			SetEntries(value as IEnumerable<Entry>);
+			ListPool<InflectedForm>.Release(ListPool<InflectedForm>.Get());
 		}
+#endif
 
-		/// <summary>
-		/// Sets the entries.
-		/// </summary>
-		/// <param name="value">Value.</param>
-		public void SetEntries(IEnumerable<Entry> value)
-		{
-			List<Entry> newValue = new List<Entry>();
-			if (value != null)
-			{
-				newValue.AddRange(value);
-			}
-			if (!newValue.SequenceEqual(m_Entries))
-			{
-				m_Entries.Clear();
-				m_Entries.AddRange(newValue);
-				RebuildKeywords();
-			}
-		}
+		#region Obsolete
+		[System.Obsolete("Use KeywordsGlossary.SetEntries(IList<Entry>)", true)]
+		public void SetEntries(IEnumerable<Entry> value) {}
+		#endregion
 	}
 }

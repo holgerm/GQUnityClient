@@ -1,16 +1,14 @@
 // 
 // BaseEditor.cs
 // 
-// Copyright (c) 2015, Candlelight Interactive, LLC
+// Copyright (c) 2015-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains a base class for custom editors that implement complex
-// inspectors and/or scene GUI.
 
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,12 +31,12 @@ namespace Candlelight
 			{
 				if (!type.IsAbstract && typeof(BaseEditor).IsAssignableFrom(type))
 				{
-					MethodInfo initializeMethod = type.GetMethod("InitializeClass", ReflectionX.staticBindingFlags);
+					MethodInfo initializeMethod = type.GetStaticMethod("InitializeClass");
 					if (initializeMethod != null)
 					{
 						initializeMethod.Invoke(null, null);
 					}
-					PropertyInfo featureGroupProp = type.GetProperty("ProductCategory", ReflectionX.staticBindingFlags);
+					PropertyInfo featureGroupProp = type.GetStaticProperty("ProductCategory");
 					if (featureGroupProp == null)
 					{
 						continue;
@@ -48,8 +46,7 @@ namespace Candlelight
 					{
 						continue;
 					}
-					MethodInfo prefMenuMethod =
-						type.GetMethod("DisplayHandlePreferences", ReflectionX.staticBindingFlags);
+					MethodInfo prefMenuMethod = type.GetStaticMethod("DisplayHandlePreferences");
 					if (prefMenuMethod == null || prefMenuMethod.DeclaringType != type)
 					{
 						continue;
@@ -63,8 +60,221 @@ namespace Candlelight
 	/// <summary>
 	/// Base editor class for objects to register preferences and scene GUI callbacks.
 	/// </summary>
+	[InitializeOnLoad]
 	public abstract class BaseEditor : Editor, ISceneGUIContext
 	{
+		/// <summary>
+		/// Initializes the <see cref="BaseEditor"/> class.
+		/// </summary>
+		static BaseEditor()
+		{
+			List<SerializedPropertyAttribute> attrs = new List<SerializedPropertyAttribute>();
+			Dictionary<FieldInfo, string> problemFields = new Dictionary<FieldInfo, string>();
+			foreach (System.Type editorType in ReflectionX.AllTypes)
+			{
+				if (editorType == s_BaseType || !typeof(BaseEditor).IsAssignableFrom(editorType))
+				{
+					continue;
+				}
+				System.Type targetType = GetBaseEditorTargetType(editorType);
+				if (targetType == null)
+				{
+					continue;
+				}
+				s_SerializedPropertyFields[editorType] = new HashSet<FieldInfo>();
+				foreach (
+					FieldInfo editorField in editorType.GetFields(ReflectionX.instanceBindingFlags).Where(
+						f => f.GetCustomAttributes(attrs) > 0
+					)
+				)
+				{
+					s_SerializedPropertyFields[editorType].Add(editorField);
+					string targetFieldName;
+					if (!attrs[0].GetPropertyPath(editorField, targetType, out targetFieldName))
+					{
+						problemFields.Add(editorField, string.Format("{0}.{1}", targetType, targetFieldName));
+					}
+				}
+			}
+			foreach (KeyValuePair<System.Type, HashSet<FieldInfo>> kv in s_SerializedPropertyFields)
+			{
+				System.Type t = kv.Key.BaseType;
+				while (t != null && t.BaseType != s_BaseType)
+				{
+					System.Type lookupType = t;
+					if (lookupType.IsGenericType)
+					{
+						lookupType = t.GetGenericTypeDefinition();
+					}
+					if (s_SerializedPropertyFields.ContainsKey(lookupType))
+					{
+						if (t.IsGenericType)
+						{
+							foreach (FieldInfo field in s_SerializedPropertyFields[lookupType])
+							{
+								kv.Value.Add(t.GetInstanceField(field.Name));
+							}
+						}
+						else
+						{
+							foreach (FieldInfo field in s_SerializedPropertyFields[lookupType])
+							{
+								kv.Value.Add(field);
+							}
+						}
+					}
+					t = t.BaseType;
+				}
+			}
+			if (problemFields.Count > 0)
+			{
+				Debug.LogError(
+					string.Format(
+						"The following fields are decorated with {0}, but no serializable field with the specified " +
+						"path could be found on their target classes:\n\n{1}\n",
+						typeof(SerializedPropertyAttribute),
+						"\n".Join(
+							from kv in problemFields select string.Format(
+								" - {0}.{1} ({2})", kv.Key.DeclaringType, kv.Key.Name, kv.Value
+							)
+						)
+					)
+				);
+			}
+		}
+
+		/// <summary>
+		/// An attribute to decorate a serialized property or reorderable list field to have it automatically assigned
+		/// in <see cref="BaseEditor.OnEnable()"/> 
+		/// </summary>
+		/// <remarks>
+		/// This class is just a convenience for nested properties. For example, a property with the path "m_Prop.m_Int"
+		/// could be indicated on a field with any name decorated with [SerializedProperty("m_Prop.m_Int")], or it could
+		/// be indicated on a field named "m_Int" decorated with [RelativeProperty("m_Prop")].
+		/// </remarks>
+		protected class RelativePropertyAttribute : SerializedPropertyAttribute
+		{
+			/// <summary>
+			/// The parent path.
+			/// </summary>
+			private readonly string m_ParentPath = null;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="BaseEditor.RelativePropertyAttribute"/> class.
+			/// </summary>
+			/// <param name="parentPath">Parent path for the property.</param>
+			public RelativePropertyAttribute(string parentPath)
+			{
+				m_ParentPath = parentPath;
+			}
+
+			/// <summary>
+			/// Gets the property path indicated on the decorated field.
+			/// </summary>
+			/// <returns>
+			/// <see cref="true"/>, if <paramref name="propertyPath"/> refers to an actual serializable field;
+			/// otherwise, <see langword="false"/>.
+			/// </returns>
+			/// <param name="decoratedField">The field decorated with this attribute.</param>
+			/// <param name="targetType">Target type specified on the <see cref="BaseEditor{T}"/>.</param>
+			/// <param name="propertyPath">Property path.</param>
+			public override bool GetPropertyPath(
+				FieldInfo decoratedField, System.Type targetType, out string propertyPath
+			)
+			{
+				return GetPropertyPath(decoratedField, targetType, out propertyPath, m_ParentPath);
+			}
+		}
+
+		/// <summary>
+		/// An attribute to decorate a serialized property or reorderable list field to have it automatically assigned
+		/// in <see cref="BaseEditor.OnEnable()"/> 
+		/// </summary>
+		protected class SerializedPropertyAttribute : System.Attribute
+		{
+			/// <summary>
+			/// The path of the property. If none is specified, then the name of the decorated field will be used.
+			/// </summary>
+			private readonly string m_PropertyPath = null;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="BaseEditor.SerializedPropertyAttribute"/> class. Use this
+			/// constructor to decorate a field on a <see cref="BaseEditor{T}"/> whose name matches the path of the
+			/// <see cref="UnityEditor.SerializedProperty"/> to which it refers on the target object.
+			/// </summary>
+			public SerializedPropertyAttribute() {}
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="BaseEditor.SerializedPropertyAttribute"/> class, allowing
+			/// you to manually specify the property path if it is different from the name of the decorated field.
+			/// </summary>
+			/// <param name="propertyPath">Property path.</param>
+			public SerializedPropertyAttribute(string propertyPath)
+			{
+				m_PropertyPath = propertyPath;
+			}
+
+			/// <summary>
+			/// Gets the property path indicated on the decorated field.
+			/// </summary>
+			/// <returns>
+			/// <see cref="true"/>, if <paramref name="propertyPath"/> refers to an actual serializable field;
+			/// otherwise, <see langword="false"/>.
+			/// </returns>
+			/// <param name="decoratedField">The field decorated with this attribute.</param>
+			/// <param name="targetType">Target type specified on the <see cref="BaseEditor{T}"/>.</param>
+			/// <param name="propertyPath">Property path.</param>
+			public virtual bool GetPropertyPath(
+				FieldInfo decoratedField, System.Type targetType, out string propertyPath
+			)
+			{
+				return GetPropertyPath(decoratedField, targetType, out propertyPath, null);
+			}
+
+			/// <summary>
+			/// Gets the property path indicated on the decorated field.
+			/// </summary>
+			/// <returns>
+			/// <see cref="true"/>, if <paramref name="propertyPath"/> refers to an actual serializable field;
+			/// otherwise, <see langword="false"/>.
+			/// </returns>
+			/// <param name="decoratedField">The field decorated with this attribute.</param>
+			/// <param name="targetType">Target type specified on the <see cref="BaseEditor{T}"/>.</param>
+			/// <param name="propertyPath">Property path.</param>
+			/// <param name="parentPath">A parent path to prefix, if any.</param>
+			protected bool GetPropertyPath(
+				FieldInfo decoratedField, System.Type targetType, out string propertyPath, string parentPath
+			)
+			{
+				propertyPath = string.Format(
+					"{0}{1}",
+					string.IsNullOrEmpty(parentPath) ?
+						null : (parentPath.StartsWith(".") ? parentPath : string.Format("{0}.", parentPath)),
+					string.IsNullOrEmpty(m_PropertyPath) ? decoratedField.Name : m_PropertyPath
+				);
+				return SerializedPropertyX.HasSerializedProperty(targetType, propertyPath);
+			}
+		}
+
+		#region Labels
+		private static readonly GUIContent[] s_SingleButtonLabel = new GUIContent[1];
+		#endregion
+
+		/// <summary>
+		/// The base type for editors with known targets.
+		/// </summary>
+		private static readonly System.Type s_BaseType = typeof(BaseEditor<>);
+		/// <summary>
+		/// For each <see cref="BaseEditor{T}"/> type, a list of the fields decorated with
+		/// <see cref="BaseEditor.SerializedPropertyAttribute"/>.
+		/// </summary>
+		private static readonly Dictionary<System.Type, HashSet<FieldInfo>> s_SerializedPropertyFields =
+			new Dictionary<System.Type, HashSet<FieldInfo>>();
+		/// <summary>
+		/// A control identifier for a single button.
+		/// </summary>
+		private static int[] s_SingleButtonControlID = new int[1];
+
 		/// <summary>
 		/// Gets the product category. Replace this property in a subclass to specify a location in the preference menu.
 		/// </summary>
@@ -72,11 +282,114 @@ namespace Candlelight
 		protected static AssetStoreProduct ProductCategory { get { return AssetStoreProduct.None; } }
 
 		/// <summary>
+		/// Displays an error message with an optional button to fix the error.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if the fix button was pressed; otherwise, <see langword="false"/>.
+		/// </returns>
+		/// <param name="errorMessage">Error message to display.</param>
+		/// <param name="buttonText">Button text. If null or empty then no button will be displayed.</param>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="controlId">
+		/// Control identifier. If left unspecified, then the text of the label will be used to generate one.
+		/// </param>
+		protected static bool DisplayErrorMessageWithFixButton(
+			string errorMessage, GUIContent buttonText, MessageType messageType = MessageType.Error, int controlId = 0
+		)
+		{
+			s_SingleButtonControlID[0] = controlId;
+			s_SingleButtonLabel[0] = buttonText;
+			return DisplayErrorMessageWithFixButtons(
+				errorMessage, s_SingleButtonLabel, messageType, s_SingleButtonControlID
+			) == 0;
+		}
+
+		/// <summary>
+		/// Displays an error message with optional buttons to fix errors.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if the fix button was pressed; otherwise, <see langword="false"/>.
+		/// </returns>
+		/// <param name="errorMessage">Error message to display.</param>
+		/// <param name="buttonTexts">Button texts. If null or empty then no buttons will be displayed.</param>
+		/// <param name="messageType">Message type.</param>
+		/// <param name="controlIds">
+		/// Control identifiers. If left unspecified, then the text of each label will be used to generate them.
+		/// </param>
+		protected static int DisplayErrorMessageWithFixButtons(
+			string errorMessage,
+			GUIContent[] buttonTexts,
+			MessageType messageType = MessageType.Error,
+			int[] controlIds = null
+		)
+		{
+			int result = -1;
+			Color oldColor = GUI.color;
+			switch (messageType)
+			{
+			case MessageType.Error:
+				GUI.color = Color.red;
+				break;
+			case MessageType.Warning:
+				GUI.color = Color.yellow;
+				break;
+			}
+			if (controlIds != null && controlIds.Length != buttonTexts.Length)
+			{
+				Debug.LogError(
+					"Different number of button labels and control identifiers specified. " +
+					"Specified control identifiers will be ignored."
+				);
+				controlIds = null;
+			}
+			EditorGUILayout.BeginVertical(EditorStylesX.Box);
+			{
+				GUI.color = oldColor;
+				EditorGUILayout.HelpBox(errorMessage, messageType);
+				if (buttonTexts != null)
+				{
+					for (int i = 0; i < buttonTexts.Length; ++i)
+					{
+						if (
+							buttonTexts[i] != null &&
+							EditorGUIX.DisplayButton(buttonTexts[i], controlId: controlIds == null ? 0 : controlIds[i])
+						)
+						{
+							result = i;
+						}
+					}
+				}
+			}
+			EditorGUILayout.EndVertical();
+			return result;
+		}
+
+		/// <summary>
 		/// Displays the handle preferences. They will be displayed in the preference menu and the top of the inspector.
 		/// </summary>
 		protected static void DisplayHandlePreferences()
 		{
 
+		}
+
+		/// <summary>
+		/// Gets the target type of the <see cref="BaseEditor{T}"/> type.
+		/// </summary>
+		/// <returns>The target type for the specified <paramref name="baseEditorType"/>.</returns>
+		/// <param name="baseEditorType">A <see cref="BaseEditor{T}"/> type.</param>
+		private static System.Type GetBaseEditorTargetType(System.Type baseEditorType)
+		{
+			while (baseEditorType != null && baseEditorType != typeof(object))
+			{
+				System.Type current =
+					baseEditorType.IsGenericType ? baseEditorType.GetGenericTypeDefinition() : baseEditorType;
+				if (s_BaseType == current)
+				{
+					return baseEditorType.GetGenericArguments().FirstOrDefault();
+				}
+				baseEditorType = baseEditorType.BaseType;
+			}
+			return null;
 		}
 
 		/// <summary>
@@ -133,6 +446,73 @@ namespace Candlelight
 		/// </summary>
 		/// <value>The serialized target.</value>
 		protected SerializedObject SerializedTarget { get { return m_InspectedObjects[this.target]; } }
+
+		/// <summary>
+		/// Applies any pending modifications and updates GUI contents.
+		/// </summary>
+		protected void ApplyModificationsAndUpdateGUIContents()
+		{
+			this.serializedObject.ApplyModifiedProperties();
+			this.serializedObject.Update();
+			UpdateGUIContents();
+		}
+
+		/// <summary>
+		/// Assigns all <see cref="UnityEditor.SerializedProperty"/> and
+		/// <see cref="UnityEditorInternal.ReorderableList"/> fields defined on this instance if they are decorated with
+		/// <see cref="SerializedPropertyAttribute"/>.
+		/// </summary>
+		/// <param name="targetType">Target type.</param>
+		protected void AssignDecoratedFields(System.Type targetType)
+		{
+			List<SerializedPropertyAttribute> attrs = new List<SerializedPropertyAttribute>();
+			string propertyPath;
+			foreach (FieldInfo propertyField in s_SerializedPropertyFields[GetType()])
+			{
+				bool isSerializedProperty = propertyField.FieldType == typeof(SerializedProperty);
+				if (!isSerializedProperty && propertyField.FieldType != typeof(ReorderableList))
+				{
+					continue;
+				}
+				propertyField.GetCustomAttributes(attrs);
+				if (attrs[0].GetPropertyPath(propertyField, targetType, out propertyPath))
+				{
+					SerializedProperty property = this.serializedObject.FindProperty(propertyPath);
+					if (property == null)
+					{
+						continue;
+					}
+					if (isSerializedProperty)
+					{
+						propertyField.SetValue(this, property);
+					}
+					else
+					{
+						ReorderableList list = new ReorderableList(property.serializedObject, property);
+						string displayName = property.displayName;
+						list.onAddCallback = delegate(ReorderableList lst) {
+							++lst.serializedProperty.arraySize;
+							lst.serializedProperty.serializedObject.ApplyModifiedProperties();
+						};
+						list.drawHeaderCallback = rect => EditorGUI.LabelField(rect, displayName);
+						list.drawElementCallback = (rect, index, isActive, isFocused) =>
+						{
+							rect.height -= EditorGUIUtility.standardVerticalSpacing;
+							EditorGUIUtility.labelWidth -= EditorGUIX.ReorderableListThumbWidth;
+							EditorGUI.PropertyField(rect, list.serializedProperty.GetArrayElementAtIndex(index));
+							EditorGUIUtility.labelWidth += EditorGUIX.ReorderableListThumbWidth;
+						};
+#if !UNITY_4_6 && !UNITY_4_7 && !UNITY_5_0 && !UNITY_5_1 && !UNITY_5_2
+						list.elementHeightCallback = delegate(int index) {
+							return EditorGUI.GetPropertyHeight(list.serializedProperty.GetArrayElementAtIndex(index)) +
+								EditorGUIUtility.standardVerticalSpacing;
+						};
+#endif
+						propertyField.SetValue(this, list);
+					}
+				}
+			}
+		}
 		
 		/// <summary>
 		/// Displays the inspector.
@@ -267,7 +647,8 @@ namespace Candlelight
 		protected virtual void OnDisable()
 		{
 			SceneGUI.DeregisterObjectGUICallback(this as ISceneGUIContext);
-			Undo.undoRedoPerformed -= UpdateGUIContents;
+			Undo.undoRedoPerformed -= ApplyModificationsAndUpdateGUIContents;
+			Undo.postprocessModifications -= OnModifyProperty;
 		}
 
 		/// <summary>
@@ -275,9 +656,7 @@ namespace Candlelight
 		/// </summary>
 		protected virtual void OnEnable()
 		{
-			m_DisplayHandlePreferencesMethod = GetType().GetMethod(
-				"DisplayHandlePreferences", ReflectionX.staticBindingFlags
-			);
+			m_DisplayHandlePreferencesMethod = GetType().GetStaticMethod("DisplayHandlePreferences");
 			m_FirstTarget = this.target;
 			foreach (Object t in this.targets)
 			{
@@ -290,7 +669,8 @@ namespace Candlelight
 			{
 				SceneGUI.RegisterObjectGUICallback(this as ISceneGUIContext, OnSceneGUIOverlay);
 			}
-			Undo.undoRedoPerformed += UpdateGUIContents;
+			Undo.undoRedoPerformed += ApplyModificationsAndUpdateGUIContents;
+			Undo.postprocessModifications += OnModifyProperty;
 		}
 		
 		/// <summary>
@@ -315,6 +695,16 @@ namespace Candlelight
 		}
 
 		/// <summary>
+		/// Triggers <see cref="UpdateGUIContents"/> when a property is modified (e.g., reset to prefab value).
+		/// </summary>
+		/// <param name="modifications">Modifications.</param>
+		private UndoPropertyModification[] OnModifyProperty(UndoPropertyModification[] modifications)
+		{
+			UpdateGUIContents();
+			return modifications;
+		}
+
+		/// <summary>
 		/// Raises the scene GUI event.
 		/// </summary>
 		protected virtual void OnSceneGUI()
@@ -324,10 +714,6 @@ namespace Candlelight
 			{
 				return;
 			}
-			if (this.ImplementsSceneGUIOverlay)
-			{
-				SceneGUI.Display(this);
-			}
 			if (this.ImplementsSceneGUIHandles)
 			{
 				Color oldColor = Handles.color;
@@ -336,6 +722,10 @@ namespace Candlelight
 				DisplaySceneGUIHandles();
 				Handles.color = oldColor;
 				Handles.matrix = oldMatrix;
+			}
+			if (this.ImplementsSceneGUIOverlay)
+			{
+				SceneGUI.Display(this);
 			}
 		}
 
@@ -403,6 +793,7 @@ namespace Candlelight
 		{
 			base.OnEnable();
 			m_IsComponentType = typeof(Component).IsAssignableFrom(typeof(T));
+			AssignDecoratedFields(typeof(T));
 		}
 	}
 }

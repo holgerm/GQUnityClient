@@ -1,7 +1,7 @@
 // 
 // ColorHSV.cs
 // 
-// Copyright (c) 2011-2015, Candlelight Interactive, LLC
+// Copyright (c) 2011-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -167,7 +167,7 @@ namespace Candlelight
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			return ObjectX.Equals(ref this, obj);
+			return (obj == null || !(obj is ColorHSV)) ? false : Equals((ColorHSV)obj);
 		}
 
 		/// <summary>
@@ -180,7 +180,10 @@ namespace Candlelight
 		/// </returns>
 		public bool Equals(ColorHSV other)
 		{
-			return GetHashCode() == other.GetHashCode();
+			return m_Alpha == other.m_Alpha &&
+				m_Hue == other.m_Hue &&
+				m_Saturation == other.m_Saturation &&
+				m_Value == other.Value;
 		}
 
 		/// <summary>

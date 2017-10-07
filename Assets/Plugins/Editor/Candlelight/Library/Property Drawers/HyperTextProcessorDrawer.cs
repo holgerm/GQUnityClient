@@ -1,7 +1,7 @@
 ﻿// 
 // HyperTextProcessorDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -18,7 +18,51 @@ using System.Linq;
 namespace Candlelight.UI
 {
 	/// <summary>
-	/// A custom property drawer for <see cref="Candlelight.UI.HyperTextProcessor"/> objects.
+	/// A custom property drawer for marked <see cref="HyperTextProcessor.KeywordCollectionClass"/> fields.
+	/// </summary>
+	[CustomPropertyDrawer(typeof(HyperTextProcessor.KeywordCollectionClassAttribute))]
+	public class KeywordCollectionClassDrawer : PropertyDrawer
+	{
+		#region Labels
+		private static readonly GUIContent s_CollectionLabel = new GUIContent(
+			"Collection", "Specifies the collection of keywords that should have the specified style applied."
+		);
+		#endregion
+
+		/// <summary>
+		/// Gets the <see cref="HyperTextProcessor.KeywordCollectionClassAttribute"/>.
+		/// </summary>
+		/// <value>The <see cref="HyperTextProcessor.KeywordCollectionClassAttribute"/>.</value>
+		private HyperTextProcessor.KeywordCollectionClassAttribute Attribute
+		{
+			get { return this.attribute as HyperTextProcessor.KeywordCollectionClassAttribute; }
+		}
+
+		/// <summary>
+		/// Raises the GUI event.
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <param name="property">Property.</param>
+		/// <param name="label">Label.</param>
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+		{
+			position.height = EditorGUIUtility.singleLineHeight;
+			float collectionWidth = position.width * 0.6f - EditorGUIX.StandardHorizontalSpacing * 0.5f;
+			float classWidth = position.width - collectionWidth - EditorGUIX.StandardHorizontalSpacing;
+			position.width = collectionWidth;
+			float oldLabelWidth = EditorGUIUtility.labelWidth;
+			EditorGUIUtility.labelWidth = 60f;
+			EditorGUI.PropertyField(position, property.FindPropertyRelative("m_Collection"), s_CollectionLabel);
+			position.x += position.width + EditorGUIX.StandardHorizontalSpacing;
+			position.width = classWidth;
+			EditorGUIUtility.labelWidth = 40f;
+			EditorGUI.PropertyField(position, property.FindPropertyRelative("m_ClassName"), this.Attribute.Label);
+			EditorGUIUtility.labelWidth = oldLabelWidth;
+		}
+	}
+
+	/// <summary>
+	/// A custom property drawer for <see cref="HyperTextProcessor"/> objects.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(HyperTextProcessor))]
 	public class HyperTextProcessorDrawer : PropertyDrawer
@@ -30,10 +74,17 @@ namespace Candlelight.UI
 		private static List<HyperTextStyles.Text> s_CascadedTextStyles = new List<HyperTextStyles.Text>(64);
 		#endregion
 		#region Labels
+		private static readonly GUIContent s_DynamicFontLabel = new GUIContent(
+			"Dynamic Font",
+			"Specifies whether <size> tags should be generated for styles. " +
+			"Disable if the destination uses a non-dynamic font"
+		);
 		private static readonly GUIContent s_LinkKeywordIdentifierGUIContent =
 			new GUIContent("Class", "Optional class name for custom <a> style with which collection is associated.");
 		private static readonly GUIContent s_QuadKeywordIdentifierGUIContent =
 			new GUIContent("Class", "Class name for the <quad> style with which this collection is associated.");
+		private static readonly GUIContent s_RichTextLabel =
+			new GUIContent("Output Rich Text", "Disable if the destination does not support rendering rich text.");
 		private static readonly GUIContent s_TagKeywordIdentifierGUIContent =
 			new GUIContent("Tag", "Tag name for the custom text style with which this collection is associated.");
 		#endregion
@@ -75,7 +126,6 @@ namespace Candlelight.UI
 		/// <param name="identifierGUIContent">Identifier GUI content.</param>
 		/// <param name="existingIdentifierNames">Existing identifier names.</param>
 		/// <param name="defaultStatus">Default status.</param>
-		/// <param name="infoTooltip">Info tooltip.</param>
 		/// <param name="missingStyleDescriptor">Missing style descriptor.</param>
 		/// <param name="styles">Styles assigned to the <see cref="Candlelight.UI.HyperTextProcessor"/>.</param>
 		/// <param name="assignedCollections">
@@ -88,16 +138,11 @@ namespace Candlelight.UI
 			GUIContent identifierGUIContent,
 			IEnumerable<string> existingIdentifierNames,
 			ValidationStatus defaultStatus,
-			string infoTooltip,
 			string missingStyleDescriptor,
 			HyperTextStyles styles,
 			IEnumerable<KeywordCollection> assignedCollections
 		)
 		{
-			position.height = EditorGUIUtility.singleLineHeight;
-			float oldLabelWidth = EditorGUIUtility.labelWidth;
-			EditorGUIUtility.labelWidth = 60f;
-			position.width = (position.width - EditorGUIX.StandardHorizontalSpacing) * 0.6f;
 			SerializedProperty collectionProperty = element.FindPropertyRelative("m_Collection");
 			ValidationStatus collectionStatus = ValidationStatus.Warning;
 			if (collectionProperty.objectReferenceValue != null)
@@ -106,60 +151,55 @@ namespace Candlelight.UI
 					assignedCollections.Count(item => item == collectionProperty.objectReferenceValue) > 1 ?
 						ValidationStatus.Error : ValidationStatus.Okay;
 			}
-			EditorGUIX.DisplayPropertyFieldWithStatus(
-				position,
-				collectionProperty,
-				collectionStatus,
-				null,
-				true,
-				collectionStatus == ValidationStatus.Okay ?
-					"" : collectionStatus == ValidationStatus.Error ?
-						string.Format(
-							"Keyword collection {0} used for multiple different styles on this object.",
-							collectionProperty.objectReferenceValue.name
-						) :
-					"Assign a keyword collection to automatically apply this style to keywords."
-			);
-			EditorGUIUtility.labelWidth = 40f;
-			position.x += position.width;
-			position.width *= 0.6666666667f;
+			string collectionTooltip;
+			switch (collectionStatus)
+			{
+			case ValidationStatus.Error:
+				collectionTooltip = "Specified keyword collection used for multiple different styles on this object.";
+				break;
+			case ValidationStatus.Warning:
+				collectionTooltip = "Assign a keyword collection to automatically apply this style to keywords.";
+				break;
+			default:
+				collectionTooltip = string.Empty;
+				break;
+			}
 			string identifierName = element.FindPropertyRelative("m_ClassName").stringValue;
-			ValidationStatus status = defaultStatus;
+			ValidationStatus identifierStatus = defaultStatus;
+			string identifierTooltip = string.Empty;
 			if (!string.IsNullOrEmpty(identifierName))
 			{
 				if (styles == null)
 				{
-					infoTooltip =
+					identifierTooltip =
 						"No styles assigned to this object. Keywords from this collection will use default style";
-					status = ValidationStatus.Warning;
+					identifierStatus = ValidationStatus.Warning;
 				}
 				else
 				{
 					int matches = existingIdentifierNames.Count(existingId => existingId == identifierName);
 					if (matches == 1)
 					{
-						status = ValidationStatus.Okay;
-						infoTooltip = string.Empty;
+						identifierStatus = ValidationStatus.Okay;
 					}
 					else
 					{
-						status = ValidationStatus.Error;
-						infoTooltip = string.Format(
-							"No custom {0} {1} found in {2}.",
-							missingStyleDescriptor, identifierName, styles.name
+						identifierStatus = ValidationStatus.Error;
+						identifierTooltip = string.Format(
+							"No custom {0} {1} found in {2}.", missingStyleDescriptor, identifierName, styles.name
 						);
 					}
 				}
 			}
+			bool useCollectionStatus = collectionStatus >= identifierStatus;
 			EditorGUIX.DisplayPropertyFieldWithStatus(
 				position,
-				element.FindPropertyRelative("m_ClassName"),
-				status,
-				identifierGUIContent,
+				element,
+				useCollectionStatus ? collectionStatus : identifierStatus,
+				null,
 				true,
-				infoTooltip
+				useCollectionStatus ? collectionTooltip : identifierTooltip
 			);
-			EditorGUIUtility.labelWidth = oldLabelWidth;
 		}
 
 		/// <summary>
@@ -185,16 +225,15 @@ namespace Candlelight.UI
 				hyperTextProcessor.FindPropertyRelative("m_Styles").objectReferenceValue as HyperTextStyles;
 			if (styles != null)
 			{
-				styles.GetCascadedLinkStyles(ref s_CascadedLinkStyles);
+				styles.GetCascadedLinkStyles(s_CascadedLinkStyles);
 			}
 			OnDrawKeywordCollectionClassEntry(
 				position,
 				hyperTextProcessor.FindPropertyRelative("m_LinkKeywordCollections").GetArrayElementAtIndex(index),
 				s_LinkKeywordIdentifierGUIContent,
 				styles == null ?
-				s_EmptyIdentifierCollection : from style in s_CascadedLinkStyles select style.ClassName,
+					s_EmptyIdentifierCollection : from style in s_CascadedLinkStyles select style.ClassName,
 				ValidationStatus.Info,
-				"Optionally specify a class name for the custom <a> style with which this collection is associated.",
 				"link style with class name",
 				styles,
 				getAllAssignedCollections()
@@ -224,7 +263,7 @@ namespace Candlelight.UI
 				hyperTextProcessor.FindPropertyRelative("m_Styles").objectReferenceValue as HyperTextStyles;
 			if (styles != null)
 			{
-				styles.GetCascadedQuadStyles(ref s_CascadedQuadStyles);
+				styles.GetCascadedQuadStyles(s_CascadedQuadStyles);
 			}
 			OnDrawKeywordCollectionClassEntry(
 				position,
@@ -233,7 +272,6 @@ namespace Candlelight.UI
 				styles == null ?
 					s_EmptyIdentifierCollection : from style in s_CascadedQuadStyles select style.ClassName,
 				ValidationStatus.Error,
-				"Specify a class name for the custom <quad> style with which this collection is associated.",
 				"quad style with class name",
 				styles,
 				getAllAssignedCollections()
@@ -263,7 +301,7 @@ namespace Candlelight.UI
 				hyperTextProcessor.FindPropertyRelative("m_Styles").objectReferenceValue as HyperTextStyles;
 			if (styles != null)
 			{
-				styles.GetCascadedCustomTextStyles(ref s_CascadedTextStyles);
+				styles.GetCascadedCustomTextStyles(s_CascadedTextStyles);
 			}
 			OnDrawKeywordCollectionClassEntry(
 				position,
@@ -271,7 +309,6 @@ namespace Candlelight.UI
 				s_TagKeywordIdentifierGUIContent,
 				styles == null ? s_EmptyIdentifierCollection : from style in s_CascadedTextStyles select style.Tag,
 				ValidationStatus.Error,
-				"Specify a tag name for the custom text style with which this collection is associated.",
 				"text style with tag name",
 				styles,
 				getAllAssignedCollections()
@@ -393,27 +430,16 @@ namespace Candlelight.UI
 			position.x = entirePosition.x;
 			position.width = entirePosition.width;
 			position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
-			EditorGUIX.DisplayPropertyFieldWithStatus(
-				position,
-				supportRichText,
-				ValidationStatus.Info,
-				new GUIContent("Output Rich Text"),
-				true,
-				"Disable if the destination does not support rendering rich text."
-			);
+			EditorGUI.PropertyField(position, supportRichText, s_RichTextLabel);
 			position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
 			++EditorGUI.indentLevel;
-			EditorGUIX.DisplayPropertyFieldWithStatus(
-				position,
-				property.FindPropertyRelative("m_IsDynamicFontDesired"),
-				supportRichText.boolValue ? ValidationStatus.Info : ValidationStatus.Warning,
-				new GUIContent("<size> Tags"),
-				true,
-				string.Format(
-					"Disable if the destination uses a non-dynamic font.{0}",
-					supportRichText.boolValue ? "" : "\n\nYou must enable rich text to output <size> tags."
-				)
-			);
+			EditorGUI.BeginDisabledGroup(!supportRichText.boolValue);
+			{
+				EditorGUI.PropertyField(
+					position, property.FindPropertyRelative("m_IsDynamicFontDesired"), s_DynamicFontLabel
+				);
+			}
+			EditorGUI.EndDisabledGroup();
 			--EditorGUI.indentLevel;
 			position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
 			position.height = m_LinkCollections[property.propertyPath].GetHeight();

@@ -1,7 +1,7 @@
 // 
 // HyperTextEditor.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -13,59 +13,224 @@
 #define IS_VBO_UI_VERTEX
 #endif
 
+#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
+#define NO_ALIGN_BY_GEOMETRY
+#endif
+
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 using System.Collections.Generic;
-#if IS_VBO_UI_VERTEX
 using System.Linq;
-#endif
 
 namespace Candlelight.UI
 {
 	/// <summary>
+	/// An editor utility class for <see cref="HyperText"/> objects.
+	/// </summary>
+	public static class HyperTextUtility
+	{
+		#region Shared Allocations
+		private static readonly List<UnityEngine.EventSystems.IPointerClickHandler> s_ClickHandlers =
+			new List<UnityEngine.EventSystems.IPointerClickHandler>();
+		private static readonly List<UnityEngine.EventSystems.IPointerDownHandler> s_DownHandlers =
+			new List<UnityEngine.EventSystems.IPointerDownHandler>();
+		#endregion
+
+		/// <summary>
+		/// Clean up obsolete <see cref="HyperTextQuad"/> components in the project.
+		/// </summary>
+		[MenuItem("Assets/Candlelight/HyperText/Clean Up HyperText Quads")]
+		private static void CleanUpQuads()
+		{
+#pragma warning disable 612
+			AssetDatabaseX.ModifyAllComponentsInProject<HyperTextQuad>(
+				(quad, assetPath) => Undo.DestroyObjectImmediate(quad), "Clean Up HyperText Quads in Prefabs"
+			);
+#pragma warning restore 612
+		}
+
+		/// <summary>
+		/// Upgrades all <see cref="UnityEngine.UI"/> objects in the project to <see cref="HyperText"/>.
+		/// </summary>
+		[MenuItem("Assets/Candlelight/HyperText/Upgrade All UI Text")]
+		private static void UpgradeAllTextObjects()
+		{
+			if (
+				!EditorUtility.DisplayDialog(
+					"Upgrade All UI Text?",
+					string.Format(
+						"This option will scan your project for all {0} instances and replace them with {1} objects. " +
+						"All references to objects and serialized values will remain intact.",
+						typeof(UnityEngine.UI.Text).FullName, typeof(HyperText).FullName
+					), "Yes", "No"
+				)
+			)
+			{
+				return;
+			}
+			HyperText ht = new GameObject("DELETE THIS", typeof(HyperText)).GetComponent<HyperText>();
+			MonoScript script = MonoScript.FromMonoBehaviour(ht);
+			AssetDatabaseX.ModifyAllComponentsInProject<UnityEngine.UI.Text>(
+				delegate(UnityEngine.UI.Text text, string assetPath)
+				{
+					if (text is HyperText)
+					{
+						return;
+					}
+					SerializedObject so = new SerializedObject(text);
+					so.FindProperty("m_Script").objectReferenceValue = script;
+					so.ApplyModifiedProperties();
+				}
+			);
+			if (ht != null)
+			{
+				Object.DestroyImmediate(ht.gameObject);
+			}
+		}
+
+		/// <summary>
+		/// Disable the raycastTarget property for <see cref="HyperText"/> instances that might interfere with parent
+		/// objects.
+		/// </summary>
+		[MenuItem("Assets/Candlelight/HyperText/Validate Raycast Targets")]
+		private static void ValidateRaycastTargets()
+		{
+			if (
+				!EditorUtility.DisplayDialog(
+					"Validate HyperText Raycast Targets?",
+					string.Format(
+						"This option will scan your project for all {0} instances that are children of {1} or {2} " +
+						"objects (such as e.g., Buttons) but also have the raycastTarget property enabled and have " +
+						"links defined. Links on these instances will block input events. Results will be logged to " +
+						"the console.\n\nDo you wish to proceed?",
+						typeof(HyperText).Name,
+						typeof(UnityEngine.EventSystems.IPointerClickHandler).Name,
+						typeof(UnityEngine.EventSystems.IPointerDownHandler).Name
+
+					), "Yes", "No"
+				)
+			)
+			{
+				return;
+			}
+			System.Type logEntries =
+				ReflectionX.AllTypes.FirstOrDefault(t => t.FullName == "UnityEditorInternal.LogEntries");
+			if (logEntries != null)
+			{
+				System.Reflection.MethodInfo clear = logEntries.GetStaticMethod("Clear");
+				if (clear != null)
+				{
+					clear.Invoke(null, null);
+				}
+			}
+			bool isSilent = HyperText.IsSilent;
+			HyperText.IsSilent = true;
+			string undoName = "Validate HyperText Raycast Targets";
+			System.Reflection.MethodInfo getWarningMessage =
+				typeof(HyperText).GetInstanceMethod("GetInputBlockingWarningMessage");
+			AssetDatabaseX.ModifyAssetCallback<HyperText> validateRaycastTarget =
+				delegate (HyperText hyperText, string assetPath)
+			{
+				if (!hyperText.raycastTarget)
+				{
+					return;
+				}
+#if UNITY_4_6 || UNITY_4_7
+				s_ClickHandlers.Clear();
+				s_DownHandlers.Clear();
+				s_ClickHandlers.AddRange(
+					hyperText.GetComponentsInParent(
+						typeof(UnityEngine.EventSystems.IPointerClickHandler), true
+					).Cast<UnityEngine.EventSystems.IPointerClickHandler>()
+				);
+				s_DownHandlers.AddRange(
+					hyperText.GetComponentsInParent(
+						typeof(UnityEngine.EventSystems.IPointerDownHandler), true
+					).Cast<UnityEngine.EventSystems.IPointerDownHandler>()
+				);
+#else
+				hyperText.GetComponentsInParent(true, s_ClickHandlers);
+				hyperText.GetComponentsInParent(true, s_DownHandlers);
+#endif
+				s_ClickHandlers.Remove(hyperText);
+				s_DownHandlers.Remove(hyperText);
+				if (s_ClickHandlers.Count > 0 || s_DownHandlers.Count > 0)
+				{
+					using (var links = new ListPool<HyperText.LinkInfo>.Scope())
+					{
+						if (hyperText.GetLinks(links.List) > 0)
+						{
+							string warningMessage = getWarningMessage.Invoke(hyperText, null) as string;
+							if (!string.IsNullOrEmpty(warningMessage))
+							{
+								Debug.LogWarning(
+									string.Format(
+										"{0}\n<b>{1}</b> at {2}\n", warningMessage, hyperText.name, assetPath
+									), hyperText
+								);
+							}
+						}
+					}
+				}
+			};
+			AssetDatabaseX.ModifyAllComponentsInProject(validateRaycastTarget, undoName);
+			HyperText.IsSilent = isSilent;
+		}
+	}
+
+	/// <summary>
 	/// A custom editor for <see cref="HyperText"/> objects.
 	/// </summary>
-	[CanEditMultipleObjects, CustomEditor(typeof(HyperText)), InitializeOnLoad]
-	public class HyperTextEditor : UnityEditor.UI.TextEditor
+	[CanEditMultipleObjects, CustomEditor(typeof(HyperText), true), InitializeOnLoad]
+	public class HyperTextEditor : BaseEditor<HyperText>
 	{
 		/// <summary>
 		/// An enum with different debug display modes
 		/// </summary>
 		public enum DebugSceneMode { None, VertexIndices }
 
-		/// <summary>
-		/// Initializes the <see cref="Candlelight.UI.HyperTextEditor"/> class.
-		/// </summary>
-		static HyperTextEditor()
-		{
-			EditorPreferenceMenu.AddPreferenceMenuItem(AssetStoreProduct.HyperText, OnPreferenceMenuGUI);
-		}
-
 		#region Labels
+		private static readonly GUIContent s_FixRaycastTargetLabel = new GUIContent(
+			"Disable Raycast Target", "Prevent this object from blocking input to buttons or similar controls."
+		);
 		private static readonly GUIContent s_InputTextSourceLabel =
 			new GUIContent("Override Text Source", "Assigning a text input source overrides the text on this object.");
+		private static readonly GUIContent s_OpenURLPatternsLabel = new GUIContent(
+			"Open URL Patterns",
+			"Enable this property to automatically open links in the browser if their name attribute specifies an " +
+			"http or https url."
+		);
 		private static readonly GUIContent s_MaterialLabel = new GUIContent("Material");
 		#endregion
-		#region Shared Allocations
-		private static List<Vector3> s_DebugSceneModeVertices = new List<Vector3>(4096);
-		private static readonly GUIContent s_ReusableLabel = new GUIContent();
-		#endregion
-		/// <summary>
-		/// The hitbox color preference.
-		/// </summary>
-		private static readonly EditorPreference<Color, HyperTextEditor> s_HitboxColorPreference =
-			new EditorPreference<Color, HyperTextEditor>("hitboxesColor", Color.magenta);
-		/// <summary>
-		/// The hitbox toggle preference.
-		/// </summary>
-		private static readonly EditorPreference<bool, HyperTextEditor> s_HitboxTogglePreference =
-			EditorPreference<bool, HyperTextEditor>.ForToggle("hitboxes", true);
-		/// <summary>
-		/// The debug mode preference
-		/// </summary>
+		#region Preferences
 		private static readonly EditorPreference<DebugSceneMode, HyperTextEditor> s_DebugSceneModePreference =
 			new EditorPreference<DebugSceneMode, HyperTextEditor>("debugSceneMode", DebugSceneMode.None);
+		private static readonly EditorPreference<Color, HyperTextEditor> s_HitboxColorPreference =
+			new EditorPreference<Color, HyperTextEditor>("hitboxesColor", Color.magenta);
+		private static readonly EditorPreference<bool, HyperTextEditor> s_HitboxTogglePreference =
+			EditorPreference<bool, HyperTextEditor>.ForToggle("hitboxes", true);
+		#endregion
+		#region Shared Allocations
+		private static readonly List<UnityEngine.EventSystems.IPointerClickHandler> s_ClickHandlers =
+			new List<UnityEngine.EventSystems.IPointerClickHandler>();
+		private static readonly List<UnityEngine.EventSystems.IPointerDownHandler> s_DownHandlers =
+			new List<UnityEngine.EventSystems.IPointerDownHandler>();
+		private static List<Vector3> s_DebugSceneModeVertices = new List<Vector3>(4096);
+		private Vector3[] s_HitboxVertices = new Vector3[4];
+		private static readonly GUIContent s_ReusableLabel = new GUIContent();
+		#endregion
+
+		/// <summary>
+		/// For each index in a quad, the next index.
+		/// </summary>
+		private static readonly int[] s_QuadIndexWrap = new [] { 1, 2, 3, 0 };
+
+		/// <summary>
+		/// Gets the product category.
+		/// </summary>
+		/// <value>The product category.</value>
+		new public static AssetStoreProduct ProductCategory { get { return AssetStoreProduct.HyperText; } }
 
 		/// <summary>
 		/// Creates a new HyperText in the scene.
@@ -87,7 +252,7 @@ namespace Candlelight.UI
 			GameObject parent = menuCommand.context as GameObject;
 			if (parent != null && parent.GetComponentInParent<Canvas>() != null)
 			{
-#if !UNITY_4_6
+#if !UNITY_4_6 && !UNITY_4_7
 				hyperText.gameObject.name =
 					GameObjectUtility.GetUniqueNameForSibling(parent.transform, hyperText.gameObject.name);
 #endif
@@ -157,6 +322,26 @@ namespace Candlelight.UI
 					position, fontProperty, status, s_ReusableLabel, false, s_ReusableLabel.tooltip
 				);
 				break;
+			}
+		}
+
+		/// <summary>
+		/// Displays the handle preferences. They will be displayed in the preference menu and the top of the inspector.
+		/// </summary>
+		new protected static void DisplayHandlePreferences()
+		{
+			EditorGUIX.DisplayHandlePropertyEditor<HyperTextEditor>(
+				"Hitboxes", s_HitboxTogglePreference, s_HitboxColorPreference
+			);
+			EditorGUI.BeginChangeCheck();
+			{
+				s_DebugSceneModePreference.CurrentValue = (DebugSceneMode)EditorGUILayout.EnumPopup(
+					"Debug Scene Mode", s_DebugSceneModePreference.CurrentValue
+				);
+			}
+			if (EditorGUI.EndChangeCheck())
+			{
+				SceneView.RepaintAll();
 			}
 		}
 
@@ -254,61 +439,52 @@ namespace Candlelight.UI
 			}
 		}
 
-		/// <summary>
-		/// Raises the preference menu GUI event.
-		/// </summary>
-		private static void OnPreferenceMenuGUI()
-		{
-			EditorGUIX.DisplayHandlePropertyEditor<HyperTextEditor>(
-				"Hitboxes", s_HitboxTogglePreference, s_HitboxColorPreference
-			);
-			EditorGUI.BeginChangeCheck();
-			{
-				s_DebugSceneModePreference.CurrentValue = (DebugSceneMode)EditorGUILayout.EnumPopup(
-					"Debug Scene Mode", s_DebugSceneModePreference.CurrentValue
-				);
-			}
-			if (EditorGUI.EndChangeCheck())
-			{
-				SceneView.RepaintAll();
-			}
-		}
-
 		#region Serialized Properties
-		private SerializedProperty m_AlignmentProperty;
-		private SerializedProperty m_BestFitProperty;
-		private SerializedProperty m_ColorProperty;
-		private SerializedProperty m_FontDataProperty;
-		private SerializedProperty m_FontProperty;
-		private SerializedProperty m_FontSizeProperty;
-		private SerializedProperty m_FontStyleProperty;
-		private SerializedProperty m_HorizontalOverflowProperty;
-		private SerializedProperty m_InputTextSourceProperty;
-		private SerializedProperty m_InteractableProperty;
-		private SerializedProperty m_LinkHitboxPaddingProperty;
-		private SerializedProperty m_LineSpacingProperty;
-		private ReorderableList m_LinkKeywordCollections = null;
-		private SerializedProperty m_MaterialProperty;
-		private SerializedProperty m_OnClickProperty;
-		private SerializedProperty m_OnEnterProperty;
-		private SerializedProperty m_OnExitProperty;
-		private SerializedProperty m_OnPressProperty;
-		private SerializedProperty m_OnReleaseProperty;
-		private SerializedProperty m_OverrideFontColorProperty;
-		private SerializedProperty m_OverrideFontStyleProperty;
-		private SerializedProperty m_OverrideFontSizeProperty;
-		private SerializedProperty m_OverrideLineSpacingProperty;
-		private SerializedProperty m_OverrideLinkHitboxProperty;
-		private ReorderableList m_QuadKeywordCollections = null;
-		private SerializedProperty m_QuadMaterialProperty;
-		private SerializedProperty m_RichTextProperty;
-		private SerializedProperty m_ScriptProperty;
-		private SerializedProperty m_StylesProperty;
-		private ReorderableList m_TagKeywordCollections = null;
-		private SerializedProperty m_TextProperty;
-		private SerializedProperty m_TextProcessorProperty;
-		private SerializedProperty m_VerticalOverflowProperty;
+#if !NO_ALIGN_BY_GEOMETRY
+		[RelativeProperty("m_FontData")]
+#endif
+		#pragma warning disable 649
+		private SerializedProperty m_AlignByGeometry;
+		#pragma warning restore 649
+		[RelativeProperty("m_FontData")] private SerializedProperty m_Alignment;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_BestFit;
+		[SerializedProperty] private SerializedProperty m_ClickedLink;
+		[SerializedProperty] private SerializedProperty m_Color;
+		[SerializedProperty] private SerializedProperty m_EnteredLink;
+		[SerializedProperty] private SerializedProperty m_ExitedLink;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_Font;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_FontSize;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_FontStyle;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_HorizontalOverflow;
+		[RelativeProperty("m_TextProcessor")] private SerializedProperty m_InputTextSourceObject;
+		[SerializedProperty] private SerializedProperty m_Interactable;
+		[SerializedProperty] private SerializedProperty m_LinkHitboxPadding;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_LineSpacing;
+		[RelativeProperty("m_TextProcessor")] private ReorderableList m_LinkKeywordCollections;
+		[SerializedProperty] private SerializedProperty m_Material;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_MaxSize;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_MinSize;
+		[SerializedProperty] private SerializedProperty m_OpenURLPatterns;
+		[SerializedProperty] private SerializedProperty m_PressedLink;
+		[RelativeProperty("m_TextProcessor")] private ReorderableList m_QuadKeywordCollections;
+		[SerializedProperty] private SerializedProperty m_QuadMaterial;
+		[SerializedProperty] private SerializedProperty m_RaycastTarget;
+		[SerializedProperty] private SerializedProperty m_ReleasedLink;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_RichText;
+		[SerializedProperty] private SerializedProperty m_Script;
+		[SerializedProperty] private SerializedProperty m_ShouldOverrideStylesFontColor;
+		[RelativeProperty("m_TextProcessor")] private SerializedProperty m_ShouldOverrideStylesFontSize;
+		[SerializedProperty] private SerializedProperty m_ShouldOverrideStylesFontStyle;
+		[SerializedProperty] private SerializedProperty m_ShouldOverrideStylesLineSpacing;
+		[SerializedProperty] private SerializedProperty m_ShouldOverrideStylesLinkHitboxPadding;
+		[RelativeProperty("m_TextProcessor")] private SerializedProperty m_Styles;
+		private List<SerializedProperty> m_SubclassProperties = new List<SerializedProperty>();
+		[RelativeProperty("m_TextProcessor")] private ReorderableList m_TagKeywordCollections;
+		[SerializedProperty] private SerializedProperty m_Text;
+		[SerializedProperty] private SerializedProperty m_TextProcessor;
+		[RelativeProperty("m_FontData")] private SerializedProperty m_VerticalOverflow;
 		#endregion
+
 		/// <summary>
 		/// All keyword collections assigned to this object in some list or other.
 		/// </summary>
@@ -322,18 +498,121 @@ namespace Candlelight.UI
 		/// </summary>
 		private Dictionary<HyperText.LinkInfo, List<Rect>> m_LinkHitboxes =
 			new Dictionary<HyperText.LinkInfo, List<Rect>>();
-		
 		/// <summary>
-		/// Displays the vertex indices in the scene.
+		/// The warning message for the raycastTarget property, if applicable.
 		/// </summary>
-		/// <param name="hyperText">Hyper text.</param>
-		private void DisplayVertexIndices(HyperText hyperText)
+		private string m_RaycastTargetWarningMessage = null;
+		/// <summary>
+		/// The warning icon to use for the raycastTarget property.
+		/// </summary>
+		private ValidationStatus m_RaycastTargetWarningStatus = ValidationStatus.None;
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="HyperTextEditor"/> implements scene GUI handles.
+		/// </summary>
+		/// <value><see langword="true"/> if implements scene GUI handles; otherwise, <see langword="false"/>.</value>
+		protected override bool ImplementsSceneGUIHandles { get { return true; } }
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="HyperTextEditor"/> implements scene GUI overlay.
+		/// </summary>
+		/// <value><see langword="true"/> if implements scene GUI overlay; otherwise, <see langword="false"/>.</value>
+		protected override bool ImplementsSceneGUIOverlay { get { return false; } }
+
+		/// <summary>
+		/// Displays the specified event property, respecting the current indent level.
+		/// </summary>
+		/// <param name="eventProperty">Event property.</param>
+		private void DisplayEventProperty(SerializedProperty eventProperty)
 		{
-			System.Collections.Generic.List<UIVertex> vertices =
-				hyperText.GetFieldValue<System.Collections.Generic.List<UIVertex>>("uiVertices");
-			for (int index = 0; index < vertices.Count; ++index)
+			// NOTE: for some reason, need to add 2 more pixels to get same height as when using GUILayout
+			Rect position =
+				EditorGUI.IndentedRect(GUILayoutUtility.GetRect(0f, EditorGUI.GetPropertyHeight(eventProperty) + 2f));
+			EditorGUI.PropertyField(position, eventProperty);
+		}
+
+		/// <summary>
+		/// Displays the scene GUI handles.
+		/// </summary>
+		protected override void DisplaySceneGUIHandles()
+		{
+			base.DisplaySceneGUIHandles();
+			if (s_HitboxTogglePreference.CurrentValue)
 			{
-				Handles.Label(vertices[index].position, index.ToString());
+				Color oldColor = Handles.color;
+				Handles.color = s_HitboxColorPreference.CurrentValue;
+				this.Target.GetLinkHitboxes(m_LinkHitboxes);
+				foreach (KeyValuePair<HyperText.LinkInfo, List<Rect>> linkHitboxes in m_LinkHitboxes)
+				{
+					Vector2 center = Vector2.zero;
+					foreach (Rect hitbox in linkHitboxes.Value)
+					{
+						s_HitboxVertices[0] = Vector3.right * hitbox.xMin + Vector3.up * hitbox.yMax;
+						s_HitboxVertices[1] = Vector3.right * hitbox.xMax + Vector3.up * hitbox.yMax;
+						s_HitboxVertices[2] = Vector3.right * hitbox.xMax + Vector3.up * hitbox.yMin;
+						s_HitboxVertices[3] = Vector3.right * hitbox.xMin + Vector3.up * hitbox.yMin;
+						// draw a box around each hitbox
+						for (int i = 0; i < s_HitboxVertices.Length; ++i)
+						{
+							Handles.DrawLine(s_HitboxVertices[i], s_HitboxVertices[s_QuadIndexWrap[i]]);
+						}
+						center += hitbox.center;
+					}
+					center /= linkHitboxes.Value.Count;
+					// indicate the name for each link
+					Handles.Label(
+						center,
+						string.Format(
+							"{0}{1}",
+							linkHitboxes.Key.Name,
+							string.IsNullOrEmpty(linkHitboxes.Key.ClassName) ?
+							"" : string.Format(" ({0})", linkHitboxes.Key.ClassName)
+						)
+					);
+				}
+				Handles.color = oldColor;
+			}
+			if (s_DebugSceneModePreference.CurrentValue == DebugSceneMode.VertexIndices)
+			{
+				int scrollAmt = 1;
+				m_CurrentlyHighlightedVertexIndex =
+					Mathf.Clamp(m_CurrentlyHighlightedVertexIndex, 0, s_DebugSceneModeVertices.Count);
+				s_DebugSceneModeVertices.Clear();
+#if IS_VBO_UI_VERTEX
+				s_DebugSceneModeVertices.AddRange(
+					from v in this.Target.GetFieldValue<List<UIVertex>>("m_UIVertices") select v.position
+				);
+#else
+				s_DebugSceneModeVertices.AddRange(this.Target.GetFieldValue<Mesh>("m_GlyphMesh").vertices);
+#endif
+				for (int i = 0; i < s_DebugSceneModeVertices.Count; ++i)
+				{
+					Handles.Label(s_DebugSceneModeVertices[i], i.ToString());
+					if (i == m_CurrentlyHighlightedVertexIndex)
+					{
+						HighlightIndex(s_DebugSceneModeVertices[i], i);
+					}
+				}
+				if (Event.current.isKey && Event.current.type == EventType.KeyDown)
+				{
+					switch (Event.current.keyCode)
+					{
+					case KeyCode.Comma:
+					case KeyCode.Less:
+						scrollAmt *= -1 * (Event.current.shift ? 12 : 1);
+						break;
+					case KeyCode.Period:
+					case KeyCode.Greater:
+						scrollAmt *= 1 * (Event.current.shift ? 12 : 1);
+						break;
+					default:
+						scrollAmt = 0;
+						break;
+					}
+					Event.current.Use();
+					m_CurrentlyHighlightedVertexIndex = ArrayX.ScrollArrayIndex(
+						m_CurrentlyHighlightedVertexIndex, s_DebugSceneModeVertices.Count, scrollAmt
+					);
+				}
 			}
 		}
 
@@ -364,68 +643,25 @@ namespace Candlelight.UI
 		/// <summary>
 		/// Raises the enable event.
 		/// </summary>
-		new private void OnEnable()
+		protected override void OnEnable()
 		{
 			base.OnEnable();
-			m_InteractableProperty = this.serializedObject.FindProperty("m_Interactable");
-			m_ColorProperty = this.serializedObject.FindProperty("m_Color");
-			m_FontDataProperty = this.serializedObject.FindProperty("m_FontData");
-			m_FontProperty = m_FontDataProperty.FindPropertyRelative("m_Font");
-			m_FontStyleProperty = m_FontDataProperty.FindPropertyRelative("m_FontStyle");
-			m_FontSizeProperty = m_FontDataProperty.FindPropertyRelative("m_FontSize");
-			m_LineSpacingProperty = m_FontDataProperty.FindPropertyRelative("m_LineSpacing");
-			m_RichTextProperty = m_FontDataProperty.FindPropertyRelative("m_RichText");
-			m_AlignmentProperty = m_FontDataProperty.FindPropertyRelative("m_Alignment");
-			m_HorizontalOverflowProperty = m_FontDataProperty.FindPropertyRelative("m_HorizontalOverflow");
-			m_VerticalOverflowProperty = m_FontDataProperty.FindPropertyRelative("m_VerticalOverflow");
-			m_BestFitProperty = m_FontDataProperty.FindPropertyRelative("m_BestFit");
-			m_LinkHitboxPaddingProperty = this.serializedObject.FindProperty("m_LinkHitboxPadding");
-			m_MaterialProperty = this.serializedObject.FindProperty("m_Material");
-			m_OnClickProperty = this.serializedObject.FindProperty("m_OnClick");
-			m_OnEnterProperty = this.serializedObject.FindProperty("m_OnEnter");
-			m_OnExitProperty = this.serializedObject.FindProperty("m_OnExit");
-			m_OnPressProperty = this.serializedObject.FindProperty("m_OnPress");
-			m_OnReleaseProperty = this.serializedObject.FindProperty("m_OnRelease");
-			m_OverrideFontColorProperty = this.serializedObject.FindProperty("m_ShouldOverrideStylesFontColor");
-			m_OverrideFontStyleProperty = this.serializedObject.FindProperty("m_ShouldOverrideStylesFontStyle");
-			m_OverrideFontSizeProperty =
-				this.serializedObject.FindProperty("m_TextProcessor.m_ShouldOverrideStylesFontSize");
-			m_OverrideLineSpacingProperty = this.serializedObject.FindProperty("m_ShouldOverrideStylesLineSpacing");
-			m_OverrideLinkHitboxProperty =
-				this.serializedObject.FindProperty("m_ShouldOverrideStylesLinkHitboxPadding");
-			m_QuadMaterialProperty = this.serializedObject.FindProperty("m_QuadMaterial");
-			m_ScriptProperty = this.serializedObject.FindProperty("m_Script");
-			m_StylesProperty = this.serializedObject.FindProperty("m_TextProcessor.m_Styles");
-			m_TextProperty = this.serializedObject.FindProperty("m_Text");
-			m_TextProcessorProperty = this.serializedObject.FindProperty("m_TextProcessor");
-			m_InputTextSourceProperty = this.serializedObject.FindProperty("m_TextProcessor.m_InputTextSourceObject");
-			m_LinkKeywordCollections = new ReorderableList(
-				this.serializedObject, this.serializedObject.FindProperty("m_TextProcessor.m_LinkKeywordCollections")
-			);
-			string displayName1 = m_LinkKeywordCollections.serializedProperty.displayName;
-			m_LinkKeywordCollections.drawHeaderCallback = (position) => EditorGUI.LabelField(position, displayName1);
 			m_LinkKeywordCollections.drawElementCallback = (position, index, isActive, isFocused) =>
 				HyperTextProcessorDrawer.OnDrawLinkKeywordCollectionsEntry(
-					position, index, m_TextProcessorProperty, () => m_AssignedCollections
+					position, index, m_TextProcessor, () => m_AssignedCollections
 				);
-			m_QuadKeywordCollections = new ReorderableList(
-				this.serializedObject, this.serializedObject.FindProperty("m_TextProcessor.m_QuadKeywordCollections")
-			);
-			string displayName2 = m_QuadKeywordCollections.serializedProperty.displayName;
-			m_QuadKeywordCollections.drawHeaderCallback = (position) => EditorGUI.LabelField(position, displayName2);
 			m_QuadKeywordCollections.drawElementCallback = (position, index, isActive, isFocused) =>
 				HyperTextProcessorDrawer.OnDrawQuadKeywordCollectionsEntry(
-					position, index, m_TextProcessorProperty, () => m_AssignedCollections
+					position, index, m_TextProcessor, () => m_AssignedCollections
 				);
-			m_TagKeywordCollections = new ReorderableList(
-				this.serializedObject, this.serializedObject.FindProperty("m_TextProcessor.m_TagKeywordCollections")
-			);
-			string displayName3 = m_TagKeywordCollections.serializedProperty.displayName;
-			m_TagKeywordCollections.drawHeaderCallback = (position) => EditorGUI.LabelField(position, displayName3);
 			m_TagKeywordCollections.drawElementCallback = (position, index, isActive, isFocused) =>
 				HyperTextProcessorDrawer.OnDrawTagKeywordCollectionsEntry(
-					position, index, m_TextProcessorProperty, () => m_AssignedCollections
+					position, index, m_TextProcessor, () => m_AssignedCollections
 				);
+			SerializedPropertyX.GetRemainingVisibleProperties<HyperText>(
+				this.serializedObject, m_SubclassProperties
+			);
+			UpdateGUIContents();
 		}
 
 		/// <summary>
@@ -434,56 +670,93 @@ namespace Candlelight.UI
 		public override void OnInspectorGUI()
 		{
 			this.serializedObject.Update();
-			m_AssignedCollections = HyperTextProcessorDrawer.GetAllCollections(m_TextProcessorProperty);
-			EditorGUILayout.PropertyField(m_ScriptProperty);
-			EditorGUILayout.PropertyField(m_InteractableProperty);
-			Rect position =
-				EditorGUILayout.GetControlRect(true, EditorGUI.GetPropertyHeight(m_LinkHitboxPaddingProperty));
-			DisplayOverridableProperty(
-				position, m_LinkHitboxPaddingProperty, m_OverrideLinkHitboxProperty, m_StylesProperty
-			);
-			bool hadStyles = m_StylesProperty.objectReferenceValue != null;
-			if (EditorGUIX.DisplayScriptableObjectPropertyFieldWithButton<HyperTextStyles>(m_StylesProperty))
+			m_AssignedCollections = HyperTextProcessorDrawer.GetAllCollections(m_TextProcessor);
+			EditorGUILayout.PropertyField(m_Script);
+			if (
+				m_RaycastTargetWarningStatus != ValidationStatus.None &&
+				DisplayErrorMessageWithFixButton(
+					m_RaycastTargetWarningMessage,
+					s_FixRaycastTargetLabel,
+					m_RaycastTargetWarningStatus == ValidationStatus.Warning ? MessageType.Warning : MessageType.Error
+				)
+			)
 			{
-				HyperTextStyles newStyles = m_StylesProperty.objectReferenceValue as HyperTextStyles;
+				m_RaycastTarget.boolValue = !m_RaycastTarget.boolValue;
+				this.serializedObject.ApplyModifiedProperties();
+			}
+			EditorGUILayout.PropertyField(m_Interactable);
+			++EditorGUI.indentLevel;
+			EditorGUI.BeginDisabledGroup(!m_Interactable.boolValue);
+			{
+				EditorGUILayout.PropertyField(m_OpenURLPatterns, s_OpenURLPatternsLabel);
+			}
+			EditorGUI.EndDisabledGroup();
+			--EditorGUI.indentLevel;
+			Rect position = EditorGUILayout.GetControlRect(true, EditorGUI.GetPropertyHeight(m_LinkHitboxPadding));
+			DisplayOverridableProperty(
+				position, m_LinkHitboxPadding, m_ShouldOverrideStylesLinkHitboxPadding, m_Styles
+			);
+			bool hadStyles = m_Styles.objectReferenceValue != null;
+			if (EditorGUIX.DisplayScriptableObjectPropertyFieldWithButton<HyperTextStyles>(m_Styles))
+			{
+				HyperTextStyles newStyles = m_Styles.objectReferenceValue as HyperTextStyles;
 				if (newStyles != null)
 				{
-					if (m_FontDataProperty.FindPropertyRelative("m_Font").objectReferenceValue != null)
+					if (m_Font.objectReferenceValue != null)
 					{
-						newStyles.Font = m_FontDataProperty.FindPropertyRelative("m_Font").objectReferenceValue as Font;
+						newStyles.Font = m_Font.objectReferenceValue as Font;
 					}
-					newStyles.DefaultFontStyle = (FontStyle)m_FontStyleProperty.enumValueIndex;
-					newStyles.DefaultTextColor = m_ColorProperty.colorValue;
-					newStyles.FontSize = m_FontSizeProperty.intValue;
+					newStyles.DefaultFontStyle = (FontStyle)m_FontStyle.enumValueIndex;
+					newStyles.DefaultTextColor = m_Color.colorValue;
+					newStyles.FontSize = m_FontSize.intValue;
 				}
 			}
 			if (
 				!hadStyles &&
-				m_StylesProperty.objectReferenceValue != null &&
-				(m_StylesProperty.objectReferenceValue as HyperTextStyles).CascadedFont != null
+				m_Styles.objectReferenceValue != null &&
+				(m_Styles.objectReferenceValue as HyperTextStyles).CascadedFont != null
 			)
 			{
-				m_FontDataProperty.FindPropertyRelative("m_Font").objectReferenceValue = null;
+				m_Font.objectReferenceValue = null;
 			}
 			// NOTE: LayoutList() doesn't use proper vertical spacing
-			Rect rect = EditorGUILayout.GetControlRect(false, m_LinkKeywordCollections.GetHeight());
+			++EditorGUI.indentLevel;
+			int indent = EditorGUI.indentLevel;
+			Rect rect =
+				EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, m_LinkKeywordCollections.GetHeight()));
+			EditorGUI.indentLevel = 0;
 			m_LinkKeywordCollections.DoList(rect);
-			rect = EditorGUILayout.GetControlRect(false, m_TagKeywordCollections.GetHeight());
+			EditorGUI.indentLevel = indent;
+			rect =
+				EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, m_TagKeywordCollections.GetHeight()));
+			EditorGUI.indentLevel = 0;
 			m_TagKeywordCollections.DoList(rect);
-			rect = EditorGUILayout.GetControlRect(false, m_QuadKeywordCollections.GetHeight());
+			EditorGUI.indentLevel = indent;
+			rect =
+				EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, m_QuadKeywordCollections.GetHeight()));
+			EditorGUI.indentLevel = 0;
 			m_QuadKeywordCollections.DoList(rect);
+			EditorGUI.indentLevel = indent;
+			--EditorGUI.indentLevel;
 			bool isTextInputSourceAssigned =
-				m_InputTextSourceProperty.objectReferenceValue != null ||
+				m_InputTextSourceObject.objectReferenceValue != null ||
 				(this.target as HyperText).InputTextSource != null;
 			EditorGUI.BeginDisabledGroup(isTextInputSourceAssigned);
 			{
-				EditorGUILayout.PropertyField(m_TextProperty);
+				EditorGUI.BeginChangeCheck();
+				{
+					EditorGUILayout.PropertyField(m_Text);
+				}
+				if (EditorGUI.EndChangeCheck())
+				{
+					ApplyModificationsAndUpdateGUIContents();
+				}
 			}
 			EditorGUI.EndDisabledGroup();
 			if (isTextInputSourceAssigned)
 			{
 				EditorGUIX.DisplayPropertyFieldWithStatus(
-					m_InputTextSourceProperty,
+					m_InputTextSourceObject,
 					ValidationStatus.Warning,
 					s_InputTextSourceLabel,
 					false,
@@ -492,143 +765,138 @@ namespace Candlelight.UI
 			}
 			else
 			{
-				EditorGUILayout.PropertyField(m_InputTextSourceProperty, s_InputTextSourceLabel);
+				EditorGUILayout.PropertyField(m_InputTextSourceObject, s_InputTextSourceLabel);
 			}
 			EditorGUILayout.LabelField("Character", EditorStyles.boldLabel);
 			++EditorGUI.indentLevel;
 			position = EditorGUILayout.GetControlRect();
-			DisplayFontProperty(position, m_FontProperty, m_StylesProperty.objectReferenceValue as HyperTextStyles);
+			DisplayFontProperty(position, m_Font, m_Styles.objectReferenceValue as HyperTextStyles);
 			position = EditorGUILayout.GetControlRect();
-			DisplayOverridableProperty(position, m_FontStyleProperty, m_OverrideFontStyleProperty, m_StylesProperty);
+			DisplayOverridableProperty(position, m_FontStyle, m_ShouldOverrideStylesFontStyle, m_Styles);
 			position = EditorGUILayout.GetControlRect();
-			DisplayOverridableProperty(position, m_FontSizeProperty, m_OverrideFontSizeProperty, m_StylesProperty);
+			DisplayOverridableProperty(position, m_FontSize, m_ShouldOverrideStylesFontSize, m_Styles);
 			position = EditorGUILayout.GetControlRect();
 			DisplayOverridableProperty(
-				position, m_LineSpacingProperty, m_OverrideLineSpacingProperty, m_StylesProperty
+				position, m_LineSpacing, m_ShouldOverrideStylesLineSpacing, m_Styles
 			);
-			EditorGUILayout.PropertyField(m_RichTextProperty);
+			EditorGUILayout.PropertyField(m_RichText);
 			--EditorGUI.indentLevel;
 			EditorGUILayout.LabelField("Paragraph", EditorStyles.boldLabel);
 			++EditorGUI.indentLevel;
-			EditorGUILayout.PropertyField(m_AlignmentProperty);
-			EditorGUILayout.PropertyField(m_HorizontalOverflowProperty);
-			EditorGUILayout.PropertyField(m_VerticalOverflowProperty);
-			EditorGUILayout.PropertyField(m_BestFitProperty);
+			EditorGUILayout.PropertyField(m_Alignment);
+			if (m_AlignByGeometry != null)
+			{
+				EditorGUILayout.PropertyField(m_AlignByGeometry);
+			}
+			EditorGUILayout.PropertyField(m_HorizontalOverflow);
+			EditorGUILayout.PropertyField(m_VerticalOverflow);
+			EditorGUILayout.PropertyField(m_BestFit);
+			if (m_BestFit.boolValue)
+			{
+				++EditorGUI.indentLevel;
+				EditorGUILayout.PropertyField(m_MinSize);
+				EditorGUILayout.PropertyField(m_MaxSize);
+				--EditorGUI.indentLevel;
+			}
 			--EditorGUI.indentLevel;
 			position = EditorGUILayout.GetControlRect();
-			DisplayOverridableProperty(position, m_ColorProperty, m_OverrideFontColorProperty, m_StylesProperty);
-			EditorGUILayout.PropertyField(m_MaterialProperty, s_MaterialLabel);
-			EditorGUILayout.PropertyField(m_QuadMaterialProperty);
+			DisplayOverridableProperty(position, m_Color, m_ShouldOverrideStylesFontColor, m_Styles);
+			EditorGUILayout.PropertyField(m_Material, s_MaterialLabel);
+			EditorGUILayout.PropertyField(m_QuadMaterial);
+			EditorGUI.BeginChangeCheck();
+			{
+				EditorGUILayout.PropertyField(m_RaycastTarget);
+				if (!string.IsNullOrEmpty(m_RaycastTargetWarningMessage))
+				{
+					position = GUILayoutUtility.GetLastRect();
+					position.x += position.width - EditorGUIUtility.singleLineHeight;
+					position.width = EditorGUIUtility.singleLineHeight;
+					EditorGUIX.DisplayValidationStatusIcon(
+						position, m_RaycastTargetWarningStatus, m_RaycastTargetWarningMessage
+					);
+				}
+			}
+			if (EditorGUI.EndChangeCheck())
+			{
+				ApplyModificationsAndUpdateGUIContents();
+			}
+			if (m_SubclassProperties.Count > 0)
+			{
+				EditorGUILayout.LabelField("Other Properties", EditorStyles.boldLabel);
+				++EditorGUI.indentLevel;
+				for (int i = 0; i < m_SubclassProperties.Count; ++i)
+				{
+					EditorGUILayout.PropertyField(m_SubclassProperties[i]);
+				}
+				--EditorGUI.indentLevel;
+			}
 			EditorGUILayout.LabelField("Events", EditorStyles.boldLabel);
-			EditorGUILayout.PropertyField(m_OnClickProperty);
-			EditorGUILayout.PropertyField(m_OnEnterProperty);
-			EditorGUILayout.PropertyField(m_OnExitProperty);
-			EditorGUILayout.PropertyField(m_OnPressProperty);
-			EditorGUILayout.PropertyField(m_OnReleaseProperty);
+			++EditorGUI.indentLevel;
+			DisplayEventProperty(m_ClickedLink);
+			DisplayEventProperty(m_EnteredLink);
+			DisplayEventProperty(m_ExitedLink);
+			DisplayEventProperty(m_PressedLink);
+			DisplayEventProperty(m_ReleasedLink);
+			--EditorGUI.indentLevel;
 			this.serializedObject.ApplyModifiedProperties();
 		}
 
 		/// <summary>
-		/// Raises the scene GUI event.
+		/// Updates any necessary GUI contents when something has changed.
 		/// </summary>
-		void OnSceneGUI()
+		protected override void UpdateGUIContents()
 		{
-			if (!s_HitboxTogglePreference.CurrentValue)
+			base.UpdateGUIContents();
+			m_RaycastTargetWarningMessage = null;
+			m_RaycastTargetWarningStatus = ValidationStatus.None;
+			if (m_RaycastTarget.boolValue || m_RaycastTarget.hasMultipleDifferentValues)
 			{
-				return;
-			}
-			Matrix4x4 oldMatrix = Handles.matrix;
-			Color oldColor = Handles.color;
-			Handles.color = s_HitboxColorPreference.CurrentValue;
-			int[] wrap = new int[] { 1, 2, 3, 0 };
-			HyperText hyperText;
-			foreach (GameObject go in Selection.gameObjects)
-			{
-				hyperText = go.GetComponent<HyperText>();
-				if (hyperText == null)
+				foreach (HyperText hyperText in this.targets)
 				{
-					continue;
-				}
-				Handles.matrix = hyperText.transform.localToWorldMatrix;
-				hyperText.GetLinkHitboxes(ref m_LinkHitboxes);
-				foreach (KeyValuePair<HyperText.LinkInfo, List<Rect>> linkHitboxes in m_LinkHitboxes)
-				{
-					Vector2 center = Vector2.zero;
-					foreach (Rect hitbox in linkHitboxes.Value)
+					if (hyperText == null)
 					{
-						Vector3[] vertices = new Vector3[]
-						{
-							Vector3.right * hitbox.xMin + Vector3.up * hitbox.yMax,
-							Vector3.right * hitbox.xMax + Vector3.up * hitbox.yMax,
-							Vector3.right * hitbox.xMax + Vector3.up * hitbox.yMin,
-							Vector3.right * hitbox.xMin + Vector3.up * hitbox.yMin,
-						};
-						// draw a box around each hitbox
-						for (int i = 0; i < vertices.Length; ++i)
-						{
-							Handles.DrawLine(vertices[i], vertices[wrap[i]]);
-						}
-						center += hitbox.center;
+						continue;
 					}
-					center /= linkHitboxes.Value.Count;
-					// indicate the name for each link
-					Handles.Label(
-						center,
-						string.Format(
-							"{0}{1}",
-							linkHitboxes.Key.Name,
-							string.IsNullOrEmpty(linkHitboxes.Key.ClassName) ?
-								"" : string.Format(" ({0})", linkHitboxes.Key.ClassName)
-						)
+					using (var links = new ListPool<HyperText.LinkInfo>.Scope())
+					{
+						if (hyperText.GetLinks(links.List) == 0)
+						{
+							continue;
+						}
+					}
+#if UNITY_4_6 || UNITY_4_7
+					s_ClickHandlers.Clear();
+					s_DownHandlers.Clear();
+					s_ClickHandlers.AddRange(
+						hyperText.GetComponentsInParent(
+							typeof(UnityEngine.EventSystems.IPointerClickHandler), true
+						).Cast<UnityEngine.EventSystems.IPointerClickHandler>()
 					);
-				}
-				int scrollAmt = 0;
-				m_CurrentlyHighlightedVertexIndex =
-					Mathf.Clamp(m_CurrentlyHighlightedVertexIndex, 0, s_DebugSceneModeVertices.Count);
-				if (s_DebugSceneModePreference.CurrentValue == DebugSceneMode.VertexIndices)
-				{
-					scrollAmt = 1;
-					s_DebugSceneModeVertices.Clear();
-#if IS_VBO_UI_VERTEX
-					s_DebugSceneModeVertices.AddRange(
-						from v in hyperText.GetFieldValue<List<UIVertex>>("m_UIVertices") select v.position
+					s_DownHandlers.AddRange(
+						hyperText.GetComponentsInParent(
+							typeof(UnityEngine.EventSystems.IPointerDownHandler), true
+						).Cast<UnityEngine.EventSystems.IPointerDownHandler>()
 					);
 #else
-					s_DebugSceneModeVertices.AddRange(hyperText.GetFieldValue<Mesh>("m_GlyphMesh").vertices);
+					hyperText.GetComponentsInParent(true, s_ClickHandlers);
+					hyperText.GetComponentsInParent(true, s_DownHandlers);
 #endif
-					for (int i = 0; i < s_DebugSceneModeVertices.Count; ++i)
+					s_ClickHandlers.Remove(hyperText);
+					s_DownHandlers.Remove(hyperText);
+					if (s_ClickHandlers.Count == 0 || s_DownHandlers.Count == 0)
 					{
-						Handles.Label(s_DebugSceneModeVertices[i], i.ToString());
-						if (i == m_CurrentlyHighlightedVertexIndex)
-						{
-							HighlightIndex(s_DebugSceneModeVertices[i], i);
-						}
+						continue;
 					}
-					if (Event.current.isKey && Event.current.type == EventType.KeyDown)
-					{
-						switch (Event.current.keyCode)
-						{
-						case KeyCode.Comma:
-						case KeyCode.Less:
-							scrollAmt *= -1 * (Event.current.shift ? 12 : 1);
-							break;
-						case KeyCode.Period:
-						case KeyCode.Greater:
-							scrollAmt *= 1 * (Event.current.shift ? 12 : 1);
-							break;
-						default:
-							scrollAmt = 0;
-							break;
-						}
-						Event.current.Use();
-						m_CurrentlyHighlightedVertexIndex = ArrayX.ScrollArrayIndex(
-							m_CurrentlyHighlightedVertexIndex, s_DebugSceneModeVertices.Count, scrollAmt
-						);
-					}
+					m_RaycastTargetWarningMessage = string.Format(
+						"One or more {0} or {1} objects found upstream in hierarchy of {2}selected object with at least one link. " +
+						"Links will block pointer input unless you disable the raycastTarget property.",
+						typeof(UnityEngine.EventSystems.IPointerClickHandler).Name,
+						typeof(UnityEngine.EventSystems.IPointerDownHandler).Name,
+						this.targets.Length == 1 ? "" : "at least one "
+					);
+					m_RaycastTargetWarningStatus = ValidationStatus.Warning;
 				}
 			}
-			Handles.color = oldColor;
-			Handles.matrix = oldMatrix;
 		}
 	}
 }

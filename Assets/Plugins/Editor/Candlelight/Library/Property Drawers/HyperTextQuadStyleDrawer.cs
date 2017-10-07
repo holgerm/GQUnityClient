@@ -1,7 +1,7 @@
 // 
 // HyperTextQuadStyleDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -24,10 +24,10 @@ namespace Candlelight.UI
 		#region Labels
 		private static readonly GUIContent colorizationGUIContent =
 			new GUIContent("Colorize", "Enable if text color styling should be applied to instances of this quad.");
-		private static readonly GUIContent linkClassGUIContent = new GUIContent(
+		private static readonly GUIContent s_LinkClassGuiContent = new GUIContent(
 			"Link Class", "if not empty, all instances of this quad will use custom link styles of the specified class."
 		);
-		private static readonly GUIContent linkIdGUIContent = new GUIContent(
+		private static readonly GUIContent s_LinkIdGuiContent = new GUIContent(
 			"Link ID", "If not empty, all instances of this quad will be wrapped in a link tag with the specified ID."
 		);
 		#endregion
@@ -35,15 +35,17 @@ namespace Candlelight.UI
 		/// The height of the property.
 		/// </summary>
 		public static readonly float propertyHeight =
-			5f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
+			6f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
 
 		#region Serialized Properties
-		private Dictionary<string, SerializedProperty> className = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> linkClassName = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> linkId = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> shouldRespectColorization =
+		private readonly Dictionary<string, SerializedProperty> m_ClassName =
 			new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> sprite = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_LinkClassName =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_LinkId = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ShouldRespectColorization =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_Sprite = new Dictionary<string, SerializedProperty>();
 		#endregion
 
 		/// <summary>
@@ -60,19 +62,19 @@ namespace Candlelight.UI
 		/// <param name="property">Property.</param>
 		protected override int DisplayCustomFields(Rect firstLinePosition, SerializedProperty property)
 		{
-			EditorGUI.PropertyField(firstLinePosition, sprite[property.propertyPath]);
+			EditorGUI.PropertyField(firstLinePosition, m_Sprite[property.propertyPath]);
 			firstLinePosition.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			EditorGUI.PropertyField(
-				firstLinePosition, shouldRespectColorization[property.propertyPath], colorizationGUIContent
+				firstLinePosition, m_ShouldRespectColorization[property.propertyPath], colorizationGUIContent
 			);
 			firstLinePosition.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			firstLinePosition.width =
 				0.5f * (firstLinePosition.width - EditorGUIX.StandardHorizontalSpacing);
-			EditorGUI.PropertyField(firstLinePosition, linkId[property.propertyPath], linkIdGUIContent);
+			EditorGUI.PropertyField(firstLinePosition, m_LinkId[property.propertyPath], s_LinkIdGuiContent);
 			firstLinePosition.x += firstLinePosition.width + EditorGUIX.StandardHorizontalSpacing;
-			EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(linkId[property.propertyPath].stringValue));
+			EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(m_LinkId[property.propertyPath].stringValue));
 			{
-				EditorGUI.PropertyField(firstLinePosition, linkClassName[property.propertyPath], linkClassGUIContent);
+				EditorGUI.PropertyField(firstLinePosition, m_LinkClassName[property.propertyPath], s_LinkClassGuiContent);
 			}
 			EditorGUI.EndDisabledGroup();
 			return 3;
@@ -85,7 +87,7 @@ namespace Candlelight.UI
 		/// <param name="property">Property.</param>
 		protected override void DisplayIdentifierField(Rect position, SerializedProperty property)
 		{
-			EditorGUI.PropertyField(position, className[property.propertyPath], classNameGUIContent);
+			EditorGUI.PropertyField(position, m_ClassName[property.propertyPath], classNameGUIContent);
 		}
 
 		/// <summary>
@@ -94,7 +96,7 @@ namespace Candlelight.UI
 		/// <returns>The property height.</returns>
 		/// <param name="property">Property.</param>
 		/// <param name="label">Label.</param>
-		public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			return propertyHeight;
 		}
@@ -106,16 +108,17 @@ namespace Candlelight.UI
 		protected override void Initialize(SerializedProperty property)
 		{
 			base.Initialize(property);
-			if (!className.ContainsKey(property.propertyPath))
+			if (m_ClassName.ContainsKey(property.propertyPath))
 			{
-				className.Add(property.propertyPath, property.FindPropertyRelative("m_ClassName"));
-				linkClassName.Add(property.propertyPath, property.FindPropertyRelative("m_LinkClassName"));
-				linkId.Add(property.propertyPath, property.FindPropertyRelative("m_LinkId"));
-				shouldRespectColorization.Add(
-					property.propertyPath, property.FindPropertyRelative("m_ShouldRespectColorization")
-				);
-				sprite.Add(property.propertyPath, property.FindPropertyRelative("m_Sprite"));
+				return;
 			}
+			m_ClassName.Add(property.propertyPath, property.FindPropertyRelative("m_ClassName"));
+			m_LinkClassName.Add(property.propertyPath, property.FindPropertyRelative("m_LinkClassName"));
+			m_LinkId.Add(property.propertyPath, property.FindPropertyRelative("m_LinkId"));
+			m_ShouldRespectColorization.Add(
+				property.propertyPath, property.FindPropertyRelative("m_ShouldRespectColorization")
+			);
+			m_Sprite.Add(property.propertyPath, property.FindPropertyRelative("m_Sprite"));
 		}
 	}
 }

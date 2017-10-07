@@ -1,7 +1,7 @@
 // 
 // KeywordCollectionEditor.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -10,9 +10,6 @@
 // This file contains a base class for custom editors for KeywordCollections.
 
 using UnityEditor;
-using UnityEngine;
-using System.Reflection;
-using System.Reflection.Emit;
 
 namespace Candlelight
 {
@@ -24,21 +21,21 @@ namespace Candlelight
 		/// <summary>
 		/// The editor preference to toggle display of keywords in the inspector.
 		/// </summary>
-		private static readonly EditorPreference<bool, KeywordCollectionEditor<T>> keywordsFoldoutPreference =
+		private static readonly EditorPreference<bool, KeywordCollectionEditor<T>> s_KeywordsFoldoutPreference =
 			EditorPreference<bool, KeywordCollectionEditor<T>>.ForFoldoutState("keywords", false);
 
 		/// <summary>
 		/// The target object as a KeywordCollection.
 		/// </summary>
-		protected KeywordCollection collection;
+		protected KeywordCollection Collection { get; private set; }
 		/// <summary>
 		/// The case match property.
 		/// </summary>
-		protected SerializedProperty caseMatchProperty;
+		protected SerializedProperty CaseMatchProperty { get; private set; }
 		/// <summary>
-		/// The priorization property.
+		/// The prioritization property.
 		/// </summary>
-		protected SerializedProperty priorizationProperty;
+		protected SerializedProperty PrioritizationProperty { get; private set; }
 		
 		/// <summary>
 		/// Creates a new asset in the project.
@@ -53,18 +50,18 @@ namespace Candlelight
 		/// </summary>
 		protected void DisplayKeywordList()
 		{
-			if (serializedObject.targetObjects.Length == 1)
+			if (this.serializedObject.targetObjects.Length == 1)
 			{
-				int numKeywords = collection.Keywords == null ? 0 : collection.Keywords.Count;
-				keywordsFoldoutPreference.CurrentValue = EditorGUILayout.Foldout(
-					keywordsFoldoutPreference.CurrentValue,
+				int numKeywords = this.Collection.Keywords == null ? 0 : this.Collection.Keywords.Count;
+				s_KeywordsFoldoutPreference.CurrentValue = EditorGUILayout.Foldout(
+					s_KeywordsFoldoutPreference.CurrentValue,
 					string.Format("Extracted Keywords ({0} Unique)", numKeywords)
 				);
-				if (keywordsFoldoutPreference.CurrentValue && numKeywords > 0)
+				if (s_KeywordsFoldoutPreference.CurrentValue && numKeywords > 0)
 				{
 					EditorGUI.BeginDisabledGroup(true);
 					++EditorGUI.indentLevel;
-					foreach (string kw in collection.Keywords)
+					foreach (string kw in this.Collection.Keywords)
 					{
 						EditorGUILayout.TextArea(kw);
 					}
@@ -79,9 +76,9 @@ namespace Candlelight
 		/// </summary>
 		protected virtual void OnEnable()
 		{
-			collection = target as KeywordCollection;
-			caseMatchProperty = serializedObject.FindProperty("m_CaseMatchMode");
-			priorizationProperty = serializedObject.FindProperty("m_WordPrioritization");
+			this.Collection = this.target as KeywordCollection;
+			this.CaseMatchProperty = this.serializedObject.FindProperty("m_CaseMatchMode");
+			this.PrioritizationProperty = this.serializedObject.FindProperty("m_WordPrioritization");
 		}
 		
 		/// <summary>

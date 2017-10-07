@@ -1,7 +1,7 @@
 // 
 // EditorPreferenceMenu.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Candlelight
 {
@@ -75,7 +74,7 @@ namespace Candlelight
 		/// The method to display the scene gui toggle, if it is available.
 		/// </summary>
 		private static readonly System.Reflection.MethodInfo s_DisplaySceneGUIToggle =
-			typeof(EditorGUIX).GetMethod("DisplaySceneGUIToggle", ReflectionX.staticBindingFlags);
+			typeof(EditorGUIX).GetStaticMethod("DisplaySceneGUIToggle");
 		/// <summary>
 		/// The publisher page URL in the asset store.
 		/// </summary>
@@ -233,7 +232,9 @@ namespace Candlelight
 		[PreferenceItem("Candlelight")]
 		public static void DisplayPreferenceGUI()
 		{
+			#if !UNITY_5_6_OR_NEWER
 			GUILayout.BeginArea(new Rect(134f, 39f, 352f, 352f)); // the rect in the preference window is bizarre...
+			#endif
 			{
 				if (s_DisplaySceneGUIToggle != null)
 				{
@@ -265,7 +266,9 @@ namespace Candlelight
 				}
 				EditorGUILayout.EndVertical();
 			}
+			#if !UNITY_5_6_OR_NEWER
 			GUILayout.EndArea();
+			#endif
 		}
 		
 		/// <summary>

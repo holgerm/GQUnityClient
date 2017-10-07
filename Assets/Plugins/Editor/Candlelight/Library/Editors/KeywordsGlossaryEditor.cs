@@ -1,7 +1,7 @@
 // 
 // KeywordsGlossaryEditor.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -14,7 +14,6 @@ using UnityEditorInternal;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Candlelight
 {
@@ -56,7 +55,7 @@ namespace Candlelight
 		/// The rebuild keywords method.
 		/// </summary>
 		private static readonly System.Reflection.MethodInfo s_RebuildKeywordsMethod =
-			typeof(KeywordsGlossary).GetMethod("RebuildKeywords", ReflectionX.instanceBindingFlags);
+			typeof(KeywordsGlossary).GetInstanceMethod("RebuildKeywords");
 
 		/// <summary>
 		/// The current word.
@@ -78,7 +77,7 @@ namespace Candlelight
 		/// <summary>
 		/// Creates a new asset in the project.
 		/// </summary>
-		[MenuItem("Assets/Create/Candlelight/Keyword Collections/Glossary")]
+		[MenuItem("Assets/Create/Candlelight/HyperText/Keyword Collections/Glossary")]
 		public static void CreateNewAsset()
 		{
 			CreateNewAssetInProject();
@@ -160,7 +159,9 @@ namespace Candlelight
 			OnDrawWordForm(
 				position,
 				m_CurrentForm,
-				m_Entries.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("m_OtherForms").arraySize
+				m_Entries.serializedProperty.GetArrayElementAtIndex(
+					index
+				).FindPropertyRelative("m_OtherForms").arraySize
 			);
 		}
 		
@@ -170,9 +171,7 @@ namespace Candlelight
 		/// <param name="position">Position.</param>
 		/// <param name="wordFormProperty">Word form property.</param>
 		/// <param name="synonymCount">Synonym count, if e.g., the word is a main form.</param>
-		private void OnDrawWordForm(
-			Rect position, SerializedProperty wordFormProperty, int synonymCount = -1
-		)
+		private void OnDrawWordForm(Rect position, SerializedProperty wordFormProperty, int synonymCount = -1)
 		{
 			float countLabelWidth = 30f;
 			position.width -= EditorGUIUtility.singleLineHeight + (synonymCount < 0 ? 0 : countLabelWidth);
@@ -180,11 +179,14 @@ namespace Candlelight
 			EditorGUI.PropertyField(position, wordFormProperty);
 			position.x += position.width;
 			position.width = EditorGUIUtility.singleLineHeight;
-			EditorGUIX.DisplayValidationStatusIcon(
-				position,
-				m_WordFormStatuses[wordFormProperty.propertyPath].Status,
-				m_WordFormStatuses[wordFormProperty.propertyPath].Tooltip
-			);
+			if (m_WordFormStatuses.ContainsKey(wordFormProperty.propertyPath))
+			{
+				EditorGUIX.DisplayValidationStatusIcon(
+					position,
+					m_WordFormStatuses[wordFormProperty.propertyPath].Status,
+					m_WordFormStatuses[wordFormProperty.propertyPath].Tooltip
+				);
+			}
 			if (synonymCount >= 0)
 			{
 				position.x += position.width;
@@ -199,7 +201,7 @@ namespace Candlelight
 		protected override void OnEnable()
 		{
 			base.OnEnable();
-			m_Entries = new ReorderableList(serializedObject, serializedObject.FindProperty("m_Entries"));
+			m_Entries = new ReorderableList(this.serializedObject, this.serializedObject.FindProperty("m_Entries"));
 			string label = m_Entries.serializedProperty.displayName;
 			m_Entries.drawHeaderCallback += (rect) => EditorGUI.LabelField(rect, label);
 			m_Entries.drawElementCallback += OnDrawMainForm;
@@ -211,33 +213,30 @@ namespace Candlelight
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
-			serializedObject.Update();
+			this.serializedObject.Update();
 			DrawDefaultInspector();
-			serializedObject.ApplyModifiedProperties();
 			EditorGUI.BeginChangeCheck();
 			{
 				EditorGUI.BeginDisabledGroup(Selection.objects.Length > 1);
 				{
-					if (GUILayout.Button("Sort Alphabetically"))
+					if (EditorGUIX.DisplayButton("Sort Alphabetically"))
 					{
-						List<KeywordsGlossary.Entry> entries = typeof(KeywordsGlossary).GetField(
-							"m_Entries", ReflectionX.instanceBindingFlags
-						).GetValue(target) as List<KeywordsGlossary.Entry>;
+						Undo.RecordObjects(this.targets, "Sort Alphabetically");
+						List<KeywordsGlossary.Entry> entries =
+							this.target.GetFieldValue<List<KeywordsGlossary.Entry>>("m_Entries");
 						foreach (KeywordsGlossary.Entry entry in entries)
 						{
 							(
-								typeof(KeywordsGlossary.Entry).GetField(
-									"m_OtherForms", ReflectionX.instanceBindingFlags
-								).GetValue(entry) as List<KeywordsGlossary.InflectedForm>
+								entry.GetFieldValue<List<KeywordsGlossary.InflectedForm>>("m_OtherForms")
 							).Sort((f1, f2) => f1.Word.CompareTo(f2.Word));
 						}
 						entries.Sort((e1, e2) => e1.MainForm.Word.CompareTo(e2.MainForm.Word));
 						m_Entries.list = entries;
-						EditorUtility.SetDirty(target);
+						EditorUtility.SetDirty(this.target);
+						this.serializedObject.Update();
 					}
 				}
 				EditorGUI.EndDisabledGroup();
-				serializedObject.Update();
 				m_Entries.DoLayoutList();
 				if (m_Entries.count > 0)
 				{
@@ -252,7 +251,7 @@ namespace Candlelight
 						if (!m_InflectedForms.ContainsKey(m_CurrentEntry.propertyPath))
 						{
 							ReorderableList newList = new ReorderableList(
-								serializedObject, m_CurrentEntry.FindPropertyRelative("m_OtherForms")
+								this.serializedObject, m_CurrentEntry.FindPropertyRelative("m_OtherForms")
 							);
 							newList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "Inflected Forms");
 							newList.drawElementCallback = OnDrawInflectedForm;
@@ -263,12 +262,13 @@ namespace Candlelight
 					}
 					EditorGUILayout.EndVertical();
 				}
-				serializedObject.ApplyModifiedProperties();
 			}
 			if (EditorGUI.EndChangeCheck())
 			{
+				this.serializedObject.ApplyModifiedProperties();
+				this.serializedObject.Update();
 				UpdateGUIContents();
-				s_RebuildKeywordsMethod.Invoke(target, null);
+				s_RebuildKeywordsMethod.Invoke(this.target, null);
 			}
 			DisplayKeywordList();
 		}
@@ -287,7 +287,7 @@ namespace Candlelight
 			{
 				sp = m_Entries.serializedProperty.GetArrayElementAtIndex(i);
 				KeywordsGlossary.Entry entry = sp.GetValue<KeywordsGlossary.Entry>();
-				entry.GetOtherForms(ref altForms);
+				entry.GetOtherForms(altForms);
 				altForms.Insert(0, entry.MainForm);
 				allInflectedForms.AddRange(altForms);
 			}
@@ -306,7 +306,7 @@ namespace Candlelight
 				}
 				// set status of each alternate form
 				sp = m_Entries.serializedProperty.GetArrayElementAtIndex(i).FindPropertyRelative("m_OtherForms");
-				entry.GetOtherForms(ref altForms);
+				entry.GetOtherForms(altForms);
 				SerializedProperty currentFormProperty;
 				ValidationStatus worstStatus = ValidationStatus.None;
 				for (int j = 0; j < altForms.Count; ++j)

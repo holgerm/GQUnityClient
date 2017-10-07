@@ -1,7 +1,7 @@
 ﻿// 
 // KeywordCollection.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -54,23 +54,33 @@ namespace Candlelight
 	/// </summary>
 	public abstract class KeywordCollection : ScriptableObject
 	{
+		#region Delegates
+		/// <summary>
+		/// A delegate for listening for changes to a <see cref="KeywordCollection"/> object.
+		/// </summary>
+		public delegate void ChangedEventHandler(KeywordCollection sender);
+		#endregion
+
 		/// <summary>
 		/// The regular expression to split n-grams.
 		/// </summary>
 		private static readonly Regex s_SplitNGramRegex = new Regex(@"\W+");
 
-		#region Shared Allocations
-		private readonly List<string> m_KeywordList = new List<string>();
-		#endregion
+		/// <summary>
+		/// Occurs whenever the keywords on this instance changed.
+		/// </summary>
+		public event ChangedEventHandler Changed = null;
 
 		#region Backing Fields
 		[SerializeField, PropertyBackingField]
 		private CaseMatchMode m_CaseMatchMode = CaseMatchMode.IgnoreCase;
+		private readonly List<string> m_KeywordList = new List<string>();
 		private ReadOnlyCollection<string> m_Keywords = null;
-		private UnityEngine.Events.UnityEvent m_OnRebuildKeywords = new UnityEngine.Events.UnityEvent();
 		[SerializeField, PropertyBackingField]
 		private WordPrioritization m_WordPrioritization = WordPrioritization.LongestNGram;
 		#endregion
+
+		#region Public Properties
 		/// <summary>
 		/// Gets or sets the case match mode.
 		/// </summary>
@@ -88,9 +98,12 @@ namespace Candlelight
 			}
 		}
 		/// <summary>
-		/// Gets or sets the keyword cache. All of the keywords are assumed to be in order of priority. For example, the
-		/// unigram "dog" would be given priority over the bigram "the dog" if it appears at a lower index.
+		/// Gets the keyword cache.
 		/// </summary>
+		/// <remarks>
+		/// All of the keywords are assumed to be in order of priority. For example, the unigram "dog" would be given
+		/// priority over the bigram "the dog" if it appears at a lower index.
+		/// </remarks>
 		/// <value>The keyword cache.</value>
 		public ReadOnlyCollection<string> Keywords
 		{
@@ -101,21 +114,6 @@ namespace Candlelight
 					RebuildKeywords();
 				}
 				return m_Keywords;
-			}
-		}
-		/// <summary>
-		/// Gets a callback for whenever keywords are rebuilt on this instance.
-		/// </summary>
-		/// <value>A callback for whenever keywords are rebuilt on this instance.</value>
-		public UnityEngine.Events.UnityEvent OnRebuildKeywords
-		{
-			get
-			{
-				if (m_OnRebuildKeywords == null)
-				{
-					m_OnRebuildKeywords = new UnityEngine.Events.UnityEvent();
-				}
-				return m_OnRebuildKeywords;
 			}
 		}
 		/// <summary>
@@ -134,24 +132,9 @@ namespace Candlelight
 				}
 			}
 		}
+		#endregion
 
-		/// <summary>
-		/// Raises the enable event.
-		/// </summary>
-		protected virtual void OnEnable()
-		{
-			RebuildKeywords();
-		}
-
-		/// <summary>
-		/// Opens the API reference page.
-		/// </summary>
-		[ContextMenu("API Reference")]
-		private void OpenAPIReferencePage()
-		{
-			this.OpenReferencePage("uas-hypertext");
-		}
-
+		#region Protected Properties
 		/// <summary>
 		/// Populates the supplied keyword list.
 		/// </summary>
@@ -167,7 +150,10 @@ namespace Candlelight
 			PopulateKeywordList(m_KeywordList);
 			SortAndFilterKeywordList();
 			m_Keywords = new ReadOnlyCollection<string>(m_KeywordList.ToArray());
-			this.OnRebuildKeywords.Invoke();
+			if (this.Changed != null)
+			{
+				this.Changed(this);
+			}
 		}
 
 		/// <summary>
@@ -197,9 +183,34 @@ namespace Candlelight
 			{
 				m_KeywordList.Sort(
 					(kw1, kw2) =>
-						-1 * s_SplitNGramRegex.Split(kw1).Length.CompareTo(s_SplitNGramRegex.Split(kw2).Length)
+					-1 * s_SplitNGramRegex.Split(kw1).Length.CompareTo(s_SplitNGramRegex.Split(kw2).Length)
 				);
 			}
 		}
+		#endregion
+
+		#region Unity Messages
+		/// <summary>
+		/// Raises the enable event.
+		/// </summary>
+		protected virtual void OnEnable()
+		{
+			RebuildKeywords();
+		}
+		#endregion
+
+		/// <summary>
+		/// Opens the API reference page.
+		/// </summary>
+		[ContextMenu("API Reference")]
+		private void OpenAPIReferencePage()
+		{
+			this.OpenReferencePage("uas-hypertext");
+		}
+
+		#region Obsolete
+		[System.Obsolete("Use KeywordCollection.Changed", true)]
+		public UnityEngine.Events.UnityEvent OnRebuildKeywords { get; private set; }
+		#endregion
 	}
 }

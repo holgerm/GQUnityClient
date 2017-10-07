@@ -1,7 +1,7 @@
 ﻿// 
 // FontStyleDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -11,19 +11,18 @@
 
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Candlelight
 {
 	/// <summary>
 	/// Font style drawer.
 	/// </summary>
-	[CustomPropertyDrawer (typeof(FontStyle))]
+	[CustomPropertyDrawer(typeof(FontStyle))]
 	public class FontStyleDrawer : PropertyDrawer
 	{
 		#region Backing Fields
-		private static GUIStyle m_BoldButtonStyle = null;
-		private static GUIStyle m_ItalicButtonStyle = null;
+		private static GUIStyle s_BoldButtonStyle = null;
+		private static GUIStyle s_ItalicButtonStyle = null;
 		#endregion
 		/// <summary>
 		/// Gets the bold button style.
@@ -33,12 +32,12 @@ namespace Candlelight
 		{
 			get
 			{
-				if (m_BoldButtonStyle == null)
+				if (s_BoldButtonStyle == null)
 				{
-					m_BoldButtonStyle = new GUIStyle(EditorStylesX.MiniButtonLeft);
-					m_BoldButtonStyle.fontStyle = FontStyle.Bold;
+					s_BoldButtonStyle = new GUIStyle(EditorStylesX.MiniButtonLeft);
+					s_BoldButtonStyle.fontStyle = FontStyle.Bold;
 				}
-				return m_BoldButtonStyle;
+				return s_BoldButtonStyle;
 			}
 		}
 		/// <summary>
@@ -49,14 +48,14 @@ namespace Candlelight
 		{
 			get
 			{
-				if (m_ItalicButtonStyle == null)
+				if (s_ItalicButtonStyle == null)
 				{
-					m_ItalicButtonStyle = new GUIStyle(EditorStylesX.MiniButtonRight);
-					m_ItalicButtonStyle.padding =
+					s_ItalicButtonStyle = new GUIStyle(EditorStylesX.MiniButtonRight);
+					s_ItalicButtonStyle.padding =
 						new RectOffset((int)(EditorGUIUtility.singleLineHeight * -0.3f), 0, 0, 0);
-					m_ItalicButtonStyle.fontStyle = FontStyle.Italic;
+					s_ItalicButtonStyle.fontStyle = FontStyle.Italic;
 				}
-				return m_ItalicButtonStyle;
+				return s_ItalicButtonStyle;
 			}
 		}
 

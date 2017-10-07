@@ -1,7 +1,7 @@
 // 
 // PropertyBackingFieldDrawer.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -21,12 +21,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-// 
-// This file contains a custom PropertyDrawer for a serialized backing field of
-// a getter/setter.
+
+#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0
+#define OVERDRAW_DECORATORS
+#endif
 
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,8 +45,22 @@ namespace Candlelight
 		/// <summary>
 		/// A hashable structure for storing a serialized property.
 		/// </summary>
-		private struct HashableSerializedProperty : System.IEquatable<HashableSerializedProperty>
+		public struct HashableSerializedProperty : System.IEquatable<HashableSerializedProperty>
 		{
+			/// <summary>
+			/// A table to look up cached serialized properties to reduce continuous garbage generation.
+			/// </summary>
+			private static Dictionary<int, SerializedProperty> s_PropertyTable =
+				new Dictionary<int, SerializedProperty>();
+
+			/// <summary>
+			/// Initialize a static lookup table for serialized properties.
+			/// </summary>
+			public static void ResetCache()
+			{
+				s_PropertyTable.Clear();
+			}
+
 			#region Backing Fields
 			private int m_Hash;
 			private string m_PropertyPath;
@@ -71,12 +85,20 @@ namespace Candlelight
 					{
 						return null;
 					}
+					if (s_PropertyTable.ContainsKey(m_Hash))
+					{
+						SerializedProperty sp = s_PropertyTable[m_Hash];
+						if (sp != null)
+						{
+							return sp;
+						}
+					}
 					SerializedObject so = new SerializedObject(m_TargetObject);
 					if (so == null)
 					{
 						return null;
 					}
-					return so.FindProperty(m_PropertyPath);
+					return s_PropertyTable[m_Hash] = so.FindProperty(m_PropertyPath);
 				}
 			}
 			
@@ -85,6 +107,14 @@ namespace Candlelight
 			/// </summary>
 			/// <value>The target object.</value>
 			public Object TargetObject { get { return m_TargetObject; } }
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="PropertyBackingFieldDrawer.HashableSerializedProperty"/>
+			/// struct.
+			/// </summary>
+			/// <param name="property">Property.</param>
+			public HashableSerializedProperty(SerializedProperty property) :
+				this(property.propertyPath, property.serializedObject.targetObject) {}
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="PropertyBackingFieldDrawer.HashableSerializedProperty"/>
@@ -105,10 +135,7 @@ namespace Candlelight
 			/// struct.
 			/// </summary>
 			/// <param name="mod">Property modification.</param>
-			public HashableSerializedProperty(PropertyModification mod) : this(mod.propertyPath, mod.target)
-			{
-
-			}
+			public HashableSerializedProperty(PropertyModification mod) : this(mod.propertyPath, mod.target) {}
 
 			/// <summary>
 			/// Determines whether the specified <see cref="System.Object"/> is equal to the current
@@ -125,7 +152,8 @@ namespace Candlelight
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals<HashableSerializedProperty>(ref this, obj);
+				return (obj == null || !(obj is HashableSerializedProperty)) ?
+					false : Equals((HashableSerializedProperty)obj);
 			}
 
 			/// <summary>
@@ -145,7 +173,8 @@ namespace Candlelight
 			/// </returns>
 			public bool Equals(HashableSerializedProperty other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return Object.ReferenceEquals(m_TargetObject, other.m_TargetObject) &&
+					string.Equals(m_PropertyPath, other.m_PropertyPath);
 			}
 
 			/// <summary>
@@ -189,13 +218,14 @@ namespace Candlelight
 			// register callbacks with UnityEditor.Undo
 			Undo.postprocessModifications += OnPerformUndoableAction;
 			Undo.undoRedoPerformed += OnUndoRedo;
+			EditorApplication.playmodeStateChanged += DeregisterAllPropertySetterCallbacks;
 			// get all types incompatible with this feature
 			List<System.SerializableAttribute> serializableAttrs = new List<System.SerializableAttribute>(1);
 			HashSet<System.Type> typesThatCannotBeBackingFields = new HashSet<System.Type>(
 				ReflectionX.AllTypes.Where(
 					t =>
 						(t.IsClass || (t.IsValueType && !t.IsEnum && !t.IsPrimitive)) &&
-						t.GetCustomAttributes(ref serializableAttrs) > 0 &&
+						t.GetCustomAttributes(serializableAttrs) > 0 &&
 						!typeof(IPropertyBackingFieldCompatible).IsAssignableFrom(t)
 				)
 			);
@@ -233,12 +263,12 @@ namespace Candlelight
 						continue;
 					}
 					// skip the field if it is not serialized
-					if (field.IsPrivate && field.GetCustomAttributes(ref serializeFieldAttrs) == 0)
+					if (field.IsPrivate && field.GetCustomAttributes(serializeFieldAttrs) == 0)
 					{
 						continue;
 					}
 					// skip the field if it is not designated as a backing field
-					if (field.GetCustomAttributes(ref pbfAttrs) == 0)
+					if (field.GetCustomAttributes(pbfAttrs) == 0)
 					{
 						continue;
 					}
@@ -289,7 +319,7 @@ namespace Candlelight
 						!t.IsAbstract &&
 						!t.IsInterface &&
 						typeof(IPropertyBackingFieldCompatible).IsAssignableFrom(t) &&
-					t.GetCustomAttributes(ref serializableAttrs) == 0
+					t.GetCustomAttributes(serializableAttrs) == 0
 				)
 			);
 			foreach (System.Type problematicType in compatibleTypesThatAreNotSerializable)
@@ -305,10 +335,6 @@ namespace Candlelight
 			}
 		}
 
-		#region Shared Allocations
-		private static List<PropertyAttribute> s_PropertyAttrs = new List<PropertyAttribute>(2);
-		#endregion
-
 		/// <summary>
 		/// The current selection.
 		/// </summary>
@@ -317,7 +343,7 @@ namespace Candlelight
 		/// The method for displaying a default property field.
 		/// </summary>
 		private static readonly MethodInfo s_DefaultPropertyField =
-			typeof(EditorGUI).GetMethod("DefaultPropertyField", ReflectionX.staticBindingFlags);
+			typeof(EditorGUI).GetStaticMethod("DefaultPropertyField");
 		/// <summary>
 		/// A reusable parameter array for invoking the default property field method via reflection.
 		/// </summary>
@@ -355,11 +381,6 @@ namespace Candlelight
 		private static Dictionary<HashableSerializedProperty, System.Action> s_PropertySetterCallbacks =
 			new Dictionary<HashableSerializedProperty, System.Action>();
 		/// <summary>
-		/// A reusable cache of serialized properties for each hashed version, to prevent additional allocations.
-		/// </summary>
-		private static Dictionary<HashableSerializedProperty, SerializedProperty> s_SerializedPropertyCache =
-			new Dictionary<HashableSerializedProperty, SerializedProperty>();
-		/// <summary>
 		/// A reusable parameter array for invoking setters via reflection.
 		/// </summary>
 		private static readonly object[] s_SetterArgs = new object[1];
@@ -391,22 +412,27 @@ namespace Candlelight
 			"Consider implementing methods {0} Get{1}() and void Set{1}({0}) in class {2}.";
 
 		/// <summary>
+		/// Deregisters all property setter callbacks.
+		/// </summary>
+		private static void DeregisterAllPropertySetterCallbacks()
+		{
+			HashableSerializedProperty.ResetCache();
+			s_PropertySetterCallbacks.Clear();
+			s_ValueCache.Clear();
+		}
+
+		/// <summary>
 		/// Gets any properties upstream of the supplied property. This method is used to determine when a parent setter
 		/// might need to be invoked.
 		/// </summary>
 		/// <param name="property">Property.</param>
 		/// <param name="upstreamProperties">The upstream properties.</param>
-		/// <param name="propertyCache">
-		/// Cached <see cref="UnityEditor.SerializedProperties"/> to prevent further allocations.
-		/// </param>
 		private static void GetUpstreamProperties(
-			HashableSerializedProperty property,
-			List<HashableSerializedProperty> upstreamProperties,
-			Dictionary<HashableSerializedProperty, SerializedProperty> propertyCache
+			HashableSerializedProperty property, List<HashableSerializedProperty> upstreamProperties
 		)
 		{
 			upstreamProperties.Clear();
-			s_Property = propertyCache[property];
+			s_Property = property.SerializedProperty;
 			if (s_Property != null)
 			{
 				s_Property = s_Property.GetParentProperty();
@@ -552,17 +578,24 @@ namespace Candlelight
 		private static UndoPropertyModification[] OnPerformUndoableAction(UndoPropertyModification[] modifications)
 		{
 			s_PropertyModifications.Clear();
-			s_SerializedPropertyCache.Clear();
+			HashableSerializedProperty.ResetCache();
 			for (int i = 0; i < modifications.Length; ++i)
 			{
+#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0
+				if (modifications[i].propertyModification == null)
+				{
+					continue;
+				}
 				HashableSerializedProperty hashed =
-#if UNITY_4_6 || UNITY_5_0
 					new HashableSerializedProperty(modifications[i].propertyModification);
 #else
-					new HashableSerializedProperty(modifications[i].currentValue);
+				if (modifications[i].currentValue == null)
+				{
+					continue;
+				}
+				HashableSerializedProperty hashed = new HashableSerializedProperty(modifications[i].currentValue);
 #endif
-				s_SerializedPropertyCache[hashed] = hashed.SerializedProperty;
-				if (s_SerializedPropertyCache[hashed] != null)
+				if (hashed.SerializedProperty != null)
 				{
 					s_PropertyModifications.Add(hashed);
 				}
@@ -570,14 +603,14 @@ namespace Candlelight
 			// add all upstream properties so parent setters are called
 			foreach (HashableSerializedProperty modification in s_PropertyModifications.ToArray())
 			{
-				GetUpstreamProperties(modification, s_UpstreamProperties, s_SerializedPropertyCache);
+				GetUpstreamProperties(modification, s_UpstreamProperties);
 				for (int i = 0; i < s_UpstreamProperties.Count; ++i)
 				{
 					s_PropertyModifications.Add(s_UpstreamProperties[i]);
 				}
 			}
 			// trigger setters for all modified properties
-			TriggerSettersForKnownModifications(s_PropertyModifications, s_SerializedPropertyCache);
+			TriggerSettersForKnownModifications(s_PropertyModifications);
 			return modifications;
 		}
 
@@ -588,16 +621,12 @@ namespace Candlelight
 		private static void OnUndoRedo()
 		{
 			// trigger setters for all modified properties
-			s_SerializedPropertyCache.Clear();
-			foreach (HashableSerializedProperty hashed in s_PropertySetterCallbacks.Keys)
-			{
-				s_SerializedPropertyCache[hashed] = hashed.SerializedProperty;
-			}
+			HashableSerializedProperty.ResetCache();
 			TriggerSettersForKnownModifications(
 				s_PropertySetterCallbacks.Keys.Where(
-					p => s_SerializedPropertyCache[p] != null &&
-					!s_SerializedPropertyCache[p].IsValueEqualTo(s_ValueCache[p])
-				), s_SerializedPropertyCache
+					p => p.SerializedProperty != null &&
+					!p.SerializedProperty.IsValueEqualTo(s_ValueCache[p])
+				)
 			);
 		}
 		
@@ -658,13 +687,17 @@ namespace Candlelight
 						string.Format("{0}.Array.data[{1}]", sp.propertyPath, elementIndex),
 						hashableProperty.TargetObject
 					);
-					if (s_ValueCache.ContainsKey(hashableElement))
+					SerializedProperty serializedElement = hashableElement.SerializedProperty;
+					if (serializedElement != null)
 					{
-						s_ValueCache[hashableElement] = hashableElement.SerializedProperty.GetValue();
-					}
-					else // for added elements when list grows
-					{
-						s_ValueCache.Add(hashableElement, hashableElement.SerializedProperty.GetValue());
+						if (s_ValueCache.ContainsKey(hashableElement))
+						{
+							s_ValueCache[hashableElement] = serializedElement.GetValue();
+						}
+						else // for added elements when list grows
+						{
+							s_ValueCache.Add(hashableElement, serializedElement.GetValue());
+						}
 					}
 				}
 			}
@@ -772,27 +805,19 @@ namespace Candlelight
 		/// parents (e.g., arrays, classes, structs).
 		/// </summary>
 		/// <param name="modifiedProperties">Properties known to be modified.</param>
-		/// <param name="propertyCache">
-		/// Cached <see cref="UnityEditor.SerializedProperties"/> to prevent further allocations.
-		/// </param>
 		private static void TriggerSettersForKnownModifications(
-			IEnumerable<HashableSerializedProperty> modifiedProperties,
-			Dictionary<HashableSerializedProperty, SerializedProperty> propertyCache
+			IEnumerable<HashableSerializedProperty> modifiedProperties
 		)
 		{
 			s_TriggeredModifications.Clear();
 			foreach (HashableSerializedProperty hashed in modifiedProperties)
 			{
 				s_TriggeredModifications.Add(hashed);
-				if (!propertyCache.ContainsKey(hashed))
-				{
-					propertyCache[hashed] = hashed.SerializedProperty;
-				}
 			}
 			// sort by depth, so children setters are invoked first
 			s_SortedModifications.Clear();
 			s_SortedModifications.AddRange(s_TriggeredModifications);
-			s_SortedModifications.Sort((a, b) => propertyCache[a].depth.CompareTo(propertyCache[b].depth));
+			s_SortedModifications.Sort((a, b) => a.SerializedProperty.depth.CompareTo(b.SerializedProperty.depth));
 			s_SortedModifications.Reverse();
 			// invoke setters
 			for (int i = 0; i < s_SortedModifications.Count; ++i)
@@ -804,10 +829,12 @@ namespace Candlelight
 			}
 		}
 		
+#if OVERDRAW_DECORATORS
 		/// <summary>
-		/// heights of any decorators preceding properties with the specified paths.
+		/// Heights of any decorators preceding properties with the specified paths.
 		/// </summary>
 		private Dictionary<string, float> m_DecoratorHeights = new Dictionary<string, float>();
+#endif
 		/// <summary>
 		/// The getter.
 		/// </summary>
@@ -824,16 +851,19 @@ namespace Candlelight
 		/// The setter.
 		/// </summary>
 		public System.Action<object, object> m_Setter = null;
+
 		#region Backing Fields
 		private PropertyBackingFieldAttribute m_Attribute = null;
 		private PropertyDrawer m_DrawerToUse = null;
+		private readonly List<System.Type[]> m_TypeArrays = new List<System.Type[]>();
 		#endregion
 		
 		/// <summary>
 		/// Gets the drawer to use.
 		/// </summary>
 		/// <value>
-		/// The drawer to use if an override is specified, otherwise <see langword="null"/> if default drawer should be used.
+		/// The drawer to use if an override is specified, otherwise <see langword="null"/> if default drawer should be
+		/// used.
 		/// </value>
 		private PropertyDrawer DrawerToUse
 		{
@@ -841,7 +871,8 @@ namespace Candlelight
 			{
 				if (m_DrawerToUse == null)
 				{
-					m_DrawerToUse = SerializedPropertyX.GetPropertyDrawer(this.fieldInfo, this.Attribute.OverrideAttribute);
+					m_DrawerToUse =
+						SerializedPropertyX.GetPropertyDrawer(this.fieldInfo, this.Attribute.OverrideAttribute);
 				}
 				return m_DrawerToUse;
 			}
@@ -868,21 +899,30 @@ namespace Candlelight
 		}
 
 		/// <summary>
-		/// Gets the concrete method representation of the supplied method on the supplied provider.
+		/// Gets the concrete method representation of the supplied method.
 		/// </summary>
 		/// <returns>
 		/// A concrete representation of the supplied method if it is defined on a generic type; otherwise, the method
 		/// itself.
 		/// </returns>
 		/// <param name="method">Method.</param>
-		/// <param name="provider">Provider.</param>
-		private MethodInfo GetConcreteMethod(MethodInfo method, object provider)
+		private MethodInfo GetConcreteMethod(MethodInfo method)
 		{
 			if (method.ReflectedType.IsGenericType)
 			{
-				// just use base type because generic MonoBehaviours and ScriptableObjects only serialize when they are
-				// concrete subclasses
-				method = provider.GetType().BaseType.GetMethod(method.Name, ReflectionX.instanceBindingFlags);
+				ParameterInfo[] parameters = method.GetParameters();
+				System.Type[] parameterTypes = GetTypeArray(parameters.Length);
+				for (int i = 0; i < parameters.Length; ++i)
+				{
+					parameterTypes[i] = parameters[i].ParameterType;
+				}
+				method = method.DeclaringType.GetMethod(
+					method.Name,
+					ReflectionX.instanceBindingFlags,
+					null,
+					parameterTypes,
+					null
+				);
 			}
 			return method;
 		}
@@ -896,11 +936,10 @@ namespace Candlelight
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			// ensure property's decorator height is registered
-			if (!m_DecoratorHeights.ContainsKey(property.propertyPath))
-			{
-				m_DecoratorHeights.Add(property.propertyPath, 0f);
-			}
-			m_DecoratorHeights[property.propertyPath] = 0f;
+#if OVERDRAW_DECORATORS
+			string key = property.propertyPath;
+			m_DecoratorHeights[key] = 0f;
+#endif
 			if (this.DrawerToUse != null)
 			{
 				return this.DrawerToUse.GetPropertyHeight(property, label);
@@ -908,22 +947,52 @@ namespace Candlelight
 			else
 			{
 				float result = EditorGUI.GetPropertyHeight(property, label, true);
+#if OVERDRAW_DECORATORS
+				bool subtractDecoratorHeight = property.propertyType == SerializedPropertyType.Generic ||
+					property.propertyType == SerializedPropertyType.Generic;
 				if (!property.IsArrayElement())
 				{
-					this.fieldInfo.GetCustomAttributes(ref s_PropertyAttrs);
-					for (int i = 0; i < s_PropertyAttrs.Count; ++i)
+					using (var attrs = new ListPool<PropertyAttribute>.Scope())
 					{
-						GUIDrawer drawer = SerializedPropertyX.GetGUIDrawer(this.fieldInfo, s_PropertyAttrs[i]);
-						if (drawer is DecoratorDrawer)
+						this.fieldInfo.GetCustomAttributes(attrs.List);
+						for (int i = 0; i < attrs.List.Count; ++i)
 						{
-							float height = (drawer as DecoratorDrawer).GetHeight();
-							result -= height;
-							m_DecoratorHeights[property.propertyPath] += height;
+							GUIDrawer drawer = SerializedPropertyX.GetGUIDrawer(this.fieldInfo, attrs.List[i]);
+							if (drawer is DecoratorDrawer)
+							{
+								float height = (drawer as DecoratorDrawer).GetHeight();
+								if (subtractDecoratorHeight)
+								{
+									result -= height;
+								}
+								m_DecoratorHeights[key] += height;
+							}
 						}
 					}
 				}
+#endif
 				return result;
 			}
+		}
+
+		/// <summary>
+		/// Gets an array of <see cref="System.Type"/> from the collection of shared allocations.
+		/// </summary>
+		/// <returns>An array of <see cref="System.Type"/> with the specified <paramref name="size"/>.</returns>
+		/// <param name="size">Size.</param>
+		private System.Type[] GetTypeArray(int size)
+		{
+			int index = size;
+			if (index > m_TypeArrays.Count - 1)
+			{
+				int i = m_TypeArrays.Count;
+				while (m_TypeArrays.Count <= index)
+				{
+					m_TypeArrays.Add(new System.Type[i]);
+					++i;
+				}
+			}
+			return m_TypeArrays[size];
 		}
 
 		/// <summary>
@@ -951,11 +1020,10 @@ namespace Candlelight
 			string getterName = propertyName;
 			string setterName = propertyName;
 			// first see if there is an editor-only property wrapper
-			PropertyInfo property =
-				providerType.GetProperty(propertyName + s_EditorPropertySuffix, ReflectionX.instanceBindingFlags);
+			PropertyInfo property = providerType.GetInstanceProperty(propertyName + s_EditorPropertySuffix);
 			if (property == null)
 			{
-				property = providerType.GetProperty(propertyName, ReflectionX.instanceBindingFlags);
+				property = providerType.GetInstanceProperty(propertyName);
 			}
 			if (property != null)
 			{
@@ -993,18 +1061,18 @@ namespace Candlelight
 				}
 				else
 				{
-					setter = providerType.GetMethod(setterName, ReflectionX.instanceBindingFlags);
+					setter = providerType.GetInstanceMethod(setterName);
 				}
 			}
 			if (getter != null)
 			{
-				m_Getter = provider => GetConcreteMethod(getter, provider).Invoke(provider, null);
+				m_Getter = provider => GetConcreteMethod(getter).Invoke(provider, null);
 			}
 			if (setter != null)
 			{
 				m_Setter = delegate(object provider, object value)
 				{
-					MethodInfo concreteSetter = GetConcreteMethod(setter, provider);
+					MethodInfo concreteSetter = GetConcreteMethod(setter);
 					System.Type concreteParameterType = concreteSetter.GetParameters().First().ParameterType;
 					s_SetterArgs[0] =
 						value == null || !concreteParameterType.IsAssignableFrom(value.GetType()) ? null : value;
@@ -1030,15 +1098,17 @@ namespace Candlelight
 			}
 #endif
 			// ensure property's decorator height is registered
-			if (!m_DecoratorHeights.ContainsKey(property.propertyPath))
+			string key = property.propertyPath;
+#if OVERDRAW_DECORATORS
+			if (!m_DecoratorHeights.ContainsKey(key))
 			{
-				m_DecoratorHeights.Add(property.propertyPath, 0f);
+				m_DecoratorHeights.Add(key, 0f);
 			}
+#endif
 			// clear all callbacks and cached values if the selection has changed
 			if (!s_CurrentSelection.SetEquals(Selection.objects))
 			{
-				s_PropertySetterCallbacks.Clear();
-				s_ValueCache.Clear();
+				DeregisterAllPropertySetterCallbacks();
 				s_CurrentSelection.Clear();
 				foreach (Object obj in Selection.objects)
 				{
@@ -1048,8 +1118,7 @@ namespace Candlelight
 			// ensure all properties are registered
 			foreach (Object target in property.serializedObject.targetObjects)
 			{
-				HashableSerializedProperty hashableProperty =
-					new HashableSerializedProperty(property.propertyPath, target);
+				HashableSerializedProperty hashableProperty = new HashableSerializedProperty(key, target);
 				// register property if needed
 				if (hashableProperty.SerializedProperty != null) // newly added array elements might not yet exist
 				{
@@ -1074,9 +1143,10 @@ namespace Candlelight
 						property.propertyType == SerializedPropertyType.ObjectReference
 					)
 					{
-						position.y -= m_DecoratorHeights[property.propertyPath];
+#if OVERDRAW_DECORATORS
+						position.y -= m_DecoratorHeights[key];
+#endif
 						EditorGUI.PropertyField(position, property, label, true);
-						// TODO: did Unity 5.1.0b3 fix this?
 					}
 					// for other types, use the default property field
 					else
@@ -1084,7 +1154,14 @@ namespace Candlelight
 						s_DefaultPropertyFieldArgs[0] = position;
 						s_DefaultPropertyFieldArgs[1] = property;
 						s_DefaultPropertyFieldArgs[2] = label;
-						s_DefaultPropertyField.Invoke(null, s_DefaultPropertyFieldArgs);
+						try
+						{
+							s_DefaultPropertyField.Invoke(null, s_DefaultPropertyFieldArgs);
+						}
+						catch (TargetInvocationException e)
+						{
+							throw e.InnerException;
+						}
 					}
 				}
 				else

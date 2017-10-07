@@ -1,7 +1,7 @@
 // 
 // HyperTextProcessor.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -23,7 +23,7 @@ namespace Candlelight.UI
 	/// <para>This class's primary function is to extract &lt;a&gt; tags and their relevant information from the value
 	/// supplied to the <see cref="HyperTextProcessor.InputText"/> property, and format the resulting string for the
 	/// <see cref="HyperTextProcessor.OutputText"/> property. You can then use the
-	/// <see cref="M:Candlelight.UI.HyperTextProcessor.GetLinks(System.Collections.Generic.List{Candlelight.UI.HyperTextProcessor.Link}@)" />
+	/// <see cref="M:Candlelight.UI.HyperTextProcessor.GetLinks(System.Collections.Generic.List{Candlelight.UI.HyperTextProcessor.Link})" />
 	/// method to get information about the links that were found, such as their character indices in
 	/// <see cref="HyperTextProcessor.OutputText"/>. The minimal syntactical requirement for an &lt;a&gt; tag is the
 	/// <c>name</c> attribute. For example, the input text <c>"Here is a &lt;a name="some_link"&gt;link&lt;/a&gt;"</c>
@@ -37,23 +37,59 @@ namespace Candlelight.UI
 	/// the font size specified in the styles or the <see cref="HyperTextProcessor.ReferenceFontSize"/> property if no
 	/// styles are assigned, as well as the <see cref="HyperTextProcessor.ScaleFactor"/> property. Information about 
 	/// custom tags and quads can then be extracted via
-	/// <see cref="M:Candlelight.UI.HyperTextProcessor.GetCustomTags(System.Collections.Generic.List{Candlelight.UI.HyperTextProcessor.CustomTag}@)" />
+	/// <see cref="M:Candlelight.UI.HyperTextProcessor.GetCustomTags(System.Collections.Generic.List{Candlelight.UI.HyperTextProcessor.CustomTag})" />
 	/// and
-	/// <see cref="M:Candlelight.UI.HyperTextProcessor.GetQuads(System.Collections.Generic.List{Candlelight.UI.HyperTextProcessor.Quad}@)" />. 
+	/// <see cref="M:Candlelight.UI.HyperTextProcessor.GetQuads(System.Collections.Generic.List{Candlelight.UI.HyperTextProcessor.Quad})" />. 
 	/// The syntactical requirements for custom styles are:</para>
 	/// <para>Link Classes: <c>&lt;a name="some_link" class="class_name"&gt;link&lt;/a&gt;</c></para>
 	/// <para>Tags: <c>&lt;custom&gt;text&lt;/custom&gt;</c></para>
 	/// <para>Quads: <c>&lt;quad class="class_name" /&gt;</c></para>
 	/// <para>You can also assign <see cref="KeywordCollection"/> objects to automatically detect and tag keywords
-	/// appearing in <see cref="HyperTextProcessor.InputText"/> as either links or custom tags. Any links automatically
-	/// detected in this way will have a <c>name</c> attribute equal to the keyword. For example, the word <c>"dog"</c>
-	/// would become <c>"&lt;a name="dog"&gt;dog&lt;/a&gt;"</c>.</para>
+	/// appearing in <see cref="HyperTextProcessor.InputText"/> as either links, custom tags, or quads. Any links
+	/// automatically detected in this way will have a <c>name</c> attribute equal to the keyword. For example, the word
+	/// <c>"dog"</c> would become <c>"&lt;a name="dog"&gt;dog&lt;/a&gt;"</c>. Keywords may contain non-alphanumeric
+	/// characters (i.e. [^A-Za-z0-9]). For example, "dog", "dog's", and ":)" may all be keywords.</para>
+	/// <para>Keywords will only be detected when occurring in text if they are not immediately preceded or followed by
+	/// alphanumeric characters, except for keywords that begin or end with non-alphanumeric characters, respectively.
+	/// For example, the keyword "dog" would be matched in any of the following strings:</para>
+	/// <list type="bullet">
+	/// <item>"dog is good"</item>
+	/// <item>"-dog is good"</item>
+	/// <item>"I like the dog"</item>
+	/// <item>"I like the dog--he is good."</item>
+	/// <item>"I like the dog—he is good."</item>
+	/// <item>"I like the dog."</item>
+	/// <item>"Where has the dog gone?"</item>
+	/// <item>"Where has the -dog- gone?"</item>
+	/// <item>"That is my dog's toy" (Note that "'s" would not be matched)</item>
+	/// </list>
+	/// <para>However, the keyword "dog" would not be matched in the following strings:</para>
+	/// <list type="bullet">
+	/// <item>I like dogs the best. (Immediately followed by letter "s")</item>
+	/// </list>
+	/// <para>On the other hand, the keyword ":)" would be matched in all of the following instances:</para>
+	/// <list type="bullet">
+	/// <item>"Hi there :)"</item>
+	/// <item>"Hi there :)."</item>
+	/// <item>"Hi there .:)."</item>
+	/// <item>"Hi there:)"</item>
+	/// <item>"Hi:)there"</item>
+	/// <item>":) Hi there"</item>
+	/// <item>":)Hi there"</item>
+	/// </list>
 	/// <para>The class also allows specification of sizes as percentages rather than raw values. For example, you can 
 	/// use the pattern: <c>"&lt;size=120%&gt;BIG TEXT&lt;/size&gt;"</c>.</para>
 	/// </remarks>
 	[System.Serializable]
 	public class HyperTextProcessor : System.IDisposable, ITextSource
 	{
+		#region Delegates
+		private delegate string KeywordSubtitutionCallback(
+			string textSegment, string keyword, string className, CaseMatchMode matchMode
+		);
+		#endregion
+
+		#region Data Types
 		/// <summary>
 		/// A class for storing information about a custom tag indicated in the text.
 		/// </summary>
@@ -92,6 +128,11 @@ namespace Candlelight.UI
 		[System.Serializable]
 		public struct KeywordCollectionClass : IPropertyBackingFieldCompatible<KeywordCollectionClass>
 		{
+			/// <summary>
+			/// The base hash code to use if the collection is <see langword="null"/>.
+			/// </summary>
+			private static readonly int s_NullCollectionHash = typeof(KeywordCollection).GetHashCode();
+
 			#region Backing Fields
 			[SerializeField]
 			private string m_ClassName;
@@ -158,7 +199,7 @@ namespace Candlelight.UI
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is KeywordCollectionClass)) ? false : Equals((KeywordCollectionClass)obj);
 			}
 
 			/// <summary>
@@ -175,7 +216,8 @@ namespace Candlelight.UI
 			/// </returns>
 			public bool Equals(KeywordCollectionClass other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return Object.ReferenceEquals(m_Collection, other.m_Collection) &&
+					string.Equals(this.ClassName, other.ClassName);
 			}
 
 			/// <summary>
@@ -187,7 +229,10 @@ namespace Candlelight.UI
 			/// </returns>
 			public override int GetHashCode()
 			{
-				return ObjectX.GenerateHashCode(this.ClassName.GetHashCode(), m_Collection.GetHashCode());
+				return ObjectX.GenerateHashCode(
+					this.ClassName.GetHashCode(),
+					m_Collection == null ? s_NullCollectionHash : m_Collection.GetHashCode()
+				);
 			}
 			
 			/// <summary>
@@ -197,6 +242,32 @@ namespace Candlelight.UI
 			public int GetSerializedPropertiesHash()
 			{
 				return GetHashCode();
+			}
+		}
+
+		/// <summary>
+		/// A custom <see cref="UnityEngine.PropertyAttribute"/> to specify information for inspector labels on a
+		/// <see cref="HyperTextProcessor.KeywordCollectionClass"/>.
+		/// </summary>
+		public class KeywordCollectionClassAttribute : PropertyAttribute
+		{
+			/// <summary>
+			/// Gets the label.
+			/// </summary>
+			/// <value>The label.</value>
+			public GUIContent Label { get; private set; }
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="HyperTextProcessor.KeywordCollectionClassAttribute"/>
+			/// class.
+			/// </summary>
+			/// <param name="identifierLabel">Identifier label.</param>
+			/// <param name="identifierDescription">Identifier description.</param>
+			public KeywordCollectionClassAttribute(string identifierLabel, string identifierDescription)
+			{
+				this.Label = new GUIContent(
+					identifierLabel, string.Format("{0} with which the collection is associated", identifierDescription)
+				);
 			}
 		}
 		
@@ -245,11 +316,6 @@ namespace Candlelight.UI
 			{
 				return new Link(this.Name, this.ClassName, (IndexRange)this.CharacterIndices.Clone(), this.Style);
 			}
-
-			#region Obsolete
-			[System.Obsolete("Use HyperTextProcessor.Link.Name")]
-			public string Id { get { return this.Name; } }
-			#endregion
 		}
 		
 		/// <summary>
@@ -311,6 +377,128 @@ namespace Candlelight.UI
 			public abstract object Clone();
 		}
 
+		private struct KeywordCollectionClassSubstitution
+		{
+			private KeywordCollectionClass CollectionClass { get; set; }
+			private KeywordSubtitutionCallback SubstitutionCallback { get; set; }
+
+			public KeywordCollectionClassSubstitution(
+				KeywordCollectionClass collectionClass, KeywordSubtitutionCallback substitutionCallback
+			)
+			{
+				this.CollectionClass = collectionClass;
+				this.SubstitutionCallback = substitutionCallback;
+			}
+
+			public string SubstituteKeywordIntoText(
+				string text, string keyword, Regex tagMatcher, List<IndexRange> substitutedKeywordIndices
+			)
+			{
+				using (var sb = new StringX.StringBuilderScope())
+				{
+					MatchCollection tagMatches = tagMatcher.Matches(text);
+					string segment = tagMatches.Count == 0 ? text : text.Substring(0, tagMatches[0].Index);
+					sb.StringBuilder.Append(
+						SubstituteKeywordIntoTextContainingNoTags(0, segment, keyword, substitutedKeywordIndices)
+					);
+					for (int matchIndex = 0, count = tagMatches.Count; matchIndex < count; ++matchIndex)
+					{
+						sb.StringBuilder.Append(tagMatches[matchIndex].Value);
+						int followingSegmentStart = tagMatches[matchIndex].Index + tagMatches[matchIndex].Length;
+						int followingSegmentEnd = matchIndex == count - 1 ?
+							text.Length : tagMatches[matchIndex + 1].Index;
+						sb.StringBuilder.Append(
+							SubstituteKeywordIntoTextContainingNoTags(
+								sb.StringBuilder.Length,
+								text.Substring(followingSegmentStart, followingSegmentEnd - followingSegmentStart),
+								keyword,
+								substitutedKeywordIndices
+							)
+						);
+					}
+					return sb.StringBuilder.ToString();
+				}
+			}
+
+			private string SubstituteKeywordIntoTextContainingNoTags(
+				int textStartIndex, string text, string keyword, List<IndexRange> substitutedKeywordIndices
+			)
+			{
+				Regex keywordMatch = GetKeywordReplacementRegex(keyword, this.CollectionClass.Collection.CaseMatchMode);
+				if (!keywordMatch.IsMatch(text))
+				{
+					return text;
+				}
+				MatchCollection matches = keywordMatch.Matches(text);
+				using (var sb = new StringX.StringBuilderScope())
+				{
+					sb.StringBuilder.Append(text.Substring(0, matches[0].Index));
+					for (int matchIndex = 0, count = matches.Count; matchIndex < count; ++matchIndex)
+					{
+						bool skip = false;
+						for (int i = 0, numIndexRanges = substitutedKeywordIndices.Count; i < numIndexRanges; ++i)
+						{
+							if (substitutedKeywordIndices[i].Contains(matches[matchIndex].Index + textStartIndex))
+							{
+								skip = true;
+								break;
+							}
+						}
+						if (skip)
+						{
+							sb.StringBuilder.Append(matches[matchIndex].Value);
+						}
+						else
+						{
+							int keywordStartIndex = sb.StringBuilder.Length + textStartIndex;
+							sb.StringBuilder.Append(
+								this.SubstitutionCallback(
+									matches[matchIndex].Value,
+									keyword,
+									this.CollectionClass.ClassName,
+									this.CollectionClass.Collection.CaseMatchMode
+								)
+							);
+							IndexRange keywordIndices = s_IndexRangePool.Get();
+							keywordIndices.StartIndex = keywordStartIndex;
+							keywordIndices.EndIndex = sb.StringBuilder.Length + textStartIndex - 1;
+							int delta = keywordIndices.Count - keyword.Length;
+							textStartIndex += delta;
+							for (int i = 0, numIndexRanges = substitutedKeywordIndices.Count; i < numIndexRanges; ++i)
+							{
+								substitutedKeywordIndices[i].Offset(keywordIndices, delta);
+							}
+							substitutedKeywordIndices.Add(keywordIndices);
+						}
+						int followingSegmentStart = matches[matchIndex].Index + matches[matchIndex].Length;
+						int followingSegmentEnd = matchIndex == count - 1 ?
+							text.Length : matches[matchIndex + 1].Index;
+						sb.StringBuilder.Append(
+							text.Substring(followingSegmentStart, followingSegmentEnd - followingSegmentStart)
+						);
+					}
+					return sb.StringBuilder.ToString();
+				}
+			}
+		}
+		#endregion
+
+		/// <summary>
+		/// A regular expression to match whether or not a keyword begins with a non-word character.
+		/// </summary>
+		private static readonly Regex s_BeginsWithNonWord = new Regex(@"^\W");
+		/// <summary>
+		/// A regular expression to match whether or not a keyword ends with a non-word character.
+		/// </summary>
+		private static readonly Regex s_EndsWithNonWord = new Regex(@"\W$");
+		/// <summary>
+		/// A pool of <see cref="IndexRange"/> objects to reuse.
+		/// </summary>
+		private static readonly ObjectPool<IndexRange> s_IndexRangePool = new ObjectPool<IndexRange>(null, null);
+		/// <summary>
+		/// A table of replacement regular expressions for keywords.
+		/// </summary>
+		private static readonly Dictionary<int, Regex> s_KeywordRegexTable = new Dictionary<int, Regex>();
 		/// <summary>
 		/// A regular expression to extract an &lt;a&gt; tag, its arguments, and enclosed text in postprocessed text.
 		/// </summary>
@@ -336,18 +524,18 @@ namespace Candlelight.UI
 		/// The base match pattern for any rich text tag in preprocessed text (used when supportRichText = true).
 		/// </summary>
 		private static readonly string s_PreprocessedAnyTagMatchPattern =
-			"</?a\b.*?>|" +
-			"<quad\b.*?>|" +
-			"</?color\b.*?>|" +
+			"</?a\\b.*?>|" +
+			"<quad\\b.*?>|" +
+			"</?color\\b.*?>|" +
 			"</?i>|" +
 			"</?b>|" +
-			"</?size\b.*?>|" +
-			"</?material\b.*?>";
+			"</?size\\b.*?>|" +
+			"</?material\\b.*?>";
 		/// <summary>
 		/// A regular expression to match only &lt;a&gt; tags in preprocessed text (used when supportRichText = false).
 		/// </summary>
 		private static readonly Regex s_PreprocessedLinkTagRegex =
-			new Regex("</?a\b.*?>", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+			new Regex("</?a\\b.*?>", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 		/// <summary>
 		/// A regular expression to extract a &lt;size&gt; tag and its arguments in preprocessed text.
 		/// </summary>
@@ -369,35 +557,13 @@ namespace Candlelight.UI
 		/// </summary>
 		private static readonly Dictionary<string, Regex> s_TagRegexes = new Dictionary<string, Regex>();
 
-		#region Shared Allocations
-		private static List<HyperTextStyles.LinkSubclass> s_CascadedLinkStyles =
-			new List<HyperTextStyles.LinkSubclass>(64);
-		private static List<HyperTextStyles.Quad> s_CascadedQuadStyles = new List<HyperTextStyles.Quad>(64);
-		private static List<HyperTextStyles.Text> s_CascadedTextStyles = new List<HyperTextStyles.Text>(64);
-		private static string s_CloseTag = string.Empty;
-		private static readonly Dictionary<IndexRange, int> s_IndexRangeOffsets = new Dictionary<IndexRange, int>();
-		private static string s_OpenTag = string.Empty;
-		private static readonly HashSet<string> s_ProcessedKeywords = new HashSet<string>();
-		private static StringBuilder s_ProcessedTextBuilder;
-		private static string s_Segment = string.Empty;
-		private static string s_TextCache;
-		#endregion
 		#region Backing Fields
 		private static readonly ReadOnlyCollection<string> s_ReservedTags = new ReadOnlyCollection<string>(
 			new [] { "a", "b", "color", "i", "material", "quad", "size" }
 		);
 		#endregion
 
-		/// <summary>
-		/// Gets the name of the capture group used for a tag's attribute value of interest.
-		/// </summary>
-		/// <value>The name of the capture group used for a tag's attribute value of interest.</value>
-		private static string AttributeValueCaptureGroup { get { return "attributeValue"; } }
-		/// <summary>
-		/// Gets the name of the capture group used for a tag's class attribute value.
-		/// </summary>
-		/// <value>The name of the capture group used for a tag's class attribute value.</value>
-		private static string ClassNameCaptureGroup { get { return "className"; } }
+		#region Public Properties
 		/// <summary>
 		/// Gets the name of the capture group used for a close tag in a piece of text.
 		/// </summary>
@@ -418,25 +584,138 @@ namespace Candlelight.UI
 		/// </summary>
 		/// <value>The name of the capture group used for text enclosed in a tag.</value>
 		public static string TextCaptureGroup { get { return "text"; } }
+		#endregion
+
+		/// <summary>
+		/// Gets the name of the capture group used for a tag's attribute value of interest.
+		/// </summary>
+		/// <value>The name of the capture group used for a tag's attribute value of interest.</value>
+		private static string AttributeValueCaptureGroup { get { return "attributeValue"; } }
+		/// <summary>
+		/// Gets the name of the capture group used for a tag's class attribute value.
+		/// </summary>
+		/// <value>The name of the capture group used for a tag's class attribute value.</value>
+		private static string ClassNameCaptureGroup { get { return "className"; } }
+
+		/// <summary>
+		/// Compares two <see cref="TagCharacterData"/> objects by their start indices. Used to sort cached tag lists.
+		/// </summary>
+		/// <typeparam name="T">A <see cref="TagCharacterData"/> type.</typeparam>
+		/// <param name="a">The first <typeparamref name="T"/>.</param>
+		/// <param name="b">The second <typeparamref name="T"/>.</param>
+		/// <returns>1 if <paramref name="a"/> comes after <paramref name="b"/>; otherwise, -1.</returns>
+		private static int CompareTagsByStartIndex<T>(T a, T b) where T : TagCharacterData
+		{
+			return a.CharacterIndices.StartIndex.CompareTo(b.CharacterIndices.StartIndex);
+		}
+
+		/// <summary>
+		/// Gets the keyword replacement regex from the specified table of expressions.
+		/// </summary>
+		/// <returns>A regular expression for matching a keyword to be replaced.</returns>
+		/// <param name="keyword">Keyword.</param>
+		/// <param name="matchMode">Match mode.</param>
+		private static Regex GetKeywordReplacementRegex(string keyword, CaseMatchMode matchMode)
+		{
+			int hash = ObjectX.GenerateHashCode(keyword.GetHashCode(), (int)matchMode);
+			Regex regex;
+			if (!s_KeywordRegexTable.ContainsKey(hash))
+			{
+				bool beginsWithNonWord = s_BeginsWithNonWord.IsMatch(keyword);
+				bool endsWithNonWord = s_EndsWithNonWord.IsMatch(keyword);
+				regex = new Regex(
+					string.Format(
+						"{0}{1}{2}",
+						beginsWithNonWord ? "" : @"(?<=^|[^A-Za-z0-9])",
+						Regex.Escape(keyword),
+						endsWithNonWord ? "" : @"(?=$|[^A-Za-z0-9])"
+					),
+				matchMode == CaseMatchMode.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None
+			);
+				s_KeywordRegexTable[hash] = regex;
+			}
+			else
+			{
+				regex = s_KeywordRegexTable[hash];
+			}
+			return regex;
+		}
+
+		/// <summary>
+		/// Gets a regular expression for matching a particular tag and its enclosed text.
+		/// </summary>
+		/// <returns>A regular expression for matching a particular tag and its enclosed text.</returns>
+		/// <param name="tag">Tag.</param>
+		private static Regex GetTagRegex(string tag)
+		{
+			if (!s_TagRegexes.ContainsKey(tag))
+			{
+				s_TagRegexes[tag] = new Regex(
+					string.Format(
+						"(?<{0}><{1}>)(?<{2}>.+?)(?<{3}></{1}>)",
+						HyperTextProcessor.OpenTagCaptureGroup,
+						Regex.Escape(tag),
+						HyperTextProcessor.TextCaptureGroup,
+						HyperTextProcessor.CloseTagCaptureGroup
+					), RegexOptions.Singleline | RegexOptions.IgnoreCase
+				);
+			}
+			return s_TagRegexes[tag];
+		}
+
+		/// <summary>
+		/// Occurs whenever a value on this instance has changed.
+		/// </summary>
+		public event ITextSourceEventHandler BecameDirty;
+
+		/// <summary>
+		/// A value indicating whether or not m_ProcessedText is currently dirty.
+		/// </summary>
+		[System.NonSerialized]
+		private bool m_IsDirty = true;
+		/// <summary>
+		/// The custom text style to use inside of the <see cref="MatchEvaluator"/> <see cref="ReplaceCustomTag()"/>.
+		/// </summary>
+		[System.NonSerialized]
+		private HyperTextStyles.Text m_ReplacementCustomTextStyle;
+		/// <summary>
+		/// The link style to use inside of the <see cref="MatchEvaluator"/> <see cref="ReplaceLink()"/>.
+		/// </summary>
+		[System.NonSerialized]
+		private HyperTextStyles.Link m_ReplacementLinkStyle;
+		/// <summary>
+		/// The table of index ranges and size scalars to use inside of the <see cref="MatchEvaluator"/> methods
+		/// <see cref="ReplaceCustomTag()"/> and <see cref="ReplaceLink()"/>.
+		/// </summary>
+		[System.NonSerialized]
+		private Dictionary<IndexRange, float> m_ReplacementProcessedIndexRangesAndScalars = null;
+
 		#region Backing Fields
-		private List<TagCharacterData> m_CustomTags = new List<TagCharacterData>();
-		[SerializeField, PropertyBackingField]
+		[System.NonSerialized]
+		private List<CustomTag> m_CustomTags = new List<CustomTag>();
+		[SerializeField, PropertyBackingField(
+			typeof(KeywordCollectionClassAttribute), "Class", "Optional class name for custom <a> style"
+		)]
 		private List<KeywordCollectionClass> m_LinkKeywordCollections = new List<KeywordCollectionClass>();
+		[System.NonSerialized]
 		private List<Link> m_Links = new List<Link>();
 		[SerializeField, PropertyBackingField]
 		private string m_InputText = string.Empty;
 		[SerializeField, PropertyBackingField]
 		private Object m_InputTextSourceObject = null;
+		[System.NonSerialized]
 		private ITextSource m_InputTextSource;
 		[SerializeField, PropertyBackingField]
 		private bool m_IsDynamicFontDesired = true;
 		[SerializeField, PropertyBackingField]
 		private bool m_IsRichTextDesired = true;
-		private UnityEngine.Events.UnityEvent m_OnBecameDirty = new UnityEngine.Events.UnityEvent();
 		[SerializeField, HideInInspector] // serialize this so editor undo/redo bypasses lazy evaluation
 		private string m_OutputText = string.Empty;
-		[SerializeField, PropertyBackingField]
+		[SerializeField, PropertyBackingField(
+			typeof(KeywordCollectionClassAttribute), "Class", "Class name for custom <quad> style"
+		)]
 		private List<KeywordCollectionClass> m_QuadKeywordCollections = new List<KeywordCollectionClass>();
+		[System.NonSerialized]
 		private List<Quad> m_Quads = new List<Quad>();
 		[SerializeField, PropertyBackingField]
 		private int m_ReferenceFontSize = 14;
@@ -445,34 +724,73 @@ namespace Candlelight.UI
 		private bool m_ShouldOverrideStylesFontSize = false;
 		[SerializeField, PropertyBackingField]
 		private HyperTextStyles m_Styles = null;
-		[SerializeField, PropertyBackingField]
+		[SerializeField, PropertyBackingField(
+			typeof(KeywordCollectionClassAttribute), "Tag", "Tag name for the custom text style"
+		)]
 		private List<KeywordCollectionClass> m_TagKeywordCollections = new List<KeywordCollectionClass>();
 		#endregion
+
+		#region Event Handlers
 		/// <summary>
-		/// A value indicating whether or not m_ProcessedText is currently dirty.
+		/// Raises the input source became dirty event.
 		/// </summary>
-		private bool m_IsDirty = true;
+		/// <param name="sender">Sender.</param>
+		private void OnInputSourceBecameDirty(ITextSource sender)
+		{
+			SetDirty();
+		}
+		/// <summary>
+		/// Raises the keyword collection changed event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		private void OnKeywordCollectionChanged(KeywordCollection sender)
+		{
+			SetDirty();
+		}
 
 		/// <summary>
-		/// Gets the default link style.
+		/// Raises the styles changed event.
 		/// </summary>
-		/// <value>The default link style.</value>
-		private HyperTextStyles.Link DefaultLinkStyle
+		/// <param name="sender">Sender.</param>
+		private void OnStylesChanged(HyperTextStyles sender)
 		{
-			get { return m_Styles == null ? HyperTextStyles.Link.DefaultStyle : m_Styles.DefaultLinkStyle; }
+			SetDirty();
 		}
-		/// <summary>
-		/// Gets the font size to use.
-		/// </summary>
-		/// <value>The font size to use.</value>
-		private int FontSizeToUse
+		#endregion
+
+		#region Inspector Properties
+		private KeywordCollectionClass[] GetLinkKeywordCollections()
 		{
-			get
-			{
-				return m_ShouldOverrideStylesFontSize || m_Styles == null ?
-					this.ReferenceFontSize : m_Styles.CascadedFontSize;
-			}
+			return m_LinkKeywordCollections.ToArray();
 		}
+
+		private KeywordCollectionClass[] GetQuadKeywordCollections()
+		{
+			return m_QuadKeywordCollections.ToArray();
+		}
+
+		private KeywordCollectionClass[] GetTagKeywordCollections()
+		{
+			return m_TagKeywordCollections.ToArray();
+		}
+
+		private void SetLinkKeywordCollections(KeywordCollectionClass[] value)
+		{
+			SetLinkKeywordCollections(value as IList<KeywordCollectionClass>);
+		}
+
+		private void SetQuadKeywordCollections(KeywordCollectionClass[] value)
+		{
+			SetQuadKeywordCollections(value as IList<KeywordCollectionClass>);
+		}
+
+		private void SetTagKeywordCollections(KeywordCollectionClass[] value)
+		{
+			SetTagKeywordCollections(value as IList<KeywordCollectionClass>);
+		}
+		#endregion
+
+		#region Public Properties
 		/// <summary>
 		/// Gets a GUIStyle for the current property values.
 		/// </summary>
@@ -520,37 +838,14 @@ namespace Candlelight.UI
 						value,
 						ref m_InputTextSource,
 						ref m_InputTextSourceObject,
-						onAssign: t => t.OnBecameDirty.AddListener(SetDirty),
-						onUnassign: t => t.OnBecameDirty.RemoveListener(SetDirty)
+						onAssign: t => t.BecameDirty += OnInputSourceBecameDirty,
+						onUnassign: t => t.BecameDirty -= OnInputSourceBecameDirty
 					)
 				)
 				{
 					SetDirty();
 				}
 			}
-		}
-		/// <summary>
-		/// Gets or sets the input text source object. This property only exists for the inspector.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <value>The input text source object.</value>
-		private Object InputTextSourceObject
-		{
-			get { return m_InputTextSourceObject; }
-			set
-			{
-				BackingFieldUtility.SetInterfaceBackingFieldObject<ITextSource>(
-					value, ref m_InputTextSourceObject, o => this.InputTextSource = o
-				);
-			}
-		}
-		/// <summary>
-		/// Gets the input text to use.
-		/// </summary>
-		/// <value>The input text to use.</value>
-		private string InputTextToUse
-		{
-			get { return this.InputTextSource != null ? m_InputTextSource.OutputText : m_InputText; }
 		}
 		/// <summary>
 		/// Gets or sets a value indicating whether dynamic font output is desired on this instance.
@@ -600,21 +895,6 @@ namespace Candlelight.UI
 		/// <value><see langword="true"/> if rich text is enabled; otherwise, <see langword="false"/>.</value>
 		public bool IsRichTextEnabled { get { return m_IsRichTextDesired && m_Styles != null; } }
 		/// <summary>
-		/// Gets a callback for whenever a value on this instance has changed.
-		/// </summary>
-		/// <value>A callback for whenever a value on this instance has changed.</value>
-		public UnityEngine.Events.UnityEvent OnBecameDirty
-		{
-			get
-			{
-				if (m_OnBecameDirty == null)
-				{
-					m_OnBecameDirty = new UnityEngine.Events.UnityEvent();
-				}
-				return m_OnBecameDirty;
-			}
-		}
-		/// <summary>
 		/// Gets the output text.
 		/// </summary>
 		/// <value>The output text.</value>
@@ -660,11 +940,6 @@ namespace Candlelight.UI
 			}
 		}
 		/// <summary>
-		/// Gets the size of the font multiplied by the DPI.
-		/// </summary>
-		/// <value>The size of the font multiplied by the DPI.</value>
-		private int ScaledFontSize { get { return (int)(this.FontSizeToUse * this.ScaleFactor); } }
-		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="HyperTextProcessor"/> should override the font size 
 		/// specified in styles, if one is assigned.
 		/// </summary>
@@ -699,17 +974,131 @@ namespace Candlelight.UI
 				}
 				if (m_Styles != null)
 				{
-					m_Styles.OnStylesChanged.RemoveListener(SetDirty);
+					m_Styles.Changed -= OnStylesChanged;
 				}
 				m_Styles = value;
 				if (m_Styles != null)
 				{
-					m_Styles.OnStylesChanged.AddListener(SetDirty);
+					m_Styles.Changed += OnStylesChanged;
 				}
 				SetDirty();
 			}
 		}
 
+		/// <summary>
+		/// Gets the custom tags extracted from the text.
+		/// </summary>
+		/// <param name="tags">Tags.</param>
+		public void GetCustomTags(List<CustomTag> tags)
+		{
+			ProcessInputText();
+			tags.Clear();
+			tags.AddRange(from customTag in m_CustomTags select (CustomTag)customTag.Clone());
+		}
+
+		/// <summary>
+		/// Gets the link keyword collections.
+		/// </summary>
+		/// <param name="collections">Collections.</param>
+		public void GetLinkKeywordCollections(List<KeywordCollectionClass> collections)
+		{
+			collections.Clear();
+			collections.AddRange(m_LinkKeywordCollections);
+		}
+
+		/// <summary>
+		/// Gets the links extracted from the text.
+		/// </summary>
+		/// <param name="links">Links.</param>
+		public void GetLinks(List<Link> links)
+		{
+			ProcessInputText();
+			links.Clear();
+			links.AddRange(from link in m_Links select (Link)link.Clone());
+		}
+
+		/// <summary>
+		/// Gets the quad keyword collections.
+		/// </summary>
+		/// <param name="collections">Collections.</param>
+		public void GetQuadKeywordCollections(List<KeywordCollectionClass> collections)
+		{
+			collections.Clear();
+			collections.AddRange(m_QuadKeywordCollections);
+		}
+
+		/// <summary>
+		/// Gets the quads extracted from the text.
+		/// </summary>
+		/// <param name="quads">Quads.</param>
+		public void GetQuads(List<Quad> quads)
+		{
+			ProcessInputText();
+			quads.Clear();
+			quads.AddRange(from quad in m_Quads select (Quad)quad.Clone());
+		}
+
+		/// <summary>
+		/// Gets the tag keyword collections.
+		/// </summary>
+		/// <param name="collections">Collections.</param>
+		public void GetTagKeywordCollections(List<KeywordCollectionClass> collections)
+		{
+			collections.Clear();
+			collections.AddRange(m_TagKeywordCollections);
+		}
+
+		/// <summary>
+		/// Initializes this instance. Call this method when the provider is enabled, or this instance is otherwise
+		/// first initialized.
+		/// </summary>
+		public void OnEnable()
+		{
+			if (m_Styles != null)
+			{
+				m_Styles.Changed -= OnStylesChanged;
+				m_Styles.Changed += OnStylesChanged;
+			}
+			InitializeKeywordCollectionCallbacks(m_LinkKeywordCollections);
+			InitializeKeywordCollectionCallbacks(m_QuadKeywordCollections);
+			InitializeKeywordCollectionCallbacks(m_TagKeywordCollections);
+			if (this.InputTextSource != null)
+			{
+				m_InputTextSource.BecameDirty -= OnInputSourceBecameDirty;
+				m_InputTextSource.BecameDirty += OnInputSourceBecameDirty;
+			}
+			SetDirty();
+		}
+
+		/// <summary>
+		/// Sets the link keyword collections.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public void SetLinkKeywordCollections(IList<KeywordCollectionClass> value)
+		{
+			SetKeywordCollectionBackingField(m_LinkKeywordCollections, value);
+		}
+
+		/// <summary>
+		/// Sets the quad keyword collections.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public void SetQuadKeywordCollections(IList<KeywordCollectionClass> value)
+		{
+			SetKeywordCollectionBackingField(m_QuadKeywordCollections, value);
+		}
+
+		/// <summary>
+		/// Sets the tag keyword collections.
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public void SetTagKeywordCollections(IList<KeywordCollectionClass> value)
+		{
+			SetKeywordCollectionBackingField(m_TagKeywordCollections, value);
+		}
+		#endregion
+
+		#region System.IDisposable
 		/// <summary>
 		/// Releases all resource used by the <see cref="HyperTextProcessor"/> object.
 		/// </summary>
@@ -721,53 +1110,62 @@ namespace Candlelight.UI
 		/// </remarks>
 		public void Dispose()
 		{
-			m_OnBecameDirty.RemoveAllListeners();
+			this.BecameDirty = null;
+			if (m_Styles != null)
+			{
+				m_Styles.Changed -= OnStylesChanged;
+			}
 		}
+		#endregion
 
 		/// <summary>
-		/// Gets the custom tags extracted from the text.
+		/// Gets the default link style.
 		/// </summary>
-		/// <param name="tags">Tags.</param>
-		public void GetCustomTags(ref List<CustomTag> tags)
+		/// <value>The default link style.</value>
+		private HyperTextStyles.Link DefaultLinkStyle
 		{
-			ProcessInputText();
-			tags = tags ?? new List<CustomTag>(m_CustomTags.Count);
-			tags.Clear();
-			tags.AddRange(from customTag in m_CustomTags select (CustomTag)customTag.Clone());
+			get { return m_Styles == null ? HyperTextStyles.Link.DefaultStyle : m_Styles.DefaultLinkStyle; }
 		}
-
 		/// <summary>
-		/// Gets the link keyword collections.
+		/// Gets the font size to use.
+		/// </summary>
+		/// <value>The font size to use.</value>
+		private int FontSizeToUse
+		{
+			get
+			{
+				return m_ShouldOverrideStylesFontSize || m_Styles == null ?
+					this.ReferenceFontSize : m_Styles.CascadedFontSize;
+			}
+		}
+		/// <summary>
+		/// Gets or sets the input text source object. This property only exists for the inspector.
 		/// </summary>
 		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The link keyword collections.</returns>
-		private KeywordCollectionClass[] GetLinkKeywordCollections()
+		/// <value>The input text source object.</value>
+		private Object InputTextSourceObject
 		{
-			return m_LinkKeywordCollections.ToArray();
+			get { return m_InputTextSourceObject; }
+			set
+			{
+				BackingFieldUtility.SetInterfaceBackingFieldObject<ITextSource>(
+					value, ref m_InputTextSourceObject, o => this.InputTextSource = o
+				);
+			}
 		}
-
 		/// <summary>
-		/// Gets the link keyword collections.
+		/// Gets the input text to use.
 		/// </summary>
-		/// <param name="collections">Collections.</param>
-		public void GetLinkKeywordCollections(ref List<KeywordCollectionClass> collections)
+		/// <value>The input text to use.</value>
+		private string InputTextToUse
 		{
-			collections = collections ?? new List<KeywordCollectionClass>(m_LinkKeywordCollections.Count);
-			collections.Clear();
-			collections.AddRange(m_LinkKeywordCollections);
+			get { return (this.InputTextSource != null ? m_InputTextSource.OutputText : m_InputText) ?? string.Empty; }
 		}
-
 		/// <summary>
-		/// Gets the links extracted from the text.
+		/// Gets the size of the font multiplied by the DPI.
 		/// </summary>
-		/// <param name="links">Links.</param>
-		public void GetLinks(ref List<Link> links)
-		{
-			ProcessInputText();
-			links = links ?? new List<Link>(m_Links.Count);
-			links.Clear();
-			links.AddRange(from link in m_Links select (Link)link.Clone());
-		}
+		/// <value>The size of the font multiplied by the DPI.</value>
+		private int ScaledFontSize { get { return (int)(this.FontSizeToUse * this.ScaleFactor); } }
 		
 		/// <summary>
 		/// Gets a version of the quad tag corresponding to the supplied Match with all of its arguments injected.
@@ -777,7 +1175,7 @@ namespace Candlelight.UI
 		/// <param name="quadTemplates">The list of quad styles specified on the styles object.</param>
 		private string GetPostprocessedQuadTag(Match quadTagMatch, List<HyperTextStyles.Quad> quadTemplates)
 		{
-			string quadName = quadTagMatch.Groups[ClassNameCaptureGroup].Value;
+			string quadName = quadTagMatch.Groups[HyperTextProcessor.ClassNameCaptureGroup].Value;
 			string linkOpenTag = "";
 			float sizeScalar = 1f;
 			float width, height;
@@ -806,67 +1204,13 @@ namespace Candlelight.UI
 				sizeScalar = quadTemplates[templateIndex].SizeScalar;
 			}
 			return string.Format(
-				"{0}<quad class=\"{1}\" size={2} width={3}>{4}",
+				"{0}<size={1}><quad class=\"{2}\" width={3}></size>{4}",
 				linkOpenTag,
-				quadName,
 				sizeScalar * this.ScaledFontSize,
+				quadName,
 				aspect,
 				string.IsNullOrEmpty(linkOpenTag) ? "" : "</a>"
 			);
-		}
-
-		/// <summary>
-		/// Gets the quad keyword collections.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The quad keyword collections.</returns>
-		private KeywordCollectionClass[] GetQuadKeywordCollections()
-		{
-			return m_QuadKeywordCollections.ToArray();
-		}
-
-		/// <summary>
-		/// Gets the quad keyword collections.
-		/// </summary>
-		/// <param name="collections">Collections.</param>
-		public void GetQuadKeywordCollections(ref List<KeywordCollectionClass> collections)
-		{
-			collections = collections ?? new List<KeywordCollectionClass>(m_QuadKeywordCollections.Count);
-			collections.Clear();
-			collections.AddRange(m_QuadKeywordCollections);
-		}
-
-		/// <summary>
-		/// Gets the quads extracted from the text.
-		/// </summary>
-		/// <param name="quads">Quads.</param>
-		public void GetQuads(ref List<Quad> quads)
-		{
-			ProcessInputText();
-			quads = quads ?? new List<Quad>(m_Quads.Count);
-			quads.Clear();
-			quads.AddRange(from quad in m_Quads select (Quad)quad.Clone());
-		}
-		
-		/// <summary>
-		/// Gets the tag keyword collections.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The tag keyword collections.</returns>
-		private KeywordCollectionClass[] GetTagKeywordCollections()
-		{
-			return m_TagKeywordCollections.ToArray();
-		}
-
-		/// <summary>
-		/// Gets the tag keyword collections.
-		/// </summary>
-		/// <param name="collections">Collections.</param>
-		public void GetTagKeywordCollections(ref List<KeywordCollectionClass> collections)
-		{
-			collections = collections ?? new List<KeywordCollectionClass>(m_TagKeywordCollections.Count);
-			collections.Clear();
-			collections.AddRange(m_TagKeywordCollections);
 		}
 
 		/// <summary>
@@ -879,8 +1223,8 @@ namespace Candlelight.UI
 			{
 				if (backingField[i].Collection != null)
 				{
-					backingField[i].Collection.OnRebuildKeywords.RemoveListener(SetDirty);
-					backingField[i].Collection.OnRebuildKeywords.AddListener(SetDirty);
+					backingField[i].Collection.Changed -= OnKeywordCollectionChanged;
+					backingField[i].Collection.Changed += OnKeywordCollectionChanged;
 				}
 			}
 		}
@@ -901,10 +1245,7 @@ namespace Candlelight.UI
 			{
 				return textSegment;
 			}
-			Regex regex = new Regex(
-				string.Format("(?<=^|\\W){0}(?=\\W|$)", Regex.Escape(keyword)),
-				matchMode == CaseMatchMode.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None
-			);
+			Regex regex = GetKeywordReplacementRegex(keyword, matchMode);
 			return regex.Replace(textSegment, string.Format("<{0}>{1}</{0}>", tag, regex.Match(textSegment).Value));
 		}
 		
@@ -916,14 +1257,11 @@ namespace Candlelight.UI
 		/// <param name="keyword">Keyword.</param>
 		/// <param name="className">Class name.</param>
 		/// <param name="matchMode">Match mode.</param>
-		private string InsertKeywordLinksIntoSegment(
+		private string InsertLinksIntoSegment(
 			string textSegment, string keyword, string className, CaseMatchMode matchMode
 		)
 		{
-			Regex regex = new Regex(
-				string.Format("(?<=^|\\W){0}(?=\\W|$)", Regex.Escape(keyword)),
-				matchMode == CaseMatchMode.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None
-			);
+			Regex regex = GetKeywordReplacementRegex(keyword, matchMode);
 			return regex.Replace(
 				textSegment,
 				string.Format(
@@ -952,32 +1290,8 @@ namespace Candlelight.UI
 			{
 				return textSegment;
 			}
-			Regex regex = new Regex(
-				string.Format("(?<=^|\\W){0}(?=\\W|$)", Regex.Escape(keyword)),
-				matchMode == CaseMatchMode.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None
-			);
+			Regex regex = GetKeywordReplacementRegex(keyword, matchMode);
 			return regex.Replace(textSegment, string.Format("<quad class=\"{0}\">", className));
-		}
-
-		/// <summary>
-		/// Raises the enable event.
-		/// </summary>
-		public void OnEnable()
-		{
-			if (m_Styles != null)
-			{
-				m_Styles.OnStylesChanged.RemoveListener(SetDirty);
-				m_Styles.OnStylesChanged.AddListener(SetDirty);
-			}
-			InitializeKeywordCollectionCallbacks(m_LinkKeywordCollections);
-			InitializeKeywordCollectionCallbacks(m_QuadKeywordCollections);
-			InitializeKeywordCollectionCallbacks(m_TagKeywordCollections);
-			if (this.InputTextSource != null)
-			{
-				m_InputTextSource.OnBecameDirty.RemoveListener(SetDirty);
-				m_InputTextSource.OnBecameDirty.AddListener(SetDirty);
-			}
-			SetDirty();
 		}
 
 		/// <summary>
@@ -990,276 +1304,364 @@ namespace Candlelight.UI
 			{
 				return;
 			}
-			// initialize variables used throughout this method
-			s_ProcessedTextBuilder = new StringBuilder();
-			int indexInRawString = 0;
-			Dictionary<string, HyperTextStyles.Text> customTags = new Dictionary<string, HyperTextStyles.Text>();
-			if (m_Styles != null)
+			using (var cascadedQuadStyles = new ListPool<HyperTextStyles.Quad>.Scope())
 			{
-				m_Styles.GetCascadedCustomTextStyles(ref s_CascadedTextStyles);
-				for (int i = 0; i < s_CascadedTextStyles.Count; ++i)
+				using (var processedIndexRangesAndScalars = new DictPool<IndexRange, float>.Scope())
 				{
-					if (
-						!string.IsNullOrEmpty(s_CascadedTextStyles[i].Tag) &&
-						!customTags.ContainsKey(s_CascadedTextStyles[i].Tag)
-					)
+					string textCache;
+					using (var sb = new StringX.StringBuilderScope())
 					{
-						customTags.Add(s_CascadedTextStyles[i].Tag, s_CascadedTextStyles[i]);
-					}
-				}
-			}
-			// insert tags in text for words present in keyword collections
-			s_TextCache = SubstituteTagsInForKeywords(this.InputTextToUse);
-			// if rich text is enabled, substitute quad arguments, discrete sizes, and custom tag styles into text
-			Dictionary<string, HyperTextStyles.Link> linkStyles = new Dictionary<string, HyperTextStyles.Link>();
-			if (m_Styles == null)
-			{
-				s_CascadedQuadStyles.Clear();
-			}
-			else
-			{
-				m_Styles.GetCascadedQuadStyles(ref s_CascadedQuadStyles);
-			}
-			m_CustomTags.Clear();
-			m_Quads.Clear();
-			Dictionary<IndexRange, float> processedIndexRangesAndScalars = new Dictionary<IndexRange, float>();
-			if (this.IsRichTextEnabled)
-			{
-				// sub quad arguments into text
-				s_TextCache =
-					s_QuadTagRegex.Replace(s_TextCache, match => GetPostprocessedQuadTag(match, s_CascadedQuadStyles));
-				// substitute sizes in for percentages
-				s_TextCache = s_PreprocessedSizeTagRegex.Replace(
-					s_TextCache,
-					match => string.Format(
-						"<size={0}>{1}</size>",
-						match.Groups[AttributeValueCaptureGroup].Value.EndsWith("%") ?
-							(int)(
-								float.Parse(
-									match.Groups[AttributeValueCaptureGroup].Value.Substring(
-										0, match.Groups[AttributeValueCaptureGroup].Value.Length - 1
-									)
-								) * this.ScaledFontSize * 0.01f
-							) : (
-								(int)float.Parse(match.Groups[AttributeValueCaptureGroup].Value) > 0 ?
-								(int)float.Parse(match.Groups[AttributeValueCaptureGroup].Value) : this.ScaledFontSize
-							),
-							match.Groups[TextCaptureGroup].Value
-					)
-				);
-				// substitute text styles in for custom tags
-				string tag;
-				foreach (HyperTextStyles.Text style in customTags.Values)
-				{
-					RichTextStyle textStyle =
-						this.IsDynamicFontEnabled ? style.TextStyle : style.TextStyle.NonDynamicVersion;
-					tag = style.Tag;
-					if (!s_TagRegexes.ContainsKey(tag))
-					{
-						s_TagRegexes[tag] = new System.Text.RegularExpressions.Regex(
-							string.Format(
-								"(?<{0}><{1}>)(?<{2}>.+?)(?<{3}></{1}>)",
-								OpenTagCaptureGroup, Regex.Escape(tag), TextCaptureGroup, CloseTagCaptureGroup
-							), RegexOptions.Singleline | RegexOptions.IgnoreCase
-						);
-					}
-					while (s_TagRegexes[tag].IsMatch(s_TextCache))
-					{
-						s_TextCache = s_TagRegexes[tag].Replace(
-							s_TextCache,
-							delegate(Match match)
-							{
-								s_OpenTag = textStyle.ToStartTag(ScaledFontSize);
-								s_Segment = match.Groups[TextCaptureGroup].Value;
-								s_CloseTag = textStyle.ToEndTag();
-								IndexRange characterIndices = new IndexRange(
-									match.Index + s_OpenTag.Length, match.Index + s_OpenTag.Length + s_Segment.Length - 1
-								);
-								s_IndexRangeOffsets.Clear();
-								s_IndexRangeOffsets.Add(
-									// start range one after match so start indices of enclosing tags aren't affected
-									new IndexRange(match.Index + 1, match.Groups[CloseTagCaptureGroup].Index - 1),
-									s_OpenTag.Length - match.Groups[OpenTagCaptureGroup].Length
-								);
-								s_IndexRangeOffsets.Add(
-									new IndexRange(match.Groups[CloseTagCaptureGroup].Index, s_TextCache.Length),
-									s_CloseTag.Length - match.Groups[CloseTagCaptureGroup].Length
-								);
-								foreach (IndexRange range in processedIndexRangesAndScalars.Keys)
-								{
-									range.Offset(s_IndexRangeOffsets);
-								}
-								processedIndexRangesAndScalars.Add(characterIndices, style.TextStyle.SizeScalar);
-								m_CustomTags.Add(new CustomTag(characterIndices, customTags[style.Tag]));
-								return string.Format("{0}{1}{2}", s_OpenTag, s_Segment, s_CloseTag);
-							},
-							1 // only replace first instance so indices are properly set for any subsequent matches
-						);
-					}
-				}
-				// collect link styles
-				this.Styles.GetCascadedLinkStyles(ref s_CascadedLinkStyles);
-				for (int i = 0; i < s_CascadedLinkStyles.Count; ++i)
-				{
-					if (
-						!string.IsNullOrEmpty(s_CascadedLinkStyles[i].ClassName) &&
-						!linkStyles.ContainsKey(s_CascadedLinkStyles[i].ClassName)
-					)
-					{
-						linkStyles.Add(s_CascadedLinkStyles[i].ClassName, s_CascadedLinkStyles[i].Style);
-					}
-				}
-			}
-			// remove <a> tags from processed text and record the link character indices
-			string className;
-			string textCapture;
-			m_Links.Clear();
-			foreach (Match match in s_PostprocessedLinkTagRegex.Matches(s_TextCache))
-			{
-				// append everything since last append
-				s_ProcessedTextBuilder.Append(s_TextCache.Substring(indexInRawString, match.Index - indexInRawString));
-				// get link class and style from match
-				HyperTextStyles.Link linkStyle = this.DefaultLinkStyle;
-				className = match.Groups[ClassNameCaptureGroup].Value;
-				if (
-					match.Groups[ClassNameCaptureGroup].Success &&
-					linkStyles.ContainsKey(match.Groups[ClassNameCaptureGroup].Value)
-				)
-				{
-					linkStyle = linkStyles[className];
-				}
-				// create the result for the substitution
-				RichTextStyle textStyle =
-					this.IsDynamicFontEnabled ? linkStyle.TextStyle : linkStyle.TextStyle.NonDynamicVersion;
-				s_OpenTag = textStyle.ToStartTag(this.ScaledFontSize);
-				s_CloseTag = textStyle.ToEndTag();
-				textCapture = match.Groups[TextCaptureGroup].Value;
-				string result = textCapture;
-				if (this.IsRichTextEnabled)
-				{
-					result = string.Format("{0}{1}{2}", s_OpenTag, textCapture, s_CloseTag);
-				}
-				// append substitution
-				s_ProcessedTextBuilder.Append(result);
-				indexInRawString = match.Index + match.Length;
-				// store the data for the link
-				int startPosition = s_ProcessedTextBuilder.Length -
-					(this.IsRichTextEnabled ? s_CloseTag.Length : 0) -
-					textCapture.Length;
-				Link newLink = new Link(
-					match.Groups[AttributeValueCaptureGroup].Value,
-					className,
-					new IndexRange(startPosition, startPosition + textCapture.Length - 1),
-					linkStyle
-				);
-				m_Links.Add(newLink);
-				// offset existing index ranges as needed
-				s_IndexRangeOffsets.Clear();
-				// add close tag first in case it shifts range backward
-				s_IndexRangeOffsets.Add(
-					new IndexRange(match.Groups[CloseTagCaptureGroup].Index, s_TextCache.Length),
-					s_CloseTag.Length - match.Groups[CloseTagCaptureGroup].Length
-				);
-				s_IndexRangeOffsets.Add(
-					// start range one after match so that start indices of enclosing tags aren't affected
-					new IndexRange(match.Index + 1, match.Groups[CloseTagCaptureGroup].Index - 1),
-					s_OpenTag.Length - (match.Groups[TextCaptureGroup].Index - match.Index)
-				);
-				foreach (IndexRange range in processedIndexRangesAndScalars.Keys)
-				{
-					range.Offset(s_IndexRangeOffsets);
-				}
-			}
-			s_ProcessedTextBuilder.Append(s_TextCache.Substring(indexInRawString, s_TextCache.Length - indexInRawString));
-			m_OutputText = s_ProcessedTextBuilder.ToString();
-			// pull out data for quads and finalize sizes if rich text is enabled
-			if (this.IsRichTextEnabled)
-			{
-				// multiply out overlapping sizes if dynamic font is enabled
-				if (this.IsDynamicFontEnabled)
-				{
-					foreach (Link link in m_Links)
-					{
-						processedIndexRangesAndScalars.Add(link.CharacterIndices, link.Style.TextStyle.SizeScalar);
-					}
-					foreach (KeyValuePair<IndexRange, float> rangeScalar in processedIndexRangesAndScalars)
-					{
-						if (rangeScalar.Value <= 0f || rangeScalar.Value == 1f)
+						// initialize variables used throughout this method
+						int indexInRawString = 0;
+						using (var linkStyles = new DictPool<string, HyperTextStyles.Link>.Scope())
 						{
-							continue;
-						}
-						s_Segment = m_OutputText.Substring(rangeScalar.Key.StartIndex, rangeScalar.Key.Count);
-						int oldLength = s_Segment.Length;
-						if (s_PostProcessedSizeAttributeRegex.IsMatch(s_Segment))
-						{
-							s_ProcessedTextBuilder = new StringBuilder();
-							s_ProcessedTextBuilder.Append(m_OutputText.Substring(0, rangeScalar.Key.StartIndex));
-							s_Segment = s_PostProcessedSizeAttributeRegex.Replace(
-								s_Segment,
-								match => string.Format(
-									"{0}{1}{2}",
-									match.Groups[OpenTagCaptureGroup].Value,
-									(int)(
-										rangeScalar.Value * float.Parse(match.Groups[AttributeValueCaptureGroup].Value)
-									),
-									match.Groups[CloseTagCaptureGroup].Value
-								)
-							);
-							s_ProcessedTextBuilder.Append(s_Segment);
-							s_ProcessedTextBuilder.Append(m_OutputText.Substring(rangeScalar.Key.EndIndex + 1));
-							m_OutputText = s_ProcessedTextBuilder.ToString();
-							int delta = s_Segment.Length - oldLength;
-							if (delta != 0)
+							using (var customTags = new DictPool<string, HyperTextStyles.Text>.Scope())
 							{
-								s_IndexRangeOffsets.Clear();
-								s_IndexRangeOffsets.Add(rangeScalar.Key, delta);
-								foreach (IndexRange range in processedIndexRangesAndScalars.Keys)
+								if (m_Styles != null)
 								{
-									if (range == rangeScalar.Key)
+									using (var styles = new ListPool<HyperTextStyles.Text>.Scope())
 									{
-										continue;
+										m_Styles.GetCascadedCustomTextStyles(styles.List);
+										for (int i = 0; i < styles.List.Count; ++i)
+										{
+											if (
+												!string.IsNullOrEmpty(styles.List[i].Tag) &&
+												!customTags.Dict.ContainsKey(styles.List[i].Tag)
+											)
+											{
+												customTags.Dict.Add(styles.List[i].Tag, styles.List[i]);
+											}
+										}
 									}
-									range.Offset(s_IndexRangeOffsets);
 								}
-								rangeScalar.Key.EndIndex += delta;
+								// insert tags in text for words present in keyword collections
+								textCache = SubstituteTagsInForKeywords(this.InputTextToUse);
+								// if rich text is enabled, substitute quad arguments, discrete sizes, and custom tag styles into text
+								if (m_Styles != null)
+								{
+									m_Styles.GetCascadedQuadStyles(cascadedQuadStyles.List);
+								}
+								m_CustomTags.Clear();
+								m_Quads.Clear();
+								if (this.IsRichTextEnabled)
+								{
+									// sub quad arguments into text
+									List<HyperTextStyles.Quad> quads = cascadedQuadStyles.List; // BUG: WinRT breaks if Scope property is accessed within closure
+									textCache = s_QuadTagRegex.Replace(
+										textCache, match => GetPostprocessedQuadTag(match, quads)
+									);
+									// substitute sizes in for percentages
+									textCache = s_PreprocessedSizeTagRegex.Replace(
+										textCache,
+										match => string.Format(
+											"<size={0}>{1}</size>",
+											match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value.EndsWith("%") ?
+												(int)(
+													float.Parse(
+														match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value.Substring(
+															0, match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value.Length - 1
+														)
+													) * this.ScaledFontSize * 0.01f
+												) : (
+													(int)float.Parse(
+														match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value
+													) > 0 ?
+														(int)float.Parse(
+															match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value
+														) : this.ScaledFontSize
+												),
+												match.Groups[HyperTextProcessor.TextCaptureGroup].Value
+										)
+									);
+									// substitute text styles in for custom tags
+									foreach (HyperTextStyles.Text style in customTags.Dict.Values)
+									{
+										Regex tagRegex = GetTagRegex(style.Tag);
+										while (tagRegex.IsMatch(textCache))
+										{
+											m_ReplacementCustomTextStyle = style;
+											m_ReplacementProcessedIndexRangesAndScalars =
+												processedIndexRangesAndScalars.Dict;
+											// only replace first instance so indices are properly set for any subsequent matches
+											textCache = tagRegex.Replace(textCache, ReplaceCustomTag, 1);
+										}
+									}
+									m_ReplacementProcessedIndexRangesAndScalars = null;
+									// collect link styles
+									using (var styles = new ListPool<HyperTextStyles.LinkSubclass>.Scope())
+									{
+										this.Styles.GetCascadedLinkStyles(styles.List);
+										for (int i = 0; i < styles.List.Count; ++i)
+										{
+											if (
+												!string.IsNullOrEmpty(styles.List[i].ClassName) &&
+												!linkStyles.Dict.ContainsKey(styles.List[i].ClassName)
+											)
+											{
+												linkStyles.Dict.Add(styles.List[i].ClassName, styles.List[i].Style);
+											}
+										}
+									}
+								}
+							}
+							// remove <a> tags from processed text and record the link character indices
+							string className;
+							m_Links.Clear();
+							while (s_PostprocessedLinkTagRegex.IsMatch(textCache))
+							{
+								className = s_PostprocessedLinkTagRegex.Match(
+									textCache
+								).Groups[HyperTextProcessor.ClassNameCaptureGroup].Value;
+								m_ReplacementLinkStyle = linkStyles.Dict.ContainsKey(className) ?
+									linkStyles.Dict[className] : this.DefaultLinkStyle;
+								m_ReplacementProcessedIndexRangesAndScalars = processedIndexRangesAndScalars.Dict;
+								// only replace first instance so indices are properly set for any subsequent matches
+								textCache = s_PostprocessedLinkTagRegex.Replace(textCache, ReplaceLink, 1);
+							}
+							m_ReplacementProcessedIndexRangesAndScalars = null;
+						}
+						sb.StringBuilder.Append(
+							textCache.Substring(indexInRawString, textCache.Length - indexInRawString)
+						);
+						m_OutputText = sb.StringBuilder.ToString();
+					}
+					// pull out data for quads and finalize sizes if rich text is enabled
+					if (this.IsRichTextEnabled)
+					{
+						// multiply out overlapping sizes if dynamic font is enabled
+						if (this.IsDynamicFontEnabled)
+						{
+							foreach (KeyValuePair<IndexRange, float> rangeScalar in processedIndexRangesAndScalars.Dict)
+							{
+								if (rangeScalar.Value <= 0f || rangeScalar.Value == 1f)
+								{
+									continue;
+								}
+								string segment =
+									m_OutputText.Substring(rangeScalar.Key.StartIndex, rangeScalar.Key.Count);
+								int oldLength = segment.Length;
+								if (s_PostProcessedSizeAttributeRegex.IsMatch(segment))
+								{
+									using (var sb = new StringX.StringBuilderScope())
+									{
+										sb.StringBuilder.Append(m_OutputText.Substring(0, rangeScalar.Key.StartIndex));
+										segment = s_PostProcessedSizeAttributeRegex.Replace(
+											segment,
+											match => string.Format(
+												"{0}{1}{2}",
+												match.Groups[HyperTextProcessor.OpenTagCaptureGroup].Value,
+												(int)(
+													rangeScalar.Value * float.Parse(
+														match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value
+													)
+												),
+												match.Groups[HyperTextProcessor.CloseTagCaptureGroup].Value
+											)
+										);
+										sb.StringBuilder.Append(segment);
+										sb.StringBuilder.Append(m_OutputText.Substring(rangeScalar.Key.EndIndex + 1));
+										m_OutputText = sb.StringBuilder.ToString();
+									}
+									int delta = segment.Length - oldLength;
+									if (delta != 0)
+									{
+										foreach (IndexRange range in processedIndexRangesAndScalars.Dict.Keys)
+										{
+											if (range != rangeScalar.Key)
+											{
+												range.Offset(rangeScalar.Key, delta);
+											}
+										}
+										rangeScalar.Key.EndIndex += delta;
+									}
+								}
+							}
+						}
+						// pull out quad data
+						string quadName;
+						bool isQuadGeomAtEndOfTag = UnityVersion.Current < new UnityVersion(5, 3, 0);
+						foreach (Match match in s_QuadTagRegex.Matches(m_OutputText))
+						{
+							// add new quad data to list if its class is known
+							quadName = match.Groups[HyperTextProcessor.ClassNameCaptureGroup].Value;
+							int templateIndex = cascadedQuadStyles.List.FindIndex(quad => quad.ClassName == quadName);
+							int quadGeomIndex = match.Index;
+							if (isQuadGeomAtEndOfTag)
+							{
+								quadGeomIndex += match.Length - 1;
+							}
+							if (templateIndex >= 0)
+							{
+								m_Quads.Add(
+									new Quad(
+										new IndexRange(quadGeomIndex, quadGeomIndex),
+										cascadedQuadStyles.List[templateIndex]
+									)
+								);
 							}
 						}
 					}
 				}
-				// pull out quad data
-				string quadName;
-				bool isQuadGeomAtEndOfTag = UnityVersion.Current < new UnityVersion(5, 3, 0);
-				foreach (Match match in s_QuadTagRegex.Matches(m_OutputText))
+			}
+			m_CustomTags.Sort(CompareTagsByStartIndex);
+			m_Links.Sort(CompareTagsByStartIndex);
+			m_Quads.Sort(CompareTagsByStartIndex);
+			m_IsDirty = false;
+		}
+
+		/// <summary>
+		/// A <see cref="MatchEvaluator"/> to replace custom tags with recognized rich text style tags and record their
+		/// index ranges.
+		/// </summary>
+		/// <remarks>
+		/// Temporally coupled with <see cref="HyperTextProcessor.m_ReplacementCustomTextStyle"/> and
+		/// <see cref="HyperTextProcessor.m_ReplacementProcessedIndexRangesAndScalars"/>.</remarks>
+		/// <returns>The string to insert in place of the <paramref name="match"/>.</returns>
+		/// <param name="match">Match.</param>
+		private string ReplaceCustomTag(Match match)
+		{
+			IndexRange characterIndices;
+			string result;
+			if (
+				ReplaceSegment(
+					match,
+					this.IsDynamicFontEnabled ?
+						m_ReplacementCustomTextStyle.TextStyle :
+						m_ReplacementCustomTextStyle.TextStyle.NonDynamicVersion,
+					m_ReplacementProcessedIndexRangesAndScalars,
+					out characterIndices,
+					out result
+				)
+			)
+			{
+				m_CustomTags.Add(new CustomTag(characterIndices, m_ReplacementCustomTextStyle));
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// A <see cref="MatchEvaluator"/> to replace links with recognized rich text style tags and record their index
+		/// ranges.
+		/// </summary>
+		/// <remarks>
+		/// Temporally coupled with <see cref="HyperTextProcessor.m_ReplacementLinkStyle"/> and
+		/// <see cref="HyperTextProcessor.m_ReplacementProcessedIndexRangesAndScalars"/>.</remarks>
+		/// <returns>The string to insert in place of the <paramref name="match"/>.</returns>
+		/// <param name="match">Match.</param>
+		private string ReplaceLink(Match match)
+		{
+			Group classNameGroup = match.Groups[HyperTextProcessor.ClassNameCaptureGroup];
+			string className = classNameGroup.Value;
+			IndexRange characterIndices;
+			string result;
+			if (
+				ReplaceSegment(
+					match,
+					this.IsDynamicFontEnabled ?
+						m_ReplacementLinkStyle.TextStyle : m_ReplacementLinkStyle.TextStyle.NonDynamicVersion,
+					m_ReplacementProcessedIndexRangesAndScalars,
+					out characterIndices,
+					out result
+				)
+			)
+			{
+				m_Links.Add(
+					new Link(
+						match.Groups[HyperTextProcessor.AttributeValueCaptureGroup].Value,
+						className,
+						characterIndices,
+						m_ReplacementLinkStyle
+					)
+				);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Gets replacement text for a <paramref name="match"/> and records index ranges if new geometry data should
+		/// be created, as well as offsetting <paramref name="processedIndexRangesAndScalars"/> as needed.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if new geomety data should be created from the <paramref name="characterIndices"/>;
+		/// otherwise, <see langword="false"/> .
+		/// </returns>
+		/// <param name="match">Match.</param>
+		/// <param name="textStyle">Text style to swap in if necessary.</param>
+		/// <param name="processedIndexRangesAndScalars">
+		/// A table of index ranges and scalars for geometry data that has already been processed.
+		/// </param>
+		/// <param name="characterIndices">
+		/// Character indices that should be used to create new geometry data if needed; otherwise,
+		/// <see langword="null"/>.
+		/// </param>
+		/// <param name="result">String that should be returned by the calling <see cref="MatchEvaluator"/>.</param>
+		private bool ReplaceSegment(
+			Match match,
+			RichTextStyle textStyle,
+			Dictionary<IndexRange, float> processedIndexRangesAndScalars,
+			out IndexRange characterIndices,
+			out string result
+		)
+		{
+			Group textCaptureGroup = match.Groups[HyperTextProcessor.TextCaptureGroup];
+			string openTag = this.IsRichTextEnabled ? textStyle.ToStartTag(this.ScaledFontSize) : "";
+			string closeTag = this.IsRichTextEnabled ? textStyle.ToEndTag() : "";
+			string segment = textCaptureGroup.Value;
+			using (var offsets = new ListPool<KeyValuePair<IndexRange, int>>.Scope())
+			{
+				Group closeTagGroup = match.Groups[HyperTextProcessor.CloseTagCaptureGroup];
+				int openTagDelta = openTag.Length - (textCaptureGroup.Index - match.Index);
+				// add close tag first in case it shifts range backward
+				offsets.List.Add(
+					new KeyValuePair<IndexRange, int>(
+						new IndexRange(
+							closeTagGroup.Index,
+							// finish one before end of match so end indices of enclosing tags aren't affected
+							closeTagGroup.Index + closeTagGroup.Length - 2
+						), closeTag.Length - closeTagGroup.Length
+					)
+				);
+				offsets.List.Add(
+					new KeyValuePair<IndexRange, int>(
+						// start one after match so start indices of enclosing tags aren't affected
+						new IndexRange(match.Index + 1, textCaptureGroup.Index - 1),
+						openTagDelta
+					)
+				);
+				foreach (IndexRange range in processedIndexRangesAndScalars.Keys)
 				{
-					// add new quad data to list if its class is known
-					quadName = match.Groups[ClassNameCaptureGroup].Value;
-					int templateIndex = s_CascadedQuadStyles.FindIndex(quad => quad.ClassName == quadName);
-					int quadGeomIndex = match.Index;
-					if (isQuadGeomAtEndOfTag)
+					foreach (KeyValuePair<IndexRange, int> offset in offsets.List)
 					{
-						quadGeomIndex += match.Length - 1;
-					}
-					if (templateIndex >= 0)
-					{
-						m_Quads.Add(
-							new Quad(new IndexRange(quadGeomIndex, quadGeomIndex), s_CascadedQuadStyles[templateIndex])
-						);
+						range.Offset(offset.Key, offset.Value);
 					}
 				}
 			}
-			m_CustomTags.Sort((x, y) => x.CharacterIndices.StartIndex.CompareTo(y.CharacterIndices.StartIndex));
-			m_Links.Sort((x, y) => x.CharacterIndices.StartIndex.CompareTo(y.CharacterIndices.StartIndex));
-			m_Quads.Sort((x, y) => x.CharacterIndices.StartIndex.CompareTo(y.CharacterIndices.StartIndex));
-			m_IsDirty = false;
+			if (segment.Length > 0)
+			{
+				characterIndices = new IndexRange(
+					match.Index + openTag.Length,
+					match.Index + openTag.Length + textCaptureGroup.Length - 1
+				);
+				processedIndexRangesAndScalars.Add(characterIndices, textStyle.SizeScalar);
+			}
+			else
+			{
+				characterIndices = null;
+			}
+			result = string.Format("{0}{1}{2}", openTag, segment, closeTag);
+			return segment.Length > 0;
 		}
-		
+
 		/// <summary>
 		/// Sets this instance dirty in order to force a became dirty callback.
 		/// </summary>
 		private void SetDirty()
 		{
 			m_IsDirty = true;
-			m_OnBecameDirty.Invoke();
+			if (this.BecameDirty != null)
+			{
+				this.BecameDirty(this);
+			}
 		}
 
 		/// <summary>
@@ -1268,14 +1670,14 @@ namespace Candlelight.UI
 		/// <param name="backingField">Backing field.</param>
 		/// <param name="value">Value.</param>
 		private void SetKeywordCollectionBackingField(
-			List<KeywordCollectionClass> backingField, IEnumerable<KeywordCollectionClass> value
+			List<KeywordCollectionClass> backingField, IList<KeywordCollectionClass> value
 		)
 		{
 			for (int i = 0; i < backingField.Count; ++i)
 			{
 				if (backingField[i].Collection != null)
 				{
-					backingField[i].Collection.OnRebuildKeywords.RemoveListener(SetDirty);
+					backingField[i].Collection.Changed -= OnKeywordCollectionChanged;
 				}
 			}
 			backingField.Clear();
@@ -1284,67 +1686,10 @@ namespace Candlelight.UI
 			{
 				if (backingField[i].Collection != null)
 				{
-					backingField[i].Collection.OnRebuildKeywords.AddListener(SetDirty);
+					backingField[i].Collection.Changed += OnKeywordCollectionChanged;
 				}
 			}
 			SetDirty();
-		}
-
-		/// <summary>
-		/// Sets the link keyword collections.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="value">Value.</param>
-		private void SetLinkKeywordCollections(KeywordCollectionClass[] value)
-		{
-			SetLinkKeywordCollections(value as IEnumerable<KeywordCollectionClass>);
-		}
-
-		/// <summary>
-		/// Sets the link keyword collections.
-		/// </summary>
-		/// <param name="value">Value.</param>
-		public void SetLinkKeywordCollections(IEnumerable<KeywordCollectionClass> value)
-		{
-			SetKeywordCollectionBackingField(m_LinkKeywordCollections, value);
-		}
-
-		/// <summary>
-		/// Sets the quad keyword collections.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="value">Value.</param>
-		private void SetQuadKeywordCollections(KeywordCollectionClass[] value)
-		{
-			SetQuadKeywordCollections(value as IEnumerable<KeywordCollectionClass>);
-		}
-
-		/// <summary>
-		/// Sets the quad keyword collections.
-		/// </summary>
-		/// <param name="value">Value.</param>
-		public void SetQuadKeywordCollections(IEnumerable<KeywordCollectionClass> value)
-		{
-			SetKeywordCollectionBackingField(m_QuadKeywordCollections, value);
-		}
-
-		/// <summary>
-		/// Sets the tag keyword collections.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="value">Value.</param>
-		private void SetTagKeywordCollections(KeywordCollectionClass[] value)
-		{
-			SetTagKeywordCollections(value as IEnumerable<KeywordCollectionClass>);
-		}
-
-		/// <summary>
-		/// Sets the tag keyword collections.
-		/// </summary>
-		/// <param name="value">Value.</param>
-		public void SetTagKeywordCollections(IEnumerable<KeywordCollectionClass> value)
-		{
-			SetKeywordCollectionBackingField(m_TagKeywordCollections, value);
 		}
 
 		/// <summary>
@@ -1355,124 +1700,145 @@ namespace Candlelight.UI
 		private string SubstituteTagsInForKeywords(string input)
 		{
 			// gather up all keyword collections and their corresponding substitution methods
-			Dictionary<KeywordCollection, System.Func<string, string, string>> keywordCollections =
-				new Dictionary<KeywordCollection, System.Func<string, string, string>>();
-			List<KeywordCollectionClass> allCollectionClasses =
-				new List<KeywordCollectionClass>(m_LinkKeywordCollections);
-			List<System.Func<string, string, string, CaseMatchMode, string>> collectionSubstitutionMethods =
-				new List<System.Func<string, string, string, CaseMatchMode, string>>();
-			for (int index = 0; index < m_LinkKeywordCollections.Count; ++index)
+			using (var keywordCollections = new DictPool<KeywordCollection, KeywordCollectionClassSubstitution>.Scope())
 			{
-				collectionSubstitutionMethods.Add(InsertKeywordLinksIntoSegment);
-			}
-			if (this.IsRichTextEnabled)
-			{
-				allCollectionClasses.AddRange(m_QuadKeywordCollections);
-				for (int index = 0; index < m_QuadKeywordCollections.Count; ++index)
+				using (var collectionSubstitutionMethods = new ListPool<KeywordSubtitutionCallback>.Scope())
 				{
-					collectionSubstitutionMethods.Add(InsertQuadTagIntoSegment);
-				}
-				allCollectionClasses.AddRange(m_TagKeywordCollections);
-				for (int index = 0; index < m_TagKeywordCollections.Count; ++index)
-				{
-					collectionSubstitutionMethods.Add(InsertCustomTagsIntoSegment);
-				}
-			}
-			for (int index = 0; index < allCollectionClasses.Count; ++index)
-			{
-				if (allCollectionClasses[index].Collection == null)
-				{
-					continue;
-				}
-				if (keywordCollections.ContainsKey(allCollectionClasses[index].Collection))
-				{
-#if UNITY_EDITOR
-					if (Application.isPlaying)
-#endif
+					using (var allCollectionClasses = new ListPool<KeywordCollectionClass>.Scope())
 					{
-						Debug.LogError(
-							string.Format(
-								"Keyword collection {0} used for multiple different styles.",
-								allCollectionClasses[index].Collection.name
-							)
-						);
-					}
-				}
-				else
-				{
-					System.Func<string, string, string, CaseMatchMode, string> substitutionMethod =
-						collectionSubstitutionMethods[index];
-					string identifierName = allCollectionClasses[index].ClassName;
-					CaseMatchMode caseMatchMode = allCollectionClasses[index].Collection.CaseMatchMode;
-					keywordCollections.Add(
-						allCollectionClasses[index].Collection,
-						(segment, keyword) => substitutionMethod(segment, keyword, identifierName, caseMatchMode)
-					);
-				}
-			}
-			// get a regular expression to match tags
-			string customTagsMatchPattern = "|".Join(
-				from style in m_TagKeywordCollections
-				select string.IsNullOrEmpty(style.ClassName) ?
-					"" : string.Format("</?{0}\b.*?>", Regex.Escape(style.ClassName))
-			);
-			Regex tagMatcher = this.IsRichTextEnabled ?
-				new Regex(
-					string.Format(
-						"{0}{1}",
-						s_PreprocessedAnyTagMatchPattern,
-						string.IsNullOrEmpty(customTagsMatchPattern) ?
-							"" : string.Format("|{0}", customTagsMatchPattern)
-					),
-					RegexOptions.Singleline | RegexOptions.IgnoreCase
-				) : s_PreprocessedLinkTagRegex;
-			// sub in tags for each keyword
-			s_ProcessedKeywords.Clear();
-			foreach (KeyValuePair<KeywordCollection, System.Func<string, string, string>> kv in keywordCollections)
-			{
-				foreach (string keyword in kv.Key.Keywords)
-				{
-					if (s_ProcessedKeywords.Contains(keyword) || string.IsNullOrEmpty(keyword))
-					{
-						continue;
-					}
-					s_ProcessedKeywords.Add(keyword);
-					int start;
-					MatchCollection tagMatches = tagMatcher.Matches(input);
-					// preserve all text inside of tags
-					if (tagMatches.Count > 0)
-					{
-						s_ProcessedTextBuilder = new StringBuilder();
-						for (int matchIndex = 0; matchIndex < tagMatches.Count; ++matchIndex)
+						allCollectionClasses.List.AddRange(m_LinkKeywordCollections);
+						for (int index = 0; index < m_LinkKeywordCollections.Count; ++index)
 						{
-							start = matchIndex == 0 ?
-								0 : tagMatches[matchIndex - 1].Index + tagMatches[matchIndex - 1].Length;
-							// append text preceding tag
-							s_Segment = input.Substring(start, tagMatches[matchIndex].Index - start);
-							// append patched text
-							s_ProcessedTextBuilder.Append(kv.Value(s_Segment, keyword));
-							// append tag
-							s_ProcessedTextBuilder.Append(tagMatches[matchIndex].Value);
-							// append segment following final tag
-							if (matchIndex == tagMatches.Count - 1)
+							collectionSubstitutionMethods.List.Add(InsertLinksIntoSegment);
+						}
+						if (this.IsRichTextEnabled)
+						{
+							allCollectionClasses.List.AddRange(m_QuadKeywordCollections);
+							for (int index = 0; index < m_QuadKeywordCollections.Count; ++index)
 							{
-								s_Segment =
-									input.Substring(tagMatches[matchIndex].Index + tagMatches[matchIndex].Length);
-								s_ProcessedTextBuilder.Append(kv.Value(s_Segment, keyword));
+								collectionSubstitutionMethods.List.Add(InsertQuadTagIntoSegment);
+							}
+							allCollectionClasses.List.AddRange(m_TagKeywordCollections);
+							for (int index = 0; index < m_TagKeywordCollections.Count; ++index)
+							{
+								collectionSubstitutionMethods.List.Add(InsertCustomTagsIntoSegment);
 							}
 						}
-						input = s_ProcessedTextBuilder.ToString();
-					}
-					// perform simple substitution if there are no tags present
-					else
-					{
-						input = kv.Value(input, keyword);
+						for (int index = 0; index < allCollectionClasses.List.Count; ++index)
+						{
+							if (allCollectionClasses.List[index].Collection == null)
+							{
+								continue;
+							}
+							if (keywordCollections.Dict.ContainsKey(allCollectionClasses.List[index].Collection))
+							{
+#if UNITY_EDITOR
+								if (Application.isPlaying)
+#endif
+								{
+									Debug.LogError(
+										string.Format(
+											"Keyword collection {0} used for multiple different styles.",
+											allCollectionClasses.List[index].Collection.name
+										)
+									);
+								}
+							}
+							else
+							{
+								KeywordSubtitutionCallback substitutionMethod =
+									collectionSubstitutionMethods.List[index];
+								keywordCollections.Dict.Add(
+									allCollectionClasses.List[index].Collection,
+									new KeywordCollectionClassSubstitution(
+										allCollectionClasses.List[index], substitutionMethod
+									)
+								);
+							}
+						}
 					}
 				}
-				// reset string builder
-				s_ProcessedTextBuilder = new StringBuilder();
+				// get a regular expression to match tags
+				string customTagsMatchPattern = "|".Join(
+					from style in m_TagKeywordCollections
+					select string.IsNullOrEmpty (style.ClassName) ?
+						"" : string.Format ("</?{0}\\b.*?>", Regex.Escape(style.ClassName))
+				);
+				Regex tagMatcher = this.IsRichTextEnabled ?
+					new Regex(
+						string.Format(
+							"{0}{1}",
+							s_PreprocessedAnyTagMatchPattern,
+							string.IsNullOrEmpty (customTagsMatchPattern) ?
+								"" : string.Format ("|{0}", customTagsMatchPattern)
+						),
+						RegexOptions.Singleline | RegexOptions.IgnoreCase
+					) : s_PreprocessedLinkTagRegex;
+				// sub in tags for each keyword
+				using (var processedKeywords = new HashPool<string>.Scope())
+				{
+					using (var substitutedKeywordIndices = new ListPool<IndexRange>.Scope())
+					{
+						foreach (var keywordCollectionSubstitution in keywordCollections.Dict)
+						{
+							foreach (string keyword in keywordCollectionSubstitution.Key.Keywords)
+							{
+								if (string.IsNullOrEmpty(keyword) || processedKeywords.HashSet.Contains(keyword))
+								{
+									continue;
+								}
+								processedKeywords.HashSet.Add(keyword);
+								input = keywordCollectionSubstitution.Value.SubstituteKeywordIntoText(
+									input, keyword, tagMatcher, substitutedKeywordIndices.List
+								);
+							}
+						}
+						for (int i = 0, count = substitutedKeywordIndices.List.Count; i < count; ++i)
+						{
+							s_IndexRangePool.Release(substitutedKeywordIndices.List[i]);
+						}
+					}
+				}
+				return input;
 			}
-			return input;
 		}
+
+#if CANDLELIGHT_MONO_AOT
+		/// <summary>
+		/// Provides a hint to the Mono AOT compiler to generate conrete generic types required at run-time.
+		/// </summary>
+		private void MonoAOTHint()
+		{
+			ListPool<CustomTag>.Release(ListPool<CustomTag>.Get());
+			ListPool<IndexRange>.Release(ListPool<IndexRange>.Get());
+			ListPool<Link>.Release(ListPool<Link>.Get());
+			ListPool<Quad>.Release(ListPool<Quad>.Get());
+			ListPool<KeyValuePair<IndexRange, int>>.Release(ListPool<KeyValuePair<IndexRange, int>>.Get());
+			DictPool<IndexRange, float>.Release(DictPool<IndexRange, float>.Get());
+			DictPool<string, HyperTextStyles.Link>.Release(DictPool<string, HyperTextStyles.Link>.Get());
+			DictPool<string, HyperTextStyles.Text>.Release(DictPool<string, HyperTextStyles.Text>.Get());
+		}
+#endif
+
+		#region Obsolete
+		[System.Obsolete("Use HyperTextProcessor.GetCustomTags(List<CustomTag>", true)]
+		public void GetCustomTags(ref List<CustomTag> tags) {}
+		[System.Obsolete("Use HyperTextProcessor.GetLinkKeywordCollections(List<KeywordCollectionClass>", true)]
+		public void GetLinkKeywordCollections(ref List<KeywordCollectionClass> collections) {}
+		[System.Obsolete("Use HyperTextProcessor.GetLinks(List<Link>", true)]
+		public void GetLinks(ref List<Link> links) {}
+		[System.Obsolete("Use HyperTextProcessor.GetQuadKeywordCollections(List<KeywordCollectionClass>", true)]
+		public void GetQuadKeywordCollections(ref List<KeywordCollectionClass> collections) {}
+		[System.Obsolete("Use HyperTextProcessor.GetQuads(List<Quad>", true)]
+		public void GetQuads(ref List<Quad> quads) {}
+		[System.Obsolete("Use HyperTextProcessor.GetTagKeywordCollections(List<KeywordCollectionClass>", true)]
+		public void GetTagKeywordCollections(ref List<KeywordCollectionClass> collections) {}
+		[System.Obsolete("Use HyperTextProcessor.SetLinkKeywordCollections(IList<KeywordCollectionClass>", true)]
+		public void SetLinkKeywordCollections(IEnumerable<KeywordCollectionClass> value) {}
+		[System.Obsolete("Use HyperTextProcessor.SetQuadKeywordCollections(IList<KeywordCollectionClass>", true)]
+		public void SetQuadKeywordCollections(IEnumerable<KeywordCollectionClass> value) {}
+		[System.Obsolete("Use HyperTextProcessor.SetTagKeywordCollections(IList<KeywordCollectionClass>", true)]
+		public void SetTagKeywordCollections(IEnumerable<KeywordCollectionClass> value) {}
+		#endregion
 	}
 }

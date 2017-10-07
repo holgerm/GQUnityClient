@@ -1,7 +1,7 @@
 ﻿// 
 // RichText.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -23,6 +23,30 @@ namespace Candlelight
 		/// <value>The default style.</value>
 		public static RichTextStyle DefaultStyle { get { return new RichTextStyle(1f, FontStyle.Normal); } }
 
+		/// <summary>
+		/// Gets the start tag for the specified <paramref name="style"/>.
+		/// </summary>
+		/// <returns>The start tag.</returns>
+		/// <param name="style">Style.</param>
+		public static string GetStartTag(FontStyle style)
+		{
+			return style == FontStyle.Bold ? "<b>" :
+				style == FontStyle.BoldAndItalic ? "<b><i>" :
+				style == FontStyle.Italic ? "<i>" : "";
+		}
+
+		/// <summary>
+		/// Gets the end tag for the specified <paramref name="style"/>.
+		/// </summary>
+		/// <returns>The end tag.</returns>
+		/// <param name="style">Style.</param>
+		public static string GetEndTag(FontStyle style)
+		{
+			return style == FontStyle.Bold ? "</b>" :
+				style == FontStyle.BoldAndItalic ? "</i></b>" :
+				style == FontStyle.Italic ? "</i>" : "";
+		}
+
 		#region Backing Fields
 		[SerializeField, PropertyBackingField]
 		private float m_SizeScalar;
@@ -43,17 +67,8 @@ namespace Candlelight
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(m_ColorString))
-				{
-					m_ColorString = string.Format(
-						"#{0}{1}{2}{3}",
-						((int)(m_ReplacementColor.r * 255f)).ToString("X2"),
-						((int)(m_ReplacementColor.g * 255f)).ToString("X2"),
-						((int)(m_ReplacementColor.b * 255f)).ToString("X2"),
-						((int)(m_ReplacementColor.a * 255f)).ToString("X2")
-					);
-				}
-				return m_ColorString;
+				return m_ColorString =
+					string.IsNullOrEmpty(m_ColorString) ? m_ReplacementColor.ToHexString() : m_ColorString;
 			}
 		}
 		/// <summary>
@@ -147,7 +162,7 @@ namespace Candlelight
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			return ObjectX.Equals(ref this, obj);
+			return (obj == null || !(obj is RichTextStyle)) ? false : Equals((RichTextStyle)obj);
 		}
 		
 		/// <summary>
@@ -163,7 +178,10 @@ namespace Candlelight
 		/// </returns>
 		public bool Equals(RichTextStyle other)
 		{
-			return GetHashCode() == other.GetHashCode();
+			return m_FontStyle == other.m_FontStyle &&
+				m_ShouldReplaceColor == other.m_ShouldReplaceColor &&
+				m_SizeScalar == other.m_SizeScalar &&
+				m_ReplacementColor == other.m_ReplacementColor;
 		}
 		
 		/// <summary>
@@ -212,9 +230,7 @@ namespace Candlelight
 		{
 			return string.Format(
 				"{0}{1}{2}",
-				m_FontStyle == FontStyle.Bold ? "<b>" :
-					m_FontStyle == FontStyle.BoldAndItalic ? "<b><i>" :
-					m_FontStyle == FontStyle.Italic ? "<i>" : "",
+				GetStartTag(m_FontStyle),
 				m_ShouldReplaceColor ? string.Format("<color={0}>", this.ColorString) : "",
 				m_SizeScalar != 1f && m_SizeScalar > 0f ? string.Format("<size={0}>", GetSize(surroundingTextSize)) : ""
 			);
@@ -230,9 +246,7 @@ namespace Candlelight
 				"{0}{1}{2}",
 				m_SizeScalar != 1f && m_SizeScalar > 0f ? "</size>" : "",
 				m_ShouldReplaceColor ? "</color>" : "",
-				m_FontStyle == FontStyle.Bold ? "</b>" :
-					m_FontStyle == FontStyle.BoldAndItalic ? "</i></b>" :
-					m_FontStyle == FontStyle.Italic ? "</i>" : ""
+				GetEndTag(m_FontStyle)
 			);
 		}
 

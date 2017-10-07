@@ -1,7 +1,7 @@
 ﻿// 
 // FontUpdateTracker.cs
 // 
-// Copyright (c) 2015, Candlelight Interactive, LLC
+// Copyright (c) 2015-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -22,7 +22,7 @@ namespace Candlelight.UI
 		/// <summary>
 		/// Fonts being tracked, and their respective <see cref="HyperText"/> objects.
 		/// </summary>
-		private static Dictionary<Font, HashSet<HyperText>> s_Tracked = new Dictionary<Font, HashSet<HyperText>>();
+		private static Dictionary<Font, List<HyperText>> s_Tracked = new Dictionary<Font, List<HyperText>>();
 
 		/// <summary>
 		/// Tracks the supplied <see cref="HyperText"/> object.
@@ -34,11 +34,11 @@ namespace Candlelight.UI
 			{
 				return;
 			}
-			HashSet<HyperText> exists;
+			List<HyperText> exists;
 			s_Tracked.TryGetValue(hyperText.FontToUse, out exists);
 			if (exists == null)
 			{
-				exists = new HashSet<HyperText>();
+				exists = new List<HyperText>();
 				s_Tracked.Add(hyperText.FontToUse, exists);
 #if UNITY_4_6
 				hyperText.FontToUse.textureRebuildCallback += RebuildForFont(hyperText.FontToUse);
@@ -67,15 +67,15 @@ namespace Candlelight.UI
 				{
 					return;
 				}
-				HashSet<HyperText> texts;
+				List<HyperText> texts;
 				s_Tracked.TryGetValue(font, out texts);
 				if (texts == null)
 				{
 					return;
 				}
-				foreach (HyperText t in texts)
+				for (int i = 0; i < texts.Count; ++i)
 				{
-					t.FontTextureChanged();
+					texts[i].FontTextureChanged();
 				}
 			};
 		}
@@ -90,7 +90,7 @@ namespace Candlelight.UI
 			{
 				return;
 			}
-			HashSet<HyperText> texts;
+			List<HyperText> texts;
 			s_Tracked.TryGetValue(hyperText.FontToUse, out texts);
 			if (texts == null)
 			{

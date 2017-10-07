@@ -1,14 +1,11 @@
 ﻿// 
 // TextAlignmentDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains as custom PropertyDrawer for TextAlignment. It mirrors that
-// found in UnityEditor.UI.FontDataDrawer.
 
 using UnityEditor;
 using UnityEngine;
@@ -17,8 +14,11 @@ using System.Reflection;
 namespace Candlelight
 {
 	/// <summary>
-	/// Text alignment drawer.
+	/// A custom <see cref="UnityEditor.PropertyDrawer"/> for <see cref="UnityEngine.TextAlignment"/>.
 	/// </summary>
+	/// <remarks>
+	/// This class mirrors that found in UnityEditor.UI.FontDataDrawer.
+	/// </remarks>
 	[CustomPropertyDrawer(typeof(TextAnchor))]
 	public class TextAlignmentDrawer : PropertyDrawer
 	{
@@ -42,8 +42,8 @@ namespace Candlelight
 		/// <param name="style">Style.</param>
 		private static bool EditorToggle(Rect position, GUIContent label, bool value, GUIStyle style)
 		{
-			int hashCode = "AlignToggle".GetHashCode ();
-			int controlID = GUIUtility.GetControlID (hashCode, EditorGUIUtility.native, position);
+			int hashCode = "AlignToggle".GetHashCode();
+			int controlID = GUIUtility.GetControlID(hashCode, FocusType.Keyboard, position);
 			Event current = Event.current;
 			if (
 				GUIUtility.keyboardControl == controlID &&
@@ -66,7 +66,7 @@ namespace Candlelight
 			{
 				GUIUtility.keyboardControl = controlID;
 				EditorGUIUtility.editingTextField = false;
-				HandleUtility.Repaint ();
+				HandleUtility.Repaint();
 			}
 			return GUI.Toggle(position, controlID, value, label, style);
 		}
@@ -79,7 +79,7 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			int controlID = GUIUtility.GetControlID(s_TextAlignmentHash, EditorGUIUtility.native, position);
+			int controlID = GUIUtility.GetControlID(s_TextAlignmentHash, FocusType.Keyboard, position);
 			EditorGUIUtility.SetIconSize(new Vector2(15f, 15f));
 			EditorGUI.BeginProperty(position, label, property);
 			Rect rect = EditorGUI.PrefixLabel(position, controlID, label);
@@ -124,12 +124,11 @@ namespace Candlelight
 			bool flag3 = horizontalAlignment == HorizontalTextAligment.Right;
 			if (property.hasMultipleDifferentValues)
 			{
-				Object[] targetObjects = property.serializedObject.targetObjects;
-				for(int i = 0; i < targetObjects.Length; i++)
+				foreach (Object obj in property.serializedObject.targetObjects)
 				{
-					Object obj = targetObjects [i];
-					UnityEngine.UI.Text text = obj as UnityEngine.UI.Text;
-					horizontalAlignment = text.alignment.GetHorizontalAlignment();
+					TextAnchor displayAlignment =
+						(TextAnchor)new SerializedObject(obj).FindProperty(property.propertyPath).enumValueIndex;
+					horizontalAlignment = displayAlignment.GetHorizontalAlignment();
 					flag = flag || horizontalAlignment == HorizontalTextAligment.Left;
 					flag2 = flag2 || horizontalAlignment == HorizontalTextAligment.Center;
 					flag3 = flag3 || horizontalAlignment == HorizontalTextAligment.Right;
@@ -193,13 +192,11 @@ namespace Candlelight
 			bool flag3 = verticalAlignment == VerticalTextAligment.Bottom;
 			if (property.hasMultipleDifferentValues)
 			{
-				Object[] targetObjects = property.serializedObject.targetObjects;
-				for(int i = 0; i < targetObjects.Length; i++)
+				foreach (Object obj in property.serializedObject.targetObjects)
 				{
-					Object obj = targetObjects [i];
-					TextAnchor alignment2 =
+					TextAnchor displayAlignment =
 						(TextAnchor)new SerializedObject(obj).FindProperty(property.propertyPath).enumValueIndex;
-					verticalAlignment = alignment2.GetVerticalAlignment();
+					verticalAlignment = displayAlignment.GetVerticalAlignment();
 					flag = flag || verticalAlignment == VerticalTextAligment.Top;
 					flag2 = flag2 || verticalAlignment == VerticalTextAligment.Middle;
 					flag3 = flag3 || verticalAlignment == VerticalTextAligment.Bottom;

@@ -1,7 +1,7 @@
 ﻿// 
 // KeywordsTextDocumentEditor.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -10,8 +10,6 @@
 // This file contains a custom editor for KeywordsTextDocument.
 
 using UnityEditor;
-using UnityEngine;
-using System.Reflection;
 
 namespace Candlelight
 {
@@ -24,7 +22,7 @@ namespace Candlelight
 		/// <summary>
 		/// Creates a new asset in the project.
 		/// </summary>
-		[MenuItem("Assets/Create/Candlelight/Keyword Collections/Text Document")]
+		[MenuItem("Assets/Create/Candlelight/HyperText/Keyword Collections/Text Document")]
 		public static void CreateNewAsset()
 		{
 			CreateNewAssetInProject();

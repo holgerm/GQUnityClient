@@ -1,7 +1,7 @@
 ﻿// 
 // UnityVersion.cs
 // 
-// Copyright (c) 2013-2015, Candlelight Interactive, LLC
+// Copyright (c) 2013-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -18,19 +18,26 @@ namespace Candlelight
 	public struct UnityVersion : System.IEquatable<UnityVersion>
 	{
 		/// <summary>
+		/// Initializes the <see cref="UnityVersion"/> struct.
+		/// </summary>
+		static UnityVersion()
+		{
+			string[] tokens = Application.unityVersion.Split('.');
+			s_Current = new UnityVersion(
+				int.Parse(tokens[0]), int.Parse(tokens[1]), int.Parse(new Regex(@"\d+").Match(tokens[2]).Value)
+			);
+		}
+
+		#region Backing Fields
+		private static UnityVersion s_Current;
+		#endregion
+
+		/// <summary>
 		/// Gets the currently running version.
 		/// </summary>
 		/// <value>The current running version.</value>
-		public static UnityVersion Current
-		{
-			get
-			{
-				string[] tokens = Application.unityVersion.Split('.');
-				return new UnityVersion(
-					int.Parse(tokens[0]), int.Parse(tokens[1]), int.Parse(new Regex(@"\d+").Match(tokens[2]).Value)
-				);
-			}
-		}
+		public static UnityVersion Current { get { return s_Current; } }
+
 		/// <summary>
 		/// Gets the maintenance version.
 		/// </summary>
@@ -93,7 +100,7 @@ namespace Candlelight
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			return ObjectX.Equals(ref this, obj);
+			return (obj == null || !(obj is UnityVersion)) ? false : Equals((UnityVersion)obj);
 		}
 
 		/// <summary>
@@ -109,7 +116,9 @@ namespace Candlelight
 		/// </returns>
 		public bool Equals(UnityVersion other)
 		{
-			return GetHashCode() == other.GetHashCode();
+			return this.MaintenanceVersion == other.MaintenanceVersion &&
+				this.MinorVersion == other.MinorVersion &&
+				this.MajorVersion == other.MajorVersion;
 		}
 
 		/// <summary>

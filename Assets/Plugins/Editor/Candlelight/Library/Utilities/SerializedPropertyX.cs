@@ -1,7 +1,7 @@
 // 
 // SerializedPropertyX.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -40,37 +40,26 @@ namespace Candlelight
 	/// </summary>
 	public static class SerializedPropertyX
 	{
-		#region Shared Allocations
-		private static List<PropertyAttribute> s_PropertyAttrs = new List<PropertyAttribute>();
-		private static List<System.SerializableAttribute> s_SerializableAttrs =
-			new List<System.SerializableAttribute>();
-		#endregion
-
 		/// <summary>
 		/// The CustomPropertyDrawerAttribute type field.
 		/// </summary>
 		private static readonly FieldInfo s_CustomPropertyDrawerTypeField =
-			typeof(CustomPropertyDrawer).GetField("m_Type", ReflectionX.instanceBindingFlags);
+			typeof(CustomPropertyDrawer).GetInstanceField("m_Type");
 		/// <summary>
 		/// The CustomPropertyDrawerAttribute use for children field.
 		/// </summary>
 		private static readonly FieldInfo s_CustomPropertyDrawerUseForChildrenField =
-			typeof(CustomPropertyDrawer).GetField("m_UseForChildren", ReflectionX.instanceBindingFlags);
+			typeof(CustomPropertyDrawer).GetInstanceField("m_UseForChildren");
 		/// <summary>
 		/// The DecoratorDrawer attribute field.
 		/// </summary>
 		private static readonly FieldInfo s_DecoratorDrawerAttributeField =
-			typeof(DecoratorDrawer).GetField("m_Attribute", ReflectionX.instanceBindingFlags);
+			typeof(DecoratorDrawer).GetInstanceField("m_Attribute");
 		/// <summary>
 		/// A dictionary mapping property attribute types to DecoratorDrawer types.
 		/// </summary>
 		private static readonly Dictionary<System.Type, System.Type> s_DecoratorsForEachType =
 			new Dictionary<System.Type, System.Type>();
-		/// <summary>
-		/// The display name property for the SerializedProperty class.
-		/// </summary>
-		private static readonly PropertyInfo s_DisplayNameProperty =
-			typeof(SerializedProperty).GetProperty("displayName", ReflectionX.instanceBindingFlags);
 		/// <summary>
 		/// A dictionary mapping types to their corresponding drawers; keys may be PropertyAttributes or field types.
 		/// </summary>
@@ -82,9 +71,10 @@ namespace Candlelight
 		private static Dictionary<System.Type, ReadOnlyCollection<FieldInfo>> s_FieldsToCopyForEachType =
 			new Dictionary<System.Type, ReadOnlyCollection<FieldInfo>>();
 		/// <summary>
-		/// An allocation for a regex match.
+		/// The last serializable field for each known type.
 		/// </summary>
-		private static Match s_Match;
+		private static readonly Dictionary<System.Type, FieldInfo> s_LastSerializableFields =
+			new Dictionary<System.Type, FieldInfo>();
 		/// <summary>
 		/// A regular expression to match an array element in the middle of a serialized property path.
 		/// </summary>
@@ -107,19 +97,15 @@ namespace Candlelight
 				@"(?<prefix>\.)?(?<name>\w+)$"
 			);
 		/// <summary>
-		/// An allocation for modifying a property path.
-		/// </summary>
-		private static string s_PatchedPropertyPath;
-		/// <summary>
 		/// The PropertyDrawer attribute field.
 		/// </summary>
 		private static readonly FieldInfo s_PropertyDrawerAttributeField =
-			typeof(PropertyDrawer).GetField("m_Attribute", ReflectionX.instanceBindingFlags);
+			typeof(PropertyDrawer).GetInstanceField("m_Attribute");
 		/// <summary>
 		/// The PropertyDrawer field info field.
 		/// </summary>
 		private static readonly FieldInfo s_PropertyDrawerFieldInfoField =
-			typeof(PropertyDrawer).GetField("m_FieldInfo", ReflectionX.instanceBindingFlags);
+			typeof(PropertyDrawer).GetInstanceField("m_FieldInfo");
 		/// <summary>
 		/// Types that are natively serializable and a corresponding SerializedPropertyType.
 		/// </summary>
@@ -154,7 +140,7 @@ namespace Candlelight
 			{ SerializedPropertyType.Bounds, prop => (object)prop.boundsValue },
 			{ SerializedPropertyType.Character, prop => (object)prop.intValue },
 			{ SerializedPropertyType.Color, prop => (object)prop.colorValue },
-			{ SerializedPropertyType.Enum, prop => (object)prop.enumValueIndex },
+			{ SerializedPropertyType.Enum, prop => (object)prop.intValue },
 			{ SerializedPropertyType.Float, prop => (object)prop.floatValue },
 			{ SerializedPropertyType.Integer, prop => (object)prop.intValue },
 			{ SerializedPropertyType.LayerMask, prop => (object)(LayerMask)prop.intValue },
@@ -178,7 +164,7 @@ namespace Candlelight
 			{ SerializedPropertyType.Bounds, (prop, val) => prop.boundsValue = (Bounds)val },
 			{ SerializedPropertyType.Character, (prop, val) => prop.intValue = (int)val },
 			{ SerializedPropertyType.Color, (prop, val) => prop.colorValue = (Color)val },
-			{ SerializedPropertyType.Enum, (prop, val) => prop.enumValueIndex = (int)val },
+			{ SerializedPropertyType.Enum, (prop, val) => prop.intValue = (int)val },
 			{ SerializedPropertyType.Float, (prop, val) => prop.floatValue = (float)val },
 			{ SerializedPropertyType.Integer, (prop, val) => prop.intValue = (int)val },
 			{ SerializedPropertyType.LayerMask, (prop, val) => prop.intValue = (int)val },
@@ -202,7 +188,7 @@ namespace Candlelight
 			List<CustomPropertyDrawer> customDrawerAttrs = new List<CustomPropertyDrawer>();
 			foreach (System.Type drawerType in drawerTypes)
 			{
-				if (drawerType.GetCustomAttributes(ref customDrawerAttrs) > 0)
+				if (drawerType.GetCustomAttributes(customDrawerAttrs) > 0)
 				{
 					System.Type baseType =
 						s_CustomPropertyDrawerTypeField.GetValue(customDrawerAttrs[0]) as System.Type;
@@ -455,10 +441,16 @@ namespace Candlelight
 				{
 					isTypeDrawer = !registrationTable.ContainsKey(propertyAttributeType);
 				}
-				ConstructorInfo constructor = registrationTable[
-					isTypeDrawer ? fieldType : propertyAttributeType
-                ].GetConstructor(new System.Type[0]);
-				result = constructor.Invoke(null) as GUIDrawer;
+				System.Type typeKey = isTypeDrawer ? fieldType : propertyAttributeType;
+				if (registrationTable.ContainsKey(typeKey) && !registrationTable[typeKey].IsAbstract)
+				{
+					ConstructorInfo constructor = registrationTable[typeKey].GetConstructor(new System.Type[0]);
+					result = constructor.Invoke(null) as GUIDrawer;
+				}
+				else
+				{
+					return null;
+				}
 				// configure the drawer's private fields
 				if (result is PropertyDrawer)
 				{
@@ -514,13 +506,13 @@ namespace Candlelight
 		/// <param name="fieldName">Field name.</param>
 		private static FieldInfo GetInstanceFieldForSerializedProperty(System.Type type, string fieldName)
 		{
-			FieldInfo result = type.GetField(fieldName, ReflectionX.instanceBindingFlags);
+			FieldInfo result = type.GetInstanceField(fieldName);
 			if (result == null)
 			{
 				System.Type t = type;
 				while (t.BaseType != null)
 				{
-					result = t.BaseType.GetField(fieldName, ReflectionX.instanceBindingFlags);
+					result = t.BaseType.GetInstanceField(fieldName);
 					if (result != null)
 					{
 						break;
@@ -529,6 +521,53 @@ namespace Candlelight
 				}
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Gets the last property defined on <paramref name="target"/> with the specified <paramref name="baseType"/>.
+		/// </summary>
+		/// <returns>
+		/// The last property defined on <paramref name="target"/> with the specified <paramref name="baseType"/>.
+		/// </returns>
+		/// <param name="target">Target.</param>
+		/// <param name="baseType">Base type.</param>
+		private static SerializedProperty GetLastProperty(SerializedObject target, System.Type baseType)
+		{
+			FieldInfo lastField = GetLastSerializableField(baseType);
+			if (lastField == null || target == null || !baseType.IsAssignableFrom(target.targetObject.GetType()))
+			{
+				return null;
+			}
+			return target.FindProperty(lastField.Name);
+		}
+
+		/// <summary>
+		/// Gets the last serializable field defined for the specified type.
+		/// </summary>
+		/// <returns>The last serializable field defined for the specified type.</returns>
+		/// <param name="type">Type.</param>
+		private static FieldInfo GetLastSerializableField(System.Type type)
+		{
+			if (type == null)
+			{
+				return null;
+			}
+			if (!s_LastSerializableFields.ContainsKey(type))
+			{
+				s_LastSerializableFields[type] = null;
+				foreach (
+					FieldInfo fieldInfo in
+					type.GetFields(ReflectionX.instanceBindingFlags).Where(f => IsFieldSerializable(f))
+				)
+				{
+					if (s_LastSerializableFields[type] != null && fieldInfo.DeclaringType != type)
+					{
+						break;
+					}
+					s_LastSerializableFields[type] = fieldInfo;
+				}
+			}
+			return s_LastSerializableFields[type];
 		}
 
 		/// <summary>
@@ -586,25 +625,28 @@ namespace Candlelight
 			FieldInfo field;
 			property.GetProvider(out field);
 			PropertyAttribute propertyAttribute = null;
-			for (int i = 0; i < field.GetCustomAttributes(ref s_PropertyAttrs, true); ++i)
+			using (var propertyAttrs = new ListPool<PropertyAttribute>.Scope())
 			{
-				if (s_DecoratorsForEachType.ContainsKey(s_PropertyAttrs[i].GetType()))
+				for (int i = 0; i < field.GetCustomAttributes(propertyAttrs.List, true); ++i)
 				{
-					continue;
-				}
-				if (propertyAttribute != null)
-				{
-					Debug.LogWarning(
-						string.Format("Found multiple PropertyAttributes specified for {0}", property.propertyPath)
-					);
-				}
-				if (s_PropertyAttrs[i] is PropertyBackingFieldAttribute)
-				{
-					propertyAttribute = (s_PropertyAttrs[i] as PropertyBackingFieldAttribute).OverrideAttribute;
-				}
-				else
-				{
-					propertyAttribute = s_PropertyAttrs[i];
+					if (s_DecoratorsForEachType.ContainsKey(propertyAttrs.List[i].GetType()))
+					{
+						continue;
+					}
+					if (propertyAttribute != null)
+					{
+						Debug.LogWarning(
+							string.Format("Found multiple PropertyAttributes specified for {0}", property.propertyPath)
+						);
+					}
+					if (propertyAttrs.List[i] is PropertyBackingFieldAttribute)
+					{
+						propertyAttribute = (propertyAttrs.List[i] as PropertyBackingFieldAttribute).OverrideAttribute;
+					}
+					else
+					{
+						propertyAttribute = propertyAttrs.List[i];
+					}
 				}
 			}
 			return GetPropertyDrawer(field, propertyAttribute);
@@ -635,14 +677,14 @@ namespace Candlelight
 			object provider = property.serializedObject.targetObject;
 			System.Type providerType = property.serializedObject.targetObject.GetType();
 			fieldInfo = GetInstanceFieldForSerializedProperty(providerType, property.propertyPath.Split('.')[0]);
-			s_PatchedPropertyPath = s_MatchTerminalProperty.Replace(property.propertyPath, "");
-			s_PatchedPropertyPath = s_MatchArrayElement.Replace(
-				s_PatchedPropertyPath, match => string.Format("[{0}]", match.Groups["index"].Value)
+			string patchedPropertyPath = s_MatchTerminalProperty.Replace(property.propertyPath, "");
+			patchedPropertyPath = s_MatchArrayElement.Replace(
+				patchedPropertyPath, match => string.Format("[{0}]", match.Groups["index"].Value)
 			);
 			// proceed to search for provider if path is still nested
-			if (!string.IsNullOrEmpty(s_PatchedPropertyPath))
+			if (!string.IsNullOrEmpty(patchedPropertyPath))
 			{
-				foreach (string part in s_PatchedPropertyPath.Split('.'))
+				foreach (string part in patchedPropertyPath.Split('.'))
 				{
 					if (s_MatchTerminalArrayElement.IsMatch(part))
 					{
@@ -650,16 +692,19 @@ namespace Candlelight
 							providerType, s_MatchTerminalArrayElement.Replace(part, "")
 						);
 						int elementIndex = int.Parse(s_MatchTerminalArrayElement.Match(part).Groups["index"].Value);
-						IList listValue = fieldInfo.GetValue(provider) as IList;
-						if (listValue.Count <= elementIndex)
+						providerType = GetIListElementType(fieldInfo.FieldType);
+						if (provider != null)
 						{
-							provider = null;
+							IList listValue = fieldInfo.GetValue(provider) as IList;
+							if (listValue.Count <= elementIndex)
+							{
+								provider = null;
+							}
+							else
+							{
+								provider = listValue[elementIndex];
+							}
 						}
-						else
-						{
-							provider = listValue[elementIndex];
-						}
-						providerType = GetIListElementType(listValue.GetType());
 					}
 					else
 					{
@@ -674,6 +719,30 @@ namespace Candlelight
 				);
 			}
 			return provider;
+		}
+
+		/// <summary>
+		/// Gets the remaining visible properties on <paramref name="target"/> following the final
+		/// <see cref="UnityEditor.SerializedProperty"/> defined in the base type specified by <typeparamref name="T">.
+		/// </summary>
+		/// <returns>The number of remaining visible properties.</returns>
+		/// <param name="target">Target.</param>
+		/// <param name="remainingVisibleProperties">List of remaining visible properties to populate.</param>
+		/// <typeparam name="T">The base <see cref="UnityEngine.Object"/> type.</typeparam>
+		public static int GetRemainingVisibleProperties<T>(
+			SerializedObject serializedTarget, List<SerializedProperty> remainingVisibleProperties
+		) where T : Object
+		{
+			remainingVisibleProperties.Clear();
+			SerializedProperty sp = GetLastProperty(serializedTarget, typeof(T));
+			if (sp != null)
+			{
+				while (sp.NextVisible(false))
+				{
+					remainingVisibleProperties.Add(sp.Copy());
+				}
+			}
+			return remainingVisibleProperties.Count;
 		}
 
 		/// <summary>
@@ -703,12 +772,14 @@ namespace Candlelight
 				property.GetProvider(out field);
 				System.Type fieldType =
 					property.IsArrayElement() ? GetIListElementType(field.FieldType): field.FieldType;
-				return System.Enum.ToObject(
-					fieldType, (int)property.enumValueIndex + System.Enum.GetValues(fieldType).Cast<int>().Min()
-				);
+				return System.Enum.ToObject(fieldType, property.intValue);
 			}
 			// if it is SerializedPropertyType.Generic, then create pending value representation
 			object provider = property.GetProvider(out field);
+			if (provider == null)
+			{
+				return null;
+			}
 			// for an array or list, just populate each element with its pending value
 			if (property.isArray)
 			{
@@ -766,14 +837,29 @@ namespace Candlelight
 				{
 					sequence = clone as IList;
 					// NOTE: Unity duplicates final element when new one is added
-					clone = sequence[elementIndex >= sequence.Count ? sequence.Count - 1 : elementIndex];
+					clone = sequence.Count > elementIndex ?
+						sequence[elementIndex >= sequence.Count ? sequence.Count - 1 : elementIndex] : null;
 				}
 				if (!elementType.IsValueType)
 				{
-					clone = ((System.ICloneable)clone).Clone();
+					clone = clone == null ? null : ((System.ICloneable)clone).Clone();
 				}
+				System.Type cloneType = clone == null ? null : clone.GetType();
 				for (int i = 0; i < s_FieldsToCopyForEachType[elementType].Count; ++i)
 				{
+					FieldInfo fi = s_FieldsToCopyForEachType[elementType][i];
+					if (cloneType != null && fi.DeclaringType.IsSubclassOf(cloneType))
+					{
+						Debug.LogException(
+							new System.MissingFieldException(
+								string.Format(
+									"Expected provider of type {0} or a subclass but found {1}. Did you forget to override Clone() in {0}?\n",
+									fi.DeclaringType, cloneType
+								)
+							)
+						);
+						continue;
+					}
 					s_FieldsToCopyForEachType[elementType][i].SetValue(
 						clone, property.FindPropertyRelative(s_FieldsToCopyForEachType[elementType][i].Name).GetValue()
 					);
@@ -794,7 +880,46 @@ namespace Candlelight
 		/// </typeparam>
 		public static T GetValue<T>(this SerializedProperty property)
 		{
-			return (T)GetValue(property);
+			object value = GetValue(property);
+			return value == null ? default(T) : (T)value;
+		}
+
+		/// <summary>
+		/// Determines if the specified <see cref="UnityEngine.Object"/> type has a serialized field with the
+		/// specified <paramref name="propertyPath"/>.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if the specified <see cref="UnityEngine.Object"/> type has a serialized field with
+		/// the specified <paramref name="propertyPath"/>; otherwise, <see langword="false"/>.
+		/// </returns>
+		/// <param name="targetType">A <see cref="UnityEngine.Object"/> type.</param>
+		/// <param name="propertyPath">Property path.</param>
+		public static bool HasSerializedProperty(this System.Type targetType, string propertyPath)
+		{
+			if (string.IsNullOrEmpty(propertyPath))
+			{
+				return false;
+			}
+			if (
+				propertyPath == "m_Script" && (
+					typeof(MonoBehaviour).IsAssignableFrom(targetType) ||
+					typeof(ScriptableObject).IsAssignableFrom(targetType)
+				)
+			)
+			{
+				return true;
+			}
+			System.Type providerType = targetType;
+			foreach (string token in propertyPath.Split('.'))
+			{
+				FieldInfo field = GetInstanceFieldForSerializedProperty(providerType, token);
+				if (field == null || !IsFieldSerializable(field))
+				{
+					return false;
+				}
+				providerType = field.FieldType;
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -838,30 +963,6 @@ namespace Candlelight
 			SerializedProperty parent =
 				property.serializedObject.FindProperty(property.propertyPath.Range(0, -11)); // - ".Array.size".Length
 			return parent.isArray;
-		}
-
-		/// <summary>
-		/// Determines if the specified field is copyable.
-		/// </summary>
-		/// <returns>
-		/// <see langword="true"/> if the specified field is copyable; otherwise, <see langword="false"/>.
-		/// </returns>
-		/// <param name="field">Field.</param>
-		private static bool IsFieldCopyable(FieldInfo field)
-		{
-			if (field.IsPublic || field.GetCustomAttributes(typeof(SerializeField), true).Count() > 0)
-			{
-				if (!IsTypeSerializable(field.FieldType))
-				{
-					return false;
-				}
-				if (field.FieldType.IsClass)
-				{
-					return typeof(IPropertyBackingFieldCompatible).IsAssignableFrom(field.FieldType);
-				}
-				return true;
-			}
-			return false;
 		}
 
 		/// <summary>
@@ -925,6 +1026,55 @@ namespace Candlelight
 		}
 
 		/// <summary>
+		/// Determines if the specified field is copyable.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if the specified field is copyable; otherwise, <see langword="false"/>.
+		/// </returns>
+		/// <param name="field">Field.</param>
+		private static bool IsFieldCopyable(FieldInfo field)
+		{
+			if (field.IsPublic || field.GetCustomAttributes(typeof(SerializeField), true).Count() > 0)
+			{
+				if (!IsTypeSerializable(field.FieldType))
+				{
+					return false;
+				}
+				if (field.FieldType.IsClass)
+				{
+					return typeof(IPropertyBackingFieldCompatible).IsAssignableFrom(field.FieldType);
+				}
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Determines if the specified field is convertable into a <see cref="UnityEditor.SerializedProperty"/>.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> the specified field is convertable into a
+		/// <see cref="UnityEditor.SerializedProperty"/>; otherwise, <see cref="false"/>.
+		/// </returns>
+		/// <param name="field">Field.</param>
+		private static bool IsFieldSerializable(FieldInfo field)
+		{
+			if (field == null)
+			{
+				return false;
+			}
+			if (field.IsPublic || field.GetCustomAttributes(typeof(SerializeField), true).Count() > 0)
+			{
+				if (!IsTypeSerializable(field.FieldType))
+				{
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
 		/// Determines if the specified type is serializable.
 		/// </summary>
 		/// <returns>
@@ -945,7 +1095,10 @@ namespace Candlelight
 			{
 				return IsTypeSerializable(GetIListElementType(type));
 			}
-			return type.GetCustomAttributes(ref s_SerializableAttrs, true) > 0;
+			using (var serializableAttrs = new ListPool<System.SerializableAttribute>.Scope())
+			{
+				return type.GetCustomAttributes(serializableAttrs.List, true) > 0;
+			}
 		}
 		
 		/// <summary>
@@ -995,13 +1148,5 @@ namespace Candlelight
 				Debug.LogError(string.Format("Unsupported serialized property type: {0}", property.propertyType));
 			}
 		}
-
-		#region Obsolete
-		[System.Obsolete("Use SerializedProperty.displayName property.")]
-		public static string GetDisplayName(this SerializedProperty property)
-		{
-			return s_DisplayNameProperty.GetValue(property, null) as string;
-		}
-		#endregion
 	}
 }

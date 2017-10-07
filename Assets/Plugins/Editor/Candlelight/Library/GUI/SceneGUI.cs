@@ -1,13 +1,11 @@
 // 
 // SceneGUI.cs
 // 
-// Copyright (c) 2011-2015, Candlelight Interactive, LLC
+// Copyright (c) 2011-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains a static class with methods for working with scene GUI.
 
 using UnityEditor;
 using UnityEngine;
@@ -42,10 +40,9 @@ namespace Candlelight
 		}
 
 		/// <summary>
-		/// The wrap values for the joint frame calculation notice.
+		/// A flag for recording manual changes in a handle context.
 		/// </summary>
-		private static readonly float[] s_JointCalculationMessageWrapValues =
-			new float[] { 1482f, 830f, 618f, 507f, 443f };
+		private static bool s_DidChange = false;
 		/// <summary>
 		/// The target object triggering display of scene GUI overlay.
 		/// </summary>
@@ -81,8 +78,8 @@ namespace Candlelight
 		/// <summary>
 		/// The toggle preference.
 		/// </summary>
-		private static readonly EditorPreference<bool, EditorApplication> s_TogglePreference =
-			EditorPreference<bool, EditorApplication>.ForToggle("sceneGUI", true);
+		private static readonly EditorPreference<bool, BaseEditor> s_TogglePreference =
+			EditorPreference<bool, BaseEditor>.ForToggle("sceneGUI", true);
 		/// <summary>
 		/// The viewport padding.
 		/// </summary>
@@ -128,6 +125,11 @@ namespace Candlelight
 		/// </summary>
 		/// <value>The line alpha scalar.</value>
 		public static float LineAlphaScalar { get { return 0.5f; } }
+		/// <summary>
+		/// Gets the height of the scene view tabs.
+		/// </summary>
+		/// <value>The height of the scene view tabs.</value>
+		public static float SceneViewTabHeight { get { return 38f; } }
 		/// <summary>
 		/// Gets the skin.
 		/// </summary>
@@ -225,6 +227,7 @@ namespace Candlelight
 			s_IsInHandleContext = true;
 			// capture current event before it is used by a handle
 			s_EnterContextMouseState = GUIHelpers.GetCurrentMouseState();
+			s_DidChange = false;
 			return IsEnabled;
 		}
 
@@ -255,7 +258,7 @@ namespace Candlelight
 				return;
 			}
 			// ensure only the first context invoking this method during a layout phase will display the GUI
-			if (Event.current.type == EventType.Layout && s_DisplayInvoker == null)
+			if (Event.current.type == EventType.Layout)
 			{
 				s_DisplayInvoker = ctx.SceneGUIContext.target;
 			}
@@ -271,11 +274,11 @@ namespace Candlelight
 			Handles.BeginGUI();
 			// begin the area
 			width = Mathf.Min(width, Screen.width - 2f * s_ViewportPadding);
-			float height = Screen.height - 2f * s_ViewportPadding - 38f; // 38 is height of tab/top menu in scene
+			float height = Screen.height - 2f * s_ViewportPadding - SceneGUI.SceneViewTabHeight;
 			GUISkin oldSkin = GUI.skin;
 			GUI.skin = Skin;
 			GUILayout.BeginArea(
-				new Rect (
+				new Rect(
 					(anchor == GUIAnchor.LowerLeft || anchor == GUIAnchor.TopLeft) ?
 						s_ViewportPadding : Screen.width - s_ViewportPadding - width,
 					(anchor == GUIAnchor.TopLeft || anchor == GUIAnchor.TopRight) ?
@@ -328,12 +331,58 @@ namespace Candlelight
 		/// <param name="orientation">Orientation.</param>
 		/// <param name="size">Size.</param>
 		/// <param name="cap">Cap draw function.</param>
+#if UNITY_5_5_OR_NEWER
+		[System.Obsolete("Handles.DrawCapFunction is obsolete. Use the version with Handles.CapFunction instead. Example: Change Handles.SphereCap to Handles.SphereHandleCap.")]
+#endif
+		#pragma warning disable 618
 		public static bool DisplayCapButton(
 			int id, Vector3 position, Quaternion orientation, float size, Handles.DrawCapFunction cap
+		)
+		#pragma warning restore 618
+		{
+			return DisplayCapButton(id, position, orientation, size, cap, Handles.color);
+		}
+
+#if UNITY_5_5_OR_NEWER
+		/// <summary>
+		/// Displays a button with a cap function.
+		/// </summary>
+		/// <returns><see langword="true"/> if cap button was clicked; otherwise, <see langword="false"/>.</returns>
+		/// <param name="id">Identifier for the control.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="orientation">Orientation.</param>
+		/// <param name="size">Size.</param>
+		/// <param name="cap">Cap draw function.</param>
+		public static bool DisplayCapButton(
+			int id, Vector3 position, Quaternion orientation, float size, Handles.CapFunction cap
 		)
 		{
 			return DisplayCapButton(id, position, orientation, size, cap, Handles.color);
 		}
+#endif
+
+		/// <summary>
+		/// Displays a button with a cap function.
+		/// </summary>
+		/// <returns><see langword="true"/> if cap button was clicked; otherwise, <see langword="false"/>.</returns>
+		/// <param name="id">Identifier for the control.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="orientation">Orientation.</param>
+		/// <param name="size">Size.</param>
+		/// <param name="cap">Cap draw function.</param>
+		/// <param name="clickColor">Color to use when the cap is clicked.</param>
+#if UNITY_5_5_OR_NEWER
+		[System.Obsolete("Handles.DrawCapFunction is obsolete. Use the version with Handles.CapFunction instead. Example: Change Handles.SphereCap to Handles.SphereHandleCap.")]
+		#pragma warning disable 618
+#endif
+		private static bool DisplayCapButton(
+			int id, Vector3 position, Quaternion orientation, float size, Handles.DrawCapFunction cap, Color clickColor
+		)
+#if UNITY_5_5_OR_NEWER
+		{
+			return DisplayCapButton(id, position, orientation, size, (i, pos, rot, sz, evt)=>cap(i, pos, rot, sz), clickColor);
+		}
+		#pragma warning restore 618
 
 		/// <summary>
 		/// Displays a button with a cap function.
@@ -346,12 +395,13 @@ namespace Candlelight
 		/// <param name="cap">Cap draw function.</param>
 		/// <param name="clickColor">Color to use when the cap is clicked.</param>
 		private static bool DisplayCapButton(
-			int id, Vector3 position, Quaternion orientation, float size, Handles.DrawCapFunction cap, Color clickColor
+			int id, Vector3 position, Quaternion orientation, float size, Handles.CapFunction cap, Color clickColor
 		)
+#endif
 		{
 			bool result = false;
 			Event current = Event.current;
-			switch (current.GetTypeForControl (id))
+			switch (current.GetTypeForControl(id))
 			{
 			case EventType.MouseDown:
 				if (
@@ -386,25 +436,18 @@ namespace Candlelight
 			case EventType.Repaint:
 			{
 				// TODO: implement click color
+#if UNITY_5_5_OR_NEWER
+				cap(id, position, orientation, size, EventType.Repaint);
+#else
 				cap(id, position, orientation, size);
+#endif
 				break;
 			}
 			case EventType.Layout:
-				HandleUtility.AddControl(id, HandleUtility.DistanceToCircle (position, size * 0.2f));
+				HandleUtility.AddControl(id, HandleUtility.DistanceToCircle(position, size * 0.2f));
 				break;
 			}
 			return result;
-		}
-		
-		/// <summary>
-		/// Displays the joint frame calculation notification message.
-		/// </summary>
-		public static void DisplayJointFrameCalculationNotification()
-		{
-			DisplayNotification(
-				"One or more selected joints did not exist before play mode was entered. Handle orientation cannot be determined.",
-				s_JointCalculationMessageWrapValues
-			);
 		}
 		
 		/// <summary>
@@ -458,7 +501,7 @@ namespace Candlelight
 		/// </returns>
 		private static bool EndHandlesChangeCheck()
 		{
-			bool isChangeDetected = false;
+			bool isChangeDetected = s_DidChange;
 			// see if event was eaten in a hold
 			if (s_EnterContextMouseState == MouseState.LeftButtonHeld && Event.current.type == EventType.Used)
 			{
@@ -479,6 +522,21 @@ namespace Candlelight
 		public static float GetFixedHandleSize(Vector3 handleSpacePosition, float desiredSize)
 		{
 			return HandleUtility.GetHandleSize(handleSpacePosition) * desiredSize;
+		}
+
+		/// <summary>
+		/// Manually register a change during a handle context.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true"/> if a handle context is currently active; otherwise, <see langword="false"/>.
+		/// </returns>
+		public static bool RegisterChange()
+		{
+			if (s_IsInHandleContext)
+			{
+				s_DidChange = true;
+			}
+			return s_IsInHandleContext;
 		}
 		
 		/// <summary>
@@ -531,10 +589,5 @@ namespace Candlelight
 			s_HandleColor = Handles.color;
 			Handles.color = new Color(s_HandleColor.r, s_HandleColor.g, s_HandleColor.b, alpha);
 		}
-
-		#region Obsolete
-		[System.Obsolete]
-		public const int nullControlId = -1; 
-		#endregion
 	}
 }

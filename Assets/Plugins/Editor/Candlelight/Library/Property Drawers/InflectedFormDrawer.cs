@@ -1,14 +1,11 @@
 ﻿// 
 // InflectedFormDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains a custom property drawer for
-// KeywordsGlossary.InflectedForm.
 
 using UnityEditor;
 using UnityEngine;
@@ -25,14 +22,15 @@ namespace Candlelight
 		/// <summary>
 		/// The width of the part of speech field.
 		/// </summary>
-		private static readonly float partOfSpeechFieldWidth = 70f;
+		private static readonly float s_PartOfSpeechFieldWidth = 70f;
 		/// <summary>
 		/// The margin of the part of speech field.
 		/// </summary>
-		private static readonly float partOfSpeechFieldMargin = 2f;
+		private static readonly float s_PartOfSpeechFieldMargin = 2f;
 		#region Serialized Properties
-		private Dictionary<string, SerializedProperty> partOfSpeech = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> word = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_PartOfSpeech =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_Word = new Dictionary<string, SerializedProperty>();
 		#endregion
 
 		/// <summary>
@@ -53,10 +51,10 @@ namespace Candlelight
 		/// <param name="property">Property.</param>
 		private void Initialize(SerializedProperty property)
 		{
-			if (!partOfSpeech.ContainsKey(property.propertyPath))
+			if (!m_PartOfSpeech.ContainsKey(property.propertyPath))
 			{
-				partOfSpeech.Add(property.propertyPath, property.FindPropertyRelative("m_PartOfSpeech"));
-				word.Add(property.propertyPath, property.FindPropertyRelative("m_Word"));
+				m_PartOfSpeech.Add(property.propertyPath, property.FindPropertyRelative("m_PartOfSpeech"));
+				m_Word.Add(property.propertyPath, property.FindPropertyRelative("m_Word"));
 			}
 		}
 
@@ -76,13 +74,13 @@ namespace Candlelight
 			}
 #endif
 			Initialize(property);
-			position.width -= partOfSpeechFieldWidth + partOfSpeechFieldMargin;
-			EditorGUI.PropertyField(position, word[property.propertyPath], GUIContent.none);
+			position.width -= s_PartOfSpeechFieldWidth + s_PartOfSpeechFieldMargin;
+			EditorGUI.PropertyField(position, m_Word[property.propertyPath], GUIContent.none);
 			int indent = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
-			position.x += position.width + partOfSpeechFieldMargin;
-			position.width = partOfSpeechFieldWidth;
-			EditorGUI.PropertyField(position, partOfSpeech[property.propertyPath], GUIContent.none);
+			position.x += position.width + s_PartOfSpeechFieldMargin;
+			position.width = s_PartOfSpeechFieldWidth;
+			EditorGUI.PropertyField(position, m_PartOfSpeech[property.propertyPath], GUIContent.none);
 			EditorGUI.indentLevel = indent;
 		}
 	}

@@ -1,7 +1,7 @@
 ﻿// 
 // ReflectionX.cs
 // 
-// Copyright (c) 2015, Candlelight Interactive, LLC
+// Copyright (c) 2015-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -111,10 +111,9 @@ namespace Candlelight
 		/// </param>
 		/// <typeparam name='T'>The type of the custom attributes desired.</typeparam>
 		public static int GetCustomAttributes<T>(
-			this ICustomAttributeProvider provider, ref List<T> attributes, bool inherit = false
+			this ICustomAttributeProvider provider, List<T> attributes, bool inherit = false
 		) where T : System.Attribute
 		{
-			attributes = attributes ?? new List<T>();
 			attributes.Clear();
 			if (provider == null)
 			{
@@ -178,6 +177,91 @@ namespace Candlelight
 		}
 
 		/// <summary>
+		/// Gets the instance field defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The instance field.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="fieldName">Field name.</param>
+		public static FieldInfo GetInstanceField(this System.Type type, string fieldName)
+		{
+			if (type == null)
+			{
+				return null;
+			}
+			FieldInfo result = type.GetField(fieldName, instanceBindingFlags);
+			while (type.BaseType != null && result == null)
+			{
+				result = type.GetField(fieldName, instanceBindingFlags);
+				type = type.BaseType;
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the instance method defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The instance method.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="methodName">Method name.</param>
+		public static MethodInfo GetInstanceMethod(this System.Type type, string methodName)
+		{
+			if (type == null)
+			{
+				return null;
+			}
+			MethodInfo result = type.GetMethod(methodName, instanceBindingFlags);
+			while (type.BaseType != null && result == null)
+			{
+				result = type.GetMethod(methodName, instanceBindingFlags);
+				type = type.BaseType;
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the instance method defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The instance method.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="methodName">Method name.</param>
+		/// <param name="types">Parameter types.</param>
+		public static MethodInfo GetInstanceMethod(this System.Type type, string methodName, System.Type[] types)
+		{
+			if (type == null)
+			{
+				return null;
+			}
+			MethodInfo result = type.GetMethod(methodName, instanceBindingFlags, null, types, null);
+			while (type.BaseType != null && result == null)
+			{
+				result = type.GetMethod(methodName, instanceBindingFlags, null, types, null);
+				type = type.BaseType;
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the instance property defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The instance property.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="propertyName">Property name.</param>
+		public static PropertyInfo GetInstanceProperty(this System.Type type, string propertyName)
+		{
+			if (type == null)
+			{
+				return null;
+			}
+			PropertyInfo result = type.GetProperty(propertyName, instanceBindingFlags);
+			while (type.BaseType != null && result == null)
+			{
+				result = type.GetProperty(propertyName, instanceBindingFlags);
+				type = type.BaseType;
+			}
+			return result;
+		}
+
+		/// <summary>
 		/// Gets the property value on an instance.
 		/// </summary>
 		/// <returns>The property value on an instance.</returns>
@@ -227,6 +311,17 @@ namespace Candlelight
 			}
 			return (T)provider.GetType().GetProperty(propertyName, bindingAttr).GetValue(provider, index);
 		}
+
+		/// <summary>
+		/// Gets the static field defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The static field.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="fieldName">Field name.</param>
+		public static FieldInfo GetStaticField(this System.Type type, string methodName)
+		{
+			return type == null ? null : type.GetField(methodName, staticBindingFlags);
+		}
 		
 		/// <summary>
 		/// Gets the field value on a class.
@@ -241,6 +336,50 @@ namespace Candlelight
 		)
 		{
 			return GetFieldValue<T>(type, null, fieldName, bindingAttr);
+		}
+
+		/// <summary>
+		/// Gets the static method defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The static method.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="methodName">Method name.</param>
+		public static MethodInfo GetStaticMethod(this System.Type type, string methodName)
+		{
+			return type == null ? null : type.GetMethod(methodName, staticBindingFlags);
+		}
+
+		/// <summary>
+		/// Gets the static method defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The static method.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="methodName">Method name.</param>
+		/// <param name="types">Parameter types.</param>
+		public static MethodInfo GetStaticMethod(this System.Type type, string methodName, System.Type[] types)
+		{
+			if (type == null)
+			{
+				return null;
+			}
+			MethodInfo result = type.GetMethod(methodName, staticBindingFlags, null, types, null);
+			while (type.BaseType != null && result == null)
+			{
+				result = type.GetMethod(methodName, staticBindingFlags, null, types, null);
+				type = type.BaseType;
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the static property defined on the specified <paramref name="type"/> or a base class.
+		/// </summary>
+		/// <returns>The static property.</returns>
+		/// <param name="type">Type.</param>
+		/// <param name="propertyName">Property name.</param>
+		public static PropertyInfo GetStaticProperty(this System.Type type, string propertyName)
+		{
+			return type == null ? null : type.GetProperty(propertyName, staticBindingFlags);
 		}
 
 		/// <summary>

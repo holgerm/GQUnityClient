@@ -1,7 +1,7 @@
 ﻿// 
 // HyperTextTextStyleDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -16,31 +16,33 @@ using System.Collections.Generic;
 namespace Candlelight.UI
 {
 	/// <summary>
-	/// Hyper text text style drawer.
+	/// HyperText text style drawer.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(HyperTextStyles.Text))]
 	public class HyperTextTextStyleDrawer : HyperTextStyleDrawer
 	{
 		#region Labels
-		private static readonly GUIContent colorizationGUIContent =
+		private static readonly GUIContent s_ColorizationGuiContent =
 			new GUIContent("Color", "Enable if instances of this style should wrap text in <color> tags.");
-		private static readonly GUIContent fontStyleGUIContent =
+		private static readonly GUIContent s_FontStyleGuiContent =
 			new GUIContent("Style", "Style to apply to the font face.");
-		private static readonly GUIContent tagGUIContent =
+		private static readonly GUIContent s_TagGuiContent =
 			new GUIContent("Tag", "Unique name in the collection of styles used to reference style.");
 		#endregion
 		/// <summary>
 		/// The height of the property.
 		/// </summary>
 		public static readonly float propertyHeight =
-			4f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
+			5f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
 
 		#region Serialized Properties
-		private Dictionary<string, SerializedProperty> fontStyle = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> replacementColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> shouldReplaceColor =
+		private readonly Dictionary<string, SerializedProperty> m_FontStyle =
 			new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> tag = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ReplacementColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ShouldReplaceColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_Tag = new Dictionary<string, SerializedProperty>();
 		#endregion
 
 		/// <summary>
@@ -64,17 +66,17 @@ namespace Candlelight.UI
 		{
 			float entireWidth = firstLinePosition.width;
 			float entireX = firstLinePosition.x;
-			EditorGUI.PropertyField(firstLinePosition, fontStyle[property.propertyPath], fontStyleGUIContent);
+			EditorGUI.PropertyField(firstLinePosition, m_FontStyle[property.propertyPath], s_FontStyleGuiContent);
 			firstLinePosition.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			firstLinePosition.width = EditorGUIUtility.labelWidth + 14f;
 			EditorGUI.PropertyField(
-				firstLinePosition, shouldReplaceColor[property.propertyPath], colorizationGUIContent
+				firstLinePosition, m_ShouldReplaceColor[property.propertyPath], s_ColorizationGuiContent
 			);
 			firstLinePosition.x += EditorGUIUtility.labelWidth + EditorGUIX.StandardHorizontalSpacing + 14f;
 			firstLinePosition.width = entireWidth - (firstLinePosition.x - entireX);
-			EditorGUI.BeginDisabledGroup(!shouldReplaceColor[property.propertyPath].boolValue);
+			EditorGUI.BeginDisabledGroup(!m_ShouldReplaceColor[property.propertyPath].boolValue);
 			{
-				EditorGUI.PropertyField(firstLinePosition, replacementColor[property.propertyPath], GUIContent.none);
+				EditorGUI.PropertyField(firstLinePosition, m_ReplacementColor[property.propertyPath], GUIContent.none);
 			}
 			EditorGUI.EndDisabledGroup();
 			return 2;
@@ -87,7 +89,7 @@ namespace Candlelight.UI
 		/// <param name="property">Property.</param>
 		protected override void DisplayIdentifierField(Rect position, SerializedProperty property)
 		{
-			EditorGUI.PropertyField(position, tag[property.propertyPath], tagGUIContent);
+			EditorGUI.PropertyField(position, m_Tag[property.propertyPath], s_TagGuiContent);
 		}
 
 		/// <summary>
@@ -97,22 +99,23 @@ namespace Candlelight.UI
 		protected override void Initialize(SerializedProperty property)
 		{
 			base.Initialize(property);
-			if (!fontStyle.ContainsKey(property.propertyPath))
+			if (m_FontStyle.ContainsKey(property.propertyPath))
 			{
-				fontStyle.Add(
-					property.propertyPath,
-					property.FindPropertyRelative(string.Format("{0}m_FontStyle", SizePropertyNamePrefix))
-				);
-				replacementColor.Add(
-					property.propertyPath, 
-					property.FindPropertyRelative(string.Format("{0}m_ReplacementColor", SizePropertyNamePrefix))
-				);
-				shouldReplaceColor.Add(
-					property.propertyPath, 
-					property.FindPropertyRelative(string.Format("{0}m_ShouldReplaceColor", SizePropertyNamePrefix))
-				);
-				tag.Add(property.propertyPath, property.FindPropertyRelative("m_Tag"));
+				return;
 			}
+			m_FontStyle.Add(
+				property.propertyPath,
+				property.FindPropertyRelative(string.Format("{0}m_FontStyle", this.SizePropertyNamePrefix))
+			);
+			m_ReplacementColor.Add(
+				property.propertyPath, 
+				property.FindPropertyRelative(string.Format("{0}m_ReplacementColor", this.SizePropertyNamePrefix))
+			);
+			m_ShouldReplaceColor.Add(
+				property.propertyPath, 
+				property.FindPropertyRelative(string.Format("{0}m_ShouldReplaceColor", this.SizePropertyNamePrefix))
+			);
+			m_Tag.Add(property.propertyPath, property.FindPropertyRelative("m_Tag"));
 		}
 	}
 }

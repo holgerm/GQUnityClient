@@ -1,7 +1,7 @@
 ﻿// 
 // LocalizableText.cs
 // 
-// Copyright (c) 2015, Candlelight Interactive, LLC
+// Copyright (c) 2015-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -18,6 +18,7 @@ namespace Candlelight.UI
 	/// </summary>
 	public class LocalizableText : ScriptableObject, ITextSource
 	{
+		#region Data Types
 		/// <summary>
 		/// Locale override entry attribute.
 		/// </summary>
@@ -27,7 +28,7 @@ namespace Candlelight.UI
 		/// A basic class to wrap and identify a string to be used as an override for a particular locale.
 		/// </summary>
 		[System.Serializable]
-		private class LocaleOverride : IdentifiableBackingFieldCompatibleObjectWrapper<string>
+		private class LocaleOverride : IdentifiableBackingFieldCompatibleObjectWrapper<string, string>
 		{
 			/// <summary>
 			/// Initializes a new instance of the <see cref="LocalizableText.LocaleOverride"/> class.
@@ -35,16 +36,18 @@ namespace Candlelight.UI
 			/// <param name="locale">Locale.</param>
 			/// <param name="text">Text.</param>
 			public LocaleOverride(string locale, string text) : base(locale, text) {}
-
-			/// <summary>
-			/// Clone this instance.
-			/// </summary>
-			/// <returns>A clone of this instance.</returns>
-			public override object Clone()
-			{
-				return new LocaleOverride(this.Identifier, this.Data);
-			}
 		}
+		#endregion
+
+		/// <summary>
+		/// Occurs when the locale is set for all instances.
+		/// </summary>
+		private static event System.Action<string> OnSetLocaleForAll = null;
+
+		/// <summary>
+		/// The locale to use for all instances.
+		/// </summary>
+		private static string s_LocaleForAll = null;
 
 		/// <summary>
 		/// Default locale string.
@@ -57,12 +60,32 @@ namespace Candlelight.UI
 		);
 		#endregion
 
+		#region Public Properties
 		/// <summary>
 		/// Gets locale strings for the ten most common languages for mobile apps according to
 		/// http://todaysweb.net/top-mobile-apps-games-localization-languages-maximum-revenue/
 		/// </summary>
 		/// <value>The ten most common languages for mobile apps.</value>
 		public static ReadOnlyCollection<string> TenMostCommonLanguages { get { return s_TenMostCommonLanguages; } }
+
+		/// <summary>
+		/// Sets the locale for all instances of <see cref="LocalizableText"/>.
+		/// </summary>
+		/// <remarks>
+		/// If you specify a <paramref name="locale"/> value of <see langword="null"/>, then all instances will use
+		/// whatever value was serialized for them when they are first loaded. Otherwise, they will automatically use
+		/// the specified value when they are first deserialized.
+		/// </remarks>
+		/// <param name="locale">Locale.</param>
+		public static void SetLocaleForAll(string locale)
+		{
+			s_LocaleForAll = locale;
+			if (OnSetLocaleForAll != null)
+			{
+				OnSetLocaleForAll(locale);
+			}
+		}
+		#endregion
 
 		#region Backing Fields
 		[SerializeField, PropertyBackingField(typeof(PopupAttribute), "GetCurrentLocalePopupContents")]
@@ -71,9 +94,17 @@ namespace Candlelight.UI
 		private string m_DefaultText = "";
 		[SerializeField, PropertyBackingField(typeof(LocaleOverrideEntryAttribute))]
 		private List<LocaleOverride> m_LocaleOverrides = new List<LocaleOverride>();
-		private UnityEngine.Events.UnityEvent m_OnBecameDirty = new UnityEngine.Events.UnityEvent();
 		#endregion
 
+		#region Constructors
+		protected LocalizableText() {}
+		#endregion
+
+		#region Public Properties
+		/// <summary>
+		/// Occurs whenever the text on this instance has changed.
+		/// </summary>
+		public event ITextSourceEventHandler BecameDirty;
 		/// <summary>
 		/// Gets or sets the current locale.
 		/// </summary>
@@ -83,11 +114,14 @@ namespace Candlelight.UI
 			get { return m_CurrentLocale; }
 			set
 			{
-				value = value ?? "";
+				value = value ?? string.Empty;
 				if (m_CurrentLocale != value)
 				{
 					m_CurrentLocale = value;
-					m_OnBecameDirty.Invoke();
+					if (this.BecameDirty != null)
+					{
+						this.BecameDirty(this);
+					}
 				}
 			}
 		}
@@ -100,19 +134,17 @@ namespace Candlelight.UI
 			get { return m_DefaultText; }
 			set
 			{
-				value = value ?? "";
+				value = value ?? string.Empty;
 				if (m_DefaultText != value)
 				{
 					m_DefaultText = value;
-					m_OnBecameDirty.Invoke();
+					if (this.BecameDirty != null)
+					{
+						this.BecameDirty(this);
+					}
 				}
 			}
 		}
-		/// <summary>
-		/// Gets a callback for whenever the text on this instance has changed.
-		/// </summary>
-		/// <value>A callback for whenever the text on this instance has changed.</value>
-		public UnityEngine.Events.UnityEvent OnBecameDirty { get { return m_OnBecameDirty; } }
 		/// <summary>
 		/// Gets the output text.
 		/// </summary>
@@ -125,6 +157,73 @@ namespace Candlelight.UI
 				return index < 0 ? m_DefaultText : m_LocaleOverrides[index].Data;
 			}
 		}
+
+		/// <summary>
+		/// Gets the localized text.
+		/// </summary>
+		/// <param name="localizedText">A dictionary of string for different locales to populate.</param>
+		public void GetLocaleOverrides(Dictionary<string, string> localizedText)
+		{
+			BackingFieldUtility.GetKeyedListBackingFieldAsDict(m_LocaleOverrides, localizedText, t => t.Data);
+		}
+
+		/// <summary>
+		/// Sets the localized text.
+		/// </summary>
+		/// <param name="value">
+		/// A dictionary of different possible <see cref="OutputText"/> values for this instance, keyed by locale.
+		/// </param>
+		public void SetLocaleOverrides(Dictionary<string, string> value)
+		{
+			if (
+				BackingFieldUtility.SetKeyedListBackingFieldFromStringKeyedDict(
+					m_LocaleOverrides, value, (locale, text) => new LocaleOverride(locale, text)
+				) && this.BecameDirty != null
+			)
+			{
+				this.BecameDirty(this);
+			}
+		}
+		#endregion
+
+		#region Unity Messages
+		/// <summary>
+		/// Raises the disable event.
+		/// </summary>
+		protected virtual void OnDisable()
+		{
+			LocalizableText.OnSetLocaleForAll -= SetLocale;
+		}
+
+		/// <summary>
+		/// Raises the enable event.
+		/// </summary>
+		protected virtual void OnEnable()
+		{
+			LocalizableText.OnSetLocaleForAll += SetLocale;
+			if (s_LocaleForAll != null)
+			{
+				this.CurrentLocale = s_LocaleForAll;
+			}
+			if (m_LocalizedText.Count == 0)
+			{
+				return;
+			}
+			m_LocaleOverrides.Clear();
+			for (int i = 0; i < m_LocalizedText.Count; ++i)
+			{
+				m_LocaleOverrides.Add(new LocaleOverride(m_LocalizedText[i].Locale, m_LocalizedText[i].Text));
+			}
+			m_LocalizedText.Clear();
+#if UNITY_EDITOR
+			UnityEditor.EditorUtility.SetDirty(this);
+			Debug.LogWarning(
+				"Updated serialization layout. Save your project and commit this object to version control.",
+				this
+			);
+#endif
+		}
+		#endregion
 
 		/// <summary>
 		/// Gets the current locale popup contents. Included for inspector.
@@ -162,45 +261,21 @@ namespace Candlelight.UI
 		}
 
 		/// <summary>
-		/// Gets the localized text.
-		/// </summary>
-		/// <param name="localizedText">A dictionary of string for different locales to populate.</param>
-		public void GetLocaleOverrides(ref Dictionary<string, string> localizedText)
-		{
-			BackingFieldUtility.GetKeyedListBackingFieldAsDict(m_LocaleOverrides, ref localizedText);
-		}
-
-		/// <summary>
-		/// Raises the enable event.
-		/// </summary>
-		protected virtual void OnEnable()
-		{
-			if (m_LocalizedText.Count == 0)
-			{
-				return;
-			}
-			m_LocaleOverrides.Clear();
-			for (int i = 0; i < m_LocalizedText.Count; ++i)
-			{
-				m_LocaleOverrides.Add(new LocaleOverride(m_LocalizedText[i].Locale, m_LocalizedText[i].Text));
-			}
-			m_LocalizedText.Clear();
-			#if UNITY_EDITOR
-			UnityEditor.EditorUtility.SetDirty(this);
-			Debug.LogWarning(
-				"Updated serialization layout. Save your project and commit this object to version control.",
-				this
-			);
-			#endif
-		}
-
-		/// <summary>
 		/// Opens the API reference page.
 		/// </summary>
 		[ContextMenu("API Reference")]
 		private void OpenAPIReferencePage()
 		{
 			this.OpenReferencePage("uas-hypertext");
+		}
+
+		/// <summary>
+		/// Sets the locale on this instance.
+		/// </summary>
+		/// <param name="locale">Locale.</param>
+		private void SetLocale(string locale)
+		{
+			this.CurrentLocale = locale;
 		}
 
 		/// <summary>
@@ -211,41 +286,23 @@ namespace Candlelight.UI
 		private void SetLocaleOverrides(LocaleOverride[] value)
 		{
 			if (
-				BackingFieldUtility.SetKeyedListBackingFieldFromArray(
+				BackingFieldUtility.SetKeyedListBackingFieldFromStringKeyedArray(
 					m_LocaleOverrides, value, (locale, wrapper) => new LocaleOverride(locale, wrapper.Data)
-				)
+				) && this.BecameDirty != null
 			)
 			{
-				m_OnBecameDirty.Invoke();
-			}
-		}
-
-		/// <summary>
-		/// Sets the localized text.
-		/// </summary>
-		/// <param name="value">
-		/// A dictionary of different possible <see cref="OutputText"/> values for this instance, keyed by locale.
-		/// </param>
-		public void SetLocaleOverrides(Dictionary<string, string> value)
-		{
-			if (
-				BackingFieldUtility.SetKeyedListBackingFieldFromDict(
-					m_LocaleOverrides, value, (locale, text) => new LocaleOverride(locale, text)
-				)
-			)
-			{
-				m_OnBecameDirty.Invoke();
+				this.BecameDirty(this);
 			}
 		}
 
 		#region Obsolete
 		[System.Serializable, System.Obsolete]
-		public struct LocalizedText : IPropertyBackingFieldCompatible<LocalizedText>
+		private struct LocalizedText
 		{
 			#region Backing Fields
 			[SerializeField]
 			private string m_Locale;
-			[SerializeField, TextArea(3, 10)]
+			[SerializeField]
 			private string m_Text;
 			#endregion
 			public string Locale { get { return m_Locale = m_Locale ?? string.Empty; } }
@@ -255,35 +312,13 @@ namespace Candlelight.UI
 				m_Locale = locale;
 				m_Text = text;
 			}
-			public object Clone()
-			{
-				return this;
-			}
-			public override bool Equals(object obj)
-			{
-				return ObjectX.Equals(ref this, obj);
-			}
-			public bool Equals(LocalizedText other)
-			{
-				return GetHashCode() == other.GetHashCode();
-			}
-			public override int GetHashCode()
-			{
-				return ObjectX.GenerateHashCode(this.Locale.GetHashCode(), this.Text.GetHashCode());
-			}
-			public int GetSerializedPropertiesHash()
-			{
-				return GetHashCode();
-			}
 		}
 		#pragma warning disable 612
 		[SerializeField]
 		private List<LocalizedText> m_LocalizedText = new List<LocalizedText>();
-		[System.Obsolete("Use LocalizableText.GetLocaleOverrides(ref Dictionary<string, string>)", true)]
-		public void SetLocalizedText(ref List<LocalizedText> localizedText) {}
-		[System.Obsolete("Use LocalizableText.SetLocaleOverrides(Dictionary<string, string>)", true)]
-		public void GetLocalizedText(IEnumerable<LocalizedText> value) {}
 		#pragma warning restore 612
+		[System.Obsolete("Use LocalizableText.GetLocaleOverrides(Dictionary<string, string>)", true)]
+		public void GetLocaleOverrides(ref Dictionary<string, string> localizedText) {}
 		#endregion
 	}
 }

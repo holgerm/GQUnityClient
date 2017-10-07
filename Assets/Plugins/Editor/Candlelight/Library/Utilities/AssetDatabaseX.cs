@@ -1,7 +1,7 @@
 // 
 // AssetDatabaseX.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,10 +25,16 @@
 // This file contains a class with static methods for working with the asset
 // database.
 
+#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
+#define NO_SCENE_MANAGER
+#endif
+
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Candlelight
@@ -38,6 +44,17 @@ namespace Candlelight
 	/// </summary>
 	public static class AssetDatabaseX
 	{
+		/// <summary>
+		/// A predicate for determining whether a specified asset at a specified path satisfies a criterion.
+		/// </summary>
+		/// <remarks>The asset path may be the path to a scene if the asset is a non-prefab in a scene.</remarks>
+		public delegate bool AssetMatchPredicate<T>(T asset, string assetPath) where T : Object;
+		/// <summary>
+		/// A callback for modifying a specified asset at a specified path.
+		/// </summary>
+		/// <remarks>The asset path may be the path to a scene if the asset is a non-prefab in a scene.</remarks>
+		public delegate void ModifyAssetCallback<T>(T asset, string assetPath) where T : Object;
+
 		/// <summary>
 		/// Adds and loads the asset.
 		/// </summary>
@@ -208,6 +225,64 @@ namespace Candlelight
 		}
 
 		/// <summary>
+		/// Finds all assets in the project of the specified type.
+		/// </summary>
+		/// <param name="assets">The asset and its path for each match found in the project.</param>
+		/// <param name="isMatch">Optional predicate to determine whether the found asset should be included.</param>
+		/// <typeparam name="T">A <see cref="UnityEngine.Object"/> type.</typeparam>
+		public static void FindAllAssets<T>(Dictionary<T, string> assets, AssetMatchPredicate<T> isMatch = null)
+			where T : Object
+		{
+			assets.Clear();
+			AssetDatabase.SaveAssets();
+			bool hasMatchPredicate = isMatch != null;
+			foreach (string guid in AssetDatabase.FindAssets(string.Format("t:{0}", typeof(T).Name)))
+			{
+				string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+				T asset = AssetDatabase.LoadAssetAtPath(assetPath, typeof(T)) as T;
+				if (asset != null && (!hasMatchPredicate || isMatch(asset, assetPath)))
+				{
+					assets.Add(asset, assetPath);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Finds all assets in the project with the specified component type in their hierarchies.
+		/// </summary>
+		/// <param name="components">
+		/// For each asset in the project where <typeparamref name="T"/> were found, all <typeparamref name="T"> found
+		/// in the asset's hierarchy as well as its path.
+		/// </param>
+		/// <typeparam name="T">A <see cref="UnityEngine.Component"/> type.</typeparam>
+		public static void FindAllAssetsWithComponent<T>(Dictionary<List<T>, string> components) where T : Component
+		{
+			Dictionary<List<T>, string> internalComponents = new Dictionary<List<T>, string>();
+			Dictionary<GameObject, string> gameObjects = new Dictionary<GameObject, string>();
+			AssetMatchPredicate<GameObject> hasComponents = delegate(GameObject asset, string assetPath)
+			{
+				if (asset == null)
+				{
+					return false;
+				}
+				List<T> comps = new List<T>();
+				asset.GetComponentsInChildren(true, comps);
+				if (comps.Count > 0)
+				{
+					internalComponents.Add(comps, assetPath);
+					return true;
+				}
+				return false;
+			};
+			FindAllAssets(gameObjects, hasComponents);
+			components.Clear();
+			foreach (KeyValuePair<List<T>, string> kv in internalComponents)
+			{
+				components.Add(kv.Key, kv.Value);
+			}
+		}
+
+		/// <summary>
 		/// Gets the folder containing the script that defines the specified <see cref="System.Type"/>.
 		/// </summary>
 		/// <returns>
@@ -301,9 +376,213 @@ namespace Candlelight
 		}
 
 		/// <summary>
+		/// Performs the specified modification on all assets in the project of the specified type.
+		/// </summary>
+		/// <param name="assets">The assets to modify and their respective paths.</param>
+		/// <param name="onModifyAsset">The callback to invoke for each asset found.</param>
+		/// <param name="undoMessage">Undo message to use.</param>
+		/// <param name="modifyCurrentSceneOnly">
+		/// If set to <see langword="true"/> then only perform operation on matching objects in the current scene;
+		/// otherwise, perform operation on all scenes.
+		/// </param>
+		/// <param name="isReadOnly">
+		/// If set to <see langword="true"/> then do not save assets or scenes when <paramref name="onModifyAsset"/> is
+		/// invoked.
+		/// </param>
+		/// <typeparam name="T">A <see cref="UnityEngine.Object"/> type.</typeparam>
+		private static void ModifyAllAssetsInProject<T>(
+			Dictionary<T, string> assets,
+			ModifyAssetCallback<T> onModifyAsset,
+			string undoMessage,
+			bool modifyCurrentSceneOnly = false,
+			bool isReadOnly = false
+		) where T : Object
+		{
+			int undoGroup = Undo.GetCurrentGroup();
+			undoMessage = string.IsNullOrEmpty(undoMessage) ?
+				string.Format("Modify All {0} in Project", typeof(T)) : undoMessage;
+			int assetIndex = 0;
+			string formatString =
+				typeof(GameObject).IsAssignableFrom(typeof(T)) || typeof(Component).IsAssignableFrom(typeof(T)) ?
+					"Processing Prefab {0} / {1}" : "Processing Asset {0} / {1}";
+			foreach (KeyValuePair<T, string> kv in assets)
+			{
+				string message = string.Format(formatString, assetIndex, assets.Count);
+				EditorUtility.DisplayProgressBar(message, message, (float)assetIndex / assets.Count);
+#if !UNITY_4_6 && !UNITY_4_7
+				Undo.SetCurrentGroupName(undoMessage);
+#endif
+				onModifyAsset(kv.Key, kv.Value);
+				++assetIndex;
+			}
+			Undo.CollapseUndoOperations(undoGroup);
+			EditorUtility.ClearProgressBar();
+			if (!isReadOnly)
+			{
+				AssetDatabase.SaveAssets();
+			}
+			if (!isReadOnly && !modifyCurrentSceneOnly)
+			{
+				if (
+					!EditorUtility.DisplayDialog(
+						"Search Scenes?",
+						"Prefab hierarchies have been modified.\n\n" +
+						string.Format(
+							"Do you also wish to modify {0} in scenes that are not in prefab hierarchies? " +
+							"(This operation is not undoable and will clear your undo queue.)", typeof(T).Name
+						), "Yes", "No"
+					)
+				)
+				{
+					return;
+				}
+			}
+			System.Action<string> ProcessScene = delegate (string assetPath)
+			{
+				HashSet<T> allObjects = new HashSet<T>();
+				if (!typeof(Component).IsAssignableFrom(typeof(T)))
+				{
+					foreach (T obj in Object.FindObjectsOfType<T>())
+					{
+						allObjects.Add(obj);
+					}
+				}
+				else
+				{
+					foreach (GameObject go in Object.FindObjectsOfType<GameObject>())
+					{
+						foreach (Component comp in go.GetComponentsInChildren(typeof(T), true))
+						{
+							allObjects.Add(comp as T);
+						}
+					}
+				}
+				undoGroup = Undo.GetCurrentGroup();
+				foreach (T obj in allObjects)
+				{
+					onModifyAsset(obj, assetPath);
+				}
+				Undo.CollapseUndoOperations(undoGroup);
+				if (allObjects.Count > 0 && !isReadOnly)
+				{
+#if NO_SCENE_MANAGER
+					EditorApplication.SaveScene();
+#else
+					UnityEditor.SceneManagement.EditorSceneManager.SaveOpenScenes();
+#endif
+				}
+			};
+			if (modifyCurrentSceneOnly)
+			{
+				ProcessScene(
+#if NO_SCENE_MANAGER
+					EditorApplication.currentScene
+#else
+					UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path
+#endif
+				);
+			}
+			else
+			{
+				List<string> scenePaths = new List<string>(
+					from guid in AssetDatabase.FindAssets("t:Scene") select AssetDatabase.GUIDToAssetPath(guid)
+				);
+				scenePaths.RemoveAll(p => !System.IO.File.Exists(p));
+				for (int i = 0; i < scenePaths.Count; ++i)
+				{
+					string scenePath = scenePaths[i];
+					string message = string.Format("Processing Scene {0} / {1}", i, scenePaths.Count);
+					EditorUtility.DisplayProgressBar(message, message, (float)i / scenePaths.Count);
+#if NO_SCENE_MANAGER
+					EditorApplication.OpenScene(scenePath);
+#else
+					UnityEditor.SceneManagement.EditorSceneManager.OpenScene(
+						scenePath, UnityEditor.SceneManagement.OpenSceneMode.Single
+					);
+#endif
+					ProcessScene(scenePath);
+				}
+			}
+			EditorUtility.ClearProgressBar();
+			if (!modifyCurrentSceneOnly)
+			{
+#if NO_SCENE_MANAGER
+				EditorApplication.NewScene();
+#else
+				UnityEditor.SceneManagement.EditorSceneManager.NewScene(
+					UnityEditor.SceneManagement.NewSceneSetup.DefaultGameObjects,
+					UnityEditor.SceneManagement.NewSceneMode.Single
+				);
+#endif
+			}
+		}
+
+		/// <summary>
+		/// Performs the specified modification on all assets in the project of the specified type.
+		/// </summary>
+		/// <param name="onModifyAsset">The callback to invoke for each asset found.</param>
+		/// <param name="undoMessage">Optional undo message to use.</param>
+		/// <param name="isMatch">Optional predicate to determine whether the found asset should be included.</param>
+		/// <param name="modifyCurrentSceneOnly">
+		/// If set to <see langword="true"/> then only perform operation on matching objects in the current scene;
+		/// otherwise, perform operation on all scenes.
+		/// </param>
+		/// <param name="isReadOnly">
+		/// If set to <see langword="true"/> then do not save assets or scenes when <paramref name="onModifyAsset"/> is
+		/// invoked.
+		/// </param>
+		/// <typeparam name="T">A <see cref="UnityEngine.Object"/> type.</typeparam>
+		public static void ModifyAllAssetsInProject<T>(
+			ModifyAssetCallback<T> onModifyAsset,
+			string undoMessage = null,
+			AssetMatchPredicate<T> isMatch = null,
+			bool modifyCurrentSceneOnly = false,
+			bool isReadOnly = false
+		) where T : Object
+		{
+			Dictionary<T, string> assets = null;
+			FindAllAssets(assets, isMatch);
+			ModifyAllAssetsInProject(assets, onModifyAsset, undoMessage, modifyCurrentSceneOnly, isReadOnly);
+		}
+
+		/// <summary>
+		/// Performs the specified modification on all components of the specified type on assets in the project.
+		/// </summary>
+		/// <param name="onModifyComponent">The callback to invoke for each component found.</param>
+		/// <param name="undoMessage">Optional undo message to use.</param>
+		/// <param name="modifyCurrentSceneOnly">
+		/// If set to <see langword="true"/> then only perform operation on matching objects in the current scene;
+		/// otherwise, perform operation on all scenes.
+		/// </param>
+		/// <param name="isReadOnly">
+		/// If set to <see langword="true"/> then do not save assets or scenes when <paramref name="onModifyAsset"/> is
+		/// invoked.
+		/// </param>
+		/// <typeparam name="T">A <see cref="UnityEngine.Component"/> type.</typeparam>
+		public static void ModifyAllComponentsInProject<T>(
+			ModifyAssetCallback<T> onModifyComponent,
+			string undoMessage = null,
+			bool modifyCurrentSceneOnly = false,
+			bool isReadOnly = false
+		) where T : Component
+		{
+			Dictionary<List<T>, string> assetsWithComponent = new Dictionary<List<T>, string>();
+			FindAllAssetsWithComponent(assetsWithComponent);
+			Dictionary<T, string> assets = new Dictionary<T, string>();
+			foreach (KeyValuePair<List<T>, string> comps in assetsWithComponent)
+			{
+				foreach (T comp in comps.Key)
+				{
+					assets[comp] = comps.Value;
+				}
+			}
+			ModifyAllAssetsInProject(assets, onModifyComponent, undoMessage, modifyCurrentSceneOnly, isReadOnly);
+		}
+
+		/// <summary>
 		/// Prints the selected objects' asset paths and types.
 		/// </summary>
-		[MenuItem ("Assets/Print Asset Path")]
+		[MenuItem("Assets/Candlelight/Print Asset Path")]
 		private static void PrintSelected()
 		{
 			foreach (Object obj in Selection.objects)

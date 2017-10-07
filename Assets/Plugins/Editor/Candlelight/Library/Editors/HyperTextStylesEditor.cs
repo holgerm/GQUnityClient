@@ -1,7 +1,7 @@
 // 
 // HyperTextStyles.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -42,7 +42,7 @@ namespace Candlelight.UI
 		/// <typeparam name="T">The style type.</typeparam>
 		/// <param name="styleSheet">The style sheet on which styles should be set.</param>
 		/// <param name="styles">The collection of new styles to set.</param>
-		private delegate void StylesSetter<T>(HyperTextStyles styleSheet, IEnumerable<T> styles);
+		private delegate void StylesSetter<T>(HyperTextStyles styleSheet, IList<T> styles);
 
 		/// <summary>
 		/// A class for storing GUIContent related to a custom style.
@@ -85,7 +85,7 @@ namespace Candlelight.UI
 		/// <summary>
 		/// Creates a new asset in the project.
 		/// </summary>
-		[UnityEditor.MenuItem("Assets/Create/Candlelight/HyperText Styles")]
+		[UnityEditor.MenuItem("Assets/Create/Candlelight/HyperText/HyperText Styles")]
 		public static void CreateNewAssetInProject()
 		{
 			AssetDatabaseX.CreateNewAssetInCurrentProjectFolder<HyperTextStyles>();
@@ -191,6 +191,67 @@ namespace Candlelight.UI
 		/// A table for storing the GUI contents for each custom tag.
 		/// </summary>
 		private Dictionary <int, CustomStyleGUIContent> m_TagGUIContents = new Dictionary<int, CustomStyleGUIContent>();
+
+		/// <summary>
+		/// Displays the current custom style tab.
+		/// </summary>
+		private void DisplayCustomStyleTab()
+		{
+			float currentlySelectedStyleHeight = 0f;
+			ReorderableList list = null;
+			switch (s_CustomStyleTabPreference.CurrentValue)
+			{
+			case CustomStyleTab.CustomTextStyles:
+				list = m_CustomTextStyles;
+				currentlySelectedStyleHeight = HyperTextTextStyleDrawer.propertyHeight;
+				m_DisplayCurrentStyle = (pos) => OnDrawCustomTextStyleEntry(pos, list.index, true, true);
+				break;
+			case CustomStyleTab.LinkStyles:
+				list = m_LinkStyles;
+				currentlySelectedStyleHeight = HyperTextLinkSubclassDrawer.propertyHeight;
+				m_DisplayCurrentStyle = (pos) => OnDrawLinkStyleEntry(pos, list.index, true, true);
+				break;
+			case CustomStyleTab.QuadStyles:
+				list = m_QuadStyles;
+				currentlySelectedStyleHeight = HyperTextQuadStyleDrawer.propertyHeight;
+				m_DisplayCurrentStyle = (pos) => OnDrawQuadStyleEntry(pos, list.index, true, true);
+				break;
+			}
+			if (list.count > 0)
+			{
+				EditorGUILayout.LabelField(
+					string.Format("Modify Style {0}", Mathf.Max(0, list.index)), EditorStylesX.BoldTitleBar
+				);
+				EditorGUILayout.Space();
+				if (m_DisplayCurrentStyle != null)
+				{
+					m_DisplayCurrentStyle(EditorGUILayout.GetControlRect(true, currentlySelectedStyleHeight));
+				}
+			}
+			else
+			{
+				EditorGUILayout.LabelField("Modify Styles", EditorStylesX.BoldTitleBar);
+				EditorGUILayout.HelpBox("Add some styles and edit them here.", MessageType.Info);
+			}
+			EditorGUILayout.LabelField("Select, Add, or Remove Styles", EditorStylesX.BoldTitleBar);
+			EditorGUILayout.Space();
+			if (list != null)
+			{
+				list.DoLayoutList();
+			}
+			if (
+				!this.serializedObject.isEditingMultipleObjects &&
+				m_ParentStyle != null &&
+				m_CurrentTabInheritedStyleNames.Count > 0
+			)
+			{
+				EditorGUILayout.LabelField("Inherited Styles", EditorStylesX.BoldTitleBar);
+				foreach (string styleName in m_CurrentTabInheritedStyleNames)
+				{
+					EditorGUILayout.LabelField(styleName);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Displays a property field with an override property checkbox and status icon if a parent style is found.
@@ -366,7 +427,7 @@ namespace Candlelight.UI
 				index,
 				m_TagGUIContents,
 				m_InheritedTags,
-				(styles, texts) => styles.GetCustomTextStyles(ref texts),
+				(styles, texts) => styles.GetCustomTextStyles(texts),
 				(styles, texts) => styles.SetCustomTextStyles(texts)
 			);
 		}
@@ -410,7 +471,7 @@ namespace Candlelight.UI
 				index,
 				m_LinkGUIContents,
 				m_InheritedLinks,
-				(styles, links) => styles.GetLinkStyles(ref links),
+				(styles, links) => styles.GetLinkStyles(links),
 				(styles, links) => styles.SetLinkStyles(links)
 			);
 		}
@@ -430,7 +491,7 @@ namespace Candlelight.UI
 				index,
 				m_QuadGUIContents,
 				m_InheritedQuads,
-				(styles, quads) => styles.GetQuadStyles(ref quads),
+				(styles, quads) => styles.GetQuadStyles(quads),
 				(styles, quads) => styles.SetQuadStyles(quads)
 			);
 		}
@@ -440,7 +501,7 @@ namespace Candlelight.UI
 		/// </summary>
 		private void OnDisable()
 		{
-			(this.target as HyperTextStyles).OnStylesChanged.RemoveListener(UpdateCustomStyleGUIContents);
+			(this.target as HyperTextStyles).Changed -= OnStylesChanged;
 		}
 
 		/// <summary>
@@ -493,69 +554,8 @@ namespace Candlelight.UI
 			string displayName4 = m_InheritedStyles.serializedProperty.displayName;
 			m_InheritedStyles.drawHeaderCallback = (position) => EditorGUI.LabelField(position, displayName4);
 			m_InheritedStyles.drawElementCallback = OnDrawInheritedStyleEntry;
-			(this.target as HyperTextStyles).OnStylesChanged.AddListener(UpdateCustomStyleGUIContents);
+			(this.target as HyperTextStyles).Changed += OnStylesChanged;
 			UpdateCustomStyleGUIContents();
-		}
-
-		/// <summary>
-		/// Displays the current custom style tab.
-		/// </summary>
-		private void DisplayCustomStyleTab()
-		{
-			float currentlySelectedStyleHeight = 0f;
-			ReorderableList list = null;
-			switch (s_CustomStyleTabPreference.CurrentValue)
-			{
-			case CustomStyleTab.CustomTextStyles:
-				list = m_CustomTextStyles;
-				currentlySelectedStyleHeight = HyperTextTextStyleDrawer.propertyHeight;
-				m_DisplayCurrentStyle = (pos) => OnDrawCustomTextStyleEntry(pos, list.index, true, true);
-				break;
-			case CustomStyleTab.LinkStyles:
-				list = m_LinkStyles;
-				currentlySelectedStyleHeight = HyperTextLinkSubclassDrawer.propertyHeight;
-				m_DisplayCurrentStyle = (pos) => OnDrawLinkStyleEntry(pos, list.index, true, true);
-				break;
-			case CustomStyleTab.QuadStyles:
-				list = m_QuadStyles;
-				currentlySelectedStyleHeight = HyperTextQuadStyleDrawer.propertyHeight;
-				m_DisplayCurrentStyle = (pos) => OnDrawQuadStyleEntry(pos, list.index, true, true);
-				break;
-			}
-			if (list.count > 0)
-			{
-				EditorGUILayout.LabelField(
-					string.Format("Modify Style {0}", Mathf.Max(0, list.index)), EditorStylesX.BoldTitleBar
-				);
-				EditorGUILayout.Space();
-				if (m_DisplayCurrentStyle != null)
-				{
-					m_DisplayCurrentStyle(EditorGUILayout.GetControlRect(true, currentlySelectedStyleHeight));
-				}
-			}
-			else
-			{
-				EditorGUILayout.LabelField("Modify Styles", EditorStylesX.BoldTitleBar);
-				EditorGUILayout.HelpBox("Add some styles and edit them here.", MessageType.Info);
-			}
-			EditorGUILayout.LabelField("Select, Add, or Remove Styles", EditorStylesX.BoldTitleBar);
-			EditorGUILayout.Space();
-			if (list != null)
-			{
-				list.DoLayoutList();
-			}
-			if (
-				!this.serializedObject.isEditingMultipleObjects &&
-				m_ParentStyle != null &&
-				m_CurrentTabInheritedStyleNames.Count > 0
-			)
-			{
-				EditorGUILayout.LabelField("Inherited Styles", EditorStylesX.BoldTitleBar);
-				foreach (string styleName in m_CurrentTabInheritedStyleNames)
-				{
-					EditorGUILayout.LabelField(styleName);
-				}
-			}
 		}
 
 		/// <summary>
@@ -611,6 +611,15 @@ namespace Candlelight.UI
 		}
 
 		/// <summary>
+		/// Raises the styles changed event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		private void OnStylesChanged(HyperTextStyles sender)
+		{
+			UpdateCustomStyleGUIContents();
+		}
+
+		/// <summary>
 		/// Updates the validation statuses, labels, and tooltips for custom styles.
 		/// </summary>
 		private void UpdateCustomStyleGUIContents()
@@ -622,7 +631,7 @@ namespace Candlelight.UI
 			m_InheritTooltip = "";
 			m_OverrideTooltip = "";
 			HyperTextStyles styles = this.target as HyperTextStyles;
-			styles.GetInheritedStyles(ref s_InheritedStyles);
+			styles.GetInheritedStyles(s_InheritedStyles);
 			m_ParentStyle = s_InheritedStyles.Where(s => s != null).LastOrDefault();
 			if (m_ParentStyle != null)
 			{
@@ -634,59 +643,73 @@ namespace Candlelight.UI
 			}
 			// rebuild tooltips and icons
 			m_LinkGUIContents.Clear();
-			List<HyperTextStyles.LinkSubclass> links = null;
-			styles.GetLinkStyles(ref links);
-			for (int i = 0; i < links.Count; ++i)
+			using (var links = new ListPool<HyperTextStyles.LinkSubclass>.Scope())
 			{
-				m_LinkGUIContents[i] = ValidateIdentifier(links[i].Identifier, links);
-				m_LinkGUIContents[i].Label = new GUIContent(
-					string.IsNullOrEmpty(links[i].Identifier) ?
-						string.Format("Link Style {0}", i) : string.Format("<a class=\"{0}\">", links[i].Identifier)
-				);
-				UpdateValidatationStatusIfOverridingInheritedStyle(
-					m_LinkGUIContents[i], links[i].Identifier, m_InheritedLinks
-				);
-			}
-			m_QuadGUIContents.Clear();
-			List<HyperTextStyles.Quad> quads = null;
-			styles.GetQuadStyles(ref quads);
-			for (int i = 0; i < quads.Count; ++i)
-			{
-				m_QuadGUIContents[i] = ValidateIdentifier(quads[i].Identifier, quads);
-				m_QuadGUIContents[i].Label = new GUIContent(
-					string.IsNullOrEmpty(quads[i].Identifier) ?
-						string.Format("Quad Style {0}", i) : string.Format("<quad class=\"{0}\">", quads[i].Identifier)
-				);
-				if (
-					m_QuadGUIContents[i].Status == ValidationStatus.Okay &&
-					!string.IsNullOrEmpty(quads[i].LinkClassName) &&
-					!string.IsNullOrEmpty(quads[i].LinkId)
-				)
+				styles.GetLinkStyles(links.List);
+				for (int i = 0; i < links.List.Count; ++i)
 				{
-					if (links.Count(link => link.Identifier.ToLower() == quads[i].ClassName.ToLower()) == 0)
+					m_LinkGUIContents[i] = ValidateIdentifier(links.List[i].Identifier, links.List);
+					m_LinkGUIContents[i].Label = new GUIContent(
+						string.IsNullOrEmpty(links.List[i].Identifier) ?
+							string.Format("Link Style {0}", i) :
+							string.Format("<a class=\"{0}\">", links.List[i].Identifier)
+					);
+					UpdateValidatationStatusIfOverridingInheritedStyle(
+						m_LinkGUIContents[i], links.List[i].Identifier, m_InheritedLinks
+					);
+				}
+				m_QuadGUIContents.Clear();
+				using (var quads = new ListPool<HyperTextStyles.Quad>.Scope())
+				{
+					styles.GetQuadStyles(quads.List);
+					styles.GetCascadedLinkStyles(links.List);
+					for (int i = 0; i < quads.List.Count; ++i)
 					{
-						m_QuadGUIContents[i].Status = ValidationStatus.Error;
-						m_QuadGUIContents[i].StatusTooltip =
-							string.Format("No link style with class name {0} exists.", quads[i].LinkClassName);
+						m_QuadGUIContents[i] = ValidateIdentifier(quads.List[i].Identifier, quads.List);
+						m_QuadGUIContents[i].Label = new GUIContent(
+							string.IsNullOrEmpty(quads.List[i].Identifier) ?
+								string.Format("Quad Style {0}", i) :
+								string.Format("<quad class=\"{0}\">", quads.List[i].Identifier)
+						);
+						if (
+							m_QuadGUIContents[i].Status == ValidationStatus.Okay &&
+							!string.IsNullOrEmpty(quads.List[i].LinkClassName) &&
+							!string.IsNullOrEmpty(quads.List[i].LinkId)
+						)
+						{
+							if (
+								links.List.Count(
+									link => link.Identifier.ToLower() == quads.List[i].LinkClassName.ToLower()
+								) == 0
+							)
+							{
+								m_QuadGUIContents[i].Status = ValidationStatus.Error;
+								m_QuadGUIContents[i].StatusTooltip = string.Format(
+									"No link style with class name {0} exists.", quads.List[i].LinkClassName
+								);
+							}
+						}
+						UpdateValidatationStatusIfOverridingInheritedStyle(
+							m_QuadGUIContents[i], quads.List[i].Identifier, m_InheritedQuads
+						);
 					}
 				}
-				UpdateValidatationStatusIfOverridingInheritedStyle(
-					m_QuadGUIContents[i], quads[i].Identifier, m_InheritedQuads
-				);
 			}
 			m_TagGUIContents.Clear();
-			List<HyperTextStyles.Text> tags = null;
-			styles.GetCustomTextStyles(ref tags);
-			for (int i = 0; i < tags.Count; ++i)
+			using (var tags = new ListPool<HyperTextStyles.Text>.Scope())
 			{
-				m_TagGUIContents[i] = ValidateIdentifier(tags[i].Identifier, tags, "Tag");
-				m_TagGUIContents[i].Label = new GUIContent(
-					string.IsNullOrEmpty(tags[i].Identifier) ?
-						string.Format("Text Style {0}", i) : string.Format("<{0}>", tags[i].Identifier)
-				);
-				UpdateValidatationStatusIfOverridingInheritedStyle(
-					m_TagGUIContents[i], tags[i].Identifier, m_InheritedTags
-				);
+				styles.GetCustomTextStyles(tags.List);
+				for (int i = 0; i < tags.List.Count; ++i)
+				{
+					m_TagGUIContents[i] = ValidateIdentifier(tags.List[i].Identifier, tags.List, "Tag");
+					m_TagGUIContents[i].Label = new GUIContent(
+						string.IsNullOrEmpty(tags.List[i].Identifier) ?
+							string.Format("Text Style {0}", i) : string.Format("<{0}>", tags.List[i].Identifier)
+					);
+					UpdateValidatationStatusIfOverridingInheritedStyle(
+						m_TagGUIContents[i], tags.List[i].Identifier, m_InheritedTags
+					);
+				}
 			}
 			// update list of inherited style names based on current tab
 			m_CurrentTabInheritedStyleNames.Clear();

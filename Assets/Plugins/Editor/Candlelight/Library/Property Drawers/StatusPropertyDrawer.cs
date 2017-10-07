@@ -6,12 +6,10 @@
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains a custom property drawer for displaying a status icon
-// alongside a property's field.
 
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 namespace Candlelight
 {
@@ -20,7 +18,42 @@ namespace Candlelight
 	/// </summary>
 	[CustomPropertyDrawer(typeof(StatusPropertyAttribute), true)]
 	public class StatusPropertyDrawer : PropertyDrawer
-	{		
+	{
+		/// <summary>
+		/// The method signature for <see cref="StatusPropertyAttribute.GetStatusCallback"/> 
+		/// </summary>
+		private static readonly System.Type[] s_GetStatusCallbackMethodSignature = (
+			from p in typeof(StatusPropertyAttribute.GetStatusCallback).GetMethod("Invoke").GetParameters()
+			select p.ParameterType
+		).ToArray();
+
+		/// <summary>
+		/// Gets the status callback with the specified name on the specified <paramref name="property"/>'s class.
+		/// </summary>
+		/// <returns>The status callback.</returns>
+		/// <param name="property">Property.</param>
+		/// <param name="methodName">Method name.</param>
+		public static StatusPropertyAttribute.GetStatusCallback GetStatusCallback(
+			SerializedProperty property, string methodName
+		)
+		{
+			System.Reflection.FieldInfo field;
+			object provider = property.GetProvider(out field);
+			StatusPropertyAttribute.GetStatusCallback result = null;
+			if (!string.IsNullOrEmpty(methodName))
+			{
+				System.Reflection.MethodInfo method =
+					provider.GetType().GetStaticMethod(methodName, s_GetStatusCallbackMethodSignature);
+				if (method != null)
+				{
+					result = System.Delegate.CreateDelegate(
+						typeof(StatusPropertyAttribute.GetStatusCallback), null, method
+					) as StatusPropertyAttribute.GetStatusCallback;
+				}
+			}
+			return result;
+		}
+
 		/// <summary>
 		/// The current status tooltip.
 		/// </summary>
@@ -52,7 +85,8 @@ namespace Candlelight
 		private ValidationStatus GetStatus(Object provider, IValidatable testValue)
 		{
 			return this.Attribute.ValidationMethod == null ?
-				testValue.GetValidationStatus(out m_CurrentStatusTooltip) : this.Attribute.ValidationMethod(provider, testValue, out m_CurrentStatusTooltip);
+				testValue.GetValidationStatus(out m_CurrentStatusTooltip) :
+				this.Attribute.ValidationMethod(provider, testValue, out m_CurrentStatusTooltip);
 		}
 		
 		/// <summary>
@@ -155,6 +189,12 @@ namespace Candlelight
 					canDraw = false;
 					break;
 				case SerializedPropertyType.AnimationCurve:
+					canDraw = Attribute.ValidationMethod != null;
+					if (canDraw)
+					{
+						status = GetStatus(property.serializedObject.targetObject, property.animationCurveValue);
+					}
+					break;
 				case SerializedPropertyType.Gradient:
 					canDraw = false;
 					break;

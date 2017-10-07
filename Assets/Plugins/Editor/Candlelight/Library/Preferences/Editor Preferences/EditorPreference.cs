@@ -173,7 +173,7 @@ namespace Candlelight
 				{
 					m_CurrentValue = (T)(object)EditorPrefs.GetFloat(this.PropertyName, (float)(object)m_DefaultValue);
 				}
-				else if (t == typeof(int) || t == typeof(System.Enum))
+				else if (t == typeof(int) || t.IsEnum)
 				{
 					m_CurrentValue = (T)(object)EditorPrefs.GetInt(this.PropertyName, (int)(object)m_DefaultValue);
 				}
@@ -219,7 +219,7 @@ namespace Candlelight
 			{
 				EditorPrefs.SetFloat(this.PropertyName, (float)(object)value);
 			}
-			else if (t == typeof(int) || t == typeof(System.Enum))
+			else if (t == typeof(int) || t.IsEnum)
 			{
 				EditorPrefs.SetInt(this.PropertyName, (int)(object)value);
 			}

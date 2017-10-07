@@ -1,7 +1,7 @@
 ﻿// 
 // HyperTextLinkStyleDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -32,16 +32,26 @@ namespace Candlelight.UI
 		}
 
 		#region Serialized Properties
-		private Dictionary<string, SerializedProperty> m_ColorMultiplier = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_ColorTintMode = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_ColorTweenMode = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_DisabledColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_DadeDuration = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_HighlightedColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_NormalColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_PressedColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_TextStyle = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> m_VerticalOffset = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ColorMultiplier =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ColorTintMode =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ColorTweenMode =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_DisabledColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_DadeDuration =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_HighlightedColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_NormalColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_PressedColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_TextStyle =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_VerticalOffset =
+			new Dictionary<string, SerializedProperty>();
 		#endregion
 
 		/// <summary>
@@ -50,7 +60,7 @@ namespace Candlelight.UI
 		/// <returns>The property height.</returns>
 		/// <param name="property">Property.</param>
 		/// <param name="label">Label.</param>
-		public override float GetPropertyHeight (SerializedProperty property, GUIContent label)
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			return PropertyHeight;
 		}
@@ -61,21 +71,20 @@ namespace Candlelight.UI
 		/// <param name="property">Property.</param>
 		private void Initialize(SerializedProperty property)
 		{
-			if (!m_ColorMultiplier.ContainsKey(property.propertyPath))
+			if (m_ColorMultiplier.ContainsKey(property.propertyPath))
 			{
-				m_ColorMultiplier.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_ColorMultiplier"));
-				m_ColorTintMode.Add(property.propertyPath, property.FindPropertyRelative("m_ColorTintMode"));
-				m_ColorTweenMode.Add(property.propertyPath, property.FindPropertyRelative("m_ColorTweenMode"));
-				m_DisabledColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_DisabledColor"));
-				m_HighlightedColor.Add(
-					property.propertyPath, property.FindPropertyRelative("m_Colors.m_HighlightedColor")
-				);
-				m_NormalColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_NormalColor"));
-				m_PressedColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_PressedColor"));
-				m_DadeDuration.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_FadeDuration"));
-				m_TextStyle.Add(property.propertyPath, property.FindPropertyRelative("m_TextStyle"));
-				m_VerticalOffset.Add(property.propertyPath, property.FindPropertyRelative("m_VerticalOffset"));
+				return;
 			}
+			m_ColorMultiplier.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_ColorMultiplier"));
+			m_ColorTintMode.Add(property.propertyPath, property.FindPropertyRelative("m_ColorTintMode"));
+			m_ColorTweenMode.Add(property.propertyPath, property.FindPropertyRelative("m_ColorTweenMode"));
+			m_DisabledColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_DisabledColor"));
+			m_HighlightedColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_HighlightedColor"));
+			m_NormalColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_NormalColor"));
+			m_PressedColor.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_PressedColor"));
+			m_DadeDuration.Add(property.propertyPath, property.FindPropertyRelative("m_Colors.m_FadeDuration"));
+			m_TextStyle.Add(property.propertyPath, property.FindPropertyRelative("m_TextStyle"));
+			m_VerticalOffset.Add(property.propertyPath, property.FindPropertyRelative("m_VerticalOffset"));
 		}
 
 		/// <summary>

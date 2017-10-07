@@ -1,7 +1,7 @@
 // 
 // StatusPropertyAttribute.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -11,9 +11,9 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Object = UnityEngine.Object;
 #if UNITY_EDITOR
+using System.Linq;
 using System.Reflection;
 #endif
 
@@ -28,7 +28,7 @@ namespace Candlelight
 		/// <summary>
 		/// Delegate for a status getter method.
 		/// </summary>
-		public delegate ValidationStatus GetStatusMethod(Object provider, object testValue, out string message);
+		public delegate ValidationStatus GetStatusCallback(object provider, object testValue, out string message);
 
 		/// <summary>
 		/// A basic tuple for storing a test value and a comparison value that indicates a bad result.
@@ -85,7 +85,7 @@ namespace Candlelight
 		/// Gets the method to validate the status of the decorated field.
 		/// </summary>
 		/// <value>The method to validate the status of the decorated field.</value>
-		public GetStatusMethod ValidationMethod { get; private set; }
+		public GetStatusCallback ValidationMethod { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StatusPropertyAttribute"/> class to display a persistent icon
@@ -213,7 +213,7 @@ namespace Candlelight
 			}
 			else
 			{
-				this.ValidationMethod = Delegate.CreateDelegate(typeof(GetStatusMethod), method) as GetStatusMethod;
+				this.ValidationMethod = Delegate.CreateDelegate(typeof(GetStatusCallback), method) as GetStatusCallback;
 			}
 #endif
 		}

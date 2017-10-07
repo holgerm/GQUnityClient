@@ -1,7 +1,7 @@
 ﻿// 
 // IndexRange.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -44,7 +44,16 @@ namespace Candlelight
 		/// <param name="index">Index.</param>
 		/// <value>The <see cref="System.Int32"/> at the specified index in the range.</value>
 		public int this[int index] { get { return this.StartIndex + index * this.Direction; } }
-		
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IndexRange"/> class.
+		/// </summary>
+		public IndexRange()
+		{
+			this.StartIndex = 0;
+			this.EndIndex = 0;
+		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndexRange"/> class.
 		/// </summary>
@@ -113,45 +122,48 @@ namespace Candlelight
 		}
 
 		/// <summary>
-		/// Offset this <see cref="IndexRange"/> using the specified delta values.
+		/// Offset the indices in this instance based on the specified <paramref name="delta"/> over the specified
+		/// <paramref name="range"/>.
 		/// </summary>
-		/// <param name="deltaValues">A collection delta values for each interval in the old range.</param>
-		public void Offset(Dictionary<IndexRange, int> deltaValues)
+		/// <param name="range">The range of indices that has shifted.</param>
+		/// <param name="delta">The amount that the specified <paramref name="range"/> has shifted.</param>
+		public void Offset(IndexRange range, int delta)
 		{
+			if (delta == 0)
+			{
+				return;
+			}
 			int direction = this.Direction;
 			if (direction < 0)
 			{
 				Reverse();
 			}
-			foreach (KeyValuePair<IndexRange, int> delta in deltaValues)
+			int deltaEnd = Mathf.Max(range.StartIndex, range.EndIndex);
+			int deltaStart = Mathf.Min(range.StartIndex, range.EndIndex);
+			if (deltaEnd <= this.StartIndex)		// ...  |-------|
 			{
-				int deltaEnd = Mathf.Max(delta.Key.StartIndex, delta.Key.EndIndex);
-				int deltaStart = Mathf.Min(delta.Key.StartIndex, delta.Key.EndIndex);
-				if (deltaEnd <= this.StartIndex)				// ...  |-------|
+				this.StartIndex += delta;
+				this.EndIndex += delta;
+			}
+			else if (Contains(deltaStart))			// |--.----|.....
+			{
+				if (deltaStart == this.StartIndex)	// .-------|.....
 				{
-					this.StartIndex += delta.Value;
-					this.EndIndex += delta.Value;
+					this.StartIndex += delta;
 				}
-				else if (Contains(deltaStart))			// |--.----|.....
-				{
-					if (deltaStart == this.StartIndex)		// .-------|.....
-					{
-						this.StartIndex += delta.Value;
-					}
-					this.EndIndex += delta.Value;
-				}
-				else if (Contains(deltaEnd))			// .....|--.----|
-				{
-					this.StartIndex += delta.Value;
-					this.EndIndex += delta.Value;
-				}
-				else if (								// ...|-------|..
-					delta.Key.Contains(this.StartIndex) && delta.Key.Contains(this.EndIndex)
-				)
-				{
-					this.StartIndex += delta.Value;
-					this.EndIndex += delta.Value;
-				}
+				this.EndIndex += delta;
+			}
+			else if (Contains(deltaEnd))			// .....|--.----|
+			{
+				this.StartIndex += delta;
+				this.EndIndex += delta;
+			}
+			else if (								// ...|-------|..
+				range.Contains(this.StartIndex) && range.Contains(this.EndIndex)
+			)
+			{
+				this.StartIndex += delta;
+				this.EndIndex += delta;
 			}
 			if (direction < 0)
 			{
@@ -177,5 +189,20 @@ namespace Candlelight
 		{
 			return string.Format("[{0}, {1}]", this.StartIndex, this.EndIndex);
 		}
+
+		#region Obsolete
+		/// <summary>
+		/// Obsolete
+		/// </summary>
+		/// <param name="deltaValues">A collection delta values for each interval in the old range.</param>
+		[System.Obsolete("Use IndexRange.Offset(IndexRange, int)")]
+		public void Offset(Dictionary<IndexRange, int> deltaValues)
+		{
+			foreach (KeyValuePair<IndexRange, int> kv in deltaValues)
+			{
+				Offset(kv.Key, kv.Value);
+			}
+		}
+		#endregion
 	}
 }

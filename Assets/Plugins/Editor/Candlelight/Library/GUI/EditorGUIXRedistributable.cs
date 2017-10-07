@@ -1,7 +1,7 @@
 ﻿// 
 // EditorGUIXRedistributable.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -60,6 +60,11 @@ namespace Candlelight
 			}
 		}
 		/// <summary>
+		/// Gets the height of the horizontal line.
+		/// </summary>
+		/// <value>The height of the horizontal line.</value>
+		public static float HorizontalLineHeight { get { return 2f; } }
+		/// <summary>
 		/// Gets the height of an inline button.
 		/// </summary>
 		/// <value>The height of an inline button.</value>
@@ -88,9 +93,12 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		/// <param name="style">Optional style override.</param>
 		/// <param name="isActive">True if the button should display the active state.</param>
-		public static bool DisplayButton(string label, GUIStyle style = null, bool isActive = false)
+		/// <param name="controlId">
+		/// Control identifier. If left unspecified, then the text of the label will be used to generate one.
+		/// </param>
+		public static bool DisplayButton(string label, GUIStyle style = null, bool isActive = false, int controlId = 0)
 		{
-			return DisplayButton(new GUIContent(label), style, isActive);
+			return DisplayButton(new GUIContent(label), style, isActive, controlId);
 		}
 		
 		/// <summary>
@@ -100,13 +108,18 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		/// <param name="style">Optional style override.</param>
 		/// <param name="isActive">True if the button should display the active state.</param>
-		public static bool DisplayButton(GUIContent label, GUIStyle style = null, bool isActive = false)
+		/// <param name="controlId">
+		/// Control identifier. If left unspecified, then the text of the label will be used to generate one.
+		/// </param>
+		public static bool DisplayButton(
+			GUIContent label, GUIStyle style = null, bool isActive = false, int controlId = 0
+		)
 		{
 			Rect position =
-				GUILayoutUtility.GetRect(0f, InlineButtonHeight + EditorGUIUtility.standardVerticalSpacing);
+				GUILayoutUtility.GetRect(0f, EditorGUIX.InlineButtonHeight + EditorGUIUtility.standardVerticalSpacing);
 			position = EditorGUI.IndentedRect(position);
 			position.height -= EditorGUIUtility.standardVerticalSpacing;
-			return DisplayButton(position, label, style, isActive);
+			return DisplayButton(position, label, style, isActive, controlId);
 		}
 		
 		/// <summary>
@@ -117,9 +130,14 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		/// <param name="style">Optional style override.</param>
 		/// <param name="isActive">True if the button should display the active state.</param>
-		public static bool DisplayButton(Rect position, string label, GUIStyle style = null, bool isActive = false)
+		/// <param name="controlId">
+		/// Control identifier. If left unspecified, then the text of the label will be used to generate one.
+		/// </param>
+		public static bool DisplayButton(
+			Rect position, string label, GUIStyle style = null, bool isActive = false, int controlId = 0
+		)
 		{
-			return DisplayButton(position, new GUIContent(label), style, isActive);
+			return DisplayButton(position, new GUIContent(label), style, isActive, controlId);
 		}
 		
 		/// <summary>
@@ -130,12 +148,17 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		/// <param name="style">Optional style override.</param>
 		/// <param name="isActive">True if the button should display the active state.</param>
-		public static bool DisplayButton(Rect position, GUIContent label, GUIStyle style = null, bool isActive = false)
+		/// <param name="controlId">
+		/// Control identifier. If left unspecified, then the text of the label will be used to generate one.
+		/// </param>
+		public static bool DisplayButton(
+			Rect position, GUIContent label, GUIStyle style = null, bool isActive = false, int controlId = 0
+		)
 		{
 			
 			Color oldColor = GUI.color;
 			GUI.color = TintedGUIColor;
-			bool result = DisplayEditorButton(position, label, style, isActive);
+			bool result = DisplayEditorButton(position, label, style, isActive, controlId);
 			GUI.color = oldColor;
 			return result;
 		}
@@ -148,14 +171,19 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		/// <param name="style">Options_InlineButtonHeight</param>
 		/// <param name="isActive">True if the button should display the active state.</param>
+		/// <param name="controlId">
+		/// Control identifier. If left unspecified, then the text of the label will be used to generate one.
+		/// </param>
 		private static bool DisplayEditorButton(
-			Rect position, GUIContent label, GUIStyle style, bool isActive
+			Rect position, GUIContent label, GUIStyle style, bool isActive, int controlId = 0
 		)
 		{
-			int controlID = GUIUtility.GetControlID(label.text.GetHashCode(), EditorGUIUtility.native, position);
+			controlId = GUIUtility.GetControlID(
+				controlId == 0 ? label.text.GetHashCode() : controlId, FocusType.Keyboard, position
+			);
 			Event current = Event.current;
 			if (
-				GUIUtility.keyboardControl == controlID &&
+				GUIUtility.keyboardControl == controlId &&
 				current.type == EventType.KeyDown && (
 					current.keyCode == KeyCode.Space ||
 					current.keyCode == KeyCode.KeypadEnter ||
@@ -172,12 +200,12 @@ namespace Candlelight
 				position.Contains(Event.current.mousePosition)
 			)
 			{
-				GUIUtility.keyboardControl = controlID;
+				GUIUtility.keyboardControl = controlId;
 				EditorGUIUtility.editingTextField = false;
 				HandleUtility.Repaint();
 			}
 			EditorGUI.BeginChangeCheck();
-			GUI.Toggle(position, controlID, isActive, label, style == null ? EditorStyles.miniButton : style);
+			GUI.Toggle(position, controlId, isActive, label, style == null ? EditorStyles.miniButton : style);
 			return EditorGUI.EndChangeCheck();
 		}
 
@@ -186,7 +214,10 @@ namespace Candlelight
 		/// </summary>
 		public static void DisplayHorizontalLine()
 		{
-			GUI.Box(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(true, 2f)), GUIContent.none);
+			GUI.Box(
+				EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(true, EditorGUIX.HorizontalLineHeight)),
+				GUIContent.none
+			);
 		}
 
 		/// <summary>
@@ -202,7 +233,7 @@ namespace Candlelight
 			GetRectsForControlWithInlineButton(position, out controlPosition, out buttonPosition);
 			float oldLabelWidth = EditorGUIUtility.labelWidth;
 			EditorGUIUtility.labelWidth = controlPosition.width;
-#if !UNITY_4_6
+#if !UNITY_4_6 && !UNITY_4_7
 			if (EditorStylesX.IsUsingBuiltinSkin)
 			{
 				EditorGUI.PrefixLabel(controlPosition, label);

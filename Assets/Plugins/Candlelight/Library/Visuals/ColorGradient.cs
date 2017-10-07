@@ -1,7 +1,7 @@
 // 
 // ColorGradient.cs
 // 
-// Copyright (c) 2011-2015, Candlelight Interactive, LLC
+// Copyright (c) 2011-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -11,7 +11,6 @@ using UnityEngine;
 
 namespace Candlelight
 {
-
 	/// <summary>
 	/// An enum to specify how intermediate color values should be calculated.
 	/// </summary>
@@ -107,7 +106,7 @@ namespace Candlelight
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			return ObjectX.Equals(ref this, obj);
+			return (obj == null || !(obj is ColorGradient)) ? false : Equals((ColorGradient)obj);
 		}
 
 		/// <summary>
@@ -123,7 +122,9 @@ namespace Candlelight
 		/// </returns>
 		public bool Equals(ColorGradient other)
 		{
-			return GetHashCode() == other.GetHashCode();
+			return m_InterpolationSpace == other.m_InterpolationSpace &&
+				m_MaxColor == other.m_MaxColor &&
+				m_MinColor == other.m_MinColor;
 		}
 
 		/// <summary>

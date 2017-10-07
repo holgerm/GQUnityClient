@@ -1,7 +1,7 @@
 ﻿// 
 // FlushChildrenDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -14,7 +14,6 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Linq;
 
 namespace Candlelight
 {
@@ -37,15 +36,39 @@ namespace Candlelight
 			}
 		);
 
-		#region Shared Allocations
-		private SerializedProperty m_SPOnGUI = null;
-		#endregion
-
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="FlushChildrenDrawer"/> should display foldout.
 		/// </summary>
 		/// <value><see langword="true"/> if should display foldout; otherwise, <see langword="false"/>.</value>
 		public bool ShouldDisplayFoldout { get { return false; } }
+
+		/// <summary>
+		/// Displays the specified child property.
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <param name="parentProperty">Parent property.</param>
+		/// <param name="childProperty">Child property.</param>
+		/// <param name="label">Label.</param>
+		protected virtual void DisplayChildProperty(
+			Rect position, SerializedProperty parentProperty, SerializedProperty childProperty, GUIContent label
+		)
+		{
+			EditorGUI.PropertyField(position, childProperty, label, true);
+		}
+
+		/// <summary>
+		/// Gets the height of the specified child property.
+		/// </summary>
+		/// <returns>The child property height.</returns>
+		/// <param name="parentProperty">Parent property.</param>
+		/// <param name="childProperty">Child property.</param>
+		protected virtual float GetChildPropertyHeight(
+			SerializedProperty parentProperty, SerializedProperty childProperty
+		)
+		{
+			s_Label.text = childProperty.displayName;
+			return EditorGUI.GetPropertyHeight(childProperty, s_Label, true);
+		}
 
 		/// <summary>
 		/// Gets the height of the property.
@@ -55,10 +78,21 @@ namespace Candlelight
 		/// <param name="label">Label.</param>
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			property.isExpanded = true;
-			return EditorGUI.GetPropertyHeight(property, label, true) - (
-				EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing
-			);
+			float result = 0f;
+			SerializedProperty childProperty = property.Copy();
+			childProperty.NextVisible(true);
+			Regex match = new Regex(string.Format("^{0}(?=\\.)", Regex.Escape(property.propertyPath)));
+			while (match.IsMatch(childProperty.propertyPath))
+			{
+				result +=
+					GetChildPropertyHeight(property, childProperty.Copy()) + EditorGUIUtility.standardVerticalSpacing;
+				childProperty.NextVisible(false);
+			}
+			if (result > 0f)
+			{
+				result -= EditorGUIUtility.standardVerticalSpacing;
+			}
+			return result;
 		}
 
 		/// <summary>
@@ -76,16 +110,15 @@ namespace Candlelight
 			}
 			else
 			{
-				m_SPOnGUI = property.Copy();
-				m_SPOnGUI.NextVisible(true);
+				SerializedProperty childProperty = property.Copy();
+				childProperty.NextVisible(true);
 				Regex match = new Regex(string.Format("^{0}(?=\\.)", Regex.Escape(property.propertyPath)));
-				while (match.IsMatch(m_SPOnGUI.propertyPath))
+				while (match.IsMatch(childProperty.propertyPath))
 				{
-					s_Label.text = m_SPOnGUI.displayName;
-					position.height = EditorGUI.GetPropertyHeight(m_SPOnGUI, s_Label, true);
-					EditorGUI.PropertyField(position, m_SPOnGUI, true);
+					position.height = GetChildPropertyHeight(property, childProperty);
+					DisplayChildProperty(position, property, childProperty.Copy(), null);
 					position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
-					m_SPOnGUI.NextVisible(false);
+					childProperty.NextVisible(false);
 				}
 			}
 		}

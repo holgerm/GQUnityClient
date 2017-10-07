@@ -1,16 +1,11 @@
 ﻿// 
 // EditorGizmos.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains a class for registering gizmos in the editor. Gizmos can
-// be registered manually or automatically. In order to automatically register a
-// gizmo, simply put a texture in the format "ObjectType Icon.png" in the same
-// folder as this script.
 
 using UnityEditor;
 using UnityEngine;
@@ -20,8 +15,12 @@ using System.IO;
 namespace Candlelight
 {
 	/// <summary>
-	/// Editor gizmos.
+	/// A class for registering gizmos in the editor.
 	/// </summary>
+	/// <remarks>
+	/// Gizmos can be registered manually or automatically. In order to automatically register a gizmo, simply put a
+	/// texture in the format "ObjectType Icon.png" in the same folder as this script.
+	/// </remarks>
 	[InitializeOnLoad]
 	public static class EditorGizmos
 	{
@@ -88,7 +87,11 @@ namespace Candlelight
 			TextureImporter importer = AssetImporter.GetAtPath(destIconPath) as TextureImporter;
 			importer.filterMode = FilterMode.Trilinear;
 			importer.textureType = TextureImporterType.GUI;
+#if UNITY_5_5_OR_NEWER
+			importer.textureCompression = TextureImporterCompression.Uncompressed;
+#else
 			importer.textureFormat = TextureImporterFormat.AutomaticTruecolor;
+#endif
 			AssetDatabase.ImportAsset(destIconPath);
 		}
 	}

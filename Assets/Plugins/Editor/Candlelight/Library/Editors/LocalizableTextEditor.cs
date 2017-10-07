@@ -1,7 +1,7 @@
 ﻿// 
 // LocalizableTextEditor.cs
 // 
-// Copyright (c) 2015, Candlelight Interactive, LLC
+// Copyright (c) 2015-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -46,7 +46,7 @@ namespace Candlelight.UI
 			/// The EditorGUIUtility.contextWidth property.
 			/// </summary>
 			private static readonly PropertyInfo s_ContextWidth =
-				typeof(EditorGUIUtility).GetProperty("contextWidth", ReflectionX.staticBindingFlags);
+				typeof(EditorGUIUtility).GetStaticProperty("contextWidth");
 			/// <summary>
 			/// The number of pixels in one line of text.
 			/// </summary>
@@ -63,7 +63,7 @@ namespace Candlelight.UI
 			/// The EditorGUI.ScrollableTextAreaInternal() method.
 			/// </summary>
 			private static readonly MethodInfo s_ScrollableTextAreaInternal =
-				typeof(EditorGUI).GetMethod("ScrollableTextAreaInternal", ReflectionX.staticBindingFlags);
+				typeof(EditorGUI).GetStaticMethod("ScrollableTextAreaInternal");
 			/// <summary>
 			/// An argument list to use when invoking EditorGUI.ScrollableTextAreaInternal().
 			/// </summary>
@@ -124,7 +124,8 @@ namespace Candlelight.UI
 						s_ScrollableTextAreaInternalArgs[1] = text.stringValue;
 						s_ScrollableTextAreaInternalArgs[2] = m_ScrollPosition;
 						s_ScrollableTextAreaInternalArgs[3] = EditorStyles.textArea;
-						stringValue = (string)s_ScrollableTextAreaInternal.Invoke(null, s_ScrollableTextAreaInternalArgs);
+						stringValue =
+							(string)s_ScrollableTextAreaInternal.Invoke(null, s_ScrollableTextAreaInternalArgs);
 						m_ScrollPosition = (Vector2)s_ScrollableTextAreaInternalArgs[2];
 					}
 					if (EditorGUI.EndChangeCheck())
@@ -140,7 +141,7 @@ namespace Candlelight.UI
 		/// The backing field storing the localized string values.
 		/// </summary>
 		private static readonly FieldInfo s_LocaleOverridesField =
-			typeof(LocalizableText).GetField("m_LocaleOverrides", ReflectionX.instanceBindingFlags);
+			typeof(LocalizableText).GetInstanceField("m_LocaleOverrides");
 		/// <summary>
 		/// Tooltips for the localized text element status icons.
 		/// </summary>
@@ -153,11 +154,15 @@ namespace Candlelight.UI
 			{ ValidationStatus.Okay, "The text override for this locale is currently being used." },
 			{ ValidationStatus.Warning, "No text override specified for this locale." }
 		};
+		/// <summary>
+		/// A reusable label.
+		/// </summary>
+		private static GUIContent s_ReusableLabel = new GUIContent();
 
 		/// <summary>
 		/// Creates a new asset in the project.
 		/// </summary>
-		[UnityEditor.MenuItem("Assets/Create/Candlelight/Localizable Text")]
+		[UnityEditor.MenuItem("Assets/Create/Candlelight/HyperText/Input Sources/Localizable Text")]
 		public static void CreateNewAssetInProject()
 		{
 			AssetDatabaseX.CreateNewAssetInCurrentProjectFolder<LocalizableText>();
@@ -200,12 +205,13 @@ namespace Candlelight.UI
 			{
 				return;
 			}
+			s_ReusableLabel.text =
+				m_LocaleOverrides.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("m_Identifier").stringValue;
 			EditorGUIX.DisplayLabelFieldWithStatus(
 				rect,
-				m_LocaleOverrides.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("m_Identifier").stringValue,
-				null,
+				s_ReusableLabel,
+				GUIContent.none,
 				m_LocaleOverrideEntryStatuses[index],
-				Color.white,
 				s_LocalizedTextElementTooltips[m_LocaleOverrideEntryStatuses[index]]
 			);
 		}
@@ -249,7 +255,7 @@ namespace Candlelight.UI
 				Undo.RecordObjects(this.targets, "Add 10 Most Common Languages");
 				foreach (LocalizableText text in this.targets)
 				{
-					text.GetLocaleOverrides(ref m_LocaleOverrideEntries);
+					text.GetLocaleOverrides(m_LocaleOverrideEntries);
 					foreach (string locale in LocalizableText.TenMostCommonLanguages)
 					{
 						if (!m_LocaleOverrideEntries.ContainsKey(locale))
@@ -299,9 +305,9 @@ namespace Candlelight.UI
 		/// </summary>
 		private void UpdateGUIContents()
 		{
-			List<IdentifiableBackingFieldCompatibleObjectWrapper<string>> entries = (
+			List<IdentifiableBackingFieldCompatibleObjectWrapper<string, string>> entries = (
 				(System.Collections.IList)s_LocaleOverridesField.GetValue(this.target)
-			).Cast<IdentifiableBackingFieldCompatibleObjectWrapper<string>>().ToList();
+			).Cast<IdentifiableBackingFieldCompatibleObjectWrapper<string, string>>().ToList();
 			m_LocaleOverrideEntryStatuses.Clear();
 			for (int i = 0; i < entries.Count; ++i)
 			{

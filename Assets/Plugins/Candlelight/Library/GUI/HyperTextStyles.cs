@@ -1,7 +1,7 @@
 ﻿// 
 // HyperTextStyles.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -18,6 +18,14 @@ namespace Candlelight.UI
 	/// </summary>
 	public class HyperTextStyles : ScriptableObject
 	{
+		#region Delegates
+		/// <summary>
+		/// A delegate for listening for changes to a <see cref="HyperTextStyles"/> object.
+		/// </summary>
+		public delegate void ChangedEventHandler(HyperTextStyles sender);
+		#endregion
+
+		#region Data Types
 		/// <summary>
 		/// A structure for storing information about a link style.
 		/// </summary>
@@ -144,7 +152,7 @@ namespace Candlelight.UI
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is Link)) ? false : Equals((Link)obj);
 			}
 
 			/// <summary>
@@ -160,7 +168,11 @@ namespace Candlelight.UI
 			/// </returns>
 			public bool Equals(Link other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return m_ColorTintMode == other.m_ColorTintMode &&
+					m_ColorTweenMode == other.m_ColorTweenMode &&
+					m_TextStyle == other.m_TextStyle &&
+					m_VerticalOffset == other.m_VerticalOffset &&
+					m_Colors.Equals(other.m_Colors);
 			}
 
 			/// <summary>
@@ -268,7 +280,7 @@ namespace Candlelight.UI
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is LinkSubclass)) ? false : Equals((LinkSubclass)obj);
 			}
 
 			/// <summary>
@@ -282,7 +294,7 @@ namespace Candlelight.UI
 			/// </returns>
 			public bool Equals(LinkSubclass other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return string.Equals(this.ClassName, other.ClassName) && m_Style.Equals(other.m_Style);
 			}
 
 			/// <summary>
@@ -400,7 +412,7 @@ namespace Candlelight.UI
 				string linkClassName
 			) : this()
 			{
-				m_LinkId = linkId;
+				m_LinkId = linkId ?? string.Empty;
 				if (className == null)
 				{
 					throw new System.ArgumentNullException("className", "Class name cannot be null or empty.");
@@ -414,7 +426,7 @@ namespace Candlelight.UI
 				{
 					throw new System.ArgumentException("Class name cannot be null or empty", "className");
 				}
-				m_ClassName = className;
+				m_ClassName = className ?? string.Empty;
 				m_LinkClassName = linkClassName ?? string.Empty;
 				m_ShouldRespectColorization = shouldRespectColorization;
 				m_SizeScalar = sizeScalar;
@@ -444,7 +456,7 @@ namespace Candlelight.UI
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is Quad)) ? false : Equals((Quad)obj);
 			}
 
 			/// <summary>
@@ -460,7 +472,13 @@ namespace Candlelight.UI
 			/// </returns>
 			public bool Equals(Quad other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return m_ShouldRespectColorization == other.m_ShouldRespectColorization &&
+					m_SizeScalar == other.m_SizeScalar &&
+					m_VerticalOffset == other.m_VerticalOffset &&
+					Object.ReferenceEquals(m_Sprite, other.m_Sprite) &&
+					string.Equals(this.ClassName, other.ClassName) &&
+					string.Equals(this.LinkClassName, other.LinkClassName) &&
+					string.Equals(this.LinkId, other.LinkId);
 			}
 
 			/// <summary>
@@ -542,7 +560,7 @@ namespace Candlelight.UI
 			/// <param name="provider">The <see cref="HyperTextStyles"/> on which the tag is defined.</param>
 			/// <param name="tag">Tag.</param>
 			/// <param name="statusMessage">Status message.</param>
-			private static ValidationStatus ValidateTag(Object provider, object tag, out string statusMessage)
+			private static ValidationStatus ValidateTag(object provider, object tag, out string statusMessage)
 			{
 				if (tag is string)
 				{
@@ -671,7 +689,7 @@ namespace Candlelight.UI
 			/// </returns>
 			public override bool Equals(object obj)
 			{
-				return ObjectX.Equals(ref this, obj);
+				return (obj == null || !(obj is Text)) ? false : Equals((Text)obj);
 			}
 
 			/// <summary>
@@ -688,7 +706,9 @@ namespace Candlelight.UI
 			/// </returns>
 			public bool Equals(Text other)
 			{
-				return GetHashCode() == other.GetHashCode();
+				return m_VerticalOffset == other.m_VerticalOffset &&
+					m_TextStyle.Equals(other.m_TextStyle) &&
+					string.Equals(m_Tag, other.m_Tag);
 			}
 
 			/// <summary>
@@ -720,37 +740,59 @@ namespace Candlelight.UI
 			{
 				return m_VerticalOffset * fontSize;
 			}
-
-			#region Obsolete
-			/// <summary>
-			/// Gets a regular expression to extract instances of this tag in text. This property is now obsolete and
-			/// will not be replaced.
-			/// </summary>
-			/// <value>A regular expression to extract instances of this tag in text.</value>
-			[System.Obsolete("This property has been removed and will not be replaced.", true)]
-			public System.Text.RegularExpressions.Regex TagRegex { get { return null; } }
-			#endregion
 		}
+		#endregion
 
 		/// <summary>
 		/// Hash code to use for null sprites.
 		/// </summary>
 		private static readonly int s_NullSpriteHash = typeof(Sprite).GetHashCode();
 
-		#region Shared Allocations
-		private static readonly Dictionary<LinkSubclass, HyperTextStyles> s_CascadedLinkStyles =
-			new Dictionary<LinkSubclass, HyperTextStyles>();
-		private static readonly Dictionary<Quad, HyperTextStyles> s_CascadedQuadStyles =
-			new Dictionary<Quad, HyperTextStyles>();
-		private static readonly Dictionary<Text, HyperTextStyles> s_CascadedTextStyles =
-			new Dictionary<Text, HyperTextStyles>();
-		private static readonly Dictionary<LinkSubclass, HyperTextStyles> s_SelfLinkStyles =
-			new Dictionary<LinkSubclass, HyperTextStyles>();
-		private static readonly Dictionary<Quad, HyperTextStyles> s_SelfQuadStyles =
-			new Dictionary<Quad, HyperTextStyles>();
-		private static readonly Dictionary<Text, HyperTextStyles> s_SelfTextStyles =
-			new Dictionary<Text, HyperTextStyles>();
-		#endregion
+		/// <summary>
+		/// Mutates the custom text identifier.
+		/// </summary>
+		/// <returns>A copy of <paramref name="text"/> with <paramref name="newIdentifier"/>.</returns>
+		/// <param name="newIdentifier">New identifier.</param>
+		/// <param name="text">Text.</param>
+		private static Text MutateCustomTextIdentifier(string newIdentifier, Text text)
+		{
+			return new Text(newIdentifier, text.TextStyle, text.VerticalOffset);
+		}
+
+		/// <summary>
+		/// Mutates the link subclass identifier.
+		/// </summary>
+		/// <returns>A copy of <paramref name="linkSubclass"/> with <paramref name="newIdentifier"/>.</returns>
+		/// <param name="newIdentifier">New identifier.</param>
+		/// <param name="linkSubclass">Link subclass.</param>
+		private static LinkSubclass MutateLinkSubclassIdentifier(string newIdentifier, LinkSubclass linkSubclass)
+		{
+			return new LinkSubclass(newIdentifier, linkSubclass.Style);
+		}
+
+		/// <summary>
+		/// Mutates the quad identifier.
+		/// </summary>
+		/// <returns>A copy of <paramref name="quad"/> with <paramref name="newIdentifier"/>.</returns>
+		/// <param name="newIdentifier">New identifier.</param>
+		/// <param name="quad">Quad.</param>
+		private static Quad MutateQuadIdentifier(string newIdentifier, Quad quad)
+		{
+			return new Quad(
+				quad.Sprite,
+				newIdentifier,
+				quad.SizeScalar,
+				quad.VerticalOffset,
+				quad.ShouldRespectColorization,
+				quad.LinkId,
+				quad.LinkClassName
+			);
+		}
+
+		/// <summary>
+		/// Occurs when a property on this instance changes.
+		/// </summary>
+		public event ChangedEventHandler Changed = null;
 
 		/// <summary>
 		/// A flag indicating whether or not lists of cascaded styles have been initialized.
@@ -794,7 +836,6 @@ namespace Candlelight.UI
 		private ImmutableRectOffset m_LinkHitboxPadding = new ImmutableRectOffset(0, 0, 0, 0);
 		[SerializeField, PropertyBackingField]
 		private List<LinkSubclass> m_LinkStyles = new List<LinkSubclass>();
-		private UnityEngine.Events.UnityEvent m_OnStylesChanged = new UnityEngine.Events.UnityEvent();
 		[SerializeField, PropertyBackingField]
 		private List<Quad> m_QuadStyles = new List<Quad>();
 		[SerializeField, PropertyBackingField]
@@ -810,7 +851,65 @@ namespace Candlelight.UI
 		[SerializeField, PropertyBackingField]
 		private bool m_ShouldOverrideInheritedLinkHitboxPadding = false;
 		#endregion
-		
+
+		#region Constructors
+		protected HyperTextStyles() {}
+		#endregion
+
+		#region Event Handlers
+		/// <summary>
+		/// Raises the inherited style changed event.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		private void OnInheritedStyleChanged(HyperTextStyles sender)
+		{
+			SetDirty();
+		}
+		#endregion
+
+		#region Inspector Properties
+		private Text[] GetCustomTextStyles()
+		{
+			return m_CustomTextStyles.ToArray();
+		}
+
+		private HyperTextStyles[] GetInheritedStyles()
+		{
+			return m_InheritedStyles.ToArray();
+		}
+
+		private LinkSubclass[] GetLinkStyles()
+		{
+			return m_LinkStyles.ToArray();
+		}
+
+		private Quad[] GetQuadStyles()
+		{
+			return m_QuadStyles.ToArray();
+		}
+
+		private void SetCustomTextStyles(Text[] styles)
+		{
+			SetCustomTextStyles(styles as IList<Text>);
+		}
+
+		private void SetInheritedStyles(HyperTextStyles[] styles)
+		{
+			SetInheritedStyles(styles as IList<HyperTextStyles>);
+		}
+
+		private void SetLinkStyles(LinkSubclass[] styles)
+		{
+			SetLinkStyles(styles as IList<LinkSubclass>);
+		}
+
+		private void SetQuadStyles(Quad[] styles)
+		{
+			SetQuadStyles(styles as IList<Quad>);
+		}
+		#endregion
+
+		#region Public Properties
 		/// <summary>
 		/// Gets the cascaded font.
 		/// </summary>
@@ -999,7 +1098,7 @@ namespace Candlelight.UI
 				if (m_DefaultFontStyle != value)
 				{
 					m_DefaultFontStyle = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1015,7 +1114,7 @@ namespace Candlelight.UI
 				if (m_DefaultTextColor != value)
 				{
 					m_DefaultTextColor = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1031,7 +1130,7 @@ namespace Candlelight.UI
 				if (m_DefaultLinkStyle.GetSerializedPropertiesHash() != value.GetSerializedPropertiesHash())
 				{
 					m_DefaultLinkStyle = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1047,7 +1146,7 @@ namespace Candlelight.UI
 				if (m_Font != value)
 				{
 					m_Font = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1063,7 +1162,7 @@ namespace Candlelight.UI
 				if (m_FontSize != value)
 				{
 					m_FontSize = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1079,7 +1178,7 @@ namespace Candlelight.UI
 				if (m_LineSpacing != value)
 				{
 					m_LineSpacing = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1099,7 +1198,7 @@ namespace Candlelight.UI
 				if (!m_LinkHitboxPadding.Equals(value))
 				{
 					m_LinkHitboxPadding = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1117,7 +1216,7 @@ namespace Candlelight.UI
 				if (m_ShouldOverrideInheritedDefaultFontStyle != value)
 				{
 					m_ShouldOverrideInheritedDefaultFontStyle = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1135,7 +1234,7 @@ namespace Candlelight.UI
 				if (m_ShouldOverrideInheritedDefaultTextColor != value)
 				{
 					m_ShouldOverrideInheritedDefaultTextColor = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1154,7 +1253,7 @@ namespace Candlelight.UI
 				if (m_ShouldOverrideInheritedDefaultLinkStyle != value)
 				{
 					m_ShouldOverrideInheritedDefaultLinkStyle = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1172,7 +1271,7 @@ namespace Candlelight.UI
 				if (m_ShouldOverrideInheritedFontSize != value)
 				{
 					m_ShouldOverrideInheritedFontSize = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1191,7 +1290,7 @@ namespace Candlelight.UI
 				if (m_ShouldOverrideInheritedLineSpacing != value)
 				{
 					m_ShouldOverrideInheritedLineSpacing = value;
-					m_OnStylesChanged.Invoke();
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1210,66 +1309,7 @@ namespace Candlelight.UI
 				if (m_ShouldOverrideInheritedLinkHitboxPadding != value)
 				{
 					m_ShouldOverrideInheritedLinkHitboxPadding = value;
-					m_OnStylesChanged.Invoke();
-				}
-			}
-		}
-		/// <summary>
-		/// Gets a callback for whenever a value on this instance has changed
-		/// </summary>
-		/// <value>A callback for whenever a value on this instance has changed.</value>
-		public UnityEngine.Events.UnityEvent OnStylesChanged
-		{
-			get
-			{
-				if (m_OnStylesChanged == null)
-				{
-					m_OnStylesChanged = new UnityEngine.Events.UnityEvent();
-				}
-				return m_OnStylesChanged;
-			}
-		}
-
-		/// <summary>
-		/// Adds items in the styles collection to the supplied cascade table.
-		/// </summary>
-		/// <param name="styles">Collection of styles and the sheets on which they are defined.</param>
-		/// <param name="cascade">Table of styles representing the cascade.</param>
-		/// <typeparam name="T">A <see cref="Candlelight.IIdentifiable{T}"/> style type.</typeparam>
-		private void AddToCascade<T>(
-			Dictionary<T, HyperTextStyles> styles, Dictionary<T, HyperTextStyles> cascade
-		) where T: IIdentifiable<string>, new()
-		{
-			List<T> cascadeKeys = new List<T>(cascade.Keys.Count * 2);
-			foreach (KeyValuePair<T, HyperTextStyles> kv in styles)
-			{
-				T existingKey = new T();
-				cascadeKeys.Clear();
-				cascadeKeys.AddRange(cascade.Keys);
-				for (int i = 0; i < cascadeKeys.Count; ++i)
-				{
-					if (cascadeKeys[i].Identifier.ToLower() == kv.Key.Identifier.ToLower())
-					{
-						existingKey = cascadeKeys[i];
-						break;
-					}
-				}
-				if (existingKey.Identifier.ToLower() == kv.Key.Identifier.ToLower())
-				{
-					if (
-						existingKey is IPropertyBackingFieldCompatible &&
-						kv.Key is IPropertyBackingFieldCompatible &&
-						(existingKey as IPropertyBackingFieldCompatible).GetSerializedPropertiesHash() !=
-							(kv.Key as IPropertyBackingFieldCompatible).GetSerializedPropertiesHash()
-					)
-					{
-						cascade.Remove(existingKey);
-						cascade.Add(kv.Key, kv.Value);
-					}
-				}
-				else
-				{
-					cascade.Add(kv.Key, kv.Value);
+					OnPropertyChanged();
 				}
 			}
 		}
@@ -1278,13 +1318,12 @@ namespace Candlelight.UI
 		/// Gets the cascaded custom text styles.
 		/// </summary>
 		/// <param name="text">Text.</param>
-		public void GetCascadedCustomTextStyles(ref List<Text> text)
+		public void GetCascadedCustomTextStyles(List<Text> text)
 		{
 			if (!m_AreCascadesInitialized)
 			{
 				RebuildCascadingAndInheritedStyles();
 			}
-			text = text ?? new List<Text>(m_CascadedTextStyles.Count);
 			text.Clear();
 			text.AddRange(m_CascadedTextStyles);
 		}
@@ -1293,13 +1332,12 @@ namespace Candlelight.UI
 		/// Gets the cascaded link styles.
 		/// </summary>
 		/// <param name="links">Links.</param>
-		public void GetCascadedLinkStyles(ref List<LinkSubclass> links)
+		public void GetCascadedLinkStyles(List<LinkSubclass> links)
 		{
 			if (!m_AreCascadesInitialized)
 			{
 				RebuildCascadingAndInheritedStyles();
 			}
-			links = links ?? new List<LinkSubclass>(m_CascadedLinkStyles.Count);
 			links.Clear();
 			links.AddRange(m_CascadedLinkStyles);
 		}
@@ -1308,15 +1346,24 @@ namespace Candlelight.UI
 		/// Gets the cascaded quad styles.
 		/// </summary>
 		/// <param name="quads">Quads.</param>
-		public void GetCascadedQuadStyles(ref List<Quad> quads)
+		public void GetCascadedQuadStyles(List<Quad> quads)
 		{
 			if (!m_AreCascadesInitialized)
 			{
 				RebuildCascadingAndInheritedStyles();
 			}
-			quads = quads ?? new List<Quad>(m_CascadedLinkStyles.Count);
 			quads.Clear();
 			quads.AddRange(m_CascadedQuadStyles);
+		}
+
+		/// <summary>
+		/// Gets the custom text styles.
+		/// </summary>
+		/// <param name="text">Text.</param>
+		public void GetCustomTextStyles(List<Text> text)
+		{
+			text.Clear();
+			text.AddRange(m_CustomTextStyles);
 		}
 
 		/// <summary>
@@ -1359,43 +1406,11 @@ namespace Candlelight.UI
 		}
 
 		/// <summary>
-		/// Gets the custom text styles.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The custom text styles.</returns>
-		private Text[] GetCustomTextStyles()
-		{
-			return m_CustomTextStyles.ToArray();
-		}
-
-		/// <summary>
-		/// Gets the custom text styles.
-		/// </summary>
-		/// <param name="text">Text.</param>
-		public void GetCustomTextStyles(ref List<Text> text)
-		{
-			text = text ?? new List<Text>(m_CustomTextStyles.Count);
-			text.Clear();
-			text.AddRange(m_CustomTextStyles);
-		}
-
-		/// <summary>
-		/// Gets the inherited styles.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The inherited styles.</returns>
-		private HyperTextStyles[] GetInheritedStyles()
-		{
-			return m_InheritedStyles.ToArray();
-		}
-
-		/// <summary>
 		/// Gets the inherited styles.
 		/// </summary>
 		/// <param name="styles">Styles.</param>
-		public void GetInheritedStyles(ref List<HyperTextStyles> styles)
+		public void GetInheritedStyles(List<HyperTextStyles> styles)
 		{
-			styles = styles ?? new List<HyperTextStyles>(m_InheritedStyles.Count);
 			styles.Clear();
 			styles.AddRange(m_InheritedStyles);
 		}
@@ -1403,46 +1418,153 @@ namespace Candlelight.UI
 		/// <summary>
 		/// Gets the link styles.
 		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The link styles.</returns>
-		private LinkSubclass[] GetLinkStyles()
-		{
-			return m_LinkStyles.ToArray();
-		}
-
-		/// <summary>
-		/// Gets the link styles.
-		/// </summary>
 		/// <param name="links">Links.</param>
-		public void GetLinkStyles(ref List<LinkSubclass> links)
+		public void GetLinkStyles(List<LinkSubclass> links)
 		{
-			links = links ?? new List<LinkSubclass>(m_LinkStyles.Count);
 			links.Clear();
 			links.AddRange(m_LinkStyles);
-		}
-
-		/// <summary>
-		/// This method is obsolete. Use 
-		/// <see cref="M:Candlelight.UI.HyperTextStyles.GetQuadStyles(System.Collections.Generic.List{Candlelight.UI.HyperTextStyles.Quad}@)" /> 
-		/// instead.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <returns>The quad styles.</returns>
-		[System.Obsolete("Use HyperTextStyles.GetQuadStyles(ref List<Quad> quads)")]
-		public Quad[] GetQuadStyles() // TODO: eventually make private
-		{
-			return m_QuadStyles.ToArray();
 		}
 
 		/// <summary>
 		/// Gets the quad styles.
 		/// </summary>
 		/// <param name="quads">Quads.</param>
-		public void GetQuadStyles(ref List<Quad> quads)
+		public void GetQuadStyles(List<Quad> quads)
 		{
-			quads = quads ?? new List<Quad>(m_QuadStyles.Count);
 			quads.Clear();
 			quads.AddRange(m_QuadStyles);
+		}
+
+		/// <summary>
+		/// Sets the custom text styles.
+		/// </summary>
+		/// <param name="styles">Custom text styles.</param>
+		/// <remarks>
+		/// If more than one <see cref="LinkSubclass" /> in the collection has the same class name, then subsequent
+		/// entries will append sequential digits to make their names unique.
+		/// </remarks>
+		public void SetCustomTextStyles(IList<Text> styles)
+		{
+			if (
+				BackingFieldUtility.SetKeyedListBackingFieldFromStringKeyedArray(
+					m_CustomTextStyles, styles == null ? null : styles, MutateCustomTextIdentifier, ignoreCase: true
+				)
+			)
+			{
+				RebuildCascadingAndInheritedStyles();
+				OnPropertyChanged();
+			}
+		}
+
+		#pragma warning disable 109
+		/// <summary>
+		/// Sets this instance dirty in order to force a styles changed callback.
+		/// </summary>
+		new public void SetDirty()
+		{
+			RebuildCascadingAndInheritedStyles();
+			OnPropertyChanged();
+		}
+		#pragma warning restore 109
+
+		/// <summary>
+		/// Sets the list of styles to inherit from. Any custom link classes, tags, or quads specified on these sheets
+		/// will be inherited, with preference given to those specified later in the array. If this instance defines any
+		/// of the items, they will be considered overrides.
+		/// </summary>
+		/// <param name="styles">Styles.</param>
+		public void SetInheritedStyles(IList<HyperTextStyles> styles)
+		{
+			List<HyperTextStyles> newStyles = new List<HyperTextStyles>();
+			if (styles != null)
+			{
+				newStyles.AddRange(styles);
+			}
+			if (m_InheritedStyles.SequenceEqual(newStyles))
+			{
+				return;
+			}
+			foreach (HyperTextStyles style in m_InheritedStyles)
+			{
+				if (style != null)
+				{
+					style.Changed -= OnInheritedStyleChanged;
+				}
+			}
+			m_InheritedStyles.Clear();
+			foreach (HyperTextStyles style in newStyles)
+			{
+				if (style == this)
+				{
+					continue;
+				}
+				m_InheritedStyles.Add(style);
+				if (style != null)
+				{
+					style.Changed += OnInheritedStyleChanged;
+				}
+			}
+			RebuildCascadingAndInheritedStyles();
+			OnPropertyChanged();
+		}
+
+		/// <summary>
+		/// Sets the link styles.
+		/// </summary>
+		/// <remarks>
+		/// If more than one <see cref="LinkSubclass" /> in the collection has the same class name, then subsequent
+		/// entries will append sequential digits to make their names unique.
+		/// </remarks>
+		/// <param name="styles">Link styles.</param>
+		public void SetLinkStyles(IList<LinkSubclass> styles)
+		{
+			if (
+				BackingFieldUtility.SetKeyedListBackingFieldFromStringKeyedArray(
+					m_LinkStyles, styles == null ? null : styles, MutateLinkSubclassIdentifier, ignoreCase: true
+				)
+			)
+			{
+				RebuildCascadingAndInheritedStyles();
+				OnPropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// Sets the quad styles.
+		/// </summary>
+		/// <remarks>
+		/// If more than one <see cref="Quad" /> in the collection has the same class name, then subsequent entries will
+		/// append sequential digits to make their names unique.
+		/// </remarks>
+		/// <param name="styles">Quad styles.</param>
+		public void SetQuadStyles(IList<Quad> styles)
+		{
+			if (
+				BackingFieldUtility.SetKeyedListBackingFieldFromStringKeyedArray(
+					m_QuadStyles, styles == null ? null : styles, MutateQuadIdentifier, ignoreCase: true
+				)
+			)
+			{
+				RebuildCascadingAndInheritedStyles();
+				OnPropertyChanged();
+			}
+		}
+		#endregion
+
+		#region Unity Messages
+		/// <summary>
+		/// Unsubscribe from change events on inherited styles.
+		/// </summary>
+		protected virtual void OnDestroy()
+		{
+			foreach (HyperTextStyles style in m_InheritedStyles)
+			{
+				if (style == this || style == null)
+				{
+					continue;
+				}
+				style.Changed -= OnInheritedStyleChanged;
+			}
 		}
 
 		/// <summary>
@@ -1452,14 +1574,81 @@ namespace Candlelight.UI
 		{
 			foreach (HyperTextStyles style in m_InheritedStyles)
 			{
-				if (style == this)
+				if (style == this || style == null)
 				{
 					continue;
 				}
-				if (style != null)
+				style.Changed += OnInheritedStyleChanged;
+			}
+		}
+		#endregion
+
+		/// <summary>
+		/// Adds items in the styles collection to the supplied cascade table.
+		/// </summary>
+		/// <param name="styles">Collection of styles and the sheets on which they are defined.</param>
+		/// <param name="cascade">Table of styles representing the cascade.</param>
+		/// <typeparam name="T">A <see cref="Candlelight.IIdentifiable{T}"/> style type.</typeparam>
+		private void AddToCascade<T>(
+			Dictionary<T, HyperTextStyles> styles, Dictionary<T, HyperTextStyles> cascade
+		) where T: IIdentifiable<string>, new()
+		{
+			using (ListPool<T>.Scope cascadeKeys = new ListPool<T>.Scope())
+			{
+				cascadeKeys.List.AddRange(cascade.Keys);
+				foreach (KeyValuePair<T, HyperTextStyles> kv in styles)
 				{
-					style.m_OnStylesChanged.AddListener(SetDirty);
+					T existingKey = new T();
+					for (int i = 0; i < cascadeKeys.List.Count; ++i)
+					{
+						if (
+							string.Compare(
+								cascadeKeys.List[i].Identifier,
+								kv.Key.Identifier,
+								System.StringComparison.OrdinalIgnoreCase
+							) == 0
+						)
+						{
+							existingKey = cascadeKeys.List[i];
+							break;
+						}
+					}
+					if (
+						string.Compare(
+							existingKey.Identifier, kv.Key.Identifier, System.StringComparison.OrdinalIgnoreCase
+						) == 0
+					)
+					{
+						if (
+							existingKey is IPropertyBackingFieldCompatible &&
+							kv.Key is IPropertyBackingFieldCompatible &&
+							(existingKey as IPropertyBackingFieldCompatible).GetSerializedPropertiesHash() !=
+							(kv.Key as IPropertyBackingFieldCompatible).GetSerializedPropertiesHash()
+						)
+						{
+							cascade.Remove(existingKey);
+							cascade.Add(kv.Key, kv.Value);
+							cascadeKeys.List.Remove(existingKey);
+							cascadeKeys.List.Add(kv.Key);
+						}
+					}
+					else
+					{
+						cascade.Add(kv.Key, kv.Value);
+						cascadeKeys.List.Add(kv.Key);
+					}
 				}
+			}
+		}
+
+		/// <summary>
+		/// Raises the property changed event.
+		/// </summary>
+		private void OnPropertyChanged()
+		{
+			if (this.Changed != null)
+			{
+				this.Changed(this);
 			}
 		}
 
@@ -1470,6 +1659,40 @@ namespace Candlelight.UI
 		private void OpenAPIReferencePage()
 		{
 			this.OpenReferencePage("uas-hypertext");
+		}
+
+		/// <summary>
+		/// Populates the cascaded styles backing field.
+		/// </summary>
+		/// <param name="cascadedStylesBackingField">Cascaded styles backing field.</param>
+		/// <param name="selfStylesBackingField">The backing field for the styles defined on this instance.</param>
+		/// <param name="inheritedStylesBackingField">The backing field for the styles inherited from parents.</param>
+		/// <typeparam name="T">A style type.</typeparam>
+		private void PopulateCascadedStylesBackingField<T>(
+			List<T> cascadedStylesBackingField,
+			List<T> selfStylesBackingField,
+			Dictionary<T, HyperTextStyles> inheritedStylesBackingField
+		) where T: IIdentifiable<string>, new()
+		{
+			using (var cascadedStyles = new DictPool<T, HyperTextStyles>.Scope())
+			{
+				AddToCascade(inheritedStylesBackingField, cascadedStyles.Dict);
+				// ensure duplicate entries (via inspector) don't get double-added to dictionaries for this instance
+				using (var selfStyles = new DictPool<T, HyperTextStyles>.Scope())
+				{
+					foreach (T style in selfStylesBackingField)
+					{
+						if (selfStyles.Dict.ContainsKey(style))
+						{
+							continue;
+						}
+						selfStyles.Dict.Add(style, this);
+					}
+					AddToCascade(selfStyles.Dict, cascadedStyles.Dict);
+					cascadedStylesBackingField.Clear();
+					cascadedStylesBackingField.AddRange(cascadedStyles.Dict.Keys);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1492,276 +1715,80 @@ namespace Candlelight.UI
 					styles.RebuildCascadingAndInheritedStyles();
 				}
 				AddToCascade(styles.m_InheritedLinkStyles, m_InheritedLinkStyles);
-				AddToCascade(styles.m_LinkStyles.ToDictionary(k => k, v => styles), m_InheritedLinkStyles);
+				using (var inherited = new DictPool<LinkSubclass, HyperTextStyles>.Scope())
+				{
+					for (int i = 0; i < styles.m_LinkStyles.Count; ++i)
+					{
+						inherited.Dict[styles.m_LinkStyles[i]] = styles;
+					}
+					AddToCascade(inherited.Dict, m_InheritedLinkStyles);
+				}
 				AddToCascade(styles.m_InheritedQuadStyles, m_InheritedQuadStyles);
-				AddToCascade(styles.m_QuadStyles.ToDictionary(k => k, v => styles), m_InheritedQuadStyles);
+				using (var inherited = new DictPool<Quad, HyperTextStyles>.Scope())
+				{
+					for (int i = 0; i < styles.m_QuadStyles.Count; ++i)
+					{
+						inherited.Dict[styles.m_QuadStyles[i]] = styles;
+					}
+					AddToCascade(inherited.Dict, m_InheritedQuadStyles);
+				}
 				AddToCascade(styles.m_InheritedTextStyles, m_InheritedTextStyles);
-				AddToCascade(styles.m_CustomTextStyles.ToDictionary(k => k, v => styles), m_InheritedTextStyles);
+				using (var inherited = new DictPool<Text, HyperTextStyles>.Scope())
+				{
+					for (int i = 0; i < styles.m_CustomTextStyles.Count; ++i)
+					{
+						inherited.Dict[styles.m_CustomTextStyles[i]] = styles;
+					}
+					AddToCascade(inherited.Dict, m_InheritedTextStyles);
+				}
 			}
 			// rebuild cascades
-			s_CascadedLinkStyles.Clear();
-			s_CascadedQuadStyles.Clear();
-			s_CascadedTextStyles.Clear();
-			AddToCascade(m_InheritedLinkStyles, s_CascadedLinkStyles);
-			AddToCascade(m_InheritedQuadStyles, s_CascadedQuadStyles);
-			AddToCascade(m_InheritedTextStyles, s_CascadedTextStyles);
-			// ensure duplicate entries (via inspector) don't get double-added to dictionaries for this instance
-			s_SelfLinkStyles.Clear();
-			s_SelfQuadStyles.Clear();
-			s_SelfTextStyles.Clear();
-			foreach (LinkSubclass style in m_LinkStyles)
-			{
-				if (s_SelfLinkStyles.ContainsKey(style))
-				{
-					continue;
-				}
-				s_SelfLinkStyles.Add(style, this);
-			}
-			foreach (Quad style in m_QuadStyles)
-			{
-				if (s_SelfQuadStyles.ContainsKey(style))
-				{
-					continue;
-				}
-				s_SelfQuadStyles.Add(style, this);
-			}
-			foreach (Text style in m_CustomTextStyles)
-			{
-				if (s_SelfTextStyles.ContainsKey(style))
-				{
-					continue;
-				}
-				s_SelfTextStyles.Add(style, this);
-			}
-			AddToCascade(s_SelfLinkStyles, s_CascadedLinkStyles);
-			AddToCascade(s_SelfQuadStyles, s_CascadedQuadStyles);
-			AddToCascade(s_SelfTextStyles, s_CascadedTextStyles);
-			m_CascadedLinkStyles.Clear();
-			m_CascadedQuadStyles.Clear();
-			m_CascadedTextStyles.Clear();
-			m_CascadedLinkStyles.AddRange(s_CascadedLinkStyles.Keys);
-			m_CascadedQuadStyles.AddRange(s_CascadedQuadStyles.Keys);
-			m_CascadedTextStyles.AddRange(s_CascadedTextStyles.Keys);
-			// clean up
-			s_CascadedLinkStyles.Clear();
-			s_CascadedQuadStyles.Clear();
-			s_CascadedTextStyles.Clear();
-			s_SelfLinkStyles.Clear();
-			s_SelfQuadStyles.Clear();
-			s_SelfTextStyles.Clear();
+			PopulateCascadedStylesBackingField(m_CascadedLinkStyles, m_LinkStyles, m_InheritedLinkStyles);
+			PopulateCascadedStylesBackingField(m_CascadedQuadStyles, m_QuadStyles, m_InheritedQuadStyles);
+			PopulateCascadedStylesBackingField(m_CascadedTextStyles, m_CustomTextStyles, m_InheritedTextStyles);
 			m_AreCascadesInitialized = true;
 		}
 
+#if CANDLELIGHT_MONO_AOT
 		/// <summary>
-		/// Sets the custom text styles.
+		/// Provides a hint to the Mono AOT compiler to generate conrete generic types required at run-time.
 		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="styles">Custom text styles.</param>
-		private void SetCustomTextStyles(Text[] styles)
+		private void MonoAOTHint()
 		{
-			SetCustomTextStyles(styles as IEnumerable<Text>);
+			ListPool<LinkSubclass>.Release(ListPool<LinkSubclass>.Get());
+			ListPool<Quad>.Release(ListPool<Quad>.Get());
+			ListPool<Text>.Release(ListPool<Text>.Get());
+			DictPool<LinkSubclass, HyperTextStyles>.Release(DictPool<LinkSubclass, HyperTextStyles>.Get());
+			DictPool<Quad, HyperTextStyles>.Release(DictPool<Quad, HyperTextStyles>.Get());
+			DictPool<Text, HyperTextStyles>.Release(DictPool<Text, HyperTextStyles>.Get());
 		}
-
-		/// <summary>
-		/// Sets the custom text styles.
-		/// </summary>
-		/// <param name="styles">Custom text styles.</param>
-		/// <remarks>
-		/// If more than one <see cref="LinkSubclass" /> in the collection has the same class name, then subsequent
-		/// entries will append sequential digits to make their names unique.
-		/// </remarks>
-		public void SetCustomTextStyles(IEnumerable<Text> styles)
-		{
-			if (
-				BackingFieldUtility.SetKeyedListBackingFieldFromArray(
-					m_CustomTextStyles,
-					styles == null ? null : styles.ToArray(),
-					(tag, t) => new Text(tag, t.TextStyle, t.VerticalOffset),
-					ignoreCase: true
-				)
-			)
-			{
-				RebuildCascadingAndInheritedStyles();
-				m_OnStylesChanged.Invoke();
-			}
-		}
-
-#pragma warning disable 109
-		/// <summary>
-		/// Sets this instance dirty in order to force a styles changed callback.
-		/// </summary>
-		new public void SetDirty()
-		{
-			RebuildCascadingAndInheritedStyles();
-			m_OnStylesChanged.Invoke();
-		}
-#pragma warning restore 109
-
-		/// <summary>
-		/// Sets the list of styles to inherit from. Any custom link classes, tags, or quads specified on these sheets
-		/// will be inherited, with preference given to those specified later in the array. If this instance defines any
-		/// of the items, they will be considered overrides.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="styles">Styles.</param>
-		private void SetInheritedStyles(HyperTextStyles[] styles)
-		{
-			SetInheritedStyles(styles as IEnumerable<HyperTextStyles>);
-		}
-
-		/// <summary>
-		/// Sets the list of styles to inherit from. Any custom link classes, tags, or quads specified on these sheets
-		/// will be inherited, with preference given to those specified later in the array. If this instance defines any
-		/// of the items, they will be considered overrides.
-		/// </summary>
-		/// <param name="styles">Styles.</param>
-		public void SetInheritedStyles(IEnumerable<HyperTextStyles> styles)
-		{
-			List<HyperTextStyles> newStyles = new List<HyperTextStyles>();
-			if (styles != null)
-			{
-				newStyles.AddRange(styles);
-			}
-			if (m_InheritedStyles.SequenceEqual(newStyles))
-			{
-				return;
-			}
-			foreach (HyperTextStyles style in m_InheritedStyles)
-			{
-				if (style != null)
-				{
-					style.m_OnStylesChanged.RemoveListener(SetDirty);
-				}
-			}
-			m_InheritedStyles.Clear();
-			foreach (HyperTextStyles style in newStyles)
-			{
-				if (style == this)
-				{
-					continue;
-				}
-				m_InheritedStyles.Add(style);
-				if (style != null)
-				{
-					style.m_OnStylesChanged.AddListener(SetDirty);
-				}
-			}
-			RebuildCascadingAndInheritedStyles();
-			m_OnStylesChanged.Invoke();
-		}
-
-		/// <summary>
-		/// Sets the link styles.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="styles">Link styles.</param>
-		private void SetLinkStyles(LinkSubclass[] styles)
-		{
-			SetLinkStyles(styles as IEnumerable<LinkSubclass>);
-		}
-
-		/// <summary>
-		/// Sets the link styles.
-		/// </summary>
-		/// <remarks>
-		/// If more than one <see cref="LinkSubclass" /> in the collection has the same class name, then subsequent
-		/// entries will append sequential digits to make their names unique.
-		/// </remarks>
-		/// <param name="styles">Link styles.</param>
-		public void SetLinkStyles(IEnumerable<LinkSubclass> styles)
-		{
-			if (
-				BackingFieldUtility.SetKeyedListBackingFieldFromArray(
-					m_LinkStyles,
-					styles == null ? null : styles.ToArray(),
-					(className, subclass) => new LinkSubclass(className, subclass.Style),
-					ignoreCase: true
-				)
-			)
-			{
-				RebuildCascadingAndInheritedStyles();
-				m_OnStylesChanged.Invoke();
-			}
-		}
-
-		/// <summary>
-		/// Sets the quad styles.
-		/// </summary>
-		/// <remarks>Included for inspector.</remarks>
-		/// <param name="styles">Quad styles.</param>
-		private void SetQuadStyles(Quad[] styles)
-		{
-			SetQuadStyles(styles as IEnumerable<Quad>);
-		}
-
-		/// <summary>
-		/// Sets the quad styles.
-		/// </summary>
-		/// <remarks>
-		/// If more than one <see cref="Quad" /> in the collection has the same class name, then subsequent entries will
-		/// append sequential digits to make their names unique.
-		/// </remarks>
-		/// <param name="styles">Quad styles.</param>
-		public void SetQuadStyles(IEnumerable<Quad> styles)
-		{
-			if (
-				BackingFieldUtility.SetKeyedListBackingFieldFromArray(
-					m_QuadStyles,
-					styles == null ? null : styles.ToArray(),
-					(className, q) => new Quad(
-						q.Sprite,
-						className,
-						q.SizeScalar,
-						q.VerticalOffset,
-						q.ShouldRespectColorization,
-						q.LinkId,
-						q.LinkClassName
-					), ignoreCase: true
-				)
-			)
-			{
-				RebuildCascadingAndInheritedStyles();
-				m_OnStylesChanged.Invoke();
-			}
-		}
+#endif
 
 		#region Obsolete
-		/// <summary>
-		/// This method is obsolete. Use 
-		/// <see cref="M:Candlelight.UI.HyperTextStyles.SetCustomTextStyles(System.Collections.Generic.IEnumerable{Candlelight.UI.HyperTextStyles.Text})" /> 
-		/// instead.
-		/// </summary>
-		/// <param name="styles">Styles.</param>
-		/// <param name="validate">This parameter is obsolete.</param>
-		[System.Obsolete("Use HyperTextStyles.SetCustomTextStyles(IEnumerable<Text> styles)")]
-		public void SetCustomTextStyles(IEnumerable<Text> styles, bool validate)
-		{
-			SetCustomTextStyles(styles);
-		}
-		/// <summary>
-		/// This method is obsolete. Use 
-		/// <see cref="M:Candlelight.UI.HyperTextStyles.SetLinkStyles(System.Collections.Generic.IEnumerable{Candlelight.UI.HyperTextStyles.LinkSubclass})" /> 
-		/// instead.
-		/// </summary>
-		/// <param name="styles">Styles.</param>
-		/// <param name="validate">This parameter is obsolete.</param>
-		[System.Obsolete("Use HyperTextStyles.SetLinkStyles(IEnumerable<LinkSubclass> styles)")]
-		public void SetLinkStyles(IEnumerable<LinkSubclass> styles, bool validate)
-		{
-			SetLinkStyles(styles);
-		}
-		/// <summary>
-		/// This method is obsolete. Use 
-		/// <see cref="M:Candlelight.UI.HyperTextStyles.SetQuadStyles(System.Collections.Generic.IEnumerable{Candlelight.UI.HyperTextStyles.Quad})" /> 
-		/// instead.
-		/// </summary>
-		/// <param name="styles">Styles.</param>
-		/// <param name="validate">This parameter is obsolete.</param>
-		[System.Obsolete("Use HyperTextStyles.SetQuadStyles(IEnumerable<Quad> styles)")]
-		public void SetQuadStyles(IEnumerable<Quad> styles, bool validate)
-		{
-			SetQuadStyles(styles);
-		}
+		[System.Obsolete("Use HyperTextStyles.StylesChanged", true)]
+		public UnityEngine.Events.UnityEvent OnStylesChanged { get; private set; }
+		[System.Obsolete("Use HyperTextStyles.GetCustomTextStyles(List<Text>)", true)]
+		public void GetCustomTextStyles(ref List<Text> text) {}
+		[System.Obsolete("Use HyperTextStyles.GetCascadedCustomTextStyles(List<Text>)", true)]
+		public void GetCascadedCustomTextStyles(ref List<Text> text) {}
+		[System.Obsolete("Use HyperTextStyles.GetCascadedLinkStyles(List<LinkSubclass>)", true)]
+		public void GetCascadedLinkStyles(ref List<LinkSubclass> links) {}
+		[System.Obsolete("Use HyperTextStyles.GetCascadedQuadStyles(List<Quad>)", true)]
+		public void GetCascadedQuadStyles(ref List<Quad> quads) {}
+		[System.Obsolete("Use HyperTextStyles.GetInheritedStyles(List<HyperTextStyles>)", true)]
+		public void GetInheritedStyles(ref List<HyperTextStyles> styles) {}
+		[System.Obsolete("Use HyperTextStyles.GetLinkStyles(List<LinkSubclass>)", true)]
+		public void GetLinkStyles(ref List<LinkSubclass> links) {}
+		[System.Obsolete("Use HyperTextStyles.GetQuadStyles(List<Quad>)", true)]
+		public void GetQuadStyles(ref List<Quad> quads) {}
+		[System.Obsolete("Use HyperTextStyles.SetCustomTextStyles(IList<Text>)", true)]
+		public void SetCustomTextStyles(IEnumerable<Text> styles) {}
+		[System.Obsolete("Use HyperTextStyles.SetInheritedStyles(IList<HyperTextStyles>)", true)]
+		public void SetInheritedStyles(IEnumerable<HyperTextStyles> styles) {}
+		[System.Obsolete("Use HyperTextStyles.SetLinkStyles(IList<LinkSubclass>)", true)]
+		public void SetLinkStyles(IEnumerable<LinkSubclass> styles) {}
+		[System.Obsolete("Use HyperTextStyles.SetQuadStyles(IList<Quad>)", true)]
+		public void SetQuadStyles(IEnumerable<Quad> styles) {}
 		#endregion
 	}
 }

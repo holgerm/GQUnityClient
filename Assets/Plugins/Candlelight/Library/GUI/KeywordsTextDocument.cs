@@ -17,6 +17,7 @@ namespace Candlelight
 	/// </summary>
 	public class KeywordsTextDocument : KeywordCollection
 	{
+		#region Enumerations
 		/// <summary>
 		/// An enum to specify how keywords are delimited in the text document.
 		/// </summary>
@@ -31,6 +32,7 @@ namespace Candlelight
 			/// </summary>
 			LineBreak
 		}
+		#endregion
 
 		#region Backing Fields
 		[SerializeField, PropertyBackingField]
@@ -38,6 +40,12 @@ namespace Candlelight
 		[SerializeField, PropertyBackingField]
 		private DelimiterValue m_Delimiter = DelimiterValue.LineBreak;
 		#endregion
+
+		#region Constructors
+		protected KeywordsTextDocument() {}
+		#endregion
+
+		#region Public Properties
 		/// <summary>
 		/// Gets or sets the delimiter.
 		/// </summary>
@@ -70,6 +78,7 @@ namespace Candlelight
 				}
 			}
 		}
+		#endregion
 
 		/// <summary>
 		/// Opens the API reference page.

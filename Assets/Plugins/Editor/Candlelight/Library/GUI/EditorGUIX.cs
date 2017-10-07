@@ -1,7 +1,7 @@
 // 
 // EditorGUIX.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -14,9 +14,9 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Candlelight
 {
@@ -25,6 +25,55 @@ namespace Candlelight
 	/// </summary>
 	public static partial class EditorGUIX
 	{
+		#region Delegates
+		/// <summary>
+		/// A callback to set the value on a serialized property.
+		/// </summary>
+		public delegate void SetSerializedPropertyValueCallback(SerializedProperty property);
+		/// <summary>
+		/// A callback to test if the value represented by a mass property is equal to the value represented by an
+		/// individual property.
+		/// </summary>
+		public delegate bool TestMassPropertyEqualityCallback(
+			SerializedProperty massProperty, SerializedProperty individualProperty
+		);
+		/// <summary>
+		/// A callback to test if all values represented by the specified property are equal.
+		/// </summary>
+		public delegate bool TestPropertyEqualityCallback(SerializedProperty property);
+		#endregion
+
+		/// <summary>
+		/// Initializes the <see cref="EditorGUIX"/> class.
+		/// </summary>
+		static EditorGUIX()
+		{
+			foreach (System.Type type in ReflectionX.AllTypes)
+			{
+				if (!type.IsEnum)
+				{
+					continue;
+				}
+				using (var attrs = new ListPool<System.FlagsAttribute>.Scope())
+				{
+					if (type.GetCustomAttributes<System.FlagsAttribute>(attrs.List) == 0)
+					{
+						continue;
+					}
+				}
+				if (System.Enum.GetUnderlyingType(type) != typeof(int))
+				{
+					continue;
+				}
+				System.Array values = System.Enum.GetValues(type);
+				// BUG: Using Cast<int>() on values sometimes results in crash from unhandled NULL exception
+				// e.g., GAFEditorInternal.Assets.GAFAnimationAssetInternalEditor`1+AssetState[TypeOfResource]
+				s_MaskEnumValues[type] = new ReadOnlyCollection<int> (
+					(from i in Enumerable.Range(0, values.Length) select (int)values.GetValue(i)).ToArray()
+				);
+			}
+		}
+
 		/// <summary>
 		/// The label to use for handle size sliders.
 		/// </summary>
@@ -49,18 +98,26 @@ namespace Candlelight
 		public static readonly Color zHandleColor =
 			GetColorFromUnityPreferences("Scene/Z Axis", new Color(0.255f, 0.553f, 0.95f, 1f));
 		/// <summary>
+		/// The values for all enum types decorated with <see cref="System.Flags"/>, converted to integers.
+		/// </summary>
+		private static readonly Dictionary<System.Type, ReadOnlyCollection<int>> s_MaskEnumValues =
+			new Dictionary<System.Type, ReadOnlyCollection<int>>();
+		/// <summary>
+		/// The maximum number of layers that can be defined.
+		/// </summary>
+		private static readonly int s_MaxNumLayers = 32;
+		/// <summary>
 		/// An empty icon to use for status fields with no status.
 		/// </summary>
 		private static Texture2D s_NoStatusIcon = null;
 		/// <summary>
 		/// The slider hash.
 		/// </summary>
-		private static readonly int s_SliderHash =
-			(int)typeof(EditorGUI).GetField("s_SliderHash", ReflectionX.staticBindingFlags).GetValue(null);
+		private static readonly int s_SliderHash = (int)typeof(EditorGUI).GetStaticFieldValue<int>("s_SliderHash");
 
 		#region MemberInfo
 		private static readonly MethodInfo s_GetClosestPowerOfTen =
-			typeof(MathUtils).GetMethod("GetClosestPowerOfTen", ReflectionX.staticBindingFlags);
+			typeof(MathUtils).GetStaticMethod("GetClosestPowerOfTen");
 		private static readonly MethodInfo s_RoundBasedOnMinimumDifference = typeof(MathUtils).GetMethod(
 			"RoundBasedOnMinimumDifference",
 			ReflectionX.staticBindingFlags,
@@ -68,17 +125,14 @@ namespace Candlelight
 			new System.Type[] { typeof(float), typeof(float) },
 			null
 		);
-		private static readonly MethodInfo s_RoundToMultipleOf =
-			typeof(MathUtils).GetMethod("RoundToMultipleOf", ReflectionX.staticBindingFlags);
+		private static readonly MethodInfo s_RoundToMultipleOf = typeof(MathUtils).GetStaticMethod("RoundToMultipleOf");
 		#endregion
 		#region Shared Allocations
-		private static readonly List<SerializedProperty> s_AffectedObjects = new List<SerializedProperty>(32);
-		private static Color s_OldColorCache;
 		private static readonly object[] s_Param1 = new object[1];
 		private static readonly object[] s_Param2 = new object[2];
+		private static readonly GUIContent s_ReusableLabel = new GUIContent();
 		private static float s_SliderMin = 0f;
 		private static float s_SliderMax = 5f;
-		private static readonly List<Object> s_UndoObjects = new List<Object>(128);
 		private static GUIContent s_ValidationStatusIcon = new GUIContent();
 		#endregion
 
@@ -92,6 +146,11 @@ namespace Candlelight
 		/// </summary>
 		/// <value>The width of the narrow inline button.</value>
 		public static float NarrowInlineButtonWidth { get { return k_NarrowButtonWidth; } }
+		/// <summary>
+		/// The width of the thumb widget in a reorderable list
+		/// </summary>
+		/// <value>The width of the thumb widget in a reorderable list.</value>
+		public static float ReorderableListThumbWidth { get { return 18f; } }
 		/// <summary>
 		/// Gets the width of the wide inline button.
 		/// </summary>
@@ -116,7 +175,8 @@ namespace Candlelight
 		/// <returns>The index of the button pressed; otherwise, -1.</returns>
 		/// <param name="labels">Labels.</param>
 		/// <param name="buttonEnabledStates">Optional array to specify enabled states for buttons in the array.</param>
-		public static int DisplayButtonArray(string[] labels, bool[] buttonEnabledStates = null)
+		/// <param name="style">Optional style to use.</param>
+		public static int DisplayButtonArray(string[] labels, bool[] buttonEnabledStates = null, GUIStyle style = null)
 		{
 			GUIContent[] gcLabels = labels == null ? null : new GUIContent[labels.Length];
 			if (labels != null)
@@ -126,7 +186,7 @@ namespace Candlelight
 					gcLabels[i] = new GUIContent(labels[i]);
 				}
 			}
-			return DisplayButtonArray(gcLabels, buttonEnabledStates);
+			return DisplayButtonArray(gcLabels, buttonEnabledStates, style);
 		}
 		
 		/// <summary>
@@ -135,12 +195,16 @@ namespace Candlelight
 		/// <returns>The index of the button pressed; otherwise, -1.</returns>
 		/// <param name="labels">Labels.</param>
 		/// <param name="buttonEnabledStates">Optional array to specify enabled states for buttons in the array.</param>
-		public static int DisplayButtonArray(GUIContent[] labels, bool[] buttonEnabledStates = null)
+		/// <param name="style">Optional style to use.</param>
+		public static int DisplayButtonArray(
+			GUIContent[] labels, bool[] buttonEnabledStates = null, GUIStyle style = null
+		)
 		{
 			return DisplayButtonArray(
 				GUILayoutUtility.GetRect(0f, InlineButtonHeight + EditorGUIUtility.standardVerticalSpacing),
 				labels,
-				buttonEnabledStates
+				buttonEnabledStates,
+				style
 			);
 		}
 
@@ -151,7 +215,10 @@ namespace Candlelight
 		/// <param name="position">Position.</param>
 		/// <param name="labels">Labels.</param>
 		/// <param name="buttonEnabledStates">Optional array to specify enabled states for buttons in the array.</param>
-		public static int DisplayButtonArray(Rect position, GUIContent[] labels, bool[] buttonEnabledStates = null)
+		/// <param name="style">Optional style to use.</param>
+		public static int DisplayButtonArray(
+			Rect position, GUIContent[] labels, bool[] buttonEnabledStates = null, GUIStyle style = null
+		)
 		{
 			int result = -1;
 			Color oldColor = GUI.color;
@@ -176,7 +243,7 @@ namespace Candlelight
 			{
 				EditorGUI.BeginDisabledGroup(!buttonEnabledStates[i]);
 				{
-					if (DisplayEditorButton(position, labels[i], null, false))
+					if (DisplayEditorButton(position, labels[i], style, false))
 					{
 						result = i;
 					}
@@ -186,6 +253,68 @@ namespace Candlelight
 			}
 			GUI.color = oldColor;
 			return result;
+		}
+
+		/// <summary>
+		/// Displays an enum mask popup.
+		/// </summary>
+		/// <remarks>
+		/// By default, EditorGUI.EnumMaskPopup() assumes each enumeration represents a unique value incremented by
+		/// powers of 2, starting from 1. This method assists when serializing enums that start from 0 and/or that have
+		/// mixed values for different enumerations (e.g., 1 | 2).
+		/// </remarks>
+		/// <returns>The value of the enum mask popup.</returns>
+		/// <param name="position">Position.</param>
+		/// <param name="label">Label.</param>
+		/// <param name="intValue"><see cref="System.Int32"/> value to be serialized.</param>
+		/// <param name="enumType">Enum type decorated with <see cref="System.Flags"/>.</param>
+		public static int DisplayEnumMaskPopup(Rect position, GUIContent label, int intValue, System.Type enumType)
+		{
+			ReadOnlyCollection<int> enumValues;
+			try { enumValues = s_MaskEnumValues[enumType]; }
+			catch (KeyNotFoundException)
+			{
+				GUIContent errorMessage = new GUIContent(
+					"Incompatible Type",
+					string.Format("{0} must be an enum marked with {1}.", enumType, typeof(System.FlagsAttribute))
+				);
+				EditorGUIX.DisplayLabelFieldWithStatus(
+					position, label, errorMessage, ValidationStatus.Error, errorMessage.tooltip
+				);
+				return intValue;
+			}
+			System.Enum oldEnumValue = (System.Enum)System.Enum.ToObject(enumType, intValue);
+			int unityIntValue = 0;
+			for (int i = 0; i < enumValues.Count; ++i)
+			{
+				if ((intValue & enumValues[i]) == enumValues[i])
+				{
+					unityIntValue |= 2 << (i - 1);
+				}
+			}
+			oldEnumValue = (System.Enum)System.Enum.ToObject(enumType, unityIntValue);
+			object newEnumValue;
+			EditorGUI.BeginChangeCheck();
+			{
+				newEnumValue = EditorGUI.EnumMaskField(position, label ?? GUIContent.none, oldEnumValue);
+			}
+			if (EditorGUI.EndChangeCheck())
+			{
+				unityIntValue = System.Convert.ToInt32(newEnumValue);
+				int result = 0;
+				for (int i = 0; i < enumValues.Count; ++i)
+				{
+					if ((unityIntValue & (2 << (i - 1))) == (2 << (i - 1)))
+					{
+						result |= System.Convert.ToInt32(enumValues[i]);
+					}
+				}
+				return result;
+			}
+			else
+			{
+				return intValue;
+			}
 		}
 
 		/// <summary>
@@ -270,7 +399,7 @@ namespace Candlelight
 		)
 		{
 			label = label ?? GUIContent.none;
-#if !UNITY_4_6
+#if !UNITY_4_6 && !UNITY_4_7
 			if (EditorStylesX.IsUsingBuiltinSkin)
 			{
 				EditorGUI.PrefixLabel(position, label);
@@ -303,49 +432,6 @@ namespace Candlelight
 			s_SliderMin = min;
 			s_SliderMax = max;
 			return DisplayField<float>(label, value, OnFloatSliderField);
-		}
-		
-		/// <summary>
-		/// Displays a label field with a status icon.
-		/// </summary>
-		/// <param name="position">Position.</param>
-		/// <param name="label">Label.</param>
-		/// <param name="text">Text.</param>
-		/// <param name="status">Status.</param>
-		/// <param name="statusTooltip">Status tooltip.</param>
-		public static void DisplayLabelFieldWithStatus(
-			Rect position, string label, string text, ValidationStatus status, Color tint, string statusTooltip = ""
-		)
-		{
-			s_OldColorCache = GUI.color;
-			GUI.color = tint;
-			position.width -= EditorGUIUtility.singleLineHeight;
-			EditorGUI.LabelField(position, label, text);
-			GUI.color = s_OldColorCache;
-			position.x += position.width;
-			position.width = position.height = EditorGUIUtility.singleLineHeight;
-			DisplayValidationStatusIcon(position, status, statusTooltip);
-		}
-
-		/// <summary>
-		/// Displays a reorderable list in a box followed by an editor for the currently selected element. Use this
-		/// method with lists of objects that are <see cref="UnityEditor.SerializedPropertyType.Generic"/>.
-		/// </summary>
-		/// <param name="list">List.</param>
-		public static void DisplayListWithElementEditor(ReorderableList list)
-		{
-			EditorGUILayout.BeginVertical(EditorStylesX.Box);
-			{
-				Rect rect = EditorGUILayout.GetControlRect(false, list.GetHeight());
-				list.DoList(rect);
-				if (list.count > 0)
-				{
-					int selected = Mathf.Clamp(list.index, 0, list.serializedProperty.arraySize - 1);
-					EditorGUILayout.Space();
-					EditorGUILayout.PropertyField(list.serializedProperty.GetArrayElementAtIndex(selected), true);
-				}
-			}
-			EditorGUILayout.EndVertical();
 		}
 
 		/// <summary>
@@ -460,7 +546,8 @@ namespace Candlelight
 					Rect colorPickerPosition = EditorGUI.IndentedRect(EditorGUILayout.GetControlRect());
 					int indent = EditorGUI.indentLevel;
 					EditorGUI.indentLevel = 0;
-					colorPickerPosition.width = (colorPickerPosition.width - StandardHorizontalSpacing) * 0.5f;
+					colorPickerPosition.width =
+						(colorPickerPosition.width - EditorGUIX.StandardHorizontalSpacing) * 0.5f;
 					try
 					{
 						minColor = EditorGUI.ColorField(colorPickerPosition, minColor);
@@ -469,7 +556,7 @@ namespace Candlelight
 					{
 						minColor = color.CurrentValue.MinColor;
 					}
-					colorPickerPosition.x += colorPickerPosition.width + StandardHorizontalSpacing;
+					colorPickerPosition.x += colorPickerPosition.width + EditorGUIX.StandardHorizontalSpacing;
 					try
 					{
 						maxColor = EditorGUI.ColorField(colorPickerPosition, maxColor);
@@ -494,6 +581,87 @@ namespace Candlelight
 			{
 				SceneView.RepaintAll();
 			}
+		}
+
+		/// <summary>
+		/// Displays a label field with a status icon.
+		/// </summary>
+		/// <param name="position">Position.</param>
+		/// <param name="label">Label.</param>
+		/// <param name="text">Text.</param>
+		/// <param name="status">Status.</param>
+		/// <param name="statusTooltip">Status tooltip.</param>
+		public static void DisplayLabelFieldWithStatus(
+			Rect position, GUIContent label, GUIContent text, ValidationStatus status, string statusTooltip = ""
+		)
+		{
+			Rect iconRect;
+			GetInlineIconRect(ref position, out iconRect);
+			EditorGUI.LabelField(position, label, text);
+			DisplayValidationStatusIcon(iconRect, status, statusTooltip);
+		}
+
+		/// <summary>
+		/// Displays a layer selector popup.
+		/// </summary>
+		/// <returns>The currently selected layer.</returns>
+		/// <param name="position">Position.</param>
+		/// <param name="label">Label.</param>
+		/// <param name="currentValue">Current value.</param>
+		public static int DisplayLayerPopup(Rect position, GUIContent label, int currentValue)
+		{
+			using (var layerLabels = new ListPool<GUIContent>.Scope())
+			{
+				using (var layerValues = new ListPool<int>.Scope())
+				{
+					for (int i = 0; i < s_MaxNumLayers; ++i)
+					{
+						string layerName = LayerMask.LayerToName(i);
+						if (!string.IsNullOrEmpty(layerName))
+						{
+							layerLabels.List.Add(new GUIContent(layerName));
+							layerValues.List.Add(i);
+						}
+						else if (i == currentValue)
+						{
+							layerLabels.List.Add(new GUIContent(string.Format("Unnamed Layer {0}", i)));
+							layerValues.List.Add(i);
+						}
+					}
+					return EditorGUI.IntPopup(
+						position, label, currentValue, layerLabels.List.ToArray(), layerValues.List.ToArray()
+					);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Displays a reorderable list in a box followed by an editor for the currently selected element. Use this
+		/// method with lists of objects that are <see cref="UnityEditor.SerializedPropertyType.Generic"/>.
+		/// </summary>
+		/// <param name="list">List.</param>
+		/// <param name="forceExpand">
+		/// If set to <see langword="true"/> then force expand the element if it has children.
+		/// </param>
+		public static void DisplayListWithElementEditor(ReorderableList list, bool forceExpand = false)
+		{
+			EditorGUILayout.BeginVertical(EditorStylesX.Box);
+			{
+				Rect rect = EditorGUILayout.GetControlRect(false, list.GetHeight());
+				list.DoList(rect);
+				if (list.count > 0)
+				{
+					int selected = Mathf.Clamp(list.index, 0, list.serializedProperty.arraySize - 1);
+					EditorGUILayout.Space();
+					SerializedProperty sp = list.serializedProperty.GetArrayElementAtIndex(selected);
+					if (forceExpand && sp.hasChildren)
+					{
+						sp.isExpanded = true;
+					}
+					EditorGUILayout.PropertyField(sp, true);
+				}
+			}
+			EditorGUILayout.EndVertical();
 		}
 
 		/// <summary>
@@ -544,9 +712,15 @@ namespace Candlelight
 			EditorGUI.indentLevel = 0;
 			if (drawSlider)
 			{
+#if UNITY_5_5_OR_NEWER
+				EditorGUI.MinMaxSlider(
+					sliderPos, GUIContent.none, ref min, ref max, Mathf.Min(sliderMin, min), Mathf.Max(sliderMax, max)
+				);
+#else
 				EditorGUI.MinMaxSlider(
 					GUIContent.none, sliderPos, ref min, ref max, Mathf.Min(sliderMin, min), Mathf.Max(sliderMax, max)
 				);
+#endif
 			}
 			if (maxProp.floatValue != max)
 			{
@@ -605,20 +779,23 @@ namespace Candlelight
 		)
 		{
 			label = label ?? new GUIContent(property.displayName);
-#if !UNITY_4_6
-			if (EditorStylesX.IsUsingBuiltinSkin)
+			if (label != GUIContent.none)
 			{
-				EditorGUI.PrefixLabel(position, label);
-			}
-			else
-			{
-				EditorGUI.PrefixLabel(position, label, GUI.skin.label);
-			}
+#if !UNITY_4_6 && !UNITY_4_7
+				if (EditorStylesX.IsUsingBuiltinSkin)
+				{
+					EditorGUI.PrefixLabel(position, label);
+				}
+				else
+				{
+					EditorGUI.PrefixLabel(position, label, GUI.skin.label);
+				}
 #else
-			EditorGUI.PrefixLabel(position, label);
+				EditorGUI.PrefixLabel(position, label);
 #endif
-			position.width -= EditorGUIUtility.labelWidth;
-			position.x += EditorGUIUtility.labelWidth;
+				position.width -= EditorGUIUtility.labelWidth;
+				position.x += EditorGUIUtility.labelWidth;
+			}
 			int oldIndent = EditorGUI.indentLevel;
 			EditorGUI.indentLevel = 0;
 			EditorGUI.PropertyField(position, property, GUIContent.none, includeChildren);
@@ -637,17 +814,20 @@ namespace Candlelight
 		/// </param>
 		/// <param name="buttonNarrow">Button width to use in narrow mode.</param>
 		/// <param name="buttonWide">Button width to use in wide mode.</param>
-		/// <param name="areValuesEqual">
+		/// <param name="isMassPropertyEqualToAffectedProperties">
 		/// If not <see langword="null"/> then specifies a method for testing equality of the values of the property and
 		/// a potentially matching affected object; otherwise, the method simply compares their hash codes and, if they
 		/// are enums, their type string as well.
 		/// </param>
+		/// <param name="areAffectedPropertiesEqual">
+		/// If not <see langword="null"/> then specifies a method for testing the equality of the values on the affected
+		/// objects. Otherwise, <see cref="UnityEditor.SerializedProperty.hasMultipleDifferentValues"/> will be used. 
+		/// </param>
 		/// <param name="onSetProperty">
-		/// <para>If not <see langword="null"/> then specifies a method to pass the new property value to, when the
-		/// property changes or the button is clicked; otherwise, the property's new value is applied directly to all
-		/// affected objects.</para>
-		/// <para>In the current implementation, if the property is of type Generic, then you must specify this method.
-		/// </para>
+		/// If not <see langword="null"/> then specifies a method to pass the new property value to, when the property
+		/// changes or the button is clicked; otherwise, the property's new value is applied directly to all affected 
+		/// objects. In the current implementation, if the property is of type Generic, then you must specify this
+		/// method.
 		/// </param>
 		public static bool DisplayPropertyWithSetManyButton(
 			SerializedProperty property,
@@ -656,14 +836,16 @@ namespace Candlelight
 			string buttonText = "Set All",
 			float buttonNarrow = k_NarrowButtonWidth,
 			float buttonWide = k_NarrowButtonWidth,
-			System.Func<object, object, bool> areValuesEqual = null,
-			System.Action<object> onSetProperty = null
+			TestMassPropertyEqualityCallback isMassPropertyEqualToAffectedProperties = null,
+			TestPropertyEqualityCallback areAffectedPropertiesEqual = null,
+			SetSerializedPropertyValueCallback onSetProperty = null
 		)
 		{
 			Rect position = EditorGUILayout.GetControlRect(label != null, EditorGUI.GetPropertyHeight(property));
 			return DisplayPropertyWithSetManyButton(
 				position, property, label, affectedObjects, buttonText,
-				buttonNarrow, buttonWide, areValuesEqual, onSetProperty
+				buttonNarrow, buttonWide,
+				isMassPropertyEqualToAffectedProperties, areAffectedPropertiesEqual, onSetProperty
 			);
 		}
 
@@ -680,17 +862,20 @@ namespace Candlelight
 		/// </param>
 		/// <param name="buttonNarrow">Button width to use in narrow mode.</param>
 		/// <param name="buttonWide">Button width to use in wide mode.</param>
-		/// <param name="areValuesEqual">
+		/// <param name="isMassPropertyEqualToAffectedProperties">
 		/// If not <see langword="null"/> then specifies a method for testing equality of the values of the property and
 		/// a potentially matching affected object; otherwise, the method simply compares their hash codes and, if they
 		/// are enums, their type string as well.
 		/// </param>
+		/// <param name="areAffectedPropertiesEqual">
+		/// If not <see langword="null"/> then specifies a method for testing the equality of the values on the affected
+		/// objects. Otherwise, <see cref="UnityEditor.SerializedProperty.hasMultipleDifferentValues"/> will be used. 
+		/// </param>
 		/// <param name="onSetProperty">
-		/// <para>If not <see langword="null"/> then specifies a method to pass the new property value to, when the
-		/// property changes or the button is clicked; otherwise, the property's new value is applied directly to all
-		/// affected objects.</para>
-		/// <para>In the current implementation, if the property is of type Generic, then you must specify this method.
-		/// </para>
+		/// If not <see langword="null"/> then specifies a method to pass the new property value to, when the property
+		/// changes or the button is clicked; otherwise, the property's new value is applied directly to all affected 
+		/// objects. In the current implementation, if the property is of type Generic, then you must specify this
+		/// method.
 		/// </param>
 		public static bool DisplayPropertyWithSetManyButton(
 			Rect position,
@@ -700,16 +885,20 @@ namespace Candlelight
 			string buttonText = "Set All",
 			float buttonNarrow = k_NarrowButtonWidth,
 			float buttonWide = k_NarrowButtonWidth,
-			System.Func<object, object, bool> areValuesEqual = null,
-			System.Action<object> onSetProperty = null
+			TestMassPropertyEqualityCallback isMassPropertyEqualToAffectedProperties = null,
+			TestPropertyEqualityCallback areAffectedPropertiesEqual = null,
+			SetSerializedPropertyValueCallback onSetProperty = null
 		)
 		{
-			s_AffectedObjects.Clear();
-			s_AffectedObjects.Add(affectedObjects);
-			return DisplayPropertyWithSetManyButton(
-				position, property, label, s_AffectedObjects, buttonText,
-				buttonNarrow, buttonWide, areValuesEqual, onSetProperty
-			);
+			using (var affected = new ListPool<SerializedProperty>.Scope())
+			{
+				affected.List.Add(affectedObjects);
+				return DisplayPropertyWithSetManyButton(
+					position, property, label, affected.List, buttonText,
+					buttonNarrow, buttonWide,
+					isMassPropertyEqualToAffectedProperties, areAffectedPropertiesEqual, onSetProperty
+				);
+			}
 		}
 
 		/// <summary>
@@ -724,17 +913,20 @@ namespace Candlelight
 		/// </param>
 		/// <param name="buttonNarrow">Button width to use in narrow mode.</param>
 		/// <param name="buttonWide">Button width to use in wide mode.</param>
-		/// <param name="areValuesEqual">
+		/// <param name="isMassPropertyEqualToAffectedProperties">
 		/// If not <see langword="null"/> then specifies a method for testing equality of the values of the property and
 		/// a potentially matching affected object; otherwise, the method simply compares their hash codes and, if they
 		/// are enums, their type string as well.
 		/// </param>
+		/// <param name="areAffectedPropertiesEqual">
+		/// If not <see langword="null"/> then specifies a method for testing the equality of the values on the affected
+		/// objects. Otherwise, <see cref="UnityEditor.SerializedProperty.hasMultipleDifferentValues"/> will be used. 
+		/// </param>
 		/// <param name="onSetProperty">
-		/// <para>If not <see langword="null"/> then specifies a method to pass the new property value to, when the
-		/// property changes or the button is clicked; otherwise, the property's new value is applied directly to all
-		/// affected objects.</para>
-		/// <para>In the current implementation, if the property is of type Generic, then you must specify this method.
-		/// </para>
+		/// If not <see langword="null"/> then specifies a method to pass the new property value to, when the property
+		/// changes or the button is clicked; otherwise, the property's new value is applied directly to all affected 
+		/// objects. In the current implementation, if the property is of type Generic, then you must specify this
+		/// method.
 		/// </param>
 		public static bool DisplayPropertyWithSetManyButton(
 			SerializedProperty property,
@@ -743,14 +935,16 @@ namespace Candlelight
 			string buttonText = "Set All",
 			float buttonNarrow = k_NarrowButtonWidth,
 			float buttonWide = k_NarrowButtonWidth,
-			System.Func<object, object, bool> areValuesEqual = null,
-			System.Action<object> onSetProperty = null
+			TestMassPropertyEqualityCallback isMassPropertyEqualToAffectedProperties = null,
+			TestPropertyEqualityCallback areAffectedPropertiesEqual = null,
+			SetSerializedPropertyValueCallback onSetProperty = null
 		)
 		{
 			Rect position = EditorGUILayout.GetControlRect(label != null, EditorGUI.GetPropertyHeight(property));
 			return DisplayPropertyWithSetManyButton(
 				position, property, label, affectedObjects, buttonText,
-				buttonNarrow, buttonWide, areValuesEqual, onSetProperty
+				buttonNarrow, buttonWide,
+				isMassPropertyEqualToAffectedProperties, areAffectedPropertiesEqual, onSetProperty
 			);
 		}
 
@@ -767,17 +961,20 @@ namespace Candlelight
 		/// </param>
 		/// <param name="buttonNarrow">Button width to use in narrow mode.</param>
 		/// <param name="buttonWide">Button width to use in wide mode.</param>
-		/// <param name="areValuesEqual">
+		/// <param name="isMassPropertyEqualToAffectedProperties">
 		/// If not <see langword="null"/> then specifies a method for testing equality of the values of the property and
 		/// a potentially matching affected object; otherwise, the method simply compares their hash codes and, if they
 		/// are enums, their type string as well.
 		/// </param>
+		/// <param name="areAffectedPropertiesEqual">
+		/// If not <see langword="null"/> then specifies a method for testing the equality of the values on the affected
+		/// objects. Otherwise, <see cref="UnityEditor.SerializedProperty.hasMultipleDifferentValues"/> will be used. 
+		/// </param>
 		/// <param name="onSetProperty">
-		/// <para>If not <see langword="null"/> then specifies a method to pass the new property value to, when the
-		/// property changes or the button is clicked; otherwise, the property's new value is applied directly to all
-		/// affected objects.</para>
-		/// <para>In the current implementation, if the property is of type Generic, then you must specify this method.
-		/// </para>
+		/// If not <see langword="null"/> then specifies a method to pass the new property value to, when the property
+		/// changes or the button is clicked; otherwise, the property's new value is applied directly to all affected 
+		/// objects. In the current implementation, if the property is of type Generic, then you must specify this
+		/// method.
 		/// </param>
 		public static bool DisplayPropertyWithSetManyButton(
 			Rect position,
@@ -787,20 +984,28 @@ namespace Candlelight
 			string buttonText = "Set All",
 			float buttonNarrow = k_NarrowButtonWidth,
 			float buttonWide = k_NarrowButtonWidth,
-			System.Func<object, object, bool> areValuesEqual = null,
-			System.Action<object> onSetProperty = null
+			TestMassPropertyEqualityCallback isMassPropertyEqualToAffectedProperties = null,
+			TestPropertyEqualityCallback areAffectedPropertiesEqual = null,
+			SetSerializedPropertyValueCallback onSetProperty = null
 		)
 		{
 			// determine if they all match (and hence whether button should be displayed)
 			bool doAllMatch = affectedObjects == null || affectedObjects.Count < 1;
 			if (!doAllMatch)
 			{
-				doAllMatch = affectedObjects.All(p => !p.hasMultipleDifferentValues);
+				if (areAffectedPropertiesEqual != null)
+				{
+					doAllMatch = affectedObjects.All(p => areAffectedPropertiesEqual(p));
+				}
+				else
+				{
+					doAllMatch = affectedObjects.All(p => !p.hasMultipleDifferentValues);
+				}
 				if (doAllMatch)
 				{
-					if (areValuesEqual != null)
+					if (isMassPropertyEqualToAffectedProperties != null)
 					{
-						doAllMatch &= areValuesEqual(property.GetValue(true), affectedObjects[0].GetValue(true));
+						doAllMatch &= isMassPropertyEqualToAffectedProperties(property, affectedObjects[0]);
 					}
 					else
 					{
@@ -831,7 +1036,10 @@ namespace Candlelight
 			// display property field
 			EditorGUI.BeginChangeCheck();
 			{
+				// wrap in Begin/EndProperty() so context menu works on label
+				EditorGUI.BeginProperty(controlPosition, label, property);
 				DisplayPropertyField(controlPosition, property, true, label);
+				EditorGUI.EndProperty();
 			}
 			bool didChange = EditorGUI.EndChangeCheck();
 			// display button if not all values match
@@ -844,24 +1052,28 @@ namespace Candlelight
 			if (didChange || didClick)
 			{
 				property.serializedObject.ApplyModifiedProperties();
-				object propertyValue = property.GetValue(true);
 				if (onSetProperty != null)
 				{
-					s_UndoObjects.Clear();
-					s_UndoObjects.AddRange(property.serializedObject.targetObjects.Where(o => o != null));
-					for (int i = 0; i < affectedObjects.Count; ++i)
+					using (var undoObjects = new ListPool<Object>.Scope())
 					{
-						s_UndoObjects.AddRange(affectedObjects[i].serializedObject.targetObjects.Where(o => o != null));
+						undoObjects.List.AddRange(property.serializedObject.targetObjects.Where(o => o != null));
+						for (int i = 0; i < affectedObjects.Count; ++i)
+						{
+							undoObjects.List.AddRange(
+								affectedObjects[i].serializedObject.targetObjects.Where(o => o != null)
+							);
+						}
+						Undo.RecordObjects(
+							undoObjects.List.ToArray(),
+							string.Format("{0} {1}", buttonText, buttonText == "Set All" ? property.displayName : "")
+						);
+						onSetProperty(property);
+						EditorUtilityX.SetDirty(undoObjects.List);
 					}
-					Undo.RecordObjects(
-						s_UndoObjects.ToArray(),
-						string.Format("{0} {1}", buttonText, buttonText == "Set All" ? property.displayName : "")
-					);
-					onSetProperty(propertyValue);
-					EditorUtilityX.SetDirty(s_UndoObjects);
 				}
 				else
 				{
+					object propertyValue = property.GetValue(true);
 					for (int i = 0; i < affectedObjects.Count; ++i)
 					{
 						affectedObjects[i].SetValue(propertyValue);
@@ -886,7 +1098,7 @@ namespace Candlelight
 		)
 		{
 			DisplayPropertyFieldWithStatus(
-				EditorGUILayout.GetControlRect(), property, status, GUI.color, label, includeChildren, statusTooltip
+				EditorGUILayout.GetControlRect(), property, status, label, includeChildren, statusTooltip
 			);
 		}
 
@@ -904,28 +1116,10 @@ namespace Candlelight
 			GUIContent label = null, bool includeChildren = true, string statusTooltip = ""
 		)
 		{
-			DisplayPropertyFieldWithStatus(
-				position, property, status, GUI.color, label, includeChildren, statusTooltip
-			);
-		}
-
-		/// <summary>
-		/// Displays a property field with a status icon.
-		/// </summary>
-		/// <param name="position">Position.</param>
-		/// <param name="property">Property.</param>
-		/// <param name="status">Status.</param>
-		/// <param name="label">Label.</param>
-		/// <param name="includeChildren">If set to <see langword="true"/> include children.</param>
-		/// <param name="statusTooltip">Status tooltip.</param>
-		public static void DisplayPropertyFieldWithStatus(
-			Rect position, SerializedProperty property, ValidationStatus status, Color tint,
-			GUIContent label = null, bool includeChildren = true, string statusTooltip = ""
-		)
-		{
-			s_OldColorCache = GUI.color;
-			GUI.color = tint;
-			position.width -= EditorGUIUtility.singleLineHeight;
+			if (status != ValidationStatus.None)
+			{
+				position.width -= EditorGUIUtility.singleLineHeight;
+			}
 			label = label ?? new GUIContent(property.displayName);
 			bool hasTooltip = !string.IsNullOrEmpty(label.tooltip);
 			if (!hasTooltip)
@@ -937,46 +1131,13 @@ namespace Candlelight
 			{
 				label.tooltip = string.Empty;
 			}
-			GUI.color = s_OldColorCache;
 			position.x += position.width;
 			position.width = position.height = EditorGUIUtility.singleLineHeight;
-			DisplayValidationStatusIcon(position, status, statusTooltip);
-		}
-
-		/// <summary>
-		/// Displays a property with a toggle. Use this method for e.g., override properties that only take effect when
-		/// the user explicitly enabled them.
-		/// </summary>
-		/// <returns><see langword="true"/> if the property is enabled; otherwise, <see langword="false"/>.</returns>
-		/// <param name="position">Position.</param>
-		/// <param name="label">Label.</param>
-		/// <param name="toggle">Property specifying whether or not the value will be used.</param>
-		/// <param name="property">Property specifying the value.</param>
-		public static bool DisplayPropertyWithToggle(
-			Rect position, GUIContent label, SerializedProperty toggle, SerializedProperty property
-		)
-		{
-			float totalWidth = position.width;
-			position.width = EditorGUIUtility.labelWidth + 14f + StandardHorizontalSpacing;
-			EditorGUI.PropertyField(position, toggle, label);
-			EditorGUI.BeginDisabledGroup(!toggle.boolValue);
+			if (status == ValidationStatus.None)
 			{
-				int indent = EditorGUI.indentLevel;
-				EditorGUI.indentLevel = 0;
-				if (property.propertyType != SerializedPropertyType.Generic) // NOTE: quick fix assuming FlushChildrenAttribute
-				{
-					position.x += position.width;
-					position.width = totalWidth - position.width;
-				}
-				else
-				{
-					position.width = totalWidth;
-				}
-				EditorGUI.PropertyField(position, property, GUIContent.none);
-				EditorGUI.indentLevel = indent;
+				position.width = 0f;
 			}
-			EditorGUI.EndDisabledGroup();
-			return toggle.boolValue;
+			DisplayValidationStatusIcon(position, status, statusTooltip);
 		}
 		
 		/// <summary>
@@ -989,6 +1150,24 @@ namespace Candlelight
 		/// <typeparam name="TEditor">The editor type.</typeparam>
 		public static bool DisplayPropertyGroup<TEditor>(
 			string label, EditorPreference<bool, TEditor> foldout, System.Action contents
+		)
+		{
+			s_ReusableLabel.text = label;
+			s_ReusableLabel.image = null;
+			s_ReusableLabel.tooltip = null;
+			return DisplayPropertyGroup(s_ReusableLabel, foldout, contents);
+		}
+		
+		/// <summary>
+		/// Displays a property group.
+		/// </summary>
+		/// <returns><see langword="true"/> if the group is expanded; otherwise, <see langword="false"/>.</returns>
+		/// <param name="label">Label for the group.</param>
+		/// <param name="foldout">Foldout preference.</param>
+		/// <param name="contents">Method to draw the contents of the group.</param>
+		/// <typeparam name="TEditor">The editor type.</typeparam>
+		public static bool DisplayPropertyGroup<TEditor>(
+			GUIContent label, EditorPreference<bool, TEditor> foldout, System.Action contents
 		)
 		{
 			foldout.CurrentValue = EditorGUILayout.Foldout(foldout.CurrentValue, label);
@@ -1010,6 +1189,44 @@ namespace Candlelight
 				EditorGUI.indentLevel = indent;
 			}
 			return foldout.CurrentValue;
+		}
+
+		/// <summary>
+		/// Displays a property with a toggle. Use this method for e.g., override properties that only take effect when
+		/// the user explicitly enabled them.
+		/// </summary>
+		/// <returns><see langword="true"/> if the property is enabled; otherwise, <see langword="false"/>.</returns>
+		/// <param name="position">Position.</param>
+		/// <param name="label">Label.</param>
+		/// <param name="toggle">Property specifying whether or not the value will be used.</param>
+		/// <param name="property">Property specifying the value.</param>
+		public static bool DisplayPropertyWithToggle(
+			Rect position, GUIContent label, SerializedProperty toggle, SerializedProperty property
+		)
+		{
+			float totalWidth = position.width;
+			position.width = EditorGUIUtility.labelWidth + 14f + StandardHorizontalSpacing;
+			Rect togglePosition = position;
+			togglePosition.height = EditorGUIUtility.singleLineHeight;
+			EditorGUI.PropertyField(togglePosition, toggle, label);
+			EditorGUI.BeginDisabledGroup(!toggle.boolValue);
+			{
+				int indent = EditorGUI.indentLevel;
+				EditorGUI.indentLevel = 0;
+				if (property.propertyType != SerializedPropertyType.Generic) // NOTE: quick fix assuming FlushChildrenAttribute
+				{
+					position.x += position.width;
+					position.width = totalWidth - position.width;
+				}
+				else
+				{
+					position.width = totalWidth;
+				}
+				EditorGUI.PropertyField(position, property, GUIContent.none);
+				EditorGUI.indentLevel = indent;
+			}
+			EditorGUI.EndDisabledGroup();
+			return toggle.boolValue;
 		}
 		
 		/// <summary>
@@ -1202,7 +1419,7 @@ namespace Candlelight
 			// modified from EditorGUI.DoSlider()
 			if (position.width >= 65f + EditorGUIUtility.fieldWidth)
 			{
-				int id = GUIUtility.GetControlID(s_SliderHash, EditorGUIUtility.native, position);
+				int id = GUIUtility.GetControlID(s_SliderHash, FocusType.Keyboard, position);
 				position = EditorGUI.PrefixLabel(position, id, label);
 				position.width -= 5f + EditorGUIUtility.fieldWidth;
 				EditorGUI.BeginChangeCheck();
@@ -1261,6 +1478,7 @@ namespace Candlelight
 					s_Param2[0] = value;
 					s_Param2[1] = Mathf.Abs(f);
 					value = (float)s_RoundBasedOnMinimumDifference.Invoke(null, s_Param2);
+					value = Mathf.Clamp(value, sliderMin, sliderMax);
 				}
 				position.x += position.width + 5f;
 				position.width = EditorGUIUtility.fieldWidth;
@@ -1325,7 +1543,11 @@ namespace Candlelight
 			}
 			if (s_ValidationStatusIcon.image != null)
 			{
-				GUI.Box(position, s_ValidationStatusIcon, EditorStylesX.StatusIconStyle);
+				GUI.Box(
+					position,
+					s_ValidationStatusIcon,
+					status == ValidationStatus.Okay ? EditorStylesX.OkayStatusIconStyle : EditorStylesX.StatusIconStyle
+				);
 			}
 		}
 		
@@ -1336,6 +1558,24 @@ namespace Candlelight
 		{
 			--EditorGUI.indentLevel;
 			EditorGUILayout.EndVertical();
+		}
+
+		/// <summary>
+		/// Gets rects for a button and a status icon next to it.
+		/// </summary>
+		/// <param name="buttonRect">Button rect.</param>
+		/// <param name="iconRect">Icon rect.</param>
+		public static void GetButtonAndStatusRects(out Rect buttonRect, out Rect iconRect)
+		{
+			buttonRect = EditorGUI.IndentedRect(
+				GUILayoutUtility.GetRect(0f, EditorGUIX.InlineButtonHeight + EditorGUIUtility.standardVerticalSpacing)
+			);
+			buttonRect.width -= EditorGUIUtility.singleLineHeight;
+			buttonRect.height -= EditorGUIUtility.standardVerticalSpacing;
+			iconRect = buttonRect;
+			iconRect.x += buttonRect.width;
+			iconRect.y += 0.5f * (EditorGUIX.InlineButtonHeight - EditorGUIUtility.singleLineHeight);
+			iconRect.width = EditorGUIUtility.singleLineHeight;
 		}
 		
 		/// <summary>
@@ -1368,6 +1608,19 @@ namespace Candlelight
 			{
 				return defaultColor;
 			}
+		}
+
+		/// <summary>
+		/// Gets a rect for an inline icon and reduces the size of the specific control rect to make room for it.
+		/// </summary>
+		/// <param name="controlRect">Control rect.</param>
+		/// <param name="iconRect">Icon rect.</param>
+		public static void GetInlineIconRect(ref Rect controlRect, out Rect iconRect)
+		{
+			controlRect.width -= EditorGUIUtility.singleLineHeight;
+			iconRect = controlRect;
+			iconRect.x += iconRect.width;
+			iconRect.width = iconRect.height = EditorGUIUtility.singleLineHeight;
 		}
 		
 		/// <summary>

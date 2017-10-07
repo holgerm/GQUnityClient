@@ -1,7 +1,7 @@
 ﻿// 
 // HyperTextStyleDrawer.cs
 // 
-// Copyright (c) 2014, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -27,20 +27,22 @@ namespace Candlelight.UI
 		private static readonly GUIContent offsetGUIContent = new GUIContent(
 			"Offset", "Vertical offset of instances of this style as a percentage of the surrounding font size."
 		);
-		private static readonly GUIContent sizeScalarGUIContent =
+		private static readonly GUIContent s_SizeScalarGuiContent =
 			new GUIContent("Scale", "Scale of instances of this style relative to the surrounding font size.");
 		#endregion
 
 		#region SerializedProperties;
-		private Dictionary<string, SerializedProperty> sizeScalar = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> verticalOffset = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_SizeScalar =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_VerticalOffset =
+			new Dictionary<string, SerializedProperty>();
 		#endregion
 
 		/// <summary>
-		/// The width of child field labels.
+		/// Gets the width of child field labels.
 		/// </summary>
-		protected static readonly float childFieldsLabelWidth = 50f;
-
+		/// <value>The width of child field labels</value>
+		protected float ChildFieldsLabelWidth { get { return 50f; } }
 		/// <summary>
 		/// Gets the offset property name prefix.
 		/// </summary>
@@ -87,9 +89,9 @@ namespace Candlelight.UI
 		{
 			// TODO: account for inspector wide mode
 			position.width = 0.5f * (position.width - EditorGUIX.StandardHorizontalSpacing);
-			EditorGUI.PropertyField(position, verticalOffset[property.propertyPath], offsetGUIContent);
+			EditorGUI.PropertyField(position, m_VerticalOffset[property.propertyPath], offsetGUIContent);
 			position.x += position.width + EditorGUIX.StandardHorizontalSpacing;
-			EditorGUI.PropertyField(position, sizeScalar[property.propertyPath], sizeScalarGUIContent);
+			EditorGUI.PropertyField(position, m_SizeScalar[property.propertyPath], s_SizeScalarGuiContent);
 		}
 
 		/// <summary>
@@ -98,17 +100,18 @@ namespace Candlelight.UI
 		/// <param name="property">Property.</param>
 		protected virtual void Initialize(SerializedProperty property)
 		{
-			if (!sizeScalar.ContainsKey(property.propertyPath))
+			if (m_SizeScalar.ContainsKey(property.propertyPath))
 			{
-				sizeScalar.Add(
-					property.propertyPath,
-					property.FindPropertyRelative(string.Format("{0}m_SizeScalar", SizePropertyNamePrefix))
-				);
-				verticalOffset.Add(
-					property.propertyPath,
-					property.FindPropertyRelative(string.Format("{0}m_VerticalOffset", OffsetPropertyNamePrefix))
-				);
+				return;
 			}
+			m_SizeScalar.Add(
+				property.propertyPath,
+				property.FindPropertyRelative(string.Format("{0}m_SizeScalar", this.SizePropertyNamePrefix))
+			);
+			m_VerticalOffset.Add(
+				property.propertyPath,
+				property.FindPropertyRelative(string.Format("{0}m_VerticalOffset", this.OffsetPropertyNamePrefix))
+			);
 		}
 
 		/// <summary>
@@ -119,7 +122,7 @@ namespace Candlelight.UI
 		/// <param name="label">Label.</param>
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			return PropertyHeight;
+			return this.PropertyHeight;
 		}
 
 		/// <summary>
@@ -132,22 +135,23 @@ namespace Candlelight.UI
 		{
 			Initialize(property);
 			EditorGUI.BeginProperty(position, label, property);
-			EditorGUI.PrefixLabel(position, label);
-			position.width -= EditorGUIUtility.labelWidth;
-			position.x += EditorGUIUtility.labelWidth;
 			position.height = EditorGUIUtility.singleLineHeight;
+			EditorGUI.PrefixLabel(position, label);
+			position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
+			position.x += EditorGUIX.pixelsPerIndentLevel;
+			position.width -= EditorGUIX.pixelsPerIndentLevel;
 			int oldIndent = EditorGUI.indentLevel;
-			float oldLabelWidth = EditorGUIUtility.labelWidth;
 			EditorGUI.indentLevel = 0;
-			EditorGUIUtility.labelWidth = childFieldsLabelWidth;
+			float oldLabelWidth = EditorGUIUtility.labelWidth;
+			EditorGUIUtility.labelWidth = this.ChildFieldsLabelWidth;
 			DisplayIdentifierField(position, property);
 			position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			DisplayOffsetAndScale(position, property);
 			position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			DisplayCustomFields(position, property);
-			EditorGUI.EndProperty();
 			EditorGUIUtility.labelWidth = oldLabelWidth;
 			EditorGUI.indentLevel = oldIndent;
+			EditorGUI.EndProperty();
 		}
 	}
 }

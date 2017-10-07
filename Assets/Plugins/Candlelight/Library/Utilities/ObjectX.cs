@@ -1,7 +1,7 @@
 // 
 // ObjectX.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,49 @@ namespace Candlelight
 	/// </summary>
 	public static class ObjectX
 	{
+#if UNITY_EDITOR
+		/// <summary>
+		/// Initializes the <see cref="ObjectX"/> class.
+		/// </summary>
+		static ObjectX()
+		{
+			System.Text.RegularExpressions.Regex matchCandlelightClass =
+				new System.Text.RegularExpressions.Regex(@"^Candlelight\b");
+			using (var types = new HashPool<System.Type>.Scope())
+			{
+				GetAllTypes(types.HashSet);
+				foreach (var type in types.HashSet)
+				{
+					if (
+						!type.IsSubclassOf(typeof(UnityEngine.ScriptableObject)) ||
+						!matchCandlelightClass.IsMatch(type.Namespace ?? "")
+					)
+					{
+						continue;
+					}
+					System.Reflection.ConstructorInfo constructor = type.GetConstructor(
+						System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static |
+						System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
+						null,
+						System.Type.EmptyTypes,
+						null
+					);
+					if (constructor == null || constructor.IsPublic)
+					{
+						UnityEngine.Debug.LogError(
+							string.Format("<b>{0}</b> has no protected, parameterless constructor.", type)
+						);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// A regular expression to match editor assembly names.
+		/// </summary>
+		private static readonly System.Text.RegularExpressions.Regex s_MatchEditorAssemblyName =
+			new System.Text.RegularExpressions.Regex(@"(^UnityEditor\.)|(-Editor\b)");
+#endif
 		/// <summary>
 		/// A regular expression to match an instance's prefab name
 		/// </summary>
@@ -38,18 +81,235 @@ namespace Candlelight
 			new System.Text.RegularExpressions.Regex(@".+(?=\s*\(Clone\))|.+");
 
 		/// <summary>
-		/// Determines if the specified other object is equal to the referenced value type.
+		/// Determine if the two specified sequences are equal.
 		/// </summary>
 		/// <remarks>
-		/// Use this method to implement <see cref="System.IEquatable{T}.Equals(T)"/> for custom structs.
+		/// Use this method when comparing list fields on two instances inside of IEquatable&lt;T&gt;.Equals().
 		/// </remarks>
-		/// <returns><see langword="true"/> if the two objects are equal; otherwise, <see langword="false"/>.</returns>
-		/// <param name="thisObj">The referenced struct object.</param>
-		/// <param name="otherObj">Other object.</param>
-		/// <typeparam name="T">The type of the struct.</typeparam>
-		public static bool Equals<T>(ref T thisObj, object otherObj) where T : struct
+		/// <returns>
+		/// <see langword="true"/> if the two lists contain equal elements or are both <see langword="null"/>;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		/// <param name="list1">List1.</param>
+		/// <param name="list2">List2.</param>
+		/// <typeparam name="T">The element type.</typeparam>
+		public static bool AreObjectSequencesEqual<T>(IList<T> list1, IList<T> list2) where T : UnityEngine.Object
 		{
-			return otherObj != null && otherObj is T && otherObj.GetHashCode() == thisObj.GetHashCode();
+			if (list1 == null)
+			{
+				return list2 == null;
+			}
+			else if (list2 == null)
+			{
+				return false;
+			}
+			int count = list1.Count;
+			if (count != list2.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < count; ++i)
+			{
+				if (!ReferenceEquals(list1[i], list2[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Determine if the two specified sequences are equal.
+		/// </summary>
+		/// <remarks>
+		/// Use this method when comparing list fields on two instances inside of IEquatable&lt;T&gt;.Equals().
+		/// </remarks>
+		/// <returns>
+		/// <see langword="true"/> if the two lists contain equal elements or are both <see langword="null"/>;
+		/// otherwise, <see langword="false"/>.
+		/// </returns>
+		/// <param name="list1">List1.</param>
+		/// <param name="list2">List2.</param>
+		/// <typeparam name="T">The element type.</typeparam>
+		public static bool AreStructSequencesEqual<T>(IList<T> list1, IList<T> list2) where T : struct, System.IEquatable<T>
+		{
+			if (list1 == null)
+			{
+				return list2 == null;
+			}
+			else if (list2 == null)
+			{
+				return false;
+			}
+			int count = list1.Count;
+			if (count != list2.Count)
+			{
+				return false;
+			}
+			for (int i = 0; i < count; ++i)
+			{
+				if (!list1[i].Equals(list2[i]))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		public static int GenerateHashCode(int hash1, int hash2)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		/// <param name="hash3">Hash3.</param>
+		public static int GenerateHashCode(int hash1, int hash2, int hash3)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			list.Add(hash3);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		/// <param name="hash3">Hash3.</param>
+		/// <param name="hash4">Hash4.</param>
+		public static int GenerateHashCode(int hash1, int hash2, int hash3, int hash4)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			list.Add(hash3);
+			list.Add(hash4);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		/// <param name="hash3">Hash3.</param>
+		/// <param name="hash4">Hash4.</param>
+		/// <param name="hash5">Hash5.</param>
+		public static int GenerateHashCode(int hash1, int hash2, int hash3, int hash4, int hash5)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			list.Add(hash3);
+			list.Add(hash4);
+			list.Add(hash5);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		/// <param name="hash3">Hash3.</param>
+		/// <param name="hash4">Hash4.</param>
+		/// <param name="hash5">Hash5.</param>
+		/// <param name="hash6">Hash6.</param>
+		public static int GenerateHashCode(int hash1, int hash2, int hash3, int hash4, int hash5, int hash6)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			list.Add(hash3);
+			list.Add(hash4);
+			list.Add(hash5);
+			list.Add(hash6);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		/// <param name="hash3">Hash3.</param>
+		/// <param name="hash4">Hash4.</param>
+		/// <param name="hash5">Hash5.</param>
+		/// <param name="hash6">Hash6.</param>
+		/// <param name="hash7">Hash7.</param>
+		public static int GenerateHashCode(int hash1, int hash2, int hash3, int hash4, int hash5, int hash6, int hash7)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			list.Add(hash3);
+			list.Add(hash4);
+			list.Add(hash5);
+			list.Add(hash6);
+			list.Add(hash7);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
+		}
+
+		/// <summary>
+		/// Generates a hash code from the hash codes for an object's fields.
+		/// </summary>
+		/// <returns>A hash code.</returns>
+		/// <param name="hash1">Hash1.</param>
+		/// <param name="hash2">Hash2.</param>
+		/// <param name="hash3">Hash3.</param>
+		/// <param name="hash4">Hash4.</param>
+		/// <param name="hash5">Hash5.</param>
+		/// <param name="hash6">Hash6.</param>
+		/// <param name="hash7">Hash7.</param>
+		/// <param name="hash8">Hash8.</param>
+		public static int GenerateHashCode(
+			int hash1, int hash2, int hash3, int hash4, int hash5, int hash6, int hash7, int hash8
+		)
+		{
+			List<int> list = ListPool<int>.Get();
+			list.Add(hash1);
+			list.Add(hash2);
+			list.Add(hash3);
+			list.Add(hash4);
+			list.Add(hash5);
+			list.Add(hash6);
+			list.Add(hash7);
+			list.Add(hash8);
+			int result = GenerateHashCode(list);
+			ListPool<int>.Release(list);
+			return result;
 		}
 
 		/// <summary>
@@ -57,11 +317,10 @@ namespace Candlelight
 		/// </summary>
 		/// <returns>A hash code.</returns>
 		/// <param name="fieldHashes">Hash codes for the fields on an object being hashed.</param>
-		public static int GenerateHashCode(params int[] fieldHashes)
+		public static int GenerateHashCode(IList<int> fieldHashes)
 		{
-			// NOTE: don't simply call other method because it increases call stack
 			int result = 17;
-			for (int i = 0; i < fieldHashes.Length; ++i)
+			for (int i = 0; i < fieldHashes.Count; ++i)
 			{
 				result = result * 23 + fieldHashes[i];
 			}
@@ -69,18 +328,48 @@ namespace Candlelight
 		}
 
 		/// <summary>
-		/// Generates a hash code from the hash codes for an object's fields.
+		/// Generates a hash code for a list or array field.
 		/// </summary>
 		/// <returns>A hash code.</returns>
-		/// <param name="fieldHashes">Hash codes for the fields on an object being hashed.</param>
-		public static int GenerateHashCode(IEnumerable<int> fieldHashes)
+		/// <param name="listField">List field.</param>
+		/// <typeparam name="T">The element type.</typeparam>
+		public static int GenerateHashCode<T>(IList<T> listField)
 		{
-			int result = 17;
-			foreach (int i in fieldHashes)
+			int typeCode = typeof(T).GetHashCode();
+			if (listField == null)
 			{
-				result = result * 23 + i;
+				return GenerateHashCode(typeCode, -1);
+			}
+			int result = GenerateHashCode(typeCode, listField.Count.GetHashCode());
+			for (int i = 0; i < listField.Count; ++i)
+			{
+				result = GenerateHashCode(result, listField[i] == null ? typeCode : listField[i].GetHashCode());
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Gets all run-time types in the current application.
+		/// </summary>
+		/// <remarks>This method does nothing at run-time.</remarks>
+		/// <param name="allTypes">All run-time types in the current application.</param>
+		[System.Diagnostics.Conditional("UNITY_EDITOR")]
+		public static void GetAllTypes(System.Collections.Generic.HashSet<System.Type> allTypes)
+		{
+			allTypes.Clear();
+#if UNITY_EDITOR
+			foreach (System.Reflection.Assembly assembly in System.AppDomain.CurrentDomain.GetAssemblies())
+			{
+				if (s_MatchEditorAssemblyName.IsMatch(assembly.FullName))
+				{
+					continue;
+				}
+				foreach (System.Type t in assembly.GetTypes())
+				{
+					allTypes.Add(t);
+				}
+			}
+#endif
 		}
 
 		/// <summary>
@@ -165,5 +454,13 @@ namespace Candlelight
 				string.Format(urlFormat, product, obj.GetType().FullName.Replace('.', '_'))
 			);
 		}
+
+		#region Obsolete
+		[System.Obsolete("Manually implement your own equality comparison.", true)]
+		public static bool Equals<T>(ref T thisObj, object otherObj) where T : struct
+		{
+			return false;
+		}
+		#endregion
 	}
 }

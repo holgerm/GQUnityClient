@@ -1,7 +1,7 @@
 ﻿// 
 // RectOffsetX.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
@@ -98,7 +98,7 @@ namespace Candlelight
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			return ObjectX.Equals(ref this, obj);
+			return (obj == null || !(obj is ImmutableRectOffset)) ? false : Equals((ImmutableRectOffset)obj);
 		}
 
 		/// <summary>
@@ -113,7 +113,10 @@ namespace Candlelight
 		/// <see cref="ImmutableRectOffset"/>; otherwise, <see langword="false"/>.</returns>
 		public bool Equals(ImmutableRectOffset other)
 		{
-			return GetHashCode() == other.GetHashCode();
+			return m_Bottom == other.m_Bottom &&
+				m_Left == other.m_Left &&
+				m_Right == other.m_Right &&
+				m_Top == other.m_Top;
 		}
 
 		/// <summary>

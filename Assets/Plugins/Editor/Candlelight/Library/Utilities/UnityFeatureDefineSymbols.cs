@@ -1,7 +1,7 @@
 // 
 // UnityFeatureDefineSymbols.cs
 // 
-// Copyright (c) 2013-2015, Candlelight Interactive, LLC
+// Copyright (c) 2013-2017, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -26,17 +26,21 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Candlelight {
+namespace Candlelight
+{
 	/// <summary>
 	/// A class to register define symbols for Unity features.
 	/// </summary>
 	[InitializeOnLoad]
-	public sealed class UnityFeatureDefineSymbols {
+	public sealed class UnityFeatureDefineSymbols
+	{
 		/// <summary>
 		/// Initializes the <see cref="UnityFeatureDefineSymbols"/> class.
 		/// </summary>
-		static UnityFeatureDefineSymbols () {
-			foreach ( KeyValuePair<string, string[]> featureClasses in s_FeatureAvailabilityClasses ) {
+		static UnityFeatureDefineSymbols()
+		{
+			foreach (KeyValuePair<string, string[]> featureClasses in s_FeatureAvailabilityClasses)
+			{
 				SetSymbolForAllBuildTargets(
 					featureClasses.Key,
 					target => featureClasses.Value.Any(
@@ -48,41 +52,30 @@ namespace Candlelight {
 		}
 
 		#region Preferences
-
 		private static readonly EditorPreference<bool, UnityFeatureDefineSymbols> s_AutoProductRegistrationPreference =
 			EditorPreference<bool, UnityFeatureDefineSymbols>.ForToggle("autoRegistration", true);
-
 		#endregion
 
 		/// <summary>
 		/// For each feature availability symbol, an array of class names whose presence indicates the feature.
 		/// </summary>
 		private static readonly Dictionary<string, string[]> s_FeatureAvailabilityClasses =
-			new Dictionary<string, string[]>() {
-				{
-					"IS_UNITYEDITOR_ANIMATIONS_AVAILABLE",
-					new [] {
-						"UnityEditor.Animations.AnimatorController"
-					}
-				}
-			};
+			new Dictionary<string, string[]>()
+		{
+			{ "IS_UNITYEDITOR_ANIMATIONS_AVAILABLE", new [] { "UnityEditor.Animations.AnimatorController" } }
+		};
 		/// <summary>
 		/// For each product availability symbol, an array of class names whose presence indicates the feature.
 		/// </summary>
 		private static readonly Dictionary<string, string[]> s_ProductAvailabilityClasses =
-			new Dictionary<string, string[]>() { {
-					"IS_CANDLELIGHT_CUSTOM_HANDLES_AVAILABLE",
-					new [] {
-						"Candlelight.FalloffHandles",
-						"Candlelight.HelixHandles"
-					}
-				},
-				{
-					"IS_CANDLELIGHT_HYPERTEXT_AVAILABLE",
-					new [] {
-						"Candlelight.UI.HyperText"
-					}
-				}, { "IS_CANDLELIGHT_RAGDOLL_AVAILABLE", new [] { "Candlelight.Physics.RagdollAnimator", } },
+			new Dictionary<string, string[]>()
+		{
+			{
+				"IS_CANDLELIGHT_CUSTOM_HANDLES_AVAILABLE",
+				new [] { "Candlelight.FalloffHandles", "Candlelight.HelixHandles" }
+			},
+			{ "IS_CANDLELIGHT_HYPERTEXT_AVAILABLE", new [] { "Candlelight.UI.HyperText" } },
+			{ "IS_CANDLELIGHT_RAGDOLL_AVAILABLE", new [] { "Candlelight.Physics.RagdollAnimator", } },
 			{ "IS_ROOTMOTION_FINAL_IK_AVAILABLE", new [] { "RootMotion.FinalIK.IKSolver" } }
 		};
 
@@ -117,27 +110,37 @@ namespace Candlelight {
 		/// particular target, it will be added; if the condition evaluates to <see langword="false"/> for the
 		/// particular target, it will be removed.
 		/// </param>
-		private static void SetSymbolForAllBuildTargets(string symbol, System.Predicate<BuildTargetGroup> condition)
+		public static void SetSymbolForAllBuildTargets(string symbol, System.Predicate<BuildTargetGroup> condition)
 		{
 			foreach (BuildTargetGroup target in System.Enum.GetValues(typeof(BuildTargetGroup)))
 			{
 				// prevent editor spam in Unity 5.x
-				if (target == BuildTargetGroup.Unknown || 
-					target == BuildTargetGroup.WP8 || 
-					target == BuildTargetGroup.BlackBerry ||
-					target == BuildTargetGroup.PS3 ||
-					target == BuildTargetGroup.XBOX360
-				)
+				if (target == BuildTargetGroup.Unknown)
 				{
 					continue;
 				}
-				// prevent editor spam in 5.3b4
-#if UNITY_5_3
-				if (target == BuildTargetGroup.tvOS && UnityEngine.Application.unityVersion.EndsWith("b4"))
+#if UNITY_5_3_0
+				// prevent editor spam in 5.3.0
+				if ((int)target == 25) // tvOS throwing out error
 				{
 					continue;
 				}
 #endif
+#if UNITY_5_6_0
+				// prevent editor spam in 5.6.0 beta
+				if ((int)target == 27) // Switch throwing out error
+				{
+					continue;
+				}
+#endif
+				using (var attrs = new ListPool<System.ObsoleteAttribute>.Scope())
+				{
+					System.Reflection.MemberInfo member = typeof(BuildTargetGroup).GetMember(target.ToString())[0];
+					if (member.GetCustomAttributes(attrs.List) > 0)
+					{
+						continue;
+					}
+				}
 				HashSet<string> symbols =
 					new HashSet<string>(PlayerSettings.GetScriptingDefineSymbolsForGroup(target).Split(';'));
 				if (condition == null || condition(target))

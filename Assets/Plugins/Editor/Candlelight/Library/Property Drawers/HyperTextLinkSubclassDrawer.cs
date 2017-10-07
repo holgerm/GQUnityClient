@@ -1,14 +1,11 @@
 ﻿// 
 // HyperTextLinkSubclassDrawer.cs
 // 
-// Copyright (c) 2014-2015, Candlelight Interactive, LLC
+// Copyright (c) 2014-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // This file is licensed according to the terms of the Unity Asset Store EULA:
 // http://download.unity3d.com/assetstore/customer-eula.pdf
-// 
-// This file contains a custom property drawer for
-// HyperTextStyles.LinkSubclass.
 
 using UnityEditor;
 using UnityEngine;
@@ -17,7 +14,7 @@ using System.Collections.Generic;
 namespace Candlelight.UI
 {
 	/// <summary>
-	/// Hyper text link subclass drawer.
+	/// HyperText link subclass drawer.
 	/// </summary>
 	[CustomPropertyDrawer(typeof(HyperTextStyles.LinkSubclass))]
 	public class HyperTextLinkSubclassDrawer : HyperTextTextStyleDrawer
@@ -45,18 +42,27 @@ namespace Candlelight.UI
 		/// The height of the property.
 		/// </summary>
 		new public static readonly float propertyHeight =
-			8f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
+			9f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
 
 		#region Serialized Properties
-		private Dictionary<string, SerializedProperty> className = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> colorMultiplier = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> colorTintMode = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> colorTweenMode = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> disabledColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> fadeDuration = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> highlightedColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> normalColor = new Dictionary<string, SerializedProperty>();
-		private Dictionary<string, SerializedProperty> pressedColor = new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ClassName =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ColorMultiplier =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ColorTintMode =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_ColorTweenMode =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_DisabledColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_FadeDuration =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_HighlightedColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_NormalColor =
+			new Dictionary<string, SerializedProperty>();
+		private readonly Dictionary<string, SerializedProperty> m_PressedColor =
+			new Dictionary<string, SerializedProperty>();
 		#endregion
 
 		/// <summary>
@@ -92,26 +98,30 @@ namespace Candlelight.UI
 				numLines * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
 			firstLinePosition.width =
 				0.5f * (firstLinePosition.width - EditorGUIX.StandardHorizontalSpacing);
-			EditorGUI.PropertyField(firstLinePosition, normalColor[property.propertyPath], s_NormalColorGuiContent );
+			EditorGUI.PropertyField(firstLinePosition, m_NormalColor[property.propertyPath], s_NormalColorGuiContent);
 			firstLinePosition.x += firstLinePosition.width + horizontalMargin;
 			EditorGUI.PropertyField(
-				firstLinePosition, highlightedColor[property.propertyPath], s_HighlightColorGuiContent
+				firstLinePosition, m_HighlightedColor[property.propertyPath], s_HighlightColorGuiContent
 			);
 			firstLinePosition.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			firstLinePosition.x -= firstLinePosition.width + horizontalMargin;
-			EditorGUI.PropertyField(firstLinePosition, pressedColor[property.propertyPath], s_PressedColorGuiContent);
+			EditorGUI.PropertyField(firstLinePosition, m_PressedColor[property.propertyPath], s_PressedColorGuiContent);
 			firstLinePosition.x += firstLinePosition.width + horizontalMargin;
-			EditorGUI.PropertyField(firstLinePosition, disabledColor[property.propertyPath], s_DisabledColorGuiContent);
+			EditorGUI.PropertyField(
+				firstLinePosition, m_DisabledColor[property.propertyPath], s_DisabledColorGuiContent
+			);
 			firstLinePosition.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			firstLinePosition.x -= firstLinePosition.width + horizontalMargin;
-			EditorGUI.PropertyField(firstLinePosition, colorMultiplier[property.propertyPath], s_MultiplierGuiContent);
+			EditorGUI.PropertyField(
+				firstLinePosition, m_ColorMultiplier[property.propertyPath], s_MultiplierGuiContent
+			);
 			firstLinePosition.x += firstLinePosition.width + horizontalMargin;
-			EditorGUI.PropertyField(firstLinePosition, colorTintMode[property.propertyPath], s_TintModeGuiContent);
+			EditorGUI.PropertyField(firstLinePosition, m_ColorTintMode[property.propertyPath], s_TintModeGuiContent);
 			firstLinePosition.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 			firstLinePosition.x -= firstLinePosition.width + horizontalMargin;
-			EditorGUI.PropertyField(firstLinePosition, fadeDuration[property.propertyPath], s_FadeDurationGuiContent);
+			EditorGUI.PropertyField(firstLinePosition, m_FadeDuration[property.propertyPath], s_FadeDurationGuiContent);
 			firstLinePosition.x += firstLinePosition.width + horizontalMargin;
-			EditorGUI.PropertyField(firstLinePosition, colorTweenMode[property.propertyPath], s_TweenModeGuiContent);
+			EditorGUI.PropertyField(firstLinePosition, m_ColorTweenMode[property.propertyPath], s_TweenModeGuiContent);
 			return numLines + 4;
 		}
 
@@ -122,38 +132,35 @@ namespace Candlelight.UI
 		/// <param name="property">Property.</param>
 		protected override void DisplayIdentifierField(Rect position, SerializedProperty property)
 		{
-			EditorGUI.PropertyField(position, className[property.propertyPath], classNameGUIContent);
+			EditorGUI.PropertyField(position, m_ClassName[property.propertyPath], classNameGUIContent);
 		}
 
 		/// <summary>
 		/// Initialize this instance.
 		/// </summary>
 		/// <param name="property">Property.</param>
-		protected override void Initialize (SerializedProperty property)
+		protected override void Initialize(SerializedProperty property)
 		{
 			base.Initialize(property);
-			if (!className.ContainsKey(property.propertyPath))
+			if (m_ClassName.ContainsKey(property.propertyPath))
 			{
-				className.Add(property.propertyPath, property.FindPropertyRelative("m_ClassName"));
-				colorMultiplier.Add(
-					property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_ColorMultiplier")
-				);
-				colorTintMode.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_ColorTintMode"));
-				colorTweenMode.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_ColorTweenMode"));
-				disabledColor.Add(
-					property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_DisabledColor")
-				);
-				highlightedColor.Add(
-					property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_HighlightedColor")
-				);
-				normalColor.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_NormalColor"));
-				pressedColor.Add(
-					property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_PressedColor")
-				);
-				fadeDuration.Add(
-					property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_FadeDuration")
-				);
+				return;
 			}
+			m_ClassName.Add(property.propertyPath, property.FindPropertyRelative("m_ClassName"));
+			m_ColorMultiplier.Add(
+				property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_ColorMultiplier")
+			);
+			m_ColorTintMode.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_ColorTintMode"));
+			m_ColorTweenMode.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_ColorTweenMode"));
+			m_DisabledColor.Add(
+				property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_DisabledColor")
+			);
+			m_HighlightedColor.Add(
+				property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_HighlightedColor")
+			);
+			m_NormalColor.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_NormalColor"));
+			m_PressedColor.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_PressedColor"));
+			m_FadeDuration.Add(property.propertyPath, property.FindPropertyRelative("m_Style.m_Colors.m_FadeDuration"));
 		}
 	}
 }

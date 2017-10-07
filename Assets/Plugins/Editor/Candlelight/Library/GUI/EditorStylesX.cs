@@ -1,7 +1,7 @@
 // 
 // EditorStylesX.cs
 // 
-// Copyright (c) 2012-2015, Candlelight Interactive, LLC
+// Copyright (c) 2012-2016, Candlelight Interactive, LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,6 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Candlelight
@@ -46,7 +45,7 @@ namespace Candlelight
 		/// The method to load a tinted texture, if it is available.
 		/// </summary>
 		private static readonly MethodInfo s_EditorResourcesLoadTinted = s_EditorResourcesType == null ?
-			null : s_EditorResourcesType.GetMethod("LoadTinted", ReflectionX.staticBindingFlags);
+			null : s_EditorResourcesType.GetStaticMethod("LoadTinted");
 
 		/// <summary>
 		/// Gets the current builtin skin.
@@ -87,7 +86,9 @@ namespace Candlelight
 		private static GUIStyle s_MiniLabel = null;
 		private static GUIStyle s_DarkTab = null;
 		private static GUIStyle s_OddBackground = null;
+		private static GUIStyle s_OkayStatusIconStyle = null;
 		private static GUIStyle s_PadlockToggle = null;
+		private static GUIStyle s_PreDropGlow = null;
 		private static GUIStyle s_PropertyFieldHorizontalLayoutBlock = null;
 		private static GUIStyle s_PropertyFieldHorizontalLayoutBlockDefault = null;
 		private static GUIStyle s_SceneBox = null;
@@ -96,6 +97,7 @@ namespace Candlelight
 		private static GUIStyle s_SelectedListItem = null;
 		private static GUIStyle s_StatusIconStyle = null;
 		private static GUIStyle s_TabBackground = null;
+		private static GUIStyle s_ThumbnailButton = null;
 		#endregion
 
 		/// <summary>
@@ -468,6 +470,26 @@ namespace Candlelight
 			}
 		}
 		/// <summary>
+		/// Gets the status icon style.
+		/// </summary>
+		/// <remarks>
+		/// Used to make boxes of a fixed size for status icons.
+		/// </remarks>
+		/// <value>The status icon style.</value>
+		public static GUIStyle OkayStatusIconStyle
+		{
+			get
+			{
+				if (s_OkayStatusIconStyle == null)
+				{
+					s_OkayStatusIconStyle = new GUIStyle();
+					s_OkayStatusIconStyle.normal.textColor = Label.normal.textColor;
+					s_OkayStatusIconStyle.alignment = TextAnchor.MiddleCenter;
+				}
+				return s_OkayStatusIconStyle;
+			}
+		}
+		/// <summary>
 		/// Gets the padlock toggle.
 		/// </summary>
 		/// <value>The padlock toggle.</value>
@@ -495,6 +517,27 @@ namespace Candlelight
 			}
 		}
 		/// <summary>
+		/// Gets the pre drop glow style.
+		/// </summary>
+		/// <value>The pre drop glow style.</value>
+		public static GUIStyle PreDropGlow
+		{
+			get
+			{
+				if (s_PreDropGlow == null)
+				{
+					try
+					{
+						s_PreDropGlow = new GUIStyle(GUI.skin.GetStyle("TL SelectionButton PreDropGlow"));
+						s_PreDropGlow.stretchHeight = true;
+						s_PreDropGlow.stretchWidth = true;
+					}
+					catch { s_PreDropGlow = GetErrorGUIStyle(); }
+				}
+				return s_PreDropGlow;
+			}
+		}
+		/// <summary>
 		/// Gets the property field horizontal layout block style.
 		/// </summary>
 		/// <remarks>
@@ -519,8 +562,7 @@ namespace Candlelight
 		/// Gets the property field horizontal layout block default.
 		/// </summary>
 		/// <remarks>
-		/// Use this when laying out PropertyFields inside of HorizontalLayout
-		/// blocks in order to prevent large margins.
+		/// Use this when laying out PropertyFields inside of HorizontalLayout blocks in order to prevent large margins.
 		/// </remarks>
 		/// <value>The property field horizontal layout block default.</value>
 		public static GUIStyle PropertyFieldHorizontalLayoutBlockDefault
@@ -649,6 +691,22 @@ namespace Candlelight
 				return s_TabBackground;
 			}
 		}
+		/// <summary>
+		/// Gets the thumbnail button.
+		/// </summary>
+		/// <value>The thumbnail button.</value>
+		public static GUIStyle ThumbnailButton
+		{
+			get
+			{
+				if (s_ThumbnailButton == null)
+				{
+					s_ThumbnailButton = new GUIStyle(EditorStylesX.MiniButton);
+					s_ThumbnailButton.padding = new RectOffset(2, 2, 2, 2);
+				}
+				return s_ThumbnailButton;
+			}
+		}
 		
 		/// <summary>
 		/// Gets the error GUI style.
@@ -675,8 +733,10 @@ namespace Candlelight
 		private static Texture2D s_LockedIcon;
 		private static Texture2D s_OddBackgroundTexture;
 		private static Texture2D s_OkayIcon;
+		private static Texture2D s_PasteAllIcon;
 		private static Texture2D s_PasteIcon;
 		private static Texture2D s_PasteSymmetricalIcon;
+		private static Texture2D s_ResetIcon;
 		private static Texture2D s_UnlockedIcon;
 		private static Texture2D s_WarningIcon;
 		#endregion
@@ -794,6 +854,21 @@ namespace Candlelight
 			}
 		}
 		/// <summary>
+		/// Gets the paste all icon.
+		/// </summary>
+		/// <value>The paste all icon.</value>
+		public static Texture2D PasteAllIcon
+		{
+			get
+			{
+				return s_PasteAllIcon = s_PasteAllIcon ?? (
+					s_EditorResourcesLoadTinted == null ?
+					null :
+					(Texture2D)s_EditorResourcesLoadTinted.Invoke(null, new [] { "Icon - Paste All.psd" })
+				);
+			}
+		}
+		/// <summary>
 		/// Gets the paste icon.
 		/// </summary>
 		/// <value>The paste icon.</value>
@@ -820,6 +895,21 @@ namespace Candlelight
 					s_EditorResourcesLoadTinted == null ?
 						null :
 						(Texture2D)s_EditorResourcesLoadTinted.Invoke(null, new [] { "Icon - Paste Symmetrical.psd" })
+				);
+			}
+		}
+		/// <summary>
+		/// Gets the reset icon.
+		/// </summary>
+		/// <value>The reset icon.</value>
+		public static Texture2D ResetIcon
+		{
+			get
+			{
+				return s_ResetIcon = s_ResetIcon ?? (
+					s_EditorResourcesLoadTinted == null ?
+					null :
+					(Texture2D)s_EditorResourcesLoadTinted.Invoke(null, new [] { "Icon - Reset.psd" })
 				);
 			}
 		}
