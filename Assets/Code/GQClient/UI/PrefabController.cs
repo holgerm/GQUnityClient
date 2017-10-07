@@ -4,13 +4,16 @@ using UnityEngine;
 using GQ.Client.Err;
 using GQ.Client.Util;
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI
+{
 	
-	public abstract class PrefabController : UIController {
+	public abstract class PrefabController : UIController
+	{
 
 		#region Runtime API
 
-		protected static GameObject Create(string prefabName, GameObject root = null) {
+		protected static GameObject Create (string prefabName, GameObject root = null)
+		{
 			Object prefab = Resources.Load (prefabName);
 			if (prefab == null) {
 				Log.SignalErrorToDeveloper ("Resource for prefab '{0}' could not be loaded.", prefabName);
@@ -18,14 +21,14 @@ namespace GQ.Client.UI {
 			}
 
 			if (root == null) {
-				root = GameObject.FindGameObjectWithTag(Tags.ROOT_CANVAS);
+				root = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
 			}
 
-			GameObject go = (GameObject) Instantiate (
-				prefab,
-				root.transform,
-				false
-			);
+			GameObject go = (GameObject)Instantiate (
+				                prefab,
+				                root.transform,
+				                false
+			                );
 			go.SetActive (false);
 			return go;
 		}
@@ -34,18 +37,21 @@ namespace GQ.Client.UI {
 		/// <summary>
 		/// Shows the prefab for at least one frame duration.
 		/// </summary>
-		public void Show() {
-			Base.Instance.StartCoroutine (showAsCoroutine(true));
+		public void Show ()
+		{
+			Base.Instance.StartCoroutine (showAsCoroutine (true));
 		}
 
 		/// <summary>
 		/// Hides the prefab for at least one frame duration.
 		/// </summary>
-		public void Hide() {
-			Base.Instance.StartCoroutine (showAsCoroutine(false));
+		public void Hide ()
+		{
+			Base.Instance.StartCoroutine (showAsCoroutine (false));
 		}
 
-		private IEnumerator showAsCoroutine(bool show) {
+		private IEnumerator showAsCoroutine (bool show)
+		{
 			yield return new WaitForEndOfFrame ();
 			gameObject.SetActive (show);
 		}
@@ -53,15 +59,20 @@ namespace GQ.Client.UI {
 		/// <summary>
 		/// Deletes the prefab from the hierarchy.
 		/// </summary>
-		public virtual void Destroy() {
-			Base.Instance.StartCoroutine (destroyAsCoroutine());
+		public virtual void Destroy ()
+		{
+			Base.Instance.StartCoroutine (destroyAsCoroutine ());
 		}
 
-		private IEnumerator destroyAsCoroutine() {
+		private IEnumerator destroyAsCoroutine ()
+		{
 			yield return new WaitForEndOfFrame ();
 			yield return new WaitForEndOfFrame ();
-			gameObject.SetActive (false);
-			Destroy (gameObject);
+
+			if (this != null && gameObject != null) {
+				gameObject.SetActive (false);
+				Destroy (gameObject);
+			}
 		}
 
 		#endregion

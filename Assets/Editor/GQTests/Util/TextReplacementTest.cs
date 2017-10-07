@@ -8,7 +8,7 @@ namespace GQTests.Util {
 
 		[Test]
 		public void ReplaceNullWithEmptyString () {
-			Assert.AreEqual("", TextHelper.makeReplacements(null));
+			Assert.AreEqual("", TextHelper.MakeReplacements(null));
 		}
 
 		[Test]
@@ -17,7 +17,7 @@ namespace GQTests.Util {
 			string original = "This<br>text<br>has<br>five<br>lines.";
 
 			// Act:
-			string transformed = TextHelper.makeReplacements(original);
+			string transformed = TextHelper.MakeReplacements(original);
 
 			// Assert:
 			Assert.AreEqual("This\ntext\nhas\nfive\nlines.", transformed);
@@ -31,7 +31,7 @@ namespace GQTests.Util {
 			questactions.setVariable("v1", "valueOne");
 
 			// Assert:
-			Assert.AreEqual("valueOne", TextHelper.makeReplacements("@v1@"));
+			Assert.AreEqual("valueOne", TextHelper.MakeReplacements("@v1@"));
 		}
 	}
 }

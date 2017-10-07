@@ -98,7 +98,7 @@ namespace GQ.Client.FileIO
 			return Regex.Replace (combinedPath.ToString (), "/+", PATH_ELEMENT_SEPARATOR);
 		}
 
-		public static string LocalPath4WWW(string assetRelativePath) 
+		public static string LocalPath4WWW (string assetRelativePath)
 		{
 			if (assetRelativePath.StartsWith ("Assets"))
 				assetRelativePath = assetRelativePath.Substring ("Assets".Length);
@@ -106,10 +106,24 @@ namespace GQ.Client.FileIO
 			if (!assetRelativePath.StartsWith ("/"))
 				assetRelativePath = "/" + assetRelativePath;
 
-			if (!assetRelativePath.StartsWith(Application.dataPath))
+			if (!assetRelativePath.StartsWith (Application.dataPath))
 				assetRelativePath = Application.dataPath + assetRelativePath;
 
 			return "file://" + assetRelativePath;
+		}
+
+		public static string AbsoluteLocalPath (string relPath)
+		{
+			if (!relPath.StartsWith (Application.persistentDataPath)) {
+				relPath = CombinePath (Application.persistentDataPath, relPath);
+			}
+
+			if (Application.isEditor)
+				return "file://" + relPath;
+			else if (Application.isMobilePlatform)
+				return relPath;
+			else // For standalone player.
+				return "file://" + relPath;
 		}
 
 		public static string FileName (string filePath)
@@ -309,22 +323,21 @@ namespace GQ.Client.FileIO
 			return isParent;
 		}
 
-		public static void DeleteDirCompletely(string path) {
-			if (!Directory.Exists(path)) {
+		public static void DeleteDirCompletely (string path)
+		{
+			if (!Directory.Exists (path)) {
 				Log.WarnDeveloper ("Trying to delete non existing directory " + path);
 				return;
 			}
 
-			DirectoryInfo dir = new DirectoryInfo(path);
+			DirectoryInfo dir = new DirectoryInfo (path);
 
-			foreach(FileInfo file in dir.GetFiles())
-			{
-				file.Delete();
+			foreach (FileInfo file in dir.GetFiles()) {
+				file.Delete ();
 			}
 
-			foreach (DirectoryInfo subdir in dir.GetDirectories())
-			{
-				DeleteDirCompletely(subdir.FullName);
+			foreach (DirectoryInfo subdir in dir.GetDirectories()) {
+				DeleteDirCompletely (subdir.FullName);
 			}
 
 			dir.Delete ();

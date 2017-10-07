@@ -109,20 +109,22 @@ namespace GQ.Client.Model
 				return hotspotDict.Values;
 			}
 		}
-			
+
 		#endregion
 
 		#region Media
 
-		public Dictionary<string, MediaInfo> MediaStore = new Dictionary<string, MediaInfo>();
+		public Dictionary<string, MediaInfo> MediaStore = new Dictionary<string, MediaInfo> ();
 
-		private void initMediaStore() {
-			MediaStore = new Dictionary<string, MediaInfo>();
+		private void initMediaStore ()
+		{
+			MediaStore = new Dictionary<string, MediaInfo> ();
 		}
 
-		public void AddMedia(string url) {
+		public void AddMedia (string url)
+		{
 			Debug.Log ("Adding media url: " + url);
-			if (!MediaStore.ContainsKey(url)) {
+			if (!MediaStore.ContainsKey (url)) {
 				MediaInfo info = new MediaInfo (Id, url);
 				MediaStore.Add (url, info);
 			}
@@ -152,7 +154,7 @@ namespace GQ.Client.Model
 		/// <param name="reader">Reader.</param>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-			initMediaStore();
+			initMediaStore ();
 
 			QuestManager.CurrentlyParsingQuest = this; // TODO use event system instead
 
@@ -238,7 +240,7 @@ namespace GQ.Client.Model
 			Hotspot hotspot = (Hotspot)serializer.Deserialize (reader);
 			hotspotDict.Add (hotspot.Id, hotspot);
 		}
-			
+
 
 		public void WriteXml (System.Xml.XmlWriter writer)
 		{
@@ -259,6 +261,8 @@ namespace GQ.Client.Model
 				);
 				return;
 			}
+
+			Variables.SetVariableValue ("quest.name", new Value (Name));
 
 			StartPage.Start ();
 		}
@@ -352,11 +356,11 @@ namespace GQ.Client.Model
 
 		[Obsolete]
 		public List<Page>
-		PageList = new List<Page> ();
+			PageList = new List<Page> ();
 
 		[Obsolete]
 		public List<QuestHotspot>
-		hotspotList = new List<QuestHotspot> ();
+			hotspotList = new List<QuestHotspot> ();
 
 		public string filepath;
 

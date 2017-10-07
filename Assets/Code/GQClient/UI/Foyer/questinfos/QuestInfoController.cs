@@ -13,12 +13,14 @@ using GQ.Client.UI.Dialogs;
 using System.IO;
 using GQ.Client.FileIO;
 
-namespace GQ.Client.UI.Foyer {
+namespace GQ.Client.UI.Foyer
+{
 
 	/// <summary>
 	/// Represents one quest info object in a list within the foyer.
 	/// </summary>
-	public class QuestInfoController : PrefabController, IComparable<QuestInfoController> {
+	public class QuestInfoController : PrefabController, IComparable<QuestInfoController>
+	{
 
 		#region Content and Structure
 
@@ -59,8 +61,11 @@ namespace GQ.Client.UI.Foyer {
 		// TODO what happens if we take predeployed into account.
 		public Button DeleteButton;
 
-		private enum DeletionWarning {
-			NoWarning, WarningNotOnServer, InfoPredeployedSurvivesDelete
+		private enum DeletionWarning
+		{
+			NoWarning,
+			WarningNotOnServer,
+			InfoPredeployedSurvivesDelete
 		}
 
 		private DeletionWarning DeletionWarnState {
@@ -80,7 +85,8 @@ namespace GQ.Client.UI.Foyer {
 
 		#region Internal UI Control Functions
 
-		protected void HideAllButtons() {
+		protected void HideAllButtons ()
+		{
 			DownloadButton.gameObject.SetActive (false);
 			StartButton.gameObject.SetActive (false);
 			DeleteButton.gameObject.SetActive (false);
@@ -92,7 +98,8 @@ namespace GQ.Client.UI.Foyer {
 		/// </summary>
 		/// <param name="button">Button.</param>
 		/// <param name="actionCallback">Action callback.</param>
-		protected void ShowButtons(params Button[] buttons) {
+		protected void ShowButtons (params Button[] buttons)
+		{
 			foreach (Button button in buttons) {
 				button.gameObject.SetActive (true);
 				button.interactable = true;
@@ -113,7 +120,8 @@ namespace GQ.Client.UI.Foyer {
 		/// a value less than zero means that this object is less than the given other one.
 		/// </summary>
 		/// <param name="otherCtrl">Other ctrl.</param>
-		public int CompareTo(QuestInfoController otherCtrl) {
+		public int CompareTo (QuestInfoController otherCtrl)
+		{
 			return data.CompareTo (otherCtrl.data);
 		}
 
@@ -122,13 +130,14 @@ namespace GQ.Client.UI.Foyer {
 
 		#region Event Reaction Methods
 
-		public void Download() {
+		public void Download ()
+		{
 			// Load quest data: game.xml
 			Downloader downloadGameXML = 
 				new Downloader (
-					url: QuestManager.GetQuestURI(data.Id), 
+					url: QuestManager.GetQuestURI (data.Id), 
 					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
-					targetPath: QuestManager.GetLocalPath4Quest(data.Id) + QuestManager.QUEST_FILE_NAME
+					targetPath: QuestManager.GetLocalPath4Quest (data.Id) + QuestManager.QUEST_FILE_NAME
 				);
 			new DownloadDialogBehaviour (downloadGameXML, "Loading quest");
 
@@ -180,7 +189,8 @@ namespace GQ.Client.UI.Foyer {
 			t.Start ();
 		}
 
-		public void Delete() {
+		public void Delete ()
+		{
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
 			data.LastUpdateOnDevice = null;
 
@@ -195,20 +205,21 @@ namespace GQ.Client.UI.Foyer {
 			exportQuestsInfoJSON.Start ();
 		}
 
-		public void Play() {
+		public void Play ()
+		{
 			// Load quest data: game.xml
 			LocalFileLoader loadGameXML = 
 				new LocalFileLoader (
-					filePath: QuestManager.GetLocalPath4Quest(data.Id) + QuestManager.QUEST_FILE_NAME
+					filePath: QuestManager.GetLocalPath4Quest (data.Id) + QuestManager.QUEST_FILE_NAME
 				);
 			new DownloadDialogBehaviour (loadGameXML, "Loading quest");
 
 			QuestStarter questStarter = new QuestStarter ();
-			new SimpleDialogBehaviour (
-				questStarter,
-				"Starting quests",
-				"Preparing Quest Data"
-			);
+//			new SimpleDialogBehaviour (
+//				questStarter,
+//				"Starting quests",
+//				"Preparing Quest Data"
+//			);
 
 			TaskSequence t = 
 				new TaskSequence (loadGameXML, questStarter);
@@ -217,9 +228,10 @@ namespace GQ.Client.UI.Foyer {
 		}
 
 
-		public void UpdateQuest() {
+		public void UpdateQuest ()
+		{
 			// TODO
-			Debug.Log("TODO: Implement update method! Trying to update quest " + data.Name);
+			Debug.Log ("TODO: Implement update method! Trying to update quest " + data.Name);
 		}
 
 		#endregion
@@ -227,7 +239,7 @@ namespace GQ.Client.UI.Foyer {
 
 		#region Runtime API
 
-		public static GameObject Create(GameObject root, QuestInfo qInfo) 
+		public static GameObject Create (GameObject root, QuestInfo qInfo)
 		{
 			// CReate the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
@@ -238,7 +250,8 @@ namespace GQ.Client.UI.Foyer {
 			return go;
 		}
 
-		public override void Destroy() {
+		public override void Destroy ()
+		{
 			data.OnChanged -= UpdateView;
 			base.Destroy ();
 		}
@@ -256,18 +269,18 @@ namespace GQ.Client.UI.Foyer {
 			namebuttonEvent.RemoveAllListeners ();
 			if (data.IsOnServer && !data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					Download();
+					Download ();
 				});
 			}
 			if (data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					Play();
+					Play ();
 				});
 			}
 
 
 			// Update Buttons:
-			HideAllButtons();
+			HideAllButtons ();
 			// Show DOWNLOAD button if needed:
 			if (data.IsOnServer && !data.IsOnDevice) {
 				DownloadButton.gameObject.SetActive (true);
@@ -303,24 +316,24 @@ namespace GQ.Client.UI.Foyer {
 
 		#region Initialization in Editor
 
-		public virtual void Reset()
+		public virtual void Reset ()
 		{
 			Name = EnsurePrefabVariableIsSet<Text> (Name, "Name", NAME_PATH);
 
 			DownloadButton = EnsurePrefabVariableIsSet<Button> (DownloadButton, "Download Button", "DownloadButton");
-			if (DownloadButton.onClick.GetPersistentEventCount() == 0)
+			if (DownloadButton.onClick.GetPersistentEventCount () == 0)
 				UnityEventTools.AddPersistentListener (DownloadButton.onClick, Download);
 			
 			StartButton = EnsurePrefabVariableIsSet<Button> (StartButton, "Start Button", "StartButton");
-			if (StartButton.onClick.GetPersistentEventCount() == 0)
+			if (StartButton.onClick.GetPersistentEventCount () == 0)
 				UnityEventTools.AddPersistentListener (StartButton.onClick, Play);
 			
 			DeleteButton = EnsurePrefabVariableIsSet<Button> (DeleteButton, "Delete Button", "DeleteButton");
-			if (DeleteButton.onClick.GetPersistentEventCount() == 0)
+			if (DeleteButton.onClick.GetPersistentEventCount () == 0)
 				UnityEventTools.AddPersistentListener (DeleteButton.onClick, Delete);
 
 			UpdateButton = EnsurePrefabVariableIsSet<Button> (UpdateButton, "Update Button", "UpdateButton");
-			if (UpdateButton.onClick.GetPersistentEventCount() == 0)
+			if (UpdateButton.onClick.GetPersistentEventCount () == 0)
 				UnityEventTools.AddPersistentListener (UpdateButton.onClick, UpdateQuest);
 		}
 

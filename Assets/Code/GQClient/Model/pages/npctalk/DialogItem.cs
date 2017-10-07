@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System;
 using GQ.Client.Err;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -68,7 +69,7 @@ namespace GQ.Client.Model
 		}
 
 		#endregion
-	
+
 		#region Null
 
 		public static NullDialogItem Null = new NullDialogItem ();

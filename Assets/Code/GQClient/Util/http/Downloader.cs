@@ -6,8 +6,10 @@ using GQ.Client.Err;
 using GQ.Client.UI;
 using System.IO;
 
-namespace GQ.Client.Util {
-	public class Downloader : AbstractDownloader {
+namespace GQ.Client.Util
+{
+	public class Downloader : AbstractDownloader
+	{
 		protected string url;
 
 		public string TargetPath { get; set; }
@@ -17,11 +19,13 @@ namespace GQ.Client.Util {
 
 		#region Default Handler
 
-		public static void defaultLogInformationHandler (AbstractDownloader d, DownloadEvent e) {
+		public static void defaultLogInformationHandler (AbstractDownloader d, DownloadEvent e)
+		{
 			Log.InformUser (e.Message);
 		}
 
-		public static void defaultLogErrorHandler (AbstractDownloader d, DownloadEvent e) {
+		public static void defaultLogErrorHandler (AbstractDownloader d, DownloadEvent e)
+		{
 			Log.SignalErrorToUser (e.Message);
 		}
 
@@ -54,13 +58,13 @@ namespace GQ.Client.Util {
 		public Downloader (
 			string url, 
 			long timeout = 0,
-			string targetPath = null) : base(true)
+			string targetPath = null) : base (true)
 		{
 			Result = "";
 			this.url = url;
 			Timeout = timeout;
 			TargetPath = targetPath;
-			stopwatch = new Stopwatch();
+			stopwatch = new Stopwatch ();
 			OnStart += defaultLogInformationHandler;
 			OnError += defaultLogErrorHandler;
 			OnTimeout += defaultLogErrorHandler;
@@ -68,32 +72,30 @@ namespace GQ.Client.Util {
 			OnProgress += defaultLogInformationHandler;
 		}
 
-		public override IEnumerator RunAsCoroutine () 
+		public override IEnumerator RunAsCoroutine ()
 		{
-			UnityEngine.Debug.Log ("Downloader started.");
+			Www = new WWW (url);
+			stopwatch.Start ();
 
-			Www = new WWW(url);
-			stopwatch.Start();
-
-			string msg = String.Format("Start to download url {0}", url);
-			if ( Timeout > 0 ) {
-				msg += String.Format(", timout set to {0} ms.", Timeout);
+			string msg = String.Format ("Start to download url {0}", url);
+			if (Timeout > 0) {
+				msg += String.Format (", timout set to {0} ms.", Timeout);
 			}
-			Raise(DownloadEventType.Start, new DownloadEvent(message: msg));
+			Raise (DownloadEventType.Start, new DownloadEvent (message: msg));
 
 			float progress = 0f;
-			while ( !Www.isDone ) {
-				if ( progress < Www.progress ) {
+			while (!Www.isDone) {
+				if (progress < Www.progress) {
 					progress = Www.progress;
 					msg = string.Format ("Downloading: URL {0}, got {1:N2}%", url, progress * 100);
-					Raise(DownloadEventType.Progress, new DownloadEvent(progress: progress, message: msg));
+					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
 				}
-				if ( Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout ) {
-					stopwatch.Stop();
-					Www.Dispose();
+				if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout) {
+					stopwatch.Stop ();
+					Www.Dispose ();
 					msg = string.Format ("Timeout: already {1} ms elapsed while trying to download url {0}", 
-							url, stopwatch.ElapsedMilliseconds);
-					Raise(DownloadEventType.Timeout, new DownloadEvent(elapsedTime: Timeout, message: msg));
+						url, stopwatch.ElapsedMilliseconds);
+					Raise (DownloadEventType.Timeout, new DownloadEvent (elapsedTime: Timeout, message: msg));
 					yield break;
 				}
 				if (Www == null)
@@ -101,56 +103,48 @@ namespace GQ.Client.Util {
 				yield return null;
 			} 
 
-			stopwatch.Stop();
+			stopwatch.Stop ();
 
-			UnityEngine.Debug.Log ("Downloader stopped.");
-
-			
-			if ( Www.error != null && Www.error != "" ) {
-				Raise(DownloadEventType.Error, new DownloadEvent(message: Www.error));
+			if (Www.error != null && Www.error != "") {
+				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
 				RaiseTaskFailed ();
-			}
-			else {
+			} else {
 				Result = Www.text;
 
 				msg = string.Format ("Downloading: URL {0}, got {1:N2}%", url, progress * 100);
-				Raise(DownloadEventType.Progress, new DownloadEvent(progress: Www.progress, message: msg));
+				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				yield return null;
 
 				msg = string.Format ("Saving file ...");
-				Raise(DownloadEventType.Progress, new DownloadEvent(progress: Www.progress, message: msg));
+				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				if (TargetPath != null) {
 					// we have to store the loaded file:
 					try {
-						string targetDir = Directory.GetParent(TargetPath).FullName;
+						string targetDir = Directory.GetParent (TargetPath).FullName;
 						if (!Directory.Exists (targetDir))
 							Directory.CreateDirectory (targetDir);
 						if (File.Exists (TargetPath))
 							File.Delete (TargetPath);
-						UnityEngine.Debug.Log("Before writing File");
 
-						File.WriteAllBytes(TargetPath, Www.bytes);
-
-						UnityEngine.Debug.Log("File wirtten");
-					}
-					catch (Exception e) {
-						Raise(DownloadEventType.Error, new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
+						File.WriteAllBytes (TargetPath, Www.bytes);
+					} catch (Exception e) {
+						Raise (DownloadEventType.Error, new DownloadEvent (message: "Could not save downloaded file: " + e.Message));
 						RaiseTaskFailed ();
 
-						Www.Dispose();
+						Www.Dispose ();
 						yield break;
 					}
 				}
 
 				msg = string.Format ("Download completed. (URL: {0})", 
 					url);
-				Raise(DownloadEventType.Success, new DownloadEvent(message: msg));
+				Raise (DownloadEventType.Success, new DownloadEvent (message: msg));
 				RaiseTaskCompleted (Result);
 			}
 
-			Www.Dispose();
+			Www.Dispose ();
 			yield break;
 		}
 

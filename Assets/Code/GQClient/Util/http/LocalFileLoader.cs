@@ -7,8 +7,10 @@ using GQ.Client.UI;
 using System.IO;
 using GQ.Client.FileIO;
 
-namespace GQ.Client.Util {
-	public class LocalFileLoader : AbstractDownloader {
+namespace GQ.Client.Util
+{
+	public class LocalFileLoader : AbstractDownloader
+	{
 		protected string filePath;
 
 		WWW _www;
@@ -16,11 +18,13 @@ namespace GQ.Client.Util {
 
 		#region Default Handler
 
-		public static void defaultLogInformationHandler (AbstractDownloader d, DownloadEvent e) {
+		public static void defaultLogInformationHandler (AbstractDownloader d, DownloadEvent e)
+		{
 			Log.InformUser (e.Message);
 		}
 
-		public static void defaultLogErrorHandler (AbstractDownloader d, DownloadEvent e) {
+		public static void defaultLogErrorHandler (AbstractDownloader d, DownloadEvent e)
+		{
 			Log.SignalErrorToUser (e.Message);
 		}
 
@@ -41,7 +45,7 @@ namespace GQ.Client.Util {
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
 		/// <param name="timeout">Target path where the downloaded file will be stored (optional).</param>
 		public LocalFileLoader (
-			string filePath) : base(true)
+			string filePath) : base (true)
 		{
 			Result = "";
 			this.filePath = filePath;
@@ -53,26 +57,21 @@ namespace GQ.Client.Util {
 			UnityEngine.Debug.Log ("LOCALFILELOADER: " + filePath);
 		}
 
-		public override IEnumerator RunAsCoroutine () 
+		public override IEnumerator RunAsCoroutine ()
 		{
-			UnityEngine.Debug.Log ("LocalFileLoader started.");
-
-			string url = Files.LocalPath4WWW (filePath);
+			string url = Files.AbsoluteLocalPath (filePath);
+			Www = new WWW (url);
 			UnityEngine.Debug.Log ("WWW url given:" + url);
 
-			Www = new WWW(url);
-
-			UnityEngine.Debug.Log ("WWW url:" + Www.url);
-
-			string msg = String.Format("Start to load local file {0}", filePath);
-			Raise(DownloadEventType.Start, new DownloadEvent(message: msg));
+			string msg = String.Format ("Start to load local file {0}", filePath);
+			Raise (DownloadEventType.Start, new DownloadEvent (message: msg));
 
 			float progress = 0f;
-			while ( !Www.isDone ) {
-				if ( progress < Www.progress ) {
+			while (!Www.isDone) {
+				if (progress < Www.progress) {
 					progress = Www.progress;
 					msg = string.Format ("Loading local file: URL {0}, got {1:N2}%", filePath, progress * 100);
-					Raise(DownloadEventType.Progress, new DownloadEvent(progress: progress, message: msg));
+					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
 				}
 				if (Www == null)
 					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
@@ -81,23 +80,22 @@ namespace GQ.Client.Util {
 
 			UnityEngine.Debug.Log ("LocalFileLoader stopped.");
 
-			if ( Www.error != null && Www.error != "" ) {
-				Raise(DownloadEventType.Error, new DownloadEvent(message: Www.error));
+			if (Www.error != null && Www.error != "") {
+				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
 				RaiseTaskFailed ();
-			}
-			else {
+			} else {
 				Result = Www.text;
 
 				msg = string.Format ("Loading local file: URL {0}, got {1:N2}%", filePath, progress * 100);
-				Raise(DownloadEventType.Progress, new DownloadEvent(progress: Www.progress, message: msg));
+				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				msg = string.Format ("Loading local file completed. (URL: {0})", 
 					filePath);
-				Raise(DownloadEventType.Success, new DownloadEvent(message: msg));
+				Raise (DownloadEventType.Success, new DownloadEvent (message: msg));
 				RaiseTaskCompleted (Result);
 			}
 
-			Www.Dispose();
+			Www.Dispose ();
 			yield break;
 		}
 

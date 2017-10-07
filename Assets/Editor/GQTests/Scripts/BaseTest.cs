@@ -4,23 +4,27 @@ using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using GQ.Editor.Building;
 using UnityEngine.SceneManagement;
+using GQ.Client.Util;
 
-namespace GQTests.Scripts {
-	public class BaseTest {
+namespace GQTests.Scripts
+{
+	public class BaseTest
+	{
 
 		[Test]
-		public void BaseGameObjectComplete () {
+		public void BaseGameObjectComplete ()
+		{
 			// Arrange:
-			Scene startScene = EditorSceneManager.OpenScene(ProductManager.START_SCENE);
-			GameObject baseGO = GameObject.Find(Base.BASE);
+			Scene startScene = EditorSceneManager.OpenScene (ProductManager.START_SCENE);
+			GameObject baseGO = GameObject.Find (Base.BASE);
 
 			// Assert Base GO exists:
-			Assert.NotNull(baseGO, "Base GameObject missing");
+			Assert.NotNull (baseGO, "Base GameObject missing");
 
 			// Assert Base GO has Base Component and is enabled:
-			Base baseComp = baseGO.GetComponent<Base>();
-			Assert.NotNull(baseComp, "Base Gameobject needs Base Component (Script)");
-			Assert.That(baseComp.enabled, "Base Component must be enabled in Base GameObejct");
+			Base baseComp = baseGO.GetComponent<Base> ();
+			Assert.NotNull (baseComp, "Base Gameobject needs Base Component (Script)");
+			Assert.That (baseComp.enabled, "Base Component must be enabled in Base GameObejct");
 		}
 	}
 }

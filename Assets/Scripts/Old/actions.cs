@@ -367,7 +367,7 @@ public class actions : MonoBehaviour
 	/// <param name="action">Action.</param>
 	void writeToNFC (QuestAction action)
 	{
-		string payload = TextHelper.makeReplacements (action.getAttribute ("content"));
+		string payload = TextHelper.MakeReplacements (action.getAttribute ("content"));
 
 		if (payload.Equals ("[null]"))
 			return;
@@ -1524,7 +1524,7 @@ public class actions : MonoBehaviour
 				variables [key] = new QuestVariable (key, action.value.num_value [0]);
 			} else if (action.value.string_value != null && action.value.string_value.Count > 0) {
 				string unformattedContent = action.value.string_value [0];
-				string formattedContent = TextHelper.makeReplacements (unformattedContent);
+				string formattedContent = TextHelper.MakeReplacements (unformattedContent);
 				variables [key] = new QuestVariable (key, formattedContent);
 			} else if (action.value.var_value != null && action.value.var_value.Count > 0) {
 

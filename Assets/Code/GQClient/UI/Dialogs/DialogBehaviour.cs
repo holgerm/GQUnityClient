@@ -8,21 +8,24 @@ using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Util;
 
-namespace GQ.Client.UI.Dialogs {
+namespace GQ.Client.UI.Dialogs
+{
 
-	public abstract class DialogBehaviour : UIBehaviour {
+	public abstract class DialogBehaviour : UIBehaviour
+	{
 
 		/// <summary>
 		/// Mutually connects this Behaviour with a Dialog Controller and initliazes the behaviour.
 		/// </summary>
-		public DialogBehaviour(Task task) : base(task) {
+		public DialogBehaviour (Task task) : base (task)
+		{
 			Dialog = DialogController.Instance;
 			Dialog.Behaviour = this;
 
 			HideAndClearButtons ();
 
 			// Initally both Buttons are connected to our standard events:
-			Dialog.YesButton.onClick.RemoveAllListeners();
+			Dialog.YesButton.onClick.RemoveAllListeners ();
 			Dialog.YesButton.onClick.AddListener (RaiseYesButtonClicked);
 
 			Dialog.NoButton.onClick.RemoveAllListeners ();
@@ -50,7 +53,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		protected int step;
 
-		public override void Start() 
+		public override void Start ()
 		{
 			base.Start ();
 		}
@@ -58,18 +61,19 @@ namespace GQ.Client.UI.Dialogs {
 		/// <summary>
 		/// Should be called before the dialog is made invisible or disposed.
 		/// </summary>
-		public virtual void Stop() 
+		public virtual void Stop ()
 		{
 			HideAndClearButtons ();
 
-			Dialog.YesButton.onClick.RemoveAllListeners();
+			Dialog.YesButton.onClick.RemoveAllListeners ();
 			Dialog.NoButton.onClick.RemoveAllListeners ();
 		}
 
 		/// <summary>
 		/// Should only be called from the Dialog UI Component.
 		/// </summary>
-		public void RaiseYesButtonClicked() {
+		public void RaiseYesButtonClicked ()
+		{
 			if (OnYesButtonClicked != null)
 				OnYesButtonClicked (Dialog.YesButton.gameObject, EventArgs.Empty);
 		}
@@ -77,7 +81,8 @@ namespace GQ.Client.UI.Dialogs {
 		/// <summary>
 		/// Should only be called from the Dialog UI Component.
 		/// </summary>
-		public void RaiseNoButtonClicked() {
+		public void RaiseNoButtonClicked ()
+		{
 			if (OnNoButtonClicked != null)
 				OnNoButtonClicked (Dialog.NoButton.gameObject, EventArgs.Empty);
 		}
@@ -88,7 +93,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
 		/// TODO move to Dialog class and change event args to some more generic type
-		protected void CloseDialog(object callbackSender, EventArgs args)
+		protected void CloseDialog (object callbackSender, EventArgs args)
 		{
 			Stop ();
 			Dialog.Destroy ();

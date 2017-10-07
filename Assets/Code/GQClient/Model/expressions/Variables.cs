@@ -90,6 +90,8 @@ namespace GQ.Client.Model
 		/// <param name="varName">Variable name.</param>
 		public static Value GetValue (string varName)
 		{
+			Debug.Log ("VARIABLES.GET: " + varName);
+
 			if (!IsValidVariableName (varName)) {
 				Log.WarnAuthor ("Assess to Variable named {0} is not possible. This is not a valid variable name.", varName);
 				return Value.Null;
@@ -121,6 +123,8 @@ namespace GQ.Client.Model
 		/// <param name="newValue">New value.</param>
 		public static bool SetVariableValue (string varName, Value newValue)
 		{
+			Debug.Log ("VARIABLES.SET: " + varName + " = " + newValue.AsString ());
+
 			if (!IsValidUserDefinedVariableName (varName)) {
 				Log.SignalErrorToAuthor ("Variable Name may not start with '$' Symbol, so you may not use {0} as you did in a SetVariable action.", varName);
 				return false;

@@ -7,18 +7,22 @@ using GQTests;
 using GQ.Editor.Util;
 using GQ.Client.Util;
 
-namespace GQTests.Util {
+namespace GQTests.Util
+{
 
-	public class DownloadTest {
+	public class DownloadTest
+	{
 
 		[Test]
-		public void FileAccessViaWWW() 
+		public void FileAccessViaWWW ()
 		{
 			string filePath = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "Util/Downloader/hello.txt");
 
 			Assert.IsTrue (Files.ExistsFile (filePath), "File should exist at " + filePath);
 
-			WWW www = new WWW (Files.LocalPath4WWW(filePath));
+			string url = Files.LocalPath4WWW (filePath);
+			Debug.Log ("Files.LocalPath4WWW does:\n" + filePath + "\n" + url);
+			WWW www = new WWW (url);
 
 			Debug.Log ("text zu beginn: " + www.text);
 
@@ -28,13 +32,12 @@ namespace GQTests.Util {
 
 			Debug.Log ("done.");
 
-			if ( www.error != null && www.error != "" ) {
+			if (www.error != null && www.error != "") {
 				string errMsg = www.error;
-				www.Dispose();
+				www.Dispose ();
 				Debug.Log ("error: " + errMsg);
 				Assert.Fail ();
-			}
-			else {
+			} else {
 				Assert.AreEqual ("Hello!", www.text);
 				Debug.Log ("Yeah!");
 			}
@@ -42,7 +45,8 @@ namespace GQTests.Util {
 		}
 
 		[Test]
-		public void FileAccess() {
+		public void FileAccess ()
+		{
 			bool started = false;
 			bool succeeded = false;
 
@@ -50,7 +54,7 @@ namespace GQTests.Util {
 
 			Assert.IsTrue (Files.ExistsFile (filePath), "File should exist at " + filePath);
 
-			Downloader downloader = new Downloader (Files.LocalPath4WWW(filePath));
+			Downloader downloader = new Downloader (Files.LocalPath4WWW (filePath));
 			downloader.OnStart += (d, e) => {
 				started = true;
 			};
@@ -58,22 +62,23 @@ namespace GQTests.Util {
 				succeeded = true;
 			};
 			downloader.OnError += (d, e) => {
-				Assert.Fail("Download Error: " + e.Message);
+				Assert.Fail ("Download Error: " + e.Message);
 			};
 
 			IEnumerator enumerator = downloader.RunAsCoroutine ();
-			while (enumerator.MoveNext()) {
-				Debug.Log ("in while ... " + (enumerator.Current == null ? "null" : enumerator.Current.ToString()));
+			while (enumerator.MoveNext ()) {
+				Debug.Log ("in while ... " + (enumerator.Current == null ? "null" : enumerator.Current.ToString ()));
 			}
 
-			Assert.IsTrue (started , "Should have started the download.");
-			Assert.IsTrue (succeeded , "Should have succeeded in downloading.");
+			Assert.IsTrue (started, "Should have started the download.");
+			Assert.IsTrue (succeeded, "Should have succeeded in downloading.");
 
 			Assert.AreEqual ("Hello!", downloader.Result);
 		}
 
 		[Test]
-		public void DownloaderUsesCoroutine() {
+		public void DownloaderUsesCoroutine ()
+		{
 
 			Downloader d = new Downloader ("some.url", 60000);
 
@@ -81,7 +86,8 @@ namespace GQTests.Util {
 		}
 
 		[Test]
-		public void MultiDownloaderUsesCoroutine() {
+		public void MultiDownloaderUsesCoroutine ()
+		{
 
 			MultiDownloader md = new MultiDownloader ();
 
@@ -89,12 +95,13 @@ namespace GQTests.Util {
 		}
 
 		[Test]
-		public void LocalFileLoader() {
+		public void LocalFileLoader ()
+		{
 			string filePath = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "Util/Downloader/hello.txt");
 
 			LocalFileLoader fileLoader = new LocalFileLoader (
-				filePath: filePath
-			);
+				                             filePath: filePath
+			                             );
 
 			fileLoader.Start ();
 

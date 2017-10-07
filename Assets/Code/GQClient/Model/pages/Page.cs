@@ -90,23 +90,23 @@ namespace GQ.Client.Model
 			XmlSerializer serializer;
 
 			switch (reader.LocalName) {
-				case GQML.ON_START:
-					xmlRootAttr.ElementName = GQML.ON_START;
-					serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
-					StartTrigger = (Trigger)serializer.Deserialize(reader);
-					StartTrigger.Parent = this;
+			case GQML.ON_START:
+				xmlRootAttr.ElementName = GQML.ON_START;
+				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
+				StartTrigger = (Trigger)serializer.Deserialize (reader);
+				StartTrigger.Parent = this;
 				break;
-				case GQML.ON_END:
-					xmlRootAttr.ElementName = GQML.ON_END;
-					serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-					EndTrigger = (Trigger)serializer.Deserialize (reader);
-					EndTrigger.Parent = this;
-					break;
-				// UNKOWN CASE:
-				default:
-					Log.WarnDeveloper ("Page has additional unknown {0} element. (Ignored)", reader.LocalName);
-					reader.Skip ();
-					break;
+			case GQML.ON_END:
+				xmlRootAttr.ElementName = GQML.ON_END;
+				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
+				EndTrigger = (Trigger)serializer.Deserialize (reader);
+				EndTrigger.Parent = this;
+				break;
+			// UNKOWN CASE:
+			default:
+				Log.WarnDeveloper ("Page has additional unknown {0} element. (Ignored)", reader.LocalName);
+				reader.Skip ();
+				break;
 			}
 		}
 
@@ -171,12 +171,13 @@ namespace GQ.Client.Model
 		public virtual void Start ()
 		{
 			// ensure that the adequate scene is loaded:
-			Scene scene = SceneManager.GetActiveScene();
-			if (!scene.path.Equals(PageScenePath)) {
+			Scene scene = SceneManager.GetActiveScene ();
+			if (!scene.path.Equals (PageScenePath)) {
 				SceneManager.LoadScene (PageScenePath);
 			}
 
 			// set this page as current in QM
+			QuestManager.Instance.CurrentQuest = Parent;
 			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
 

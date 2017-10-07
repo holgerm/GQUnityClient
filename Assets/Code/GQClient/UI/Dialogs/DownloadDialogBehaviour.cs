@@ -7,22 +7,25 @@ using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
 
-namespace GQ.Client.UI.Dialogs {
+namespace GQ.Client.UI.Dialogs
+{
 	
-	public class DownloadDialogBehaviour : DialogBehaviour {
+	public class DownloadDialogBehaviour : DialogBehaviour
+	{
 
 		AbstractDownloader DownloadTask { get; set; }
 
-		public DownloadDialogBehaviour(Task task, string title = "Downloading ...") : base(task) {
+		public DownloadDialogBehaviour (Task task, string title = "Downloading ...") : base (task)
+		{
 
 			if (Task is AbstractDownloader) {
 				DownloadTask = Task as AbstractDownloader;
 			}
 
 			this.title = title;
-		} 
+		}
 
-		public override void Start() 
+		public override void Start ()
 		{
 			base.Start ();
 
@@ -32,8 +35,8 @@ namespace GQ.Client.UI.Dialogs {
 			// attach listeners before the task gets started:
 			attachUpdateListeners ();
 		}
-			
-		public override void Stop()
+
+		public override void Stop ()
 		{
 			base.Stop ();
 
@@ -46,7 +49,7 @@ namespace GQ.Client.UI.Dialogs {
 			DownloadTask.OnProgress += UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess += CloseDialog;
 			DownloadTask.OnError += UpdateLoadingScreenError;
-		}			
+		}
 
 		void detachUpdateListeners ()
 		{
@@ -63,10 +66,10 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
-		public void OnDownloadStarted(object callbackSender, DownloadEvent args)
+		public void OnDownloadStarted (object callbackSender, DownloadEvent args)
 		{
 			EnterDownloadMode ();
-		}	
+		}
 
 		void EnterDownloadMode ()
 		{
@@ -74,8 +77,7 @@ namespace GQ.Client.UI.Dialogs {
 
 			if (DownloadTask.Step == 0) {
 				Dialog.Title.text = string.Format (title);
-			}
-			else {
+			} else {
 				Dialog.Title.text = string.Format (title + " (step {0})", DownloadTask.Step);
 			}
 			Dialog.Details.text = "Start downloading data ...";
@@ -88,7 +90,7 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
-		public void UpdateLoadingScreenProgress(object callbackSender, DownloadEvent args)
+		public void UpdateLoadingScreenProgress (object callbackSender, DownloadEvent args)
 		{
 			Dialog.Details.text = String.Format ("{0:#0.0}% done", args.Progress * 100);
 		}
@@ -98,17 +100,17 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		/// <param name="callbackSender">Callback sender.</param>
 		/// <param name="args">Arguments.</param>
-		public void UpdateLoadingScreenError(object callbackSender, DownloadEvent args)
+		public void UpdateLoadingScreenError (object callbackSender, DownloadEvent args)
 		{
 			Dialog.Details.text = String.Format ("Error: {0}", args.Message);
 
 			// Use No button for Giving Up:
-			Dialog.SetNoButton(
+			Dialog.SetNoButton (
 				"Give Up",
 				(GameObject sender, EventArgs e) => {
 					// in error case when user clicks the give up button, we just close the dialog:
-					CloseDialog(sender, new DownloadEvent ());
-					Task.RaiseTaskFailed();
+					CloseDialog (sender, new DownloadEvent ());
+					Task.RaiseTaskFailed ();
 				}
 			);
 
@@ -117,8 +119,8 @@ namespace GQ.Client.UI.Dialogs {
 				"Retry",
 				(GameObject yesButton, EventArgs e) => {
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
-					EnterDownloadMode();
-					DownloadTask.Restart();
+					EnterDownloadMode ();
+					DownloadTask.Restart ();
 				}
 			);
 		}
