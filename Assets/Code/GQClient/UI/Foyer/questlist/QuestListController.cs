@@ -39,6 +39,19 @@ namespace GQ.Client.UI.Foyer
 
 		#endregion
 
+		#region Lifecycle API
+
+		static bool _listAlreadyShownBefore = false;
+
+		public static bool ListAlreadyShownBefore {
+			get {
+				return _listAlreadyShownBefore;
+			}
+			set {
+				_listAlreadyShownBefore = value;
+			}
+		}
+
 		// Use this for initialization
 		void Start ()
 		{
@@ -53,9 +66,20 @@ namespace GQ.Client.UI.Foyer
 			// TODO soll wirklich der ListController hier dem Manager sagen, dass er ein update braucht?
 			// sollte doch eher passieren, wenn wieder online, oder user interaktion, oder letztes updates lange her...
 			// aber vielleicht eben doch auch hier beim Start des Controllers, d.h. bei neuer Anzeige der Liste.
-			qim.UpdateQuestInfos ();
-
+			if (!ListAlreadyShownBefore) {
+				qim.UpdateQuestInfos ();
+				ListAlreadyShownBefore = true;
+			} else {
+				UpdateView ();
+			}
 		}
+
+		void OnDestroy ()
+		{
+			qim.OnChange -= OnQuestInfoChanged;
+		}
+
+		#endregion
 
 
 		#region React on Events
@@ -72,7 +96,7 @@ namespace GQ.Client.UI.Foyer
 				).GetComponent<QuestInfoController> ();
 				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 				qiCtrl.Show ();
-				SortView ();
+				sortView ();
 				break;
 			case ChangeType.ChangedInfo:
 				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
@@ -84,7 +108,7 @@ namespace GQ.Client.UI.Foyer
 				}
 				qiCtrl.UpdateView ();
 				qiCtrl.Show ();
-				SortView ();
+				sortView ();
 				break;
 			case ChangeType.RemovedInfo:
 				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
@@ -98,24 +122,7 @@ namespace GQ.Client.UI.Foyer
 				questInfoControllers.Remove (e.OldQuestInfo.Id);
 				break;							
 			case ChangeType.ListChanged:
-				// hide and delete all list elements:
-				foreach (KeyValuePair<int, QuestInfoController> kvp in questInfoControllers) {
-					kvp.Value.Hide ();
-					kvp.Value.Destroy ();
-				}
-				foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
-					// create new list elements
-					if (QuestInfoManager.Instance.Filter.accept (info)) {
-						qiCtrl = 
-						QuestInfoController.Create (
-							root: InfoList.gameObject,
-							qInfo: info
-						).GetComponent<QuestInfoController> ();
-						questInfoControllers.Add (info.Id, qiCtrl);
-						qiCtrl.Show ();
-						SortView ();
-					}
-				}
+				UpdateView ();
 				break;							
 			}
 		}
@@ -123,13 +130,36 @@ namespace GQ.Client.UI.Foyer
 		/// <summary>
 		/// Sorts the list. Takes the current sorter into account to move the gameobjects in the right order.
 		/// </summary>
-		public void SortView ()
+		private void sortView ()
 		{
 			List<QuestInfoController> qcList = new List<QuestInfoController> (questInfoControllers.Values);
 			qcList.Sort ();
 			for (int i = 0; i < qcList.Count; i++) {
 				qcList [i].transform.SetSiblingIndex (i);
 			}
+		}
+
+		public void UpdateView ()
+		{
+			// hide and delete all list elements:
+			foreach (KeyValuePair<int, QuestInfoController> kvp in questInfoControllers) {
+				kvp.Value.Hide ();
+				kvp.Value.Destroy ();
+			}
+			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
+				// create new list elements
+				if (QuestInfoManager.Instance.Filter.accept (info)) {
+					QuestInfoController qiCtrl = 
+						QuestInfoController.Create (
+							root: InfoList.gameObject,
+							qInfo: info
+						).GetComponent<QuestInfoController> ();
+					questInfoControllers.Add (info.Id, qiCtrl);
+					qiCtrl.Show ();
+				}
+			}
+			sortView ();
+
 		}
 
 		#endregion

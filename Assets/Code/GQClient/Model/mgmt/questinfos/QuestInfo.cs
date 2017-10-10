@@ -6,7 +6,8 @@ using GQ.Client.Err;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace GQ.Client.Model {
+namespace GQ.Client.Model
+{
 
 	/// <summary>
 	/// Stores meta data about a quest, i.e. name, id, and some limited details about its content as well as usage data.
@@ -63,13 +64,15 @@ namespace GQ.Client.Model {
 
 
 	/// </summary>
-	[JsonObject(MemberSerialization.OptIn)]
+	[JsonObject (MemberSerialization.OptIn)]
 	public class QuestInfo : IComparable<QuestInfo>
 	{
 		#region Serialized Features
+
 		[JsonProperty]
-		private 	int 	id;
-		public 		int  	Id		{ 
+		private 	int id;
+
+		public 		int  	Id { 
 			get {
 				return id;
 			} 
@@ -77,7 +80,8 @@ namespace GQ.Client.Model {
 
 		[JsonProperty]
 		private 	string	name;
-		public 		string	Name	{ 
+
+		public 		string	Name { 
 			get {
 				return name;
 			} 
@@ -85,15 +89,17 @@ namespace GQ.Client.Model {
 
 		[JsonProperty]
 		private 	string	featuredImagePath;
-		public 		string 	FeaturedImagePath	{ 
+
+		public 		string 	FeaturedImagePath { 
 			get {
 				return featuredImagePath;
 			} 
 		}
 
 		[JsonProperty]
-		private 	int? 	typeID;
-		public 		int?	TypeID 				{ 
+		private 	int? typeID;
+
+		public 		int?	TypeID { 
 			get {
 				return typeID;
 			}
@@ -101,7 +107,8 @@ namespace GQ.Client.Model {
 
 		[JsonProperty]
 		private 	string	iconPath;
-		public 		string 	IconPath			{ 
+
+		public 		string 	IconPath { 
 			get {
 				return iconPath;
 			} 
@@ -112,8 +119,9 @@ namespace GQ.Client.Model {
 		/// </summary>
 		/// <value>The last update.</value>
 		[JsonProperty]
-		private 	long? 	lastUpdate;
-		public 		long? 	LastUpdateOnServer 	{
+		private 	long? lastUpdate;
+
+		public 		long? 	LastUpdateOnServer {
 			get {
 				return lastUpdate;
 			}
@@ -121,22 +129,25 @@ namespace GQ.Client.Model {
 
 		[JsonProperty]
 		private 	HotspotInfo[]	hotspots;
-		public 		HotspotInfo[] 	Hotspots	{ 
+
+		public 		HotspotInfo[] 	Hotspots { 
 			get {
 				return hotspots;
 			}
 		}
 
 		[JsonProperty]
-		private 	MetaDataInfo[] 	metadata;
-		public 		MetaDataInfo[] 	Metadata	{ 
+		private 	MetaDataInfo[] metadata;
+
+		public 		MetaDataInfo[] 	Metadata { 
 			get {
 				return metadata;
 			}
 		}
 
 		[JsonProperty]
-		private 	long?	_lastUpdateOnDevice = null;		
+		private 	long?	_lastUpdateOnDevice = null;
+
 		public 		long? 	LastUpdateOnDevice {
 			get {
 				return _lastUpdateOnDevice;
@@ -152,6 +163,7 @@ namespace GQ.Client.Model {
 
 		[JsonProperty]
 		private 	long?	_timestampOfPredeployedVersion = null;
+
 		public 		long? 	TimestampOfPredeployedVersion {
 			get {
 				return _timestampOfPredeployedVersion;
@@ -163,14 +175,15 @@ namespace GQ.Client.Model {
 		}
 
 		[JsonProperty]
-		private 	int 	_playedTimes = 0;
+		private 	int _playedTimes = 0;
+
 		public 		int 	PlayedTimes {
 			get {
 				return _playedTimes;
 			}
 			set {
 				if (value != _playedTimes) {
-					QuestInfo oldInfo = (QuestInfo) this.MemberwiseClone ();
+					QuestInfo oldInfo = (QuestInfo)this.MemberwiseClone ();
 					_playedTimes = value;
 					QuestInfoManager.Instance.raiseChange (
 						new QuestInfoChangedEvent (
@@ -215,10 +228,10 @@ namespace GQ.Client.Model {
 		public bool HasUpdate {
 			get {
 				return (
-					// exists on both device and server:
-					IsOnDevice && IsOnServer 
+				    // exists on both device and server:
+				    IsOnDevice && IsOnServer
 					// server update is newer (bigger number):
-					&& LastUpdateOnServer > LastUpdateOnDevice
+				    && LastUpdateOnServer > LastUpdateOnDevice
 				);
 			}
 		}
@@ -256,35 +269,43 @@ namespace GQ.Client.Model {
 
 		#region Runtime API
 
-		public delegate void ChangeHandler();
+		public delegate void ChangeHandler ();
 
 		public event ChangeHandler OnChanged;
 
-		public override string ToString () {
-			StringBuilder sb = new StringBuilder();
-
-			sb.AppendFormat("{0} (id: {1})\n", Name, Id);
-			sb.AppendFormat("\t last server update: {0}", LastUpdateOnServer);
-			sb.AppendFormat("\t type id: {0}", TypeID);
-			sb.AppendFormat("\t icon path: {0}", IconPath);
-			sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
-			sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
-			sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
-
-			return sb.ToString();
+		public int HowManyListerners ()
+		{
+			return OnChanged.GetInvocationList ().Length;
 		}
 
-		public string GetMetadata (string key) {
+		public override string ToString ()
+		{
+			StringBuilder sb = new StringBuilder ();
 
-			foreach ( MetaDataInfo md in Metadata ) {
-				if ( md.Key.Equals(key) )
+			sb.AppendFormat ("{0} (id: {1})\n", Name, Id);
+			sb.AppendFormat ("\t last server update: {0}", LastUpdateOnServer);
+			sb.AppendFormat ("\t type id: {0}", TypeID);
+			sb.AppendFormat ("\t icon path: {0}", IconPath);
+			sb.AppendFormat ("\t featured image path: {0}", FeaturedImagePath);
+			sb.AppendFormat ("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
+			sb.AppendFormat ("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
+
+			return sb.ToString ();
+		}
+
+		public string GetMetadata (string key)
+		{
+
+			foreach (MetaDataInfo md in Metadata) {
+				if (md.Key.Equals (key))
 					return md.Value;
 			}
 
 			return null;
 		}
 
-		public void Dispose() {
+		public void Dispose ()
+		{
 			OnChanged = null;
 		}
 
@@ -299,18 +320,20 @@ namespace GQ.Client.Model {
 		/// a value less than zero means that this object is less than the given other one.
 		/// </summary>
 		/// <param name="otherInfo">Other info.</param>
-		public int CompareTo(QuestInfo otherInfo) {
+		public int CompareTo (QuestInfo otherInfo)
+		{
 			if (SortAscending)
-				return Compare(this, otherInfo);
-			else 
-				return -Compare(this, otherInfo);
+				return Compare (this, otherInfo);
+			else
+				return -Compare (this, otherInfo);
 		}
 
-		public delegate int CompareMethod(QuestInfo one, QuestInfo other);
+		public delegate int CompareMethod (QuestInfo one,QuestInfo other);
 
 		static public bool SortAscending = true;
 
 		private static CompareMethod _compare;
+
 		static public CompareMethod Compare {
 			get {
 				if (_compare == null) {
@@ -337,7 +360,8 @@ namespace GQ.Client.Model {
 	}
 
 
-	public struct HotspotInfo {
+	public struct HotspotInfo
+	{
 
 		public double? Latitude { get; set; }
 
@@ -345,7 +369,8 @@ namespace GQ.Client.Model {
 	}
 
 
-	public struct MetaDataInfo {
+	public struct MetaDataInfo
+	{
 
 		public string Key { get; set; }
 

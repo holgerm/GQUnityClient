@@ -33,8 +33,6 @@ namespace GQ.Client.Util
 
 		#region Public Interface
 
-		public WWW Www { get; set; }
-
 		/// <summary>
 		/// Initializes a new Downloader object. 
 		/// You can start the download as Coroutine: StartCoroutine(download.startDownload).
@@ -53,15 +51,12 @@ namespace GQ.Client.Util
 			OnError += defaultLogErrorHandler;
 			OnSuccess += defaultLogInformationHandler;
 			OnProgress += defaultLogInformationHandler;
-
-			UnityEngine.Debug.Log ("LOCALFILELOADER: " + filePath);
 		}
 
 		public override IEnumerator RunAsCoroutine ()
 		{
 			string url = Files.AbsoluteLocalPath (filePath);
 			Www = new WWW (url);
-			UnityEngine.Debug.Log ("WWW url given:" + url);
 
 			string msg = String.Format ("Start to load local file {0}", filePath);
 			Raise (DownloadEventType.Start, new DownloadEvent (message: msg));
@@ -77,9 +72,7 @@ namespace GQ.Client.Util
 					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
 				yield return null;
 			} 
-
-			UnityEngine.Debug.Log ("LocalFileLoader stopped.");
-
+				
 			if (Www.error != null && Www.error != "") {
 				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
 				RaiseTaskFailed ();

@@ -30,5 +30,26 @@ namespace GQ.Client.UI
 		{
 			
 		}
+
+		#region Back and Forward
+
+		/// <summary>
+		/// Override this method to react on Back Button CLick (or similar events).
+		/// </summary>
+		public virtual void OnBack ()
+		{
+			Debug.Log ("OnBack() not yet implemented for page controller " + GetType ().Name);
+		}
+
+		/// <summary>
+		/// Override this method to react on Forward Button CLick (or similar events).
+		/// </summary>
+		public virtual void OnForward ()
+		{
+			page.End ();
+		}
+
+		#endregion
+
 	}
 }

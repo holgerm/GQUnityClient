@@ -52,7 +52,8 @@ namespace GQ.Client.Model
 
 		public Quest CurrentQuest { get; set; }
 
-		public void StartQuest(int id) {
+		public void StartQuest (int id)
+		{
 			// TODO
 		}
 
@@ -63,7 +64,8 @@ namespace GQ.Client.Model
 
 		#region Quest Access
 
-		public static string GetQuestURI(int questID) {
+		public static string GetQuestURI (int questID)
+		{
 			string uri = string.Format ("{0}/editor/{1}/clientxml",
 				             ConfigurationManager.GQ_SERVER_BASE_URL,
 				             questID
@@ -76,7 +78,8 @@ namespace GQ.Client.Model
 		/// </summary>
 		/// <returns>The local quest dir path.</returns>
 		/// <param name="questID">Quest I.</param>
-		public static string GetLocalPath4Quest(int questID) {
+		public static string GetLocalPath4Quest (int questID)
+		{
 			return QuestInfoManager.LocalQuestsPath + questID + "/";
 		}
 
@@ -88,7 +91,8 @@ namespace GQ.Client.Model
 		/// </summary>
 		/// <returns>The local file name from URL.</returns>
 		/// <param name="url">URL.</param>
-		public static string MakeLocalFileNameFromUrl(string url) {
+		public static string MakeLocalFileNameFromUrl (string url)
+		{
 			string filename = Files.FileName (url);
 
 
@@ -165,15 +169,14 @@ namespace GQ.Client.Model
 		/// Imports the local media infos fomr the game-media.json file and updates the existing media store. 
 		/// This is step 2 of 4 in media sync (download or update of a quest).
 		/// </summary>
-		public void ImportLocalMediaInfo() {
+		public void ImportLocalMediaInfo ()
+		{
 			string mediaJSON = "";
 			try {
 				mediaJSON = File.ReadAllText (CurrentQuest.MediaJsonPath);
-			}
-			catch (FileNotFoundException e) {
+			} catch (FileNotFoundException e) {
 				mediaJSON = @"[]"; // we use an empty list then
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error reading media.json for quest " + CurrentQuest.Id + ": " + e.Message);
 				mediaJSON = @"[]"; // we use an empty list then
 			}
@@ -184,7 +187,7 @@ namespace GQ.Client.Model
 
 			foreach (LocalMediaInfo localInfo in localInfos) {
 				MediaInfo info;
-				if (CurrentQuest.MediaStore.TryGetValue(localInfo.url, out info)) {
+				if (CurrentQuest.MediaStore.TryGetValue (localInfo.url, out info)) {
 					// add local information to media store:
 					info.LocalDir = localInfo.dir;
 					info.LocalFileName = localInfo.filename;
@@ -192,16 +195,14 @@ namespace GQ.Client.Model
 					info.LocalTimestamp = localInfo.time;
 					// remember filenames as occupied for later creation of new unique filenames
 					occupiedFileNames.Add (info.LocalFileName);
-				}
-				else {
+				} else {
 					// this media file is not useful anymore, we delete it:
 					string filePath = localInfo.LocalPath;
 					try {
-						File.Delete(filePath);
-					}
-					catch (Exception e) {
-						Log.SignalErrorToDeveloper(
-							"Error while deleting media file " + filePath + 
+						File.Delete (filePath);
+					} catch (Exception e) {
+						Log.SignalErrorToDeveloper (
+							"Error while deleting media file " + filePath +
 							" : " + e.Message);
 					}
 				}
@@ -214,7 +215,7 @@ namespace GQ.Client.Model
 					string fileNameCandidate = fileName;
 					int discriminationNr = 1;
 					string discriminiationAppendix = "";
-					while (occupiedFileNames.Contains(fileNameCandidate)) {
+					while (occupiedFileNames.Contains (fileNameCandidate)) {
 						fileNameCandidate = fileName + discriminiationAppendix;
 						discriminiationAppendix = "-" + discriminationNr++;
 					}
@@ -227,9 +228,10 @@ namespace GQ.Client.Model
 		/// <summary>
 		/// This is step 3 of 4 during quest media sync. Downloads or updates the media files needed for this quest.
 		/// </summary>
-		public List<MediaInfo> GetListOfFilesNeedDownload() {
+		public List<MediaInfo> GetListOfFilesNeedDownload ()
+		{
 			// 1. we create a list of files to be downloaded / updated (as Dictionary with all neeeded data for multi downloader:
-			List<MediaInfo> filesToDownload = new List<MediaInfo>();
+			List<MediaInfo> filesToDownload = new List<MediaInfo> ();
 
 			MediaInfo info;
 			foreach (KeyValuePair<string,MediaInfo> kvpEntry in CurrentQuest.MediaStore) {
@@ -237,24 +239,22 @@ namespace GQ.Client.Model
 
 				// Request file header
 				// TODO WHAT IF OFFLINE?
-				Dictionary<string, string> headers = HTTP.GetRequestHeaders(info.Url);
+				Dictionary<string, string> headers = HTTP.GetRequestHeaders (info.Url);
 
 				string headerValue;
-				if (!headers.TryGetValue(HTTP.CONTENT_LENGTH, out headerValue)) {
+				if (!headers.TryGetValue (HTTP.CONTENT_LENGTH, out headerValue)) {
 					Log.SignalErrorToDeveloper ("{0} header missing for url {1}", HTTP.CONTENT_LENGTH, info.Url);
 					info.RemoteSize = MediaInfo.UNKNOWN;
-				}
-				else {
+				} else {
 					info.RemoteSize = long.Parse (headerValue);
 				}
 
-				if (!headers.TryGetValue(HTTP.LAST_MODIFIED, out headerValue)) {
+				if (!headers.TryGetValue (HTTP.LAST_MODIFIED, out headerValue)) {
 					Log.SignalErrorToDeveloper ("{0} header missing for url {1}", HTTP.LAST_MODIFIED, info.Url);
 					info.RemoteTimestamp = MediaInfo.UNKNOWN;
 					// Since we do not know the timestamp of this file we load it:
 					filesToDownload.Add (info);
-				}
-				else {
+				} else {
 					info.RemoteTimestamp = long.Parse (headerValue);
 
 					// if the remote file is newer we update: 
@@ -271,9 +271,11 @@ namespace GQ.Client.Model
 		#endregion
 	}
 
-	public class MediaInfo {
+	public class MediaInfo
+	{
 
 		string url;
+
 		public string Url {
 			get {
 				return url;
@@ -284,6 +286,7 @@ namespace GQ.Client.Model
 		}
 
 		string localDir;
+
 		public string LocalDir {
 			get {
 				return localDir;
@@ -294,6 +297,7 @@ namespace GQ.Client.Model
 		}
 
 		string localFileName;
+
 		public string LocalFileName {
 			get {
 				return localFileName;
@@ -308,11 +312,12 @@ namespace GQ.Client.Model
 				if (LocalDir == null || LocalFileName == null)
 					return null;
 				else
-					return LocalDir + "/" + LocalFileName;
+					return Files.CombinePath (LocalDir, LocalFileName);
 			}
 		}
-			
+
 		long localTimestamp;
+
 		public long LocalTimestamp {
 			get {
 				return localTimestamp;
@@ -323,6 +328,7 @@ namespace GQ.Client.Model
 		}
 
 		long remoteTimestamp;
+
 		public long RemoteTimestamp {
 			get {
 				return remoteTimestamp;
@@ -336,6 +342,7 @@ namespace GQ.Client.Model
 		public const long UNKNOWN = -2L;
 
 		long localSize;
+
 		public long LocalSize {
 			get {
 				return localSize;
@@ -346,6 +353,7 @@ namespace GQ.Client.Model
 		}
 
 		long remoteSize;
+
 		public long RemoteSize {
 			get {
 				return remoteSize;
@@ -355,13 +363,24 @@ namespace GQ.Client.Model
 			}
 		}
 
-
-		public MediaInfo(int questID, string url) {
+		public MediaInfo (int questID, string url)
+		{
 			this.Url = url;
-			this.LocalDir = Files.CombinePath(QuestManager.GetLocalPath4Quest (questID), "files");
+			this.LocalDir = Files.CombinePath (QuestManager.GetLocalPath4Quest (questID), "files");
 			this.LocalFileName = null;
 			this.LocalTimestamp = 0L;
 			this.LocalSize = NOT_AVAILABLE;
+			this.RemoteTimestamp = 0L;
+			this.RemoteSize = UNKNOWN;
+		}
+
+		public MediaInfo (LocalMediaInfo localInfo)
+		{
+			this.Url = localInfo.url;
+			this.LocalDir = localInfo.dir;
+			this.LocalFileName = localInfo.filename;
+			this.LocalTimestamp = localInfo.time;
+			this.LocalSize = localInfo.size;
 			this.RemoteTimestamp = 0L;
 			this.RemoteSize = UNKNOWN;
 		}
@@ -376,14 +395,16 @@ namespace GQ.Client.Model
 	/// <summary>
 	/// Media Info about the local game media that is persisted in JSON file game-media.json in the quest folder.
 	/// </summary>
-	public struct LocalMediaInfo {
+	public struct LocalMediaInfo
+	{
 		public string url;
 		public string dir;
 		public string filename;
 		public long size;
 		public long time;
 
-		public LocalMediaInfo(string url, string dir, string filename, long size, long time) {
+		public LocalMediaInfo (string url, string dir, string filename, long size, long time)
+		{
 			this.url = url;
 			this.dir = dir;
 			this.filename = filename;
@@ -391,6 +412,7 @@ namespace GQ.Client.Model
 			this.time = time;
 		}
 
+		[JsonIgnore]
 		public string LocalPath {
 			get {
 				return dir + "/" + filename;

@@ -34,8 +34,6 @@ namespace GQ.Client.Util
 
 		#region Public Interface
 
-		public WWW Www { get; set; }
-
 		/// <summary>
 		/// The elapsed time the download is/was active in milliseconds.
 		/// </summary>

@@ -5,6 +5,8 @@ using GQ.Client.Model;
 using UnityEngine.UI;
 using Candlelight.UI;
 using GQ.Client.Util;
+using GQ.Client.Err;
+using System.Text.RegularExpressions;
 
 namespace GQ.Client.UI
 {
@@ -14,7 +16,7 @@ namespace GQ.Client.UI
 
 		#region Fields
 
-		public Transform image;
+		public RawImage image;
 		private string IMAGE_PATH = "Viewport/Panel/Image";
 
 		public HyperText text;
@@ -31,21 +33,71 @@ namespace GQ.Client.UI
 		public override void Start ()
 		{
 			base.Start ();
-			Debug.Log (
-				"Here NPCTAlkController @quest: " + QuestManager.Instance.CurrentQuest.Name +
-				"@page: " + QuestManager.Instance.CurrentPage.Id
-			);
+			QuestManager qm = QuestManager.Instance;
 
-			if (page != null) {
-				npcPage = (PageNPCTalk)page;
-				text.text = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
+			if (page == null) {
+				Log.SignalErrorToDeveloper (
+					"Page is null in quest {0}", 
+					QuestManager.Instance.CurrentQuest.Id.ToString ()
+				);
+				return;
+				// TODO What should we do now? End quest?
 			}
+
+			npcPage = (PageNPCTalk)page;
+
+			// show text:
+			text.text = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
+
+			// show image:
+			AbstractDownloader loader;
+			if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
+				MediaInfo mediaInfo;
+				npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
+				loader = new LocalFileLoader (mediaInfo.LocalPath);
+			} else {
+				loader = new Downloader (npcPage.ImageUrl);
+				// TODO store the image locally ...
+			}
+			loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
+				image.texture = d.Www.texture;
+			};
+			loader.Start ();
+
 		}
 		
 		// Update is called once per frame
 		void Update ()
 		{
 			
+		}
+
+		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
+		{
+			Debug.Log ("### name = " + linkInfo.Name);
+			string href = extractHREF (linkInfo);
+			if (href != null) {
+//				href = @"""" + href + @"""";
+				Application.OpenURL (href);
+			}
+		}
+
+		private string extractHREF (Candlelight.UI.HyperText.LinkInfo info)
+		{
+			string href = null;
+
+			string pattern = @".*?href=""(?'href'[^""]*?)(?:["" \s]|$)";
+			Match match = Regex.Match (info.Name, pattern);
+			if (match.Success) {
+				for (int i = 0; i < match.Groups.Count; i++) {
+					Debug.Log ("   #### group " + i + " : " + match.Groups [i]);
+				}
+				href = match.Groups ["href"].ToString ();
+				if (!href.StartsWith ("http://") && !href.StartsWith ("https://")) {
+					href = "http://" + href;
+				}
+			}
+			return href;
 		}
 
 		#endregion
@@ -55,7 +107,7 @@ namespace GQ.Client.UI
 
 		void Reset ()
 		{
-			image = EnsurePrefabVariableIsSet<Transform> (image, "Image", IMAGE_PATH);
+			image = EnsurePrefabVariableIsSet<RawImage> (image, "Image", IMAGE_PATH);
 			text = EnsurePrefabVariableIsSet<HyperText> (text, "Text", Text_PATH);
 		}
 

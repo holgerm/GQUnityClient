@@ -243,6 +243,7 @@ namespace GQ.Client.UI.Foyer
 		{
 			// CReate the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
+			go.name = "QuestInfo (" + qInfo.Name + ")";
 			QuestInfoController ctrl = go.GetComponent<QuestInfoController> ();
 			ctrl.data = qInfo;
 			ctrl.data.OnChanged += ctrl.UpdateView;
@@ -252,8 +253,12 @@ namespace GQ.Client.UI.Foyer
 
 		public override void Destroy ()
 		{
-			data.OnChanged -= UpdateView;
 			base.Destroy ();
+		}
+
+		void OnDestroy ()
+		{
+			data.OnChanged -= UpdateView;
 		}
 
 		public void UpdateView ()

@@ -17,6 +17,7 @@ using System;
 using GQ.Client.Err;
 using Newtonsoft.Json;
 using GQ.Client.FileIO;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Client.Model
 {
@@ -119,11 +120,27 @@ namespace GQ.Client.Model
 		private void initMediaStore ()
 		{
 			MediaStore = new Dictionary<string, MediaInfo> ();
+
+			string mediaJSON = "";
+			try {
+				mediaJSON = File.ReadAllText (MediaJsonPath);
+			} catch (FileNotFoundException e) {
+				mediaJSON = @"[]"; // we use an empty list then
+			} catch (Exception e) {
+				Log.SignalErrorToDeveloper ("Error reading media.json for quest " + Id + ": " + e.Message);
+				mediaJSON = @"[]"; // we use an empty list then
+			}
+
+			List<LocalMediaInfo> localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>> (mediaJSON);
+
+			foreach (LocalMediaInfo localInfo in localInfos) {
+				MediaInfo info = new MediaInfo (localInfo);
+				MediaStore.Add (info.Url, info);
+			}
 		}
 
 		public void AddMedia (string url)
 		{
-			Debug.Log ("Adding media url: " + url);
 			if (!MediaStore.ContainsKey (url)) {
 				MediaInfo info = new MediaInfo (Id, url);
 				MediaStore.Add (url, info);
@@ -132,7 +149,7 @@ namespace GQ.Client.Model
 
 		public string MediaJsonPath {
 			get {
-				return QuestManager.GetLocalPath4Quest (Id) + "/media.json";
+				return Files.CombinePath (QuestManager.GetLocalPath4Quest (Id), "media.json");
 			}
 		}
 
@@ -154,8 +171,6 @@ namespace GQ.Client.Model
 		/// <param name="reader">Reader.</param>
 		public void ReadXml (System.Xml.XmlReader reader)
 		{
-			initMediaStore ();
-
 			QuestManager.CurrentlyParsingQuest = this; // TODO use event system instead
 
 			// proceed to quest start element:
@@ -164,6 +179,8 @@ namespace GQ.Client.Model
 			}
 
 			ReadAttributes (reader);
+
+			initMediaStore ();
 
 			// consume the begin quest element:
 			reader.Read ();
@@ -267,8 +284,15 @@ namespace GQ.Client.Model
 			StartPage.Start ();
 		}
 
+		public void End ()
+		{
+			SceneManager.LoadScene (Base.FOYER_SCENE);
+		}
+
 		public void GoBackOnePage ()
 		{
+			// TODO this is an OLD implementation!
+
 			Page show = previouspages [previouspages.Count - 1];
 			previouspages.Remove (previouspages [previouspages.Count - 1]);
 

@@ -11,21 +11,24 @@ using Newtonsoft.Json;
 using System.IO;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
+using System.Linq;
 
 
-namespace GQ.Client.Model {
+namespace GQ.Client.Model
+{
 
 	/// <summary>
 	/// Manages the meta data for all quests available: locally on the device as well as remotely on the server.
 	/// </summary>
-	public class QuestInfoManager {
+	public class QuestInfoManager
+	{
 
 		#region store & access data
 
 		public static string LocalQuestsPath {
 			get {
-				if (!Directory.Exists(Application.persistentDataPath + "/quests/")) {
-					Directory.CreateDirectory(Application.persistentDataPath + "/quests/");
+				if (!Directory.Exists (Application.persistentDataPath + "/quests/")) {
+					Directory.CreateDirectory (Application.persistentDataPath + "/quests/");
 				}
 				return Application.persistentDataPath + "/quests/";
 			}
@@ -42,11 +45,13 @@ namespace GQ.Client.Model {
 			set;
 		}
 
-		public List<QuestInfo> GetListOfQuestInfos() {
-			return new List<QuestInfo> (QuestDict.Values);
+		public List<QuestInfo> GetListOfQuestInfos ()
+		{
+			return QuestDict.Values.ToList<QuestInfo> ();
 		}
 
-		public bool ContainsQuestInfo(int id) {
+		public bool ContainsQuestInfo (int id)
+		{
 			return QuestDict.ContainsKey (id);
 		}
 
@@ -56,12 +61,14 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		public QuestInfo GetQuestInfo (int id) {
+		public QuestInfo GetQuestInfo (int id)
+		{
 			QuestInfo questInfo;
-			return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
+			return (QuestDict.TryGetValue (id, out questInfo) ? questInfo : null);
 		}
 
 		private QuestInfoFilter _filter;
+
 		public QuestInfoFilter Filter {
 			get { 
 				return _filter;
@@ -71,7 +78,7 @@ namespace GQ.Client.Model {
 					_filter = value;
 					raiseChange (
 						new QuestInfoChangedEvent (
-							String.Format ("Quest Info Filter changed to {0}.", _filter.ToString()),
+							String.Format ("Quest Info Filter changed to {0}.", _filter.ToString ()),
 							ChangeType.ListChanged
 						)
 					);
@@ -85,12 +92,12 @@ namespace GQ.Client.Model {
 
 		#region Quest Info Changes
 
-		public void AddInfo(QuestInfo newInfo) {
-			if (QuestDict.ContainsKey(newInfo.Id)) {
+		public void AddInfo (QuestInfo newInfo)
+		{
+			if (QuestDict.ContainsKey (newInfo.Id)) {
 				// A questInfo with this ID already exists: this is a CHANGE:
 				// TODO
-			}
-			else {
+			} else {
 				// this is a NEW quest info:
 				QuestDict.Add (newInfo.Id, newInfo);
 
@@ -107,7 +114,8 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		public void RemoveInfo(QuestInfo oldInfo) {
+		public void RemoveInfo (QuestInfo oldInfo)
+		{
 			oldInfo.Dispose ();
 			QuestDict.Remove (oldInfo.Id);
 
@@ -124,12 +132,13 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		public void ChangeInfo(QuestInfo info) {
+		public void ChangeInfo (QuestInfo info)
+		{
 			QuestInfo oldInfo;
 			if (!QuestDict.TryGetValue (info.Id, out oldInfo)) {
 				Log.SignalErrorToDeveloper (
 					"Trying to change quest info {0} but it deos not exist in QuestInfoManager.", 
-					info.Id.ToString()
+					info.Id.ToString ()
 				);
 				return;
 			}
@@ -157,7 +166,8 @@ namespace GQ.Client.Model {
 		/// Should be called in cases like the list is shown again (or first time), 
 		/// the server connection is gained back, the last update is long ago or the user demands an update.
 		/// </summary>
-		public void UpdateQuestInfos() {
+		public void UpdateQuestInfos ()
+		{
 			ImportQuestInfosFromJSON importLocal = 
 				new ImportQuestInfosFromJSON (false);
 			new SimpleDialogBehaviour (
@@ -190,13 +200,20 @@ namespace GQ.Client.Model {
 
 			TaskSequence t = new TaskSequence (importLocal, downloader);
 			t.AppendIfCompleted (importFromServer);
-			t.Append(exporter);
+			t.Append (exporter);
 			t.Start ();
 		}
 
-		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
+		public delegate void ChangeCallback (object sender,QuestInfoChangedEvent e);
 
 		public event ChangeCallback OnChange;
+
+		public int HowManyListerners ()
+		{
+			return OnChange.GetInvocationList ().Length;
+		}
+
+
 
 		public virtual void raiseChange (QuestInfoChangedEvent e)
 		{
@@ -213,8 +230,8 @@ namespace GQ.Client.Model {
 
 		public static QuestInfoManager Instance {
 			get {
-				if ( _instance == null ) {
-					_instance = new QuestInfoManager();
+				if (_instance == null) {
+					_instance = new QuestInfoManager ();
 				}
 				return _instance;
 			}
@@ -223,11 +240,13 @@ namespace GQ.Client.Model {
 			}
 		}
 
-		public static void Reset () {
+		public static void Reset ()
+		{
 			_instance = null;
 		}
 
-		public QuestInfoManager() {
+		public QuestInfoManager ()
+		{
 			QuestDict = new Dictionary<int, QuestInfo> ();
 			Filter = new AllQuests ();
 		}
@@ -235,14 +254,17 @@ namespace GQ.Client.Model {
 		#endregion
 	}
 
-	public class QuestInfoChangedEvent : EventArgs 
+	public class QuestInfoChangedEvent : EventArgs
 	{
 		public string Message { get; protected set; }
+
 		public ChangeType ChangeType { get; protected set; }
+
 		public QuestInfo NewQuestInfo { get; protected set; }
+
 		public QuestInfo OldQuestInfo { get; protected set; }
 
-		public QuestInfoChangedEvent(
+		public QuestInfoChangedEvent (
 			string message = "", 
 			ChangeType type = ChangeType.ChangedInfo, 
 			QuestInfo newQuestInfo = null, 
@@ -257,8 +279,12 @@ namespace GQ.Client.Model {
 
 	}
 
-	public enum ChangeType {
-		AddedInfo, RemovedInfo, ChangedInfo, ListChanged
+	public enum ChangeType
+	{
+		AddedInfo,
+		RemovedInfo,
+		ChangedInfo,
+		ListChanged
 	}
 		
 

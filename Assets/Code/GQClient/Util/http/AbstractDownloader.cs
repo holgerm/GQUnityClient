@@ -4,23 +4,30 @@ using UnityEngine;
 using System.Diagnostics;
 using GQ.Client.Err;
 
-namespace GQ.Client.Util {
-	public abstract class AbstractDownloader : Task {
+namespace GQ.Client.Util
+{
+	public abstract class AbstractDownloader : Task
+	{
 
-		public AbstractDownloader(bool runsAsCoroutine = true) : base(true) {}
+		public AbstractDownloader (bool runsAsCoroutine = true) : base (true)
+		{
+		}
+
+		public WWW Www { get; set; }
 
 		public long Timeout { get; set; }
 
 		protected Stopwatch stopwatch;
 
-		public void Restart() {
-			Base.Instance.StartCoroutine(RunAsCoroutine ());
+		public void Restart ()
+		{
+			Base.Instance.StartCoroutine (RunAsCoroutine ());
 			// TODO: isn't a call to Start() enough?
 		}
 
 		#region Callback Delegates
 
-		public delegate void DownloadCallback (AbstractDownloader d, DownloadEvent e);
+		public delegate void DownloadCallback (AbstractDownloader d,DownloadEvent e);
 
 		public event DownloadCallback OnStart;
 		public event DownloadCallback OnError;
@@ -39,7 +46,8 @@ namespace GQ.Client.Util {
 				callback (this, e);
 		}
 
-		protected virtual void Raise(DownloadEventType eventType, DownloadEvent e = DownloadEvent.EMPTY) {
+		protected virtual void Raise (DownloadEventType eventType, DownloadEvent e = DownloadEvent.EMPTY)
+		{
 			switch (eventType) {
 			case DownloadEventType.Start:
 				Raise (OnStart, e);
@@ -67,14 +75,17 @@ namespace GQ.Client.Util {
 	}
 
 
-	public class DownloadEvent : TaskEventArgs 
+	public class DownloadEvent : TaskEventArgs
 	{
 		public string Message { get; protected set; }
+
 		public float Progress { get; protected set; }
+
 		public long ElapsedTime { get; protected set; }
+
 		public DownloadEventType ChangeType { get; protected set; }
 
-		public DownloadEvent(
+		public DownloadEvent (
 			string message = "", 
 			float progress = 0f, 
 			long elapsedTime = 0,
@@ -90,8 +101,13 @@ namespace GQ.Client.Util {
 	}
 
 
-	public enum DownloadEventType {
-		Start, Progress, Timeout, Error, Success
+	public enum DownloadEventType
+	{
+		Start,
+		Progress,
+		Timeout,
+		Error,
+		Success
 	}
 
 

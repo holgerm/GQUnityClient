@@ -21,7 +21,7 @@ namespace GQ.Client.Model
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
 
-		public I_GQML Parent { get;  set; }
+		public I_GQML Parent { get; set; }
 
 		public Quest Quest {
 			get {
@@ -69,14 +69,14 @@ namespace GQ.Client.Model
 				reader.Read ();
 		}
 
-		protected void tryThis (XmlReader reader)
-		{
-			if (!reader.IsEmptyElement) {
-				// consume the starting action element, when there is content
-				reader.Read (); 
-			}
-		}
-
+		//		protected void tryThis (XmlReader reader)
+		//		{
+		//			if (!reader.IsEmptyElement) {
+		//				// consume the starting action element, when there is content
+		//				reader.Read ();
+		//			}
+		//		}
+		//
 		protected virtual void ReadAttributes (XmlReader reader)
 		{
 		}

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 using GQ.Client.Model;
+using System.Collections.Generic;
+using System.Text;
 
 namespace GQ.Client.Util
 {
@@ -10,6 +12,9 @@ namespace GQ.Client.Util
 	{
 
 		public const string regexPattern4Varnames = @"@[a-zA-Z.]+[a-zA-Z.0-9\-_]*@";
+		public const string regexPattern4HTMLAnchors = @"<a +(?:(?:[a-zA-Z]+) *= *(?:""[^""]*?""|'[^']*?'))*.*?>(?'content'.*?)<\/a>";
+		public const string regexPattern4HTMLAttributes = @"(?'name'[a-zA-Z]+) *= *(?'val'""[^""]*?""|'[^']*?')";
+
 
 		public static string MakeReplacements (string rawText)
 		{
@@ -28,7 +33,6 @@ namespace GQ.Client.Util
 		{
 			string varName = match.Value.Substring (1, match.Value.Length - 2);
 			string value = Variables.GetValue (varName).AsString ();
-			Debug.Log ("VAR: " + varName + " has VALUE: " + value);
 			return value;
 		}
 
@@ -60,9 +64,47 @@ namespace GQ.Client.Util
 		{
 			string result = HTMLDecode (rawText);
 			result = MakeReplacements (result);
+			result = EnhanceHTMLAnchors4HyperText (result);
 
 			return result;
 		}
-	}
 
+		private static string EnhanceHTMLAnchors4HyperText (string htmlText)
+		{
+			Dictionary<string, string> replacements = new Dictionary<string, string> ();
+			MatchCollection matchedAnchors = Regex.Matches (htmlText, regexPattern4HTMLAnchors);
+			foreach (Match matchedAnchor in matchedAnchors) {
+				if (!matchedAnchor.Success || replacements.ContainsKey (matchedAnchor.Value))
+					continue;
+
+				StringBuilder newAnchorStartAndNameAttr = new StringBuilder ("<a name=\"link\"");
+				StringBuilder newAnchorFurtherAttributes = new StringBuilder ("");
+
+				MatchCollection matchedAttributes = Regex.Matches (matchedAnchor.Value, regexPattern4HTMLAttributes);
+
+				foreach (Match matchedAttr in matchedAttributes) {
+					// we add all attributes but ignore when we already find a name attribute:
+					if (!matchedAttr.Groups ["name"].ToString ().Equals ("name")) {
+						newAnchorFurtherAttributes.Append (" " + matchedAttr.Groups ["name"] + "=" + matchedAttr.Groups ["val"]);
+					}
+				}
+
+				string enhancedAnchor = 
+					newAnchorStartAndNameAttr.ToString () +
+					newAnchorFurtherAttributes.ToString () + ">" +
+					matchedAnchor.Groups ["content"] +
+					"</a>";
+				// store the anchor replacement (old, new):
+				replacements.Add (matchedAnchor.Value, enhancedAnchor);
+			}
+
+			// execute all anchor replacements:
+			Dictionary<string, string>.Enumerator enumerator = replacements.GetEnumerator ();
+			while (enumerator.MoveNext ()) {
+				htmlText = htmlText.Replace (enumerator.Current.Key, enumerator.Current.Value);
+			}
+			return htmlText;
+		}
+
+	}
 }

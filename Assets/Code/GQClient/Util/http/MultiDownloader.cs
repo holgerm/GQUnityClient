@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using GQ.Client.Model;
 using GQ.Client.FileIO;
 
-namespace GQ.Client.Util {
+namespace GQ.Client.Util
+{
 	
-	public class MultiDownloader : AbstractDownloader {
+	public class MultiDownloader : AbstractDownloader
+	{
 
 		/// <summary>
 		/// Initializes a new Downloader object. 
@@ -27,7 +29,7 @@ namespace GQ.Client.Util {
 		public MultiDownloader (
 			int maxParallelDownloads = 1, 
 			long timeout = 0, 
-			List<MediaInfo> files = null) : base(true)
+			List<MediaInfo> files = null) : base (true)
 		{
 			if (files != null) {
 				FileInfoList = files;
@@ -35,12 +37,13 @@ namespace GQ.Client.Util {
 			Result = "";
 			MaxParallelDownloads = maxParallelDownloads;
 			Timeout = timeout;
-			stopwatch = new Stopwatch();
+			stopwatch = new Stopwatch ();
 		}
 
 		List<MediaInfo> FileInfoList;
 
-		public override void ReadInput(object sender, TaskEventArgs e) {
+		public override void ReadInput (object sender, TaskEventArgs e)
+		{
 			if (e.Content is List<MediaInfo>) {
 				FileInfoList = e.Content as List<MediaInfo>;
 			}
@@ -70,7 +73,7 @@ namespace GQ.Client.Util {
 		/// Actually starts the download.
 		/// </summary>
 		/// <returns>The download.</returns>
-		public override IEnumerator RunAsCoroutine () 
+		public override IEnumerator RunAsCoroutine ()
 		{
 			CurrentlyRunningDownloads = 0;
 
@@ -86,24 +89,24 @@ namespace GQ.Client.Util {
 				}
 
 				if (TimeIsUp) {
-					stopwatch.Stop();
-					Raise(DownloadEventType.Timeout, new DownloadEvent(elapsedTime: Timeout));
+					stopwatch.Stop ();
+					Raise (DownloadEventType.Timeout, new DownloadEvent (elapsedTime: Timeout));
 					RaiseTaskFailed (); 
 					yield break;
 				}
 
 				// now we can start the next file downloader:
-				info.LocalFileName = QuestManager.MakeLocalFileNameFromUrl(info.Url);
-				Downloader d = new Downloader(info.Url, targetPath: info.LocalPath);
+				info.LocalFileName = QuestManager.MakeLocalFileNameFromUrl (info.Url);
+				Downloader d = new Downloader (info.Url, targetPath: info.LocalPath);
 				CurrentlyRunningDownloads++;
 				d.OnTaskEnded += (object sender, TaskEventArgs e) => {
 					CurrentlyRunningDownloads--;
-					UnityEngine.Debug.Log("downloader freed");
+					UnityEngine.Debug.Log ("downloader freed");
 				};
 				d.OnTaskCompleted += (object sender, TaskEventArgs e) => {
 					info.LocalSize = info.RemoteSize;
 					info.LocalTimestamp = info.RemoteTimestamp;
-					UnityEngine.Debug.Log("size and time updated: new time: " + info.LocalTimestamp);
+					UnityEngine.Debug.Log ("size and time updated: new time: " + info.LocalTimestamp);
 				};
 				d.Start ();
 			}
@@ -112,7 +115,7 @@ namespace GQ.Client.Util {
 			while (CurrentlyRunningDownloads > 0) {
 				yield return null;
 			}
-
+			UnityEngine.Debug.Log ("     ------- TASK COMPLETED Multidownloader");
 			RaiseTaskCompleted ();
 		}
 

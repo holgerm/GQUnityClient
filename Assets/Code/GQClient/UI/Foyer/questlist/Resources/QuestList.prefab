@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 222508345438096536}
   - component: {fileID: 114166621306365220}
   - component: {fileID: 114345298717261854}
-  - component: {fileID: 114373579358479458}
+  - component: {fileID: 114184205793611318}
   m_Layer: 5
   m_Name: QuestList
   m_TagString: Untagged
@@ -261,6 +261,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114184205793611318
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1407310516175498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3135002d62954c98ae70ca77ce53a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoList: {fileID: 224002653445665578}
 --- !u!114 &114250159118630328
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -307,18 +319,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 120
   m_LayoutPriority: 1
---- !u!114 &114373579358479458
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1407310516175498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3135002d62954c98ae70ca77ce53a7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InfoList: {fileID: 224002653445665578}
 --- !u!114 &114431059063331810
 MonoBehaviour:
   m_ObjectHideFlags: 1
