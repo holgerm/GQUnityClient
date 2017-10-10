@@ -17,8 +17,7 @@ namespace GQ.Client.UI
 				Transform textGo = transform.Find (goPath);
 				if (textGo == null) {
 					Debug.LogErrorFormat (
-						"Dialog must contain a {0} GameObject \"{1}\" inside (at path {2}).", 
-						variable.GetType ().Name,
+						"Dialog must contain a GameObject \"{0}\" inside (at path {1}).", 
 						goName,
 						goPath);
 					return null;

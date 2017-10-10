@@ -17,10 +17,10 @@ namespace GQ.Client.UI
 		#region Fields
 
 		public RawImage image;
-		private string IMAGE_PATH = "Viewport/Panel/Image";
+		private string IMAGE_PATH = "ImagePanel/Image";
 
 		public HyperText text;
-		private string Text_PATH = "Viewport/Panel/Text";
+		private string Text_PATH = "ScrollView/Viewport/Content/HyperText";
 
 		protected PageNPCTalk npcPage;
 
@@ -61,7 +61,8 @@ namespace GQ.Client.UI
 				// TODO store the image locally ...
 			}
 			loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
-				image.texture = d.Www.texture;
+				AspectRatioFitter fitter = transform.Find (IMAGE_PATH).GetComponent<AspectRatioFitter> ();
+				fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
 			};
 			loader.Start ();
 
@@ -78,7 +79,6 @@ namespace GQ.Client.UI
 			Debug.Log ("### name = " + linkInfo.Name);
 			string href = extractHREF (linkInfo);
 			if (href != null) {
-//				href = @"""" + href + @"""";
 				Application.OpenURL (href);
 			}
 		}
