@@ -6,12 +6,13 @@ using System;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using GQ.Client.Event;
-using UnityEngine.Events;
-using UnityEditor.Events;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using System.IO;
 using GQ.Client.FileIO;
+
+//using UnityEngine.Events;
+
 
 namespace GQ.Client.UI.Foyer
 {
@@ -321,25 +322,26 @@ namespace GQ.Client.UI.Foyer
 
 		#region Initialization in Editor
 
+
 		public virtual void Reset ()
 		{
 			Name = EnsurePrefabVariableIsSet<Text> (Name, "Name", NAME_PATH);
 
 			DownloadButton = EnsurePrefabVariableIsSet<Button> (DownloadButton, "Download Button", "DownloadButton");
-			if (DownloadButton.onClick.GetPersistentEventCount () == 0)
-				UnityEventTools.AddPersistentListener (DownloadButton.onClick, Download);
+//			if (DownloadButton.onClick.GetPersistentEventCount () == 0)
+//				UnityEventTools.AddPersistentListener (DownloadButton.onClick, Download);
 			
 			StartButton = EnsurePrefabVariableIsSet<Button> (StartButton, "Start Button", "StartButton");
-			if (StartButton.onClick.GetPersistentEventCount () == 0)
-				UnityEventTools.AddPersistentListener (StartButton.onClick, Play);
+//			if (StartButton.onClick.GetPersistentEventCount () == 0)
+//				UnityEventTools.AddPersistentListener (StartButton.onClick, Play);
 			
 			DeleteButton = EnsurePrefabVariableIsSet<Button> (DeleteButton, "Delete Button", "DeleteButton");
-			if (DeleteButton.onClick.GetPersistentEventCount () == 0)
-				UnityEventTools.AddPersistentListener (DeleteButton.onClick, Delete);
+//			if (DeleteButton.onClick.GetPersistentEventCount () == 0)
+//				UnityEventTools.AddPersistentListener (DeleteButton.onClick, Delete);
 
 			UpdateButton = EnsurePrefabVariableIsSet<Button> (UpdateButton, "Update Button", "UpdateButton");
-			if (UpdateButton.onClick.GetPersistentEventCount () == 0)
-				UnityEventTools.AddPersistentListener (UpdateButton.onClick, UpdateQuest);
+//			if (UpdateButton.onClick.GetPersistentEventCount () == 0)
+//				UnityEventTools.AddPersistentListener (UpdateButton.onClick, UpdateQuest);
 		}
 
 		#endregion

@@ -135,11 +135,11 @@ public class menucontroller : MonoBehaviour
 	{
 
 
-		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
-
-			GameObject.Find ("PageController").GetComponent<page_webpage> ().deactivateWebView ();
-
-		}
+//		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
+//
+//			GameObject.Find ("PageController").GetComponent<page_webpage> ().deactivateWebView ();
+//
+//		}
 
 	}
 
@@ -147,11 +147,11 @@ public class menucontroller : MonoBehaviour
 	public void hideMenu ()
 	{
 
-		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
-			
-			GameObject.Find ("PageController").GetComponent<page_webpage> ().activateWebView ();
-			
-		}
+//		if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
+//			
+//			GameObject.Find ("PageController").GetComponent<page_webpage> ().activateWebView ();
+//			
+//		}
 		
 		
 	}

@@ -20,11 +20,11 @@ public class filtercontroller : MonoBehaviour
 	public void showMenu ()
 	{
 		
-		if (QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
-			
-			GameObject.Find ("PageController").GetComponent<page_webpage> ().deactivateWebView ();
-			
-		}
+//		if (QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
+//			
+//			GameObject.Find ("PageController").GetComponent<page_webpage> ().deactivateWebView ();
+//			
+//		}
 		
 	}
 
@@ -32,11 +32,11 @@ public class filtercontroller : MonoBehaviour
 	public void hideMenu ()
 	{
 		
-		if (QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
-			
-			GameObject.Find ("PageController").GetComponent<page_webpage> ().activateWebView ();
-			
-		}
+//		if (QuestManager.Instance.CurrentQuest.currentpage.type == "WebPage") {
+//			
+//			GameObject.Find ("PageController").GetComponent<page_webpage> ().activateWebView ();
+//			
+//		}
 		
 		
 	}

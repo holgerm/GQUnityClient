@@ -56,6 +56,8 @@ namespace GQ.Client.Util
 		public override IEnumerator RunAsCoroutine ()
 		{
 			string url = Files.AbsoluteLocalPath (filePath);
+
+			UnityEngine.Debug.Log ("------------> LocalFileLoader.RUnAsCoroutine() url: " + url);
 			Www = new WWW (url);
 
 			string msg = String.Format ("Start to load local file {0}", filePath);

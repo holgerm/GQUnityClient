@@ -4,6 +4,7 @@ using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.SceneManagement;
 using GQ.Client.Util;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {
@@ -13,12 +14,15 @@ namespace GQ.Client.UI
 
 		protected Page page;
 
+		protected bool resumingToFoyer = false;
+
 		// Use this for initialization
 		public virtual void Start ()
 		{
 			QuestManager qm = QuestManager.Instance;
 			if (qm.CurrentQuest == null || qm.CurrentPage == Page.Null) {
-				SceneManager.LoadScene (Base.FOYER_SCENE);
+				SceneManager.LoadSceneAsync (Base.FOYER_SCENE);
+				resumingToFoyer = true;
 				return;
 			}
 

@@ -36,10 +36,11 @@ namespace GQ.Client.UI
 			QuestManager qm = QuestManager.Instance;
 
 			if (page == null) {
-				Log.SignalErrorToDeveloper (
-					"Page is null in quest {0}", 
-					QuestManager.Instance.CurrentQuest.Id.ToString ()
-				);
+				if (!resumingToFoyer)
+					Log.SignalErrorToDeveloper (
+						"Page is null in quest {0}", 
+						QuestManager.Instance.CurrentQuest.Id.ToString ()
+					);
 				return;
 				// TODO What should we do now? End quest?
 			}

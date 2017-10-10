@@ -3,7 +3,8 @@ using UnityEngine;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using UnityEditor;
+
+//using UnityEditor;
 using GQ.Client.Err;
 
 namespace GQ.Client.FileIO
@@ -120,9 +121,11 @@ namespace GQ.Client.FileIO
 
 			if (Application.isEditor)
 				return "file://" + relPath;
-			else if (Application.isMobilePlatform)
-				return relPath;
-			else // For standalone player.
+			else if (Application.platform == RuntimePlatform.Android)
+				return "file://" + relPath;
+			else if (Application.platform == RuntimePlatform.IPhonePlayer)
+				return "file://" + relPath;
+			else
 				return "file://" + relPath;
 		}
 
