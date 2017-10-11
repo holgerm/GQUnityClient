@@ -15,7 +15,7 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Shows all Quest Info objects, e.g. in a scrollable list within the foyer. Drives a dialog while refreshing its content.
 	/// </summary>
-	public class QuestListController : PrefabController
+	public class QuestListController : MonoBehaviour
 	{
 
 		#region Fields
@@ -30,14 +30,14 @@ namespace GQ.Client.UI.Foyer
 		#endregion
 
 
-		#region Editor Setup
-
-		void Reset ()
-		{
-			InfoList = EnsurePrefabVariableIsSet<Transform> (InfoList, "InfoList", INFOLIST_PATH);
-		}
-
-		#endregion
+		//		#region Editor Setup
+		//
+		//		void Reset ()
+		//		{
+		//			InfoList = EnsurePrefabVariableIsSet<Transform> (InfoList, "InfoList", INFOLIST_PATH);
+		//		}
+		//
+		//		#endregion
 
 		#region Lifecycle API
 
