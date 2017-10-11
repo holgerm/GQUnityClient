@@ -173,7 +173,7 @@ namespace GQ.Client.Model
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
 			if (!scene.path.Equals (PageScenePath)) {
-				SceneManager.LoadScene (PageScenePath);
+				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
 			}
 
 			// set this page as current in QM

@@ -286,7 +286,7 @@ namespace GQ.Client.Model
 
 		public void End ()
 		{
-			SceneManager.LoadSceneAsync (Base.FOYER_SCENE);
+			SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
 		}
 
 		public void GoBackOnePage ()

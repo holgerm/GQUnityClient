@@ -11,6 +11,7 @@ using GQ.Client.FileIO;
 using Newtonsoft.Json;
 using System;
 using GQ.Client.Util;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Client.Model
 {
@@ -58,6 +59,13 @@ namespace GQ.Client.Model
 		}
 
 		public Page CurrentPage { get; set; }
+
+		public Scene CurrentScene { 
+			get { 
+				Scene curScene = SceneManager.GetSceneByName (CurrentPage.GetType ().Name.Substring (4)); 
+				return curScene;
+			} 
+		}
 
 		#endregion
 
