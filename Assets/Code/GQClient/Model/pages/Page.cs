@@ -188,7 +188,16 @@ namespace GQ.Client.Model
 		public virtual void End ()
 		{
 			State = GQML.STATE_SUCCEEDED;
-			EndTrigger.Initiate ();
+			if (EndTrigger == Trigger.Null) {
+				Log.SignalErrorToAuthor (
+					"Quest {0} ({1}, page {2} has no actions onEnd defined. We ended the quest here.",
+					Quest.Name, Quest.Id,
+					Id
+				);
+				Quest.End ();
+			} else {
+				EndTrigger.Initiate ();
+			}
 		}
 
 		#endregion

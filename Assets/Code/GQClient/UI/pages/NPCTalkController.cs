@@ -50,23 +50,29 @@ namespace GQ.Client.UI
 			// show text:
 			text.text = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
 
-			// show image:
-			AbstractDownloader loader;
-			if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
-				MediaInfo mediaInfo;
-				npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
-				loader = new LocalFileLoader (mediaInfo.LocalPath);
+			// show (or hide completely) image:
+			GameObject imagePanel = image.transform.parent.gameObject;
+			if (npcPage.ImageUrl == "") {
+				imagePanel.SetActive (false);
+				return;
 			} else {
-				loader = new Downloader (npcPage.ImageUrl);
-				// TODO store the image locally ...
+				imagePanel.SetActive (true);
+				AbstractDownloader loader;
+				if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
+					MediaInfo mediaInfo;
+					npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
+					loader = new LocalFileLoader (mediaInfo.LocalPath);
+				} else {
+					loader = new Downloader (npcPage.ImageUrl);
+					// TODO store the image locally ...
+				}
+				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
+					AspectRatioFitter fitter = transform.Find (IMAGE_PATH).GetComponent<AspectRatioFitter> ();
+					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
+					image.texture = d.Www.texture;
+				};
+				loader.Start ();
 			}
-			loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
-				AspectRatioFitter fitter = transform.Find (IMAGE_PATH).GetComponent<AspectRatioFitter> ();
-				fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-				image.texture = d.Www.texture;
-			};
-			loader.Start ();
-
 		}
 		
 		// Update is called once per frame
