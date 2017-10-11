@@ -63,6 +63,7 @@ namespace GQ.Client.UI
 			loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
 				AspectRatioFitter fitter = transform.Find (IMAGE_PATH).GetComponent<AspectRatioFitter> ();
 				fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
+				image.texture = d.Www.texture;
 			};
 			loader.Start ();
 
