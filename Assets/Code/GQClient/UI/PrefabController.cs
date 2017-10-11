@@ -22,6 +22,8 @@ namespace GQ.Client.UI
 
 			if (root == null) {
 				root = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
+				if (root == null)
+					Log.SignalErrorToDeveloper ("No root game object found for prefab {0}", prefabName);
 			}
 
 			GameObject go = (GameObject)Instantiate (

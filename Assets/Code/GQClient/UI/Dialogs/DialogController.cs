@@ -7,7 +7,8 @@ using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Event;
 
-namespace GQ.Client.UI.Dialogs {
+namespace GQ.Client.UI.Dialogs
+{
 
 	/// <summary>
 	/// Connects the Dialog UI with the behaviour implemented in a subclass of DialogBehaviour. 
@@ -26,11 +27,14 @@ namespace GQ.Client.UI.Dialogs {
 	/// For details on how to link UI elements like this Dialog to Tasks cf. @ref TasksAndUI
 
 	/// </summary>
-	public class DialogController : PrefabController {
+	public class DialogController : PrefabController
+	{
 
 		#region Content and Structure
 
 		protected static readonly string PREFAB = "Dialog";
+
+		public const string DIALOG_CANVAS_PATH = "/DialogCanvas";
 
 		public Text Details;
 		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
@@ -41,7 +45,7 @@ namespace GQ.Client.UI.Dialogs {
 		public Button NoButton;
 		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
 
-		public DialogBehaviour Behaviour { get; set; } 
+		public DialogBehaviour Behaviour { get; set; }
 
 		#endregion
 
@@ -49,6 +53,7 @@ namespace GQ.Client.UI.Dialogs {
 		#region Singleton
 
 		private static DialogController instance = null;
+
 		/// <summary>
 		/// Gets the instance. If the instance is used for the first time, 
 		/// it will be created from the prefab and will be inactive.
@@ -57,12 +62,12 @@ namespace GQ.Client.UI.Dialogs {
 		public static DialogController Instance {
 			get {
 				if (instance == null)
-					return Create(PREFAB).GetComponent<DialogController> ();
+					return Create (PREFAB, GameObject.Find (DIALOG_CANVAS_PATH)).GetComponent<DialogController> ();
 				else
 					return instance;
 			}
 		}
-			
+
 		#endregion
 
 
@@ -73,8 +78,9 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		/// <param name="description">Description.</param>
 		/// <param name="yesButtonClicked">Yes button clicked.</param>
-		public void SetYesButton(string description, ClickCallBack yesButtonClicked) {
-			Text buttonText = YesButton.transform.Find ("Text").GetComponent<Text>();
+		public void SetYesButton (string description, ClickCallBack yesButtonClicked)
+		{
+			Text buttonText = YesButton.transform.Find ("Text").GetComponent<Text> ();
 			buttonText.text = description;
 
 			Behaviour.OnYesButtonClicked += yesButtonClicked;
@@ -87,8 +93,9 @@ namespace GQ.Client.UI.Dialogs {
 		/// </summary>
 		/// <param name="description">Description.</param>
 		/// <param name="noButtonClicked">No button clicked.</param>
-		public void SetNoButton(string description, ClickCallBack noButtonClicked) {
-			Text buttonText = NoButton.transform.Find ("Text").GetComponent<Text>();
+		public void SetNoButton (string description, ClickCallBack noButtonClicked)
+		{
+			Text buttonText = NoButton.transform.Find ("Text").GetComponent<Text> ();
 			buttonText.text = description;
 
 			Behaviour.OnNoButtonClicked += noButtonClicked;
@@ -101,7 +108,7 @@ namespace GQ.Client.UI.Dialogs {
 
 		#region Initialization in Editor
 
-		public virtual void Reset()
+		public virtual void Reset ()
 		{
 			Details = EnsurePrefabVariableIsSet<Text> (Details, "Details Label", DETAILS_PATH);
 			Title = EnsurePrefabVariableIsSet<Text> (Title, "Title Label", TITLE_PATH);
