@@ -1,17 +1,5 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Runtime.Serialization;
-using System;
-using System.Linq;
-using System.Text;
-using GQ.Geo;
-using GQ.Client.Util;
 using GQ.Client.Model;
+using System.Xml.Serialization;
 
 [XmlRoot (GQML.HOTSPOT)]
 public class Hotspot
@@ -40,7 +28,7 @@ public class Hotspot
 	[XmlAttribute ("initialVisibility")]
 	public bool InitialVisibility { get; protected set; }
 
-	[XmlAttribute("img")]
+	[XmlAttribute ("img")]
 	public string ImageURI { get; protected set; }
 
 	[XmlAttribute ("radius")]
@@ -58,7 +46,8 @@ public class Hotspot
 	[XmlElement ("onTap")]
 	public Trigger TapTrigger { get; protected set; }
 
-	public Hotspot() {
+	public Hotspot ()
+	{
 		EnterTrigger = Trigger.Null;
 		LeaveTrigger = Trigger.Null;
 		TapTrigger = Trigger.Null;
@@ -74,12 +63,12 @@ public class Hotspot
 		EnterTrigger.Initiate ();
 	}
 
-	public virtual void Leave()
+	public virtual void Leave ()
 	{
 		LeaveTrigger.Initiate ();
 	}
 
-	public virtual void Tap()
+	public virtual void Tap ()
 	{
 		TapTrigger.Initiate ();
 	}

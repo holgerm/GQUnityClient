@@ -259,7 +259,11 @@ namespace GQ.Client.UI.Foyer
 
 		void OnDestroy ()
 		{
-			data.OnChanged -= UpdateView;
+			if (this == null) {
+				Log.SignalErrorToDeveloper ("QICtrl: this == null in OnDestroy()".Red ());
+			} else {
+				data.OnChanged -= UpdateView;
+			}
 		}
 
 		public void UpdateView ()

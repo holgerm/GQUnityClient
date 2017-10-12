@@ -6,9 +6,19 @@ using GQ.Client.Err;
 public class MenuCtrl : MonoBehaviour
 {
 
+	void Start ()
+	{
+		// TODO Assert that both map and list panels exist in the herarchy and have the correct name!
+	}
+
+	public GameObject ListPanel;
+	public GameObject MapPanel;
+
+
 	public void OnChangeQuestInfosViewer (GameObject viewer)
 	{
-		Debug.Log (("We need to change the Quest Infos Viewer to: " + viewer.name).Red ());
+		ListPanel.SetActive (viewer.name == "ViewAsList");
+		MapPanel.SetActive (viewer.name == "ViewOnMap");
 	}
 
 }

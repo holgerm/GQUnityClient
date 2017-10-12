@@ -29,6 +29,10 @@ namespace QM.UI
 
 		public Button toggleButton;
 
+		/// <summary>
+		/// Register listener methods for Toggle events here. They receive a parameter set to the gameobject that 
+		/// represents the button that has been pressed, e.g. a "View on Map"-Button etc.
+		/// </summary>
 		public ToggleEvent onToggledEvent;
 
 		// Use this for initialization
@@ -96,6 +100,7 @@ namespace QM.UI
 			}
 
 			// increase to next index (start from beginning if the end of series is reached):
+			int indexReferredByPressedButton = indexCurShownObject;
 			indexCurShownObject = (indexCurShownObject + 1) % shownObjects.Length;
 			// and set only the new object active:
 			for (int i = 0; i < shownObjects.Length; i++) {
@@ -103,7 +108,9 @@ namespace QM.UI
 			}
 
 			// invoke the onToggled Unity Event:
-			onToggledEvent.Invoke (shownObjects [indexCurShownObject]);
+			if (indexReferredByPressedButton > -1) {
+				onToggledEvent.Invoke (shownObjects [indexReferredByPressedButton]);
+			}
 		}
 
 		/// <summary>

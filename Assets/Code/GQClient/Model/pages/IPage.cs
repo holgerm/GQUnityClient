@@ -1,17 +1,5 @@
-using UnityEngine;
-using UnityEngine.UI;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Runtime.Serialization;
-using System;
-using System.Linq;
-using System.Text;
-using GQ.Geo;
-using GQ.Client.Util;
 using GQ.Client.Model;
+using System.Xml.Serialization;
 
 namespace GQ.Client.Model
 {
