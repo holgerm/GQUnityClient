@@ -31,7 +31,7 @@ namespace QM.UI
 					gameObject.name
 				);
 				return;
-			}
+			} 
 
 			toggleButton.onClick.AddListener (ToggleOnOff);
 		}
@@ -40,5 +40,6 @@ namespace QM.UI
 		{
 			whatToToggle.SetActive (!whatToToggle.activeSelf);
 		}
+
 	}
 }
