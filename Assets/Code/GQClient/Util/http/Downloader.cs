@@ -72,7 +72,6 @@ namespace GQ.Client.Util
 
 		public override IEnumerator RunAsCoroutine ()
 		{
-			UnityEngine.Debug.Log (("Downloader url: " + url).Red ());
 			Www = new WWW (url);
 			stopwatch.Start ();
 
