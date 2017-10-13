@@ -1734,7 +1734,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.00004808901, y: 0.08779781}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &688381783
 MonoBehaviour:
@@ -2668,9 +2668,9 @@ RectTransform:
   m_Father: {fileID: 1337534263}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 383.25, y: 0}
   m_SizeDelta: {x: 766.5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1003398647
@@ -3057,7 +3057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1337534263
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3074,7 +3074,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.9194791}
-  m_AnchoredPosition: {x: 0, y: 0.52}
+  m_AnchoredPosition: {x: 0, y: 0.51999664}
   m_SizeDelta: {x: 0, y: 1.14}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1337534264
@@ -4070,6 +4070,7 @@ GameObject:
   - component: {fileID: 1816695882}
   - component: {fileID: 1816695884}
   - component: {fileID: 1816695883}
+  - component: {fileID: 1816695885}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -4129,6 +4130,19 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1816695881}
+--- !u!114 &1816695885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1816695881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3e2a6775b8d0404997817bbe616d39c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LocationTexture: {fileID: 2800000, guid: 1d6a67e0dc6854c728a7c1f849d205c4, type: 3}
+  MarkerTexture: {fileID: 2800000, guid: 0239ac01a86764dfcb0754320f87921f, type: 3}
 --- !u!1 &1839321229
 GameObject:
   m_ObjectHideFlags: 0
@@ -4777,7 +4791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2019729071
 RectTransform:
   m_ObjectHideFlags: 0
