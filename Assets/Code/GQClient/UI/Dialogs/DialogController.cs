@@ -5,7 +5,7 @@ using GQ.Client.Conf;
 using GQ.Client.Util;
 using UnityEngine.UI;
 using GQ.Client.Model;
-using GQ.Client.Event;
+using GQ.Client.GQEvents;
 
 namespace GQ.Client.UI.Dialogs
 {

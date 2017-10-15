@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using GQ.Client.Event;
+using GQ.Client.GQEvents;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;

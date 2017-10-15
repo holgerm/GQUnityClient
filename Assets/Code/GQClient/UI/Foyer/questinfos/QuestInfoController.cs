@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System;
 using GQ.Client.Util;
 using GQ.Client.Err;
-using GQ.Client.Event;
+using GQ.Client.GQEvents;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using System.IO;

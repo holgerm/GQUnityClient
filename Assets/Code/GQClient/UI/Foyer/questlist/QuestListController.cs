@@ -141,6 +141,16 @@ namespace GQ.Client.UI.Foyer
 
 		public void UpdateView ()
 		{
+			if (this == null) {
+				Debug.Log ("QuestListCOntroller is null".Red ());
+				return;
+			}
+			if (InfoList == null) {
+				Debug.Log ("QuestListController.InfoList is null".Red ());
+				return;
+			}
+			// TODO: Create a common super class for QuestInfoControllers like QuestListInfoController(this one here) and QuestInfoMapController!
+
 			// hide and delete all list elements:
 			foreach (KeyValuePair<int, QuestInfoController> kvp in questInfoControllers) {
 				kvp.Value.Hide ();
