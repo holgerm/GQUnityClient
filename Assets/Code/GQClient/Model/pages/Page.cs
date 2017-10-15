@@ -5,6 +5,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using System;
 using UnityEngine;
+using GQ.Client.Util;
+using GQ.Client.UI;
 
 namespace GQ.Client.Model
 {
@@ -154,6 +156,11 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
+		public PageController PageCtrl {
+			get;
+			set;
+		}
+
 		private string PageScenePath {
 			get {
 				return "Scenes/Pages/" + GetType ().Name.Substring (4);
@@ -168,10 +175,25 @@ namespace GQ.Client.Model
 				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
 			}
 
+			// TODO: We need to get rid of old scenes. this was a trial that did not yet work completely:
+//			if (QuestManager.Instance.CurrentPage == null) {
+//				// this is the first page, hence we do not need to unload another page's scene.
+//				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
+//			} else {
+//				// this is not the first page: can the next page reuse the same scene?
+//				string currentSceneUnloadPath = "Scenes/Pages/" + QuestManager.Instance.CurrentPage.GetType ().Name.Substring (4);
+//				if (!GetType ().Equals (QuestManager.Instance.CurrentPage.GetType ())) {
+//					SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
+//					SceneManager.UnloadSceneAsync (currentSceneUnloadPath);
+//				}
+//			}
+
+
 			// set this page as current in QM
 			QuestManager.Instance.CurrentQuest = Parent;
 			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
+//			PageCtrl.Initialize ();
 
 			// Trigger OnStart Actions of this page:
 			StartTrigger.Initiate ();

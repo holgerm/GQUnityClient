@@ -38,6 +38,8 @@ namespace QM.UI
 
 		public void ToggleOnOff ()
 		{
+			Debug.Log (string.Format ("OnOffToggle {0} to: {1}", whatToToggle.name, !whatToToggle.activeSelf));
+
 			whatToToggle.SetActive (!whatToToggle.activeSelf);
 		}
 

@@ -17,14 +17,27 @@ namespace GQ.Client.UI
 		public GameObject ListCanvas;
 		public GameObject MapCanvas;
 
+		public GameObject MenuCanvas;
 
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
-			Debug.Log ("ViewCtrl: viewer.name = " + viewer.name);
 			ListCanvas.SetActive (viewer.name == "ViewAsList");
 			MapCanvas.SetActive (viewer.name == "ViewOnMap");
+
+			MenuCanvas.SetActive (false);
 		}
 
+		//		public void ShowList ()
+		//		{
+		//			ListCanvas.SetActive (true);
+		//			MapCanvas.SetActive (false);
+		//		}
+		//
+		//		public void ShowMap ()
+		//		{
+		//			MapCanvas.SetActive (true);
+		//			ListCanvas.SetActive (false);
+		//		}
 	}
 
 }

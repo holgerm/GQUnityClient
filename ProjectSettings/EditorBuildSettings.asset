@@ -56,3 +56,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pages/NPCTalk.unity
     guid: 85c46296aff5143538ab8f65bdeafdcb
+  - enabled: 1
+    path: Assets/Scenes/Pages/ImageWithText.unity
+    guid: 062b81631e00d4e3eb3ad06d1a930928
+  - enabled: 1
+    path: Assets/Scenes/Pages/StartAndExitScreen.unity
+    guid: f3cb1065372bf4f4f9c2cc51a3fc3d67

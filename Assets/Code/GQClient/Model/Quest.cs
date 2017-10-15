@@ -272,6 +272,8 @@ namespace GQ.Client.Model
 
 			Variables.SetVariableValue ("quest.name", new Value (Name));
 
+			QuestManager.Instance.CurrentPage = null;
+
 			StartPage.Start ();
 		}
 

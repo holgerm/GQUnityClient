@@ -9,17 +9,19 @@ using GQ.Client.Err;
 namespace GQ.Client.UI
 {
 
-	public class PageController : UIController
+	public abstract class PageController : UIController
 	{
 
 		protected Page page;
+		protected QuestManager qm;
 
-		protected bool resumingToFoyer = false;
+		#region MonoBehaviour
 
-		// Use this for initialization
 		public virtual void Start ()
 		{
-			QuestManager qm = QuestManager.Instance;
+			bool resumingToFoyer = false;
+
+			qm = QuestManager.Instance;
 			if (qm.CurrentQuest == null || qm.CurrentPage == Page.Null) {
 				SceneManager.LoadSceneAsync (Base.FOYER_SCENE);
 				resumingToFoyer = true;
@@ -27,15 +29,28 @@ namespace GQ.Client.UI
 			}
 
 			page = qm.CurrentPage;
-		}
-		
-		// Update is called once per frame
-		void Update ()
-		{
-			
+
+			if (page == null) {
+				if (!resumingToFoyer)
+					Log.SignalErrorToDeveloper (
+						"Page is null in quest {0}", 
+						QuestManager.Instance.CurrentQuest.Id.ToString ()
+					);
+				return;
+				// TODO What should we do now? End quest?
+			}
+
+			page.PageCtrl = this;
+
+			Initialize ();
 		}
 
-		#region Back and Forward
+		#endregion
+
+
+		#region Runtime API
+
+		public abstract void Initialize ();
 
 		/// <summary>
 		/// Override this method to react on Back Button CLick (or similar events).

@@ -14,14 +14,15 @@ namespace GQ.Client.Model
 
 		public int Id { get; set; }
 
-		public bool AllowReturn { get; set;	}
+		public bool AllowReturn { get; set; }
 
 		#endregion
 
 
 		#region Structure
 
-		protected override void ReadAttributes(XmlReader reader) {
+		protected override void ReadAttributes (XmlReader reader)
+		{
 			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
 			AllowReturn = GQML.GetOptionalBoolAttribute (GQML.ACTION_STARTMISSION_ALLOWRETURN, reader, false);
 		}
@@ -33,7 +34,7 @@ namespace GQ.Client.Model
 
 		public override void Execute ()
 		{
-			Quest.GetPageWithID(Id).Start();
+			Quest.GetPageWithID (Id).Start ();
 		}
 
 		#endregion

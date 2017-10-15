@@ -146,7 +146,7 @@ namespace GQ.Client.UI
 			map.CenterWGS84 = new double[2] { 4.83527, 45.76487 };
 			map.UsesLocation = true;
 			map.InputsEnabled = true;
-			map.ShowsGUIControls = true;
+			map.ShowsGUIControls = false;
 
 			map.GUIDelegate += Toolbar;
 

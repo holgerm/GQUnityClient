@@ -28,24 +28,36 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_MULTIPLE_CHOICE_QUESTION = "MultipleChoiceQuestion";
 		public const string PAGE_TYPE_TEXT_QUESTION = "TextQuestion";
 
-		// NPCTALK PAGE:
+		// IMAGE_WITH_TEXT PAGE:
+		public const string PAGE_TYPE_IMAGEWITHTEXT = "NPCTalk";
+		public const string PAGE_IMAGEWITHTEXT_IMAGEURL = "image";
+		public const string PAGE_IMAGEWITHTEXT_TEXTSIZE = "textsize";
+		public const string PAGE_IMAGEWITHTEXT_TEXT = "text";
+		public const string PAGE_IMAGEWITHTEXT_ENDBUTTONTEXT = "endbuttontext";
+
+		// NPC_TALK PAGE:
 		public const string PAGE_TYPE_NPCTALK = "NPCTalk";
 		public const string PAGE_NPCTALK_ENDBUTTONTEXT = "endbuttontext";
 		public const string PAGE_NPCTALK_IMAGEURL = "image";
 		public const string PAGE_NPCTALK_DISPLAYMODE = "mode";
 		public const string PAGE_NPCTALK_DISPLAYMODE_ALL_AT_ONCE = "Komplett anzeigen";
 		public const string PAGE_NPCTALK_DISPLAYMODE_WORD_BY_WORD = "Wordticker";
-
 		public const string PAGE_NPCTALK_NEXTBUTTONTEXT = "nextdialogbuttontext";
 		public const string PAGE_NPCTALK_SKIPWORDTICKER = "skipwordticker";
 		public const string PAGE_NPCTALK_TEXTSIZE = "textsize";
 		public const string PAGE_NPCTALK_TICKERSPEED = "tickerspeed";
-		// DIALOGITEM:
+		// DIALOG_ITEM:
 		public const string PAGE_NPCTALK_DIALOGITEM = "dialogitem";
 		public const string PAGE_NPCTALK_DIALOGITEM_BLOCKING = "blocking";
 		public const string PAGE_NPCTALK_DIALOGITEM_AUDIOURL = "sound";
 		public const string PAGE_NPCTALK_DIALOGITEM_SPEAKER = "speaker";
 
+		// START_AND_EXIT_SCREEN PAGE:
+		public const string PAGE_TYPE_STARTANDEXITSCREEN = "StartAndExitScreen";
+		public const string PAGE_STARTANDEXITSCREEN_IMAGEURL = "image";
+		public const string PAGE_STARTANDEXITSCREEN_DURATION = "duration";
+		public const string PAGE_STARTANDEXITSCREEN_FPS = "fps";
+		public const string PAGE_STARTANDEXITSCREEN_LOOP = "loop";
 
 		// TRIGGER:
 		public const string ON_START = "onStart";
