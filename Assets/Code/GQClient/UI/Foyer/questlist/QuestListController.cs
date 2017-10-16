@@ -21,7 +21,6 @@ namespace GQ.Client.UI.Foyer
 		#region Fields
 
 		public Transform InfoList;
-		private string INFOLIST_PATH = "Viewport/InfoList";
 
 		protected QuestInfoManager qim;
 
@@ -29,15 +28,6 @@ namespace GQ.Client.UI.Foyer
 
 		#endregion
 
-
-		//		#region Editor Setup
-		//
-		//		void Reset ()
-		//		{
-		//			InfoList = EnsurePrefabVariableIsSet<Transform> (InfoList, "InfoList", INFOLIST_PATH);
-		//		}
-		//
-		//		#endregion
 
 		#region Lifecycle API
 

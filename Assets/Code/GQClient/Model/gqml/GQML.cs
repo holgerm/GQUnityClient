@@ -102,6 +102,17 @@ namespace GQ.Client.Model
 
 		// HOTSPOTS:
 		public const string HOTSPOT = "hotspot";
+		public const string HOTSPOT_ID = "id";
+		public const string HOTSPOT_MARKERURL = "img";
+		public const string HOTSPOT_INITIAL_ACTIVITY = "initialActivity";
+		public const string HOTSPOT_INITIAL_VISIBILITY = "initialVisibility";
+		public const string HOTSPOT_NUMBER = "number";
+		public const string HOTSPOT_RADIUS = "radius";
+		public const string HOTSPOT_LATLONG = "latlong";
+		public const string HOTSPOT_NFC = "nfc";
+		public const string HOTSPOT_IBEACON = "iBeacon";
+		public const string HOTSPOT_QRCODE = "qrcode";
+
 
 		#endregion
 
@@ -147,6 +158,20 @@ namespace GQ.Client.Model
 			if (!Int64.TryParse (attString, out val)) {
 				Log.SignalErrorToDeveloper (
 					"Long attribute {0} for a page could not be parsed. We found: {1}.", 
+					attributeName, 
+					attString);
+			}
+
+			return val;
+		}
+
+		public static double GetDoubleAttribute (string attributeName, XmlReader reader, double defaultVal = 0d)
+		{
+			string attString = getAttr (attributeName, "Double", reader);
+			double val = defaultVal;
+			if (!Double.TryParse (attString, out val)) {
+				Log.SignalErrorToDeveloper (
+					"Double attribute {0} for a page could not be parsed. We found: {1}.", 
 					attributeName, 
 					attString);
 			}

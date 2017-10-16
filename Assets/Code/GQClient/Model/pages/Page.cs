@@ -132,15 +132,9 @@ namespace GQ.Client.Model
 		[Obsolete]
 		public string stateOld;
 
-		private string state;
-
 		public string State {
-			get {
-				return state;
-			}
-			protected set {
-				state = value;
-			}
+			get;
+			protected set;
 		}
 
 		public string result;
