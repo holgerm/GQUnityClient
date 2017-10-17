@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using GQ.Client.Model;
+using System.Diagnostics;
 
 namespace GQ.Client.Err
 {
@@ -12,7 +13,7 @@ namespace GQ.Client.Err
 
 		private static Stack<Problem> stack;
 
-		#region Public API
+		#region File Messages
 
 		/// <summary>
 		/// Log only logs problems with a level equal or higher than the current ReportLevel.
@@ -20,7 +21,8 @@ namespace GQ.Client.Err
 		/// <value>The report level.</value>
 		public static Level ReportLevel { get; set; }
 
-		static Log() {
+		static Log ()
+		{
 			ReportLevel = Level.Info;
 			stack = new Stack<Problem> ();
 		}
@@ -45,14 +47,14 @@ namespace GQ.Client.Err
 				);
 			switch (level) {
 			case Level.Info:
-				Debug.Log (logtext);
+				UnityEngine.Debug.Log (logtext);
 				break;
 			case Level.Warning:
-				Debug.LogWarning (logtext);
+				UnityEngine.Debug.LogWarning (logtext);
 				break;
 			case Level.Error:
 			case Level.FatalError:
-				Debug.LogWarning ("ERROR: " + logtext);
+				UnityEngine.Debug.LogWarning ("ERROR: " + logtext);
 				break;
 			default:
 				break;
@@ -136,17 +138,30 @@ namespace GQ.Client.Err
 		#endregion
 
 
+		#region Stats
 
+		public static void TexturesLoaded ()
+		{
+			File (("Textures " + Resources.FindObjectsOfTypeAll (typeof(Texture)).Length).Red (), Level.Info, Recipient.Developer);
+		}
+
+
+		#endregion
 	}
 
 
 	public class Problem
 	{
 		public string Message { get; private set; }
+
 		public Recipient Recipient { get; private set; }
-		public Level Level { get; private set; } 
+
+		public Level Level { get; private set; }
+
 		public DateTime Timestamp { get; private set; }
+
 		public int QuestID { get; private set; }
+
 		public string QuestName { get; private set; }
 
 		public Problem (string message, Level level, Recipient recipient)

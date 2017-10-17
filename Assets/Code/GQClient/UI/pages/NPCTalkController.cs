@@ -68,6 +68,7 @@ namespace GQ.Client.UI
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
 					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
 					image.texture = d.Www.texture;
+//					Resources.UnloadAsset (d.Www.texture);
 				};
 				loader.Start ();
 			}

@@ -163,6 +163,9 @@ namespace GQ.Client.Model
 
 		public virtual void Start ()
 		{
+			// TODO Show Mem Avail:
+			Log.TexturesLoaded ();
+
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
 			if (!scene.path.Equals (PageScenePath)) {

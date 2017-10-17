@@ -158,79 +158,79 @@ namespace GQ.Client.UI
 
 			layers.Add (osmLayer);
 
-			// create a WMS tile layer
-			WMSTileLayerBehaviour wmsLayer = map.CreateLayer<WMSTileLayerBehaviour> ("WMS");
-			wmsLayer.BaseURL = "http://129.206.228.72/cached/osm?"; // http://www.osm-wms.de : seems to be of very limited use
-			wmsLayer.Layers = "osm_auto:all";
-			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-			wmsLayer.gameObject.SetActiveRecursively(false);
-			#else
-			wmsLayer.gameObject.SetActive (false);
-			#endif
-
-			layers.Add (wmsLayer);
-
-			// create a VirtualEarth tile layer
-			VirtualEarthTileLayerBehaviour virtualEarthLayer = map.CreateLayer<VirtualEarthTileLayerBehaviour> ("VirtualEarth");
-			// Note: this is the key UnitySlippyMap, DO NOT use it for any other purpose than testing
-			virtualEarthLayer.Key = "ArgkafZs0o_PGBuyg468RaapkeIQce996gkyCe8JN30MjY92zC_2hcgBU_rHVUwT";
-
-			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-			virtualEarthLayer.gameObject.SetActiveRecursively(false);
-			#else
-			virtualEarthLayer.gameObject.SetActive (false);
-			#endif
-
-			layers.Add (virtualEarthLayer);
-
-			// create an MBTiles tile layer
-			bool error = false;
-			// on iOS, you need to add the db file to the Xcode project using a directory reference
-			string mbTilesDir = "MBTiles/";
-			//string filename = "UnitySlippyMap_World_0_8.mbtiles";
-			string filename = "CountryMapWithUTfData.mbtiles";
-			string filepath = null;
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-			} else if (Application.platform == RuntimePlatform.Android) {
-				// Note: Android is a bit tricky, Unity produces APK files and those are never unzip on the device.
-				// Place your MBTiles file in the StreamingAssets folder (http://docs.unity3d.com/Documentation/Manual/StreamingAssets.html).
-				// Then you need to access the APK on the device with WWW and copy the file to persitentDataPath
-				// to that it can be read by SqliteDatabase as an individual file
-				string newfilepath = Application.temporaryCachePath + "/" + filename;
-				if (File.Exists (newfilepath) == false) {
-					Debug.Log ("DEBUG: file doesn't exist: " + newfilepath);
-					filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-					// TODO: read the file with WWW and write it to persitentDataPath
-					WWW loader = new WWW (filepath);
-					yield return loader;
-					if (loader.error != null) {
-						Debug.LogError ("ERROR: " + loader.error);
-						error = true;
-					} else {
-						Debug.Log ("DEBUG: will write: '" + filepath + "' to: '" + newfilepath + "'");
-						File.WriteAllBytes (newfilepath, loader.bytes);
-					}
-				} else
-					Debug.Log ("DEBUG: exists: " + newfilepath);
-				filepath = newfilepath;
-			} else {
-				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-			}
-
-			if (error == false) {
-				Debug.Log ("DEBUG: using MBTiles file: " + filepath);
-				MBTilesLayerBehaviour mbTilesLayer = map.CreateLayer<MBTilesLayerBehaviour> ("MBTiles");
-				mbTilesLayer.Filepath = filepath;
-				#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-				mbTilesLayer.gameObject.SetActiveRecursively(false);
-				#else
-				mbTilesLayer.gameObject.SetActive (false);
-				#endif
-
-				layers.Add (mbTilesLayer);
-			} else
-				Debug.LogError ("ERROR: MBTiles file not found!");
+//			// create a WMS tile layer
+//			WMSTileLayerBehaviour wmsLayer = map.CreateLayer<WMSTileLayerBehaviour> ("WMS");
+//			wmsLayer.BaseURL = "http://129.206.228.72/cached/osm?"; // http://www.osm-wms.de : seems to be of very limited use
+//			wmsLayer.Layers = "osm_auto:all";
+//			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
+//			wmsLayer.gameObject.SetActiveRecursively(false);
+//			#else
+//			wmsLayer.gameObject.SetActive (false);
+//			#endif
+//
+//			layers.Add (wmsLayer);
+//
+//			// create a VirtualEarth tile layer
+//			VirtualEarthTileLayerBehaviour virtualEarthLayer = map.CreateLayer<VirtualEarthTileLayerBehaviour> ("VirtualEarth");
+//			// Note: this is the key UnitySlippyMap, DO NOT use it for any other purpose than testing
+//			virtualEarthLayer.Key = "ArgkafZs0o_PGBuyg468RaapkeIQce996gkyCe8JN30MjY92zC_2hcgBU_rHVUwT";
+//
+//			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
+//			virtualEarthLayer.gameObject.SetActiveRecursively(false);
+//			#else
+//			virtualEarthLayer.gameObject.SetActive (false);
+//			#endif
+//
+//			layers.Add (virtualEarthLayer);
+//
+//			// create an MBTiles tile layer
+//			bool error = false;
+//			// on iOS, you need to add the db file to the Xcode project using a directory reference
+//			string mbTilesDir = "MBTiles/";
+//			//string filename = "UnitySlippyMap_World_0_8.mbtiles";
+//			string filename = "CountryMapWithUTfData.mbtiles";
+//			string filepath = null;
+//			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+//				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
+//			} else if (Application.platform == RuntimePlatform.Android) {
+//				// Note: Android is a bit tricky, Unity produces APK files and those are never unzip on the device.
+//				// Place your MBTiles file in the StreamingAssets folder (http://docs.unity3d.com/Documentation/Manual/StreamingAssets.html).
+//				// Then you need to access the APK on the device with WWW and copy the file to persitentDataPath
+//				// to that it can be read by SqliteDatabase as an individual file
+//				string newfilepath = Application.temporaryCachePath + "/" + filename;
+//				if (File.Exists (newfilepath) == false) {
+//					Debug.Log ("DEBUG: file doesn't exist: " + newfilepath);
+//					filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
+//					// TODO: read the file with WWW and write it to persitentDataPath
+//					WWW loader = new WWW (filepath);
+//					yield return loader;
+//					if (loader.error != null) {
+//						Debug.LogError ("ERROR: " + loader.error);
+//						error = true;
+//					} else {
+//						Debug.Log ("DEBUG: will write: '" + filepath + "' to: '" + newfilepath + "'");
+//						File.WriteAllBytes (newfilepath, loader.bytes);
+//					}
+//				} else
+//					Debug.Log ("DEBUG: exists: " + newfilepath);
+//				filepath = newfilepath;
+//			} else {
+//				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
+//			}
+//
+//			if (error == false) {
+//				Debug.Log ("DEBUG: using MBTiles file: " + filepath);
+//				MBTilesLayerBehaviour mbTilesLayer = map.CreateLayer<MBTilesLayerBehaviour> ("MBTiles");
+//				mbTilesLayer.Filepath = filepath;
+//				#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
+//				mbTilesLayer.gameObject.SetActiveRecursively(false);
+//				#else
+//				mbTilesLayer.gameObject.SetActive (false);
+//				#endif
+//
+//				layers.Add (mbTilesLayer);
+//			} else
+//				Debug.LogError ("ERROR: MBTiles file not found!");
 
 			// create some test 2D markers
 			GameObject go = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
@@ -262,6 +262,8 @@ namespace GQ.Client.UI
 			map.SetLocationMarker<LocationMarkerBehaviour> (markerGO);
 
 			DestroyImmediate (go);
+
+			yield break;
 		}
 
 		void OnApplicationQuit ()

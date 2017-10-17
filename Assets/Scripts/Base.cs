@@ -61,17 +61,11 @@ namespace GQ.Client.Util
 		// Use this for initialization
 		void Start ()
 		{
-			DontDestroyOnLoad (GameObject.Find ("/FoyerCanvas"));
-			DontDestroyOnLoad (GameObject.Find (DialogController.DIALOG_CANVAS_PATH));
-		}
-		
-		// Update is called once per frame
-		void Update ()
-		{
-		
 		}
 
 		#endregion
+
+
 	}
 
 }
