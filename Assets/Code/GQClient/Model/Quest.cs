@@ -280,6 +280,7 @@ namespace GQ.Client.Model
 		public void End ()
 		{
 			SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
+			Resources.UnloadUnusedAssets ();
 		}
 
 		public void GoBackOnePage ()

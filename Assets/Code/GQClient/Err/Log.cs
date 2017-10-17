@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using GQ.Client.Model;
 using System.Diagnostics;
+using System.Text;
 
 namespace GQ.Client.Err
 {
@@ -140,9 +141,23 @@ namespace GQ.Client.Err
 
 		#region Stats
 
-		public static void TexturesLoaded ()
+		public static void TexturesLoaded (string prefix = "")
 		{
-			File (("Textures " + Resources.FindObjectsOfTypeAll (typeof(Texture)).Length).Red (), Level.Info, Recipient.Developer);
+			UnityEngine.Object[] textures = Resources.FindObjectsOfTypeAll (typeof(Texture));
+			StringBuilder details = new StringBuilder();
+			int bigTexturesLoaded = 0;
+			for (int i = 0; i < textures.Length; i++ ) {
+				Texture tex = (Texture)textures [i];
+				if (tex.width >100 || tex.height > 100) {
+					bigTexturesLoaded++;
+					details.AppendLine (tex.name + ": " + tex.width + " x " + tex.height);
+				}
+			}
+			File (
+				(prefix + "Big Textures " + bigTexturesLoaded).Yellow () + "\n" + details.ToString(), 
+				Level.Info, 
+				Recipient.Developer
+			);
 		}
 
 

@@ -164,7 +164,9 @@ namespace GQ.Client.Model
 		public virtual void Start ()
 		{
 			// TODO Show Mem Avail:
-			Log.TexturesLoaded ();
+			Log.TexturesLoaded("Page.Start() #2: ");
+			Resources.UnloadUnusedAssets ();
+			Log.TexturesLoaded("Page.Start() #2: ");
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
@@ -209,6 +211,7 @@ namespace GQ.Client.Model
 			} else {
 				EndTrigger.Initiate ();
 			}
+			Resources.UnloadUnusedAssets ();
 		}
 
 		#endregion
