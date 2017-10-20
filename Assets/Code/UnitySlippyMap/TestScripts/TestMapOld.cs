@@ -35,7 +35,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TestMap : MonoBehaviour
+public class TestMapOld : MonoBehaviour
 {
 	private MapBehaviour map;
 	

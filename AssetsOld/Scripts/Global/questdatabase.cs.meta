@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: fa9550d02c2d244fc9034bcabbc47c7a
+timeCreated: 1428501793
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - questdataprefab: {fileID: 483494, guid: 0bc29257c789c49eea959680bd54985d, type: 2}
+  - currentquestdata: {instanceID: 0}
+  - downloadmsg: {instanceID: 0}
+  - publicquestslist: {instanceID: 0}
+  - actioncontroller: {instanceID: 0}
+  - message_prefab: {instanceID: 0}
+  - questmilllogo: {instanceID: 0}
+  - webloadingmessage: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
