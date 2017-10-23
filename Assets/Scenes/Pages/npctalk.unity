@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 39874145}
   - component: {fileID: 39874144}
   - component: {fileID: 39874143}
+  - component: {fileID: 39874147}
   m_Layer: 5
   m_Name: RightButton
   m_TagString: Untagged
@@ -255,6 +256,17 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 39874141}
+--- !u!114 &39874147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 39874141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9286fbe42762c45e2b25e08b2a9baee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &215277135
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +387,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 185
+  m_FlexibleHeight: 171
   m_LayoutPriority: 1
 --- !u!114 &215277141
 MonoBehaviour:
@@ -585,7 +597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.13235295, g: 0.12846021, b: 0.12846021, a: 1}
+  m_Color: {r: 0.41960788, g: 0.3803922, b: 0.10980393, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -720,6 +732,7 @@ GameObject:
   - component: {fileID: 489062702}
   - component: {fileID: 489062701}
   - component: {fileID: 489062700}
+  - component: {fileID: 489062705}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -857,6 +870,17 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 489062698}
+--- !u!114 &489062705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 489062698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9286fbe42762c45e2b25e08b2a9baee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &561690669
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,7 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.42745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -963,6 +987,7 @@ GameObject:
   - component: {fileID: 779427905}
   - component: {fileID: 779427904}
   - component: {fileID: 779427907}
+  - component: {fileID: 779427908}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -1082,6 +1107,17 @@ MonoBehaviour:
   m_FlexibleWidth: 10
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &779427908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 779427902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da245c8a7627a4c758970827b73e53ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &787800011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,7 +1356,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.05
+    m_LineSpacing: 1.1
   m_Text: 'New <a name="link" href="www.google.de">HyperText</a>
 
     sfasfasfasfasfasfasf as asfas f asf asfasfas fasf afasf aff s '
@@ -1409,6 +1445,7 @@ GameObject:
   - component: {fileID: 988022700}
   - component: {fileID: 988022699}
   - component: {fileID: 988022703}
+  - component: {fileID: 988022704}
   - component: {fileID: 988022702}
   m_Layer: 5
   m_Name: Page
@@ -1456,7 +1493,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 850
+  m_FlexibleHeight: 875
   m_LayoutPriority: 1
 --- !u!114 &988022700
 MonoBehaviour:
@@ -1510,7 +1547,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 25
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -1528,6 +1565,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1549135014}
   text: {fileID: 925438090}
+--- !u!114 &988022704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 988022697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1005699202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1621,6 +1669,7 @@ GameObject:
   - component: {fileID: 1095057062}
   - component: {fileID: 1095057065}
   - component: {fileID: 1095057064}
+  - component: {fileID: 1095057066}
   - component: {fileID: 1095057063}
   m_Layer: 5
   m_Name: Header
@@ -1667,7 +1716,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 75
+  m_FlexibleHeight: 50
   m_LayoutPriority: 1
 --- !u!114 &1095057064
 MonoBehaviour:
@@ -1704,6 +1753,17 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1095057061}
+--- !u!114 &1095057066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1095057061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b83c73d4cd27405ab4c6f21a131606e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1430352258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,6 +1849,7 @@ GameObject:
   - component: {fileID: 1488490925}
   - component: {fileID: 1488490924}
   - component: {fileID: 1488490923}
+  - component: {fileID: 1488490927}
   - component: {fileID: 1488490926}
   m_Layer: 5
   m_Name: ForwardButton
@@ -1920,6 +1981,17 @@ MonoBehaviour:
   m_FlexibleWidth: 10
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1488490927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1488490921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da245c8a7627a4c758970827b73e53ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1542102336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,6 +2004,7 @@ GameObject:
   - component: {fileID: 1542102339}
   - component: {fileID: 1542102338}
   - component: {fileID: 1542102341}
+  - component: {fileID: 1542102342}
   m_Layer: 5
   m_Name: SpecialButton
   m_TagString: Untagged
@@ -2011,7 +2084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2051,6 +2124,17 @@ MonoBehaviour:
   m_FlexibleWidth: 60
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1542102342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1542102336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da245c8a7627a4c758970827b73e53ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1549135012
 GameObject:
   m_ObjectHideFlags: 0
@@ -2162,6 +2246,7 @@ GameObject:
   - component: {fileID: 1804547553}
   - component: {fileID: 1804547556}
   - component: {fileID: 1804547555}
+  - component: {fileID: 1804547557}
   - component: {fileID: 1804547554}
   m_Layer: 5
   m_Name: Footer
@@ -2220,7 +2305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.43137258, g: 0.37647063, b: 0.121568635, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2241,6 +2326,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1804547552}
+--- !u!114 &1804547557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1804547552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6588269b38ff3407cb3c48c6e14f2d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1862011689
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,7 +2384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2443,7 +2539,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 114
+  m_FlexibleHeight: 128
   m_LayoutPriority: 1
 --- !u!114 &2026155315
 MonoBehaviour:
@@ -2530,7 +2626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.40933174, g: 0.45817176, b: 0.49264705, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

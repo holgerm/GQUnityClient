@@ -394,6 +394,9 @@ namespace GQ.Editor.Building {
 
 			ProductEditor.IsCurrentlyPreparingProduct = false;
 			GQAssetChangePostprocessor.writeBuildDate();
+
+			// update view in editor:
+			LayoutConfig.ResetAll ();
 		}
 
 		private void replaceLoadingLogoInScene (string scenePath) {
@@ -507,7 +510,5 @@ namespace GQ.Editor.Building {
 
 		#endregion
 	}
-
-
 
 }

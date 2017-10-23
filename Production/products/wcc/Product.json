@@ -5,6 +5,7 @@
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
+  "downloadStrategy": 0,
   "downloadTimeOutSeconds": 80,
   "nameForQuest": "Ort",
   "questVisualization": "map",
@@ -101,5 +102,55 @@
       "ID": "wcc.cafe",
       "Name": "Café"
     }
-  ]
+  ],
+  "headerHeightPermill": 50,
+  "headerBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "headerButtonBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "headerButtonFgColor": {
+    "r": 0.431372583,
+    "g": 0.376470625,
+    "b": 0.121568635,
+    "a": 1.0
+  },
+  "contentBackgroundColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "contentFontColor": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0,
+    "a": 1.0
+  },
+  "footerHeightPermill": 75,
+  "footerBgColor": {
+    "r": 0.431372583,
+    "g": 0.3803922,
+    "b": 0.121568635,
+    "a": 1.0
+  },
+  "footerButtonBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "footerButtonFgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  }
 }

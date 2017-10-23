@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using UnityEngine;
+using Newtonsoft.Json;
+using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.Conf
 {
@@ -62,6 +66,42 @@ namespace GQ.Client.Conf
 
 		public List<CategoryInfo> markers { get; set; }
 
+
+		#region Layout
+
+		public int 		headerHeightPermill { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	headerBgColor  { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	headerButtonBgColor  { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	headerButtonFgColor  { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	contentBackgroundColor  { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	contentFontColor  { get; set; }
+
+		public int 		footerHeightPermill { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	footerBgColor  { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	footerButtonBgColor  { get; set; }
+
+		[JsonConverter(typeof(ColorConverter))]		
+		public Color	footerButtonFgColor  { get; set; }
+
+		#endregion
+
+
+		#region Defaults
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class and intializes it with generic default values.
 		/// 
@@ -91,9 +131,23 @@ namespace GQ.Client.Conf
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;
 			colorProfile = "default";
+			headerButtonBgColor = Color.white;
+			contentBackgroundColor = Color.white;
+			contentFontColor = Color.black;
+
+			// Layout:
+			headerHeightPermill = 50;
+			headerBgColor = Color.white;
+			footerHeightPermill = 75;
+			footerBgColor = Color.white;
+			headerButtonBgColor = GQColor.transparent;
+			headerButtonFgColor = Color.black;
 		}
 
+		#endregion
+
 	}
+
 
 	public enum DownloadStrategy {
 		UPFRONT,
@@ -102,6 +156,49 @@ namespace GQ.Client.Conf
 	}
 
 
+	public class ColorConverter : JsonConverter
+	{
+		public override bool CanConvert(Type objectType)
+		{
+			return objectType == typeof(Color);
+		}
+
+		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		{
+			reader.Read ();
+			float r = (float)reader.ReadAsDouble();
+			reader.Read ();
+			float g = (float) reader.ReadAsDouble ();
+			reader.Read ();
+			float b = (float) reader.ReadAsDouble ();
+			reader.Read ();
+			float a = (float) reader.ReadAsDouble ();
+			reader.Read ();
+
+			Color c = new Color (r, g, b, a);
+			return c;
+		}
+
+		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		{
+			Color c = (Color)value;
+			writer.WriteStartObject ();
+			writer.WritePropertyName ("r");
+			writer.WriteValue (c.r);
+			writer.WritePropertyName ("g");
+			writer.WriteValue (c.g);
+			writer.WritePropertyName ("b");
+			writer.WriteValue (c.b);
+			writer.WritePropertyName ("a");
+			writer.WriteValue (c.a);
+			writer.WriteEndObject ();
+		}
+	}
+
+	public static class GQColor {
+
+		public static readonly Color transparent = new Color(1f, 1f, 1f, 0f);
+	}
 }
 
 

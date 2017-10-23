@@ -466,6 +466,17 @@ namespace GQ.Editor.UI
 								}
 							}
 							break;
+						case "Color":
+							Color oldColorVal = (Color)curPropInfo.GetValue (p.Config, null);
+							Color newColorVal = oldColorVal;
+
+							// show Color field if value fits in one line:
+							newColorVal = EditorGUILayout.ColorField (namePrefixGUIContent, oldColorVal);
+							if (newColorVal != oldColorVal) {
+								configIsDirty = true;
+							}
+							curPropInfo.SetValue (p.Config, newColorVal, null);
+							break;
 						default:
 							Debug.Log ("Unhandled property Type: " + curPropInfo.PropertyType.Name);
 							break;
@@ -501,6 +512,7 @@ namespace GQ.Editor.UI
 						ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
 						Pm.serializeConfig (p.Config, ConfigurationManager.RUNTIME_PRODUCT_DIR);
 						configIsDirty = false;
+						LayoutConfig.ResetAll (); // TODO check and implement update all laoyut components in editor
 					}
 					if (GUILayout.Button ("Revert")) {
 						ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
