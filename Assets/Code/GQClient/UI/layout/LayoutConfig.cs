@@ -3,28 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Err;
 
-public abstract class LayoutConfig : MonoBehaviour {
 
-	public static string HEADER = "Header";
-	public static string FOOTER = "Footer";
+namespace GQ.Client.UI {
 
-	protected abstract void layout ();
+	public abstract class LayoutConfig : MonoBehaviour {
 
-	protected void Start () {
-		layout ();
-	}
-	
-	protected void Reset () {
-		layout ();
-	}
+		public static string HEADER = "Header";
+		public static string FOOTER = "Footer";
 
-	/// <summary>
-	/// Resets all layout changes made in the config to all gameobjects involved in the editor, so that the changes are immediatley reflected.
-	/// </summary>
-	public static void ResetAll() {
-		Object[] objects = Resources.FindObjectsOfTypeAll (typeof(LayoutConfig));
-		foreach (var item in objects) {
-			((LayoutConfig)item).Reset ();
+		protected abstract void layout ();
+
+		protected void Start () {
+			layout ();
+		}
+		
+		protected void Reset () {
+			layout ();
+		}
+
+		/// <summary>
+		/// Resets all layout changes made in the config to all gameobjects involved in the editor, so that the changes are immediatley reflected.
+		/// </summary>
+		public static void ResetAll() {
+			Object[] objects = Resources.FindObjectsOfTypeAll (typeof(LayoutConfig));
+			foreach (var item in objects) {
+				((LayoutConfig)item).Reset ();
+			}
 		}
 	}
+
 }

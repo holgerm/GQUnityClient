@@ -5,35 +5,39 @@ using UnityEngine.UI;
 using GQ.Client.Conf;
 using System;
 
-/// <summary>
-/// Configures the header layout based on the seetings in the current apps config data. Attach this script to all header game objects.
-/// </summary>
-[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
-public class FooterButtonLayoutConfig : LayoutConfig {
+namespace GQ.Client.UI {
 
-	protected override void layout() {
-		// set background color:
-		Image bgImage = GetComponent<Image> ();
-		if (bgImage != null) {
-			bgImage.color = ConfigurationManager.Current.footerButtonBgColor;
-		}
+	/// <summary>
+	/// Configures the header layout based on the seetings in the current apps config data. Attach this script to all header game objects.
+	/// </summary>
+	[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
+	public class FooterButtonLayoutConfig : LayoutConfig {
 
-		// set foreground color in Image:
-		try {
-			Image fgImage = transform.Find("Image").GetComponent<Image> ();
-			if (fgImage != null) {
-				fgImage.color = ConfigurationManager.Current.footerButtonFgColor;
+		protected override void layout() {
+			// set background color:
+			Image bgImage = GetComponent<Image> ();
+			if (bgImage != null) {
+				bgImage.color = ConfigurationManager.Current.footerButtonBgColor;
 			}
-		}
-		catch (Exception) {}	
 
-		// set foreground color as font color in Text:
-		try {
-			Text fgText = transform.Find("Text").GetComponent<Text> ();
-			if (fgText != null) {
-				fgText.color = ConfigurationManager.Current.footerButtonFgColor;
+			// set foreground color in Image:
+			try {
+				Image fgImage = transform.Find("Image").GetComponent<Image> ();
+				if (fgImage != null) {
+					fgImage.color = ConfigurationManager.Current.footerButtonFgColor;
+				}
 			}
+			catch (Exception) {}	
+
+			// set foreground color as font color in Text:
+			try {
+				Text fgText = transform.Find("Text").GetComponent<Text> ();
+				if (fgText != null) {
+					fgText.color = ConfigurationManager.Current.footerButtonFgColor;
+				}
+			}
+			catch (Exception) {}	
 		}
-		catch (Exception) {}	
 	}
+
 }
