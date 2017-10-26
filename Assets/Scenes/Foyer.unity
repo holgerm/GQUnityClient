@@ -3145,6 +3145,7 @@ GameObject:
   - component: {fileID: 1260760256}
   - component: {fileID: 1260760255}
   - component: {fileID: 1260760254}
+  - component: {fileID: 1260760258}
   - component: {fileID: 1260760253}
   m_Layer: 5
   m_Name: MenuButton
@@ -3283,6 +3284,17 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1260760251}
+--- !u!114 &1260760258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1260760251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9286fbe42762c45e2b25e08b2a9baee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1337534262
 GameObject:
   m_ObjectHideFlags: 0
@@ -4016,7 +4028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.13235295, g: 0.12846021, b: 0.12846021, a: 1}
+  m_Color: {r: 0.43137258, g: 0.37647063, b: 0.121568635, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
