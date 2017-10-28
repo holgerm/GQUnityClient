@@ -54,7 +54,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Foyer.unity
     guid: 4d551cc36556f4ca2bad53f82276aede
   - enabled: 1
-    path: Assets/Scenes/Pages/npctalk.unity
+    path: Assets/Scenes/Pages/NPCTalk.unity
     guid: 85c46296aff5143538ab8f65bdeafdcb
   - enabled: 1
     path: Assets/Scenes/Pages/ImageWithText.unity

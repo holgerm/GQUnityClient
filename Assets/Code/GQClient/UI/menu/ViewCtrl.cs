@@ -16,6 +16,7 @@ namespace GQ.Client.UI
 
 		public GameObject ListCanvas;
 		public GameObject MapCanvas;
+		public GameObject MapHolder;
 
 		public GameObject MenuCanvas;
 
@@ -23,21 +24,11 @@ namespace GQ.Client.UI
 		{
 			ListCanvas.SetActive (viewer.name == "ViewAsList");
 			MapCanvas.SetActive (viewer.name == "ViewOnMap");
+			MapHolder.SetActive (viewer.name == "ViewOnMap");
 
 			MenuCanvas.SetActive (false);
 		}
 
-		//		public void ShowList ()
-		//		{
-		//			ListCanvas.SetActive (true);
-		//			MapCanvas.SetActive (false);
-		//		}
-		//
-		//		public void ShowMap ()
-		//		{
-		//			MapCanvas.SetActive (true);
-		//			ListCanvas.SetActive (false);
-		//		}
 	}
 
 }

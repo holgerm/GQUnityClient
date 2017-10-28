@@ -146,7 +146,7 @@ namespace GQ.Client.UI
 			map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
 			map.CurrentZoom = 15.0f;
 			// 9 rue Gentil, Lyon
-			map.CenterWGS84 = new double[2] { 4.83527, 45.76487 };
+			map.CenterWGS84 = new double[2] { 7.0090314, 50.9603868 };
 
 			LocationSensor.Instance.OnLocationUpdate += 
 				(object sender, LocationSensor.LocationEventArgs e) => 
@@ -241,14 +241,14 @@ namespace GQ.Client.UI
 			if (error == false) {
 				Debug.Log ("DEBUG: using MBTiles file: " + filepath);
 				MBTilesLayerBehaviour mbTilesLayer = map.CreateLayer<MBTilesLayerBehaviour> ("MBTiles");
-				mbTilesLayer.Filepath = filepath;
+//				mbTilesLayer.Filepath = filepath;
 				#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-				mbTilesLayer.gameObject.SetActiveRecursively(false);
+//				mbTilesLayer.gameObject.SetActiveRecursively(false);
 				#else
-				mbTilesLayer.gameObject.SetActive (false);
+//				mbTilesLayer.gameObject.SetActive (false);
 				#endif
 
-				layers.Add (mbTilesLayer);
+//				layers.Add (mbTilesLayer);
 			} else
 				Debug.LogError ("ERROR: MBTiles file not found!");
 
@@ -262,13 +262,13 @@ namespace GQ.Client.UI
 
 			GameObject markerGO;
 			markerGO = Instantiate (go) as GameObject;
-			map.CreateMarker<MarkerBehaviour> ("test marker - 9 rue Gentil, Lyon", new double[2] { 4.83527, 45.76487 }, markerGO);
+			map.CreateMarker<MarkerBehaviour> ("test marker - Holger's Home", new double[2] { 7.0090314, 50.9603868 }, markerGO);
 
 			markerGO = Instantiate (go) as GameObject;
-			map.CreateMarker<MarkerBehaviour> ("test marker - 31 rue de la Bourse, Lyon", new double[2] { 4.83699, 45.76535 }, markerGO);
+			map.CreateMarker<MarkerBehaviour> ("test marker - der schöne Wiener Platz", new double[2] { 7.0063599, 50.9610017 }, markerGO);
 
 			markerGO = Instantiate (go) as GameObject;
-			map.CreateMarker<MarkerBehaviour> ("test marker - 1 place St Nizier, Lyon", new double[2] { 4.83295, 45.76468 }, markerGO);
+			map.CreateMarker<MarkerBehaviour> ("test marker - Mülheimer Bahnhof - falls man mal weg will ...", new double[2] { 7.0097933, 50.957596 }, markerGO);
 
 			DestroyImmediate (go);
 
