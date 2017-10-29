@@ -149,16 +149,15 @@ namespace GQ.Client.UI
 			map.CenterWGS84 = new double[2] { 7.0090314, 50.9603868 };
 
 			LocationSensor.Instance.OnLocationUpdate += 
-				(object sender, LocationSensor.LocationEventArgs e) => 
-			{
+				(object sender, LocationSensor.LocationEventArgs e) => {
 				if (e.Kind == LocationSensor.LocationEventType.Update) {
-					Debug.Log(
-						string .Format("--- LOC: {0}, {1}", e.Location.longitude,  e.Location.latitude)
-						.Yellow()
+					Debug.Log (
+						string.Format ("--- LOC: {0}, {1}", e.Location.longitude, e.Location.latitude)
+						.Yellow ()
 					);
 				}
 				if (e.Kind == LocationSensor.LocationEventType.NotAvailable) {
-					Debug.Log(("--- LOC: Unavailable. enabled: " + Input.location.isEnabledByUser).Yellow() );
+					Debug.Log (("--- LOC: Unavailable. enabled: " + Input.location.isEnabledByUser).Yellow ());
 				}
 			};
 
@@ -170,13 +169,7 @@ namespace GQ.Client.UI
 
 			layers = new List<LayerBehaviour> ();
 
-			// create an OSM tile layer
-			OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer> ("OSM");
-			osmLayer.BaseURL = "http://a.tile.openstreetmap.org/";
-//			osmLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapboxMapID + "/";
-//			osmLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapboxKey;
-
-			layers.Add (osmLayer);
+			layers.Add (MapLayer);
 
 			// create a WMS tile layer
 			WMSTileLayerBehaviour wmsLayer = map.CreateLayer<WMSTileLayerBehaviour> ("WMS");
@@ -203,54 +196,6 @@ namespace GQ.Client.UI
 
 			layers.Add (virtualEarthLayer);
 
-			// create an MBTiles tile layer
-			bool error = false;
-			// on iOS, you need to add the db file to the Xcode project using a directory reference
-			string mbTilesDir = "MBTiles/";
-			//string filename = "UnitySlippyMap_World_0_8.mbtiles";
-			string filename = "CountryMapWithUTfData.mbtiles";
-			string filepath = null;
-			if (Application.platform == RuntimePlatform.IPhonePlayer) {
-				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-			} else if (Application.platform == RuntimePlatform.Android) {
-				// Note: Android is a bit tricky, Unity produces APK files and those are never unzip on the device.
-				// Place your MBTiles file in the StreamingAssets folder (http://docs.unity3d.com/Documentation/Manual/StreamingAssets.html).
-				// Then you need to access the APK on the device with WWW and copy the file to persitentDataPath
-				// to that it can be read by SqliteDatabase as an individual file
-				string newfilepath = Application.temporaryCachePath + "/" + filename;
-				if (File.Exists (newfilepath) == false) {
-					Debug.Log ("DEBUG: file doesn't exist: " + newfilepath);
-					filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-					// TODO: read the file with WWW and write it to persitentDataPath
-					WWW loader = new WWW (filepath);
-					yield return loader;
-					if (loader.error != null) {
-						Debug.LogError ("ERROR: " + loader.error);
-						error = true;
-					} else {
-						Debug.Log ("DEBUG: will write: '" + filepath + "' to: '" + newfilepath + "'");
-						File.WriteAllBytes (newfilepath, loader.bytes);
-					}
-				} else
-					Debug.Log ("DEBUG: exists: " + newfilepath);
-				filepath = newfilepath;
-			} else {
-				filepath = Application.streamingAssetsPath + "/" + mbTilesDir + filename;
-			}
-
-			if (error == false) {
-				Debug.Log ("DEBUG: using MBTiles file: " + filepath);
-				MBTilesLayerBehaviour mbTilesLayer = map.CreateLayer<MBTilesLayerBehaviour> ("MBTiles");
-//				mbTilesLayer.Filepath = filepath;
-				#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-//				mbTilesLayer.gameObject.SetActiveRecursively(false);
-				#else
-//				mbTilesLayer.gameObject.SetActive (false);
-				#endif
-
-//				layers.Add (mbTilesLayer);
-			} else
-				Debug.LogError ("ERROR: MBTiles file not found!");
 
 			// create some test 2D markers
 			GameObject go = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
@@ -284,6 +229,47 @@ namespace GQ.Client.UI
 			DestroyImmediate (go);
 
 			yield break;
+		}
+
+		private LayerBehaviour MapLayer {
+			get {
+				LayerBehaviour mapLayer;
+
+				switch (ConfigurationManager.Current.mapProvider) {
+				case MapProvider.OpenStreetMap:
+					mapLayer = OsmMapLayer;
+					break;
+				case MapProvider.MapBox:
+					mapLayer = MapBoxLayer;
+					break;
+				default:
+					Log.SignalErrorToDeveloper (
+						"Unknown map provider defined in configuration: {0}. We use OpenStreetMap instead.", 
+						ConfigurationManager.Current.mapProvider
+					);
+					mapLayer = OsmMapLayer;
+					break;
+				}
+
+				return mapLayer;
+			}
+		}
+
+		private LayerBehaviour OsmMapLayer {
+			get {
+				OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
+				osmLayer.BaseURL = ConfigurationManager.Current.mapBaseUrl + "/";
+				return osmLayer;
+			}
+		}
+
+		private LayerBehaviour MapBoxLayer {
+			get {
+				OSMTileLayer mapBoxLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
+				mapBoxLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/";
+				mapBoxLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapKey;
+				return mapBoxLayer;
+			}
 		}
 
 		void OnApplicationQuit ()

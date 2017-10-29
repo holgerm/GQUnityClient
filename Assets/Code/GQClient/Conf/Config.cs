@@ -3,6 +3,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System;
 using GQ.Client.Err;
+using Newtonsoft.Json.Converters;
 
 namespace GQ.Client.Conf
 {
@@ -27,8 +28,8 @@ namespace GQ.Client.Conf
 
 		public bool 	keepAutoStarting  { get; set; }
 
-		// TODO change to string
-		public DownloadStrategy downloadStrategy { get; set; }
+		[JsonConverter (typeof(StringEnumConverter))]
+		public DownloadStrategy DownloadStrategy { get; set; }
 
 		public int   	downloadTimeOutSeconds   { get; set; }
 
@@ -54,11 +55,19 @@ namespace GQ.Client.Conf
 
 		public bool 	showNetConnectionWarning  { get; set; }
 
-		public string 	colorProfile { get; set; }
 
-		public string 	mapboxKey { get; set; }
+		#region Map
 
-		public string 	mapboxMapID { get; set; }
+		[JsonConverter (typeof(StringEnumConverter))]
+		public MapProvider 	mapProvider { get; set; }
+
+		public string 	mapBaseUrl { get; set; }
+
+		public string 	mapKey { get; set; }
+
+		public string 	mapID { get; set; }
+
+		public string 	mapTileImageExtension { get; set; }
 
 		public bool		useMapOffline { get; set; }
 
@@ -66,35 +75,37 @@ namespace GQ.Client.Conf
 
 		public List<CategoryInfo> markers { get; set; }
 
+		#endregion
+
 
 		#region Layout
 
 		public int 		headerHeightPermill { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	headerBgColor  { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	headerButtonBgColor  { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	headerButtonFgColor  { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	contentBackgroundColor  { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	contentFontColor  { get; set; }
 
 		public int 		footerHeightPermill { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	footerBgColor  { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	footerButtonBgColor  { get; set; }
 
-		[JsonConverter(typeof(ColorConverter))]		
+		[JsonConverter (typeof(ColorConverter))]		
 		public Color	footerButtonFgColor  { get; set; }
 
 		#endregion
@@ -113,12 +124,6 @@ namespace GQ.Client.Conf
 			autoStartQuestID = 0;
 			autostartIsPredeployed = false;
 			keepAutoStarting = true;
-			mapboxKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
-			mapboxMapID = "mapbox.streets";
-			questVisualization = "list";
-			markers = new List<CategoryInfo> ();
-			useMapOffline = false;
-			mapMinimalZoom = 7.0f;
 			questVisualization = "list";
 			cloudQuestsVisible = true;
 			showCloudQuestsImmediately = false;
@@ -126,22 +131,35 @@ namespace GQ.Client.Conf
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
 			hasMenuWithinQuests = true;
-			downloadStrategy = DownloadStrategy.UPFRONT;
+			DownloadStrategy = DownloadStrategy.UPFRONT;
 			downloadTimeOutSeconds = 300;
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;
-			colorProfile = "default";
-			headerButtonBgColor = Color.white;
-			contentBackgroundColor = Color.white;
-			contentFontColor = Color.black;
+
+			// Map:
+			mapProvider = MapProvider.OpenStreetMap;
+			mapBaseUrl = "http://a.tile.openstreetmap.org";
+			mapKey = "";
+			mapID = "";
+			mapTileImageExtension = ".png";
+//			mapKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
+//			mapID = "mapbox.streets";
+//			mapTileImageExtension = "@2x.png?access_token=" + mapKey;
+			useMapOffline = false;
+			mapMinimalZoom = 7.0f;
+			markers = new List<CategoryInfo> ();
 
 			// Layout:
 			headerHeightPermill = 50;
 			headerBgColor = Color.white;
-			footerHeightPermill = 75;
-			footerBgColor = Color.white;
 			headerButtonBgColor = GQColor.transparent;
 			headerButtonFgColor = Color.black;
+			contentBackgroundColor = Color.white;
+			contentFontColor = Color.black;
+			footerHeightPermill = 75;
+			footerBgColor = Color.white;
+			footerButtonBgColor = GQColor.transparent;
+			footerButtonFgColor = Color.black;
 		}
 
 		#endregion
@@ -149,37 +167,43 @@ namespace GQ.Client.Conf
 	}
 
 
-	public enum DownloadStrategy {
+	public enum DownloadStrategy
+	{
 		UPFRONT,
 		LAZY,
 		BACKGROUND
 	}
 
+	public enum MapProvider
+	{
+		OpenStreetMap,
+		MapBox
+	}
 
 	public class ColorConverter : JsonConverter
 	{
-		public override bool CanConvert(Type objectType)
+		public override bool CanConvert (Type objectType)
 		{
 			return objectType == typeof(Color);
 		}
 
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+		public override object ReadJson (JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
 			reader.Read ();
-			float r = (float)reader.ReadAsDouble();
+			float r = (float)reader.ReadAsDouble ();
 			reader.Read ();
-			float g = (float) reader.ReadAsDouble ();
+			float g = (float)reader.ReadAsDouble ();
 			reader.Read ();
-			float b = (float) reader.ReadAsDouble ();
+			float b = (float)reader.ReadAsDouble ();
 			reader.Read ();
-			float a = (float) reader.ReadAsDouble ();
+			float a = (float)reader.ReadAsDouble ();
 			reader.Read ();
 
 			Color c = new Color (r, g, b, a);
 			return c;
 		}
 
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+		public override void WriteJson (JsonWriter writer, object value, JsonSerializer serializer)
 		{
 			Color c = (Color)value;
 			writer.WriteStartObject ();
@@ -195,9 +219,10 @@ namespace GQ.Client.Conf
 		}
 	}
 
-	public static class GQColor {
+	public static class GQColor
+	{
 
-		public static readonly Color transparent = new Color(1f, 1f, 1f, 0f);
+		public static readonly Color transparent = new Color (1f, 1f, 1f, 0f);
 	}
 }
 

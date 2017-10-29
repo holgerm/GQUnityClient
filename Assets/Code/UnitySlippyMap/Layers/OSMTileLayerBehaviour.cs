@@ -39,8 +39,8 @@ namespace UnitySlippyMap.Layers
 	/// </summary>
 	public class OSMTileLayer : WebTileLayerBehaviour
 	{
-	#region Private members & properties
-	
+		#region Private members & properties
+
 		/// <summary>
 		/// The format for the URL parameters as in String.Format().
 		/// </summary>
@@ -60,7 +60,7 @@ namespace UnitySlippyMap.Layers
 				urlParametersFormat = value; 
 			}
 		}
-	
+
 		/// <summary>
 		/// The extension of the tile files.
 		/// </summary>
@@ -72,14 +72,16 @@ namespace UnitySlippyMap.Layers
 		/// <value>The extension of the tile files.</value>
 		public string TileImageExtension {
 			get { return tileImageExtension; }
-			set { tileImageExtension = value;
+			set {
+				tileImageExtension = value;
 				if (tileImageExtension == null)
-					tileImageExtension = String.Empty; }
+					tileImageExtension = String.Empty;
+			}
 		}
-	
-	#endregion
 
-    #region OSMTileLayer implementation
+		#endregion
+
+		#region OSMTileLayer implementation
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UnitySlippyMap.Layers.OSMTileLayer"/> class.
@@ -89,10 +91,10 @@ namespace UnitySlippyMap.Layers
 			isReadyToBeQueried = true;
 		}
 
-    #endregion
+		#endregion
 
-    #region MonoBehaviour implementation
-    
+		#region MonoBehaviour implementation
+
 		/// <summary>
 		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Awake().
 		/// </summary>
@@ -103,9 +105,9 @@ namespace UnitySlippyMap.Layers
 			maxZoom = 19;
 		}
 
-    #endregion
+		#endregion
 
-    #region TileLayer implementation
+		#region TileLayer implementation
 
 		/// <summary>
 		/// Gets the tile count per axis. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.GetTileCountPerAxis"/>.
@@ -116,7 +118,7 @@ namespace UnitySlippyMap.Layers
 		{
 			tileCountOnX = tileCountOnY = (int)Mathf.Pow (2, Map.RoundedZoom);
 		}
-	
+
 		/// <summary>
 		/// Gets the center tile. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.GetCenterTile"/>.
 		/// </summary>
@@ -137,7 +139,7 @@ namespace UnitySlippyMap.Layers
 			offsetX = Map.RoundedHalfMapScale / 2.0f - (float)(Map.CenterEPSG900913 [0] - centerTileMeters [0]) * Map.RoundedScaleMultiplier;
 			offsetZ = -Map.RoundedHalfMapScale / 2.0f - (float)(Map.CenterEPSG900913 [1] - centerTileMeters [1]) * Map.RoundedScaleMultiplier;
 		}
-	
+
 		/// <summary>
 		/// Gets a neighbour tile. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.GetNeighbourTile"/>.
 		/// </summary>
@@ -203,10 +205,10 @@ namespace UnitySlippyMap.Layers
 			return ret;
 		}
 
-	#endregion
+		#endregion
 
-	#region WebTileLayer implementation
-	
+		#region WebTileLayer implementation
+
 		/// <summary>
 		/// Gets a tile URL. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.GetTileURL"/>.
 		/// </summary>
@@ -219,7 +221,7 @@ namespace UnitySlippyMap.Layers
 			return String.Format (Path.Combine (BaseURL, URLParametersFormat).Replace ("\\", "/") + TileImageExtension, roundedZoom, tileX, tileY);
 		}
 
-	#endregion
+		#endregion
 	}
 
 }

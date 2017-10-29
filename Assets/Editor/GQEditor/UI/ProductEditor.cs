@@ -98,6 +98,9 @@ namespace GQ.Editor.UI
 		int selectedDownloadStrategy;
 		string[] downloadStrategyNames = Enum.GetNames (typeof(DownloadStrategy));
 
+		int selectedMapProvider;
+		string[] mapProviderNames = Enum.GetNames (typeof(MapProvider));
+
 		ProductManager _pm;
 
 		public ProductManager Pm {
@@ -315,7 +318,7 @@ namespace GQ.Editor.UI
 					float allNamesMax = 0f, allValuesMax = 0f;
 
 					foreach (PropertyInfo curPropInfo in propertyInfos) {
-						if (!curPropInfo.CanRead)
+						if (entryHidden (curPropInfo, p.Config))
 							continue;
 
 						string name = curPropInfo.Name + ":";
@@ -342,7 +345,7 @@ namespace GQ.Editor.UI
 
 					// show all properties as textfields or textareas in fitting width:
 					foreach (PropertyInfo curPropInfo in propertyInfos) {
-						if (!curPropInfo.CanRead)
+						if (entryHidden (curPropInfo, p.Config))
 							continue;
 
 						GUIStyle guiStyle = new GUIStyle ();
@@ -376,11 +379,11 @@ namespace GQ.Editor.UI
 							EditorGUILayout.EndHorizontal ();
 							break;
 						case "String":
-							using (new EditorGUI.DisabledGroupScope (curPropInfo.Name.Equals ("id"))) {
+							using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo, p.Config))) {
 								// id of products may not be altered.
 								if (curPropInfo.Name.Equals ("id")) {
 									namePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
-								}
+								} 
 								// show textfield or if value too long show textarea:
 								string oldStringVal = (string)curPropInfo.GetValue (p.Config, null);
 								oldStringVal = Objects.ToString (oldStringVal);
@@ -406,7 +409,7 @@ namespace GQ.Editor.UI
 							}
 							break;
 						case "Int32":
-							using (new EditorGUI.DisabledGroupScope (curPropInfo.Name.Equals ("id"))) {
+							using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo, p.Config))) {
 								// id of products may not be altered.
 								if (curPropInfo.Name.Equals ("id")) {
 									namePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
@@ -438,13 +441,32 @@ namespace GQ.Editor.UI
 						case "DownloadStrategy":
 							{
 								// TODO implement all three strategies
-//								Debug.Log ("Implement selection list here.");
+								int oldDownloadStrategy = selectedDownloadStrategy;
 								selectedDownloadStrategy = 
 									EditorGUILayout.Popup (
-										"Download Strategy", 
-										selectedDownloadStrategy, 
-										downloadStrategyNames
-									);
+									"Download Strategy", 
+									selectedDownloadStrategy, 
+									downloadStrategyNames
+								);
+								if (oldDownloadStrategy != selectedDownloadStrategy) {
+									configIsDirty = true;
+								}
+								curPropInfo.SetValue (p.Config, (DownloadStrategy)selectedDownloadStrategy, null);
+							}
+							break;
+						case "MapProvider":
+							{
+								int oldMapProvider = selectedMapProvider;
+								selectedMapProvider = 
+									EditorGUILayout.Popup (
+									"Map Provider", 
+									selectedMapProvider, 
+									mapProviderNames
+								);
+								if (oldMapProvider != selectedMapProvider) {
+									configIsDirty = true;
+								}
+								curPropInfo.SetValue (p.Config, (MapProvider)selectedMapProvider, null);
 							}
 							break;
 						case "List`1":
@@ -485,6 +507,38 @@ namespace GQ.Editor.UI
 					}
 				} // End Scope Disabled Group 
 			} // End Scope ScrollView 
+		}
+
+		private bool entryDisabled (PropertyInfo propInfo, Config config)
+		{
+			bool disabled = false;
+			// the entry for the given property will be disabled, if one of the following is true
+			disabled |= propInfo.Name.Equals ("id");
+				
+			return disabled;
+		}
+
+		private bool entryHidden (PropertyInfo propInfo, Config config)
+		{
+			bool hidden = false;
+
+			hidden |= !propInfo.CanRead;
+			hidden |= (
+			    config.mapProvider == MapProvider.OpenStreetMap
+			) && (
+			    propInfo.Name.Equals ("mapBaseUrl") ||
+			    propInfo.Name.Equals ("mapKey") ||
+			    propInfo.Name.Equals ("mapID") ||
+			    propInfo.Name.Equals ("mapTileImageExtension")
+			);
+			hidden |= (
+			    config.mapProvider == MapProvider.MapBox
+			) && (
+			    propInfo.Name.Equals ("mapBaseUrl") ||
+			    propInfo.Name.Equals ("mapTileImageExtension")
+			);
+
+			return hidden;
 		}
 
 		private bool allowChanges = false;
