@@ -171,30 +171,30 @@ namespace GQ.Client.UI
 
 			layers.Add (MapLayer);
 
-			// create a WMS tile layer
-			WMSTileLayerBehaviour wmsLayer = map.CreateLayer<WMSTileLayerBehaviour> ("WMS");
-			wmsLayer.BaseURL = "http://129.206.228.72/cached/osm?"; // http://www.osm-wms.de : seems to be of very limited use
-			wmsLayer.Layers = "osm_auto:all";
-			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-			wmsLayer.gameObject.SetActiveRecursively(false);
-			#else
-			wmsLayer.gameObject.SetActive (false);
-			#endif
+//			// create a WMS tile layer
+//			WMSTileLayerBehaviour wmsLayer = map.CreateLayer<WMSTileLayerBehaviour> ("WMS");
+//			wmsLayer.BaseURL = "http://129.206.228.72/cached/osm?"; // http://www.osm-wms.de : seems to be of very limited use
+//			wmsLayer.Layers = "osm_auto:all";
+//			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
+//			wmsLayer.gameObject.SetActiveRecursively(false);
+//			#else
+//			wmsLayer.gameObject.SetActive (false);
+//			#endif
+//
+//			layers.Add (wmsLayer);
 
-			layers.Add (wmsLayer);
-
-			// create a VirtualEarth tile layer
-			VirtualEarthTileLayerBehaviour virtualEarthLayer = map.CreateLayer<VirtualEarthTileLayerBehaviour> ("VirtualEarth");
-			// Note: this is the key UnitySlippyMap, DO NOT use it for any other purpose than testing
-			virtualEarthLayer.Key = "ArgkafZs0o_PGBuyg468RaapkeIQce996gkyCe8JN30MjY92zC_2hcgBU_rHVUwT";
-
-			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-			virtualEarthLayer.gameObject.SetActiveRecursively(false);
-			#else
-			virtualEarthLayer.gameObject.SetActive (false);
-			#endif
-
-			layers.Add (virtualEarthLayer);
+//			// create a VirtualEarth tile layer
+//			VirtualEarthTileLayerBehaviour virtualEarthLayer = map.CreateLayer<VirtualEarthTileLayerBehaviour> ("VirtualEarth");
+//			// Note: this is the key UnitySlippyMap, DO NOT use it for any other purpose than testing
+//			virtualEarthLayer.Key = "ArgkafZs0o_PGBuyg468RaapkeIQce996gkyCe8JN30MjY92zC_2hcgBU_rHVUwT";
+//
+//			#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
+//			virtualEarthLayer.gameObject.SetActiveRecursively(false);
+//			#else
+//			virtualEarthLayer.gameObject.SetActive (false);
+//			#endif
+//
+//			layers.Add (virtualEarthLayer);
 
 
 			// create some test 2D markers

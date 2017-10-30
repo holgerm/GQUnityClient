@@ -80,10 +80,10 @@ namespace GQ.Client.UI.Foyer
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
 				qiCtrl = 
-					QuestInfoController.Create (
+					QuestListElementController.Create (
 					root: InfoList.gameObject,
 					qInfo: e.NewQuestInfo
-				).GetComponent<QuestInfoController> ();
+				).GetComponent<QuestListElementController> ();
 				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 				qiCtrl.Show ();
 				sortView ();
@@ -132,7 +132,7 @@ namespace GQ.Client.UI.Foyer
 		public void UpdateView ()
 		{
 			if (this == null) {
-				Debug.Log ("QuestListCOntroller is null".Red ());
+				Debug.Log ("QuestListController is null".Red ());
 				return;
 			}
 			if (InfoList == null) {
@@ -149,11 +149,11 @@ namespace GQ.Client.UI.Foyer
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				// create new list elements
 				if (QuestInfoManager.Instance.Filter.accept (info)) {
-					QuestInfoController qiCtrl = 
-						QuestInfoController.Create (
+					QuestListElementController qiCtrl = 
+						QuestListElementController.Create (
 							root: InfoList.gameObject,
 							qInfo: info
-						).GetComponent<QuestInfoController> ();
+						).GetComponent<QuestListElementController> ();
 					questInfoControllers.Add (info.Id, qiCtrl);
 					qiCtrl.Show ();
 				}
