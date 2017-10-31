@@ -18,6 +18,7 @@
   "hasMenuWithinQuests": false,
   "showTextInLoadingLogo": false,
   "showNetConnectionWarning": false,
+  "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",
   "mapID": "",
