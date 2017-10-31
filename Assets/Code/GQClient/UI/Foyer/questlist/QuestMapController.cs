@@ -13,9 +13,9 @@ namespace GQ.Client.UI.Foyer
 {
 
 	/// <summary>
-	/// Shows all Quest Info objects, e.g. in a scrollable list within the foyer. Drives a dialog while refreshing its content.
+	/// Shows all Quest Info objects, on a map within the foyer. Refreshing its content silently (no dialogs shown etc.).
 	/// </summary>
-	public class QuestListController : QuestSetViewerController
+	public class QuestMapController : QuestSetViewerController
 	{
 
 		#region React on Events
@@ -26,13 +26,12 @@ namespace GQ.Client.UI.Foyer
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
 				qiCtrl = 
-					QuestListElementController.Create (
+					QuestMapMarkerController.Create (
 					root: InfoList.gameObject,
 					qInfo: e.NewQuestInfo
-				).GetComponent<QuestListElementController> ();
+					).GetComponent<QuestMapMarkerController> ();
 				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 				qiCtrl.Show ();
-				sortView ();
 				break;
 			case ChangeType.ChangedInfo:
 				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
@@ -44,7 +43,6 @@ namespace GQ.Client.UI.Foyer
 				}
 				qiCtrl.UpdateView ();
 				qiCtrl.Show ();
-				sortView ();
 				break;
 			case ChangeType.RemovedInfo:
 				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
@@ -63,26 +61,14 @@ namespace GQ.Client.UI.Foyer
 			}
 		}
 
-		/// <summary>
-		/// Sorts the list. Takes the current sorter into account to move the gameobjects in the right order.
-		/// </summary>
-		private void sortView ()
-		{
-			List<QuestInfoController> qcList = new List<QuestInfoController> (questInfoControllers.Values);
-			qcList.Sort ();
-			for (int i = 0; i < qcList.Count; i++) {
-				qcList [i].transform.SetSiblingIndex (i);
-			}
-		}
-
 		public override void UpdateView ()
 		{
 			if (this == null) {
-				Debug.Log ("QuestListController is null".Red ());
+				Debug.Log ("QuestMapController is null".Red ());
 				return;
 			}
 			if (InfoList == null) {
-				Debug.Log ("QuestListController.InfoList is null".Red ());
+				Debug.Log ("QuestMapMarkerController.InfoList is null".Red ());
 				return;
 			}
 
@@ -94,17 +80,15 @@ namespace GQ.Client.UI.Foyer
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				// create new list elements
 				if (QuestInfoManager.Instance.Filter.accept (info)) {
-					QuestListElementController qiCtrl = 
-						QuestListElementController.Create (
+					QuestMapMarkerController qiCtrl = 
+						QuestMapMarkerController.Create (
 							root: InfoList.gameObject,
 							qInfo: info
-						).GetComponent<QuestListElementController> ();
+						).GetComponent<QuestMapMarkerController> ();
 					questInfoControllers.Add (info.Id, qiCtrl);
 					qiCtrl.Show ();
 				}
 			}
-			sortView ();
-
 		}
 
 		#endregion
