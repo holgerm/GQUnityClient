@@ -327,12 +327,12 @@ Prefab:
     - target: {fileID: 224858462805379532, guid: 51f9c513ad05541d8a3519c611667559,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 489.375
+      value: 468.45
       objectReference: {fileID: 0}
     - target: {fileID: 224858462805379532, guid: 51f9c513ad05541d8a3519c611667559,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 37.96875
+      value: 31.050001
       objectReference: {fileID: 0}
     - target: {fileID: 224858462805379532, guid: 51f9c513ad05541d8a3519c611667559,
         type: 2}
@@ -363,6 +363,11 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114913112628643464, guid: 51f9c513ad05541d8a3519c611667559,
+        type: 2}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 51f9c513ad05541d8a3519c611667559, type: 2}
