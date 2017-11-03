@@ -30,17 +30,9 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
-		//		// Use this for initialization
-		//		public override void Start ()
-		//		{
-		//			base.Start ();
-		//
-		//			if (page == null)
-		//				return;
-		//
-		//			Initialize ();
-		//		}
-
+		/// <summary>
+		/// Is called during Start() of the base class, which is a MonoBehaviour.
+		/// </summary>
 		public override void Initialize ()
 		{
 			npcPage = (PageNPCTalk)page;
@@ -68,10 +60,11 @@ namespace GQ.Client.UI
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
 					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
 					image.texture = d.Www.texture;
-					Log.TexturesLoaded("NPCTalk.Initialize() #1: ");
-//					Resources.UnloadAsset(d.Www.texture);
-					d.Www.Dispose();
-					Log.TexturesLoaded("NPCTalk.Initialize() #2: ");
+
+					// Dispose www including it s Texture and take some logs for preformace surveillance:
+					Log.TexturesLoaded ("NPCTalk.Initialize() #1: ");
+					d.Www.Dispose ();
+					Log.TexturesLoaded ("NPCTalk.Initialize() #2: ");
 				};
 				loader.Start ();
 			}
