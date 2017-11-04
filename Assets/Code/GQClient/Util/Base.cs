@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Threading;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
+using UnityEngine.SceneManagement;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Util
 {
@@ -56,6 +58,7 @@ namespace GQ.Client.Util
 		void Awake ()
 		{
 			DontDestroyOnLoad (Instance);
+			SceneManager.sceneLoaded += SceneAdaptation.OnSceneLoaded;
 		}
 
 		// Use this for initialization

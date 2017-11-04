@@ -101,7 +101,7 @@ namespace GQ.Editor.UI
 		int selectedMapProvider;
 		string[] mapProviderNames = Enum.GetNames (typeof(MapProvider));
 
-		ProductManager _pm;
+		static ProductManager _pm;
 
 		public ProductManager Pm {
 			get {
@@ -306,7 +306,7 @@ namespace GQ.Editor.UI
 			ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
 
 			// Begin ScrollView:
-			using (var scrollView = new EditorGUILayout.ScrollViewScope (scrollPos /* , GUILayout.Width(100), GUILayout.Height(100) */)) {
+			using (var scrollView = new EditorGUILayout.ScrollViewScope (scrollPos)) {
 				scrollPos = scrollView.scrollPosition;
 
 				using (new EditorGUI.DisabledGroupScope ((!allowChanges))) {

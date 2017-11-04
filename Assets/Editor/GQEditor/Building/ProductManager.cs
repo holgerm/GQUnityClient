@@ -18,15 +18,17 @@ using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using System.Reflection;
 
-namespace GQ.Editor.Building {
-	public class ProductManager {
+namespace GQ.Editor.Building
+{
+	public class ProductManager
+	{
 
 		#region Names, Paths and Storage
 
 		/// <summary>
 		/// In this directory all defined products are stored. This data is NOT included in the app build.
 		/// </summary>
-		private static string PRODUCTS_DIR_PATH_DEFAULT = Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
+		private static string PRODUCTS_DIR_PATH_DEFAULT = Files.CombinePath (GQAssert.PROJECT_PATH, "Production/products/");
 
 		/// <summary>
 		/// This is the template for new products which is copied when we create a new product. It should contain a complete product definition.
@@ -46,7 +48,7 @@ namespace GQ.Editor.Building {
 			}
 			set {
 				_productsDirPath = value;
-				_instance = new ProductManager();
+				_instance = new ProductManager ();
 			}
 		}
 
@@ -75,7 +77,7 @@ namespace GQ.Editor.Building {
 
 		public string ANDROID_MANIFEST_FILE {
 			get {
-				return Files.CombinePath(ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST);
+				return Files.CombinePath (ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST);
 			}
 		}
 
@@ -113,9 +115,9 @@ namespace GQ.Editor.Building {
 				return _configFilesHaveChanges;
 			}
 			set {
-				if ( _configFilesHaveChanges != value ) {
+				if (_configFilesHaveChanges != value) {
 					_configFilesHaveChanges = value;
-					EditorPrefs.SetBool("configDirty", _configFilesHaveChanges);
+					EditorPrefs.SetBool ("configDirty", _configFilesHaveChanges);
 				}
 			}
 		}
@@ -139,10 +141,11 @@ namespace GQ.Editor.Building {
 			}
 		}
 
-		public ProductSpec GetProduct (string productID) {
+		public ProductSpec GetProduct (string productID)
+		{
 			ProductSpec found = null;
 
-			if ( Instance._productDict.TryGetValue(productID, out found) )
+			if (Instance._productDict.TryGetValue (productID, out found))
 				return found;
 			else
 				return null;
@@ -157,8 +160,8 @@ namespace GQ.Editor.Building {
 
 		public static ProductManager Instance {
 			get {
-				if ( _instance == null ) {
-					_instance = new ProductManager();
+				if (_instance == null) {
+					_instance = new ProductManager ();
 				}
 				return _instance;
 			}
@@ -169,51 +172,52 @@ namespace GQ.Editor.Building {
 
 		public static ProductManager TestInstance {
 			get {
-				if ( _testInstance == null ) {
-					_testInstance = new ProductManager();
+				if (_testInstance == null) {
+					_testInstance = new ProductManager ();
 
 					_testInstance._buildExportPath = 
-						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "ConfigAssets", "Resources");
-					if ( !Directory.Exists(_testInstance.BuildExportPath) )
-						Directory.CreateDirectory(_testInstance.BuildExportPath);
+						Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "Output", "ConfigAssets", "Resources");
+					if (!Directory.Exists (_testInstance.BuildExportPath))
+						Directory.CreateDirectory (_testInstance.BuildExportPath);
 
-					string androidPluginDirPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android");
+					string androidPluginDirPath = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android");
 					_testInstance.ANDROID_MANIFEST_DIR = 
-						Files.CombinePath(androidPluginDirPath);
-					if ( !Directory.Exists(androidPluginDirPath) )
-						Directory.CreateDirectory(androidPluginDirPath);
+						Files.CombinePath (androidPluginDirPath);
+					if (!Directory.Exists (androidPluginDirPath))
+						Directory.CreateDirectory (androidPluginDirPath);
 
 					_testInstance.STREAMING_ASSET_PATH = 
-						Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "StreamingAssets");
-					if ( !Directory.Exists(_testInstance.STREAMING_ASSET_PATH) )
-						Directory.CreateDirectory(_testInstance.STREAMING_ASSET_PATH);
+						Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "Output", "StreamingAssets");
+					if (!Directory.Exists (_testInstance.STREAMING_ASSET_PATH))
+						Directory.CreateDirectory (_testInstance.STREAMING_ASSET_PATH);
 				}
 				return _testInstance;
 			}
 		}
 
-		private ProductManager () {
-			_errors = new List<string>();
-			InitProductDictionary();
+		private ProductManager ()
+		{
+			_errors = new List<string> ();
+			InitProductDictionary ();
 		}
 
-		internal void InitProductDictionary () {
+		internal void InitProductDictionary ()
+		{
 			string oldSelectedProductID = null;
-			if ( _currentProduct != null )
+			if (_currentProduct != null)
 				oldSelectedProductID = _currentProduct.Id;
 			
-			_productDict = new Dictionary<string, ProductSpec>();
+			_productDict = new Dictionary<string, ProductSpec> ();
 
-			IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
+			IEnumerable<string> productDirCandidates = Directory.GetDirectories (ProductsDirPath).Select (d => new DirectoryInfo (d).FullName);
 
-			foreach ( var productCandidatePath in productDirCandidates ) {
-				LoadProductSpec(productCandidatePath);
+			foreach (var productCandidatePath in productDirCandidates) {
+				LoadProductSpec (productCandidatePath);
 			}
 
-			if ( oldSelectedProductID != null ) {
-				_productDict.TryGetValue(oldSelectedProductID, out _currentProduct);
-			}
-			else
+			if (oldSelectedProductID != null) {
+				_productDict.TryGetValue (oldSelectedProductID, out _currentProduct);
+			} else
 				_currentProduct = null;
 		}
 
@@ -222,25 +226,27 @@ namespace GQ.Editor.Building {
 		/// </summary>
 		/// <returns>The product spec or null if an error occurred.</returns>
 		/// <param name="productCandidatePath">Product candidate path.</param>
-		internal ProductSpec LoadProductSpec (string productCandidatePath) {
+		internal ProductSpec LoadProductSpec (string productCandidatePath)
+		{
 			ProductSpec product;
 			try {
-				product = new ProductSpec(productCandidatePath);
-				if ( _productDict.ContainsKey(product.Id) )
-					_productDict.Remove(product.Id);
-				_productDict.Add(product.Id, product);
+				product = new ProductSpec (productCandidatePath);
+				if (_productDict.ContainsKey (product.Id))
+					_productDict.Remove (product.Id);
+				_productDict.Add (product.Id, product);
 				return product;
-			} catch ( ArgumentException exc ) {
-				Errors.Add("Product Manager found invalid product directory: " + productCandidatePath + "\n" + exc.Message + "\n\n");
+			} catch (ArgumentException exc) {
+				Errors.Add ("Product Manager found invalid product directory: " + productCandidatePath + "\n" + exc.Message + "\n\n");
 				return null;
 			}
 		}
 
-		internal static void _dispose () {
+		internal static void _dispose ()
+		{
 			_productsDirPath = PRODUCTS_DIR_PATH_DEFAULT;
-			if ( _instance == null )
+			if (_instance == null)
 				return;
-			_instance._productDict.Clear();
+			_instance._productDict.Clear ();
 			_instance._productDict = null;
 			_instance = null;
 		}
@@ -250,35 +256,36 @@ namespace GQ.Editor.Building {
 
 		#region Interaction API
 
-		public ProductSpec createNewProduct (string newProductID) {
-			if ( !ProductSpec.IsValidProductName(newProductID) ) {
-				throw new ArgumentException("Invalid product id: " + newProductID);
+		public ProductSpec createNewProduct (string newProductID)
+		{
+			if (!ProductSpec.IsValidProductName (newProductID)) {
+				throw new ArgumentException ("Invalid product id: " + newProductID);
 			}
 
-			string newProductDirPath = Files.CombinePath(ProductsDirPath, newProductID);
+			string newProductDirPath = Files.CombinePath (ProductsDirPath, newProductID);
 
-			if ( Directory.Exists(newProductDirPath) ) {
-				throw new ArgumentException("Product name already used: " + newProductID + " in: " + newProductDirPath);
+			if (Directory.Exists (newProductDirPath)) {
+				throw new ArgumentException ("Product name already used: " + newProductID + " in: " + newProductDirPath);
 			}
 
 			// copy default template files to a new product folder:
-			Files.CreateDir(newProductDirPath);
-			Files.CopyDirContents(TEMPLATE_PRODUCT_PATH, newProductDirPath);
+			Files.CreateDir (newProductDirPath);
+			Files.CopyDirContents (TEMPLATE_PRODUCT_PATH, newProductDirPath);
 
 			// create Config, populate it with defaults and serialize it into the new product folder:
-			createConfigWithDefaults(newProductID);
+			createConfigWithDefaults (newProductID);
 
-			ProductSpec newProduct = new ProductSpec(newProductDirPath);
+			ProductSpec newProduct = new ProductSpec (newProductDirPath);
 			// append a watermark to the blank AndroidManifest file:
-			string watermark = MakeXMLWatermark(newProduct.Id);
-			using ( StreamWriter sw = File.AppendText(newProduct.AndroidManifestPath) ) {
-				sw.WriteLine(watermark);
-				sw.Close();
+			string watermark = MakeXMLWatermark (newProduct.Id);
+			using (StreamWriter sw = File.AppendText (newProduct.AndroidManifestPath)) {
+				sw.WriteLine (watermark);
+				sw.Close ();
 			}	
 
 
 
-			Instance._productDict.Add(newProduct.Id, newProduct);
+			Instance._productDict.Add (newProduct.Id, newProduct);
 			return newProduct;
 		}
 
@@ -318,54 +325,55 @@ namespace GQ.Editor.Building {
 		/// 
 		/// </summary>
 		/// <param name="productID">Product I.</param>
-		public void PrepareProductForBuild (string productID) {
+		public void PrepareProductForBuild (string productID)
+		{
 			
 			ProductEditor.IsCurrentlyPreparingProduct = true;
 
-			string productDirPath = Files.CombinePath(ProductsDirPath, productID);
+			string productDirPath = Files.CombinePath (ProductsDirPath, productID);
 
-			if ( !Directory.Exists(productDirPath) ) {
-				throw new ArgumentException("Product can not be build , since its Spec does not exist: " + productID);
+			if (!Directory.Exists (productDirPath)) {
+				throw new ArgumentException ("Product can not be build , since its Spec does not exist: " + productID);
 			}
 
-			ProductSpec newProduct = new ProductSpec(productDirPath);
+			ProductSpec newProduct = new ProductSpec (productDirPath);
 
-			if ( !newProduct.IsValid() ) {
-				throw new ArgumentException("Invalid product: " + newProduct.Id + "\n" + newProduct.AllErrorsAsString());
+			if (!newProduct.IsValid ()) {
+				throw new ArgumentException ("Invalid product: " + newProduct.Id + "\n" + newProduct.AllErrorsAsString ());
 			}
 
 			// clear build folder:
-			if ( !Directory.Exists(BuildExportPath) ) {
-				Directory.CreateDirectory(BuildExportPath);
+			if (!Directory.Exists (BuildExportPath)) {
+				Directory.CreateDirectory (BuildExportPath);
 			}
 
-			Files.ClearDir(BuildExportPath); 
+			Files.ClearDir (BuildExportPath); 
 
-			DirectoryInfo productDirInfo = new DirectoryInfo(productDirPath);
+			DirectoryInfo productDirInfo = new DirectoryInfo (productDirPath);
 
-			foreach ( FileInfo file in productDirInfo.GetFiles() ) {
-				if ( file.Name.StartsWith(".") || file.Name.EndsWith(".meta") )
+			foreach (FileInfo file in productDirInfo.GetFiles()) {
+				if (file.Name.StartsWith (".") || file.Name.EndsWith (".meta"))
 					continue;
 
-				Files.CopyFile(
-					Files.CombinePath(productDirPath, file.Name), 
+				Files.CopyFile (
+					Files.CombinePath (productDirPath, file.Name), 
 					BuildExportPath
 				);
 			}
 
-			foreach ( DirectoryInfo dir in productDirInfo.GetDirectories() ) {
-				if ( dir.Name.StartsWith("_") || dir.Name.Equals("StreamingAssets") )
+			foreach (DirectoryInfo dir in productDirInfo.GetDirectories()) {
+				if (dir.Name.StartsWith ("_") || dir.Name.Equals ("StreamingAssets"))
 					continue;
 
-				Files.CopyDir(
-					Files.CombinePath(productDirPath, dir.Name), 
+				Files.CopyDir (
+					Files.CombinePath (productDirPath, dir.Name), 
 					BuildExportPath
 				);
 			}
 
 			// copy AndroidManifest (additionally) to plugins/android directory:
-			Files.CopyFile(
-				Files.CombinePath(
+			Files.CopyFile (
+				Files.CombinePath (
 					BuildExportPath, 
 					ProductSpec.ANDROID_MANIFEST
 				), 
@@ -373,13 +381,13 @@ namespace GQ.Editor.Building {
 			);
 
 			// copy StreamingAssets:
-			if ( Files.ExistsDir(STREAMING_ASSET_PATH) )
-				Files.ClearDir(STREAMING_ASSET_PATH);
+			if (Files.ExistsDir (STREAMING_ASSET_PATH))
+				Files.ClearDir (STREAMING_ASSET_PATH);
 			else
-				Files.CreateDir(STREAMING_ASSET_PATH);
+				Files.CreateDir (STREAMING_ASSET_PATH);
 
-			if ( Directory.Exists(newProduct.StreamingAssetPath) ) {
-				Files.CopyDirContents(
+			if (Directory.Exists (newProduct.StreamingAssetPath)) {
+				Files.CopyDirContents (
 					newProduct.StreamingAssetPath, 
 					STREAMING_ASSET_PATH);
 			}
@@ -387,54 +395,58 @@ namespace GQ.Editor.Building {
 			PlayerSettings.productName = newProduct.Config.name;
 			PlayerSettings.applicationIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
 
-			replaceLoadingLogoInScene(START_SCENE);
+//			formerly we loaded the start scene: replaceLoadingLogoInScene (START_SCENE);
 
 			ProductEditor.BuildIsDirty = false;
 			CurrentProduct = newProduct; // remember the new product for the editor time access point.
-			ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
+			ConfigurationManager.Reset (); // tell the runtime access point that the product has changed.
+
+			Scene currentScene = SceneManager.GetActiveScene ();
+			EditorSceneManager.OpenScene (currentScene.path);
 
 			ProductEditor.IsCurrentlyPreparingProduct = false;
-			GQAssetChangePostprocessor.writeBuildDate();
+			GQAssetChangePostprocessor.writeBuildDate ();
 
 			// update view in editor:
 			LayoutConfig.ResetAll ();
 		}
 
-		private void replaceLoadingLogoInScene (string scenePath) {
+		private void replaceLoadingLogoInScene (string scenePath)
+		{
 			// save currently open scenes and open start scene:
-			EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-			EditorSceneManager.OpenScene(scenePath); 
-			Scene startScene = SceneManager.GetSceneByPath(scenePath);
+			EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo ();
+			EditorSceneManager.OpenScene (scenePath); 
+			Scene startScene = SceneManager.GetSceneByPath (scenePath);
 
-			if ( !startScene.IsValid() ) {
-				Errors.Add("Start scene is not valid or not found.");
+			if (!startScene.IsValid ()) {
+				Errors.Add ("Start scene is not valid or not found.");
 				return;
 			}
 
 			// destroy old loading canvas if exists:
-			foreach ( GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG) ) {
-				foreach ( Transform child in lcc.transform ) {
-					UnityEngine.Object.DestroyImmediate(child.gameObject);
+			foreach (GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG)) {
+				foreach (Transform child in lcc.transform) {
+					UnityEngine.Object.DestroyImmediate (child.gameObject);
 				}
 			}
 
 
 			// load prefab for loading canvas:
-			GameObject loadingCanvasPrefab = Resources.Load<GameObject>(LOADING_CANVAS_PREFAB);
-			if ( loadingCanvasPrefab == null ) {
-				Errors.Add("Product misses LoadingCanvas prefab.");
+			GameObject loadingCanvasPrefab = Resources.Load<GameObject> (LOADING_CANVAS_PREFAB);
+			if (loadingCanvasPrefab == null) {
+				Errors.Add ("Product misses LoadingCanvas prefab.");
 				return;
 			}
 
 			// instantiate new loading canvas(es) from prefab into all LCCs:
-			foreach ( GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG) ) {
-				foreach ( Transform child in lcc.transform ) {
-					UnityEngine.Object.DestroyImmediate(child.gameObject);
+			foreach (GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG)) {
+				foreach (Transform child in lcc.transform) {
+					UnityEngine.Object.DestroyImmediate (child.gameObject);
 				}
 
-				GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab, startScene);
-				if ( loadingCanvas == null ) {
-					Errors.Add("Unable to create LoadingCanvas.");
+				GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab (loadingCanvasPrefab, startScene);
+				if (loadingCanvas == null) {
+					Errors.Add ("Unable to create LoadingCanvas.");
 					return;
 				}
 				loadingCanvas.transform.parent = lcc.transform;
@@ -443,22 +455,22 @@ namespace GQ.Editor.Building {
 				// if product has initializer call it:
 				Type loadingCanvasType = null;
 				try {
-					loadingCanvasType = Type.GetType("GQ.Client.Conf.LoadingCanvas");
-				} catch ( Exception e ) {
-					Debug.Log("Exception: " + e.Message);
+					loadingCanvasType = Type.GetType ("GQ.Client.Conf.LoadingCanvas");
+				} catch (Exception e) {
+					Debug.Log ("Exception: " + e.Message);
 					loadingCanvasType = null;
 				}
-				if ( loadingCanvasType != null ) {
-					Debug.Log("found type: " + loadingCanvasType.FullName);
+				if (loadingCanvasType != null) {
+					Debug.Log ("found type: " + loadingCanvasType.FullName);
 					MethodInfo initMethod = 
-						loadingCanvasType.GetMethod(
+						loadingCanvasType.GetMethod (
 							"Init", 
 							new Type[] {
 								typeof(UnityEngine.GameObject) 
 							}
 						);
-					if ( initMethod != null )
-						initMethod.Invoke(null, new GameObject[] {
+					if (initMethod != null)
+						initMethod.Invoke (null, new GameObject[] {
 							loadingCanvas
 						});
 				}
@@ -470,23 +482,25 @@ namespace GQ.Editor.Building {
 
 		#region Helper Methods
 
-		private void createConfigWithDefaults (string productID) {
-			Config config = new Config();
+		private void createConfigWithDefaults (string productID)
+		{
+			Config config = new Config ();
 
 			// set product specific default values:
 			config.id = productID;
 			config.name = "QuestMill App " + productID;
 
 			// serialize into new product folder:
-			serializeConfig(config, Files.CombinePath(ProductsDirPath, productID));
+			serializeConfig (config, Files.CombinePath (ProductsDirPath, productID));
 		}
 
-		internal void serializeConfig (Config config, string productDirPath) {
-			string json = JsonConvert.SerializeObject(config, Formatting.Indented);
-			string configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
-			File.WriteAllText(configFilePath, json);
-			if ( Assets.IsAssetPath(configFilePath) )
-				AssetDatabase.Refresh();
+		internal void serializeConfig (Config config, string productDirPath)
+		{
+			string json = JsonConvert.SerializeObject (config, Formatting.Indented);
+			string configFilePath = Files.CombinePath (productDirPath, ConfigurationManager.CONFIG_FILE);
+			File.WriteAllText (configFilePath, json);
+			if (Assets.IsAssetPath (configFilePath))
+				AssetDatabase.Refresh ();
 		}
 
 		/// <summary>
@@ -494,17 +508,19 @@ namespace GQ.Editor.Building {
 		/// </summary>
 		/// <returns>The product manifest watermark.</returns>
 		/// <param name="productId">Product identifier.</param>
-		public static string MakeXMLWatermark (string id) {
-			return String.Format("<!-- product id: {0} -->", id);
+		public static string MakeXMLWatermark (string id)
+		{
+			return String.Format ("<!-- product id: {0} -->", id);
 		}
 
-		public static string Extract_ID_FromXML_Watermark (string filepath) {
-			if ( !File.Exists(filepath) )
+		public static string Extract_ID_FromXML_Watermark (string filepath)
+		{
+			if (!File.Exists (filepath))
 				return null;
-			string xmlText = File.ReadAllText(filepath);
-			Match match = Regex.Match(xmlText, @"<!-- product id: ([-a-zA-Z0-9_]+) -->");
-			if ( match.Success )
-				return match.Groups[1].Value;
+			string xmlText = File.ReadAllText (filepath);
+			Match match = Regex.Match (xmlText, @"<!-- product id: ([-a-zA-Z0-9_]+) -->");
+			if (match.Success)
+				return match.Groups [1].Value;
 			else
 				return null;
 		}
