@@ -55,6 +55,11 @@ namespace GQ.Client.Model
 			);
 		}
 
+		public override int GetHashCode ()
+		{            
+			return base.GetHashCode ();        
+		}
+
 		public enum Type
 		{
 			Bool,
@@ -151,16 +156,13 @@ namespace GQ.Client.Model
 			try {
 				if (ValType == Type.Bool || ValType == Type.Text) {
 					result = Convert.ToBoolean (internalValue);
-				} else
-				if (ValType == Type.Integer) {
+				} else if (ValType == Type.Integer) {
 					int asInt = Convert.ToInt32 (internalValue);
 					result = Convert.ToBoolean (asInt);
-				} else
-				if (ValType == Type.Float) {
+				} else if (ValType == Type.Float) {
 					double asDouble = Convert.ToDouble (internalValue);
 					result = Convert.ToBoolean (asDouble);
-				} else 
-				if (ValType == Type.VariableName) {
+				} else if (ValType == Type.VariableName) {
 					result = Variables.GetValue (internalValue).AsBool ();
 				} else {
 					result = false;
@@ -228,12 +230,18 @@ namespace GQ.Client.Model
 
 			try {
 				if (ValType == Type.Bool || ValType == Type.Text) {
-					result = Convert.ToInt32 (internalValue);
-				}
+					return Convert.ToInt32 (internalValue);
+				} 
 				if (ValType == Type.Integer || ValType == Type.Float) {
-					result = Convert.ToInt32 (Convert.ToDouble (extractNumberString (internalValue)));
-				}
-				return result;
+					return Convert.ToInt32 (Convert.ToDouble (extractNumberString (internalValue)));
+				} 
+				if (ValType == Type.VariableName) {
+					return Variables.GetValue (internalValue).AsInt ();
+				} 
+
+				// else:
+				Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Int so {2} was used instead.", internalValue, ValType, result);
+				return 0;
 			} catch (OverflowException) {
 				result = (internalValue.StartsWith ("-") ? Int32.MinValue : Int32.MaxValue);
 				Log.WarnAuthor ("Tried to read value {0} as Int but value exceeded limits so {1} was used instead.", internalValue, result);
@@ -243,14 +251,6 @@ namespace GQ.Client.Model
 				Log.WarnAuthor ("Value {0} could ne be read as Int so {1} was used instead.", internalValue, result);
 				return result;
 			} 
-
-			if (ValType == Type.VariableName) {
-				return Variables.GetValue (internalValue).AsInt ();
-			}
-
-			result = 0;
-			Log.WarnDeveloper ("Unknown Value Type found when trying to read value {0} typed {1} as Int so {2} was used instead.", internalValue, ValType, result);
-			return result;
 		}
 
 		public string AsString ()

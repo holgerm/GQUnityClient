@@ -6,7 +6,6 @@ using System;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Client.Model;
-using GQ.Client.Util;
 using Newtonsoft.Json;
 using System.IO;
 using GQ.Client.Err;
@@ -25,27 +24,33 @@ namespace GQ.Client.Model
 	}
 
 
-	public class AllQuests : QuestInfoFilter {
+	public class AllQuests : QuestInfoFilter
+	{
 
-		public bool accept (QuestInfo qi) {
+		public bool accept (QuestInfo qi)
+		{
 			return true;
 		}
 
-		public override string ToString() {
+		public override string ToString ()
+		{
 			return "All";
 		}
 	}
 
 
-	public class AndFilter : QuestInfoFilter {
+	public class AndFilter : QuestInfoFilter
+	{
 
 		List<QuestInfoFilter> selectors;
 
-		public AndFilter(params QuestInfoFilter[] selector) {
+		public AndFilter (params QuestInfoFilter[] selector)
+		{
 			selectors.AddRange (selector);
 		}
 
-		public bool accept (QuestInfo qi) {
+		public bool accept (QuestInfo qi)
+		{
 			bool accepted = true;
 
 			foreach (QuestInfoFilter filter in selectors) {
@@ -55,7 +60,8 @@ namespace GQ.Client.Model
 			return accepted;
 		}
 
-		public override string ToString () {
+		public override string ToString ()
+		{
 			StringBuilder sb = new StringBuilder ("And(");
 
 			foreach (QuestInfoFilter sel in selectors) {
@@ -68,15 +74,18 @@ namespace GQ.Client.Model
 		}
 	}
 
-	public class OrFilter : QuestInfoFilter {
+	public class OrFilter : QuestInfoFilter
+	{
 
 		List<QuestInfoFilter> selectors;
 
-		public OrFilter(params QuestInfoFilter[] selector) {
+		public OrFilter (params QuestInfoFilter[] selector)
+		{
 			selectors.AddRange (selector);
 		}
 
-		public bool accept (QuestInfo qi) {
+		public bool accept (QuestInfo qi)
+		{
 			bool accepted = false;
 
 			foreach (QuestInfoFilter filter in selectors) {
@@ -86,7 +95,8 @@ namespace GQ.Client.Model
 			return accepted;
 		}
 
-		public override string ToString () {
+		public override string ToString ()
+		{
 			StringBuilder sb = new StringBuilder ("Or(");
 
 			foreach (QuestInfoFilter sel in selectors) {

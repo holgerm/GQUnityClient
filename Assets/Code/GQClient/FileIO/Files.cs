@@ -275,7 +275,7 @@ namespace GQ.Client.FileIO
 			FileInfo fi = null;
 			try {
 				fi = new FileInfo (path);
-			} catch (Exception e) {
+			} catch (Exception) {
 				valid = false;
 			} 
 			valid &= !ReferenceEquals (fi, null);
@@ -290,7 +290,7 @@ namespace GQ.Client.FileIO
 			DirectoryInfo di = null;
 			try {
 				di = new DirectoryInfo (path);
-			} catch (Exception e) {
+			} catch (Exception) {
 				valid = false;
 			}
 			valid &= !ReferenceEquals (di, null);

@@ -151,8 +151,6 @@ namespace GQTests.Model
 			Assert.AreEqual (3, q.AllHotspots.Count);
 
 			Hotspot hEnter = q.GetHotspotWithID (12183);
-			Hotspot hLeave = q.GetHotspotWithID (12182);
-			Hotspot hTap = q.GetHotspotWithID (12184);
 
 			// Beforehand Variable MyState is not set:
 			Assert.AreEqual (Value.Null, Variables.GetValue ("MyState"));

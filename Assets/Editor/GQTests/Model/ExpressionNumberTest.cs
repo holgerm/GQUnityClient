@@ -4,7 +4,6 @@ using NUnit.Framework;
 using GQ.Client.Model;
 using System.IO;
 using System.Xml.Serialization;
-using GQ.Client.Model;
 using GQ.Client.Util;
 using System;
 
@@ -122,7 +121,7 @@ namespace GQTests.Model
 			Assert.AreEqual (true, numberExpr.Evaluate ().AsBool ());
 		}
 
-		[Test, Ignore("only english so far")]
+		[Test, Ignore ("only english so far")]
 		public void Number_XML_IntWithThousandsSepDE_Test ()
 		{
 			// Act:

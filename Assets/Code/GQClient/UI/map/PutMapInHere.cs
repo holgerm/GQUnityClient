@@ -13,7 +13,7 @@ namespace GQ.Client.UI
 		void Start ()
 		{
 			MapBehaviour.Instance.transform.SetParent (transform);
-			GameObject ttGo = GameObject.Find ("[Tile Template]");
+//	TODO make home of Tile Template here:		GameObject ttGo = GameObject.Find ("[Tile Template]");
 		}
 	
 		// Update is called once per frame

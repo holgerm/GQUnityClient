@@ -4,7 +4,6 @@ using NUnit.Framework;
 using GQ.Client.Model;
 using System.IO;
 using System.Xml.Serialization;
-using GQ.Client.Model;
 using GQ.Client.Util;
 
 namespace GQTests.Model

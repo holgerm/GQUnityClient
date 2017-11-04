@@ -291,7 +291,6 @@ namespace GQ.Editor.Util
 			} else {
 				return copyDirToNonAssetsDir (fromDirPath, toDirPath);  
 			}
-			return false;
 		}
 
 		private static bool copyDirToNonAssetsDir (string fromDirPath, string toDirPath, bool recursive = true, bool copyContentsOnly = false)

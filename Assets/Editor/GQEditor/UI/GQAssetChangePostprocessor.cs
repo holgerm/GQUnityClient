@@ -9,7 +9,6 @@ using System.Reflection;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Editor.Building;
-using GQ.Client.Util;
 using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
@@ -106,8 +105,6 @@ namespace GQ.Editor.Building
 				configHasChanged = true;
 			}
 		}
-
-		private static bool isWritingBuildTime = false;
 
 		/// <summary>
 		/// Writes the current build date into a tiny file in the ConfigAssets. 

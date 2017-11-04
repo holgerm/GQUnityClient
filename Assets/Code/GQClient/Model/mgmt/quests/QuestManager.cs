@@ -183,7 +183,7 @@ namespace GQ.Client.Model
 			string mediaJSON = "";
 			try {
 				mediaJSON = File.ReadAllText (CurrentQuest.MediaJsonPath);
-			} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException) {
 				mediaJSON = @"[]"; // we use an empty list then
 			} catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error reading media.json for quest " + CurrentQuest.Id + ": " + e.Message);

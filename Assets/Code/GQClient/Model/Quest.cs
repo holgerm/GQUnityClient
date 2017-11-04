@@ -115,7 +115,7 @@ namespace GQ.Client.Model
 			string mediaJSON = "";
 			try {
 				mediaJSON = File.ReadAllText (MediaJsonPath);
-			} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException) {
 				mediaJSON = @"[]"; // we use an empty list then
 			} catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error reading media.json for quest " + Id + ": " + e.Message);
@@ -179,7 +179,6 @@ namespace GQ.Client.Model
 			// Content:
 			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
 			xmlRootAttr.IsNullable = true;
-			XmlSerializer serializer;
 
 			while (!GQML.IsReaderAtEnd (reader, GQML.QUEST)) {
 

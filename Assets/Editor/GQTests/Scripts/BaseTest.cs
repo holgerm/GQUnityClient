@@ -15,7 +15,6 @@ namespace GQTests.Scripts
 		public void BaseGameObjectComplete ()
 		{
 			// Arrange:
-			Scene startScene = EditorSceneManager.OpenScene (ProductManager.START_SCENE);
 			GameObject baseGO = GameObject.Find (Base.BASE);
 
 			// Assert Base GO exists:

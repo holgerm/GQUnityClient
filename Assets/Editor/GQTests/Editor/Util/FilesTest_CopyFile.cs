@@ -5,7 +5,8 @@ using GQ.Editor.Util;
 using GQTests;
 using System.IO;
 
-namespace GQTests.Editor.Util {
+namespace GQTests.Editor.Util
+{
 
 	/// <summary>
 	/// Test for Copy functionality in the Files utility class.
@@ -20,426 +21,445 @@ namespace GQTests.Editor.Util {
 	/// - points to an exsiting directory (normal case, creates the file within that directory)
 	/// - does not point to an exsting directory : we try to create the directory and give up if that fails.
 	/// </summary>
-	public class FilesTest_CopyFile : FilesTest {
+	public class FilesTest_CopyFile : FilesTest
+	{
 
 		static string originAssetFilePath = 
-			Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "SomeFiles", "PlainTextDocument.txt");
+			Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "SomeFiles", "PlainTextDocument.txt");
 		static string newAssetFilePath = 
-			Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "SomeFiles", "OtherPlainTextDocument.txt");
+			Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "SomeFiles", "OtherPlainTextDocument.txt");
 		//		static string targetAssetFilePath =
 		//			Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Targets", "TargetTextDocument.txt");
 		static string originNonAssetFilePath = 
-			Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "NonEmptyDir", "PlainTextDocument.txt");
+			Files.CombinePath (GQAssert.PROJECT_PATH, "TestsData", "NonEmptyDir", "PlainTextDocument.txt");
 		static string newNonAssetFilePath = 
-			Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "NonEmptyDir", "OtherPlainTextDocument.txt");
+			Files.CombinePath (GQAssert.PROJECT_PATH, "TestsData", "NonEmptyDir", "OtherPlainTextDocument.txt");
 		//		static string targetNonAssetFilePath =
 		//			Files.CombinePath(GQAssert.PROJECT_PATH, "TestsData", "Targets", "TargetTextDocument.txt");
 
-		static string originFileContent = File.ReadAllText(originAssetFilePath);
-		static string newFileContent = File.ReadAllText(newAssetFilePath);
-		static string overwriteContent = 
-			File.ReadAllText(
-				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "NonEmptyDir", "PlainTextDocument.txt"));
+		static string originFileContent = File.ReadAllText (originAssetFilePath);
+		static string newFileContent = File.ReadAllText (newAssetFilePath);
 
 
 		[SetUp]
-		public void setUp () {
-			ensureCleanTargets();
+		public void setUp ()
+		{
+			ensureCleanTargets ();
 		}
 
 		[TearDown]
-		public void tearDown () {
-			ensureCleanTargets();
+		public void tearDown ()
+		{
+			ensureCleanTargets ();
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_Asset () {
+		public void CopyFile_Asset_2_Asset ()
+		{
 			// Arrange:
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(originAssetFilePath)
+					Files.FileName (originAssetFilePath)
 				);
 			
 			// Act:
-			bool isCopied = Files.CopyFile(originAssetFilePath, targetAssetDirPath);
+			bool isCopied = Files.CopyFile (originAssetFilePath, targetAssetDirPath);
 
 			// Assert:
-			Assert.That(isCopied);
-			Assert.That(Assets.ExistsAssetAtPath(targetAssetFilePath));
+			Assert.That (isCopied);
+			Assert.That (Assets.ExistsAssetAtPath (targetAssetFilePath));
 		}
 
 		/// <summary>
 		/// Copies a file ("FilesTest/Origins/SomeFiles/PlainTextDocument.txt") to the target dir. 
 		/// It does so in similar manner for assets and non-assets.
 		/// </summary>
-		private void prepareTargetFileToBeOverridden () {
+		private void prepareTargetFileToBeOverridden ()
+		{
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(originAssetFilePath)
+					Files.FileName (originAssetFilePath)
 				);
-			Files.CopyFile(
+			Files.CopyFile (
 				originAssetFilePath, 
 				targetAssetDirPath,
 				true);				
-			Assert.That(Files.ExistsFile(targetAssetFilePath));
-			Assert.AreEqual(originFileContent, File.ReadAllText(targetAssetFilePath));
+			Assert.That (Files.ExistsFile (targetAssetFilePath));
+			Assert.AreEqual (originFileContent, File.ReadAllText (targetAssetFilePath));
 
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(originNonAssetFilePath)
+					Files.FileName (originNonAssetFilePath)
 				);
-			Files.CopyFile(originNonAssetFilePath, targetNonAssetDirPath, true);
-			Assert.That(Files.ExistsFile(targetNonAssetFilePath));
-			Assert.AreEqual(originFileContent, File.ReadAllText(targetNonAssetFilePath));
+			Files.CopyFile (originNonAssetFilePath, targetNonAssetDirPath, true);
+			Assert.That (Files.ExistsFile (targetNonAssetFilePath));
+			Assert.AreEqual (originFileContent, File.ReadAllText (targetNonAssetFilePath));
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_Asset_OverwriteFalse () {
+		public void CopyFile_Asset_2_Asset_OverwriteFalse ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(originAssetFilePath)
+					Files.FileName (originAssetFilePath)
 				);
 			
 
 			// Act:
-			Files.CopyFile(newAssetFilePath, targetAssetDirPath, false);
+			Files.CopyFile (newAssetFilePath, targetAssetDirPath, false);
 
 			// Assert:
-			expectContentAtPath(originFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
+			expectContentAtPath (originFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_Asset_OverwriteTrue () {
+		public void CopyFile_Asset_2_Asset_OverwriteTrue ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(newAssetFilePath)
+					Files.FileName (newAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newAssetFilePath, targetAssetDirPath, true);
+			Files.CopyFile (newAssetFilePath, targetAssetDirPath, true);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
+			expectContentAtPath (newFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_Asset_OverwriteDefault () {
+		public void CopyFile_Asset_2_Asset_OverwriteDefault ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(newAssetFilePath)
+					Files.FileName (newAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newAssetFilePath, targetAssetDirPath);
+			Files.CopyFile (newAssetFilePath, targetAssetDirPath);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
+			expectContentAtPath (newFileContent, targetAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_NonAsset () {
+		public void CopyFile_Asset_2_NonAsset ()
+		{
 			// Prepare:
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(originAssetFilePath)
+					Files.FileName (originAssetFilePath)
 				);
 			
 			// Act:
-			bool isCopied = Files.CopyFile(originAssetFilePath, targetNonAssetDirPath);
+			bool isCopied = Files.CopyFile (originAssetFilePath, targetNonAssetDirPath);
 
 			// Assert:
-			Assert.That(isCopied);
-			Assert.That(File.Exists(targetNonAssetFilePath));
+			Assert.That (isCopied);
+			Assert.That (File.Exists (targetNonAssetFilePath));
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_NonAsset_OverwriteFalse () {
+		public void CopyFile_Asset_2_NonAsset_OverwriteFalse ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(originNonAssetFilePath)
+					Files.FileName (originNonAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newAssetFilePath, targetNonAssetDirPath, false);
+			Files.CopyFile (newAssetFilePath, targetNonAssetDirPath, false);
 
 			// Assert:
-			expectContentAtPath(originFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
+			expectContentAtPath (originFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_NonAsset_OverwriteTrue () {
+		public void CopyFile_Asset_2_NonAsset_OverwriteTrue ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(newAssetFilePath)
+					Files.FileName (newAssetFilePath)
 				);
 			
 			// Act:
-			Files.CopyFile(newAssetFilePath, targetNonAssetDirPath, true);
+			Files.CopyFile (newAssetFilePath, targetNonAssetDirPath, true);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
+			expectContentAtPath (newFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_Asset_2_NonAsset_OverwriteDefault () {
+		public void CopyFile_Asset_2_NonAsset_OverwriteDefault ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(newAssetFilePath)
+					Files.FileName (newAssetFilePath)
 				);
 			
 			// Act:
-			Files.CopyFile(newAssetFilePath, targetNonAssetDirPath);
+			Files.CopyFile (newAssetFilePath, targetNonAssetDirPath);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetNonAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
+			expectContentAtPath (newFileContent, targetNonAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_Asset () {
+		public void CopyFile_NonAsset_2_Asset ()
+		{
 			// Prepare:
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(originNonAssetFilePath)
+					Files.FileName (originNonAssetFilePath)
 				);
 
 			// Act:
-			bool isCopied = Files.CopyFile(originNonAssetFilePath, targetAssetDirPath);
+			bool isCopied = Files.CopyFile (originNonAssetFilePath, targetAssetDirPath);
 
 			// Assert:
-			Assert.That(isCopied);
-			Assert.That(Assets.ExistsAssetAtPath(targetAssetFilePath));
+			Assert.That (isCopied);
+			Assert.That (Assets.ExistsAssetAtPath (targetAssetFilePath));
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_Asset_OverwriteFalse () {
+		public void CopyFile_NonAsset_2_Asset_OverwriteFalse ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(originNonAssetFilePath)
+					Files.FileName (originNonAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newNonAssetFilePath, targetAssetDirPath, false);
+			Files.CopyFile (newNonAssetFilePath, targetAssetDirPath, false);
 
 			// Assert:
-			expectContentAtPath(originFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
+			expectContentAtPath (originFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_Asset_OverwriteTrue () {
+		public void CopyFile_NonAsset_2_Asset_OverwriteTrue ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(newNonAssetFilePath)
+					Files.FileName (newNonAssetFilePath)
 				);
 			
 			// Act:
-			Files.CopyFile(newNonAssetFilePath, targetAssetDirPath, true);
+			Files.CopyFile (newNonAssetFilePath, targetAssetDirPath, true);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
+			expectContentAtPath (newFileContent, targetAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_Asset_OverwriteDefault () {
+		public void CopyFile_NonAsset_2_Asset_OverwriteDefault ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetAssetDirPath, 
-					Files.FileName(newNonAssetFilePath)
+					Files.FileName (newNonAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newNonAssetFilePath, targetAssetDirPath);
+			Files.CopyFile (newNonAssetFilePath, targetAssetDirPath);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
+			expectContentAtPath (newFileContent, targetAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_NonAsset () {
+		public void CopyFile_NonAsset_2_NonAsset ()
+		{
 			// Prepare:
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(originNonAssetFilePath)
+					Files.FileName (originNonAssetFilePath)
 				);
 
 			// Act:
-			bool isCopied = Files.CopyFile(originNonAssetFilePath, targetNonAssetDirPath);
+			bool isCopied = Files.CopyFile (originNonAssetFilePath, targetNonAssetDirPath);
 
 			// Assert:
-			Assert.That(isCopied);
-			Assert.That(File.Exists(targetNonAssetFilePath));
+			Assert.That (isCopied);
+			Assert.That (File.Exists (targetNonAssetFilePath));
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_NonAsset_OverwriteFalse () {
+		public void CopyFile_NonAsset_2_NonAsset_OverwriteFalse ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(originNonAssetFilePath)
+					Files.FileName (originNonAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newNonAssetFilePath, targetNonAssetDirPath, false);
+			Files.CopyFile (newNonAssetFilePath, targetNonAssetDirPath, false);
 
 			// Assert:
-			expectContentAtPath(originFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
+			expectContentAtPath (originFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to FALSE should NOT overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_NonAsset_OverwriteTrue () {
+		public void CopyFile_NonAsset_2_NonAsset_OverwriteTrue ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(newNonAssetFilePath)
+					Files.FileName (newNonAssetFilePath)
 				);
 
 			// Act:
-			Files.CopyFile(newNonAssetFilePath, targetNonAssetDirPath, true);
+			Files.CopyFile (newNonAssetFilePath, targetNonAssetDirPath, true);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
+			expectContentAtPath (newFileContent, targetNonAssetFilePath, "CopyFile with overwrite flag set to true should overwrite file.");
 		}
 
 		[Test]
-		public void CopyFile_NonAsset_2_NonAsset_OverwriteDefault () {
+		public void CopyFile_NonAsset_2_NonAsset_OverwriteDefault ()
+		{
 			// Prepare:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string targetNonAssetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					targetNonAssetDirPath, 
-					Files.FileName(newNonAssetFilePath)
+					Files.FileName (newNonAssetFilePath)
 				);
 			
 			// Act:
-			Files.CopyFile(newNonAssetFilePath, targetNonAssetDirPath);
+			Files.CopyFile (newNonAssetFilePath, targetNonAssetDirPath);
 
 			// Assert:
-			expectContentAtPath(newFileContent, targetNonAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
+			expectContentAtPath (newFileContent, targetNonAssetFilePath, "CopyFile with using default for overwrite flag should overwrite file.");
 		}
 
 		[Test]
-		public void FileCopy_NonExistingFile () {
+		public void FileCopy_NonExistingFile ()
+		{
 			// Arrange:
-			string toBeCopiedFilePath = Files.CombinePath(originAssetDirEmptyPath, "NonExisting.File");
+			string toBeCopiedFilePath = Files.CombinePath (originAssetDirEmptyPath, "NonExisting.File");
 
 			// Act:
-			bool isCopied = Files.CopyFile(toBeCopiedFilePath, targetAssetDirPath);
+			bool isCopied = Files.CopyFile (toBeCopiedFilePath, targetAssetDirPath);
 
 			// Assert:
-			Assert.IsFalse(isCopied, "Non-existing file can not be copied.");
-			Assert.That(Files.IsEmptyDir(targetAssetDirPath));
+			Assert.IsFalse (isCopied, "Non-existing file can not be copied.");
+			Assert.That (Files.IsEmptyDir (targetAssetDirPath));
 		}
 
 		[Test]
-		public void FileCopy_NonExistingTargetDir () {
+		public void FileCopy_NonExistingTargetDir ()
+		{
 			// Arrange:
-			string nonExistingTargetDirPath = Files.CombinePath(targetAssetDirPath, "NewTargetSubdir");
+			string nonExistingTargetDirPath = Files.CombinePath (targetAssetDirPath, "NewTargetSubdir");
 			string targetFilePath = 
-				Files.CombinePath(
+				Files.CombinePath (
 					nonExistingTargetDirPath, 
-					Files.FileName(originAssetFilePath)
+					Files.FileName (originAssetFilePath)
 				);
 
 			// Pre-Assert:
-			Assert.That(!Files.ExistsDir(nonExistingTargetDirPath));
-			Assert.That(!Files.ExistsFile(targetFilePath));
+			Assert.That (!Files.ExistsDir (nonExistingTargetDirPath));
+			Assert.That (!Files.ExistsFile (targetFilePath));
 
 			// Act:
-			bool isCopied = Files.CopyFile(originAssetFilePath, nonExistingTargetDirPath);
+			bool isCopied = Files.CopyFile (originAssetFilePath, nonExistingTargetDirPath);
 
 			// Assert:
-			Assert.That(isCopied);
-			Assert.That(Files.ExistsDir(nonExistingTargetDirPath));
-			Assert.That(File.Exists(targetFilePath));
+			Assert.That (isCopied);
+			Assert.That (Files.ExistsDir (nonExistingTargetDirPath));
+			Assert.That (File.Exists (targetFilePath));
 		}
 
 		[Test]
-		public void FileCopy_OverrideExistingTargetFile () {
+		public void FileCopy_OverrideExistingTargetFile ()
+		{
 			// Arrange:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string overwriteFilePath = 
-				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "NonEmptyDir", "PlainTextDocument.txt");
-			string overwriteContent = File.ReadAllText(overwriteFilePath);
+				Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "NonEmptyDir", "PlainTextDocument.txt");
 
 			// Pre-Assert:
-			expectContentAtPath(
+			expectContentAtPath (
 				"some plain text", 
-				Files.CombinePath(targetAssetDirPath, "PlainTextDocument.txt"), 
+				Files.CombinePath (targetAssetDirPath, "PlainTextDocument.txt"), 
 				"Original file should be placed into target directory before we overwrite it by copyFile()"
 			);
 
 			// Act:
-			Files.CopyFile(overwriteFilePath, targetAssetDirPath, true);
+			Files.CopyFile (overwriteFilePath, targetAssetDirPath, true);
 
 			// Assert:
 			// TODO
-			Assert.That(Files.ExistsFile(Files.CombinePath(targetAssetDirPath, "PlainTextDocument.txt")));
-			expectContentAtPath(
+			Assert.That (Files.ExistsFile (Files.CombinePath (targetAssetDirPath, "PlainTextDocument.txt")));
+			expectContentAtPath (
 				"non empty text file", 
-				Files.CombinePath(targetAssetDirPath, "PlainTextDocument.txt"),
+				Files.CombinePath (targetAssetDirPath, "PlainTextDocument.txt"),
 				"New file 'OtherPlainTextDocument.txt' should replace the original file at target dir after copyFile()"
 			);
 		}
 
 		[Test]
-		public void FileCopy_NotOverrideExistingTarget () {
+		public void FileCopy_NotOverrideExistingTarget ()
+		{
 			// Arrange:
-			prepareTargetFileToBeOverridden();
+			prepareTargetFileToBeOverridden ();
 			string overwriteFilePath = 
-				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "NonEmptyDir", "PlainTextDocument.txt");
-			string overwriteContent = File.ReadAllText(overwriteFilePath);
+				Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "Origins", "NonEmptyDir", "PlainTextDocument.txt");
 
 			// Pre-Assert:
-			expectContentAtPath(
+			expectContentAtPath (
 				"some plain text", 
-				Files.CombinePath(targetAssetDirPath, "PlainTextDocument.txt"), 
+				Files.CombinePath (targetAssetDirPath, "PlainTextDocument.txt"), 
 				"Original file should be placed into target directory before we overwrite it by copyFile()"
 			);
 
 			// Act:
-			Files.CopyFile(overwriteFilePath, targetAssetDirPath, false);
+			Files.CopyFile (overwriteFilePath, targetAssetDirPath, false);
 
 			// Assert:
 			// TODO
-			Assert.That(Files.ExistsFile(Files.CombinePath(targetAssetDirPath, "PlainTextDocument.txt")));
-			expectContentAtPath(
+			Assert.That (Files.ExistsFile (Files.CombinePath (targetAssetDirPath, "PlainTextDocument.txt")));
+			expectContentAtPath (
 				"some plain text", 
-				Files.CombinePath(targetAssetDirPath, "PlainTextDocument.txt"),
+				Files.CombinePath (targetAssetDirPath, "PlainTextDocument.txt"),
 				"The original file at target dir should NOT have been replaced even after copyFile()"
 			);
 		}
