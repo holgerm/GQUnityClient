@@ -13,13 +13,12 @@ namespace GQ.Editor.Util
 	{
 		static EditorAutostart ()
 		{
-			Debug.Log ("Up and running");
 			EditorSceneManager.sceneOpened += OnSceneOpened;
 		}
 
 		public static void OnSceneOpened (Scene scene, OpenSceneMode mode)
 		{
-			SceneAdaptation.OnSceneActivated (scene);
+			SceneAdapter.OnSceneActivated (scene);
 		}
 
 

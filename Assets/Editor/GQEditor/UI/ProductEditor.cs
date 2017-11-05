@@ -471,20 +471,27 @@ namespace GQ.Editor.UI
 							break;
 						case "List`1":
 							{
-								// We currently do not offer edit option for Lists! Sorry.
+								Type argumentType = curPropInfo.PropertyType.GetGenericArguments () [0];
+								switch (argumentType.Name) {
+								case "SceneExtension":
+									break;
+								default:
+								// We currently do not offer edit option for this type of Lists! Sorry.
 								// show textfield or if value too long show textarea:
-								string oldStringVal = curPropInfo.GetValue (p.Config, null).ToString ();
-								guiStyle.CalcMinMaxWidth (new GUIContent (oldStringVal), out valueMin, out valueNeededWidth);
+									string oldStringVal = curPropInfo.GetValue (p.Config, null).ToString ();
+									guiStyle.CalcMinMaxWidth (new GUIContent (oldStringVal), out valueMin, out valueNeededWidth);
 
-								if (widthForValues < valueNeededWidth) {
-									// show textarea if value does not fit within one line:
-									EditorGUILayout.BeginHorizontal ();
-									EditorGUILayout.PrefixLabel (namePrefixGUIContent);
-									EditorGUILayout.TextArea (oldStringVal, textareaGUIStyle);
-									EditorGUILayout.EndHorizontal ();
-								} else {
-									// show text field if value fits in one line:
-									EditorGUILayout.TextField (namePrefixGUIContent, oldStringVal);
+									if (widthForValues < valueNeededWidth) {
+										// show textarea if value does not fit within one line:
+										EditorGUILayout.BeginHorizontal ();
+										EditorGUILayout.PrefixLabel (namePrefixGUIContent);
+										EditorGUILayout.TextArea (oldStringVal, textareaGUIStyle);
+										EditorGUILayout.EndHorizontal ();
+									} else {
+										// show text field if value fits in one line:
+										EditorGUILayout.TextField (namePrefixGUIContent, oldStringVal);
+									}
+									break;
 								}
 							}
 							break;
@@ -748,17 +755,20 @@ namespace GQ.Editor.UI
 		//
 		//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
 		//		}
-		//
-		//
-		//		static void OnWillSaveAssets (string[] assetPaths) {
-		//
-		//			foreach ( string str in assetPaths ) {
-		//				Debug.Log("AssetModificationProcessor: Will SAVE asset: " + str);
-		//			}
-		//
-		//		}
-		//
-		//
+		
+		
+		static void OnWillSaveAssets (string[] assetPaths)
+		{
+		
+			foreach (string str in assetPaths) {
+				Debug.Log ("AssetModificationProcessor: Will SAVE asset: " + str);
+			}
+		
+			foreach (string path in assetPaths)
+				Debug.Log ("\t" + path);
+		}
+		
+		
 		//		static void IsOpenForEdit (string s1, string s2) {
 		//
 		//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");

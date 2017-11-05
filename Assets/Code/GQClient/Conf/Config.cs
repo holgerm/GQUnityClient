@@ -55,6 +55,8 @@ namespace GQ.Client.Conf
 
 		public bool 	showNetConnectionWarning  { get; set; }
 
+		public List<SceneExtension> sceneExtensions { get; set; }
+
 
 		#region Map
 
@@ -135,6 +137,8 @@ namespace GQ.Client.Conf
 			downloadTimeOutSeconds = 300;
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;
+
+			sceneExtensions = new List<SceneExtension> ();
 
 			// Map:
 			mapProvider = MapProvider.OpenStreetMap;
@@ -223,6 +227,25 @@ namespace GQ.Client.Conf
 	{
 
 		public static readonly Color transparent = new Color (1f, 1f, 1f, 0f);
+	}
+
+
+	public struct SceneExtension
+	{
+		/// <summary>
+		/// The scene path.
+		/// </summary>
+		public string scene;
+
+		/// <summary>
+		/// The path to gameobject where the prefab should be instantiated.
+		/// </summary>
+		public string root;
+
+		/// <summary>
+		/// The path to the prefab. It is relative to the folder Assets/ConfigAssets/Resources folder.
+		/// </summary>
+		public string prefab;
 	}
 }
 

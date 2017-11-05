@@ -18,6 +18,13 @@
   "hasMenuWithinQuests": false,
   "showTextInLoadingLogo": false,
   "showNetConnectionWarning": false,
+  "sceneExtensions": [
+    {
+      "scene": "Assets/Scenes/Pages/NPCTalk.unity",
+      "root": "Canvas/Screen/Page/ImagePanel/Image",
+      "prefab": "Prefabs/wcc.CopyRightsText"
+    }
+  ],
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",

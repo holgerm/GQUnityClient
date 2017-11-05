@@ -58,7 +58,7 @@ namespace GQ.Client.Util
 		void Awake ()
 		{
 			DontDestroyOnLoad (Instance);
-			SceneManager.sceneLoaded += SceneAdaptation.OnSceneLoaded;
+			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
 		}
 
 		// Use this for initialization
