@@ -126,9 +126,9 @@
     "a": 0.0
   },
   "headerButtonFgColor": {
-    "r": 0.431372583,
-    "g": 0.376470625,
-    "b": 0.121568635,
+    "r": 0.454901963,
+    "g": 0.403921574,
+    "b": 0.129411772,
     "a": 1.0
   },
   "contentBackgroundColor": {
@@ -145,16 +145,16 @@
   },
   "footerHeightPermill": 75,
   "footerBgColor": {
-    "r": 0.431372583,
-    "g": 0.3803922,
-    "b": 0.121568635,
-    "a": 1.0
-  },
-  "footerButtonBgColor": {
     "r": 1.0,
     "g": 1.0,
     "b": 1.0,
-    "a": 0.0
+    "a": 1.0
+  },
+  "footerButtonBgColor": {
+    "r": 0.454901963,
+    "g": 0.403921574,
+    "b": 0.129411772,
+    "a": 1.0
   },
   "footerButtonFgColor": {
     "r": 1.0,
