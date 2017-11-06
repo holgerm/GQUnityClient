@@ -474,6 +474,30 @@ namespace GQ.Editor.UI
 								Type argumentType = curPropInfo.PropertyType.GetGenericArguments () [0];
 								switch (argumentType.Name) {
 								case "SceneExtension":
+									// Header with Add and Clear Button:
+									EditorGUILayout.BeginHorizontal ();
+									EditorGUILayout.PrefixLabel (namePrefixGUIContent);
+									if (GUILayout.Button ("+")) {
+										Debug.Log ("Adding a new SceneExtension is not supported yet!");
+									}
+									if (GUILayout.Button ("Clear")) {
+										Debug.Log ("Clearing the list of SceneExtensions is not supported yet!");
+									}
+									EditorGUILayout.EndHorizontal ();
+
+									List<SceneExtension> oldSceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
+									foreach (SceneExtension oldSceneExt in oldSceneExtsVal) {
+										EditorGUILayout.BeginHorizontal ();
+										string sceneName = Files.FileName (oldSceneExt.scene);
+										if (sceneName.EndsWith(".unity")) 
+											sceneName = sceneName.Substring(0, sceneName.Length - ".unity".Length);
+										namePrefixGUIContent = new GUIContent(sceneName, "The prefab extends this scene.");
+										EditorGUILayout.TextField (namePrefixGUIContent, Files.FileName (oldSceneExt.prefab));
+										EditorGUILayout.EndHorizontal ();
+										EditorGUILayout.TextField (
+											new GUIContent("\t", "The root gameobject where the prefab is injected."), 
+											Files.FileName (oldSceneExt.root));
+									}
 									break;
 								default:
 								// We currently do not offer edit option for this type of Lists! Sorry.
