@@ -506,8 +506,11 @@ namespace GQ.Editor.UI
 												(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
 											if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
 												// if user selected another prefab we store it:
-												newSceneExt.prefab = AssetDatabase.GetAssetPath(newPrefabGO);
+												string prefabPathWithEnding =
+													Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
+												newSceneExt.prefab = prefabPathWithEnding.Substring (0, prefabPathWithEnding.Length - ".prefab".Length);
 												sceneExtChanged = true;
+												Debug.Log ("Old Prefab: " + oldSceneExt.prefab);
 												Debug.Log ("New Prefab: " + newSceneExt.prefab);
 											}
 											EditorGUILayout.EndHorizontal ();
@@ -827,13 +830,10 @@ namespace GQ.Editor.UI
 		
 		static void OnWillSaveAssets (string[] assetPaths)
 		{
-		
+			Debug.Log (string.Format ("AssetModificationProcessor: Will SAVE {0} assets:", assetPaths.Length));
 			foreach (string str in assetPaths) {
-				Debug.Log ("AssetModificationProcessor: Will SAVE asset: " + str);
+				Debug.Log ("\tasset: " + str);
 			}
-		
-			foreach (string path in assetPaths)
-				Debug.Log ("\t" + path);
 		}
 		
 		

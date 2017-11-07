@@ -9,6 +9,8 @@ TagManager:
   - LoadingCanvasContainer
   - RootCanvas
   - Dialog
+  - LoadingCanvas
+  - Extension
   layers:
   - Default
   - TransparentFX
