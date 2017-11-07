@@ -36,12 +36,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1102504744855464}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
+  m_HorizontalFit: 0
   m_VerticalFit: 2
 --- !u!114 &114652588838351352
 MonoBehaviour:
@@ -51,10 +51,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1102504744855464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dd85f097ab9f4275b0105089b90e410, type: 3}
+  m_Script: {fileID: 11500000, guid: 150fe1c9634df468ab53f0be7ec9a634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copyrightText: {fileID: 114913112628643464}
 --- !u!114 &114913112628643464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -87,7 +86,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xA9 StadMichael Sondermannt Bonn, "
+  m_Text: 
 --- !u!222 &222648415019821674
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -109,6 +108,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 358.0435, y: 358.04346}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 5, y: 5}
+  m_SizeDelta: {x: 414, y: 36}
   m_Pivot: {x: 0, y: 0}

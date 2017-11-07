@@ -10,13 +10,15 @@ namespace GQ.Client.WCC
 	
 	public class ShowImageCopyRight : MonoBehaviour
 	{
-		public Text copyrightText;
+		Text copyrightText;
 
 		private const string DEFAULT_COPYRIGHT_TEXT = "© WCC";
 		private const string COPYRIGHT_PREFIX = "© ";
 
 		void Start ()
 		{
+			Reset ();
+
 			/// get copyright text from variable value:
 			string copyright = Variables.GetValue ("bildrechte").AsString ();
 
@@ -36,7 +38,9 @@ namespace GQ.Client.WCC
 			copyrightText.text = copyright;
 		}
 
-
+		void Reset() {
+			copyrightText = GetComponent<Text> ();
+		}
 
 	}
 }

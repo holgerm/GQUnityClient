@@ -18,8 +18,8 @@ namespace GQ.Client.FileIO
 		/// <summary>
 		/// Unity uses for path separators on all platforms the forward slash even on Windows.
 		/// </summary>
-		private const string PATH_ELEMENT_SEPARATOR = "/";
-		private static readonly char[] SEPARATORS = new char[] {
+		public const string PATH_ELEMENT_SEPARATOR = "/";
+		public static readonly char[] SEPARATORS = new char[] {
 			'/'
 		};
 

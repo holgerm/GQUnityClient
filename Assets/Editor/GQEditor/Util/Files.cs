@@ -380,6 +380,23 @@ namespace GQ.Editor.Util
 			}
 		}
 
+		public static string RESOURCES_FOLDER_NAME = "Resources";
+
+		public static string GetResourcesRelativePath(string assetPath) {
+			string[] segments = assetPath.Split (SEPARATORS);
+			bool resourceFolderFound = false;
+			StringBuilder resourceRelPath = new StringBuilder ("");
+			for (int i = 0; i < segments.Length; i++) {
+				resourceFolderFound |= (segments [i] == RESOURCES_FOLDER_NAME);
+				if (resourceFolderFound) {
+					resourceRelPath.Append (segments [i]);
+					if (i + 1 < segments.Length)
+						resourceRelPath.Append (PATH_ELEMENT_SEPARATOR);
+				}
+			}
+			return resourceRelPath.ToString ();
+		}
+
 		#endregion
 
 	}

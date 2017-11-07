@@ -15,6 +15,8 @@ using System.Globalization;
 using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQTests;
+using UnityEditor.SceneManagement;
+using QM.Util;
 
 namespace GQ.Editor.UI
 {
@@ -415,10 +417,9 @@ namespace GQ.Editor.UI
 									namePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
 								}
 								int oldIntVal = (int)curPropInfo.GetValue (p.Config, null);
-								int newIntVal = oldIntVal;
 
 								// show text field if value fits in one line:
-								newIntVal = EditorGUILayout.IntField (namePrefixGUIContent, oldIntVal);
+								int newIntVal = EditorGUILayout.IntField (namePrefixGUIContent, oldIntVal);
 								if (newIntVal != oldIntVal) {
 									configIsDirty = true;
 								}
@@ -464,9 +465,9 @@ namespace GQ.Editor.UI
 									mapProviderNames
 								);
 								if (oldMapProvider != selectedMapProvider) {
+									curPropInfo.SetValue (p.Config, (MapProvider)selectedMapProvider, null);
 									configIsDirty = true;
 								}
-								curPropInfo.SetValue (p.Config, (MapProvider)selectedMapProvider, null);
 							}
 							break;
 						case "List`1":
@@ -476,27 +477,70 @@ namespace GQ.Editor.UI
 								case "SceneExtension":
 									// Header with Add and Clear Button:
 									EditorGUILayout.BeginHorizontal ();
-									EditorGUILayout.PrefixLabel (namePrefixGUIContent);
+									GUILayout.Label ("Scene Extension", EditorStyles.boldLabel);
 									if (GUILayout.Button ("+")) {
 										Debug.Log ("Adding a new SceneExtension is not supported yet!");
 									}
-									if (GUILayout.Button ("Clear")) {
-										Debug.Log ("Clearing the list of SceneExtensions is not supported yet!");
-									}
 									EditorGUILayout.EndHorizontal ();
 
-									List<SceneExtension> oldSceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
-									foreach (SceneExtension oldSceneExt in oldSceneExtsVal) {
-										EditorGUILayout.BeginHorizontal ();
-										string sceneName = Files.FileName (oldSceneExt.scene);
-										if (sceneName.EndsWith(".unity")) 
-											sceneName = sceneName.Substring(0, sceneName.Length - ".unity".Length);
-										namePrefixGUIContent = new GUIContent(sceneName, "The prefab extends this scene.");
-										EditorGUILayout.TextField (namePrefixGUIContent, Files.FileName (oldSceneExt.prefab));
-										EditorGUILayout.EndHorizontal ();
-										EditorGUILayout.TextField (
-											new GUIContent("\t", "The root gameobject where the prefab is injected."), 
-											Files.FileName (oldSceneExt.root));
+									List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
+									bool sceneExtsChanged = false;
+
+									for (int i = 0; i < sceneExtsVal.Count; i++) {
+										SceneExtension oldSceneExt = sceneExtsVal [i];
+										SceneExtension newSceneExt = oldSceneExt;
+										// entry for extension only enabled when in same scene:
+										bool sceneExtensionDisabled = EditorSceneManager.GetActiveScene ().path != oldSceneExt.scene;
+
+										using (new EditorGUI.DisabledGroupScope (sceneExtensionDisabled)) {
+											EditorGUILayout.BeginHorizontal ();
+											bool sceneExtChanged = false;
+											// scene name:
+											string sceneName = Files.FileName (oldSceneExt.scene);
+											if (sceneName.EndsWith (".unity"))
+												sceneName = sceneName.Substring (0, sceneName.Length - ".unity".Length);
+											// prefab:
+											EditorGUILayout.PrefixLabel (new GUIContent ("  -> " + sceneName, "The prefab extends this scene."));
+											GameObject oldPrefabGO = Resources.Load<GameObject> (oldSceneExt.prefab);
+											GameObject newPrefabGO = 
+												(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
+											if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
+												// if user selected another prefab we store it:
+												newSceneExt.prefab = AssetDatabase.GetAssetPath(newPrefabGO);
+												sceneExtChanged = true;
+												Debug.Log ("New Prefab: " + newSceneExt.prefab);
+											}
+											EditorGUILayout.EndHorizontal ();
+											EditorGUILayout.BeginHorizontal ();
+											// root:
+											EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
+											if (sceneExtensionDisabled) {
+												EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
+											} else {
+												GameObject oldRootGO = GameObject.Find (oldSceneExt.root);
+												GameObject newRootGO = 
+													(GameObject)EditorGUILayout.ObjectField (oldRootGO, typeof(GameObject), true);
+												if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene ()) {
+													newSceneExt.root = newRootGO.transform.GetPath ();
+													sceneExtChanged = true;
+													Debug.Log ("New Root: " + newSceneExt.root);
+												}
+											}
+											if (sceneExtChanged) {
+												newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
+												sceneExtsVal [i] = newSceneExt;
+												sceneExtsChanged = true;
+											}
+										} // end disabled group for current scene extension
+										if (GUILayout.Button ("-")) {
+											Debug.Log ("Deleting a SceneExtension is not supported yet!");
+										}
+										EditorGUILayout.EndHorizontal (); // end horizontal line of prefab and delete button for current scene extension.
+									}
+									if (sceneExtsChanged) {
+										// Update Config property for scene extensions:
+										curPropInfo.SetValue (p.Config, sceneExtsVal, null);
+										configIsDirty = true;
 									}
 									break;
 								default:

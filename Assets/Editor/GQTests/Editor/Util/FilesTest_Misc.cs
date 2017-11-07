@@ -391,6 +391,13 @@ namespace GQTests.Editor.Util {
 				"Calling ParentDir on root should throw ArgumentException.");
 		}
 
+		[Test]
+		public void GetResourcesRelativePath() {
+			Assert.AreEqual ("Resources/dir1/dir2/file.txt", Files.GetResourcesRelativePath ("Assets/Resources/dir1/dir2/file.txt"));
+			Assert.AreEqual ("Resources", Files.GetResourcesRelativePath ("Assets/Resources"));
+			Assert.AreEqual ("Resources", Files.GetResourcesRelativePath ("Assets/Resources/"));
+		}
+
 		#endregion
 
 		#region Directory Features
