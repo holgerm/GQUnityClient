@@ -477,15 +477,18 @@ namespace GQ.Editor.UI
 								case "SceneExtension":
 									List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
 									bool sceneExtsChanged = false;
+									string sceneName;
 
 									// Header with Add and Clear Button:
 									EditorGUILayout.BeginHorizontal ();
-									GUILayout.Label ("Scene Extension", EditorStyles.boldLabel);
+									GUILayout.Label (
+										string.Format ("Scene Extensions ({0})", sceneExtsVal.Count), 
+										EditorStyles.boldLabel
+									);
 									if (GUILayout.Button ("+")) {
-										Debug.Log ("Adding a new SceneExtension is not supported yet!");
 										SceneExtension sce = new SceneExtension ();
-										sce.root = null;
-										sce.prefab = null;
+										sce.root = "";
+										sce.prefab = "";
 										sce.scene = EditorSceneManager.GetActiveScene ().path;
 										sceneExtsVal.Add (sce);
 										sceneExtsChanged = true;
@@ -502,7 +505,7 @@ namespace GQ.Editor.UI
 											EditorGUILayout.BeginHorizontal ();
 											bool sceneExtChanged = false;
 											// scene name:
-											string sceneName = Files.FileName (oldSceneExt.scene);
+											sceneName = Files.FileName (oldSceneExt.scene);
 											if (sceneName.EndsWith (".unity"))
 												sceneName = sceneName.Substring (0, sceneName.Length - ".unity".Length);
 											// prefab:
@@ -543,6 +546,18 @@ namespace GQ.Editor.UI
 										} // end disabled group for current scene extension
 										if (GUILayout.Button ("-")) {
 											Debug.Log ("Deleting a SceneExtension is not supported yet!");
+											if (EditorUtility.DisplayDialog (
+												    string.Format ("Really delete extension for scene {0}?", sceneName), 
+												    string.Format (
+													    "It adds {0} to {1}.", 
+													    Files.FileName (oldSceneExt.prefab),
+													    Files.FileName (oldSceneExt.root)
+												    ), 
+												    "Yes, delete it!", 
+												    "No, keep it")) {
+												sceneExtsVal.Remove (oldSceneExt);
+												sceneExtsChanged = true;
+											}
 										}
 										EditorGUILayout.EndHorizontal (); // end horizontal line of prefab and delete button for current scene extension.
 									}
