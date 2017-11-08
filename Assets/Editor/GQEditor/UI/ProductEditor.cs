@@ -475,16 +475,22 @@ namespace GQ.Editor.UI
 								Type argumentType = curPropInfo.PropertyType.GetGenericArguments () [0];
 								switch (argumentType.Name) {
 								case "SceneExtension":
+									List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
+									bool sceneExtsChanged = false;
+
 									// Header with Add and Clear Button:
 									EditorGUILayout.BeginHorizontal ();
 									GUILayout.Label ("Scene Extension", EditorStyles.boldLabel);
 									if (GUILayout.Button ("+")) {
 										Debug.Log ("Adding a new SceneExtension is not supported yet!");
+										SceneExtension sce = new SceneExtension ();
+										sce.root = null;
+										sce.prefab = null;
+										sce.scene = EditorSceneManager.GetActiveScene ().path;
+										sceneExtsVal.Add (sce);
+										sceneExtsChanged = true;
 									}
 									EditorGUILayout.EndHorizontal ();
-
-									List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
-									bool sceneExtsChanged = false;
 
 									for (int i = 0; i < sceneExtsVal.Count; i++) {
 										SceneExtension oldSceneExt = sceneExtsVal [i];
