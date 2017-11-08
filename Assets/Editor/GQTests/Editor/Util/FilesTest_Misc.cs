@@ -332,6 +332,7 @@ namespace GQTests.Editor.Util
 			Assert.AreEqual ("justTheFile.txt", Files.FileName ("justTheFile.txt"));
 			Assert.AreEqual ("justTheFileWithoutExtension", Files.FileName ("justTheFileWithoutExtension"));
 			Assert.AreEqual (".justAHiddenFile", Files.FileName (".justAHiddenFile"));
+			Assert.AreEqual (null, Files.FileName (null));
 			// URL:
 			Assert.AreEqual (
 				"1_k800_badkoesenpumphaus.jpg", 

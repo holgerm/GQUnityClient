@@ -131,6 +131,9 @@ namespace GQ.Client.FileIO
 
 		public static string FileName (string filePath)
 		{
+			if (filePath == null)
+				return null;
+			
 			string filename = "";
 			int lastSlashIndex = filePath.LastIndexOf (PATH_ELEMENT_SEPARATOR);
 
