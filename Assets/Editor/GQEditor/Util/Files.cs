@@ -382,6 +382,12 @@ namespace GQ.Editor.Util
 
 		public static string RESOURCES_FOLDER_NAME = "Resources";
 
+		/// <summary>
+		/// If the given assetPath refers to a resource (a file or directory inside a Resources folder, 
+		/// you will get the path relative to the Resource folder and without ending (like .png").
+		/// </summary>
+		/// <returns>A relative path that can be used for Unity's Resources.Load().</returns>
+		/// <param name="assetPath">Asset path.</param>
 		public static string GetResourcesRelativePath (string assetPath)
 		{
 			string[] segments = assetPath.Split (SEPARATORS);
@@ -395,8 +401,17 @@ namespace GQ.Editor.Util
 				}
 				resourceFolderFound |= (segments [i] == RESOURCES_FOLDER_NAME);
 			}
+			if (!resourceFolderFound)
+				return null;
+			
 			string result = resourceRelPath.ToString ();
-			return (!resourceFolderFound ? null : result);
+			// strip any endings separated by dot ".":
+			string filename = FileName (result);
+			if (filename.LastIndexOf (".") >= 0) {
+				int eraseCharsFromEnd = filename.Length - filename.LastIndexOf (".");
+				result = result.Substring (0, result.Length - eraseCharsFromEnd);
+			}
+			return result;
 		}
 
 		#endregion

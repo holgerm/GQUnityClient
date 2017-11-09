@@ -23,7 +23,8 @@ namespace GQ.Editor.UI
 	public class ProductEditor : EditorWindow
 	{
 
-		private GUIStyle textareaGUIStyle;
+		public static GUIStyle TextareaGUIStyle { get; private set; }
+
 		private Texture warnIcon;
 		Vector2 scrollPos;
 
@@ -97,12 +98,6 @@ namespace GQ.Editor.UI
 		int monthVersionNumber;
 		int buildVersionNumber;
 
-		int selectedDownloadStrategy;
-		string[] downloadStrategyNames = Enum.GetNames (typeof(DownloadStrategy));
-
-		int selectedMapProvider;
-		string[] mapProviderNames = Enum.GetNames (typeof(MapProvider));
-
 		static ProductManager _pm;
 
 		public ProductManager Pm {
@@ -155,8 +150,8 @@ namespace GQ.Editor.UI
 		void OnGUI ()
 		{
 			// adjust textarea style:
-			textareaGUIStyle = GUI.skin.textField;
-			textareaGUIStyle.wordWrap = true;
+			TextareaGUIStyle = GUI.skin.textField;
+			TextareaGUIStyle.wordWrap = true;
 
 			gui4ProductManager ();
 
@@ -302,10 +297,17 @@ namespace GQ.Editor.UI
 
 		bool configIsDirty = false;
 
+		static public Config SelectedConfig { get; private set; }
+
+		static public float WidthForValues { get; private set; }
+
+		static public float WidthForNames { get; private set; }
+
 		void gui4ProductDetails ()
 		{
 			GUILayout.Label ("Product Details", EditorStyles.boldLabel);
 			ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
+			SelectedConfig = p.Config;
 
 			// Begin ScrollView:
 			using (var scrollView = new EditorGUILayout.ScrollViewScope (scrollPos)) {
@@ -320,11 +322,11 @@ namespace GQ.Editor.UI
 					float allNamesMax = 0f, allValuesMax = 0f;
 
 					foreach (PropertyInfo curPropInfo in propertyInfos) {
-						if (entryHidden (curPropInfo, p.Config))
-							continue;
+//		TODO				if (entryHidden (curPropInfo))
+//							continue;
 
 						string name = curPropInfo.Name + ":";
-						string value = Objects.ToString (curPropInfo.GetValue (p.Config, null));
+						string value = Objects.ToString (curPropInfo.GetValue (SelectedConfig, null));
 
 						float nameMin, nameMax;
 						float valueMin, valueMax;
@@ -340,304 +342,17 @@ namespace GQ.Editor.UI
 					// add left, middle and right borders as given:
 					float borders = new GUIStyle (GUI.skin.textField).margin.left + new GUIStyle (GUI.skin.textField).margin.horizontal + new GUIStyle (GUI.skin.textField).margin.right; 
 					// calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
-					float widthForNames = Math.Min ((position.width - borders) * 0.4f, allNamesMax);
-					float widthForValues = position.width - (borders + widthForNames);
+					WidthForNames = Math.Min ((position.width - borders) * 0.4f, allNamesMax);
+					WidthForValues = position.width - (borders + WidthForNames);
 
-					EditorGUIUtility.labelWidth = widthForNames;
+					EditorGUIUtility.labelWidth = WidthForNames;
 
 					// show all properties as textfields or textareas in fitting width:
 					foreach (PropertyInfo curPropInfo in propertyInfos) {
-						if (entryHidden (curPropInfo, p.Config))
-							continue;
-
-						GUIStyle guiStyle = new GUIStyle ();
-
-						string name = curPropInfo.Name;
-						float nameMin, nameWidthNeed;
-						guiStyle.CalcMinMaxWidth (new GUIContent (name + ":"), out nameMin, out nameWidthNeed);
-						GUIContent namePrefixGUIContent;
-						if (widthForNames < nameWidthNeed)
-							// Show hover over name because it is too long to be shown:
-							namePrefixGUIContent = new GUIContent (name + ":", name);
-						else
-							// Show only name without hover:
-							namePrefixGUIContent = new GUIContent (name + ":");
-
-						float valueMin, valueNeededWidth;
-
-						switch (curPropInfo.PropertyType.Name) {
-						case "Boolean":
-								// show checkbox:
-							EditorGUILayout.BeginHorizontal ();
-							{
-								EditorGUILayout.PrefixLabel (namePrefixGUIContent);
-								bool oldBoolVal = (bool)curPropInfo.GetValue (p.Config, null);
-								bool newBoolVal = EditorGUILayout.Toggle (oldBoolVal);
-								if (newBoolVal != oldBoolVal) {
-									configIsDirty = true;
-								}
-								curPropInfo.SetValue (p.Config, newBoolVal, null);
-							}
-							EditorGUILayout.EndHorizontal ();
-							break;
-						case "String":
-							using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo, p.Config))) {
-								// id of products may not be altered.
-								if (curPropInfo.Name.Equals ("id")) {
-									namePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
-								} 
-								// show textfield or if value too long show textarea:
-								string oldStringVal = (string)curPropInfo.GetValue (p.Config, null);
-								oldStringVal = Objects.ToString (oldStringVal);
-								string newStringVal;
-								guiStyle.CalcMinMaxWidth (new GUIContent (oldStringVal), out valueMin, out valueNeededWidth);
-
-								if (widthForValues < valueNeededWidth) {
-									// show textarea if value does not fit within one line:
-									EditorGUILayout.BeginHorizontal ();
-									EditorGUILayout.PrefixLabel (namePrefixGUIContent);
-									newStringVal = EditorGUILayout.TextArea (oldStringVal, textareaGUIStyle);
-									newStringVal = Objects.ToString (newStringVal);
-									EditorGUILayout.EndHorizontal ();
-								} else {
-									// show text field if value fits in one line:
-									newStringVal = EditorGUILayout.TextField (namePrefixGUIContent, oldStringVal);
-									newStringVal = Objects.ToString (newStringVal);
-								}
-								if (!newStringVal.Equals (oldStringVal)) {
-									configIsDirty = true;
-								}
-								curPropInfo.SetValue (p.Config, newStringVal, null);
-							}
-							break;
-						case "Int32":
-							using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo, p.Config))) {
-								// id of products may not be altered.
-								if (curPropInfo.Name.Equals ("id")) {
-									namePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
-								}
-								int oldIntVal = (int)curPropInfo.GetValue (p.Config, null);
-
-								// show text field if value fits in one line:
-								int newIntVal = EditorGUILayout.IntField (namePrefixGUIContent, oldIntVal);
-								if (newIntVal != oldIntVal) {
-									configIsDirty = true;
-								}
-								curPropInfo.SetValue (p.Config, newIntVal, null);
-							}
-							break;
-						case "Single": // aka float
-							{
-								float oldFloatVal = (float)curPropInfo.GetValue (p.Config, null);
-								float newFloatVal = oldFloatVal;
-
-								// show text field if value fits in one line:
-								newFloatVal = EditorGUILayout.FloatField (namePrefixGUIContent, oldFloatVal);
-								if (newFloatVal != oldFloatVal) {
-									configIsDirty = true;
-								}
-								curPropInfo.SetValue (p.Config, newFloatVal, null);
-							}
-							break;
-						case "DownloadStrategy":
-							{
-								// TODO implement all three strategies
-								int oldDownloadStrategy = selectedDownloadStrategy;
-								selectedDownloadStrategy = 
-									EditorGUILayout.Popup (
-									"Download Strategy", 
-									selectedDownloadStrategy, 
-									downloadStrategyNames
-								);
-								if (oldDownloadStrategy != selectedDownloadStrategy) {
-									configIsDirty = true;
-								}
-								curPropInfo.SetValue (p.Config, (DownloadStrategy)selectedDownloadStrategy, null);
-							}
-							break;
-						case "MapProvider":
-							{
-								int oldMapProvider = selectedMapProvider;
-								selectedMapProvider = 
-									EditorGUILayout.Popup (
-									"Map Provider", 
-									selectedMapProvider, 
-									mapProviderNames
-								);
-								if (oldMapProvider != selectedMapProvider) {
-									curPropInfo.SetValue (p.Config, (MapProvider)selectedMapProvider, null);
-									configIsDirty = true;
-								}
-							}
-							break;
-						case "List`1":
-							{
-								Type argumentType = curPropInfo.PropertyType.GetGenericArguments () [0];
-								switch (argumentType.Name) {
-								case "SceneExtension":
-									List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (p.Config, null);
-									bool sceneExtsChanged = false;
-									string sceneName;
-
-									// Header with Add and Clear Button:
-									EditorGUILayout.BeginHorizontal ();
-									GUILayout.Label (
-										string.Format ("Scene Extensions ({0})", sceneExtsVal.Count), 
-										EditorStyles.boldLabel
-									);
-									if (GUILayout.Button ("+")) {
-										SceneExtension sce = new SceneExtension ();
-										sce.root = "";
-										sce.prefab = "";
-										sce.scene = EditorSceneManager.GetActiveScene ().path;
-										sceneExtsVal.Add (sce);
-										sceneExtsChanged = true;
-									}
-									EditorGUILayout.EndHorizontal ();
-
-									for (int i = 0; i < sceneExtsVal.Count; i++) {
-										SceneExtension oldSceneExt = sceneExtsVal [i];
-										SceneExtension newSceneExt = oldSceneExt;
-										// entry for extension only enabled when in same scene:
-										bool sceneExtensionDisabled = EditorSceneManager.GetActiveScene ().path != oldSceneExt.scene;
-
-										using (new EditorGUI.DisabledGroupScope (sceneExtensionDisabled)) {
-											EditorGUILayout.BeginHorizontal ();
-											bool sceneExtChanged = false;
-											// scene name:
-											sceneName = Files.FileName (oldSceneExt.scene);
-											if (sceneName.EndsWith (".unity"))
-												sceneName = sceneName.Substring (0, sceneName.Length - ".unity".Length);
-											// prefab:
-											EditorGUILayout.PrefixLabel (new GUIContent ("  -> " + sceneName, "The prefab extends this scene."));
-											GameObject oldPrefabGO = Resources.Load<GameObject> (oldSceneExt.prefab);
-											GameObject newPrefabGO = 
-												(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
-											if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
-												// if user selected another prefab we store it:
-												string prefabPathWithEnding =
-													Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
-												newSceneExt.prefab = prefabPathWithEnding.Substring (0, prefabPathWithEnding.Length - ".prefab".Length);
-												sceneExtChanged = true;
-												Debug.Log ("Old Prefab: " + oldSceneExt.prefab);
-												Debug.Log ("New Prefab: " + newSceneExt.prefab);
-											}
-											EditorGUILayout.EndHorizontal ();
-											EditorGUILayout.BeginHorizontal ();
-											// root:
-											EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
-											if (sceneExtensionDisabled) {
-												EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
-											} else {
-												GameObject oldRootGO = GameObject.Find (oldSceneExt.root);
-												GameObject newRootGO = 
-													(GameObject)EditorGUILayout.ObjectField (oldRootGO, typeof(GameObject), true);
-												if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene ()) {
-													newSceneExt.root = newRootGO.transform.GetPath ();
-													sceneExtChanged = true;
-													Debug.Log ("New Root: " + newSceneExt.root);
-												}
-											}
-											if (sceneExtChanged) {
-												newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
-												sceneExtsVal [i] = newSceneExt;
-												sceneExtsChanged = true;
-											}
-										} // end disabled group for current scene extension
-										if (GUILayout.Button ("-")) {
-											Debug.Log ("Deleting a SceneExtension is not supported yet!");
-											if (EditorUtility.DisplayDialog (
-												    string.Format ("Really delete extension for scene {0}?", sceneName), 
-												    string.Format (
-													    "It adds {0} to {1}.", 
-													    Files.FileName (oldSceneExt.prefab),
-													    Files.FileName (oldSceneExt.root)
-												    ), 
-												    "Yes, delete it!", 
-												    "No, keep it")) {
-												sceneExtsVal.Remove (oldSceneExt);
-												sceneExtsChanged = true;
-											}
-										}
-										EditorGUILayout.EndHorizontal (); // end horizontal line of prefab and delete button for current scene extension.
-									}
-									if (sceneExtsChanged) {
-										// Update Config property for scene extensions:
-										curPropInfo.SetValue (p.Config, sceneExtsVal, null);
-										configIsDirty = true;
-									}
-									break;
-								default:
-								// We currently do not offer edit option for this type of Lists! Sorry.
-								// show textfield or if value too long show textarea:
-									string oldStringVal = curPropInfo.GetValue (p.Config, null).ToString ();
-									guiStyle.CalcMinMaxWidth (new GUIContent (oldStringVal), out valueMin, out valueNeededWidth);
-
-									if (widthForValues < valueNeededWidth) {
-										// show textarea if value does not fit within one line:
-										EditorGUILayout.BeginHorizontal ();
-										EditorGUILayout.PrefixLabel (namePrefixGUIContent);
-										EditorGUILayout.TextArea (oldStringVal, textareaGUIStyle);
-										EditorGUILayout.EndHorizontal ();
-									} else {
-										// show text field if value fits in one line:
-										EditorGUILayout.TextField (namePrefixGUIContent, oldStringVal);
-									}
-									break;
-								}
-							}
-							break;
-						case "Color":
-							Color oldColorVal = (Color)curPropInfo.GetValue (p.Config, null);
-							Color newColorVal = oldColorVal;
-
-							// show Color field if value fits in one line:
-							newColorVal = EditorGUILayout.ColorField (namePrefixGUIContent, oldColorVal);
-							if (newColorVal != oldColorVal) {
-								configIsDirty = true;
-							}
-							curPropInfo.SetValue (p.Config, newColorVal, null);
-							break;
-						default:
-							Debug.Log ("Unhandled property Type: " + curPropInfo.PropertyType.Name);
-							break;
-						}
-
+						configIsDirty |= ProductEditorPart.CreateGui (curPropInfo);
 					}
 				} // End Scope Disabled Group 
 			} // End Scope ScrollView 
-		}
-
-		private bool entryDisabled (PropertyInfo propInfo, Config config)
-		{
-			bool disabled = false;
-			// the entry for the given property will be disabled, if one of the following is true
-			disabled |= propInfo.Name.Equals ("id");
-				
-			return disabled;
-		}
-
-		private bool entryHidden (PropertyInfo propInfo, Config config)
-		{
-			bool hidden = false;
-
-			hidden |= !propInfo.CanRead;
-			hidden |= (
-			    config.mapProvider == MapProvider.OpenStreetMap
-			) && (
-			    propInfo.Name.Equals ("mapBaseUrl") ||
-			    propInfo.Name.Equals ("mapKey") ||
-			    propInfo.Name.Equals ("mapID") ||
-			    propInfo.Name.Equals ("mapTileImageExtension")
-			);
-			hidden |= (
-			    config.mapProvider == MapProvider.MapBox
-			) && (
-			    propInfo.Name.Equals ("mapBaseUrl") ||
-			    propInfo.Name.Equals ("mapTileImageExtension")
-			);
-
-			return hidden;
 		}
 
 		private bool allowChanges = false;
@@ -663,7 +378,7 @@ namespace GQ.Editor.UI
 				{
 					if (GUILayout.Button ("Save")) {
 						ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
-						Pm.serializeConfig (p.Config, ConfigurationManager.RUNTIME_PRODUCT_DIR);
+						Pm.serializeConfig (SelectedConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
 						configIsDirty = false;
 						LayoutConfig.ResetAll (); // TODO check and implement update all laoyut components in editor
 					}
@@ -672,7 +387,6 @@ namespace GQ.Editor.UI
 						p.initConfig ();
 						GUIUtility.keyboardControl = 0;
 						GUIUtility.hotControl = 0;
-						configIsDirty = false;
 					}
 				}
 				EditorGUI.EndDisabledGroup ();
@@ -826,42 +540,529 @@ namespace GQ.Editor.UI
 	}
 
 
-
-
-	class MyAssetModificationProcessor : UnityEditor.AssetModificationProcessor
+	abstract public  class ProductEditorPart
 	{
-		//
-		//		static void OnWillCreateAsset (string assetPath) {
-		//
-		//			Debug.Log("AssetModificationProcessor will CREATE asset: " + assetPath);
-		//		}
-		//
-		//
-		//		static void OnWillDeleteAsset (string assetPath, RemoveAssetOptions options) {
-		//
-		//			Debug.Log("AssetModificationProcessor will DELETE asset: " + assetPath + " with options: " + options.ToString());
-		//		}
-		//
-		//
-		//		static void OnWillMoveAsset (string fromPath, string toPath) {
-		//
-		//			Debug.Log("AssetModificationProcessor will MOVE asset from: " + fromPath + " to: " + toPath);
-		//		}
-		
-		
-		static void OnWillSaveAssets (string[] assetPaths)
+		static private Dictionary<Type, ProductEditorPart> cachedEditorParts = new Dictionary<Type, ProductEditorPart> ();
+
+		static public GUIContent NamePrefixGUIContent { get; private set; }
+
+		static public bool CreateGui (PropertyInfo curPropInfo)
 		{
-			Debug.Log (string.Format ("AssetModificationProcessor: Will SAVE {0} assets:", assetPaths.Length));
-			foreach (string str in assetPaths) {
-				Debug.Log ("\tasset: " + str);
+			Type propertyType = curPropInfo.PropertyType;
+			ProductEditorPart accordingEditorPart;
+
+			if (!cachedEditorParts.TryGetValue (propertyType, out accordingEditorPart)) {
+				// construct the class name of the according editor gui creator class (a subclass of me):
+				// the class name scheme is: PEP4<basictype>[Of<typearg1>[And<typearg2...]...]
+				StringBuilder classNameBuilder = new StringBuilder (typeof(ProductEditorPart).FullName + "4");
+				classNameBuilder.Append (
+					(propertyType.Name.Contains ("`") ? 
+						propertyType.Name.Substring (0, propertyType.Name.LastIndexOf ("`")) : 
+						propertyType.Name));
+				Type[] argTypes = propertyType.GetGenericArguments ();
+				for (int i = 0; i < argTypes.Length; i++) {
+					classNameBuilder.Append ((i == 0) ? "Of" : "And");
+					classNameBuilder.Append (argTypes [i].Name);
+				}
+				string className = classNameBuilder.ToString ();
+
+				// create a new instance of the according product editor part class:
+				try {
+					accordingEditorPart = typeof(ProductEditorPart).Assembly.CreateInstance (className) as ProductEditorPart;
+					if (accordingEditorPart != null)
+						cachedEditorParts.Add (propertyType, accordingEditorPart);
+				} catch (Exception e) {
+					Debug.Log ("Unhandled property Type: " + curPropInfo.PropertyType.Name + "\t" + e.Message);
+					return false;
+				}
+			} 
+
+			if (accordingEditorPart == null) {
+				Debug.Log ("Unhandled property Type: " + propertyType.FullName);
+				return false;
 			}
+
+			if (entryHidden (curPropInfo))
+				return false;
+
+			GUIStyle guiStyle = new GUIStyle ();
+
+			string name = curPropInfo.Name;
+			float nameMin, nameWidthNeed;
+			guiStyle.CalcMinMaxWidth (new GUIContent (name + ":"), out nameMin, out nameWidthNeed);
+			if (ProductEditor.WidthForNames < nameWidthNeed)
+				// Show hover over name because it is too long to be shown:
+				NamePrefixGUIContent = new GUIContent (name + ":", name);
+			else
+				// Show only name without hover:
+				NamePrefixGUIContent = new GUIContent (name + ":");
+			
+			return accordingEditorPart.doCreateGui (curPropInfo);
 		}
-		
-		
-		//		static void IsOpenForEdit (string s1, string s2) {
-		//
-		//			Debug.Log("AssetModificationProcessor IsOpenForEdit(" + s1 + ", " + s2 + ")");
-		//		}
+
+		abstract protected bool doCreateGui (PropertyInfo curPropInfo);
+
+		static protected bool entryDisabled (PropertyInfo propInfo)
+		{
+			bool disabled = false;
+			// the entry for the given property will be disabled, if one of the following is true
+			disabled |= propInfo.Name.Equals ("id");
+
+			return disabled;
+		}
+
+		static protected bool entryHidden (PropertyInfo propInfo)
+		{
+			bool hidden = false;
+
+			hidden |= !propInfo.CanRead;
+			hidden |= (
+			    ProductEditor.SelectedConfig.mapProvider == MapProvider.OpenStreetMap
+			) && (
+			    propInfo.Name.Equals ("mapBaseUrl") ||
+			    propInfo.Name.Equals ("mapKey") ||
+			    propInfo.Name.Equals ("mapID") ||
+			    propInfo.Name.Equals ("mapTileImageExtension")
+			);
+			hidden |= (
+			    ProductEditor.SelectedConfig.mapProvider == MapProvider.MapBox
+			) && (
+			    propInfo.Name.Equals ("mapBaseUrl") ||
+			    propInfo.Name.Equals ("mapTileImageExtension")
+			);
+
+			return hidden;
+		}
+
 	}
+
+	public class ProductEditorPart4Boolean : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			// show checkbox:
+			EditorGUILayout.BeginHorizontal ();
+			{
+				EditorGUILayout.PrefixLabel (NamePrefixGUIContent);
+				bool oldBoolVal = (bool)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+				bool newBoolVal = EditorGUILayout.Toggle (oldBoolVal);
+				if (newBoolVal != oldBoolVal) {
+					markConfigAsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, newBoolVal, null);
+				}
+			}
+			EditorGUILayout.EndHorizontal ();
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4Color : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			Color oldColorVal = (Color)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			Color newColorVal = oldColorVal;
+
+			// show Color field if value fits in one line:
+			newColorVal = EditorGUILayout.ColorField (NamePrefixGUIContent, oldColorVal);
+			if (newColorVal != oldColorVal) {
+				markConfigAsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, newColorVal, null);
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4DownloadStrategy : ProductEditorPart
+	{
+
+		int selectedDownloadStrategy;
+		string[] downloadStrategyNames = Enum.GetNames (typeof(DownloadStrategy));
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			// TODO implement all three strategies
+			int oldDownloadStrategy = selectedDownloadStrategy;
+			selectedDownloadStrategy = 
+				EditorGUILayout.Popup (
+				"Download Strategy", 
+				selectedDownloadStrategy, 
+				downloadStrategyNames
+			);
+			if (oldDownloadStrategy != selectedDownloadStrategy) {
+				markConfigAsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, (DownloadStrategy)selectedDownloadStrategy, null);
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4ImagePath : ProductEditorPart
+	{
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
+
+			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
+				// get currently stored image path from config:
+				ImagePath oldVal = (ImagePath)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+				Sprite oldSprite = Resources.Load<Sprite> (oldVal.path);
+
+				// show textarea if value does not fit within one line:
+				EditorGUILayout.BeginHorizontal ();
+				EditorGUILayout.PrefixLabel (myNamePrefixGUIContent);
+				Sprite newSprite = 
+					(Sprite)EditorGUILayout.ObjectField (oldSprite, typeof(Sprite), false);
+				string path = AssetDatabase.GetAssetPath (newSprite);
+				ImagePath newVal = new ImagePath (Files.GetResourcesRelativePath (path));
+				EditorGUILayout.EndHorizontal ();
+				if (newVal.path != "" && newVal.path != null && !newVal.path.Equals (oldVal.path)) {
+					markConfigAsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, newVal, null);
+				}
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4Int32 : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
+
+			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
+				// id of products may not be altered.
+				if (curPropInfo.Name.Equals ("id")) {
+					myNamePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
+				}
+				int oldIntVal = (int)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+
+				// show text field if value fits in one line:
+				int newIntVal = EditorGUILayout.IntField (myNamePrefixGUIContent, oldIntVal);
+				if (newIntVal != oldIntVal) {
+					markConfigAsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, newIntVal, null);
+				}
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4ListOfCategory : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			List<Category> values = (List<Category>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			if (values == null)
+				values = new List<Category> ();
+			bool valsChanged = false;
+
+			// Header with Add and Clear Button:
+			EditorGUILayout.BeginHorizontal ();
+			GUILayout.Label (
+				string.Format ("Categories ({0})", values.Count), 
+				EditorStyles.boldLabel
+			);
+			if (GUILayout.Button ("+")) {
+				Category cat = new Category ();
+				cat.symbol = new ImagePath ();
+				values.Add (cat);
+				valsChanged = true;
+			}
+			EditorGUILayout.EndHorizontal ();
+
+			for (int i = 0; i < values.Count; i++) {
+				Category oldCat = values [i];
+				Category newCat = oldCat;
+
+				bool valChanged = false;
+				// category name:
+				string newName = EditorGUILayout.TextField (new GUIContent ("name:"), oldCat.name);
+				valChanged |= (newName != oldCat.name);
+				// id as text:
+				string newId = EditorGUILayout.TextField (new GUIContent ("id:", "Id must be unqiue within these categories."), oldCat.id);
+				if (newId != oldCat.id) {
+					// check that the new id is not used among the other categories, else reset to the old id:
+					bool newIdIsUnique = true;
+					for (int j = 0; j < values.Count; j++) {
+						if (j == i)
+							continue;
+						if (values [j] == values [i]) {
+							newIdIsUnique = false;
+							break;
+						}
+					}
+					if (!newIdIsUnique) {
+						// reset if not unique:
+						newId = oldCat.id;
+					} else {
+						valChanged |= (newId != oldCat.id);
+					}
+				}
+
+				// symbol:
+				EditorGUILayout.BeginHorizontal ();
+				EditorGUILayout.PrefixLabel (new GUIContent ("symbol:"));
+				// get currently stored image path from config:
+				ImagePath oldSymbolPath = oldCat.symbol;
+				ImagePath newSymbolPath = oldSymbolPath;
+				Sprite oldSymbolSprite = Resources.Load<Sprite> (oldSymbolPath.path);
+				Sprite newSymbolSprite = 
+					(Sprite)EditorGUILayout.ObjectField (oldSymbolSprite, typeof(Sprite), false);
+				if (newSymbolSprite != oldSymbolSprite) {
+					string path = AssetDatabase.GetAssetPath (newSymbolSprite);
+					newSymbolPath = new ImagePath (Files.GetResourcesRelativePath (path));
+					valChanged |= (newSymbolPath.path != oldSymbolPath.path);
+				}
+				if (valChanged) {
+					valsChanged = true;
+					newCat.name = newName;
+					newCat.id = newId;
+					newCat.symbol = newSymbolPath;
+					values [i] = newCat;
+				}
+
+				if (GUILayout.Button ("-")) {
+					if (EditorUtility.DisplayDialog (
+						    string.Format ("Really delete category {0}?", (oldCat.name != null && oldCat.name != "") ? oldCat.name : i.ToString ()), 
+						    string.Format (
+							    "This can not be undone"
+						    ), 
+						    "Yes, delete it!", 
+						    "No, keep it")) {
+						values.Remove (values [i]);
+						valsChanged = true;
+					}
+				}
+				EditorGUILayout.EndHorizontal (); // end horizontal line of symbol and delete button for current category.
+			}
+			if (valsChanged) {
+				// Update Config property for scene extensions:
+				markConfigAsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, values, null);
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4ListOfSceneExtension : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			bool sceneExtsChanged = false;
+			string sceneName;
+
+			// Header with Add and Clear Button:
+			EditorGUILayout.BeginHorizontal ();
+			GUILayout.Label (
+				string.Format ("Scene Extensions ({0})", sceneExtsVal.Count), 
+				EditorStyles.boldLabel
+			);
+			if (GUILayout.Button ("+")) {
+				SceneExtension sce = new SceneExtension ();
+				sce.root = "";
+				sce.prefab = "";
+				sce.scene = EditorSceneManager.GetActiveScene ().path;
+				sceneExtsVal.Add (sce);
+				sceneExtsChanged = true;
+			}
+			EditorGUILayout.EndHorizontal ();
+
+			for (int i = 0; i < sceneExtsVal.Count; i++) {
+				SceneExtension oldSceneExt = sceneExtsVal [i];
+				SceneExtension newSceneExt = oldSceneExt;
+				// entry for extension only enabled when in same scene:
+				bool sceneExtensionDisabled = EditorSceneManager.GetActiveScene ().path != oldSceneExt.scene;
+
+				using (new EditorGUI.DisabledGroupScope (sceneExtensionDisabled)) {
+					EditorGUILayout.BeginHorizontal ();
+					bool sceneExtChanged = false;
+					// scene name:
+					sceneName = Files.FileName (oldSceneExt.scene);
+					if (sceneName.EndsWith (".unity"))
+						sceneName = sceneName.Substring (0, sceneName.Length - ".unity".Length);
+					// prefab:
+					EditorGUILayout.PrefixLabel (new GUIContent ("  -> " + sceneName, "The prefab extends this scene."));
+					GameObject oldPrefabGO = Resources.Load<GameObject> (oldSceneExt.prefab);
+					GameObject newPrefabGO = 
+						(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
+					if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
+						// if user selected another prefab we store it:
+						newSceneExt.prefab = Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
+						sceneExtChanged = true;
+						Debug.Log ("Old Prefab: " + oldSceneExt.prefab);
+						Debug.Log ("New Prefab: " + newSceneExt.prefab);
+					}
+					EditorGUILayout.EndHorizontal ();
+					EditorGUILayout.BeginHorizontal ();
+					// root:
+					EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
+					if (sceneExtensionDisabled) {
+						EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
+					} else {
+						GameObject oldRootGO = GameObject.Find (oldSceneExt.root);
+						GameObject newRootGO = 
+							(GameObject)EditorGUILayout.ObjectField (oldRootGO, typeof(GameObject), true);
+						if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene ()) {
+							newSceneExt.root = newRootGO.transform.GetPath ();
+							sceneExtChanged = true;
+							Debug.Log ("New Root: " + newSceneExt.root);
+						}
+					}
+					if (sceneExtChanged) {
+						newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
+						sceneExtsVal [i] = newSceneExt;
+						sceneExtsChanged = true;
+					}
+				} // end disabled group for current scene extension
+				if (GUILayout.Button ("-")) {
+					if (EditorUtility.DisplayDialog (
+						    string.Format ("Really delete extension for scene {0}?", sceneName), 
+						    string.Format (
+							    "It adds {0} to {1}.", 
+							    Files.FileName (oldSceneExt.prefab),
+							    Files.FileName (oldSceneExt.root)
+						    ), 
+						    "Yes, delete it!", 
+						    "No, keep it")) {
+						sceneExtsVal.Remove (oldSceneExt);
+						sceneExtsChanged = true;
+					}
+				}
+				EditorGUILayout.EndHorizontal (); // end horizontal line of prefab and delete button for current scene extension.
+			}
+			if (sceneExtsChanged) {
+				// Update Config property for scene extensions:
+				markConfigAsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, sceneExtsVal, null);
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4MapProvider : ProductEditorPart
+	{
+		int selectedMapProvider;
+		string[] mapProviderNames = Enum.GetNames (typeof(MapProvider));
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			int oldMapProvider = selectedMapProvider;
+			selectedMapProvider = 
+				EditorGUILayout.Popup (
+				"Map Provider", 
+				selectedMapProvider, 
+				mapProviderNames
+			);
+			if (oldMapProvider != selectedMapProvider) {
+				markConfigAsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, (MapProvider)selectedMapProvider, null);
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4Single : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+
+			float oldFloatVal = (float)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			float newFloatVal = oldFloatVal;
+
+			// show text field if value fits in one line:
+			newFloatVal = EditorGUILayout.FloatField (NamePrefixGUIContent, oldFloatVal);
+			if (newFloatVal != oldFloatVal) {
+				markConfigAsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, newFloatVal, null);
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4String : ProductEditorPart
+	{
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			bool markConfigAsDirty = false;
+			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
+
+			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
+				// id of products may not be altered.
+				if (curPropInfo.Name.Equals ("id")) {
+					myNamePrefixGUIContent = new GUIContent (curPropInfo.Name, "You may not alter the id of a product.");
+				} 
+				// show textfield or if value too long show textarea:
+				string oldStringVal = (string)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+				oldStringVal = Objects.ToString (oldStringVal);
+				string newStringVal;
+				GUIStyle guiStyle = new GUIStyle ();
+				float valueMin, valueNeededWidth;
+				guiStyle.CalcMinMaxWidth (new GUIContent (oldStringVal), out valueMin, out valueNeededWidth);
+
+				if (ProductEditor.WidthForValues < valueNeededWidth) {
+					// show textarea if value does not fit within one line:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (myNamePrefixGUIContent);
+					newStringVal = EditorGUILayout.TextArea (oldStringVal, ProductEditor.TextareaGUIStyle);
+					newStringVal = Objects.ToString (newStringVal);
+					EditorGUILayout.EndHorizontal ();
+				} else {
+					// show text field if value fits in one line:
+					newStringVal = EditorGUILayout.TextField (myNamePrefixGUIContent, oldStringVal);
+					newStringVal = Objects.ToString (newStringVal);
+				}
+				if (!newStringVal.Equals (oldStringVal)) {
+					markConfigAsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, newStringVal, null);
+				}
+			}
+
+			return markConfigAsDirty;
+		}
+	}
+
+
 }
 

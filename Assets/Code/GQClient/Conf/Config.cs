@@ -75,7 +75,7 @@ namespace GQ.Client.Conf
 
 		public float	mapMinimalZoom { get; set; }
 
-		public List<CategoryInfo> markers { get; set; }
+		public List<Category> categories { get; set; }
 
 		#endregion
 
@@ -92,6 +92,8 @@ namespace GQ.Client.Conf
 
 		[JsonConverter (typeof(ColorConverter))]		
 		public Color	headerButtonFgColor  { get; set; }
+
+		public ImagePath topLogo { get; set; }
 
 		[JsonConverter (typeof(ColorConverter))]		
 		public Color	contentBackgroundColor  { get; set; }
@@ -151,7 +153,6 @@ namespace GQ.Client.Conf
 //			mapTileImageExtension = "@2x.png?access_token=" + mapKey;
 			useMapOffline = false;
 			mapMinimalZoom = 7.0f;
-			markers = new List<CategoryInfo> ();
 
 			// Layout:
 			headerHeightPermill = 50;
@@ -246,6 +247,29 @@ namespace GQ.Client.Conf
 		/// The path to the prefab. It is relative to the folder Assets/ConfigAssets/Resources folder.
 		/// </summary>
 		public string prefab;
+	}
+
+	public struct ImagePath
+	{
+		public string path;
+
+		public ImagePath (string path)
+		{
+			this.path = path;
+		}
+	}
+
+	public class Category
+	{
+		public string id;
+
+		/// <summary>
+		/// The display name.
+		/// </summary>
+		public string name;
+
+		public ImagePath symbol = new ImagePath ();
+
 	}
 }
 

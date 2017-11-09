@@ -321,6 +321,7 @@ namespace GQTests.Editor.Util
 			// Assert:
 			Assert.AreEqual ("file.txt", Files.FileName ("relative/path/to/a/file.txt"));
 			Assert.AreEqual ("file.txt", Files.FileName ("/absolute/path/to/a/file.txt"));
+			Assert.AreEqual ("file.txt.pdf", Files.FileName ("/absolute/path/to/a/file.txt.pdf"));
 			Assert.AreEqual (".file", Files.FileName ("relative/path/to/a/hidden/.file"));
 			Assert.AreEqual (".file", Files.FileName ("/absolute/path/to/a/hidden/.file"));
 			Assert.AreEqual ("", Files.FileName ("relative/path/ending/with/a/slash/"));
@@ -413,8 +414,9 @@ namespace GQTests.Editor.Util
 		[Test]
 		public void GetResourcesRelativePath ()
 		{
-			Assert.AreEqual ("dir1/dir2/file.txt", Files.GetResourcesRelativePath ("Assets/Resources/dir1/dir2/file.txt"));
-			Assert.AreEqual ("dir1/dir2/file.txt", Files.GetResourcesRelativePath ("C:/Assets/Resources/dir1/dir2/file.txt"));
+			Assert.AreEqual ("dir1/dir2/file", Files.GetResourcesRelativePath ("Assets/Resources/dir1/dir2/file.txt"));
+			Assert.AreEqual ("dir1/dir2/file", Files.GetResourcesRelativePath ("C:/Assets/Resources/dir1/dir2/file.txt"));
+			Assert.AreEqual ("dir1/dir2/file.txt", Files.GetResourcesRelativePath ("C:/Assets/Resources/dir1/dir2/file.txt.png"));
 			Assert.AreEqual (null, Files.GetResourcesRelativePath ("Assets/dir1/dir2/file.txt"));
 			Assert.AreEqual ("", Files.GetResourcesRelativePath ("Assets/Resources"));
 			Assert.AreEqual ("", Files.GetResourcesRelativePath ("Assets/Resources/"));

@@ -32,84 +32,13 @@
   "mapTileImageExtension": ".png",
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
-  "markers": [
+  "categories": [
     {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.tour",
-      "Name": "Tour"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.tour.beethoven",
-      "Name": "Beethoven Tour"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.beethovenfest",
-      "Name": "Beethovenfest Spielort"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.info",
-      "Name": "Information"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.culture",
-      "Name": "Kultur"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.architecture",
-      "Name": "Architektur"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.history",
-      "Name": "Historisches"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.museum",
-      "Name": "Museum"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.gallery",
-      "Name": "Gallery"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.nature",
-      "Name": "Natur"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.special",
-      "Name": "Besonderes"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.restaurant",
-      "Name": "Restaurant"
-    },
-    {
-      "showInList": true,
-      "showOnMap": true,
-      "ID": "wcc.cafe",
-      "Name": "Café"
+      "id": "wcc.test",
+      "name": "Test",
+      "symbol": {
+        "path": "markers/wcc.culture"
+      }
     }
   ],
   "headerHeightPermill": 50,
@@ -130,6 +59,9 @@
     "g": 0.403921574,
     "b": 0.129411772,
     "a": 1.0
+  },
+  "topLogo": {
+    "path": "TopLogo"
   },
   "contentBackgroundColor": {
     "r": 1.0,
