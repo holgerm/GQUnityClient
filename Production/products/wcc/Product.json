@@ -34,10 +34,59 @@
   "mapMinimalZoom": 7.0,
   "categories": [
     {
-      "id": "wcc.test",
-      "name": "Test",
+      "id": "wcc.special.bonnleuchtet",
+      "name": "Bonn leuchtet",
       "symbol": {
         "path": "markers/wcc.culture"
+      }
+    },
+    {
+      "id": "wcc.special.offeneateliers",
+      "name": "Offene Ateliers",
+      "symbol": {
+        "path": "markers/wcc.culture"
+      }
+    },
+    {
+      "id": "wcc.sights.antiquariats",
+      "name": "Antiquariat",
+      "symbol": {
+        "path": "markers/wcc.gallery"
+      }
+    },
+    {
+      "id": "wcc.sights.architecture",
+      "name": "Antiquariat",
+      "symbol": {
+        "path": "markers/wcc.architecture"
+      }
+    },
+    {
+      "id": "wcc.sights.gallery",
+      "name": "Galerie",
+      "symbol": {
+        "path": "markers/wcc.gallery"
+      }
+    },
+    {
+      "id": "wcc.sights.museum",
+      "name": "Museum",
+      "symbol": {
+        "path": "markers/wcc.museum"
+      }
+    },
+    {
+      "id": "wcc.sights.nature",
+      "name": "Natur",
+      "symbol": {
+        "path": "markers/wcc.nature"
+      }
+    },
+    {
+      "id": "wcc.sights.historic",
+      "name": "Historisch",
+      "symbol": {
+        "path": "markers/wcc.history"
       }
     }
   ],

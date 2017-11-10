@@ -230,7 +230,6 @@ namespace GQ.Client.Conf
 		public static readonly Color transparent = new Color (1f, 1f, 1f, 0f);
 	}
 
-
 	public struct SceneExtension
 	{
 		/// <summary>
@@ -259,7 +258,7 @@ namespace GQ.Client.Conf
 		}
 	}
 
-	public class Category
+	public struct Category
 	{
 		public string id;
 
@@ -268,7 +267,7 @@ namespace GQ.Client.Conf
 		/// </summary>
 		public string name;
 
-		public ImagePath symbol = new ImagePath ();
+		public ImagePath symbol;
 
 	}
 }

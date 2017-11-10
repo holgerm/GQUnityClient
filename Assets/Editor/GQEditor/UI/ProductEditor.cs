@@ -17,6 +17,7 @@ using GQ.Editor.Util;
 using GQTests;
 using UnityEditor.SceneManagement;
 using QM.Util;
+using GQ.Client.Err;
 
 namespace GQ.Editor.UI
 {
@@ -540,11 +541,27 @@ namespace GQ.Editor.UI
 	}
 
 
-	abstract public  class ProductEditorPart
+	abstract public class ProductEditorPart
 	{
 		static private Dictionary<Type, ProductEditorPart> cachedEditorParts = new Dictionary<Type, ProductEditorPart> ();
 
+		protected static bool configIsDirty;
+
 		static public GUIContent NamePrefixGUIContent { get; private set; }
+
+		protected static GUIStyle STYLE_LABEL_RightAdjusted;
+		protected static GUIStyle STYLE_LABEL_Bold;
+		protected static GUIStyle STYLE_FOLDOUT_Bold;
+
+		static ProductEditorPart ()
+		{
+			STYLE_LABEL_RightAdjusted = new GUIStyle (EditorStyles.label);
+			STYLE_LABEL_RightAdjusted.alignment = TextAnchor.MiddleRight;
+			STYLE_LABEL_Bold = new GUIStyle (EditorStyles.label);
+			STYLE_LABEL_Bold.fontStyle = FontStyle.Bold;
+			STYLE_FOLDOUT_Bold = new GUIStyle (EditorStyles.foldout);
+			STYLE_FOLDOUT_Bold.fontStyle = FontStyle.Bold;
+		}
 
 		static public bool CreateGui (PropertyInfo curPropInfo)
 		{
@@ -572,13 +589,13 @@ namespace GQ.Editor.UI
 					if (accordingEditorPart != null)
 						cachedEditorParts.Add (propertyType, accordingEditorPart);
 				} catch (Exception e) {
-					Debug.Log ("Unhandled property Type: " + curPropInfo.PropertyType.Name + "\t" + e.Message);
+					Log.SignalErrorToDeveloper ("Unhandled property Type: " + curPropInfo.PropertyType.Name + "\t" + e.Message);
 					return false;
 				}
 			} 
 
 			if (accordingEditorPart == null) {
-				Debug.Log ("Unhandled property Type: " + propertyType.FullName);
+				Log.SignalErrorToDeveloper ("Unhandled property Type: " + propertyType.FullName);
 				return false;
 			}
 
@@ -597,7 +614,8 @@ namespace GQ.Editor.UI
 				// Show only name without hover:
 				NamePrefixGUIContent = new GUIContent (name + ":");
 			
-			return accordingEditorPart.doCreateGui (curPropInfo);
+			accordingEditorPart.doCreateGui (curPropInfo);
+			return configIsDirty;
 		}
 
 		abstract protected bool doCreateGui (PropertyInfo curPropInfo);
@@ -641,7 +659,7 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 
 			// show checkbox:
 			EditorGUILayout.BeginHorizontal ();
@@ -650,13 +668,13 @@ namespace GQ.Editor.UI
 				bool oldBoolVal = (bool)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
 				bool newBoolVal = EditorGUILayout.Toggle (oldBoolVal);
 				if (newBoolVal != oldBoolVal) {
-					markConfigAsDirty = true;
+					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newBoolVal, null);
 				}
 			}
 			EditorGUILayout.EndHorizontal ();
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -666,7 +684,7 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 
 			Color oldColorVal = (Color)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
 			Color newColorVal = oldColorVal;
@@ -674,11 +692,11 @@ namespace GQ.Editor.UI
 			// show Color field if value fits in one line:
 			newColorVal = EditorGUILayout.ColorField (NamePrefixGUIContent, oldColorVal);
 			if (newColorVal != oldColorVal) {
-				markConfigAsDirty = true;
+				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, newColorVal, null);
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -691,7 +709,7 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 
 			// TODO implement all three strategies
 			int oldDownloadStrategy = selectedDownloadStrategy;
@@ -702,11 +720,11 @@ namespace GQ.Editor.UI
 				downloadStrategyNames
 			);
 			if (oldDownloadStrategy != selectedDownloadStrategy) {
-				markConfigAsDirty = true;
+				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, (DownloadStrategy)selectedDownloadStrategy, null);
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -715,7 +733,7 @@ namespace GQ.Editor.UI
 	{
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
 
 			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
@@ -732,12 +750,12 @@ namespace GQ.Editor.UI
 				ImagePath newVal = new ImagePath (Files.GetResourcesRelativePath (path));
 				EditorGUILayout.EndHorizontal ();
 				if (newVal.path != "" && newVal.path != null && !newVal.path.Equals (oldVal.path)) {
-					markConfigAsDirty = true;
+					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newVal, null);
 				}
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -747,7 +765,7 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
 
 			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
@@ -760,215 +778,244 @@ namespace GQ.Editor.UI
 				// show text field if value fits in one line:
 				int newIntVal = EditorGUILayout.IntField (myNamePrefixGUIContent, oldIntVal);
 				if (newIntVal != oldIntVal) {
-					markConfigAsDirty = true;
+					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newIntVal, null);
 				}
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
 
 	public class ProductEditorPart4ListOfCategory : ProductEditorPart
 	{
+		bool showList = false;
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
-
-			List<Category> values = (List<Category>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
-			if (values == null)
-				values = new List<Category> ();
+			List<Category> allElements = (List<Category>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			if (allElements == null)
+				allElements = new List<Category> ();
 			bool valsChanged = false;
 
-			// Header with Add and Clear Button:
-			EditorGUILayout.BeginHorizontal ();
-			GUILayout.Label (
-				string.Format ("Categories ({0})", values.Count), 
-				EditorStyles.boldLabel
-			);
-			if (GUILayout.Button ("+")) {
-				Category cat = new Category ();
-				cat.symbol = new ImagePath ();
-				values.Add (cat);
-				valsChanged = true;
-			}
-			EditorGUILayout.EndHorizontal ();
+			showList = EditorGUILayout.Foldout (showList, string.Format ("Categories: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+			if (showList) {
+				configIsDirty = false;
+				// Header with Add Button:
+				EditorGUILayout.BeginHorizontal ();
+				EditorGUILayout.PrefixLabel (
+					new GUIContent ("Add new:"), 
+					EditorStyles.textField, 
+					STYLE_LABEL_Bold
+				);
+				if (GUILayout.Button ("+")) {
+					Category cat = new Category ();
+					allElements.Add (cat);
+					valsChanged = true;
+				}
+				EditorGUILayout.EndHorizontal ();
 
-			for (int i = 0; i < values.Count; i++) {
-				Category oldCat = values [i];
-				Category newCat = oldCat;
+				for (int i = 0; i < allElements.Count; i++) {
+					bool elemChanged = false;
+					Category oldElem = allElements [i];
+					Category newElem = oldElem;
 
-				bool valChanged = false;
-				// category name:
-				string newName = EditorGUILayout.TextField (new GUIContent ("name:"), oldCat.name);
-				valChanged |= (newName != oldCat.name);
-				// id as text:
-				string newId = EditorGUILayout.TextField (new GUIContent ("id:", "Id must be unqiue within these categories."), oldCat.id);
-				if (newId != oldCat.id) {
-					// check that the new id is not used among the other categories, else reset to the old id:
-					bool newIdIsUnique = true;
-					for (int j = 0; j < values.Count; j++) {
-						if (j == i)
-							continue;
-						if (values [j] == values [i]) {
-							newIdIsUnique = false;
-							break;
+					// category name:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ((i + 1).ToString () + ". name:"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_Bold
+					);
+					string newName = EditorGUILayout.TextField (oldElem.name);
+					EditorGUILayout.EndHorizontal (); // end horizontal line for id.
+					elemChanged |= (newName != oldElem.name);
+
+					// id as text:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("id:", "Id must be unqiue within these categories."), 
+						EditorStyles.textField, 
+						STYLE_LABEL_RightAdjusted
+					);
+					string newId = EditorGUILayout.TextField (oldElem.id);
+					EditorGUILayout.EndHorizontal (); // end horizontal line for id.
+					if (newId != oldElem.id) {
+						// check that the new id is not used among the other categories, else reset to the old id:
+						bool newIdIsUnique = true;
+						for (int j = 0; j < allElements.Count; j++) {
+							if (j == i)
+								continue;
+							if (allElements [j].Equals (allElements [i])) {
+								newIdIsUnique = false;
+								break;
+							}
+						}
+						if (!newIdIsUnique) {
+							// reset if not unique:
+							newId = oldElem.id;
+						} else {
+							elemChanged |= (newId != oldElem.id);
 						}
 					}
-					if (!newIdIsUnique) {
-						// reset if not unique:
-						newId = oldCat.id;
-					} else {
-						valChanged |= (newId != oldCat.id);
+
+					// symbol:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("symbol:"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_RightAdjusted
+					);
+					// get currently stored image path from config:
+					ImagePath oldSymbolPath = oldElem.symbol;
+					ImagePath newSymbolPath = oldSymbolPath;
+					Sprite oldSymbolSprite = Resources.Load<Sprite> (oldSymbolPath.path);
+					Sprite newSymbolSprite = 
+						(Sprite)EditorGUILayout.ObjectField (oldSymbolSprite, typeof(Sprite), false);
+					if (newSymbolSprite != oldSymbolSprite) {
+						string path = AssetDatabase.GetAssetPath (newSymbolSprite);
+						newSymbolPath = new ImagePath (Files.GetResourcesRelativePath (path));
+						elemChanged |= (newSymbolPath.path != oldSymbolPath.path);
 					}
-				}
-
-				// symbol:
-				EditorGUILayout.BeginHorizontal ();
-				EditorGUILayout.PrefixLabel (new GUIContent ("symbol:"));
-				// get currently stored image path from config:
-				ImagePath oldSymbolPath = oldCat.symbol;
-				ImagePath newSymbolPath = oldSymbolPath;
-				Sprite oldSymbolSprite = Resources.Load<Sprite> (oldSymbolPath.path);
-				Sprite newSymbolSprite = 
-					(Sprite)EditorGUILayout.ObjectField (oldSymbolSprite, typeof(Sprite), false);
-				if (newSymbolSprite != oldSymbolSprite) {
-					string path = AssetDatabase.GetAssetPath (newSymbolSprite);
-					newSymbolPath = new ImagePath (Files.GetResourcesRelativePath (path));
-					valChanged |= (newSymbolPath.path != oldSymbolPath.path);
-				}
-				if (valChanged) {
-					valsChanged = true;
-					newCat.name = newName;
-					newCat.id = newId;
-					newCat.symbol = newSymbolPath;
-					values [i] = newCat;
-				}
-
-				if (GUILayout.Button ("-")) {
-					if (EditorUtility.DisplayDialog (
-						    string.Format ("Really delete category {0}?", (oldCat.name != null && oldCat.name != "") ? oldCat.name : i.ToString ()), 
-						    string.Format (
-							    "This can not be undone"
-						    ), 
-						    "Yes, delete it!", 
-						    "No, keep it")) {
-						values.Remove (values [i]);
+					if (elemChanged) {
 						valsChanged = true;
+						newElem.name = newName;
+						newElem.id = newId;
+						newElem.symbol = newSymbolPath;
+						allElements [i] = newElem;
 					}
+
+					if (GUILayout.Button ("-")) {
+						if (EditorUtility.DisplayDialog (
+							    string.Format ("Really delete category {0}?", (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString ()), 
+							    string.Format (
+								    "This can not be undone"
+							    ), 
+							    "Yes, delete it!", 
+							    "No, keep it")) {
+							allElements.Remove (allElements [i]);
+							valsChanged = true;
+						}
+					}
+					EditorGUILayout.EndHorizontal (); // end horizontal line of symbol and delete button for current category.
 				}
-				EditorGUILayout.EndHorizontal (); // end horizontal line of symbol and delete button for current category.
-			}
-			if (valsChanged) {
-				// Update Config property for scene extensions:
-				markConfigAsDirty = true;
-				curPropInfo.SetValue (ProductEditor.SelectedConfig, values, null);
+				if (valsChanged) {
+					// Update Config property for scene extensions:
+					configIsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements, null);
+				}
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
+
 		}
 	}
 
 
 	public class ProductEditorPart4ListOfSceneExtension : ProductEditorPart
 	{
+		bool showList = false;
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
-
-			List<SceneExtension> sceneExtsVal = (List<SceneExtension>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
-			bool sceneExtsChanged = false;
+			List<SceneExtension> allElements = (List<SceneExtension>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			if (allElements == null)
+				allElements = new List<SceneExtension> ();
+			bool valsChanged = false;
 			string sceneName;
 
-			// Header with Add and Clear Button:
-			EditorGUILayout.BeginHorizontal ();
-			GUILayout.Label (
-				string.Format ("Scene Extensions ({0})", sceneExtsVal.Count), 
-				EditorStyles.boldLabel
-			);
-			if (GUILayout.Button ("+")) {
-				SceneExtension sce = new SceneExtension ();
-				sce.root = "";
-				sce.prefab = "";
-				sce.scene = EditorSceneManager.GetActiveScene ().path;
-				sceneExtsVal.Add (sce);
-				sceneExtsChanged = true;
-			}
-			EditorGUILayout.EndHorizontal ();
+			showList = EditorGUILayout.Foldout (showList, string.Format ("Scene Extensions: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+			if (showList) {
+				configIsDirty = false;
+				// Header with Add Button:
+				EditorGUILayout.BeginHorizontal ();
+				EditorGUILayout.PrefixLabel (
+					new GUIContent ("Add new:"), 
+					EditorStyles.textField, 
+					STYLE_LABEL_Bold
+				);
+				if (GUILayout.Button ("+")) {
+					SceneExtension sce = new SceneExtension ();
+					sce.root = "";
+					sce.prefab = "";
+					sce.scene = EditorSceneManager.GetActiveScene ().path;
+					allElements.Add (sce);
+					valsChanged = true;
+				}
+				EditorGUILayout.EndHorizontal ();
 
-			for (int i = 0; i < sceneExtsVal.Count; i++) {
-				SceneExtension oldSceneExt = sceneExtsVal [i];
-				SceneExtension newSceneExt = oldSceneExt;
-				// entry for extension only enabled when in same scene:
-				bool sceneExtensionDisabled = EditorSceneManager.GetActiveScene ().path != oldSceneExt.scene;
+				for (int i = 0; i < allElements.Count; i++) {
+					SceneExtension oldSceneExt = allElements [i];
+					SceneExtension newSceneExt = oldSceneExt;
+					// entry for extension only enabled when in same scene:
+					bool sceneExtensionDisabled = EditorSceneManager.GetActiveScene ().path != oldSceneExt.scene;
 
-				using (new EditorGUI.DisabledGroupScope (sceneExtensionDisabled)) {
-					EditorGUILayout.BeginHorizontal ();
-					bool sceneExtChanged = false;
-					// scene name:
-					sceneName = Files.FileName (oldSceneExt.scene);
-					if (sceneName.EndsWith (".unity"))
-						sceneName = sceneName.Substring (0, sceneName.Length - ".unity".Length);
-					// prefab:
-					EditorGUILayout.PrefixLabel (new GUIContent ("  -> " + sceneName, "The prefab extends this scene."));
-					GameObject oldPrefabGO = Resources.Load<GameObject> (oldSceneExt.prefab);
-					GameObject newPrefabGO = 
-						(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
-					if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
-						// if user selected another prefab we store it:
-						newSceneExt.prefab = Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
-						sceneExtChanged = true;
-						Debug.Log ("Old Prefab: " + oldSceneExt.prefab);
-						Debug.Log ("New Prefab: " + newSceneExt.prefab);
-					}
-					EditorGUILayout.EndHorizontal ();
-					EditorGUILayout.BeginHorizontal ();
-					// root:
-					EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
-					if (sceneExtensionDisabled) {
-						EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
-					} else {
-						GameObject oldRootGO = GameObject.Find (oldSceneExt.root);
-						GameObject newRootGO = 
-							(GameObject)EditorGUILayout.ObjectField (oldRootGO, typeof(GameObject), true);
-						if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene ()) {
-							newSceneExt.root = newRootGO.transform.GetPath ();
+					using (new EditorGUI.DisabledGroupScope (sceneExtensionDisabled)) {
+						EditorGUILayout.BeginHorizontal ();
+						bool sceneExtChanged = false;
+						// scene name:
+						sceneName = Files.FileName (oldSceneExt.scene);
+						if (sceneName.EndsWith (".unity"))
+							sceneName = sceneName.Substring (0, sceneName.Length - ".unity".Length);
+						// prefab:
+						EditorGUILayout.PrefixLabel (new GUIContent ("  -> " + sceneName, "The prefab extends this scene."));
+						GameObject oldPrefabGO = Resources.Load<GameObject> (oldSceneExt.prefab);
+						GameObject newPrefabGO = 
+							(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
+						if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
+							// if user selected another prefab we store it:
+							newSceneExt.prefab = Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
 							sceneExtChanged = true;
-							Debug.Log ("New Root: " + newSceneExt.root);
+							Debug.Log ("Old Prefab: " + oldSceneExt.prefab);
+							Debug.Log ("New Prefab: " + newSceneExt.prefab);
+						}
+						EditorGUILayout.EndHorizontal ();
+						EditorGUILayout.BeginHorizontal ();
+						// root:
+						EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
+						if (sceneExtensionDisabled) {
+							EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
+						} else {
+							GameObject oldRootGO = GameObject.Find (oldSceneExt.root);
+							GameObject newRootGO = 
+								(GameObject)EditorGUILayout.ObjectField (oldRootGO, typeof(GameObject), true);
+							if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene ()) {
+								newSceneExt.root = newRootGO.transform.GetPath ();
+								sceneExtChanged = true;
+								Debug.Log ("New Root: " + newSceneExt.root);
+							}
+						}
+						if (sceneExtChanged) {
+							newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
+							allElements [i] = newSceneExt;
+							valsChanged = true;
+						}
+					} // end disabled group for current scene extension
+					if (GUILayout.Button ("-")) {
+						if (EditorUtility.DisplayDialog (
+							    string.Format ("Really delete extension for scene {0}?", sceneName), 
+							    string.Format (
+								    "It adds {0} to {1}.", 
+								    Files.FileName (oldSceneExt.prefab),
+								    Files.FileName (oldSceneExt.root)
+							    ), 
+							    "Yes, delete it!", 
+							    "No, keep it")) {
+							allElements.Remove (oldSceneExt);
+							valsChanged = true;
 						}
 					}
-					if (sceneExtChanged) {
-						newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
-						sceneExtsVal [i] = newSceneExt;
-						sceneExtsChanged = true;
-					}
-				} // end disabled group for current scene extension
-				if (GUILayout.Button ("-")) {
-					if (EditorUtility.DisplayDialog (
-						    string.Format ("Really delete extension for scene {0}?", sceneName), 
-						    string.Format (
-							    "It adds {0} to {1}.", 
-							    Files.FileName (oldSceneExt.prefab),
-							    Files.FileName (oldSceneExt.root)
-						    ), 
-						    "Yes, delete it!", 
-						    "No, keep it")) {
-						sceneExtsVal.Remove (oldSceneExt);
-						sceneExtsChanged = true;
-					}
+					EditorGUILayout.EndHorizontal (); // end horizontal line of prefab and delete button for current scene extension.
 				}
-				EditorGUILayout.EndHorizontal (); // end horizontal line of prefab and delete button for current scene extension.
-			}
-			if (sceneExtsChanged) {
-				// Update Config property for scene extensions:
-				markConfigAsDirty = true;
-				curPropInfo.SetValue (ProductEditor.SelectedConfig, sceneExtsVal, null);
+				if (valsChanged) {
+					// Update Config property for scene extensions:
+					configIsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements, null);
+				}
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -980,7 +1027,7 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 
 			int oldMapProvider = selectedMapProvider;
 			selectedMapProvider = 
@@ -990,11 +1037,11 @@ namespace GQ.Editor.UI
 				mapProviderNames
 			);
 			if (oldMapProvider != selectedMapProvider) {
-				markConfigAsDirty = true;
+				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, (MapProvider)selectedMapProvider, null);
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -1004,7 +1051,7 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 
 			float oldFloatVal = (float)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
 			float newFloatVal = oldFloatVal;
@@ -1012,11 +1059,11 @@ namespace GQ.Editor.UI
 			// show text field if value fits in one line:
 			newFloatVal = EditorGUILayout.FloatField (NamePrefixGUIContent, oldFloatVal);
 			if (newFloatVal != oldFloatVal) {
-				markConfigAsDirty = true;
+				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, newFloatVal, null);
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -1025,7 +1072,7 @@ namespace GQ.Editor.UI
 	{
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
-			bool markConfigAsDirty = false;
+			configIsDirty = false;
 			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
 
 			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
@@ -1054,12 +1101,12 @@ namespace GQ.Editor.UI
 					newStringVal = Objects.ToString (newStringVal);
 				}
 				if (!newStringVal.Equals (oldStringVal)) {
-					markConfigAsDirty = true;
+					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newStringVal, null);
 				}
 			}
 
-			return markConfigAsDirty;
+			return configIsDirty;
 		}
 	}
 
