@@ -15,7 +15,7 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Shows all Quest Info objects, on a map within the foyer. Refreshing its content silently (no dialogs shown etc.).
 	/// </summary>
-	public class QuestMapController : QuestInfoContainerController
+	public class QuestMapController : QuestContainerController
 	{
 
 		#region React on Events
@@ -25,17 +25,17 @@ namespace GQ.Client.UI.Foyer
 			QuestInfoController qiCtrl;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
-				qiCtrl = 
-					QuestMapMarkerController.Create (
-					root: InfoList.gameObject,
-					qInfo: e.NewQuestInfo,
-					containerController: this
-				).GetComponent<QuestMapMarkerController> ();
-				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
-				qiCtrl.Show ();
+//				qiCtrl = 
+//					QuestMapMarkerController.Create (
+//					root: InfoList.gameObject,
+//					qInfo: e.NewQuestInfo,
+//					containerController: this
+//				).GetComponent<QuestMapMarkerController> ();
+//				QuestInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
+//				qiCtrl.Show ();
 				break;
 			case ChangeType.ChangedInfo:
-				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
+				if (!QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
 						e.OldQuestInfo.Id
@@ -46,7 +46,7 @@ namespace GQ.Client.UI.Foyer
 				qiCtrl.Show ();
 				break;
 			case ChangeType.RemovedInfo:
-				if (!questInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
+				if (!QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Remove event occurred.",
 						e.OldQuestInfo.Id
@@ -54,7 +54,7 @@ namespace GQ.Client.UI.Foyer
 					break;
 				}
 				qiCtrl.Hide ();
-				questInfoControllers.Remove (e.OldQuestInfo.Id);
+				QuestInfoControllers.Remove (e.OldQuestInfo.Id);
 				break;							
 			case ChangeType.ListChanged:
 				UpdateView ();
@@ -68,27 +68,27 @@ namespace GQ.Client.UI.Foyer
 				Debug.Log ("QuestMapController is null".Red ());
 				return;
 			}
-			if (InfoList == null) {
-				Debug.Log ("QuestMapMarkerController.InfoList is null".Red ());
-				return;
-			}
+//			if (InfoList == null) {
+//				Debug.Log ("QuestMapMarkerController.InfoList is null".Red ());
+//				return;
+//			}
 
 			// hide and delete all list elements:
-			foreach (KeyValuePair<int, QuestInfoController> kvp in questInfoControllers) {
+			foreach (KeyValuePair<int, QuestInfoController> kvp in QuestInfoControllers) {
 				kvp.Value.Hide ();
 				kvp.Value.Destroy ();
 			}
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				// create new list elements
 				if (QuestInfoManager.Instance.Filter.accept (info)) {
-					QuestMapMarkerController qiCtrl = 
-						QuestMapMarkerController.Create (
-							root: InfoList.gameObject,
-							qInfo: info,
-							containerController: this
-						).GetComponent<QuestMapMarkerController> ();
-					questInfoControllers.Add (info.Id, qiCtrl);
-					qiCtrl.Show ();
+//					QuestMapMarkerController qiCtrl = 
+//						QuestMapMarkerController.Create (
+//							root: InfoList.gameObject,
+//							qInfo: info,
+//							containerController: this
+//						).GetComponent<QuestMapMarkerController> ();
+//					QuestInfoControllers.Add (info.Id, qiCtrl);
+//					qiCtrl.Show ();
 				}
 			}
 		}

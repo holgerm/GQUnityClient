@@ -47,7 +47,7 @@ namespace GQ.Client.UI.Foyer
 		/// </summary>
 		public Button UpdateButton;
 
-		protected QuestInfoContainerController containerController { get; set; }
+		protected QuestContainerController containerController { get; set; }
 
 		/// <summary>
 		/// The delete button is available WHEN this quest is locally on device.
@@ -227,7 +227,7 @@ namespace GQ.Client.UI.Foyer
 
 		#region Runtime API
 
-		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestInfoContainerController containerController)
+		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestContainerController containerController)
 		{
 			// CReate the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);

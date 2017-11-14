@@ -205,19 +205,39 @@ namespace GQ.Client.Model
 
 		public delegate void ChangeCallback (object sender,QuestInfoChangedEvent e);
 
-		public event ChangeCallback OnChange;
+		private event ChangeCallback onChange;
+
+		public event ChangeCallback OnChange {
+			add {
+				onChange += value;
+				value(
+					this, 					
+					new QuestInfoChangedEvent (
+						"Initializing listener ...",
+						ChangeType.ListChanged,
+						newQuestInfo: null,
+						oldQuestInfo: null
+					)
+				);
+				Debug.Log("Added QuestInfo Listener".Yellow());
+			}
+			remove {
+				onChange -= value;
+				Debug.Log("Removed QuestInfo Listener".Yellow());
+			}
+		}
 
 		public int HowManyListerners ()
 		{
-			return OnChange.GetInvocationList ().Length;
+			return onChange.GetInvocationList ().Length;
 		}
 
 
 
 		public virtual void raiseChange (QuestInfoChangedEvent e)
 		{
-			if (OnChange != null)
-				OnChange (this, e);
+			if (onChange != null)
+				onChange (this, e);
 		}
 
 		#endregion

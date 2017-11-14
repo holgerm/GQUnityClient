@@ -6,6 +6,7 @@ using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using UnityEngine.SceneManagement;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 
 namespace GQ.Client.Util
 {
@@ -33,6 +34,9 @@ namespace GQ.Client.Util
 						baseGO.AddComponent (typeof(Base));
 
 					_instance = (Base)baseGO.GetComponent (typeof(Base));
+
+					// Initialize QuestInfoManager:
+					QuestInfoManager.Instance.UpdateQuestInfos();
 				}
 				return _instance;
 			}
