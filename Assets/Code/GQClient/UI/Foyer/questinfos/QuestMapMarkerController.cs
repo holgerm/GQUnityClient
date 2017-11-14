@@ -116,7 +116,7 @@ namespace GQ.Client.UI.Foyer
 
 		#region Runtime API
 
-		public static GameObject Create (GameObject root, QuestInfo qInfo)
+		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestInfoContainerController containerController)
 		{
 			// CReate the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);

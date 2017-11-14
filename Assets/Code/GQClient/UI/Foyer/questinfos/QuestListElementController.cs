@@ -47,6 +47,8 @@ namespace GQ.Client.UI.Foyer
 		/// </summary>
 		public Button UpdateButton;
 
+		protected QuestInfoContainerController containerController { get; set; }
+
 		/// <summary>
 		/// The delete button is available WHEN this quest is locally on device.
 		/// (IsOnDevice)
@@ -225,13 +227,14 @@ namespace GQ.Client.UI.Foyer
 
 		#region Runtime API
 
-		public static GameObject Create (GameObject root, QuestInfo qInfo)
+		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestInfoContainerController containerController)
 		{
 			// CReate the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + qInfo.Name + ")";
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
 			ctrl.data = qInfo;
+			ctrl.containerController = containerController;
 			ctrl.data.OnChanged += ctrl.UpdateView;
 			ctrl.UpdateView ();
 			return go;

@@ -15,7 +15,7 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Shows all Quest Info objects, e.g. in a scrollable list within the foyer. Drives a dialog while refreshing its content.
 	/// </summary>
-	public class QuestListController : QuestSetViewerController
+	public class QuestListController : QuestInfoContainerController
 	{
 
 		#region React on Events
@@ -28,7 +28,8 @@ namespace GQ.Client.UI.Foyer
 				qiCtrl = 
 					QuestListElementController.Create (
 					root: InfoList.gameObject,
-					qInfo: e.NewQuestInfo
+					qInfo: e.NewQuestInfo,
+					containerController: this
 				).GetComponent<QuestListElementController> ();
 				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 				qiCtrl.Show ();
@@ -97,7 +98,8 @@ namespace GQ.Client.UI.Foyer
 					QuestListElementController qiCtrl = 
 						QuestListElementController.Create (
 							root: InfoList.gameObject,
-							qInfo: info
+							qInfo: info,
+							containerController: this
 						).GetComponent<QuestListElementController> ();
 					questInfoControllers.Add (info.Id, qiCtrl);
 					qiCtrl.Show ();

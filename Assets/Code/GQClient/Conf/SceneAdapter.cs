@@ -22,12 +22,11 @@ namespace GQ.Client.Conf
 		{
 			RemoveAllSceneExtensions (scene);
 
-			Debug.Log (string.Format ("OnSceneActivated: name {0}, path {1} isloaded: {2}, current product id: {3}", 
-				scene.name, scene.path, scene.isLoaded, ConfigurationManager.Current.id).Yellow ());
-
 			foreach (SceneExtension extension in ConfigurationManager.Current.sceneExtensions) {
-				Debug.Log (string.Format ("Extending Scene {0} at {1} with prefab {2}.",
-					extension.scene, extension.root, extension.prefab));
+				if (extension.scene != scene.path)
+					// skip extension on other scenes:
+					continue;
+				
 				Object prefab = Resources.Load (extension.prefab);
 				if (prefab == null) {
 					Log.SignalErrorToDeveloper (
@@ -49,10 +48,7 @@ namespace GQ.Client.Conf
 
 		public static void RemoveAllSceneExtensions (Scene scene)
 		{
-			Debug.Log (string.Format ("RemoveAllSceneExtensions: scene {0}", scene.name).Yellow ());
-
 			foreach (GameObject go in GameObject.FindGameObjectsWithTag(EXTENSION_TAG)) {
-				Debug.Log ("\t" + go.name);
 				GameObject.DestroyImmediate (go);
 			}
 		}

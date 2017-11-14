@@ -60,6 +60,8 @@ namespace GQ.Client.Model
 			if (importFromInputString) {
 				if (e != null && e.Content != null && e.Content is string) {
 					InputJSON = e.Content as string;
+				} else {
+					Log.SignalErrorToDeveloper ("ImportFromInputString task should read from Input but got no input string.");
 				}
 			}
 		}

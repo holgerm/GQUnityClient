@@ -15,7 +15,7 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Shows all Quest Info objects, on a map within the foyer. Refreshing its content silently (no dialogs shown etc.).
 	/// </summary>
-	public class QuestMapController : QuestSetViewerController
+	public class QuestMapController : QuestInfoContainerController
 	{
 
 		#region React on Events
@@ -28,8 +28,9 @@ namespace GQ.Client.UI.Foyer
 				qiCtrl = 
 					QuestMapMarkerController.Create (
 					root: InfoList.gameObject,
-					qInfo: e.NewQuestInfo
-					).GetComponent<QuestMapMarkerController> ();
+					qInfo: e.NewQuestInfo,
+					containerController: this
+				).GetComponent<QuestMapMarkerController> ();
 				questInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 				qiCtrl.Show ();
 				break;
@@ -83,7 +84,8 @@ namespace GQ.Client.UI.Foyer
 					QuestMapMarkerController qiCtrl = 
 						QuestMapMarkerController.Create (
 							root: InfoList.gameObject,
-							qInfo: info
+							qInfo: info,
+							containerController: this
 						).GetComponent<QuestMapMarkerController> ();
 					questInfoControllers.Add (info.Id, qiCtrl);
 					qiCtrl.Show ();

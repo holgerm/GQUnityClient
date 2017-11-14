@@ -8,7 +8,8 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Abstract super class of all viewer contorlers that show quest sets. E.g. the quest list and map in the foyer.
 	/// </summary>
-	public abstract class QuestSetViewerController : MonoBehaviour {
+	public abstract class QuestInfoContainerController : MonoBehaviour
+	{
 
 		#region Fields
 
