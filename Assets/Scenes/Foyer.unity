@@ -213,9 +213,6 @@ GameObject:
   - component: {fileID: 83702170}
   - component: {fileID: 83702169}
   - component: {fileID: 83702168}
-  - component: {fileID: 83702167}
-  - component: {fileID: 83702166}
-  - component: {fileID: 83702172}
   m_Layer: 5
   m_Name: MapCanvas
   m_TagString: Untagged
@@ -223,30 +220,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &83702166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 83702165}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a613a63ebff40e3888596f7d8bfbc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LocationTexture: {fileID: 2800000, guid: 1d6a67e0dc6854c728a7c1f849d205c4, type: 3}
-  MarkerTexture: {fileID: 2800000, guid: 0239ac01a86764dfcb0754320f87921f, type: 3}
---- !u!114 &83702167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 83702165}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7571c48d8f1c45f18f8b86929d8989e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &83702168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,20 +296,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &83702172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 83702165}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce9e36d389d374b84a9a9faf1fa14b6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 0}
-  LocationTexture: {fileID: 2800000, guid: 1d6a67e0dc6854c728a7c1f849d205c4, type: 3}
-  MarkerTexture: {fileID: 2800000, guid: 0239ac01a86764dfcb0754320f87921f, type: 3}
 --- !u!1 &95263544
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,14 +616,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.43137258, g: 0.37647063, b: 0.121568635, a: 1}
+  m_Color: {r: 0.45490196, g: 0.40392157, b: 0.12941177, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 48bc818ba858c405a9061819fc21934a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5cbba09d040c540a3aff6d2e604bfa18, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -888,7 +847,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -973,7 +932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.45490196, g: 0.40392157, b: 0.12941177, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1218,7 +1177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  header: {fileID: 0}
+  header: {fileID: 1389843868}
   footer: {fileID: 0}
 --- !u!1 &523054182
 GameObject:
@@ -2469,7 +2428,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4042,14 +4001,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.43137258, g: 0.37647063, b: 0.121568635, a: 1}
+  m_Color: {r: 0.45490196, g: 0.40392157, b: 0.12941177, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 48bc818ba858c405a9061819fc21934a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5cbba09d040c540a3aff6d2e604bfa18, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -5014,8 +4973,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1965040557}
-  - component: {fileID: 1965040556}
   - component: {fileID: 1965040555}
+  - component: {fileID: 1965040554}
   m_Layer: 0
   m_Name: MapHolder
   m_TagString: Untagged
@@ -5023,6 +4982,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &1965040554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1965040553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a06f2975db27640ac9e642e5be34bf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CenterTexture: {fileID: 2800000, guid: 5f2a9d856c61b48dc8f747556b8b1977, type: 3}
+  FrameTexture: {fileID: 2800000, guid: f0be5d4cabc3742eb94f13da27287697, type: 3}
+  LocationTexture: {fileID: 2800000, guid: 1d6a67e0dc6854c728a7c1f849d205c4, type: 3}
+  MarkerTexture: {fileID: 2800000, guid: 0239ac01a86764dfcb0754320f87921f, type: 3}
 --- !u!114 &1965040555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5034,19 +5008,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7571c48d8f1c45f18f8b86929d8989e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1965040556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1965040553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3a613a63ebff40e3888596f7d8bfbc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LocationTexture: {fileID: 2800000, guid: 1d6a67e0dc6854c728a7c1f849d205c4, type: 3}
-  MarkerTexture: {fileID: 2800000, guid: 0239ac01a86764dfcb0754320f87921f, type: 3}
 --- !u!4 &1965040557
 Transform:
   m_ObjectHideFlags: 0

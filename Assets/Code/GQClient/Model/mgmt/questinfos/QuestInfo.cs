@@ -136,6 +136,21 @@ namespace GQ.Client.Model
 			}
 		}
 
+		public HotspotInfo MarkerHotspot {
+			get {
+				double sumLong = 0f;
+				double sumLat = 0f;
+				foreach (HotspotInfo h in Hotspots) {
+					sumLong += h.Longitude;
+					sumLat += h.Latitude;
+				}
+				if (Hotspots.Length == 0)
+					return HotspotInfo.NULL;
+				else
+					return new HotspotInfo (sumLat / Hotspots.Length, sumLong / Hotspots.Length);
+			}
+		}
+
 		[JsonProperty]
 		private 	MetaDataInfo[] metadata;
 
@@ -363,9 +378,16 @@ namespace GQ.Client.Model
 	public struct HotspotInfo
 	{
 
-		public double? Latitude { get; set; }
+		public HotspotInfo(double lat, double lon) {
+			Latitude = lat;
+			Longitude = lon;
+		} 
 
-		public double? Longitude { get; set; }
+		public double Latitude { get; set; }
+
+		public double Longitude { get; set; }
+
+		public static HotspotInfo NULL = new HotspotInfo (0f, 0f);
 	}
 
 

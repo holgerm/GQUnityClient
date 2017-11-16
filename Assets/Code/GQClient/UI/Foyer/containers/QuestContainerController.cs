@@ -32,13 +32,10 @@ namespace GQ.Client.UI.Foyer
 
 		#region Lifecycle API
 
-		void Start ()
+		protected void Start ()
 		{
-			Debug.Log (("QuestCOntainerController.Start(): " + GetType ()).Yellow ());
 			qim = QuestInfoManager.Instance;
-
 			qim.OnChange += OnQuestInfoChanged;
-
 		}
 
 		public abstract void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e);

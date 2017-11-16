@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnitySlippyMap.Map;
+using GQ.Client.UI.Foyer;
 
 namespace GQ.Client.UI
 {
-	[RequireComponent (typeof(Map))]
+	[RequireComponent (typeof(QuestMap))]
 	public class PutMapInHere : MonoBehaviour
 	{
 

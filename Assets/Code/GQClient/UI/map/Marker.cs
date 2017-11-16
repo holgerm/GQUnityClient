@@ -1,40 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GQ.Client.Err;
+using UnitySlippyMap.Markers;
 using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
-	
-	public abstract class PrefabController : UIController
-	{
 
-		#region Runtime API
-
-		public static GameObject Create (string prefabName, GameObject root = null)
-		{
-			Object prefab = Resources.Load (prefabName);
-			if (prefab == null) {
-				Log.SignalErrorToDeveloper ("Resource for prefab '{0}' could not be loaded.", prefabName);
-				return null;
-			}
-
-			if (root == null) {
-				root = GameObject.FindGameObjectWithTag (Tags.ROOT_CANVAS);
-				if (root == null)
-					Log.SignalErrorToDeveloper ("No root game object found for prefab {0}", prefabName);
-			}
-
-			GameObject go = (GameObject)Instantiate (
-				                prefab,
-				                root.transform,
-				                false
-			                );
-			go.SetActive (false);
-			return go;
-		}
-
+	/// <summary>
+	/// Abstract super calss for all kinds of map markers, e.g. quest info markers, hotspot markers.
+	/// </summary>
+	public abstract class Marker : MarkerBehaviour {
+		
+		public abstract void UpdateView ();
 
 		/// <summary>
 		/// Shows the prefab for at least one frame duration.
@@ -76,8 +54,7 @@ namespace GQ.Client.UI
 				Destroy (gameObject);
 			}
 		}
-
-		#endregion
-
 	}
+
+
 }

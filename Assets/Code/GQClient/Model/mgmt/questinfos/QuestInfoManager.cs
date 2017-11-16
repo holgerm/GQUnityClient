@@ -219,11 +219,9 @@ namespace GQ.Client.Model
 						oldQuestInfo: null
 					)
 				);
-				Debug.Log("Added QuestInfo Listener".Yellow());
 			}
 			remove {
 				onChange -= value;
-				Debug.Log("Removed QuestInfo Listener".Yellow());
 			}
 		}
 
