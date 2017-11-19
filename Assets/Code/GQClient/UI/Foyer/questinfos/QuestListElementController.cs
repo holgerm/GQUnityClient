@@ -109,7 +109,7 @@ namespace GQ.Client.UI.Foyer
 			Button.ButtonClickedEvent namebuttonEvent = Name.GetComponent<Button> ().onClick;
 			if (StartButton.gameObject.activeInHierarchy) {
 				namebuttonEvent.RemoveAllListeners ();
-				namebuttonEvent.AddListener (Play);
+				namebuttonEvent.AddListener( () => { data.Play().Start(); });
 			} else {
 				namebuttonEvent.RemoveAllListeners ();
 			}
@@ -122,104 +122,25 @@ namespace GQ.Client.UI.Foyer
 
 		public void Download ()
 		{
-			// Load quest data: game.xml
-			Downloader downloadGameXML = 
-				new Downloader (
-					url: QuestManager.GetQuestURI (data.Id), 
-					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
-					targetPath: QuestManager.GetLocalPath4Quest (data.Id) + QuestManager.QUEST_FILE_NAME
-				);
-			new DownloadDialogBehaviour (downloadGameXML, "Loading quest");
-
-			// analyze game.xml, gather all media info compare to local media info and detect missing media
-			PrepareMediaInfoList prepareMediaInfosToDownload = 
-				new PrepareMediaInfoList ();
-			new SimpleDialogBehaviour (
-				prepareMediaInfosToDownload,
-				"Synching Quest Data",
-				"Preparing media information."
-			);
-
-			// download all missing media info
-			MultiDownloader downloadMediaFiles =
-				new MultiDownloader (1);
-			new SimpleDialogBehaviour (
-				downloadMediaFiles,
-				"Synching Quest Data",
-				"Loading media files."
-			);
-			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
-				data.LastUpdateOnDevice = data.LastUpdateOnServer;
-			};
-
-			// store current media info locally
-			ExportMediaInfoList exportLocalMediaInfo =
-				new ExportMediaInfoList ();
-			new SimpleDialogBehaviour (
-				exportLocalMediaInfo,
-				"Synching Quest Data",
-				"Saving updated media info."
-			);
-
-			ExportQuestInfosToJSON exportQuestsInfoJSON = 
-				new ExportQuestInfosToJSON ();
-			new SimpleDialogBehaviour (
-				exportQuestsInfoJSON,
-				"Updating quests",
-				"Saving Quest Data"
-			);
-
-			TaskSequence t = 
-				new TaskSequence (downloadGameXML);
-			t.AppendIfCompleted (prepareMediaInfosToDownload);
-			t.Append (downloadMediaFiles);
-			t.AppendIfCompleted (exportLocalMediaInfo);
-			t.Append (exportQuestsInfoJSON);
-
-			t.Start ();
+			data.Download().Start();
 		}
 
 		public void Delete ()
 		{
-			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (data.Id));
-			data.LastUpdateOnDevice = null;
-
-			ExportQuestInfosToJSON exportQuestsInfoJSON = 
-				new ExportQuestInfosToJSON ();
-			new SimpleDialogBehaviour (
-				exportQuestsInfoJSON,
-				"Updating quests",
-				"Saving Quest Data"
-			);
-
-			exportQuestsInfoJSON.Start ();
+			data.Delete();
 		}
 
 		public void Play ()
 		{
-			// Load quest data: game.xml
-			LocalFileLoader loadGameXML = 
-				new LocalFileLoader (
-					filePath: QuestManager.GetLocalPath4Quest (data.Id) + QuestManager.QUEST_FILE_NAME
-				);
-			new DownloadDialogBehaviour (loadGameXML, "Loading quest");
-
-			QuestStarter questStarter = new QuestStarter ();
-
-			TaskSequence t = 
-				new TaskSequence (loadGameXML, questStarter);
-
-			t.Start ();
+			data.Play().Start();
 		}
-
 
 		/// <summary>
 		/// Called when the update button is pressed.
 		/// </summary>
 		public void UpdateQuest ()
 		{
-			// TODO
-			Debug.Log ("TODO: Implement update method! Trying to update quest " + data.Name);
+			data.Update ();
 		}
 
 		#endregion
@@ -253,12 +174,12 @@ namespace GQ.Client.UI.Foyer
 			namebuttonEvent.RemoveAllListeners ();
 			if (data.IsOnServer && !data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					Download ();
+					data.Download ().Start();
 				});
 			}
 			if (data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					Play ();
+					data.Play ().Start();
 				});
 			}
 

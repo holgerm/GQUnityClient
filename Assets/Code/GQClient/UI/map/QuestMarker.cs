@@ -18,7 +18,16 @@ namespace GQ.Client.UI
 
 		public override void OnTouch() {
 			Debug.Log(string.Format("Marker '{0}' has been touched. (id: {1}, file: {2})", Data.Name, Data.Id, QuestManager.GetLocalPath4Quest (Data.Id)));
-			Play ();
+			if (!Data.IsOnDevice && Data.IsOnServer) {
+				Task download = Data.Download ();
+				Task play = Data.Play ();
+				TaskSequence t = new TaskSequence (download);
+				t.AppendIfCompleted (play);
+				t.Start ();
+			}
+			if (Data.IsOnDevice) {
+				Data.Play ().Start();
+			}
 		}
 
 		protected void Play ()

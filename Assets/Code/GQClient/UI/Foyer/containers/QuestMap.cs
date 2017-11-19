@@ -99,7 +99,7 @@ namespace GQ.Client.UI.Foyer
 			markerGO.GetComponent<Renderer> ().material.renderQueue = 4001;
 			float markerWidth = Math.Min (1.0f, (float)MarkerTexture.width / (float)MarkerTexture.height);
 			float markerHeight = Math.Min (1.0f, (float)MarkerTexture.height / (float)MarkerTexture.width);
-			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) / 7.0f;
+			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) / 5.0f;
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
 			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;

@@ -5,6 +5,10 @@ using System;
 using GQ.Client.Err;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using GQ.Client.Util;
+using GQ.Client.Conf;
+using GQ.Client.UI.Dialogs;
+using GQ.Client.FileIO;
 
 namespace GQ.Client.Model
 {
@@ -369,6 +373,113 @@ namespace GQ.Client.Model
 					return one.Name.CompareTo (other.Name);
 				};
 			}
+		}
+
+		#endregion
+
+
+		#region Runtime Functions
+
+		public Task Download ()
+		{
+			// Load quest data: game.xml
+			Downloader downloadGameXML = 
+				new Downloader (
+					url: QuestManager.GetQuestURI (Id), 
+					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
+					targetPath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
+				);
+			new DownloadDialogBehaviour (downloadGameXML, "Loading quest");
+
+			// analyze game.xml, gather all media info compare to local media info and detect missing media
+			PrepareMediaInfoList prepareMediaInfosToDownload = 
+				new PrepareMediaInfoList ();
+			new SimpleDialogBehaviour (
+				prepareMediaInfosToDownload,
+				"Synching Quest Data",
+				"Preparing media information."
+			);
+
+			// download all missing media info
+			MultiDownloader downloadMediaFiles =
+				new MultiDownloader (1);
+			new SimpleDialogBehaviour (
+				downloadMediaFiles,
+				"Synching Quest Data",
+				"Loading media files."
+			);
+			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
+				LastUpdateOnDevice = LastUpdateOnServer;
+			};
+
+			// store current media info locally
+			ExportMediaInfoList exportLocalMediaInfo =
+				new ExportMediaInfoList ();
+			new SimpleDialogBehaviour (
+				exportLocalMediaInfo,
+				"Synching Quest Data",
+				"Saving updated media info."
+			);
+
+			ExportQuestInfosToJSON exportQuestsInfoJSON = 
+				new ExportQuestInfosToJSON ();
+			new SimpleDialogBehaviour (
+				exportQuestsInfoJSON,
+				"Updating quests",
+				"Saving Quest Data"
+			);
+
+			TaskSequence t = 
+				new TaskSequence (downloadGameXML);
+			t.AppendIfCompleted (prepareMediaInfosToDownload);
+			t.Append (downloadMediaFiles);
+			t.AppendIfCompleted (exportLocalMediaInfo);
+			t.Append (exportQuestsInfoJSON);
+
+			return t;
+		}
+
+		public void Delete ()
+		{
+			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (Id));
+			LastUpdateOnDevice = null;
+
+			ExportQuestInfosToJSON exportQuestsInfoJSON = 
+				new ExportQuestInfosToJSON ();
+			new SimpleDialogBehaviour (
+				exportQuestsInfoJSON,
+				"Updating quests",
+				"Saving Quest Data"
+			);
+
+			exportQuestsInfoJSON.Start ();
+		}
+
+		public Task Play ()
+		{
+			// Load quest data: game.xml
+			LocalFileLoader loadGameXML = 
+				new LocalFileLoader (
+					filePath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
+				);
+			new DownloadDialogBehaviour (loadGameXML, "Loading quest");
+
+			QuestStarter questStarter = new QuestStarter ();
+
+			TaskSequence t = 
+				new TaskSequence (loadGameXML, questStarter);
+
+			return t;
+		}
+
+
+		/// <summary>
+		/// Updates the qust info represented by this object.
+		/// </summary>
+		public void Update ()
+		{
+			// TODO
+			Debug.Log ("TODO: Implement update method! Trying to update quest " + Name);
 		}
 
 		#endregion
