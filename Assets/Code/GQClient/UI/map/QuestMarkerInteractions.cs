@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.UI;
 using GQ.Client.Err;
+using UnityEngine.EventSystems;
 
 namespace GQ.Client.UI
 {
@@ -13,6 +14,9 @@ namespace GQ.Client.UI
 		public const int MARKER_LAYER_MASK = 1 << MARKER_LAYER;
 
 		void Update () {
+			if (EventSystem.current.IsPointerOverGameObject ())
+				return;
+			
 			if (
 				Input.GetMouseButtonDown (0) || 
 				(Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)

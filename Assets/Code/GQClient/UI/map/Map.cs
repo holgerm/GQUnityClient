@@ -78,23 +78,18 @@ namespace GQ.Client.UI
 		#region Zooming
 
 		public void ZoomInButtonPressed() {
-			Debug.Log ("Zoom In Button Pressed ...");
-			// TODO: zomm into the map if possible
 			map.CurrentZoom = Math.Min(map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
 			map.Zoom (0f);
 			UpdateZoomButtons ();
 		}
 
 		public void ZoomOutButtonPressed() {
-			Debug.Log ("Zoom Out Button Pressed");
 			map.CurrentZoom = Math.Max(map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
 			map.Zoom (0f);
 			UpdateZoomButtons ();
 		}
 
 		protected void UpdateZoomButtons() {
-			Debug.Log (("Map.CurrentZoom is: " + map.CurrentZoom + "(max: " + map.MaxZoom + ", min: " + map.MinZoom + ")").Yellow());
-
 			// If further zooming IN is not possible disable ZoomInButton: 
 			zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
 
