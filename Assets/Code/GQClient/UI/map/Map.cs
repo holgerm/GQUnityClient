@@ -3,65 +3,121 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnitySlippyMap.Markers;
 using GQ.Client.UI;
+using UnityEngine.UI;
+using UnitySlippyMap.Map;
+using GQ.Client.Conf;
+using System;
+using GQ.Client.Err;
 
-public class Map : MonoBehaviour {
+namespace GQ.Client.UI
+{
 
-	#region Markers
+	public class Map : MonoBehaviour {
 
-	private Dictionary<int, Marker> markers;
+		protected MapBehaviour map;
 
-	protected Dictionary<int, Marker> Markers {
-		get {
-			if (markers == null) {
-				markers = new Dictionary<int, Marker> ();
+		public Texture	LocationTexture;
+
+
+		#region Markers
+
+		private Dictionary<int, Marker> markers;
+
+		protected Dictionary<int, Marker> Markers {
+			get {
+				if (markers == null) {
+					markers = new Dictionary<int, Marker> ();
+				}
+				return markers;
 			}
-			return markers;
 		}
+
+		#endregion
+
+
+		#region Centering
+
+		public GameObject MapButtonPanel;
+		public Texture CenterTexture;
+		public Texture FrameTexture;
+
+		public enum Centering {
+			Centered,
+			Framed,
+			Manual
+		}
+			
+		public Centering CenteringState {
+			get;
+			protected set;
+		}
+
+		public void Frame() {
+			// center the map so it frames all currently visible markers: TODO
+
+			// let the center button show the centering button icon now, unless local position is not available, in that case show the frame icon and disbale it.
+
+			CenteringState = Centering.Framed;
+		}
+
+		public void Center() {
+			// center the map so it is centered to the current users position: TODO
+
+			// let the center button show the centering button icon now
+
+			CenteringState = Centering.Centered;
+		}
+
+		public void CenterButtonPressed() {
+			Debug.Log ("Center Button Pressed");
+		}
+
+		#endregion
+
+
+		#region Zooming
+
+		public void ZoomInButtonPressed() {
+			Debug.Log ("Zoom In Button Pressed ...");
+			// TODO: zomm into the map if possible
+			map.CurrentZoom = Math.Min(map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
+			map.Zoom (0f);
+			UpdateZoomButtons ();
+		}
+
+		public void ZoomOutButtonPressed() {
+			Debug.Log ("Zoom Out Button Pressed");
+			map.CurrentZoom = Math.Max(map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
+			map.Zoom (0f);
+			UpdateZoomButtons ();
+		}
+
+		protected void UpdateZoomButtons() {
+			Debug.Log (("Map.CurrentZoom is: " + map.CurrentZoom + "(max: " + map.MaxZoom + ", min: " + map.MinZoom + ")").Yellow());
+
+			// If further zooming IN is not possible disable ZoomInButton: 
+			zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
+
+			// If further zooming OUT is not possible disable ZoomOutButton: 
+			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
+		}
+
+
+		#endregion
+
+
+		#region Runtime
+
+		OverlayButtonLayoutConfig zoomInButton;
+		OverlayButtonLayoutConfig zoomOutButton;
+
+		protected void Start() {
+			Frame ();
+			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;
+			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();
+			zoomOutButton = MapButtonPanel.transform.Find ("ZoomOutButton").GetComponent<OverlayButtonLayoutConfig> ();
+		}
+
+		#endregion
 	}
-
-	#endregion
-
-
-	#region Centering Button
-
-	public Texture CenterTexture;
-	public Texture FrameTexture;
-
-	public enum Centering {
-		Centered,
-		Framed,
-		Manual
-	}
-		
-	public Centering CenteringState {
-		get;
-		protected set;
-	}
-
-	public void Frame() {
-		// center the map so it frames all currently visible markers: TODO
-
-		// let the center button show the centering button icon now, unless local position is not available, in that case show the frame icon and disbale it.
-
-		CenteringState = Centering.Framed;
-	}
-
-	public void Center() {
-		// center the map so it is centered to the current users position: TODO
-
-		// let the center button show the centering button icon now
-
-		CenteringState = Centering.Centered;
-	}
-
-	#endregion
-
-
-	#region Runtime
-
-	void Start() {
-		Frame ();
-	}
-
-	#endregion
 }

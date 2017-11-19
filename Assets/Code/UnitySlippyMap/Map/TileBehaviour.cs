@@ -25,6 +25,7 @@
 // SOFTWARE.
 
 using UnityEngine;
+using GQ.Client.UI;
 
 namespace UnitySlippyMap.Map
 {
@@ -183,7 +184,7 @@ namespace UnitySlippyMap.Map
 			MeshFilter meshFilter = tileTemplate.AddComponent<MeshFilter> ();
 			MeshRenderer meshRenderer = tileTemplate.AddComponent<MeshRenderer> ();
 			BoxCollider boxCollider = tileTemplate.AddComponent<BoxCollider> ();
-			
+
 			// add the geometry
 			Mesh mesh = meshFilter.mesh;
 			switch (anchorPoint) {

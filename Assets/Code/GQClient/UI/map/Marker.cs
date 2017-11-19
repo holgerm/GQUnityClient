@@ -54,6 +54,12 @@ namespace GQ.Client.UI
 				Destroy (gameObject);
 			}
 		}
+
+		#region Interaction
+
+		public abstract void OnTouch ();
+
+		#endregion
 	}
 
 

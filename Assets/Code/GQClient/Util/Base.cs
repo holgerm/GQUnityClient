@@ -65,11 +65,6 @@ namespace GQ.Client.Util
 			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
 		}
 
-		// Use this for initialization
-		void Start ()
-		{
-		}
-
 		#endregion
 
 

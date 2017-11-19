@@ -94,29 +94,30 @@ namespace GQ.Client.UI.Foyer
 //			// TODO: create Marker from Prefab:
 //			GameObject go = PrefabController.Create (PREFAB, transform.Find("[Map]").gameObject);
 
-			GameObject go = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
-			go.GetComponent<Renderer> ().material.mainTexture = MarkerTexture;
-			go.GetComponent<Renderer> ().material.renderQueue = 4001;
-			go.transform.localScale = new Vector3 (0.70588235294118f, 1.0f, 1.0f);
-			go.transform.localScale /= 7.0f;
-			go.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
+			GameObject markerGO = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.MiddleCenter).gameObject;
+			markerGO.GetComponent<Renderer> ().material.mainTexture = MarkerTexture;
+			markerGO.GetComponent<Renderer> ().material.renderQueue = 4001;
+			float markerWidth = Math.Min (1.0f, (float)MarkerTexture.width / (float)MarkerTexture.height);
+			float markerHeight = Math.Min (1.0f, (float)MarkerTexture.height / (float)MarkerTexture.width);
+			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) / 7.0f;
+			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
+			markerGO.name = "Markertile (" + info.Name + ")";
+			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
+			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
 
-			GameObject markerGO;
-			markerGO = Instantiate (go) as GameObject;
-			Destroy (go);
-
-			QuestMarker newMarker;
 			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
 				Destroy (markerGO);
 				return null;
 			}
-			else
-				return 
-					map.CreateMarker<QuestMarker> (
-						info.Name, 
-						new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
-						markerGO
-					);
+			else {
+				QuestMarker newMarker = map.CreateMarker<QuestMarker> (
+					info.Name, 
+					new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
+					markerGO
+				);
+				newMarker.Data = info;
+				return newMarker;
+			}
 		}
 
 		#endregion
@@ -124,9 +125,6 @@ namespace GQ.Client.UI.Foyer
 
 		#region Map (SlippyMaps)
 
-		private MapBehaviour map;
-
-		public Texture	LocationTexture;
 		public Texture	MarkerTexture;
 
 		private bool isPerspectiveView = false;
@@ -145,6 +143,9 @@ namespace GQ.Client.UI.Foyer
 
 		private void Start ()
 		{
+			// set up the inherited Map features:
+			base.Start ();
+
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;

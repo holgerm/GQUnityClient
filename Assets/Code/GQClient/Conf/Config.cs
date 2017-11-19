@@ -75,6 +75,8 @@ namespace GQ.Client.Conf
 
 		public float	mapMinimalZoom { get; set; }
 
+		public float	mapDeltaZoom { get; set; }
+
 		public List<Category> categories { get; set; }
 
 		#endregion
@@ -111,6 +113,15 @@ namespace GQ.Client.Conf
 
 		[JsonConverter (typeof(ColorConverter))]		
 		public Color	footerButtonFgColor  { get; set; }
+
+		[JsonConverter (typeof(ColorConverter))]		
+		public Color	overlayButtonBgColor  { get; set; }
+
+		[JsonConverter (typeof(ColorConverter))]		
+		public Color	overlayButtonFgColor  { get; set; }
+
+		[JsonConverter (typeof(ColorConverter))]		
+		public Color	overlayButtonFgDisabledColor  { get; set; }
 
 		#endregion
 
@@ -153,6 +164,7 @@ namespace GQ.Client.Conf
 //			mapTileImageExtension = "@2x.png?access_token=" + mapKey;
 			useMapOffline = false;
 			mapMinimalZoom = 7.0f;
+			mapDeltaZoom = 0.5f;
 
 			// Layout:
 			headerHeightPermill = 50;
@@ -165,6 +177,9 @@ namespace GQ.Client.Conf
 			footerBgColor = Color.white;
 			footerButtonBgColor = GQColor.transparent;
 			footerButtonFgColor = Color.black;
+			overlayButtonBgColor = GQColor.transparent;
+			overlayButtonFgColor = Color.black;
+			overlayButtonFgDisabledColor = new Color (159f, 159f, 159f, 187f);
 		}
 
 		#endregion
