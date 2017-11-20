@@ -80,14 +80,10 @@ namespace GQ.Client.UI.Foyer
 
 		public override void UpdateView ()
 		{
-			Debug.Log ("QuestListController.UpdateView()".Yellow());
-
 			if (this == null) {
-				Debug.Log ("QuestListController is null".Red ());
 				return;
 			}
 			if (InfoList == null) {
-				Debug.Log ("QuestListController.InfoList is null".Red ());
 				return;
 			}
 

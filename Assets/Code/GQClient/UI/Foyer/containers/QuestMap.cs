@@ -255,11 +255,6 @@ namespace GQ.Client.UI.Foyer
 				map.HasMoved = true;
 			}
 
-			// if (Input.GetMouseButtonDown(0))
-			foreach (LayerBehaviour _lb in layers)
-				if (_lb.GetType () == typeof(MBTilesLayerBehaviour))
-					utfGridJsonString = ((MBTilesLayerBehaviour)_lb).UtfGridJsonString ();
-
 		}
 
 		#endregion 

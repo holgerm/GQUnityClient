@@ -228,9 +228,6 @@ namespace UnitySlippyMap.Map
 				double[] newCenterESPG900913 = wgs84ToEPSG900913Transform.Transform (centerWGS84);
 
 				centerEPSG900913 = ComputeCenterEPSG900913 (newCenterESPG900913);
-
-				Debug.Log ("center: " + centerEPSG900913 [0] + " " + centerEPSG900913 [1]);
-
 				FitVerticalBorder ();
 				IsDirty = true;
 			}
