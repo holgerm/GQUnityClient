@@ -7,7 +7,7 @@ using GQ.Client.Err;
 namespace GQ.Client.UI.Foyer
 {
 	/// <summary>
-	/// Abstract super class of all viewer contorlers that show quest sets. E.g. the quest list and map in the foyer.
+	/// Abstract super class of all viewer controllers that show quest sets. E.g. the quest list and map in the foyer.
 	/// </summary>
 	public abstract class QuestContainerController : MonoBehaviour
 	{
@@ -45,7 +45,8 @@ namespace GQ.Client.UI.Foyer
 
 		void OnDestroy ()
 		{
-			qim.OnChange -= OnQuestInfoChanged;
+			if (qim != null)
+				qim.OnChange -= OnQuestInfoChanged;
 		}
 
 		#endregion

@@ -6,6 +6,7 @@ using GQ.Client.Err;
 using GQ.Client.Util;
 using GQ.Client.Model;
 using GQ.Client.UI.Dialogs;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -50,6 +51,21 @@ namespace GQ.Client.UI
 				new TaskSequence (loadGameXML, questStarter);
 
 			t.Start ();
+		}
+
+		public override Texture Texture {
+			get {
+				string category = Data.Categories.Count > 0 ? Data.Categories [0] : "base";
+				string textureID = "marker." + category;
+				Texture t = TextureManager.Instance.GetTexture (textureID);
+				if (t == null) {
+					// create Texture and store it in TextureManager:
+					t = Resources.Load<Texture2D>(ConfigurationManager.Current.marker.path);
+					TextureManager.Instance.Add (textureID, t);
+					Debug.Log("ADDED T to TM: " + textureID);
+				}
+				return t;
+			}
 		}
 
 	}

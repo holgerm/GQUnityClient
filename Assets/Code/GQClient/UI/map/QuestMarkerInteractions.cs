@@ -25,6 +25,7 @@ namespace GQ.Client.UI
 		}
 
 		void Update () {
+			// if users touches buttons or header, we ignore that touch on the map and its markers:
 			if (EventSystem.current.IsPointerOverGameObject ())
 				return;
 

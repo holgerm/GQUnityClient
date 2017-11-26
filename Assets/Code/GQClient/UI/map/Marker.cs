@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnitySlippyMap.Markers;
 using GQ.Client.Util;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -36,6 +37,8 @@ namespace GQ.Client.UI
 			gameObject.SetActive (show);
 		}
 
+		public abstract Texture Texture { get; }
+
 		/// <summary>
 		/// Deletes the prefab from the hierarchy.
 		/// </summary>
@@ -60,6 +63,8 @@ namespace GQ.Client.UI
 		public abstract void OnTouch ();
 
 		#endregion
+
+
 	}
 
 

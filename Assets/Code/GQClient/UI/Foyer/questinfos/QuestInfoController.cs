@@ -41,7 +41,8 @@ namespace GQ.Client.UI.Foyer
 			if (this == null) {
 				Log.SignalErrorToDeveloper ("QICtrl: this == null in OnDestroy()".Red ());
 			} else {
-				data.OnChanged -= UpdateView;
+				if (data != null)
+					data.OnChanged -= UpdateView;
 			}
 		}
 			

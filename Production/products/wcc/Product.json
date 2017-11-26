@@ -33,6 +33,9 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "marker": {
+    "path": "markers/wcc"
+  },
   "categories": [
     {
       "id": "wcc.special.bonnleuchtet",

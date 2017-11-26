@@ -87,15 +87,23 @@ namespace GQ.Client.UI.Foyer
 				}
 			}
 		}
-
-//		protected static readonly string PREFAB = "Marker";
-
+			
 		private Marker CreateMarker(QuestInfo info) {
-//			// TODO: create Marker from Prefab:
-//			GameObject go = PrefabController.Create (PREFAB, transform.Find("[Map]").gameObject);
+			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
+				return null;
+			}
 
-			GameObject markerGO = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.MiddleCenter).gameObject;
-			markerGO.GetComponent<Renderer> ().material.mainTexture = MarkerTexture;
+			GameObject markerGO = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
+
+			QuestMarker newMarker = map.CreateMarker<QuestMarker> (
+				info.Name, 
+				new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
+				markerGO
+			);
+			newMarker.Data = info;
+
+			// Get the category name for the given info regarding the current filter selection ...
+			markerGO.GetComponent<Renderer> ().material.mainTexture = newMarker.Texture; // TextureManager.Instance.GetTexture ("marker.base");
 			markerGO.GetComponent<Renderer> ().material.renderQueue = 4001;
 			float markerWidth = Math.Min (1.0f, (float)MarkerTexture.width / (float)MarkerTexture.height);
 			float markerHeight = Math.Min (1.0f, (float)MarkerTexture.height / (float)MarkerTexture.width);
@@ -104,20 +112,49 @@ namespace GQ.Client.UI.Foyer
 			markerGO.name = "Markertile (" + info.Name + ")";
 			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
 			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
+			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
+			GameObject markerSymbolGo = CreateSymbolForMarker (markerGO, info);
 
-			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
-				Destroy (markerGO);
-				return null;
-			}
-			else {
-				QuestMarker newMarker = map.CreateMarker<QuestMarker> (
-					info.Name, 
-					new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
-					markerGO
-				);
-				newMarker.Data = info;
-				return newMarker;
-			}
+			return newMarker;
+		}
+
+		private GameObject CreateSymbolForMarker(GameObject markerGO, QuestInfo info) {
+			GameObject markerSymbolGo = new GameObject ();
+			markerSymbolGo.transform.parent = markerGO.transform;
+			markerSymbolGo.name = "Markersymbol (" + info.Name + ")";
+			MeshFilter meshFilter = markerSymbolGo.AddComponent<MeshFilter> ();
+			MeshRenderer meshRenderer = markerSymbolGo.AddComponent<MeshRenderer> ();
+			Mesh mesh = meshFilter.mesh;
+			mesh.vertices = new Vector3[] {
+				new Vector3 (0.5f, 0.0f, 1.0f),
+				new Vector3 (0.5f, 0.0f, 0.0f),
+				new Vector3 (-0.5f, 0.0f, 0.0f),
+				new Vector3 (-0.5f, 0.0f, 1.0f)
+			};
+			mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+			mesh.normals = new Vector3[] {
+				Vector3.up,
+				Vector3.up,
+				Vector3.up,
+				Vector3.up
+			};
+			mesh.uv = new Vector2[] {
+				new Vector2 (1.0f, 1.0f),
+				new Vector2 (1.0f, 0.0f),
+				new Vector2 (0.0f, 0.0f),
+				new Vector2 (0.0f, 1.0f)
+			};
+			// add a material
+			string shaderName = "Larku/UnlitTransparent";
+			Shader shader = Shader.Find (shaderName);
+			meshRenderer.material = new Material (shader);
+			meshRenderer.material.mainTexture = MarkerSymbolTexture;
+			meshRenderer.material.color = ConfigurationManager.Current.overlayButtonFgColor;
+			markerSymbolGo.transform.localScale = new Vector3 (0.604f, 0.0f, 0.4f);
+			markerSymbolGo.transform.localPosition = new Vector3 (0.0f, 0.0f, 0.468f);
+			meshRenderer.material.renderQueue = 4001;
+
+			return markerSymbolGo;
 		}
 
 		#endregion
@@ -126,6 +163,7 @@ namespace GQ.Client.UI.Foyer
 		#region Map (SlippyMaps)
 
 		public Texture	MarkerTexture;
+		public Texture MarkerSymbolTexture;
 
 		private bool isPerspectiveView = false;
 		private float	perspectiveAngle = 30.0f;

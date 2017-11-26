@@ -77,6 +77,8 @@ namespace GQ.Client.Conf
 
 		public float	mapDeltaZoom { get; set; }
 
+		public ImagePath marker { get; set; }
+
 		public List<Category> categories { get; set; }
 
 		#endregion

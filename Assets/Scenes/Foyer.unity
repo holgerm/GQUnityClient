@@ -5761,6 +5761,7 @@ MonoBehaviour:
   CenterTexture: {fileID: 2800000, guid: 5f2a9d856c61b48dc8f747556b8b1977, type: 3}
   FrameTexture: {fileID: 2800000, guid: f0be5d4cabc3742eb94f13da27287697, type: 3}
   MarkerTexture: {fileID: 2800000, guid: 7ffae9f891a3947a8b72896a8ad28917, type: 3}
+  MarkerSymbolTexture: {fileID: 2800000, guid: 54512c4997f6e40a48dc03d4eb87974a, type: 3}
 --- !u!114 &1965040555
 MonoBehaviour:
   m_ObjectHideFlags: 0
