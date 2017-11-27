@@ -66,6 +66,11 @@ namespace GQ.Client.Model
 			return (QuestDict.TryGetValue (id, out questInfo) ? questInfo : null);
 		}
 
+		#endregion
+
+
+		#region Filter
+
 		private QuestInfoFilter _filter;
 
 		public QuestInfoFilter Filter {
@@ -86,6 +91,10 @@ namespace GQ.Client.Model
 			}
 		}
 
+		public string CurrentCategoryId(QuestInfo info) {
+			return Filter.CategoryToShow (info);
+		}
+
 		#endregion
 
 
@@ -100,7 +109,7 @@ namespace GQ.Client.Model
 				// this is a NEW quest info:
 				QuestDict.Add (newInfo.Id, newInfo);
 
-				if (Filter.accept (newInfo)) {
+				if (Filter.Accept (newInfo)) {
 					// Run through filter and raise event if involved:
 					raiseChange (
 						new QuestInfoChangedEvent (
@@ -118,7 +127,7 @@ namespace GQ.Client.Model
 			oldInfo.Dispose ();
 			QuestDict.Remove (oldInfo.Id);
 
-			if (Filter.accept (oldInfo)) {
+			if (Filter.Accept (oldInfo)) {
 				// Run through filter and raise event if involved
 
 				raiseChange (
@@ -145,7 +154,7 @@ namespace GQ.Client.Model
 			QuestDict.Remove (info.Id);
 			QuestDict.Add (info.Id, info);
 
-			if (Filter.accept (oldInfo) || Filter.accept (info)) {
+			if (Filter.Accept (oldInfo) || Filter.Accept (info)) {
 				// Run through filter and raise event if involved
 
 				raiseChange (
@@ -265,7 +274,7 @@ namespace GQ.Client.Model
 		public QuestInfoManager ()
 		{
 			QuestDict = new Dictionary<int, QuestInfo> ();
-			Filter = new AllQuests ();
+			Filter = new QuestInfoFilter.All ();
 		}
 
 		#endregion

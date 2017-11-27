@@ -94,7 +94,7 @@ namespace GQ.Client.UI.Foyer
 			}
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				// create new list elements
-				if (QuestInfoManager.Instance.Filter.accept (info)) {
+				if (QuestInfoManager.Instance.Filter.Accept (info)) {
 					QuestListElementController qiCtrl = 
 						QuestListElementController.Create (
 							root: InfoList.gameObject,

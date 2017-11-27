@@ -80,7 +80,7 @@ namespace GQ.Client.UI.Foyer
 			}
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				// create new list elements
-				if (QuestInfoManager.Instance.Filter.accept (info)) {
+				if (QuestInfoManager.Instance.Filter.Accept (info)) {
 					Marker newMarker = CreateMarker (info);
 					if (newMarker != null)
 						map.Markers.Add (newMarker);

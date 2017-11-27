@@ -283,6 +283,8 @@ namespace GQ.Client.Model
 			}
 		}
 
+		public const string WITHOUT_CATEGORY_ID = "withoutcatgeory";
+
 		#endregion
 
 
