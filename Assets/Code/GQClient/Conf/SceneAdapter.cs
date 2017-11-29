@@ -23,7 +23,7 @@ namespace GQ.Client.Conf
 			RemoveAllSceneExtensions (scene);
 
 			foreach (SceneExtension extension in ConfigurationManager.Current.sceneExtensions) {
-				if (extension.scene != scene.path)
+				if (extension.scene.ToLower() != scene.path.ToLower())
 					// skip extension on other scenes:
 					continue;
 				
