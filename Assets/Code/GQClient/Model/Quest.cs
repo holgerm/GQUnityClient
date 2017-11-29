@@ -238,7 +238,15 @@ namespace GQ.Client.Model
 			page.Parent = this;
 			if (pageDict.Count == 0)
 				StartPage = page;
-			pageDict.Add (page.Id, page);
+			if (pageDict.ContainsKey(page.Id)) {
+				pageDict.Remove(page.Id);
+			}
+			try {
+				pageDict.Add (page.Id, page);
+			}
+			catch (Exception e) {
+				Debug.LogWarning((e.Message + " id: " + page.Id).Yellow());
+			}
 		}
 
 		private void ReadHotspot (XmlReader reader)
