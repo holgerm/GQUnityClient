@@ -34,7 +34,7 @@
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
   "marker": {
-    "path": "markers/wcc"
+    "path": "images/marker"
   },
   "categories": [
     {
@@ -62,7 +62,7 @@
       "id": "wcc.sights.architecture",
       "name": "Antiquariat",
       "symbol": {
-        "path": "markers/wcc.architecture"
+        "path": "images/symbolTest"
       }
     },
     {
