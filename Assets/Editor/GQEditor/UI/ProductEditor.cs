@@ -182,9 +182,6 @@ namespace GQ.Editor.UI
 			// Heading:
 			GUILayout.Label ("Product Manager", EditorStyles.boldLabel);
 
-			// Current Build:
-			CurrentBuildName = currentBuild ();
-
 			string shownBuildName; 
 			EditorGUILayout.BeginHorizontal ();
 			{
