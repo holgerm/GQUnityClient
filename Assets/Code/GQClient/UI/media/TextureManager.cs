@@ -22,7 +22,7 @@ namespace GQ.Client.UI {
 		} 
 
 		private TextureManager() {
-			texDict = new Dictionary<string, Texture>();
+			texDict = new Dictionary<string, Texture2D>();
 		}
 
 		#endregion
@@ -30,14 +30,14 @@ namespace GQ.Client.UI {
 
 		#region Public API
 
-		public Texture GetTexture(string textureID) {
-			Texture tex = null;
+		public Texture2D GetTexture(string textureID) {
+			Texture2D tex = null;
 			texDict.TryGetValue (textureID, out tex);
 			return tex;
 		}
 
-		public bool Add(string textureID, Texture texture) {
-			Texture t;
+		public bool Add(string textureID, Texture2D texture) {
+			Texture2D t;
 			if (texDict.TryGetValue(textureID, out t)) {
 				return false;
 			}
@@ -52,7 +52,7 @@ namespace GQ.Client.UI {
 
 		#region Internals
 
-		private Dictionary<string, Texture> texDict;
+		private Dictionary<string, Texture2D> texDict;
 
 		#endregion
 

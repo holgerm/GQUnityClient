@@ -57,12 +57,20 @@ namespace GQ.Client.UI
 			get {
 				string category = Data.Categories.Count > 0 ? Data.Categories [0] : "base";
 				string textureID = "marker." + category;
-				Texture t = TextureManager.Instance.GetTexture (textureID);
+				Texture2D t = TextureManager.Instance.GetTexture (textureID);
 				if (t == null) {
 					// create Texture and store it in TextureManager:
 					t = Resources.Load<Texture2D>(ConfigurationManager.Current.marker.path);
+					string categoryID = QuestInfoManager.Instance.CurrentCategoryId (Data);
+					try {
+						Texture2D symbol = Resources.Load<Texture2D> (ConfigurationManager.Current.categoryDict [categoryID].symbol.path);
+					}
+					catch (KeyNotFoundException)
+					{
+						Log.SignalErrorToAuthor ("Quest Category {0} not found.", categoryID);
+					}
 					TextureManager.Instance.Add (textureID, t);
-					Debug.Log("ADDED T to TM: " + textureID);
+					Debug.Log("ADDED T to TM: " + textureID + ". Category is: " + QuestInfoManager.Instance.CurrentCategoryId(Data));
 				}
 				return t;
 			}

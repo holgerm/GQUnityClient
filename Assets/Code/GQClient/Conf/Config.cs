@@ -79,7 +79,25 @@ namespace GQ.Client.Conf
 
 		public ImagePath marker { get; set; }
 
-		public List<Category> categories { get; set; }
+		[JsonIgnore]
+		private List<Category> _categories;
+
+		public List<Category> categories { 
+			get {
+				return _categories;
+			}
+			set {
+				_categories = value;
+				Debug.Log (("Setting Categories: #" + value.Count).Yellow());
+				categoryDict = new Dictionary<string, Category> ();
+				foreach (Category c in value) {
+					categoryDict.Add (c.id, c);
+				}
+			} 
+		}
+
+		[JsonIgnore]
+		public Dictionary<string, Category> categoryDict;
 
 		#endregion
 

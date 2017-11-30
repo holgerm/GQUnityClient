@@ -106,7 +106,7 @@ namespace GQ.Client.UI
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
 
-		protected void Start() {
+		protected virtual void Start() {
 			Frame ();
 			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;
 			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();

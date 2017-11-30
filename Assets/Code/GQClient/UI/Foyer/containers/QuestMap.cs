@@ -152,8 +152,7 @@ namespace GQ.Client.UI.Foyer
 			meshRenderer.material.color = ConfigurationManager.Current.overlayButtonFgColor;
 			markerSymbolGo.transform.localScale = new Vector3 (0.604f, 0.0f, 0.4f);
 			markerSymbolGo.transform.localPosition = new Vector3 (0.0f, 0.0f, 0.468f);
-			meshRenderer.material.renderQueue = 4001;
-
+			meshRenderer.material.renderQueue = 4002;
 			return markerSymbolGo;
 		}
 
@@ -179,7 +178,7 @@ namespace GQ.Client.UI.Foyer
 
 		protected QuestInfoManager qim;
 
-		private void Start ()
+		protected override void Start ()
 		{
 			// set up the inherited Map features:
 			base.Start ();
