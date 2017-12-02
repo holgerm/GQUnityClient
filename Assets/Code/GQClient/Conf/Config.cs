@@ -93,6 +93,25 @@ namespace GQ.Client.Conf
 
 		[JsonConverter (typeof(ColorConverter))]		
 		public Color	markerColor  { get; set; }
+		
+		[JsonIgnore]
+		private float _markerBGAlpha = 0.66f;
+		public float markerBGAlpha {
+			get {
+				return _markerBGAlpha;
+			}
+			set {
+				if (value < 0.0f) {
+					_markerBGAlpha = 0.0f;
+					return;
+				}
+				if (value > 1.0f) {
+					_markerBGAlpha = 1.0f;
+					return;
+				}
+				_markerBGAlpha = value;
+			}
+		}
 
 		[JsonIgnore]
 		private List<Category> _categories;

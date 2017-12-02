@@ -34,7 +34,13 @@
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
   "marker": {
-    "path": "images/marker"
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerColor": {
+    "r": 0.454902,
+    "g": 0.4039216,
+    "b": 0.129411772,
+    "a": 1.0
   },
   "categories": [
     {

@@ -105,8 +105,8 @@ namespace GQ.Client.UI.Foyer
 			// Get the category name for the given info regarding the current filter selection ...
 			markerGO.GetComponent<Renderer> ().material.mainTexture = newMarker.Texture; // TextureManager.Instance.GetTexture ("marker.base");
 			markerGO.GetComponent<Renderer> ().material.renderQueue = 4001;
-			float markerWidth = Math.Min (1.0f, (float)MarkerTexture.width / (float)MarkerTexture.height);
-			float markerHeight = Math.Min (1.0f, (float)MarkerTexture.height / (float)MarkerTexture.width);
+			float markerWidth = Math.Min (1.0f, (float)newMarker.Texture.width / (float)newMarker.Texture.height);
+			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
 			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) / 5.0f;
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
@@ -156,15 +156,13 @@ namespace GQ.Client.UI.Foyer
 			return markerSymbolGo;
 		}
 
+		public Texture MarkerSymbolTexture;
 		#endregion
 
 
 		#region Map (SlippyMaps)
 
-		public Texture	MarkerTexture;
-		public Texture MarkerSymbolTexture;
-
-		private bool isPerspectiveView = false;
+		private bool 	isPerspectiveView = false;
 		private float	perspectiveAngle = 30.0f;
 		private float	destinationAngle = 0.0f;
 		private float	currentAngle = 0.0f;

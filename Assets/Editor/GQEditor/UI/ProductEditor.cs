@@ -753,7 +753,6 @@ namespace GQ.Editor.UI
 				string oldValString = (oldVal == null ? "" : (oldVal.path == null ? "" : oldVal.path));
 				if (!newValString.Equals(oldValString)) 
 				{
-					Debug.Log("IMAGE makes COnfig dirty: newVal: '" + newValString + "' oldval: '" + oldValString + "'");
 					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newVal, null);
 				}
