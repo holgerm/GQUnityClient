@@ -4,6 +4,8 @@
   "portal": 402,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
+  "keepAutoStarting": true,
+  "DownloadStrategy": "UPFRONT",
   "downloadTimeOutSeconds": 180,
   "nameForQuest": "Quest",
   "questVisualization": "list",
@@ -16,10 +18,94 @@
   "hasMenuWithinQuests": true,
   "showTextInLoadingLogo": true,
   "showNetConnectionWarning": true,
-  "colorProfile": "lwl",
-  "mapboxKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
-  "mapboxMapID": "mapbox.streets",
+  "sceneExtensions": [],
+  "mapProvider": "OpenStreetMap",
+  "mapBaseUrl": "http://a.tile.openstreetmap.org",
+  "mapKey": "",
+  "mapID": "",
+  "mapTileImageExtension": ".png",
   "useMapOffline": false,
   "mapMinimalZoom": 13.0,
-  "markers": []
+  "mapDeltaZoom": 0.5,
+  "marker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerColor": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0,
+    "a": 0.0
+  },
+  "categories": null,
+  "headerHeightPermill": 50,
+  "headerBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "headerButtonBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "headerButtonFgColor": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0,
+    "a": 1.0
+  },
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "contentBackgroundColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "contentFontColor": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0,
+    "a": 1.0
+  },
+  "footerHeightPermill": 75,
+  "footerBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "footerButtonBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "footerButtonFgColor": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0,
+    "a": 1.0
+  },
+  "overlayButtonBgColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "overlayButtonFgColor": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0,
+    "a": 1.0
+  },
+  "overlayButtonFgDisabledColor": {
+    "r": 159.0,
+    "g": 159.0,
+    "b": 159.0,
+    "a": 187.0
+  }
 }
