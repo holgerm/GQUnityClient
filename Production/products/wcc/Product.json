@@ -38,59 +38,157 @@
   },
   "categories": [
     {
-      "id": "wcc.special.bonnleuchtet",
-      "name": "Bonn leuchtet",
-      "symbol": {
-        "path": "markers/wcc.culture"
-      }
-    },
-    {
-      "id": "wcc.special.offeneateliers",
-      "name": "Offene Ateliers",
-      "symbol": {
-        "path": "markers/wcc.culture"
-      }
-    },
-    {
-      "id": "wcc.sights.antiquariats",
+      "id": "wcc.sight.antiquariate",
       "name": "Antiquariat",
       "symbol": {
-        "path": "markers/wcc.gallery"
+        "path": ""
       }
     },
     {
-      "id": "wcc.sights.architecture",
-      "name": "Antiquariat",
+      "id": "wcc.sight.architecture",
+      "name": "Architektur",
       "symbol": {
-        "path": "images/symbolTest"
+        "path": ""
       }
     },
     {
-      "id": "wcc.sights.gallery",
-      "name": "Galerie",
-      "symbol": {
-        "path": "markers/wcc.gallery"
-      }
-    },
-    {
-      "id": "wcc.sights.museum",
+      "id": "wcc.sight.museum",
       "name": "Museum",
       "symbol": {
-        "path": "markers/wcc.museum"
+        "path": ""
       }
     },
     {
-      "id": "wcc.sights.nature",
+      "id": "wcc.sight.nature",
       "name": "Natur",
       "symbol": {
-        "path": "markers/wcc.nature"
+        "path": ""
       }
     },
     {
-      "id": "wcc.sights.historic",
+      "id": "wcc.sight.historic",
       "name": "Historisch",
       "symbol": {
-        "path": "markers/wcc.history"
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.tour.beethoven",
+      "name": "Beethoventour",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.tour.pathofdemocracy",
+      "name": "Weg der Demokratie",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.tour.macke",
+      "name": "Macketour",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.activity.gallery",
+      "name": "Galerie",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.activity.cinema",
+      "name": "Kino",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.activity.concerthall",
+      "name": "Konzertsaal",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.activity.theatre",
+      "name": "Theater",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.gastro.bar",
+      "name": "Bar",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.gastro.beergarden",
+      "name": "Biergarten",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.gastro.cafe",
+      "name": "Café",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.gastro.iceparlour",
+      "name": "Eisdiele",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.gastro.pub",
+      "name": "Kneipe",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.gastro.restaurant",
+      "name": "Restaurant",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.special",
+      "name": "Besonderes",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.info.tourist",
+      "name": "Tourist Info",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.info.wc",
+      "name": "WC",
+      "symbol": {
+        "path": ""
+      }
+    },
+    {
+      "id": "wcc.info.bike",
+      "name": "Fahrradvermietung",
+      "symbol": {
+        "path": ""
       }
     }
   ],
