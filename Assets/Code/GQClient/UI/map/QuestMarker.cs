@@ -53,22 +53,45 @@ namespace GQ.Client.UI
 			t.Start ();
 		}
 
+		private const string DEFAULT_MARKER_PATH = "defaultMarker";
+
 		public override Texture Texture {
 			get {
 				string category = Data.Categories.Count > 0 ? Data.Categories [0] : "base";
 				string textureID = "marker." + category;
 				Texture2D t = TextureManager.Instance.GetTexture (textureID);
 				if (t == null) {
-					// create Texture and store it in TextureManager:
-					t = Resources.Load<Texture2D>(ConfigurationManager.Current.marker.path);
+					// load basic marker texture:
+					t = Resources.Load<Texture2D> (ConfigurationManager.Current.marker.path);
+
+					// colorize solid white parts of the basic marker texture:
+					Color[] colors = t.GetPixels();
+					int counter = 0;
+					for (int i=0; i< colors.Length; i++) {
+						if (colors[i].r == 1f && colors[i].g == 1f && colors[i].b == 1f) {
+							// replace solid white with marker color:
+							colors[i].r = ConfigurationManager.Current.markerColor.r;
+							colors[i].g = ConfigurationManager.Current.markerColor.g;
+							colors[i].b = ConfigurationManager.Current.markerColor.b;
+							counter++;
+						}
+					}
+					Debug.Log (("TEXTURE pixels recolored: #" + counter + " of " + colors.Length + " format: " + t.format.ToString()).Yellow());
+					t.SetPixels (colors);
+
 					string categoryID = QuestInfoManager.Instance.CurrentCategoryId (Data);
+					Debug.Log (("Searching category " + categoryID + " among " + ConfigurationManager.Current.categoryDict.Count + " in dictionary.").Yellow ());
 					try {
-						Texture2D symbol = Resources.Load<Texture2D> (ConfigurationManager.Current.categoryDict [categoryID].symbol.path);
+						Category cat = ConfigurationManager.Current.categoryDict [categoryID];
+						Debug.Log("FOUND cat: " + cat.name + " @ " + cat.symbol.path);
+						Texture2D symbol = Resources.Load<Texture2D> (cat.symbol.path);
 					}
 					catch (KeyNotFoundException)
 					{
 						Log.SignalErrorToAuthor ("Quest Category {0} not found.", categoryID);
+						return t;
 					}
+					t.Apply ();
 					TextureManager.Instance.Add (textureID, t);
 					Debug.Log("ADDED T to TM: " + textureID + ". Category is: " + QuestInfoManager.Instance.CurrentCategoryId(Data));
 				}

@@ -77,7 +77,22 @@ namespace GQ.Client.Conf
 
 		public float	mapDeltaZoom { get; set; }
 
-		public ImagePath marker { get; set; }
+		[JsonIgnore]
+		private ImagePath _marker;
+		public ImagePath marker { 
+			get {
+				if (_marker == null) {
+					return new ImagePath ("defaults/readable/defaultMarker");
+				}
+				return _marker;
+			}
+			set {
+				_marker = value;
+			}
+		}
+
+		[JsonConverter (typeof(ColorConverter))]		
+		public Color	markerColor  { get; set; }
 
 		[JsonIgnore]
 		private List<Category> _categories;
@@ -88,11 +103,11 @@ namespace GQ.Client.Conf
 			}
 			set {
 				_categories = value;
-				Debug.Log (("Setting Categories: #" + value.Count).Yellow());
 				categoryDict = new Dictionary<string, Category> ();
-				foreach (Category c in value) {
-					categoryDict.Add (c.id, c);
-				}
+				if (value != null)
+					foreach (Category c in value) {
+						categoryDict.Add (c.id, c);
+					}
 			} 
 		}
 
@@ -185,6 +200,8 @@ namespace GQ.Client.Conf
 			useMapOffline = false;
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
+
+
 
 			// Layout:
 			headerHeightPermill = 50;
@@ -283,13 +300,34 @@ namespace GQ.Client.Conf
 		public string prefab;
 	}
 
-	public struct ImagePath
+	public class ImagePath
 	{
 		public string path;
 
 		public ImagePath (string path)
 		{
 			this.path = path;
+		}
+
+		public override string ToString() {
+			return "ImagePath: " + path;
+		}
+
+		public override bool Equals(System.Object other) 
+		{
+			// Other null?
+			if (other == null)
+				return path == null || path.Equals ("");
+
+			// Compare run-time types.
+			if (GetType() != other.GetType()) 
+				return false;
+
+			return path == ((ImagePath)other).path;
+		}
+		public override int GetHashCode() 
+		{
+			return path.GetHashCode();
 		}
 	}
 

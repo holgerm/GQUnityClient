@@ -736,7 +736,9 @@ namespace GQ.Editor.UI
 			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
 				// get currently stored image path from config:
 				ImagePath oldVal = (ImagePath)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
-				Sprite oldSprite = Resources.Load<Sprite> (oldVal.path);
+				Sprite oldSprite = null;
+				if (oldVal != null)
+					oldSprite = Resources.Load<Sprite> (oldVal.path);
 
 				// show textarea if value does not fit within one line:
 				EditorGUILayout.BeginHorizontal ();
@@ -746,7 +748,12 @@ namespace GQ.Editor.UI
 				string path = AssetDatabase.GetAssetPath (newSprite);
 				ImagePath newVal = new ImagePath (Files.GetResourcesRelativePath (path));
 				EditorGUILayout.EndHorizontal ();
-				if (newVal.path != "" && newVal.path != null && !newVal.path.Equals (oldVal.path)) {
+
+				string newValString = (newVal == null ? "" : (newVal.path == null ? "" : newVal.path));
+				string oldValString = (oldVal == null ? "" : (oldVal.path == null ? "" : oldVal.path));
+				if (!newValString.Equals(oldValString)) 
+				{
+					Debug.Log("IMAGE makes COnfig dirty: newVal: '" + newValString + "' oldval: '" + oldValString + "'");
 					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newVal, null);
 				}
@@ -867,7 +874,9 @@ namespace GQ.Editor.UI
 					// get currently stored image path from config:
 					ImagePath oldSymbolPath = oldElem.symbol;
 					ImagePath newSymbolPath = oldSymbolPath;
-					Sprite oldSymbolSprite = Resources.Load<Sprite> (oldSymbolPath.path);
+					Sprite oldSymbolSprite = null;
+					if (oldSymbolPath != null)
+						oldSymbolSprite = Resources.Load<Sprite> (oldSymbolPath.path);
 					Sprite newSymbolSprite = 
 						(Sprite)EditorGUILayout.ObjectField (oldSymbolSprite, typeof(Sprite), false);
 					if (newSymbolSprite != oldSymbolSprite) {
