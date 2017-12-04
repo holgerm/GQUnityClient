@@ -113,7 +113,7 @@ namespace GQ.Client.UI.Foyer
 			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
 			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
 			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
-			GameObject markerSymbolGo = CreateSymbolForMarker (markerGO, info);
+//			GameObject markerSymbolGo = CreateSymbolForMarker (markerGO, info);
 
 			return newMarker;
 		}

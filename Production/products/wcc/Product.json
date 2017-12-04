@@ -36,6 +36,7 @@
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
+  "markerBGAlpha": 0.66,
   "markerColor": {
     "r": 0.454902,
     "g": 0.4039216,

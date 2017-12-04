@@ -7,6 +7,7 @@ using GQ.Client.Util;
 using GQ.Client.Model;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Conf;
+using System;
 
 namespace GQ.Client.UI
 {
@@ -53,7 +54,7 @@ namespace GQ.Client.UI
 			t.Start ();
 		}
 
-		private const string DEFAULT_MARKER_PATH = "defaultMarker";
+		private const string MARKER_ALPHA_BG_PATH = "defaults/readable/defaultMarkerBG";
 
 		public override Texture Texture {
 			get {
@@ -61,39 +62,72 @@ namespace GQ.Client.UI
 				string textureID = "marker." + category;
 				Texture2D t = TextureManager.Instance.GetTexture (textureID);
 				if (t == null) {
-					// load basic marker texture:
-					t = Resources.Load<Texture2D> (ConfigurationManager.Current.marker.path);
+					// load basic marker texture and white alpha background template:
+					Texture2D markerOutline = Resources.Load<Texture2D> (ConfigurationManager.Current.marker.path);
+					Texture2D alphaBG = Resources.Load<Texture2D> (MARKER_ALPHA_BG_PATH);
 
-					// colorize solid white parts of the basic marker texture:
-					Color[] colors = t.GetPixels();
-					int counter = 0;
+					t = new Texture2D(markerOutline.width, markerOutline.height);
+					Color[] alphaColors = alphaBG.GetPixels ();
+					// colorize solid white parts of the basic marker texture and blend above alpha background:
+					Color[] colors = markerOutline.GetPixels();
+
 					for (int i=0; i< colors.Length; i++) {
-						if (colors[i].r == 1f && colors[i].g == 1f && colors[i].b == 1f) {
-							// replace solid white with marker color:
+						if (colors[i].a >= 0.99f) {
+							// replace solid white in marker with marker color:
 							colors[i].r = ConfigurationManager.Current.markerColor.r;
 							colors[i].g = ConfigurationManager.Current.markerColor.g;
 							colors[i].b = ConfigurationManager.Current.markerColor.b;
-							counter++;
+						}
+
+						if (alphaColors [i].a >= 0.99f) {
+							// for all pixels of solid white in alpha circle we blend the marker pixel above the alpha circle:
+							colors [i] = TextureManager.Blend (colors [i], new Color (1f, 1f, 1f, ConfigurationManager.Current.markerBGAlpha));
 						}
 					}
-					Debug.Log (("TEXTURE pixels recolored: #" + counter + " of " + colors.Length + " format: " + t.format.ToString()).Yellow());
+
 					t.SetPixels (colors);
 
 					string categoryID = QuestInfoManager.Instance.CurrentCategoryId (Data);
-					Debug.Log (("Searching category " + categoryID + " among " + ConfigurationManager.Current.categoryDict.Count + " in dictionary.").Yellow ());
 					try {
 						Category cat = ConfigurationManager.Current.categoryDict [categoryID];
-						Debug.Log("FOUND cat: " + cat.name + " @ " + cat.symbol.path);
 						Texture2D symbol = Resources.Load<Texture2D> (cat.symbol.path);
+						if (symbol == null) {
+							Log.SignalErrorToDeveloper("Symbol Texture not found for category {0}. Using default symbol.", categoryID);
+							t.Apply();
+							TextureManager.Instance.Add (textureID, t);
+							return t;
+						}
+						if (symbol.width > t.width) {
+							Log.SignalErrorToDeveloper("Smybol Texture too wide. Must not be wider than marker outline. Using default symbol.");
+							t.Apply();
+							TextureManager.Instance.Add (textureID, t);
+							return t;
+						}
+						if (symbol.height > t.height) {
+							Log.SignalErrorToDeveloper("Smybol Texture too high. Must not be higher than marker outline. Using default symbol.");
+							t.Apply();
+							TextureManager.Instance.Add (textureID, t);
+							return t;
+						}
+						Color[] symbolColors = symbol.GetPixels();
+						int deltaX = (t.width - symbol.width) / 2;
+						int deltaY = t.height - symbol.height;
+
+						Color[] tBelowSymbol = t.GetPixels(deltaX, deltaY, symbol.width, symbol.height);
+
+						for (int i = 0; i< symbolColors.Length; i++) {
+							tBelowSymbol[i] = TextureManager.Blend (symbolColors[i], tBelowSymbol[i]);
+						}
+
+						t.SetPixels(deltaX, deltaY, symbol.width, symbol.height, tBelowSymbol);
 					}
 					catch (KeyNotFoundException)
 					{
-						Log.SignalErrorToAuthor ("Quest Category {0} not found.", categoryID);
-						return t;
+						Log.SignalErrorToAuthor ("Quest Category {0} not found. Using default symbol.", categoryID);
 					}
+
 					t.Apply ();
 					TextureManager.Instance.Add (textureID, t);
-					Debug.Log("ADDED T to TM: " + textureID + ". Category is: " + QuestInfoManager.Instance.CurrentCategoryId(Data));
 				}
 				return t;
 			}
