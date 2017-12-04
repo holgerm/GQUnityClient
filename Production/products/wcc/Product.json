@@ -36,13 +36,13 @@
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerBGAlpha": 0.66,
   "markerColor": {
-    "r": 0.454902,
-    "g": 0.4039216,
-    "b": 0.129411772,
-    "a": 1.0
+    "r": 116,
+    "g": 103,
+    "b": 33,
+    "a": 255
   },
+  "markerBGAlpha": 166,
   "categories": [
     {
       "id": "wcc.sight.antiquariate",
@@ -55,7 +55,7 @@
       "id": "wcc.sight.architecture",
       "name": "Architektur",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/architecture"
       }
     },
     {
@@ -201,73 +201,73 @@
   ],
   "headerHeightPermill": 50,
   "headerBgColor": {
-    "r": 1.0,
-    "g": 1.0,
-    "b": 1.0,
-    "a": 1.0
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
   },
   "headerButtonBgColor": {
-    "r": 1.0,
-    "g": 1.0,
-    "b": 1.0,
-    "a": 0.0
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
   },
   "headerButtonFgColor": {
-    "r": 0.454901963,
-    "g": 0.403921574,
-    "b": 0.129411772,
-    "a": 1.0
+    "r": 116,
+    "g": 103,
+    "b": 33,
+    "a": 255
   },
   "topLogo": {
     "path": "TopLogo"
   },
   "contentBackgroundColor": {
-    "r": 1.0,
-    "g": 1.0,
-    "b": 1.0,
-    "a": 1.0
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
   },
   "contentFontColor": {
-    "r": 0.0,
-    "g": 0.0,
-    "b": 0.0,
-    "a": 1.0
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
   },
   "footerHeightPermill": 75,
   "footerBgColor": {
-    "r": 1.0,
-    "g": 1.0,
-    "b": 1.0,
-    "a": 1.0
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
   },
   "footerButtonBgColor": {
-    "r": 0.454901963,
-    "g": 0.403921574,
-    "b": 0.129411772,
-    "a": 1.0
+    "r": 116,
+    "g": 103,
+    "b": 33,
+    "a": 255
   },
   "footerButtonFgColor": {
-    "r": 1.0,
-    "g": 1.0,
-    "b": 1.0,
-    "a": 1.0
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
   },
   "overlayButtonBgColor": {
-    "r": 1.0,
-    "g": 1.0,
-    "b": 1.0,
-    "a": 0.7294118
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 164
   },
   "overlayButtonFgColor": {
-    "r": 0.454901963,
-    "g": 0.403921574,
-    "b": 0.129411772,
-    "a": 0.733333349
+    "r": 116,
+    "g": 103,
+    "b": 33,
+    "a": 187
   },
   "overlayButtonFgDisabledColor": {
-    "r": 0.625,
-    "g": 0.625,
-    "b": 0.625,
-    "a": 0.733333349
+    "r": 159,
+    "g": 159,
+    "b": 159,
+    "a": 187
   }
 }
