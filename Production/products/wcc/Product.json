@@ -48,7 +48,7 @@
       "id": "wcc.sight.antiquariate",
       "name": "Antiquariat",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/antiquariat"
       }
     },
     {
@@ -62,28 +62,28 @@
       "id": "wcc.sight.museum",
       "name": "Museum",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/museum"
       }
     },
     {
       "id": "wcc.sight.nature",
       "name": "Natur",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/nature"
       }
     },
     {
       "id": "wcc.sight.historic",
       "name": "Historisch",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/historic"
       }
     },
     {
       "id": "wcc.tour.beethoven",
       "name": "Beethoventour",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/beethoventour"
       }
     },
     {
@@ -104,98 +104,98 @@
       "id": "wcc.activity.gallery",
       "name": "Galerie",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/gallery"
       }
     },
     {
       "id": "wcc.activity.cinema",
       "name": "Kino",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/cinema"
       }
     },
     {
       "id": "wcc.activity.concerthall",
       "name": "Konzertsaal",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/concerthall"
       }
     },
     {
       "id": "wcc.activity.theatre",
       "name": "Theater",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/theatre"
       }
     },
     {
       "id": "wcc.gastro.bar",
       "name": "Bar",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/bar"
       }
     },
     {
       "id": "wcc.gastro.beergarden",
       "name": "Biergarten",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/beergarden"
       }
     },
     {
       "id": "wcc.gastro.cafe",
       "name": "Café",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/cafe"
       }
     },
     {
       "id": "wcc.gastro.iceparlour",
       "name": "Eisdiele",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/iceparlour"
       }
     },
     {
       "id": "wcc.gastro.pub",
       "name": "Kneipe",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/pub"
       }
     },
     {
       "id": "wcc.gastro.restaurant",
       "name": "Restaurant",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/restaurant"
       }
     },
     {
       "id": "wcc.special",
       "name": "Besonderes",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/special"
       }
     },
     {
       "id": "wcc.info.tourist",
       "name": "Tourist Info",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/touristinfo"
       }
     },
     {
       "id": "wcc.info.wc",
       "name": "WC",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/wc"
       }
     },
     {
       "id": "wcc.info.bike",
       "name": "Fahrradvermietung",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/bike"
       }
     }
   ],
