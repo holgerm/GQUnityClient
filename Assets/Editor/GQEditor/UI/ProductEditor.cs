@@ -676,19 +676,19 @@ namespace GQ.Editor.UI
 	}
 
 
-	public class ProductEditorPart4Color : ProductEditorPart
+	public class ProductEditorPart4Color32 : ProductEditorPart
 	{
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
 			configIsDirty = false;
 
-			Color oldColorVal = (Color)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
-			Color newColorVal = oldColorVal;
+			Color32 oldColorVal = (Color32)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			Color32 newColorVal = oldColorVal;
 
 			// show Color field if value fits in one line:
 			newColorVal = EditorGUILayout.ColorField (NamePrefixGUIContent, oldColorVal);
-			if (newColorVal != oldColorVal) {
+			if (!newColorVal.Equals(oldColorVal)) {
 				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, newColorVal, null);
 			}
@@ -783,6 +783,38 @@ namespace GQ.Editor.UI
 				if (newIntVal != oldIntVal) {
 					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newIntVal, null);
+				}
+			}
+
+			return configIsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4Byte : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
+
+			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
+				byte oldVal = (byte)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+
+				// show text field if value fits in one line:
+				int intVal = EditorGUILayout.IntField (myNamePrefixGUIContent, oldVal);
+				byte newVal;
+				if (intVal < 0)
+					newVal = 0;
+				else if (intVal > 255)
+					newVal = 255;
+				else
+					newVal = (byte)intVal;
+				
+				if (newVal != oldVal) {
+					configIsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, newVal, null);
 				}
 			}
 

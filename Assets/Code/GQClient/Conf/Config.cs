@@ -91,22 +91,22 @@ namespace GQ.Client.Conf
 			}
 		}
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	markerColor  { get; set; }
-		
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	markerColor  { get; set; }
+
 		[JsonIgnore]
-		private float _markerBGAlpha = 0.66f;
-		public float markerBGAlpha {
+		private byte _markerBGAlpha = 168;
+		public byte markerBGAlpha {
 			get {
 				return _markerBGAlpha;
 			}
 			set {
-				if (value < 0.0f) {
-					_markerBGAlpha = 0.0f;
+				if (value < 0) {
+					_markerBGAlpha = 0;
 					return;
 				}
-				if (value > 1.0f) {
-					_markerBGAlpha = 1.0f;
+				if (value > 255) {
+					_markerBGAlpha = 255;
 					return;
 				}
 				_markerBGAlpha = value;
@@ -140,42 +140,42 @@ namespace GQ.Client.Conf
 
 		public int 		headerHeightPermill { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	headerBgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	headerBgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	headerButtonBgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	headerButtonBgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	headerButtonFgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	headerButtonFgColor  { get; set; }
 
 		public ImagePath topLogo { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	contentBackgroundColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	contentBackgroundColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	contentFontColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	contentFontColor  { get; set; }
 
 		public int 		footerHeightPermill { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	footerBgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	footerBgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	footerButtonBgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	footerButtonBgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	footerButtonFgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	footerButtonFgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	overlayButtonBgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	overlayButtonBgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	overlayButtonFgColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	overlayButtonFgColor  { get; set; }
 
-		[JsonConverter (typeof(ColorConverter))]		
-		public Color	overlayButtonFgDisabledColor  { get; set; }
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	overlayButtonFgDisabledColor  { get; set; }
 
 		#endregion
 
@@ -256,32 +256,32 @@ namespace GQ.Client.Conf
 		MapBox
 	}
 
-	public class ColorConverter : JsonConverter
+	public class Color32Converter : JsonConverter
 	{
 		public override bool CanConvert (Type objectType)
 		{
-			return objectType == typeof(Color);
+			return objectType == typeof(Color32);
 		}
 
 		public override object ReadJson (JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
 			reader.Read ();
-			float r = (float)reader.ReadAsDouble ();
+			byte r = (byte)reader.ReadAsInt32 ();
 			reader.Read ();
-			float g = (float)reader.ReadAsDouble ();
+			byte g = (byte)reader.ReadAsInt32 ();
 			reader.Read ();
-			float b = (float)reader.ReadAsDouble ();
+			byte b = (byte)reader.ReadAsInt32 ();
 			reader.Read ();
-			float a = (float)reader.ReadAsDouble ();
+			byte a = (byte)reader.ReadAsInt32 ();
 			reader.Read ();
 
-			Color c = new Color (r, g, b, a);
+			Color32 c = new Color32 (r, g, b, a);
 			return c;
 		}
 
 		public override void WriteJson (JsonWriter writer, object value, JsonSerializer serializer)
 		{
-			Color c = (Color)value;
+			Color32 c = (Color32)value;
 			writer.WriteStartObject ();
 			writer.WritePropertyName ("r");
 			writer.WriteValue (c.r);
@@ -298,7 +298,7 @@ namespace GQ.Client.Conf
 	public static class GQColor
 	{
 
-		public static readonly Color transparent = new Color (1f, 1f, 1f, 0f);
+		public static readonly Color32 transparent = new Color32 (255, 255, 255, 0);
 	}
 
 	public struct SceneExtension

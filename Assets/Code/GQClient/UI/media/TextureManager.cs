@@ -71,6 +71,18 @@ namespace GQ.Client.UI {
 			return result;
 		}
 
+		public static Color32 Blend(Color32 fg, Color32 bg) {
+			Color32 result = new Color32 ();
+			result.a = (byte) (fg.a + (float) bg.a * (1.0f - (float)fg.a));
+			if (result.a != 0.0f) {
+				// otherwise we keep the initial zero values for r,g,b.
+				result.r = (byte) (((float)fg.r * (float)fg.a + (float)bg.r * (float)bg.a * (1.0f - (float)fg.a)) / (float)result.a);
+				result.g = (byte) (((float)fg.g * (float)fg.a + (float)bg.g * (float)bg.a * (1.0f - (float)fg.a)) / (float)result.a);
+				result.b = (byte) (((float)fg.b * (float)fg.a + (float)bg.b * (float)bg.a * (1.0f - (float)fg.a)) / (float)result.a);
+			}
+			return result;
+		}
+
 		#endregion
 	}
 }

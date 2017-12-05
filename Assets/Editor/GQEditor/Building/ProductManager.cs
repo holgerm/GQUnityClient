@@ -393,7 +393,10 @@ namespace GQ.Editor.Building
 			}
 
 			PlayerSettings.productName = newProduct.Config.name;
-			PlayerSettings.applicationIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id;
+			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
+			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
+			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
+			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.WebGL, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
 
 //			formerly we loaded the start scene: replaceLoadingLogoInScene (START_SCENE);
 

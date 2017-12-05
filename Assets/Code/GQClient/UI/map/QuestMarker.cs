@@ -58,75 +58,94 @@ namespace GQ.Client.UI
 
 		public override Texture Texture {
 			get {
-				string category = Data.Categories.Count > 0 ? Data.Categories [0] : "base";
-				string textureID = "marker." + category;
+				string categoryID = QuestInfoManager.Instance.CurrentCategoryId (Data);
+				string textureID = "marker." + categoryID;
 				Texture2D t = TextureManager.Instance.GetTexture (textureID);
+
 				if (t == null) {
 					// load basic marker texture and white alpha background template:
 					Texture2D markerOutline = Resources.Load<Texture2D> (ConfigurationManager.Current.marker.path);
-					Texture2D alphaBG = Resources.Load<Texture2D> (MARKER_ALPHA_BG_PATH);
-
 					t = new Texture2D(markerOutline.width, markerOutline.height);
-					Color[] alphaColors = alphaBG.GetPixels ();
-					// colorize solid white parts of the basic marker texture and blend above alpha background:
-					Color[] colors = markerOutline.GetPixels();
 
-					for (int i=0; i< colors.Length; i++) {
-						if (colors[i].a >= 0.99f) {
-							// replace solid white in marker with marker color:
-							colors[i].r = ConfigurationManager.Current.markerColor.r;
-							colors[i].g = ConfigurationManager.Current.markerColor.g;
-							colors[i].b = ConfigurationManager.Current.markerColor.b;
-						}
-
-						if (alphaColors [i].a >= 0.99f) {
-							// for all pixels of solid white in alpha circle we blend the marker pixel above the alpha circle:
-							colors [i] = TextureManager.Blend (colors [i], new Color (1f, 1f, 1f, ConfigurationManager.Current.markerBGAlpha));
-						}
-					}
-
-					t.SetPixels (colors);
-
-					string categoryID = QuestInfoManager.Instance.CurrentCategoryId (Data);
+					Texture2D symbol = null;
 					try {
 						Category cat = ConfigurationManager.Current.categoryDict [categoryID];
-						Texture2D symbol = Resources.Load<Texture2D> (cat.symbol.path);
+						symbol = Resources.Load<Texture2D> (cat.symbol.path);
 						if (symbol == null) {
 							Log.SignalErrorToDeveloper("Symbol Texture not found for category {0}. Using default symbol.", categoryID);
-							t.Apply();
-							TextureManager.Instance.Add (textureID, t);
-							return t;
 						}
-						if (symbol.width > t.width) {
+						else if (symbol.width > t.width) {
 							Log.SignalErrorToDeveloper("Smybol Texture too wide. Must not be wider than marker outline. Using default symbol.");
-							t.Apply();
-							TextureManager.Instance.Add (textureID, t);
-							return t;
+							symbol = null;
 						}
-						if (symbol.height > t.height) {
+						else if (symbol.height > t.height) {
 							Log.SignalErrorToDeveloper("Smybol Texture too high. Must not be higher than marker outline. Using default symbol.");
-							t.Apply();
-							TextureManager.Instance.Add (textureID, t);
-							return t;
+							symbol = null;
 						}
-						Color[] symbolColors = symbol.GetPixels();
-						int deltaX = (t.width - symbol.width) / 2;
-						int deltaY = t.height - symbol.height;
-
-						Color[] tBelowSymbol = t.GetPixels(deltaX, deltaY, symbol.width, symbol.height);
-
-						for (int i = 0; i< symbolColors.Length; i++) {
-							tBelowSymbol[i] = TextureManager.Blend (symbolColors[i], tBelowSymbol[i]);
-						}
-
-						t.SetPixels(deltaX, deltaY, symbol.width, symbol.height, tBelowSymbol);
 					}
 					catch (KeyNotFoundException)
 					{
 						Log.SignalErrorToAuthor ("Quest Category {0} not found. Using default symbol.", categoryID);
 					}
 
+					Color32[] outlineColors = markerOutline.GetPixels32();
+
+					Texture2D alphaBG = Resources.Load<Texture2D> (MARKER_ALPHA_BG_PATH);
+					Color32[] alphaColors = alphaBG.GetPixels32();
+					Color32[] symbolColors = null;
+					int symbolXMin = 0;
+					int symbolXMax = 0;
+					int symbolYMin = 0;
+					int symbolYMax = 0;
+
+					if (symbol == null) {
+						symbol = new Texture2D (1, 1);
+						symbol.SetPixels32 (new Color32[] { new Color32(0, 0, 0, 0) });
+					}
+
+					symbolColors = symbol.GetPixels32();
+					symbolXMin = (t.width - symbol.width) / 2; // before this column there are no symbol pixels
+					symbolXMax = symbol.width + symbolXMin - 1; // after this line there are no symbol pixels
+					symbolYMin = t.height - symbol.height - symbolXMin; // below this line there are no symbol pixels
+					symbolYMax = t.height - symbolXMin - 1; // above this line there are no symbol pixels
+						
+					int i = 0; // counter for fast access in flat color arrays for marker outline and alpha circle
+					int j = 0; // counter for symbol colors array (which is often smaller
+					for (int y = 0; y < markerOutline.height; y++) {
+						for (int x = 0; x < markerOutline.width; x++) {
+							
+							if (symbolYMin <= y && y <= symbolYMax && symbolXMin <= x && x <= symbolXMax) {
+								if (alphaColors [i].a == 255) {
+									if (symbolColors [j].a > 0) {
+										// we take symbol pixels if we find them above the opaque white circle:
+										alphaColors [i] = symbolColors [j];
+									} else {
+										// we take the marker background alpha as specified for this product:
+										alphaColors [i].a = ConfigurationManager.Current.markerBGAlpha;
+									}
+								}
+								j++;
+							} else if (alphaColors [i].a == 255) {
+								// outside of the symbol but inside the white circle, we also use only the specified transparency:
+								alphaColors [i].a = ConfigurationManager.Current.markerBGAlpha;
+							}
+
+							// colorize marker outline (keeping alpha channel):
+							outlineColors[i].r = ConfigurationManager.Current.markerColor.r;
+							outlineColors[i].g = ConfigurationManager.Current.markerColor.g;
+							outlineColors[i].b = ConfigurationManager.Current.markerColor.b;
+
+							// blend outline above alpha cirlce (already evtually including symbol):
+							outlineColors [i] = TextureManager.Blend (outlineColors [i], alphaColors [i]);
+
+							i++;
+						}
+					}
+						
+					t.SetPixels32 (outlineColors);
+//					t.SetPixels32 (alphaColors);
 					t.Apply ();
+					// cache this marker texture:
 					TextureManager.Instance.Add (textureID, t);
 				}
 				return t;
