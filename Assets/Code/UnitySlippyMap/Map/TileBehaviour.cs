@@ -26,6 +26,9 @@
 
 using UnityEngine;
 using GQ.Client.UI;
+using System.IO;
+using GQ.Client.FileIO;
+using GQ.Client.Err;
 
 namespace UnitySlippyMap.Map
 {
@@ -34,12 +37,12 @@ namespace UnitySlippyMap.Map
 	/// </summary>
 	public class TileBehaviour : MonoBehaviour
 	{
-    #region Private members & properties
+		#region Private members & properties
 
 		/// <summary>
 		/// The texture identifier.
 		/// </summary>
-		private int			textureId;
+		private int textureId;
 
 		/// <summary>
 		/// Gets or sets the texture identifier.
@@ -81,11 +84,11 @@ namespace UnitySlippyMap.Map
 		/// The apparition start time.
 		/// </summary>
 		private float apparitionStartTime = 0.0f;
-	
 
-    #endregion
-	
-	#region MonoBehaviour implementation
+
+		#endregion
+
+		#region MonoBehaviour implementation
 
 		/// <summary>
 		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Update().
@@ -106,10 +109,10 @@ namespace UnitySlippyMap.Map
 				material.color = color;
 			}
 		}
-	
-	#endregion
-	
-    #region Public enums
+
+		#endregion
+
+		#region Public enums
 
 		/// <summary>
 		/// The anchor points enumeration.
@@ -127,10 +130,10 @@ namespace UnitySlippyMap.Map
 			BottomRight
 		}
 
-    #endregion 
+		#endregion
 
-    #region Public methods
-	
+		#region Public methods
+
 		/// <summary>
 		/// Show this instance.
 		/// </summary>
@@ -190,75 +193,75 @@ namespace UnitySlippyMap.Map
 			switch (anchorPoint) {
 			case AnchorPoint.TopLeft:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (1.0f, 0.0f, 0.0f),
-				new Vector3 (1.0f, 0.0f, -1.0f),
-				new Vector3 (0.0f, 0.0f, -1.0f),
-				new Vector3 (0.0f, 0.0f, 0.0f)
-			};
+					new Vector3 (1.0f, 0.0f, 0.0f),
+					new Vector3 (1.0f, 0.0f, -1.0f),
+					new Vector3 (0.0f, 0.0f, -1.0f),
+					new Vector3 (0.0f, 0.0f, 0.0f)
+				};
 				break;
 			case AnchorPoint.TopCenter:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (0.5f, 0.0f, 0.0f),
-				new Vector3 (0.5f, 0.0f, -1.0f),
-				new Vector3 (-0.5f, 0.0f, -1.0f),
-				new Vector3 (-0.5f, 0.0f, 0.0f)
-			};
+					new Vector3 (0.5f, 0.0f, 0.0f),
+					new Vector3 (0.5f, 0.0f, -1.0f),
+					new Vector3 (-0.5f, 0.0f, -1.0f),
+					new Vector3 (-0.5f, 0.0f, 0.0f)
+				};
 				break;
 			case AnchorPoint.TopRight:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (0.0f, 0.0f, 0.0f),
-				new Vector3 (0.0f, 0.0f, -1.0f),
-				new Vector3 (-1.0f, 0.0f, -1.0f),
-				new Vector3 (-1.0f, 0.0f, 0.0f)
-			};
+					new Vector3 (0.0f, 0.0f, 0.0f),
+					new Vector3 (0.0f, 0.0f, -1.0f),
+					new Vector3 (-1.0f, 0.0f, -1.0f),
+					new Vector3 (-1.0f, 0.0f, 0.0f)
+				};
 				break;
 			case AnchorPoint.MiddleLeft:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (1.0f, 0.0f, 0.5f),
-				new Vector3 (1.0f, 0.0f, -0.5f),
-				new Vector3 (0.0f, 0.0f, -0.5f),
-				new Vector3 (0.0f, 0.0f, 0.5f)
-			};
+					new Vector3 (1.0f, 0.0f, 0.5f),
+					new Vector3 (1.0f, 0.0f, -0.5f),
+					new Vector3 (0.0f, 0.0f, -0.5f),
+					new Vector3 (0.0f, 0.0f, 0.5f)
+				};
 				break;
 			case AnchorPoint.MiddleRight:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (0.0f, 0.0f, 0.5f),
-				new Vector3 (0.0f, 0.0f, -0.5f),
-				new Vector3 (-1.0f, 0.0f, -0.5f),
-				new Vector3 (-1.0f, 0.0f, 0.5f)
-			};
+					new Vector3 (0.0f, 0.0f, 0.5f),
+					new Vector3 (0.0f, 0.0f, -0.5f),
+					new Vector3 (-1.0f, 0.0f, -0.5f),
+					new Vector3 (-1.0f, 0.0f, 0.5f)
+				};
 				break;
 			case AnchorPoint.BottomLeft:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (1.0f, 0.0f, 1.0f),
-				new Vector3 (1.0f, 0.0f, 0.0f),
-				new Vector3 (0.0f, 0.0f, 0.0f),
-				new Vector3 (0.0f, 0.0f, 1.0f)
-			};
+					new Vector3 (1.0f, 0.0f, 1.0f),
+					new Vector3 (1.0f, 0.0f, 0.0f),
+					new Vector3 (0.0f, 0.0f, 0.0f),
+					new Vector3 (0.0f, 0.0f, 1.0f)
+				};
 				break;
 			case AnchorPoint.BottomCenter:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (0.5f, 0.0f, 1.0f),
-				new Vector3 (0.5f, 0.0f, 0.0f),
-				new Vector3 (-0.5f, 0.0f, 0.0f),
-				new Vector3 (-0.5f, 0.0f, 1.0f)
-			};
+					new Vector3 (0.5f, 0.0f, 1.0f),
+					new Vector3 (0.5f, 0.0f, 0.0f),
+					new Vector3 (-0.5f, 0.0f, 0.0f),
+					new Vector3 (-0.5f, 0.0f, 1.0f)
+				};
 				break;
 			case AnchorPoint.BottomRight:
 				mesh.vertices = new Vector3[] {
-				new Vector3 (0.0f, 0.0f, 1.0f),
-				new Vector3 (0.0f, 0.0f, 0.0f),
-				new Vector3 (-1.0f, 0.0f, 0.0f),
-				new Vector3 (-1.0f, 0.0f, 1.0f)
-			};
+					new Vector3 (0.0f, 0.0f, 1.0f),
+					new Vector3 (0.0f, 0.0f, 0.0f),
+					new Vector3 (-1.0f, 0.0f, 0.0f),
+					new Vector3 (-1.0f, 0.0f, 1.0f)
+				};
 				break;
 			default: // MiddleCenter
 				mesh.vertices = new Vector3[] {
-				new Vector3 (0.5f, 0.0f, 0.5f),
-				new Vector3 (0.5f, 0.0f, -0.5f),
-				new Vector3 (-0.5f, 0.0f, -0.5f),
-				new Vector3 (-0.5f, 0.0f, 0.5f)
-			};
+					new Vector3 (0.5f, 0.0f, 0.5f),
+					new Vector3 (0.5f, 0.0f, -0.5f),
+					new Vector3 (-0.5f, 0.0f, -0.5f),
+					new Vector3 (-0.5f, 0.0f, 0.5f)
+				};
 				break;
 			}
 			mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
@@ -293,18 +296,18 @@ namespace UnitySlippyMap.Map
 		
 			return tile;
 		}
-	
+
 		/// <summary>
 		/// Sets the texture.
 		/// </summary>
 		/// <param name="texture">Texture.</param>
 		public void SetTexture (Texture2D texture)
 		{
-			material = this.gameObject.GetComponent<Renderer>().material;
+			material = this.gameObject.GetComponent<Renderer> ().material;
 			material.mainTexture = texture;
 			material.mainTexture.wrapMode = TextureWrapMode.Clamp;
 			material.mainTexture.filterMode = FilterMode.Trilinear;
-			this.GetComponent<Renderer>().enabled = true;
+			this.GetComponent<Renderer> ().enabled = true;
 			this.Show ();
 		}
 
@@ -320,7 +323,7 @@ namespace UnitySlippyMap.Map
 			return roundedZoom + "_" + tileX + "_" + tileY;
 		}
 
-    #endregion
+		#endregion
 	}
 
 }
