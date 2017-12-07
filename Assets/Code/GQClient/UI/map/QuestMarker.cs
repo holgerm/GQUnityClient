@@ -58,7 +58,7 @@ namespace GQ.Client.UI
 
 		public override Texture Texture {
 			get {
-				string categoryID = QuestInfoManager.Instance.CurrentCategoryId (Data);
+				string categoryID = Data.CurrentCategoryId;
 				string textureID = "marker." + categoryID;
 				Texture2D t = TextureManager.Instance.GetTexture (textureID);
 

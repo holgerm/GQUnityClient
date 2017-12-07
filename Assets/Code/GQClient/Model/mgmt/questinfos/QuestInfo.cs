@@ -285,6 +285,39 @@ namespace GQ.Client.Model
 
 		public const string WITHOUT_CATEGORY_ID = "withoutcatgeory";
 
+		public string CurrentCategoryId {
+			get {
+				string cat = QuestInfoManager.Instance.Filter.CategoryToShow (this);
+				switch (cat) {
+				case "wcc.architecture":
+					cat = "wcc.sight.architecture";
+					break;
+				case "wcc.nature":
+					cat = "wcc.sight.nature";
+					break;
+				case "wcc.history":
+					cat = "wcc.sight.historic";
+					break;
+				case "wcc.cafe":
+					cat = "wcc.gastro.cafe";
+					break;
+				case "wcc.restaurant":
+					cat = "wcc.gastro.restaurant";
+					break;
+				case "wcc.culture":
+					cat = "wcc.special";
+					break;
+				case "wcc.info":
+					cat = "wcc.info.tourist";
+					break;
+				default:
+					break;
+				}
+				return cat;
+			}
+		}
+
+
 		#endregion
 
 

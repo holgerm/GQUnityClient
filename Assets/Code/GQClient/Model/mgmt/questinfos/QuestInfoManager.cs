@@ -91,36 +91,6 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public string CurrentCategoryId(QuestInfo info) {
-			string cat = Filter.CategoryToShow (info);
-			switch (cat) {
-			case "wcc.architecture":
-				cat = "wcc.sight.architecture";
-				break;
-			case "wcc.nature":
-				cat = "wcc.sight.nature";
-				break;
-			case "wcc.history":
-				cat = "wcc.sight.historic";
-				break;
-			case "wcc.cafe":
-				cat = "wcc.gastro.cafe";
-				break;
-			case "wcc.restaurant":
-				cat = "wcc.gastro.restaurant";
-				break;
-			case "wcc.culture":
-				cat = "wcc.special";
-				break;
-			case "wcc.info":
-				cat = "wcc.info.tourist";
-				break;
-			default:
-				break;
-			}
-			return cat;
-		}
-
 		#endregion
 
 

@@ -22,12 +22,12 @@ namespace GQTests
 			}
 		}
 
-		//		static private string _PROJECT_PATH = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
+//		static private string _PROJECT_PATH = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
 		// On MacBookPro:
-		static private string _PROJECT_PATH = "/Users/muegge/projects/qv-geoquest/GQUnityClient";
+//		static private string _PROJECT_PATH = "/Users/muegge/projects/qv-geoquest/GQUnityClient";
 
 		// On MacAir:
-		//		static private string _PROJECT_PATH = "/Users/qeeveedeveloper/GeoQuest/GQUnityClient";
+		static private string _PROJECT_PATH = "/Users/qeeveedeveloper/GeoQuest/GQUnityClient";
 
 		public static string PROJECT_PATH {
 			get {
