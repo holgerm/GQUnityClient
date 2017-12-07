@@ -62,9 +62,7 @@ namespace GQ.Client.UI
 					image.texture = d.Www.texture;
 
 					// Dispose www including it s Texture and take some logs for preformace surveillance:
-					Log.TexturesLoaded ("NPCTalk.Initialize() #1: ");
 					d.Www.Dispose ();
-					Log.TexturesLoaded ("NPCTalk.Initialize() #2: ");
 				};
 				loader.Start ();
 			}

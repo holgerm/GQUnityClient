@@ -27,7 +27,7 @@ namespace GQ.Client.Conf
 					// skip extension on other scenes:
 					continue;
 				
-				Object prefab = Resources.Load (extension.prefab);
+				GameObject prefab = Resources.Load (extension.prefab) as GameObject;
 				if (prefab == null) {
 					Log.SignalErrorToDeveloper (
 						"Extending scene {0}: prefab '{1}' could not be loaded.", 
@@ -39,8 +39,7 @@ namespace GQ.Client.Conf
 				GameObject root = GameObject.Find (extension.root);
 				GameObject go = (GameObject)Base.Instantiate (
 					                prefab,
-					                root.transform,
-					                false
+					                root.transform
 				                );
 				go.tag = EXTENSION_TAG;
 			}
