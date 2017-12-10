@@ -34,7 +34,7 @@ namespace GQ.Editor.UI
 		public static string CurrentBuildName {
 			get {
 				if (_currentBuildName == null) {
-					_currentBuildName = currentBuild ();
+					_currentBuildName = updateFromCurrentConfig ();
 				}
 				return _currentBuildName;
 			}
@@ -276,7 +276,7 @@ namespace GQ.Editor.UI
 			} // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
 		}
 
-		internal static string currentBuild ()
+		internal static string updateFromCurrentConfig ()
 		{
 			string build = null;
 
@@ -286,6 +286,7 @@ namespace GQ.Editor.UI
 					return build;
 				string configText = File.ReadAllText (configFile);
 				Config buildConfig = JsonConvert.DeserializeObject<Config> (configText);
+				updateEditorBuildSceneSettings(buildConfig);
 				return buildConfig.id;
 			} catch (Exception exc) {
 				Debug.LogWarning ("ProductEditor.currentBuild() threw exception:\n" + exc.Message);
@@ -294,6 +295,14 @@ namespace GQ.Editor.UI
 		}
 
 		bool configIsDirty = false;
+
+		static private void updateEditorBuildSceneSettings(Config config) {
+			EditorBuildSettingsScene[] sceneSettings = new EditorBuildSettingsScene[config.scenePaths.Length];
+			for(int i = 0; i < config.scenePaths.Length; i++) {
+				sceneSettings [i] = new EditorBuildSettingsScene (config.scenePaths [i], true);
+			}
+			EditorBuildSettings.scenes = sceneSettings;
+		}
 
 		static public Config SelectedConfig { get; private set; }
 
@@ -378,7 +387,7 @@ namespace GQ.Editor.UI
 						ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
 						Pm.serializeConfig (SelectedConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
 						configIsDirty = false;
-						LayoutConfig.ResetAll (); // TODO check and implement update all laoyut components in editor
+						LayoutConfig.ResetAll (); // TODO check and implement update all layout components in editor
 					}
 					if (GUILayout.Button ("Revert")) {
 						ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
@@ -564,21 +573,25 @@ namespace GQ.Editor.UI
 		{
 			Type propertyType = curPropInfo.PropertyType;
 			ProductEditorPart accordingEditorPart;
+			string className = null;
 
 			if (!cachedEditorParts.TryGetValue (propertyType, out accordingEditorPart)) {
 				// construct the class name of the according editor gui creator class (a subclass of me):
 				// the class name scheme is: PEP4<basictype>[Of<typearg1>[And<typearg2...]...]
+				// for array types the Scheme is: PEP4<basictype>Array
 				StringBuilder classNameBuilder = new StringBuilder (typeof(ProductEditorPart).FullName + "4");
-				classNameBuilder.Append (
-					(propertyType.Name.Contains ("`") ? 
-						propertyType.Name.Substring (0, propertyType.Name.LastIndexOf ("`")) : 
-						propertyType.Name));
+				if (propertyType.Name.Contains ("`")) {
+					classNameBuilder.Append (propertyType.Name.Substring (0, propertyType.Name.LastIndexOf ("`")));
+				}
+				else {
+					classNameBuilder.Append (propertyType.Name);
+				}
 				Type[] argTypes = propertyType.GetGenericArguments ();
 				for (int i = 0; i < argTypes.Length; i++) {
 					classNameBuilder.Append ((i == 0) ? "Of" : "And");
 					classNameBuilder.Append (argTypes [i].Name);
 				}
-				string className = classNameBuilder.ToString ();
+				className = classNameBuilder.Replace ("[]", "Array").ToString ();
 
 				// create a new instance of the according product editor part class:
 				try {
@@ -586,13 +599,13 @@ namespace GQ.Editor.UI
 					if (accordingEditorPart != null)
 						cachedEditorParts.Add (propertyType, accordingEditorPart);
 				} catch (Exception e) {
-					Log.SignalErrorToDeveloper ("Unhandled property Type: " + curPropInfo.PropertyType.Name + "\t" + e.Message);
+					Log.SignalErrorToDeveloper ("Unhandled property Type: {0} ({1})\t{2}", curPropInfo.PropertyType.Name ,className, e.Message);
 					return false;
 				}
 			} 
 
 			if (accordingEditorPart == null) {
-				Log.SignalErrorToDeveloper ("Unhandled property Type: " + propertyType.FullName);
+				Log.SignalErrorToDeveloper ("Unhandled property Type: {0} ({1})", curPropInfo.PropertyType.Name ,className);
 				return false;
 			}
 
@@ -622,6 +635,7 @@ namespace GQ.Editor.UI
 			bool disabled = false;
 			// the entry for the given property will be disabled, if one of the following is true
 			disabled |= propInfo.Name.Equals ("id");
+//			disabled |= propInfo.Name.Equals ("scenePaths");
 
 			return disabled;
 		}
@@ -1140,6 +1154,58 @@ namespace GQ.Editor.UI
 				if (!newStringVal.Equals (oldStringVal)) {
 					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newStringVal, null);
+				}
+			}
+
+			return configIsDirty;
+		}
+	}
+
+	public class ProductEditorPart4StringArray : ProductEditorPart
+	{
+		bool showDetails = false;
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+
+			showDetails = EditorGUILayout.Foldout (
+				showDetails, 
+				string.Format ("Included Scenes: ({0})", ProductEditor.SelectedConfig.scenePaths.Length), 
+				STYLE_FOLDOUT_Bold
+			);
+
+			if (showDetails) {
+				// Header with Import Button:
+				EditorGUILayout.BeginHorizontal ();
+				EditorGUILayout.PrefixLabel (
+					new GUIContent ("Update:"), 
+					EditorStyles.textField, 
+					STYLE_LABEL_Bold
+				);
+				if (GUILayout.Button ("Import from Editor Settings")) {
+					List<string> scenePathsFromSettings = new List<string> ();
+					for (int i = 0; i < EditorBuildSettings.scenes.Length; i++) {
+						if (EditorBuildSettings.scenes [i].enabled) {
+							scenePathsFromSettings.Add (EditorBuildSettings.scenes [i].path);
+						}
+					}
+					ProductEditor.SelectedConfig.scenePaths = scenePathsFromSettings.ToArray ();
+					configIsDirty = true;
+				}
+				EditorGUILayout.EndHorizontal ();
+
+				using (new EditorGUI.DisabledGroupScope (true)) {
+					for (int i = 0; i < ProductEditor.SelectedConfig.scenePaths.Length; i++) {
+						EditorGUILayout.BeginHorizontal ();
+						EditorGUILayout.PrefixLabel (
+							new GUIContent ("" + (i + 1) + ":"), 
+							EditorStyles.textField, 
+							STYLE_LABEL_Bold
+						);
+						EditorGUILayout.TextField (ProductEditor.SelectedConfig.scenePaths [i]);
+						EditorGUILayout.EndHorizontal ();
+					}
 				}
 			}
 

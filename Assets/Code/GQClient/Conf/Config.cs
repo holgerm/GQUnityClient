@@ -55,6 +55,8 @@ namespace GQ.Client.Conf
 
 		public bool 	showNetConnectionWarning  { get; set; }
 
+		public string[]	scenePaths { get; set; }
+
 		public List<SceneExtension> sceneExtensions { get; set; }
 
 
@@ -205,6 +207,7 @@ namespace GQ.Client.Conf
 			showNetConnectionWarning = true;
 			showTextInLoadingLogo = true;
 
+			scenePaths = new string[0];
 			sceneExtensions = new List<SceneExtension> ();
 
 			// Map:
