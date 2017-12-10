@@ -16,12 +16,11 @@
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
   "hasMenuWithinQuests": false,
-  "showTextInLoadingLogo": false,
-  "showNetConnectionWarning": false,
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
+  "sceneMappings": [],
   "sceneExtensions": [
     {
       "scene": "Assets/Scenes/Pages/NPCTalk.unity",
