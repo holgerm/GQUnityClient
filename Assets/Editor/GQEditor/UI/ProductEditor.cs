@@ -617,6 +617,13 @@ namespace GQ.Editor.UI
 
 			if (ProductEditorPart.entryHidden (curPropInfo))
 				return false;
+			else if (Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor))) {
+				var attributes = curPropInfo.GetCustomAttributes (typeof(ShowInProductEditor), false);
+				ShowInProductEditor attr = (ShowInProductEditor)attributes [0];
+				if (attr.StartSection != null && attr.StartSection != "") {
+					GUILayout.Label (attr.StartSection, EditorStyles.boldLabel);
+				}
+			}
 
 			GUIStyle guiStyle = new GUIStyle ();
 
@@ -1344,7 +1351,6 @@ namespace GQ.Editor.UI
 
 			List<string> pageScenes = new List<string> ();
 			foreach (string scenePath in Directory.GetFiles(SceneMapping.PageSceneAssetPathRoot, "*.unity")) {
-				Debug.Log (("Scene found for mapping: " + scenePath).Yellow());
 				pageScenes.Add (
 					scenePath.Substring(
 						SceneMapping.PageSceneAssetPathRoot.Length, 

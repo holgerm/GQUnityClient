@@ -59,7 +59,7 @@ namespace GQ.Client.Conf
 
 		public bool 	hasMenuWithinQuests  { get; set; }
 
-		[ShowInProductEditor]
+		[ShowInProductEditor(StartSection="Pages & Scenes:")]
 		public string[]	acceptedPageTypes { get; set; }
 
 		[JsonIgnore]
@@ -93,7 +93,7 @@ namespace GQ.Client.Conf
 
 		#region Map
 
-		[ShowInProductEditor]
+		[ShowInProductEditor(StartSection="Map & Markers:")]
 		[JsonConverter (typeof(StringEnumConverter))]
 		public MapProvider 	mapProvider { get; set; }
 
@@ -182,7 +182,7 @@ namespace GQ.Client.Conf
 
 		#region Layout
 
-		[ShowInProductEditor]
+		[ShowInProductEditor(StartSection="Layout & Colors:")]
 		public int 		headerHeightPermill { get; set; }
 
 		[ShowInProductEditor]
@@ -463,6 +463,7 @@ namespace GQ.Client.Conf
 
 	public class ShowInProductEditor : Attribute
 	{	
+		public string StartSection { get; set; }
 	}
 }
 
