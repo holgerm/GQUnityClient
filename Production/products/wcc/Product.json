@@ -19,12 +19,7 @@
   "acceptedPageTypes": [
     "NPCTalk"
   ],
-  "sceneMappings": [
-    {
-      "pageTypeName": "NPCTalk",
-      "scenePath": "Assets/Scenes/Pages/ImageWithText.unity"
-    }
-  ],
+  "sceneMappings": [],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity"
