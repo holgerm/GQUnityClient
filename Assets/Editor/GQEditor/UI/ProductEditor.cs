@@ -356,6 +356,8 @@ namespace GQ.Editor.UI
 
 					// show all properties as textfields or textareas in fitting width:
 					foreach (PropertyInfo curPropInfo in propertyInfos) {
+						if (ProductEditorPart.entryHidden (curPropInfo))
+							continue;
 						configIsDirty |= ProductEditorPart.CreateGui (curPropInfo);
 					}
 				} // End Scope Disabled Group 
@@ -557,6 +559,7 @@ namespace GQ.Editor.UI
 
 		protected static GUIStyle STYLE_LABEL_RightAdjusted;
 		protected static GUIStyle STYLE_LABEL_Bold;
+		protected static GUIStyle STYLE_LABEL_Bold_RightAdjusted;
 		protected static GUIStyle STYLE_FOLDOUT_Bold;
 
 		static ProductEditorPart ()
@@ -565,6 +568,9 @@ namespace GQ.Editor.UI
 			STYLE_LABEL_RightAdjusted.alignment = TextAnchor.MiddleRight;
 			STYLE_LABEL_Bold = new GUIStyle (EditorStyles.label);
 			STYLE_LABEL_Bold.fontStyle = FontStyle.Bold;
+			STYLE_LABEL_Bold_RightAdjusted = new GUIStyle (EditorStyles.label);
+			STYLE_LABEL_Bold_RightAdjusted.alignment = TextAnchor.MiddleRight;
+			STYLE_LABEL_Bold_RightAdjusted.fontStyle = FontStyle.Bold;
 			STYLE_FOLDOUT_Bold = new GUIStyle (EditorStyles.foldout);
 			STYLE_FOLDOUT_Bold.fontStyle = FontStyle.Bold;
 		}
@@ -599,7 +605,7 @@ namespace GQ.Editor.UI
 					if (accordingEditorPart != null)
 						cachedEditorParts.Add (propertyType, accordingEditorPart);
 				} catch (Exception e) {
-					Log.SignalErrorToDeveloper ("Unhandled property Type: {0} ({1})\t{2}", curPropInfo.PropertyType.Name ,className, e.Message);
+					Log.SignalErrorToDeveloper ("Unhandled property Type: {0} ({1})\t{2}", curPropInfo.PropertyType.Name, className, e.Message);
 					return false;
 				}
 			} 
@@ -609,7 +615,7 @@ namespace GQ.Editor.UI
 				return false;
 			}
 
-			if (entryHidden (curPropInfo))
+			if (ProductEditorPart.entryHidden (curPropInfo))
 				return false;
 
 			GUIStyle guiStyle = new GUIStyle ();
@@ -640,7 +646,7 @@ namespace GQ.Editor.UI
 			return disabled;
 		}
 
-		static protected bool entryHidden (PropertyInfo propInfo)
+		static internal bool entryHidden (PropertyInfo propInfo)
 		{
 			bool hidden = false;
 
@@ -659,6 +665,7 @@ namespace GQ.Editor.UI
 			    propInfo.Name.Equals ("mapBaseUrl") ||
 			    propInfo.Name.Equals ("mapTileImageExtension")
 			);
+			hidden |= !Attribute.IsDefined (propInfo, typeof(ShowInProductEditor));				
 
 			return hidden;
 		}
@@ -854,7 +861,7 @@ namespace GQ.Editor.UI
 				// Header with Add Button:
 				EditorGUILayout.BeginHorizontal ();
 				EditorGUILayout.PrefixLabel (
-					new GUIContent ("Add new:"), 
+					new GUIContent ("Add Category:"), 
 					EditorStyles.textField, 
 					STYLE_LABEL_Bold
 				);
@@ -982,7 +989,7 @@ namespace GQ.Editor.UI
 				// Header with Add Button:
 				EditorGUILayout.BeginHorizontal ();
 				EditorGUILayout.PrefixLabel (
-					new GUIContent ("Add new:"), 
+					new GUIContent ("Add Extension:"), 
 					EditorStyles.textField, 
 					STYLE_LABEL_Bold
 				);
@@ -1018,8 +1025,6 @@ namespace GQ.Editor.UI
 							// if user selected another prefab we store it:
 							newSceneExt.prefab = Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
 							sceneExtChanged = true;
-							Debug.Log ("Old Prefab: " + oldSceneExt.prefab);
-							Debug.Log ("New Prefab: " + newSceneExt.prefab);
 						}
 						EditorGUILayout.EndHorizontal ();
 						EditorGUILayout.BeginHorizontal ();
@@ -1034,7 +1039,6 @@ namespace GQ.Editor.UI
 							if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene ()) {
 								newSceneExt.root = newRootGO.transform.GetPath ();
 								sceneExtChanged = true;
-								Debug.Log ("New Root: " + newSceneExt.root);
 							}
 						}
 						if (sceneExtChanged) {
@@ -1167,6 +1171,22 @@ namespace GQ.Editor.UI
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
 		{
+			switch (curPropInfo.Name) {
+			case "scenePaths":
+				configIsDirty = doGui4ScenePaths (curPropInfo);
+				break;
+			case "acceptedPageTypes":
+				configIsDirty = doGui4AcceptedPageTypes (curPropInfo);
+				break;
+			default:
+				Log.SignalErrorToDeveloper ("Unhandled property Type: {0}", curPropInfo.PropertyType.Name);
+				break;
+			}
+
+			return configIsDirty;
+		}
+
+		private bool doGui4ScenePaths (PropertyInfo curPropInfo) {
 			configIsDirty = false;
 
 			showDetails = EditorGUILayout.Foldout (
@@ -1184,6 +1204,9 @@ namespace GQ.Editor.UI
 					STYLE_LABEL_Bold
 				);
 				if (GUILayout.Button ("Import from Editor Settings")) {
+					EditorWindow editorBuildSettingsWindow = EditorWindow.GetWindow(Type.GetType("UnityEditor.BuildPlayerWindow,UnityEditor"));
+					editorBuildSettingsWindow.Show ();
+
 					List<string> scenePathsFromSettings = new List<string> ();
 					for (int i = 0; i < EditorBuildSettings.scenes.Length; i++) {
 						if (EditorBuildSettings.scenes [i].enabled) {
@@ -1201,18 +1224,223 @@ namespace GQ.Editor.UI
 						EditorGUILayout.PrefixLabel (
 							new GUIContent ("" + (i + 1) + ":"), 
 							EditorStyles.textField, 
-							STYLE_LABEL_Bold
+							STYLE_LABEL_RightAdjusted
 						);
 						EditorGUILayout.TextField (ProductEditor.SelectedConfig.scenePaths [i]);
 						EditorGUILayout.EndHorizontal ();
 					}
 				}
 			}
+			return configIsDirty;
+		}
 
+		int selectedPageTypeToAccept = 0;
+
+		private bool doGui4AcceptedPageTypes(PropertyInfo curPropInfo) {
+			configIsDirty = false;
+
+			if (ProductEditor.SelectedConfig.acceptedPageTypes == null) {
+				ProductEditor.SelectedConfig.acceptedPageTypes = new string[0];
+			}
+			List<string> allElements = new List<string> (ProductEditor.SelectedConfig.acceptedPageTypes);
+
+			int selectedPageTypeToAdd;
+			List<string> pageTypesToAdd = new List<string>();
+			foreach (string pageType in Enum.GetNames (typeof(PageType))) {
+				if (!allElements.Contains(pageType)) {
+					pageTypesToAdd.Add (pageType);
+				}
+			}
+
+			showDetails = EditorGUILayout.Foldout (
+				showDetails, 
+				string.Format ("Accepted Page Types: ({0})", ProductEditor.SelectedConfig.acceptedPageTypes.Length), 
+				STYLE_FOLDOUT_Bold
+			);
+
+			if (showDetails) {
+				using (new EditorGUI.DisabledGroupScope (pageTypesToAdd.Count == 0)) {
+					// Header with Add Button:
+					EditorGUILayout.BeginHorizontal ();
+
+					selectedPageTypeToAccept = 
+					EditorGUILayout.Popup (
+						"Add Page Type:", 
+							selectedPageTypeToAccept, 
+						pageTypesToAdd.ToArray ()
+					);
+				
+					if (GUILayout.Button ("+")) {
+						allElements.Add (pageTypesToAdd [selectedPageTypeToAccept]);
+						configIsDirty = true;
+					}
+					EditorGUILayout.EndHorizontal ();
+				}
+
+				for (int i = 0; i < ProductEditor.SelectedConfig.acceptedPageTypes.Length; i++) {
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("" + (i + 1) + ":"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_RightAdjusted
+					);
+					using (new EditorGUI.DisabledGroupScope (true)) {
+						string pageType = EditorGUILayout.TextField (ProductEditor.SelectedConfig.acceptedPageTypes [i]);
+						if (!pageType.Equals (ProductEditor.SelectedConfig.acceptedPageTypes [i])) {
+							Debug.Log (string.Format ("replaced {0} with {1}.", ProductEditor.SelectedConfig.acceptedPageTypes [i], pageType).Yellow ());
+							allElements [i] = pageType;
+							configIsDirty = true;
+						}
+					}
+					if (GUILayout.Button ("-")) {
+						if (EditorUtility.DisplayDialog (
+							string.Format ("Really Delete Accepted Page Type {0}?", ProductEditor.SelectedConfig.acceptedPageTypes [i]), 
+							"Sure?.", 
+							"Yes, delete it!", 
+							"No, keep it")) {
+							allElements.Remove (ProductEditor.SelectedConfig.acceptedPageTypes [i]);
+							configIsDirty = true;
+						}
+					}
+					EditorGUILayout.EndHorizontal ();
+				}
+			}
+
+			if (configIsDirty) {
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements.ToArray(), null);
+			}
 			return configIsDirty;
 		}
 	}
 
+
+	public class ProductEditorPart4ListOfSceneMapping : ProductEditorPart
+	{
+		bool showDetails = false;
+
+		int selectedPageTypeToAdd = 0;
+		int selectedSceneToAdd = 0;
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
+
+			bool valsChanged = false;
+			List<SceneMapping> allElements = ProductEditor.SelectedConfig.sceneMappings;
+
+			List<string> availablePageTypesToMap = new List<string> ();
+			foreach (string pageType in ProductEditor.SelectedConfig.acceptedPageTypes) {
+				bool alreadyMapped = false;
+				foreach (SceneMapping mapping in allElements) {
+					if (pageType.Equals(mapping.pageTypeName)) {
+						alreadyMapped = true;
+						break; // do not add this page type since it is already mapped
+					}
+				}
+				if (!alreadyMapped)
+					availablePageTypesToMap.Add (pageType);
+			}
+
+			List<string> pageScenes = new List<string> ();
+			foreach (string scenePath in Directory.GetFiles(SceneMapping.PageSceneAssetPathRoot, "*.unity")) {
+				Debug.Log (("Scene found for mapping: " + scenePath).Yellow());
+				pageScenes.Add (
+					scenePath.Substring(
+						SceneMapping.PageSceneAssetPathRoot.Length, 
+						scenePath.Length - (SceneMapping.PageSceneAssetPathRoot.Length + ".unity".Length)
+					)
+				);
+			}
+
+			showDetails = EditorGUILayout.Foldout (showDetails, string.Format ("Scene Mappings: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+			if (showDetails) {
+				configIsDirty = false;
+				using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo) || availablePageTypesToMap.Count == 0)) {
+					// Two line header with Add Button:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("Add Mapping from:"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_Bold
+					);
+					selectedPageTypeToAdd = 
+						EditorGUILayout.Popup (
+							selectedPageTypeToAdd,
+							availablePageTypesToMap.ToArray()
+						);
+					EditorGUILayout.EndHorizontal ();
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("to:"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_Bold_RightAdjusted
+					);
+					selectedSceneToAdd = 
+						EditorGUILayout.Popup (
+							selectedSceneToAdd,
+							pageScenes.ToArray()
+						);
+					if (GUILayout.Button ("+")) {
+						allElements.Add (
+							new SceneMapping (
+								availablePageTypesToMap[selectedPageTypeToAdd], 
+								SceneMapping.PageSceneAssetPathRoot + pageScenes[selectedSceneToAdd] + ".unity"
+							)
+						);
+						valsChanged = true;
+					}
+					EditorGUILayout.EndHorizontal ();
+				}
+
+				for (int i = 0; i < allElements.Count; i++) {
+					EditorGUILayout.BeginHorizontal ();
+					using (new EditorGUI.DisabledGroupScope (true)) {
+						EditorGUILayout.PrefixLabel (
+							allElements [i].pageTypeName + " ->", 
+							EditorStyles.textField, 
+							STYLE_LABEL_RightAdjusted
+						);
+						EditorGUILayout.TextField (
+							allElements [i].scenePath.Substring (
+								SceneMapping.PageSceneAssetPathRoot.Length, 
+								allElements [i].scenePath.Length - (SceneMapping.PageSceneAssetPathRoot.Length + ".unity".Length)
+							)
+						);
+					}
+					if (GUILayout.Button ("-")) {
+						allElements.RemoveAt (i);
+						valsChanged = true;
+					}
+					EditorGUILayout.EndHorizontal ();
+				}
+
+				if (valsChanged) {
+					// Update Config property for scene extensions:
+					configIsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements, null);
+					List<EditorBuildSettingsScene> editorBuildScenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);					
+					foreach (SceneMapping sm in allElements) {
+						bool sceneInBuild = false;
+						foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes) {
+							if (scene.path.Equals(sm.scenePath)) {
+								sceneInBuild = true;
+								scene.enabled = true;
+								break;
+							}
+						}
+						if (sceneInBuild == false) {
+							// we need to add the target of this scene mapping to the build settings:
+							editorBuildScenes.Add (new EditorBuildSettingsScene (sm.scenePath, true));
+						}
+					}
+					EditorBuildSettings.scenes = editorBuildScenes.ToArray ();
+				}
+			}
+
+			return configIsDirty;
+		}
+	}
 
 }
 

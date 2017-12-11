@@ -16,11 +16,19 @@
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
   "hasMenuWithinQuests": false,
+  "acceptedPageTypes": [
+    "NPCTalk"
+  ],
+  "sceneMappings": [
+    {
+      "pageTypeName": "NPCTalk",
+      "scenePath": "Assets/Scenes/Pages/ImageWithText.unity"
+    }
+  ],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
-  "sceneMappings": [],
   "sceneExtensions": [
     {
       "scene": "Assets/Scenes/Pages/NPCTalk.unity",

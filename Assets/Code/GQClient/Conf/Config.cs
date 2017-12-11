@@ -16,21 +16,29 @@ namespace GQ.Client.Conf
 		//////////////////////////////////
 		// THE ACTUAL PRODUCT CONFIG DATA:	
 		
+		[ShowInProductEditor]
 		public string   id     { get; set; }
 
+		[ShowInProductEditor]
 		public string   name   { get; set; }
 
+		[ShowInProductEditor]
 		public int   	portal   { get; set; }
 
+		[ShowInProductEditor]
 		public int   	autoStartQuestID   { get; set; }
 
+		[ShowInProductEditor]
 		public bool 	autostartIsPredeployed  { get; set; }
 
+		[ShowInProductEditor]
 		public bool 	keepAutoStarting  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(StringEnumConverter))]
 		public DownloadStrategy DownloadStrategy { get; set; }
 
+		[ShowInProductEditor]
 		public int   	downloadTimeOutSeconds   { get; set; }
 
 		public string 	nameForQuest { get; set; }
@@ -51,36 +59,67 @@ namespace GQ.Client.Conf
 
 		public bool 	hasMenuWithinQuests  { get; set; }
 
-		public bool 	showTextInLoadingLogo  { get; set; }
+		[ShowInProductEditor]
+		public string[]	acceptedPageTypes { get; set; }
 
-		public bool 	showNetConnectionWarning  { get; set; }
+		[JsonIgnore]
+		public Dictionary<string, string> sceneMappingsDict { get; set; }
 
+		[ShowInProductEditor]
+		public List<SceneMapping> sceneMappings { 
+			get {
+				List<SceneMapping> smList = new List<SceneMapping> ();
+				if (sceneMappingsDict != null)
+					foreach(KeyValuePair<string, string> entry in sceneMappingsDict) {
+						smList.Add (new SceneMapping (entry.Key, entry.Value));
+					}
+				return smList;
+			}
+			set {
+				sceneMappingsDict = new Dictionary<string, string> ();
+				if (value != null)
+					foreach(SceneMapping sm in value) {
+						sceneMappingsDict.Add (sm.pageTypeName, sm.scenePath);
+					}
+			}
+		}
+
+		[ShowInProductEditor]
 		public string[]	scenePaths { get; set; }
 
+		[ShowInProductEditor]
 		public List<SceneExtension> sceneExtensions { get; set; }
 
 
 		#region Map
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(StringEnumConverter))]
 		public MapProvider 	mapProvider { get; set; }
 
+		[ShowInProductEditor]
 		public string 	mapBaseUrl { get; set; }
 
+		[ShowInProductEditor]
 		public string 	mapKey { get; set; }
 
+		[ShowInProductEditor]
 		public string 	mapID { get; set; }
 
+		[ShowInProductEditor]
 		public string 	mapTileImageExtension { get; set; }
 
 		public bool		useMapOffline { get; set; }
 
+		[ShowInProductEditor]
 		public float	mapMinimalZoom { get; set; }
 
+		[ShowInProductEditor]
 		public float	mapDeltaZoom { get; set; }
 
 		[JsonIgnore]
 		private ImagePath _marker;
+		[ShowInProductEditor]
 		public ImagePath marker { 
 			get {
 				if (_marker == null) {
@@ -93,11 +132,13 @@ namespace GQ.Client.Conf
 			}
 		}
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	markerColor  { get; set; }
 
 		[JsonIgnore]
 		private byte _markerBGAlpha = 168;
+		[ShowInProductEditor]
 		public byte markerBGAlpha {
 			get {
 				return _markerBGAlpha;
@@ -118,6 +159,7 @@ namespace GQ.Client.Conf
 		[JsonIgnore]
 		private List<Category> _categories;
 
+		[ShowInProductEditor]
 		public List<Category> categories { 
 			get {
 				return _categories;
@@ -140,42 +182,56 @@ namespace GQ.Client.Conf
 
 		#region Layout
 
+		[ShowInProductEditor]
 		public int 		headerHeightPermill { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	headerBgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	headerButtonBgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	headerButtonFgColor  { get; set; }
 
+		[ShowInProductEditor]
 		public ImagePath topLogo { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	contentBackgroundColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	contentFontColor  { get; set; }
 
+		[ShowInProductEditor]
 		public int 		footerHeightPermill { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	footerBgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	footerButtonBgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	footerButtonFgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonBgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonFgColor  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonFgDisabledColor  { get; set; }
 
@@ -204,9 +260,9 @@ namespace GQ.Client.Conf
 			hasMenuWithinQuests = true;
 			DownloadStrategy = DownloadStrategy.UPFRONT;
 			downloadTimeOutSeconds = 300;
-			showNetConnectionWarning = true;
-			showTextInLoadingLogo = true;
 
+			acceptedPageTypes = new string[0];
+			sceneMappings = new List<SceneMapping> ();
 			scenePaths = new string[0];
 			sceneExtensions = new List<SceneExtension> ();
 
@@ -251,6 +307,25 @@ namespace GQ.Client.Conf
 		UPFRONT,
 		LAZY,
 		BACKGROUND
+	}
+
+	public enum PageType {
+		StartAndExitScreen,
+		NPCTalk,
+		ImageWithText,
+		Menu,
+		MultipleChoiceQuestion,
+		TextQuestion,
+		AudioRecord,
+		ImageCapture,
+		VideoPlay,
+		WebPage,
+		MapOSM,
+		Navigation,
+		TagScanner,
+		ReadNFC,
+		Custom,
+		MetaData
 	}
 
 	public enum MapProvider
@@ -302,6 +377,26 @@ namespace GQ.Client.Conf
 	{
 
 		public static readonly Color32 transparent = new Color32 (255, 255, 255, 0);
+	}
+
+	public struct SceneMapping {
+
+		public const string PageSceneAssetPathRoot = "Assets/Scenes/Pages/";
+
+		public SceneMapping(string pageType, string scenePath) {
+			this.pageTypeName = pageType;
+			this.scenePath = scenePath;
+		}
+			
+		/// <summary>
+		/// Pages of this type will use the scene given by the scenePath.
+		/// </summary>
+		public string pageTypeName;
+
+		/// <summary>
+		/// Path of the scene that is used for the given page type.
+		/// </summary>
+		public string scenePath;
 	}
 
 	public struct SceneExtension
@@ -364,6 +459,10 @@ namespace GQ.Client.Conf
 
 		public ImagePath symbol;
 
+	}
+
+	public class ShowInProductEditor : Attribute
+	{	
 	}
 }
 
