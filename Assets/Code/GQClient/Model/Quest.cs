@@ -222,19 +222,33 @@ namespace GQ.Client.Model
 
 			// Determine the full name of the according page type (e.g. GQ.Client.Model.XML.PageNPCTalk) 
 			//		where SetVariable is taken form ath type attribute of the xml action element.
-			string ruleTypeFullName = this.GetType ().FullName;
-			int lastDotIndex = ruleTypeFullName.LastIndexOf (".");
-			string modelNamespace = ruleTypeFullName.Substring (0, lastDotIndex);
-			Type pageType = Type.GetType (string.Format ("{0}.Page{1}", modelNamespace, pageTypeName));
+			string __myTypeName = this.GetType ().FullName;
+			int lastDotIndex = __myTypeName.LastIndexOf (".");
+			string modelNamespace = __myTypeName.Substring (0, lastDotIndex);
+			string targetScenePath = null;
+			// TODO: Implement page2scene mapping here:
+			Dictionary<string, string> sceneMappings = ConfigurationManager.Current.GetSceneMappingsDict ();
+			if (sceneMappings.TryGetValue (pageTypeName, out targetScenePath)) {
+				pageTypeName = targetScenePath.Substring (
+					SceneMapping.PageSceneAssetPathRoot.Length, 
+					targetScenePath.Length - (SceneMapping.PageSceneAssetPathRoot.Length + ".unity".Length)
+				);
+			} 
+			pageTypeName = string.Format ("{0}.Page{1}", modelNamespace, pageTypeName);
+			Type pageType = Type.GetType (pageTypeName);
 
 			if (pageType == null) {
-				Log.SignalErrorToDeveloper ("No Implementation for Page Type {0} found.", pageTypeName);
+				Log.SignalErrorToDeveloper ("No Implementation for Page Type {0}.", pageTypeName);
 				reader.Skip ();
 				return;
+			}
+			else {
+				Debug.Log (string.Format ("Reading xml page with class {0} ...", pageTypeName).Yellow());
 			}
 
 			XmlSerializer serializer = new XmlSerializer (pageType);
 			IPage page = (IPage)serializer.Deserialize (reader);
+			Debug.Log ("Page deserialized done. id: " + page.Id);
 			page.Parent = this;
 			if (pageDict.Count == 0)
 				StartPage = page;

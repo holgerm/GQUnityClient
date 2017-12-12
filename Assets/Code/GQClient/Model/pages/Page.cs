@@ -160,7 +160,7 @@ namespace GQ.Client.Model
 				return "Scenes/Pages/" + GetType ().Name.Substring (4);
 			}
 		}
-
+			
 		public virtual void Start ()
 		{
 			// TODO Show Mem Avail:
@@ -173,6 +173,8 @@ namespace GQ.Client.Model
 			if (!scene.path.Equals (PageScenePath)) {
 				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
 			}
+
+			Debug.Log (string.Format ("Loaded scene: {0} with page impl type: {1}", PageScenePath, GetType ().Name).Yellow ());
 
 			// TODO: We need to get rid of old scenes. this was a trial that did not yet work completely:
 //			if (QuestManager.Instance.CurrentPage == null) {

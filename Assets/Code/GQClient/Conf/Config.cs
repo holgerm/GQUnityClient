@@ -62,27 +62,16 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor(StartSection="Pages & Scenes:")]
 		public string[]	acceptedPageTypes { get; set; }
 
-		[JsonIgnore]
-		public Dictionary<string, string> sceneMappingsDict { get; set; }
+		public Dictionary<string, string> GetSceneMappingsDict () { 
+			Dictionary<string, string> smDict = new Dictionary<string, string> ();
+			foreach (SceneMapping sm in sceneMappings) {
+				smDict.Add (sm.pageTypeName, sm.scenePath);
+			}
+			return smDict;
+		}
 
 		[ShowInProductEditor]
-		public List<SceneMapping> sceneMappings { 
-			get {
-				List<SceneMapping> smList = new List<SceneMapping> ();
-				if (sceneMappingsDict != null)
-					foreach(KeyValuePair<string, string> entry in sceneMappingsDict) {
-						smList.Add (new SceneMapping (entry.Key, entry.Value));
-					}
-				return smList;
-			}
-			set {
-				sceneMappingsDict = new Dictionary<string, string> ();
-				if (value != null)
-					foreach(SceneMapping sm in value) {
-						sceneMappingsDict.Add (sm.pageTypeName, sm.scenePath);
-					}
-			}
-		}
+		public List<SceneMapping> sceneMappings { get; set; }
 
 		[ShowInProductEditor]
 		public string[]	scenePaths { get; set; }
