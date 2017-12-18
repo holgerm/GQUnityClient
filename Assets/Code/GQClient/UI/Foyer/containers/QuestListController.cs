@@ -92,18 +92,16 @@ namespace GQ.Client.UI.Foyer
 				kvp.Value.Hide ();
 				kvp.Value.Destroy ();
 			}
-			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
+			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
-				if (QuestInfoManager.Instance.Filter.Accept (info)) {
-					QuestListElementController qiCtrl = 
-						QuestListElementController.Create (
-							root: InfoList.gameObject,
-							qInfo: info,
-							containerController: this
-						).GetComponent<QuestListElementController> ();
-					QuestInfoControllers.Add (info.Id, qiCtrl);
-					qiCtrl.Show ();
-				}
+				QuestListElementController qiCtrl = 
+					QuestListElementController.Create (
+						root: InfoList.gameObject,
+						qInfo: info,
+						containerController: this
+					).GetComponent<QuestListElementController> ();
+				QuestInfoControllers.Add (info.Id, qiCtrl);
+				qiCtrl.Show ();
 			}
 			sortView ();
 

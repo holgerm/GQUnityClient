@@ -49,6 +49,10 @@ namespace GQ.Client.Model
 			return QuestDict.Values.ToList<QuestInfo> ();
 		}
 
+		public IEnumerable<QuestInfo> GetFilteredQuestInfos() {
+			return QuestDict.Values.Where( x => Filter.Accept(x)).ToList();
+		}
+
 		public bool ContainsQuestInfo (int id)
 		{
 			return QuestDict.ContainsKey (id);
