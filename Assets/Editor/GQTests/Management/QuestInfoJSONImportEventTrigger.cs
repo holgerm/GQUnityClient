@@ -10,7 +10,7 @@ using System.Linq;
 using GQ.Client.Util;
 using GQTests.Util;
 
-namespace GQTests.Managent {
+namespace GQTests.Management {
 
 	public class QuestInfoJSONImportEventTrigger : JSONQuestInfoTest {
 

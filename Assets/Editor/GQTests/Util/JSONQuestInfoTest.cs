@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using GQ.Editor.Util;
-using GQTests.Managent;
+using GQTests.Management;
 using GQ.Client.Util;
 using GQ.Client.Model;
 using NUnit.Framework;

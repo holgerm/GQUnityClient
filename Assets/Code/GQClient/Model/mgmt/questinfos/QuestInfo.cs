@@ -275,8 +275,8 @@ namespace GQ.Client.Model
 				if (_categories == null) {
 					_categories = new List<string> ();
 					foreach (MetaDataInfo md in Metadata) {
-						if (md.Key.Equals ("category"))
-							_categories.Add (md.Value);
+						if (md.Key.StartsWith ("category"))
+							_categories.Add (md.Value.StripQuotes());
 					}
 				}
 				return _categories;
@@ -287,33 +287,7 @@ namespace GQ.Client.Model
 
 		public string CurrentCategoryId {
 			get {
-				string cat = QuestInfoManager.Instance.Filter.CategoryToShow (this);
-				switch (cat) {
-				case "wcc.architecture":
-					cat = "wcc.sight.architecture";
-					break;
-				case "wcc.nature":
-					cat = "wcc.sight.nature";
-					break;
-				case "wcc.history":
-					cat = "wcc.sight.historic";
-					break;
-				case "wcc.cafe":
-					cat = "wcc.gastro.cafe";
-					break;
-				case "wcc.restaurant":
-					cat = "wcc.gastro.restaurant";
-					break;
-				case "wcc.culture":
-					cat = "wcc.special";
-					break;
-				case "wcc.info":
-					cat = "wcc.info.tourist";
-					break;
-				default:
-					break;
-				}
-				return cat;
+				return QuestInfoManager.Instance.Filter.CategoryToShow (this);
 			}
 		}
 

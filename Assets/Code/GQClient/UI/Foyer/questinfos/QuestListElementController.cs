@@ -150,7 +150,7 @@ namespace GQ.Client.UI.Foyer
 
 		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestContainerController containerController)
 		{
-			// CReate the view object for this controller:
+			// Create the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + qInfo.Name + ")";
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();

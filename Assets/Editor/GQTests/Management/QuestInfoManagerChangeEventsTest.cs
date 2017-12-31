@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GQTests.Managent {
+namespace GQTests.Management {
 
 	public class QuestInfoManagerChangeEventsTest {
 

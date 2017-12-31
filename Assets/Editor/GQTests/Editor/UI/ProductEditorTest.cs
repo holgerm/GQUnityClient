@@ -3,6 +3,8 @@ using UnityEditor;
 using NUnit.Framework;
 using System.IO;
 using GQ.Editor.UI;
+using System.Collections.Generic;
+using GQ.Client.Conf;
 
 namespace GQTests.Editor.UI {
 
@@ -18,5 +20,6 @@ namespace GQTests.Editor.UI {
 				(Texture)AssetDatabase.LoadAssetAtPath(ProductEditor.WARN_ICON_PATH, typeof(Texture)), 
 				"Could not load Warn Icon from: " + ProductEditor.WARN_ICON_PATH);
 		}
+
 	}
 }

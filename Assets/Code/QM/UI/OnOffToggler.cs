@@ -10,7 +10,7 @@ namespace QM.UI
 	/// <summary>
 	/// Add this component to a button to toggle the given GameObject on and off. 
 	/// 
-	/// Initial state depnds on the activity setting of the gameobject whatToToggle.
+	/// Initial state depends on the activity setting of the gameobject whatToToggle.
 	/// GameObject to toggle must be set in Inspector, otherwise the script will warn you and simply not work.
 	/// </summary>
 	[RequireComponent (typeof(Button))]

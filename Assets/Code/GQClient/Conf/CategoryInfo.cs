@@ -11,7 +11,7 @@ namespace GQ.Client.Conf {
 	/// This class is used for derserializing the JSON product configuration into at runtime. 
 	/// This is done right in the beginning in Awake() of the ConfigurationManager.
 	/// </summary>
-	[System.Serializable]
+	[System.Serializable, Obsolete]
 	public class CategoryInfo {
 
 		private string _id;

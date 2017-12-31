@@ -8,7 +8,7 @@ using System.Text;
 namespace GQ.Client.Util
 {
 
-	public class TextHelper
+	public static class TextHelper
 	{
 
 		public const string regexPattern4Varnames = @"@[a-zA-Z.]+[a-zA-Z.0-9\-_]*@";
@@ -106,5 +106,15 @@ namespace GQ.Client.Util
 			return htmlText;
 		}
 
+		public static string StripQuotes(this string original) {
+			string result = original;
+			if (result.StartsWith("\"")) {
+				result = result.Substring (1);
+			}
+			if (result.EndsWith("\"")) {
+				result = result.Substring (0, result.Length - 1);
+			}
+			return result;
+		}
 	}
 }

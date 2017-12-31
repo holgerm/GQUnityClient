@@ -861,6 +861,7 @@ namespace GQ.Editor.UI
 			if (allElements == null)
 				allElements = new List<Category> ();
 			bool valsChanged = false;
+			bool folderNameChanged = false;
 
 			showList = EditorGUILayout.Foldout (showList, string.Format ("Categories: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
 			if (showList) {
@@ -874,7 +875,11 @@ namespace GQ.Editor.UI
 				);
 				if (GUILayout.Button ("+")) {
 					Category cat = new Category ();
-					allElements.Add (cat);
+					allElements.Insert (0, cat);
+					valsChanged = true;
+				}
+				if (GUILayout.Button ("Sort")) {
+					allElements = getSortedAccordingToFolders (allElements);
 					valsChanged = true;
 				}
 				EditorGUILayout.EndHorizontal ();
@@ -923,6 +928,18 @@ namespace GQ.Editor.UI
 						}
 					}
 
+					// folder as text:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("folder name:", "Folder name is optional."), 
+						EditorStyles.textField, 
+						STYLE_LABEL_RightAdjusted
+					);
+					string newFolderName = EditorGUILayout.TextField (oldElem.folderName);
+					EditorGUILayout.EndHorizontal (); // end horizontal line for id.
+					folderNameChanged |= (newFolderName != oldElem.folderName);
+					elemChanged |= folderNameChanged;
+
 					// symbol:
 					EditorGUILayout.BeginHorizontal ();
 					EditorGUILayout.PrefixLabel (
@@ -946,6 +963,7 @@ namespace GQ.Editor.UI
 					if (elemChanged) {
 						valsChanged = true;
 						newElem.name = newName;
+						newElem.folderName = newFolderName;
 						newElem.id = newId;
 						newElem.symbol = newSymbolPath;
 						allElements [i] = newElem;
@@ -973,7 +991,37 @@ namespace GQ.Editor.UI
 			}
 
 			return configIsDirty;
+		}
+			
+		public List<Category> getSortedAccordingToFolders(List<Category> allCats) {
+			// we create for each folder a list of current indices where the elements of that folders stay:
+			Dictionary<string, List<int>> catPositionsForFolders = new Dictionary<string, List<int>> ();
+			// we collect the order in wich the folders start to create the collected folders in that order again later:
+			List<string> orderOfFolders = new List<string> ();
 
+			for (int i = 0; i < allCats.Count; i++) {
+				List<int> positionList;
+				if (!catPositionsForFolders.TryGetValue(allCats[i].folderName, out positionList)) {
+					positionList = new List<int> ();
+					catPositionsForFolders.Add(allCats [i].folderName, positionList);
+					orderOfFolders.Add (allCats [i].folderName);
+				}
+				positionList.Add (i);
+			}
+
+			List<Category> sortedList = new List<Category> (allCats.Count);
+			int newIndex = 0;
+			for (int i = 0; i < orderOfFolders.Count; i++) {
+				List<int> oldIndicesForThisFolder;
+				if (!catPositionsForFolders.TryGetValue (orderOfFolders [i], out oldIndicesForThisFolder)) {
+					Log.SignalErrorToDeveloper ("Sorting Categories for Folders broken: Folder {0} not in catPositionsForFolders list! Fix it!", orderOfFolders [i]);
+				}
+				foreach (int oldIndex in oldIndicesForThisFolder) {
+					sortedList.Insert(newIndex++, allCats [oldIndex]);
+				}
+			}
+
+			return sortedList;
 		}
 	}
 

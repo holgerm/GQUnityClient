@@ -59,6 +59,12 @@ namespace GQ.Client.Model
 		public const string PAGE_STARTANDEXITSCREEN_FPS = "fps";
 		public const string PAGE_STARTANDEXITSCREEN_LOOP = "loop";
 
+		// METADATA PAGE:
+		public const string PAGE_TYPE_METADATA = "MetaData";
+		public const string PAGE_METADATA_STRINGMETA = "stringmeta";
+		public const string PAGE_METADATA_STRINGMETA_KEY = "key";
+		public const string PAGE_METADATA_STRINGMETA_VALUE = "value";
+
 		// TRIGGER:
 		public const string ON_START = "onStart";
 		public const string ON_SUCCESS = "onSuccess";

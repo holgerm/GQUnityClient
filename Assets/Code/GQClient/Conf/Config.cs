@@ -57,8 +57,6 @@ namespace GQ.Client.Conf
 
 		public bool 	hideHiddenQuests  { get; set; }
 
-		public bool 	hasMenuWithinQuests  { get; set; }
-
 		[ShowInProductEditor(StartSection="Pages & Scenes:")]
 		public string[]	acceptedPageTypes { get; set; }
 
@@ -224,6 +222,20 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonFgDisabledColor  { get; set; }
 
+		[ShowInProductEditor]
+		public int menuMainEntryHeight { get; set; }
+
+		[ShowInProductEditor]
+		public int menuSubEntryHeight { get; set; }
+
+		[ShowInProductEditor]
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	menuBGColor  { get; set; }
+
+		[ShowInProductEditor]
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	menuPartBGColor  { get; set; }
+
 		#endregion
 
 
@@ -246,7 +258,6 @@ namespace GQ.Client.Conf
 			downloadAllCloudQuestOnStart = false;
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
-			hasMenuWithinQuests = true;
 			DownloadStrategy = DownloadStrategy.UPFRONT;
 			downloadTimeOutSeconds = 300;
 
@@ -437,7 +448,7 @@ namespace GQ.Client.Conf
 		}
 	}
 
-	public struct Category
+	public class Category
 	{
 		public string id;
 
@@ -446,7 +457,24 @@ namespace GQ.Client.Conf
 		/// </summary>
 		public string name;
 
+		public string folderName;
+
 		public ImagePath symbol;
+
+		public Category() {
+			this.id = "";
+			name = "";
+			folderName = "";
+			symbol = null;
+		}
+
+		[JsonConstructor]
+		public Category(string id, string name, string folderName, string symbolPath) {
+			this.id = id;
+			this.name = name;
+			this.folderName = folderName == null ? "" : folderName;
+			this.symbol = new ImagePath (symbolPath);
+		}
 
 	}
 

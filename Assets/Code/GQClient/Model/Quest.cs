@@ -104,6 +104,14 @@ namespace GQ.Client.Model
 
 		#endregion
 
+
+		#region Metadata
+
+		public Dictionary<string, string> metadata = new Dictionary<string, string>();
+
+		#endregion
+
+
 		#region Media
 
 		public Dictionary<string, MediaInfo> MediaStore = new Dictionary<string, MediaInfo> ();

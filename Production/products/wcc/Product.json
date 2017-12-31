@@ -15,14 +15,13 @@
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
-  "hasMenuWithinQuests": false,
   "acceptedPageTypes": [
     "NPCTalk"
   ],
   "sceneMappings": [],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
-    "Assets/Scenes/Pages/npctalk.unity"
+    "Assets/Scenes/Pages/NPCTalk.unity"
   ],
   "sceneExtensions": [
     {
@@ -51,113 +50,137 @@
   "markerBGAlpha": 150,
   "categories": [
     {
-      "id": "wcc.sight.antiquariate",
+      "id": "wcc.antiquariate",
       "name": "Antiquariat",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/antiquariat"
       }
     },
     {
-      "id": "wcc.sight.architecture",
+      "id": "wcc.architecture",
       "name": "Architektur",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/architecture"
       }
     },
     {
-      "id": "wcc.sight.museum",
+      "id": "wcc.museum",
       "name": "Museum",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/museum"
       }
     },
     {
-      "id": "wcc.sight.nature",
+      "id": "wcc.nature",
       "name": "Natur",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/nature"
       }
     },
     {
-      "id": "wcc.sight.historic",
+      "id": "wcc.history",
       "name": "Historisch",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/historic"
       }
     },
     {
-      "id": "wcc.tour.beethoven",
-      "name": "Beethoventour",
-      "symbol": {
-        "path": "textures/readable/beethoventour"
-      }
-    },
-    {
-      "id": "wcc.tour.pathofdemocracy",
-      "name": "Weg der Demokratie",
-      "symbol": {
-        "path": ""
-      }
-    },
-    {
-      "id": "wcc.tour.macke",
-      "name": "Macketour",
-      "symbol": {
-        "path": ""
-      }
-    },
-    {
-      "id": "wcc.activity.gallery",
+      "id": "wcc.gallery",
       "name": "Galerie",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/gallery"
       }
     },
     {
-      "id": "wcc.activity.cinema",
+      "id": "wcc.cinema",
       "name": "Kino",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/cinema"
       }
     },
     {
-      "id": "wcc.activity.concerthall",
+      "id": "wcc.concerthall",
       "name": "Konzertsaal",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/concerthall"
       }
     },
     {
-      "id": "wcc.activity.theatre",
+      "id": "wcc.theatre",
       "name": "Theater",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/theatre"
       }
     },
     {
-      "id": "wcc.gastro.bar",
+      "id": "wcc.bar",
       "name": "Bar",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/bar"
       }
     },
     {
-      "id": "wcc.gastro.beergarden",
+      "id": "wcc.special",
+      "name": "Besonderes",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/special"
+      }
+    },
+    {
+      "id": "wcc.tourist",
+      "name": "Tourist Info",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/touristinfo"
+      }
+    },
+    {
+      "id": "wcc.wc",
+      "name": "WC",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/wc"
+      }
+    },
+    {
+      "id": "wcc.bike",
+      "name": "Fahrradvermietung",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/bike"
+      }
+    },
+    {
+      "id": "wcc.beergarden",
       "name": "Biergarten",
+      "folderName": "Gastronomie",
       "symbol": {
         "path": "textures/readable/beergarden"
       }
     },
     {
-      "id": "wcc.gastro.cafe",
+      "id": "wcc.cafe",
       "name": "Café",
+      "folderName": "Gastronomie",
       "symbol": {
         "path": "textures/readable/cafe"
       }
     },
     {
-      "id": "wcc.gastro.iceparlour",
+      "id": "wcc.iceparlour",
       "name": "Eisdiele",
+      "folderName": "Gastronomie",
       "symbol": {
         "path": "textures/readable/iceparlour"
       }
@@ -165,43 +188,41 @@
     {
       "id": "wcc.gastro.pub",
       "name": "Kneipe",
+      "folderName": "Gastronomie",
       "symbol": {
         "path": "textures/readable/pub"
       }
     },
     {
-      "id": "wcc.gastro.restaurant",
+      "id": "wcc.restaurant",
       "name": "Restaurant",
+      "folderName": "Gastronomie",
       "symbol": {
         "path": "textures/readable/restaurant"
       }
     },
     {
-      "id": "wcc.special",
-      "name": "Besonderes",
+      "id": "wcc.tour.beethoven",
+      "name": "Beethoventour",
+      "folderName": "Touren",
       "symbol": {
-        "path": "textures/readable/special"
+        "path": "textures/readable/beethoventour"
       }
     },
     {
-      "id": "wcc.info.tourist",
-      "name": "Tourist Info",
+      "id": "wcc.pathofdemocracy",
+      "name": "Weg der Demokratie",
+      "folderName": "Touren",
       "symbol": {
-        "path": "textures/readable/touristinfo"
+        "path": ""
       }
     },
     {
-      "id": "wcc.info.wc",
-      "name": "WC",
+      "id": "wcc.macke",
+      "name": "Macketour",
+      "folderName": "Touren",
       "symbol": {
-        "path": "textures/readable/wc"
-      }
-    },
-    {
-      "id": "wcc.info.bike",
-      "name": "Fahrradvermietung",
-      "symbol": {
-        "path": "textures/readable/bike"
+        "path": ""
       }
     }
   ],
@@ -213,9 +234,9 @@
     "a": 255
   },
   "headerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 56,
+    "g": 56,
+    "b": 56,
     "a": 0
   },
   "headerButtonFgColor": {
@@ -275,5 +296,19 @@
     "g": 159,
     "b": 159,
     "a": 187
+  },
+  "menuMainEntryHeight": 0,
+  "menuSubEntryHeight": 0,
+  "menuBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "menuPartBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
   }
 }
