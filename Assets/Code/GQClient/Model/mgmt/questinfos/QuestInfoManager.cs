@@ -11,6 +11,7 @@ using System.IO;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using System.Linq;
+using QM.Util;
 
 
 namespace GQ.Client.Model
@@ -84,14 +85,35 @@ namespace GQ.Client.Model
 			protected set {
 				if (_filter != value) {
 					_filter = value;
-					raiseChange (
-						new QuestInfoChangedEvent (
-							String.Format ("Quest Info Filter changed to {0}.", _filter.ToString ()),
-							ChangeType.ListChanged
-						)
-					);
-
+					// we register with later changes of the filter:
+					_filter.filterChange += FilterChanged;
+					// we use the new filter instantly:
+					FilterChanged ();
 				}
+			}
+		}
+
+		/// <summary>
+		/// Adds the given andFilter in conjunction to the current filter(s).
+		/// </summary>
+		/// <param name="andFilter">And filter.</param>
+		public void FilterAnd(QuestInfoFilter andFilter) {
+			Filter = new QuestInfoFilter.And (Filter, andFilter);
+		}
+			
+		public event ChangeCallback OnFilterChange;
+
+		public void FilterChanged() {
+			if (OnFilterChange != null) {
+				OnFilterChange (
+					this, 					
+					new QuestInfoChangedEvent (
+						"Filter changed ...",
+						ChangeType.FilterChanged,
+						newQuestInfo: null,
+						oldQuestInfo: null
+					)
+				);
 			}
 		}
 
@@ -111,7 +133,7 @@ namespace GQ.Client.Model
 
 				if (Filter.Accept (newInfo)) {
 					// Run through filter and raise event if involved:
-					raiseChange (
+					raiseDataChange (
 						new QuestInfoChangedEvent (
 							String.Format ("Info for quest {0} added.", newInfo.Name),
 							ChangeType.AddedInfo,
@@ -130,7 +152,7 @@ namespace GQ.Client.Model
 			if (Filter.Accept (oldInfo)) {
 				// Run through filter and raise event if involved
 
-				raiseChange (
+				raiseDataChange (
 					new QuestInfoChangedEvent (
 						String.Format ("Info for quest {0} removed.", oldInfo.Name),
 						ChangeType.RemovedInfo,
@@ -157,7 +179,7 @@ namespace GQ.Client.Model
 			if (Filter.Accept (oldInfo) || Filter.Accept (info)) {
 				// Run through filter and raise event if involved
 
-				raiseChange (
+				raiseDataChange (
 					new QuestInfoChangedEvent (
 						String.Format ("Info for quest {0} changed.", info.Name),
 						ChangeType.ChangedInfo,
@@ -212,13 +234,13 @@ namespace GQ.Client.Model
 			t.Start ();
 		}
 
-		public delegate void ChangeCallback (object sender,QuestInfoChangedEvent e);
+		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
 
-		private event ChangeCallback onChange;
+		private event ChangeCallback onDataChange;
 
-		public event ChangeCallback OnChange {
+		public event ChangeCallback OnDataChange {
 			add {
-				onChange += value;
+				onDataChange += value;
 				value(
 					this, 					
 					new QuestInfoChangedEvent (
@@ -230,21 +252,21 @@ namespace GQ.Client.Model
 				);
 			}
 			remove {
-				onChange -= value;
+				onDataChange -= value;
 			}
 		}
 
 		public int HowManyListerners ()
 		{
-			return onChange.GetInvocationList ().Length;
+			return onDataChange.GetInvocationList ().Length;
 		}
 
 
 
-		public virtual void raiseChange (QuestInfoChangedEvent e)
+		public virtual void raiseDataChange (QuestInfoChangedEvent e)
 		{
-			if (onChange != null)
-				onChange (this, e);
+			if (onDataChange != null)
+				onDataChange (this, e);
 		}
 
 		#endregion
@@ -310,7 +332,8 @@ namespace GQ.Client.Model
 		AddedInfo,
 		RemovedInfo,
 		ChangedInfo,
-		ListChanged
+		ListChanged,
+		FilterChanged
 	}
 		
 

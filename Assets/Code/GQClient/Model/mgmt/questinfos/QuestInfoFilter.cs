@@ -11,6 +11,7 @@ using System.IO;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using System.Text;
+using QM.Util;
 
 
 namespace GQ.Client.Model
@@ -18,6 +19,34 @@ namespace GQ.Client.Model
 
 	public abstract class QuestInfoFilter
 	{
+
+		public delegate void OnFilterChanged();
+
+		public event OnFilterChanged filterChange; 
+
+		protected void RaiseFilterChangeEvent() {
+			if (NotificationPaused)
+				return;
+			
+			if (filterChange != null) 
+				filterChange ();
+				
+			if (parentFilter != null) 
+				parentFilter.RaiseFilterChangeEvent ();
+		}
+
+		bool _notificationPaused = false;
+		public bool NotificationPaused {
+			get {
+				return _notificationPaused;
+			}
+			set {
+				_notificationPaused = value;
+				RaiseFilterChangeEvent ();
+			}
+		}
+
+		protected QuestInfoFilter parentFilter { get; set; }
 
 		abstract public bool Accept (QuestInfo qi);
 
@@ -51,7 +80,36 @@ namespace GQ.Client.Model
 			private List<string> acceptedCategories = new List<string>();
 
 			public Category(params string[] categories) {
-				acceptedCategories.AddRange(categories);
+				foreach (string c in categories)
+					AddCategory(c);
+			}
+
+			public void AddCategories(params string[] categories) {
+				foreach (string category in categories) {
+					if (!acceptedCategories.Contains (category)) {
+						acceptedCategories.Add (category);
+					}
+				}
+				RaiseFilterChangeEvent();
+			}
+
+			public void AddCategory(string category) {
+				if (!acceptedCategories.Contains (category)) {
+					acceptedCategories.Add (category);
+					RaiseFilterChangeEvent ();
+				}
+			}
+
+			public void RemoveCategory(string category) {
+				if (acceptedCategories.Contains (category)) {
+					acceptedCategories.Remove (category);
+					RaiseFilterChangeEvent ();
+				}
+			}
+
+			public void ClearCategories() {
+				acceptedCategories = new List<string>();
+				RaiseFilterChangeEvent ();
 			}
 
 			/// <summary>
@@ -90,6 +148,7 @@ namespace GQ.Client.Model
 			}
 		}
 
+
 		public abstract class Multi : QuestInfoFilter {
 			protected List<QuestInfoFilter> subfilters = new List<QuestInfoFilter>();
 		}
@@ -100,6 +159,12 @@ namespace GQ.Client.Model
 
 			public And (params QuestInfoFilter[] filters)
 			{
+				foreach (QuestInfoFilter filter in filters) {
+					if (!subfilters.Contains(filter)) {
+						subfilters.Add(filter);
+						filter.parentFilter = this;
+					}
+				}
 				subfilters.AddRange (filters);
 			}
 
@@ -119,9 +184,9 @@ namespace GQ.Client.Model
 				StringBuilder sb = new StringBuilder ("And(");
 
 				foreach (QuestInfoFilter sel in subfilters) {
-					sb.Append (sel.ToString ());
+					sb.Append (sel.ToString () + ",");
 				}
-
+				sb.Remove (sb.Length - 1, 1); // remove the last comma
 				sb.Append (")");
 
 				return sb.ToString ();

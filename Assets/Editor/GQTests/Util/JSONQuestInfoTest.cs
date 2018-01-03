@@ -22,7 +22,7 @@ namespace GQTests.Util {
 			qim = QuestInfoManager.Instance;
 
 			testListener = new TestChangeListener();
-			qim.OnChange += testListener.OnChange;
+			qim.OnDataChange += testListener.OnChange;
 
 			importTask = new ImportQuestInfosFromJSON (true);
 		}

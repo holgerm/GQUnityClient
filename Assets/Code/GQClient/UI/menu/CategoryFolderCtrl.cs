@@ -1,0 +1,98 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using GQ.Client.UI;
+using UnityEngine.UI;
+using GQ.Client.Conf;
+using QM.UI;
+
+namespace GQ.Client.UI {
+
+	public class CategoryFolderCtrl : CategoryCtrl {
+
+		#region static stuff
+
+		protected static readonly string PREFAB = "CategoryFolder";
+
+		public static CategoryFolderCtrl Create (GameObject root, CategoryTreeCtrl.CategoryFolder catFolder, CategoryTreeCtrl catTree)
+		{
+			// Create the view object for this controller:
+			GameObject go = PrefabController.Create (PREFAB, root);
+			go.name = PREFAB + " (" + catFolder.Name + ")";
+
+			// save tree controller & folder:
+			CategoryFolderCtrl folderCtrl = go.GetComponent<CategoryFolderCtrl> ();
+			folderCtrl.treeCtrl = catTree;
+			folderCtrl.folder = catFolder;
+
+			// initialize the UI Entry for this folder:
+			folderCtrl.UpdateView (catFolder);
+
+			// hook the show/hide children method onto the image toggle button of this folder:
+			ImageToggleButton itb = folderCtrl.folderImage.GetComponent<ImageToggleButton>();
+			itb.ToggleButton.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
+
+			return folderCtrl;
+		}
+
+		#endregion
+
+
+		#region Instance stuff
+
+		public Image folderImage;
+
+		CategoryTreeCtrl.CategoryFolder folder;
+
+		/// <summary>
+		/// Updates the view of a category UI folder.
+		/// </summary>
+		protected void UpdateView(CategoryTreeCtrl.CategoryFolder folder) {
+			// show the folder, according to the current rules:
+			gameObject.SetActive (showMenuItem());
+			
+			// enable the folder image toggle button:
+			ImageToggleButton tb = folderImage.GetComponent<ImageToggleButton> ();
+			if (tb != null) {
+				tb.enabled = true;
+			}
+
+			// set the name of this category entry:
+			categoryName.text = folder.Name;
+
+			// calculate and set the number of quests represented by all categories within this folder:
+			categoryCount.text = folder.NumberOfQuests().ToString();
+		}
+
+		/// <summary>
+		/// This method will only be called from UnityEvent of folder's image toggle button onClick.
+		/// </summary>
+		public void ToggleShowFolderContents() {
+			// determine this folders show state:
+			bool stateIsShow = !folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
+
+			// set activity of all contained category entries according to folder show state:
+			CategoryTreeCtrl.CategoryFolder folderCtrl;
+			if (treeCtrl.categoryFolders.TryGetValue (folder.Name, out folderCtrl)) {
+				foreach (CategoryTreeCtrl.CategoryEntry cat in folderCtrl.Entries) {
+					cat.ctrl.Unfolded = stateIsShow;
+					cat.ctrl.UpdateView ();
+				}
+			}
+		}
+
+		override protected bool showMenuItem() {
+			if (ConfigurationManager.Current.showEmptyMenuEntries)
+				return (folder.Name != "");
+			else
+				return (folder.Name != "" && folder.Entries.Count > 1);
+		}
+
+		override public void ToggleSelectedState () {
+			// TODO
+			Debug.Log("Selection os NOT YET IMPLEMENTED for folders of categories.");
+		}
+
+		#endregion
+	}
+}

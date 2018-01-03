@@ -8,6 +8,7 @@ using GQ.Client.Util;
 using GQ.Client.Conf;
 using UnityEngine.UI;
 using GQ.Client.Err;
+using QM.Util;
 
 namespace GQ.Client.UI.Foyer
 {
@@ -63,6 +64,9 @@ namespace GQ.Client.UI.Foyer
 			case ChangeType.ListChanged:
 				UpdateView ();
 				break;							
+			case ChangeType.FilterChanged:
+				UpdateViewAfterFilterChanged ();
+				break;							
 			}
 		}
 
@@ -92,6 +96,9 @@ namespace GQ.Client.UI.Foyer
 				kvp.Value.Hide ();
 				kvp.Value.Destroy ();
 			}
+
+			QuestInfoControllers.Clear();
+
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				QuestListElementController qiCtrl = 
@@ -100,11 +107,53 @@ namespace GQ.Client.UI.Foyer
 						qInfo: info,
 						containerController: this
 					).GetComponent<QuestListElementController> ();
-				QuestInfoControllers.Add (info.Id, qiCtrl);
+				QuestInfoControllers[info.Id] = qiCtrl;
 				qiCtrl.Show ();
 			}
-			sortView ();
 
+			sortView ();
+		}
+
+		public void UpdateViewAfterFilterChanged ()
+		{
+			if (this == null) {
+				return;
+			}
+			if (InfoList == null) {
+				return;
+			}
+
+			// we make a separate list of ids of all old quest infos:
+			List<int> rememberedOldIDs = new List<int>(QuestInfoControllers.Keys);
+
+			// we create new qi elements and keep those we can reuse. We remove those from our helper list.
+			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
+				QuestInfoController qiCtrl;
+				if (QuestInfoControllers.TryGetValue(info.Id, out qiCtrl)) {
+					// this new element was already there, hence we keep it:
+					rememberedOldIDs.Remove(info.Id);
+				}
+				else {
+					// this new element was not there before, hence we create it:
+					QuestListElementController qleCtrl = 
+						QuestListElementController.Create (
+							root: InfoList.gameObject,
+							qInfo: info,
+							containerController: this
+						).GetComponent<QuestListElementController> ();
+					QuestInfoControllers[info.Id] = qleCtrl;
+					qleCtrl.Show ();
+				}
+			}
+
+			// now in the helper list only the old unused elements are left. Hence we delete them:
+			foreach (int oldID in rememberedOldIDs) {
+				QuestInfoControllers [oldID].Hide ();
+				QuestInfoControllers [oldID].Destroy ();
+				QuestInfoControllers.Remove (oldID);
+			}
+				
+			sortView ();
 		}
 
 		#endregion

@@ -11,6 +11,7 @@ using GQ.Client.Err;
 using UnitySlippyMap.Map;
 using UnitySlippyMap.Layers;
 using UnitySlippyMap.Markers;
+using QM.Util;
 
 namespace GQ.Client.UI.Foyer
 {
@@ -63,6 +64,9 @@ namespace GQ.Client.UI.Foyer
 			case ChangeType.ListChanged:
 				UpdateView ();
 				break;							
+			case ChangeType.FilterChanged:
+				UpdateView ();
+				break;							
 			}
 		}
 
@@ -72,20 +76,29 @@ namespace GQ.Client.UI.Foyer
 				Debug.Log ("QuestMap is null".Red ());
 				return;
 			}
+			WATCH.Create("slowMenu").Start();
+			Debug.Log ("Timer #1 (remove all): " + WATCH.Milliseconds("slowMenu"));
 
 			// hide and delete all list elements:
 			foreach (KeyValuePair<int, Marker> kvp in Markers) {
 				kvp.Value.Hide ();
 				kvp.Value.Destroy ();
+				map.RemoveMarker (kvp.Value);
 			}
-			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
+
+			Markers.Clear ();
+
+			Debug.Log ("Timer #2 (create new): " + WATCH.Milliseconds("slowMenu"));
+
+			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
-				if (QuestInfoManager.Instance.Filter.Accept (info)) {
-					Marker newMarker = CreateMarker (info);
-					if (newMarker != null)
-						map.Markers.Add (newMarker);
-				}
+				Marker newMarker = CreateMarker (info);
+				if (newMarker != null)
+				Markers.Add (info.Id, newMarker);
 			}
+
+			Debug.Log ("Timer #3 (done): " + WATCH.Milliseconds("slowMenu"));
+			WATCH.StopAndShow ("slowMenu");
 		}
 			
 		private Marker CreateMarker(QuestInfo info) {
@@ -113,48 +126,46 @@ namespace GQ.Client.UI.Foyer
 			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
 			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
 			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
-//			GameObject markerSymbolGo = CreateSymbolForMarker (markerGO, info);
-
 			return newMarker;
 		}
 
-		private GameObject CreateSymbolForMarker(GameObject markerGO, QuestInfo info) {
-			GameObject markerSymbolGo = new GameObject ();
-			markerSymbolGo.transform.parent = markerGO.transform;
-			markerSymbolGo.name = "Markersymbol (" + info.Name + ")";
-			MeshFilter meshFilter = markerSymbolGo.AddComponent<MeshFilter> ();
-			MeshRenderer meshRenderer = markerSymbolGo.AddComponent<MeshRenderer> ();
-			Mesh mesh = meshFilter.mesh;
-			mesh.vertices = new Vector3[] {
-				new Vector3 (0.5f, 0.0f, 1.0f),
-				new Vector3 (0.5f, 0.0f, 0.0f),
-				new Vector3 (-0.5f, 0.0f, 0.0f),
-				new Vector3 (-0.5f, 0.0f, 1.0f)
-			};
-			mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-			mesh.normals = new Vector3[] {
-				Vector3.up,
-				Vector3.up,
-				Vector3.up,
-				Vector3.up
-			};
-			mesh.uv = new Vector2[] {
-				new Vector2 (1.0f, 1.0f),
-				new Vector2 (1.0f, 0.0f),
-				new Vector2 (0.0f, 0.0f),
-				new Vector2 (0.0f, 1.0f)
-			};
-			// add a material
-			string shaderName = "Larku/UnlitTransparent";
-			Shader shader = Shader.Find (shaderName);
-			meshRenderer.material = new Material (shader);
-			meshRenderer.material.mainTexture = MarkerSymbolTexture;
-			meshRenderer.material.color = ConfigurationManager.Current.overlayButtonFgColor;
-			markerSymbolGo.transform.localScale = new Vector3 (0.604f, 0.0f, 0.4f);
-			markerSymbolGo.transform.localPosition = new Vector3 (0.0f, 0.0f, 0.468f);
-			meshRenderer.material.renderQueue = 4002;
-			return markerSymbolGo;
-		}
+//		private GameObject CreateSymbolForMarker(GameObject markerGO, QuestInfo info) {
+//			GameObject markerSymbolGo = new GameObject ();
+//			markerSymbolGo.transform.parent = markerGO.transform;
+//			markerSymbolGo.name = "Markersymbol (" + info.Name + ")";
+//			MeshFilter meshFilter = markerSymbolGo.AddComponent<MeshFilter> ();
+//			MeshRenderer meshRenderer = markerSymbolGo.AddComponent<MeshRenderer> ();
+//			Mesh mesh = meshFilter.mesh;
+//			mesh.vertices = new Vector3[] {
+//				new Vector3 (0.5f, 0.0f, 1.0f),
+//				new Vector3 (0.5f, 0.0f, 0.0f),
+//				new Vector3 (-0.5f, 0.0f, 0.0f),
+//				new Vector3 (-0.5f, 0.0f, 1.0f)
+//			};
+//			mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+//			mesh.normals = new Vector3[] {
+//				Vector3.up,
+//				Vector3.up,
+//				Vector3.up,
+//				Vector3.up
+//			};
+//			mesh.uv = new Vector2[] {
+//				new Vector2 (1.0f, 1.0f),
+//				new Vector2 (1.0f, 0.0f),
+//				new Vector2 (0.0f, 0.0f),
+//				new Vector2 (0.0f, 1.0f)
+//			};
+//			// add a material
+//			string shaderName = "Larku/UnlitTransparent";
+//			Shader shader = Shader.Find (shaderName);
+//			meshRenderer.material = new Material (shader);
+//			meshRenderer.material.mainTexture = MarkerSymbolTexture;
+//			meshRenderer.material.color = ConfigurationManager.Current.overlayButtonFgColor;
+//			markerSymbolGo.transform.localScale = new Vector3 (0.604f, 0.0f, 0.4f);
+//			markerSymbolGo.transform.localPosition = new Vector3 (0.0f, 0.0f, 0.468f);
+//			meshRenderer.material.renderQueue = 4002;
+//			return markerSymbolGo;
+//		}
 
 		public Texture MarkerSymbolTexture;
 		#endregion
@@ -223,7 +234,8 @@ namespace GQ.Client.UI.Foyer
 
 			// at last we register for changes on quest infos with the quest info manager:
 			qim = QuestInfoManager.Instance;
-			qim.OnChange += OnMarkerChanged;
+			qim.OnDataChange += OnMarkerChanged;
+			qim.OnFilterChange += OnMarkerChanged;
 		}
 
 		private LayerBehaviour MapLayer {

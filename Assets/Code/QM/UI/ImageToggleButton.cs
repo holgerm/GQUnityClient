@@ -48,7 +48,7 @@ namespace QM.UI
 			ToggleImage.sprite = stateIsOn ? OnSprite : OffSprite;
 		}
 
-		public void OnDisable()
+		void OnDisable()
 		{
 			ToggleImage.enabled = false;
 			ToggleButton.enabled = false;

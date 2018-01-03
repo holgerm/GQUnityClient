@@ -16,16 +16,7 @@ namespace GQ.Client.UI.Foyer
 
 		protected QuestInfoManager qim;
 
-		private Dictionary<int, QuestInfoController> questInfoControllers;
-
-		protected Dictionary<int, QuestInfoController> QuestInfoControllers {
-			get {
-				if (questInfoControllers == null) {
-					questInfoControllers = new Dictionary<int, QuestInfoController> ();
-				}
-				return questInfoControllers;
-			}
-		}
+		protected Dictionary<int, QuestInfoController> QuestInfoControllers;
 
 		#endregion
 
@@ -35,7 +26,9 @@ namespace GQ.Client.UI.Foyer
 		protected void Start ()
 		{
 			qim = QuestInfoManager.Instance;
-			qim.OnChange += OnQuestInfoChanged;
+			QuestInfoControllers = new Dictionary<int, QuestInfoController> ();
+			qim.OnDataChange += OnQuestInfoChanged;
+			qim.OnFilterChange += OnQuestInfoChanged;
 		}
 
 		public abstract void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e);
@@ -45,8 +38,10 @@ namespace GQ.Client.UI.Foyer
 
 		void OnDestroy ()
 		{
-			if (qim != null)
-				qim.OnChange -= OnQuestInfoChanged;
+			if (qim != null) {
+				qim.OnDataChange -= OnQuestInfoChanged;
+				qim.OnFilterChange -= OnQuestInfoChanged;
+			}
 		}
 
 		#endregion

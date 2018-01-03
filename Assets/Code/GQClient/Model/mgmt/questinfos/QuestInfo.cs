@@ -204,7 +204,7 @@ namespace GQ.Client.Model
 				if (value != _playedTimes) {
 					QuestInfo oldInfo = (QuestInfo)this.MemberwiseClone ();
 					_playedTimes = value;
-					QuestInfoManager.Instance.raiseChange (
+					QuestInfoManager.Instance.raiseDataChange (
 						new QuestInfoChangedEvent (
 							String.Format ("Info for quest {0} changed.", Name),
 							ChangeType.ChangedInfo,

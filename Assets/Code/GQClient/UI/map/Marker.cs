@@ -34,7 +34,8 @@ namespace GQ.Client.UI
 		private IEnumerator showAsCoroutine (bool show)
 		{
 			yield return new WaitForEndOfFrame ();
-			gameObject.SetActive (show);
+			if (this != null && gameObject != null)
+				gameObject.SetActive (show);
 		}
 
 		public abstract Texture Texture { get; }

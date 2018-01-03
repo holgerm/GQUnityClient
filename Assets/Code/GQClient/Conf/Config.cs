@@ -161,6 +161,9 @@ namespace GQ.Client.Conf
 			} 
 		}
 
+		[ShowInProductEditor]
+		public bool filterByCategories { get; set; }
+
 		[JsonIgnore]
 		public Dictionary<string, Category> categoryDict;
 
@@ -222,6 +225,9 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonFgDisabledColor  { get; set; }
 
+		[ShowInProductEditor(StartSection="Menu:")]
+		public bool showEmptyMenuEntries { get; set; }
+
 		[ShowInProductEditor]
 		public int menuMainEntryHeight { get; set; }
 
@@ -235,6 +241,26 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	menuPartBGColor  { get; set; }
+
+		[JsonIgnore]
+		private float _disabledAlpha = 0.5f;
+		[ShowInProductEditor]
+		public float disabledAlpha {
+			get {
+				return _disabledAlpha;
+			}
+			set {
+				if (value < 0f) {
+					_disabledAlpha = 0f;
+					return;
+				}
+				if (value > 1f) {
+					_disabledAlpha = 1f;
+					return;
+				}
+				_disabledAlpha = value;
+			}
+		}
 
 		#endregion
 
@@ -295,6 +321,11 @@ namespace GQ.Client.Conf
 			overlayButtonBgColor = GQColor.transparent;
 			overlayButtonFgColor = Color.black;
 			overlayButtonFgDisabledColor = new Color (159f, 159f, 159f, 187f);
+
+
+			// Menu:
+			showEmptyMenuEntries = false;
+			filterByCategories = true;
 		}
 
 		#endregion

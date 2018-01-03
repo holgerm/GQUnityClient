@@ -16,18 +16,17 @@ namespace GQ.Client.UI {
 
 		private QuestInfoManager qim;
 
+		public QuestInfoFilter.Category CategoryFilter;
+
 
 		// Use this for initialization
 		void Start () {
 			qim = QuestInfoManager.Instance;
-			qim.OnChange += OnQuestInfoChanged;
+			CategoryFilter = new QuestInfoFilter.Category ();
+			qim.FilterAnd(CategoryFilter);
+			qim.OnDataChange += OnQuestInfoChanged;
 		}
 		
-		// Update is called once per frame
-		void Update () {
-			
-		}
-
 		#region React on Events
 
 		public void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e)
@@ -53,11 +52,14 @@ namespace GQ.Client.UI {
 		}
 
 
-		protected void UpdateView ()
+		public void UpdateView ()
 		{
 			if (this == null) {
 				return;
 			}
+
+			// pause filter change events:
+			CategoryFilter.NotificationPaused = true;
 
 			// initialize the category entry dictionary:
 			categoryEntries = new Dictionary<string, CategoryEntry> ();
@@ -76,7 +78,7 @@ namespace GQ.Client.UI {
 			}
 
 			// Build the internal category tree model:
-			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
+			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				foreach (string catId in info.Categories) {
 					string cat = catId.StripQuotes ();
 					CategoryEntry catEntry;
@@ -101,8 +103,8 @@ namespace GQ.Client.UI {
 
 			// create all category tree UI entries:
 			foreach (CategoryFolder folder in categoryFolders.Values) {
-				CategoryEntryCtrl uiFolder = 
-					CategoryEntryCtrl.Create (
+				CategoryFolderCtrl uiFolder = 
+					CategoryFolderCtrl.Create (
 						root: this.gameObject,
 						catFolder: folder,
 						catTree: this
@@ -122,6 +124,9 @@ namespace GQ.Client.UI {
 				}
 			}
 
+			// reactivate filter change events after pause:
+			CategoryFilter.NotificationPaused = false;
+
 			// set the number of all quests represented by the currently selected categories
 			int nr = 0;
 			foreach (CategoryFolder folder in categoryFolders.Values) {
@@ -135,7 +140,7 @@ namespace GQ.Client.UI {
 
 		#region Internal Model of Tree
 
-		protected Dictionary<string, CategoryFolder> categoryFolders;
+		public Dictionary<string, CategoryFolder> categoryFolders;
 
 		public class CategoryFolder {
 			public string Name;
@@ -174,13 +179,13 @@ namespace GQ.Client.UI {
 			public Category category;
 			List<int> questIds;
 
-			/// <summary>
-			/// Initializes a new instance of the <see cref="CategoryTreeCtrl+CategoryEntry"/> struct.
-			/// </summary>
-			/// <param name="category">Category.</param>
+			/// Will be set by the ui controller, when it is created from prefab, c.f. the Create() function in the CategoryEntryCtrl class.
+			public CategoryEntryCtrl ctrl;
+
 			public CategoryEntry(Category category) {
 				this.category = category;
 				this.questIds = new List<int>();
+				this.ctrl = null;
 			}
 
 			/// <summary>
