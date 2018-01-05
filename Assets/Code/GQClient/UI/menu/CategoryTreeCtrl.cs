@@ -13,6 +13,7 @@ namespace GQ.Client.UI {
 
 		public Text Title;
 		public Text Number;
+		public Image OnOff;
 
 		private QuestInfoManager qim;
 
@@ -134,6 +135,24 @@ namespace GQ.Client.UI {
 			}
 			Number.text = ""; // nr.ToString (); TODO make Config?
  		}
+
+		bool generalSelectionState = true;
+
+		public void SetSelection4AllItems() {
+			generalSelectionState = !generalSelectionState;
+			CategoryFilter.NotificationPaused = true;
+			foreach (CategoryEntry entry in categoryEntries.Values) {
+				entry.ctrl.SetSelectedState (generalSelectionState);
+			}
+			CategoryFilter.NotificationPaused = false;
+
+			if (generalSelectionState) {
+				OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b, 1f);
+			}
+			else {
+				OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b, ConfigurationManager.Current.disabledAlpha);
+			}
+		}
 			
 		#endregion
 

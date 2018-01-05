@@ -80,7 +80,7 @@ namespace GQ.Client.UI {
 
 		bool selectedForFilter;
 
-		void SetSelectedState(bool newState) {
+		public void SetSelectedState(bool newState) {
 			selectedForFilter = newState;
 
 			// Make the UI reflect selection status & change category filter in quest info manager:
@@ -98,6 +98,9 @@ namespace GQ.Client.UI {
 			}
 		}
 
+		public void ToggleSelectedState () {
+			SetSelectedState (!selectedForFilter);
+		}
 
 		#endregion
 
