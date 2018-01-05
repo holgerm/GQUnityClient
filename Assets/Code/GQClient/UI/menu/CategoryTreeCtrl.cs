@@ -132,7 +132,7 @@ namespace GQ.Client.UI {
 			foreach (CategoryFolder folder in categoryFolders.Values) {
 				nr += folder.NumberOfQuests ();
 			}
-			Number.text = nr.ToString ();
+			Number.text = ""; // nr.ToString (); TODO make Config?
  		}
 			
 		#endregion

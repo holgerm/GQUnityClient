@@ -37,8 +37,6 @@ namespace QM.UI
 				return;
 			} 
 
-			ToggleButton.onClick.AddListener (Toggle);
-
 			ToggleImage.sprite = stateIsOn ? OnSprite : OffSprite;
 		}
 

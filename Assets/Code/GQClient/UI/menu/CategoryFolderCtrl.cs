@@ -30,7 +30,12 @@ namespace GQ.Client.UI {
 
 			// hook the show/hide children method onto the image toggle button of this folder:
 			ImageToggleButton itb = folderCtrl.folderImage.GetComponent<ImageToggleButton>();
+			itb.ToggleButton.onClick.AddListener (itb.Toggle);
 			itb.ToggleButton.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
+			// ... and onto the button of the whole entry:
+			Button folderBtn = folderCtrl.GetComponent<Button>();
+			folderBtn.onClick.AddListener (itb.Toggle);
+			folderBtn.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
 
 			return folderCtrl;
 		}
@@ -61,7 +66,7 @@ namespace GQ.Client.UI {
 			categoryName.text = folder.Name;
 
 			// calculate and set the number of quests represented by all categories within this folder:
-			categoryCount.text = folder.NumberOfQuests().ToString();
+			categoryCount.text = ""; // folder.NumberOfQuests().ToString(); TODO make Config?
 		}
 
 		/// <summary>
@@ -69,7 +74,7 @@ namespace GQ.Client.UI {
 		/// </summary>
 		public void ToggleShowFolderContents() {
 			// determine this folders show state:
-			bool stateIsShow = !folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
+			bool stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
 
 			// set activity of all contained category entries according to folder show state:
 			CategoryTreeCtrl.CategoryFolder folderCtrl;
@@ -79,6 +84,8 @@ namespace GQ.Client.UI {
 					cat.ctrl.UpdateView ();
 				}
 			}
+
+			// UpdateView (folder); // refresh folder item TODO
 		}
 
 		override protected bool showMenuItem() {
@@ -86,11 +93,6 @@ namespace GQ.Client.UI {
 				return (folder.Name != "");
 			else
 				return (folder.Name != "" && folder.Entries.Count > 1);
-		}
-
-		override public void ToggleSelectedState () {
-			// TODO
-			Debug.Log("Selection os NOT YET IMPLEMENTED for folders of categories.");
 		}
 
 		#endregion

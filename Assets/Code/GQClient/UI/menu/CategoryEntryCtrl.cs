@@ -60,7 +60,7 @@ namespace GQ.Client.UI {
 			categoryName.text = categoryEntry.category.name;
 
 			// set the number of elements represented by this ctaegory:
-			categoryCount.text = categoryEntry.NumberOfQuests().ToString();
+			categoryCount.text = ""; // categoryEntry.NumberOfQuests().ToString(); TODO make Config?
 			gameObject.SetActive (showMenuItem());	
 
 			// set symbol for this category:
@@ -79,11 +79,6 @@ namespace GQ.Client.UI {
 		}
 
 		bool selectedForFilter;
-
-		override public void ToggleSelectedState () {
-			SetSelectedState (!selectedForFilter);
-		}
-
 
 		void SetSelectedState(bool newState) {
 			selectedForFilter = newState;

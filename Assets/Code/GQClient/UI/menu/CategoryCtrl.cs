@@ -31,7 +31,5 @@ namespace GQ.Client.UI {
 
 		abstract protected bool showMenuItem ();
 
-		abstract public void ToggleSelectedState ();
-
 	}
 }
