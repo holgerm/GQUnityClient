@@ -390,7 +390,7 @@ MonoBehaviour:
   ToggleImage: {fileID: 114282918207415182}
   OnSprite: {fileID: 21300000, guid: a658da9ae6a3a451393579035bf9d0da, type: 3}
   OffSprite: {fileID: 21300000, guid: 6267bf0f28ac04d879359a2bdcb7b5bd, type: 3}
-  stateIsOn: 1
+  stateIsOn: 0
 --- !u!114 &114994542776828278
 MonoBehaviour:
   m_ObjectHideFlags: 1

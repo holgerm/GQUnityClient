@@ -15,7 +15,7 @@ namespace GQ.Client.UI {
 
 		protected CategoryTreeCtrl treeCtrl;
 
-		protected bool unfolded = true;
+		protected bool unfolded = false;
 		/// <summary>
 		/// Is true if the corresponding folder is open, so that this item should eventually be shown.
 		/// </summary>
