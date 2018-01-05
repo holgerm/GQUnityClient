@@ -52,7 +52,7 @@
     {
       "id": "wcc.antiquariate",
       "name": "Antiquariat",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/antiquariat"
       }
@@ -60,7 +60,7 @@
     {
       "id": "wcc.architecture",
       "name": "Architektur",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/architecture"
       }
@@ -68,7 +68,7 @@
     {
       "id": "wcc.museum",
       "name": "Museum",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/museum"
       }
@@ -76,7 +76,7 @@
     {
       "id": "wcc.nature",
       "name": "Natur",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/nature"
       }
@@ -84,7 +84,7 @@
     {
       "id": "wcc.history",
       "name": "Historisch",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/historic"
       }
@@ -92,7 +92,7 @@
     {
       "id": "wcc.gallery",
       "name": "Galerie",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/gallery"
       }
@@ -100,7 +100,7 @@
     {
       "id": "wcc.cinema",
       "name": "Kino",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/cinema"
       }
@@ -108,7 +108,7 @@
     {
       "id": "wcc.concerthall",
       "name": "Konzertsaal",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/concerthall"
       }
@@ -116,49 +116,33 @@
     {
       "id": "wcc.theatre",
       "name": "Theater",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/theatre"
       }
     },
     {
-      "id": "wcc.bar",
-      "name": "Bar",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/bar"
-      }
-    },
-    {
       "id": "wcc.special",
       "name": "Besonderes",
-      "folderName": "",
+      "folderName": "Kultur",
       "symbol": {
         "path": "textures/readable/special"
       }
     },
     {
-      "id": "wcc.tourist",
-      "name": "Tourist Info",
-      "folderName": "",
+      "id": "wcc.tour.beethoven",
+      "name": "Beethoventour",
+      "folderName": "Touren",
       "symbol": {
-        "path": "textures/readable/touristinfo"
+        "path": "textures/readable/beethoventour"
       }
     },
     {
-      "id": "wcc.wc",
-      "name": "WC",
-      "folderName": "",
+      "id": "wcc.bar",
+      "name": "Bar",
+      "folderName": "Gastronomie",
       "symbol": {
-        "path": "textures/readable/wc"
-      }
-    },
-    {
-      "id": "wcc.bike",
-      "name": "Fahrradvermietung",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/bike"
+        "path": "textures/readable/bar"
       }
     },
     {
@@ -202,30 +186,31 @@
       }
     },
     {
-      "id": "wcc.tour.beethoven",
-      "name": "Beethoventour",
-      "folderName": "Touren",
+      "id": "wcc.tourist",
+      "name": "Tourist Info",
+      "folderName": "Hilfe & Information",
       "symbol": {
-        "path": "textures/readable/beethoventour"
+        "path": "textures/readable/touristinfo"
       }
     },
     {
-      "id": "wcc.pathofdemocracy",
-      "name": "Weg der Demokratie",
-      "folderName": "Touren",
+      "id": "wcc.wc",
+      "name": "WC",
+      "folderName": "Hilfe & Information",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/wc"
       }
     },
     {
-      "id": "wcc.macke",
-      "name": "Macketour",
-      "folderName": "Touren",
+      "id": "wcc.bike",
+      "name": "Fahrradvermietung",
+      "folderName": "Hilfe & Information",
       "symbol": {
-        "path": ""
+        "path": "textures/readable/bike"
       }
     }
   ],
+  "filterByCategories": true,
   "headerHeightPermill": 50,
   "headerBgColor": {
     "r": 255,
@@ -297,6 +282,7 @@
     "b": 159,
     "a": 187
   },
+  "showEmptyMenuEntries": true,
   "menuMainEntryHeight": 0,
   "menuSubEntryHeight": 0,
   "menuBGColor": {
@@ -310,5 +296,6 @@
     "g": 0,
     "b": 0,
     "a": 0
-  }
+  },
+  "disabledAlpha": 0.5
 }
