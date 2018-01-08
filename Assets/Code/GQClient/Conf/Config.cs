@@ -173,6 +173,10 @@ namespace GQ.Client.Conf
 		#region Layout
 
 		[ShowInProductEditor(StartSection="Layout & Colors:")]
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	mainColor  { get; set; }
+
+		[ShowInProductEditor]
 		public int 		headerHeightPermill { get; set; }
 
 		[ShowInProductEditor]

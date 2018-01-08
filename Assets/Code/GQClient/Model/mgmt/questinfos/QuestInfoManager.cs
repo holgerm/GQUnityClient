@@ -93,6 +93,8 @@ namespace GQ.Client.Model
 			}
 		}
 
+		public QuestInfoFilter.Category CategoryFilter;
+
 		/// <summary>
 		/// Adds the given andFilter in conjunction to the current filter(s).
 		/// </summary>
@@ -295,8 +297,13 @@ namespace GQ.Client.Model
 
 		public QuestInfoManager ()
 		{
+			// init quest info store:
 			QuestDict = new Dictionary<int, QuestInfo> ();
+
+			// init filters
 			Filter = new QuestInfoFilter.All ();
+			CategoryFilter = new QuestInfoFilter.Category ();
+			FilterAnd(CategoryFilter);
 		}
 
 		#endregion

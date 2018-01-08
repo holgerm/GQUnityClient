@@ -80,9 +80,21 @@ namespace GQ.Client.Model
 
 			private List<string> acceptedCategories = new List<string>();
 
-			public Category(params string[] categories) {
+			public Category() {
+				// TODO initialize from persisted Filter when we have that feature.
+				NotificationPaused = true;
+				foreach (Conf.Category c in ConfigurationManager.Current.categories) {
+					AddCategory(c.id);
+				}
+				NotificationPaused = false;
+			}
+
+			public Category(string firstCategory, params string[] categories) {
+				NotificationPaused = true;
+				AddCategory(firstCategory);
 				foreach (string c in categories)
 					AddCategory(c);
+				NotificationPaused = false;
 			}
 
 			public void AddCategories(params string[] categories) {

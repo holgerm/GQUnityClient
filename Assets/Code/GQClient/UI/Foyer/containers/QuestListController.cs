@@ -116,7 +116,6 @@ namespace GQ.Client.UI.Foyer
 
 		public void UpdateViewAfterFilterChanged ()
 		{
-			WATCH.Lap ("1");
 			if (this == null) {
 				return;
 			}
@@ -126,48 +125,24 @@ namespace GQ.Client.UI.Foyer
 
 			// we make a separate list of ids of all old quest infos:
 			List<int> rememberedOldIDs = new List<int>(QuestInfoControllers.Keys);
-			int created = 0;
-			int kept = 0;
 
 			// we create new qi elements and keep those we can reuse. We remove those from our helper list.
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				QuestInfoController qiCtrl;
 				if (QuestInfoControllers.TryGetValue(info.Id, out qiCtrl)) {
+					qiCtrl.Show (); // why do we need to show them here again? Aren't they still shown? Why?
 					// this new element was already there, hence we keep it:
 					rememberedOldIDs.Remove(info.Id);
-					kept++;
 				}
 				else {
-					WATCH.Start("2");
-					// this new element was not there before, hence we create it:
-					QuestListElementController qleCtrl = 
-						QuestListElementController.Create (
-							root: InfoList.gameObject,
-							qInfo: info,
-							containerController: this
-						).GetComponent<QuestListElementController> ();
-					WATCH.Show ("2", string.Format("created {0}", info.Name));
-					QuestInfoControllers[info.Id] = qleCtrl;
-					qleCtrl.Show ();
-					WATCH.StopAndShow ("2");
-					created++;
+					QuestInfoControllers [info.Id].Show ();
 				}
 			}
 
-			WATCH.Show ("1", string.Format("kept {0} existing and created {1} new.", kept, created));
-
-			int removed = 0;
 			// now in the helper list only the old unused elements are left. Hence we delete them:
 			foreach (int oldID in rememberedOldIDs) {
 				QuestInfoControllers [oldID].Hide ();
-				QuestInfoControllers [oldID].Destroy ();
-				QuestInfoControllers.Remove (oldID);
-				removed++;
 			}
-
-			WATCH.Show ("1", string.Format("did remove {0} unused old.", removed));
-
-			sortView ();
 		}
 
 		#endregion

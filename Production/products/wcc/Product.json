@@ -211,6 +211,12 @@
     }
   ],
   "filterByCategories": true,
+  "mainColor": {
+    "r": 116,
+    "g": 103,
+    "b": 33,
+    "a": 255
+  },
   "headerHeightPermill": 50,
   "headerBgColor": {
     "r": 255,

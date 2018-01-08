@@ -24,8 +24,7 @@ namespace GQ.Client.UI {
 		// Use this for initialization
 		void Start () {
 			qim = QuestInfoManager.Instance;
-			CategoryFilter = new QuestInfoFilter.Category ();
-			qim.FilterAnd(CategoryFilter);
+			CategoryFilter = qim.CategoryFilter;
 			qim.OnDataChange += OnQuestInfoChanged;
 		}
 		
@@ -56,8 +55,6 @@ namespace GQ.Client.UI {
 
 		public void UpdateView ()
 		{
-			new WATCH("1").Start();
-
 			if (this == null) {
 				return;
 			}
@@ -66,12 +63,7 @@ namespace GQ.Client.UI {
 			CategoryFilter.NotificationPaused = true;
 
 			recreateModelTree ();
-
-			WATCH.Show ("1", "model recreated");
-
 			recreateUI ();
-
-			WATCH.Show ("1", "UI recreated");
 
 			// reactivate filter change events after pause:
 			CategoryFilter.NotificationPaused = false;
@@ -82,7 +74,6 @@ namespace GQ.Client.UI {
 //				nr += folder.NumberOfQuests ();
 //			}
 //			Number.text = ""; // nr.ToString (); TODO make Config?
-			WATCH.Show ("1", "all changes notified");
 		}
 
 		private void recreateModelTree() {
@@ -155,7 +146,6 @@ namespace GQ.Client.UI {
 		bool generalSelectionState = true;
 
 		public void SetSelection4AllItems() {
-			new WATCH ("SetSelection4AllItems").Start();
 			generalSelectionState = !generalSelectionState;
 			CategoryFilter.NotificationPaused = true;
 			foreach (CategoryEntry entry in categoryEntries.Values) {
@@ -169,7 +159,6 @@ namespace GQ.Client.UI {
 			else {
 				OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b, ConfigurationManager.Current.disabledAlpha);
 			}
-			WATCH.StopAndShow ("SetSelection4AllItems");
 		}
 			
 		#endregion

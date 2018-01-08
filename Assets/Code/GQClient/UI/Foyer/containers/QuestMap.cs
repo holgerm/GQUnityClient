@@ -76,8 +76,6 @@ namespace GQ.Client.UI.Foyer
 				Debug.Log ("QuestMap is null".Red ());
 				return;
 			}
-			new WATCH("slowMenu").Start();
-			Debug.Log ("Timer #1 (remove all): " + WATCH.Milliseconds("slowMenu"));
 
 			// hide and delete all list elements:
 			foreach (KeyValuePair<int, Marker> kvp in Markers) {
@@ -88,17 +86,12 @@ namespace GQ.Client.UI.Foyer
 
 			Markers.Clear ();
 
-			Debug.Log ("Timer #2 (create new): " + WATCH.Milliseconds("slowMenu"));
-
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				Marker newMarker = CreateMarker (info);
 				if (newMarker != null)
 				Markers.Add (info.Id, newMarker);
 			}
-
-			Debug.Log ("Timer #3 (done): " + WATCH.Milliseconds("slowMenu"));
-			WATCH.StopAndShow ("slowMenu");
 		}
 			
 		private Marker CreateMarker(QuestInfo info) {
