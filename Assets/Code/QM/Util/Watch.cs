@@ -7,47 +7,102 @@ namespace QM.Util {
 	
 	public class WATCH {
 
-		static Dictionary<string, Stopwatch> watches = new Dictionary<string, Stopwatch> ();
+		static Dictionary<string, WATCH> watches = new Dictionary<string, WATCH> ();
 
-		public static Stopwatch Create(string name) {
-			Stopwatch watch = new Stopwatch ();
-			watches[name] = watch;
-			return watch;
+		private Stopwatch stopwatch;
+		private string name;
+		private long lastTimeStamp;
+
+		public WATCH(string name) {
+			stopwatch = new Stopwatch ();
+			this.name = name;
+			this.lastTimeStamp = 0L;
+			watches[name] = this;
 		}
 
-		private static Stopwatch Get(string name) {
-			Stopwatch watch;
+		public static WATCH Get(string name) {
+			WATCH watch;
 			if (!watches.TryGetValue(name, out watch)) {
 				return null;
 			}
 			return watch;
 		}
 
+		public static void Start(string name) {
+			WATCH w = new WATCH (name);
+			w.Start ();
+		}
+
+		public void Start() {
+			lastTimeStamp = 0L;
+			stopwatch.Start ();
+		}
+
 		public static void StopAndShow(string name) {
-			Stopwatch w = Get (name);
+			WATCH w = Get (name);
 			if (w == null) {
 				UnityEngine.Debug.Log (string.Format ("WATCH {0} not available.", name));
 				return;
 			}
-			w.Stop ();
-			UnityEngine.Debug.Log (string.Format ("WATCH {0} stopped after {1} ms.", name, w.ElapsedMilliseconds));
+			w.StopAndShow ();
+		}
+
+		public void StopAndShow() {
+			stopwatch.Stop ();
+			UnityEngine.Debug.Log (
+				string.Format ("WATCH {0} stopped after {1} ms ({2} delta)", 
+					name, 
+					stopwatch.ElapsedMilliseconds, 
+					stopwatch.ElapsedMilliseconds - lastTimeStamp
+				)
+			);
+		}
+
+		public static void Lap(string name) {
+			WATCH w = Get (name);
+			if (w == null) {
+				UnityEngine.Debug.Log (string.Format ("WATCH {0} not available.", name));
+				return;
+			}
+			w.Lap ();
+		}
+
+		public void Lap() {
+			lastTimeStamp = 0L;
 		}
 
 		public static void Show(string name, string pointName) {
-			Stopwatch w = Get (name);
+			WATCH w = Get (name);
 			if (w == null) {
 				UnityEngine.Debug.Log (string.Format ("WATCH {0} not available at {1}.", name, pointName));
 				return;
 			}
-			long t = w.ElapsedMilliseconds;
-			UnityEngine.Debug.Log (string.Format ("WATCH {0} at {1} took {2} ms.", name, pointName, t));
+			w.Show(pointName);
+		}
+
+		public void Show(string pointName) {
+			stopwatch.Stop ();
+			UnityEngine.Debug.Log (
+				string.Format ("WATCH {0} at {1} took {2} ms ({3} delta)", 
+					name, 
+					pointName, 
+					stopwatch.ElapsedMilliseconds, 
+					stopwatch.ElapsedMilliseconds - lastTimeStamp
+				)
+			);
+			lastTimeStamp = stopwatch.ElapsedMilliseconds;
+			stopwatch.Start ();
 		}
 
 		public static long Milliseconds(string name) {
-			Stopwatch w = Get (name);
+			WATCH w = Get (name);
 			if (w == null)
 				return 0L;
-			return w.ElapsedMilliseconds;
+			return w.Milliseconds();
+		}
+
+		public long Milliseconds() {
+			return stopwatch.ElapsedMilliseconds;
 		}
 	}
 }
