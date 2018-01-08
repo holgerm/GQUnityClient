@@ -34,6 +34,9 @@ namespace GQ.Client.WCC
 				}
 			}
 
+			// replace andy line breaks by one space:
+			copyright.Replace('\n', ' ');
+
 			// set copyright text in game object:
 			copyrightText.text = copyright;
 		}

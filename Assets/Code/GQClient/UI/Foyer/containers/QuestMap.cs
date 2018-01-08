@@ -76,7 +76,7 @@ namespace GQ.Client.UI.Foyer
 				Debug.Log ("QuestMap is null".Red ());
 				return;
 			}
-			WATCH.Create("slowMenu").Start();
+			new WATCH("slowMenu").Start();
 			Debug.Log ("Timer #1 (remove all): " + WATCH.Milliseconds("slowMenu"));
 
 			// hide and delete all list elements:

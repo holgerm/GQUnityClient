@@ -28,8 +28,9 @@ namespace GQ.Client.Model
 			if (NotificationPaused)
 				return;
 			
-			if (filterChange != null) 
+			if (filterChange != null) {
 				filterChange ();
+			}
 				
 			if (parentFilter != null) 
 				parentFilter.RaiseFilterChangeEvent ();

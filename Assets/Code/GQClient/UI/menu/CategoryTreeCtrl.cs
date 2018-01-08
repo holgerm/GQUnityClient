@@ -6,6 +6,7 @@ using GQ.Client.Conf;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using UnityEngine.UI;
+using QM.Util;
 
 namespace GQ.Client.UI {
 
@@ -55,6 +56,8 @@ namespace GQ.Client.UI {
 
 		public void UpdateView ()
 		{
+			new WATCH("1").Start();
+
 			if (this == null) {
 				return;
 			}
@@ -62,7 +65,28 @@ namespace GQ.Client.UI {
 			// pause filter change events:
 			CategoryFilter.NotificationPaused = true;
 
-			// initialize the category entry dictionary:
+			recreateModelTree ();
+
+			WATCH.Show ("1", "model recreated");
+
+			recreateUI ();
+
+			WATCH.Show ("1", "UI recreated");
+
+			// reactivate filter change events after pause:
+			CategoryFilter.NotificationPaused = false;
+
+			// set the number of all quests represented by the currently selected categories
+//			int nr = 0;
+//			foreach (CategoryFolder folder in categoryFolders.Values) {
+//				nr += folder.NumberOfQuests ();
+//			}
+//			Number.text = ""; // nr.ToString (); TODO make Config?
+			WATCH.Show ("1", "all changes notified");
+		}
+
+		private void recreateModelTree() {
+			// model: create skeleton of folders and entries:
 			categoryEntries = new Dictionary<string, CategoryEntry> ();
 			categoryFolders = new Dictionary<string, CategoryFolder> ();
 			foreach (Category c in ConfigurationManager.Current.categories) {
@@ -77,8 +101,8 @@ namespace GQ.Client.UI {
 				}
 				catFolder.AddCategoryEntry (catEntry);
 			}
-
-			// Build the internal category tree model:
+				
+			// model: populate entries with quest infos:
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
 				foreach (string catId in info.Categories) {
 					string cat = catId.StripQuotes ();
@@ -92,7 +116,9 @@ namespace GQ.Client.UI {
 					catEntry.AddQuestID (info.Id);
 				}
 			}
+		}
 
+		private void recreateUI () {
 			// delete all category entry UI elements:
 			for (int i = 1; i < transform.childCount; i++) {
 				Transform child = transform.GetChild (i);
@@ -124,21 +150,12 @@ namespace GQ.Client.UI {
 					uiEntry.transform.SetAsLastSibling ();
 				}
 			}
-
-			// reactivate filter change events after pause:
-			CategoryFilter.NotificationPaused = false;
-
-			// set the number of all quests represented by the currently selected categories
-			int nr = 0;
-			foreach (CategoryFolder folder in categoryFolders.Values) {
-				nr += folder.NumberOfQuests ();
-			}
-			Number.text = ""; // nr.ToString (); TODO make Config?
- 		}
+		}
 
 		bool generalSelectionState = true;
 
 		public void SetSelection4AllItems() {
+			new WATCH ("SetSelection4AllItems").Start();
 			generalSelectionState = !generalSelectionState;
 			CategoryFilter.NotificationPaused = true;
 			foreach (CategoryEntry entry in categoryEntries.Values) {
@@ -152,6 +169,7 @@ namespace GQ.Client.UI {
 			else {
 				OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b, ConfigurationManager.Current.disabledAlpha);
 			}
+			WATCH.StopAndShow ("SetSelection4AllItems");
 		}
 			
 		#endregion
