@@ -204,30 +204,33 @@ namespace GQ.Client.Model
 				new ImportQuestInfosFromJSON (false);
 			new SimpleDialogBehaviour (
 				importLocal,
-				"Updating quests",
-				"Reading local quests."
+				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			Downloader downloader = 
 				new Downloader (
 					url: ConfigurationManager.UrlPublicQuestsJSON, 
 					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000);
-			new DownloadDialogBehaviour (downloader, "Updating quests");
+			new DownloadDialogBehaviour (
+				downloader, 
+				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
+			);
 
 			ImportQuestInfosFromJSON importFromServer = 
 				new ImportQuestInfosFromJSON (true);
 			new SimpleDialogBehaviour (
 				importFromServer,
-				"Updating quests",
-				"Reading all found quests into the local data store."
+				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format("Neue {0} werden lokal gespeichert", ConfigurationManager.Current.nameForQuestsPl)
 			);
 
 			ExportQuestInfosToJSON exporter = 
 				new ExportQuestInfosToJSON ();
 			new SimpleDialogBehaviour (
 				exporter,
-				"Updating quests",
-				"Saving Quest Data"
+				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			TaskSequence t = new TaskSequence (importLocal, downloader);

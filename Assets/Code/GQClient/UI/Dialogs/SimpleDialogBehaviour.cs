@@ -31,7 +31,7 @@ namespace GQ.Client.UI.Dialogs {
 					string.Format (title);
 			} else {
 				Dialog.Title.text = 
-					string.Format (title + " (step {0})", Task.Step);
+					string.Format (title + " (Schritt {0})", Task.Step);
 			}
 			Dialog.Details.text = details;
 

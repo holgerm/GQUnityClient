@@ -405,8 +405,8 @@ namespace GQ.Client.Model
 				new PrepareMediaInfoList ();
 			new SimpleDialogBehaviour (
 				prepareMediaInfosToDownload,
-				"Synching Quest Data",
-				"Preparing media information."
+				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+				"Medien werden vorbereitet"
 			);
 
 			// download all missing media info
@@ -414,8 +414,8 @@ namespace GQ.Client.Model
 				new MultiDownloader (1);
 			new SimpleDialogBehaviour (
 				downloadMediaFiles,
-				"Synching Quest Data",
-				"Loading media files."
+				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+				"Mediendateien werden geladen"
 			);
 			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
 				LastUpdateOnDevice = LastUpdateOnServer;
@@ -426,16 +426,16 @@ namespace GQ.Client.Model
 				new ExportMediaInfoList ();
 			new SimpleDialogBehaviour (
 				exportLocalMediaInfo,
-				"Synching Quest Data",
-				"Saving updated media info."
+				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+				"Medieninformationen werden lokal gespeichert"
 			);
 
 			ExportQuestInfosToJSON exportQuestsInfoJSON = 
 				new ExportQuestInfosToJSON ();
 			new SimpleDialogBehaviour (
 				exportQuestsInfoJSON,
-				"Updating quests",
-				"Saving Quest Data"
+				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			TaskSequence t = 
@@ -457,8 +457,8 @@ namespace GQ.Client.Model
 				new ExportQuestInfosToJSON ();
 			new SimpleDialogBehaviour (
 				exportQuestsInfoJSON,
-				"Updating quests",
-				"Saving Quest Data"
+				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			exportQuestsInfoJSON.Start ();
@@ -471,7 +471,10 @@ namespace GQ.Client.Model
 				new LocalFileLoader (
 					filePath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
 				);
-			new DownloadDialogBehaviour (loadGameXML, "Loading quest");
+			new DownloadDialogBehaviour (
+				loadGameXML, 
+				string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
+			);
 
 			QuestStarter questStarter = new QuestStarter ();
 

@@ -14,7 +14,7 @@ namespace GQ.Client.UI.Dialogs
 
 		AbstractDownloader DownloadTask { get; set; }
 
-		public DownloadDialogBehaviour (Task task, string title = "Downloading ...") : base (task)
+		public DownloadDialogBehaviour (Task task, string title = "Laden ...") : base (task)
 		{
 
 			if (Task is AbstractDownloader) {
@@ -79,7 +79,7 @@ namespace GQ.Client.UI.Dialogs
 			} else {
 				Dialog.Title.text = string.Format (title + " (step {0})", DownloadTask.Step);
 			}
-			Dialog.Details.text = "Start downloading data ...";
+			Dialog.Details.text = "Download startet ...";
 			// now we show the dialog:
 			Dialog.Show ();
 		}
@@ -91,7 +91,7 @@ namespace GQ.Client.UI.Dialogs
 		/// <param name="args">Arguments.</param>
 		public void UpdateLoadingScreenProgress (object callbackSender, DownloadEvent args)
 		{
-			Dialog.Details.text = String.Format ("{0:#0.0}% done", args.Progress * 100);
+			Dialog.Details.text = String.Format ("{0:#0.0}% erledigt", args.Progress * 100);
 		}
 
 		/// <summary>
@@ -101,11 +101,11 @@ namespace GQ.Client.UI.Dialogs
 		/// <param name="args">Arguments.</param>
 		public void UpdateLoadingScreenError (object callbackSender, DownloadEvent args)
 		{
-			Dialog.Details.text = String.Format ("Error: {0}", args.Message);
+			Dialog.Details.text = String.Format ("Fehler: {0}", args.Message);
 
 			// Use No button for Giving Up:
 			Dialog.SetNoButton (
-				"Give Up",
+				"Abbrechen",
 				(GameObject sender, EventArgs e) => {
 					// in error case when user clicks the give up button, we just close the dialog:
 					CloseDialog (sender, new DownloadEvent ());
@@ -115,7 +115,7 @@ namespace GQ.Client.UI.Dialogs
 
 			// Use Yes button for Retry:
 			Dialog.SetYesButton (
-				"Retry",
+				"Erneut versuchen",
 				(GameObject yesButton, EventArgs e) => {
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
 					EnterDownloadMode ();

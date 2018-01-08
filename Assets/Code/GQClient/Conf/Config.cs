@@ -41,7 +41,11 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public int   	downloadTimeOutSeconds   { get; set; }
 
-		public string 	nameForQuest { get; set; }
+		[ShowInProductEditor]
+		public string 	nameForQuestSg { get; set; }
+
+		[ShowInProductEditor]
+		public string 	nameForQuestsPl { get; set; }
 
 		public string 	questVisualization { get; set; }
 

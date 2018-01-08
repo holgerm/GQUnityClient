@@ -44,7 +44,10 @@ namespace GQ.Client.UI
 				new LocalFileLoader (
 					filePath: QuestManager.GetLocalPath4Quest (Data.Id) + QuestManager.QUEST_FILE_NAME
 				);
-			new DownloadDialogBehaviour (loadGameXML, "Loading quest");
+			new DownloadDialogBehaviour (
+				loadGameXML, 
+				string.Format("Loading {0}", ConfigurationManager.Current.nameForQuestSg)
+			);
 
 			QuestStarter questStarter = new QuestStarter ();
 

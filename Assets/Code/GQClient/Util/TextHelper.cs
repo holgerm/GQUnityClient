@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using GQ.Client.Model;
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 namespace GQ.Client.Util
 {
@@ -115,6 +116,12 @@ namespace GQ.Client.Util
 				result = result.Substring (0, result.Length - 1);
 			}
 			return result;
+		}
+
+		public static string Capitalize(this string original) {
+			if (original == null || original == "" || !Char.IsLetter(original[0]))
+				return original;
+			return (original.Substring (0, 1).ToUpper () + original.Substring (1));
 		}
 	}
 }
