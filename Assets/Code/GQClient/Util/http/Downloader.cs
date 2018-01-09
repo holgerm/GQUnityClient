@@ -85,14 +85,14 @@ namespace GQ.Client.Util
 			while (!Www.isDone) {
 				if (progress < Www.progress) {
 					progress = Www.progress;
-					msg = string.Format ("Downloading: URL {0}, got {1:N2}%", url, progress * 100);
+					msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);
 					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
 				}
 				if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout) {
 					stopwatch.Stop ();
 					Www.Dispose ();
-					msg = string.Format ("Timeout: already {1} ms elapsed while trying to download url {0}", 
-						url, stopwatch.ElapsedMilliseconds);
+					msg = string.Format ("Timeout: schon {0} ms vergangen", 
+						stopwatch.ElapsedMilliseconds);
 					Raise (DownloadEventType.Timeout, new DownloadEvent (elapsedTime: Timeout, message: msg));
 					yield break;
 				}
@@ -109,12 +109,12 @@ namespace GQ.Client.Util
 			} else {
 				Result = Www.text;
 
-				msg = string.Format ("Downloading: URL {0}, got {1:N2}%", url, progress * 100);
+				msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);
 				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				yield return null;
 
-				msg = string.Format ("Saving file ...");
+				msg = string.Format ("Speichere Datei ...");
 				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				if (TargetPath != null) {
@@ -136,7 +136,7 @@ namespace GQ.Client.Util
 					}
 				}
 
-				msg = string.Format ("Download completed. (URL: {0})", 
+				msg = string.Format ("Download für Datei {0} abgeschlossen", 
 					url);
 				Raise (DownloadEventType.Success, new DownloadEvent (message: msg));
 				RaiseTaskCompleted (Result);

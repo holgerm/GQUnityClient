@@ -7,6 +7,7 @@ using Candlelight.UI;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using System.Text.RegularExpressions;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -60,7 +61,11 @@ namespace GQ.Client.UI
 					iwtPage.Parent.MediaStore.TryGetValue (iwtPage.ImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
-					loader = new Downloader (iwtPage.ImageUrl);
+					loader = 
+						new Downloader (
+							url: iwtPage.ImageUrl, 
+							timeout: ConfigurationManager.Current.timeoutMS
+						);
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {

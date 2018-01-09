@@ -39,7 +39,7 @@ namespace GQ.Client.Conf
 		public DownloadStrategy DownloadStrategy { get; set; }
 
 		[ShowInProductEditor]
-		public int   	downloadTimeOutSeconds   { get; set; }
+		public long   	timeoutMS   { get; set; }
 
 		[ShowInProductEditor]
 		public string 	nameForQuestSg { get; set; }
@@ -293,7 +293,7 @@ namespace GQ.Client.Conf
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
 			DownloadStrategy = DownloadStrategy.UPFRONT;
-			downloadTimeOutSeconds = 300;
+			timeoutMS = 10000L;
 
 			acceptedPageTypes = new string[0];
 			sceneMappings = new List<SceneMapping> ();

@@ -48,6 +48,7 @@ namespace GQ.Client.UI.Dialogs
 			DownloadTask.OnProgress += UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess += CloseDialog;
 			DownloadTask.OnError += UpdateLoadingScreenError;
+			DownloadTask.OnTimeout += UpdateLoadingScreenTimeout;
 		}
 
 		void detachUpdateListeners ()
@@ -56,6 +57,7 @@ namespace GQ.Client.UI.Dialogs
 			DownloadTask.OnProgress -= UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess -= CloseDialog;
 			DownloadTask.OnError -= UpdateLoadingScreenError;
+			DownloadTask.OnTimeout -= UpdateLoadingScreenTimeout;
 		}
 
 		private string title;
@@ -77,7 +79,7 @@ namespace GQ.Client.UI.Dialogs
 			if (DownloadTask.Step == 0) {
 				Dialog.Title.text = string.Format (title);
 			} else {
-				Dialog.Title.text = string.Format (title + " (step {0})", DownloadTask.Step);
+				Dialog.Title.text = string.Format (title + " (Schritt {0})", DownloadTask.Step);
 			}
 			Dialog.Details.text = "Download startet ...";
 			// now we show the dialog:
@@ -124,6 +126,36 @@ namespace GQ.Client.UI.Dialogs
 			);
 		}
 
+
+		/// <summary>
+		/// Callback for the OnTimeout event.
+		/// </summary>
+		/// <param name="callbackSender">Callback sender.</param>
+		/// <param name="args">Arguments.</param>
+		public void UpdateLoadingScreenTimeout (object callbackSender, DownloadEvent args)
+		{
+			Dialog.Details.text = String.Format ("Problem: {0}", args.Message);
+
+			// Use No button for Giving Up:
+			Dialog.SetNoButton (
+				"Abbrechen",
+				(GameObject sender, EventArgs e) => {
+					// in error case when user clicks the give up button, we just close the dialog:
+					CloseDialog (sender, new DownloadEvent ());
+					Task.RaiseTaskFailed ();
+				}
+			);
+
+			// Use Yes button for Retry:
+			Dialog.SetYesButton (
+				"Erneut versuchen",
+				(GameObject yesButton, EventArgs e) => {
+					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
+					EnterDownloadMode ();
+					DownloadTask.Restart ();
+				}
+			);
+		}
 	}
 
 }

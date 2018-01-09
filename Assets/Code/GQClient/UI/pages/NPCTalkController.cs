@@ -7,6 +7,7 @@ using Candlelight.UI;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using System.Text.RegularExpressions;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -53,7 +54,11 @@ namespace GQ.Client.UI
 					npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
-					loader = new Downloader (npcPage.ImageUrl);
+					loader = 
+						new Downloader (
+							url: npcPage.ImageUrl, 
+							timeout: ConfigurationManager.Current.timeoutMS
+						);
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {

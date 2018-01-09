@@ -6,7 +6,7 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
   "DownloadStrategy": "UPFRONT",
-  "downloadTimeOutSeconds": 80,
+  "timeoutMS": 20000,
   "nameForQuestSg": "Ort",
   "nameForQuestsPl": "Orte",
   "questVisualization": "map",

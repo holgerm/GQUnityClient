@@ -819,6 +819,33 @@ namespace GQ.Editor.UI
 	}
 
 
+	/// <summary>
+	/// Product editor part for properties typed as long.
+	/// </summary>
+	public class ProductEditorPart4Int64 : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+			GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
+
+			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
+				long oldIntVal = (long)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+
+				// show text field if value fits in one line:
+				long newIntVal = EditorGUILayout.LongField (myNamePrefixGUIContent, oldIntVal);
+				if (newIntVal != oldIntVal) {
+					configIsDirty = true;
+					curPropInfo.SetValue (ProductEditor.SelectedConfig, newIntVal, null);
+				}
+			}
+
+			return configIsDirty;
+		}
+	}
+
+
 	public class ProductEditorPart4Byte : ProductEditorPart
 	{
 

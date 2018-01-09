@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.Generic;
 using GQ.Client.Model;
 using GQ.Client.FileIO;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Util
 {
@@ -75,12 +76,13 @@ namespace GQ.Client.Util
 		/// <returns>The download.</returns>
 		public override IEnumerator RunAsCoroutine ()
 		{
-			CurrentlyRunningDownloads = 0;
-
 			if (FileInfoList == null || FileInfoList.Count == 0) {
 				RaiseTaskCompleted ();
 				yield break;
 			}
+
+			CurrentlyRunningDownloads = 0;
+			stopwatch.Start ();
 
 			foreach (MediaInfo info in FileInfoList) {
 				// wait until a place for download is free:
@@ -90,6 +92,11 @@ namespace GQ.Client.Util
 
 				if (TimeIsUp) {
 					stopwatch.Stop ();
+					string msg = 
+						string.Format (
+							"Timeout: Schon {0} ms vergangen", 
+							stopwatch.ElapsedMilliseconds
+						);
 					Raise (DownloadEventType.Timeout, new DownloadEvent (elapsedTime: Timeout));
 					RaiseTaskFailed (); 
 					yield break;
@@ -97,16 +104,21 @@ namespace GQ.Client.Util
 
 				// now we can start the next file downloader:
 				info.LocalFileName = QuestManager.MakeLocalFileNameFromUrl (info.Url);
-				Downloader d = new Downloader (info.Url, targetPath: info.LocalPath);
+				Downloader d = 
+					new Downloader (
+						url: info.Url, 
+						timeout: ConfigurationManager.Current.timeoutMS, 
+						targetPath: info.LocalPath
+					);
 				CurrentlyRunningDownloads++;
 				d.OnTaskEnded += (object sender, TaskEventArgs e) => {
 					CurrentlyRunningDownloads--;
-					UnityEngine.Debug.Log ("downloader freed");
+//					UnityEngine.Debug.Log ("downloader freed, timeout was: " + Timeout + " took ms: " + stopwatch.ElapsedMilliseconds);
 				};
 				d.OnTaskCompleted += (object sender, TaskEventArgs e) => {
 					info.LocalSize = info.RemoteSize;
 					info.LocalTimestamp = info.RemoteTimestamp;
-					UnityEngine.Debug.Log ("size and time updated: new time: " + info.LocalTimestamp);
+//					UnityEngine.Debug.Log ("size and time updated: new time: " + info.LocalTimestamp + " timeout was: " + Timeout + " took ms: " + stopwatch.ElapsedMilliseconds);
 				};
 				d.Start ();
 			}
@@ -115,7 +127,7 @@ namespace GQ.Client.Util
 			while (CurrentlyRunningDownloads > 0) {
 				yield return null;
 			}
-			UnityEngine.Debug.Log ("     ------- TASK COMPLETED Multidownloader");
+//			UnityEngine.Debug.Log ("     ------- TASK COMPLETED Multidownloader");
 			RaiseTaskCompleted ();
 		}
 

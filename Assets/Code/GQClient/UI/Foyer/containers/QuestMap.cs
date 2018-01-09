@@ -26,7 +26,6 @@ namespace GQ.Client.UI.Foyer
 
 		public void OnMarkerChanged (object sender, QuestInfoChangedEvent e)
 		{
-			Debug.Log (("QuestMap.OnMarkerChanged() called with event: " + e.ChangeType.ToString ()).Yellow());
 			Marker m;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:

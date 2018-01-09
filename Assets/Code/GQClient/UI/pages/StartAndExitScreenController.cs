@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using System.Text.RegularExpressions;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -55,7 +56,11 @@ namespace GQ.Client.UI
 					saesPage.Parent.MediaStore.TryGetValue (saesPage.ImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
-					loader = new Downloader (saesPage.ImageUrl);
+					loader = 
+						new Downloader (
+							url: saesPage.ImageUrl, 
+							timeout: ConfigurationManager.Current.timeoutMS
+						);
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {

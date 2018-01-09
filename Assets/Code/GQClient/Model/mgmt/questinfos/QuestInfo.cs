@@ -395,10 +395,13 @@ namespace GQ.Client.Model
 			Downloader downloadGameXML = 
 				new Downloader (
 					url: QuestManager.GetQuestURI (Id), 
-					timeout: ConfigurationManager.Current.downloadTimeOutSeconds * 1000,
+					timeout: ConfigurationManager.Current.timeoutMS,
 					targetPath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
 				);
-			new DownloadDialogBehaviour (downloadGameXML, "Loading quest");
+			new DownloadDialogBehaviour (
+				downloadGameXML, 
+				string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
+			);
 
 			// analyze game.xml, gather all media info compare to local media info and detect missing media
 			PrepareMediaInfoList prepareMediaInfosToDownload = 
@@ -411,7 +414,10 @@ namespace GQ.Client.Model
 
 			// download all missing media info
 			MultiDownloader downloadMediaFiles =
-				new MultiDownloader (1);
+				new MultiDownloader (
+					maxParallelDownloads: 1,
+					timeout: ConfigurationManager.Current.timeoutMS
+				);
 			new SimpleDialogBehaviour (
 				downloadMediaFiles,
 				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
