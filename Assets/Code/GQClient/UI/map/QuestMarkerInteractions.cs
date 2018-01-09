@@ -25,8 +25,9 @@ namespace GQ.Client.UI
 		}
 
 		void Update () {
-			// if users touches buttons or header, we ignore that touch on the map and its markers:
-			if (EventSystem.current.IsPointerOverGameObject ()) {
+			// if users touches buttons or header, we ignore that touch on the map and its markers
+			// also we ignore if the user starts a drag move from such an ui element (hence we ask for used events, c.f. UnitySlippyMap.Input.MapInput
+			if ((Event.current != null && Event.current.type == EventType.Used) || EventSystem.current.IsPointerOverGameObject () || Map.IgnoreInteraction) {
 				return;
 			}
 

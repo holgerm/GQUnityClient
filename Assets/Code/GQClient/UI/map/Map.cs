@@ -35,6 +35,13 @@ namespace GQ.Client.UI
 		#endregion
 
 
+		#region Global static behaviour
+
+		public static bool IgnoreInteraction = false;
+
+		#endregion
+
+
 		#region Centering
 
 		public GameObject MapButtonPanel;
