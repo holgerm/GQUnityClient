@@ -61,50 +61,22 @@ namespace UnitySlippyMap.Input
 		/// <param name="wasInputInterceptedByGUI">If set to <c>true</c> was input intercepted by GU.</param>
 		public static void BasicTouchAndKeyboard (MapBehaviour map, bool wasInputInterceptedByGUI)
 		{
-			// GQ added this to prevent map interactions under UI canvas game object like menu, buttons etc.
-			if (Application.platform == RuntimePlatform.IPhonePlayer
-			    || Application.platform == RuntimePlatform.Android) {
-				if (EventSystem.current.IsPointerOverGameObject (UnityEngine.Input.GetTouch (0).fingerId)) {
-					if (UnityEngine.Input.touchCount > 0) {
-						switch (UnityEngine.Input.GetTouch (0).phase) {
-						case TouchPhase.Began:
-							GQ.Client.UI.Map.IgnoreInteraction = true;
-							break;
-						case TouchPhase.Ended:
-						case TouchPhase.Canceled:
-							GQ.Client.UI.Map.IgnoreInteraction = false;
-							break;
-						}
-					}
-					return;
-				} 
-
-				if (GQ.Client.UI.Map.IgnoreInteraction) {
-					if (UnityEngine.Input.GetTouch (0).phase == TouchPhase.Ended || UnityEngine.Input.GetTouch (0).phase == TouchPhase.Canceled) {
-						GQ.Client.UI.Map.IgnoreInteraction = false;
-					} 
-					return;
+			// GQ added part begins here.
+			if (EventSystem.current.IsPointerOverGameObject () || 
+				(UnityEngine.Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject (UnityEngine.Input.GetTouch (0).fingerId))) 
+			{
+				GQ.Client.UI.Map.IgnoreInteraction = true;
+				if (UnityEngine.Input.GetMouseButtonUp(0)) {
+					GQ.Client.UI.Map.IgnoreInteraction = false;
 				}
+				return;
 			}
-			else {
-				// NON-Mobile Platforms:
-				if (EventSystem.current.IsPointerOverGameObject ()) {
-					if (UnityEngine.Input.GetMouseButtonDown(0)) {
-						GQ.Client.UI.Map.IgnoreInteraction = true;
-					}
-					if (UnityEngine.Input.GetMouseButtonUp(0)) {
-						GQ.Client.UI.Map.IgnoreInteraction = false;
-					}
-					return;
-				}
 
-				if (GQ.Client.UI.Map.IgnoreInteraction) {
-					if (UnityEngine.Input.GetMouseButtonUp(0)) {
-						GQ.Client.UI.Map.IgnoreInteraction = false;	
-						Event.current.Use ();
-					}
-					return;
+			if (GQ.Client.UI.Map.IgnoreInteraction) {
+				if (UnityEngine.Input.GetMouseButtonUp(0)) {
+					GQ.Client.UI.Map.IgnoreInteraction = false;	
 				}
+				return;
 			}
 			// GQ added part ends here.
 

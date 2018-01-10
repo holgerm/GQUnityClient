@@ -8,6 +8,7 @@ using GQ.Client.Model;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Conf;
 using System;
+using UnityEngine.EventSystems;
 
 namespace GQ.Client.UI
 {
@@ -19,7 +20,6 @@ namespace GQ.Client.UI
 		public override void UpdateView () {}
 
 		public override void OnTouch() {
-			Debug.Log(string.Format("Marker '{0}' has been touched. (id: {1}, file: {2})", Data.Name, Data.Id, QuestManager.GetLocalPath4Quest (Data.Id)));
 			if (!Data.IsOnDevice && Data.IsOnServer) {
 				Task download = Data.Download ();
 				Task play = Data.Play ();

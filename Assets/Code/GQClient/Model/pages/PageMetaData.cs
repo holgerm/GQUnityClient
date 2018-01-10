@@ -94,9 +94,6 @@ namespace GQ.Client.Model
 			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
 			Key = GQML.GetStringAttribute (GQML.PAGE_METADATA_STRINGMETA_KEY, reader);
 			Value = GQML.GetStringAttribute (GQML.PAGE_METADATA_STRINGMETA_VALUE, reader);
-			Debug.Log (string.Format ("metadata read: {0} -> {1}", Key, Value).Bold ());
-
-
 
 			// consume the whole stringmeta tag:
 			reader.ReadInnerXml ();

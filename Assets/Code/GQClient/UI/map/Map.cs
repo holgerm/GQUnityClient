@@ -8,6 +8,7 @@ using UnitySlippyMap.Map;
 using GQ.Client.Conf;
 using System;
 using GQ.Client.Err;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
@@ -37,7 +38,28 @@ namespace GQ.Client.UI
 
 		#region Global static behaviour
 
-		public static bool IgnoreInteraction = false;
+		private static bool _ignoreInteraction = false;
+		public static bool IgnoreInteraction {
+			get {
+				return _ignoreInteraction;
+			}
+			set {
+				if (value == true) {
+					_ignoreInteraction = true;
+				}
+				else {
+					Base.Instance.StartCoroutine (_setIgnoreInteractionToFalseAsCoroutine ());
+				}
+			}
+
+		}
+
+		private static IEnumerator _setIgnoreInteractionToFalseAsCoroutine() {
+			yield return new WaitForEndOfFrame ();
+			yield return new WaitForEndOfFrame ();
+			_ignoreInteraction = false;
+			yield break;
+		}
 
 		#endregion
 

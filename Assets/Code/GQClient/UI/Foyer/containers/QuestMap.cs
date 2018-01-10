@@ -108,11 +108,19 @@ namespace GQ.Client.UI.Foyer
 			newMarker.Data = info;
 
 			// Get the category name for the given info regarding the current filter selection ...
-			markerGO.GetComponent<Renderer> ().material.mainTexture = newMarker.Texture; // TextureManager.Instance.GetTexture ("marker.base");
-			markerGO.GetComponent<Renderer> ().material.renderQueue = 4001;
+			Renderer markerRenderer = markerGO.GetComponent<Renderer> ();
+			markerRenderer.material.mainTexture = newMarker.Texture; 
+			markerRenderer.material.renderQueue = 4001;
+
+			// scale the marker so that it fits inside the surrouding tile holder which is a square:
 			float markerWidth = Math.Min (1.0f, (float)newMarker.Texture.width / (float)newMarker.Texture.height);
 			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
+			int longScreenSide = Math.Max(Screen.width, Screen.height);
+			float longMarkerSide = Math.Max (markerRenderer.bounds.size.z, markerRenderer.bounds.size.x);
+//			Debug.Log ("MARKER: long Screen: " + longScreenSide + " long marker side: " + longMarkerSide);
+
 			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) / 5.0f;
+
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
 			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
@@ -120,44 +128,6 @@ namespace GQ.Client.UI.Foyer
 			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
 			return newMarker;
 		}
-
-//		private GameObject CreateSymbolForMarker(GameObject markerGO, QuestInfo info) {
-//			GameObject markerSymbolGo = new GameObject ();
-//			markerSymbolGo.transform.parent = markerGO.transform;
-//			markerSymbolGo.name = "Markersymbol (" + info.Name + ")";
-//			MeshFilter meshFilter = markerSymbolGo.AddComponent<MeshFilter> ();
-//			MeshRenderer meshRenderer = markerSymbolGo.AddComponent<MeshRenderer> ();
-//			Mesh mesh = meshFilter.mesh;
-//			mesh.vertices = new Vector3[] {
-//				new Vector3 (0.5f, 0.0f, 1.0f),
-//				new Vector3 (0.5f, 0.0f, 0.0f),
-//				new Vector3 (-0.5f, 0.0f, 0.0f),
-//				new Vector3 (-0.5f, 0.0f, 1.0f)
-//			};
-//			mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-//			mesh.normals = new Vector3[] {
-//				Vector3.up,
-//				Vector3.up,
-//				Vector3.up,
-//				Vector3.up
-//			};
-//			mesh.uv = new Vector2[] {
-//				new Vector2 (1.0f, 1.0f),
-//				new Vector2 (1.0f, 0.0f),
-//				new Vector2 (0.0f, 0.0f),
-//				new Vector2 (0.0f, 1.0f)
-//			};
-//			// add a material
-//			string shaderName = "Larku/UnlitTransparent";
-//			Shader shader = Shader.Find (shaderName);
-//			meshRenderer.material = new Material (shader);
-//			meshRenderer.material.mainTexture = MarkerSymbolTexture;
-//			meshRenderer.material.color = ConfigurationManager.Current.overlayButtonFgColor;
-//			markerSymbolGo.transform.localScale = new Vector3 (0.604f, 0.0f, 0.4f);
-//			markerSymbolGo.transform.localPosition = new Vector3 (0.0f, 0.0f, 0.468f);
-//			meshRenderer.material.renderQueue = 4002;
-//			return markerSymbolGo;
-//		}
 
 		public Texture MarkerSymbolTexture;
 		#endregion
