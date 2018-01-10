@@ -61,10 +61,11 @@ namespace GQ.Client.Conf
 
 		public bool 	hideHiddenQuests  { get; set; }
 
-		[ShowInProductEditor(StartSection="Pages & Scenes:")]
+		[ShowInProductEditor (StartSection = "Pages & Scenes:")]
 		public string[]	acceptedPageTypes { get; set; }
 
-		public Dictionary<string, string> GetSceneMappingsDict () { 
+		public Dictionary<string, string> GetSceneMappingsDict ()
+		{ 
 			Dictionary<string, string> smDict = new Dictionary<string, string> ();
 			foreach (SceneMapping sm in sceneMappings) {
 				smDict.Add (sm.pageTypeName, sm.scenePath);
@@ -84,7 +85,7 @@ namespace GQ.Client.Conf
 
 		#region Map
 
-		[ShowInProductEditor(StartSection="Map & Markers:")]
+		[ShowInProductEditor (StartSection = "Map & Markers:")]
 		[JsonConverter (typeof(StringEnumConverter))]
 		public MapProvider 	mapProvider { get; set; }
 
@@ -110,6 +111,7 @@ namespace GQ.Client.Conf
 
 		[JsonIgnore]
 		private ImagePath _marker;
+
 		[ShowInProductEditor]
 		public ImagePath marker { 
 			get {
@@ -129,6 +131,7 @@ namespace GQ.Client.Conf
 
 		[JsonIgnore]
 		private byte _markerBGAlpha = 168;
+
 		[ShowInProductEditor]
 		public byte markerBGAlpha {
 			get {
@@ -146,6 +149,9 @@ namespace GQ.Client.Conf
 				_markerBGAlpha = value;
 			}
 		}
+
+		[ShowInProductEditor]
+		public float markerScale { get; set; }
 
 		[JsonIgnore]
 		private List<Category> _categories;
@@ -176,7 +182,7 @@ namespace GQ.Client.Conf
 
 		#region Layout
 
-		[ShowInProductEditor(StartSection="Layout & Colors:")]
+		[ShowInProductEditor (StartSection = "Layout & Colors:")]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	mainColor  { get; set; }
 
@@ -233,7 +239,7 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonFgDisabledColor  { get; set; }
 
-		[ShowInProductEditor(StartSection="Menu:")]
+		[ShowInProductEditor (StartSection = "Menu:")]
 		public bool showEmptyMenuEntries { get; set; }
 
 		[ShowInProductEditor]
@@ -252,6 +258,7 @@ namespace GQ.Client.Conf
 
 		[JsonIgnore]
 		private float _disabledAlpha = 0.5f;
+
 		[ShowInProductEditor]
 		public float disabledAlpha {
 			get {
@@ -312,7 +319,7 @@ namespace GQ.Client.Conf
 			useMapOffline = false;
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
-
+			markerScale = 1.0f;
 
 
 			// Layout:
@@ -348,7 +355,8 @@ namespace GQ.Client.Conf
 		BACKGROUND
 	}
 
-	public enum PageType {
+	public enum PageType
+	{
 		StartAndExitScreen,
 		NPCTalk,
 		ImageWithText,
@@ -418,15 +426,17 @@ namespace GQ.Client.Conf
 		public static readonly Color32 transparent = new Color32 (255, 255, 255, 0);
 	}
 
-	public struct SceneMapping {
+	public struct SceneMapping
+	{
 
 		public const string PageSceneAssetPathRoot = "Assets/Scenes/Pages/";
 
-		public SceneMapping(string pageType, string scenePath) {
+		public SceneMapping (string pageType, string scenePath)
+		{
 			this.pageTypeName = pageType;
 			this.scenePath = scenePath;
 		}
-			
+
 		/// <summary>
 		/// Pages of this type will use the scene given by the scenePath.
 		/// </summary>
@@ -465,25 +475,27 @@ namespace GQ.Client.Conf
 			this.path = path;
 		}
 
-		public override string ToString() {
+		public override string ToString ()
+		{
 			return "ImagePath: " + path;
 		}
 
-		public override bool Equals(System.Object other) 
+		public override bool Equals (System.Object other)
 		{
 			// Other null?
 			if (other == null)
 				return path == null || path.Equals ("");
 
 			// Compare run-time types.
-			if (GetType() != other.GetType()) 
+			if (GetType () != other.GetType ())
 				return false;
 
 			return path == ((ImagePath)other).path;
 		}
-		public override int GetHashCode() 
+
+		public override int GetHashCode ()
 		{
-			return path.GetHashCode();
+			return path.GetHashCode ();
 		}
 	}
 
@@ -500,7 +512,8 @@ namespace GQ.Client.Conf
 
 		public ImagePath symbol;
 
-		public Category() {
+		public Category ()
+		{
 			this.id = "";
 			name = "";
 			folderName = "";
@@ -508,7 +521,8 @@ namespace GQ.Client.Conf
 		}
 
 		[JsonConstructor]
-		public Category(string id, string name, string folderName, string symbolPath) {
+		public Category (string id, string name, string folderName, string symbolPath)
+		{
 			this.id = id;
 			this.name = name;
 			this.folderName = folderName == null ? "" : folderName;
@@ -518,7 +532,7 @@ namespace GQ.Client.Conf
 	}
 
 	public class ShowInProductEditor : Attribute
-	{	
+	{
 		public string StartSection { get; set; }
 	}
 }

@@ -89,11 +89,12 @@ namespace GQ.Client.UI.Foyer
 				// create new list elements
 				Marker newMarker = CreateMarker (info);
 				if (newMarker != null)
-				Markers.Add (info.Id, newMarker);
+					Markers.Add (info.Id, newMarker);
 			}
 		}
-			
-		private Marker CreateMarker(QuestInfo info) {
+
+		private Marker CreateMarker (QuestInfo info)
+		{
 			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
 				return null;
 			}
@@ -101,10 +102,10 @@ namespace GQ.Client.UI.Foyer
 			GameObject markerGO = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
 			QuestMarker newMarker = map.CreateMarker<QuestMarker> (
-				info.Name, 
-				new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
-				markerGO
-			);
+				                        info.Name, 
+				                        new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
+				                        markerGO
+			                        );
 			newMarker.Data = info;
 
 			// Get the category name for the given info regarding the current filter selection ...
@@ -115,11 +116,12 @@ namespace GQ.Client.UI.Foyer
 			// scale the marker so that it fits inside the surrouding tile holder which is a square:
 			float markerWidth = Math.Min (1.0f, (float)newMarker.Texture.width / (float)newMarker.Texture.height);
 			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
-			int longScreenSide = Math.Max(Screen.width, Screen.height);
+			int longScreenSide = Math.Max (Screen.width, Screen.height);
 			float longMarkerSide = Math.Max (markerRenderer.bounds.size.z, markerRenderer.bounds.size.x);
 //			Debug.Log ("MARKER: long Screen: " + longScreenSide + " long marker side: " + longMarkerSide);
 
-			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) / 5.0f;
+			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) *
+			(ConfigurationManager.Current.markerScale / 5.0f);
 
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
@@ -130,12 +132,13 @@ namespace GQ.Client.UI.Foyer
 		}
 
 		public Texture MarkerSymbolTexture;
+
 		#endregion
 
 
 		#region Map (SlippyMaps)
 
-		private bool 	isPerspectiveView = false;
+		private bool isPerspectiveView = false;
 		private float	perspectiveAngle = 30.0f;
 		private float	destinationAngle = 0.0f;
 		private float	currentAngle = 0.0f;
@@ -266,6 +269,6 @@ namespace GQ.Client.UI.Foyer
 
 		}
 
-		#endregion 
+		#endregion
 	}
 }
