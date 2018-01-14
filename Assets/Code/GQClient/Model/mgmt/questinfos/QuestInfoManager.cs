@@ -236,6 +236,7 @@ namespace GQ.Client.Model
 			TaskSequence t = new TaskSequence (importLocal, downloader);
 			t.AppendIfCompleted (importFromServer);
 			t.Append (exporter);
+			Debug.Log ("QIM Starting TaskSequence ... as coroutine? " + t.RunsAsCoroutine);
 			t.Start ();
 		}
 

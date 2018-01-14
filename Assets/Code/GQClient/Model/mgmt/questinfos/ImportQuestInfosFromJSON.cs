@@ -8,6 +8,7 @@ using System;
 using GQ.Client.UI;
 using System.IO;
 using GQ.Client.Err;
+using Newtonsoft.Json.Converters;
 
 namespace GQ.Client.Model
 {
@@ -71,7 +72,17 @@ namespace GQ.Client.Model
 			QuestInfo[] quests;
 
 			try {
-				quests = JsonConvert.DeserializeObject<QuestInfo[]> (InputJSON);
+				quests = JsonConvert.DeserializeObject<QuestInfo[]> (InputJSON,
+					new JsonSerializerSettings {
+						Error = delegate(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+							{
+								Log.SignalErrorToDeveloper("ERROR while deserializing from JSON: " + args.ErrorContext.Error.Message +
+									" path: " + args.ErrorContext.Path +
+									" inner exc: " + args.ErrorContext.Error.InnerException.Message);
+								args.ErrorContext.Handled = true;
+							},
+						Converters = { new IsoDateTimeConverter() }
+					});
 			} catch (Exception e) {
 				Log.SignalErrorToDeveloper (
 					"Error in JSON while trying to update quest infos: {0}\nJSON:\n{1}",

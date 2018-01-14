@@ -504,7 +504,7 @@ namespace GQ.Client.Model
 	}
 
 
-	public struct HotspotInfo
+	public class HotspotInfo
 	{
 
 		public HotspotInfo(double lat, double lon) {
@@ -520,8 +520,13 @@ namespace GQ.Client.Model
 	}
 
 
-	public struct MetaDataInfo
+	public class MetaDataInfo
 	{
+
+		public MetaDataInfo(string key, string val) {
+			Key = key;
+			Value = val;
+		}
 
 		public string Key { get; set; }
 

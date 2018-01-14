@@ -72,6 +72,8 @@ namespace GQ.Client.Util
 
 		public override IEnumerator RunAsCoroutine ()
 		{
+			UnityEngine.Debug.Log ("Downloader #1 from url: " + url);
+
 			Www = new WWW (url);
 			stopwatch.Start ();
 
@@ -83,6 +85,8 @@ namespace GQ.Client.Util
 
 			float progress = 0f;
 			while (!Www.isDone) {
+				UnityEngine.Debug.Log ("Downloader running at: " + Www.progress);
+
 				if (progress < Www.progress) {
 					progress = Www.progress;
 					msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);
@@ -105,9 +109,12 @@ namespace GQ.Client.Util
 
 			if (Www.error != null && Www.error != "") {
 				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
+				UnityEngine.Debug.Log ("Downloader error: " + Www.error);
 				RaiseTaskFailed ();
 			} else {
 				Result = Www.text;
+			
+				UnityEngine.Debug.Log ("Downloader done text length: " + Www.text.Length);
 
 				msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);
 				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
