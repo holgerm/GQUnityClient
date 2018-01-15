@@ -81,6 +81,9 @@ namespace GQ.Client.Model
 		public const string ACTION_TYPE = "type";
 		public const string ACTION_ATTRIBUTE_VARNAME = "var";
 		public const string ACTION_ATTRIBUTE_FROMVARNAME = "FromVar";
+		public const string ACTION_PLAYAUDIO_FILE = "file";
+		public const string ACTION_PLAYAUDIO_LOOP = "loop";
+		public const string ACTION_PLAYAUDIO_STOPOTHERS = "stopOthers";
 		public const string ACTION_SETVARIABLE_VALUE = "value";
 		public const string ACTION_STARTMISSION_ALLOWRETURN = "allowReturn";
 
@@ -188,9 +191,13 @@ namespace GQ.Client.Model
 		public static bool GetOptionalBoolAttribute (string attributeName, XmlReader reader, bool defaultVal = false)
 		{
 			string attString = getAttr (attributeName, "Bool", reader);
-			bool val = defaultVal;
-			bool.TryParse (attString, out val);
-			return val;
+			if (attString == null)
+				return defaultVal;
+
+			bool result = false;
+			result |= attString.ToLower ().Equals ("true");
+			result |= attString.ToLower ().Equals ("1");
+			return result;
 		}
 
 		public static bool GetRequiredBoolAttribute (string attributeName, XmlReader reader)

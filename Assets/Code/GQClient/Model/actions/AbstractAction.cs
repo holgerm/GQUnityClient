@@ -69,14 +69,6 @@ namespace GQ.Client.Model
 				reader.Read ();
 		}
 
-		//		protected void tryThis (XmlReader reader)
-		//		{
-		//			if (!reader.IsEmptyElement) {
-		//				// consume the starting action element, when there is content
-		//				reader.Read ();
-		//			}
-		//		}
-		//
 		protected virtual void ReadAttributes (XmlReader reader)
 		{
 		}

@@ -985,7 +985,7 @@ namespace GQ.Editor.UI
 					if (newSymbolSprite != oldSymbolSprite) {
 						string path = AssetDatabase.GetAssetPath (newSymbolSprite);
 						newSymbolPath = new ImagePath (Files.GetResourcesRelativePath (path));
-						elemChanged |= (newSymbolPath.path != oldSymbolPath.path);
+						elemChanged |= !newSymbolPath.Equals(oldSymbolPath);
 					}
 					if (elemChanged) {
 						valsChanged = true;

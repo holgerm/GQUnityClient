@@ -159,6 +159,8 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public List<Category> categories { 
 			get {
+				if (_categories == null)
+					_categories = new List<Category> ();
 				return _categories;
 			}
 			set {

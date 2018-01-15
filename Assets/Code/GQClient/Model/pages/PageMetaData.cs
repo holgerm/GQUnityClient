@@ -88,7 +88,7 @@ namespace GQ.Client.Model
 
 		public void ReadXml (XmlReader reader)
 		{
-			GQML.AssertReaderAtStart (reader, GQML.PAGE_NPCTALK_DIALOGITEM);
+			GQML.AssertReaderAtStart (reader, GQML.PAGE_METADATA_STRINGMETA);
 
 			// Read Attributes:
 			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);

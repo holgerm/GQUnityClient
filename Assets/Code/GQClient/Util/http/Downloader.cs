@@ -85,8 +85,6 @@ namespace GQ.Client.Util
 
 			float progress = 0f;
 			while (!Www.isDone) {
-				UnityEngine.Debug.Log ("Downloader running at: " + Www.progress);
-
 				if (progress < Www.progress) {
 					progress = Www.progress;
 					msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);

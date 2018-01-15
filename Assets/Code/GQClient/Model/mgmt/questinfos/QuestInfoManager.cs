@@ -126,9 +126,27 @@ namespace GQ.Client.Model
 
 		public void AddInfo (QuestInfo newInfo)
 		{
-			if (QuestDict.ContainsKey (newInfo.Id)) {
+			QuestInfo oldInfo = null;
+			if (QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
 				// A questInfo with this ID already exists: this is a CHANGE:
-				// TODO
+				if (newInfo.LastUpdateOnServer > oldInfo.LastUpdateOnServer) {
+					// NEW INFO IS NEWER: hence we should replace the old one with the new:
+					QuestDict.Remove(newInfo.Id);
+					QuestDict.Add (newInfo.Id, newInfo);
+					Debug.Log ("Change of QuestInfos in QIM, we found a server-side update and replaced the old info with the new one.");
+
+					if (Filter.Accept (newInfo)) {
+						// Run through filter and raise event if involved:
+						raiseDataChange (
+							new QuestInfoChangedEvent (
+								String.Format ("Info for quest {0} changed.", newInfo.Name),
+								ChangeType.ChangedInfo,
+								newQuestInfo: newInfo,
+								oldQuestInfo: oldInfo
+							)
+						);
+					}
+				}
 			} else {
 				// this is a NEW quest info:
 				QuestDict.Add (newInfo.Id, newInfo);

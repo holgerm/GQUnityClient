@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using GQ.Client.Err;
 using System.IO;
 using System.Xml;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -308,6 +309,7 @@ namespace GQ.Client.Model
 
 		public void End ()
 		{
+			Audio.Clear ();
 			SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
 			Resources.UnloadUnusedAssets ();
 		}
