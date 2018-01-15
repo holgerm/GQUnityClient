@@ -161,6 +161,13 @@ namespace GQ.Client.Conf
 			get {
 				if (_categories == null)
 					_categories = new List<Category> ();
+				else {
+					// JSON does set values via reflection in this getter and does not call the setter at all. Hence we need to populate our dictionary here.
+					foreach (Category c in _categories) {
+						if (!categoryDict.ContainsKey(c.id))
+							categoryDict.Add (c.id, c);
+					}
+				}
 				return _categories;
 			}
 			set {
@@ -343,6 +350,7 @@ namespace GQ.Client.Conf
 			// Menu:
 			showEmptyMenuEntries = false;
 			filterByCategories = true;
+			categoryDict = new Dictionary<string, Category> ();
 		}
 
 		#endregion
