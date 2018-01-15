@@ -48,9 +48,33 @@
   "markerScale": 1.0,
   "categories": [
     {
+      "id": "q3tg.bildung",
+      "name": "Bildung",
+      "folderName": "Traunreut",
+      "symbol": {
+        "path": "textures/readable/bildung"
+      }
+    },
+    {
+      "id": "q3tg.geschichte",
+      "name": "Geschichte",
+      "folderName": "Traunreut",
+      "symbol": {
+        "path": "textures/readable/geschichte"
+      }
+    },
+    {
+      "id": "q3tg.freizeit",
+      "name": "Freizeit",
+      "folderName": "Traunreut",
+      "symbol": {
+        "path": "textures/readable/freizeit"
+      }
+    },
+    {
       "id": "q3tg.restaurant",
       "name": "Restaurant",
-      "folderName": "",
+      "folderName": "Traunreut",
       "symbol": {
         "path": "textures/readable/restaurant"
       }
