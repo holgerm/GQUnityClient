@@ -6,7 +6,7 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
-  "timeoutMS": 10000,
+  "timeoutMS": 20000,
   "nameForQuestSg": null,
   "nameForQuestsPl": null,
   "questVisualization": "list",
