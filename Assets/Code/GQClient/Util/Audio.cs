@@ -43,7 +43,7 @@ namespace GQ.Client.Util
 			GameObject go = new GameObject ("AudioSource for " + path);
 			go.transform.SetParent (Base.Instance.transform);
 			AudioSource audioSource = go.AddComponent<AudioSource> ();
-			audioSource.clip = audioWWW.GetAudioClip (false, true);
+			audioSource.clip = audioWWW.GetAudioClip (false, false);
 			audioSources [path] = audioSource;
 			_internalStartPlaying (audioSource, loop, stopOtherAudio);
 

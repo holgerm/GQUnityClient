@@ -161,6 +161,14 @@ namespace GQ.Client.Model
 			}
 		}
 			
+		// called when a scene has been loaded:
+		void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		{
+			Debug.Log(string.Format("OnSceneLoaded: {0} in {1} mode.", scene.name, mode).Yellow());
+			SceneManager.SetActiveScene (scene);
+			SceneManager.sceneLoaded -= OnSceneLoaded;
+		}
+
 		public virtual void Start ()
 		{
 			// TODO Show Mem Avail:
@@ -170,31 +178,18 @@ namespace GQ.Client.Model
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
+			Debug.Log (("Current scene: " + scene.name).Yellow());
+			Debug.Log (string.Format ("Loading scene: {0} with page impl type: {1}", PageScenePath, GetType ().Name).Yellow ());
 			if (!scene.path.Equals (PageScenePath)) {
+				SceneManager.sceneLoaded += OnSceneLoaded;
 				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
+				SceneManager.UnloadSceneAsync (scene);
 			}
-
-			Debug.Log (string.Format ("Loaded scene: {0} with page impl type: {1}", PageScenePath, GetType ().Name).Yellow ());
-
-			// TODO: We need to get rid of old scenes. this was a trial that did not yet work completely:
-//			if (QuestManager.Instance.CurrentPage == null) {
-//				// this is the first page, hence we do not need to unload another page's scene.
-//				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
-//			} else {
-//				// this is not the first page: can the next page reuse the same scene?
-//				string currentSceneUnloadPath = "Scenes/Pages/" + QuestManager.Instance.CurrentPage.GetType ().Name.Substring (4);
-//				if (!GetType ().Equals (QuestManager.Instance.CurrentPage.GetType ())) {
-//					SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
-//					SceneManager.UnloadSceneAsync (currentSceneUnloadPath);
-//				}
-//			}
-
 
 			// set this page as current in QM
 			QuestManager.Instance.CurrentQuest = Parent;
 			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
-//			PageCtrl.Initialize ();
 
 			// Trigger OnStart Actions of this page:
 			StartTrigger.Initiate ();
@@ -205,7 +200,7 @@ namespace GQ.Client.Model
 			State = GQML.STATE_SUCCEEDED;
 			if (EndTrigger == Trigger.Null) {
 				Log.SignalErrorToAuthor (
-					"Quest {0} ({1}, page {2} has no actions onEnd defined. We ended the quest here.",
+					"Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
 					Quest.Name, Quest.Id,
 					Id
 				);
