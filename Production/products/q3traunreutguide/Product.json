@@ -106,7 +106,9 @@
     "b": 0,
     "a": 255
   },
-  "topLogo": null,
+  "topLogo": {
+    "path": "TopLogo"
+  },
   "contentBackgroundColor": {
     "r": 255,
     "g": 255,
