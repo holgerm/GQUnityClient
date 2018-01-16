@@ -42,7 +42,7 @@ namespace GQ.Client.Model
 
 			if (reader.IsEmptyElement) {
 				reader.Read ();
-				Log.SignalErrorToDeveloper ("Empty xml hotspot element found.");
+				Log.WarnAuthor ("Empty xml hotspot element found.");
 				return;
 			}
 

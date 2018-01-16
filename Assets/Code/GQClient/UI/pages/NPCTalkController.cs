@@ -18,9 +18,11 @@ namespace GQ.Client.UI
 		#region Inspector Fields
 
 		public RawImage image;
-		public HyperText text;
+		public Transform dialogItemContainer;
+		public Text forwardButtonText;
 
 		#endregion
+
 
 		#region Other Fields
 
@@ -38,44 +40,14 @@ namespace GQ.Client.UI
 		{
 			npcPage = (PageNPCTalk)page;
 
-			// show text:
-			text.text = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
-
-			// show (or hide completely) image:
-			GameObject imagePanel = image.transform.parent.gameObject;
-			if (npcPage.ImageUrl == "") {
-				imagePanel.SetActive (false);
-				return;
-			} else {
-				imagePanel.SetActive (true);
-				AbstractDownloader loader;
-				if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
-					MediaInfo mediaInfo;
-					npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
-					loader = new LocalFileLoader (mediaInfo.LocalPath);
-				} else {
-					loader = 
-						new Downloader (
-							url: npcPage.ImageUrl, 
-							timeout: ConfigurationManager.Current.timeoutMS
-						);
-					// TODO store the image locally ...
-				}
-				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
-					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
-					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-					image.texture = d.Www.texture;
-
-					// Dispose www including it s Texture and take some logs for preformace surveillance:
-					d.Www.Dispose ();
-				};
-				loader.Start ();
-			}
+			// show the content:
+			ShowImage ();
+			AddCurrentText ();
+			UpdateForwardButton ();
 		}
 
 		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
 		{
-			Debug.Log ("### name = " + linkInfo.Name);
 			string href = extractHREF (linkInfo);
 			if (href != null) {
 				Application.OpenURL (href);
@@ -100,7 +72,70 @@ namespace GQ.Client.UI
 			return href;
 		}
 
+		public override void OnForward () {
+			if (npcPage.HasMoreDialogItems()) {
+				npcPage.Next ();
+				// update the content:
+				AddCurrentText ();
+				UpdateForwardButton ();
+			}
+			else {
+				npcPage.End ();
+			}
+		}
+
+		#endregion
+
+
+		#region View Update Methods
+
+		void ShowImage ()
+		{
+			// show (or hide completely) image:
+			GameObject imagePanel = image.transform.parent.gameObject;
+			if (npcPage.ImageUrl == "") {
+				imagePanel.SetActive (false);
+				return;
+			}
+			else {
+				imagePanel.SetActive (true);
+				AbstractDownloader loader;
+				if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
+					MediaInfo mediaInfo;
+					npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
+					loader = new LocalFileLoader (mediaInfo.LocalPath);
+				}
+				else {
+					loader = new Downloader (url: npcPage.ImageUrl, timeout: ConfigurationManager.Current.timeoutMS);
+					// TODO store the image locally ...
+				}
+				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>  {
+					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
+					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
+					image.texture = d.Www.texture;
+					// Dispose www including it s Texture and take some logs for preformace surveillance:
+					d.Www.Dispose ();
+				};
+				loader.Start ();
+			}
+		}
+
+		void AddCurrentText() {
+			// decode text for HyperText Component:
+			string currentText = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
+
+			// create dialog item GO form prefab:
+			Debug.Log("TODO: Add dialog Item: " + currentText);
+			DialogItemCtrl.Create(dialogItemContainer, currentText);
+		}
+
+		void UpdateForwardButton() {
+			// update forward button text:
+			forwardButtonText.text = npcPage.HasMoreDialogItems() ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
+		}
+			
 		#endregion
 
 	}
+
 }

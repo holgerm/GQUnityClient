@@ -45,7 +45,7 @@ namespace GQ.Client.Model
 
 		/// <summary>
 		/// The (1-based) index of the current dialog item. 
-		/// Limited by the available dialog items: If not dialog items are present it will always be zero.
+		/// Limited by the available dialog items: If no dialog items are present it will always be zero.
 		/// </summary>
 		/// <value>The current dialog item no.</value>
 		public int CurDialogItemNo {
@@ -66,11 +66,22 @@ namespace GQ.Client.Model
 		{
 			base.Start ();
 			CurDialogItemNo++;
+
 		}
 
-		public void Next ()
+		public bool Next ()
 		{
-			CurDialogItemNo++;
+			if (dialogItems.Count > CurDialogItemNo) {
+				CurDialogItemNo++;
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		public bool HasMoreDialogItems() {
+			return (dialogItems.Count > CurDialogItemNo);
 		}
 
 		#endregion
