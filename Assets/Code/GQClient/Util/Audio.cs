@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Err;
+using System;
 
 namespace GQ.Client.Util
 {
@@ -15,6 +16,11 @@ namespace GQ.Client.Util
 			deleteList.AddRange(audioSources.Values);
 			foreach (AudioSource audioSrc in deleteList) {
 				audioSrc.Stop ();
+				if (audioSrc.clip != null) {
+					// in case the clip has not finished loading yet:
+					audioSrc.clip.UnloadAudioData ();
+				}				
+				audioSrc.clip = null;
 				Base.Destroy (audioSrc);
 			}
 			audioSources = new Dictionary<string, AudioSource> ();
@@ -34,19 +40,26 @@ namespace GQ.Client.Util
 		}
 
 		private static IEnumerator PlayAudioFileAsynch(string path, bool loop, bool stopOtherAudio) {
-			WWW audioWWW = new WWW (path);
-
-			while (!audioWWW.isDone) {
-				yield return null;
-			}
-
 			GameObject go = new GameObject ("AudioSource for " + path);
 			go.transform.SetParent (Base.Instance.transform);
 			AudioSource audioSource = go.AddComponent<AudioSource> ();
-			audioSource.clip = audioWWW.GetAudioClip (false, false);
 			audioSources [path] = audioSource;
-			_internalStartPlaying (audioSource, loop, stopOtherAudio);
+			// new AudioSource is stored in dictionary so it can be stopped already by Clear() etc.
 
+			WWW audioWWW = new WWW (path);
+
+			while (!audioWWW.isDone && audioSource != null) {
+				// we wait until audio file is loaded and still audio not has been stopped in between:
+
+				yield return null;
+			}
+
+			if (audioSource != null) {
+				audioSource.clip = audioWWW.GetAudioClip (false, true);
+				_internalStartPlaying (audioSource, loop, stopOtherAudio);
+			}
+
+			audioWWW.Dispose ();
 			yield break;
 		}
 
@@ -61,5 +74,6 @@ namespace GQ.Client.Util
 				}
 			audioSource.Play ();
 		}
+
 	}
 }
