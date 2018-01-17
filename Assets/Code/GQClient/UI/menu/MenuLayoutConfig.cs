@@ -11,7 +11,7 @@ namespace GQ.Client.UI {
 		public GameObject MenuContent;
 
 		protected override void layout() {
-			MenuContent.GetComponent<Image> ().color = ConfigurationManager.Current.mainColor;
+			MenuContent.GetComponent<Image> ().color = ConfigurationManager.Current.menuBGColor;
 		}
 
 	}
