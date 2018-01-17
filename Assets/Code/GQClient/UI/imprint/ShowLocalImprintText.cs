@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 public class ShowLocalImprintText : MonoBehaviour {
 
-	public HyperText imprintHyperText;
+	public Text imprintText;
 
 	// Use this for initialization
 	void Start () {
 		TextAsset imprintTA = Resources.Load<TextAsset> ("imprint");
 		if (imprintTA != null) {
-			imprintHyperText.text = imprintTA.text;
+			imprintText.text = imprintTA.text;
 		}
 	
 	}
