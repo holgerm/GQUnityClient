@@ -123,8 +123,9 @@ namespace GQ.Client.FileIO
 				return "file://" + relPath;
 			else if (Application.platform == RuntimePlatform.Android)
 				return "file://" + relPath;
-			else if (Application.platform == RuntimePlatform.IPhonePlayer)
+			else if (Application.platform == RuntimePlatform.IPhonePlayer) {
 				return "file://" + relPath;
+			}
 			else
 				return "file://" + relPath;
 		}

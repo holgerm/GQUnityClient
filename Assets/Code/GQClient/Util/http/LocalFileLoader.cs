@@ -57,7 +57,6 @@ namespace GQ.Client.Util
 		{
 			string url = Files.AbsoluteLocalPath (filePath);
 
-			UnityEngine.Debug.Log (("------------> LocalFileLoader.RUnAsCoroutine() url: " + url).Yellow ());
 			Www = new WWW (url);
 
 			string msg = String.Format ("Start to load local file {0}", filePath);
