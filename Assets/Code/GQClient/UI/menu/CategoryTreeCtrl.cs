@@ -15,7 +15,7 @@ namespace GQ.Client.UI
 	{
 
 		public Text Title;
-		public Text Number;
+		public Text Hint;
 		public Image OnOff;
 
 		private QuestInfoManager qim;
@@ -70,13 +70,6 @@ namespace GQ.Client.UI
 
 			// reactivate filter change events after pause:
 			CategoryFilter.NotificationPaused = false;
-
-			// set the number of all quests represented by the currently selected categories
-//			int nr = 0;
-//			foreach (CategoryFolder folder in categoryFolders.Values) {
-//				nr += folder.NumberOfQuests ();
-//			}
-//			Number.text = ""; // nr.ToString (); TODO make Config?
 		}
 
 		private void recreateModelTree ()

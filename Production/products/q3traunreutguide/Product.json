@@ -50,7 +50,7 @@
     {
       "id": "q3tg.bildung",
       "name": "Bildung",
-      "folderName": "Traunreut",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/bildung"
       }
@@ -58,7 +58,7 @@
     {
       "id": "q3tg.geschichte",
       "name": "Geschichte",
-      "folderName": "Traunreut",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/geschichte"
       }
@@ -66,7 +66,7 @@
     {
       "id": "q3tg.freizeit",
       "name": "Freizeit",
-      "folderName": "Traunreut",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/freizeit"
       }
@@ -74,7 +74,7 @@
     {
       "id": "q3tg.restaurant",
       "name": "Restaurant",
-      "folderName": "Traunreut",
+      "folderName": "",
       "symbol": {
         "path": "textures/readable/restaurant"
       }

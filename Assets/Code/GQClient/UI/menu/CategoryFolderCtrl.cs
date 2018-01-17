@@ -92,7 +92,7 @@ namespace GQ.Client.UI {
 			if (ConfigurationManager.Current.showEmptyMenuEntries)
 				return (folder.Name != "");
 			else
-				return (folder.Name != "" && folder.Entries.Count > 1);
+				return (folder.Name != "" && folder.Entries.Count >= 1);
 		}
 
 		#endregion

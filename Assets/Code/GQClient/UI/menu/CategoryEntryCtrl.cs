@@ -72,10 +72,11 @@ namespace GQ.Client.UI {
 		}
 
 		override protected bool showMenuItem() {
+			bool entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
 			if (ConfigurationManager.Current.showEmptyMenuEntries)
-				return (Unfolded);
+				return (entryVisible);
 			else
-				return (Unfolded && categoryEntry.NumberOfQuests () > 0);
+				return (categoryEntry.NumberOfQuests () > 0 && entryVisible);
 		}
 
 		bool selectedForFilter;
