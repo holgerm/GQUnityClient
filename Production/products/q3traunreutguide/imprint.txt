@@ -21,7 +21,7 @@ mail: quartier@qdrei.info
 <b>Registereintrag: </b>
 Sitz: Übersee – Handelsregister Traunstein: HRB 21940
 
-<b>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:
+<b>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:</b>
 P-Seminar 2018 des Johannes-Heidenhain-Gymnasium
 Adalbert-Stifter-Straße 36
 83301 Traunreut
