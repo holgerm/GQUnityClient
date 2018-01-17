@@ -52,6 +52,7 @@ namespace GQ.Client.Util
 		{
 			string result = rawText.Replace ("&lt;", "<");
 			result = result.Replace ("&gt;", ">");
+			result = result.Replace ("&amp;", "&");
 
 			return result;
 		}

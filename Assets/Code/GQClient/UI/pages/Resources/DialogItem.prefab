@@ -97,7 +97,7 @@ MonoBehaviour:
   m_ClickedLink:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 114954937088945366}
         m_MethodName: OnLinkClicked
         m_Mode: 0
         m_Arguments:
