@@ -82,10 +82,10 @@
   ],
   "filterByCategories": true,
   "mainColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
   },
   "headerHeightPermill": 50,
   "headerBgColor": {
@@ -101,9 +101,9 @@
     "a": 0
   },
   "headerButtonFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 128,
+    "g": 186,
+    "b": 39,
     "a": 255
   },
   "topLogo": {
@@ -123,16 +123,16 @@
   },
   "footerHeightPermill": 75,
   "footerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 128,
+    "g": 186,
+    "b": 39,
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
   },
   "footerButtonFgColor": {
     "r": 0,
@@ -162,16 +162,16 @@
   "menuMainEntryHeight": 0,
   "menuSubEntryHeight": 0,
   "menuBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 100,
+    "g": 99,
+    "b": 99,
+    "a": 255
   },
   "menuPartBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 100,
+    "g": 99,
+    "b": 99,
+    "a": 255
   },
   "disabledAlpha": 0.5
 }
