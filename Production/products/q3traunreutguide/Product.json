@@ -48,6 +48,14 @@
   "markerScale": 1.0,
   "categories": [
     {
+      "id": "q3tg.person",
+      "name": "Persönlichkeit",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/person"
+      }
+    },
+    {
       "id": "q3tg.bildung",
       "name": "Bildung",
       "folderName": "",
@@ -87,7 +95,7 @@
     "b": 39,
     "a": 255
   },
-  "headerHeightPermill": 50,
+  "headerHeightPermill": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,

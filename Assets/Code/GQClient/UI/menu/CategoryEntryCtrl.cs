@@ -64,7 +64,9 @@ namespace GQ.Client.UI {
 			gameObject.SetActive (showMenuItem());	
 
 			// set symbol for this category:
-			categorySymbol.sprite = Resources.Load<Sprite>(categoryEntry.category.symbol.path);
+			categorySymbol.sprite = categoryEntry.category.symbol != null ?
+				Resources.Load<Sprite>(categoryEntry.category.symbol.path) :
+				null;
 			if (categorySymbol.sprite == null)
 			{
 				categorySymbol.GetComponent<Image> ().enabled = false;
