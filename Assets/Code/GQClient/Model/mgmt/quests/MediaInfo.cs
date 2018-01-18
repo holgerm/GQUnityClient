@@ -55,10 +55,14 @@ namespace GQ.Client.Model
 
 		public string LocalPath {
 			get {
-				if (LocalDir == null || LocalFileName == null)
+				if (LocalDir == null || LocalFileName == null) {
+					Log.SignalErrorToAuthor("MediaInfo for url {0} invalid: LocalDir: {1}, LocalFileName: {2}",
+						Url,
+						(LocalDir == null) ? "null" : LocalDir,
+						(LocalFileName == null) ? "null" : LocalFileName);
 					return null;
+				}
 				else {
-					Debug.Log(string.Format("MediaInfo.LocalPath_get: PROBLEM? localDir: {0} + localFilename: {1}", LocalDir, LocalFileName));
 					return Files.CombinePath (LocalDir, LocalFileName);
 				}
 			}
