@@ -4839,7 +4839,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Schliessen
+  m_Text: "Schlie\xDFen"
 --- !u!222 &1240970697
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5129,6 +5129,7 @@ GameObject:
   - component: {fileID: 1337534266}
   - component: {fileID: 1337534267}
   - component: {fileID: 1337534269}
+  - component: {fileID: 1337534268}
   m_Layer: 5
   m_Name: MenuPanel
   m_TagString: Untagged
@@ -5162,13 +5163,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1337534262}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5206,7 +5207,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 950
+  m_FlexibleHeight: 1000
   m_LayoutPriority: 1
 --- !u!114 &1337534267
 MonoBehaviour:
@@ -5230,6 +5231,19 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
+--- !u!114 &1337534268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1337534262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  header: {fileID: 1945845349}
+  footer: {fileID: 0}
 --- !u!114 &1337534269
 MonoBehaviour:
   m_ObjectHideFlags: 0
