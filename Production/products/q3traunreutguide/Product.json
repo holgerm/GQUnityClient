@@ -35,6 +35,9 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 12.593101,
+  "mapStartAtLatitude": 47.961851,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -48,19 +51,19 @@
   "markerScale": 1.0,
   "categories": [
     {
-      "id": "q3tg.person",
-      "name": "Persönlichkeit",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/person"
-      }
-    },
-    {
       "id": "q3tg.bildung",
       "name": "Bildung",
       "folderName": "",
       "symbol": {
         "path": "textures/readable/bildung"
+      }
+    },
+    {
+      "id": "q3tg.freizeit",
+      "name": "Freizeit",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/freizeit"
       }
     },
     {
@@ -72,11 +75,11 @@
       }
     },
     {
-      "id": "q3tg.freizeit",
-      "name": "Freizeit",
+      "id": "q3tg.person",
+      "name": "Persönlichkeit",
       "folderName": "",
       "symbol": {
-        "path": "textures/readable/freizeit"
+        "path": "textures/readable/person"
       }
     },
     {
