@@ -109,6 +109,16 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float	mapDeltaZoom { get; set; }
 
+
+		[ShowInProductEditor]
+		public bool mapStartAtLocation { get; set; }
+
+		[ShowInProductEditor]
+		public double mapStartAtLongitude { get; set; }
+
+		[ShowInProductEditor]
+		public double mapStartAtLatitude { get; set; }
+
 		[JsonIgnore]
 		private ImagePath _marker;
 
@@ -458,7 +468,7 @@ namespace GQ.Client.Conf
 		public string scenePath;
 	}
 
-	public struct SceneExtension
+	public class SceneExtension
 	{
 		/// <summary>
 		/// The scene path.
