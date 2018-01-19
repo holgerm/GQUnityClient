@@ -1104,13 +1104,13 @@ namespace GQ.Editor.UI
 						GameObject newPrefabGO = 
 							(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
 						if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
-							// if user selected another prefab we store it:
+							// if user selects another prefab we store it:
 							newSceneExt.prefab = Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
 							sceneExtChanged = true;
 						}
 						EditorGUILayout.EndHorizontal ();
-						EditorGUILayout.BeginHorizontal ();
 						// root:
+						EditorGUILayout.BeginHorizontal ();
 						EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
 						if (sceneExtensionDisabled) {
 							EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
@@ -1123,6 +1123,7 @@ namespace GQ.Editor.UI
 								sceneExtChanged = true;
 							}
 						}
+
 						if (sceneExtChanged) {
 							newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
 							allElements [i] = newSceneExt;
@@ -1198,6 +1199,28 @@ namespace GQ.Editor.UI
 			if (newFloatVal != oldFloatVal) {
 				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, newFloatVal, null);
+			}
+
+			return configIsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4Double : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+
+			double oldDoubleVal = (double)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			double newDoubleVal = oldDoubleVal;
+
+			// show text field if value fits in one line:
+			newDoubleVal = EditorGUILayout.DoubleField (NamePrefixGUIContent, oldDoubleVal);
+			if (newDoubleVal != oldDoubleVal) {
+				configIsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, newDoubleVal, null);
 			}
 
 			return configIsDirty;
