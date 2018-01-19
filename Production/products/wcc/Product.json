@@ -24,13 +24,7 @@
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
-  "sceneExtensions": [
-    {
-      "scene": "Assets/Scenes/Pages/NPCTalk.unity",
-      "root": "Canvas/Screen/Page/ImagePanel/Image",
-      "prefab": "Prefabs/wcc.CopyRightsText"
-    }
-  ],
+  "sceneExtensions": [],
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -39,6 +33,9 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 0.0,
+  "mapStartAtLatitude": 0.0,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
