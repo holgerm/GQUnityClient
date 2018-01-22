@@ -76,8 +76,20 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public List<SceneMapping> sceneMappings { get; set; }
 
+		private string[] _scenePaths;
 		[ShowInProductEditor]
-		public string[]	scenePaths { get; set; }
+		public string[]	scenePaths { 
+			get {
+				if (_scenePaths == null) {
+					_scenePaths = new string[0];
+				}
+				return _scenePaths;
+			} 
+			set {
+				if (value != null)
+					_scenePaths = value;
+			}
+		}
 
 		[ShowInProductEditor]
 		public List<SceneExtension> sceneExtensions { get; set; }
