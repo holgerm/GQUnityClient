@@ -75,5 +75,16 @@ namespace GQ.Client.UI
 		#endregion
 
 
+		#region implemented abstract members of PageController
+
+		protected override int NumberOfSpacesInContent ()
+		{
+			// we only have spaces between header and content as well as between content and footer:
+			return 2;
+		}
+
+		#endregion
+
+
 	}
 }

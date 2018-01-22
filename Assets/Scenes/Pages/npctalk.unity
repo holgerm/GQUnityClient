@@ -1250,7 +1250,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00005313351}
+  m_AnchoredPosition: {x: 0, y: -0.000031888496}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -1426,6 +1426,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1549135014}
+  imagePanel: {fileID: 2026155312}
+  contentPanel: {fileID: 215277135}
   dialogItemContainer: {fileID: 885299350}
   forwardButtonText: {fileID: 1862011691}
 --- !u!114 &988022704
@@ -1709,7 +1711,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: '@ Image Copyright'
 --- !u!222 &1206162632
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -206,7 +206,7 @@ namespace GQ.Client.Conf
 		public Color32	mainColor  { get; set; }
 
 		[ShowInProductEditor]
-		public int 		headerHeightPermill { get; set; }
+		public int 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -232,7 +232,22 @@ namespace GQ.Client.Conf
 		public Color32	contentFontColor  { get; set; }
 
 		[ShowInProductEditor]
-		public int 		footerHeightPermill { get; set; }
+		public float contentTopMarginUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentBottomMarginUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentInnerSpaceHeightUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentImageShareMinimum { get; set; }
+
+		[ShowInProductEditor]
+		public float contentImageShareMaximum { get; set; }
+
+		[ShowInProductEditor]
+		public int 		footerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -245,6 +260,13 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	footerButtonFgColor  { get; set; }
+
+		/// <summary>
+		/// The width of space on a single side on the display that is intended to be left free (in permill of th absolute display width).
+		/// </summary>
+		/// <value>The side per mill.</value>
+		[ShowInProductEditor]
+		public float sideMarginWidthUnits  { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -342,13 +364,16 @@ namespace GQ.Client.Conf
 
 
 			// Layout:
-			headerHeightPermill = 50;
+			headerHeightUnits = 60;
+			footerHeightUnits = 60;
+			contentInnerSpaceHeightUnits = 0;
+			sideMarginWidthUnits = 0;
 			headerBgColor = Color.white;
 			headerButtonBgColor = GQColor.transparent;
 			headerButtonFgColor = Color.black;
 			contentBackgroundColor = Color.white;
 			contentFontColor = Color.black;
-			footerHeightPermill = 75;
+			footerHeightUnits = 75;
 			footerBgColor = Color.white;
 			footerButtonBgColor = GQColor.transparent;
 			footerButtonFgColor = Color.black;
