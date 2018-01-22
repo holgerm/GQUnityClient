@@ -6,8 +6,9 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
-  "downloadTimeOutSeconds": 240,
-  "nameForQuest": "Spiel",
+  "timeoutMS": 10000,
+  "nameForQuestSg": null,
+  "nameForQuestsPl": null,
   "questVisualization": "list",
   "questVisualizationChangeable": false,
   "cloudQuestsVisible": true,
@@ -15,10 +16,14 @@
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
-  "hasMenuWithinQuests": false,
-  "showTextInLoadingLogo": true,
-  "showNetConnectionWarning": true,
-  "scenePaths": null,
+  "acceptedPageTypes": [
+    "NPCTalk"
+  ],
+  "sceneMappings": [],
+  "scenePaths": [
+    "Assets/Scenes/Foyer.unity",
+    "Assets/Scenes/Pages/NPCTalk.unity"
+  ],
   "sceneExtensions": [],
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
@@ -28,6 +33,9 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 0.0,
+  "mapStartAtLatitude": 0.0,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -38,8 +46,16 @@
     "a": 0
   },
   "markerBGAlpha": 168,
-  "categories": null,
-  "headerHeightPermill": 50,
+  "markerScale": 1.0,
+  "categories": [],
+  "filterByCategories": true,
+  "mainColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "headerHeightUnits": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -71,7 +87,12 @@
     "b": 0,
     "a": 255
   },
-  "footerHeightPermill": 75,
+  "contentTopMarginUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "contentInnerSpaceHeightUnits": 0.0,
+  "contentImageShareMinimum": 0.0,
+  "contentImageShareMaximum": 0.0,
+  "footerHeightUnits": 75,
   "footerBgColor": {
     "r": 255,
     "g": 255,
@@ -90,6 +111,7 @@
     "b": 0,
     "a": 255
   },
+  "sideMarginWidthUnits": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -107,5 +129,21 @@
     "g": 255,
     "b": 255,
     "a": 255
-  }
+  },
+  "showEmptyMenuEntries": false,
+  "menuMainEntryHeight": 0,
+  "menuSubEntryHeight": 0,
+  "menuBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "menuPartBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "disabledAlpha": 0.5
 }
