@@ -89,6 +89,11 @@ namespace GQ.Client.Model
 				NotificationPaused = false;
 			}
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="GQ.Client.Model.QuestInfoFilter+Category"/> class.
+			/// </summary>
+			/// <param name="firstCategory">First category to be accepted by this filter.</param>
+			/// <param name="categories">Further categories to be accepted. In fact you can simply sepcify any number of acceptable categories in one row.</param>
 			public Category(string firstCategory, params string[] categories) {
 				NotificationPaused = true;
 				AddCategory(firstCategory);
@@ -178,7 +183,6 @@ namespace GQ.Client.Model
 						filter.parentFilter = this;
 					}
 				}
-				subfilters.AddRange (filters);
 			}
 
 			public override bool Accept (QuestInfo qi)
