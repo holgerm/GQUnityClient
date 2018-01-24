@@ -7,8 +7,8 @@
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
   "timeoutMS": 10000,
-  "nameForQuestSg": null,
-  "nameForQuestsPl": null,
+  "nameForQuestSg": "Spiel",
+  "nameForQuestsPl": "Spiele",
   "questVisualization": "list",
   "questVisualizationChangeable": false,
   "cloudQuestsVisible": true,
@@ -48,6 +48,8 @@
   "markerBGAlpha": 168,
   "markerScale": 1.0,
   "foldableCategoryFilters": true,
+  "categoryFiltersStartFolded": true,
+  "mainCategorySet": "Spieltyp",
   "categorySets": [
     {
       "name": "Spieltyp",
@@ -314,7 +316,6 @@
     }
   ],
   "categories": [],
-  "filterByCategories": true,
   "mainColor": {
     "r": 0,
     "g": 0,
