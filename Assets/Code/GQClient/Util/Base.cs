@@ -48,6 +48,7 @@ namespace GQ.Client.Util
 		#region Globals
 
 		public const string FOYER_SCENE = "Scenes/Foyer";
+		public const string FOYER_SCENE_NAME = "Foyer";
 
 		#endregion
 
