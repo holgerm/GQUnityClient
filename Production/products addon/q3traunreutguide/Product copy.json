@@ -1,0 +1,188 @@
+{
+  "id": "q3traunreutguide",
+  "name": "Traunreut Guide",
+  "portal": 521,
+  "autoStartQuestID": 0,
+  "autostartIsPredeployed": false,
+  "keepAutoStarting": true,
+  "DownloadStrategy": "UPFRONT",
+  "timeoutMS": 100000,
+  "nameForQuestSg": "Ort",
+  "nameForQuestsPl": "Orte",
+  "questVisualization": "list",
+  "questVisualizationChangeable": false,
+  "cloudQuestsVisible": true,
+  "showCloudQuestsImmediately": false,
+  "downloadAllCloudQuestOnStart": false,
+  "localQuestsDeletable": true,
+  "hideHiddenQuests": false,
+  "acceptedPageTypes": [
+    "StartAndExitScreen",
+    "NPCTalk"
+  ],
+  "sceneMappings": [],
+  "scenePaths": [
+    "Assets/Scenes/Foyer.unity",
+    "Assets/Scenes/Pages/NPCTalk.unity",
+    "Assets/Scenes/Pages/StartAndExitScreen.unity"
+  ],
+  "sceneExtensions": [],
+  "mapProvider": "OpenStreetMap",
+  "mapBaseUrl": "http://a.tile.openstreetmap.org",
+  "mapKey": "",
+  "mapID": "",
+  "mapTileImageExtension": ".png",
+  "useMapOffline": false,
+  "mapMinimalZoom": 7.0,
+  "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 12.593101,
+  "mapStartAtLatitude": 47.961851,
+  "marker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "markerBGAlpha": 168,
+  "markerScale": 1.0,
+  "categories": [
+    {
+      "id": "q3tg.bildung",
+      "name": "Bildung",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/bildung"
+      }
+    },
+    {
+      "id": "q3tg.freizeit",
+      "name": "Freizeit",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/freizeit"
+      }
+    },
+    {
+      "id": "q3tg.geschichte",
+      "name": "Geschichte",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/geschichte"
+      }
+    },
+    {
+      "id": "q3tg.person",
+      "name": "Persönlichkeit",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/person"
+      }
+    },
+    {
+      "id": "q3tg.restaurant",
+      "name": "Restaurant",
+      "folderName": "",
+      "symbol": {
+        "path": "textures/readable/restaurant"
+      }
+    }
+  ],
+  "filterByCategories": true,
+  "mainColor": {
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
+  },
+  "headerHeightPermill": 60,
+  "headerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "headerButtonFgColor": {
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
+  },
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "contentFontColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "footerHeightPermill": 75,
+  "footerBgColor": {
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
+  },
+  "footerButtonBgColor": {
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
+  },
+  "footerButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "overlayButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "overlayButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "overlayButtonFgDisabledColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "showEmptyMenuEntries": true,
+  "menuMainEntryHeight": 0,
+  "menuSubEntryHeight": 0,
+  "menuBGColor": {
+    "r": 100,
+    "g": 99,
+    "b": 99,
+    "a": 255
+  },
+  "menuPartBGColor": {
+    "r": 100,
+    "g": 99,
+    "b": 99,
+    "a": 255
+  },
+  "disabledAlpha": 0.5
+}
