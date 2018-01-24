@@ -49,56 +49,64 @@
   },
   "markerBGAlpha": 168,
   "markerScale": 1.0,
-  "categories": [
+  "foldableCategoryFilters": false,
+  "categoryFiltersStartFolded": false,
+  "mainCategorySet": "Kategorie",
+  "categorySets": [
     {
-      "id": "q3tg.bildung",
-      "name": "Bildung",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/bildung"
-      }
-    },
-    {
-      "id": "q3tg.freizeit",
-      "name": "Freizeit",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/freizeit"
-      }
-    },
-    {
-      "id": "q3tg.geschichte",
-      "name": "Geschichte",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/geschichte"
-      }
-    },
-    {
-      "id": "q3tg.person",
-      "name": "Persönlichkeit",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/person"
-      }
-    },
-    {
-      "id": "q3tg.restaurant",
-      "name": "Restaurant",
-      "folderName": "",
-      "symbol": {
-        "path": "textures/readable/restaurant"
-      }
+      "name": "Kategorie",
+      "categories": [
+        {
+          "id": "q3tg.bildung",
+          "name": "Bildung",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/bildung"
+          }
+        },
+        {
+          "id": "q3tg.freizeit",
+          "name": "Freizeit",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/freizeit"
+          }
+        },
+        {
+          "id": "q3tg.geschichte",
+          "name": "Geschichte",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/geschichte"
+          }
+        },
+        {
+          "id": "q3tg.person",
+          "name": "Persönlichkeit",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/person"
+          }
+        },
+        {
+          "id": "q3tg.restaurant",
+          "name": "Restaurant",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/restaurant"
+          }
+        }
+      ]
     }
   ],
-  "filterByCategories": true,
+  "categories": [],
   "mainColor": {
     "r": 128,
     "g": 186,
     "b": 39,
     "a": 255
   },
-  "headerHeightPermill": 60,
+  "headerHeightUnits": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -132,7 +140,12 @@
     "b": 0,
     "a": 255
   },
-  "footerHeightPermill": 75,
+  "contentTopMarginUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "contentInnerSpaceHeightUnits": 0.0,
+  "contentImageShareMinimum": 0.0,
+  "contentImageShareMaximum": 0.0,
+  "footerHeightUnits": 75,
   "footerBgColor": {
     "r": 128,
     "g": 186,
@@ -151,6 +164,7 @@
     "b": 0,
     "a": 255
   },
+  "sideMarginWidthUnits": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
