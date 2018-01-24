@@ -13,6 +13,7 @@ namespace GQ.Client.UI
 
 	public class CategoryTreeCtrl : MonoBehaviour
 	{
+		#region Inspector & Initialization
 
 		public Text Title;
 		public Text Hint;
@@ -20,16 +21,60 @@ namespace GQ.Client.UI
 
 		private QuestInfoManager qim;
 
-		public QuestInfoFilter.Category CategoryFilter;
+		public QuestInfoFilter.CategoryFilter CategoryFilter;
+		List<Category> categories;
 
 
 		// Use this for initialization
 		void Start ()
 		{
 			qim = QuestInfoManager.Instance;
-			CategoryFilter = qim.CategoryFilter;
+//			CategoryFilter = qim.CategoryFilter; // TODO use CatSet instead
 			qim.OnDataChange += OnQuestInfoChanged;
+
+			// fold the categories of this set (up to now they are unfolded):
+			if (ConfigurationManager.Current.categoryFiltersStartFolded) {
+				ToggleMenuView ();
+			}
 		}
+
+		protected static readonly string PREFAB = "CategoryTree";
+
+		public static CategoryTreeCtrl Create (GameObject root, QuestInfoFilter.CategoryFilter catFilter, List<Category> categories)
+		{
+			// Create the view object for this controller:
+			GameObject go = PrefabController.Create (PREFAB, root);
+			go.name = PREFAB + " (" + catFilter.Name + ")";
+
+			// save tree controller & folder:
+			CategoryTreeCtrl treeCtrl = go.GetComponent<CategoryTreeCtrl> ();
+			treeCtrl.categories = categories;
+			treeCtrl.CategoryFilter = catFilter;
+			treeCtrl.Title.text = catFilter.Name;
+			treeCtrl.gameObject.SetActive (true);
+
+			return treeCtrl;
+		}
+
+		#endregion
+
+
+		#region Runtime API
+
+		public void ToggleMenuView() {
+			if (!ConfigurationManager.Current.foldableCategoryFilters  || transform.childCount < 2)
+				// if we can't fold or do not have entries (the header is always there) we skip this:
+				return;
+			
+			bool currentShowState = transform.GetChild (1).gameObject.activeSelf;
+
+			for (int i = 1; i < transform.childCount; i++) {
+				transform.GetChild (i).gameObject.SetActive (!currentShowState);
+			}
+		}
+
+		#endregion
+
 
 		#region React on Events
 
@@ -58,7 +103,7 @@ namespace GQ.Client.UI
 
 		public void UpdateView ()
 		{
-			if (this == null) {
+			if (this == null || CategoryFilter == null) {
 				return;
 			}
 
@@ -77,7 +122,7 @@ namespace GQ.Client.UI
 			// model: create skeleton of folders and entries:
 			categoryEntries = new Dictionary<string, CategoryEntry> ();
 			categoryFolders = new Dictionary<string, CategoryFolder> ();
-			foreach (Category c in ConfigurationManager.Current.categories) {
+			foreach (Category c in categories) {
 				// create and add the new category entry:
 				CategoryEntry catEntry = new CategoryEntry (c);
 				categoryEntries.Add (c.id, catEntry);
@@ -100,7 +145,7 @@ namespace GQ.Client.UI
 						Log.SignalErrorToAuthor ("Quest {0} has unkown category {1}.", info.Name, cat);
 						continue;
 					}
-					// we take note of the catgeory of the current quest in our tree model:
+					// we take note of the category of the current quest in our tree model:
 					catEntry.AddQuestID (info.Id);
 				}
 			}
@@ -119,14 +164,16 @@ namespace GQ.Client.UI
 
 			// create all category tree UI entries:
 			foreach (CategoryFolder folder in categoryFolders.Values) {
-				CategoryFolderCtrl uiFolder = 
-					CategoryFolderCtrl.Create (
-						root: this.gameObject,
-						catFolder: folder,
-						catTree: this
-					);
-				uiFolder.transform.SetParent (this.transform);
-				uiFolder.transform.SetAsLastSibling ();
+				if (folder.Name != "") {
+					CategoryFolderCtrl uiFolder = 
+						CategoryFolderCtrl.Create (
+							root: this.gameObject,
+							catFolder: folder,
+							catTree: this
+						);
+					uiFolder.transform.SetParent (this.transform);
+					uiFolder.transform.SetAsLastSibling ();
+				}
 
 				foreach (CategoryEntry entry in folder.Entries) {
 					CategoryEntryCtrl uiEntry = 
@@ -145,6 +192,9 @@ namespace GQ.Client.UI
 
 		public void SetSelection4AllItems ()
 		{
+			if (CategoryFilter == null)
+				return;
+			
 			generalSelectionState = !generalSelectionState;
 			CategoryFilter.NotificationPaused = true;
 			foreach (CategoryEntry entry in categoryEntries.Values) {
