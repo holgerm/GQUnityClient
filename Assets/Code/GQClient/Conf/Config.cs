@@ -175,16 +175,53 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float markerScale { get; set; }
 
-		[JsonIgnore]
-		private List<Category> _categories;
+
+		[ShowInProductEditor (StartSection = "Categories & Filters:")]
+		public bool foldableCategoryFilters { get; set; }
 
 		[ShowInProductEditor]
+		public bool categoryFiltersStartFolded { get; set; }
+
+		/// <summary>
+		/// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
+		/// </summary>
+		/// <value>The main category set.</value>
+		[ShowInProductEditor]
+		public string mainCategorySet { get; set; }
+
+		[ShowInProductEditor]
+		public List<CategorySet> categorySets {
+			get {
+				if (_categorySets == null) {
+					_categorySets = new List<CategorySet> ();
+				} 
+				return _categorySets;
+			}
+			set {
+				_categorySets = value;
+			}
+		}
+
+		[JsonIgnore] 
+		private List<CategorySet> _categorySets;
+
+
+		[JsonIgnore] // TODO REMOVE when CategorySet is ready
+		private List<Category> _categories;
+
+		[ShowInProductEditor] // TODO REMOVE when CategorySet is ready
 		public List<Category> categories { 
 			get {
 				if (_categories == null)
 					_categories = new List<Category> ();
-				else {
+				else { // TODO else wird irgendwie gebraucht, warum? eigentlich sollte es doch weg denn der Rest sollte immer gemacht werden auch wenn liste auf null gesetzt wird, damit Dict dann überschrieben wird und ebenfalls leer
 					// JSON does set values via reflection in this getter and does not call the setter at all. Hence we need to populate our dictionary here.
+					if (categoryDict == null) {
+						categoryDict = new Dictionary<string, Category> ();
+//						foreach (Category c in _categories) {
+//							categoryDict.Add (c.id, c);
+//						}
+					}
 					foreach (Category c in _categories) {
 						if (!categoryDict.ContainsKey(c.id))
 							categoryDict.Add (c.id, c);
@@ -201,9 +238,6 @@ namespace GQ.Client.Conf
 					}
 			} 
 		}
-
-		[ShowInProductEditor]
-		public bool filterByCategories { get; set; }
 
 		[JsonIgnore]
 		public Dictionary<string, Category> categoryDict;
@@ -396,8 +430,9 @@ namespace GQ.Client.Conf
 
 			// Menu:
 			showEmptyMenuEntries = false;
-			filterByCategories = true;
 			categoryDict = new Dictionary<string, Category> ();
+			foldableCategoryFilters = true;
+			categoryFiltersStartFolded = true;
 		}
 
 		#endregion
@@ -586,6 +621,25 @@ namespace GQ.Client.Conf
 			this.symbol = new ImagePath (symbolPath);
 		}
 
+	}
+
+	public class CategorySet {
+		public string name;
+
+		public List<Category> categories;
+
+		[JsonConstructor]
+		public CategorySet(string name, List<Category> categories) {
+			this.name = name;
+			if (categories == null)
+				categories = new List<Category> ();
+			this.categories = categories;
+		}
+
+		public CategorySet() {
+			name = "";
+			categories = new List<Category> ();
+		}
 	}
 
 	public class ShowInProductEditor : Attribute

@@ -127,7 +127,7 @@ namespace GQ.Editor.Building
 
 		#region Access to Products
 
-		private Dictionary<string, ProductSpec> _productDict;
+		internal Dictionary<string, ProductSpec> _productDict;
 
 		public ICollection<ProductSpec> AllProducts {
 			get {
@@ -149,6 +149,13 @@ namespace GQ.Editor.Building
 				return found;
 			else
 				return null;
+		}
+
+		public void SetProductConfig(string id, Config config) {
+//			if (_productDict.ContainsKey(id)) {
+//				_productDict.Remove (id);
+//			}
+			_productDict [id].Config = config;
 		}
 
 		#endregion
@@ -307,7 +314,7 @@ namespace GQ.Editor.Building
 			get {
 				return _currentProduct;
 			}
-			private set {
+			internal set {
 				_currentProduct = value;
 			}
 		}

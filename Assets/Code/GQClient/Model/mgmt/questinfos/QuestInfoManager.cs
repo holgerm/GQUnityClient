@@ -12,6 +12,7 @@ using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using System.Linq;
 using QM.Util;
+using GQ.Client.UI;
 
 
 namespace GQ.Client.Model
@@ -93,7 +94,9 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public QuestInfoFilter.Category CategoryFilter;
+		public QuestInfoFilter.CategoryFilter CategoryFilter;
+
+		public Dictionary<string, QuestInfoFilter.CategoryFilter> CategoryFilters;
 
 		/// <summary>
 		/// Adds the given andFilter in conjunction to the current filter(s).
@@ -324,8 +327,24 @@ namespace GQ.Client.Model
 
 			// init filters
 			Filter = new QuestInfoFilter.All ();
-			CategoryFilter = new QuestInfoFilter.Category ();
-			FilterAnd(CategoryFilter);
+			// init category filters:
+			CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
+			List<CategorySet> catSets = ConfigurationManager.Current.categorySets;
+			foreach (CategorySet catSet in catSets) {
+				CategoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter (catSet);
+				FilterAnd(CategoryFilters[catSet.name]);
+			}
+
+			// init menu:
+			initMenu();
+		}
+
+		void initMenu() {
+			// create UI for Category Filters:
+			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
+			foreach (CategorySet catSet in ConfigurationManager.Current.categorySets) {
+				CategoryTreeCtrl.Create (menuContent, CategoryFilters[catSet.name], catSet.categories);
+			}
 		}
 
 		#endregion

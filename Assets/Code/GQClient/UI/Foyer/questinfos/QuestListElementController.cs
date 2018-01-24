@@ -29,6 +29,8 @@ namespace GQ.Client.UI.Foyer
 
 		protected const string NAME_PATH = "Name";
 
+		public Button InfoButton;
+
 		/// <summary>
 		/// The download button is available WHEN this quest is on server but not on device.
 		/// (IsOnServer && !IsOnDevice)
