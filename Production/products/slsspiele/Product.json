@@ -19,10 +19,15 @@
   "acceptedPageTypes": [
     "NPCTalk"
   ],
-  "sceneMappings": [],
+  "sceneMappings": [
+    {
+      "pageTypeName": "NPCTalk",
+      "scenePath": "Assets/Scenes/Pages/SLS_Spielbeschreibung.unity"
+    }
+  ],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
-    "Assets/Scenes/Pages/NPCTalk.unity"
+    "Assets/Scenes/Pages/SLS_Spielbeschreibung.unity"
   ],
   "sceneExtensions": [],
   "mapProvider": "OpenStreetMap",
