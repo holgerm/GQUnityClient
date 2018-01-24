@@ -163,16 +163,17 @@ namespace GQ.Client.UI.Foyer
 				Category determiningCategory = null;
 				foreach (string myCatId in qInfo.Categories) {
 					determiningCategory = mainCategorySet.categories.Find (mainCat => mainCat.id == myCatId);
+					if (determiningCategory != null)
+						break;
 				}
 
-				Image infoImage = ctrl.InfoButton.GetComponent<Image>();
+				Image infoImage = ctrl.InfoButton.transform.Find("Image").GetComponent<Image>();
 				infoImage.enabled = true;
 				ctrl.InfoButton.enabled = false;
 				ctrl.InfoButton.gameObject.SetActive (true); // show info icon
 
 				if (determiningCategory != null) {
 					// set symbol for this category:
-					Debug.Log(string.Format("InfoIMAGE: setting {0} to {1}", ctrl.name, determiningCategory.symbol.path).Yellow());
 					infoImage.sprite = determiningCategory.symbol != null ?
 						Resources.Load<Sprite>(determiningCategory.symbol.path) :
 						null;
@@ -197,6 +198,7 @@ namespace GQ.Client.UI.Foyer
 		{
 			// Update Info-Icon:
 			// TODO: enable Info dialog
+			Image infoImage = InfoButton.GetComponent<Image>();
 
 			// Update Name:
 			Name.text = data.Name;
