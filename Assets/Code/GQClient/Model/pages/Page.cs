@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using GQ.Client.Util;
 using GQ.Client.UI;
+using System.Collections.Generic;
 
 namespace GQ.Client.Model
 {
@@ -77,6 +78,9 @@ namespace GQ.Client.Model
 			} else {
 				Log.SignalErrorToDeveloper ("Id for a page could not be parsed. We found: " + reader.GetAttribute (GQML.QUEST_ID));
 			}
+
+			PageType = GQML.GetStringAttribute (GQML.PAGE_TYPE, reader);
+
 		}
 
 		protected virtual void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
@@ -125,6 +129,8 @@ namespace GQ.Client.Model
 
 		public int Id { get; protected set; }
 
+		public string PageType { get; protected set; }
+
 		[XmlAttribute ("type"), Obsolete]
 		public string
 			type;
@@ -164,26 +170,28 @@ namespace GQ.Client.Model
 		// called when a scene has been loaded:
 		void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 		{
-			Debug.Log(string.Format("OnSceneLoaded: {0} in {1} mode.", scene.name, mode).Yellow());
 			SceneManager.SetActiveScene (scene);
+			foreach (Scene sceneToUnload in scenesToUnload) {
+				SceneManager.UnloadSceneAsync (sceneToUnload);
+				scenesToUnload.Remove (sceneToUnload);
+			}
 			SceneManager.sceneLoaded -= OnSceneLoaded;
 		}
 
+		public static List<Scene> scenesToUnload = new List<Scene>();
+
 		public virtual void Start ()
 		{
-			// TODO Show Mem Avail:
-			Log.TexturesLoaded("Page.Start() #2: ");
 			Resources.UnloadUnusedAssets ();
-			Log.TexturesLoaded("Page.Start() #2: ");
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
-			Debug.Log (("Current scene: " + scene.name).Yellow());
-			Debug.Log (string.Format ("Loading scene: {0} with page impl type: {1}", PageScenePath, GetType ().Name).Yellow ());
 			if (!scene.path.Equals (PageScenePath)) {
 				SceneManager.sceneLoaded += OnSceneLoaded;
 				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
-				SceneManager.UnloadSceneAsync (scene);
+				if (scene.name != Base.FOYER_SCENE_NAME) {
+					scenesToUnload.Add (scene);
+				}
 			}
 
 			// set this page as current in QM
@@ -243,224 +251,6 @@ namespace GQ.Client.Model
 				StartTrigger.Initiate ();
 			}
 		}
-
-		#endregion
-
-
-		#region Old Stuff needs Rework
-
-		//		[XmlAnyAttribute ()]
-		//		public XmlAttribute[]
-		//			help_attributes;
-		//
-		//		public List<QuestAttribute> attributes;
-		//
-		//		[XmlElement ("dialogitem")]
-		//		public List<QuestContent>
-		//			contents_dialogitems;
-		//
-		//
-		//
-		//		[XmlElement ("expectedCode")]
-		//		public List<QuestContent>
-		//			contents_expectedcode;
-		//
-		//		[XmlElement ("answer")]
-		//		public List<QuestContent>
-		//			contents_answers;
-		//
-		//		[XmlElement ("question")]
-		//		public QuestContent
-		//			contents_question;
-		//
-		//		[XmlElement ("answers")]
-		//		public List<QuestContent>
-		//			contents_answersgroup;
-		//
-		//		[XmlElement ("stringmeta")]
-		//		public List<QuestContent>
-		//			contents_stringmeta;
-		//
-		//		[XmlElement ("onEnd")]
-		//		public QuestTrigger
-		//			onEnd;
-		//
-		//		[XmlElement ("onStart")]
-		//		public QuestTrigger
-		//			onStart;
-		//
-		//		[XmlElement ("onTap")]
-		//		public QuestTrigger
-		//			onTap;
-		//
-		//		[XmlElement ("onSuccess")]
-		//		public QuestTrigger
-		//			onSuccess;
-		//
-		//		[XmlElement ("onFail")]
-		//		public QuestTrigger
-		//			onFailure;
-		//
-		//		[XmlElement ("onRead")]
-		//		public QuestTrigger
-		//			onRead;
-		//
-		//		public string getAttribute (string k)
-		//		{
-		//
-		//			foreach (QuestAttribute qa in attributes) {
-		//
-		//				if (qa.key.Equals (k)) {
-		//					return qa.value;
-		//				}
-		//
-		//			}
-		//
-		//			return "";
-		//
-		//		}
-		//
-		//		public bool hasAttribute (string k)
-		//		{
-		//
-		//			bool h = false;
-		//			foreach (QuestAttribute qa in attributes) {
-		//
-		//				if (qa.key.Equals (k)) {
-		//					h = true;
-		//				}
-		//
-		//			}
-		//
-		//			return h;
-		//
-		//		}
-		//
-		//		public void deserializeAttributes (int id, bool redo)
-		//		{
-		//
-		//			questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-		//
-		////		if ( QuestManager.Instance.CurrentQuest != null ) {
-		//			attributes = new List<QuestAttribute> ();
-		//
-		//			if (help_attributes != null) {
-		//				foreach (XmlAttribute xmla in help_attributes) {
-		//
-		//					if (xmla.Name.Equals ("file") && xmla.Value.StartsWith (page_videoplay.YOUTUBE_URL_PREFIX)) {
-		//						attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
-		//
-		//						return;
-		//					}
-		//
-		//					if ((xmla.Value.StartsWith ("http://") || xmla.Value.StartsWith ("https://")) && !(type == "WebPage" && xmla.Name.ToLower () == "url")) {
-		//
-		//						string[] splitted = xmla.Value.Split ('/');
-		//
-		//						string filename = "files/" + splitted [splitted.Length - 1];
-		//
-		//						if (!Application.isWebPlayer) {
-		//
-		//							if (!redo) {
-		//								questdb.downloadAsset (xmla.Value, Application.persistentDataPath + "/quests/" + id + "/" + filename);
-		//							}
-		//							if (splitted.Length > 3) {
-		//
-		//								if (QuestManager.Instance.CurrentQuest != null && QuestManager.Instance.CurrentQuest.predeployed) {
-		//
-		//									xmla.Value = questdb.PATH_2_PREDEPLOYED_QUESTS + "/" + id + "/" + filename;
-		//
-		//								} else {
-		//
-		//									xmla.Value = Application.persistentDataPath + "/quests/" + id + "/" + filename;
-		//
-		//								}
-		//								questdb.performSpriteConversion (xmla.Value);
-		//
-		//							}
-		//						}
-		//
-		//					}
-		//
-		//					attributes.Add (new QuestAttribute (xmla.Name, xmla.Value));
-		//
-		//				}
-		//			}
-		//
-		//			foreach (QuestContent qcdi in contents_dialogitems) {
-		//				qcdi.deserializeAttributes (id, redo);
-		//			}
-		//
-		//			foreach (QuestContent qcdi in contents_answers) {
-		//				qcdi.deserializeAttributes (id, redo);
-		//			}
-		//
-		//			if (contents_question != null) {
-		//				contents_question.deserializeAttributes (id, redo);
-		//			}
-		//			foreach (QuestContent qcdi in contents_answersgroup) {
-		//				qcdi.deserializeAttributes (id, redo);
-		//			}
-		//
-		//			foreach (QuestContent qcdi in contents_stringmeta) {
-		//				qcdi.deserializeAttributes (id, redo);
-		//			}
-		//
-		//			foreach (QuestContent qcdi in contents_expectedcode) {
-		//				qcdi.deserializeAttributes (id, redo);
-		//			}
-		//
-		//			if (onEnd != null) {
-		//				foreach (QuestAction qa in onEnd.actions) {
-		//					qa.deserializeAttributes (id, redo);
-		//				}
-		//			}
-		//			if (onStart != null) {
-		//				foreach (QuestAction qa in onStart.actions) {
-		//					qa.deserializeAttributes (id, redo);
-		//				}
-		//			}
-		//			if (onTap != null) {
-		//				foreach (QuestAction qa in onTap.actions) {
-		//					qa.deserializeAttributes (id, redo);
-		//				}
-		//			}
-		//			if (onSuccess != null) {
-		//				foreach (QuestAction qa in onSuccess.actions) {
-		//					qa.deserializeAttributes (id, redo);
-		//				}
-		//			}
-		//			if (onFailure != null) {
-		//				foreach (QuestAction qa in onFailure.actions) {
-		//					qa.deserializeAttributes (id, redo);
-		//				}
-		//			}
-		//			if (onRead != null) {
-		//				foreach (QuestAction qa in onRead.actions) {
-		//					qa.deserializeAttributes (id, redo);
-		//				}
-		//			}
-		//		}
-		//
-		//		public bool hasActionInChildren (string type1)
-		//		{
-		//
-		//			if (onTap != null && onTap.hasActionInChildren (type1)) {
-		//				return true;
-		//			} else if (onEnd != null && onEnd.hasActionInChildren (type1)) {
-		//				return true;
-		//			} else if (onStart != null && onStart.hasActionInChildren (type1)) {
-		//				return true;
-		//			} else if (onSuccess != null && onSuccess.hasActionInChildren (type1)) {
-		//				return true;
-		//			} else if (onFailure != null && onFailure.hasActionInChildren (type1)) {
-		//				return true;
-		//			} else if (onRead != null && onRead.hasActionInChildren (type1)) {
-		//				return true;
-		//			}
-		//
-		//			return false;
-		//		}
 
 		#endregion
 
