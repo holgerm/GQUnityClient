@@ -182,6 +182,9 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public bool categoryFiltersStartFolded { get; set; }
 
+		[ShowInProductEditor]
+		public bool categoryFolderStartFolded { get; set; }
+
 		/// <summary>
 		/// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
 		/// </summary>
@@ -437,6 +440,7 @@ namespace GQ.Client.Conf
 			categoryDict = new Dictionary<string, Category> ();
 			foldableCategoryFilters = true;
 			categoryFiltersStartFolded = true;
+			categoryFolderStartFolded = true;
 		}
 
 		#endregion

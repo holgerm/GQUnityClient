@@ -105,6 +105,12 @@ namespace GQ.Client.UI {
 			SetSelectedState (!selectedForFilter);
 		}
 
+		public void show(bool show)
+		{
+			gameObject.SetActive (show);
+		}
+
+
 		#endregion
 
 	}

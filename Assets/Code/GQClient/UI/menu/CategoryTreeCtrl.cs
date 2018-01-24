@@ -69,8 +69,24 @@ namespace GQ.Client.UI
 			bool currentShowState = transform.GetChild (1).gameObject.activeSelf;
 
 			for (int i = 1; i < transform.childCount; i++) {
-				transform.GetChild (i).gameObject.SetActive (!currentShowState);
+				Transform child = transform.GetChild (i);
+				CategoryFolderCtrl folderCtrl = child.GetComponent<CategoryFolderCtrl> ();
+				if (folderCtrl != null) {
+					folderCtrl.Show (!currentShowState);
+				}
 			}
+
+//			foreach (CategoryFolder folder in categoryFolders.Values) {
+//				Debug.Log("TOGGLE_MENU: Before: " + transform.childCount);
+//				if (folder.ctrl.gameObject.activeSelf) {
+//					folder.ctrl.gameObject.SetActive (false);
+//				}
+//				else {
+//					folder.ctrl.gameObject.SetActive (true);
+//					UpdateView ();
+//				}
+//				Debug.Log("TOGGLE_MENU: After: " + transform.childCount);
+//			}
 		}
 
 		#endregion
@@ -220,12 +236,16 @@ namespace GQ.Client.UI
 		{
 			public string Name;
 
+			/// Will be set by the ui controller, when it is created from prefab, c.f. the Create() function in the CategoryEntryCtrl class.
+			public CategoryFolderCtrl ctrl;
+
 			public List<CategoryEntry> Entries;
 
 			public CategoryFolder (string name)
 			{
 				Name = name;
 				Entries = new List<CategoryEntry> ();
+				ctrl = null;
 			}
 
 			public void AddCategoryEntry (CategoryEntry entry)
