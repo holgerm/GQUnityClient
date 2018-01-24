@@ -189,6 +189,10 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public string mainCategorySet { get; set; }
 
+		public CategorySet GetMainCategorySet () {
+			return categorySets.Find (cat => cat.name == mainCategorySet);
+		}
+
 		[ShowInProductEditor]
 		public List<CategorySet> categorySets {
 			get {

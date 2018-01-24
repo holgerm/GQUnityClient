@@ -156,6 +156,36 @@ namespace GQ.Client.UI.Foyer
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + qInfo.Name + ")";
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
+
+			// set info button as configured:
+			if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "") {
+				CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet ();
+				Category determiningCategory = null;
+				foreach (string myCatId in qInfo.Categories) {
+					determiningCategory = mainCategorySet.categories.Find (mainCat => mainCat.id == myCatId);
+				}
+
+				Image infoImage = ctrl.InfoButton.GetComponent<Image>();
+				infoImage.enabled = true;
+				ctrl.InfoButton.enabled = false;
+				ctrl.InfoButton.gameObject.SetActive (true); // show info icon
+
+				if (determiningCategory != null) {
+					// set symbol for this category:
+					Debug.Log(string.Format("InfoIMAGE: setting {0} to {1}", ctrl.name, determiningCategory.symbol.path).Yellow());
+					infoImage.sprite = determiningCategory.symbol != null ?
+						Resources.Load<Sprite>(determiningCategory.symbol.path) :
+						null;
+					if (infoImage.sprite != null)
+					{
+						infoImage.enabled = true;
+						ctrl.InfoButton.enabled = true;
+						ctrl.InfoButton.gameObject.SetActive (true);
+					}
+				}
+			}
+
+			// set data and event management:
 			ctrl.data = qInfo;
 			ctrl.containerController = containerController;
 			ctrl.data.OnChanged += ctrl.UpdateView;
