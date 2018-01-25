@@ -168,17 +168,17 @@ namespace GQ.Client.Model
 		}
 			
 		// called when a scene has been loaded:
-		void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		void OnSceneLoaded (Scene scene, LoadSceneMode mode)
 		{
 			SceneManager.SetActiveScene (scene);
 			foreach (Scene sceneToUnload in scenesToUnload) {
 				SceneManager.UnloadSceneAsync (sceneToUnload);
-				scenesToUnload.Remove (sceneToUnload);
 			}
+			scenesToUnload.Clear ();
 			SceneManager.sceneLoaded -= OnSceneLoaded;
 		}
 
-		public static List<Scene> scenesToUnload = new List<Scene>();
+		public static List<Scene> scenesToUnload = new List<Scene> ();
 
 		public virtual void Start ()
 		{

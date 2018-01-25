@@ -77,6 +77,7 @@ namespace GQ.Client.Conf
 		public List<SceneMapping> sceneMappings { get; set; }
 
 		private string[] _scenePaths;
+
 		[ShowInProductEditor]
 		public string[]	scenePaths { 
 			get {
@@ -192,7 +193,8 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public string mainCategorySet { get; set; }
 
-		public CategorySet GetMainCategorySet () {
+		public CategorySet GetMainCategorySet ()
+		{
 			return categorySets.Find (cat => cat.name == mainCategorySet);
 		}
 
@@ -230,7 +232,7 @@ namespace GQ.Client.Conf
 //						}
 					}
 					foreach (Category c in _categories) {
-						if (!categoryDict.ContainsKey(c.id))
+						if (!categoryDict.ContainsKey (c.id))
 							categoryDict.Add (c.id, c);
 					}
 				}
@@ -254,12 +256,12 @@ namespace GQ.Client.Conf
 
 		#region Layout
 
+		[ShowInProductEditor]
+		public ImagePath topLogo { get; set; }
+
 		[ShowInProductEditor (StartSection = "Layout & Colors:")]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	mainColor  { get; set; }
-
-		[ShowInProductEditor]
-		public int 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -274,15 +276,15 @@ namespace GQ.Client.Conf
 		public Color32	headerButtonFgColor  { get; set; }
 
 		[ShowInProductEditor]
-		public ImagePath topLogo { get; set; }
-
-		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	contentBackgroundColor  { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	contentFontColor  { get; set; }
+
+		[ShowInProductEditor]
+		public int 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		public float contentTopMarginUnits  { get; set; }
@@ -631,20 +633,23 @@ namespace GQ.Client.Conf
 
 	}
 
-	public class CategorySet {
+	public class CategorySet
+	{
 		public string name;
 
 		public List<Category> categories;
 
 		[JsonConstructor]
-		public CategorySet(string name, List<Category> categories) {
+		public CategorySet (string name, List<Category> categories)
+		{
 			this.name = name;
 			if (categories == null)
 				categories = new List<Category> ();
 			this.categories = categories;
 		}
 
-		public CategorySet() {
+		public CategorySet ()
+		{
 			name = "";
 			categories = new List<Category> ();
 		}

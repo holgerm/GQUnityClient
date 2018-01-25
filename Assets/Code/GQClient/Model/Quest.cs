@@ -108,7 +108,7 @@ namespace GQ.Client.Model
 
 		#region Metadata
 
-		public Dictionary<string, string> metadata = new Dictionary<string, string>();
+		public Dictionary<string, string> metadata = new Dictionary<string, string> ();
 
 		#endregion
 
@@ -251,24 +251,19 @@ namespace GQ.Client.Model
 				reader.Skip ();
 				return;
 			}
-			else {
-				Debug.Log (string.Format ("Reading xml page with class {0} ...", pageTypeName).Yellow());
-			}
 
 			XmlSerializer serializer = new XmlSerializer (pageType);
 			IPage page = (IPage)serializer.Deserialize (reader);
-			Debug.Log ("Page deserialized done. id: " + page.Id);
 			page.Parent = this;
 			if (pageDict.Count == 0)
 				StartPage = page;
-			if (pageDict.ContainsKey(page.Id)) {
-				pageDict.Remove(page.Id);
+			if (pageDict.ContainsKey (page.Id)) {
+				pageDict.Remove (page.Id);
 			}
 			try {
 				pageDict.Add (page.Id, page);
-			}
-			catch (Exception e) {
-				Debug.LogWarning((e.Message + " id: " + page.Id).Yellow());
+			} catch (Exception e) {
+				Debug.LogWarning ((e.Message + " id: " + page.Id).Yellow ());
 			}
 		}
 

@@ -31,35 +31,32 @@ namespace GQ.Client.Model
 		[JsonIgnore]
 		public string absDir {
 			get {
-				Debug.Log ("LocalMediaInfo.dir get: dir: " + (dir == null ? null : dir));
 				if (dir == null) {
 					return null;
 				}
 
-				return PersistentDataPath() + dir;
+				return PersistentDataPath () + dir;
 			}
 			set {
 				if (value == null) {
-					Debug.Log ("LocalMediaInfo.dir SET NULL: ");
 					dir = null;
 					return;
 				}
 
-				if (value.StartsWith (PersistentDataPath())) {
-					Debug.Log ("LocalMediaInfo.dir SET MIT APPL_PATH: " + value);
-					dir = value.Substring (PersistentDataPath().Length);
+				if (value.StartsWith (PersistentDataPath ())) {
+					dir = value.Substring (PersistentDataPath ().Length);
 				} else {
-					Debug.Log ("LocalMediaInfo.dir SET OHNE APPL_PATH: " + value);
 					dir = value;
 				}
-				Debug.Log ("LocalMediaInfo.dir set: value: " + value + " dir: " + dir + "  \n    ApplPath: " + PersistentDataPath());
 			}
 		}
+
 		public string filename;
 		public long size;
 		public long time;
 
-		public delegate string ConstantStringReturningMethod();
+		public delegate string ConstantStringReturningMethod ();
+
 		public static ConstantStringReturningMethod PersistentDataPath = () => {
 			return Application.persistentDataPath;
 		};
