@@ -24,13 +24,7 @@
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
-  "sceneExtensions": [
-    {
-      "scene": "Assets/Scenes/Pages/NPCTalk.unity",
-      "root": "Canvas/Screen/Page/ImagePanel/Image",
-      "prefab": "Prefabs/wcc.CopyRightsText"
-    }
-  ],
+  "sceneExtensions": [],
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -39,6 +33,9 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": true,
+  "mapStartAtLongitude": 0.0,
+  "mapStartAtLatitude": 0.0,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -50,176 +47,185 @@
   },
   "markerBGAlpha": 150,
   "markerScale": 1.2,
-  "categories": [
+  "foldableCategoryFilters": false,
+  "categoryFiltersStartFolded": false,
+  "categoryFolderStartFolded": true,
+  "mainCategorySet": "Kategorien",
+  "categorySets": [
     {
-      "id": "wcc.antiquariate",
-      "name": "Antiquariat",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/antiquariat"
-      }
-    },
-    {
-      "id": "wcc.architecture",
-      "name": "Architektur",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/architecture"
-      }
-    },
-    {
-      "id": "wcc.museum",
-      "name": "Museum",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/museum"
-      }
-    },
-    {
-      "id": "wcc.nature",
-      "name": "Natur",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/nature"
-      }
-    },
-    {
-      "id": "wcc.history",
-      "name": "Historisch",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/historic"
-      }
-    },
-    {
-      "id": "wcc.gallery",
-      "name": "Galerie",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/gallery"
-      }
-    },
-    {
-      "id": "wcc.cinema",
-      "name": "Kino",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/cinema"
-      }
-    },
-    {
-      "id": "wcc.concerthall",
-      "name": "Konzertsaal",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/concerthall"
-      }
-    },
-    {
-      "id": "wcc.theatre",
-      "name": "Theater",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/theatre"
-      }
-    },
-    {
-      "id": "wcc.special",
-      "name": "Besonderes",
-      "folderName": "Kultur",
-      "symbol": {
-        "path": "textures/readable/special"
-      }
-    },
-    {
-      "id": "wcc.tour.beethoven",
-      "name": "Beethoventour",
-      "folderName": "Touren",
-      "symbol": {
-        "path": "textures/readable/beethoventour"
-      }
-    },
-    {
-      "id": "wcc.bar",
-      "name": "Bar",
-      "folderName": "Gastronomie",
-      "symbol": {
-        "path": "textures/readable/bar"
-      }
-    },
-    {
-      "id": "wcc.beergarden",
-      "name": "Biergarten",
-      "folderName": "Gastronomie",
-      "symbol": {
-        "path": "textures/readable/beergarden"
-      }
-    },
-    {
-      "id": "wcc.cafe",
-      "name": "Café",
-      "folderName": "Gastronomie",
-      "symbol": {
-        "path": "textures/readable/cafe"
-      }
-    },
-    {
-      "id": "wcc.iceparlour",
-      "name": "Eisdiele",
-      "folderName": "Gastronomie",
-      "symbol": {
-        "path": "textures/readable/iceparlour"
-      }
-    },
-    {
-      "id": "wcc.gastro.pub",
-      "name": "Kneipe",
-      "folderName": "Gastronomie",
-      "symbol": {
-        "path": "textures/readable/pub"
-      }
-    },
-    {
-      "id": "wcc.restaurant",
-      "name": "Restaurant",
-      "folderName": "Gastronomie",
-      "symbol": {
-        "path": "textures/readable/restaurant"
-      }
-    },
-    {
-      "id": "wcc.tourist",
-      "name": "Tourist Info",
-      "folderName": "Hilfe & Information",
-      "symbol": {
-        "path": "textures/readable/touristinfo"
-      }
-    },
-    {
-      "id": "wcc.wc",
-      "name": "WC",
-      "folderName": "Hilfe & Information",
-      "symbol": {
-        "path": "textures/readable/wc"
-      }
-    },
-    {
-      "id": "wcc.bike",
-      "name": "Fahrradvermietung",
-      "folderName": "Hilfe & Information",
-      "symbol": {
-        "path": "textures/readable/bike"
-      }
+      "name": "Kategorien",
+      "categories": [
+        {
+          "id": "wcc.antiquariate",
+          "name": "Antiquariat",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/antiquariat"
+          }
+        },
+        {
+          "id": "wcc.architecture",
+          "name": "Architektur",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/architecture"
+          }
+        },
+        {
+          "id": "wcc.museum",
+          "name": "Museum",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/museum"
+          }
+        },
+        {
+          "id": "wcc.nature",
+          "name": "Natur",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/nature"
+          }
+        },
+        {
+          "id": "wcc.history",
+          "name": "Historisch",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/historic"
+          }
+        },
+        {
+          "id": "wcc.gallery",
+          "name": "Galerie",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/gallery"
+          }
+        },
+        {
+          "id": "wcc.cinema",
+          "name": "Kino",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/cinema"
+          }
+        },
+        {
+          "id": "wcc.concerthall",
+          "name": "Konzertsaal",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/concerthall"
+          }
+        },
+        {
+          "id": "wcc.theatre",
+          "name": "Theater",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/theatre"
+          }
+        },
+        {
+          "id": "wcc.special",
+          "name": "Besonderes",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/special"
+          }
+        },
+        {
+          "id": "wcc.tour.beethoven",
+          "name": "Beethoventour",
+          "folderName": "Touren",
+          "symbol": {
+            "path": "textures/readable/beethoventour"
+          }
+        },
+        {
+          "id": "wcc.bar",
+          "name": "Bar",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/bar"
+          }
+        },
+        {
+          "id": "wcc.beergarden",
+          "name": "Biergarten",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/beergarden"
+          }
+        },
+        {
+          "id": "wcc.cafe",
+          "name": "Café",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/cafe"
+          }
+        },
+        {
+          "id": "wcc.iceparlour",
+          "name": "Eisdiele",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/iceparlour"
+          }
+        },
+        {
+          "id": "wcc.gastro.pub",
+          "name": "Kneipe",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/pub"
+          }
+        },
+        {
+          "id": "wcc.restaurant",
+          "name": "Restaurant",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/restaurant"
+          }
+        },
+        {
+          "id": "wcc.tourist",
+          "name": "Tourist Info",
+          "folderName": "Hilfe & Information",
+          "symbol": {
+            "path": "textures/readable/touristinfo"
+          }
+        },
+        {
+          "id": "wcc.wc",
+          "name": "WC",
+          "folderName": "Hilfe & Information",
+          "symbol": {
+            "path": "textures/readable/wc"
+          }
+        },
+        {
+          "id": "wcc.bike",
+          "name": "Fahrradvermietung",
+          "folderName": "Hilfe & Information",
+          "symbol": {
+            "path": "textures/readable/bike"
+          }
+        }
+      ]
     }
   ],
-  "filterByCategories": true,
+  "categories": [],
   "mainColor": {
     "r": 116,
     "g": 103,
     "b": 33,
     "a": 255
   },
-  "headerHeightPermill": 50,
+  "headerHeightUnits": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -253,7 +259,12 @@
     "b": 0,
     "a": 255
   },
-  "footerHeightPermill": 75,
+  "contentTopMarginUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "contentInnerSpaceHeightUnits": 0.0,
+  "contentImageShareMinimum": 0.0,
+  "contentImageShareMaximum": 0.0,
+  "footerHeightUnits": 75,
   "footerBgColor": {
     "r": 255,
     "g": 255,
@@ -272,6 +283,7 @@
     "b": 255,
     "a": 255
   },
+  "sideMarginWidthUnits": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -294,16 +306,16 @@
   "menuMainEntryHeight": 0,
   "menuSubEntryHeight": 0,
   "menuBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 116,
+    "g": 103,
+    "b": 33,
+    "a": 255
   },
   "menuPartBGColor": {
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0
+    "a": 255
   },
   "disabledAlpha": 0.5
 }

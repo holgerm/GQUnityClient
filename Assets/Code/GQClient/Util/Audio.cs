@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Err;
 using System;
+using GQ.Client.Model;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Util
 {
@@ -34,8 +36,36 @@ namespace GQ.Client.Util
 				return;
 			}
 			else {
-				// First load the audio file asynch and then play it:
-				Base.Instance.StartCoroutine(PlayAudioFileAsynch(path, loop, stopOtherAudio));
+//				// First load the audio file asynch and then play it:
+//				MediaInfo mediaInfo;
+//				QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue (path, out mediaInfo);
+
+				// NEW:
+				AbstractDownloader loader;
+				if (QuestManager.Instance.CurrentQuest.MediaStore.ContainsKey (path)) {
+					MediaInfo mediaInfo;
+					QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue (path, out mediaInfo);
+					loader = new LocalFileLoader (mediaInfo.LocalPath);
+				}
+				else {
+					loader = new Downloader (url: path, timeout: ConfigurationManager.Current.timeoutMS);
+					// TODO store the image locally ...
+				}
+				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>  {
+					GameObject go = new GameObject ("AudioSource for " + path);
+					go.transform.SetParent (Base.Instance.transform);
+					audioSource = go.AddComponent<AudioSource> ();
+					audioSources [path] = audioSource;
+
+					audioSource.clip = d.Www.GetAudioClip (false, true);
+					_internalStartPlaying (audioSource, loop, stopOtherAudio);
+					// Dispose www including it s Texture and take some logs for preformace surveillance:
+					d.Www.Dispose ();
+				};
+				loader.Start ();
+//
+//
+//				Base.Instance.StartCoroutine(PlayAudioFileAsynch(mediaInfo.LocalPath, loop, stopOtherAudio));
 			}
 		}
 

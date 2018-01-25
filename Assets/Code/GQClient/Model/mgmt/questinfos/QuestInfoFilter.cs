@@ -76,20 +76,38 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public class Category : QuestInfoFilter {
+		public class CategoryFilter : QuestInfoFilter {
+
+			public string Name;
 
 			private List<string> acceptedCategories = new List<string>();
 
-			public Category() {
+			public CategoryFilter() {
 				// TODO initialize from persisted Filter when we have that feature.
 				NotificationPaused = true;
+				Config config = ConfigurationManager.Current;
 				foreach (Conf.Category c in ConfigurationManager.Current.categories) {
 					AddCategory(c.id);
 				}
 				NotificationPaused = false;
+				Name = "";
 			}
 
-			public Category(string firstCategory, params string[] categories) {
+			public CategoryFilter(CategorySet catSet) {
+				NotificationPaused = true;
+				foreach (Conf.Category c in catSet.categories) {
+					AddCategory(c.id);
+				}
+				NotificationPaused = false;
+				Name = catSet.name;
+			}
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="GQ.Client.Model.QuestInfoFilter+Category"/> class.
+			/// </summary>
+			/// <param name="firstCategory">First category to be accepted by this filter.</param>
+			/// <param name="categories">Further categories to be accepted. In fact you can simply sepcify any number of acceptable categories in one row.</param>
+			public CategoryFilter(string firstCategory, params string[] categories) {
 				NotificationPaused = true;
 				AddCategory(firstCategory);
 				foreach (string c in categories)
@@ -178,7 +196,6 @@ namespace GQ.Client.Model
 						filter.parentFilter = this;
 					}
 				}
-				subfilters.AddRange (filters);
 			}
 
 			public override bool Accept (QuestInfo qi)

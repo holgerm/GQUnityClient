@@ -9,6 +9,7 @@ using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.FileIO;
+using GQ.AppSpecific;
 
 namespace GQ.Client.Model
 {
@@ -273,17 +274,13 @@ namespace GQ.Client.Model
 		public List<string> Categories {
 			get {
 				if (_categories == null) {
-					_categories = new List<string> ();
-					foreach (MetaDataInfo md in Metadata) {
-						if (md.Key.StartsWith ("category"))
-							_categories.Add (md.Value.StripQuotes());
-					}
+					_categories = CategoryReader.ReadCategoriesFromMetadata (Metadata);
 				}
 				return _categories;
 			}
 		}
 
-		public const string WITHOUT_CATEGORY_ID = "withoutcatgeory";
+		public const string WITHOUT_CATEGORY_ID = "withoutcategory";
 
 		public string CurrentCategoryId {
 			get {

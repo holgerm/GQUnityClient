@@ -31,6 +31,10 @@ namespace GQ.Client.Model
 
 		protected List<DialogItem> dialogItems = new List<DialogItem> ();
 
+		public int NumberOfDialogItems() {
+			return dialogItems.Count;
+		}
+
 		public DialogItem CurrentDialogItem {
 			get {
 				if (CurDialogItemNo == 0) 

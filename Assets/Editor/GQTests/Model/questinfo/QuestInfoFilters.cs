@@ -116,7 +116,7 @@ namespace GQTests.Model {
 
 		[Test]
 		public void CategoryFilter() {
-			QuestInfoFilter filter_A = new QuestInfoFilter.Category ("A");
+			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter ("A");
 
 			Assert.IsTrue (filter_A.Accept (qi_ABC));
 			Assert.IsFalse (filter_A.Accept (qi_CDE));
@@ -131,7 +131,7 @@ namespace GQTests.Model {
 			Assert.AreEqual (QuestInfo.WITHOUT_CATEGORY_ID, filter_A.CategoryToShow (qi_DEF));
 		
 		
-			QuestInfoFilter filter_C = new QuestInfoFilter.Category ("C");
+			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter ("C");
 
 			Assert.IsTrue (filter_C.Accept (qi_ABC));
 			Assert.IsTrue (filter_C.Accept (qi_CDE));
@@ -146,7 +146,7 @@ namespace GQTests.Model {
 			Assert.AreEqual (QuestInfo.WITHOUT_CATEGORY_ID, filter_C.CategoryToShow (qi_DEF));
 
 
-			QuestInfoFilter filter_CDE = new QuestInfoFilter.Category ("C", "D", "E");
+			QuestInfoFilter filter_CDE = new QuestInfoFilter.CategoryFilter ("C", "D", "E");
 
 			Assert.IsTrue (filter_CDE.Accept (qi_ABC));
 			Assert.IsTrue (filter_CDE.Accept (qi_CDE));
@@ -163,8 +163,8 @@ namespace GQTests.Model {
 
 		[Test]
 		public void AndFilter() {
-			QuestInfoFilter filter_A = new QuestInfoFilter.Category ("A");
-			QuestInfoFilter filter_C = new QuestInfoFilter.Category ("C");
+			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter ("A");
+			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter ("C");
 			QuestInfoFilter andFilter = new QuestInfoFilter.And (filter_A, filter_C);
 
 			Assert.IsTrue (andFilter.Accept (qi_ABC));
@@ -182,9 +182,9 @@ namespace GQTests.Model {
 
 		[Test]
 		public void OrFilter() {
-			QuestInfoFilter filter_A = new QuestInfoFilter.Category ("A");
-			QuestInfoFilter filter_C = new QuestInfoFilter.Category ("C");
-			QuestInfoFilter filter_E = new QuestInfoFilter.Category ("E");
+			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter ("A");
+			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter ("C");
+			QuestInfoFilter filter_E = new QuestInfoFilter.CategoryFilter ("E");
 			QuestInfoFilter orFilterAC = new QuestInfoFilter.Or (filter_A, filter_C);
 
 			Assert.IsTrue (orFilterAC.Accept (qi_ABC));

@@ -29,6 +29,17 @@ namespace GQ.Client.UI
 		#endregion
 
 
+		#region implemented abstract members of PageController
+
+		protected override int NumberOfSpacesInContent ()
+		{
+			// we only have one space between image and text:
+			return 1;
+		}
+
+		#endregion
+
+
 		#region Runtime API
 
 		//		// Use this for initialization

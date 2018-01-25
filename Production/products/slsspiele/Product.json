@@ -6,8 +6,9 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
-  "downloadTimeOutSeconds": 240,
-  "nameForQuest": "Spiel",
+  "timeoutMS": 10000,
+  "nameForQuestSg": "Spiel",
+  "nameForQuestsPl": "Spiele",
   "questVisualization": "list",
   "questVisualizationChangeable": false,
   "cloudQuestsVisible": true,
@@ -15,10 +16,19 @@
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
-  "hasMenuWithinQuests": false,
-  "showTextInLoadingLogo": true,
-  "showNetConnectionWarning": true,
-  "scenePaths": null,
+  "acceptedPageTypes": [
+    "NPCTalk"
+  ],
+  "sceneMappings": [
+    {
+      "pageTypeName": "NPCTalk",
+      "scenePath": "Assets/Scenes/Pages/SLS_Spielbeschreibung.unity"
+    }
+  ],
+  "scenePaths": [
+    "Assets/Scenes/Foyer.unity",
+    "Assets/Scenes/Pages/SLS_Spielbeschreibung.unity"
+  ],
   "sceneExtensions": [],
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
@@ -28,6 +38,9 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 0.0,
+  "mapStartAtLatitude": 0.0,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -38,8 +51,283 @@
     "a": 0
   },
   "markerBGAlpha": 168,
-  "categories": null,
-  "headerHeightPermill": 50,
+  "markerScale": 1.0,
+  "foldableCategoryFilters": true,
+  "categoryFiltersStartFolded": true,
+  "mainCategorySet": "Spieltyp",
+  "categorySets": [
+    {
+      "name": "Spieltyp",
+      "categories": [
+        {
+          "id": "slsspiele.app",
+          "name": "Apps & Games",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typapps"
+          }
+        },
+        {
+          "id": "slsspiele.ballspiel",
+          "name": "Ballspiele",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typball"
+          }
+        },
+        {
+          "id": "slsspiele.bauspiel",
+          "name": "Bauen & Konstruieren",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typbauen"
+          }
+        },
+        {
+          "id": "slsspiele.bewegungsspiel",
+          "name": "Bewegung",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typbewegung"
+          }
+        },
+        {
+          "id": "slsspiele.kartenspiel",
+          "name": "Karten & Brettspiele",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typkarten"
+          }
+        },
+        {
+          "id": "slsspiele.darstellen",
+          "name": "Darstellen",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.erzaehlen",
+          "name": "Erzählen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typerzaehlen"
+          }
+        },
+        {
+          "id": "slsspiele.geschicklichkeit",
+          "name": "Geschicklichkeit",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.rallye",
+          "name": "Rallyes",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typrallye"
+          }
+        },
+        {
+          "id": "slsspiele.kennenlernen",
+          "name": "Kennenlernen",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.kooperationsspiel",
+          "name": "Kooperationsspiele",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typkooperation"
+          }
+        },
+        {
+          "id": "slsspiele.musikspiel",
+          "name": "Musik & Ton",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typmusik"
+          }
+        },
+        {
+          "id": "slsspiele.naturspiel",
+          "name": "Natur",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.ratespiel",
+          "name": "Raten",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.reaktionsspiel",
+          "name": "Reaktion",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.schreiben_malen",
+          "name": "Schreiben und Malen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typmalen"
+          }
+        },
+        {
+          "id": "slsspiele.sportspiel",
+          "name": "Sport & Mannschaft",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.strategiespiel",
+          "name": "Strategie",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.suchspiel",
+          "name": "Suchen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typsuchen"
+          }
+        },
+        {
+          "id": "slsspiele.wahrnehmungsspiel",
+          "name": "Wahrnehmung",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typwahrnehmung"
+          }
+        },
+        {
+          "id": "slsspiele.sonstige_spielform",
+          "name": "Sonstiges",
+          "folderName": "",
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "name": "Spieleranzahl",
+      "categories": [
+        {
+          "id": "slsspiele.einzelspieler",
+          "name": "Alleine",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/spielereinzeln"
+          }
+        },
+        {
+          "id": "slsspiele.kleinegruppe",
+          "name": "Kleine Gruppe",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/spielerkleinegruppe"
+          }
+        },
+        {
+          "id": "slsspiele.grossegruppe",
+          "name": "Große Gruppe",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/spielergrossegruppe"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dauer",
+      "categories": [
+        {
+          "id": "slsspiele.kurz",
+          "name": "Kurz",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.mittellang",
+          "name": "Mittel",
+          "folderName": "",
+          "symbol": null
+        },
+        {
+          "id": "slsspiele.lang",
+          "name": "Lang",
+          "folderName": "",
+          "symbol": null
+        }
+      ]
+    },
+    {
+      "name": "Wetter",
+      "categories": [
+        {
+          "id": "slsspiele.sonne",
+          "name": "Gutes Wetter",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/wettersonne"
+          }
+        },
+        {
+          "id": "slsspiele.regen",
+          "name": "Regen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/wetterregen"
+          }
+        },
+        {
+          "id": "slsspiele.schnee",
+          "name": "Schnee",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/wetterschnee"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orte",
+      "categories": [
+        {
+          "id": "slsspiele.draussen",
+          "name": "Draussen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/ortdraussen"
+          }
+        },
+        {
+          "id": "slsspiele.drinnen",
+          "name": "Drinnen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/ortdrinnen"
+          }
+        },
+        {
+          "id": "slsspiele.spezielle_orte",
+          "name": "Speziell",
+          "folderName": "",
+          "symbol": null
+        }
+      ]
+    }
+  ],
+  "categories": [],
+  "mainColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "headerHeightUnits": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -71,7 +359,12 @@
     "b": 0,
     "a": 255
   },
-  "footerHeightPermill": 75,
+  "contentTopMarginUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "contentInnerSpaceHeightUnits": 0.0,
+  "contentImageShareMinimum": 0.0,
+  "contentImageShareMaximum": 0.0,
+  "footerHeightUnits": 75,
   "footerBgColor": {
     "r": 255,
     "g": 255,
@@ -90,6 +383,7 @@
     "b": 0,
     "a": 255
   },
+  "sideMarginWidthUnits": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -107,5 +401,21 @@
     "g": 255,
     "b": 255,
     "a": 255
-  }
+  },
+  "showEmptyMenuEntries": true,
+  "menuMainEntryHeight": 0,
+  "menuSubEntryHeight": 0,
+  "menuBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "menuPartBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "disabledAlpha": 0.5
 }

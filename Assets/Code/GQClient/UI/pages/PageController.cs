@@ -5,6 +5,7 @@ using GQ.Client.Model;
 using UnityEngine.SceneManagement;
 using GQ.Client.Util;
 using GQ.Client.Err;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -70,5 +71,74 @@ namespace GQ.Client.UI
 
 		#endregion
 
+
+		#region Layout
+
+
+		/// <summary>
+		/// Height of the header element in device-dependent units.
+		/// </summary>
+		/// <value>The height of the header.</value>
+		static public float HeaderHeight {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.headerHeightUnits;
+			}
+		}
+
+		/// <summary>
+		/// Margin between header and content in device-dependent units.
+		/// </summary>
+		static public float ContentTopMargin {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.contentTopMarginUnits;
+			}
+		}
+
+		/// <summary>
+		/// Margin between content and footer in device-dependent units.
+		/// </summary>
+		static public float ContentBottomMargin {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.contentBottomMarginUnits;
+			}
+		}
+
+		/// <summary>
+		/// Height of the footer element in device-dependent units.
+		/// </summary>
+		/// <value>The height of the footer.</value>
+		static public float FooterHeight {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.footerHeightUnits;
+			}
+		}
+
+		static public float ContentInnerSpaceHeightUnits {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.contentInnerSpaceHeightUnits;
+			}
+		}
+
+		protected float TotalHeightUnits {
+			get {
+				return HeaderHeight + FooterHeight + (ContentInnerSpaceHeightUnits * (float) NumberOfSpacesInContent ());
+			}
+		}
+
+		protected abstract int NumberOfSpacesInContent ();
+
+		static public float SideMarginWidthUnits {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.sideMarginWidthUnits;
+			}
+		}
+
+		#endregion
 	}
 }

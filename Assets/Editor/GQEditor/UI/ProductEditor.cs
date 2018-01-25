@@ -34,7 +34,8 @@ namespace GQ.Editor.UI
 		public static string CurrentBuildName {
 			get {
 				if (_currentBuildName == null) {
-					_currentBuildName = updateFromCurrentConfig ();
+					Config curConfig = updateFromCurrentConfig ();
+					_currentBuildName = curConfig == null ? "[null]" : curConfig.id;
 				}
 				return _currentBuildName;
 			}
@@ -198,8 +199,16 @@ namespace GQ.Editor.UI
 				}
 				GUILayout.Label (shownBuildName);
 
+				if (GUILayout.Button ("Reload")) {
+					Config reloadedConfig = updateFromCurrentConfig ();
+					if (reloadedConfig != null) {
+						Pm.SetProductConfig(Pm.AllProductIds.ElementAt (selectedProductIndex), reloadedConfig);
+					}
+				}
+
+
 				if (Pm.ConfigFilesHaveChanges) {
-					if (GUILayout.Button ("Persist Changes")) {
+					if (GUILayout.Button ("Persist")) {
 						Files.CopyDirContents (
 							ConfigurationManager.RUNTIME_PRODUCT_DIR, 
 							Files.CombinePath (ProductManager.ProductsDirPath, CurrentBuildName),
@@ -276,21 +285,21 @@ namespace GQ.Editor.UI
 			} // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
 		}
 
-		internal static string updateFromCurrentConfig ()
+		internal static Config updateFromCurrentConfig ()
 		{
 			string build = null;
 
 			try {
 				string configFile = Files.CombinePath (ProductManager.Instance.BuildExportPath, ConfigurationManager.CONFIG_FILE);
 				if (!File.Exists (configFile))
-					return build;
+					return null;
 				string configText = File.ReadAllText (configFile);
 				Config buildConfig = JsonConvert.DeserializeObject<Config> (configText);
 				updateEditorBuildSceneSettings(buildConfig);
-				return buildConfig.id;
+				return buildConfig;
 			} catch (Exception exc) {
 				Debug.LogWarning ("ProductEditor.currentBuild() threw exception:\n" + exc.Message);
-				return build;
+				return null;
 			}
 		}
 
@@ -878,6 +887,83 @@ namespace GQ.Editor.UI
 	}
 
 
+	public class ProductEditorPart4ListOfCategorySet : ProductEditorPart {
+		bool showList = false;
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			List<CategorySet> allElements = (List<CategorySet>)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			if (allElements == null)
+				allElements = new List<CategorySet> ();
+			bool valsChanged = false;
+
+			showList = EditorGUILayout.Foldout (showList, string.Format ("Category Sets: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+			if (showList) {
+				configIsDirty = false;
+
+				// Header with Add Button:
+				EditorGUILayout.BeginHorizontal ();
+				EditorGUILayout.PrefixLabel (
+					new GUIContent ("Add Category Set:"), 
+					EditorStyles.textField, 
+					STYLE_LABEL_Bold
+				);
+				if (GUILayout.Button ("+")) {
+					CategorySet catSet = new CategorySet ();
+					allElements.Insert (0, catSet);
+					valsChanged = true;
+				}
+				EditorGUILayout.EndHorizontal ();
+	
+				for (int i = 0; i < allElements.Count; i++) {
+					bool elemChanged = false;
+					CategorySet oldElem = allElements [i];
+					CategorySet newElem = oldElem;
+
+					// category set name:
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ((i + 1).ToString () + ". name:"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_Bold
+					);
+					string newName = EditorGUILayout.TextField (oldElem.name);
+
+					elemChanged |= (newName != oldElem.name);
+
+					if (GUILayout.Button ("-")) {
+						if (EditorUtility.DisplayDialog (
+							string.Format ("Really delete category set {0}?", (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString ()), 
+							string.Format (
+								"This can not be undone"
+							), 
+							"Yes, delete it!", 
+							"No, keep it")) {
+							allElements.RemoveAll(item => item.name == oldElem.name);
+							valsChanged = true;
+						}
+					}
+					EditorGUILayout.EndHorizontal (); // end row for name and "-".
+
+					if (elemChanged) {
+						valsChanged = true;
+						newElem.name = newName;
+						// TODO newElem.categories = ....
+						allElements [i] = newElem;
+					}
+				}
+			}
+			if (valsChanged) {
+				// Update Config property for category sets:
+				configIsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements, null);
+			}
+
+		return configIsDirty;
+		}
+	}
+
+
 	public class ProductEditorPart4ListOfCategory : ProductEditorPart
 	{
 		bool showList = false;
@@ -1104,13 +1190,13 @@ namespace GQ.Editor.UI
 						GameObject newPrefabGO = 
 							(GameObject)EditorGUILayout.ObjectField (oldPrefabGO, typeof(GameObject), false);
 						if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType (newPrefabGO) == PrefabType.Prefab) {
-							// if user selected another prefab we store it:
+							// if user selects another prefab we store it:
 							newSceneExt.prefab = Files.GetResourcesRelativePath (AssetDatabase.GetAssetPath (newPrefabGO));
 							sceneExtChanged = true;
 						}
 						EditorGUILayout.EndHorizontal ();
-						EditorGUILayout.BeginHorizontal ();
 						// root:
+						EditorGUILayout.BeginHorizontal ();
 						EditorGUILayout.PrefixLabel (new GUIContent ("\t\tat", "The root gameobject where the prefab is injected."));
 						if (sceneExtensionDisabled) {
 							EditorGUILayout.TextField (Files.FileName (oldSceneExt.root));
@@ -1123,6 +1209,7 @@ namespace GQ.Editor.UI
 								sceneExtChanged = true;
 							}
 						}
+
 						if (sceneExtChanged) {
 							newSceneExt.scene = EditorSceneManager.GetActiveScene ().path;
 							allElements [i] = newSceneExt;
@@ -1198,6 +1285,28 @@ namespace GQ.Editor.UI
 			if (newFloatVal != oldFloatVal) {
 				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, newFloatVal, null);
+			}
+
+			return configIsDirty;
+		}
+	}
+
+
+	public class ProductEditorPart4Double : ProductEditorPart
+	{
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+
+			double oldDoubleVal = (double)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+			double newDoubleVal = oldDoubleVal;
+
+			// show text field if value fits in one line:
+			newDoubleVal = EditorGUILayout.DoubleField (NamePrefixGUIContent, oldDoubleVal);
+			if (newDoubleVal != oldDoubleVal) {
+				configIsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, newDoubleVal, null);
 			}
 
 			return configIsDirty;
@@ -1369,7 +1478,6 @@ namespace GQ.Editor.UI
 					using (new EditorGUI.DisabledGroupScope (true)) {
 						string pageType = EditorGUILayout.TextField (ProductEditor.SelectedConfig.acceptedPageTypes [i]);
 						if (!pageType.Equals (ProductEditor.SelectedConfig.acceptedPageTypes [i])) {
-							Debug.Log (string.Format ("replaced {0} with {1}.", ProductEditor.SelectedConfig.acceptedPageTypes [i], pageType).Yellow ());
 							allElements [i] = pageType;
 							configIsDirty = true;
 						}

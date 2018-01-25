@@ -25,6 +25,9 @@ namespace GQ.Client.UI {
 			folderCtrl.treeCtrl = catTree;
 			folderCtrl.folder = catFolder;
 
+			// set the back link from the model to this controller:
+			catFolder.ctrl = folderCtrl;
+
 			// initialize the UI Entry for this folder:
 			folderCtrl.UpdateView (catFolder);
 
@@ -84,8 +87,6 @@ namespace GQ.Client.UI {
 					cat.ctrl.UpdateView ();
 				}
 			}
-
-			// UpdateView (folder); // refresh folder item TODO
 		}
 
 		override protected bool showMenuItem() {
@@ -93,6 +94,18 @@ namespace GQ.Client.UI {
 				return (folder.Name != "");
 			else
 				return (folder.Name != "" && folder.Entries.Count >= 1);
+		}
+
+		#endregion
+
+
+		#region Runtime API
+
+		public void Show(bool show) {
+			gameObject.SetActive (show);
+			foreach (CategoryTreeCtrl.CategoryEntry ec in folder.Entries) {
+				ec.ctrl.show (show && ec.ctrl.Unfolded);
+			}
 		}
 
 		#endregion

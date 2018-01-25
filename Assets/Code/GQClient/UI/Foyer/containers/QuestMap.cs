@@ -162,8 +162,6 @@ namespace GQ.Client.UI.Foyer
 			map.CurrentCamera = Camera.main;
 			map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
 			map.CurrentZoom = 15.0f;
-			// 9 rue Gentil, Lyon
-			map.CenterWGS84 = new double[2] { 7.0090314, 50.9603868 };
 
 			LocationSensor.Instance.OnLocationUpdate += 
 				(object sender, LocationSensor.LocationEventArgs e) => {
@@ -181,6 +179,19 @@ namespace GQ.Client.UI.Foyer
 			map.UsesLocation = true;
 			map.InputsEnabled = true;
 			map.ShowsGUIControls = false;
+
+			// Locate at Start:
+			if (ConfigurationManager.Current.mapStartAtLocation) {
+				map.CenterOnLocation();
+				Debug.Log ("QuestMap.Start(): Centering on Location ...");
+			} else {
+				map.CenterWGS84 = new double[2] { 
+					ConfigurationManager.Current.mapStartAtLongitude, 
+					ConfigurationManager.Current.mapStartAtLatitude 
+				};
+				Debug.Log ("QuestMap.Start(): Centering on StartLocation: " + 
+					ConfigurationManager.Current.mapStartAtLongitude + " , " + ConfigurationManager.Current.mapStartAtLatitude);
+			}
 
 			layers = new List<LayerBehaviour> ();
 

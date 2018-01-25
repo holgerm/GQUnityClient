@@ -30,24 +30,14 @@ namespace GQ.Client.UI
 			LayoutElement layElem = GetComponent<LayoutElement> ();
 			if (layElem != null) {
 				float headerPermill = 0f;
-				if (header != null) {
+				if (header != null && header.gameObject.activeInHierarchy) {
 					headerPermill = header.GetComponent<LayoutElement> ().flexibleHeight;
-				} else {
-					try {
-						headerPermill = transform.parent.Find (LayoutConfig.HEADER).GetComponent<LayoutElement> ().flexibleHeight;
-					} catch (Exception) {
-					}
 				}
 
 				float footerPermill = 0f;
-				if (footer != null) {
+				if (footer != null && footer.gameObject.activeInHierarchy) {
 					footerPermill = footer.GetComponent<LayoutElement> ().flexibleHeight;
-				} else {
-					try {
-						footerPermill = transform.parent.Find (LayoutConfig.FOOTER).GetComponent<LayoutElement> ().flexibleHeight;
-					} catch (Exception) {
-					}
-				}
+				} 
 
 				layElem.flexibleHeight = 1000f - (headerPermill + footerPermill);
 			}

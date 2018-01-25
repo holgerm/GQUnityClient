@@ -8,6 +8,8 @@ namespace GQ.Client.Model
 	{
 		int Id { get; }
 
+		string PageType { get; }
+
 		string Result { get; }
 
 		string State { get; }

@@ -17,6 +17,8 @@ namespace GQ.Client.UI
 		#region Inspector Fields
 
 		public RawImage image;
+		public GameObject imagePanel;
+		public GameObject contentPanel;
 		public Transform dialogItemContainer;
 		public Text forwardButtonText;
 
@@ -60,6 +62,44 @@ namespace GQ.Client.UI
 		#endregion
 
 
+		#region Layout
+
+		protected override int NumberOfSpacesInContent ()
+		{
+			return npcPage.NumberOfDialogItems() + 2;
+		}
+			
+		protected float ContentImageHeight {
+			get {
+				return TotalHeightUnits - (HeaderHeight + FooterHeight + ContentInnerSpaceHeightUnits);
+			}
+		}
+
+		static public float ContentImageWidth {
+			get {
+				return 1000f - (2 * SideMarginWidthUnits);
+			}
+		}
+
+		protected float ImageRatioMinimum {
+			get {
+				float width = ContentImageWidth;
+				float height = ContentImageHeight * ConfigurationManager.Current.contentImageShareMinimum;
+				return width / height;
+			}
+		}
+
+		protected float ImageRatioMaximum {
+			get {
+				float width = ContentImageWidth;
+				float height = ContentImageHeight * ConfigurationManager.Current.contentImageShareMaximum;
+				return width / height;
+			}
+		}
+
+		#endregion
+
+
 		#region View Update Methods
 
 		void ShowImage ()
@@ -84,7 +124,15 @@ namespace GQ.Client.UI
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>  {
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
-					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
+					float imageRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
+//					if (ImageRatioMinimum <= imageRatio && imageRatio <= ImageRatioMaximum) {
+//						// adjust image and content heights:
+////	TODO					imagePanel.GetComponent<LayoutElement>().flexibleHeight = ContentImageWidth / imageRatio;
+//						// image fits:
+//						fitter.aspectRatio = imageRatio;
+//						fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+//					}
+					fitter.aspectRatio = imageRatio;
 					image.texture = d.Www.texture;
 					// Dispose www including it s Texture and take some logs for preformace surveillance:
 					d.Www.Dispose ();

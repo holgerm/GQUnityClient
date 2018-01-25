@@ -29,6 +29,8 @@ namespace GQ.Client.UI.Foyer
 
 		protected const string NAME_PATH = "Name";
 
+		public Button InfoButton;
+
 		/// <summary>
 		/// The download button is available WHEN this quest is on server but not on device.
 		/// (IsOnServer && !IsOnDevice)
@@ -154,6 +156,37 @@ namespace GQ.Client.UI.Foyer
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + qInfo.Name + ")";
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
+
+			// set info button as configured:
+			if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "") {
+				CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet ();
+				Category determiningCategory = null;
+				foreach (string myCatId in qInfo.Categories) {
+					determiningCategory = mainCategorySet.categories.Find (mainCat => mainCat.id == myCatId);
+					if (determiningCategory != null)
+						break;
+				}
+
+				Image infoImage = ctrl.InfoButton.transform.Find("Image").GetComponent<Image>();
+				infoImage.enabled = true;
+				ctrl.InfoButton.enabled = false;
+				ctrl.InfoButton.gameObject.SetActive (true); // show info icon
+
+				if (determiningCategory != null) {
+					// set symbol for this category:
+					infoImage.sprite = determiningCategory.symbol != null ?
+						Resources.Load<Sprite>(determiningCategory.symbol.path) :
+						null;
+					if (infoImage.sprite != null)
+					{
+						infoImage.enabled = true;
+						ctrl.InfoButton.enabled = true;
+						ctrl.InfoButton.gameObject.SetActive (true);
+					}
+				}
+			}
+
+			// set data and event management:
 			ctrl.data = qInfo;
 			ctrl.containerController = containerController;
 			ctrl.data.OnChanged += ctrl.UpdateView;
@@ -165,6 +198,7 @@ namespace GQ.Client.UI.Foyer
 		{
 			// Update Info-Icon:
 			// TODO: enable Info dialog
+			Image infoImage = InfoButton.GetComponent<Image>();
 
 			// Update Name:
 			Name.text = data.Name;

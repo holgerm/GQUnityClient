@@ -50,6 +50,9 @@ namespace GQ.Client.Util
 
 		public static string HTMLDecode (string rawText)
 		{
+			if (rawText == null || rawText == "")
+				return rawText;
+			
 			string result = rawText.Replace ("&lt;", "<");
 			result = result.Replace ("&gt;", ">");
 			result = result.Replace ("&amp;", "&");

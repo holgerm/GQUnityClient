@@ -76,8 +76,20 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public List<SceneMapping> sceneMappings { get; set; }
 
+		private string[] _scenePaths;
 		[ShowInProductEditor]
-		public string[]	scenePaths { get; set; }
+		public string[]	scenePaths { 
+			get {
+				if (_scenePaths == null) {
+					_scenePaths = new string[0];
+				}
+				return _scenePaths;
+			} 
+			set {
+				if (value != null)
+					_scenePaths = value;
+			}
+		}
 
 		[ShowInProductEditor]
 		public List<SceneExtension> sceneExtensions { get; set; }
@@ -108,6 +120,16 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor]
 		public float	mapDeltaZoom { get; set; }
+
+
+		[ShowInProductEditor]
+		public bool mapStartAtLocation { get; set; }
+
+		[ShowInProductEditor]
+		public double mapStartAtLongitude { get; set; }
+
+		[ShowInProductEditor]
+		public double mapStartAtLatitude { get; set; }
 
 		[JsonIgnore]
 		private ImagePath _marker;
@@ -153,16 +175,60 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float markerScale { get; set; }
 
-		[JsonIgnore]
-		private List<Category> _categories;
+
+		[ShowInProductEditor (StartSection = "Categories & Filters:")]
+		public bool foldableCategoryFilters { get; set; }
 
 		[ShowInProductEditor]
+		public bool categoryFiltersStartFolded { get; set; }
+
+		[ShowInProductEditor]
+		public bool categoryFolderStartFolded { get; set; }
+
+		/// <summary>
+		/// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
+		/// </summary>
+		/// <value>The main category set.</value>
+		[ShowInProductEditor]
+		public string mainCategorySet { get; set; }
+
+		public CategorySet GetMainCategorySet () {
+			return categorySets.Find (cat => cat.name == mainCategorySet);
+		}
+
+		[ShowInProductEditor]
+		public List<CategorySet> categorySets {
+			get {
+				if (_categorySets == null) {
+					_categorySets = new List<CategorySet> ();
+				} 
+				return _categorySets;
+			}
+			set {
+				_categorySets = value;
+			}
+		}
+
+		[JsonIgnore] 
+		private List<CategorySet> _categorySets;
+
+
+		[JsonIgnore] // TODO REMOVE when CategorySet is ready
+		private List<Category> _categories;
+
+		[ShowInProductEditor] // TODO REMOVE when CategorySet is ready
 		public List<Category> categories { 
 			get {
 				if (_categories == null)
 					_categories = new List<Category> ();
-				else {
+				else { // TODO else wird irgendwie gebraucht, warum? eigentlich sollte es doch weg denn der Rest sollte immer gemacht werden auch wenn liste auf null gesetzt wird, damit Dict dann überschrieben wird und ebenfalls leer
 					// JSON does set values via reflection in this getter and does not call the setter at all. Hence we need to populate our dictionary here.
+					if (categoryDict == null) {
+						categoryDict = new Dictionary<string, Category> ();
+//						foreach (Category c in _categories) {
+//							categoryDict.Add (c.id, c);
+//						}
+					}
 					foreach (Category c in _categories) {
 						if (!categoryDict.ContainsKey(c.id))
 							categoryDict.Add (c.id, c);
@@ -180,9 +246,6 @@ namespace GQ.Client.Conf
 			} 
 		}
 
-		[ShowInProductEditor]
-		public bool filterByCategories { get; set; }
-
 		[JsonIgnore]
 		public Dictionary<string, Category> categoryDict;
 
@@ -196,7 +259,7 @@ namespace GQ.Client.Conf
 		public Color32	mainColor  { get; set; }
 
 		[ShowInProductEditor]
-		public int 		headerHeightPermill { get; set; }
+		public int 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -222,7 +285,22 @@ namespace GQ.Client.Conf
 		public Color32	contentFontColor  { get; set; }
 
 		[ShowInProductEditor]
-		public int 		footerHeightPermill { get; set; }
+		public float contentTopMarginUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentBottomMarginUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentInnerSpaceHeightUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentImageShareMinimum { get; set; }
+
+		[ShowInProductEditor]
+		public float contentImageShareMaximum { get; set; }
+
+		[ShowInProductEditor]
+		public int 		footerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -235,6 +313,13 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	footerButtonFgColor  { get; set; }
+
+		/// <summary>
+		/// The width of space on a single side on the display that is intended to be left free (in permill of th absolute display width).
+		/// </summary>
+		/// <value>The side per mill.</value>
+		[ShowInProductEditor]
+		public float sideMarginWidthUnits  { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -332,13 +417,16 @@ namespace GQ.Client.Conf
 
 
 			// Layout:
-			headerHeightPermill = 50;
+			headerHeightUnits = 60;
+			footerHeightUnits = 60;
+			contentInnerSpaceHeightUnits = 0;
+			sideMarginWidthUnits = 0;
 			headerBgColor = Color.white;
 			headerButtonBgColor = GQColor.transparent;
 			headerButtonFgColor = Color.black;
 			contentBackgroundColor = Color.white;
 			contentFontColor = Color.black;
-			footerHeightPermill = 75;
+			footerHeightUnits = 75;
 			footerBgColor = Color.white;
 			footerButtonBgColor = GQColor.transparent;
 			footerButtonFgColor = Color.black;
@@ -349,8 +437,10 @@ namespace GQ.Client.Conf
 
 			// Menu:
 			showEmptyMenuEntries = false;
-			filterByCategories = true;
 			categoryDict = new Dictionary<string, Category> ();
+			foldableCategoryFilters = true;
+			categoryFiltersStartFolded = true;
+			categoryFolderStartFolded = true;
 		}
 
 		#endregion
@@ -458,7 +548,7 @@ namespace GQ.Client.Conf
 		public string scenePath;
 	}
 
-	public struct SceneExtension
+	public class SceneExtension
 	{
 		/// <summary>
 		/// The scene path.
@@ -539,6 +629,25 @@ namespace GQ.Client.Conf
 			this.symbol = new ImagePath (symbolPath);
 		}
 
+	}
+
+	public class CategorySet {
+		public string name;
+
+		public List<Category> categories;
+
+		[JsonConstructor]
+		public CategorySet(string name, List<Category> categories) {
+			this.name = name;
+			if (categories == null)
+				categories = new List<Category> ();
+			this.categories = categories;
+		}
+
+		public CategorySet() {
+			name = "";
+			categories = new List<Category> ();
+		}
 	}
 
 	public class ShowInProductEditor : Attribute
