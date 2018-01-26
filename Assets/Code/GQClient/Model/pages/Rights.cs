@@ -5,18 +5,28 @@ using GQ.Client.UI;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Conf;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
 
 	public class Rights : MonoBehaviour
 	{
-		Text copyrightText;
+		public Text copyrightText4FittingImage;
+		public Text copyrightText4EnvelopingImage;
 
 		private const string COPYRIGHT_PREFIX = "© ";
 
 		void Start ()
 		{
+			if (copyrightText4FittingImage == null || copyrightText4EnvelopingImage == null) {
+				Log.SignalErrorToDeveloper ("Rights component not set properly. Set both Text references.");
+				return;
+			}
+
+			copyrightText4FittingImage.gameObject.SetActive (ConfigurationManager.Current.fitExceedingImagesIntoArea);
+			copyrightText4EnvelopingImage.gameObject.SetActive (!ConfigurationManager.Current.fitExceedingImagesIntoArea);
+
 			switch (ConfigurationManager.Current.id) {
 			case "wcc":
 				start_wcc ();
@@ -30,7 +40,6 @@ namespace GQ.Client.Model
 		void start_wcc ()
 		{
 			// FOR WCC PRODUCT:
-			Reset ();
 
 			/// get copyright text from variable value:
 			string copyright = Variables.GetValue ("bildrechte").AsString ();
@@ -50,15 +59,11 @@ namespace GQ.Client.Model
 			// replace andy line breaks by one space:
 			copyright.Replace ('\n', ' ');
 
-			// set copyright text in game object:
-			copyrightText.text = copyright;
+			// set copyright text in game objects:
+			copyrightText4FittingImage.text = copyright;
+			copyrightText4EnvelopingImage.text = copyright;
 		}
 
-
-		void Reset ()
-		{
-			copyrightText = GetComponent<Text> ();
-		}
 
 	}
 }

@@ -287,19 +287,25 @@ namespace GQ.Client.Conf
 		public int 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
+		public int 		contentHeightUnits { get; set; }
+
+		[ShowInProductEditor]
 		public float contentTopMarginUnits  { get; set; }
+
+		[ShowInProductEditor]
+		public float contentDividerUnits  { get; set; }
 
 		[ShowInProductEditor]
 		public float contentBottomMarginUnits  { get; set; }
 
 		[ShowInProductEditor]
-		public float contentInnerSpaceHeightUnits  { get; set; }
+		public float imageAreaHeightMinUnits { get; set; }
 
 		[ShowInProductEditor]
-		public float contentImageShareMinimum { get; set; }
+		public float imageAreaHeightMaxUnits { get; set; }
 
 		[ShowInProductEditor]
-		public float contentImageShareMaximum { get; set; }
+		public bool fitExceedingImagesIntoArea { get; set; }
 
 		[ShowInProductEditor]
 		public int 		footerHeightUnits { get; set; }
@@ -321,7 +327,7 @@ namespace GQ.Client.Conf
 		/// </summary>
 		/// <value>The side per mill.</value>
 		[ShowInProductEditor]
-		public float sideMarginWidthUnits  { get; set; }
+		public float borderWidthUnits  { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -339,10 +345,10 @@ namespace GQ.Client.Conf
 		public bool showEmptyMenuEntries { get; set; }
 
 		[ShowInProductEditor]
-		public int menuMainEntryHeight { get; set; }
+		public int menuMainEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int menuSubEntryHeight { get; set; }
+		public int menuSubEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -421,8 +427,8 @@ namespace GQ.Client.Conf
 			// Layout:
 			headerHeightUnits = 60;
 			footerHeightUnits = 60;
-			contentInnerSpaceHeightUnits = 0;
-			sideMarginWidthUnits = 0;
+			contentDividerUnits = 0;
+			borderWidthUnits = 0;
 			headerBgColor = Color.white;
 			headerButtonBgColor = GQColor.transparent;
 			headerButtonFgColor = Color.black;

@@ -79,7 +79,7 @@ namespace GQ.Client.UI
 		/// Height of the header element in device-dependent units.
 		/// </summary>
 		/// <value>The height of the header.</value>
-		static public float HeaderHeight {
+		static public float HeaderHeightUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
 				return ConfigurationManager.Current.headerHeightUnits;
@@ -87,9 +87,20 @@ namespace GQ.Client.UI
 		}
 
 		/// <summary>
+		/// Height of the whole content are in device-dependent units.
+		/// </summary>
+		/// <value>The height of the header.</value>
+		static public float ContentHeightUnits {
+			get {
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return ConfigurationManager.Current.contentHeightUnits;
+			}
+		}
+
+		/// <summary>
 		/// Margin between header and content in device-dependent units.
 		/// </summary>
-		static public float ContentTopMargin {
+		static public float ContentTopMarginUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
 				return ConfigurationManager.Current.contentTopMarginUnits;
@@ -99,7 +110,7 @@ namespace GQ.Client.UI
 		/// <summary>
 		/// Margin between content and footer in device-dependent units.
 		/// </summary>
-		static public float ContentBottomMargin {
+		static public float ContentBottomMarginUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
 				return ConfigurationManager.Current.contentBottomMarginUnits;
@@ -110,33 +121,82 @@ namespace GQ.Client.UI
 		/// Height of the footer element in device-dependent units.
 		/// </summary>
 		/// <value>The height of the footer.</value>
-		static public float FooterHeight {
+		static public float FooterHeightUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
 				return ConfigurationManager.Current.footerHeightUnits;
 			}
 		}
 
-		static public float ContentInnerSpaceHeightUnits {
+		static public float ContentDividerUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.contentInnerSpaceHeightUnits;
+				return ConfigurationManager.Current.contentDividerUnits;
 			}
 		}
 
-		protected float TotalHeightUnits {
+		public abstract int NumberOfSpacesInContent ();
+
+		static public float ScreenHeightUnits {
 			get {
-				return HeaderHeight + FooterHeight + (ContentInnerSpaceHeightUnits * (float) NumberOfSpacesInContent ());
+				return (
+				    HeaderHeightUnits +
+				    ContentHeightUnits +
+				    FooterHeightUnits
+				);
 			}
 		}
 
-		protected abstract int NumberOfSpacesInContent ();
+		static public float ScreenWidthUnits {
+			get {
+				float rawScreenWidthUnits = (9f / 16f) * ScreenHeightUnits;
+				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
+				return rawScreenWidthUnits;
+			}
+		}
 
-		static public float SideMarginWidthUnits {
+		static public float BorderWidthUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.sideMarginWidthUnits;
+				return ConfigurationManager.Current.borderWidthUnits;
 			}
+		}
+
+		static public float ContentWidthUnits {
+			get {
+				return ScreenWidthUnits - (2 * BorderWidthUnits);
+			}
+		}
+
+		static public int UnitsToPixels (float units)
+		{
+			return (int)(units * (Screen.height / ScreenHeightUnits));
+		}
+
+		protected float ImageRatioMinimum {
+			get {
+				return ContentWidthUnits / ConfigurationManager.Current.imageAreaHeightMaxUnits;
+			}
+		}
+
+		protected float ImageRatioMaximum {
+			get {
+				return ContentWidthUnits / ConfigurationManager.Current.imageAreaHeightMinUnits;
+
+			}
+		}
+
+		protected float CalculateMainAreaHeight (float imageAreaHeight)
+		{
+			return (	
+			    ContentHeightUnits -
+			    (
+			        ContentTopMarginUnits +
+			        imageAreaHeight +
+			        ContentDividerUnits +
+			        ContentBottomMarginUnits
+			    )
+			);
 		}
 
 		#endregion

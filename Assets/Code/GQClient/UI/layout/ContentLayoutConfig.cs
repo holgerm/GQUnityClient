@@ -16,6 +16,10 @@ namespace GQ.Client.UI
 	{
 
 		public HeaderLayoutConfig header;
+		public GameObject TopMargin;
+		public GameObject ContentArea;
+		public GameObject Divider;
+		public GameObject BottomMargin;
 		public FooterLayoutConfig footer;
 
 		protected override void layout ()
@@ -26,21 +30,74 @@ namespace GQ.Client.UI
 				image.color = ConfigurationManager.Current.contentBackgroundColor;
 			}
 	
-			// set height as rest left over by header and footer:
-			LayoutElement layElem = GetComponent<LayoutElement> ();
-			if (layElem != null) {
-				float headerPermill = 0f;
-				if (header != null && header.gameObject.activeInHierarchy) {
-					headerPermill = header.GetComponent<LayoutElement> ().flexibleHeight;
-				}
+			setContentHeight ();
+			setTopMargin ();
+			setDividerHeight ();
+			setBottomMargin ();
+		}
 
-				float footerPermill = 0f;
-				if (footer != null && footer.gameObject.activeInHierarchy) {
-					footerPermill = footer.GetComponent<LayoutElement> ().flexibleHeight;
-				} 
+		private void setContentHeight ()
+		{
+			if (ContentArea == null)
+				return;
 
-				layElem.flexibleHeight = 1000f - (headerPermill + footerPermill);
+			LayoutElement layElem = ContentArea.GetComponent<LayoutElement> ();
+			if (layElem == null)
+				return;
+
+			layElem.flexibleHeight = PageController.ContentHeightUnits;
+		}
+
+		private void setTopMargin ()
+		{
+			if (TopMargin == null)
+				return;
+
+			// set background color:
+			Image image = TopMargin.GetComponent<Image> ();
+			if (image != null) {
+				image.color = ConfigurationManager.Current.contentBackgroundColor;
 			}
+
+			LayoutElement layElem = TopMargin.GetComponent<LayoutElement> ();
+			if (layElem == null)
+				return;
+			layElem.flexibleHeight = PageController.ContentTopMarginUnits;
+		}
+
+		private void setBottomMargin ()
+		{
+			if (BottomMargin == null)
+				return;
+
+			// set background color:
+			Image image = BottomMargin.GetComponent<Image> ();
+			if (image != null) {
+				image.color = ConfigurationManager.Current.contentBackgroundColor;
+			}
+
+			LayoutElement layElem = BottomMargin.GetComponent<LayoutElement> ();
+			if (layElem == null)
+				return;
+			layElem.flexibleHeight = PageController.ContentBottomMarginUnits;
+		}
+
+		private void setDividerHeight ()
+		{
+			if (Divider == null)
+				return;
+
+			// set background color:
+			Image image = Divider.GetComponent<Image> ();
+			if (image != null) {
+				image.color = ConfigurationManager.Current.contentBackgroundColor;
+			}
+
+			LayoutElement layElem = Divider.GetComponent<LayoutElement> ();
+			if (layElem == null)
+				return;
+
+			layElem.flexibleHeight = PageController.ContentDividerUnits;
 		}
 	}
 

@@ -7,6 +7,7 @@ using Candlelight.UI;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using GQ.Client.Conf;
+using System;
 
 namespace GQ.Client.UI
 {
@@ -64,36 +65,14 @@ namespace GQ.Client.UI
 
 		#region Layout
 
-		protected override int NumberOfSpacesInContent ()
+		public override int NumberOfSpacesInContent ()
 		{
-			return npcPage.NumberOfDialogItems () + 2;
+			return Math.Max (npcPage.NumberOfDialogItems () - 1, 0);
 		}
 
 		protected float ContentImageHeight {
 			get {
-				return TotalHeightUnits - (HeaderHeight + FooterHeight + ContentInnerSpaceHeightUnits);
-			}
-		}
-
-		static public float ContentImageWidth {
-			get {
-				return 1000f - (2 * SideMarginWidthUnits);
-			}
-		}
-
-		protected float ImageRatioMinimum {
-			get {
-				float width = ContentImageWidth;
-				float height = ContentImageHeight * ConfigurationManager.Current.contentImageShareMinimum;
-				return width / height;
-			}
-		}
-
-		protected float ImageRatioMaximum {
-			get {
-				float width = ContentImageWidth;
-				float height = ContentImageHeight * ConfigurationManager.Current.contentImageShareMaximum;
-				return width / height;
+				return ScreenHeightUnits - (HeaderHeightUnits + FooterHeightUnits + ContentDividerUnits);
 			}
 		}
 
@@ -123,14 +102,29 @@ namespace GQ.Client.UI
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
 					float imageRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-					if (ImageRatioMinimum <= imageRatio && imageRatio <= ImageRatioMaximum) {
-						// adjust image and text heights:
-						imagePanel.GetComponent<LayoutElement> ().flexibleHeight = ContentImageWidth / imageRatio;
-						// image fits:
-						fitter.aspectRatio = imageRatio;
-						fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+					float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
+
+					if (imageRatio < ImageRatioMinimum) {
+						// image too high to fit:
+						imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMaxUnits;
 					}
-					fitter.aspectRatio = imageRatio;
+					if (ImageRatioMaximum < imageRatio) {
+						// image too wide to fit:
+						imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
+					}
+					Debug.Log ("IMAGE Ratios: max: " + ImageRatioMinimum + " real Ration: " + imageRatio + " max: " + ImageRatioMaximum);
+					Debug.Log ("IMAGE AREA HEIGHT: " + imageAreaHeight + " WIDTH: " + ContentWidthUnits);
+					Debug.Log ("SCREEN HEIGHT: " + ScreenHeightUnits + " WIDTH: " + ScreenWidthUnits);
+
+					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = imageAreaHeight;
+					contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
+
+					fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
+					fitter.aspectMode = 
+						ConfigurationManager.Current.fitExceedingImagesIntoArea 
+						? AspectRatioFitter.AspectMode.FitInParent 
+						: AspectRatioFitter.AspectMode.EnvelopeParent;
+
 					image.texture = d.Www.texture;
 					// Dispose www including it s Texture and take some logs for preformace surveillance:
 					d.Www.Dispose ();

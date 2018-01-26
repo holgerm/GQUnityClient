@@ -58,9 +58,9 @@ namespace GQ.Client.UI
 				} else {
 					loader = 
 						new Downloader (
-							url: saesPage.ImageUrl, 
-							timeout: ConfigurationManager.Current.timeoutMS
-						);
+						url: saesPage.ImageUrl, 
+						timeout: ConfigurationManager.Current.timeoutMS
+					);
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
@@ -77,7 +77,7 @@ namespace GQ.Client.UI
 
 		#region implemented abstract members of PageController
 
-		protected override int NumberOfSpacesInContent ()
+		public override int NumberOfSpacesInContent ()
 		{
 			// we only have spaces between header and content as well as between content and footer:
 			return 2;

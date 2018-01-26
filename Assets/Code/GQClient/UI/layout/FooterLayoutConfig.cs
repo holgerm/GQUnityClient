@@ -24,7 +24,7 @@ namespace GQ.Client.UI {
 			// set height:
 			LayoutElement layElem = GetComponent<LayoutElement>();
 			if (layElem != null) {
-				layElem.flexibleHeight = PageController.FooterHeight;
+				layElem.flexibleHeight = PageController.FooterHeightUnits;
 			}
 		}
 	}

@@ -31,10 +31,10 @@ namespace GQ.Client.UI
 
 		#region implemented abstract members of PageController
 
-		protected override int NumberOfSpacesInContent ()
+		public override int NumberOfSpacesInContent ()
 		{
-			// we only have one space between image and text:
-			return 1;
+			// we no spaces wihin the textarea:
+			return 0;
 		}
 
 		#endregion
@@ -74,9 +74,9 @@ namespace GQ.Client.UI
 				} else {
 					loader = 
 						new Downloader (
-							url: iwtPage.ImageUrl, 
-							timeout: ConfigurationManager.Current.timeoutMS
-						);
+						url: iwtPage.ImageUrl, 
+						timeout: ConfigurationManager.Current.timeoutMS
+					);
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {

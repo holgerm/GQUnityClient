@@ -34,7 +34,7 @@ namespace GQ.Client.UI
 			// set height:
 			LayoutElement layElem = GetComponent<LayoutElement> ();
 			if (layElem != null) {
-				layElem.flexibleHeight = PageController.HeaderHeight;
+				layElem.flexibleHeight = PageController.HeaderHeightUnits;
 			}
 
 			if (layoutOnlyNoMedia)
