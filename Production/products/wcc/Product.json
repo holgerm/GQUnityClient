@@ -219,13 +219,15 @@
     }
   ],
   "categories": [],
+  "topLogo": {
+    "path": "TopLogo"
+  },
   "mainColor": {
     "r": 116,
     "g": 103,
     "b": 33,
     "a": 255
   },
-  "headerHeightUnits": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -244,9 +246,6 @@
     "b": 33,
     "a": 255
   },
-  "topLogo": {
-    "path": "TopLogo"
-  },
   "contentBackgroundColor": {
     "r": 255,
     "g": 255,
@@ -259,11 +258,14 @@
     "b": 0,
     "a": 255
   },
+  "headerHeightUnits": 60,
+  "contentHeightUnits": 750,
   "contentTopMarginUnits": 0.0,
+  "contentDividerUnits": 3.0,
   "contentBottomMarginUnits": 0.0,
-  "contentInnerSpaceHeightUnits": 0.0,
-  "contentImageShareMinimum": 0.0,
-  "contentImageShareMaximum": 0.0,
+  "imageAreaHeightMinUnits": 150.0,
+  "imageAreaHeightMaxUnits": 350.0,
+  "fitExceedingImagesIntoArea": false,
   "footerHeightUnits": 75,
   "footerBgColor": {
     "r": 255,
@@ -283,7 +285,7 @@
     "b": 255,
     "a": 255
   },
-  "sideMarginWidthUnits": 0.0,
+  "borderWidthUnits": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -303,8 +305,8 @@
     "a": 187
   },
   "showEmptyMenuEntries": true,
-  "menuMainEntryHeight": 0,
-  "menuSubEntryHeight": 0,
+  "menuMainEntryHeightUnits": 0,
+  "menuSubEntryHeightUnits": 0,
   "menuBGColor": {
     "r": 116,
     "g": 103,
