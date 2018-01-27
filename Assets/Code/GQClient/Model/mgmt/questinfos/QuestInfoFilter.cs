@@ -20,11 +20,12 @@ namespace GQ.Client.Model
 	public abstract class QuestInfoFilter
 	{
 
-		public delegate void OnFilterChanged();
+		public delegate void OnFilterChanged ();
 
-		public event OnFilterChanged filterChange; 
+		public event OnFilterChanged filterChange;
 
-		protected void RaiseFilterChangeEvent() {
+		protected void RaiseFilterChangeEvent ()
+		{
 			if (NotificationPaused)
 				return;
 			
@@ -32,11 +33,12 @@ namespace GQ.Client.Model
 				filterChange ();
 			}
 				
-			if (parentFilter != null) 
+			if (parentFilter != null)
 				parentFilter.RaiseFilterChangeEvent ();
 		}
 
 		bool _notificationPaused = false;
+
 		public bool NotificationPaused {
 			get {
 				return _notificationPaused;
@@ -51,10 +53,11 @@ namespace GQ.Client.Model
 
 		abstract public bool Accept (QuestInfo qi);
 
-		abstract public List<string> AcceptedCategories(QuestInfo qi);
+		abstract public List<string> AcceptedCategories (QuestInfo qi);
 
-		public string CategoryToShow (QuestInfo qi) {
-			return AcceptedCategories(qi).Count > 0 ? AcceptedCategories(qi)[0] : QuestInfo.WITHOUT_CATEGORY_ID;
+		public string CategoryToShow (QuestInfo qi)
+		{
+			return AcceptedCategories (qi).Count > 0 ? AcceptedCategories (qi) [0] : QuestInfo.WITHOUT_CATEGORY_ID;
 		}
 
 
@@ -71,32 +74,24 @@ namespace GQ.Client.Model
 				return "All";
 			}
 
-			public override List<string> AcceptedCategories (QuestInfo qi) {
+			public override List<string> AcceptedCategories (QuestInfo qi)
+			{
 				return qi.Categories;
 			}
 		}
 
-		public class CategoryFilter : QuestInfoFilter {
+		public class CategoryFilter : QuestInfoFilter
+		{
 
 			public string Name;
 
-			private List<string> acceptedCategories = new List<string>();
+			private List<string> acceptedCategories = new List<string> ();
 
-			public CategoryFilter() {
-				// TODO initialize from persisted Filter when we have that feature.
-				NotificationPaused = true;
-				Config config = ConfigurationManager.Current;
-				foreach (Conf.Category c in ConfigurationManager.Current.categories) {
-					AddCategory(c.id);
-				}
-				NotificationPaused = false;
-				Name = "";
-			}
-
-			public CategoryFilter(CategorySet catSet) {
+			public CategoryFilter (CategorySet catSet)
+			{
 				NotificationPaused = true;
 				foreach (Conf.Category c in catSet.categories) {
-					AddCategory(c.id);
+					AddCategory (c.id);
 				}
 				NotificationPaused = false;
 				Name = catSet.name;
@@ -107,39 +102,44 @@ namespace GQ.Client.Model
 			/// </summary>
 			/// <param name="firstCategory">First category to be accepted by this filter.</param>
 			/// <param name="categories">Further categories to be accepted. In fact you can simply sepcify any number of acceptable categories in one row.</param>
-			public CategoryFilter(string firstCategory, params string[] categories) {
+			public CategoryFilter (string firstCategory, params string[] categories)
+			{
 				NotificationPaused = true;
-				AddCategory(firstCategory);
+				AddCategory (firstCategory);
 				foreach (string c in categories)
-					AddCategory(c);
+					AddCategory (c);
 				NotificationPaused = false;
 			}
 
-			public void AddCategories(params string[] categories) {
+			public void AddCategories (params string[] categories)
+			{
 				foreach (string category in categories) {
 					if (!acceptedCategories.Contains (category)) {
 						acceptedCategories.Add (category);
 					}
 				}
-				RaiseFilterChangeEvent();
+				RaiseFilterChangeEvent ();
 			}
 
-			public void AddCategory(string category) {
+			public void AddCategory (string category)
+			{
 				if (!acceptedCategories.Contains (category)) {
 					acceptedCategories.Add (category);
 					RaiseFilterChangeEvent ();
 				}
 			}
 
-			public void RemoveCategory(string category) {
+			public void RemoveCategory (string category)
+			{
 				if (acceptedCategories.Contains (category)) {
 					acceptedCategories.Remove (category);
 					RaiseFilterChangeEvent ();
 				}
 			}
 
-			public void ClearCategories() {
-				acceptedCategories = new List<string>();
+			public void ClearCategories ()
+			{
+				acceptedCategories = new List<string> ();
 				RaiseFilterChangeEvent ();
 			}
 
@@ -160,8 +160,8 @@ namespace GQ.Client.Model
 			{
 				StringBuilder sb = new StringBuilder ("Category is in {");
 				for (int i = 0; i < acceptedCategories.Count; i++) {
-					sb.Append (acceptedCategories[i]);
-					if (i+1 < acceptedCategories.Count) {
+					sb.Append (acceptedCategories [i]);
+					if (i + 1 < acceptedCategories.Count) {
 						sb.Append (", ");
 					}
 				}
@@ -169,7 +169,8 @@ namespace GQ.Client.Model
 				return sb.ToString ();
 			}
 
-			public override List<string> AcceptedCategories (QuestInfo qi) {
+			public override List<string> AcceptedCategories (QuestInfo qi)
+			{
 				List<string> accCats = new List<string> ();
 				foreach (string cat in acceptedCategories) {
 					if (qi.Categories.Contains (cat))
@@ -180,8 +181,9 @@ namespace GQ.Client.Model
 		}
 
 
-		public abstract class Multi : QuestInfoFilter {
-			protected List<QuestInfoFilter> subfilters = new List<QuestInfoFilter>();
+		public abstract class Multi : QuestInfoFilter
+		{
+			protected List<QuestInfoFilter> subfilters = new List<QuestInfoFilter> ();
 		}
 
 
@@ -191,8 +193,8 @@ namespace GQ.Client.Model
 			public And (params QuestInfoFilter[] filters)
 			{
 				foreach (QuestInfoFilter filter in filters) {
-					if (!subfilters.Contains(filter)) {
-						subfilters.Add(filter);
+					if (!subfilters.Contains (filter)) {
+						subfilters.Add (filter);
 						filter.parentFilter = this;
 					}
 				}
@@ -222,12 +224,13 @@ namespace GQ.Client.Model
 				return sb.ToString ();
 			}
 
-			public override List<string> AcceptedCategories (QuestInfo qi) {
+			public override List<string> AcceptedCategories (QuestInfo qi)
+			{
 				// if we have no filters we return all categories:
 				if (subfilters == null || subfilters.Count == 0)
 					return qi.Categories;
 
-				List<string> acceptedCategories = new List<string>();
+				List<string> acceptedCategories = new List<string> ();
 
 				if (!Accept (qi))
 					return acceptedCategories;
@@ -235,7 +238,7 @@ namespace GQ.Client.Model
 				// the qi is accepted, so we also accept any categories to represent it:
 				for (int j = 0; j < subfilters.Count; j++) {
 					for (int i = 0; i < subfilters [j].AcceptedCategories (qi).Count; i++) {
-						if (!acceptedCategories.Contains(subfilters [j].AcceptedCategories (qi)[i])) {
+						if (!acceptedCategories.Contains (subfilters [j].AcceptedCategories (qi) [i])) {
 							acceptedCategories.Add (subfilters [j].AcceptedCategories (qi) [i]);
 						}
 					}
@@ -276,16 +279,17 @@ namespace GQ.Client.Model
 				return sb.ToString ();
 			}
 
-			public override List<string> AcceptedCategories (QuestInfo qi) {
+			public override List<string> AcceptedCategories (QuestInfo qi)
+			{
 				// if we have no filters we return all categories:
 				if (subfilters == null || subfilters.Count == 0)
 					return qi.Categories;
 
 				// all categories which are accepted by any of the filters shoud be contained:
-				List<string> acceptedCategories = new List<string>();
+				List<string> acceptedCategories = new List<string> ();
 				for (int j = 0; j < subfilters.Count; j++) {
 					for (int i = 0; i < subfilters [j].AcceptedCategories (qi).Count; i++) {
-						if (!acceptedCategories.Contains(subfilters [j].AcceptedCategories (qi)[i])) {
+						if (!acceptedCategories.Contains (subfilters [j].AcceptedCategories (qi) [i])) {
 							acceptedCategories.Add (subfilters [j].AcceptedCategories (qi) [i]);
 						}
 					}

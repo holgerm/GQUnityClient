@@ -204,6 +204,12 @@ namespace GQ.Client.Conf
 				if (_categorySets == null) {
 					_categorySets = new List<CategorySet> ();
 				} 
+				categoryDict = new Dictionary<string, Category> ();
+				foreach (CategorySet cs in _categorySets) {
+					foreach (Category c in cs.categories) {
+						categoryDict [c.id] = c;
+					}
+				}
 				return _categorySets;
 			}
 			set {
@@ -214,39 +220,6 @@ namespace GQ.Client.Conf
 		[JsonIgnore] 
 		private List<CategorySet> _categorySets;
 
-
-		[JsonIgnore] // TODO REMOVE when CategorySet is ready
-		private List<Category> _categories;
-
-		[ShowInProductEditor] // TODO REMOVE when CategorySet is ready
-		public List<Category> categories { 
-			get {
-				if (_categories == null)
-					_categories = new List<Category> ();
-				else { // TODO else wird irgendwie gebraucht, warum? eigentlich sollte es doch weg denn der Rest sollte immer gemacht werden auch wenn liste auf null gesetzt wird, damit Dict dann überschrieben wird und ebenfalls leer
-					// JSON does set values via reflection in this getter and does not call the setter at all. Hence we need to populate our dictionary here.
-					if (categoryDict == null) {
-						categoryDict = new Dictionary<string, Category> ();
-//						foreach (Category c in _categories) {
-//							categoryDict.Add (c.id, c);
-//						}
-					}
-					foreach (Category c in _categories) {
-						if (!categoryDict.ContainsKey (c.id))
-							categoryDict.Add (c.id, c);
-					}
-				}
-				return _categories;
-			}
-			set {
-				_categories = value;
-				categoryDict = new Dictionary<string, Category> ();
-				if (value != null)
-					foreach (Category c in value) {
-						categoryDict.Add (c.id, c);
-					}
-			} 
-		}
 
 		[JsonIgnore]
 		public Dictionary<string, Category> categoryDict;
