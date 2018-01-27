@@ -54,6 +54,7 @@
   "markerScale": 1.0,
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
+  "categoryFolderStartFolded": true,
   "mainCategorySet": "Spieltyp",
   "categorySets": [
     {
@@ -320,14 +321,13 @@
       ]
     }
   ],
-  "categories": [],
+  "topLogo": null,
   "mainColor": {
     "r": 0,
     "g": 0,
     "b": 0,
     "a": 0
   },
-  "headerHeightUnits": 60,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -346,7 +346,6 @@
     "b": 0,
     "a": 255
   },
-  "topLogo": null,
   "contentBackgroundColor": {
     "r": 255,
     "g": 255,
@@ -359,11 +358,14 @@
     "b": 0,
     "a": 255
   },
+  "headerHeightUnits": 60,
+  "contentHeightUnits": 0,
   "contentTopMarginUnits": 0.0,
+  "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
-  "contentInnerSpaceHeightUnits": 0.0,
-  "contentImageShareMinimum": 0.0,
-  "contentImageShareMaximum": 0.0,
+  "imageAreaHeightMinUnits": 0.0,
+  "imageAreaHeightMaxUnits": 0.0,
+  "fitExceedingImagesIntoArea": false,
   "footerHeightUnits": 75,
   "footerBgColor": {
     "r": 255,
@@ -383,7 +385,7 @@
     "b": 0,
     "a": 255
   },
-  "sideMarginWidthUnits": 0.0,
+  "borderWidthUnits": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -403,8 +405,8 @@
     "a": 255
   },
   "showEmptyMenuEntries": true,
-  "menuMainEntryHeight": 0,
-  "menuSubEntryHeight": 0,
+  "menuMainEntryHeightUnits": 0,
+  "menuSubEntryHeightUnits": 0,
   "menuBGColor": {
     "r": 0,
     "g": 0,
