@@ -47,7 +47,7 @@
   },
   "markerBGAlpha": 150,
   "markerScale": 1.2,
-  "foldableCategoryFilters": false,
+  "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": false,
   "categoryFolderStartFolded": true,
   "mainCategorySet": "Kategorien",
@@ -218,7 +218,6 @@
       ]
     }
   ],
-  "categories": [],
   "topLogo": {
     "path": "TopLogo"
   },
