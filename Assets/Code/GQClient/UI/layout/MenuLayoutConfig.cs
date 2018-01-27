@@ -17,16 +17,13 @@ namespace GQ.Client.UI
 
 		public HeaderLayoutConfig header;
 		public GameObject MenuContent;
+		public Image MenuBackgroundImage;
 
 		protected override void layout ()
 		{
-			if (MenuContent == null)
-				return;
-
 			// set menu background color:
-			Image image = MenuContent.GetComponent<Image> ();
-			if (image != null) {
-				image.color = ConfigurationManager.Current.menuBGColor;
+			if (MenuBackgroundImage != null) {
+				MenuBackgroundImage.color = ConfigurationManager.Current.menuBGColor;
 			}
 	
 			setContentHeight ();

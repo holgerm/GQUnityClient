@@ -2245,6 +2245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   header: {fileID: 1945845349}
   MenuContent: {fileID: 1337534262}
+  MenuBackgroundImage: {fileID: 688381785}
 --- !u!1 &749231821
 GameObject:
   m_ObjectHideFlags: 0
