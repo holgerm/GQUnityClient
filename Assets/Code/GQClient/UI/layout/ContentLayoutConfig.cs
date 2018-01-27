@@ -46,6 +46,9 @@ namespace GQ.Client.UI
 				return;
 
 			layElem.flexibleHeight = PageController.ContentHeightUnits;
+			if (footer == null || !footer.gameObject.activeSelf) {
+				layElem.flexibleHeight += PageController.FooterHeightUnits;	
+			}
 		}
 
 		private void setTopMargin ()
