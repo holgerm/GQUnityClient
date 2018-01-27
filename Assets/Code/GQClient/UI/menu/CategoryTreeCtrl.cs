@@ -61,12 +61,14 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
-		public void ToggleMenuView() {
-			if (!ConfigurationManager.Current.foldableCategoryFilters  || transform.childCount < 2)
+		public void ToggleMenuView ()
+		{
+			bool foldable = ConfigurationManager.Current.foldableCategoryFilters;
+			if (!foldable || transform.childCount < 3)
 				// if we can't fold or do not have entries (the header is always there) we skip this:
 				return;
 			
-			bool currentShowState = transform.GetChild (1).gameObject.activeSelf;
+			bool currentShowState = transform.GetChild (2).gameObject.activeSelf;
 
 			for (int i = 1; i < transform.childCount; i++) {
 				Transform child = transform.GetChild (i);
@@ -180,16 +182,16 @@ namespace GQ.Client.UI
 
 			// create all category tree UI entries:
 			foreach (CategoryFolder folder in categoryFolders.Values) {
-				if (folder.Name != "") {
-					CategoryFolderCtrl uiFolder = 
-						CategoryFolderCtrl.Create (
-							root: this.gameObject,
-							catFolder: folder,
-							catTree: this
-						);
-					uiFolder.transform.SetParent (this.transform);
-					uiFolder.transform.SetAsLastSibling ();
-				}
+//				if (folder.Name != "") {
+				CategoryFolderCtrl uiFolder = 
+					CategoryFolderCtrl.Create (
+						root: this.gameObject,
+						catFolder: folder,
+						catTree: this
+					);
+				uiFolder.transform.SetParent (this.transform);
+				uiFolder.transform.SetAsLastSibling ();
+//				}
 
 				foreach (CategoryEntry entry in folder.Entries) {
 					CategoryEntryCtrl uiEntry = 

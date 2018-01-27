@@ -9,7 +9,6 @@ using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.FileIO;
-using GQ.AppSpecific;
 
 namespace GQ.Client.Model
 {
@@ -397,7 +396,7 @@ namespace GQ.Client.Model
 				);
 			new DownloadDialogBehaviour (
 				downloadGameXML, 
-				string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
+				string.Format ("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			// analyze game.xml, gather all media info compare to local media info and detect missing media
@@ -405,7 +404,7 @@ namespace GQ.Client.Model
 				new PrepareMediaInfoList ();
 			new SimpleDialogBehaviour (
 				prepareMediaInfosToDownload,
-				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+				string.Format ("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
 				"Medien werden vorbereitet"
 			);
 
@@ -417,7 +416,7 @@ namespace GQ.Client.Model
 				);
 			new SimpleDialogBehaviour (
 				downloadMediaFiles,
-				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+				string.Format ("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
 				"Mediendateien werden geladen"
 			);
 			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
@@ -429,7 +428,7 @@ namespace GQ.Client.Model
 				new ExportMediaInfoList ();
 			new SimpleDialogBehaviour (
 				exportLocalMediaInfo,
-				string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+				string.Format ("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
 				"Medieninformationen werden lokal gespeichert"
 			);
 
@@ -437,8 +436,8 @@ namespace GQ.Client.Model
 				new ExportQuestInfosToJSON ();
 			new SimpleDialogBehaviour (
 				exportQuestsInfoJSON,
-				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format ("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			TaskSequence t = 
@@ -460,8 +459,8 @@ namespace GQ.Client.Model
 				new ExportQuestInfosToJSON ();
 			new SimpleDialogBehaviour (
 				exportQuestsInfoJSON,
-				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format ("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			exportQuestsInfoJSON.Start ();
@@ -476,7 +475,7 @@ namespace GQ.Client.Model
 				);
 			new DownloadDialogBehaviour (
 				loadGameXML, 
-				string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
+				string.Format ("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
 			);
 
 			QuestStarter questStarter = new QuestStarter ();
@@ -504,10 +503,11 @@ namespace GQ.Client.Model
 	public class HotspotInfo
 	{
 
-		public HotspotInfo(double lat, double lon) {
+		public HotspotInfo (double lat, double lon)
+		{
 			Latitude = lat;
 			Longitude = lon;
-		} 
+		}
 
 		public double Latitude { get; set; }
 
@@ -520,7 +520,8 @@ namespace GQ.Client.Model
 	public class MetaDataInfo
 	{
 
-		public MetaDataInfo(string key, string val) {
+		public MetaDataInfo (string key, string val)
+		{
 			Key = key;
 			Value = val;
 		}

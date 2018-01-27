@@ -6,9 +6,11 @@ using UnityEngine.UI;
 using GQ.Client.Conf;
 using QM.UI;
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI
+{
 
-	public abstract class CategoryCtrl : MonoBehaviour {
+	public abstract class CategoryCtrl : MonoBehaviour
+	{
 
 		public Text categoryName;
 		public Text categoryCount;
@@ -16,11 +18,12 @@ namespace GQ.Client.UI {
 		protected CategoryTreeCtrl treeCtrl;
 
 		protected bool unfolded = false;
+
 		/// <summary>
 		/// Is true if the corresponding folder is open, so that this item should eventually be shown.
 		/// </summary>
 		/// <value><c>true</c> if unfolded; otherwise, <c>false</c>.</value>
-		public bool Unfolded { 
+		public virtual bool Unfolded { 
 			get {
 				return unfolded;
 			}

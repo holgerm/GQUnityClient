@@ -6,9 +6,11 @@ using UnityEngine.UI;
 using GQ.Client.Conf;
 using QM.UI;
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI
+{
 
-	public class CategoryFolderCtrl : CategoryCtrl {
+	public class CategoryFolderCtrl : CategoryCtrl
+	{
 
 		#region static stuff
 
@@ -32,11 +34,11 @@ namespace GQ.Client.UI {
 			folderCtrl.UpdateView (catFolder);
 
 			// hook the show/hide children method onto the image toggle button of this folder:
-			ImageToggleButton itb = folderCtrl.folderImage.GetComponent<ImageToggleButton>();
+			ImageToggleButton itb = folderCtrl.folderImage.GetComponent<ImageToggleButton> ();
 			itb.ToggleButton.onClick.AddListener (itb.Toggle);
 			itb.ToggleButton.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
 			// ... and onto the button of the whole entry:
-			Button folderBtn = folderCtrl.GetComponent<Button>();
+			Button folderBtn = folderCtrl.GetComponent<Button> ();
 			folderBtn.onClick.AddListener (itb.Toggle);
 			folderBtn.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
 
@@ -55,9 +57,10 @@ namespace GQ.Client.UI {
 		/// <summary>
 		/// Updates the view of a category UI folder.
 		/// </summary>
-		protected void UpdateView(CategoryTreeCtrl.CategoryFolder folder) {
+		protected void UpdateView (CategoryTreeCtrl.CategoryFolder folder)
+		{
 			// show the folder, according to the current rules:
-			gameObject.SetActive (showMenuItem());
+			gameObject.SetActive (showMenuItem ());
 			
 			// enable the folder image toggle button:
 			ImageToggleButton tb = folderImage.GetComponent<ImageToggleButton> ();
@@ -75,7 +78,8 @@ namespace GQ.Client.UI {
 		/// <summary>
 		/// This method will only be called from UnityEvent of folder's image toggle button onClick.
 		/// </summary>
-		public void ToggleShowFolderContents() {
+		public void ToggleShowFolderContents ()
+		{
 			// determine this folders show state:
 			bool stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
 
@@ -89,7 +93,8 @@ namespace GQ.Client.UI {
 			}
 		}
 
-		override protected bool showMenuItem() {
+		override protected bool showMenuItem ()
+		{
 			if (ConfigurationManager.Current.showEmptyMenuEntries)
 				return (folder.Name != "");
 			else
@@ -101,10 +106,11 @@ namespace GQ.Client.UI {
 
 		#region Runtime API
 
-		public void Show(bool show) {
-			gameObject.SetActive (show);
+		public void Show (bool show)
+		{
+			gameObject.SetActive (show && showMenuItem ());
 			foreach (CategoryTreeCtrl.CategoryEntry ec in folder.Entries) {
-				ec.ctrl.show (show && ec.ctrl.Unfolded);
+				ec.ctrl.show (show && (ec.ctrl.Unfolded || folder.Name == ""));
 			}
 		}
 
