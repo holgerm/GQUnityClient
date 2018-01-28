@@ -260,6 +260,12 @@ namespace GQ.Client.Conf
 		public int 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
+		public int headerHeightMinimumMM { get; set; }
+
+		[ShowInProductEditor]
+		public int headerHeightMaximumMM { get; set; }
+
+		[ShowInProductEditor]
 		public int 		contentHeightUnits { get; set; }
 
 		[ShowInProductEditor]
@@ -282,6 +288,12 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor]
 		public int 		footerHeightUnits { get; set; }
+
+		[ShowInProductEditor]
+		public int footerHeightMinimumMM { get; set; }
+
+		[ShowInProductEditor]
+		public int footerHeightMaximumMM { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
