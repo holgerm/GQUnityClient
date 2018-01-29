@@ -149,6 +149,23 @@ namespace GQ.Client.Conf
 		}
 
 		[ShowInProductEditor]
+		public int markerHeightUnits { get; set; }
+
+		[ShowInProductEditor]
+		public int markerHeightMinimumMM { get; set; }
+
+		[ShowInProductEditor]
+		public int markerHeightMaximumMM { get; set; }
+
+		/// <summary>
+		/// This should not be shown in the Product Editor neither persistetd in Product.json but calculated in the background instead. 
+		/// It will rely on markerHeightUnits, markerHeightMinimumMM and markerHeightMaximumMM.
+		/// </summary>
+		/// <value>The marker scale.</value>
+		[ShowInProductEditor]
+		public float markerScale { get; set; }
+
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	markerColor  { get; set; }
 
@@ -174,7 +191,13 @@ namespace GQ.Client.Conf
 		}
 
 		[ShowInProductEditor]
-		public float markerScale { get; set; }
+		public int mapButtonHeightUnits { get; set; }
+
+		[ShowInProductEditor]
+		public int mapButtonHeightMinimumMM { get; set; }
+
+		[ShowInProductEditor]
+		public int mapButtonHeightMaximumMM { get; set; }
 
 
 		[ShowInProductEditor (StartSection = "Categories & Filters:")]
@@ -257,16 +280,16 @@ namespace GQ.Client.Conf
 		public Color32	contentFontColor  { get; set; }
 
 		[ShowInProductEditor]
-		public int 		headerHeightUnits { get; set; }
+		public float 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int headerHeightMinimumMM { get; set; }
+		public float headerHeightMinimumMM { get; set; }
 
 		[ShowInProductEditor]
-		public int headerHeightMaximumMM { get; set; }
+		public float headerHeightMaximumMM { get; set; }
 
 		[ShowInProductEditor]
-		public int 		contentHeightUnits { get; set; }
+		public float 		contentHeightUnits { get; set; }
 
 		[ShowInProductEditor]
 		public float contentTopMarginUnits  { get; set; }
@@ -287,13 +310,13 @@ namespace GQ.Client.Conf
 		public bool fitExceedingImagesIntoArea { get; set; }
 
 		[ShowInProductEditor]
-		public int 		footerHeightUnits { get; set; }
+		public float 		footerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int footerHeightMinimumMM { get; set; }
+		public float footerHeightMinimumMM { get; set; }
 
 		[ShowInProductEditor]
-		public int footerHeightMaximumMM { get; set; }
+		public float footerHeightMaximumMM { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -330,10 +353,13 @@ namespace GQ.Client.Conf
 		public bool showEmptyMenuEntries { get; set; }
 
 		[ShowInProductEditor]
-		public int menuMainEntryHeightUnits { get; set; }
+		public float menuEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int menuSubEntryHeightUnits { get; set; }
+		public float menuEntryHeightMinimumMM { get; set; }
+
+		[ShowInProductEditor]
+		public float menuEntryHeightMaximumMM { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -363,6 +389,15 @@ namespace GQ.Client.Conf
 				_disabledAlpha = value;
 			}
 		}
+
+		[ShowInProductEditor]
+		public float listEntryHeightUnits { get; set; }
+
+		[ShowInProductEditor]
+		public float listEntryHeightMinimumMM { get; set; }
+
+		[ShowInProductEditor]
+		public float listEntryHeightMaximumMM { get; set; }
 
 		#endregion
 
@@ -410,8 +445,11 @@ namespace GQ.Client.Conf
 
 
 			// Layout:
-			headerHeightUnits = 60;
-			footerHeightUnits = 60;
+			headerHeightUnits = 60f;
+			contentHeightUnits = 750f;
+			imageAreaHeightMinUnits = 150f;
+			imageAreaHeightMaxUnits = 350f;
+			footerHeightUnits = 75f;
 			contentDividerUnits = 0;
 			borderWidthUnits = 0;
 			headerBgColor = Color.white;
@@ -419,7 +457,6 @@ namespace GQ.Client.Conf
 			headerButtonFgColor = Color.black;
 			contentBackgroundColor = Color.white;
 			contentFontColor = Color.black;
-			footerHeightUnits = 75;
 			footerBgColor = Color.white;
 			footerButtonBgColor = GQColor.transparent;
 			footerButtonFgColor = Color.black;

@@ -72,7 +72,7 @@ namespace GQ.Client.UI
 
 		protected float ContentImageHeight {
 			get {
-				return ScreenHeightUnits - (HeaderHeightUnits + FooterHeightUnits + ContentDividerUnits);
+				return LayoutConfig.ScreenHeightUnits - (LayoutConfig.HeaderHeightUnits + LayoutConfig.FooterHeightUnits + ContentDividerUnits);
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace GQ.Client.UI
 					}
 					Debug.Log ("IMAGE Ratios: max: " + ImageRatioMinimum + " real Ration: " + imageRatio + " max: " + ImageRatioMaximum);
 					Debug.Log ("IMAGE AREA HEIGHT: " + imageAreaHeight + " WIDTH: " + ContentWidthUnits);
-					Debug.Log ("SCREEN HEIGHT: " + ScreenHeightUnits + " WIDTH: " + ScreenWidthUnits);
+					Debug.Log ("SCREEN HEIGHT: " + LayoutConfig.ScreenHeightUnits + " WIDTH: " + LayoutConfig.ScreenWidthUnits);
 
 					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = imageAreaHeight;
 					contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);

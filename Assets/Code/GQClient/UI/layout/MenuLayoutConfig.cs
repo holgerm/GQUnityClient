@@ -38,10 +38,10 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			float sh = PageController.ScreenHeightUnits;
-			float hh = PageController.HeaderHeightUnits;
-			float ch = PageController.ContentHeightUnits;
-			layElem.flexibleHeight = PageController.ScreenHeightUnits - PageController.HeaderHeightUnits;
+			float sh = LayoutConfig.ScreenHeightUnits;
+			float hh = LayoutConfig.HeaderHeightUnits;
+			float ch = LayoutConfig.ContentHeightUnits;
+			layElem.flexibleHeight = LayoutConfig.ScreenHeightUnits - LayoutConfig.HeaderHeightUnits;
 		}
 	}
 

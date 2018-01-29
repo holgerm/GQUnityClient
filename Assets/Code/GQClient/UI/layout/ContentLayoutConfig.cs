@@ -45,9 +45,9 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = PageController.ContentHeightUnits;
+			layElem.flexibleHeight = LayoutConfig.ContentHeightUnits;
 			if (footer == null || !footer.gameObject.activeSelf) {
-				layElem.flexibleHeight += PageController.FooterHeightUnits;	
+				layElem.flexibleHeight += LayoutConfig.FooterHeightUnits;	
 			}
 		}
 

@@ -76,28 +76,6 @@ namespace GQ.Client.UI
 
 
 		/// <summary>
-		/// Height of the header element in device-dependent units.
-		/// </summary>
-		/// <value>The height of the header.</value>
-		static public float HeaderHeightUnits {
-			get {
-				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.headerHeightUnits;
-			}
-		}
-
-		/// <summary>
-		/// Height of the whole content are in device-dependent units.
-		/// </summary>
-		/// <value>The height of the header.</value>
-		static public float ContentHeightUnits {
-			get {
-				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.contentHeightUnits;
-			}
-		}
-
-		/// <summary>
 		/// Margin between header and content in device-dependent units.
 		/// </summary>
 		static public float ContentTopMarginUnits {
@@ -117,17 +95,6 @@ namespace GQ.Client.UI
 			}
 		}
 
-		/// <summary>
-		/// Height of the footer element in device-dependent units.
-		/// </summary>
-		/// <value>The height of the footer.</value>
-		static public float FooterHeightUnits {
-			get {
-				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.footerHeightUnits;
-			}
-		}
-
 		static public float ContentDividerUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
@@ -136,24 +103,6 @@ namespace GQ.Client.UI
 		}
 
 		public abstract int NumberOfSpacesInContent ();
-
-		static public float ScreenHeightUnits {
-			get {
-				return (
-				    HeaderHeightUnits +
-				    ContentHeightUnits +
-				    FooterHeightUnits
-				);
-			}
-		}
-
-		static public float ScreenWidthUnits {
-			get {
-				float rawScreenWidthUnits = (9f / 16f) * ScreenHeightUnits;
-				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return rawScreenWidthUnits;
-			}
-		}
 
 		static public float BorderWidthUnits {
 			get {
@@ -164,13 +113,8 @@ namespace GQ.Client.UI
 
 		static public float ContentWidthUnits {
 			get {
-				return ScreenWidthUnits - (2 * BorderWidthUnits);
+				return LayoutConfig.ScreenWidthUnits - (2 * BorderWidthUnits);
 			}
-		}
-
-		static public int UnitsToPixels (float units)
-		{
-			return (int)(units * (Screen.height / ScreenHeightUnits));
 		}
 
 		protected float ImageRatioMinimum {
@@ -189,7 +133,7 @@ namespace GQ.Client.UI
 		protected float CalculateMainAreaHeight (float imageAreaHeight)
 		{
 			return (	
-			    ContentHeightUnits -
+				LayoutConfig.ContentHeightUnits -
 			    (
 			        ContentTopMarginUnits +
 			        imageAreaHeight +
