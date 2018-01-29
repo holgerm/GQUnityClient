@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Util;
 
-namespace GQ.Client.Model
-{
+namespace GQ.Client.Model {
 
-	public class CategoryReader
-	{
+	public class CategoryReader {
 
-		public static List<string> ReadCategoriesFromMetadata (MetaDataInfo[] metadata)
-		{
+		public static List<string> ReadCategoriesFromMetadata(MetaDataInfo[] metadata) {
 			
 			List<string> categories = new List<string> ();
 			string netVal;
