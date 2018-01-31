@@ -325,6 +325,35 @@ namespace GQ.Client.Model
 			// init quest info store:
 			QuestDict = new Dictionary<int, QuestInfo> ();
 
+			initViews();
+			initFilters();
+		}
+
+		void initViews() {
+			if (ConfigurationManager.Current.questInfoViews == null || ConfigurationManager.Current.questInfoViews.Length == 0) {
+				Log.SignalErrorToDeveloper ("No quest info views defined for this app. Fix that!");
+				return;
+			}
+
+			string startView = ConfigurationManager.Current.questInfoViews[0];
+			if (startView == QuestInfoView.List.ToString()) {
+				Base.Instance.ListCanvas.gameObject.SetActive(true);
+			} 
+			else if (startView == QuestInfoView.Map.ToString()) {
+				Base.Instance.MapCanvas.gameObject.SetActive(true);
+				Base.Instance.MapHolder.gameObject.SetActive(true);
+			}
+
+			// check whether we have alternative views to offer:
+			if (ConfigurationManager.Current.questInfoViews.Length <= 1)
+				return;
+
+			// Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
+			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
+			ViewCtrl.Create (menuContent);
+		}
+
+		void initFilters() {
 			// init filters
 			Filter = new QuestInfoFilter.All ();
 			// init category filters:
@@ -335,11 +364,6 @@ namespace GQ.Client.Model
 				FilterAnd(CategoryFilters[catSet.name]);
 			}
 
-			// init menu:
-			initMenu();
-		}
-
-		void initMenu() {
 			// create UI for Category Filters:
 			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
 			foreach (CategorySet catSet in ConfigurationManager.Current.categorySets) {

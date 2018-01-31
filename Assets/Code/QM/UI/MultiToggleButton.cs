@@ -22,10 +22,11 @@ namespace QM.UI
 	/// the parameter to perform the right action, e.g. changing a view according to the state that you toggled to.
 	/// </summary>
 	[RequireComponent (typeof(Button))]
-	public class SeriesToggleButton : MonoBehaviour
+	public class MultiToggleButton : MonoBehaviour
 	{
 
 		public GameObject[] shownObjects;
+		public int selectedIndexAtStart = 0;
 
 		public Button toggleButton;
 
@@ -39,7 +40,7 @@ namespace QM.UI
 		void Start ()
 		{
 			orderToggleSeries ();
-			showFirstObjectOnly ();
+			showSelectedObjectOnly ();
 
 			toggleButton = gameObject.GetComponentInChildren<Button> ();
 
@@ -55,12 +56,27 @@ namespace QM.UI
 			toggleButton.onClick.AddListener (ProceedToggle);
 		}
 
-		void showFirstObjectOnly ()
+		public void SetSelectedStartIndex(int index)
 		{
+			if (index < 0 || index > shownObjects.Length) {
+				Log.SignalErrorToDeveloper ("Tried to set the startIndex to {0} but only {1} objects are shown.", index, shownObjects.Length);
+				return;
+			}
+
+			selectedIndexAtStart = index;
+			showSelectedObjectOnly (); // update the view
+		}
+
+
+		void showSelectedObjectOnly ()
+		{
+			if (selectedIndexAtStart < 0 || selectedIndexAtStart > shownObjects.Length) {
+				selectedIndexAtStart = 0;
+			}
+			
 			if (shownObjects.Length > 0) {
-				shownObjects [0].SetActive (true);
 				for (int i = 1; i < shownObjects.Length; i++) {
-					shownObjects [i].SetActive (false);
+					shownObjects [i].SetActive (i == selectedIndexAtStart);
 				}
 			}
 		}
@@ -89,6 +105,7 @@ namespace QM.UI
 			for (int i = 0; i < shownObjects.Length; i++) {
 				if (shownObjects [i].activeSelf) {
 					if (indexCurShownObject == -1) {
+						// currently active view was not found before, hence we remember its index:
 						indexCurShownObject = i;
 					}
 					shownObjects [i].SetActive (false);
@@ -104,11 +121,13 @@ namespace QM.UI
 			indexCurShownObject = (indexCurShownObject + 1) % shownObjects.Length;
 			// and set only the new object active:
 			for (int i = 0; i < shownObjects.Length; i++) {
+				// show next view (cyclic) in menu entry:
 				shownObjects [i].SetActive (i == indexCurShownObject);
 			}
 
 			// invoke the onToggled Unity Event:
 			if (indexReferredByPressedButton > -1) {
+				Debug.Log ("MTB.onToggledEvent: index: " + indexReferredByPressedButton + " view: " + shownObjects [indexReferredByPressedButton].name);
 				onToggledEvent.Invoke (shownObjects [indexReferredByPressedButton]);
 			}
 		}
@@ -119,7 +138,7 @@ namespace QM.UI
 		public void Reset ()
 		{
 			orderToggleSeries ();
-			showFirstObjectOnly ();
+			showSelectedObjectOnly ();
 			toggleButton = gameObject.GetComponentInChildren<Button> ();
 		}
 	

@@ -67,8 +67,9 @@ namespace GQ.Client.UI
 			if (!foldable || transform.childCount < 3)
 				// if we can't fold or do not have entries (the header is always there) we skip this:
 				return;
-			
-			bool currentShowState = transform.GetChild (2).gameObject.activeSelf;
+
+			// we use the first folder, i.e. the second child, or child nr. 1 (counting starts with 0) to determine the showstate:
+			bool currentShowState = transform.GetChild (1).gameObject.activeSelf;
 
 			for (int i = 1; i < transform.childCount; i++) {
 				Transform child = transform.GetChild (i);
@@ -77,18 +78,6 @@ namespace GQ.Client.UI
 					folderCtrl.Show (!currentShowState);
 				}
 			}
-
-//			foreach (CategoryFolder folder in categoryFolders.Values) {
-//				Debug.Log("TOGGLE_MENU: Before: " + transform.childCount);
-//				if (folder.ctrl.gameObject.activeSelf) {
-//					folder.ctrl.gameObject.SetActive (false);
-//				}
-//				else {
-//					folder.ctrl.gameObject.SetActive (true);
-//					UpdateView ();
-//				}
-//				Debug.Log("TOGGLE_MENU: After: " + transform.childCount);
-//			}
 		}
 
 		#endregion

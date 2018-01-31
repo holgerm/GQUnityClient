@@ -47,9 +47,8 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public string 	nameForQuestsPl { get; set; }
 
-		public string 	questVisualization { get; set; }
-
-		public bool 	questVisualizationChangeable  { get; set; }
+		[ShowInProductEditor]
+		public string[] 	questInfoViews { get; set; }
 
 		public bool 	cloudQuestsVisible  { get; set; }
 
@@ -207,7 +206,7 @@ namespace GQ.Client.Conf
 		public bool categoryFiltersStartFolded { get; set; }
 
 		[ShowInProductEditor]
-		public bool categoryFolderStartFolded { get; set; }
+		public bool categoryFoldersStartFolded { get; set; }
 
 		/// <summary>
 		/// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
@@ -415,7 +414,7 @@ namespace GQ.Client.Conf
 			autoStartQuestID = 0;
 			autostartIsPredeployed = false;
 			keepAutoStarting = true;
-			questVisualization = "list";
+			questInfoViews = new string[] { QuestInfoView.List.ToString(), QuestInfoView.Map.ToString() };
 			cloudQuestsVisible = true;
 			showCloudQuestsImmediately = false;
 			downloadAllCloudQuestOnStart = false;
@@ -470,7 +469,7 @@ namespace GQ.Client.Conf
 			categoryDict = new Dictionary<string, Category> ();
 			foldableCategoryFilters = true;
 			categoryFiltersStartFolded = true;
-			categoryFolderStartFolded = true;
+			categoryFoldersStartFolded = true;
 		}
 
 		#endregion
@@ -483,6 +482,11 @@ namespace GQ.Client.Conf
 		UPFRONT,
 		LAZY,
 		BACKGROUND
+	}
+
+	public enum QuestInfoView {
+		List,
+		Map
 	}
 
 	public enum PageType

@@ -12,6 +12,14 @@ namespace GQ.Client.UI {
 		public static string HEADER = "Header";
 		public static string FOOTER = "Footer";
 
+		protected void Awake() {
+			config ();
+		}
+
+		protected virtual void config() {
+			
+		}
+
 		protected abstract void layout ();
 
 		protected void Start () {

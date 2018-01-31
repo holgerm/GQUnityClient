@@ -657,7 +657,7 @@ namespace GQ.Editor.UI
 			bool disabled = false;
 			// the entry for the given property will be disabled, if one of the following is true
 			disabled |= propInfo.Name.Equals ("id");
-//			disabled |= propInfo.Name.Equals ("scenePaths");
+			disabled |= propInfo.Name.Equals ("categoryFiltersStartFolded") && ProductEditor.SelectedConfig.foldableCategoryFilters == false;
 
 			return disabled;
 		}
@@ -695,18 +695,25 @@ namespace GQ.Editor.UI
 		{
 			configIsDirty = false;
 
-			// show checkbox:
-			EditorGUILayout.BeginHorizontal ();
-			{
-				EditorGUILayout.PrefixLabel (NamePrefixGUIContent);
-				bool oldBoolVal = (bool)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
-				bool newBoolVal = EditorGUILayout.Toggle (oldBoolVal);
-				if (newBoolVal != oldBoolVal) {
-					configIsDirty = true;
-					curPropInfo.SetValue (ProductEditor.SelectedConfig, newBoolVal, null);
+			using (new EditorGUI.DisabledGroupScope (entryDisabled (curPropInfo))) {
+				// show checkbox:
+				EditorGUILayout.BeginHorizontal ();
+				{
+					EditorGUILayout.PrefixLabel (NamePrefixGUIContent);
+					bool oldBoolVal = (bool)curPropInfo.GetValue (ProductEditor.SelectedConfig, null);
+					bool newBoolVal = EditorGUILayout.Toggle (oldBoolVal);
+					if (newBoolVal != oldBoolVal) {
+						configIsDirty = true;
+						curPropInfo.SetValue (ProductEditor.SelectedConfig, newBoolVal, null);
+
+						if (curPropInfo.Name == "foldableCategoryFilters" && newBoolVal == false) {
+							// if categories are not foldable they must start unfolded:
+							ProductEditor.SelectedConfig.categoryFiltersStartFolded = false;
+						}
+					}
 				}
+				EditorGUILayout.EndHorizontal ();
 			}
-			EditorGUILayout.EndHorizontal ();
 
 			return configIsDirty;
 		}
@@ -1369,6 +1376,9 @@ namespace GQ.Editor.UI
 			case "acceptedPageTypes":
 				configIsDirty = doGui4AcceptedPageTypes (curPropInfo);
 				break;
+			case "questInfoViews":
+				configIsDirty = doGui4QuestInfoViews (curPropInfo);
+				break;
 			default:
 				Log.SignalErrorToDeveloper ("Unhandled property Type: {0}", curPropInfo.PropertyType.Name);
 				break;
@@ -1425,7 +1435,7 @@ namespace GQ.Editor.UI
 			return configIsDirty;
 		}
 
-		int selectedPageTypeToAccept = 0;
+		int selection = 0;
 
 		private bool doGui4AcceptedPageTypes(PropertyInfo curPropInfo) {
 			configIsDirty = false;
@@ -1454,15 +1464,15 @@ namespace GQ.Editor.UI
 					// Header with Add Button:
 					EditorGUILayout.BeginHorizontal ();
 
-					selectedPageTypeToAccept = 
+					selection = 
 					EditorGUILayout.Popup (
 						"Add Page Type:", 
-							selectedPageTypeToAccept, 
+							selection, 
 						pageTypesToAdd.ToArray ()
 					);
 				
 					if (GUILayout.Button ("+")) {
-						allElements.Add (pageTypesToAdd [selectedPageTypeToAccept]);
+						allElements.Add (pageTypesToAdd [selection]);
 						configIsDirty = true;
 					}
 					EditorGUILayout.EndHorizontal ();
@@ -1501,6 +1511,86 @@ namespace GQ.Editor.UI
 			}
 			return configIsDirty;
 		}
+
+		private bool doGui4QuestInfoViews(PropertyInfo curPropInfo) {
+			configIsDirty = false;
+
+			if (ProductEditor.SelectedConfig.questInfoViews == null) {
+				ProductEditor.SelectedConfig.questInfoViews = new string[2] { QuestInfoView.Map.ToString(), QuestInfoView.List.ToString() };
+			}
+			List<string> allElements = new List<string> (ProductEditor.SelectedConfig.questInfoViews);
+
+			List<string> viewsToAdd = new List<string>();
+			foreach (string pageType in Enum.GetNames (typeof(QuestInfoView))) {
+				if (!allElements.Contains(pageType)) {
+					viewsToAdd.Add (pageType);
+				}
+			}
+
+			showDetails = EditorGUILayout.Foldout (
+				showDetails, 
+				string.Format ("Questinfo View & Select Options: ({0})", ProductEditor.SelectedConfig.questInfoViews.Length), 
+				STYLE_FOLDOUT_Bold
+			);
+
+			if (showDetails) {
+				using (new EditorGUI.DisabledGroupScope (viewsToAdd.Count == 0)) {
+					// Header with Add Button:
+					EditorGUILayout.BeginHorizontal ();
+
+					if (selection < 0)
+						selection = 0;
+					if (selection > viewsToAdd.Count - 1)
+						selection = viewsToAdd.Count - 1;
+					selection = 
+						EditorGUILayout.Popup (
+							"Add Questinfo Viewing Option:", 
+							selection, 
+							viewsToAdd.ToArray ()
+						);
+
+					if (GUILayout.Button ("+")) {
+						allElements.Add (viewsToAdd [selection]);
+						configIsDirty = true;
+					}
+					EditorGUILayout.EndHorizontal ();
+				}
+
+				for (int i = 0; i < ProductEditor.SelectedConfig.questInfoViews.Length; i++) {
+					EditorGUILayout.BeginHorizontal ();
+					EditorGUILayout.PrefixLabel (
+						new GUIContent ("" + (i + 1) + ":"), 
+						EditorStyles.textField, 
+						STYLE_LABEL_RightAdjusted
+					);
+					using (new EditorGUI.DisabledGroupScope (true)) {
+						string pageType = EditorGUILayout.TextField (ProductEditor.SelectedConfig.questInfoViews [i]);
+						if (!pageType.Equals (ProductEditor.SelectedConfig.questInfoViews [i])) {
+							allElements [i] = pageType;
+							configIsDirty = true;
+						}
+					}
+					if (GUILayout.Button ("-")) {
+//						bool delete = EditorUtility.DisplayDialog (
+//							              string.Format ("Really Delete Questinfo View Type {0}?", ProductEditor.SelectedConfig.questInfoViews [i]), 
+//							              "Sure?.", 
+//							              "Yes, delete it!", 
+//							              "No, keep it");
+//						if (delete) {
+							allElements.Remove (ProductEditor.SelectedConfig.questInfoViews [i]);
+							configIsDirty = true;
+//						}
+					}
+					EditorGUILayout.EndHorizontal ();
+				}
+			}
+
+			if (configIsDirty) {
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements.ToArray(), null);
+			}
+			return configIsDirty;
+		}
+
 	}
 
 

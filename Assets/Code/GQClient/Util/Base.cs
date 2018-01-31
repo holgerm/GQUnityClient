@@ -13,6 +13,15 @@ namespace GQ.Client.Util
 	
 	public class Base : MonoBehaviour
 	{
+		#region Inspector Global Values
+
+		public GameObject ListCanvas;
+		public GameObject MapCanvas;
+		public GameObject MapHolder;
+		public GameObject MenuCanvas;
+
+		#endregion
+
 
 		#region Singleton
 

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Err;
+using GQ.Client.Util;
+using QM.UI;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -9,24 +12,40 @@ namespace GQ.Client.UI
 	public class ViewCtrl : MonoBehaviour
 	{
 
-		void Start ()
+		/// <summary>
+		/// When this method is called it is guaranteed that at least two views are referred by shownObjects[] of the MultiToggleButton.
+		/// </summary>
+		/// <param name="root">Root.</param>
+		public static ViewCtrl Create (GameObject root)
 		{
-			// TODO Assert that both map and list panels exist in the herarchy and have the correct name!
+			// Create the view object for this controller:
+			GameObject go = PrefabController.Create ("ViewToggle", root);
+			go.name = "ViewToggle";
+
+			// save tree controller & folder:
+			ViewCtrl viewCtrl = go.GetComponent<ViewCtrl> ();
+
+			MultiToggleButton mtb = viewCtrl.GetComponent<MultiToggleButton> ();
+			mtb.shownObjects = new GameObject[ConfigurationManager.Current.questInfoViews.Length];
+			for (int i = 0; i < ConfigurationManager.Current.questInfoViews.Length; i++) {
+				string mtbGoName = "ViewToggleTo" + ConfigurationManager.Current.questInfoViews [i];
+				mtb.shownObjects[i] = PrefabController.Create (mtbGoName, viewCtrl.gameObject);
+				mtb.shownObjects [i].name = mtbGoName;
+			}
+			// view no. 0 is set, view no. 1 is shown as next to reach by this menu entry:
+			mtb.SetSelectedStartIndex(1);
+
+			viewCtrl.gameObject.SetActive (true);
+			return viewCtrl;
 		}
-
-		public GameObject ListCanvas;
-		public GameObject MapCanvas;
-		public GameObject MapHolder;
-
-		public GameObject MenuCanvas;
 
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
-			ListCanvas.SetActive (viewer.name == "ViewAsList");
-			MapCanvas.SetActive (viewer.name == "ViewOnMap");
-			MapHolder.SetActive (viewer.name == "ViewOnMap");
+			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
+			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
+			Base.Instance.MapHolder.SetActive (viewer.name == "ViewToggleToMap");
 
-			MenuCanvas.SetActive (false);
+			Base.Instance.MenuCanvas.SetActive (false);
 		}
 
 	}

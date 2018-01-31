@@ -10,26 +10,16 @@ namespace QM.UI
 	// TODO can we react on changes in the hierarchy? E.g. perform Reset()?
 	// For now we react only if we beforehand have eanbled this editor, i.e. we need to touch the Toggle gameobject in the hierarchy.
 
-	[CustomEditor (typeof(SeriesToggleButton))]
-	public class SeriesToggleButtonEditor : Editor
+	[CustomEditor (typeof(MultiToggleButton))]
+	public class MultiToggleButtonEditor : Editor
 	{
-		SeriesToggleButton script = null;
-		//		bool automaticResetListenerRegistered = false;
-		//
-		//		void OnEnable ()
-		//		{
-		//			if (target != null && !automaticResetListenerRegistered) {
-		//				EditorApplication.hierarchyWindowChanged += ((SeriesToggleButton)target).Reset;
-		//				automaticResetListenerRegistered = true;
-		//				// TODO this happens very often, whenever we click on the go in the hierarchy.
-		//			}
-		//		}
+		MultiToggleButton script = null;
 
 		public override void OnInspectorGUI ()
 		{
 			base.OnInspectorGUI ();
 
-			script = (SeriesToggleButton)target;
+			script = (MultiToggleButton)target;
 
 			if (script.shownObjects.Length > 0) {
 				// first object should be active:
