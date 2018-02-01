@@ -76,11 +76,13 @@ namespace GQ.Client.UI.Dialogs
 		{
 			HideAndClearButtons ();
 
-			if (DownloadTask.Step == 0) {
-				Dialog.Title.text = string.Format (title);
-			} else {
-				Dialog.Title.text = string.Format (title + " (Schritt {0})", DownloadTask.Step);
-			}
+			Dialog.Title.text = title;
+
+//			if (DownloadTask.Step == 0) {
+//				Dialog.Title.text = string.Format (title);
+//			} else {
+//				Dialog.Title.text = string.Format (title + " (Schritt {0})", DownloadTask.Step);
+//			}
 			Dialog.Details.text = "Download startet ...";
 			// now we show the dialog:
 			Dialog.Show ();

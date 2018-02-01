@@ -26,13 +26,15 @@ namespace GQ.Client.UI.Dialogs {
 		{
 			base.Start ();
 
-			if (Task.Step == 0) {
-				Dialog.Title.text = 
-					string.Format (title);
-			} else {
-				Dialog.Title.text = 
-					string.Format (title + " (Schritt {0})", Task.Step);
-			}
+			Dialog.Title.text = title;
+
+//			if (Task.Step == 0) {
+//				Dialog.Title.text = 
+//					string.Format (title);
+//			} else {
+//				Dialog.Title.text = 
+//					string.Format (title + " (Schritt {0})", Task.Step);
+//			}
 			Dialog.Details.text = details;
 
 			// make completion close this dialog:

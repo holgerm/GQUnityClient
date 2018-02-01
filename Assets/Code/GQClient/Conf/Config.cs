@@ -330,7 +330,7 @@ namespace GQ.Client.Conf
 		public Color32	footerButtonFgColor  { get; set; }
 
 		/// <summary>
-		/// The width of space on a single side on the display that is intended to be left free (in permill of th absolute display width).
+		/// The width of space on each side of the display that is intended to be left free (in permill of th absolute display width).
 		/// </summary>
 		/// <value>The side per mill.</value>
 		[ShowInProductEditor]
