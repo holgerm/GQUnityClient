@@ -270,7 +270,7 @@
   "headerHeightMaximumMM": 0.0,
   "contentHeightUnits": 750.0,
   "contentTopMarginUnits": 0.0,
-  "contentDividerUnits": 5.0,
+  "contentDividerUnits": 10.0,
   "contentBottomMarginUnits": 0.0,
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
