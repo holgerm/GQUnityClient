@@ -77,7 +77,6 @@ namespace GQ.Client.Util
 
 		#endregion
 
-
 	}
 
 }

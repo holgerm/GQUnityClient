@@ -151,14 +151,14 @@ namespace GQ.Client.Conf
 		public int markerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int markerHeightMinimumMM { get; set; }
+		public int markerHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public int markerHeightMaximumMM { get; set; }
+		public int markerHeightMaxMM { get; set; }
 
 		/// <summary>
 		/// This should not be shown in the Product Editor neither persistetd in Product.json but calculated in the background instead. 
-		/// It will rely on markerHeightUnits, markerHeightMinimumMM and markerHeightMaximumMM.
+		/// It will rely on markerHeightUnits, markerHeightMinMM and markerHeightMaxMM.
 		/// </summary>
 		/// <value>The marker scale.</value>
 		[ShowInProductEditor]
@@ -193,10 +193,10 @@ namespace GQ.Client.Conf
 		public int mapButtonHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int mapButtonHeightMinimumMM { get; set; }
+		public int mapButtonHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public int mapButtonHeightMaximumMM { get; set; }
+		public int mapButtonHeightMaxMM { get; set; }
 
 
 		[ShowInProductEditor (StartSection = "Categories & Filters:")]
@@ -282,10 +282,10 @@ namespace GQ.Client.Conf
 		public float 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public float headerHeightMinimumMM { get; set; }
+		public float headerHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public float headerHeightMaximumMM { get; set; }
+		public float headerHeightMaxMM { get; set; }
 
 		[ShowInProductEditor]
 		public float 		contentHeightUnits { get; set; }
@@ -312,10 +312,10 @@ namespace GQ.Client.Conf
 		public float 		footerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public float footerHeightMinimumMM { get; set; }
+		public float footerHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public float footerHeightMaximumMM { get; set; }
+		public float footerHeightMaxMM { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -355,10 +355,10 @@ namespace GQ.Client.Conf
 		public float menuEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public float menuEntryHeightMinimumMM { get; set; }
+		public float menuEntryHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public float menuEntryHeightMaximumMM { get; set; }
+		public float menuEntryHeightMaxMM { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -393,10 +393,10 @@ namespace GQ.Client.Conf
 		public float listEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public float listEntryHeightMinimumMM { get; set; }
+		public float listEntryHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public float listEntryHeightMaximumMM { get; set; }
+		public float listEntryHeightMaxMM { get; set; }
 
 		#endregion
 

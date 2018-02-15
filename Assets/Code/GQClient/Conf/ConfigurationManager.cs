@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using GQ.Client.Util;
 
 namespace GQ.Client.Conf
 {
@@ -194,6 +195,33 @@ namespace GQ.Client.Conf
 			}
 		}
 
+		private static string retrieveProductJSONFromAppConfig() {
+			TextAsset configAsset = Resources.Load ("Product") as TextAsset;
+
+			if (configAsset == null) {
+				throw new ArgumentException ("Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
+			}
+
+			return configAsset.text;
+		}
+
+		public delegate string RetrieveProductJSONTextDelegate();
+
+		private static RetrieveProductJSONTextDelegate _retrieveProductJSONText;
+
+		public static RetrieveProductJSONTextDelegate RetrieveProductJSONText {
+			get {
+				if (_retrieveProductJSONText == null) {
+					_retrieveProductJSONText = retrieveProductJSONFromAppConfig;
+				}
+				return _retrieveProductJSONText;
+			}
+			set {
+				Current = null;
+				_retrieveProductJSONText = value;
+			}
+		}
+
 
 		/// <summary>
 		/// Deserialize the Product.json file to the current config object that is used throughout the client.
@@ -201,14 +229,10 @@ namespace GQ.Client.Conf
 		public static void deserializeConfig ()
 		{
 
-			TextAsset configAsset = Resources.Load ("Product") as TextAsset;
-
-			if (configAsset == null) {
-				throw new ArgumentException ("Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
-			}
+			string json = RetrieveProductJSONText ();
 
 			try {
-				_current = JsonConvert.DeserializeObject<Config> (configAsset.text);
+				_current = JsonConvert.DeserializeObject<Config> (json);
 			} catch (Exception e) {
 				Debug.LogWarning ("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
 			}

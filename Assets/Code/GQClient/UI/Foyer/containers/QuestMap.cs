@@ -116,7 +116,7 @@ namespace GQ.Client.UI.Foyer
 			// scale the marker so that it fits inside the surrouding tile holder which is a square:
 			float markerWidth = Math.Min (1.0f, (float)newMarker.Texture.width / (float)newMarker.Texture.height);
 			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
-			int longScreenSide = Math.Max (Screen.width, Screen.height);
+			int longScreenSide = Math.Max (Device.width, Device.height);
 			float longMarkerSide = Math.Max (markerRenderer.bounds.size.z, markerRenderer.bounds.size.x);
 //			Debug.Log ("MARKER: long Screen: " + longScreenSide + " long marker side: " + longMarkerSide);
 
