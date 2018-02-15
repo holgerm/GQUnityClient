@@ -42,8 +42,8 @@
     "path": "defaults/readable/defaultMarker"
   },
   "markerHeightUnits": 0,
-  "markerHeightMinimumMM": 0,
-  "markerHeightMaximumMM": 0,
+  "markerHeightMinMM": 0,
+  "markerHeightMaxMM": 0,
   "markerScale": 1.2,
   "markerColor": {
     "r": 116,
@@ -53,8 +53,8 @@
   },
   "markerBGAlpha": 150,
   "mapButtonHeightUnits": 0,
-  "mapButtonHeightMinimumMM": 0,
-  "mapButtonHeightMaximumMM": 0,
+  "mapButtonHeightMinMM": 0,
+  "mapButtonHeightMaxMM": 0,
   "foldableCategoryFilters": false,
   "categoryFiltersStartFolded": false,
   "categoryFoldersStartFolded": true,
@@ -266,8 +266,8 @@
     "a": 255
   },
   "headerHeightUnits": 60.0,
-  "headerHeightMinimumMM": 0.0,
-  "headerHeightMaximumMM": 0.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 10.0,
@@ -276,8 +276,8 @@
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
   "footerHeightUnits": 75.0,
-  "footerHeightMinimumMM": 0.0,
-  "footerHeightMaximumMM": 0.0,
+  "footerHeightMinMM": 40.0,
+  "footerHeightMaxMM": 0.0,
   "footerBgColor": {
     "r": 255,
     "g": 255,
@@ -317,8 +317,8 @@
   },
   "showEmptyMenuEntries": true,
   "menuEntryHeightUnits": 0.0,
-  "menuEntryHeightMinimumMM": 0.0,
-  "menuEntryHeightMaximumMM": 0.0,
+  "menuEntryHeightMinMM": 0.0,
+  "menuEntryHeightMaxMM": 0.0,
   "menuBGColor": {
     "r": 116,
     "g": 103,
@@ -333,6 +333,6 @@
   },
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 0.0,
-  "listEntryHeightMinimumMM": 0.0,
-  "listEntryHeightMaximumMM": 0.0
+  "listEntryHeightMinMM": 0.0,
+  "listEntryHeightMaxMM": 0.0
 }
