@@ -63,42 +63,21 @@ namespace GQ.Client.UI {
 			heightReductionInHeaderAndFooter = 0f;
 
 			// calculate footer adaptation (reduction):
-			_footerHeightUnits = ConfigurationManager.Current.footerHeightUnits; // start with standard
-			if (ConfigurationManager.Current.footerHeightMinMM > 0f) {
-				// check wether specified units obeye the contraint:
-				if (Units2MM (ConfigurationManager.Current.footerHeightUnits) < ConfigurationManager.Current.footerHeightMinMM) {
-					// if not, adapt to nearest value and return that:
-					_footerHeightUnits = MM2Units (ConfigurationManager.Current.footerHeightMinMM);
-					heightReductionInHeaderAndFooter += ConfigurationManager.Current.footerHeightUnits - _footerHeightUnits;
-				}
-			}
-			if (ConfigurationManager.Current.footerHeightMaxMM > 0f) {
-				// check wether specified units obeye the contraint:
-				if (Units2MM (ConfigurationManager.Current.footerHeightUnits) > ConfigurationManager.Current.footerHeightMaxMM) {
-					// if not, adapt to nearest value and return that:
-					_footerHeightUnits = MM2Units (ConfigurationManager.Current.footerHeightMaxMM);
-					heightReductionInHeaderAndFooter += ConfigurationManager.Current.footerHeightUnits - _footerHeightUnits;
-				}
-			}
+			_footerHeightUnits = 
+				calculateRestrictedHeight(
+					ConfigurationManager.Current.footerHeightUnits, 
+					ConfigurationManager.Current.footerHeightMinMM, 
+					ConfigurationManager.Current.footerHeightMaxMM
+				);
+			heightReductionInHeaderAndFooter += ConfigurationManager.Current.footerHeightUnits - _footerHeightUnits;
 
 			// calculate header adaptation (reduction):
-			_headerHeightUnits = ConfigurationManager.Current.headerHeightUnits; // start with standard
-			if (ConfigurationManager.Current.headerHeightMinMM > 0f) {
-				// check wether specified units obeye the contraint:
-				if (Units2MM (ConfigurationManager.Current.headerHeightUnits) < ConfigurationManager.Current.headerHeightMinMM) {
-					// if not, adapt to nearest value and return that:
-					_headerHeightUnits = MM2Units (ConfigurationManager.Current.headerHeightMinMM);
-					heightReductionInHeaderAndFooter += ConfigurationManager.Current.headerHeightUnits - _headerHeightUnits;
-				}
-			}
-			if (ConfigurationManager.Current.headerHeightMaxMM > 0f) {
-				// check wether specified units obeye the contraint:
-				if (Units2MM (ConfigurationManager.Current.headerHeightUnits) > ConfigurationManager.Current.headerHeightMaxMM) {
-					// if not, adapt to nearest value and return that:
-					_headerHeightUnits = MM2Units (ConfigurationManager.Current.headerHeightMaxMM);
-					heightReductionInHeaderAndFooter += ConfigurationManager.Current.headerHeightUnits - _headerHeightUnits;
-				}
-			}
+			_headerHeightUnits = calculateRestrictedHeight(
+				ConfigurationManager.Current.headerHeightUnits, 
+				ConfigurationManager.Current.headerHeightMinMM, 
+				ConfigurationManager.Current.headerHeightMaxMM
+			);
+			heightReductionInHeaderAndFooter += ConfigurationManager.Current.headerHeightUnits - _headerHeightUnits;
 
 			// adapt content height units based on footer and header adaptations:
 			_contentHeightUnits = ConfigurationManager.Current.contentHeightUnits + heightReductionInHeaderAndFooter;
@@ -127,6 +106,27 @@ namespace GQ.Client.UI {
 				calculateHeightAdaptations ();
 				return _contentHeightUnits;
 			}
+		}
+
+		static private float calculateRestrictedHeight(float units, float minMM, float maxMM) {
+			float result = units;
+
+			if (minMM > 0f) {
+				// check wether specified units obeye the contraint:
+				if (Units2MM (units) < minMM) {
+					// if not, adapt to nearest value and return that:
+					result = MM2Units (minMM);
+				}
+			}
+			if (maxMM > 0f) {
+				// check wether specified units obeye the contraint:
+				if (Units2MM (units) > maxMM) {
+					// if not, adapt to nearest value and return that:
+					result = MM2Units (maxMM);
+				}
+			}
+
+			return result;
 		}
 
 		static public float ScreenHeightUnits {
