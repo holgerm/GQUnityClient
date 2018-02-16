@@ -215,5 +215,27 @@ namespace GQTests.Layout
 			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
 		}
 
+
+		[Test]
+		public void HeightOfMapButton() {
+
+			// prepare product json:
+			ConfigurationManager.RetrieveProductJSONText = () => {
+				return 
+					@"{
+							""id"": ""test"",
+							""headerHeightUnits"": 60.0,
+			 				""contentHeightUnits"": 750.0,
+			 	 			""footerHeightUnits"": 75.0,
+			  				""mapButtonHeightUnits"": 100.0
+					}";
+			};
+
+			DeviceDefinitions.Use (DeviceDefinitions.DeviceType.iPad4);
+
+			// we expect the resulting map button to be 100 units high, i.e. a share of 100 / 885 = 11,3% of 197mm is ca. 22.26mm:
+			Assert.That (LayoutConfig.Units2MM (LayoutConfig.MapButtonHeightUnits), Is.InRange (22.24f, 22.28f));
+		}
+
 	}
 }

@@ -129,6 +129,17 @@ namespace GQ.Client.UI {
 			return result;
 		}
 
+		static public float MapButtonHeightUnits {
+			get {
+				return 
+					calculateRestrictedHeight (
+						ConfigurationManager.Current.mapButtonHeightUnits,
+						ConfigurationManager.Current.mapButtonHeightMinMM,
+						ConfigurationManager.Current.mapButtonHeightMaxMM
+					);
+			}
+		}
+
 		static public float ScreenHeightUnits {
 			get {
 				return (
@@ -147,9 +158,12 @@ namespace GQ.Client.UI {
 			}
 		}
 
-		static public int Units2Pixels (float units)
+		static public float Units2Pixels (float units)
 		{
-			return (int)(units * (Device.height / ScreenHeightUnits));
+			Debug.Log ("Units2Pixels: Device.height: " + Device.height + ", ScreenHeightUnits: " + ScreenHeightUnits + ", units: " + units);
+			float canvasScale = GameObject.Find ("DialogCanvas").transform.localScale.y;
+			Debug.Log ("scale: " + canvasScale);
+			return (units * (Device.height / ScreenHeightUnits)) / canvasScale;
 		}
 
 		static public float MMperINCH = 25.4f;

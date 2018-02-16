@@ -190,13 +190,13 @@ namespace GQ.Client.Conf
 		}
 
 		[ShowInProductEditor]
-		public int mapButtonHeightUnits { get; set; }
+		public float mapButtonHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int mapButtonHeightMinMM { get; set; }
+		public float mapButtonHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public int mapButtonHeightMaxMM { get; set; }
+		public float mapButtonHeightMaxMM { get; set; }
 
 
 		[ShowInProductEditor (StartSection = "Categories & Filters:")]
@@ -441,7 +441,7 @@ namespace GQ.Client.Conf
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
 			markerScale = 1.0f;
-
+			mapButtonHeightUnits = 100f;
 
 			// Layout:
 			headerHeightUnits = 60f;
