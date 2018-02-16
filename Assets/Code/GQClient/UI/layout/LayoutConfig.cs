@@ -140,6 +140,17 @@ namespace GQ.Client.UI
 			}
 		}
 
+		static public float MenuEntryHeightUnits {
+			get {
+				return 
+					calculateRestrictedHeight (
+					ConfigurationManager.Current.menuEntryHeightUnits,
+					ConfigurationManager.Current.menuEntryHeightMinMM,
+					ConfigurationManager.Current.menuEntryHeightMaxMM
+				);
+			}
+		}
+
 		static public float ScreenHeightUnits {
 			get {
 				return (

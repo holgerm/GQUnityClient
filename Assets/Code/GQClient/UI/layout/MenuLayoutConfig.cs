@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Conf;
 using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {
@@ -26,6 +27,21 @@ namespace GQ.Client.UI
 	
 			setContentHeight ();
 		}
+
+		public static void SetEntryHeight (GameObject menuEntry, string gameObjectPath = null)
+		{
+			// set layout height:
+			Transform t = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find (gameObjectPath));
+			if (t != null) {
+				LayoutElement layElem = t.GetComponent<LayoutElement> ();
+				if (layElem != null) {
+					layElem.minHeight = LayoutConfig.Units2Pixels (LayoutConfig.MenuEntryHeightUnits);
+				}
+			} else {
+				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
+			}
+		}
+
 
 	}
 

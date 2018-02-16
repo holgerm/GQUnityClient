@@ -7,9 +7,11 @@ using GQ.Client.Conf;
 using QM.UI;
 using QM.Util;
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI
+{
 
-	public class CategoryEntryCtrl : CategoryCtrl {
+	public class CategoryEntryCtrl : CategoryCtrl
+	{
 
 		#region static stuff
 
@@ -20,6 +22,10 @@ namespace GQ.Client.UI {
 			// Create the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + catEntry.category.name + ")";
+
+			// set entry height:
+			MenuLayoutConfig.SetEntryHeight (go, "Name");
+
 			CategoryEntryCtrl entryCtrl = go.GetComponent<CategoryEntryCtrl> ();
 			entryCtrl.categoryEntry = catEntry;
 			entryCtrl.UpdateView ();
@@ -31,7 +37,7 @@ namespace GQ.Client.UI {
 			catEntry.ctrl = entryCtrl;
 
 			// add this category to the filter since it is on at start:
-			entryCtrl.SetSelectedState(true);
+			entryCtrl.SetSelectedState (true);
 
 			return entryCtrl;
 		}
@@ -48,11 +54,12 @@ namespace GQ.Client.UI {
 		/// <summary>
 		/// Updates the view of a category UI entry.
 		/// </summary>
-		public void UpdateView() {
+		public void UpdateView ()
+		{
 			// eventually remove leading product id:
 			string productIDStartOfCat = ConfigurationManager.Current.id + ".";
 			string catId = categoryEntry.category.id;
-			if (catId.StartsWith(productIDStartOfCat)) {
+			if (catId.StartsWith (productIDStartOfCat)) {
 				catId = catId.Substring (productIDStartOfCat.Length);
 			}
 				
@@ -61,19 +68,19 @@ namespace GQ.Client.UI {
 
 			// set the number of elements represented by this ctaegory:
 			categoryCount.text = ""; // categoryEntry.NumberOfQuests().ToString(); TODO make Config?
-			gameObject.SetActive (showMenuItem());	
+			gameObject.SetActive (showMenuItem ());	
 
 			// set symbol for this category:
 			categorySymbol.sprite = categoryEntry.category.symbol != null ?
-				Resources.Load<Sprite>(categoryEntry.category.symbol.path) :
+				Resources.Load<Sprite> (categoryEntry.category.symbol.path) :
 				null;
-			if (categorySymbol.sprite == null)
-			{
+			if (categorySymbol.sprite == null) {
 				categorySymbol.GetComponent<Image> ().enabled = false;
 			}
 		}
 
-		override protected bool showMenuItem() {
+		override protected bool showMenuItem ()
+		{
 			bool entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
 			if (ConfigurationManager.Current.showEmptyMenuEntries)
 				return (entryVisible);
@@ -83,29 +90,30 @@ namespace GQ.Client.UI {
 
 		bool selectedForFilter;
 
-		public void SetSelectedState(bool newState) {
+		public void SetSelectedState (bool newState)
+		{
 			selectedForFilter = newState;
 
 			// Make the UI reflect selection status & change category filter in quest info manager:
 			if (selectedForFilter) {
-				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b, 1f);
-				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, 1f);
-				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, 1f);
+				categoryName.color = new Color (categoryName.color.r, categoryName.color.g, categoryName.color.b, 1f);
+				categoryCount.color = new Color (categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, 1f);
+				categorySymbol.color = new Color (categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, 1f);
 				treeCtrl.CategoryFilter.AddCategory (categoryEntry.category.id);
-			}
-			else {
-				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b, ConfigurationManager.Current.disabledAlpha);
-				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, ConfigurationManager.Current.disabledAlpha);
-				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, ConfigurationManager.Current.disabledAlpha);
+			} else {
+				categoryName.color = new Color (categoryName.color.r, categoryName.color.g, categoryName.color.b, ConfigurationManager.Current.disabledAlpha);
+				categoryCount.color = new Color (categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, ConfigurationManager.Current.disabledAlpha);
+				categorySymbol.color = new Color (categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, ConfigurationManager.Current.disabledAlpha);
 				treeCtrl.CategoryFilter.RemoveCategory (categoryEntry.category.id);
 			}
 		}
 
-		public void ToggleSelectedState () {
+		public void ToggleSelectedState ()
+		{
 			SetSelectedState (!selectedForFilter);
 		}
 
-		public void show(bool show)
+		public void show (bool show)
 		{
 			gameObject.SetActive (show);
 		}
