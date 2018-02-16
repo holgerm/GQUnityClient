@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Conf;
 using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {
@@ -12,15 +13,15 @@ namespace GQ.Client.UI
 	/// Configures the header layout based on the seetings in the current apps config data. Attach this script to all header game objects.
 	/// </summary>
 	[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
-	public class ContentLayoutConfig : LayoutConfig
+	public class ScreenLayoutConfig : LayoutConfig
 	{
 
-		public HeaderLayoutConfig header;
+		public GameObject Header;
 		public GameObject TopMargin;
 		public GameObject ContentArea;
 		public GameObject Divider;
 		public GameObject BottomMargin;
-		public FooterLayoutConfig footer;
+		public GameObject Footer;
 
 		protected override void layout ()
 		{
@@ -30,13 +31,46 @@ namespace GQ.Client.UI
 				image.color = ConfigurationManager.Current.contentBackgroundColor;
 			}
 	
+			setHeader ();
 			setContentHeight ();
 			setTopMargin ();
-			setDividerHeight ();
+			setDivider ();
 			setBottomMargin ();
+			setFooter ();
 		}
 
-		private void setContentHeight ()
+		protected virtual void setHeader ()
+		{
+			if (Header == null)
+				return;
+
+			// set background color:
+			Image image = GetComponent<Image> ();
+			if (image != null) {
+				image.color = ConfigurationManager.Current.headerBgColor;
+			}
+
+			// set MiddleTopLogo:
+			try {
+				Transform middleTopLogo = transform.Find ("ButtonPanel/MiddleTopLogo");
+				if (middleTopLogo != null) {
+					Image mtlImage = middleTopLogo.GetComponent<Image> ();
+					if (mtlImage != null) {
+						mtlImage.sprite = Resources.Load<Sprite> ("TopLogo");
+					}
+				}
+			} catch (Exception e) {
+				Log.SignalErrorToDeveloper ("Could not set Middle Top Logo Image. Exception occurred: " + e.Message);
+			}
+
+			LayoutElement layElem = Header.GetComponent<LayoutElement> ();
+			if (layElem == null)
+				return;
+
+			layElem.flexibleHeight = LayoutConfig.HeaderHeightUnits;
+		}
+
+		protected virtual void setContentHeight ()
 		{
 			if (ContentArea == null)
 				return;
@@ -46,12 +80,12 @@ namespace GQ.Client.UI
 				return;
 
 			layElem.flexibleHeight = LayoutConfig.ContentHeightUnits;
-			if (footer == null || !footer.gameObject.activeSelf) {
+			if (Footer == null || !Footer.gameObject.activeSelf) {
 				layElem.flexibleHeight += LayoutConfig.FooterHeightUnits;	
 			}
 		}
 
-		private void setTopMargin ()
+		protected virtual void setTopMargin ()
 		{
 			if (TopMargin == null)
 				return;
@@ -68,7 +102,7 @@ namespace GQ.Client.UI
 			layElem.flexibleHeight = PageController.ContentTopMarginUnits;
 		}
 
-		private void setBottomMargin ()
+		protected virtual void setBottomMargin ()
 		{
 			if (BottomMargin == null)
 				return;
@@ -85,7 +119,7 @@ namespace GQ.Client.UI
 			layElem.flexibleHeight = PageController.ContentBottomMarginUnits;
 		}
 
-		private void setDividerHeight ()
+		protected virtual void setDivider ()
 		{
 			if (Divider == null)
 				return;
@@ -101,6 +135,24 @@ namespace GQ.Client.UI
 				return;
 
 			layElem.flexibleHeight = PageController.ContentDividerUnits;
+		}
+
+		protected virtual void setFooter ()
+		{
+			if (Footer == null)
+				return;
+
+			// set background color:
+			Image image = Footer.GetComponent<Image> ();
+			if (image != null) {
+				image.color = ConfigurationManager.Current.footerBgColor;
+			}
+
+			LayoutElement layElem = Footer.GetComponent<LayoutElement> ();
+			if (layElem == null)
+				return;
+
+			layElem.flexibleHeight = LayoutConfig.FooterHeightUnits;
 		}
 	}
 

@@ -6,35 +6,32 @@ using GQ.Client.Conf;
 using GQ.Client.Util;
 
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI
+{
 
-	public abstract class LayoutConfig : MonoBehaviour {
+	public abstract class LayoutConfig : MonoBehaviour
+	{
 
 		public static string HEADER = "Header";
 		public static string FOOTER = "Footer";
 
-		protected void Awake() {
-			config ();
-		}
-
-		protected virtual void config() {
-			
-		}
-
 		protected abstract void layout ();
 
-		protected void Start () {
+		protected void Start ()
+		{
 			layout ();
 		}
-		
-		protected void Reset () {
+
+		protected void Reset ()
+		{
 			layout ();
 		}
 
 		/// <summary>
 		/// Resets all layout changes made in the config to all gameobjects involved in the editor, so that the changes are immediatley reflected.
 		/// </summary>
-		public static void ResetAll() {
+		public static void ResetAll ()
+		{
 			Object[] objects = Resources.FindObjectsOfTypeAll (typeof(LayoutConfig));
 			foreach (var item in objects) {
 				((LayoutConfig)item).Reset ();
@@ -59,20 +56,21 @@ namespace GQ.Client.UI {
 
 		static private float heightReductionInHeaderAndFooter { get; set; }
 
-		static private void calculateHeightAdaptations() {
+		static private void calculateHeightAdaptations ()
+		{
 			heightReductionInHeaderAndFooter = 0f;
 
 			// calculate footer adaptation (reduction):
 			_footerHeightUnits = 
-				calculateRestrictedHeight(
-					ConfigurationManager.Current.footerHeightUnits, 
-					ConfigurationManager.Current.footerHeightMinMM, 
-					ConfigurationManager.Current.footerHeightMaxMM
-				);
+				calculateRestrictedHeight (
+				ConfigurationManager.Current.footerHeightUnits, 
+				ConfigurationManager.Current.footerHeightMinMM, 
+				ConfigurationManager.Current.footerHeightMaxMM
+			);
 			heightReductionInHeaderAndFooter += ConfigurationManager.Current.footerHeightUnits - _footerHeightUnits;
 
 			// calculate header adaptation (reduction):
-			_headerHeightUnits = calculateRestrictedHeight(
+			_headerHeightUnits = calculateRestrictedHeight (
 				ConfigurationManager.Current.headerHeightUnits, 
 				ConfigurationManager.Current.headerHeightMinMM, 
 				ConfigurationManager.Current.headerHeightMaxMM
@@ -84,6 +82,7 @@ namespace GQ.Client.UI {
 		}
 
 		static private float _footerHeightUnits { get; set; }
+
 		/// <summary>
 		/// Height of the footer element in device-dependent units.
 		/// </summary>
@@ -108,7 +107,8 @@ namespace GQ.Client.UI {
 			}
 		}
 
-		static private float calculateRestrictedHeight(float units, float minMM, float maxMM) {
+		static private float calculateRestrictedHeight (float units, float minMM, float maxMM)
+		{
 			float result = units;
 
 			if (minMM > 0f) {
@@ -133,19 +133,19 @@ namespace GQ.Client.UI {
 			get {
 				return 
 					calculateRestrictedHeight (
-						ConfigurationManager.Current.mapButtonHeightUnits,
-						ConfigurationManager.Current.mapButtonHeightMinMM,
-						ConfigurationManager.Current.mapButtonHeightMaxMM
-					);
+					ConfigurationManager.Current.mapButtonHeightUnits,
+					ConfigurationManager.Current.mapButtonHeightMinMM,
+					ConfigurationManager.Current.mapButtonHeightMaxMM
+				);
 			}
 		}
 
 		static public float ScreenHeightUnits {
 			get {
 				return (
-					ConfigurationManager.Current.headerHeightUnits +
-					ConfigurationManager.Current.contentHeightUnits +
-					ConfigurationManager.Current.footerHeightUnits
+				    ConfigurationManager.Current.headerHeightUnits +
+				    ConfigurationManager.Current.contentHeightUnits +
+				    ConfigurationManager.Current.footerHeightUnits
 				);
 			}
 		}
@@ -168,11 +168,13 @@ namespace GQ.Client.UI {
 
 		static public float MMperINCH = 25.4f;
 
-		static public float Units2MM (float units) {
+		static public float Units2MM (float units)
+		{
 			return (units * Device.height * MMperINCH) / (ScreenHeightUnits * Device.dpi);
 		}
 
-		static public float MM2Units (float mm) {
+		static public float MM2Units (float mm)
+		{
 			return ScreenHeightUnits * mm * Device.dpi / (Device.height * MMperINCH);
 		}
 

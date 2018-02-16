@@ -12,11 +12,9 @@ namespace GQ.Client.UI
 	/// Configures the header layout based on the seetings in the current apps config data. Attach this script to all header game objects.
 	/// </summary>
 	[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
-	public class MenuLayoutConfig : LayoutConfig
+	public class MenuLayoutConfig : ScreenLayoutConfig
 	{
 
-		public HeaderLayoutConfig header;
-		public GameObject MenuContent;
 		public Image MenuBackgroundImage;
 
 		protected override void layout ()
@@ -29,20 +27,6 @@ namespace GQ.Client.UI
 			setContentHeight ();
 		}
 
-		private void setContentHeight ()
-		{
-			if (MenuContent == null)
-				return;
-
-			LayoutElement layElem = MenuContent.GetComponent<LayoutElement> ();
-			if (layElem == null)
-				return;
-
-			float sh = LayoutConfig.ScreenHeightUnits;
-			float hh = LayoutConfig.HeaderHeightUnits;
-			float ch = LayoutConfig.ContentHeightUnits;
-			layElem.flexibleHeight = LayoutConfig.ScreenHeightUnits - LayoutConfig.HeaderHeightUnits;
-		}
 	}
 
 }
