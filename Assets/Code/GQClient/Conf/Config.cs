@@ -148,13 +148,13 @@ namespace GQ.Client.Conf
 		}
 
 		[ShowInProductEditor]
-		public int markerHeightUnits { get; set; }
+		public float markerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
-		public int markerHeightMinMM { get; set; }
+		public float markerHeightMinMM { get; set; }
 
 		[ShowInProductEditor]
-		public int markerHeightMaxMM { get; set; }
+		public float markerHeightMaxMM { get; set; }
 
 		/// <summary>
 		/// This should not be shown in the Product Editor neither persistetd in Product.json but calculated in the background instead. 
@@ -441,7 +441,8 @@ namespace GQ.Client.Conf
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
 			markerScale = 1.0f;
-			mapButtonHeightUnits = 100f;
+			mapButtonHeightUnits = 55f;
+			markerHeightUnits = 75f;
 
 			// Layout:
 			headerHeightUnits = 60f;

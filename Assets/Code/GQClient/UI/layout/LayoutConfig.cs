@@ -140,6 +140,17 @@ namespace GQ.Client.UI
 			}
 		}
 
+		static public float MarkerHeightUnits {
+			get {
+				return 
+					calculateRestrictedHeight (
+					ConfigurationManager.Current.markerHeightUnits,
+					ConfigurationManager.Current.markerHeightMinMM,
+					ConfigurationManager.Current.markerHeightMaxMM
+				);
+			}
+		}
+
 		static public float MenuEntryHeightUnits {
 			get {
 				return 
