@@ -111,7 +111,9 @@ namespace GQ.Client.UI.Foyer
 			Button.ButtonClickedEvent namebuttonEvent = Name.GetComponent<Button> ().onClick;
 			if (StartButton.gameObject.activeInHierarchy) {
 				namebuttonEvent.RemoveAllListeners ();
-				namebuttonEvent.AddListener( () => { data.Play().Start(); });
+				namebuttonEvent.AddListener (() => {
+					data.Play ().Start ();
+				});
 			} else {
 				namebuttonEvent.RemoveAllListeners ();
 			}
@@ -124,17 +126,17 @@ namespace GQ.Client.UI.Foyer
 
 		public void Download ()
 		{
-			data.Download().Start();
+			data.Download ().Start ();
 		}
 
 		public void Delete ()
 		{
-			data.Delete();
+			data.Delete ();
 		}
 
 		public void Play ()
 		{
-			data.Play().Start();
+			data.Play ().Start ();
 		}
 
 		/// <summary>
@@ -155,6 +157,10 @@ namespace GQ.Client.UI.Foyer
 			// Create the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + qInfo.Name + ")";
+
+			// set entry height:
+			FoyerListLayoutConfig.SetEntryHeight (go);
+
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
 
 			// set info button as configured:
@@ -167,7 +173,7 @@ namespace GQ.Client.UI.Foyer
 						break;
 				}
 
-				Image infoImage = ctrl.InfoButton.transform.Find("Image").GetComponent<Image>();
+				Image infoImage = ctrl.InfoButton.transform.Find ("Image").GetComponent<Image> ();
 				infoImage.enabled = true;
 				ctrl.InfoButton.enabled = false;
 				ctrl.InfoButton.gameObject.SetActive (true); // show info icon
@@ -175,10 +181,9 @@ namespace GQ.Client.UI.Foyer
 				if (determiningCategory != null) {
 					// set symbol for this category:
 					infoImage.sprite = determiningCategory.symbol != null ?
-						Resources.Load<Sprite>(determiningCategory.symbol.path) :
+						Resources.Load<Sprite> (determiningCategory.symbol.path) :
 						null;
-					if (infoImage.sprite != null)
-					{
+					if (infoImage.sprite != null) {
 						infoImage.enabled = true;
 						ctrl.InfoButton.enabled = true;
 						ctrl.InfoButton.gameObject.SetActive (true);
@@ -198,7 +203,7 @@ namespace GQ.Client.UI.Foyer
 		{
 			// Update Info-Icon:
 			// TODO: enable Info dialog
-			Image infoImage = InfoButton.GetComponent<Image>();
+			Image infoImage = InfoButton.GetComponent<Image> ();
 
 			// Update Name:
 			Name.text = data.Name;
@@ -208,12 +213,12 @@ namespace GQ.Client.UI.Foyer
 			namebuttonEvent.RemoveAllListeners ();
 			if (data.IsOnServer && !data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					data.Download ().Start();
+					data.Download ().Start ();
 				});
 			}
 			if (data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					data.Play ().Start();
+					data.Play ().Start ();
 				});
 			}
 

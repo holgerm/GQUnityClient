@@ -1409,7 +1409,6 @@ GameObject:
   - component: {fileID: 465658546}
   - component: {fileID: 465658549}
   - component: {fileID: 465658548}
-  - component: {fileID: 465658550}
   - component: {fileID: 465658547}
   m_Layer: 5
   m_Name: MapArea (invisible)
@@ -1489,17 +1488,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 465658545}
---- !u!114 &465658550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 465658545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &523054182
 GameObject:
   m_ObjectHideFlags: 0
@@ -3053,7 +3041,6 @@ GameObject:
   - component: {fileID: 990637105}
   - component: {fileID: 990637108}
   - component: {fileID: 990637107}
-  - component: {fileID: 990637109}
   - component: {fileID: 990637106}
   m_Layer: 5
   m_Name: Content
@@ -3133,17 +3120,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 990637104}
---- !u!114 &990637109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 990637104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1003398645
 GameObject:
   m_ObjectHideFlags: 0
@@ -4291,7 +4267,6 @@ GameObject:
   - component: {fileID: 1337534266}
   - component: {fileID: 1337534267}
   - component: {fileID: 1337534269}
-  - component: {fileID: 1337534268}
   m_Layer: 5
   m_Name: MenuPanel
   m_TagString: Untagged
@@ -4393,17 +4368,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
---- !u!114 &1337534268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1337534262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1337534269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5664,7 +5628,6 @@ GameObject:
   - component: {fileID: 1686877496}
   - component: {fileID: 1686877501}
   - component: {fileID: 1686877500}
-  - component: {fileID: 1686877499}
   m_Layer: 5
   m_Name: ImprintScreen
   m_TagString: Untagged
@@ -5747,17 +5710,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1686877494}
---- !u!114 &1686877499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1686877494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1686877500
 MonoBehaviour:
   m_ObjectHideFlags: 0

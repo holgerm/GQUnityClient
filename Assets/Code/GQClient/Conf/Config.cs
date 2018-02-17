@@ -414,7 +414,7 @@ namespace GQ.Client.Conf
 			autoStartQuestID = 0;
 			autostartIsPredeployed = false;
 			keepAutoStarting = true;
-			questInfoViews = new string[] { QuestInfoView.List.ToString(), QuestInfoView.Map.ToString() };
+			questInfoViews = new string[] { QuestInfoView.List.ToString (), QuestInfoView.Map.ToString () };
 			cloudQuestsVisible = true;
 			showCloudQuestsImmediately = false;
 			downloadAllCloudQuestOnStart = false;
@@ -463,6 +463,9 @@ namespace GQ.Client.Conf
 			overlayButtonFgColor = Color.black;
 			overlayButtonFgDisabledColor = new Color (159f, 159f, 159f, 187f);
 
+			// Foyer List:
+			listEntryHeightUnits = 45f;
+
 
 			// Menu:
 			showEmptyMenuEntries = false;
@@ -484,7 +487,8 @@ namespace GQ.Client.Conf
 		BACKGROUND
 	}
 
-	public enum QuestInfoView {
+	public enum QuestInfoView
+	{
 		List,
 		Map
 	}

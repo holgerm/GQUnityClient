@@ -42,7 +42,6 @@ namespace GQ.Client.UI
 			}
 		}
 
-
 	}
 
 }
