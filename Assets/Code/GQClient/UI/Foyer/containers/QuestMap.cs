@@ -127,18 +127,9 @@ namespace GQ.Client.UI.Foyer
 			// scale the marker so that it fits inside the surrouding tile holder which is a square:
 			float markerWidth = Math.Min (1.0f, (float)newMarker.Texture.width / (float)newMarker.Texture.height);
 			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
-//			int longScreenSide = Math.Max (Device.width, Device.height);
-//			float longMarkerSide = Math.Max (markerRenderer.bounds.size.z, markerRenderer.bounds.size.x);
-//			Debug.Log ("MARKER: long Screen: " + longScreenSide + " long marker side: " + longMarkerSide);
 
 			markerGO.transform.localScale = 
 				new Vector3 (markerWidth, 1.0f, markerHeight) * (LayoutConfig.MarkerHeightUnits / MARKER_SCALE_FACTOR);
-			Debug.Log ("MARKER SCALE_FACTOR: " + MARKER_SCALE_FACTOR);
-			Debug.Log ("MARKER Screen Height: " + Device.height);
-			Debug.Log ("MARKER Screen dpi: " + Device.dpi);
-			Debug.Log ("MARKER LayoutConfig.MarkerHeightUnits: " + LayoutConfig.MarkerHeightUnits);
-			Debug.Log ("MARKER Config markerHeightMinMM: " + ConfigurationManager.Current.markerHeightMinMM);
-			Debug.Log ("MARKER localScale z: " + markerGO.transform.localScale.z);
 
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
