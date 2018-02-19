@@ -35,14 +35,14 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
-  "mapStartAtLocation": true,
-  "mapStartAtLongitude": 0.0,
-  "mapStartAtLatitude": 0.0,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 7.100114,
+  "mapStartAtLatitude": 50.73381,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 70.0,
-  "markerHeightMinMM": 0.0,
+  "markerHeightUnits": 55.0,
+  "markerHeightMinMM": 25.0,
   "markerHeightMaxMM": 0.0,
   "markerScale": 1.2,
   "markerColor": {

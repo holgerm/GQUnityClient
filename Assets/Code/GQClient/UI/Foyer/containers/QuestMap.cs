@@ -93,6 +93,17 @@ namespace GQ.Client.UI.Foyer
 			}
 		}
 
+		private float MARKER_SCALE_FACTOR {
+			get {
+//				return 194f; // fits for iPad i.e. 2048 px
+//				return 308f; // iPhone, i.e. 1331 px
+//				return 395f; // simulated iPhone 4 in Editor, i.e. 960 px
+				// We empirically found this to be close to a correct scaling factor in order to resize the markers according to 
+				// UI elements like buttons etc.:
+				return (400000f / Device.height);
+			}
+		}
+
 		private Marker CreateMarker (QuestInfo info)
 		{
 			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
@@ -120,8 +131,14 @@ namespace GQ.Client.UI.Foyer
 //			float longMarkerSide = Math.Max (markerRenderer.bounds.size.z, markerRenderer.bounds.size.x);
 //			Debug.Log ("MARKER: long Screen: " + longScreenSide + " long marker side: " + longMarkerSide);
 
-			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) *
-			(LayoutConfig.MarkerHeightUnits / 415f);
+			markerGO.transform.localScale = 
+				new Vector3 (markerWidth, 1.0f, markerHeight) * (LayoutConfig.MarkerHeightUnits / MARKER_SCALE_FACTOR);
+			Debug.Log ("MARKER SCALE_FACTOR: " + MARKER_SCALE_FACTOR);
+			Debug.Log ("MARKER Screen Height: " + Device.height);
+			Debug.Log ("MARKER Screen dpi: " + Device.dpi);
+			Debug.Log ("MARKER LayoutConfig.MarkerHeightUnits: " + LayoutConfig.MarkerHeightUnits);
+			Debug.Log ("MARKER Config markerHeightMinMM: " + ConfigurationManager.Current.markerHeightMinMM);
+			Debug.Log ("MARKER localScale z: " + markerGO.transform.localScale.z);
 
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
