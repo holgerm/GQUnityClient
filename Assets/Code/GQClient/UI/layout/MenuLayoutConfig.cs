@@ -18,7 +18,7 @@ namespace GQ.Client.UI
 
 		public Image MenuBackgroundImage;
 
-		protected override void layout ()
+		public override void layout ()
 		{
 			// set menu background color:
 			if (MenuBackgroundImage != null) {
@@ -31,11 +31,24 @@ namespace GQ.Client.UI
 		public static void SetEntryHeight (GameObject menuEntry, string gameObjectPath = null)
 		{
 			// set layout height:
-			Transform t = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find (gameObjectPath));
-			if (t != null) {
-				LayoutElement layElem = t.GetComponent<LayoutElement> ();
+			Transform transf = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find (gameObjectPath));
+			if (transf != null) {
+				LayoutElement layElem = transf.GetComponent<LayoutElement> ();
 				if (layElem != null) {
 					layElem.minHeight = LayoutConfig.Units2Pixels (LayoutConfig.MenuEntryHeightUnits);
+					layElem.preferredHeight = layElem.minHeight;
+
+					// for images we set the width too:
+					if (transf.GetComponent<Image> () != null) {
+						layElem.minWidth = layElem.minHeight;
+						layElem.preferredWidth = layElem.minHeight;
+					}
+
+					// for texts we adapt the font size to be at most one third of the container element height:
+					Text text = transf.GetComponent<Text> ();
+					if (text != null) {
+						text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f);
+					}
 				}
 			} else {
 				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);

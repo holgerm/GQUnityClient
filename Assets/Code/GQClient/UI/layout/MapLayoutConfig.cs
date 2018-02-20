@@ -15,7 +15,7 @@ namespace GQ.Client.UI
 
 		public GameObject MapButtonPanel;
 
-		protected override void layout ()
+		public override void layout ()
 		{
 			base.layout ();
 

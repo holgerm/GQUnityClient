@@ -350,7 +350,7 @@ namespace GQ.Client.Model
 
 			// Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
 			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
-			ViewCtrl.Create (menuContent);
+			ViewToggleController.Create (menuContent);
 		}
 
 		void initFilters() {

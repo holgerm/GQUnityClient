@@ -23,9 +23,6 @@ namespace GQ.Client.UI
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + catEntry.category.name + ")";
 
-			// set entry height:
-			MenuLayoutConfig.SetEntryHeight (go, "Name");
-
 			CategoryEntryCtrl entryCtrl = go.GetComponent<CategoryEntryCtrl> ();
 			entryCtrl.categoryEntry = catEntry;
 			entryCtrl.UpdateView ();

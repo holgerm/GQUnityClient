@@ -9,24 +9,24 @@ using GQ.Client.Conf;
 namespace GQ.Client.UI
 {
 
-	public class ViewCtrl : MonoBehaviour
+	public class ViewToggleController : MonoBehaviour
 	{
 
 		/// <summary>
 		/// When this method is called it is guaranteed that at least two views are referred by shownObjects[] of the MultiToggleButton.
 		/// </summary>
 		/// <param name="root">Root.</param>
-		public static ViewCtrl Create (GameObject root)
+		public static ViewToggleController Create (GameObject root)
 		{
 			// Create the view object for this controller:
 			GameObject go = PrefabController.Create ("ViewToggle", root);
 			go.name = "ViewToggle";
 
 			// set menu entry height:
-			MenuLayoutConfig.SetEntryHeight (go);
+//			MenuLayoutConfig.SetEntryHeight (go);
 
 			// save tree controller & folder:
-			ViewCtrl viewCtrl = go.GetComponent<ViewCtrl> ();
+			ViewToggleController viewCtrl = go.GetComponent<ViewToggleController> ();
 
 			MultiToggleButton mtb = viewCtrl.GetComponent<MultiToggleButton> ();
 			mtb.shownObjects = new GameObject[ConfigurationManager.Current.questInfoViews.Length];

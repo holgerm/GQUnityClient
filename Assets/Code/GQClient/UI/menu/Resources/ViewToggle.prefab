@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114314009684323856}
   - component: {fileID: 114296419942745390}
   - component: {fileID: 114255983472339858}
+  - component: {fileID: 114992855786327510}
   m_Layer: 5
   m_Name: ViewToggle
   m_TagString: Untagged
@@ -40,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1403573281710038}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a697884a80342a4a285fc6521c5fc9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1147ab8fba3e841d8b956040107be06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114296419942745390
@@ -141,6 +142,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114992855786327510
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1403573281710038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef447c94ca17e43f78daa3185ce8a94d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114996764855816734
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -154,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 90
+  m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1

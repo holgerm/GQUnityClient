@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114839148628133206}
   - component: {fileID: 114831737298514814}
   - component: {fileID: 114746816625216348}
+  - component: {fileID: 114457590220162096}
   m_Layer: 5
   m_Name: CategoryFolder
   m_TagString: Untagged
@@ -101,9 +102,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: -1
+  m_MinHeight: 54.915253
   m_PreferredWidth: -1
-  m_PreferredHeight: -1
+  m_PreferredHeight: 54.915253
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -120,9 +121,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: -1
+  m_MinHeight: 54.915253
   m_PreferredWidth: -1
-  m_PreferredHeight: 90
+  m_PreferredHeight: 54.915253
   m_FlexibleWidth: 600
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -175,6 +176,17 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
+--- !u!114 &114457590220162096
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1041129160364016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ae6582f5d8944d3cad84f941670d3f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114534073209083912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -237,7 +249,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fe4a18836802e41b6b6fe4baa471c76a, type: 3}
-    m_FontSize: 50
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -284,7 +296,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fe4a18836802e41b6b6fe4baa471c76a, type: 3}
-    m_FontSize: 50
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -349,10 +361,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: 90
+  m_MinWidth: 54.915253
+  m_MinHeight: 54.915253
+  m_PreferredWidth: 54.915253
+  m_PreferredHeight: 54.915253
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -368,10 +380,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: 90
-  m_PreferredWidth: 60
-  m_PreferredHeight: -1
+  m_MinWidth: 54.915253
+  m_MinHeight: 54.915253
+  m_PreferredWidth: 54.915253
+  m_PreferredHeight: 54.915253
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1

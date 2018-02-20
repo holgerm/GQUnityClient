@@ -15,7 +15,7 @@ namespace GQ.Client.UI
 		public static string HEADER = "Header";
 		public static string FOOTER = "Footer";
 
-		protected abstract void layout ();
+		public abstract void layout ();
 
 		protected void Start ()
 		{

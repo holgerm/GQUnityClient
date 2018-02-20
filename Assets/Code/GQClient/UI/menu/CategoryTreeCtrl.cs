@@ -46,9 +46,6 @@ namespace GQ.Client.UI
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + catFilter.Name + ")";
 
-			// set header height:
-			MenuLayoutConfig.SetEntryHeight (go, "CategoryTreeHeader/Name");
-
 			// save tree controller & folder:
 			CategoryTreeCtrl treeCtrl = go.GetComponent<CategoryTreeCtrl> ();
 			treeCtrl.categories = categories;

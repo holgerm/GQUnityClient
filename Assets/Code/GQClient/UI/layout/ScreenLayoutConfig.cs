@@ -23,7 +23,7 @@ namespace GQ.Client.UI
 		public GameObject BottomMargin;
 		public GameObject Footer;
 
-		protected override void layout ()
+		public override void layout ()
 		{
 			// set background color:
 			Image image = GetComponent<Image> ();

@@ -22,9 +22,6 @@ namespace GQ.Client.UI
 			GameObject go = PrefabController.Create (PREFAB, root);
 			go.name = PREFAB + " (" + catFolder.Name + ")";
 
-			// set folder height:
-			MenuLayoutConfig.SetEntryHeight (go, "Name");
-
 			// save tree controller & folder:
 			CategoryFolderCtrl folderCtrl = go.GetComponent<CategoryFolderCtrl> ();
 			folderCtrl.treeCtrl = catTree;

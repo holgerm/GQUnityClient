@@ -10,9 +10,10 @@ namespace GQ.Client.UI.Dialogs
 	/// <summary>
 	/// Should be applied to the Dialog Prefab, which is placed at runtime into the DialogCanvas.
 	/// </summary>
-	public class DialogLayout : LayoutConfig {
+	public class DialogLayout : LayoutConfig
+	{
 
-		protected override void layout ()
+		public override void layout ()
 		{
 			// set frame color (implemented as background of the enveloping dialog panel):
 			Image image = GetComponent<Image> ();
@@ -21,7 +22,7 @@ namespace GQ.Client.UI.Dialogs
 			}
 
 			// set content background color:
-			Transform contentPanelT = transform.Find("Panel");
+			Transform contentPanelT = transform.Find ("Panel");
 			if (contentPanelT == null)
 				return;
 
