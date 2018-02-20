@@ -13,13 +13,17 @@ using UnityEngine.EventSystems;
 namespace GQ.Client.UI
 {
 
-	public class QuestMarker : Marker {
+	public class QuestMarker : Marker
+	{
 
 		public QuestInfo Data { get; set; }
 
-		public override void UpdateView () {}
+		public override void UpdateView ()
+		{
+		}
 
-		public override void OnTouch() {
+		public override void OnTouch ()
+		{
 			if (!Data.IsOnDevice && Data.IsOnServer) {
 				Task download = Data.Download ();
 				Task play = Data.Play ();
@@ -28,14 +32,14 @@ namespace GQ.Client.UI
 				t.Start ();
 			}
 			if (Data.IsOnDevice) {
-				Data.Play ().Start();
+				Data.Play ().Start ();
 			}
 		}
 
 		protected void Play ()
 		{
 			if (Data == null) {
-				Log.SignalErrorToDeveloper("Tried to play quest for QuestMarker without QuestInfo data.");
+				Log.SignalErrorToDeveloper ("Tried to play quest for QuestMarker without QuestInfo data.");
 				return;
 			}
 			
@@ -46,7 +50,7 @@ namespace GQ.Client.UI
 				);
 			new DownloadDialogBehaviour (
 				loadGameXML, 
-				string.Format("Loading {0}", ConfigurationManager.Current.nameForQuestSg)
+				string.Format ("Loading {0}", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			QuestStarter questStarter = new QuestStarter ();
@@ -68,33 +72,29 @@ namespace GQ.Client.UI
 				if (t == null) {
 					// load basic marker texture and white alpha background template:
 					Texture2D markerOutline = Resources.Load<Texture2D> (ConfigurationManager.Current.marker.path);
-					t = new Texture2D(markerOutline.width, markerOutline.height);
+					t = new Texture2D (markerOutline.width, markerOutline.height);
 
 					Texture2D symbol = null;
 					try {
 						Category cat = ConfigurationManager.Current.categoryDict [categoryID];
 						symbol = Resources.Load<Texture2D> (cat.symbol.path);
 						if (symbol == null) {
-							Log.SignalErrorToDeveloper("Symbol Texture not found for category {0}. Using default symbol.", categoryID);
-						}
-						else if (symbol.width > t.width) {
-							Log.SignalErrorToDeveloper("Smybol Texture too wide. Must not be wider than marker outline. Using default symbol.");
+							Log.SignalErrorToDeveloper ("Symbol Texture not found for category {0}. Using default symbol.", categoryID);
+						} else if (symbol.width > t.width) {
+							Log.SignalErrorToDeveloper ("Smybol Texture too wide. Must not be wider than marker outline. Using default symbol.");
+							symbol = null;
+						} else if (symbol.height > t.width) {
+							Log.SignalErrorToDeveloper ("Smybol Texture too high. Must not be higher than marker outline width. Using default symbol.");
 							symbol = null;
 						}
-						else if (symbol.height > t.height) {
-							Log.SignalErrorToDeveloper("Smybol Texture too high. Must not be higher than marker outline. Using default symbol.");
-							symbol = null;
-						}
-					}
-					catch (KeyNotFoundException)
-					{
+					} catch (KeyNotFoundException) {
 						Log.SignalErrorToAuthor ("Quest Category {0} not found. Using default symbol.", categoryID);
 					}
 
-					Color32[] outlineColors = markerOutline.GetPixels32();
+					Color32[] outlineColors = markerOutline.GetPixels32 ();
 
 					Texture2D alphaBG = Resources.Load<Texture2D> (MARKER_ALPHA_BG_PATH);
-					Color32[] alphaColors = alphaBG.GetPixels32();
+					Color32[] alphaColors = alphaBG.GetPixels32 ();
 					Color32[] symbolColors = null;
 					int symbolXMin = 0;
 					int symbolXMax = 0;
@@ -103,14 +103,14 @@ namespace GQ.Client.UI
 
 					if (symbol == null) {
 						symbol = new Texture2D (1, 1);
-						symbol.SetPixels32 (new Color32[] { new Color32(0, 0, 0, 0) });
+						symbol.SetPixels32 (new Color32[] { new Color32 (0, 0, 0, 0) });
 					}
 
-					symbolColors = symbol.GetPixels32();
+					symbolColors = symbol.GetPixels32 ();
 					symbolXMin = (t.width - symbol.width) / 2; // before this column there are no symbol pixels
-					symbolXMax = symbol.width + symbolXMin - 1; // after this line there are no symbol pixels
-					symbolYMin = t.height - symbol.height - symbolXMin; // below this line there are no symbol pixels
-					symbolYMax = t.height - symbolXMin - 1; // above this line there are no symbol pixels
+					symbolXMax = (t.width + symbol.width) / 2 - 1; // after this line there are no symbol pixels
+					symbolYMin = t.height - (t.width + symbol.height) / 2; // below this line there are no symbol pixels
+					symbolYMax = t.height - (t.width - symbol.height) / 2 - 1; // above this line there are no symbol pixels
 						
 					int i = 0; // counter for fast access in flat color arrays for marker outline and alpha circle
 					int j = 0; // counter for symbol colors array (which is often smaller
@@ -134,9 +134,9 @@ namespace GQ.Client.UI
 							}
 
 							// colorize marker outline (keeping alpha channel):
-							outlineColors[i].r = ConfigurationManager.Current.markerColor.r;
-							outlineColors[i].g = ConfigurationManager.Current.markerColor.g;
-							outlineColors[i].b = ConfigurationManager.Current.markerColor.b;
+							outlineColors [i].r = ConfigurationManager.Current.markerColor.r;
+							outlineColors [i].g = ConfigurationManager.Current.markerColor.g;
+							outlineColors [i].b = ConfigurationManager.Current.markerColor.b;
 
 							// blend outline above alpha cirlce (already evtually including symbol):
 							outlineColors [i] = TextureManager.Blend (outlineColors [i], alphaColors [i]);
