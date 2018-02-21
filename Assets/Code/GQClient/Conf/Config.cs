@@ -377,6 +377,9 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	menuPartBGColor  { get; set; }
 
+		[ShowInProductEditor]
+		public bool menuInhibitsInteraction { get; set; }
+
 		[JsonIgnore]
 		private float _disabledAlpha = 0.5f;
 
@@ -484,6 +487,7 @@ namespace GQ.Client.Conf
 			categoryFoldersStartFolded = true;
 			menuEntryHeightUnits = 35f;
 			menuEntryWidthUnits = 400f;
+			menuInhibitsInteraction = false;
 		}
 
 		#endregion

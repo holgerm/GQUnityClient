@@ -2908,8 +2908,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 84.42267
-  m_PreferredHeight: 84.42267
+  m_PreferredWidth: 100.67796
+  m_PreferredHeight: 100.67796
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -3320,9 +3320,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 400
+  m_MinWidth: 768.81354
   m_MinHeight: -1
-  m_PreferredWidth: 400
+  m_PreferredWidth: 768.81354
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -3853,8 +3853,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 84.42267
-  m_PreferredHeight: 84.42267
+  m_PreferredWidth: 100.67796
+  m_PreferredHeight: 100.67796
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -5525,7 +5525,7 @@ GameObject:
   - component: {fileID: 1591041758}
   - component: {fileID: 1591041757}
   m_Layer: 5
-  m_Name: Image (inhibit click on background)
+  m_Name: SideImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6218,8 +6218,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 84.42267
-  m_PreferredHeight: 84.42267
+  m_PreferredWidth: 100.67796
+  m_PreferredHeight: 100.67796
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1

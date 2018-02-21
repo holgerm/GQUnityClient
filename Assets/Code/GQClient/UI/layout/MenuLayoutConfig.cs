@@ -28,6 +28,24 @@ namespace GQ.Client.UI
 			setContentHeight ();
 
 			// set menu width:
+			setWidth ();
+
+			// set interaction option:
+			string[] goPaths = 
+				new string[] { "MenuPanel/SideImage", "MenuPanel/MenuScrollView", "MenuPanel/MenuScrollView/Viewport" };
+			foreach (string path in goPaths) {
+				Transform menuScrollT = transform.Find (path);
+				if (menuScrollT != null) {
+					Image im = menuScrollT.GetComponent<Image> ();
+					if (im != null) {
+						im.raycastTarget = ConfigurationManager.Current.menuInhibitsInteraction;
+					}
+				}
+			}
+		}
+
+		void setWidth ()
+		{
 			Transform menuScrollT = transform.Find ("MenuPanel/MenuScrollView");
 			if (menuScrollT != null) {
 				LayoutElement layElem = menuScrollT.GetComponent<LayoutElement> ();
