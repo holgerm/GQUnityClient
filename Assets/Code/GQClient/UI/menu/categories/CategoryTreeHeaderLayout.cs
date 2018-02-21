@@ -13,7 +13,7 @@ namespace GQ.Client.UI
 			MenuLayoutConfig.SetEntryHeight (gameObject);
 			MenuLayoutConfig.SetEntryHeight (gameObject, "Name");
 			MenuLayoutConfig.SetEntryHeight (gameObject, "Button");
-			MenuLayoutConfig.SetEntryHeight (gameObject, "Button/Hint");
+			MenuLayoutConfig.SetEntryHeight (gameObject, "Button/Hint", sizeScaleFactor: 0.6f);
 			MenuLayoutConfig.SetEntryHeight (gameObject, "Button/OnOff");
 		}
 

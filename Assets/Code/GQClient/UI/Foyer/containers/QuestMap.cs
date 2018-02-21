@@ -129,7 +129,7 @@ namespace GQ.Client.UI.Foyer
 			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
 
 			markerGO.transform.localScale = 
-				new Vector3 (markerWidth, 1.0f, markerHeight) * (LayoutConfig.MarkerHeightUnits / MARKER_SCALE_FACTOR);
+				new Vector3 (markerWidth, 1.0f, markerHeight) * (MapLayoutConfig.MarkerHeightUnits / MARKER_SCALE_FACTOR);
 
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";

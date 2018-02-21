@@ -12,10 +12,12 @@ using GQTests;
 namespace GQTests.Layout
 {
 
-	public class HeightTests {
+	public class HeightTests
+	{
 
 		[Test]
-		public void FooterHeightAdaptToMin() {
+		public void FooterHeightAdaptToMin ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -33,7 +35,7 @@ namespace GQTests.Layout
 			DeviceDefinitions.Use (DeviceDefinitions.DeviceType.iPad4);
 
 			// we have a totoal of 60 + 750 +75 = 885 units defined.
-			Assert.That(LayoutConfig.ScreenHeightUnits, Is.EqualTo(885f));
+			Assert.That (LayoutConfig.ScreenHeightUnits, Is.EqualTo (885f));
 			// the device has a tital screen height of (2048p / 264p/inch) * 25,4inch/mm = 197mm.
 			// we defined for the footer height a minimum of 40mm, i.e. 20.3% of the total screen height.
 			// we expect the footer height to use 20.3% ot the tital units, i.e. 179.7 units.
@@ -42,12 +44,13 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.FooterHeightUnits), Is.InRange (39f, 41f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 
 		[Test]
-		public void FooterHeightAdaptToMax() {
+		public void FooterHeightAdaptToMax ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -67,11 +70,12 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.FooterHeightUnits), Is.InRange (4.5f, 5.5f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 		[Test]
-		public void HeaderHeightAdaptToMin() {
+		public void HeaderHeightAdaptToMin ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -89,7 +93,7 @@ namespace GQTests.Layout
 			DeviceDefinitions.Use (DeviceDefinitions.DeviceType.iPad4);
 
 			// we have a totoal of 60 + 750 +75 = 885 units defined.
-			Assert.That(LayoutConfig.ScreenHeightUnits, Is.EqualTo(885f));
+			Assert.That (LayoutConfig.ScreenHeightUnits, Is.EqualTo (885f));
 			// the device has a total screen height of (2048p / 264p/inch) * 25,4inch/mm = 197mm.
 			// we defined for the header height a minimum of 40mm, i.e. 20.3% of the total screen height.
 			// we expect the header height to use 20.3% ot the tital units, i.e. 179.7 units.
@@ -98,11 +102,12 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.HeaderHeightUnits), Is.InRange (39f, 41f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 		[Test]
-		public void HeaderHeightAdaptToMax() {
+		public void HeaderHeightAdaptToMax ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -122,11 +127,12 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.HeaderHeightUnits), Is.InRange (4.5f, 5.5f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 		[Test]
-		public void HeaderAndFooterHeightAdaptToMin() {
+		public void HeaderAndFooterHeightAdaptToMin ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -144,7 +150,7 @@ namespace GQTests.Layout
 			DeviceDefinitions.Use (DeviceDefinitions.DeviceType.iPad4);
 
 			// we have a totoal of 60 + 750 +75 = 885 units defined.
-			Assert.That(LayoutConfig.ScreenHeightUnits, Is.EqualTo(885f));
+			Assert.That (LayoutConfig.ScreenHeightUnits, Is.EqualTo (885f));
 			// the device has a total screen height of (2048p / 264p/inch) * 25,4inch/mm = 197mm.
 			// we defined for the header height a minimum of 40mm, i.e. 20.3% of the total screen height.
 			// we expect the header height to use 20.3% ot the tital units, i.e. 179.7 units.
@@ -156,11 +162,12 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.ContentHeightUnits), Is.InRange (116f, 118f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 		[Test]
-		public void HeaderAndFooterHeightAdaptToMax() {
+		public void HeaderAndFooterHeightAdaptToMax ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -184,11 +191,12 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.ContentHeightUnits), Is.InRange (186f, 188f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 		[Test]
-		public void AdaptHeightsOfHeaderToMaxAndFooterToMin() {
+		public void AdaptHeightsOfHeaderToMaxAndFooterToMin ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -212,12 +220,13 @@ namespace GQTests.Layout
 			Assert.That (LayoutConfig.Units2MM (LayoutConfig.ContentHeightUnits), Is.InRange (151.5f, 152.5f));
 
 			// the apadated heights should still sum up to the same total height:
-			Assert.That(LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo(LayoutConfig.ScreenHeightUnits));
+			Assert.That (LayoutConfig.FooterHeightUnits + LayoutConfig.ContentHeightUnits + LayoutConfig.HeaderHeightUnits, Is.EqualTo (LayoutConfig.ScreenHeightUnits));
 		}
 
 
 		[Test]
-		public void HeightOfMapButton() {
+		public void HeightOfMapButton ()
+		{
 
 			// prepare product json:
 			ConfigurationManager.RetrieveProductJSONText = () => {
@@ -234,7 +243,7 @@ namespace GQTests.Layout
 			DeviceDefinitions.Use (DeviceDefinitions.DeviceType.iPad4);
 
 			// we expect the resulting map button to be 100 units high, i.e. a share of 100 / 885 = 11,3% of 197mm is ca. 22.26mm:
-			Assert.That (LayoutConfig.Units2MM (LayoutConfig.MapButtonHeightUnits), Is.InRange (22.24f, 22.28f));
+			Assert.That (LayoutConfig.Units2MM (MapLayoutConfig.MapButtonHeightUnits), Is.InRange (22.24f, 22.28f));
 		}
 
 	}

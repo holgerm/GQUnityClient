@@ -361,6 +361,15 @@ namespace GQ.Client.Conf
 		public float menuEntryHeightMaxMM { get; set; }
 
 		[ShowInProductEditor]
+		public float menuEntryWidthUnits { get; set; }
+
+		[ShowInProductEditor]
+		public float menuEntryWidthMinMM { get; set; }
+
+		[ShowInProductEditor]
+		public float menuEntryWidthMaxMM { get; set; }
+
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	menuBGColor  { get; set; }
 
@@ -467,13 +476,14 @@ namespace GQ.Client.Conf
 			// Foyer List:
 			listEntryHeightUnits = 45f;
 
-
 			// Menu:
 			showEmptyMenuEntries = false;
 			categoryDict = new Dictionary<string, Category> ();
 			foldableCategoryFilters = true;
 			categoryFiltersStartFolded = true;
 			categoryFoldersStartFolded = true;
+			menuEntryHeightUnits = 35f;
+			menuEntryWidthUnits = 400f;
 		}
 
 		#endregion

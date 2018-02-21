@@ -26,17 +26,27 @@ namespace GQ.Client.UI
 			}
 	
 			setContentHeight ();
+
+			// set menu width:
+			Transform menuScrollT = transform.Find ("MenuPanel/MenuScrollView");
+			if (menuScrollT != null) {
+				LayoutElement layElem = menuScrollT.GetComponent<LayoutElement> ();
+				if (layElem != null) {
+					layElem.minWidth = Units2Pixels (MenuEntryWidthUnits);
+					layElem.preferredWidth = Units2Pixels (MenuEntryWidthUnits);
+				}
+			}
 		}
 
-		public static void SetEntryHeight (GameObject menuEntry, string gameObjectPath = null)
+		public static void SetEntryHeight (GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
 			// set layout height:
 			Transform transf = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find (gameObjectPath));
 			if (transf != null) {
 				LayoutElement layElem = transf.GetComponent<LayoutElement> ();
 				if (layElem != null) {
-					layElem.minHeight = LayoutConfig.Units2Pixels (LayoutConfig.MenuEntryHeightUnits);
-					layElem.preferredHeight = layElem.minHeight;
+					layElem.minHeight = Units2Pixels (MenuEntryHeightUnits) * sizeScaleFactor;
+					layElem.preferredHeight = layElem.minHeight * sizeScaleFactor;
 
 					// for images we set the width too:
 					if (transf.GetComponent<Image> () != null) {
@@ -47,11 +57,33 @@ namespace GQ.Client.UI
 					// for texts we adapt the font size to be at most one third of the container element height:
 					Text text = transf.GetComponent<Text> ();
 					if (text != null) {
-						text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f);
+						text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 
 					}
 				}
 			} else {
 				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
+			}
+		}
+
+		static public float MenuEntryHeightUnits {
+			get {
+				return 
+					calculateRestrictedHeight (
+					ConfigurationManager.Current.menuEntryHeightUnits,
+					ConfigurationManager.Current.menuEntryHeightMinMM,
+					ConfigurationManager.Current.menuEntryHeightMaxMM
+				);
+			}
+		}
+
+		static public float MenuEntryWidthUnits {
+			get {
+				return 
+					calculateRestrictedHeight (
+					ConfigurationManager.Current.menuEntryWidthUnits,
+					ConfigurationManager.Current.menuEntryWidthMinMM,
+					ConfigurationManager.Current.menuEntryWidthMaxMM
+				);
 			}
 		}
 

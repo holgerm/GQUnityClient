@@ -12,7 +12,7 @@ namespace GQ.Client.UI
 		{
 			// set heights of text and image:
 			MenuLayoutConfig.SetEntryHeight (gameObject);
-			MenuLayoutConfig.SetEntryHeight (gameObject, "FolderImage");
+			MenuLayoutConfig.SetEntryHeight (gameObject, "FolderImage", sizeScaleFactor: CategoryFolderLayout.FolderImageScaleFactor);
 			MenuLayoutConfig.SetEntryHeight (gameObject, "Name");
 			MenuLayoutConfig.SetEntryHeight (gameObject, "Number");
 			MenuLayoutConfig.SetEntryHeight (gameObject, "Symbol");

@@ -316,9 +316,12 @@
     "a": 187
   },
   "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 30.0,
+  "menuEntryHeightUnits": 50.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 420.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
   "menuBGColor": {
     "r": 116,
     "g": 103,

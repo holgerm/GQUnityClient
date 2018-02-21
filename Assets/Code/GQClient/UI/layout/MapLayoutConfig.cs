@@ -28,12 +28,37 @@ namespace GQ.Client.UI
 				if (button != null) {
 					LayoutElement layElem = perhapsAButton.GetComponent<LayoutElement> ();
 					if (layElem != null) {
-						layElem.preferredHeight = LayoutConfig.Units2Pixels (LayoutConfig.MapButtonHeightUnits);
+						layElem.preferredHeight = Units2Pixels (MapButtonHeightUnits);
 						layElem.preferredWidth = layElem.preferredHeight;
 					}
 				}
 			}
 		}
+
+		static public float MapButtonHeightUnits {
+			get {
+				float result = 
+					calculateRestrictedHeight (
+						ConfigurationManager.Current.mapButtonHeightUnits,
+						ConfigurationManager.Current.mapButtonHeightMinMM,
+						ConfigurationManager.Current.mapButtonHeightMaxMM
+					);
+				return result;
+			}
+		}
+
+		static public float MarkerHeightUnits {
+			get {
+				float result = 
+					calculateRestrictedHeight (
+						ConfigurationManager.Current.markerHeightUnits,
+						ConfigurationManager.Current.markerHeightMinMM,
+						ConfigurationManager.Current.markerHeightMaxMM
+					);
+				return result;
+			}
+		}
+
 	}
 
 }

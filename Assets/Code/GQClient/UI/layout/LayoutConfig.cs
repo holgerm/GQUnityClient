@@ -107,7 +107,7 @@ namespace GQ.Client.UI
 			}
 		}
 
-		static private float calculateRestrictedHeight (float units, float minMM, float maxMM)
+		static protected float calculateRestrictedHeight (float units, float minMM, float maxMM)
 		{
 			float result = units;
 
@@ -127,41 +127,6 @@ namespace GQ.Client.UI
 			}
 
 			return result;
-		}
-
-		static public float MapButtonHeightUnits {
-			get {
-				float result = 
-					calculateRestrictedHeight (
-						ConfigurationManager.Current.mapButtonHeightUnits,
-						ConfigurationManager.Current.mapButtonHeightMinMM,
-						ConfigurationManager.Current.mapButtonHeightMaxMM
-					);
-				return result;
-			}
-		}
-
-		static public float MarkerHeightUnits {
-			get {
-				float result = 
-					calculateRestrictedHeight (
-						ConfigurationManager.Current.markerHeightUnits,
-						ConfigurationManager.Current.markerHeightMinMM,
-						ConfigurationManager.Current.markerHeightMaxMM
-					);
-				return result;
-			}
-		}
-
-		static public float MenuEntryHeightUnits {
-			get {
-				return 
-					calculateRestrictedHeight (
-					ConfigurationManager.Current.menuEntryHeightUnits,
-					ConfigurationManager.Current.menuEntryHeightMinMM,
-					ConfigurationManager.Current.menuEntryHeightMaxMM
-				);
-			}
 		}
 
 		static public float ListEntryHeightUnits {
@@ -199,7 +164,7 @@ namespace GQ.Client.UI
 			return (units * (Device.height / ScreenHeightUnits)) / canvasScale;
 		}
 
-		static public float MMperINCH = 25.4f;
+		static protected float MMperINCH = 25.4f;
 
 		static public float Units2MM (float units)
 		{
