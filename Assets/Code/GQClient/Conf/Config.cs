@@ -259,6 +259,9 @@ namespace GQ.Client.Conf
 		public Color32	mainColor  { get; set; }
 
 		[ShowInProductEditor]
+		public bool showShadows { get; set; }
+
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	headerBgColor  { get; set; }
 
@@ -410,6 +413,10 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float listEntryHeightMaxMM { get; set; }
 
+		[ShowInProductEditor]
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	listEntryColor  { get; set; }
+
 		#endregion
 
 
@@ -457,6 +464,7 @@ namespace GQ.Client.Conf
 			markerHeightUnits = 75f;
 
 			// Layout:
+			showShadows = true;
 			headerHeightUnits = 60f;
 			contentHeightUnits = 750f;
 			imageAreaHeightMinUnits = 150f;
@@ -478,6 +486,7 @@ namespace GQ.Client.Conf
 
 			// Foyer List:
 			listEntryHeightUnits = 45f;
+			listEntryColor = new Color (159f, 159f, 159f, 255f);
 
 			// Menu:
 			showEmptyMenuEntries = false;

@@ -25,12 +25,8 @@ namespace GQ.Client.UI
 
 		public override void layout ()
 		{
-			// set background color:
-			Image image = GetComponent<Image> ();
-			if (image != null) {
-				image.color = ConfigurationManager.Current.contentBackgroundColor;
-			}
-	
+			setMainBackgroundColor ();
+
 			setHeader ();
 			setContentHeight ();
 			setTopMargin ();
@@ -39,13 +35,22 @@ namespace GQ.Client.UI
 			setFooter ();
 		}
 
+		protected virtual void setMainBackgroundColor ()
+		{
+			// set background color:
+			Image image = GetComponent<Image> ();
+			if (image != null) {
+				image.color = ConfigurationManager.Current.contentBackgroundColor;
+			}
+		}
+
 		protected virtual void setHeader ()
 		{
 			if (Header == null)
 				return;
 
 			// set background color:
-			Image image = GetComponent<Image> ();
+			Image image = Header.GetComponent<Image> ();
 			if (image != null) {
 				image.color = ConfigurationManager.Current.headerBgColor;
 			}
@@ -100,6 +105,7 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 			layElem.flexibleHeight = PageController.ContentTopMarginUnits;
+			TopMargin.SetActive (PageController.ContentTopMarginUnits > 0f);
 		}
 
 		protected virtual void setBottomMargin ()
@@ -117,6 +123,7 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 			layElem.flexibleHeight = PageController.ContentBottomMarginUnits;
+			BottomMargin.SetActive (PageController.ContentBottomMarginUnits > 0f);
 		}
 
 		protected virtual void setDivider ()
@@ -135,6 +142,7 @@ namespace GQ.Client.UI
 				return;
 
 			layElem.flexibleHeight = PageController.ContentDividerUnits;
+			Divider.SetActive (PageController.ContentDividerUnits > 0f);
 		}
 
 		protected virtual void setFooter ()

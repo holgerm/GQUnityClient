@@ -13,7 +13,20 @@ namespace GQ.Client.UI
 	/// </summary>
 	public class FoyerListLayoutConfig : ScreenLayoutConfig
 	{
+		
+		public override void layout ()
+		{
+			// set list background color:
+			Transform transf = transform.Find ("Content/List/Viewport/InfoList");
+			if (transf != null) {
+				Image im = transf.GetComponent<Image> ();
+				if (im != null) {
+					im.color = ConfigurationManager.Current.mainColor;
+				}
+			}
 
+
+		}
 
 		static public void SetListEntryHeight (GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{

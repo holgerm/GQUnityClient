@@ -12,7 +12,9 @@ namespace GQ.Client.Model
 
 	public class Rights : MonoBehaviour
 	{
+		public Image copyrightTextBG4FittingImage;
 		public Text copyrightText4FittingImage;
+		public Image copyrightTextBG4EnvelopingImage;
 		public Text copyrightText4EnvelopingImage;
 
 		private const string COPYRIGHT_PREFIX = "© ";
@@ -24,8 +26,26 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			copyrightText4FittingImage.gameObject.SetActive (ConfigurationManager.Current.fitExceedingImagesIntoArea);
-			copyrightText4EnvelopingImage.gameObject.SetActive (!ConfigurationManager.Current.fitExceedingImagesIntoArea);
+			RectTransform rt = GetComponent<RectTransform> ();
+
+			if (ConfigurationManager.Current.fitExceedingImagesIntoArea) {
+				copyrightText4FittingImage.gameObject.SetActive (true);
+				copyrightText4EnvelopingImage.gameObject.SetActive (false);
+
+				if (rt != null) {
+					copyrightTextBG4FittingImage.rectTransform.sizeDelta = 
+						new Vector2 (0, copyrightText4FittingImage.fontSize * 1.2f);
+				}
+			} else {
+				copyrightTextBG4FittingImage.gameObject.SetActive (false);
+				copyrightTextBG4EnvelopingImage.gameObject.SetActive (true);
+
+				if (rt != null) {
+					copyrightTextBG4EnvelopingImage.rectTransform.sizeDelta = 
+						new Vector2 (0, copyrightText4EnvelopingImage.fontSize * 1.2f);
+				}
+			}
+
 
 			switch (ConfigurationManager.Current.id) {
 			case "wcc":

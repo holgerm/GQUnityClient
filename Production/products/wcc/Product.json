@@ -235,6 +235,7 @@
     "b": 33,
     "a": 255
   },
+  "showShadows": true,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -270,7 +271,7 @@
   "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
   "contentTopMarginUnits": 0.0,
-  "contentDividerUnits": 10.0,
+  "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
@@ -338,5 +339,11 @@
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 50.0,
   "listEntryHeightMinMM": 0.0,
-  "listEntryHeightMaxMM": 0.0
+  "listEntryHeightMaxMM": 0.0,
+  "listEntryColor": {
+    "r": 232,
+    "g": 232,
+    "b": 232,
+    "a": 255
+  }
 }
