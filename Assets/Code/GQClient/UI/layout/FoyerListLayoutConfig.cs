@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Err;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -12,18 +13,23 @@ namespace GQ.Client.UI
 	/// </summary>
 	public class FoyerListLayoutConfig : ScreenLayoutConfig
 	{
-		public static void SetEntryHeight (GameObject listEntry, string gameObjectPath = null)
+
+
+		static public void SetListEntryHeight (GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
-			// set layout height:
-			Transform t = (gameObjectPath == null ? listEntry.transform : listEntry.transform.Find (gameObjectPath));
-			if (t != null) {
-				LayoutElement layElem = t.GetComponent<LayoutElement> ();
-				if (layElem != null) {
-					layElem.minHeight = LayoutConfig.Units2Pixels (LayoutConfig.ListEntryHeightUnits);
-				}
-			} else {
-				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", listEntry.gameObject, gameObjectPath);
+			ScreenLayoutConfig.SetEntryHeight (ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor);
+		}
+
+		static public float ListEntryHeightUnits {
+			get {
+				return 
+					calculateRestrictedHeight (
+					ConfigurationManager.Current.listEntryHeightUnits,
+					ConfigurationManager.Current.listEntryHeightMinMM,
+					ConfigurationManager.Current.listEntryHeightMaxMM
+				);
 			}
 		}
+
 	}
 }

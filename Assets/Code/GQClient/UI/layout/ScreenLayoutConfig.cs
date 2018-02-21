@@ -154,6 +154,34 @@ namespace GQ.Client.UI
 
 			layElem.flexibleHeight = LayoutConfig.FooterHeightUnits;
 		}
+
+		protected static void SetEntryHeight (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
+		{
+			// set layout height:
+			Transform transf = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find (gameObjectPath));
+			if (transf != null) {
+				LayoutElement layElem = transf.GetComponent<LayoutElement> ();
+				if (layElem != null) {
+					layElem.minHeight = Units2Pixels (heightUnits) * sizeScaleFactor;
+					layElem.preferredHeight = layElem.minHeight;
+
+					// for images we set the width too:
+					if (transf.GetComponent<Image> () != null) {
+						layElem.minWidth = layElem.minHeight;
+						layElem.preferredWidth = layElem.minHeight;
+					}
+
+					// for texts we adapt the font size to be at most one third of the container element height:
+					Text text = transf.GetComponent<Text> ();
+					if (text != null) {
+						text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 
+					}
+				}
+			} else {
+				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
+			}
+		}
+
 	}
 
 }

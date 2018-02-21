@@ -10,11 +10,11 @@ namespace GQ.Client.UI
 		public override void layout ()
 		{
 			// set heights of text and image:
-			MenuLayoutConfig.SetEntryHeight (gameObject);
-			MenuLayoutConfig.SetEntryHeight (gameObject, "Name");
-			MenuLayoutConfig.SetEntryHeight (gameObject, "Button");
-			MenuLayoutConfig.SetEntryHeight (gameObject, "Button/Hint", sizeScaleFactor: 0.6f);
-			MenuLayoutConfig.SetEntryHeight (gameObject, "Button/OnOff");
+			MenuLayoutConfig.SetMenuEntryHeight (gameObject);
+			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Name");
+			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Button");
+			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Button/Hint", sizeScaleFactor: 0.6f);
+			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Button/OnOff");
 		}
 
 	}

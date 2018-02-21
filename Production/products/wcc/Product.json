@@ -334,8 +334,9 @@
     "b": 0,
     "a": 255
   },
+  "menuInhibitsInteraction": false,
   "disabledAlpha": 0.5,
-  "listEntryHeightUnits": 30.0,
+  "listEntryHeightUnits": 50.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0
 }

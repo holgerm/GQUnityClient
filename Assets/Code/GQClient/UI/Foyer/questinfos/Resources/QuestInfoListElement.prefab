@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 114570279926477600}
   - component: {fileID: 114083423239208560}
   - component: {fileID: 114431090388501368}
+  - component: {fileID: 114464221084566548}
   m_Layer: 5
   m_Name: QuestInfoListElement
   m_TagString: Untagged
@@ -277,10 +278,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 62
-  m_MinHeight: -1
-  m_PreferredWidth: 22
-  m_PreferredHeight: -1
+  m_MinWidth: 91.52542
+  m_MinHeight: 91.52542
+  m_PreferredWidth: 91.52542
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -335,10 +336,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 68
-  m_MinHeight: -1
-  m_PreferredWidth: 22
-  m_PreferredHeight: -1
+  m_MinWidth: 91.52542
+  m_MinHeight: 91.52542
+  m_PreferredWidth: 91.52542
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -408,9 +409,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 18
+  m_MinHeight: 91.52542
   m_PreferredWidth: -1
-  m_PreferredHeight: 18
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: 800
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -431,6 +432,17 @@ MonoBehaviour:
   StartButton: {fileID: 114776062018062490}
   UpdateButton: {fileID: 114586075506312080}
   DeleteButton: {fileID: 114828754933300470}
+--- !u!114 &114464221084566548
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1775057105045158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41be552d4640145a6ad222a823e97b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114530400569062646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -538,10 +550,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: 115
+  m_MinWidth: 91.52542
+  m_MinHeight: 91.52542
+  m_PreferredWidth: 91.52542
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -609,10 +621,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 60
-  m_MinHeight: -1
-  m_PreferredWidth: 22
-  m_PreferredHeight: -1
+  m_MinWidth: 91.52542
+  m_MinHeight: 91.52542
+  m_PreferredWidth: 91.52542
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -707,10 +719,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 50
-  m_MinHeight: -1
-  m_PreferredWidth: 22
-  m_PreferredHeight: -1
+  m_MinWidth: 91.52542
+  m_MinHeight: 91.52542
+  m_PreferredWidth: 91.52542
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -814,7 +826,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fe4a18836802e41b6b6fe4baa471c76a, type: 3}
-    m_FontSize: 70
+    m_FontSize: 60
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -865,10 +877,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 48
-  m_MinHeight: -1
-  m_PreferredWidth: 48
-  m_PreferredHeight: -1
+  m_MinWidth: 91.52542
+  m_MinHeight: 91.52542
+  m_PreferredWidth: 91.52542
+  m_PreferredHeight: 91.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1

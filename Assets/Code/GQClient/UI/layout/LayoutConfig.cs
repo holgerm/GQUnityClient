@@ -129,17 +129,6 @@ namespace GQ.Client.UI
 			return result;
 		}
 
-		static public float ListEntryHeightUnits {
-			get {
-				return 
-					calculateRestrictedHeight (
-					ConfigurationManager.Current.listEntryHeightUnits,
-					ConfigurationManager.Current.listEntryHeightMinMM,
-					ConfigurationManager.Current.listEntryHeightMaxMM
-				);
-			}
-		}
-
 		static public float ScreenHeightUnits {
 			get {
 				return (

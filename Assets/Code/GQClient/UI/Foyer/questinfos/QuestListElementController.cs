@@ -159,7 +159,7 @@ namespace GQ.Client.UI.Foyer
 			go.name = PREFAB + " (" + qInfo.Name + ")";
 
 			// set entry height:
-			FoyerListLayoutConfig.SetEntryHeight (go);
+			FoyerListLayoutConfig.SetListEntryHeight (go);
 
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
 
