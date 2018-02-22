@@ -42,9 +42,8 @@
     "path": "defaults/readable/defaultMarker"
   },
   "markerHeightUnits": 55.0,
-  "markerHeightMinMM": 25.0,
+  "markerHeightMinMM": 10.0,
   "markerHeightMaxMM": 0.0,
-  "markerScale": 1.2,
   "markerColor": {
     "r": 116,
     "g": 103,
@@ -317,10 +316,10 @@
     "a": 187
   },
   "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 50.0,
-  "menuEntryHeightMinMM": 0.0,
+  "menuEntryHeightUnits": 40.0,
+  "menuEntryHeightMinMM": 5.0,
   "menuEntryHeightMaxMM": 0.0,
-  "menuEntryWidthUnits": 420.0,
+  "menuEntryWidthUnits": 365.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuBGColor": {

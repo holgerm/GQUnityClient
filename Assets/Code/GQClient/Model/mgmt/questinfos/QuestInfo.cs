@@ -468,6 +468,9 @@ namespace GQ.Client.Model
 
 		public Task Play ()
 		{
+			// Close menu if open:
+			Base.Instance.MenuCanvas.SetActive (false);
+
 			// Load quest data: game.xml
 			LocalFileLoader loadGameXML = 
 				new LocalFileLoader (

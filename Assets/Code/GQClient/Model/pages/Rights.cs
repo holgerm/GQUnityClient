@@ -34,7 +34,9 @@ namespace GQ.Client.Model
 
 				if (rt != null) {
 					copyrightTextBG4FittingImage.rectTransform.sizeDelta = 
-						new Vector2 (0, copyrightText4FittingImage.fontSize * 1.2f);
+						new Vector2 (0, copyrightText4FittingImage.fontSize * 1.45f);
+//					copyrightText4FittingImage.rectTransform.sizeDelta = 
+//						new Vector2 (0, copyrightText4FittingImage.fontSize * 1.2f);
 				}
 			} else {
 				copyrightTextBG4FittingImage.gameObject.SetActive (false);
@@ -42,7 +44,9 @@ namespace GQ.Client.Model
 
 				if (rt != null) {
 					copyrightTextBG4EnvelopingImage.rectTransform.sizeDelta = 
-						new Vector2 (0, copyrightText4EnvelopingImage.fontSize * 1.2f);
+						new Vector2 (0, copyrightText4EnvelopingImage.fontSize * 1.45f);
+//					copyrightText4EnvelopingImage.rectTransform.sizeDelta = 
+//						new Vector2 (0, copyrightText4EnvelopingImage.fontSize * 1.2f);
 				}
 			}
 

@@ -156,14 +156,6 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float markerHeightMaxMM { get; set; }
 
-		/// <summary>
-		/// This should not be shown in the Product Editor neither persistetd in Product.json but calculated in the background instead. 
-		/// It will rely on markerHeightUnits, markerHeightMinMM and markerHeightMaxMM.
-		/// </summary>
-		/// <value>The marker scale.</value>
-		[ShowInProductEditor]
-		public float markerScale { get; set; }
-
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	markerColor  { get; set; }
@@ -459,8 +451,6 @@ namespace GQ.Client.Conf
 			useMapOffline = false;
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
-			markerScale = 1.0f;
-			mapButtonHeightUnits = 55f;
 			markerHeightUnits = 75f;
 
 			// Layout:
