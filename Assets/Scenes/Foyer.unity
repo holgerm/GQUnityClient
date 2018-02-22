@@ -1739,7 +1739,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: f0be5d4cabc3742eb94f13da27287697, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5f2a9d856c61b48dc8f747556b8b1977, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4879,6 +4879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abe7662a0d0db44f998b1fa209b8a96e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showOnlyWhenActive: {fileID: 0}
 --- !u!1 &1460940676
 GameObject:
   m_ObjectHideFlags: 0
@@ -6590,7 +6591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06f2975db27640ac9e642e5be34bf11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LocationTexture: {fileID: 2800000, guid: 1d6a67e0dc6854c728a7c1f849d205c4, type: 3}
+  LocationTexture: {fileID: 2800000, guid: 0553a618485594677bc3760068be9858, type: 3}
   MapButtonPanel: {fileID: 1068315289}
   CenterTexture: {fileID: 2800000, guid: 5f2a9d856c61b48dc8f747556b8b1977, type: 3}
   FrameTexture: {fileID: 2800000, guid: f0be5d4cabc3742eb94f13da27287697, type: 3}

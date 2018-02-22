@@ -13,7 +13,8 @@ using GQ.Client.Util;
 namespace GQ.Client.UI
 {
 
-	public class Map : MonoBehaviour {
+	public class Map : MonoBehaviour
+	{
 
 		protected MapBehaviour map;
 
@@ -39,6 +40,7 @@ namespace GQ.Client.UI
 		#region Global static behaviour
 
 		private static bool _ignoreInteraction = false;
+
 		public static bool IgnoreInteraction {
 			get {
 				return _ignoreInteraction;
@@ -46,15 +48,15 @@ namespace GQ.Client.UI
 			set {
 				if (value == true) {
 					_ignoreInteraction = true;
-				}
-				else {
+				} else {
 					Base.Instance.StartCoroutine (_setIgnoreInteractionToFalseAsCoroutine ());
 				}
 			}
 
 		}
 
-		private static IEnumerator _setIgnoreInteractionToFalseAsCoroutine() {
+		private static IEnumerator _setIgnoreInteractionToFalseAsCoroutine ()
+		{
 			yield return new WaitForEndOfFrame ();
 			yield return new WaitForEndOfFrame ();
 			_ignoreInteraction = false;
@@ -70,18 +72,20 @@ namespace GQ.Client.UI
 		public Texture CenterTexture;
 		public Texture FrameTexture;
 
-		public enum Centering {
+		public enum Centering
+		{
 			Centered,
 			Framed,
 			Manual
 		}
-			
+
 		public Centering CenteringState {
 			get;
 			protected set;
 		}
 
-		public void Frame() {
+		public void Frame ()
+		{
 			// center the map so it frames all currently visible markers: TODO
 
 			// let the center button show the centering button icon now, unless local position is not available, in that case show the frame icon and disbale it.
@@ -89,16 +93,19 @@ namespace GQ.Client.UI
 			CenteringState = Centering.Framed;
 		}
 
-		public void Center() {
+		public void Center ()
+		{
 			// center the map so it is centered to the current users position: TODO
+			map.CenterOnLocation ();
 
 			// let the center button show the centering button icon now
 
 			CenteringState = Centering.Centered;
 		}
 
-		public void CenterButtonPressed() {
-			Debug.Log ("Center Button Pressed");
+		public void CenterButtonPressed ()
+		{
+			Center ();
 		}
 
 		#endregion
@@ -106,19 +113,22 @@ namespace GQ.Client.UI
 
 		#region Zooming
 
-		public void ZoomInButtonPressed() {
-			map.CurrentZoom = Math.Min(map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
+		public void ZoomInButtonPressed ()
+		{
+			map.CurrentZoom = Math.Min (map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
 			map.Zoom (0f);
 			UpdateZoomButtons ();
 		}
 
-		public void ZoomOutButtonPressed() {
-			map.CurrentZoom = Math.Max(map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
+		public void ZoomOutButtonPressed ()
+		{
+			map.CurrentZoom = Math.Max (map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
 			map.Zoom (0f);
 			UpdateZoomButtons ();
 		}
 
-		protected void UpdateZoomButtons() {
+		protected void UpdateZoomButtons ()
+		{
 			// If further zooming IN is not possible disable ZoomInButton: 
 			zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
 
@@ -135,7 +145,8 @@ namespace GQ.Client.UI
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
 
-		protected virtual void Start() {
+		protected virtual void Start ()
+		{
 			Frame ();
 			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;
 			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();

@@ -209,7 +209,7 @@ namespace GQ.Client.UI.Foyer
 			GameObject go = TileBehaviour.CreateTileTemplate ().gameObject;
 			go.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
 			go.GetComponent<Renderer> ().material.renderQueue = 4000;
-			go.transform.localScale /= 27.0f;
+			go.transform.localScale /= 4f; 
 
 			GameObject markerGO = Instantiate (go) as GameObject;
 			map.SetLocationMarker<LocationMarkerBehaviour> (markerGO);
