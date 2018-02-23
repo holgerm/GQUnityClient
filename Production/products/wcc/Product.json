@@ -35,7 +35,7 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
-  "mapStartAtLocation": false,
+  "mapStartAtLocation": true,
   "mapStartAtLongitude": 7.100114,
   "mapStartAtLatitude": 50.73381,
   "marker": {
