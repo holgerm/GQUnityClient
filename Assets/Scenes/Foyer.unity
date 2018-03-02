@@ -2914,8 +2914,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 144.56693
-  m_PreferredHeight: 144.56693
+  m_PreferredWidth: 111.01843
+  m_PreferredHeight: 111.01843
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -3326,9 +3326,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 791.9732
+  m_MinWidth: 788.0574
   m_MinHeight: -1
-  m_PreferredWidth: 791.9732
+  m_PreferredWidth: 788.0574
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -3859,8 +3859,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 144.56693
-  m_PreferredHeight: 144.56693
+  m_PreferredWidth: 111.01843
+  m_PreferredHeight: 111.01843
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -5861,6 +5861,7 @@ GameObject:
   - component: {fileID: 1839321231}
   - component: {fileID: 1839321230}
   - component: {fileID: 1839321233}
+  - component: {fileID: 1839321234}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -5919,6 +5920,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MenuTopLeftContent: {fileID: 688381781}
+--- !u!114 &1839321234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1839321229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e71e0b7cc724f49f89ebc3468f59f259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1848717076
 GameObject:
   m_ObjectHideFlags: 0
@@ -6237,8 +6249,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 144.56693
-  m_PreferredHeight: 144.56693
+  m_PreferredWidth: 111.01843
+  m_PreferredHeight: 111.01843
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
