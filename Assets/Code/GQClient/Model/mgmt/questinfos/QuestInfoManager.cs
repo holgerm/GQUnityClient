@@ -184,7 +184,6 @@ namespace GQ.Client.Model
 
 			oldInfo.Dispose ();
 			QuestDict.Remove (oldInfoID);
-			// TODO TEST THIS NEW IMPLEMENTATION!
 
 			if (Filter.Accept (oldInfo)) {
 				// Run through filter and raise event if involved

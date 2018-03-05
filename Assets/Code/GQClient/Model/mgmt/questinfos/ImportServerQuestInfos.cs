@@ -50,10 +50,13 @@ namespace GQ.Client.Model
 
 			// we create new qi elements and keep those we can reuse. We remove those from our helper list.
 			foreach (QuestInfo newInfo in newQuests) {
-				if (qim.QuestDict.ContainsKey(newInfo.Id)) {
-					// this new element was already there, hence we keep it (remove from the remove list) and update it if newer:
+				QuestInfo oldInfo = null;
+				if (qim.QuestDict.TryGetValue(newInfo.Id, out oldInfo)) {
+					// this new element was already there, hence we keep it (remove from the remove list) and update if newer:
 					oldIDsToBeRemoved.Remove(newInfo.Id);
-					qim.ChangeInfo(newInfo); // TODO check that newer or nor same somehow!
+					if (oldInfo.LastUpdateOnServer < newInfo.LastUpdateOnServer) {
+						qim.ChangeInfo (newInfo);
+					}
 				}
 				else {
 					qim.AddInfo(newInfo);
