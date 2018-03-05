@@ -23,49 +23,21 @@ namespace GQ.Client.Model
 	/// To load the local json file use 'false' as paraneter of the constructor. 
 	/// In this case no download task is needed and if exitent its result will be ignored.
 	/// </summary>
-	public class ImportQuestInfosFromJSON : Task
+	public abstract class ImportQuestInfos : Task
 	{
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GQ.Client.Model.ImportQuestInfosFromJSON"/> class.
 		/// </summary>
 		/// <param name="importFromServer">If set to <c>true</c> import from server otherwise use the local infos.json file.</param>
-		public ImportQuestInfosFromJSON (bool useInputTextAsJSON) : base ()
+		public ImportQuestInfos () : base ()
 		{ 
-			this.importFromInputString = useInputTextAsJSON;
-
 			InputJSON = "[]";
 			qim = QuestInfoManager.Instance;
-
-			if (!importFromInputString) {
-				// import from local quest json file:
-				if (File.Exists (QuestInfoManager.LocalQuestInfoJSONPath)) {
-					try {
-						InputJSON = File.ReadAllText (QuestInfoManager.LocalQuestInfoJSONPath);
-					} catch (Exception e) {
-						Log.SignalErrorToDeveloper ("Error while trying to import local quest info json file: " + e.Message);
-						InputJSON = "[]";
-					}
-				}
-			}
 		}
 
-		private bool importFromInputString;
-		private QuestInfoManager qim;
-		private Dictionary<int, QuestInfo> qimDict;
-
-		private string InputJSON { get; set; }
-
-		public override void ReadInput (object sender, TaskEventArgs e)
-		{
-			if (importFromInputString) {
-				if (e != null && e.Content != null && e.Content is string) {
-					InputJSON = e.Content as string;
-				} else {
-					Log.SignalErrorToDeveloper ("ImportFromInputString task should read from Input but got no input string.");
-				}
-			}
-		}
+		protected QuestInfoManager qim;
+		protected string InputJSON { get; set; }
 
 		public override bool Run ()
 		{
@@ -95,21 +67,12 @@ namespace GQ.Client.Model
 			if (quests == null || quests.Length == 0)
 				return true;
 
-			foreach (var q in quests) {
-				if (q.Id <= 0)
-					continue;
-
-				qim.AddInfo (q);
-			}
-
-			// TODO: If we receive JSON from server and a quest is missing, 
-			// we either need to remove it (when it was only downloadable)
-			// or we need to change its info, so that it can only be deleted with a warning.
+			updateQuestInfoManager (quests);
 				
 			return true;
 		}
 
-
+		protected abstract void updateQuestInfoManager (QuestInfo[] quests);
 
 		public override object Result {
 			get {

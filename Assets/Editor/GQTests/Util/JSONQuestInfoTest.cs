@@ -12,7 +12,7 @@ namespace GQTests.Util {
 
 	public class JSONQuestInfoTest {
 		
-		protected ImportQuestInfosFromJSON importTask;
+		protected ImportQuestInfos importTask;
 		protected QuestInfoManager qim;
 		protected TestChangeListener testListener;
 
@@ -24,7 +24,7 @@ namespace GQTests.Util {
 			testListener = new TestChangeListener();
 			qim.OnDataChange += testListener.OnChange;
 
-			importTask = new ImportQuestInfosFromJSON (true);
+			importTask = new ImportServerQuestInfos ();
 		}
 
 

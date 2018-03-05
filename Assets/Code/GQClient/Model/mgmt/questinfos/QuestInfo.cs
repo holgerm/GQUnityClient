@@ -335,7 +335,6 @@ namespace GQ.Client.Model
 
 		#endregion
 
-
 		#region Sorting Comparison
 
 		/// <summary>

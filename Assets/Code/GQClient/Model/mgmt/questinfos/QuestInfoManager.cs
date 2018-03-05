@@ -41,7 +41,7 @@ namespace GQ.Client.Model
 			}
 		}
 
-		protected Dictionary<int, QuestInfo> QuestDict {
+		public Dictionary<int, QuestInfo> QuestDict {
 			get;
 			set;
 		}
@@ -129,6 +129,8 @@ namespace GQ.Client.Model
 
 		public void AddInfo (QuestInfo newInfo)
 		{
+			Debug.Log ("AddInfo(" + newInfo.Id + ")");
+
 			QuestInfo oldInfo = null;
 			if (QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
 				// A questInfo with this ID already exists: this is a CHANGE:
@@ -167,10 +169,22 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public void RemoveInfo (QuestInfo oldInfo)
+		public void RemoveInfo (int oldInfoID)
 		{
+			Debug.Log ("RemoveInfo(" + oldInfoID + ")");
+
+			QuestInfo oldInfo = null;
+			if (!QuestDict.TryGetValue(oldInfoID, out oldInfo)) {
+				Log.SignalErrorToDeveloper (
+					"Trying to remove quest info with ID {0} but it deos not exist in QuestInfoManager.", 
+					oldInfoID
+				);
+				return;
+			}
+
 			oldInfo.Dispose ();
-			QuestDict.Remove (oldInfo.Id);
+			QuestDict.Remove (oldInfoID);
+			// TODO TEST THIS NEW IMPLEMENTATION!
 
 			if (Filter.Accept (oldInfo)) {
 				// Run through filter and raise event if involved
@@ -187,6 +201,8 @@ namespace GQ.Client.Model
 
 		public void ChangeInfo (QuestInfo info)
 		{
+			Debug.Log ("ChangeInfo(" + info.Id + ")");
+
 			QuestInfo oldInfo;
 			if (!QuestDict.TryGetValue (info.Id, out oldInfo)) {
 				Log.SignalErrorToDeveloper (
@@ -221,8 +237,8 @@ namespace GQ.Client.Model
 		/// </summary>
 		public void UpdateQuestInfos ()
 		{
-			ImportQuestInfosFromJSON importLocal = 
-				new ImportQuestInfosFromJSON (false);
+			ImportQuestInfos importLocal = 
+				new ImportLocalQuestInfos ();
 			new SimpleDialogBehaviour (
 				importLocal,
 				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
@@ -238,8 +254,8 @@ namespace GQ.Client.Model
 				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
 			);
 
-			ImportQuestInfosFromJSON importFromServer = 
-				new ImportQuestInfosFromJSON (true);
+			ImportQuestInfos importFromServer = 
+				new ImportServerQuestInfos ();
 			new SimpleDialogBehaviour (
 				importFromServer,
 				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),

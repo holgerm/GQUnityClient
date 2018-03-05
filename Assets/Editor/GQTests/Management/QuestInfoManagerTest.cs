@@ -29,7 +29,6 @@ namespace GQTests.Management {
 			Assert.NotNull(qm);
 			Assert.AreEqual(0, qm.Count);
 		}
-
 	}
 
 
