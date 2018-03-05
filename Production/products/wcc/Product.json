@@ -337,8 +337,8 @@
   "menuInhibitsInteraction": false,
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 50.0,
-  "listEntryHeightMinMM": 0.0,
-  "listEntryHeightMaxMM": 0.0,
+  "listEntryHeightMinMM": 6.0,
+  "listEntryHeightMaxMM": 10.0,
   "listEntryColor": {
     "r": 232,
     "g": 232,
