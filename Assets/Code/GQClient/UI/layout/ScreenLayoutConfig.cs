@@ -57,11 +57,11 @@ namespace GQ.Client.UI
 
 			// set MiddleTopLogo:
 			try {
-				Transform middleTopLogo = transform.Find ("ButtonPanel/MiddleTopLogo");
+				Transform middleTopLogo = Header.transform.Find ("ButtonPanel/MiddleTopLogo");
 				if (middleTopLogo != null) {
 					Image mtlImage = middleTopLogo.GetComponent<Image> ();
 					if (mtlImage != null) {
-						mtlImage.sprite = Resources.Load<Sprite> ("TopLogo");
+						mtlImage.sprite = Resources.Load<Sprite> (ConfigurationManager.Current.topLogo.path);
 					}
 				}
 			} catch (Exception e) {
