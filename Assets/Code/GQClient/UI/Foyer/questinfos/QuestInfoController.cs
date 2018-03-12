@@ -27,7 +27,13 @@ namespace GQ.Client.UI.Foyer
 			return data.CompareTo (otherCtrl.data);
 		}
 
-
+		/// <summary>
+		/// Performs an update of the controller data to the given newQuestInfo.
+		/// </summary>
+		public void PerformUpdate(QuestInfo newInfo) {
+			data = newInfo;
+			UpdateView ();
+		}
 
 		abstract public void UpdateView ();
 

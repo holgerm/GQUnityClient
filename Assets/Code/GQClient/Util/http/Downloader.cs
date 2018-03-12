@@ -10,7 +10,7 @@ namespace GQ.Client.Util
 {
 	public class Downloader : AbstractDownloader
 	{
-		protected string url;
+		public string Url { get; set; } 
 
 		public string TargetPath { get; set; }
 
@@ -32,7 +32,33 @@ namespace GQ.Client.Util
 		#endregion
 
 
-		#region Public Interface
+		#region Delegation API for Tests
+
+		static Downloader() {
+			CoroutineRunner = DownloadAsCoroutine;
+		}
+
+		public delegate IEnumerator DownloaderCoroutineMethod(Downloader d);
+
+		public static DownloaderCoroutineMethod CoroutineRunner {
+			get;
+			set;
+		}
+
+		public override IEnumerator RunAsCoroutine ()
+		{
+			return CoroutineRunner (this);
+		}
+
+		static protected IEnumerator DownloadAsCoroutine (Downloader d)
+		{
+			return d.Download ();
+		}
+
+		#endregion
+
+
+		#region Public API
 
 		/// <summary>
 		/// The elapsed time the download is/was active in milliseconds.
@@ -59,7 +85,7 @@ namespace GQ.Client.Util
 			string targetPath = null) : base (true)
 		{
 			Result = "";
-			this.url = url;
+			this.Url = url;
 			Timeout = timeout;
 			TargetPath = targetPath;
 			stopwatch = new Stopwatch ();
@@ -70,14 +96,14 @@ namespace GQ.Client.Util
 			OnProgress += defaultLogInformationHandler;
 		}
 
-		public override IEnumerator RunAsCoroutine ()
+		protected IEnumerator Download ()
 		{
-			UnityEngine.Debug.Log ("Downloader #1 from url: " + url);
+			UnityEngine.Debug.Log ("Downloader #1 from url: " + Url);
 
-			Www = new WWW (url);
+			Www = new WWW (Url);
 			stopwatch.Start ();
 
-			string msg = String.Format ("Start to download url {0}", url);
+			string msg = String.Format ("Start to download url {0}", Url);
 			if (Timeout > 0) {
 				msg += String.Format (", timout set to {0} ms.", Timeout);
 			}
@@ -87,7 +113,7 @@ namespace GQ.Client.Util
 			while (!Www.isDone) {
 				if (progress < Www.progress) {
 					progress = Www.progress;
-					msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);
+					msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", Url, progress * 100);
 					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
 				}
 				if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout) {
@@ -114,7 +140,7 @@ namespace GQ.Client.Util
 			
 				UnityEngine.Debug.Log ("Downloader done text length: " + Www.text.Length);
 
-				msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", url, progress * 100);
+				msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", Url, progress * 100);
 				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				yield return null;
@@ -142,7 +168,7 @@ namespace GQ.Client.Util
 				}
 
 				msg = string.Format ("Download für Datei {0} abgeschlossen", 
-					url);
+					Url);
 				Raise (DownloadEventType.Success, new DownloadEvent (message: msg));
 				RaiseTaskCompleted (Result);
 			}

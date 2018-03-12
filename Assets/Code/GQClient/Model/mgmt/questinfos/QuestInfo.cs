@@ -129,6 +129,9 @@ namespace GQ.Client.Model
 			get {
 				return lastUpdate;
 			}
+			set {
+				lastUpdate = value;
+			}
 		}
 
 		[JsonProperty]
@@ -215,6 +218,12 @@ namespace GQ.Client.Model
 
 				}
 			}
+		}
+
+		[JsonProperty]
+		public QuestInfo NewVersionOnServer {
+			get;
+			set;
 		}
 
 		#endregion
@@ -486,16 +495,6 @@ namespace GQ.Client.Model
 				new TaskSequence (loadGameXML, questStarter);
 
 			return t;
-		}
-
-
-		/// <summary>
-		/// Updates the qust info represented by this object.
-		/// </summary>
-		public void Update ()
-		{
-			// TODO
-			Debug.Log ("TODO: Implement update method! Trying to update quest " + Name);
 		}
 
 		#endregion

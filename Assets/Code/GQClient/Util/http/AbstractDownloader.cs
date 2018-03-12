@@ -46,7 +46,7 @@ namespace GQ.Client.Util
 				callback (this, e);
 		}
 
-		protected virtual void Raise (DownloadEventType eventType, DownloadEvent e = DownloadEvent.EMPTY)
+		public virtual void Raise (DownloadEventType eventType, DownloadEvent e = DownloadEvent.EMPTY)
 		{
 			switch (eventType) {
 			case DownloadEventType.Start:

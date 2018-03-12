@@ -39,6 +39,9 @@ namespace GQ.Client.Conf
 		public DownloadStrategy DownloadStrategy { get; set; }
 
 		[ShowInProductEditor]
+		public bool autoUpdateQuestInfos { get; set; }
+
+		[ShowInProductEditor]
 		public long   	timeoutMS   { get; set; }
 
 		[ShowInProductEditor]
@@ -432,6 +435,7 @@ namespace GQ.Client.Conf
 			localQuestsDeletable = true;
 			hideHiddenQuests = false;
 			DownloadStrategy = DownloadStrategy.UPFRONT;
+			autoUpdateQuestInfos = false;
 			timeoutMS = 10000L;
 
 			acceptedPageTypes = new string[0];

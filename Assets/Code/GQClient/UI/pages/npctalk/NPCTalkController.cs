@@ -139,7 +139,6 @@ namespace GQ.Client.UI
 			string currentText = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
 
 			// create dialog item GO form prefab:
-			Debug.Log ("TODO: Add dialog Item: " + currentText);
 			DialogItemCtrl.Create (dialogItemContainer, currentText);
 		}
 

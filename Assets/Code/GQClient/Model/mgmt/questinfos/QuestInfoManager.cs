@@ -198,30 +198,46 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public void ChangeInfo (QuestInfo info)
+		public void ChangeInfo (QuestInfo newInfo)
 		{
-			Debug.Log ("ChangeInfo(" + info.Id + ")");
+			Debug.Log ("ChangeInfo(" + newInfo.Id + ")");
 
 			QuestInfo oldInfo;
-			if (!QuestDict.TryGetValue (info.Id, out oldInfo)) {
+			if (!QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
 				Log.SignalErrorToDeveloper (
 					"Trying to change quest info {0} but it deos not exist in QuestInfoManager.", 
-					info.Id.ToString ()
+					newInfo.Id.ToString ()
 				);
 				return;
 			}
 
-			QuestDict.Remove (info.Id);
-			QuestDict.Add (info.Id, info);
+			if (ConfigurationManager.Current.autoUpdateQuestInfos) {
+				// preform the complete update, i.e. remove the old and add the new info:
+				QuestDict.Remove (newInfo.Id);
+				QuestDict.Add (newInfo.Id, newInfo);
 
-			if (Filter.Accept (oldInfo) || Filter.Accept (info)) {
+				// TODO: update the quest itself:
+				newInfo.Download().Start();
+			}
+			else {
+				// only update the quest info server timestamp so the views can figure out that this info is updatable 
+				// and offer manual update to the user:
+				oldInfo.LastUpdateOnServer = newInfo.LastUpdateOnServer;
+				// store the new quest info to which this can manually be updated later ...
+				oldInfo.NewVersionOnServer = newInfo;
+			}
+
+			// in case we update the info after updating the quest we have to erase the link to the new info within the new info:
+			newInfo.NewVersionOnServer = null;
+
+			if (Filter.Accept (oldInfo) || Filter.Accept (newInfo)) {
 				// Run through filter and raise event if involved
 
 				raiseDataChange (
 					new QuestInfoChangedEvent (
-						String.Format ("Info for quest {0} changed.", info.Name),
+						String.Format ("Info for quest {0} changed.", newInfo.Name),
 						ChangeType.ChangedInfo,
-						newQuestInfo: info,
+						newQuestInfo: newInfo,
 						oldQuestInfo: oldInfo
 					)
 				);

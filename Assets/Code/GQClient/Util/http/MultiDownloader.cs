@@ -131,7 +131,7 @@ namespace GQ.Client.Util
 			RaiseTaskCompleted ();
 		}
 
-		public override object Result { get; protected set; }
+		public override object Result { get; set; }
 
 	}
 }

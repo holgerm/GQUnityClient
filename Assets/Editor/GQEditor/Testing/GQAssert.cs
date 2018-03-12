@@ -14,13 +14,14 @@ namespace GQTests
 
 		// TODO move these paths to Files class:
 
-		static private string _TEST_DATA_BASE_DIR = "Assets/Editor/GQTestsData/";
-
 		static public string TEST_DATA_BASE_DIR {
 			get {
 				return _TEST_DATA_BASE_DIR;
 			}
 		}
+		static private string _TEST_DATA_BASE_DIR = "Assets/Editor/GQTestsData/";
+
+		static public string TEST_DATA_SERVER_DIR = Files.CombinePath (TEST_DATA_BASE_DIR, "Server");
 
 		static private string _PROJECT_PATH = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
 		// On MacBookPro:

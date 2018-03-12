@@ -38,7 +38,7 @@ namespace GQ.Client.Model {
 			get {
 				return null;
 			}
-			protected set { }
+			set { }
 		}
 	}
 }

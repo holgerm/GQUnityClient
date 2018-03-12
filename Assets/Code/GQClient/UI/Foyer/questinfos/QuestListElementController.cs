@@ -144,7 +144,15 @@ namespace GQ.Client.UI.Foyer
 		/// </summary>
 		public void UpdateQuest ()
 		{
-			data.Update ();
+			// update the quest info:
+			if (data.NewVersionOnServer != null && QuestInfoManager.Instance.QuestDict.Remove (data.Id)) {
+//				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer);
+				data.NewVersionOnServer.Download ().Start ();
+
+				// Update the quest info list ...
+				QuestInfoManager.Instance.ChangeInfo(data.NewVersionOnServer);
+			}
+
 		}
 
 		#endregion
@@ -164,32 +172,7 @@ namespace GQ.Client.UI.Foyer
 			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
 
 			// set info button as configured:
-			if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "") {
-				CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet ();
-				Category determiningCategory = null;
-				foreach (string myCatId in qInfo.Categories) {
-					determiningCategory = mainCategorySet.categories.Find (mainCat => mainCat.id == myCatId);
-					if (determiningCategory != null)
-						break;
-				}
-
-				Image infoImage = ctrl.InfoButton.transform.Find ("Image").GetComponent<Image> ();
-				infoImage.enabled = true;
-				ctrl.InfoButton.enabled = false;
-				ctrl.InfoButton.gameObject.SetActive (true); // show info icon
-
-				if (determiningCategory != null) {
-					// set symbol for this category:
-					infoImage.sprite = determiningCategory.symbol != null ?
-						Resources.Load<Sprite> (determiningCategory.symbol.path) :
-						null;
-					if (infoImage.sprite != null) {
-						infoImage.enabled = true;
-						ctrl.InfoButton.enabled = true;
-						ctrl.InfoButton.gameObject.SetActive (true);
-					}
-				}
-			}
+			ctrl.setCategorySymbol(qInfo);
 
 			// set data and event management:
 			ctrl.data = qInfo;
@@ -202,8 +185,8 @@ namespace GQ.Client.UI.Foyer
 		public override void UpdateView ()
 		{
 			// Update Info-Icon:
-			// TODO: enable Info dialog
-			Image infoImage = InfoButton.GetComponent<Image> ();
+			// set info button as configured:
+			setCategorySymbol(data);
 
 			// Update Name:
 			Name.text = data.Name;
@@ -253,6 +236,37 @@ namespace GQ.Client.UI.Foyer
 			// TODO make elipsify automatic when content of name text changes....???!!!
 
 			// TODO call the lists sorter ...
+		}
+
+		private void setCategorySymbol(QuestInfo qInfo) {
+			// set info button as configured:
+			if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "") {
+				CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet ();
+				Category determiningCategory = null;
+				foreach (string myCatId in qInfo.Categories) {
+					determiningCategory = mainCategorySet.categories.Find (mainCat => mainCat.id == myCatId);
+					if (determiningCategory != null)
+						break;
+				}
+
+				Image infoImage = InfoButton.transform.Find ("Image").GetComponent<Image> ();
+				infoImage.enabled = true;
+				InfoButton.enabled = false;
+				InfoButton.gameObject.SetActive (true); // show info icon
+
+				if (determiningCategory != null) {
+					// set symbol for this category:
+					infoImage.sprite = determiningCategory.symbol != null ?
+						Resources.Load<Sprite> (determiningCategory.symbol.path) :
+						null;
+					if (infoImage.sprite != null) {
+						infoImage.enabled = true;
+						InfoButton.enabled = true;
+						InfoButton.gameObject.SetActive (true);
+					}
+				}
+			}
+
 		}
 
 		#endregion

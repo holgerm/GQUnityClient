@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System.IO;
 using GQTests;
 using GQ.Client.Util;
+using Qm.Mocks;
 
 namespace GQTests.Testing
 {
@@ -88,6 +89,14 @@ namespace GQTests.Testing
 				"file5", 
 				GQAssert.UniqueNameInDir ("file", BASE_DIR + "FolderFile012346"), 
 				"Unique filename should be 'file5' since that name does not exist yet.");
+		}
+
+		[Test]
+		public void UseMockDownloader() {
+			MockDownloader.Use = true;
+
+			Downloader d = new Downloader ("http:www.testserver.com");
+			d.Start ();
 		}
 	}
 }

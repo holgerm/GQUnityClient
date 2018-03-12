@@ -116,7 +116,7 @@ namespace GQ.Client.Util {
 				// 		Hence we need an IsCompleted for Tasks.
 				return "";
 			}
-			protected set { }
+			set { }
 		}
 
 		private void CompletedCallback (object sender, TaskEventArgs e) {

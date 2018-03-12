@@ -40,7 +40,7 @@ namespace GQ.Client.Util {
 		public bool RunsAsCoroutine { get; internal set; }
 
 		/// <summary>
-		/// Starts the loading process and inform the QuestInfoManager about feedback via callbacks.
+		/// Starts the loading process and informs the QuestInfoManager about feedback via callbacks.
 		/// 
 		/// The parameters step and totalSteps signal which step of how many steps this loading 
 		/// within a larger process currently is.
@@ -103,7 +103,7 @@ namespace GQ.Client.Util {
 			return;
 		}
 
-		public virtual object Result { get; protected set; }
+		public virtual object Result { get; set; }
 
 		public delegate void TaskCallback (object sender, TaskEventArgs e);
 
