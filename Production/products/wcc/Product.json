@@ -88,6 +88,14 @@
           }
         },
         {
+          "id": "wcc.art",
+          "name": "Kunst",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/art"
+          }
+        },
+        {
           "id": "wcc.nature",
           "name": "Natur",
           "folderName": "Kultur",
@@ -184,7 +192,7 @@
           }
         },
         {
-          "id": "wcc.gastro.pub",
+          "id": "wcc.pub",
           "name": "Kneipe",
           "folderName": "Gastronomie",
           "symbol": {
@@ -197,6 +205,14 @@
           "folderName": "Gastronomie",
           "symbol": {
             "path": "textures/readable/restaurant"
+          }
+        },
+        {
+          "id": "wcc.hotel",
+          "name": "Hotel",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "path": "textures/readable/hotel"
           }
         },
         {
