@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 //using UnityEditor;
 using GQ.Client.Err;
+using GQ.Client.Util;
 
 namespace GQ.Client.FileIO
 {
@@ -115,8 +116,8 @@ namespace GQ.Client.FileIO
 
 		public static string AbsoluteLocalPath (string relPath)
 		{
-			if (!relPath.StartsWith (Application.persistentDataPath)) {
-				relPath = CombinePath (Application.persistentDataPath, relPath);
+			if (!relPath.StartsWith (Device.GetPersistentDatapath())) {
+				relPath = CombinePath (Device.GetPersistentDatapath(), relPath);
 			}
 
 			if (Application.isEditor)

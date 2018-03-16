@@ -23,6 +23,9 @@ namespace GQTests
 
 		static public string TEST_DATA_SERVER_DIR = Files.CombinePath (TEST_DATA_BASE_DIR, "Server");
 
+		static public string TEST_DATA_TEMP_DIR = "Temp";
+
+
 		static private string _PROJECT_PATH = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
 		// On MacBookPro:
 		//		static private string _PROJECT_PATH = "/Users/muegge/projects/qv-geoquest/GQUnityClient";

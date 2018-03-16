@@ -50,7 +50,7 @@ namespace GQ.Client.Util
 			return CoroutineRunner (this);
 		}
 
-		static protected IEnumerator DownloadAsCoroutine (Downloader d)
+		static public IEnumerator DownloadAsCoroutine (Downloader d)
 		{
 			return d.Download ();
 		}

@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using GQ.Client.UI;
 using GQ.Client.Err;
+using System.Text;
 
 namespace GQ.Client.Util {
 
@@ -59,7 +60,7 @@ namespace GQ.Client.Util {
 					RaiseTaskFailed ();
 			}
 			else {
-				Base.Instance.StartCoroutine (RunAsCoroutine());
+				CoroutineStarter.Run (RunAsCoroutine());
 			}
 		}
 
@@ -104,6 +105,14 @@ namespace GQ.Client.Util {
 		}
 
 		public virtual object Result { get; set; }
+
+		public string GetResultAsString () {
+			byte[] bytes = (byte[]) Result;
+			return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+		}
+
+
+		#region Events
 
 		public delegate void TaskCallback (object sender, TaskEventArgs e);
 
@@ -153,6 +162,9 @@ namespace GQ.Client.Util {
 		protected virtual void BeforeFailed() {
 			return;
 		}
+
+		#endregion
+
 
 		#region Test Access
 

@@ -112,9 +112,6 @@ namespace GQ.Client.UI
 						// image too wide to fit:
 						imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
 					}
-					Debug.Log ("IMAGE Ratios: max: " + ImageRatioMinimum + " real Ration: " + imageRatio + " max: " + ImageRatioMaximum);
-					Debug.Log ("IMAGE AREA HEIGHT: " + imageAreaHeight + " WIDTH: " + ContentWidthUnits);
-					Debug.Log ("SCREEN HEIGHT: " + LayoutConfig.ScreenHeightUnits + " WIDTH: " + LayoutConfig.ScreenWidthUnits);
 
 					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = imageAreaHeight;
 					contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);

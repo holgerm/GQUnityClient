@@ -13,6 +13,7 @@ using System;
 using GQ.Client.Util;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
+using QM.Util;
 
 namespace GQ.Client.Model
 {
@@ -35,7 +36,7 @@ namespace GQ.Client.Model
 					return null;
 				}
 
-				return PersistentDataPath () + dir;
+				return Device.GetPersistentDatapath () + dir;
 			}
 			set {
 				if (value == null) {
@@ -43,8 +44,8 @@ namespace GQ.Client.Model
 					return;
 				}
 
-				if (value.StartsWith (PersistentDataPath ())) {
-					dir = value.Substring (PersistentDataPath ().Length);
+				if (value.StartsWith (Device.GetPersistentDatapath ())) {
+					dir = value.Substring (Device.GetPersistentDatapath ().Length);
 				} else {
 					dir = value;
 				}
@@ -54,12 +55,6 @@ namespace GQ.Client.Model
 		public string filename;
 		public long size;
 		public long time;
-
-		public delegate string ConstantStringReturningMethod ();
-
-		public static ConstantStringReturningMethod PersistentDataPath = () => {
-			return Application.persistentDataPath;
-		};
 
 		public LocalMediaInfo (string url, string absDir, string filename, long size, long time)
 		{

@@ -28,10 +28,10 @@ namespace GQ.Client.Model
 
 		public static string LocalQuestsPath {
 			get {
-				if (!Directory.Exists (Application.persistentDataPath + "/quests/")) {
-					Directory.CreateDirectory (Application.persistentDataPath + "/quests/");
+				if (!Directory.Exists (Device.GetPersistentDatapath() + "/quests/")) {
+					Directory.CreateDirectory (Device.GetPersistentDatapath() + "/quests/");
 				}
-				return Application.persistentDataPath + "/quests/";
+				return Device.GetPersistentDatapath() + "/quests/";
 			}
 		}
 
@@ -288,9 +288,11 @@ namespace GQ.Client.Model
 			TaskSequence t = new TaskSequence (importLocal, downloader);
 			t.AppendIfCompleted (importFromServer);
 			t.Append (exporter);
-			Debug.Log ("QIM Starting TaskSequence ... as coroutine? " + t.RunsAsCoroutine);
+			t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
 			t.Start ();
 		}
+
+		public static event Task.TaskCallback OnQuestInfosUpdateSucceeded;
 
 		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
 

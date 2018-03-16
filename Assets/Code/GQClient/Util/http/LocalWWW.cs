@@ -19,7 +19,7 @@ namespace GQ.Client.Util {
 				pre = "file:";
 			}
 
-			return new WWW(pre + Application.persistentDataPath + localFilePath);
+			return new WWW(pre + Device.GetPersistentDatapath() + localFilePath);
 		}
 
 	}
