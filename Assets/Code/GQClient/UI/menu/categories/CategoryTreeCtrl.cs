@@ -69,8 +69,9 @@ namespace GQ.Client.UI
 				return;
 
 			// we use the first folder, i.e. the second child, or child nr. 1 (counting starts with 0) to determine the showstate:
-			bool currentShowState = transform.GetChild (1).gameObject.activeSelf;
+			bool currentShowState = transform.GetChild (1).GetComponent<CategoryFolderCtrl> ().ShowState;
 
+			// toggle show for all folders:
 			for (int i = 1; i < transform.childCount; i++) {
 				Transform child = transform.GetChild (i);
 				CategoryFolderCtrl folderCtrl = child.GetComponent<CategoryFolderCtrl> ();

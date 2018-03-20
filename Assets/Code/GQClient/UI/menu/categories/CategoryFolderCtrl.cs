@@ -31,6 +31,7 @@ namespace GQ.Client.UI
 			catFolder.ctrl = folderCtrl;
 
 			// initialize the UI Entry for this folder:
+			folderCtrl.ShowState = ConfigurationManager.Current.categoryFiltersStartFolded;
 			folderCtrl.UpdateView (catFolder);
 
 			// hook the show/hide children method onto the image toggle button of this folder:
@@ -106,8 +107,14 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
+		public bool ShowState {
+			get;
+			private set;
+		}
+
 		public void Show (bool show)
 		{
+			ShowState = show;
 			gameObject.SetActive (show && showMenuItem ());
 			foreach (CategoryTreeCtrl.CategoryEntry ec in folder.Entries) {
 				ec.ctrl.show (show && (ec.ctrl.Unfolded || folder.Name == ""));
