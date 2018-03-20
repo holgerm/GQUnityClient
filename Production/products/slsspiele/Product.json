@@ -6,11 +6,14 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
+  "autoUpdateQuestInfos": false,
   "timeoutMS": 10000,
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
-  "questVisualization": "list",
-  "questVisualizationChangeable": false,
+  "questInfoViews": [
+    "List",
+    "Map"
+  ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": true,
@@ -44,6 +47,9 @@
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
+  "markerHeightUnits": 75.0,
+  "markerHeightMinMM": 0.0,
+  "markerHeightMaxMM": 0.0,
   "markerColor": {
     "r": 0,
     "g": 0,
@@ -51,10 +57,12 @@
     "a": 0
   },
   "markerBGAlpha": 168,
-  "markerScale": 1.0,
+  "mapButtonHeightUnits": 0.0,
+  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightMaxMM": 0.0,
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
-  "categoryFolderStartFolded": true,
+  "categoryFoldersStartFolded": true,
   "mainCategorySet": "Spieltyp",
   "categorySets": [
     {
@@ -321,13 +329,16 @@
       ]
     }
   ],
-  "topLogo": null,
+  "topLogo": {
+    "path": "TopLogo"
+  },
   "mainColor": {
     "r": 0,
     "g": 0,
     "b": 0,
     "a": 0
   },
+  "showShadows": true,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -358,15 +369,19 @@
     "b": 0,
     "a": 255
   },
-  "headerHeightUnits": 60,
-  "contentHeightUnits": 0,
+  "headerHeightUnits": 60.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
+  "contentHeightUnits": 880.0,
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
   "imageAreaHeightMinUnits": 0.0,
   "imageAreaHeightMaxUnits": 0.0,
   "fitExceedingImagesIntoArea": false,
-  "footerHeightUnits": 75,
+  "footerHeightUnits": 60.0,
+  "footerHeightMinMM": 0.0,
+  "footerHeightMaxMM": 0.0,
   "footerBgColor": {
     "r": 255,
     "g": 255,
@@ -405,19 +420,33 @@
     "a": 255
   },
   "showEmptyMenuEntries": true,
-  "menuMainEntryHeightUnits": 0,
-  "menuSubEntryHeightUnits": 0,
+  "menuEntryHeightUnits": 35.0,
+  "menuEntryHeightMinMM": 0.0,
+  "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 400.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
   "menuBGColor": {
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0
+    "a": 252
   },
   "menuPartBGColor": {
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0
+    "a": 255
   },
-  "disabledAlpha": 0.5
+  "menuInhibitsInteraction": false,
+  "disabledAlpha": 0.5,
+  "listEntryHeightUnits": 45.0,
+  "listEntryHeightMinMM": 0.0,
+  "listEntryHeightMaxMM": 0.0,
+  "listEntryColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  }
 }
