@@ -13,20 +13,24 @@ namespace GQ.Client.UI
 	/// </summary>
 	public class FoyerListLayoutConfig : ScreenLayoutConfig
 	{
-		
+
+		public Transform questInfoList;
+
 		public override void layout ()
 		{
+			base.layout ();
+
 			// set list background color:
-			Transform transf = transform.Find ("Content/List/Viewport/InfoList");
-			if (transf != null) {
-				Image im = transf.GetComponent<Image> ();
+			if (questInfoList != null) {
+				Image im = questInfoList.GetComponent<Image> ();
 				if (im != null) {
 					im.color = ConfigurationManager.Current.mainColor;
 				}
 			}
-
-
 		}
+
+
+		#region Static Layout Helpers
 
 		static public void SetListEntryHeight (GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
@@ -44,5 +48,6 @@ namespace GQ.Client.UI
 			}
 		}
 
+		#endregion
 	}
 }

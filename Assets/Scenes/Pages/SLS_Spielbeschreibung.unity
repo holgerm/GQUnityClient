@@ -1250,7 +1250,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00003348362}
+  m_AnchoredPosition: {x: 0, y: 0.000015595351}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -1424,8 +1424,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e24c19031ac94387ad05ffcc50f99cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  header: {fileID: 1095057066}
-  footer: {fileID: 1804547557}
 --- !u!1 &1005699202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,7 +1612,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b83c73d4cd27405ab4c6f21a131606e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layoutOnlyNoMedia: 0
 --- !u!1 &1206162628
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,6 +1659,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4db9f7b5016a44e0ae35759e14ea7d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  copyrightTextBG4FittingImage: {fileID: 0}
+  copyrightText4FittingImage: {fileID: 0}
+  copyrightTextBG4EnvelopingImage: {fileID: 0}
+  copyrightText4EnvelopingImage: {fileID: 0}
 --- !u!114 &1206162631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2615,11 +2616,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2125452544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f15e1f045954586b55ae1590c33fc4, type: 3}
+  m_Script: {fileID: 11500000, guid: f5e0037bfecf3493a9cbf581f128e6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1549135014}
   imagePanel: {fileID: 2026155312}
-  contentPanel: {fileID: 215277135}
+  contentPanel: {fileID: 988022697}
   dialogItemContainer: {fileID: 885299350}
   forwardButtonText: {fileID: 1862011691}

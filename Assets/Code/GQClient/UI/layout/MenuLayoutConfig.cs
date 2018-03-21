@@ -20,12 +20,13 @@ namespace GQ.Client.UI
 
 		public override void layout ()
 		{
+
+			base.layout ();
+
 			// set menu background color:
 			if (MenuBackgroundImage != null) {
 				MenuBackgroundImage.color = ConfigurationManager.Current.menuBGColor;
 			}
-	
-			setContentHeight ();
 
 			// set menu width:
 			setWidth ();

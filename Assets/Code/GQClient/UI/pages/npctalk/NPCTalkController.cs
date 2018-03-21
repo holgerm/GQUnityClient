@@ -72,7 +72,8 @@ namespace GQ.Client.UI
 
 		protected float ContentImageHeight {
 			get {
-				return LayoutConfig.ScreenHeightUnits - (LayoutConfig.HeaderHeightUnits + LayoutConfig.FooterHeightUnits + ContentDividerUnits);
+				float units = LayoutConfig.ScreenHeightUnits - (LayoutConfig.HeaderHeightUnits + LayoutConfig.FooterHeightUnits + ContentDividerUnits);
+				return LayoutConfig.Units2Pixels (units);
 			}
 		}
 

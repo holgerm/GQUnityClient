@@ -72,7 +72,7 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = LayoutConfig.HeaderHeightUnits;
+			layElem.flexibleHeight = Units2Pixels (LayoutConfig.HeaderHeightUnits);
 		}
 
 		protected virtual void setContentHeight ()
@@ -84,9 +84,9 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = LayoutConfig.ContentHeightUnits;
+			layElem.flexibleHeight = Units2Pixels (LayoutConfig.ContentHeightUnits);
 			if (Footer == null || !Footer.gameObject.activeSelf) {
-				layElem.flexibleHeight += LayoutConfig.FooterHeightUnits;	
+				layElem.flexibleHeight += Units2Pixels (LayoutConfig.FooterHeightUnits);	
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = LayoutConfig.FooterHeightUnits;
+			layElem.flexibleHeight = LayoutConfig.Units2Pixels (LayoutConfig.FooterHeightUnits);
 		}
 
 		protected static void SetEntryHeight (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
@@ -179,7 +179,7 @@ namespace GQ.Client.UI
 						layElem.preferredWidth = layElem.minHeight;
 					}
 
-					// for texts we adapt the font size to be at most one third of the container element height:
+					// for texts we adapt the font size to be at most two thirds of the container element height:
 					Text text = transf.GetComponent<Text> ();
 					if (text != null) {
 						text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 

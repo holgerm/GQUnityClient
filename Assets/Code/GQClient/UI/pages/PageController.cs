@@ -132,15 +132,14 @@ namespace GQ.Client.UI
 
 		protected float CalculateMainAreaHeight (float imageAreaHeight)
 		{
-			return (	
-				LayoutConfig.ContentHeightUnits -
-			    (
-			        ContentTopMarginUnits +
-			        imageAreaHeight +
-			        ContentDividerUnits +
-			        ContentBottomMarginUnits
-			    )
-			);
+			float units = LayoutConfig.ContentHeightUnits -
+			              (
+			                  ContentTopMarginUnits +
+			                  imageAreaHeight +
+			                  ContentDividerUnits +
+			                  ContentBottomMarginUnits
+			              );
+			return LayoutConfig.Units2Pixels (units);
 		}
 
 		#endregion
