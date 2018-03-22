@@ -55,6 +55,9 @@ namespace GQ.Client.Model
 			case "wcc":
 				start_wcc ();
 				break;
+			case "slsspiele":
+				start_slsspiele ();
+				break;
 			default:
 				gameObject.SetActive (false);
 				break;
@@ -71,6 +74,33 @@ namespace GQ.Client.Model
 			// normalize copyright text:
 			if (copyright == "") {
 				copyright = "© WCC";
+			} else {
+				if (copyright.StartsWith ("©")) {
+					copyright = copyright.Substring (1);
+					copyright.TrimStart (' ');
+				} else {
+					copyright = COPYRIGHT_PREFIX + copyright;
+				}
+			}
+
+			// replace andy line breaks by one space:
+			copyright.Replace ('\n', ' ');
+
+			// set copyright text in game objects:
+			copyrightText4FittingImage.text = copyright;
+			copyrightText4EnvelopingImage.text = copyright;
+		}
+
+		void start_slsspiele ()
+		{
+			// for slsspiel Product:
+
+			/// get copyright text from variable value:
+			string copyright = Variables.GetValue ("bildrechte").AsString ();
+
+			// normalize copyright text:
+			if (copyright == "") {
+				copyright = "© SLS";
 			} else {
 				if (copyright.StartsWith ("©")) {
 					copyright = copyright.Substring (1);

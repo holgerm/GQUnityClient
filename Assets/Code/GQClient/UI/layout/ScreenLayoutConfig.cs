@@ -72,9 +72,12 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = Units2Pixels (LayoutConfig.HeaderHeightUnits);
+			SetLayoutElementHeight (layElem, Units2Pixels (HeaderHeightUnits));
 		}
 
+		/// <summary>
+		/// Sets the height of the content. If the footer is not shown its height will be added to content.
+		/// </summary>
 		protected virtual void setContentHeight ()
 		{
 			if (ContentArea == null)
@@ -84,9 +87,9 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = Units2Pixels (LayoutConfig.ContentHeightUnits);
+			SetLayoutElementHeight (layElem, Units2Pixels (ContentHeightUnits));
 			if (Footer == null || !Footer.gameObject.activeSelf) {
-				layElem.flexibleHeight += Units2Pixels (LayoutConfig.FooterHeightUnits);	
+				SetLayoutElementHeight (layElem, layElem.minHeight + Units2Pixels (FooterHeightUnits));
 			}
 		}
 
@@ -160,7 +163,8 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			layElem.flexibleHeight = LayoutConfig.Units2Pixels (LayoutConfig.FooterHeightUnits);
+			layElem.minHeight = LayoutConfig.Units2Pixels (LayoutConfig.FooterHeightUnits);
+			layElem.preferredHeight = layElem.minHeight;
 		}
 
 		protected static void SetEntryHeight (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)

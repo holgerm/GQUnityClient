@@ -4,6 +4,7 @@ using UnityEngine;
 using GQ.Client.Err;
 using GQ.Client.Conf;
 using GQ.Client.Util;
+using UnityEngine.UI;
 
 
 namespace GQ.Client.UI
@@ -165,6 +166,12 @@ namespace GQ.Client.UI
 			return ScreenHeightUnits * mm * Device.dpi / (Device.height * MMperINCH);
 		}
 
+		static public void SetLayoutElementHeight (LayoutElement layElem, float height)
+		{
+			layElem.minHeight = height;	
+			layElem.preferredHeight = height;	
+			layElem.flexibleHeight = 0f;
+		}
 
 		#endregion
 	}
