@@ -251,7 +251,10 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor (StartSection = "Layout & Colors:")]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	mainColor  { get; set; }
+		public Color32	mainColorFG  { get; set; }
+
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	mainColorBG  { get; set; }
 
 		[ShowInProductEditor]
 		public bool showShadows { get; set; }
@@ -458,6 +461,8 @@ namespace GQ.Client.Conf
 			markerHeightUnits = 75f;
 
 			// Layout:
+			mainColorBG = Color.white;
+			mainColorFG = Color.black;
 			showShadows = true;
 			headerHeightUnits = 60f;
 			contentHeightUnits = 750f;

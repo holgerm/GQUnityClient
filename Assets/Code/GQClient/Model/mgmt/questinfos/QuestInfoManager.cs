@@ -28,10 +28,10 @@ namespace GQ.Client.Model
 
 		public static string LocalQuestsPath {
 			get {
-				if (!Directory.Exists (Device.GetPersistentDatapath() + "/quests/")) {
-					Directory.CreateDirectory (Device.GetPersistentDatapath() + "/quests/");
+				if (!Directory.Exists (Device.GetPersistentDatapath () + "/quests/")) {
+					Directory.CreateDirectory (Device.GetPersistentDatapath () + "/quests/");
 				}
-				return Device.GetPersistentDatapath() + "/quests/";
+				return Device.GetPersistentDatapath () + "/quests/";
 			}
 		}
 
@@ -51,8 +51,9 @@ namespace GQ.Client.Model
 			return QuestDict.Values.ToList<QuestInfo> ();
 		}
 
-		public IEnumerable<QuestInfo> GetFilteredQuestInfos() {
-			return QuestDict.Values.Where( x => Filter.Accept(x)).ToList();
+		public IEnumerable<QuestInfo> GetFilteredQuestInfos ()
+		{
+			return QuestDict.Values.Where (x => Filter.Accept (x)).ToList ();
 		}
 
 		public bool ContainsQuestInfo (int id)
@@ -102,13 +103,15 @@ namespace GQ.Client.Model
 		/// Adds the given andFilter in conjunction to the current filter(s).
 		/// </summary>
 		/// <param name="andFilter">And filter.</param>
-		public void FilterAnd(QuestInfoFilter andFilter) {
+		public void FilterAnd (QuestInfoFilter andFilter)
+		{
 			Filter = new QuestInfoFilter.And (Filter, andFilter);
 		}
-			
+
 		public event ChangeCallback OnFilterChange;
 
-		public void FilterChanged() {
+		public void FilterChanged ()
+		{
 			if (OnFilterChange != null) {
 				OnFilterChange (
 					this, 					
@@ -136,7 +139,7 @@ namespace GQ.Client.Model
 				// A questInfo with this ID already exists: this is a CHANGE:
 				if (newInfo.LastUpdateOnServer > oldInfo.LastUpdateOnServer) {
 					// NEW INFO IS NEWER: hence we should replace the old one with the new:
-					QuestDict.Remove(newInfo.Id);
+					QuestDict.Remove (newInfo.Id);
 					QuestDict.Add (newInfo.Id, newInfo);
 					Debug.Log ("Change of QuestInfos in QIM, we found a server-side update and replaced the old info with the new one.");
 
@@ -174,7 +177,7 @@ namespace GQ.Client.Model
 			Debug.Log ("RemoveInfo(" + oldInfoID + ")");
 
 			QuestInfo oldInfo = null;
-			if (!QuestDict.TryGetValue(oldInfoID, out oldInfo)) {
+			if (!QuestDict.TryGetValue (oldInfoID, out oldInfo)) {
 				Log.SignalErrorToDeveloper (
 					"Trying to remove quest info with ID {0} but it deos not exist in QuestInfoManager.", 
 					oldInfoID
@@ -217,9 +220,8 @@ namespace GQ.Client.Model
 				QuestDict.Add (newInfo.Id, newInfo);
 
 				// TODO: update the quest itself:
-				newInfo.Download().Start();
-			}
-			else {
+				newInfo.Download ().Start ();
+			} else {
 				// only update the quest info server timestamp so the views can figure out that this info is updatable 
 				// and offer manual update to the user:
 				oldInfo.LastUpdateOnServer = newInfo.LastUpdateOnServer;
@@ -256,8 +258,8 @@ namespace GQ.Client.Model
 				new ImportLocalQuestInfos ();
 			new SimpleDialogBehaviour (
 				importLocal,
-				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
+				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format ("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			Downloader downloader = 
@@ -266,23 +268,23 @@ namespace GQ.Client.Model
 					timeout: ConfigurationManager.Current.timeoutMS);
 			new DownloadDialogBehaviour (
 				downloader, 
-				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
+				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
 			);
 
 			ImportQuestInfos importFromServer = 
 				new ImportServerQuestInfos ();
 			new SimpleDialogBehaviour (
 				importFromServer,
-				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format("Neue {0} werden lokal gespeichert", ConfigurationManager.Current.nameForQuestsPl)
+				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format ("Neue {0} werden lokal gespeichert", ConfigurationManager.Current.nameForQuestsPl)
 			);
 
 			ExportQuestInfosToJSON exporter = 
 				new ExportQuestInfosToJSON ();
 			new SimpleDialogBehaviour (
 				exporter,
-				string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+				string.Format ("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
 			);
 
 			TaskSequence t = new TaskSequence (importLocal, downloader);
@@ -294,14 +296,14 @@ namespace GQ.Client.Model
 
 		public static event Task.TaskCallback OnQuestInfosUpdateSucceeded;
 
-		public delegate void ChangeCallback (object sender, QuestInfoChangedEvent e);
+		public delegate void ChangeCallback (object sender,QuestInfoChangedEvent e);
 
 		private event ChangeCallback onDataChange;
 
 		public event ChangeCallback OnDataChange {
 			add {
 				onDataChange += value;
-				value(
+				value (
 					this, 					
 					new QuestInfoChangedEvent (
 						"Initializing listener ...",
@@ -358,49 +360,47 @@ namespace GQ.Client.Model
 			// init quest info store:
 			QuestDict = new Dictionary<int, QuestInfo> ();
 
-			initViews();
-			initFilters();
+			initViews ();
+			initFilters ();
 		}
 
-		void initViews() {
+		void initViews ()
+		{
 			if (ConfigurationManager.Current.questInfoViews == null || ConfigurationManager.Current.questInfoViews.Length == 0) {
 				Log.SignalErrorToDeveloper ("No quest info views defined for this app. Fix that!");
 				return;
 			}
 
-			string startView = ConfigurationManager.Current.questInfoViews[0];
-			if (startView == QuestInfoView.List.ToString()) {
-				Base.Instance.ListCanvas.gameObject.SetActive(true);
-			} 
-			else if (startView == QuestInfoView.Map.ToString()) {
-				Base.Instance.MapCanvas.gameObject.SetActive(true);
-				Base.Instance.MapHolder.gameObject.SetActive(true);
-			}
+			string startView = ConfigurationManager.Current.questInfoViews [0];
+			Base.Instance.ListCanvas.gameObject.SetActive (startView == QuestInfoView.List.ToString ());
+			Base.Instance.MapCanvas.gameObject.SetActive (startView == QuestInfoView.Map.ToString ());
+			Base.Instance.MapHolder.gameObject.SetActive (startView == QuestInfoView.Map.ToString ());
 
 			// check whether we have alternative views to offer:
 			if (ConfigurationManager.Current.questInfoViews.Length <= 1)
 				return;
 
 			// Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
-			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
+			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint> ().MenuTopLeftContent;
 			ViewToggleController.Create (menuContent);
 		}
 
-		void initFilters() {
+		void initFilters ()
+		{
 			// init filters
 			Filter = new QuestInfoFilter.All ();
 			// init category filters:
-			CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
+			CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter> ();
 			List<CategorySet> catSets = ConfigurationManager.Current.categorySets;
 			foreach (CategorySet catSet in catSets) {
-				CategoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter (catSet);
-				FilterAnd(CategoryFilters[catSet.name]);
+				CategoryFilters [catSet.name] = new QuestInfoFilter.CategoryFilter (catSet);
+				FilterAnd (CategoryFilters [catSet.name]);
 			}
 
 			// create UI for Category Filters:
-			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
+			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint> ().MenuTopLeftContent;
 			foreach (CategorySet catSet in ConfigurationManager.Current.categorySets) {
-				CategoryTreeCtrl.Create (menuContent, CategoryFilters[catSet.name], catSet.categories);
+				CategoryTreeCtrl.Create (menuContent, CategoryFilters [catSet.name], catSet.categories);
 			}
 		}
 

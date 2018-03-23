@@ -24,7 +24,7 @@ namespace GQ.Client.UI
 			if (questInfoList != null) {
 				Image im = questInfoList.GetComponent<Image> ();
 				if (im != null) {
-					im.color = ConfigurationManager.Current.mainColor;
+					im.color = ConfigurationManager.Current.mainColorFG;
 				}
 			}
 		}

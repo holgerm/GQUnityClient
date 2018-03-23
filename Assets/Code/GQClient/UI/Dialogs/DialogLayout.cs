@@ -18,7 +18,7 @@ namespace GQ.Client.UI.Dialogs
 			// set frame color (implemented as background of the enveloping dialog panel):
 			Image image = GetComponent<Image> ();
 			if (image != null) {
-				image.color = ConfigurationManager.Current.mainColor;
+				image.color = ConfigurationManager.Current.mainColorFG;
 			}
 
 			// set content background color:
