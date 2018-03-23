@@ -245,10 +245,16 @@
   "topLogo": {
     "path": "TopLogo"
   },
-  "mainColor": {
+  "mainColorFG": {
     "r": 116,
     "g": 103,
     "b": 33,
+    "a": 255
+  },
+  "mainColorBG": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "showShadows": true,
