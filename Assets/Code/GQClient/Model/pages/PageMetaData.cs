@@ -17,7 +17,8 @@ namespace GQ.Client.Model
 
 		public override void Start ()
 		{
-			base.Start ();
+//			base.Start ();
+//			Quest.End ();
 		}
 
 		#endregion
@@ -36,8 +37,7 @@ namespace GQ.Client.Model
 					break;
 				if (QuestManager.CurrentlyParsingQuest.metadata.ContainsKey (smde.Key)) {
 					QuestManager.CurrentlyParsingQuest.metadata [smde.Key] = smde.Value;
-				}
-				else {
+				} else {
 					QuestManager.CurrentlyParsingQuest.metadata.Add (smde.Key, smde.Value);
 				}
 				break;
