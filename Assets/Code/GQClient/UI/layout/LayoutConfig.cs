@@ -5,6 +5,7 @@ using GQ.Client.Err;
 using GQ.Client.Conf;
 using GQ.Client.Util;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 namespace GQ.Client.UI
@@ -148,10 +149,24 @@ namespace GQ.Client.UI
 			}
 		}
 
+		static protected float CanvasScale {
+			get {
+				foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects()) {
+					if (go.GetComponent<Canvas> () != null && go.name.EndsWith ("Canvas")) {
+						return go.transform.localScale.y;
+					}
+				}
+				Log.SignalErrorToDeveloper (
+					"No root canvas found in scene {0} hence canvas scale factor is set to 1.0f", 
+					SceneManager.GetActiveScene ().name
+				);
+				return 1f;
+			}
+		}
+
 		static public float Units2Pixels (float units)
 		{
-			float canvasScale = GameObject.Find ("DialogCanvas").transform.localScale.y;
-			return (units * (Device.height / ScreenHeightUnits)) / canvasScale;
+			return (units * (Device.height / ScreenHeightUnits)) / CanvasScale;
 		}
 
 		static protected float MMperINCH = 25.4f;
