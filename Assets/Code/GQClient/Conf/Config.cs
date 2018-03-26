@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using GQ.Client.Err;
 using Newtonsoft.Json.Converters;
+using GQ.Client.FileIO;
 
 namespace GQ.Client.Conf
 {
@@ -587,10 +588,11 @@ namespace GQ.Client.Conf
 		public static readonly Color32 transparent = new Color32 (255, 255, 255, 0);
 	}
 
-	public struct SceneMapping
+	public class SceneMapping
 	{
 
-		public const string PageSceneAssetPathRoot = "Assets/Scenes/Pages/";
+		public const string ProjectScenesRootPath = "Assets/Scenes/Pages/";
+		public static readonly string ProductScenesRootPath = Files.CombinePath (ConfigurationManager.RUNTIME_PRODUCT_DIR, "Scenes/Pages/");
 
 		public SceneMapping (string pageType, string scenePath)
 		{

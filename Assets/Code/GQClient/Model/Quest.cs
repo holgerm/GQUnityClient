@@ -239,8 +239,8 @@ namespace GQ.Client.Model
 			Dictionary<string, string> sceneMappings = ConfigurationManager.Current.GetSceneMappingsDict ();
 			if (sceneMappings.TryGetValue (pageTypeName, out targetScenePath)) {
 				pageTypeName = targetScenePath.Substring (
-					SceneMapping.PageSceneAssetPathRoot.Length, 
-					targetScenePath.Length - (SceneMapping.PageSceneAssetPathRoot.Length + ".unity".Length)
+					targetScenePath.LastIndexOf ("/") + 1, 
+					targetScenePath.Length - (targetScenePath.LastIndexOf ("/") + 1 + ".unity".Length)
 				);
 			} 
 			pageTypeName = string.Format ("{0}.Page{1}", modelNamespace, pageTypeName);

@@ -8,6 +8,9 @@ using UnityEngine;
 using GQ.Client.Util;
 using GQ.Client.UI;
 using System.Collections.Generic;
+using System.IO;
+using GQ.Client.FileIO;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Model
 {
@@ -163,7 +166,17 @@ namespace GQ.Client.Model
 
 		private string PageScenePath {
 			get {
-				return "Scenes/Pages/" + GetType ().Name.Substring (4);
+				string scenePath = Files.CombinePath (SceneMapping.ProjectScenesRootPath, GetType ().Name.Substring (4));
+				if (File.Exists (scenePath + ".unity")) {
+					return scenePath.Substring ("Assets/".Length);
+				}
+				scenePath = Files.CombinePath (SceneMapping.ProductScenesRootPath, GetType ().Name.Substring (4));
+				if (File.Exists (scenePath + ".unity")) {
+					return scenePath.Substring ("Assets/".Length);
+				}
+
+				Log.SignalErrorToDeveloper ("No scene file found for path {0}. Forgot to update set of scenes in product editor?", scenePath);
+				return "";
 			}
 		}
 			

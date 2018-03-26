@@ -202,7 +202,7 @@ namespace GQ.Editor.UI
 				if (GUILayout.Button ("Reload")) {
 					Config reloadedConfig = updateFromCurrentConfig ();
 					if (reloadedConfig != null) {
-						Pm.SetProductConfig(Pm.AllProductIds.ElementAt (selectedProductIndex), reloadedConfig);
+						Pm.SetProductConfig (Pm.AllProductIds.ElementAt (selectedProductIndex), reloadedConfig);
 					}
 				}
 
@@ -295,7 +295,7 @@ namespace GQ.Editor.UI
 					return null;
 				string configText = File.ReadAllText (configFile);
 				Config buildConfig = JsonConvert.DeserializeObject<Config> (configText);
-				updateEditorBuildSceneSettings(buildConfig);
+				updateEditorBuildSceneSettings (buildConfig);
 				return buildConfig;
 			} catch (Exception exc) {
 				Debug.LogWarning ("ProductEditor.currentBuild() threw exception:\n" + exc.Message);
@@ -305,9 +305,10 @@ namespace GQ.Editor.UI
 
 		bool configIsDirty = false;
 
-		static private void updateEditorBuildSceneSettings(Config config) {
+		static private void updateEditorBuildSceneSettings (Config config)
+		{
 			EditorBuildSettingsScene[] sceneSettings = new EditorBuildSettingsScene[config.scenePaths.Length];
-			for(int i = 0; i < config.scenePaths.Length; i++) {
+			for (int i = 0; i < config.scenePaths.Length; i++) {
 				sceneSettings [i] = new EditorBuildSettingsScene (config.scenePaths [i], true);
 			}
 			EditorBuildSettings.scenes = sceneSettings;
@@ -597,8 +598,7 @@ namespace GQ.Editor.UI
 				StringBuilder classNameBuilder = new StringBuilder (typeof(ProductEditorPart).FullName + "4");
 				if (propertyType.Name.Contains ("`")) {
 					classNameBuilder.Append (propertyType.Name.Substring (0, propertyType.Name.LastIndexOf ("`")));
-				}
-				else {
+				} else {
 					classNameBuilder.Append (propertyType.Name);
 				}
 				Type[] argTypes = propertyType.GetGenericArguments ();
@@ -620,13 +620,13 @@ namespace GQ.Editor.UI
 			} 
 
 			if (accordingEditorPart == null) {
-				Log.SignalErrorToDeveloper ("Unhandled property Type: {0} ({1})", curPropInfo.PropertyType.Name ,className);
+				Log.SignalErrorToDeveloper ("Unhandled property Type: {0} ({1})", curPropInfo.PropertyType.Name, className);
 				return false;
 			}
 
 			if (ProductEditorPart.entryHidden (curPropInfo))
 				return false;
-			else if (Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor))) {
+			else if (Attribute.IsDefined (curPropInfo, typeof(ShowInProductEditor))) {
 				var attributes = curPropInfo.GetCustomAttributes (typeof(ShowInProductEditor), false);
 				ShowInProductEditor attr = (ShowInProductEditor)attributes [0];
 				if (attr.StartSection != null && attr.StartSection != "") {
@@ -732,7 +732,7 @@ namespace GQ.Editor.UI
 
 			// show Color field if value fits in one line:
 			newColorVal = EditorGUILayout.ColorField (NamePrefixGUIContent, oldColorVal);
-			if (!newColorVal.Equals(oldColorVal)) {
+			if (!newColorVal.Equals (oldColorVal)) {
 				configIsDirty = true;
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, newColorVal, null);
 			}
@@ -795,8 +795,7 @@ namespace GQ.Editor.UI
 
 				string newValString = (newVal == null ? "" : (newVal.path == null ? "" : newVal.path));
 				string oldValString = (oldVal == null ? "" : (oldVal.path == null ? "" : oldVal.path));
-				if (!newValString.Equals(oldValString)) 
-				{
+				if (!newValString.Equals (oldValString)) {
 					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, newVal, null);
 				}
@@ -894,7 +893,8 @@ namespace GQ.Editor.UI
 	}
 
 
-	public class ProductEditorPart4ListOfCategorySet : ProductEditorPart {
+	public class ProductEditorPart4ListOfCategorySet : ProductEditorPart
+	{
 		bool showList = false;
 
 		override protected bool doCreateGui (PropertyInfo curPropInfo)
@@ -940,13 +940,13 @@ namespace GQ.Editor.UI
 
 					if (GUILayout.Button ("-")) {
 						if (EditorUtility.DisplayDialog (
-							string.Format ("Really delete category set {0}?", (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString ()), 
-							string.Format (
-								"This can not be undone"
-							), 
-							"Yes, delete it!", 
-							"No, keep it")) {
-							allElements.RemoveAll(item => item.name == oldElem.name);
+							    string.Format ("Really delete category set {0}?", (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString ()), 
+							    string.Format (
+								    "This can not be undone"
+							    ), 
+							    "Yes, delete it!", 
+							    "No, keep it")) {
+							allElements.RemoveAll (item => item.name == oldElem.name);
 							valsChanged = true;
 						}
 					}
@@ -966,7 +966,7 @@ namespace GQ.Editor.UI
 				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements, null);
 			}
 
-		return configIsDirty;
+			return configIsDirty;
 		}
 	}
 
@@ -1078,7 +1078,7 @@ namespace GQ.Editor.UI
 					if (newSymbolSprite != oldSymbolSprite) {
 						string path = AssetDatabase.GetAssetPath (newSymbolSprite);
 						newSymbolPath = new ImagePath (Files.GetResourcesRelativePath (path));
-						elemChanged |= !newSymbolPath.Equals(oldSymbolPath);
+						elemChanged |= !newSymbolPath.Equals (oldSymbolPath);
 					}
 					if (elemChanged) {
 						valsChanged = true;
@@ -1112,8 +1112,9 @@ namespace GQ.Editor.UI
 
 			return configIsDirty;
 		}
-			
-		public List<Category> getSortedAccordingToFolders(List<Category> allCats) {
+
+		public List<Category> getSortedAccordingToFolders (List<Category> allCats)
+		{
 			// we create for each folder a list of current indices where the elements of that folders stay:
 			Dictionary<string, List<int>> catPositionsForFolders = new Dictionary<string, List<int>> ();
 			// we collect the order in wich the folders start to create the collected folders in that order again later:
@@ -1121,9 +1122,9 @@ namespace GQ.Editor.UI
 
 			for (int i = 0; i < allCats.Count; i++) {
 				List<int> positionList;
-				if (!catPositionsForFolders.TryGetValue(allCats[i].folderName, out positionList)) {
+				if (!catPositionsForFolders.TryGetValue (allCats [i].folderName, out positionList)) {
 					positionList = new List<int> ();
-					catPositionsForFolders.Add(allCats [i].folderName, positionList);
+					catPositionsForFolders.Add (allCats [i].folderName, positionList);
 					orderOfFolders.Add (allCats [i].folderName);
 				}
 				positionList.Add (i);
@@ -1137,7 +1138,7 @@ namespace GQ.Editor.UI
 					Log.SignalErrorToDeveloper ("Sorting Categories for Folders broken: Folder {0} not in catPositionsForFolders list! Fix it!", orderOfFolders [i]);
 				}
 				foreach (int oldIndex in oldIndicesForThisFolder) {
-					sortedList.Insert(newIndex++, allCats [oldIndex]);
+					sortedList.Insert (newIndex++, allCats [oldIndex]);
 				}
 			}
 
@@ -1387,7 +1388,8 @@ namespace GQ.Editor.UI
 			return configIsDirty;
 		}
 
-		private bool doGui4ScenePaths (PropertyInfo curPropInfo) {
+		private bool doGui4ScenePaths (PropertyInfo curPropInfo)
+		{
 			configIsDirty = false;
 
 			showDetails = EditorGUILayout.Foldout (
@@ -1405,7 +1407,7 @@ namespace GQ.Editor.UI
 					STYLE_LABEL_Bold
 				);
 				if (GUILayout.Button ("Import from Editor Settings")) {
-					EditorWindow editorBuildSettingsWindow = EditorWindow.GetWindow(Type.GetType("UnityEditor.BuildPlayerWindow,UnityEditor"));
+					EditorWindow editorBuildSettingsWindow = EditorWindow.GetWindow (Type.GetType ("UnityEditor.BuildPlayerWindow,UnityEditor"));
 					editorBuildSettingsWindow.Show ();
 
 					List<string> scenePathsFromSettings = new List<string> ();
@@ -1437,7 +1439,8 @@ namespace GQ.Editor.UI
 
 		int selection = 0;
 
-		private bool doGui4AcceptedPageTypes(PropertyInfo curPropInfo) {
+		private bool doGui4AcceptedPageTypes (PropertyInfo curPropInfo)
+		{
 			configIsDirty = false;
 
 			if (ProductEditor.SelectedConfig.acceptedPageTypes == null) {
@@ -1446,9 +1449,9 @@ namespace GQ.Editor.UI
 			List<string> allElements = new List<string> (ProductEditor.SelectedConfig.acceptedPageTypes);
 
 			int selectedPageTypeToAdd;
-			List<string> pageTypesToAdd = new List<string>();
+			List<string> pageTypesToAdd = new List<string> ();
 			foreach (string pageType in Enum.GetNames (typeof(PageType))) {
-				if (!allElements.Contains(pageType)) {
+				if (!allElements.Contains (pageType)) {
 					pageTypesToAdd.Add (pageType);
 				}
 			}
@@ -1467,7 +1470,7 @@ namespace GQ.Editor.UI
 					selection = 
 					EditorGUILayout.Popup (
 						"Add Page Type:", 
-							selection, 
+						selection, 
 						pageTypesToAdd.ToArray ()
 					);
 				
@@ -1494,10 +1497,10 @@ namespace GQ.Editor.UI
 					}
 					if (GUILayout.Button ("-")) {
 						if (EditorUtility.DisplayDialog (
-							string.Format ("Really Delete Accepted Page Type {0}?", ProductEditor.SelectedConfig.acceptedPageTypes [i]), 
-							"Sure?.", 
-							"Yes, delete it!", 
-							"No, keep it")) {
+							    string.Format ("Really Delete Accepted Page Type {0}?", ProductEditor.SelectedConfig.acceptedPageTypes [i]), 
+							    "Sure?.", 
+							    "Yes, delete it!", 
+							    "No, keep it")) {
 							allElements.Remove (ProductEditor.SelectedConfig.acceptedPageTypes [i]);
 							configIsDirty = true;
 						}
@@ -1507,22 +1510,23 @@ namespace GQ.Editor.UI
 			}
 
 			if (configIsDirty) {
-				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements.ToArray(), null);
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements.ToArray (), null);
 			}
 			return configIsDirty;
 		}
 
-		private bool doGui4QuestInfoViews(PropertyInfo curPropInfo) {
+		private bool doGui4QuestInfoViews (PropertyInfo curPropInfo)
+		{
 			configIsDirty = false;
 
 			if (ProductEditor.SelectedConfig.questInfoViews == null) {
-				ProductEditor.SelectedConfig.questInfoViews = new string[2] { QuestInfoView.Map.ToString(), QuestInfoView.List.ToString() };
+				ProductEditor.SelectedConfig.questInfoViews = new string[2] { QuestInfoView.Map.ToString (), QuestInfoView.List.ToString () };
 			}
 			List<string> allElements = new List<string> (ProductEditor.SelectedConfig.questInfoViews);
 
-			List<string> viewsToAdd = new List<string>();
+			List<string> viewsToAdd = new List<string> ();
 			foreach (string pageType in Enum.GetNames (typeof(QuestInfoView))) {
-				if (!allElements.Contains(pageType)) {
+				if (!allElements.Contains (pageType)) {
 					viewsToAdd.Add (pageType);
 				}
 			}
@@ -1544,10 +1548,10 @@ namespace GQ.Editor.UI
 						selection = viewsToAdd.Count - 1;
 					selection = 
 						EditorGUILayout.Popup (
-							"Add Questinfo Viewing Option:", 
-							selection, 
-							viewsToAdd.ToArray ()
-						);
+						"Add Questinfo Viewing Option:", 
+						selection, 
+						viewsToAdd.ToArray ()
+					);
 
 					if (GUILayout.Button ("+")) {
 						allElements.Add (viewsToAdd [selection]);
@@ -1577,8 +1581,8 @@ namespace GQ.Editor.UI
 //							              "Yes, delete it!", 
 //							              "No, keep it");
 //						if (delete) {
-							allElements.Remove (ProductEditor.SelectedConfig.questInfoViews [i]);
-							configIsDirty = true;
+						allElements.Remove (ProductEditor.SelectedConfig.questInfoViews [i]);
+						configIsDirty = true;
 //						}
 					}
 					EditorGUILayout.EndHorizontal ();
@@ -1586,7 +1590,7 @@ namespace GQ.Editor.UI
 			}
 
 			if (configIsDirty) {
-				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements.ToArray(), null);
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements.ToArray (), null);
 			}
 			return configIsDirty;
 		}
@@ -1613,7 +1617,7 @@ namespace GQ.Editor.UI
 			foreach (string pageType in ProductEditor.SelectedConfig.acceptedPageTypes) {
 				bool alreadyMapped = false;
 				foreach (SceneMapping mapping in allElements) {
-					if (pageType.Equals(mapping.pageTypeName)) {
+					if (pageType.Equals (mapping.pageTypeName)) {
 						alreadyMapped = true;
 						break; // do not add this page type since it is already mapped
 					}
@@ -1622,15 +1626,21 @@ namespace GQ.Editor.UI
 					availablePageTypesToMap.Add (pageType);
 			}
 
+			// Collect all available page scenes:
 			List<string> pageScenes = new List<string> ();
-			foreach (string scenePath in Directory.GetFiles(SceneMapping.PageSceneAssetPathRoot, "*.unity")) {
+			// general project page scenes:
+			foreach (string scenePath in Directory.GetFiles(SceneMapping.ProjectScenesRootPath, "*.unity")) {
 				pageScenes.Add (
-					scenePath.Substring(
-						SceneMapping.PageSceneAssetPathRoot.Length, 
-						scenePath.Length - (SceneMapping.PageSceneAssetPathRoot.Length + ".unity".Length)
-					)
+					scenePath.Substring (0, scenePath.Length - ".unity".Length)
 				);
 			}
+			// product specific page scenes:
+			if (Directory.Exists (SceneMapping.ProductScenesRootPath))
+				foreach (string scenePath in Directory.GetFiles(SceneMapping.ProductScenesRootPath, "*.unity")) {
+					pageScenes.Add (
+						scenePath.Substring (0, scenePath.Length - ".unity".Length)
+					);
+				}
 
 			showDetails = EditorGUILayout.Foldout (showDetails, string.Format ("Scene Mappings: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
 			if (showDetails) {
@@ -1645,9 +1655,9 @@ namespace GQ.Editor.UI
 					);
 					selectedPageTypeToAdd = 
 						EditorGUILayout.Popup (
-							selectedPageTypeToAdd,
-							availablePageTypesToMap.ToArray()
-						);
+						selectedPageTypeToAdd,
+						availablePageTypesToMap.ToArray ()
+					);
 					EditorGUILayout.EndHorizontal ();
 					EditorGUILayout.BeginHorizontal ();
 					EditorGUILayout.PrefixLabel (
@@ -1657,14 +1667,14 @@ namespace GQ.Editor.UI
 					);
 					selectedSceneToAdd = 
 						EditorGUILayout.Popup (
-							selectedSceneToAdd,
-							pageScenes.ToArray()
-						);
+						selectedSceneToAdd,
+						pageScenes.Select (s => s.Substring (
+							s.LastIndexOf ("/") + 1)).ToArray ());
 					if (GUILayout.Button ("+")) {
 						allElements.Add (
 							new SceneMapping (
-								availablePageTypesToMap[selectedPageTypeToAdd], 
-								SceneMapping.PageSceneAssetPathRoot + pageScenes[selectedSceneToAdd] + ".unity"
+								availablePageTypesToMap [selectedPageTypeToAdd], 
+								pageScenes [selectedSceneToAdd] + ".unity"
 							)
 						);
 						valsChanged = true;
@@ -1682,8 +1692,8 @@ namespace GQ.Editor.UI
 						);
 						EditorGUILayout.TextField (
 							allElements [i].scenePath.Substring (
-								SceneMapping.PageSceneAssetPathRoot.Length, 
-								allElements [i].scenePath.Length - (SceneMapping.PageSceneAssetPathRoot.Length + ".unity".Length)
+								SceneMapping.ProjectScenesRootPath.Length, 
+								allElements [i].scenePath.Length - (SceneMapping.ProjectScenesRootPath.Length + ".unity".Length)
 							)
 						);
 					}
@@ -1698,11 +1708,11 @@ namespace GQ.Editor.UI
 					// Update Config property for scene extensions:
 					configIsDirty = true;
 					curPropInfo.SetValue (ProductEditor.SelectedConfig, allElements, null);
-					List<EditorBuildSettingsScene> editorBuildScenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);					
+					List<EditorBuildSettingsScene> editorBuildScenes = new List<EditorBuildSettingsScene> (EditorBuildSettings.scenes);					
 					foreach (SceneMapping sm in allElements) {
 						bool sceneInBuild = false;
 						foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes) {
-							if (scene.path.Equals(sm.scenePath)) {
+							if (scene.path.Equals (sm.scenePath)) {
 								sceneInBuild = true;
 								scene.enabled = true;
 								break;
