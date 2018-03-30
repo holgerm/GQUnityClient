@@ -28,8 +28,8 @@ namespace GQ.Client.UI
 				if (button != null) {
 					LayoutElement layElem = perhapsAButton.GetComponent<LayoutElement> ();
 					if (layElem != null) {
-						layElem.preferredHeight = Units2Pixels (MapButtonHeightUnits);
-						layElem.preferredWidth = layElem.preferredHeight;
+						SetLayoutElementHeight (layElem, Units2Pixels (MapButtonHeightUnits));
+						SetLayoutElementWidth (layElem, Units2Pixels (MapButtonHeightUnits));
 					}
 				}
 			}

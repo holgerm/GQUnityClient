@@ -166,7 +166,8 @@ namespace GQ.Client.UI
 
 		static public float Units2Pixels (float units)
 		{
-			return (units * (Device.height / ScreenHeightUnits)) / CanvasScale;
+			float pixels = (units * (Device.height / ScreenHeightUnits)) / CanvasScale;
+			return pixels;
 		}
 
 		static protected float MMperINCH = 25.4f;
@@ -186,6 +187,13 @@ namespace GQ.Client.UI
 			layElem.minHeight = height;	
 			layElem.preferredHeight = height;	
 			layElem.flexibleHeight = 0f;
+		}
+
+		static public void SetLayoutElementWidth (LayoutElement layElem, float width)
+		{
+			layElem.minWidth = width;	
+			layElem.preferredWidth = width;	
+			layElem.flexibleWidth = 0f;
 		}
 
 		#endregion

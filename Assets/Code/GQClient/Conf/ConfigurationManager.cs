@@ -51,10 +51,10 @@ namespace GQ.Client.Conf
 		public const string TOPLOGO_FILE_NAME = "TopLogo";
 		public const string TOPLOGO_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + TOPLOGO_FILE_NAME;
 
-		public const string GQ_SERVER_BASE_URL = "http://qeevee.org:9091";
+		public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
+		// "http://qeevee.org:9091";
 
-		public static string UrlPublicQuestsJSON 
-		{
+		public static string UrlPublicQuestsJSON {
 			get {
 				return 
 					String.Format (
@@ -195,7 +195,8 @@ namespace GQ.Client.Conf
 			}
 		}
 
-		private static string retrieveProductJSONFromAppConfig() {
+		private static string retrieveProductJSONFromAppConfig ()
+		{
 			TextAsset configAsset = Resources.Load ("Product") as TextAsset;
 
 			if (configAsset == null) {
@@ -205,7 +206,7 @@ namespace GQ.Client.Conf
 			return configAsset.text;
 		}
 
-		public delegate string RetrieveProductJSONTextDelegate();
+		public delegate string RetrieveProductJSONTextDelegate ();
 
 		private static RetrieveProductJSONTextDelegate _retrieveProductJSONText;
 
