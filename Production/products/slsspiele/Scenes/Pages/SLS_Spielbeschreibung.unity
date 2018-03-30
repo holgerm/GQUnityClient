@@ -550,7 +550,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Test Text
+  m_Text: Here goes the title
 --- !u!222 &219813621
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1010,8 +1010,8 @@ GameObject:
   - component: {fileID: 489062703}
   - component: {fileID: 489062702}
   - component: {fileID: 489062701}
-  - component: {fileID: 489062700}
   - component: {fileID: 489062705}
+  - component: {fileID: 489062700}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -1042,16 +1042,14 @@ RectTransform:
 --- !u!114 &489062700
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114056384082163908, guid: f8361c2fc90d94856ae2ef57f7b95aad,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 489062698}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0126e8b9468aa428f8d1599e31ad340c, type: 3}
+  m_Script: {fileID: 11500000, guid: bdde3fb2e30ae48e485b4ae90899b577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whatToToggle: {fileID: 0}
 --- !u!114 &489062701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,7 +1077,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 489062698}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -1111,7 +1109,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 489062703}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 489062700}
+        m_MethodName: DoEndQuest
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &489062703
@@ -1721,7 +1730,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00004730802}
+  m_AnchoredPosition: {x: 0, y: 0.00004415081}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -2456,10 +2465,10 @@ RectTransform:
   m_Father: {fileID: 561690670}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 540, y: -77.56142}
+  m_SizeDelta: {x: 1080, y: 155.12283}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1488490923
 MonoBehaviour:
@@ -2831,7 +2840,6 @@ GameObject:
   - component: {fileID: 1804547553}
   - component: {fileID: 1804547556}
   - component: {fileID: 1804547555}
-  - component: {fileID: 1804547557}
   - component: {fileID: 1804547554}
   m_Layer: 5
   m_Name: Footer
@@ -2839,7 +2847,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1804547553
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2854,10 +2862,10 @@ RectTransform:
   m_Father: {fileID: 2125452548}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 540, y: -1685.3267}
+  m_SizeDelta: {x: 1080, y: 155.12283}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1804547554
 MonoBehaviour:
@@ -2911,17 +2919,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1804547552}
---- !u!114 &1804547557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1804547552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6588269b38ff3407cb3c48c6e14f2d60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1862011689
 GameObject:
   m_ObjectHideFlags: 0
@@ -3297,15 +3294,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2125452544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e809b6a0c8843ea9ef00e82fe46c29, type: 3}
+  m_Script: {fileID: 11500000, guid: f5e0037bfecf3493a9cbf581f128e6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Header: {fileID: 1095057061}
-  TopMargin: {fileID: 485913647}
-  ContentArea: {fileID: 988022697}
-  Divider: {fileID: 515129376}
-  BottomMargin: {fileID: 498327046}
-  Footer: {fileID: 1804547552}
+  image: {fileID: 1549135014}
+  imagePanel: {fileID: 2026155312}
+  contentPanel: {fileID: 215277135}
+  dialogItemContainer: {fileID: 885299350}
+  forwardButtonText: {fileID: 0}
+  titleText: {fileID: 219813620}
 --- !u!114 &2125452551
 MonoBehaviour:
   m_ObjectHideFlags: 0
