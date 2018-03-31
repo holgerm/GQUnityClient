@@ -132,11 +132,6 @@ namespace GQ.Client.Model
 
 		public void AddInfo (QuestInfo newInfo)
 		{
-			Debug.Log ("AddInfo(" + newInfo.Id + ")");
-			if (newInfo.Id == 11005) {
-				Debug.Log ("Treffer");
-			}
-
 			QuestInfo oldInfo = null;
 			if (QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
 				// A questInfo with this ID already exists: this is a CHANGE:

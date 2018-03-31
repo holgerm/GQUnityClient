@@ -147,10 +147,14 @@ namespace GQ.Client.UI.Foyer
 			// update the quest info:
 			if (data.NewVersionOnServer != null && QuestInfoManager.Instance.QuestDict.Remove (data.Id)) {
 //				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer);
-				data.NewVersionOnServer.Download ().Start ();
+				Task download = data.NewVersionOnServer.Download ();
 
 				// Update the quest info list ...
-				QuestInfoManager.Instance.ChangeInfo(data.NewVersionOnServer);
+				download.OnTaskCompleted += 
+					(object sender, TaskEventArgs e) => 
+				{ 
+					QuestInfoManager.Instance.ChangeInfo(data.NewVersionOnServer); 
+				};
 			}
 
 		}

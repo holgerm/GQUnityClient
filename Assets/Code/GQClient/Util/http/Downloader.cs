@@ -98,8 +98,6 @@ namespace GQ.Client.Util
 
 		protected IEnumerator Download ()
 		{
-			UnityEngine.Debug.Log ("Downloader #1 from url: " + Url);
-
 			Www = new WWW (Url);
 			stopwatch.Start ();
 
@@ -133,13 +131,10 @@ namespace GQ.Client.Util
 
 			if (Www.error != null && Www.error != "") {
 				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
-				UnityEngine.Debug.Log ("Downloader error: " + Www.error);
 				RaiseTaskFailed ();
 			} else {
 				Result = Www.text;
 			
-				UnityEngine.Debug.Log ("Downloader done text length: " + Www.text.Length);
-
 				msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", Url, progress * 100);
 				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 

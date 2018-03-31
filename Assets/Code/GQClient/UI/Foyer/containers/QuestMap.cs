@@ -72,7 +72,6 @@ namespace GQ.Client.UI.Foyer
 		public void UpdateView ()
 		{
 			if (this == null) {
-				Debug.Log ("QuestMap is null".Red ());
 				return;
 			}
 
@@ -191,14 +190,11 @@ namespace GQ.Client.UI.Foyer
 			// Locate at Start:
 			if (ConfigurationManager.Current.mapStartAtLocation) {
 				map.CenterOnLocation ();
-				Debug.Log ("QuestMap.Start(): Centering on Location ...");
 			} else {
 				map.CenterWGS84 = new double[2] { 
 					ConfigurationManager.Current.mapStartAtLongitude, 
 					ConfigurationManager.Current.mapStartAtLatitude 
 				};
-				Debug.Log ("QuestMap.Start(): Centering on StartLocation: " +
-				ConfigurationManager.Current.mapStartAtLongitude + " , " + ConfigurationManager.Current.mapStartAtLatitude);
 			}
 
 			layers = new List<LayerBehaviour> ();

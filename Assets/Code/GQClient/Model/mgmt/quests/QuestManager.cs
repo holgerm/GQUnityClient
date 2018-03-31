@@ -103,8 +103,6 @@ namespace GQ.Client.Model
 		public static string MakeLocalFileNameFromUrl (string url)
 		{
 			string filename = Files.FileName (url);
-			Debug.Log (string.Format ("QuestManager.MakeLocalFileName(): url: {0} --> filename: {1}", url, filename));
-
 			return filename; // TODO
 		}
 

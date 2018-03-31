@@ -170,12 +170,7 @@ namespace GQ.Client.Conf
 
 		public void addPossibleValues (string values)
 		{
-
-			Debug.Log (values);
-
-
 			if (values.Contains (",")) {
-
 
 				List<string> split = new List<string> ();
 				split.AddRange (values.Split (','));
@@ -259,10 +254,6 @@ namespace GQ.Client.Conf
 				}
 
 			}
-
-
-
-
 		}
 
 	}
