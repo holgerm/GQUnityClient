@@ -152,7 +152,7 @@ namespace GQ.Client.UI
 		static protected float CanvasScale {
 			get {
 				foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects()) {
-					if (go.GetComponent<Canvas> () != null && go.name.EndsWith ("Canvas")) {
+					if (go.activeSelf && go.GetComponent<Canvas> () != null && go.name.EndsWith ("Canvas")) {
 						return go.transform.localScale.y;
 					}
 				}
@@ -166,6 +166,7 @@ namespace GQ.Client.UI
 
 		static public float Units2Pixels (float units)
 		{
+			Debug.Log(string.Format("UNITS->Pixels: CVScale: {0}, Dev.H: {1}, ScreenHeightUnits: {2}.", CanvasScale, Device.height, ScreenHeightUnits));
 			float pixels = (units * (Device.height / ScreenHeightUnits)) / CanvasScale;
 			return pixels;
 		}

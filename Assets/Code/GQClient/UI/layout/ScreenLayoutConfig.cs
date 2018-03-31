@@ -72,7 +72,9 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			SetLayoutElementHeight (layElem, Units2Pixels (HeaderHeightUnits));
+			float height = Units2Pixels (HeaderHeightUnits);
+			Debug.Log (string.Format ("HEIGHT: {0} to units {1} is px {2}", layElem.name, HeaderHeightUnits, height));
+			SetLayoutElementHeight (layElem, height);
 		}
 
 		/// <summary>
@@ -87,7 +89,9 @@ namespace GQ.Client.UI
 			if (layElem == null)
 				return;
 
-			SetLayoutElementHeight (layElem, Units2Pixels (ContentHeightUnits));
+			float height = Units2Pixels (ContentHeightUnits);
+			Debug.Log (string.Format ("HEIGHT: {0} to units {1} is px {2}", layElem.name, ContentHeightUnits, height));
+			SetLayoutElementHeight (layElem, height);
 			if (Footer == null || !Footer.gameObject.activeSelf) {
 				SetLayoutElementHeight (layElem, layElem.minHeight + Units2Pixels (FooterHeightUnits));
 			}
