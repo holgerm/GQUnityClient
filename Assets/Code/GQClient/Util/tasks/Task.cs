@@ -106,11 +106,6 @@ namespace GQ.Client.Util {
 
 		public virtual object Result { get; set; }
 
-		public string GetResultAsString () {
-			byte[] bytes = (byte[]) Result;
-			return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-		}
-
 
 		#region Events
 

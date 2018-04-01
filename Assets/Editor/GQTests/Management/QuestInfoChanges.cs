@@ -10,6 +10,7 @@ using System.Linq;
 using QM.Mocks;
 using GQ.Client.Conf;
 using System;
+using GQ.Client.UI.Foyer;
 
 namespace GQTests.Management {
 
@@ -22,10 +23,10 @@ namespace GQTests.Management {
 
 		[Test]
 		public void PublishNewQuestInfoOnServer () {
-			// Arrange:
+			// Arrange Server has no quests:
 			ConfigurationManager.Current.portal = 0;
 			Mock.Use = true;
-			Mock.DeclareServerResponseByString (
+			Mock.DeclareGQServerResponseByString (
 				"json/0/publicgamesinfo", 
 				@"[]"
 			);
@@ -37,7 +38,7 @@ namespace GQTests.Management {
 			Assert.AreEqual(0, qm.Count);
 
 			// Publish new questInfo on server:
-			Mock.DeclareServerResponseByString (
+			Mock.DeclareGQServerResponseByString (
 				"json/0/publicgamesinfo", 
 				@"[
 				    {
@@ -68,10 +69,15 @@ namespace GQTests.Management {
 			// Update QuestInfoManager from Server:
 			qm.UpdateQuestInfos();
 
-			// Assert:
+			// Assert that the QM now knows the new quest:
 			Assert.AreEqual(1, qm.Count);
 			Assert.That(qm.ContainsQuestInfo (10557));
-
+			// assert also some features for showing this quest info:
+			QuestInfo info = qm.GetQuestInfo(10557);
+			Assert.That (QuestListElementController.ShowDownloadOption (info));
+			Assert.IsFalse (QuestListElementController.ShowStartOption (info));
+			Assert.IsFalse (QuestListElementController.ShowUpdateOption (info));
+			Assert.IsFalse (QuestListElementController.ShowDeleteOption (info));
 		}
 
 	}
