@@ -16,28 +16,44 @@ namespace GQTests.Management {
 
 	public class QuestInfoChanges : AbstractMockTest {
 
-		[SetUp]
-		public void ResetQMInstance () {
-			QuestInfoManager.Reset();
-		}
+		#region SetUp
+		QuestInfoManager QM;
 
-		[Test]
-		public void PublishNewQuestInfoOnServer () {
-			// Arrange Server has no quests:
+		[SetUp]
+		public void SetUp () {
+			QuestInfoManager.Reset();
+			QM = QuestInfoManager.Instance;
 			ConfigurationManager.Current.portal = 0;
 			Mock.Use = true;
+		}
+		#endregion
+
+		#region Tests
+		[Test]
+		public void PublishNewQuestInfoOnServer () {
+			MOCK_EmptyServer();
+			ASSERT_ServerHasNoQuests ();
+
+			MOCK_PublishNewQuest ();
+			QM.UpdateQuestInfos();
+			ASSERT_QM_ShowsNewQuest_OffersDownload ();
+		}
+		#endregion
+
+		#region Helpers
+		void MOCK_EmptyServer() {
 			Mock.DeclareGQServerResponseByString (
 				"json/0/publicgamesinfo", 
 				@"[]"
 			);
+		}
 
-			QuestInfoManager qm = QuestInfoManager.Instance;
+		void ASSERT_ServerHasNoQuests() {
+			Assert.NotNull(QM);
+			Assert.AreEqual(0, QM.Count);
+		}
 
-			// Assert:
-			Assert.NotNull(qm);
-			Assert.AreEqual(0, qm.Count);
-
-			// Publish new questInfo on server:
+		void MOCK_PublishNewQuest() {
 			Mock.DeclareGQServerResponseByString (
 				"json/0/publicgamesinfo", 
 				@"[
@@ -65,20 +81,19 @@ namespace GQTests.Management {
 				    }
 				]"
 			);
+		}
 
-			// Update QuestInfoManager from Server:
-			qm.UpdateQuestInfos();
-
-			// Assert that the QM now knows the new quest:
-			Assert.AreEqual(1, qm.Count);
-			Assert.That(qm.ContainsQuestInfo (10557));
+		void ASSERT_QM_ShowsNewQuest_OffersDownload() {
+			Assert.AreEqual(1, QM.Count);
+			Assert.That(QM.ContainsQuestInfo (10557));
 			// assert also some features for showing this quest info:
-			QuestInfo info = qm.GetQuestInfo(10557);
+			QuestInfo info = QM.GetQuestInfo(10557);
 			Assert.That (QuestListElementController.ShowDownloadOption (info));
 			Assert.IsFalse (QuestListElementController.ShowStartOption (info));
 			Assert.IsFalse (QuestListElementController.ShowUpdateOption (info));
 			Assert.IsFalse (QuestListElementController.ShowDeleteOption (info));
 		}
+		#endregion
 
 	}
 
