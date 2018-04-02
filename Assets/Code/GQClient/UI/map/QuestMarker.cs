@@ -25,7 +25,7 @@ namespace GQ.Client.UI
 		public override void OnTouch ()
 		{
 			if (!Data.IsOnDevice && Data.IsOnServer) {
-				Task download = Data.Download ();
+				Task download = Data.DownloadTask ();
 				Task play = Data.Play ();
 				TaskSequence t = new TaskSequence (download);
 				t.AppendIfCompleted (play);

@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 114530400569062646}
   - component: {fileID: 114570279926477600}
   - component: {fileID: 114083423239208560}
+  - component: {fileID: 114689583810863396}
   - component: {fileID: 114431090388501368}
   - component: {fileID: 114464221084566548}
   m_Layer: 5
@@ -253,12 +254,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114431090388501368}
+      - m_Target: {fileID: 114689583810863396}
         m_MethodName: Download
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -596,7 +597,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114431090388501368}
+      - m_Target: {fileID: 114689583810863396}
         m_MethodName: UpdateQuest
         m_Mode: 1
         m_Arguments:
@@ -655,6 +656,23 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114689583810863396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1775057105045158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec5e339472afe4edd8f43087f9937982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: {fileID: 114905912459409068}
+  InfoButton: {fileID: 114536599216068904}
+  DownloadButton: {fileID: 114085645580280312}
+  StartButton: {fileID: 114776062018062490}
+  UpdateButton: {fileID: 114586075506312080}
+  DeleteButton: {fileID: 114828754933300470}
 --- !u!114 &114776062018062490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -694,7 +712,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114431090388501368}
+      - m_Target: {fileID: 114689583810863396}
         m_MethodName: Play
         m_Mode: 1
         m_Arguments:
@@ -765,7 +783,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114431090388501368}
+      - m_Target: {fileID: 114689583810863396}
         m_MethodName: Delete
         m_Mode: 1
         m_Arguments:

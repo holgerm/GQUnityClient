@@ -16,7 +16,7 @@ namespace GQ.Client.UI.Foyer
 
 		protected QuestInfoManager qim;
 
-		protected Dictionary<int, QuestInfoController> QuestInfoControllers;
+		protected Dictionary<int, QuestInfoUIC> QuestInfoControllers;
 
 		#endregion
 
@@ -26,7 +26,7 @@ namespace GQ.Client.UI.Foyer
 		protected void Start ()
 		{
 			qim = QuestInfoManager.Instance;
-			QuestInfoControllers = new Dictionary<int, QuestInfoController> ();
+			QuestInfoControllers = new Dictionary<int, QuestInfoUIC> ();
 			qim.OnDataChange += OnQuestInfoChanged;
 			qim.OnFilterChange += OnQuestInfoChanged;
 		}

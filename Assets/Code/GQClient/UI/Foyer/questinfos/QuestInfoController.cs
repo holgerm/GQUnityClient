@@ -11,7 +11,7 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Abstact class for all kinds of view controllers presenting quest infos. E.g. list elements in the foyer list, or markers on the foyer map.
 	/// </summary>
-	public abstract class QuestInfoController : PrefabController, IComparable<QuestInfoController> {
+	public abstract class QuestInfoUIC : PrefabController, IComparable<QuestInfoUIC> {
 
 		protected QuestInfo data;
 		public Text Name;
@@ -22,7 +22,7 @@ namespace GQ.Client.UI.Foyer
 		/// a value less than zero means that this object is less than the given other one.
 		/// </summary>
 		/// <param name="otherCtrl">Other ctrl.</param>
-		public int CompareTo (QuestInfoController otherCtrl)
+		public int CompareTo (QuestInfoUIC otherCtrl)
 		{
 			return data.CompareTo (otherCtrl.data);
 		}

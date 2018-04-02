@@ -20,7 +20,7 @@ namespace GQ.Client.UI.Foyer
 	/// <summary>
 	/// Represents one quest info object in a list within the foyer.
 	/// </summary>
-	public class QuestListElementController : QuestInfoController
+	public class QuestInfoUICListElement : QuestInfoUIC
 	{
 
 		#region Content and Structure
@@ -122,11 +122,10 @@ namespace GQ.Client.UI.Foyer
 		#endregion
 
 
-		#region Event Reaction Methods
-
+		#region Event Reaction Methods for Unity
 		public void Download ()
 		{
-			data.Download ().Start ();
+			data.Download ();
 		}
 
 		public void Delete ()
@@ -139,26 +138,10 @@ namespace GQ.Client.UI.Foyer
 			data.Play ().Start ();
 		}
 
-		/// <summary>
-		/// Called when the update button is pressed.
-		/// </summary>
 		public void UpdateQuest ()
 		{
-			// update the quest info:
-			if (data.NewVersionOnServer != null && QuestInfoManager.Instance.QuestDict.Remove (data.Id)) {
-//				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer);
-				Task download = data.NewVersionOnServer.Download ();
-
-				// Update the quest info list ...
-				download.OnTaskCompleted += 
-					(object sender, TaskEventArgs e) => 
-				{ 
-					QuestInfoManager.Instance.ChangeInfo(data.NewVersionOnServer); 
-				};
-			}
-
+			data.Update ();
 		}
-
 		#endregion
 
 
@@ -173,7 +156,7 @@ namespace GQ.Client.UI.Foyer
 			// set entry height:
 			FoyerListLayoutConfig.SetListEntryHeight (go);
 
-			QuestListElementController ctrl = go.GetComponent<QuestListElementController> ();
+			QuestInfoUICListElement ctrl = go.GetComponent<QuestInfoUICListElement> ();
 
 			// set info button as configured:
 			ctrl.setCategorySymbol(qInfo);
@@ -200,7 +183,7 @@ namespace GQ.Client.UI.Foyer
 			namebuttonEvent.RemoveAllListeners ();
 			if (data.IsOnServer && !data.IsOnDevice) {
 				namebuttonEvent.AddListener (() => {
-					data.Download ().Start ();
+					data.Download ();
 				});
 			}
 			if (data.IsOnDevice) {

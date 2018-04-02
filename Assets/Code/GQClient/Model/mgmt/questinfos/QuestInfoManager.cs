@@ -218,7 +218,7 @@ namespace GQ.Client.Model
 				QuestDict.Add (newInfo.Id, newInfo);
 
 				// TODO: update the quest itself:
-				newInfo.Download ().Start ();
+				newInfo.Download ();
 			} else {
 				// only update the quest info server timestamp so the views can figure out that this info is updatable 
 				// and offer manual update to the user:

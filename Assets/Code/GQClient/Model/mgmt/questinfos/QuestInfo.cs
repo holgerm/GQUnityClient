@@ -387,13 +387,11 @@ namespace GQ.Client.Model
 				};
 			}
 		}
-
 		#endregion
 
 
 		#region Runtime Functions
-
-		public Task Download ()
+		public Task DownloadTask ()
 		{
 			// Load quest data: game.xml
 			Downloader downloadGameXML = 
@@ -458,6 +456,25 @@ namespace GQ.Client.Model
 			return t;
 		}
 
+		public void Download() {
+			DownloadTask ().Start ();
+		}
+
+		public void Update() {
+			// update the quest info:
+			if (NewVersionOnServer != null && QuestInfoManager.Instance.QuestDict.Remove (Id)) {
+				//				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
+				Task download = NewVersionOnServer.DownloadTask ();
+
+				// Update the quest info list ...
+				download.OnTaskCompleted += 
+					(object sender, TaskEventArgs e) => 
+				{ 
+					QuestInfoManager.Instance.ChangeInfo(NewVersionOnServer); 
+				};
+			}
+		}
+
 		public void Delete ()
 		{
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (Id));
@@ -496,7 +513,6 @@ namespace GQ.Client.Model
 
 			return t;
 		}
-
 		#endregion
 	}
 

@@ -25,15 +25,15 @@ namespace GQ.Client.UI.Foyer
 
 		public override void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e)
 		{
-			QuestInfoController qiCtrl;
+			QuestInfoUIC qiCtrl;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
 				qiCtrl = 
-					QuestListElementController.Create (
+					QuestInfoUICListElement.Create (
 					root: InfoList.gameObject,
 					qInfo: e.NewQuestInfo,
 					containerController: this
-				).GetComponent<QuestListElementController> ();
+				).GetComponent<QuestInfoUICListElement> ();
 				QuestInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 				qiCtrl.Show ();
 				sortView ();
@@ -89,7 +89,7 @@ namespace GQ.Client.UI.Foyer
 		/// </summary>
 		private void sortView ()
 		{
-			List<QuestInfoController> qcList = new List<QuestInfoController> (QuestInfoControllers.Values);
+			List<QuestInfoUIC> qcList = new List<QuestInfoUIC> (QuestInfoControllers.Values);
 			qcList.Sort ();
 			for (int i = 0; i < qcList.Count; i++) {
 				qcList [i].transform.SetSiblingIndex (i);
@@ -106,7 +106,7 @@ namespace GQ.Client.UI.Foyer
 			}
 
 			// hide and delete all list elements:
-			foreach (KeyValuePair<int, QuestInfoController> kvp in QuestInfoControllers) {
+			foreach (KeyValuePair<int, QuestInfoUIC> kvp in QuestInfoControllers) {
 				kvp.Value.Hide ();
 				kvp.Value.Destroy ();
 			}
@@ -115,12 +115,12 @@ namespace GQ.Client.UI.Foyer
 
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
-				QuestListElementController qiCtrl = 
-					QuestListElementController.Create (
+				QuestInfoUICListElement qiCtrl = 
+					QuestInfoUICListElement.Create (
 						root: InfoList.gameObject,
 						qInfo: info,
 						containerController: this
-					).GetComponent<QuestListElementController> ();
+					).GetComponent<QuestInfoUICListElement> ();
 				QuestInfoControllers[info.Id] = qiCtrl;
 				qiCtrl.Show ();
 			}
@@ -142,7 +142,7 @@ namespace GQ.Client.UI.Foyer
 
 			// we create new qi elements and keep those we can reuse. We remove those from our helper list.
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
-				QuestInfoController qiCtrl;
+				QuestInfoUIC qiCtrl;
 				if (QuestInfoControllers.TryGetValue(info.Id, out qiCtrl)) {
 					qiCtrl.Show (); // why do we need to show them here again? Aren't they still shown? Why?
 					// this new element was already there, hence we keep it:
