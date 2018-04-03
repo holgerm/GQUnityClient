@@ -21,39 +21,183 @@ namespace GQTests.Management {
 
 		[SetUp]
 		public void SetUp () {
+			Mock.Use = true;
+			MOCK_Server_Empty();
+			Mock.DeclareGQServerResponseByString ("editor/10557/clientxml", questXML);
+
+			ConfigurationManager.Current.portal = 0;
+
 			QuestInfoManager.Reset();
 			QM = QuestInfoManager.Instance;
-			ConfigurationManager.Current.portal = 0;
-			Mock.Use = true;
 		}
 		#endregion
 
 		#region Tests
+		/// <summary>
+		/// When the server lists no quests, 
+		/// then the app should display no quests.
+		/// </summary>
+		[Test]
+		public void EmptyServerEmptyQuestManager () {
+			QM.UpdateQuestInfos();
+			ASSERT_QM_ShowsNoQuests ();
+		}
+
+		/// <summary>
+		/// When the server publishes a new quest and the app refreshes, 
+		/// then the app should show that quest and offer to download it.
+		/// </summary>
 		[Test]
 		public void PublishNewQuestInfoOnServer () {
-			MOCK_EmptyServer();
-			ASSERT_ServerHasNoQuests ();
-
-			MOCK_PublishNewQuest ();
+			MOCK_Server_PublishQuest ();
 			QM.UpdateQuestInfos();
-			ASSERT_QM_ShowsNewQuest_OffersDownload ();
+			ASSERT_ShowOptions_Download ();
+		}
+
+		/// <summary>
+		/// When the app downloads a new published quest from the server, 
+		/// then the app should offer play and delete options for that quest.
+		/// </summary>
+		[Test]
+		public void DownloadQuest() {
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+			// before download app offers us to download the quest:
+			ASSERT_ShowOptions_Download ();
+			MOCK_DownloadQuest();
+			// after download no download option is shown, instead we can play or delete the local quest:
+			ASSERT_ShowOptions_Play_Delete ();
+		}
+
+		/// <summary>
+		/// When the server changes the category of a quest that the app has NOT yet downloaded,
+		/// then the quest category should be updated when the app gets refreshed and then offer download as before.
+		/// </summary>
+		[Test]
+		public void ChangeInfoOfUnloadedQuestByCategory() {
+			// PREPARATION: published quest:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+
+			// TEST:
+			MOCK_ChangeCategoryOfQuestInfo ();
+			QM.UpdateQuestInfos();
+			ASSERT_ShowOptions_Download ();
+			ASSERT_ShowsNewCategory ();
+		}
+
+		/// <summary>
+		/// When a quest that is already downloaded on the app changes category on the server, 
+		/// then the app should offer to update it.
+		/// </summary>
+		[Test]
+		public void ChangeInfoOfLoadedQuestByCategory() {
+			// PREPARATION: published downloaded quest:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+			MOCK_DownloadQuest();
+
+			// TEST:
+			MOCK_ChangeCategoryOfQuestInfo ();
+			QM.UpdateQuestInfos();
+			ASSERT_ShowOptions_Play_Delete_Update ();
+			ASSERT_ShowsOldCategory ();
+		}
+
+		/// <summary>
+		/// When the server changes the category of a quest that the app has NOT yet downloaded,
+		/// then the quest category should be updated when the app gets refreshed and then offer download as before.
+		/// </summary>
+		[Test]
+		public void ChangeInfoOfUnloadedQuestByName() {
+			// PREPARATION: published quest:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+
+			// TEST:
+			MOCK_ChangeNameOfQuestInfo ();
+			QM.UpdateQuestInfos();
+			ASSERT_ShowOptions_Download ();
+			ASSERT_ShowsNewName ();
+		}
+
+		/// <summary>
+		/// When a quest that is already downloaded on the app changes category on the server, 
+		/// then the app should offer to update it.
+		/// </summary>
+		[Test]
+		public void ChangeInfoOfLoadedQuestByName() {
+			// PREPARATION: published downloaded quest:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+			MOCK_DownloadQuest();
+
+			// TEST:
+			MOCK_ChangeNameOfQuestInfo ();
+			QM.UpdateQuestInfos();
+			ASSERT_ShowOptions_Play_Delete_Update ();
+			ASSERT_ShowsOldName ();
 		}
 		#endregion
 
 		#region Helpers
-		void MOCK_EmptyServer() {
+		void ASSERT_QM_ShowsNoQuests() {
+			Assert.NotNull(QM);
+			Assert.AreEqual(0, QM.Count);
+		}
+
+		void ASSERT_ShowOptions_Download() {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.That (QuestInfoUICListElement.ShowDownloadOption (info));
+			Assert.IsFalse (QuestInfoUICListElement.ShowStartOption (info));
+			Assert.IsFalse (QuestInfoUICListElement.ShowUpdateOption (info));
+			Assert.IsFalse (QuestInfoUICListElement.ShowDeleteOption (info));
+		}
+
+		void ASSERT_ShowOptions_Play_Delete () {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.IsFalse (QuestInfoUICListElement.ShowDownloadOption (info));
+			Assert.That (QuestInfoUICListElement.ShowStartOption (info));
+			Assert.IsFalse (QuestInfoUICListElement.ShowUpdateOption (info));
+			Assert.That (QuestInfoUICListElement.ShowDeleteOption (info));
+		}
+
+		void ASSERT_ShowOptions_Play_Delete_Update() {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.IsFalse (QuestInfoUICListElement.ShowDownloadOption (info));
+			Assert.That (QuestInfoUICListElement.ShowStartOption (info));
+			Assert.That (QuestInfoUICListElement.ShowUpdateOption (info));
+			Assert.That (QuestInfoUICListElement.ShowDeleteOption (info));
+		}
+
+		void ASSERT_ShowsOldCategory() {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.AreEqual ("wcc.tour.beethoven", info.Categories [0]);
+		}
+
+		void ASSERT_ShowsNewCategory() {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.AreEqual ("wcc.tour.macke", info.Categories [0]);
+		}
+
+		void ASSERT_ShowsOldName() {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.AreEqual ("Franziskanerkirche", info.Name);
+		}
+
+		void ASSERT_ShowsNewName() {
+			QuestInfo info = QM.GetQuestInfo(10557);
+			Assert.AreEqual ("Neuer Name", info.Name);
+		}
+
+		void MOCK_Server_Empty() {
 			Mock.DeclareGQServerResponseByString (
 				"json/0/publicgamesinfo", 
 				@"[]"
 			);
 		}
 
-		void ASSERT_ServerHasNoQuests() {
-			Assert.NotNull(QM);
-			Assert.AreEqual(0, QM.Count);
-		}
-
-		void MOCK_PublishNewQuest() {
+		void MOCK_Server_PublishQuest() {
 			Mock.DeclareGQServerResponseByString (
 				"json/0/publicgamesinfo", 
 				@"[
@@ -83,16 +227,127 @@ namespace GQTests.Management {
 			);
 		}
 
-		void ASSERT_QM_ShowsNewQuest_OffersDownload() {
-			Assert.AreEqual(1, QM.Count);
-			Assert.That(QM.ContainsQuestInfo (10557));
-			// assert also some features for showing this quest info:
-			QuestInfo info = QM.GetQuestInfo(10557);
-			Assert.That (QuestListElementController.ShowDownloadOption (info));
-			Assert.IsFalse (QuestListElementController.ShowStartOption (info));
-			Assert.IsFalse (QuestListElementController.ShowUpdateOption (info));
-			Assert.IsFalse (QuestListElementController.ShowDeleteOption (info));
+		void MOCK_ChangeCategoryOfQuestInfo () {
+			// we change category from beethoven to macke ... and increase the lastupdate time stamp by one:
+			Mock.DeclareGQServerResponseByString (
+				"json/0/publicgamesinfo", 
+				@"[
+				    {
+				        ""hotspots"": [
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            },
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            }
+				        ],
+				        ""id"": 10557,
+				        ""lastUpdate"": 1505465979828,
+				        ""metadata"": [
+				            {
+				                ""key"": ""category"",
+				                ""value"": ""wcc.tour.macke""
+				            }
+				        ],
+				        ""name"": ""Franziskanerkirche"",
+				        ""typeID"": 3318
+				    }
+				]"
+			);
 		}
+
+		void MOCK_ChangeNameOfQuestInfo () {
+			// we change category from beethoven to macke ... and increase the lastupdate time stamp by one:
+			Mock.DeclareGQServerResponseByString (
+				"json/0/publicgamesinfo", 
+				@"[
+				    {
+				        ""hotspots"": [
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            },
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            }
+				        ],
+				        ""id"": 10557,
+				        ""lastUpdate"": 1505465979828,
+				        ""metadata"": [
+				            {
+				                ""key"": ""category"",
+				                ""value"": ""wcc.tour.macke""
+				            }
+				        ],
+				        ""name"": ""Neuer Name"",
+				        ""typeID"": 3318
+				    }
+				]"
+			);
+		}
+
+		void MOCK_DownloadQuest() {
+			QM.GetQuestInfo (10557).Download ();
+		}
+
+		string questXML = 
+			@"<game id=""10557"" lastUpdate=""1505465979827"" name=""Franziskanerkirche"" xmlformat=""5"">
+				<mission endbuttontext=""Zurück zur Karte"" id=""30917"" mode=""Komplett anzeigen"" nextdialogbuttontext=""Zurück zur Karte"" skipwordticker=""true"" textsize=""20"" tickerspeed=""50"" type=""NPCTalk"">
+					<onStart>
+						<rule>
+							<action type=""SetVariable"" var=""content"">
+								<value>
+									<string>Aus den Erinnerungen des Bäckermeisters Fischer, Eigentümer des Wohnhauses in der Rheingasse 24, ist bekannt, dass der kleine Ludwig van Beethoven Orgelunterricht erhielt bei Bruder Willibaldus im damaligen Franziskanerkloster. In der Franziskanerkirche erlernte er nicht nur das Orgelspiel, sondern wurde auch in kirchlichen Ritualen unterrichtet. Wenig später wurde Ludwig der Gehilfe von Willibaldus.</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""link"">
+								<value>
+									<string>http://www.buergerfuerbeethoven.de/start/index.html</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""autor"">
+								<value>
+									<string>BN-BfB</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""bildrechte"">
+								<value>
+									<string/>
+								</value>
+							</action>
+						</rule>
+					</onStart>
+					<onEnd>
+						<rule>
+							<action type=""EndGame""/>
+						</rule>
+					</onEnd>
+					<dialogitem blocking=""false"" id=""35913"">&lt;b&gt;@quest.name@&lt;/b&gt;&lt;br&gt;@content@&lt;br&gt;&lt;br&gt;Autor: @autor@&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;@link@&quot;&gt;@link@&lt;/a&gt;&lt;br&gt;</dialogitem>
+				</mission>
+				<mission id=""30918"" type=""MetaData"">
+					<stringmeta id=""35914"" key=""category"" value=""wcc.tour.beethoven""/>
+					<stringmeta id=""35915"" key=""city"" value=""Bonn""/>
+					<stringmeta id=""35916"" key=""administrative"" value=""Bonn""/>
+					<stringmeta id=""35917"" key=""administrative"" value=""Regierungsbezirk Köln""/>
+					<stringmeta id=""35918"" key=""state"" value=""Nordrhein-Westfalen""/>
+					<stringmeta id=""35919"" key=""country"" value=""Deutschland""/>
+				</mission>
+				<hotspot id=""12341"" initialActivity=""true"" initialVisibility=""true"" latlong=""50.73447,7.104104"" radius=""20"">
+					<onEnter>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onEnter>
+					<onLeave>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onLeave>
+				</hotspot>
+			</game>";
 		#endregion
 
 	}

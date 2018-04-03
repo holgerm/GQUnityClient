@@ -41,6 +41,10 @@ namespace GQ.Client.Model {
 					(localInfos.Count == 0) 
 					? "[]"
 					: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
+				string dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJSONPath);
+				if (!Directory.Exists(dir4MediaJSON)) {
+					Directory.CreateDirectory(dir4MediaJSON);
+				}
 				File.WriteAllText(QuestManager.Instance.CurrentMediaJSONPath, mediaJSON);
 			}
 			catch (Exception e) {

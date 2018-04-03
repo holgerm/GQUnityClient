@@ -18,7 +18,6 @@ namespace GQ.Client.Util
 
 
 		#region Default Handler
-
 		public static void defaultLogInformationHandler (AbstractDownloader d, DownloadEvent e)
 		{
 			Log.InformUser (e.Message);
@@ -28,12 +27,10 @@ namespace GQ.Client.Util
 		{
 			Log.SignalErrorToUser (e.Message);
 		}
-
 		#endregion
 
 
 		#region Delegation API for Tests
-
 		static Downloader() {
 			CoroutineRunner = DownloadAsCoroutine;
 		}
@@ -54,12 +51,10 @@ namespace GQ.Client.Util
 		{
 			return d.Download ();
 		}
-
 		#endregion
 
 
 		#region Public API
-
 		/// <summary>
 		/// The elapsed time the download is/was active in milliseconds.
 		/// </summary>
@@ -171,7 +166,6 @@ namespace GQ.Client.Util
 			Www.Dispose ();
 			yield break;
 		}
-
 		#endregion
 
 	}

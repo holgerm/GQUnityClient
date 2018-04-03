@@ -7,6 +7,7 @@ using GQ.Client.Util;
 using GQTests;
 using GQ.Editor.Util;
 using QM.Mocks;
+using GQ.Client.Conf;
 
 namespace QM.Tests {
 
@@ -28,7 +29,10 @@ namespace QM.Tests {
 		public void PersistentDataPath() {
 			Mock.Use = true;
 
-			Assert.AreEqual (Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "persistentDataPath"), Device.GetPersistentDatapath ());
+			Assert.AreEqual (
+				Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, Mock.MOCK_PERSISTENT_DATA_PATH), 
+				Device.GetPersistentDatapath ()
+			);
 
 			Mock.Use = false;
 			Assert.AreEqual (Application.persistentDataPath, Device.GetPersistentDatapath ());
@@ -46,5 +50,36 @@ namespace QM.Tests {
 			Assert.AreEqual ("1001", headers [HTTP.CONTENT_LENGTH]);
 			Assert.AreEqual ("10101010", headers [HTTP.LAST_MODIFIED]);
 		}
+
+
+		[Test]
+		public void OverwriteServerResponseMapping() {
+			Mock.Use = true;
+			Mock.DeclareGQServerResponseByString ("test", "Originalwert");
+
+			Downloader d = new Downloader (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + "test");
+			d.Start ();
+			Assert.AreEqual ("Originalwert", Convert.ToString(d.Result));
+
+			Mock.DeclareGQServerResponseByString ("test", "Neuer Wert");
+
+			d.Start ();
+			Assert.AreEqual ("Neuer Wert", Convert.ToString(d.Result));
+		}
+
+
+		[Test]
+		public void MultipleServerResponseMappingsByString() {
+			Mock.Use = true;
+			Mock.DeclareGQServerResponseByString ("target1", "Wert 1");
+			Mock.DeclareGQServerResponseByString ("target2", "Wert 2");
+
+			Downloader d = new Downloader (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + "target1");
+			d.Start ();
+			Assert.AreEqual ("Wert 1", Convert.ToString(d.Result));
+
+			d = new Downloader (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + "target2");
+			d.Start ();
+			Assert.AreEqual ("Wert 2", Convert.ToString(d.Result));}
 	}
 }

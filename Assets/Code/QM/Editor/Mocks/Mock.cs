@@ -13,13 +13,13 @@ namespace QM.Mocks {
 	public class Mock {
 
 		#region Initialize and Reset Usage
-
 		public static bool Use {
 			get {
 				return _use;
 			}
 			set {
 				_use = value;
+				tmpFileCounter = 0;
 				setDownloader (_use);
 				setPersistentPath (_use);
 				setHTTPGetRequestHeadersMethod (_use);
@@ -54,12 +54,10 @@ namespace QM.Mocks {
 				HTTP.RequestHeaderGetter = HTTP.internalGetRequestHeaders;
 			}
 		}
-
 		#endregion
 
 
 		#region Download
-
 		/// <summary>
 		/// The mock download method put as delegate into the abstract downloader when mocking is used.
 		/// </summary>
@@ -79,41 +77,44 @@ namespace QM.Mocks {
 
 		public static void DeclareServerResponseByFile(string serverURI, string mockPath) {
 			MappedUris [new Uri (serverURI)] = mockPath;
+			Debug.Log (string.Format ("MappedURIs [{0}] = {1}", serverURI, mockPath));
 		}
 
 		public static void DeclareGQServerResponseByFile (string serverPath, string mockPath) {
 			DeclareServerResponseByFile(ConfigurationManager.GQ_SERVER_BASE_URL + "/" + serverPath, mockPath);
 		}
 
+		static int tmpFileCounter;
 		public static void DeclareGQServerResponseByString (string serverPath, string responseText) {
-			string tmpFilePath = Files.CombinePath(GQAssert.TEST_DATA_TEMP_DIR, "server_response.json");
+			string uniqueTmpFile = string.Format ("server_response{0}.json", tmpFileCounter++);
+			string tmpFilePath = Files.CombinePath(GQAssert.TEST_DATA_TEMP_DIR, uniqueTmpFile);
 			File.WriteAllText(Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, tmpFilePath), responseText);
 			DeclareGQServerResponseByFile(serverPath, tmpFilePath);
 		}
 
 		static string MapUri2Path(Uri uri) {
 			string path = null;
+			string result = null;
 			if (MappedUris.TryGetValue (uri, out path)) {
-				return Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, path);
+				result = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, path);
 			} else {
-				return Files.CombinePath (GQAssert.TEST_DATA_SERVER_DIR, uri.Host, uri.AbsolutePath);
+				result = Files.CombinePath (GQAssert.TEST_DATA_SERVER_DIR, uri.Host, uri.AbsolutePath);
 			}
+			Debug.Log(string.Format("MapUri2Path({0}): {1}", uri.AbsolutePath, result));
+			return result;
 		}
-
 		#endregion
 
 
 		#region Persistent Path
-
+		public static readonly string MOCK_PERSISTENT_DATA_PATH = "PersistentDataPath";
 		public static string GetMockPersistentPath () {
-			return Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "persistentDataPath");
+			return Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, MOCK_PERSISTENT_DATA_PATH);
 		}
-
 		#endregion
 
 
 		#region HTTP
-
 		public static Dictionary<string, string> MockGetRequestHeaders (string url) {
 			Dictionary<string, string> headers = null;
 			MappedHTTPRequestHeaders.TryGetValue (url, out headers);
@@ -141,7 +142,6 @@ namespace QM.Mocks {
 		public static void DeclareGQRequestResponse(string serverPath, string headerName, string headerValue) {
 			DeclareRequestResponse (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + serverPath, headerName, headerValue);
 		}
-
 		#endregion
 	}
 }

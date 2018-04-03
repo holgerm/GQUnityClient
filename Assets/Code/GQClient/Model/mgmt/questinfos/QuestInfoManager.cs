@@ -201,8 +201,6 @@ namespace GQ.Client.Model
 
 		public void ChangeInfo (QuestInfo newInfo)
 		{
-			Debug.Log ("ChangeInfo(" + newInfo.Id + ")");
-
 			QuestInfo oldInfo;
 			if (!QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
 				Log.SignalErrorToDeveloper (
@@ -212,13 +210,13 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			if (ConfigurationManager.Current.autoUpdateQuestInfos) {
+			if (ConfigurationManager.Current.autoUpdateQuestInfos || !oldInfo.IsOnDevice) {
 				// preform the complete update, i.e. remove the old and add the new info:
 				QuestDict.Remove (newInfo.Id);
 				QuestDict.Add (newInfo.Id, newInfo);
 
 				// TODO: update the quest itself:
-				newInfo.Download ();
+//				newInfo.Download (); This should be done only when autoQuestSynch is on
 			} else {
 				// only update the quest info server timestamp so the views can figure out that this info is updatable 
 				// and offer manual update to the user:

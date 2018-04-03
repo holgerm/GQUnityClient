@@ -26,7 +26,6 @@ namespace GQ.Client.Util
 		}
 
 		#region Callback Delegates
-
 		public delegate void DownloadCallback (AbstractDownloader d,DownloadEvent e);
 
 		public event DownloadCallback OnStart;
@@ -69,7 +68,6 @@ namespace GQ.Client.Util
 				break;
 			}
 		}
-
 		#endregion
 
 	}
