@@ -305,6 +305,7 @@ namespace GQ.Client.Model
 		public void End ()
 		{
 			Audio.Clear ();
+			Variables.ClearAll (); // persistente variablen nicht löschen
 			SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
 			Resources.UnloadUnusedAssets ();
 		}
