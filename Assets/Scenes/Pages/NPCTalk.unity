@@ -741,10 +741,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4db9f7b5016a44e0ae35759e14ea7d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copyrightTextBG4FittingImage: {fileID: 0}
-  copyrightText4FittingImage: {fileID: 0}
-  copyrightTextBG4EnvelopingImage: {fileID: 0}
-  copyrightText4EnvelopingImage: {fileID: 0}
+  copyrightTextBG4FittingImage: {fileID: 371924651}
+  copyrightText4FittingImage: {fileID: 1206162631}
+  copyrightTextBG4EnvelopingImage: {fileID: 1320613528}
+  copyrightText4EnvelopingImage: {fileID: 414968228}
 --- !u!114 &414968228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1716,7 +1716,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000016714393}
+  m_AnchoredPosition: {x: 0, y: -0.00003114189}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
