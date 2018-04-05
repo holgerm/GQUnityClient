@@ -164,22 +164,12 @@ namespace GQ.Client.Model
 			set;
 		}
 
-		private string PageScenePath {
+		private string PageSceneName {
 			get {
-				string scenePath = Files.CombinePath (SceneMapping.ProjectScenesRootPath, GetType ().Name.Substring (4));
-				if (File.Exists (scenePath + ".unity")) {
-					return scenePath.Substring ("Assets/".Length);
-				}
-				scenePath = Files.CombinePath (SceneMapping.ProductScenesRootPath, GetType ().Name.Substring (4));
-				if (File.Exists (scenePath + ".unity")) {
-					return scenePath.Substring ("Assets/".Length);
-				}
-
-				Log.SignalErrorToDeveloper ("No scene file found for path {0}. Forgot to update set of scenes in product editor?", scenePath);
-				return "";
+				return GetType ().Name.Substring (4);
 			}
 		}
-			
+
 		// called when a scene has been loaded:
 		void OnSceneLoaded (Scene scene, LoadSceneMode mode)
 		{
@@ -199,9 +189,9 @@ namespace GQ.Client.Model
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
-			if (!scene.path.Equals (PageScenePath)) {
+			if (!scene.name.Equals (PageSceneName)) {
 				SceneManager.sceneLoaded += OnSceneLoaded;
-				SceneManager.LoadSceneAsync (PageScenePath, LoadSceneMode.Additive);
+				SceneManager.LoadSceneAsync (PageSceneName, LoadSceneMode.Additive);
 				if (scene.name != Base.FOYER_SCENE_NAME) {
 					scenesToUnload.Add (scene);
 				}
