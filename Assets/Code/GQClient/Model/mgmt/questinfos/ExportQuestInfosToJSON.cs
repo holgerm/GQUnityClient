@@ -8,6 +8,7 @@ using System;
 using GQ.Client.UI;
 using System.IO;
 using GQ.Client.Err;
+using GQ.Client.FileIO;
 
 namespace GQ.Client.Model {
 
@@ -24,7 +25,7 @@ namespace GQ.Client.Model {
 					(questInfoList.Count == 0) 
 					? "[]"
 					: JsonConvert.SerializeObject(questInfoList, Newtonsoft.Json.Formatting.Indented);
-				File.WriteAllText(QuestInfoManager.LocalQuestInfoJSONPath, questInfoJSON);
+				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJSONPath, questInfoJSON);
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export quest info json file: " + e.Message);

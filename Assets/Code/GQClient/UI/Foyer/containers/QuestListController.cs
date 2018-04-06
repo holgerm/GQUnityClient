@@ -39,13 +39,13 @@ namespace GQ.Client.UI.Foyer
 				sortView ();
 				break;
 			case ChangeType.ChangedInfo:
-				if (e.OldQuestInfo == null || !QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
-					Log.SignalErrorToDeveloper (
-						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
-						e.OldQuestInfo.Id
-					);
-					break;
-				}
+//				if (e.OldQuestInfo == null || !QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
+//					Log.SignalErrorToDeveloper (
+//						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
+//						e.OldQuestInfo.Id
+//					);
+//					break;
+//				}
 				if (e.NewQuestInfo == null || !QuestInfoControllers.TryGetValue (e.NewQuestInfo.Id, out qiCtrl)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
@@ -53,13 +53,13 @@ namespace GQ.Client.UI.Foyer
 					);
 					break;
 				}
-				if (e.OldQuestInfo.Id != e.NewQuestInfo.Id) {
-					Log.SignalErrorToDeveloper (
-						"Quest Info Controller for quest id {0} got an update that changed the id to {1} which is not allowed and will be ignored.",
-						e.NewQuestInfo.Id, e.NewQuestInfo.Id
-					);
-					break;
-				}
+//				if (e.OldQuestInfo.Id != e.NewQuestInfo.Id) {
+//					Log.SignalErrorToDeveloper (
+//						"Quest Info Controller for quest id {0} got an update that changed the id to {1} which is not allowed and will be ignored.",
+//						e.NewQuestInfo.Id, e.NewQuestInfo.Id
+//					);
+//					break;
+//				}
 				qiCtrl.PerformUpdate (e.NewQuestInfo);
 				qiCtrl.Show ();
 				sortView ();

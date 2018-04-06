@@ -7,6 +7,7 @@ using GQ.Editor.Util;
 using GQTests;
 using System.IO;
 using GQ.Client.Conf;
+using GQ.Client.Err;
 
 namespace QM.Mocks {
 
@@ -67,6 +68,10 @@ namespace QM.Mocks {
 			string path = MapUri2Path (uri);
 			d.Result = File.ReadAllText (path);
 
+			if (d.TargetPath != null && d.TargetPath != "") {
+				Files.WriteAllText (d.TargetPath, Convert.ToString(d.Result));
+			}
+
 			d.Raise (DownloadEventType.Success, new DownloadEvent (message: "Mock download done."));
 			d.RaiseTaskCompleted (d.Result);
 
@@ -98,6 +103,7 @@ namespace QM.Mocks {
 			if (MappedUris.TryGetValue (uri, out path)) {
 				result = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, path);
 			} else {
+				Log.SignalErrorToDeveloper ("Mock can not map uri {0} to path.", uri.AbsolutePath);
 				result = Files.CombinePath (GQAssert.TEST_DATA_SERVER_DIR, uri.Host, uri.AbsolutePath);
 			}
 			Debug.Log(string.Format("MapUri2Path({0}): {1}", uri.AbsolutePath, result));

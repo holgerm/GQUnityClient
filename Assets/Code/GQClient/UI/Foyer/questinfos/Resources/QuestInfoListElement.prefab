@@ -138,7 +138,6 @@ GameObject:
   - component: {fileID: 114570279926477600}
   - component: {fileID: 114083423239208560}
   - component: {fileID: 114689583810863396}
-  - component: {fileID: 114431090388501368}
   - component: {fileID: 114464221084566548}
   m_Layer: 5
   m_Name: QuestInfoListElement
@@ -416,23 +415,6 @@ MonoBehaviour:
   m_FlexibleWidth: 800
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &114431090388501368
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1775057105045158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaed0951d21df4f33815810a79c86a28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: {fileID: 114905912459409068}
-  InfoButton: {fileID: 114536599216068904}
-  DownloadButton: {fileID: 114085645580280312}
-  StartButton: {fileID: 114776062018062490}
-  UpdateButton: {fileID: 114586075506312080}
-  DeleteButton: {fileID: 114828754933300470}
 --- !u!114 &114464221084566548
 MonoBehaviour:
   m_ObjectHideFlags: 1

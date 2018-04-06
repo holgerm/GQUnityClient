@@ -72,7 +72,6 @@ namespace GQ.Client.Model
 	public class QuestInfo : IComparable<QuestInfo>
 	{
 		#region Serialized Features
-
 		[JsonProperty]
 		private 	int id;
 
@@ -89,6 +88,9 @@ namespace GQ.Client.Model
 			get {
 				return name;
 			} 
+			set {
+				name = value;
+			}
 		}
 
 		[JsonProperty]
@@ -141,20 +143,8 @@ namespace GQ.Client.Model
 			get {
 				return hotspots;
 			}
-		}
-
-		public HotspotInfo MarkerHotspot {
-			get {
-				double sumLong = 0f;
-				double sumLat = 0f;
-				foreach (HotspotInfo h in Hotspots) {
-					sumLong += h.Longitude;
-					sumLat += h.Latitude;
-				}
-				if (Hotspots.Length == 0)
-					return HotspotInfo.NULL;
-				else
-					return new HotspotInfo (sumLat / Hotspots.Length, sumLong / Hotspots.Length);
+			set {
+				hotspots = value;
 			}
 		}
 
@@ -164,6 +154,11 @@ namespace GQ.Client.Model
 		public 		MetaDataInfo[] 	Metadata { 
 			get {
 				return metadata;
+			}
+			set {
+				metadata = value;
+				// reset categories which are lazily evaluated
+				_categories = null;
 			}
 		}
 
@@ -225,11 +220,25 @@ namespace GQ.Client.Model
 			get;
 			set;
 		}
-
 		#endregion
 
 
 		#region Derived features
+		[JsonIgnore]
+		public HotspotInfo MarkerHotspot {
+			get {
+				double sumLong = 0f;
+				double sumLat = 0f;
+				foreach (HotspotInfo h in Hotspots) {
+					sumLong += h.Longitude;
+					sumLat += h.Latitude;
+				}
+				if (Hotspots.Length == 0)
+					return HotspotInfo.NULL;
+				else
+					return new HotspotInfo (sumLat / Hotspots.Length, sumLong / Hotspots.Length);
+			}
+		}
 
 		[JsonIgnore]
 		public bool IsOnServer {
@@ -295,13 +304,10 @@ namespace GQ.Client.Model
 				return QuestInfoManager.Instance.Filter.CategoryToShow (this);
 			}
 		}
-
-
 		#endregion
 
 
 		#region Runtime API
-
 		public delegate void ChangeHandler ();
 
 		public event ChangeHandler OnChanged;
@@ -341,11 +347,9 @@ namespace GQ.Client.Model
 		{
 			OnChanged = null;
 		}
-
 		#endregion
 
 		#region Sorting Comparison
-
 		/// <summary>
 		/// Returns a value greater than zero in case this object is considered greater than the given other. 
 		/// A return value of 0 signals that both objects are equal and 
@@ -456,13 +460,27 @@ namespace GQ.Client.Model
 			return t;
 		}
 
+		/// <summary>
+		/// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
+		/// </summary>
 		public void Download() {
 			DownloadTask ().Start ();
 		}
 
+		/// <summary>
+		/// Updates the quest represented by this info, i.e. its content is replaced by the current server content. 
+		/// It is assumed that this info already has a link to the new server version stored (cf. NewVersionOnServer property).
+		/// Is called from the UI (Button e.g.).
+		/// 
+		/// Updating a local quest means three steps: 
+		/// 
+		/// 1. This info is replaced by the info of the new version (hence the list etc. in the foyer will be updated)
+		/// 2. The represented quest game.xml is downloaded and replaces the old version.
+		/// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
+		/// </summary>
 		public void Update() {
 			// update the quest info:
-			if (NewVersionOnServer != null && QuestInfoManager.Instance.QuestDict.Remove (Id)) {
+			if (NewVersionOnServer != null) {
 				//				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
 				Task download = NewVersionOnServer.DownloadTask ();
 
@@ -470,11 +488,16 @@ namespace GQ.Client.Model
 				download.OnTaskCompleted += 
 					(object sender, TaskEventArgs e) => 
 				{ 
-					QuestInfoManager.Instance.ChangeInfo(NewVersionOnServer); 
+					QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(NewVersionOnServer.Id);
 				};
+
+				download.Start ();
 			}
 		}
 
+		/// <summary>
+		/// Deletes the local quest represented by this info. Is called from the UI (Button e.g.).
+		/// </summary>
 		public void Delete ()
 		{
 			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (Id));
@@ -491,6 +514,9 @@ namespace GQ.Client.Model
 			exportQuestsInfoJSON.Start ();
 		}
 
+		/// <summary>
+		/// Starts the local quest represented by this info. Is called from the UI (Button e.g.).
+		/// </summary>
 		public Task Play ()
 		{
 			// Close menu if open:

@@ -350,9 +350,20 @@ namespace GQ.Client.FileIO
 
 			dir.Delete ();
 		}
-
 		#endregion
 
+		#region Write
+		/// <summary>
+		/// Enforced version of File.WriteAllText
+		/// </summary>
+		public static void WriteAllText(string filePath, string content) {
+			string dir = ParentDir (filePath);
+			if (!Directory.Exists(dir)) {
+				Directory.CreateDirectory(dir);
+			}
+			File.WriteAllText(filePath, content);
+		}
+		#endregion
 	}
 
 }

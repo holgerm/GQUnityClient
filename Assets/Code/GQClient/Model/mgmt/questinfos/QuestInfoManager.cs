@@ -13,6 +13,7 @@ using GQ.Client.UI.Dialogs;
 using System.Linq;
 using QM.Util;
 using GQ.Client.UI;
+using GQ.Client.FileIO;
 
 
 namespace GQ.Client.Model
@@ -136,10 +137,15 @@ namespace GQ.Client.Model
 			if (QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
 				// A questInfo with this ID already exists: this is a CHANGE:
 				if (newInfo.LastUpdateOnServer > oldInfo.LastUpdateOnServer) {
-					// NEW INFO IS NEWER: hence we should replace the old one with the new:
-					QuestDict.Remove (newInfo.Id);
-					QuestDict.Add (newInfo.Id, newInfo);
-					Debug.Log ("Change of QuestInfos in QIM, we found a server-side update and replaced the old info with the new one.");
+					// NEW INFO IS NEWER: 
+					if (oldInfo.IsOnDevice) {
+						// Quest has already been downloaded before, hence we only show the option of update:
+						oldInfo.NewVersionOnServer = newInfo;
+					} else {
+						// Quest was not yet donloaded, hence we should replace the old one with the new info:
+						QuestDict.Remove (newInfo.Id);
+						QuestDict.Add (newInfo.Id, newInfo);
+					}
 
 					if (Filter.Accept (newInfo)) {
 						// Run through filter and raise event if involved:
@@ -199,6 +205,10 @@ namespace GQ.Client.Model
 			}
 		}
 
+		/// <summary>
+		/// Called when a new quest info has been retrieved from server.
+		/// </summary>
+		/// <param name="newInfo">New info.</param>
 		public void ChangeInfo (QuestInfo newInfo)
 		{
 			QuestInfo oldInfo;
@@ -210,23 +220,7 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			if (ConfigurationManager.Current.autoUpdateQuestInfos || !oldInfo.IsOnDevice) {
-				// preform the complete update, i.e. remove the old and add the new info:
-				QuestDict.Remove (newInfo.Id);
-				QuestDict.Add (newInfo.Id, newInfo);
-
-				// TODO: update the quest itself:
-//				newInfo.Download (); This should be done only when autoQuestSynch is on
-			} else {
-				// only update the quest info server timestamp so the views can figure out that this info is updatable 
-				// and offer manual update to the user:
-				oldInfo.LastUpdateOnServer = newInfo.LastUpdateOnServer;
-				// store the new quest info to which this can manually be updated later ...
-				oldInfo.NewVersionOnServer = newInfo;
-			}
-
-			// in case we update the info after updating the quest we have to erase the link to the new info within the new info:
-			newInfo.NewVersionOnServer = null;
+			UpdateQuestInfoFromLocalQuest (newInfo.Id);
 
 			if (Filter.Accept (oldInfo) || Filter.Accept (newInfo)) {
 				// Run through filter and raise event if involved
@@ -290,6 +284,65 @@ namespace GQ.Client.Model
 			t.Start ();
 		}
 
+		/// <summary>
+		/// Updates the quest info from local quest. 
+		/// This method should be called immediately after downloading or updating a quest from server.
+		/// </summary>
+		/// <param name="questId">Quest identifier.</param>
+		public void UpdateQuestInfoFromLocalQuest(int questId) {
+			// create a quest from local xml:
+			string gameXmlPath = Files.CombinePath(QuestManager.GetLocalPath4Quest (questId), "game.xml");
+			string xml = File.ReadAllText (gameXmlPath);
+			Quest q = QuestManager.Instance.DeserializeQuest (xml);
+
+			QuestInfo info = null;
+			if (!QuestDict.TryGetValue(questId, out info)) {
+				Log.SignalErrorToDeveloper (
+					"Trying to change quest info {0} but it deos not exist in QuestInfoManager.", 
+					questId
+				);
+				return;
+			} 
+
+			info.Name = q.Name;
+			info.LastUpdateOnServer = q.LastUpdate;
+			info.LastUpdateOnDevice = info.LastUpdateOnServer;
+			// hotspots:
+			HotspotInfo[] hInfos = new HotspotInfo[q.AllHotspots.Count];
+			int i = 0;
+			foreach (Hotspot h in q.AllHotspots) {
+				hInfos [i++] = new HotspotInfo (h.Latitude, h.Longitude);
+			}
+			info.Hotspots = hInfos;
+			// metadata:
+			MetaDataInfo[] mInfos = new MetaDataInfo[q.metadata.Count];
+			i = 0;
+			foreach (string key in q.metadata.Keys) {
+				string value = null;
+				q.metadata.TryGetValue(key, out value);
+				mInfos [i++] = new MetaDataInfo (key, value);
+			}
+			info.Metadata = mInfos;
+			// TimestampOfPredeployedVersion remains unchanged
+			// PlayedTimes remains unchanged (TODO if we want to count for versions separately we should enhance it here!)
+			info.NewVersionOnServer = null;
+
+			// tell the UIC for this quest info to refresh: 
+			if (Filter.Accept (info)) {
+				// Run through filter and raise event if involved
+
+				raiseDataChange (
+					new QuestInfoChangedEvent (
+						String.Format ("Info for quest {0} changed.", info.Name),
+						ChangeType.ChangedInfo,
+						newQuestInfo: info,
+						oldQuestInfo: null
+					)
+				);
+			}
+
+		}
+
 		public static event Task.TaskCallback OnQuestInfosUpdateSucceeded;
 
 		public delegate void ChangeCallback (object sender,QuestInfoChangedEvent e);
@@ -338,6 +391,8 @@ namespace GQ.Client.Model
 			get {
 				if (_instance == null) {
 					_instance = new QuestInfoManager ();
+					_instance.initViews ();
+					_instance.initFilters ();
 				}
 				return _instance;
 			}
@@ -355,9 +410,6 @@ namespace GQ.Client.Model
 		{
 			// init quest info store:
 			QuestDict = new Dictionary<int, QuestInfo> ();
-
-			initViews ();
-			initFilters ();
 		}
 
 		void initViews ()

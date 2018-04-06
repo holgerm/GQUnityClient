@@ -38,7 +38,7 @@ namespace GQ.Client.Model {
 		public override bool Run() 
 		{
 			// step 1 deserialize game.xml:
-			QuestManager.Instance.DeserializeQuest(gameXML);
+			QuestManager.Instance.SetCurrentQuestFromXML(gameXML);
 
 			// step 2 import local media info:
 			QuestManager.Instance.ImportLocalMediaInfo();

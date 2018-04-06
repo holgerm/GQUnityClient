@@ -23,7 +23,6 @@ namespace GQTests.Management {
 		public void SetUp () {
 			Mock.Use = true;
 			MOCK_Server_Empty();
-			Mock.DeclareGQServerResponseByString ("editor/10557/clientxml", questXML);
 
 			ConfigurationManager.Current.portal = 0;
 
@@ -87,24 +86,6 @@ namespace GQTests.Management {
 		}
 
 		/// <summary>
-		/// When a quest that is already downloaded on the app changes category on the server, 
-		/// then the app should offer to update it.
-		/// </summary>
-		[Test]
-		public void ChangeInfoOfLoadedQuestByCategory() {
-			// PREPARATION: published downloaded quest:
-			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
-			MOCK_DownloadQuest();
-
-			// TEST:
-			MOCK_ChangeCategoryOfQuestInfo ();
-			QM.UpdateQuestInfos();
-			ASSERT_ShowOptions_Play_Delete_Update ();
-			ASSERT_ShowsOldCategory ();
-		}
-
-		/// <summary>
 		/// When the server changes the category of a quest that the app has NOT yet downloaded,
 		/// then the quest category should be updated when the app gets refreshed and then offer download as before.
 		/// </summary>
@@ -126,6 +107,43 @@ namespace GQTests.Management {
 		/// then the app should offer to update it.
 		/// </summary>
 		[Test]
+		public void ChangeInfoOfLoadedQuestByCategory() {
+			// PREPARATION: published downloaded quest:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+			MOCK_DownloadQuest();
+
+			// TEST:
+			MOCK_ChangeCategoryOfQuestInfo ();
+			QM.UpdateQuestInfos();
+			ASSERT_ShowOptions_Play_Delete_Update ();
+			ASSERT_ShowsOldCategory ();
+		}
+
+		/// <summary>
+		/// When a downloaded quest that changed category on the server is updated in the app, 
+		/// then the app should not offer update anymore, but still offer play and delete.
+		/// </summary>
+		[Test]
+		public void UpdateChangedQuestByCategory() {
+			// PREPARATION: publish and download quest and change it on server:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+			MOCK_DownloadQuest();
+			MOCK_ChangeCategoryOfQuestInfo ();
+			QM.UpdateQuestInfos();
+
+			MOCK_UpdateQuest ();
+
+			ASSERT_ShowOptions_Play_Delete ();
+			ASSERT_ShowsNewCategory ();
+		}
+
+		/// <summary>
+		/// When a quest that is already downloaded on the app changes category on the server, 
+		/// then the app should offer to update it.
+		/// </summary>
+		[Test]
 		public void ChangeInfoOfLoadedQuestByName() {
 			// PREPARATION: published downloaded quest:
 			MOCK_Server_PublishQuest ();
@@ -140,7 +158,9 @@ namespace GQTests.Management {
 		}
 		#endregion
 
-		#region Helpers
+		// ###############################################################################################################
+
+		#region Assertion to check on Client App
 		void ASSERT_QM_ShowsNoQuests() {
 			Assert.NotNull(QM);
 			Assert.AreEqual(0, QM.Count);
@@ -189,111 +209,41 @@ namespace GQTests.Management {
 			QuestInfo info = QM.GetQuestInfo(10557);
 			Assert.AreEqual ("Neuer Name", info.Name);
 		}
+		#endregion
 
+		#region Mock Server Behaviour
 		void MOCK_Server_Empty() {
-			Mock.DeclareGQServerResponseByString (
-				"json/0/publicgamesinfo", 
-				@"[]"
-			);
+			Mock.DeclareGQServerResponseByString ("json/0/publicgamesinfo", @"[]");
 		}
 
 		void MOCK_Server_PublishQuest() {
-			Mock.DeclareGQServerResponseByString (
-				"json/0/publicgamesinfo", 
-				@"[
-				    {
-				        ""hotspots"": [
-				            {
-				                ""latitude"": 50.73447,
-				                ""longitude"": 7.104104
-				            },
-				            {
-				                ""latitude"": 50.73447,
-				                ""longitude"": 7.104104
-				            }
-				        ],
-				        ""id"": 10557,
-				        ""lastUpdate"": 1505465979827,
-				        ""metadata"": [
-				            {
-				                ""key"": ""category"",
-				                ""value"": ""wcc.tour.beethoven""
-				            }
-				        ],
-				        ""name"": ""Franziskanerkirche"",
-				        ""typeID"": 3318
-				    }
-				]"
-			);
+			Mock.DeclareGQServerResponseByString ("editor/10557/clientxml", questXMLOriginal);
+			Mock.DeclareGQServerResponseByString ("json/0/publicgamesinfo", questInfoOriginal);
 		}
 
 		void MOCK_ChangeCategoryOfQuestInfo () {
 			// we change category from beethoven to macke ... and increase the lastupdate time stamp by one:
-			Mock.DeclareGQServerResponseByString (
-				"json/0/publicgamesinfo", 
-				@"[
-				    {
-				        ""hotspots"": [
-				            {
-				                ""latitude"": 50.73447,
-				                ""longitude"": 7.104104
-				            },
-				            {
-				                ""latitude"": 50.73447,
-				                ""longitude"": 7.104104
-				            }
-				        ],
-				        ""id"": 10557,
-				        ""lastUpdate"": 1505465979828,
-				        ""metadata"": [
-				            {
-				                ""key"": ""category"",
-				                ""value"": ""wcc.tour.macke""
-				            }
-				        ],
-				        ""name"": ""Franziskanerkirche"",
-				        ""typeID"": 3318
-				    }
-				]"
-			);
+			Mock.DeclareGQServerResponseByString ("editor/10557/clientxml", questXMLNewCategory);
+			Mock.DeclareGQServerResponseByString ("json/0/publicgamesinfo", questInfoNewCategory);
 		}
 
 		void MOCK_ChangeNameOfQuestInfo () {
 			// we change category from beethoven to macke ... and increase the lastupdate time stamp by one:
-			Mock.DeclareGQServerResponseByString (
-				"json/0/publicgamesinfo", 
-				@"[
-				    {
-				        ""hotspots"": [
-				            {
-				                ""latitude"": 50.73447,
-				                ""longitude"": 7.104104
-				            },
-				            {
-				                ""latitude"": 50.73447,
-				                ""longitude"": 7.104104
-				            }
-				        ],
-				        ""id"": 10557,
-				        ""lastUpdate"": 1505465979828,
-				        ""metadata"": [
-				            {
-				                ""key"": ""category"",
-				                ""value"": ""wcc.tour.macke""
-				            }
-				        ],
-				        ""name"": ""Neuer Name"",
-				        ""typeID"": 3318
-				    }
-				]"
-			);
+			Mock.DeclareGQServerResponseByString ("editor/10557/clientxml", questXMLNewName);
+			Mock.DeclareGQServerResponseByString ("json/0/publicgamesinfo", questInfoNewName);
 		}
 
 		void MOCK_DownloadQuest() {
 			QM.GetQuestInfo (10557).Download ();
 		}
 
-		string questXML = 
+		void MOCK_UpdateQuest() {
+			QM.GetQuestInfo (10557).Update ();
+		}
+		#endregion
+
+		#region Long Content Strings
+		string questXMLOriginal = 
 			@"<game id=""10557"" lastUpdate=""1505465979827"" name=""Franziskanerkirche"" xmlformat=""5"">
 				<mission endbuttontext=""Zurück zur Karte"" id=""30917"" mode=""Komplett anzeigen"" nextdialogbuttontext=""Zurück zur Karte"" skipwordticker=""true"" textsize=""20"" tickerspeed=""50"" type=""NPCTalk"">
 					<onStart>
@@ -348,6 +298,197 @@ namespace GQTests.Management {
 					</onLeave>
 				</hotspot>
 			</game>";
+
+		string questInfoOriginal = 
+			@"[
+				    {
+				        ""hotspots"": [
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            },
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            }
+				        ],
+				        ""id"": 10557,
+				        ""lastUpdate"": 1505465979827,
+				        ""metadata"": [
+				            {
+				                ""key"": ""category"",
+				                ""value"": ""wcc.tour.beethoven""
+				            }
+				        ],
+				        ""name"": ""Franziskanerkirche"",
+				        ""typeID"": 3318
+				    }
+				]";
+
+
+		string questXMLNewCategory = 
+			@"<game id=""10557"" lastUpdate=""1505465979828"" name=""Franziskanerkirche"" xmlformat=""5"">
+				<mission endbuttontext=""Zurück zur Karte"" id=""30917"" mode=""Komplett anzeigen"" nextdialogbuttontext=""Zurück zur Karte"" skipwordticker=""true"" textsize=""20"" tickerspeed=""50"" type=""NPCTalk"">
+					<onStart>
+						<rule>
+							<action type=""SetVariable"" var=""content"">
+								<value>
+									<string>Aus den Erinnerungen des Bäckermeisters Fischer, Eigentümer des Wohnhauses in der Rheingasse 24, ist bekannt, dass der kleine Ludwig van Beethoven Orgelunterricht erhielt bei Bruder Willibaldus im damaligen Franziskanerkloster. In der Franziskanerkirche erlernte er nicht nur das Orgelspiel, sondern wurde auch in kirchlichen Ritualen unterrichtet. Wenig später wurde Ludwig der Gehilfe von Willibaldus.</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""link"">
+								<value>
+									<string>http://www.buergerfuerbeethoven.de/start/index.html</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""autor"">
+								<value>
+									<string>BN-BfB</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""bildrechte"">
+								<value>
+									<string/>
+								</value>
+							</action>
+						</rule>
+					</onStart>
+					<onEnd>
+						<rule>
+							<action type=""EndGame""/>
+						</rule>
+					</onEnd>
+					<dialogitem blocking=""false"" id=""35913"">&lt;b&gt;@quest.name@&lt;/b&gt;&lt;br&gt;@content@&lt;br&gt;&lt;br&gt;Autor: @autor@&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;@link@&quot;&gt;@link@&lt;/a&gt;&lt;br&gt;</dialogitem>
+				</mission>
+				<mission id=""30918"" type=""MetaData"">
+					<stringmeta id=""35914"" key=""category"" value=""wcc.tour.macke""/>
+					<stringmeta id=""35915"" key=""city"" value=""Bonn""/>
+					<stringmeta id=""35916"" key=""administrative"" value=""Bonn""/>
+					<stringmeta id=""35917"" key=""administrative"" value=""Regierungsbezirk Köln""/>
+					<stringmeta id=""35918"" key=""state"" value=""Nordrhein-Westfalen""/>
+					<stringmeta id=""35919"" key=""country"" value=""Deutschland""/>
+				</mission>
+				<hotspot id=""12341"" initialActivity=""true"" initialVisibility=""true"" latlong=""50.73447,7.104104"" radius=""20"">
+					<onEnter>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onEnter>
+					<onLeave>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onLeave>
+				</hotspot>
+			</game>";
+
+		string questInfoNewCategory = 
+			@"[
+				    {
+				        ""hotspots"": [
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            },
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            }
+				        ],
+				        ""id"": 10557,
+				        ""lastUpdate"": 1505465979828,
+				        ""metadata"": [
+				            {
+				                ""key"": ""category"",
+				                ""value"": ""wcc.tour.macke""
+				            }
+				        ],
+				        ""name"": ""Franziskanerkirche"",
+				        ""typeID"": 3318
+				    }
+				]";
+
+		string questXMLNewName = 
+			@"<game id=""10557"" lastUpdate=""1505465979828"" name=""Neuer Name"" xmlformat=""5"">
+				<mission endbuttontext=""Zurück zur Karte"" id=""30917"" mode=""Komplett anzeigen"" nextdialogbuttontext=""Zurück zur Karte"" skipwordticker=""true"" textsize=""20"" tickerspeed=""50"" type=""NPCTalk"">
+					<onStart>
+						<rule>
+							<action type=""SetVariable"" var=""content"">
+								<value>
+									<string>Aus den Erinnerungen des Bäckermeisters Fischer, Eigentümer des Wohnhauses in der Rheingasse 24, ist bekannt, dass der kleine Ludwig van Beethoven Orgelunterricht erhielt bei Bruder Willibaldus im damaligen Franziskanerkloster. In der Franziskanerkirche erlernte er nicht nur das Orgelspiel, sondern wurde auch in kirchlichen Ritualen unterrichtet. Wenig später wurde Ludwig der Gehilfe von Willibaldus.</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""link"">
+								<value>
+									<string>http://www.buergerfuerbeethoven.de/start/index.html</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""autor"">
+								<value>
+									<string>BN-BfB</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""bildrechte"">
+								<value>
+									<string/>
+								</value>
+							</action>
+						</rule>
+					</onStart>
+					<onEnd>
+						<rule>
+							<action type=""EndGame""/>
+						</rule>
+					</onEnd>
+					<dialogitem blocking=""false"" id=""35913"">&lt;b&gt;@quest.name@&lt;/b&gt;&lt;br&gt;@content@&lt;br&gt;&lt;br&gt;Autor: @autor@&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;@link@&quot;&gt;@link@&lt;/a&gt;&lt;br&gt;</dialogitem>
+				</mission>
+				<mission id=""30918"" type=""MetaData"">
+					<stringmeta id=""35914"" key=""category"" value=""wcc.tour.beethoven""/>
+					<stringmeta id=""35915"" key=""city"" value=""Bonn""/>
+					<stringmeta id=""35916"" key=""administrative"" value=""Bonn""/>
+					<stringmeta id=""35917"" key=""administrative"" value=""Regierungsbezirk Köln""/>
+					<stringmeta id=""35918"" key=""state"" value=""Nordrhein-Westfalen""/>
+					<stringmeta id=""35919"" key=""country"" value=""Deutschland""/>
+				</mission>
+				<hotspot id=""12341"" initialActivity=""true"" initialVisibility=""true"" latlong=""50.73447,7.104104"" radius=""20"">
+					<onEnter>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onEnter>
+					<onLeave>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onLeave>
+				</hotspot>
+			</game>";
+
+		string questInfoNewName = 
+			@"[
+				    {
+				        ""hotspots"": [
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            },
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            }
+				        ],
+				        ""id"": 10557,
+				        ""lastUpdate"": 1505465979828,
+				        ""metadata"": [
+				            {
+				                ""key"": ""category"",
+				                ""value"": ""wcc.tour.beethoven""
+				            }
+				        ],
+				        ""name"": ""Neuer Name"",
+				        ""typeID"": 3318
+				    }
+				]";
 		#endregion
 
 	}

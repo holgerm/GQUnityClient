@@ -79,7 +79,35 @@ namespace GQ.Client.Model
 
 		public bool InitialVisibility { get; protected set; }
 
-		public string LatLong { get; protected set; }
+		protected string LatLong { 
+			set {
+				string[] parts = value.Split (',');
+				if (parts.Length != 2) {
+					Log.SignalErrorToDeveloper (
+						"Hotspot {0} in quest {1} contains bad location string '{2}'",
+						Id,
+						QuestManager.CurrentlyParsingQuest.Id,
+						value
+					);
+				}
+				latitude = Convert.ToDouble (parts [0]);
+				longitude = Convert.ToDouble (parts [1]);
+			} 
+		}
+
+		private double latitude;
+		public double Latitude {
+			get {
+				return latitude;
+			}
+		}
+
+		private double longitude;
+		public double Longitude {
+			get {
+				return longitude;
+			}
+		}
 
 		public double Radius { get; protected set; }
 

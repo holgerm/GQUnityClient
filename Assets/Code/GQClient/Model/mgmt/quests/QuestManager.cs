@@ -152,8 +152,12 @@ namespace GQ.Client.Model
 		///
 		/// </summary>
 		/// <param name="xml">Xml.</param>
-		public void DeserializeQuest (string xml)
+		public void SetCurrentQuestFromXML (string xml)
 		{
+			CurrentQuest = DeserializeQuest(xml);
+		}
+
+		public Quest DeserializeQuest(string xml) {
 			// Creates an instance of the XmlSerializer class;
 			// specifies the type of object to be deserialized.
 			XmlSerializer serializer = new XmlSerializer (typeof(Quest));
@@ -167,7 +171,7 @@ namespace GQ.Client.Model
 				XmlAttributeEventHandler (serializer_UnknownAttribute);
 
 			using (TextReader reader = new StringReader (xml)) {
-				CurrentQuest = (Quest)serializer.Deserialize (reader);
+				return (Quest)serializer.Deserialize (reader);
 			}
 		}
 

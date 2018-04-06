@@ -55,7 +55,7 @@ namespace GQ.Client.Model
 					// this new element was already there, hence we keep it (remove from the remove list) and update if newer:
 					oldIDsToBeRemoved.Remove(newInfo.Id);
 					if (oldInfo.LastUpdateOnServer < newInfo.LastUpdateOnServer) {
-						qim.ChangeInfo (newInfo);
+						qim.AddInfo (newInfo);
 					}
 				}
 				else {
