@@ -114,7 +114,7 @@ namespace GQ.Client.UI
 						imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
 					}
 
-					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = imageAreaHeight;
+					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
 					contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
 
 					fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
