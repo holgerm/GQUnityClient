@@ -156,6 +156,27 @@ namespace GQTests.Management {
 			ASSERT_ShowOptions_Play_Delete_Update ();
 			ASSERT_ShowsOldName ();
 		}
+
+		[Test]
+		public void ChangeGameXmlOnly() {
+			// PREPARATION: publish quest and download it:
+			MOCK_Server_PublishQuest ();
+			QM.UpdateQuestInfos();
+			MOCK_DownloadQuest();
+
+			// ACT: publish new version of game.xml where only content changed but metadata and media stay the same:
+			MOCK_Server_ChangeQuestXML ();
+			QM.UpdateQuestInfos();
+
+			// TEST:
+			ASSERT_ShowOptions_Play_Delete_Update ();
+
+			// ACT: update on client:
+			MOCK_UpdateQuest ();
+
+			// TEST: new game.xml is now downloaded:
+			ASSERT_ChangedQuestXmlOnDevice();
+		}
 		#endregion
 
 		// ###############################################################################################################
@@ -209,6 +230,12 @@ namespace GQTests.Management {
 			QuestInfo info = QM.GetQuestInfo(10557);
 			Assert.AreEqual ("Neuer Name", info.Name);
 		}
+
+		void ASSERT_ChangedQuestXmlOnDevice() {
+			string gameXmlPath = Files.CombinePath(QuestManager.GetLocalPath4Quest (10557), "game.xml");
+			string localGameXml = File.ReadAllText (gameXmlPath);
+			Assert.AreEqual (questXMLChangedContent, localGameXml);
+		}
 		#endregion
 
 		#region Mock Server Behaviour
@@ -233,6 +260,12 @@ namespace GQTests.Management {
 			Mock.DeclareGQServerResponseByString ("json/0/publicgamesinfo", questInfoNewName);
 		}
 
+		void MOCK_Server_ChangeQuestXML() {
+			// we change the game.xml on the server:
+			Mock.DeclareGQServerResponseByString ("editor/10557/clientxml", questXMLChangedContent);
+			Mock.DeclareGQServerResponseByString ("json/0/publicgamesinfo", questInfoChangedContent);
+		}
+
 		void MOCK_DownloadQuest() {
 			QM.GetQuestInfo (10557).Download ();
 		}
@@ -251,6 +284,62 @@ namespace GQTests.Management {
 							<action type=""SetVariable"" var=""content"">
 								<value>
 									<string>Aus den Erinnerungen des Bäckermeisters Fischer, Eigentümer des Wohnhauses in der Rheingasse 24, ist bekannt, dass der kleine Ludwig van Beethoven Orgelunterricht erhielt bei Bruder Willibaldus im damaligen Franziskanerkloster. In der Franziskanerkirche erlernte er nicht nur das Orgelspiel, sondern wurde auch in kirchlichen Ritualen unterrichtet. Wenig später wurde Ludwig der Gehilfe von Willibaldus.</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""link"">
+								<value>
+									<string>http://www.buergerfuerbeethoven.de/start/index.html</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""autor"">
+								<value>
+									<string>BN-BfB</string>
+								</value>
+							</action>
+							<action type=""SetVariable"" var=""bildrechte"">
+								<value>
+									<string/>
+								</value>
+							</action>
+						</rule>
+					</onStart>
+					<onEnd>
+						<rule>
+							<action type=""EndGame""/>
+						</rule>
+					</onEnd>
+					<dialogitem blocking=""false"" id=""35913"">&lt;b&gt;@quest.name@&lt;/b&gt;&lt;br&gt;@content@&lt;br&gt;&lt;br&gt;Autor: @autor@&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;@link@&quot;&gt;@link@&lt;/a&gt;&lt;br&gt;</dialogitem>
+				</mission>
+				<mission id=""30918"" type=""MetaData"">
+					<stringmeta id=""35914"" key=""category"" value=""wcc.tour.beethoven""/>
+					<stringmeta id=""35915"" key=""city"" value=""Bonn""/>
+					<stringmeta id=""35916"" key=""administrative"" value=""Bonn""/>
+					<stringmeta id=""35917"" key=""administrative"" value=""Regierungsbezirk Köln""/>
+					<stringmeta id=""35918"" key=""state"" value=""Nordrhein-Westfalen""/>
+					<stringmeta id=""35919"" key=""country"" value=""Deutschland""/>
+				</mission>
+				<hotspot id=""12341"" initialActivity=""true"" initialVisibility=""true"" latlong=""50.73447,7.104104"" radius=""20"">
+					<onEnter>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onEnter>
+					<onLeave>
+						<rule>
+							<action allowReturn=""0"" id=""30917"" type=""StartMission""/>
+						</rule>
+					</onLeave>
+				</hotspot>
+			</game>";
+
+		string questXMLChangedContent = 
+			@"<game id=""10557"" lastUpdate=""1505465979828"" name=""Franziskanerkirche"" xmlformat=""5"">
+				<mission endbuttontext=""Zurück zur Karte"" id=""30917"" mode=""Komplett anzeigen"" nextdialogbuttontext=""Zurück zur Karte"" skipwordticker=""true"" textsize=""20"" tickerspeed=""50"" type=""NPCTalk"">
+					<onStart>
+						<rule>
+							<action type=""SetVariable"" var=""content"">
+								<value>
+									<string>NEUER TEXT. Aus den Erinnerungen des Bäckermeisters Fischer, Eigentümer des Wohnhauses in der Rheingasse 24, ist bekannt, dass der kleine Ludwig van Beethoven Orgelunterricht erhielt bei Bruder Willibaldus im damaligen Franziskanerkloster. In der Franziskanerkirche erlernte er nicht nur das Orgelspiel, sondern wurde auch in kirchlichen Ritualen unterrichtet. Wenig später wurde Ludwig der Gehilfe von Willibaldus.</string>
 								</value>
 							</action>
 							<action type=""SetVariable"" var=""link"">
@@ -325,7 +414,32 @@ namespace GQTests.Management {
 				    }
 				]";
 
-
+		string questInfoChangedContent = 
+			@"[
+				    {
+				        ""hotspots"": [
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            },
+				            {
+				                ""latitude"": 50.73447,
+				                ""longitude"": 7.104104
+				            }
+				        ],
+				        ""id"": 10557,
+				        ""lastUpdate"": 1505465979828,
+				        ""metadata"": [
+				            {
+				                ""key"": ""category"",
+				                ""value"": ""wcc.tour.beethoven""
+				            }
+				        ],
+				        ""name"": ""Franziskanerkirche"",
+				        ""typeID"": 3318
+				    }
+				]";
+				
 		string questXMLNewCategory = 
 			@"<game id=""10557"" lastUpdate=""1505465979828"" name=""Franziskanerkirche"" xmlformat=""5"">
 				<mission endbuttontext=""Zurück zur Karte"" id=""30917"" mode=""Komplett anzeigen"" nextdialogbuttontext=""Zurück zur Karte"" skipwordticker=""true"" textsize=""20"" tickerspeed=""50"" type=""NPCTalk"">
