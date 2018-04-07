@@ -141,6 +141,7 @@ namespace GQ.Client.Model
 					if (oldInfo.IsOnDevice) {
 						// Quest has already been downloaded before, hence we only show the option of update:
 						oldInfo.NewVersionOnServer = newInfo;
+						oldInfo.LastUpdateOnServer = newInfo.LastUpdateOnServer;
 					} else {
 						// Quest was not yet donloaded, hence we should replace the old one with the new info:
 						QuestDict.Remove (newInfo.Id);
@@ -199,37 +200,6 @@ namespace GQ.Client.Model
 					new QuestInfoChangedEvent (
 						String.Format ("Info for quest {0} removed.", oldInfo.Name),
 						ChangeType.RemovedInfo,
-						oldQuestInfo: oldInfo
-					)
-				);
-			}
-		}
-
-		/// <summary>
-		/// Called when a new quest info has been retrieved from server.
-		/// </summary>
-		/// <param name="newInfo">New info.</param>
-		public void ChangeInfo (QuestInfo newInfo)
-		{
-			QuestInfo oldInfo;
-			if (!QuestDict.TryGetValue (newInfo.Id, out oldInfo)) {
-				Log.SignalErrorToDeveloper (
-					"Trying to change quest info {0} but it deos not exist in QuestInfoManager.", 
-					newInfo.Id.ToString ()
-				);
-				return;
-			}
-
-			UpdateQuestInfoFromLocalQuest (newInfo.Id);
-
-			if (Filter.Accept (oldInfo) || Filter.Accept (newInfo)) {
-				// Run through filter and raise event if involved
-
-				raiseDataChange (
-					new QuestInfoChangedEvent (
-						String.Format ("Info for quest {0} changed.", newInfo.Name),
-						ChangeType.ChangedInfo,
-						newQuestInfo: newInfo,
 						oldQuestInfo: oldInfo
 					)
 				);
@@ -343,6 +313,9 @@ namespace GQ.Client.Model
 
 		}
 
+		/// <summary>
+		/// Here one can register listeners that will be called each time when the quest infos are successfully updated.
+		/// </summary>
 		public static event Task.TaskCallback OnQuestInfosUpdateSucceeded;
 
 		public delegate void ChangeCallback (object sender,QuestInfoChangedEvent e);
