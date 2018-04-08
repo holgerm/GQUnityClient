@@ -1437,7 +1437,7 @@ namespace GQ.Editor.UI
 			return configIsDirty;
 		}
 
-		int selection = 0;
+		int acceptedPageTypeSelection = 0;
 
 		private bool doGui4AcceptedPageTypes (PropertyInfo curPropInfo)
 		{
@@ -1467,15 +1467,15 @@ namespace GQ.Editor.UI
 					// Header with Add Button:
 					EditorGUILayout.BeginHorizontal ();
 
-					selection = 
+					acceptedPageTypeSelection = 
 					EditorGUILayout.Popup (
 						"Add Page Type:", 
-						selection, 
+							acceptedPageTypeSelection, 
 						pageTypesToAdd.ToArray ()
 					);
 				
 					if (GUILayout.Button ("+")) {
-						allElements.Add (pageTypesToAdd [selection]);
+						allElements.Add (pageTypesToAdd [acceptedPageTypeSelection]);
 						configIsDirty = true;
 					}
 					EditorGUILayout.EndHorizontal ();
@@ -1515,6 +1515,8 @@ namespace GQ.Editor.UI
 			return configIsDirty;
 		}
 
+		int questInfoViewSelection = 0;
+
 		private bool doGui4QuestInfoViews (PropertyInfo curPropInfo)
 		{
 			configIsDirty = false;
@@ -1542,19 +1544,19 @@ namespace GQ.Editor.UI
 					// Header with Add Button:
 					EditorGUILayout.BeginHorizontal ();
 
-					if (selection < 0)
-						selection = 0;
-					if (selection > viewsToAdd.Count - 1)
-						selection = viewsToAdd.Count - 1;
-					selection = 
+					if (questInfoViewSelection < 0)
+						questInfoViewSelection = 0;
+					if (questInfoViewSelection > viewsToAdd.Count - 1)
+						questInfoViewSelection = viewsToAdd.Count - 1;
+					questInfoViewSelection = 
 						EditorGUILayout.Popup (
 						"Add Questinfo Viewing Option:", 
-						selection, 
+							questInfoViewSelection, 
 						viewsToAdd.ToArray ()
 					);
 
 					if (GUILayout.Button ("+")) {
-						allElements.Add (viewsToAdd [selection]);
+						allElements.Add (viewsToAdd [questInfoViewSelection]);
 						configIsDirty = true;
 					}
 					EditorGUILayout.EndHorizontal ();
