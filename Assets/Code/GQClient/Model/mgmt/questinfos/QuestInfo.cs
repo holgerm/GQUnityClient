@@ -402,6 +402,7 @@ namespace GQ.Client.Model
 				new Downloader (
 					url: QuestManager.GetQuestURI (Id), 
 					timeout: ConfigurationManager.Current.timeoutMS,
+					maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS, 
 					targetPath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
 				);
 			new DownloadDialogBehaviour (

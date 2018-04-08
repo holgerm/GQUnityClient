@@ -16,8 +16,10 @@ namespace GQ.Client.Util
 		public WWW Www { get; set; }
 
 		public long Timeout { get; set; }
+		public long MaxIdleTime { get; set; }
 
 		protected Stopwatch stopwatch;
+		protected Stopwatch idlewatch;
 
 		public void Restart ()
 		{

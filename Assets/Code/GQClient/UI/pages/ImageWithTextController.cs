@@ -75,7 +75,8 @@ namespace GQ.Client.UI
 					loader = 
 						new Downloader (
 						url: iwtPage.ImageUrl, 
-						timeout: ConfigurationManager.Current.timeoutMS
+						timeout: ConfigurationManager.Current.timeoutMS,
+						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 					);
 					// TODO store the image locally ...
 				}

@@ -46,6 +46,9 @@ namespace GQ.Client.Conf
 		public long   	timeoutMS   { get; set; }
 
 		[ShowInProductEditor]
+		public long   	maxIdleTimeMS   { get; set; }
+
+		[ShowInProductEditor]
 		public string 	nameForQuestSg { get; set; }
 
 		[ShowInProductEditor]

@@ -28,7 +28,7 @@ namespace GQ.Client.Util
 		/// <param name="maxParallelDownloads">Maximal number of parallel downloads.</param>
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
 		public MultiDownloader (
-			int maxParallelDownloads = 1, 
+			int maxParallelDownloads = 5, 
 			long timeout = 0, 
 			List<MediaInfo> files = null) : base (true)
 		{
@@ -108,6 +108,7 @@ namespace GQ.Client.Util
 					new Downloader (
 						url: info.Url, 
 						timeout: ConfigurationManager.Current.timeoutMS, 
+						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS, 
 						targetPath: info.LocalPath
 					);
 				CurrentlyRunningDownloads++;

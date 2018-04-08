@@ -48,7 +48,11 @@ namespace GQ.Client.Util
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				}
 				else {
-					loader = new Downloader (url: path, timeout: ConfigurationManager.Current.timeoutMS);
+					loader = new Downloader (
+						url: path, 
+						timeout: ConfigurationManager.Current.timeoutMS,
+						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+					);
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>  {

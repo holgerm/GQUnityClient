@@ -77,13 +77,16 @@ namespace GQ.Client.Util
 		public Downloader (
 			string url, 
 			long timeout = 0,
-			string targetPath = null) : base (true)
+			string targetPath = null,
+			long maxIdleTime = 2000L) : base (true)
 		{
 			Result = "";
 			this.Url = url;
 			Timeout = timeout;
+			MaxIdleTime = maxIdleTime;
 			TargetPath = targetPath;
 			stopwatch = new Stopwatch ();
+			idlewatch = new Stopwatch ();
 			OnStart += defaultLogInformationHandler;
 			OnError += defaultLogErrorHandler;
 			OnTimeout += defaultLogErrorHandler;
@@ -98,19 +101,36 @@ namespace GQ.Client.Util
 
 			string msg = String.Format ("Start to download url {0}", Url);
 			if (Timeout > 0) {
-				msg += String.Format (", timout set to {0} ms.", Timeout);
+				msg += String.Format (", timout set to {0} ms, idle timeout set to {1} ms.", Timeout, MaxIdleTime);
 			}
 			Raise (DownloadEventType.Start, new DownloadEvent (message: msg));
 
 			float progress = 0f;
 			while (!Www.isDone) {
 				if (progress < Www.progress) {
+					// we have a PROGRESS:
+					idlewatch.Reset();
 					progress = Www.progress;
 					msg = string.Format ("Lade Datei {0}, aktuell: {1:N2}%", Url, progress * 100);
 					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
+				} else {
+					// we have no progress, i.e. we are IDLE:
+					if (idlewatch.IsRunning && idlewatch.ElapsedMilliseconds > MaxIdleTime) {
+						idlewatch.Stop ();
+						stopwatch.Stop ();
+						Www.Dispose ();
+						msg = string.Format ("Idle-Timeout: schon {0} ms ohne effektiven Download vergangen", 
+							idlewatch.ElapsedMilliseconds);
+						Raise (DownloadEventType.Timeout, new DownloadEvent (elapsedTime: MaxIdleTime, message: msg));
+						yield break;
+					} else {
+						idlewatch.Start();
+					}
 				}
 				if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout) {
+					// overall time beyond TIMEOUT:
 					stopwatch.Stop ();
+					idlewatch.Stop ();
 					Www.Dispose ();
 					msg = string.Format ("Timeout: schon {0} ms vergangen", 
 						stopwatch.ElapsedMilliseconds);
@@ -118,11 +138,12 @@ namespace GQ.Client.Util
 					yield break;
 				}
 				if (Www == null)
-					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
+					UnityEngine.Debug.Log ("Www is null".Red()); // TODO what to do in this case?
 				yield return null;
 			} 
 
 			stopwatch.Stop ();
+			idlewatch.Stop ();
 
 			if (Www.error != null && Www.error != "") {
 				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));

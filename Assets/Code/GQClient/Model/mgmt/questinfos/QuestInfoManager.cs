@@ -225,7 +225,9 @@ namespace GQ.Client.Model
 			Downloader downloader = 
 				new Downloader (
 					url: ConfigurationManager.UrlPublicQuestsJSON, 
-					timeout: ConfigurationManager.Current.timeoutMS);
+					timeout: ConfigurationManager.Current.timeoutMS,
+					maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+				);
 			new DownloadDialogBehaviour (
 				downloader, 
 				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
