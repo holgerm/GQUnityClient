@@ -97,7 +97,9 @@ namespace GQ.Client.Util
 		protected IEnumerator Download ()
 		{
 			Www = new WWW (Url);
+			stopwatch.Reset ();
 			stopwatch.Start ();
+			idlewatch.Reset ();
 
 			string msg = String.Format ("Start to download url {0}", Url);
 			if (Timeout > 0) {
@@ -115,7 +117,7 @@ namespace GQ.Client.Util
 					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
 				} else {
 					// we have no progress, i.e. we are IDLE:
-					if (idlewatch.IsRunning && idlewatch.ElapsedMilliseconds > MaxIdleTime) {
+					if (MaxIdleTime >  0 && idlewatch.IsRunning && idlewatch.ElapsedMilliseconds > MaxIdleTime) {
 						idlewatch.Stop ();
 						stopwatch.Stop ();
 						Www.Dispose ();
