@@ -260,7 +260,7 @@ namespace GQ.Client.Model
 		/// </summary>
 		/// <param name="questId">Quest identifier.</param>
 		public void UpdateQuestInfoFromLocalQuest(int questId) {
-			// create a quest from local xml:
+			// read quest from local xml:
 			string gameXmlPath = Files.CombinePath(QuestManager.GetLocalPath4Quest (questId), "game.xml");
 			string xml = File.ReadAllText (gameXmlPath);
 			Quest q = QuestManager.Instance.DeserializeQuest (xml);
