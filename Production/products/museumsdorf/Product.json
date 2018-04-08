@@ -4,22 +4,204 @@
   "portal": 461,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
-  "downloadTimeOutSeconds": 300,
-  "nameForQuest": "[null]",
-  "questVisualization": "list",
-  "questVisualizationChangeable": false,
+  "keepAutoStarting": true,
+  "DownloadStrategy": "UPFRONT",
+  "autoUpdateQuestInfos": false,
+  "timeoutMS": 100000,
+  "nameForQuestSg": null,
+  "nameForQuestsPl": null,
+  "questInfoViews": [
+    "List",
+    "Map"
+  ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
-  "hasMenuWithinQuests": true,
-  "showTextInLoadingLogo": true,
-  "showNetConnectionWarning": true,
-  "colorProfile": "default",
-  "mapboxKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
-  "mapboxMapID": "mapbox.streets",
+  "acceptedPageTypes": [
+    "StartAndExitScreen",
+    "NPCTalk",
+    "ImageWithText",
+    "Menu",
+    "MultipleChoiceQuestion",
+    "TextQuestion",
+    "AudioRecord",
+    "ImageCapture",
+    "VideoPlay",
+    "MapOSM",
+    "MetaData"
+  ],
+  "sceneMappings": [
+    {
+      "pageTypeName": "ImageWithText",
+      "scenePath": "Assets/Scenes/Pages/NPCTalk.unity"
+    }
+  ],
+  "scenePaths": [
+    "Assets/Scenes/Foyer.unity",
+    "Assets/Scenes/Pages/NPCTalk.unity",
+    "Assets/Scenes/Pages/ImageWithText.unity",
+    "Assets/Scenes/Pages/MapOSM.unity",
+    "Assets/Scenes/Pages/StartAndExitScreen.unity"
+  ],
+  "sceneExtensions": [],
+  "mapProvider": "OpenStreetMap",
+  "mapBaseUrl": "http://a.tile.openstreetmap.org",
+  "mapKey": "",
+  "mapID": "",
+  "mapTileImageExtension": ".png",
   "useMapOffline": false,
   "mapMinimalZoom": 13.0,
-  "markers": []
+  "mapDeltaZoom": 0.5,
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 8.053463,
+  "mapStartAtLatitude": 52.850121,
+  "marker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerHeightUnits": 55.0,
+  "markerHeightMinMM": 10.0,
+  "markerHeightMaxMM": 0.0,
+  "markerColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "markerBGAlpha": 168,
+  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightMinMM": 7.0,
+  "mapButtonHeightMaxMM": 12.0,
+  "foldableCategoryFilters": true,
+  "categoryFiltersStartFolded": true,
+  "categoryFoldersStartFolded": true,
+  "mainCategorySet": null,
+  "categorySets": [],
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "mainColorFG": {
+    "r": 123,
+    "g": 105,
+    "b": 43,
+    "a": 255
+  },
+  "mainColorBG": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "showShadows": true,
+  "headerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "headerButtonFgColor": {
+    "r": 123,
+    "g": 105,
+    "b": 43,
+    "a": 255
+  },
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "contentFontColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "headerHeightUnits": 60.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
+  "contentHeightUnits": 750.0,
+  "contentTopMarginUnits": 0.0,
+  "contentDividerUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "imageAreaHeightMinUnits": 150.0,
+  "imageAreaHeightMaxUnits": 350.0,
+  "fitExceedingImagesIntoArea": false,
+  "footerHeightUnits": 75.0,
+  "footerHeightMinMM": 0.0,
+  "footerHeightMaxMM": 0.0,
+  "footerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "footerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "footerButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "borderWidthUnits": 0.0,
+  "overlayButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "overlayButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "overlayButtonFgDisabledColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "showEmptyMenuEntries": false,
+  "menuEntryHeightUnits": 40.0,
+  "menuEntryHeightMinMM": 5.0,
+  "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 350.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
+  "menuBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "menuPartBGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "menuInhibitsInteraction": false,
+  "disabledAlpha": 0.5,
+  "listEntryHeightUnits": 45.0,
+  "listEntryHeightMinMM": 0.0,
+  "listEntryHeightMaxMM": 0.0,
+  "listEntryColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  }
 }
