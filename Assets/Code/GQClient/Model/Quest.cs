@@ -23,16 +23,10 @@ namespace GQ.Client.Model
 	{
 
 		#region Attributes
-
 		public string Name { get; set; }
-
 		public int Id { get; set; }
-		// TODO: make setter protected
-
 		public long LastUpdate { get; set; }
-
 		public string XmlFormat { get; set; }
-
 		public bool IndividualReturnDefinitions { get; set; }
 
 		public bool IsHidden {
@@ -41,11 +35,9 @@ namespace GQ.Client.Model
 				return (ConfigurationManager.Current.hideHiddenQuests && Name != null && Name.StartsWith ("---"));
 			}
 		}
-
 		#endregion
 
 		#region State Pages
-
 		protected Dictionary<int, IPage> pageDict = new Dictionary<int, IPage> ();
 
 		public IPage GetPageWithID (int id)
@@ -83,11 +75,9 @@ namespace GQ.Client.Model
 				currentPage = value;
 			}
 		}
-
 		#endregion
 
 		#region Hotspots
-
 		protected Dictionary<int, Hotspot> hotspotDict = new Dictionary<int, Hotspot> ();
 
 		public Hotspot GetHotspotWithID (int id)
@@ -102,19 +92,15 @@ namespace GQ.Client.Model
 				return hotspotDict.Values;
 			}
 		}
-
 		#endregion
 
 
 		#region Metadata
-
 		public Dictionary<string, string> metadata = new Dictionary<string, string> ();
-
 		#endregion
 
 
 		#region Media
-
 		public Dictionary<string, MediaInfo> MediaStore = new Dictionary<string, MediaInfo> ();
 
 		private void initMediaStore ()
@@ -152,12 +138,10 @@ namespace GQ.Client.Model
 				return Files.CombinePath (QuestManager.GetLocalPath4Quest (Id), "media.json");
 			}
 		}
-
 		#endregion
 
 
-		#region Structure
-
+		#region XML Reading
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -178,11 +162,16 @@ namespace GQ.Client.Model
 				reader.Read ();
 			}
 
-			ReadAttributes (reader);
+			// we need the id first, because it is used in createing the media store...
+			Id = GQML.GetIntAttribute (GQML.QUEST_ID, reader);
 
+			// set up the media store, depends on the id of the quest for paths:
 			initMediaStore ();
 
-			// consume the begin quest element:
+			// read all further attributes
+			ReadFurtherAttributes (reader);
+
+			// Start the xml content: consume the begin quest element:
 			reader.Read ();
 
 			// Content:
@@ -196,7 +185,6 @@ namespace GQ.Client.Model
 				}
 
 				// now we are at an element:
-
 				switch (reader.LocalName) {
 				case GQML.PAGE:
 					ReadPage (reader);
@@ -207,13 +195,13 @@ namespace GQ.Client.Model
 				}
 			}
 
+			// we are done with this quest:
 			QuestManager.CurrentlyParsingQuest = Null;
 		}
 
-		private void ReadAttributes (XmlReader reader)
+		private void ReadFurtherAttributes (XmlReader reader)
 		{
 			Name = GQML.GetStringAttribute (GQML.QUEST_NAME, reader);
-			Id = GQML.GetIntAttribute (GQML.QUEST_ID, reader);
 			XmlFormat = GQML.GetStringAttribute (GQML.QUEST_XMLFORMAT, reader);
 			LastUpdate = GQML.GetLongAttribute (GQML.QUEST_LASTUPDATE, reader);
 			IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute (GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader);
@@ -279,12 +267,10 @@ namespace GQ.Client.Model
 		{
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
-
 		#endregion
 
 
 		#region Runtime API
-
 		public virtual void Start ()
 		{
 			if (StartPage == null) {

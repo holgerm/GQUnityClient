@@ -25,6 +25,7 @@ namespace GQ.Client.UI
 
 		public override void layout ()
 		{
+			Debug.Log ("CanvasScale in ScreenLayout: " + CanvasScale);
 			setMainBackgroundColor ();
 
 			setHeader ();

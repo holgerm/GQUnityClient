@@ -37,14 +37,17 @@
     {
       "pageTypeName": "ImageWithText",
       "scenePath": "Assets/Scenes/Pages/NPCTalk.unity"
+    },
+    {
+      "pageTypeName": "MapOSM",
+      "scenePath": "Assets/Scenes/Pages/Navigation.unity"
     }
   ],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
-    "Assets/Scenes/Pages/ImageWithText.unity",
-    "Assets/Scenes/Pages/MapOSM.unity",
-    "Assets/Scenes/Pages/StartAndExitScreen.unity"
+    "Assets/Scenes/Pages/StartAndExitScreen.unity",
+    "Assets/Scenes/Pages/Navigation.unity"
   ],
   "sceneExtensions": [],
   "mapProvider": "OpenStreetMap",
