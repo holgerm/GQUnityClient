@@ -44,6 +44,7 @@ namespace GQ.Client.UI
 
 			// show the content:
 			ShowImage ();
+			ClearText ();
 			AddCurrentText ();
 			UpdateForwardButton ();
 		}
@@ -135,12 +136,18 @@ namespace GQ.Client.UI
 			}
 		}
 
+		void ClearText() {
+			foreach (Transform dialogItem in dialogItemContainer) {
+				GameObject.Destroy(dialogItem.gameObject);
+			}
+		}
+
 		void AddCurrentText ()
 		{
 			// decode text for HyperText Component:
 			string currentText = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
 
-			// create dialog item GO form prefab:
+			// create dialog item GO from prefab:
 			DialogItemCtrl.Create (dialogItemContainer, currentText);
 		}
 

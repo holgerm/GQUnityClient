@@ -86,6 +86,13 @@ namespace GQ.Client.Model
 
 		}
 
+		/// <summary>
+		/// If you enhance this method by overriding it in subtypes to process additional content, 
+		/// you should first process the additional content or alternatives and at the end 
+		/// call this implementation with base.ReadContent() as fallback.
+		/// </summary>
+		/// <param name="reader">Reader.</param>
+		/// <param name="xmlRootAttr">Xml root attr.</param>
 		protected virtual void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
 		{
 			XmlSerializer serializer;
@@ -105,7 +112,7 @@ namespace GQ.Client.Model
 				break;
 			// UNKOWN CASE:
 			default:
-				Log.WarnDeveloper ("Page has additional unknown {0} element. (Ignored)", reader.LocalName);
+				Log.WarnDeveloper ("Page {0} has additional unknown {1} element. (Ignored)", Id, reader.LocalName);
 				reader.Skip ();
 				break;
 			}
@@ -164,7 +171,11 @@ namespace GQ.Client.Model
 			set;
 		}
 
-		private string PageSceneName {
+		/// <summary>
+		/// Maps the scene to this model for a page (mission).
+		/// </summary>
+		/// <value>The name of the page scene.</value>
+		protected virtual string PageSceneName {
 			get {
 				return GetType ().Name.Substring (4);
 			}
@@ -183,9 +194,16 @@ namespace GQ.Client.Model
 
 		public static List<Scene> scenesToUnload = new List<Scene> ();
 
+		private const string GO_PATH_PAGE_CONTROLLER = "Canvas/Screen";
+
 		public virtual void Start ()
 		{
 			Resources.UnloadUnusedAssets ();
+
+			// set this page as current in QM
+			QuestManager.Instance.CurrentQuest = Parent;
+			QuestManager.Instance.CurrentPage = this; 
+			State = GQML.STATE_RUNNING;
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
@@ -196,11 +214,30 @@ namespace GQ.Client.Model
 					scenesToUnload.Add (scene);
 				}
 			}
+			else {
+				// if we use the same page again, we have to initialize the UI controller again with the new data.
+				GameObject goPageScreen = GameObject.Find(GO_PATH_PAGE_CONTROLLER);
+				if (goPageScreen == null) {
+					Log.SignalErrorToDeveloper (
+						"Page {0} using scene {1} does not have a PageController at {2}", 
+						Id, scene.name, GO_PATH_PAGE_CONTROLLER
+					);
+					Quest.End ();
+					return;
+				} 
 
-			// set this page as current in QM
-			QuestManager.Instance.CurrentQuest = Parent;
-			QuestManager.Instance.CurrentPage = this; 
-			State = GQML.STATE_RUNNING;
+				PageController pageCtrl = goPageScreen.GetComponent<PageController> ();
+				if (pageCtrl == null) {
+					Log.SignalErrorToDeveloper (
+						"Page {0} using scene {1} does not have a PageController at {2}", 
+						Id, scene.name, GO_PATH_PAGE_CONTROLLER
+					);
+					Quest.End ();
+					return;
+				}
+
+				pageCtrl.InitPage ();
+			}
 
 			// Trigger OnStart Actions of this page:
 			StartTrigger.Initiate ();

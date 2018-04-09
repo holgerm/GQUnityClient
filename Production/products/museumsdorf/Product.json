@@ -35,10 +35,6 @@
   ],
   "sceneMappings": [
     {
-      "pageTypeName": "ImageWithText",
-      "scenePath": "Assets/Scenes/Pages/NPCTalk.unity"
-    },
-    {
       "pageTypeName": "MapOSM",
       "scenePath": "Assets/Scenes/Pages/Navigation.unity"
     }

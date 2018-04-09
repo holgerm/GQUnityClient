@@ -65,12 +65,10 @@ namespace GQ.Client.Model
 
 
 		#region Runtime API
-
 		public override void Start ()
 		{
-			base.Start ();
 			CurDialogItemNo++;
-
+			base.Start ();
 		}
 
 		public bool Next ()
@@ -140,27 +138,27 @@ namespace GQ.Client.Model
 
 		public int Id {
 			get;
-			protected set;
+			set;
 		}
 
 		public bool IsBlocking {
 			get;
-			protected set;
+			set;
 		}
 
 		public string Speaker {
 			get;
-			protected set;
+			set;
 		}
 
 		public string AudioURL {
 			get;
-			protected set;
+			set;
 		}
 
 		public string Text {
 			get;
-			protected set;
+			set;
 		}
 
 		#endregion

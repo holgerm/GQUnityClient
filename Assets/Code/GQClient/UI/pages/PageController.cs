@@ -16,11 +16,12 @@ namespace GQ.Client.UI
 		protected Page page;
 		protected QuestManager qm;
 
-		#region MonoBehaviour
+		#region Start
+		bool resumingToFoyer;
 
 		public virtual void Start ()
 		{
-			bool resumingToFoyer = false;
+			resumingToFoyer = false;
 
 			qm = QuestManager.Instance;
 			if (qm.CurrentQuest == null || qm.CurrentPage == Page.Null) {
@@ -29,6 +30,14 @@ namespace GQ.Client.UI
 				return;
 			}
 
+			InitPage ();
+		}
+
+		/// <summary>
+		/// Must be called manually if you want to reuse the page model, i.e. for the second of two consecutive pages 
+		/// of the same model type.
+		/// </summary>
+		public void InitPage() {
 			page = qm.CurrentPage;
 
 			if (page == null) {
@@ -45,7 +54,6 @@ namespace GQ.Client.UI
 
 			Initialize ();
 		}
-
 		#endregion
 
 

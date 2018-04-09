@@ -10,29 +10,42 @@ namespace GQ.Client.Model
 {
 
 	[XmlRoot (GQML.PAGE)]
-	public class PageImageWithText : Page
+	public class PageImageWithText : PageNPCTalk
 	{
 
 		#region State
-
-		public string EndButtonText { get; set ; }
-
-		public string ImageUrl { get; set; }
-
-		public string Text { get; set; }
-
-		public int TextSize { get; set; }
-
+		private string text;
+		public string Text { 
+			get {
+				return text;
+			} 
+			set {
+				text = value;
+				// adapt to NPCTalk: set the text as dialog item:
+				DialogItem d = new DialogItem ();
+				d.Id = -1; // not applicable
+				d.IsBlocking = false;
+				d.AudioURL = null;
+				d.Speaker = null;
+				d.Text = text;
+				dialogItems.Clear (); // we have only this dialog item
+				dialogItems.Add (d);
+			} 
+		}
 		#endregion
 
 
 		#region Runtime API
-
 		public override void Start ()
 		{
 			base.Start ();
 		}
 
+		protected override string PageSceneName {
+			get {
+				return "NPCTalk";
+			}
+		}
 		#endregion
 
 
@@ -52,22 +65,6 @@ namespace GQ.Client.Model
 
 			TextSize = GQML.GetIntAttribute (GQML.PAGE_IMAGEWITHTEXT_TEXTSIZE, reader);
 		}
-
-		//		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
-		//		{
-		//			switch (reader.LocalName) {
-		//			case GQML.PAGE_NPCTALK_DIALOGITEM:
-		//				xmlRootAttr.ElementName = GQML.PAGE_NPCTALK_DIALOGITEM;
-		//				XmlSerializer serializer = new XmlSerializer (typeof(DialogItem), xmlRootAttr);
-		//				DialogItem d = (DialogItem)serializer.Deserialize (reader);
-		//				dialogItems.Add (d);
-		//				break;
-		//			default:
-		//				base.ReadContent (reader, xmlRootAttr);
-		//				break;
-		//			}
-		//		}
-
 		#endregion
 
 	}
