@@ -103,7 +103,6 @@ namespace GQ.Client.UI
 							timeout: ConfigurationManager.Current.timeoutMS,
 							maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 						);
-					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
@@ -131,6 +130,7 @@ namespace GQ.Client.UI
 					image.texture = d.Www.texture;
 					// Dispose www including it s Texture and take some logs for preformace surveillance:
 					d.Www.Dispose ();
+					imagePanel.SetActive (true);
 				};
 				loader.Start ();
 			}

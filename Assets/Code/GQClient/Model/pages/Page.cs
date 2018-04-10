@@ -19,7 +19,6 @@ namespace GQ.Client.Model
 	{
 
 		#region Structure
-
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -194,7 +193,7 @@ namespace GQ.Client.Model
 
 		public static List<Scene> scenesToUnload = new List<Scene> ();
 
-		private const string GO_PATH_PAGE_CONTROLLER = "Canvas/Screen";
+		private const string GO_PATH_PAGE_CONTROLLER = "PageController";
 
 		public virtual void Start ()
 		{
