@@ -4,6 +4,7 @@ using UnityEngine;
 using GQ.Client.Err;
 using System.Xml;
 using System;
+using System.Globalization;
 
 namespace GQ.Client.Model
 {
@@ -12,8 +13,7 @@ namespace GQ.Client.Model
 	public class Hotspot : IXmlSerializable, ITriggerContainer
 	{
 
-		#region Structure
-
+		#region XML Parsing
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -62,12 +62,10 @@ namespace GQ.Client.Model
 			if (reader.NodeType == XmlNodeType.EndElement)
 				reader.Read ();
 		}
-
 		#endregion
 
 
 		#region Data
-
 		public const double DEFAULT_RADIUS = 20.0d;
 		public const string DEFAULT_NUMBER = "007";
 
@@ -90,8 +88,8 @@ namespace GQ.Client.Model
 						value
 					);
 				}
-				latitude = Convert.ToDouble (parts [0]);
-				longitude = Convert.ToDouble (parts [1]);
+				latitude = Convert.ToDouble (parts [0], new CultureInfo("en-US"));
+				longitude = Convert.ToDouble (parts [1], new CultureInfo("en-US"));
 			} 
 		}
 
@@ -199,12 +197,10 @@ namespace GQ.Client.Model
 				break;
 			}
 		}
-
 		#endregion
 
 
 		#region State
-
 		public Hotspot ()
 		{
 			State = GQML.STATE_NEW;
@@ -232,12 +228,10 @@ namespace GQ.Client.Model
 		}
 
 		public virtual Quest Parent { get; set; }
-
 		#endregion
 
 
 		#region Runtime API
-
 		public virtual void Enter ()
 		{
 			EnterTrigger.Initiate ();
@@ -252,7 +246,6 @@ namespace GQ.Client.Model
 		{
 			TapTrigger.Initiate ();
 		}
-
 		#endregion
 
 	}
