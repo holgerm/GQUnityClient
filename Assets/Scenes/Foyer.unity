@@ -485,9 +485,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2884.191
+  m_MinHeight: 815.8029
   m_PreferredWidth: -1
-  m_PreferredHeight: 2884.191
+  m_PreferredHeight: 815.8029
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1340,9 +1340,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 262.19916
+  m_MinHeight: 74.1639
   m_PreferredWidth: -1
-  m_PreferredHeight: 262.19916
+  m_PreferredHeight: 74.1639
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -1542,9 +1542,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2884.191
+  m_MinHeight: 815.8029
   m_PreferredWidth: -1
-  m_PreferredHeight: 2884.191
+  m_PreferredHeight: 815.8029
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2334,9 +2334,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 209.75934
+  m_MinHeight: 59.331123
   m_PreferredWidth: -1
-  m_PreferredHeight: 209.75934
+  m_PreferredHeight: 59.331123
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2953,10 +2953,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 192.27939
-  m_MinHeight: 192.27939
-  m_PreferredWidth: 192.27939
-  m_PreferredHeight: 192.27939
+  m_MinWidth: 78.551834
+  m_MinHeight: 78.551834
+  m_PreferredWidth: 78.551834
+  m_PreferredHeight: 78.551834
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3214,9 +3214,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2884.191
+  m_MinHeight: 815.8029
   m_PreferredWidth: -1
-  m_PreferredHeight: 2884.191
+  m_PreferredHeight: 815.8029
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3367,9 +3367,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 1223.5961
+  m_MinWidth: 346.0982
   m_MinHeight: -1
-  m_PreferredWidth: 1223.5961
+  m_PreferredWidth: 346.0982
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -3898,10 +3898,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 192.27939
-  m_MinHeight: 192.27939
-  m_PreferredWidth: 192.27939
-  m_PreferredHeight: 192.27939
+  m_MinWidth: 78.551834
+  m_MinHeight: 78.551834
+  m_PreferredWidth: 78.551834
+  m_PreferredHeight: 78.551834
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -4346,9 +4346,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 209.75934
+  m_MinHeight: 59.331123
   m_PreferredWidth: -1
-  m_PreferredHeight: 209.75934
+  m_PreferredHeight: 59.331123
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -4473,9 +4473,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2884.191
+  m_MinHeight: 815.8029
   m_PreferredWidth: -1
-  m_PreferredHeight: 2884.191
+  m_PreferredHeight: 815.8029
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -4665,9 +4665,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 209.75934
+  m_MinHeight: 59.331123
   m_PreferredWidth: -1
-  m_PreferredHeight: 209.75934
+  m_PreferredHeight: 59.331123
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5936,6 +5936,7 @@ MonoBehaviour:
   MapCanvas: {fileID: 83702165}
   MapHolder: {fileID: 1965040553}
   MenuCanvas: {fileID: 1985048597}
+  ImprintCanvas: {fileID: 50516745}
 --- !u!4 &1839321232
 Transform:
   m_ObjectHideFlags: 0
@@ -6288,10 +6289,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 192.27939
-  m_MinHeight: 192.27939
-  m_PreferredWidth: 192.27939
-  m_PreferredHeight: 192.27939
+  m_MinWidth: 78.551834
+  m_MinHeight: 78.551834
+  m_PreferredWidth: 78.551834
+  m_PreferredHeight: 78.551834
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6582,9 +6583,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 209.75934
+  m_MinHeight: 59.331123
   m_PreferredWidth: -1
-  m_PreferredHeight: 209.75934
+  m_PreferredHeight: 59.331123
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6647,14 +6648,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1965040553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a06f2975db27640ac9e642e5be34bf11, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d72c4645afae459aa6711c32ece682a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LocationTexture: {fileID: 2800000, guid: 0553a618485594677bc3760068be9858, type: 3}
   MapButtonPanel: {fileID: 1068315289}
   CenterTexture: {fileID: 2800000, guid: 5f2a9d856c61b48dc8f747556b8b1977, type: 3}
   FrameTexture: {fileID: 2800000, guid: f0be5d4cabc3742eb94f13da27287697, type: 3}
-  MarkerSymbolTexture: {fileID: 2800000, guid: 54512c4997f6e40a48dc03d4eb87974a, type: 3}
+  MarkerSymbolTexture: {fileID: 2800000, guid: c067ee36e010c4664bc1a73c87c1ca80, type: 3}
 --- !u!114 &1965040555
 MonoBehaviour:
   m_ObjectHideFlags: 0

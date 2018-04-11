@@ -30,10 +30,10 @@ namespace GQ.Client.UI
 			// also we ignore if the user starts a drag move from such an ui element (hence we ask for used events, c.f. UnitySlippyMap.Input.MapInput
 			if ((Event.current != null && Event.current.type == EventType.Used) 
 				|| EventSystem.current.IsPointerOverGameObject () 
-				|| Map.IgnoreInteraction
+				|| MapController.IgnoreInteraction
 				|| (UnityEngine.Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject (UnityEngine.Input.GetTouch (0).fingerId))
 			) {
-				Map.IgnoreInteraction = true;
+				MapController.IgnoreInteraction = true;
 				return;
 			}
 

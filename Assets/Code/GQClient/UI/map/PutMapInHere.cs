@@ -6,7 +6,7 @@ using GQ.Client.UI.Foyer;
 
 namespace GQ.Client.UI
 {
-	[RequireComponent (typeof(QuestMap))]
+	[RequireComponent (typeof(FoyerMapController))]
 	public class PutMapInHere : MonoBehaviour
 	{
 

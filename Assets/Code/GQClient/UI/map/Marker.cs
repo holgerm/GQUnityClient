@@ -13,7 +13,10 @@ namespace GQ.Client.UI
 	/// </summary>
 	public abstract class Marker : MarkerBehaviour {
 		
-		public abstract void UpdateView ();
+		protected const string MARKER_ALPHA_BG_PATH = "defaults/readable/defaultMarkerBG";
+		protected const string DEFAULT_MARKER_PATH = "defaults/readable/defaultMarker";
+
+		public virtual void UpdateView () {}
 
 		/// <summary>
 		/// Shows the prefab for at least one frame duration.
@@ -60,9 +63,7 @@ namespace GQ.Client.UI
 		}
 
 		#region Interaction
-
 		public abstract void OnTouch ();
-
 		#endregion
 
 

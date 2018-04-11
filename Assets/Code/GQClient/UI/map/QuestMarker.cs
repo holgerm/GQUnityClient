@@ -18,10 +18,6 @@ namespace GQ.Client.UI
 
 		public QuestInfo Data { get; set; }
 
-		public override void UpdateView ()
-		{
-		}
-
 		public override void OnTouch ()
 		{
 			if (!Data.IsOnDevice && Data.IsOnServer) {
@@ -60,8 +56,6 @@ namespace GQ.Client.UI
 
 			t.Start ();
 		}
-
-		private const string MARKER_ALPHA_BG_PATH = "defaults/readable/defaultMarkerBG";
 
 		public override Texture Texture {
 			get {
@@ -146,7 +140,6 @@ namespace GQ.Client.UI
 					}
 						
 					t.SetPixels32 (outlineColors);
-//					t.SetPixels32 (alphaColors);
 					t.Apply ();
 					// cache this marker texture:
 					TextureManager.Instance.Add (textureID, t);

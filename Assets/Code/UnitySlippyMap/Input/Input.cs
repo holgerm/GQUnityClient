@@ -65,16 +65,16 @@ namespace UnitySlippyMap.Input
 			if (EventSystem.current.IsPointerOverGameObject () || 
 				(UnityEngine.Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject (UnityEngine.Input.GetTouch (0).fingerId))) 
 			{
-				GQ.Client.UI.Map.IgnoreInteraction = true;
+				GQ.Client.UI.MapController.IgnoreInteraction = true;
 				if (UnityEngine.Input.GetMouseButtonUp(0)) {
-					GQ.Client.UI.Map.IgnoreInteraction = false;
+					GQ.Client.UI.MapController.IgnoreInteraction = false;
 				}
 				return;
 			}
 
-			if (GQ.Client.UI.Map.IgnoreInteraction) {
+			if (GQ.Client.UI.MapController.IgnoreInteraction) {
 				if (UnityEngine.Input.GetMouseButtonUp(0)) {
-					GQ.Client.UI.Map.IgnoreInteraction = false;	
+					GQ.Client.UI.MapController.IgnoreInteraction = false;	
 				}
 				return;
 			}
