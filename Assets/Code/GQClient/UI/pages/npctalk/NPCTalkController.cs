@@ -16,24 +16,15 @@ namespace GQ.Client.UI
 	{
 
 		#region Inspector Fields
-
 		public RawImage image;
 		public GameObject imagePanel;
 		public GameObject contentPanel;
 		public Transform dialogItemContainer;
 		public Text forwardButtonText;
-
 		#endregion
-
-
-		#region Other Fields
-
-		protected PageNPCTalk npcPage;
-
-		#endregion
-
 
 		#region Runtime API
+		protected PageNPCTalk npcPage;
 
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
@@ -60,12 +51,9 @@ namespace GQ.Client.UI
 				npcPage.End ();
 			}
 		}
-
 		#endregion
 
-
 		#region Layout
-
 		public override int NumberOfSpacesInContent ()
 		{
 			return Math.Max (npcPage.NumberOfDialogItems () - 1, 0);
@@ -77,12 +65,9 @@ namespace GQ.Client.UI
 				return LayoutConfig.Units2Pixels (units);
 			}
 		}
-
 		#endregion
 
-
 		#region View Update Methods
-
 		void ShowImage ()
 		{
 			// show (or hide completely) image:
@@ -91,7 +76,7 @@ namespace GQ.Client.UI
 				imagePanel.SetActive (false);
 				return;
 			} else {
-				imagePanel.SetActive (true);
+//				imagePanel.SetActive (true);
 				AbstractDownloader loader;
 				if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
 					MediaInfo mediaInfo;
@@ -156,9 +141,7 @@ namespace GQ.Client.UI
 			// update forward button text:
 			forwardButtonText.text = npcPage.HasMoreDialogItems () ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
 		}
-
 		#endregion
-
 	}
 
 }

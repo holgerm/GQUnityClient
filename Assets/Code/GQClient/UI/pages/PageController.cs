@@ -19,7 +19,7 @@ namespace GQ.Client.UI
 		#region Start
 		bool resumingToFoyer;
 
-		public virtual void Start ()
+		public virtual void Awake ()
 		{
 			resumingToFoyer = false;
 
@@ -29,7 +29,9 @@ namespace GQ.Client.UI
 				resumingToFoyer = true;
 				return;
 			}
+		}
 
+		public virtual void Start() {
 			InitPage ();
 		}
 
@@ -76,13 +78,10 @@ namespace GQ.Client.UI
 		{
 			page.End ();
 		}
-
 		#endregion
 
 
 		#region Layout
-
-
 		/// <summary>
 		/// Margin between header and content in device-dependent units.
 		/// </summary>
@@ -149,7 +148,6 @@ namespace GQ.Client.UI
 			              );
 			return LayoutConfig.Units2Pixels (units);
 		}
-
 		#endregion
 	}
 }

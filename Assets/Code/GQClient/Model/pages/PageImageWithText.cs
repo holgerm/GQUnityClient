@@ -43,7 +43,7 @@ namespace GQ.Client.Model
 
 		protected override string PageSceneName {
 			get {
-				return "NPCTalk";
+				return GQML.PAGE_TYPE_NPCTALK;
 			}
 		}
 		#endregion
