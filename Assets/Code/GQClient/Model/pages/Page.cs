@@ -18,7 +18,7 @@ namespace GQ.Client.Model
 	public abstract class Page : IPage
 	{
 
-		#region Structure
+		#region XML Parsing
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -128,9 +128,6 @@ namespace GQ.Client.Model
 		public Page ()
 		{
 			State = GQML.STATE_NEW;
-
-			stateOld = GQML.STATE_NEW;
-
 			result = null;
 		}
 
@@ -139,13 +136,6 @@ namespace GQ.Client.Model
 		public int Id { get; protected set; }
 
 		public string PageType { get; protected set; }
-
-		[XmlAttribute ("type"), Obsolete]
-		public string
-			type;
-
-		[Obsolete]
-		public string stateOld;
 
 		public string State {
 			get;
@@ -159,12 +149,9 @@ namespace GQ.Client.Model
 				return result;
 			}
 		}
-
 		#endregion
 
-
 		#region Runtime API
-
 		public PageController PageCtrl {
 			get;
 			set;
@@ -206,6 +193,10 @@ namespace GQ.Client.Model
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
+			if (scene.name.Equals(Base.FOYER_SCENE_NAME)) {
+				Base.Instance.HideFoyerCanvases ();
+			}
+
 			if (!scene.name.Equals (PageSceneName)) {
 				SceneManager.sceneLoaded += OnSceneLoaded;
 				SceneManager.LoadSceneAsync (PageSceneName, LoadSceneMode.Additive);
