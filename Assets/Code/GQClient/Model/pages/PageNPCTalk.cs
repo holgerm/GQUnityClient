@@ -14,7 +14,6 @@ namespace GQ.Client.Model
 	{
 
 		#region State
-
 		public string EndButtonText { get; set ; }
 
 		public string ImageUrl { get; set; }
@@ -60,7 +59,6 @@ namespace GQ.Client.Model
 				curDialogItemNo = Math.Max (0, Math.Min (curDialogItemNo + 1, dialogItems.Count));
 			}
 		}
-
 		#endregion
 
 
@@ -85,12 +83,10 @@ namespace GQ.Client.Model
 		public bool HasMoreDialogItems() {
 			return (dialogItems.Count > CurDialogItemNo);
 		}
-
 		#endregion
 
 
 		#region XML Serialization
-
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);

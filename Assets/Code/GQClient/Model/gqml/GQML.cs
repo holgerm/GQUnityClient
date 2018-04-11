@@ -52,6 +52,23 @@ namespace GQ.Client.Model
 		public const string PAGE_NPCTALK_DIALOGITEM_AUDIOURL = "sound";
 		public const string PAGE_NPCTALK_DIALOGITEM_SPEAKER = "speaker";
 
+		// NAVIGATION PAGE:
+		public const string PAGE_TYPE_NAVIGATION = "Navigation";
+		public const string PAGE_NAVIGATION_OPTION_MAP = "map";
+		public const string PAGE_NAVIGATION_OPTION_LIST = "list";
+		public const string PAGE_NAVIGATION_OPTION_QR = "qr";
+		public const string PAGE_NAVIGATION_TEXT_QR = "text_qr";
+		public const string PAGE_NAVIGATION_TEXT_QR_NOTFOUND = "text_qr_notfound";
+		public const string PAGE_NAVIGATION_OPTION_NFC = "nfc";
+		public const string PAGE_NAVIGATION_TEXT_NFC = "text_nfc";
+		public const string PAGE_NAVIGATION_TEXT_NFC_NOTFOUND = "text_nfc_notfound";
+		public const string PAGE_NAVIGATION_OPTION_IBEACON = "ibeacon";
+		public const string PAGE_NAVIGATION_TEXT_IBEACON = "text_ibeacon";
+		public const string PAGE_NAVIGATION_TEXT_IBEACON_NOTFOUND = "text_ibeacon_notfound";
+		public const string PAGE_NAVIGATION_OPTION_NUMBER = "number";
+		public const string PAGE_NAVIGATION_TEXT_NUMBER = "text_number";
+		public const string PAGE_NAVIGATION_TEXT_NUMBER_NOTFOUND = "text_number_notfound";
+
 		// START_AND_EXIT_SCREEN PAGE:
 		public const string PAGE_TYPE_STARTANDEXITSCREEN = "StartAndExitScreen";
 		public const string PAGE_STARTANDEXITSCREEN_IMAGEURL = "image";
