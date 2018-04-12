@@ -23,6 +23,11 @@ namespace GQ.Client.UI
 		#region Markers
 		private static Dictionary<int, Marker> markers;
 
+		/// <summary>
+		/// Marker dictionary is static to support the singleton MapBehaviour from slippy maps well. 
+		/// When maps change all markers must be removed from the MapBehaviour as well as from this dictionary.
+		/// </summary>
+		/// <value>The markers.</value>
 		protected static Dictionary<int, Marker> Markers {
 			get {
 				if (markers == null) {
@@ -32,11 +37,11 @@ namespace GQ.Client.UI
 			}
 		}
 
-		protected float MARKER_SCALE_FACTOR {
+		protected static float MARKER_SCALE_FACTOR {
 			get {
 				// We empirically found this to be close to a correct scaling factor in order to resize the markers according to 
 				// UI elements like buttons etc.:
-				return (400000f / Device.height);
+				return (Device.height / 155000f);
 			}
 		}
 		#endregion

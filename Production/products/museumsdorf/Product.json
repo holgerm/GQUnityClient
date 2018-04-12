@@ -71,8 +71,8 @@
   },
   "markerBGAlpha": 168,
   "mapButtonHeightUnits": 55.0,
-  "mapButtonHeightMinMM": 7.0,
-  "mapButtonHeightMaxMM": 12.0,
+  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightMaxMM": 0.0,
   "mapButtonBGColor": {
     "r": 123,
     "g": 105,

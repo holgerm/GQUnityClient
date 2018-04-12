@@ -69,7 +69,7 @@ namespace GQ.Client.UI
 			float markerHeight = Math.Min (1.0f, (float)texture.height / (float)texture.width);
 
 			markerGO.transform.localScale = 
-				new Vector3 (markerWidth, 1.0f, markerHeight) * (MapLayoutConfig.MarkerHeightUnits / MARKER_SCALE_FACTOR);
+				new Vector3 (markerWidth, 1.0f, markerHeight) * MapLayoutConfig.MarkerHeightUnits * MARKER_SCALE_FACTOR;
 
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (hotspot #" + hotspot.Id + ")";
