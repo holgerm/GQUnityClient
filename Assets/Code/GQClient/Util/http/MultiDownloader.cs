@@ -114,12 +114,10 @@ namespace GQ.Client.Util
 				CurrentlyRunningDownloads++;
 				d.OnTaskEnded += (object sender, TaskEventArgs e) => {
 					CurrentlyRunningDownloads--;
-//					UnityEngine.Debug.Log ("downloader freed, timeout was: " + Timeout + " took ms: " + stopwatch.ElapsedMilliseconds);
 				};
 				d.OnTaskCompleted += (object sender, TaskEventArgs e) => {
 					info.LocalSize = info.RemoteSize;
 					info.LocalTimestamp = info.RemoteTimestamp;
-//					UnityEngine.Debug.Log ("size and time updated: new time: " + info.LocalTimestamp + " timeout was: " + Timeout + " took ms: " + stopwatch.ElapsedMilliseconds);
 				};
 				d.Start ();
 			}
@@ -128,7 +126,6 @@ namespace GQ.Client.Util
 			while (CurrentlyRunningDownloads > 0) {
 				yield return null;
 			}
-//			UnityEngine.Debug.Log ("     ------- TASK COMPLETED Multidownloader");
 			RaiseTaskCompleted ();
 		}
 

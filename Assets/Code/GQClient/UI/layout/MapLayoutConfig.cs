@@ -21,9 +21,17 @@ namespace GQ.Client.UI
 
 			// TODO set background color for button panel:
 
-			// TODO set button background color & height:
+			// set button background color & height:
 			for (int i = 0; i < MapButtonPanel.transform.childCount; i++) {
 				GameObject perhapsAButton = MapButtonPanel.transform.GetChild (i).gameObject;
+				Image buttonBGImage = perhapsAButton.GetComponent<Image> ();
+				if (buttonBGImage != null) {
+					Debug.Log (string.Format ("Color before: {0}, {1}, {2}, {3}", 
+						buttonBGImage.color.r, buttonBGImage.color.g, buttonBGImage.color.b, buttonBGImage.color.a));
+					buttonBGImage.color = ConfigurationManager.Current.mapButtonBGColor;
+					Debug.Log (string.Format ("Color after: {0}, {1}, {2}, {3}", 
+						buttonBGImage.color.r, buttonBGImage.color.g, buttonBGImage.color.b, buttonBGImage.color.a));
+				} 
 				Button button = perhapsAButton.GetComponent<Button> ();
 				if (button != null) {
 					LayoutElement layElem = perhapsAButton.GetComponent<LayoutElement> ();
@@ -34,6 +42,10 @@ namespace GQ.Client.UI
 					}
 				}
 			}
+			GameObject b = GameObject.Find ("MapCanvas/MapScreen/MapArea (invisible)/MapButtonPanel/CenteringButton");
+			Image img = b.GetComponent<Image> ();
+			Debug.Log(string.Format ("Resulting Color for Center Button: {0}, {1}, {2}, {3}", 
+				img.color.r, img.color.g, img.color.b, img.color.a));
 		}
 
 		static public float MapButtonHeightUnits {

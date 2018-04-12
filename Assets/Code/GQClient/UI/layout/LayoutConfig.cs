@@ -29,6 +29,7 @@ namespace GQ.Client.UI
 			layout ();
 		}
 
+		#region Static Helpers
 		/// <summary>
 		/// Resets all layout changes made in the config to all gameobjects involved in the editor, so that the changes are immediatley reflected.
 		/// </summary>
@@ -39,9 +40,6 @@ namespace GQ.Client.UI
 				((LayoutConfig)item).Reset ();
 			}
 		}
-
-		#region Static Size Functions
-
 
 		static private float _headerHeightUnits { get; set; }
 
@@ -195,7 +193,6 @@ namespace GQ.Client.UI
 			layElem.preferredWidth = width;	
 			layElem.flexibleWidth = 0f;
 		}
-
 		#endregion
 	}
 

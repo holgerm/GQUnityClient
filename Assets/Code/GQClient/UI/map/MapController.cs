@@ -21,9 +21,9 @@ namespace GQ.Client.UI
 		protected MapBehaviour map;
 
 		#region Markers
-		private Dictionary<int, Marker> markers;
+		private static Dictionary<int, Marker> markers;
 
-		protected Dictionary<int, Marker> Markers {
+		protected static Dictionary<int, Marker> Markers {
 			get {
 				if (markers == null) {
 					markers = new Dictionary<int, Marker> ();

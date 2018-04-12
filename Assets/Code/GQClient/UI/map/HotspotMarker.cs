@@ -18,7 +18,6 @@ namespace GQ.Client.UI
 		public override Texture Texture {
 			get {
 				return DefaultTexture;
-				// TODO
 			}
 		}
 

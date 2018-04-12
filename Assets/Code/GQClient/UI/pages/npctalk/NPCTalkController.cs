@@ -76,7 +76,6 @@ namespace GQ.Client.UI
 				imagePanel.SetActive (false);
 				return;
 			} else {
-//				imagePanel.SetActive (true);
 				AbstractDownloader loader;
 				if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
 					MediaInfo mediaInfo;

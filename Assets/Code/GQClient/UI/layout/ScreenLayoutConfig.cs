@@ -170,6 +170,7 @@ namespace GQ.Client.UI
 			layElem.preferredHeight = layElem.minHeight;
 		}
 
+		#region Static Helpers
 		protected static void SetEntryHeight (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
 			// set layout height:
@@ -196,7 +197,7 @@ namespace GQ.Client.UI
 				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
 			}
 		}
-
+		#endregion
 	}
 
 }

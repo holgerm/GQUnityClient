@@ -39,7 +39,7 @@ namespace GQ.Client.Model
 		/// Maps the scene to this model for a page (mission).
 		/// </summary>
 		/// <value>The name of the page scene.</value>
-		protected virtual string PageSceneName {
+		protected override string PageSceneName {
 			get {
 				return GQML.PAGE_TYPE_NAVIGATION;
 			}

@@ -132,7 +132,7 @@ namespace GQ.Client.Model
 				MediaStore.Add (url, info);
 			}
 		}
-
+			
 		public string MediaJsonPath {
 			get {
 				return Files.CombinePath (QuestManager.GetLocalPath4Quest (Id), "media.json");
