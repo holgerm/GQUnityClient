@@ -1,6 +1,6 @@
 {
   "id": "museumsdorf",
-  "name": "Museumsdorf App",
+  "name": "Neue Museumsdorf App",
   "portal": 461,
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
@@ -54,13 +54,13 @@
   "useMapOffline": false,
   "mapMinimalZoom": 13.0,
   "mapDeltaZoom": 0.5,
-  "mapStartAtLocation": false,
-  "mapStartAtLongitude": 8.053463,
+  "mapStartAtLocation": true,
+  "mapStartAtLongitude": 8.054113,
   "mapStartAtLatitude": 52.850121,
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 55.0,
+  "markerHeightUnits": 65.0,
   "markerHeightMinMM": 0.0,
   "markerHeightMaxMM": 0.0,
   "markerColor": {
@@ -70,15 +70,9 @@
     "a": 0
   },
   "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightUnits": 65.0,
   "mapButtonHeightMinMM": 0.0,
   "mapButtonHeightMaxMM": 0.0,
-  "mapButtonBGColor": {
-    "r": 123,
-    "g": 105,
-    "b": 43,
-    "a": 169
-  },
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,

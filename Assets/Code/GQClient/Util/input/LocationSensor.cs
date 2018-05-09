@@ -83,6 +83,8 @@ namespace GQ.Client.Util {
 
 		private void WaitedForInitialization() {
 			stillWait--;
+		
+			UnityEngine.Debug.Log("GPS_____: WAITING FOR INIT  stillWait: " + stillWait);
 		}
 
 		public static readonly LocationInfo NullLocationInfo = new LocationInfo();
@@ -186,17 +188,25 @@ namespace GQ.Client.Util {
 				currentlyPolling = true;
 				bool failed = false;
 
+				Input.location.Stop();
+
 				while (Activated && ListenersAttached) {
 					switch (Input.location.status) 
 					{
 					case LocationServiceStatus.Running:
+//						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
 						LocationInfo newLocation = Input.location.lastData;
+
+						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
+//						UnityEngine.Debug.Log("GPS_____: time: " + timeSpan.ToString() + " lat: " + newLocation.latitude + " long: " + newLocation.longitude);
+
 						if (!lastLocation.WithinDistance(UpdateDistance, newLocation)) {
 							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Input.location.lastData));
 						}
 						lastLocation = newLocation;
 						break;
 					case LocationServiceStatus.Stopped:
+//						UnityEngine.Debug.Log("GPS_____: STOPPED: ");
 						if (
 							Input.location.isEnabledByUser || 
 							Application.platform == RuntimePlatform.IPhonePlayer
@@ -217,13 +227,17 @@ namespace GQ.Client.Util {
 						}
 						break;
 					case LocationServiceStatus.Initializing:
+						UnityEngine.Debug.Log("GPS_____: INITIALIZING: ");
 						StartWaitingForInitialization();
 						do {
 							yield return new WaitForSeconds (1);
 							WaitedForInitialization ();
 						} while (WaitingForInitialization);
-						continue;
+						//						continue;
+						break;
 					case LocationServiceStatus.Failed:
+						UnityEngine.Debug.Log("GPS_____: FAILED: ");
+
 						if (!failed) {
 							_onLocationUpdate (
 								this, 

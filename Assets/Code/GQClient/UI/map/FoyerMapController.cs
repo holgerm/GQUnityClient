@@ -81,20 +81,20 @@ namespace GQ.Client.UI.Foyer
 				break;							
 			}
 		}
+		#endregion
 
+		#region Markers
 		protected override void populateMarkers() {
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
-				Marker newMarker = CreateMarker (info);
-				if (newMarker != null)
-					Markers.Add (info.Id, newMarker);
+				CreateMarker (info);
 			}
 		}
 
-		private Marker CreateMarker (QuestInfo info)
+		private void CreateMarker (QuestInfo info)
 		{
 			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
-				return null;
+				return;
 			}
 
 			GameObject markerGO = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
@@ -104,26 +104,15 @@ namespace GQ.Client.UI.Foyer
 				                        new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
 				                        markerGO
 			                        );
+			if (newMarker == null)
+				return;
+			
 			newMarker.Data = info;
-
-			// Get the category name for the given info regarding the current filter selection ...
-			Renderer markerRenderer = markerGO.GetComponent<Renderer> ();
-			markerRenderer.material.mainTexture = newMarker.Texture; 
-			markerRenderer.material.renderQueue = 4001;
-
-			// scale the marker so that it fits inside the surrouding tile holder which is a square:
-			float markerWidth = Math.Min (1.0f, (float)newMarker.Texture.width / (float)newMarker.Texture.height);
-			float markerHeight = Math.Min (1.0f, (float)newMarker.Texture.height / (float)newMarker.Texture.width);
-
-			markerGO.transform.localScale = 
-				new Vector3 (markerWidth, 1.0f, markerHeight) * MapLayoutConfig.MarkerHeightUnits * MARKER_SCALE_FACTOR;
-
-			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.name = "Markertile (" + info.Name + ")";
-			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
-			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
-			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
-			return newMarker;
+
+			calculateMarkerDetails (newMarker.Texture, markerGO);
+
+			Markers.Add (info.Id, newMarker);
 		}
 
 		public Texture MarkerSymbolTexture;

@@ -19,6 +19,7 @@ namespace GQ.Client.UI
 		public override void layout ()
 		{
 			base.layout ();
+			Debug.Log ("FoyerListLayoutConfig.layout()");
 
 			// set list background color:
 			if (questInfoList != null) {

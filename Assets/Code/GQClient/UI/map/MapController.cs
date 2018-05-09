@@ -37,17 +37,33 @@ namespace GQ.Client.UI
 			}
 		}
 
-		protected static float MARKER_SCALE_FACTOR {
+		public static float MARKER_SCALE_FACTOR {
 			get {
 				// We empirically found this to be close to a correct scaling factor in order to resize the markers according to 
 				// UI elements like buttons etc.:
-				return (Device.height / 155000f);
+				return (Device.height / 800000f);
 			}
 		}
 		#endregion
 
 
 		#region Global static behaviour
+		static protected void calculateMarkerDetails (Texture texture, GameObject markerGO)
+		{
+			// Get the category name for the given info regarding the current filter selection ...
+			Renderer markerRenderer = markerGO.GetComponent<Renderer> ();
+			markerRenderer.material.renderQueue = 4001;
+			markerRenderer.material.mainTexture = texture;
+			// scale the marker so that it fits inside the surrouding tile holder which is a square:
+			float markerWidth = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.width / (float)texture.height));
+			float markerHeight = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.height / (float)texture.width));
+			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) * MapLayoutConfig.MarkerHeightUnits * MARKER_SCALE_FACTOR;
+			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
+			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
+			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
+			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
+		}
+
 		private static bool _ignoreInteraction = false;
 
 		public static bool IgnoreInteraction {
@@ -168,20 +184,26 @@ namespace GQ.Client.UI
 			}
 		}
 
+		private OSMTileLayer _osmMapLayer;
 		private LayerBehaviour OsmMapLayer {
 			get {
-				OSMTileLayer osmLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
-				osmLayer.BaseURL = ConfigurationManager.Current.mapBaseUrl + "/";
-				return osmLayer;
+				if (_osmMapLayer == null) {
+					_osmMapLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
+					_osmMapLayer.BaseURL = ConfigurationManager.Current.mapBaseUrl + "/";
+				}
+				return _osmMapLayer;
 			}
 		}
 
+		private OSMTileLayer _mapBoxLayer;
 		private LayerBehaviour MapBoxLayer {
 			get {
-				OSMTileLayer mapBoxLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
-				mapBoxLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/";
-				mapBoxLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapKey;
-				return mapBoxLayer;
+				if (_mapBoxLayer == null) {
+					_mapBoxLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
+					_mapBoxLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/";
+					_mapBoxLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapKey;
+				}
+				return _mapBoxLayer;
 			}
 		}
 		#endregion
@@ -192,6 +214,8 @@ namespace GQ.Client.UI
 
 		protected virtual void Start ()
 		{
+			Debug.Log ("----------------- TIME NOW MapCONTROLLER.START(): " + DateTime.Now.ToString ());
+
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
@@ -256,7 +280,7 @@ namespace GQ.Client.UI
 			// hide and delete all list elements:
 			foreach (KeyValuePair<int, Marker> kvp in Markers) {
 				kvp.Value.Hide ();
-				kvp.Value.Destroy ();
+//				kvp.Value.Destroy ();
 				map.RemoveMarker (kvp.Value);
 			}
 

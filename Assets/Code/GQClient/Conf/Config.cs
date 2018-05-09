@@ -197,10 +197,6 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float mapButtonHeightMaxMM { get; set; }
 
-		[ShowInProductEditor]
-		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	mapButtonBGColor  { get; set; }
-
 
 		[ShowInProductEditor (StartSection = "Categories & Filters:")]
 		public bool foldableCategoryFilters { get; set; }
@@ -466,7 +462,6 @@ namespace GQ.Client.Conf
 			useMapOffline = false;
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
-			mapButtonBGColor = new Color (255f, 255f, 255f, 147f);
 			markerHeightUnits = 75f;
 
 			// Layout:

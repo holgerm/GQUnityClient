@@ -214,6 +214,8 @@ namespace GQ.Client.Model
 		/// </summary>
 		public void UpdateQuestInfos ()
 		{
+			Debug.Log ("QuestInfoManager.UpdateQuestInfos()");
+
 			ImportQuestInfos importLocal = 
 				new ImportLocalQuestInfos ();
 			new SimpleDialogBehaviour (

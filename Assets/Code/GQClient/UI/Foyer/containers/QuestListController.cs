@@ -25,6 +25,7 @@ namespace GQ.Client.UI.Foyer
 
 		public override void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e)
 		{
+			Debug.Log ("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString());
 			QuestInfoUIC qiCtrl;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
@@ -98,6 +99,7 @@ namespace GQ.Client.UI.Foyer
 
 		public override void UpdateView ()
 		{
+			WATCH.Start ("######## UpdateView");
 			if (this == null) {
 				return;
 			}
@@ -126,6 +128,7 @@ namespace GQ.Client.UI.Foyer
 			}
 
 			sortView ();
+			WATCH.StopAndShowLast();
 		}
 
 		public void UpdateViewAfterFilterChanged ()

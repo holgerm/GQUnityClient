@@ -5,6 +5,8 @@ using GQ.Client.Err;
 using GQ.Client.Util;
 using QM.UI;
 using GQ.Client.Conf;
+using System.Diagnostics;
+using QM.Util;
 
 namespace GQ.Client.UI
 {
@@ -44,9 +46,12 @@ namespace GQ.Client.UI
 
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
+			WATCH w = new WATCH ("Change Quests View");
+			w.Start ();
 			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
 			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
 			Base.Instance.MapHolder.SetActive (viewer.name == "ViewToggleToMap");
+			w.StopAndShow ();
 
 			Base.Instance.MenuCanvas.SetActive (false);
 		}

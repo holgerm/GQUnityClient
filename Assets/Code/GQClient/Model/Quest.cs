@@ -50,19 +50,9 @@ namespace GQ.Client.Model
 			}
 		}
 
-		protected IPage startPage;
-
 		public IPage StartPage {
-			get {
-				if (startPage == null) {
-					Log.SignalErrorToDeveloper ("Quest {0}({1}) can not be started, since start page is not set.", Name, Id);
-					return null;
-				} else
-					return startPage;
-			}
-			set {
-				startPage = value;
-			}
+			get;
+			set;
 		}
 
 		protected IPage currentPage;
@@ -243,7 +233,7 @@ namespace GQ.Client.Model
 			XmlSerializer serializer = new XmlSerializer (pageType);
 			IPage page = (IPage)serializer.Deserialize (reader);
 			page.Parent = this;
-			if (pageDict.Count == 0)
+			if (StartPage == null && page.CanStart())
 				StartPage = page;
 			if (pageDict.ContainsKey (page.Id)) {
 				pageDict.Remove (page.Id);

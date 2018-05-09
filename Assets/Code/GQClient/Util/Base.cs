@@ -7,6 +7,8 @@ using GQ.Client.UI.Dialogs;
 using UnityEngine.SceneManagement;
 using GQ.Client.Conf;
 using GQ.Client.Model;
+using GQ.Client.UI;
+using System;
 
 namespace GQ.Client.Util
 {
@@ -30,6 +32,7 @@ namespace GQ.Client.Util
 		public static Base Instance {
 			get {
 				if (_instance == null) {
+					Debug.Log ("Base.Instance init");
 					GameObject baseGO = GameObject.Find (BASE);
 
 					if (baseGO == null) {
@@ -94,6 +97,11 @@ namespace GQ.Client.Util
 		{
 			DontDestroyOnLoad (Instance);
 			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
+
+			Debug.Log (string.Format ("Device Height: {0}, Width: {1}, DPI: {2}", Device.height, Device.width, Device.dpi));
+			Debug.Log ("MARKER_SCALE_FACTOR: " + MapController.MARKER_SCALE_FACTOR);
+
+			Debug.Log ("----------------- TIME NOW BASE.AWAKE(): " + DateTime.Now.ToString ());
 		}
 		#endregion
 
