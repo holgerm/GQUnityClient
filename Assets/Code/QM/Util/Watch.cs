@@ -13,6 +13,8 @@ namespace QM.Util {
 		private string name;
 		private long lastTimeStamp;
 
+		private static string nameOfLastStarted;
+
 		public WATCH(string name) {
 			stopwatch = new Stopwatch ();
 			this.name = name;
@@ -29,14 +31,20 @@ namespace QM.Util {
 		}
 
 		public static void Start(string name) {
+			nameOfLastStarted = name;
 			WATCH w = new WATCH (name);
 			w.Start ();
 		}
 
 		public void Start() {
 			lastTimeStamp = 0L;
+			nameOfLastStarted = this.name;
 			stopwatch.Start ();
 		}
+
+		public static void StopAndShowLast() {
+			StopAndShow (nameOfLastStarted);
+		} 
 
 		public static void StopAndShow(string name) {
 			WATCH w = Get (name);
