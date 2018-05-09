@@ -149,6 +149,17 @@ namespace GQ.Client.Model
 				return result;
 			}
 		}
+
+		public bool CanStart() {
+			switch (PageType) {
+			case GQML.PAGE_TYPE_METADATA:
+				return false;
+				break;
+			default:
+				return true;
+				break;
+			}
+		}
 		#endregion
 
 		#region Runtime API

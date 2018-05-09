@@ -16,6 +16,8 @@ namespace GQ.Client.Model
 
 		Quest Parent { get; set; }
 
+		bool CanStart ();
+
 		void Start ();
 
 		void End ();
