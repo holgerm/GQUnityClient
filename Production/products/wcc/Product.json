@@ -145,6 +145,14 @@
           }
         },
         {
+          "id": "wcc.sports",
+          "name": "Leibesübungen",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/theatre"
+          }
+        },
+        {
           "id": "wcc.special",
           "name": "Besonderes",
           "folderName": "Kultur",
