@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using GQ.Client.Util;
+using QM.Util;
 
 namespace GQ.Client.Conf
 {

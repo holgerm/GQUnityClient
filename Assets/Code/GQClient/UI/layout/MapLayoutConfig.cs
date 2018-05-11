@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Conf;
+using QM.Util;
 
 namespace GQ.Client.UI
 {
@@ -18,7 +19,6 @@ namespace GQ.Client.UI
 		public override void layout ()
 		{
 			base.layout ();
-			Debug.Log ("MapLayoutConfig.layout()");
 
 			// TODO set background color for button panel:
 

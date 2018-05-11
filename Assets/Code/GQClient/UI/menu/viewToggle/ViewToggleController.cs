@@ -46,14 +46,13 @@ namespace GQ.Client.UI
 
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
-			WATCH w = new WATCH ("Change Quests View");
-			w.Start ();
+			new WATCH ().Start ();
 			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
 			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
 			Base.Instance.MapHolder.SetActive (viewer.name == "ViewToggleToMap");
-			w.StopAndShow ();
 
 			Base.Instance.MenuCanvas.SetActive (false);
+			WATCH._StopAndShow ();
 		}
 
 	}

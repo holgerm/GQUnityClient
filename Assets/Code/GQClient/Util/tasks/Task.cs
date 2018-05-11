@@ -5,8 +5,10 @@ using System;
 using GQ.Client.UI;
 using GQ.Client.Err;
 using System.Text;
+using QM.Util;
 
-namespace GQ.Client.Util {
+namespace GQ.Client.Util
+{
 
 	/// <summary>
 	/// 	
@@ -16,9 +18,11 @@ namespace GQ.Client.Util {
 	/// For details cf. @ref TasksAndUI
 	///
 	/// </summary>
-	public abstract class Task {
+	public abstract class Task
+	{
 
-		public Task(bool runsAsCoroutine = false) {
+		public Task (bool runsAsCoroutine = false)
+		{
 			RunsAsCoroutine = runsAsCoroutine;
 			behaviours = new List<UIBehaviour> ();
 		}
@@ -28,7 +32,7 @@ namespace GQ.Client.Util {
 
 		protected List<UIBehaviour> behaviours;
 
-		public void AddBehaviour(UIBehaviour behaviour) 
+		public void AddBehaviour (UIBehaviour behaviour)
 		{
 			behaviours.Add (behaviour);
 		}
@@ -46,7 +50,8 @@ namespace GQ.Client.Util {
 		/// The parameters step and totalSteps signal which step of how many steps this loading 
 		/// within a larger process currently is.
 		/// </summary>
-		public void Start (int step = 1) {
+		public void Start (int step = 1)
+		{
 			Step = step;
 
 			behaviours.ForEach (
@@ -54,13 +59,13 @@ namespace GQ.Client.Util {
 			);
 
 			if (!RunsAsCoroutine) {
-				if (Run ())
+				if (Run ()) {
 					RaiseTaskCompleted (Result);
-				else
+				} else {
 					RaiseTaskFailed ();
-			}
-			else {
-				CoroutineStarter.Run (RunAsCoroutine());
+				}
+			} else {
+				CoroutineStarter.Run (RunAsCoroutine ());
 			}
 		}
 
@@ -71,7 +76,8 @@ namespace GQ.Client.Util {
 		/// In order to give the tasks result to potential following tasks, 
 		/// store it in the Result property before leaving this method.
 		/// </summary>
-		public virtual bool Run() {
+		public virtual bool Run ()
+		{
 			return true;
 		}
 
@@ -81,18 +87,20 @@ namespace GQ.Client.Util {
 		/// and optional give the result as parameter (or store in in advance in the Result property).
 		/// </summary>
 		/// <returns>The as coroutine.</returns>
-		public virtual IEnumerator RunAsCoroutine () {
+		public virtual IEnumerator RunAsCoroutine ()
+		{
 			yield return null;
 			RaiseTaskCompleted ();
 			yield break;
 		}
 
-		public void StartCallback(object sender, TaskEventArgs e) {
+		public void StartCallback (object sender, TaskEventArgs e)
+		{
 			Step = e.Step + 1;
 
 			ReadInput (sender, e);
 
-			this.Start(Step);
+			this.Start (Step);
 		}
 
 		/// <summary>
@@ -100,7 +108,8 @@ namespace GQ.Client.Util {
 		/// e.g. read specific input. This method is called when this task is chained after another task 
 		/// within a TaskSequence and before the Start() method is called.
 		/// </summary>
-		public virtual void ReadInput (object sender, TaskEventArgs e) {
+		public virtual void ReadInput (object sender, TaskEventArgs e)
+		{
 			return;
 		}
 
@@ -109,15 +118,16 @@ namespace GQ.Client.Util {
 
 		#region Events
 
-		public delegate void TaskCallback (object sender, TaskEventArgs e);
+		public delegate void TaskCallback (object sender,TaskEventArgs e);
 
-		public event TaskCallback OnTaskCompleted; 
+		public event TaskCallback OnTaskCompleted;
 		public event TaskCallback OnTaskFailed;
 		public event TaskCallback OnTaskEnded;
 
 		private bool hasEnded = false;
 
-		public void RaiseTaskCompleted(object content = null) {
+		public void RaiseTaskCompleted (object content = null)
+		{
 			if (hasEnded)
 				return;
 			else {
@@ -132,11 +142,13 @@ namespace GQ.Client.Util {
 				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
 
-		protected virtual void BeforeCompleted() {
+		protected virtual void BeforeCompleted ()
+		{
 			return;
 		}
 
-		public virtual void RaiseTaskFailed(object content = null) {
+		public virtual void RaiseTaskFailed (object content = null)
+		{
 			if (hasEnded)
 				return;
 			else {
@@ -144,7 +156,7 @@ namespace GQ.Client.Util {
 				Debug.Log ("Task " + GetType ().Name + " has ended.");
 			}
 			
-			Debug.Log ("Task FAILED step: " + Step + " type: " + GetType().Name);
+			Debug.Log ("Task FAILED step: " + Step + " type: " + GetType ().Name);
 
 			BeforeFailed ();
 
@@ -154,7 +166,8 @@ namespace GQ.Client.Util {
 				OnTaskEnded (this, new TaskEventArgs (step: Step, content: content));
 		}
 
-		protected virtual void BeforeFailed() {
+		protected virtual void BeforeFailed ()
+		{
 			return;
 		}
 
@@ -163,15 +176,18 @@ namespace GQ.Client.Util {
 
 		#region Test Access
 
-		public Delegate[] GetOnEndedInvocationList() {
+		public Delegate[] GetOnEndedInvocationList ()
+		{
 			return OnTaskEnded != null ? OnTaskEnded.GetInvocationList () : null;
 		}
 
-		public Delegate[] GetOnCompletedInvocationList() {
+		public Delegate[] GetOnCompletedInvocationList ()
+		{
 			return OnTaskCompleted != null ? OnTaskCompleted.GetInvocationList () : null;
 		}
 
-		public Delegate[] GetOnFailedInvocationList() {
+		public Delegate[] GetOnFailedInvocationList ()
+		{
 			return OnTaskFailed != null ? OnTaskFailed.GetInvocationList () : null;
 		}
 
@@ -180,12 +196,13 @@ namespace GQ.Client.Util {
 	}
 
 
-	public class TaskEventArgs : EventArgs 
+	public class TaskEventArgs : EventArgs
 	{
 		public int Step { get; protected set; }
+
 		public object Content { get; protected set; }
 
-		public TaskEventArgs(
+		public TaskEventArgs (
 			int step = 0,
 			object content = null)
 		{
@@ -194,6 +211,13 @@ namespace GQ.Client.Util {
 		}
 	}
 
-	public enum TaskState { Started, Succeded, Failed, RunningAsCoroutine };
+	public enum TaskState
+	{
+		Started,
+		Succeded,
+		Failed,
+		RunningAsCoroutine}
+
+	;
 
 }

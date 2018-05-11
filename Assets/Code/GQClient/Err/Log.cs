@@ -36,7 +36,7 @@ namespace GQ.Client.Err
 			Problem problem = new Problem (message, level, recipient);
 			stack.Push (problem);
 
-			#if UNITY_EDITOR
+//			#if UNITY_EDITOR
 			string logtext = 
 				string.Format (
 					"{0}. {1} for {2} in quest {3} ({4})", 
@@ -60,7 +60,7 @@ namespace GQ.Client.Err
 			default:
 				break;
 			}
-			#endif		
+//			#endif		
 		}
 
 
@@ -144,17 +144,17 @@ namespace GQ.Client.Err
 		public static void TexturesLoaded (string prefix = "")
 		{
 			UnityEngine.Object[] textures = Resources.FindObjectsOfTypeAll (typeof(Texture));
-			StringBuilder details = new StringBuilder();
+			StringBuilder details = new StringBuilder ();
 			int bigTexturesLoaded = 0;
-			for (int i = 0; i < textures.Length; i++ ) {
+			for (int i = 0; i < textures.Length; i++) {
 				Texture tex = (Texture)textures [i];
-				if (tex.width >100 || tex.height > 100) {
+				if (tex.width > 100 || tex.height > 100) {
 					bigTexturesLoaded++;
 					details.AppendLine (tex.name + ": " + tex.width + " x " + tex.height);
 				}
 			}
 			File (
-				(prefix + "Big Textures " + bigTexturesLoaded).Yellow () + "\n" + details.ToString(), 
+				(prefix + "Big Textures " + bigTexturesLoaded).Yellow () + "\n" + details.ToString (), 
 				Level.Info, 
 				Recipient.Developer
 			);

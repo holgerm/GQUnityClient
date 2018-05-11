@@ -30,6 +30,7 @@ namespace GQ.Client.UI
 		}
 
 		#region Static Helpers
+
 		/// <summary>
 		/// Resets all layout changes made in the config to all gameobjects involved in the editor, so that the changes are immediatley reflected.
 		/// </summary>
@@ -193,6 +194,7 @@ namespace GQ.Client.UI
 			layElem.preferredWidth = width;	
 			layElem.flexibleWidth = 0f;
 		}
+
 		#endregion
 	}
 

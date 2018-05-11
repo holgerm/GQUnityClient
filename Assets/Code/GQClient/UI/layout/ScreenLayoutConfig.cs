@@ -25,7 +25,6 @@ namespace GQ.Client.UI
 
 		public override void layout ()
 		{
-			Debug.Log ("CanvasScale in ScreenLayout: " + CanvasScale);
 			setMainBackgroundColor ();
 
 			setHeader ();
@@ -171,6 +170,7 @@ namespace GQ.Client.UI
 		}
 
 		#region Static Helpers
+
 		protected static void SetEntryHeight (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
 			// set layout height:
@@ -197,6 +197,7 @@ namespace GQ.Client.UI
 				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
 			}
 		}
+
 		#endregion
 	}
 

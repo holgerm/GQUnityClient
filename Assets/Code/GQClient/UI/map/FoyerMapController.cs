@@ -22,6 +22,7 @@ namespace GQ.Client.UI.Foyer
 	public class FoyerMapController : MapController
 	{
 		#region Initialize
+
 		protected QuestInfoManager qim;
 
 		protected override void Start ()
@@ -34,9 +35,11 @@ namespace GQ.Client.UI.Foyer
 			qim.OnDataChange += OnMarkerChanged;
 			qim.OnFilterChange += OnMarkerChanged;
 		}
+
 		#endregion
 
 		#region React on Events
+
 		public void OnMarkerChanged (object sender, QuestInfoChangedEvent e)
 		{
 			Marker m;
@@ -81,10 +84,13 @@ namespace GQ.Client.UI.Foyer
 				break;							
 			}
 		}
+
 		#endregion
 
 		#region Markers
-		protected override void populateMarkers() {
+
+		protected override void populateMarkers ()
+		{
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				CreateMarker (info);
@@ -116,6 +122,7 @@ namespace GQ.Client.UI.Foyer
 		}
 
 		public Texture MarkerSymbolTexture;
+
 		#endregion
 	}
 }

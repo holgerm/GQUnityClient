@@ -9,6 +9,7 @@ using GQ.Client.Conf;
 using GQ.Client.Model;
 using GQ.Client.UI;
 using System;
+using QM.Util;
 
 namespace GQ.Client.Util
 {
@@ -16,15 +17,18 @@ namespace GQ.Client.Util
 	public class Base : MonoBehaviour
 	{
 		#region Inspector Global Values
+
 		public GameObject ListCanvas;
 		public GameObject MapCanvas;
 		public GameObject MapHolder;
 		public GameObject MenuCanvas;
 		public GameObject ImprintCanvas;
+
 		#endregion
 
 
 		#region Singleton
+
 		public const string BASE = "Base";
 
 		private static Base _instance = null;
@@ -32,7 +36,6 @@ namespace GQ.Client.Util
 		public static Base Instance {
 			get {
 				if (_instance == null) {
-					Debug.Log ("Base.Instance init");
 					GameObject baseGO = GameObject.Find (BASE);
 
 					if (baseGO == null) {
@@ -46,15 +49,17 @@ namespace GQ.Client.Util
 					_instance = (Base)baseGO.GetComponent (typeof(Base));
 
 					// Initialize QuestInfoManager:
-					QuestInfoManager.Instance.UpdateQuestInfos();
+					QuestInfoManager.Instance.UpdateQuestInfos ();
 				}
 				return _instance;
 			}
 		}
+
 		#endregion
 
 
 		#region Foyer
+
 		public const string FOYER_SCENE = "Scenes/Foyer";
 		public const string FOYER_SCENE_NAME = "Foyer";
 
@@ -63,7 +68,8 @@ namespace GQ.Client.Util
 		private bool menuShown;
 		private bool imprintShown;
 
-		public void HideFoyerCanvases() {
+		public void HideFoyerCanvases ()
+		{
 			// store current show state and hide:
 			listShown = ListCanvas.activeSelf;
 			ListCanvas.SetActive (false);
@@ -76,7 +82,8 @@ namespace GQ.Client.Util
 			ImprintCanvas.SetActive (false);
 		}
 
-		public void ShowFoyerCanvases() {
+		public void ShowFoyerCanvases ()
+		{
 			// show again accordingg to stored state:
 			ListCanvas.SetActive (listShown);
 			MapCanvas.SetActive (mapShown);
@@ -84,10 +91,12 @@ namespace GQ.Client.Util
 			MenuCanvas.SetActive (menuShown);
 			ImprintCanvas.SetActive (imprintShown);
 		}
+
 		#endregion
 
 
 		#region LifeCycle
+
 		public static void Init ()
 		{
 			Thread.CurrentThread.CurrentCulture = new CultureInfo ("de-DE");
@@ -97,12 +106,8 @@ namespace GQ.Client.Util
 		{
 			DontDestroyOnLoad (Instance);
 			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
-
-			Debug.Log (string.Format ("Device Height: {0}, Width: {1}, DPI: {2}", Device.height, Device.width, Device.dpi));
-			Debug.Log ("MARKER_SCALE_FACTOR: " + MapController.MARKER_SCALE_FACTOR);
-
-			Debug.Log ("----------------- TIME NOW BASE.AWAKE(): " + DateTime.Now.ToString ());
 		}
+
 		#endregion
 
 	}

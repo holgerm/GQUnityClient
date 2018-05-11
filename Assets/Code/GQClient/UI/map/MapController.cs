@@ -10,6 +10,7 @@ using System;
 using GQ.Client.Err;
 using GQ.Client.Util;
 using UnitySlippyMap.Layers;
+using QM.Util;
 
 namespace GQ.Client.UI
 {
@@ -21,6 +22,7 @@ namespace GQ.Client.UI
 		protected MapBehaviour map;
 
 		#region Markers
+
 		private static Dictionary<int, Marker> markers;
 
 		/// <summary>
@@ -44,10 +46,12 @@ namespace GQ.Client.UI
 				return (Device.height / 800000f);
 			}
 		}
+
 		#endregion
 
 
 		#region Global static behaviour
+
 		static protected void calculateMarkerDetails (Texture texture, GameObject markerGO)
 		{
 			// Get the category name for the given info regarding the current filter selection ...
@@ -87,10 +91,12 @@ namespace GQ.Client.UI
 			_ignoreInteraction = false;
 			yield break;
 		}
+
 		#endregion
 
 
 		#region Centering
+
 		public GameObject MapButtonPanel;
 		public Texture CenterTexture;
 		public Texture FrameTexture;
@@ -131,10 +137,12 @@ namespace GQ.Client.UI
 		{
 			Center ();
 		}
+
 		#endregion
 
 
 		#region Zooming
+
 		public void ZoomInButtonPressed ()
 		{
 			map.CurrentZoom = Math.Min (map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
@@ -157,9 +165,11 @@ namespace GQ.Client.UI
 			// If further zooming OUT is not possible disable ZoomOutButton: 
 			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
 		}
+
 		#endregion
 
 		#region Map Layers
+
 		private LayerBehaviour MapLayer {
 			get {
 				LayerBehaviour mapLayer;
@@ -185,6 +195,7 @@ namespace GQ.Client.UI
 		}
 
 		private OSMTileLayer _osmMapLayer;
+
 		private LayerBehaviour OsmMapLayer {
 			get {
 				if (_osmMapLayer == null) {
@@ -196,6 +207,7 @@ namespace GQ.Client.UI
 		}
 
 		private OSMTileLayer _mapBoxLayer;
+
 		private LayerBehaviour MapBoxLayer {
 			get {
 				if (_mapBoxLayer == null) {
@@ -206,16 +218,16 @@ namespace GQ.Client.UI
 				return _mapBoxLayer;
 			}
 		}
+
 		#endregion
 
 		#region Runtime
+
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
 
 		protected virtual void Start ()
 		{
-			Debug.Log ("----------------- TIME NOW MapCONTROLLER.START(): " + DateTime.Now.ToString ());
-
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
@@ -293,6 +305,7 @@ namespace GQ.Client.UI
 		{
 			map = null;
 		}
+
 		#endregion
 	}
 }

@@ -214,8 +214,6 @@ namespace GQ.Client.Model
 		/// </summary>
 		public void UpdateQuestInfos ()
 		{
-			Debug.Log ("QuestInfoManager.UpdateQuestInfos()");
-
 			ImportQuestInfos importLocal = 
 				new ImportLocalQuestInfos ();
 			new SimpleDialogBehaviour (
@@ -263,14 +261,15 @@ namespace GQ.Client.Model
 		/// This method should be called immediately after downloading or updating a quest from server.
 		/// </summary>
 		/// <param name="questId">Quest identifier.</param>
-		public void UpdateQuestInfoFromLocalQuest(int questId) {
+		public void UpdateQuestInfoFromLocalQuest (int questId)
+		{
 			// read quest from local xml:
-			string gameXmlPath = Files.CombinePath(QuestManager.GetLocalPath4Quest (questId), "game.xml");
+			string gameXmlPath = Files.CombinePath (QuestManager.GetLocalPath4Quest (questId), "game.xml");
 			string xml = File.ReadAllText (gameXmlPath);
 			Quest q = QuestManager.Instance.DeserializeQuest (xml);
 
 			QuestInfo info = null;
-			if (!QuestDict.TryGetValue(questId, out info)) {
+			if (!QuestDict.TryGetValue (questId, out info)) {
 				Log.SignalErrorToDeveloper (
 					"Trying to change quest info {0} but it deos not exist in QuestInfoManager.", 
 					questId
@@ -293,7 +292,7 @@ namespace GQ.Client.Model
 			i = 0;
 			foreach (string key in q.metadata.Keys) {
 				string value = null;
-				q.metadata.TryGetValue(key, out value);
+				q.metadata.TryGetValue (key, out value);
 				mInfos [i++] = new MetaDataInfo (key, value);
 			}
 			info.Metadata = mInfos;

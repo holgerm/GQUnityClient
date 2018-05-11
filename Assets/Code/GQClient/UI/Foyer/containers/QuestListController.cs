@@ -25,7 +25,7 @@ namespace GQ.Client.UI.Foyer
 
 		public override void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e)
 		{
-			Debug.Log ("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString());
+			Debug.Log ("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString ());
 			QuestInfoUIC qiCtrl;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
@@ -90,21 +90,35 @@ namespace GQ.Client.UI.Foyer
 		/// </summary>
 		private void sortView ()
 		{
+			Base.Instance.StartCoroutine (sortViewAsCoroutine ());
+		}
+
+		private IEnumerator sortViewAsCoroutine ()
+		{
+
 			List<QuestInfoUIC> qcList = new List<QuestInfoUIC> (QuestInfoControllers.Values);
 			qcList.Sort ();
+
 			for (int i = 0; i < qcList.Count; i++) {
 				qcList [i].transform.SetSiblingIndex (i);
+
+				if (i % 5 == 0)
+					yield return null;
 			}
 		}
 
 		public override void UpdateView ()
 		{
-			WATCH.Start ("######## UpdateView");
+			Base.Instance.StartCoroutine (updateViewAsCoroutine ());
+		}
+
+		private IEnumerator updateViewAsCoroutine ()
+		{
 			if (this == null) {
-				return;
+				yield break;
 			}
 			if (InfoList == null) {
-				return;
+				yield break;
 			}
 
 			// hide and delete all list elements:
@@ -113,8 +127,9 @@ namespace GQ.Client.UI.Foyer
 				kvp.Value.Destroy ();
 			}
 
-			QuestInfoControllers.Clear();
+			QuestInfoControllers.Clear ();
 
+			int steps = 0;
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				QuestInfoUICListElement qiCtrl = 
@@ -123,12 +138,16 @@ namespace GQ.Client.UI.Foyer
 						qInfo: info,
 						containerController: this
 					).GetComponent<QuestInfoUICListElement> ();
-				QuestInfoControllers[info.Id] = qiCtrl;
+				QuestInfoControllers [info.Id] = qiCtrl;
 				qiCtrl.Show ();
+
+				if (steps % 3 == 0) {
+					yield return null;
+					steps = 0;
+				}
 			}
 
 			sortView ();
-			WATCH.StopAndShowLast();
 		}
 
 		public void UpdateViewAfterFilterChanged ()
@@ -141,17 +160,16 @@ namespace GQ.Client.UI.Foyer
 			}
 
 			// we make a separate list of ids of all old quest infos:
-			List<int> rememberedOldIDs = new List<int>(QuestInfoControllers.Keys);
+			List<int> rememberedOldIDs = new List<int> (QuestInfoControllers.Keys);
 
 			// we create new qi elements and keep those we can reuse. We remove those from our helper list.
 			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				QuestInfoUIC qiCtrl;
-				if (QuestInfoControllers.TryGetValue(info.Id, out qiCtrl)) {
+				if (QuestInfoControllers.TryGetValue (info.Id, out qiCtrl)) {
 					qiCtrl.Show (); // why do we need to show them here again? Aren't they still shown? Why?
 					// this new element was already there, hence we keep it:
-					rememberedOldIDs.Remove(info.Id);
-				}
-				else {
+					rememberedOldIDs.Remove (info.Id);
+				} else {
 					QuestInfoControllers [info.Id].Show ();
 				}
 			}
