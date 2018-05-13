@@ -17,6 +17,7 @@ namespace GQ.Client.UI
 	{
 
 		public Image MenuBackgroundImage;
+		public float WidthScale = 1.0f;
 
 		public override void layout ()
 		{
@@ -51,8 +52,8 @@ namespace GQ.Client.UI
 			if (menuScrollT != null) {
 				LayoutElement layElem = menuScrollT.GetComponent<LayoutElement> ();
 				if (layElem != null) {
-					layElem.minWidth = Units2Pixels (MenuEntryWidthUnits);
-					layElem.preferredWidth = Units2Pixels (MenuEntryWidthUnits);
+					layElem.minWidth = Units2Pixels (MenuEntryWidthUnits * WidthScale);
+					layElem.preferredWidth = Units2Pixels (MenuEntryWidthUnits * WidthScale);
 				}
 			}
 		}

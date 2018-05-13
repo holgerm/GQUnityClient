@@ -12,7 +12,8 @@
   "nameForQuestSg": null,
   "nameForQuestsPl": null,
   "questInfoViews": [
-    "List"
+    "List",
+    "Map"
   ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
@@ -181,16 +182,16 @@
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 123,
+    "g": 105,
+    "b": 43,
+    "a": 255
   },
   "menuPartBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 123,
+    "g": 105,
+    "b": 43,
+    "a": 255
   },
   "menuInhibitsInteraction": false,
   "disabledAlpha": 0.5,

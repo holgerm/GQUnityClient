@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GQ.Client.UI {
+namespace GQ.Client.UI
+{
 
-	public class MenuAccessPoint : MonoBehaviour {
+	public class MenuAccessPoint : MonoBehaviour
+	{
 
 		public GameObject MenuTopLeftContent;
+		public GameObject MenuTopRightContent;
 
 	}
 }

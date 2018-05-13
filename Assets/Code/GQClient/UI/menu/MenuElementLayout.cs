@@ -6,8 +6,7 @@ using QM.UI;
 namespace GQ.Client.UI
 {
 
-	[RequireComponent (typeof(MultiToggleButton))]
-	public class ViewToggleLayout : LayoutConfig
+	public class MenuElementLayout : LayoutConfig
 	{
 		/// <summary>
 		/// Sets the height of this multi toggle button as menu entry.

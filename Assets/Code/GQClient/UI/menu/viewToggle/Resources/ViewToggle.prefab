@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114314009684323856}
   - component: {fileID: 114296419942745390}
   - component: {fileID: 114255983472339858}
-  - component: {fileID: 114992855786327510}
+  - component: {fileID: 114702379773950192}
   m_Layer: 5
   m_Name: ViewToggle
   m_TagString: Untagged
@@ -115,6 +115,17 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: QM.UI.ToggleEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+--- !u!114 &114702379773950192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1403573281710038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2f8c9fe9bf04bdc849bf8636e33412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114938480174805850
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -142,17 +153,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114992855786327510
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1403573281710038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef447c94ca17e43f78daa3185ce8a94d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114996764855816734
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,10 +165,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
+  m_MinWidth: 36.63202
+  m_MinHeight: 36.63202
+  m_PreferredWidth: 36.63202
+  m_PreferredHeight: 36.63202
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
