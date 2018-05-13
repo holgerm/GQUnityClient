@@ -36,10 +36,11 @@ namespace GQ.Client.UI.Dialogs
 
 		public const string DIALOG_CANVAS_PATH = "/DialogCanvas";
 
-		public Text Details;
-		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
 		public Text Title;
 		protected const string TITLE_PATH = "Panel/TitleText";
+		public Image Img;
+		public Text Details;
+		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
 		public Button YesButton;
 		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
 		public Button NoButton;

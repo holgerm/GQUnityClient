@@ -16,7 +16,7 @@ namespace GQ.Client.UI.Dialogs
 		/// <summary>
 		/// Mutually connects this Behaviour with a Dialog Controller and initliazes the behaviour.
 		/// </summary>
-		public DialogBehaviour (Task task) : base (task)
+		public DialogBehaviour (Task task = null) : base (task)
 		{
 			Dialog = DialogController.Instance;
 			Dialog.Behaviour = this;

@@ -6,10 +6,12 @@ using GQ.Client.Model;
 namespace GQ.Client.UI
 {
 
-	public class HotspotMarker : Marker {
+	public class HotspotMarker : Marker
+	{
 		public Texture DefaultTexture;
 
-		public void Awake() {
+		public void Awake ()
+		{
 			DefaultTexture = Resources.Load<Texture2D> (DEFAULT_MARKER_PATH);
 		}
 
@@ -21,7 +23,9 @@ namespace GQ.Client.UI
 			}
 		}
 
-		public override void OnTouch () {
+		public override void OnTouch ()
+		{
+			Debug.Log ("Hotspot tapped: " + Hotspot.Id);
 			Hotspot.Tap ();
 		}
 
