@@ -103,6 +103,7 @@ namespace GQ.Client.Model
 		public const string ACTION_PLAYAUDIO_STOPOTHERS = "stopOthers";
 		public const string ACTION_SETVARIABLE_VALUE = "value";
 		public const string ACTION_STARTMISSION_ALLOWRETURN = "allowReturn";
+		public const string ACTION_SHOWMESSAGE_BUTTONTEXT = "buttontext";
 		public const string ACTION_SHOWMESSAGE_MESSAGE = "message";
 
 		// IF ACTION:

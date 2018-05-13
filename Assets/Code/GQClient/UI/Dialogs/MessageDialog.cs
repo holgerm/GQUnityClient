@@ -8,10 +8,13 @@ namespace GQ.Client.UI.Dialogs
 	{
 		private string message { get; set; }
 
-		public MessageDialog (string message) : base (null) 
+		private string buttontext { get; set; }
+
+		public MessageDialog (string message, string buttontext = "Ok") : base (null) 
 		// 'null' because we do NOT connect a Task, sice message dialogs only rely on user interaction
 		{
 			this.message = message;
+			this.buttontext = buttontext;
 		}
 
 		public override void Start ()
@@ -21,7 +24,7 @@ namespace GQ.Client.UI.Dialogs
 			Dialog.Title.gameObject.SetActive (false);
 			Dialog.Img.gameObject.SetActive (false);
 			Dialog.Details.text = message;
-			Dialog.SetYesButton ("Ok", CloseDialog);
+			Dialog.SetYesButton (buttontext, CloseDialog);
 			Dialog.NoButton.gameObject.SetActive (false);
 
 			// show the dialog:

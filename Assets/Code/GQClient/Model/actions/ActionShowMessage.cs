@@ -15,6 +15,8 @@ namespace GQ.Client.Model
 
 		public string Message { get; set; }
 
+		public string Buttontext { get; set; }
+
 		#endregion
 
 
@@ -23,6 +25,7 @@ namespace GQ.Client.Model
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			Message = GQML.GetStringAttribute (GQML.ACTION_SHOWMESSAGE_MESSAGE, reader, "");
+			Buttontext = GQML.GetStringAttribute (GQML.ACTION_SHOWMESSAGE_BUTTONTEXT, reader, "Ok");
 		}
 
 		#endregion
@@ -32,7 +35,7 @@ namespace GQ.Client.Model
 
 		public override void Execute ()
 		{
-			MessageDialog dialog = new MessageDialog (Message);
+			MessageDialog dialog = new MessageDialog (Message, Buttontext);
 			dialog.Start ();
 		}
 
