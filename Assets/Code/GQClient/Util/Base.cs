@@ -10,6 +10,7 @@ using GQ.Client.Model;
 using GQ.Client.UI;
 using System;
 using QM.Util;
+using System.Collections.Generic;
 
 namespace GQ.Client.Util
 {
@@ -23,6 +24,8 @@ namespace GQ.Client.Util
 		public GameObject MapHolder;
 		public GameObject MenuCanvas;
 		public GameObject ImprintCanvas;
+		public GameObject PrivacyCanvas;
+		public GameObject AuthorCanvas;
 
 		#endregion
 
@@ -68,28 +71,46 @@ namespace GQ.Client.Util
 		private bool menuShown;
 		private bool imprintShown;
 
+		private Dictionary<string, bool> canvasStates;
+
+		/// <summary>
+		/// Called when we leave the foyer towards a page.
+		/// </summary>
 		public void HideFoyerCanvases ()
 		{
 			// store current show state and hide:
-			listShown = ListCanvas.activeSelf;
-			ListCanvas.SetActive (false);
-			mapShown = MapCanvas.activeSelf;
-			MapCanvas.SetActive (false);
-			MapHolder.SetActive (false);
-			menuShown = MenuCanvas.activeSelf;
-			MenuCanvas.SetActive (false);
-			imprintShown = ImprintCanvas.activeSelf;
-			ImprintCanvas.SetActive (false);
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene ().GetRootGameObjects ();
+			foreach (GameObject rootGo in rootGOs) {
+				Canvas canv = rootGo.GetComponent<Canvas> ();
+				if (canv != null) {
+					canvasStates [canv.name] = canv.isActiveAndEnabled;
+					Debug.Log ("HideFoyerCanvases: " + canv.name + " stored as: " + canvasStates [canv.name]);
+					canv.gameObject.SetActive (false);
+				}
+			}
+			Debug.Log ("FRAMES NOW: " + Time.frameCount);
 		}
 
+		/// <summary>
+		/// Called when we return to the foyer from a page.
+		/// </summary>
 		public void ShowFoyerCanvases ()
 		{
 			// show again accordingg to stored state:
-			ListCanvas.SetActive (listShown);
-			MapCanvas.SetActive (mapShown);
-			MapHolder.SetActive (mapShown);
-			MenuCanvas.SetActive (menuShown);
-			ImprintCanvas.SetActive (imprintShown);
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME).GetRootGameObjects ();
+			foreach (GameObject rootGo in rootGOs) {
+				Canvas canv = rootGo.GetComponent<Canvas> ();
+				bool oldCanvState;
+				if (canv != null) {
+					if (canvasStates.TryGetValue (canv.name, out oldCanvState)) {
+						Debug.Log ("ShowFoyerCanvases: trying to read " + canv.name + " stored as: " + canvasStates [canv.name]);
+						canv.gameObject.SetActive (canvasStates [canv.name]);
+					}
+					else {
+						Debug.Log ("ShowFoyerCanvases: Canv name not found in state store: " + canv.name);
+					}
+				}
+			}
 		}
 
 		#endregion
@@ -104,8 +125,44 @@ namespace GQ.Client.Util
 
 		void Awake ()
 		{
+			// hide all canvases at first, we show the needed ones in initViews()
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene ().GetRootGameObjects ();
+			foreach (GameObject rootGo in rootGOs) {
+				Canvas canv = rootGo.GetComponent<Canvas> ();
+				if (canv != null) {
+					if ("DialogCanvas".Equals(canv.name)) {
+						canv.gameObject.SetActive (true);
+					}
+					else {
+						canv.gameObject.SetActive (false);
+					}
+				}
+			}
+
 			DontDestroyOnLoad (Instance);
 			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
+			canvasStates = new Dictionary<string, bool> ();
+		}
+
+//		void Start() {
+//			ImprintCanvas.gameObject.SetActive (false);
+//			PrivacyCanvas.gameObject.SetActive (false);
+//			AuthorCanvas.gameObject.SetActive (false);
+//		}
+//
+		#endregion
+
+
+		#region Global Runtime State
+
+		string loggedInAs = null;
+		public string LoggedInAs { 
+			get {
+				return loggedInAs;
+			}
+			set {
+				loggedInAs = value;
+			}
 		}
 
 		#endregion

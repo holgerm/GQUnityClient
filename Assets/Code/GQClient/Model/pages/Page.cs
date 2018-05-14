@@ -151,14 +151,16 @@ namespace GQ.Client.Model
 		}
 
 		public bool CanStart() {
+			bool result;
 			switch (PageType) {
 			case GQML.PAGE_TYPE_METADATA:
-				return false;
+				result = false;
 				break;
 			default:
-				return true;
+				result = true;
 				break;
 			}
+			return result;
 		}
 		#endregion
 

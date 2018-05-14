@@ -16,6 +16,15 @@ namespace GQ.UI {
 		// Use this for initialization
 		void Start ()
 		{
+			Debug.Log ("STARTED: IMPRINT CANVAS");
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene ().GetRootGameObjects ();
+			foreach (GameObject rootGo in rootGOs) {
+				Canvas canv = rootGo.GetComponent<Canvas> ();
+				if (canv != null) {
+					Debug.Log ("Canvas " + canv.name + " on sorting order " + canv.sortingOrder + " layer ID: " + canv.sortingLayerID + " active&enabled: " + canv.isActiveAndEnabled);
+				}
+			}
+
 			imprintText = GetComponent<Text> ();
 
 			if (imprintText == null) {

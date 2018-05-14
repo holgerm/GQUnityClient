@@ -16,14 +16,12 @@ namespace GQ.Client.Model
 			string netVal;
 			foreach (MetaDataInfo md in metadata) {
 				switch (md.Key) {
-				case "category":
-				case "category1":
+				case "Medienart":
 					netVal = md.Value.StripQuotes ();
 					if (netVal != "")
 						categories.Insert (0, netVal);
 					break;
-				case "category2":
-				case "category3":
+				case "Sortierung":
 					netVal = md.Value.StripQuotes ();
 					if (netVal != "")
 						categories.Add (netVal);
