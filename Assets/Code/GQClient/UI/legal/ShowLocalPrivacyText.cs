@@ -6,26 +6,29 @@ using System.IO;
 using UnityEngine.UI;
 using GQ.Client.Err;
 
-public class ShowLocalPrivacyText : MonoBehaviour
-{
+namespace GQ.UI {
 
-	protected Text privacyText;
-
-	// Use this for initialization
-	void Start ()
+	public class ShowLocalPrivacyText : MonoBehaviour
 	{
-		privacyText = GetComponent<Text> ();
 
-		if (privacyText == null) {
-			Log.SignalErrorToDeveloper ("Privacy Info: Text Component missing.");
-			return;
-		}
+		protected Text privacyText;
 
-		TextAsset privacyTA = Resources.Load<TextAsset> ("privacy");
-		if (privacyTA != null) {
-			privacyText.text = privacyTA.text;
+		// Use this for initialization
+		void Start ()
+		{
+			privacyText = GetComponent<Text> ();
+
+			if (privacyText == null) {
+				Log.SignalErrorToDeveloper ("Privacy Info: Text Component missing.");
+				return;
+			}
+
+			TextAsset privacyTA = Resources.Load<TextAsset> ("privacy");
+			if (privacyTA != null) {
+				privacyText.text = privacyTA.text;
+			}
+		
 		}
-	
+		
 	}
-	
 }

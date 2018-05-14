@@ -6,27 +6,31 @@ using System.IO;
 using UnityEngine.UI;
 using GQ.Client.Err;
 
-[RequireComponent (typeof(Text))]
-public class ShowVersionText : MonoBehaviour
-{
+namespace GQ.UI {
 
-	protected Text text;
-
-	// Use this for initialization
-	void Start ()
+	[RequireComponent (typeof(Text))]
+	public class ShowVersionText : MonoBehaviour
 	{
-		text = GetComponent<Text> ();
 
-		if (text == null) {
-			Log.SignalErrorToDeveloper ("Version Text: Text Component missing.");
-			return;
-		}
+		protected Text text;
 
-		TextAsset imprintTA = Resources.Load<TextAsset> ("buildtime");
-		if (imprintTA != null) {
-			text.text = "Version Info: " + imprintTA.text;
+		// Use this for initialization
+		void Start ()
+		{
+			text = GetComponent<Text> ();
+
+			if (text == null) {
+				Log.SignalErrorToDeveloper ("Version Text: Text Component missing.");
+				return;
+			}
+
+			TextAsset imprintTA = Resources.Load<TextAsset> ("buildtime");
+			if (imprintTA != null) {
+				text.text = "Version Info: " + imprintTA.text;
+			}
+		
 		}
-	
+		
 	}
-	
+
 }

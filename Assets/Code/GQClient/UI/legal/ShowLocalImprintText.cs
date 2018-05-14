@@ -6,26 +6,29 @@ using System.IO;
 using UnityEngine.UI;
 using GQ.Client.Err;
 
-public class ShowLocalImprintText : MonoBehaviour
-{
-
-	protected Text imprintText;
-
-	// Use this for initialization
-	void Start ()
+namespace GQ.UI {
+	
+	public class ShowLocalImprintText : MonoBehaviour
 	{
-		imprintText = GetComponent<Text> ();
 
-		if (imprintText == null) {
-			Log.SignalErrorToDeveloper ("Imprint: Text Component missing.");
-			return;
-		}
+		protected Text imprintText;
 
-		TextAsset imprintTA = Resources.Load<TextAsset> ("imprint");
-		if (imprintTA != null) {
-			imprintText.text = imprintTA.text;
+		// Use this for initialization
+		void Start ()
+		{
+			imprintText = GetComponent<Text> ();
+
+			if (imprintText == null) {
+				Log.SignalErrorToDeveloper ("Imprint: Text Component missing.");
+				return;
+			}
+
+			TextAsset imprintTA = Resources.Load<TextAsset> ("imprint");
+			if (imprintTA != null) {
+				imprintText.text = imprintTA.text;
+			}
+		
 		}
-	
+		
 	}
-	
 }

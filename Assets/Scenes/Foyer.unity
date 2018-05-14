@@ -494,9 +494,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 314.52274
+  m_MinHeight: 177.97113
   m_PreferredWidth: -1
-  m_PreferredHeight: 314.52274
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -878,9 +878,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 3992.0193
+  m_MinHeight: 2258.8645
   m_PreferredWidth: -1
-  m_PreferredHeight: 3992.0193
+  m_PreferredHeight: 2258.8645
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1143,7 +1143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 161871675}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70e5ca084e5da4160af0e671edded85c, type: 3}
+  m_Script: {fileID: 11500000, guid: d8b4599432f0c4b9f9f56bfb7863e3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &175513577
@@ -1667,7 +1667,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1821,9 +1821,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 362.91083
+  m_MinHeight: 205.3513
   m_PreferredWidth: -1
-  m_PreferredHeight: 362.91083
+  m_PreferredHeight: 205.3513
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -2216,9 +2216,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 3992.0193
+  m_MinHeight: 2258.8645
   m_PreferredWidth: -1
-  m_PreferredHeight: 3992.0193
+  m_PreferredHeight: 2258.8645
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2363,7 +2363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000088433706}
+  m_AnchoredPosition: {x: 0, y: -0.00007961477}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &523054184
@@ -3760,9 +3760,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 314.52274
+  m_MinHeight: 177.97113
   m_PreferredWidth: -1
-  m_PreferredHeight: 314.52274
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -4203,7 +4203,7 @@ GameObject:
   - component: {fileID: 833900633}
   - component: {fileID: 833900632}
   m_Layer: 5
-  m_Name: ImprintText
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4328,9 +4328,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 3992.0193
+  m_MinHeight: 2258.8645
   m_PreferredWidth: -1
-  m_PreferredHeight: 3992.0193
+  m_PreferredHeight: 2258.8645
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -4754,7 +4754,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4843,10 +4843,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 314.52274
-  m_MinHeight: 314.52274
-  m_PreferredWidth: 314.52274
-  m_PreferredHeight: 314.52274
+  m_MinWidth: 177.97113
+  m_MinHeight: 177.97113
+  m_PreferredWidth: 177.97113
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5103,7 +5103,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -5240,9 +5240,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 3992.0193
+  m_MinHeight: 2258.8645
   m_PreferredWidth: -1
-  m_PreferredHeight: 3992.0193
+  m_PreferredHeight: 2258.8645
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5393,9 +5393,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 1693.584
+  m_MinWidth: 958.3061
   m_MinHeight: -1
-  m_PreferredWidth: 1693.584
+  m_PreferredWidth: 958.3061
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -6057,10 +6057,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 314.52274
-  m_MinHeight: 314.52274
-  m_PreferredWidth: 314.52274
-  m_PreferredHeight: 314.52274
+  m_MinWidth: 177.97113
+  m_MinHeight: 177.97113
+  m_PreferredWidth: 177.97113
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6606,9 +6606,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 314.52274
+  m_MinHeight: 177.97113
   m_PreferredWidth: -1
-  m_PreferredHeight: 314.52274
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6733,9 +6733,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 3992.0193
+  m_MinHeight: 2258.8645
   m_PreferredWidth: -1
-  m_PreferredHeight: 3992.0193
+  m_PreferredHeight: 2258.8645
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6926,9 +6926,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 314.52274
+  m_MinHeight: 177.97113
   m_PreferredWidth: -1
-  m_PreferredHeight: 314.52274
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7199,9 +7199,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 314.52274
+  m_MinHeight: 177.97113
   m_PreferredWidth: -1
-  m_PreferredHeight: 314.52274
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7361,7 +7361,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -7632,9 +7632,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 1185.5088
+  m_MinWidth: 670.8143
   m_MinHeight: -1
-  m_PreferredWidth: 1185.5088
+  m_PreferredWidth: 670.8143
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -8304,7 +8304,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1569561146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11ca44f43ae314c348bd6a17855afeae, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b8fd539ce6ae40149abaa5f8adab0bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &1580102627
@@ -8758,9 +8758,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 3992.0193
+  m_MinHeight: 2258.8645
   m_PreferredWidth: -1
-  m_PreferredHeight: 3992.0193
+  m_PreferredHeight: 2258.8645
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9196,10 +9196,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 314.52274
-  m_MinHeight: 314.52274
-  m_PreferredWidth: 314.52274
-  m_PreferredHeight: 314.52274
+  m_MinWidth: 177.97113
+  m_MinHeight: 177.97113
+  m_PreferredWidth: 177.97113
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9490,9 +9490,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 314.52274
+  m_MinHeight: 177.97113
   m_PreferredWidth: -1
-  m_PreferredHeight: 314.52274
+  m_PreferredHeight: 177.97113
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
