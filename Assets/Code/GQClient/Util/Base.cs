@@ -79,7 +79,7 @@ namespace GQ.Client.Util
 		public void HideFoyerCanvases ()
 		{
 			// store current show state and hide:
-			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene ().GetRootGameObjects ();
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME).GetRootGameObjects ();
 			foreach (GameObject rootGo in rootGOs) {
 				Canvas canv = rootGo.GetComponent<Canvas> ();
 				if (canv != null) {

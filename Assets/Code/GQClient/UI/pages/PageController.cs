@@ -33,6 +33,7 @@ namespace GQ.Client.UI
 
 		public virtual void Start() {
 			InitPage ();
+			Base.Instance.HideFoyerCanvases ();
 		}
 
 		/// <summary>

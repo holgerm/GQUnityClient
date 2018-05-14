@@ -206,9 +206,6 @@ namespace GQ.Client.Model
 
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
-			if (scene.name.Equals(Base.FOYER_SCENE_NAME)) {
-				Base.Instance.HideFoyerCanvases ();
-			}
 
 			if (!scene.name.Equals (PageSceneName)) {
 				SceneManager.sceneLoaded += OnSceneLoaded;
