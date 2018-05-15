@@ -26,9 +26,6 @@ public class AuthorCanvasController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Canvas thisCanv = gameObject.GetComponent<Canvas> ();
-		thisCanv.sortingOrder = 20;
-
 		AccountEmail = AccountInput.transform.Find ("InputField").GetComponent<InputField> ();
 		Password = PasswordInput.transform.Find ("InputField").GetComponent<InputField> ();
 		LoginButtonText = LoginButton.transform.Find ("Text").GetComponent<Text> ();
