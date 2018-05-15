@@ -54,7 +54,7 @@
   "mapMinimalZoom": 13.0,
   "mapDeltaZoom": 0.5,
   "mapStartAtLocation": true,
-  "mapStartAtLongitude": 8.054113,
+  "mapStartAtLongitude": 8.054064,
   "mapStartAtLatitude": 52.850121,
   "marker": {
     "path": "defaults/readable/defaultMarker"
@@ -244,6 +244,7 @@
     "a": 255
   },
   "menuInhibitsInteraction": false,
+  "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 55.0,
   "listEntryHeightMinMM": 0.0,
