@@ -231,6 +231,8 @@ namespace UnitySlippyMap.Map
 				centerEPSG900913 = ComputeCenterEPSG900913 (newCenterESPG900913);
 				FitVerticalBorder ();
 				IsDirty = true;
+
+				Debug.Log ("POSITION MApController set to: (" + centerWGS84 [0] + ", " + centerWGS84 [1] + ")");
 			}
 		}
 

@@ -297,8 +297,11 @@ namespace GQ.Client.UI
 
 			// hide and delete all list elements:
 			foreach (KeyValuePair<int, Marker> kvp in Markers) {
+				// TODO CLARIFY WHY THIS CONTINUE IS NECESSARY:
+				if (kvp.Value == null)
+					continue;
+				
 				kvp.Value.Hide ();
-//				kvp.Value.Destroy ();
 				map.RemoveMarker (kvp.Value);
 			}
 

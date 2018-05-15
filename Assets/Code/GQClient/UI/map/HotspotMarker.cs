@@ -25,7 +25,6 @@ namespace GQ.Client.UI
 
 		public override void OnTouch ()
 		{
-			Debug.Log ("Hotspot tapped: " + Hotspot.Id);
 			Hotspot.Tap ();
 		}
 
