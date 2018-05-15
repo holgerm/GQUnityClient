@@ -23,10 +23,15 @@ namespace GQ.Client.Model
 	{
 
 		#region Attributes
+
 		public string Name { get; set; }
+
 		public int Id { get; set; }
+
 		public long LastUpdate { get; set; }
+
 		public string XmlFormat { get; set; }
+
 		public bool IndividualReturnDefinitions { get; set; }
 
 		public bool IsHidden {
@@ -35,9 +40,11 @@ namespace GQ.Client.Model
 				return (ConfigurationManager.Current.hideHiddenQuests && Name != null && Name.StartsWith ("---"));
 			}
 		}
+
 		#endregion
 
 		#region State Pages
+
 		protected Dictionary<int, IPage> pageDict = new Dictionary<int, IPage> ();
 
 		public IPage GetPageWithID (int id)
@@ -65,9 +72,11 @@ namespace GQ.Client.Model
 				currentPage = value;
 			}
 		}
+
 		#endregion
 
 		#region Hotspots
+
 		protected Dictionary<int, Hotspot> hotspotDict = new Dictionary<int, Hotspot> ();
 
 		public Hotspot GetHotspotWithID (int id)
@@ -82,15 +91,19 @@ namespace GQ.Client.Model
 				return hotspotDict.Values;
 			}
 		}
+
 		#endregion
 
 
 		#region Metadata
+
 		public Dictionary<string, string> metadata = new Dictionary<string, string> ();
+
 		#endregion
 
 
 		#region Media
+
 		public Dictionary<string, MediaInfo> MediaStore = new Dictionary<string, MediaInfo> ();
 
 		private void initMediaStore ()
@@ -122,16 +135,18 @@ namespace GQ.Client.Model
 				MediaStore.Add (url, info);
 			}
 		}
-			
+
 		public string MediaJsonPath {
 			get {
 				return Files.CombinePath (QuestManager.GetLocalPath4Quest (Id), "media.json");
 			}
 		}
+
 		#endregion
 
 
 		#region XML Reading
+
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -233,7 +248,7 @@ namespace GQ.Client.Model
 			XmlSerializer serializer = new XmlSerializer (pageType);
 			IPage page = (IPage)serializer.Deserialize (reader);
 			page.Parent = this;
-			if (StartPage == null && page.CanStart())
+			if (StartPage == null && page.CanStart ())
 				StartPage = page;
 			if (pageDict.ContainsKey (page.Id)) {
 				pageDict.Remove (page.Id);
@@ -249,6 +264,7 @@ namespace GQ.Client.Model
 		{
 			XmlSerializer serializer = new XmlSerializer (typeof(Hotspot));
 			Hotspot hotspot = (Hotspot)serializer.Deserialize (reader);
+			hotspot.Parent = this;
 			hotspotDict.Add (hotspot.Id, hotspot);
 		}
 
@@ -257,10 +273,12 @@ namespace GQ.Client.Model
 		{
 			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
+
 		#endregion
 
 
 		#region Runtime API
+
 		public virtual void Start ()
 		{
 			if (StartPage == null) {
