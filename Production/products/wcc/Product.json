@@ -8,7 +8,7 @@
   "DownloadStrategy": "UPFRONT",
   "autoUpdateQuestInfos": false,
   "timeoutMS": 60000,
-  "maxIdleTimeMS": 5000,
+  "maxIdleTimeMS": 9000,
   "nameForQuestSg": "Ort",
   "nameForQuestsPl": "Orte",
   "questInfoViews": [
@@ -367,6 +367,7 @@
     "a": 255
   },
   "menuInhibitsInteraction": false,
+  "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 50.0,
   "listEntryHeightMinMM": 6.0,
@@ -375,6 +376,12 @@
     "r": 232,
     "g": 232,
     "b": 232,
+    "a": 255
+  },
+  "eumlationColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   }
 }
