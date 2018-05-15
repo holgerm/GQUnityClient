@@ -23,9 +23,6 @@ namespace GQ.Client.Util
 		public GameObject MapCanvas;
 		public GameObject MapHolder;
 		public GameObject MenuCanvas;
-		public GameObject ImprintCanvas;
-		public GameObject PrivacyCanvas;
-		public GameObject AuthorCanvas;
 
 		#endregion
 
@@ -79,7 +76,7 @@ namespace GQ.Client.Util
 		public void HideFoyerCanvases ()
 		{
 			// store current show state and hide:
-			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME).GetRootGameObjects ();
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName (FOYER_SCENE_NAME).GetRootGameObjects ();
 			foreach (GameObject rootGo in rootGOs) {
 				Canvas canv = rootGo.GetComponent<Canvas> ();
 				if (canv != null) {
@@ -97,7 +94,7 @@ namespace GQ.Client.Util
 		public void ShowFoyerCanvases ()
 		{
 			// show again accordingg to stored state:
-			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME).GetRootGameObjects ();
+			GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName (FOYER_SCENE_NAME).GetRootGameObjects ();
 			foreach (GameObject rootGo in rootGOs) {
 				Canvas canv = rootGo.GetComponent<Canvas> ();
 				bool oldCanvState;
@@ -105,8 +102,7 @@ namespace GQ.Client.Util
 					if (canvasStates.TryGetValue (canv.name, out oldCanvState)) {
 						Debug.Log ("ShowFoyerCanvases: trying to read " + canv.name + " stored as: " + canvasStates [canv.name]);
 						canv.gameObject.SetActive (canvasStates [canv.name]);
-					}
-					else {
+					} else {
 						Debug.Log ("ShowFoyerCanvases: Canv name not found in state store: " + canv.name);
 					}
 				}
@@ -130,10 +126,9 @@ namespace GQ.Client.Util
 			foreach (GameObject rootGo in rootGOs) {
 				Canvas canv = rootGo.GetComponent<Canvas> ();
 				if (canv != null) {
-					if ("DialogCanvas".Equals(canv.name)) {
+					if ("DialogCanvas".Equals (canv.name)) {
 						canv.gameObject.SetActive (true);
-					}
-					else {
+					} else {
 						canv.gameObject.SetActive (false);
 					}
 				}
@@ -144,18 +139,20 @@ namespace GQ.Client.Util
 			canvasStates = new Dictionary<string, bool> ();
 		}
 
-//		void Start() {
-//			ImprintCanvas.gameObject.SetActive (false);
-//			PrivacyCanvas.gameObject.SetActive (false);
-//			AuthorCanvas.gameObject.SetActive (false);
-//		}
-//
+		//		void Start() {
+		//			ImprintCanvas.gameObject.SetActive (false);
+		//			PrivacyCanvas.gameObject.SetActive (false);
+		//			AuthorCanvas.gameObject.SetActive (false);
+		//		}
+		//
+
 		#endregion
 
 
 		#region Global Runtime State
 
 		string loggedInAs = null;
+
 		public string LoggedInAs { 
 			get {
 				return loggedInAs;

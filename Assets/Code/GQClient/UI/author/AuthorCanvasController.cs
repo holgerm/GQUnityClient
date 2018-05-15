@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Util;
 
-public class AuthorCanvasController : MonoBehaviour {
+public class AuthorCanvasController : MonoBehaviour
+{
 
 	public Button LoginButton;
 	Text LoginButtonText;
@@ -23,18 +24,19 @@ public class AuthorCanvasController : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		Canvas thisCanv = gameObject.GetComponent<Canvas> ();
 		thisCanv.sortingOrder = 20;
 
-		AccountEmail = AccountInput.transform.Find ("InputField").GetComponent<InputField>();
-		Password = PasswordInput.transform.Find ("InputField").GetComponent<InputField>();
-		LoginButtonText = LoginButton.transform.Find ("Text").GetComponent<Text>();
+		AccountEmail = AccountInput.transform.Find ("InputField").GetComponent<InputField> ();
+		Password = PasswordInput.transform.Find ("InputField").GetComponent<InputField> ();
+		LoginButtonText = LoginButton.transform.Find ("Text").GetComponent<Text> ();
 		checkLoginButtonText ();
 		checkStatus ();
-		checkInput(AccountEmail.text, Password.text); 
-		Debug.Log ("AUTHOR CANVAS START() FInished. is activeSelf?: " + gameObject.activeSelf + 
-			"  is active in hierarchy: " + gameObject.activeInHierarchy);
+		checkInput (AccountEmail.text, Password.text); 
+		Debug.Log ("AUTHOR CANVAS START() FInished. is activeSelf?: " + gameObject.activeSelf +
+		"  is active in hierarchy: " + gameObject.activeInHierarchy);
 		GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene ().GetRootGameObjects ();
 		foreach (GameObject rootGo in rootGOs) {
 			Canvas canv = rootGo.GetComponent<Canvas> ();
@@ -43,24 +45,31 @@ public class AuthorCanvasController : MonoBehaviour {
 			}
 		}
 	}
-	
-	public void EmailChanged(string newMail) {
+
+	public void EmailChanged (string newMail)
+	{
 		checkInput (newMail, Password.text);
 	}
 
 
-	public void PasswordChanged(string newPassword) {
+	public void PasswordChanged (string newPassword)
+	{
 		checkInput (AccountEmail.text, newPassword);
 	}
 
-	void checkInput(string mail, string passwd) {
+	void checkInput (string mail, string passwd)
+	{
 		LoginButton.interactable =
-			mail.Contains("@") && 
-			mail.Length >= 6 && 
-			passwd.Length >= 3;
+			mail.Contains ("@") &&
+		mail.Length >= 6 &&
+		passwd.Length >= 3;
 	}
 
-	void checkStatus() {
+	/// <summary>
+	/// Depending on state of the logged-in-state we set the status text and show or hide the input fields.
+	/// </summary>
+	void checkStatus ()
+	{
 		if (Base.Instance.LoggedInAs == null) {
 			StatusText.text = NOT_LOGGED_IN_TEXT;
 			AccountInput.gameObject.SetActive (true);
@@ -73,20 +82,23 @@ public class AuthorCanvasController : MonoBehaviour {
 		}
 	}
 
-	void checkLoginButtonText () {
-		LoginButtonText.text =  
+	void checkLoginButtonText ()
+	{
+		LoginButtonText.text = 
 			Base.Instance.LoggedInAs == null ? 
 			LOGIN_TEXT : 
 			LOGOUT_TEXT;
 	}
 
-	bool tryToLogin(string email, string password) {
+	bool tryToLogin (string email, string password)
+	{
 		// TODO ask server for permissions ...
 		Base.Instance.LoggedInAs = email;
 		return true;
 	}
 
-	public void LoginPressed() {
+	public void LoginPressed ()
+	{
 		switch (LoginButtonText.text) {
 		case LOGIN_TEXT:
 			if (tryToLogin (AccountEmail.text, Password.text)) {
@@ -98,10 +110,11 @@ public class AuthorCanvasController : MonoBehaviour {
 			break;
 		case LOGOUT_TEXT:
 			Base.Instance.LoggedInAs = null;
-			StatusText.text = NOT_LOGGED_IN_TEXT;
+			checkStatus ();
 			checkLoginButtonText ();
 			break;
 		}
+		Debug.Log ("After Log Button Pressed, LoggedInAs is: " + (Base.Instance.LoggedInAs == null ? "[null]" : Base.Instance.LoggedInAs));
 	}
 
 }
