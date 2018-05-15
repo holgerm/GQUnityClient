@@ -23,6 +23,7 @@ namespace GQ.Client.Util
 		public GameObject MapCanvas;
 		public GameObject MapHolder;
 		public GameObject MenuCanvas;
+		public GameObject DialogCanvas;
 
 		#endregion
 
@@ -159,6 +160,12 @@ namespace GQ.Client.Util
 			}
 			set {
 				loggedInAs = value;
+			}
+		}
+
+		public bool EmulationMode {
+			get {
+				return (LoggedInAs != null);
 			}
 		}
 

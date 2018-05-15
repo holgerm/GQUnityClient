@@ -207,9 +207,9 @@
   },
   "borderWidthUnits": 0.0,
   "overlayButtonBgColor": {
-    "r": 183,
-    "g": 166,
-    "b": 123,
+    "r": 83,
+    "g": 237,
+    "b": 77,
     "a": 169
   },
   "overlayButtonFgColor": {
@@ -249,6 +249,12 @@
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
   "listEntryColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "eumlationColor": {
     "r": 255,
     "g": 255,
     "b": 255,

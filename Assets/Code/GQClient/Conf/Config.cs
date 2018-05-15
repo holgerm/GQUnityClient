@@ -385,6 +385,9 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public bool menuInhibitsInteraction { get; set; }
 
+		[ShowInProductEditor]
+		public bool menu2ShownInQuests { get; set; }
+
 		[JsonIgnore]
 		private float _disabledAlpha = 0.5f;
 
@@ -418,6 +421,11 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	listEntryColor  { get; set; }
+
+
+		[ShowInProductEditor (StartSection = "Internal:")]
+		[JsonConverter (typeof(Color32Converter))]		
+		public Color32	eumlationColor  { get; set; }
 
 		#endregion
 
@@ -500,6 +508,10 @@ namespace GQ.Client.Conf
 			menuEntryHeightUnits = 35f;
 			menuEntryWidthUnits = 400f;
 			menuInhibitsInteraction = false;
+			menu2ShownInQuests = true;
+
+			// Internal:
+			eumlationColor = new Color (255f, 182f, 182f, 255f);
 		}
 
 		#endregion

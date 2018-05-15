@@ -5,6 +5,8 @@ using GQ.Client.Err;
 using System.Xml;
 using System;
 using System.Globalization;
+using GQ.Client.Util;
+using GQ.Client.Emulate;
 
 namespace GQ.Client.Model
 {
@@ -14,6 +16,7 @@ namespace GQ.Client.Model
 	{
 
 		#region XML Parsing
+
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -62,10 +65,12 @@ namespace GQ.Client.Model
 			if (reader.NodeType == XmlNodeType.EndElement)
 				reader.Read ();
 		}
+
 		#endregion
 
 
 		#region Data
+
 		public const double DEFAULT_RADIUS = 20.0d;
 		public const string DEFAULT_NUMBER = "007";
 
@@ -88,12 +93,13 @@ namespace GQ.Client.Model
 						value
 					);
 				}
-				latitude = Convert.ToDouble (parts [0], new CultureInfo("en-US"));
-				longitude = Convert.ToDouble (parts [1], new CultureInfo("en-US"));
+				latitude = Convert.ToDouble (parts [0], new CultureInfo ("en-US"));
+				longitude = Convert.ToDouble (parts [1], new CultureInfo ("en-US"));
 			} 
 		}
 
 		private double latitude;
+
 		public double Latitude {
 			get {
 				return latitude;
@@ -101,6 +107,7 @@ namespace GQ.Client.Model
 		}
 
 		private double longitude;
+
 		public double Longitude {
 			get {
 				return longitude;
@@ -197,10 +204,12 @@ namespace GQ.Client.Model
 				break;
 			}
 		}
+
 		#endregion
 
 
 		#region State
+
 		public Hotspot ()
 		{
 			State = GQML.STATE_NEW;
@@ -228,10 +237,12 @@ namespace GQ.Client.Model
 		}
 
 		public virtual Quest Parent { get; set; }
+
 		#endregion
 
 
 		#region Runtime API
+
 		public virtual void Enter ()
 		{
 			EnterTrigger.Initiate ();
@@ -244,8 +255,13 @@ namespace GQ.Client.Model
 
 		public virtual void Tap ()
 		{
-			TapTrigger.Initiate ();
+			if (Base.Instance.EmulationMode) {
+				EmuHotspotDialog.CreateAndShow (EnterTrigger, LeaveTrigger, TapTrigger);
+			} else {
+				TapTrigger.Initiate ();
+			}
 		}
+
 		#endregion
 
 	}

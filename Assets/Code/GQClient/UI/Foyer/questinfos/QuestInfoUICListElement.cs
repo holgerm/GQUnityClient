@@ -123,6 +123,7 @@ namespace GQ.Client.UI.Foyer
 
 
 		#region Event Reaction Methods for Unity
+
 		public void Download ()
 		{
 			data.Download ();
@@ -142,6 +143,7 @@ namespace GQ.Client.UI.Foyer
 		{
 			data.Update ();
 		}
+
 		#endregion
 
 
@@ -159,7 +161,7 @@ namespace GQ.Client.UI.Foyer
 			QuestInfoUICListElement ctrl = go.GetComponent<QuestInfoUICListElement> ();
 
 			// set info button as configured:
-			ctrl.setCategorySymbol(qInfo);
+			ctrl.setCategorySymbol (qInfo);
 
 			// set data and event management:
 			ctrl.data = qInfo;
@@ -173,7 +175,7 @@ namespace GQ.Client.UI.Foyer
 		{
 			// Update Info-Icon:
 			// set info button as configured:
-			setCategorySymbol(data);
+			setCategorySymbol (data);
 
 			// Update Name:
 			Name.text = data.Name;
@@ -196,22 +198,22 @@ namespace GQ.Client.UI.Foyer
 			// Update Buttons:
 			HideAllButtons ();
 			// Show DOWNLOAD button if needed:
-			if (ShowDownloadOption(data)) {
+			if (ShowDownloadOption (data)) {
 				DownloadButton.gameObject.SetActive (true);
 				DownloadButton.interactable = true;
 			}
 			// Show START button if needed:
-			if (ShowStartOption(data)) {
+			if (ShowStartOption (data)) {
 				StartButton.gameObject.SetActive (true);
 				StartButton.interactable = true;
 			}
 			// Show UPDATE button if needed:
-			if (ShowUpdateOption(data)) {
+			if (ShowUpdateOption (data)) {
 				UpdateButton.gameObject.SetActive (true);
 				UpdateButton.interactable = true;
 			}
 			// Show DELETE button if needed:
-			if (ShowDeleteOption(data)) {
+			if (ShowDeleteOption (data)) {
 				DeleteButton.gameObject.SetActive (true);
 				DeleteButton.interactable = true;
 			}
@@ -225,23 +227,28 @@ namespace GQ.Client.UI.Foyer
 			// TODO call the lists sorter ...
 		}
 
-		public static bool ShowDownloadOption(QuestInfo data) {
+		public static bool ShowDownloadOption (QuestInfo data)
+		{
 			return data.IsOnServer && !data.IsOnDevice;
 		}
 
-		public static bool ShowStartOption(QuestInfo data) {
+		public static bool ShowStartOption (QuestInfo data)
+		{
 			return data.IsOnDevice;
 		}
 
-		public static bool ShowUpdateOption(QuestInfo data) {
+		public static bool ShowUpdateOption (QuestInfo data)
+		{
 			return data.HasUpdate;
 		}
 
-		public static bool ShowDeleteOption(QuestInfo data) {
+		public static bool ShowDeleteOption (QuestInfo data)
+		{
 			return data.IsOnDevice;
 		}
 
-		private void setCategorySymbol(QuestInfo qInfo) {
+		private void setCategorySymbol (QuestInfo qInfo)
+		{
 			// set info button as configured:
 			if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "") {
 				CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet ();
