@@ -82,11 +82,9 @@ namespace GQ.Client.Util
 				Canvas canv = rootGo.GetComponent<Canvas> ();
 				if (canv != null) {
 					canvasStates [canv.name] = canv.isActiveAndEnabled;
-					Debug.Log ("HideFoyerCanvases: " + canv.name + " stored as: " + canvasStates [canv.name]);
 					canv.gameObject.SetActive (false);
 				}
 			}
-			Debug.Log ("FRAMES NOW: " + Time.frameCount);
 		}
 
 		/// <summary>
@@ -101,11 +99,8 @@ namespace GQ.Client.Util
 				bool oldCanvState;
 				if (canv != null) {
 					if (canvasStates.TryGetValue (canv.name, out oldCanvState)) {
-						Debug.Log ("ShowFoyerCanvases: trying to read " + canv.name + " stored as: " + canvasStates [canv.name]);
 						canv.gameObject.SetActive (canvasStates [canv.name]);
-					} else {
-						Debug.Log ("ShowFoyerCanvases: Canv name not found in state store: " + canv.name);
-					}
+					} 
 				}
 			}
 		}

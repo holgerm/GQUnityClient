@@ -256,15 +256,7 @@ namespace GQ.Client.UI
 			map.InputsEnabled = true;
 			map.ShowsGUIControls = false;
 
-			// Locate at Start:
-			if (ConfigurationManager.Current.mapStartAtLocation) {
-				map.CenterOnLocation ();
-			} else {
-				map.CenterWGS84 = new double[2] { 
-					ConfigurationManager.Current.mapStartAtLongitude, 
-					ConfigurationManager.Current.mapStartAtLatitude 
-				};
-			}
+			locateAtStart ();
 
 			layers = new List<LayerBehaviour> ();
 
@@ -279,6 +271,20 @@ namespace GQ.Client.UI
 			GameObject markerGO = Instantiate (go) as GameObject;
 			map.SetLocationMarker<LocationMarkerBehaviour> (markerGO);
 			DestroyImmediate (go);
+		}
+
+		void locateAtStart ()
+		{
+			if (ConfigurationManager.Current.mapStartAtLocation &&
+			    Input.location.isEnabledByUser &&
+			    Input.location.status != LocationServiceStatus.Running) {
+				map.CenterOnLocation ();
+			} else {
+				map.CenterWGS84 = new double[2] {
+					ConfigurationManager.Current.mapStartAtLongitude,
+					ConfigurationManager.Current.mapStartAtLatitude
+				};
+			}
 		}
 
 		protected abstract void populateMarkers ();
