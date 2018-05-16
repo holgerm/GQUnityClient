@@ -45,6 +45,7 @@
     "Assets/Scenes/Pages/Navigation.unity"
   ],
   "sceneExtensions": [],
+  "offerLeaveQuestOnEachPage": true,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",
