@@ -228,7 +228,8 @@ namespace GQ.Client.Model
 			int lastDotIndex = __myTypeName.LastIndexOf (".");
 			string modelNamespace = __myTypeName.Substring (0, lastDotIndex);
 			string targetScenePath = null;
-			// TODO: Implement page2scene mapping here:
+
+			// page2scene mapping comes here:
 			Dictionary<string, string> sceneMappings = ConfigurationManager.Current.GetSceneMappingsDict ();
 			if (sceneMappings.TryGetValue (pageTypeName, out targetScenePath)) {
 				pageTypeName = targetScenePath.Substring (
@@ -293,6 +294,7 @@ namespace GQ.Client.Model
 
 			QuestManager.Instance.CurrentPage = null;
 
+			Base.Instance.HideFoyerCanvases ();
 			StartPage.Start ();
 		}
 
@@ -300,6 +302,7 @@ namespace GQ.Client.Model
 		{
 			Audio.Clear ();
 			Variables.ClearAll (); // persistente variablen nicht löschen
+			Scene sceneToUnload = QuestManager.Instance.CurrentScene;
 			SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
 			Base.Instance.ShowFoyerCanvases ();
 			Resources.UnloadUnusedAssets ();

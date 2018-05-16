@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GQ.Client.UI
 {
 	
-	public class NPCTalkLayout : ScreenLayoutConfig
+	public class NPCTalkLayout : PageLayout
 	{
 
 	}

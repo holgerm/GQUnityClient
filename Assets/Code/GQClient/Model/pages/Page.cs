@@ -19,6 +19,7 @@ namespace GQ.Client.Model
 	{
 
 		#region XML Parsing
+
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -150,7 +151,8 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public bool CanStart() {
+		public bool CanStart ()
+		{
 			bool result;
 			switch (PageType) {
 			case GQML.PAGE_TYPE_METADATA:
@@ -162,9 +164,11 @@ namespace GQ.Client.Model
 			}
 			return result;
 		}
+
 		#endregion
 
 		#region Runtime API
+
 		public PageController PageCtrl {
 			get;
 			set;
@@ -174,7 +178,7 @@ namespace GQ.Client.Model
 		/// Maps the scene to this model for a page (mission).
 		/// </summary>
 		/// <value>The name of the page scene.</value>
-		protected virtual string PageSceneName {
+		public virtual string PageSceneName {
 			get {
 				return GetType ().Name.Substring (4);
 			}
@@ -213,10 +217,9 @@ namespace GQ.Client.Model
 				if (scene.name != Base.FOYER_SCENE_NAME) {
 					scenesToUnload.Add (scene);
 				}
-			}
-			else {
+			} else {
 				// if we use the same page again, we have to initialize the UI controller again with the new data.
-				GameObject goPageScreen = GameObject.Find(GO_PATH_PAGE_CONTROLLER);
+				GameObject goPageScreen = GameObject.Find (GO_PATH_PAGE_CONTROLLER);
 				if (goPageScreen == null) {
 					Log.SignalErrorToDeveloper (
 						"Page {0} using scene {1} does not have a PageController at {2}", 

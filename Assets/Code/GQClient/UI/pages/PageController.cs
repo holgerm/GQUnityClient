@@ -17,6 +17,7 @@ namespace GQ.Client.UI
 		protected QuestManager qm;
 
 		#region Start
+
 		bool resumingToFoyer;
 
 		public virtual void Awake ()
@@ -31,16 +32,17 @@ namespace GQ.Client.UI
 			}
 		}
 
-		public virtual void Start() {
+		public virtual void Start ()
+		{
 			InitPage ();
-			Base.Instance.HideFoyerCanvases ();
 		}
 
 		/// <summary>
 		/// Must be called manually if you want to reuse the page model, i.e. for the second of two consecutive pages 
 		/// of the same model type.
 		/// </summary>
-		public void InitPage() {
+		public void InitPage ()
+		{
 			page = qm.CurrentPage;
 
 			if (page == null) {
@@ -57,6 +59,7 @@ namespace GQ.Client.UI
 
 			Initialize ();
 		}
+
 		#endregion
 
 
@@ -79,10 +82,12 @@ namespace GQ.Client.UI
 		{
 			page.End ();
 		}
+
 		#endregion
 
 
 		#region Layout
+
 		/// <summary>
 		/// Margin between header and content in device-dependent units.
 		/// </summary>
@@ -109,8 +114,6 @@ namespace GQ.Client.UI
 				return ConfigurationManager.Current.contentDividerUnits;
 			}
 		}
-
-		public abstract int NumberOfSpacesInContent ();
 
 		static public float BorderWidthUnits {
 			get {
@@ -149,6 +152,7 @@ namespace GQ.Client.UI
 			              );
 			return LayoutConfig.Units2Pixels (units);
 		}
+
 		#endregion
 	}
 }

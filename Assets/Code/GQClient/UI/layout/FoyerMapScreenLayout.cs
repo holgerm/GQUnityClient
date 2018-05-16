@@ -11,7 +11,7 @@ namespace GQ.Client.UI
 	/// <summary>
 	/// Add this script to map screens.
 	/// </summary>
-	public class MapLayoutConfig : ScreenLayoutConfig
+	public class FoyerMapScreenLayout : ScreenLayout
 	{
 
 		public GameObject MapButtonPanel;

@@ -14,7 +14,9 @@ namespace GQ.Client.Model
 	{
 
 		#region State
+
 		private string text;
+
 		public string Text { 
 			get {
 				return text;
@@ -32,20 +34,23 @@ namespace GQ.Client.Model
 				dialogItems.Add (d);
 			} 
 		}
+
 		#endregion
 
 
 		#region Runtime API
+
 		public override void Start ()
 		{
 			base.Start ();
 		}
 
-		protected override string PageSceneName {
+		public override string PageSceneName {
 			get {
 				return GQML.PAGE_TYPE_NPCTALK;
 			}
 		}
+
 		#endregion
 
 
@@ -65,6 +70,7 @@ namespace GQ.Client.Model
 
 			TextSize = GQML.GetIntAttribute (GQML.PAGE_IMAGEWITHTEXT_TEXTSIZE, reader);
 		}
+
 		#endregion
 
 	}

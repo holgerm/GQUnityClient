@@ -952,9 +952,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1601.7979
+  m_MinHeight: 2534.291
   m_PreferredWidth: -1
-  m_PreferredHeight: 1601.7979
+  m_PreferredHeight: 2534.291
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1033,6 +1033,7 @@ GameObject:
   - component: {fileID: 95263548}
   - component: {fileID: 95263547}
   - component: {fileID: 95263546}
+  - component: {fileID: 95263550}
   - component: {fileID: 95263549}
   m_Layer: 5
   m_Name: MapScreen
@@ -1124,7 +1125,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 95263544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 030d428d92aef414d835f33bbe7930fd, type: 3}
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!114 &95263550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 95263544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5aa1ad4f76a4809a392197427f9a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Header: {fileID: 1389843863}
@@ -3031,7 +3051,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000032315962}
+  m_AnchoredPosition: {x: 0, y: 0.000017133043}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &523054184
@@ -3467,7 +3487,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000060674905}
+  m_AnchoredPosition: {x: 0, y: 0.00014488363}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &574055467
@@ -3800,8 +3820,8 @@ GameObject:
   - component: {fileID: 678410812}
   - component: {fileID: 678410811}
   - component: {fileID: 678410810}
-  - component: {fileID: 678410809}
   - component: {fileID: 678410808}
+  - component: {fileID: 678410809}
   m_Layer: 5
   m_Name: PrivacyScreen
   m_TagString: Untagged
@@ -3856,7 +3876,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 678410806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03b7e51249dab4347b9532bd93b86400, type: 3}
+  m_Script: {fileID: 11500000, guid: 6438218298e1a42e3ba7677ea545a2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Header: {fileID: 1365844254}
@@ -5267,9 +5287,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1601.7979
+  m_MinHeight: 2534.291
   m_PreferredWidth: -1
-  m_PreferredHeight: 1601.7979
+  m_PreferredHeight: 2534.291
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6900,9 +6920,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1601.7979
+  m_MinHeight: 2534.291
   m_PreferredWidth: -1
-  m_PreferredHeight: 1601.7979
+  m_PreferredHeight: 2534.291
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8104,9 +8124,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 126.20225
+  m_MinHeight: 199.6714
   m_PreferredWidth: -1
-  m_PreferredHeight: 126.20225
+  m_PreferredHeight: 199.6714
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8499,9 +8519,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 126.20225
+  m_MinHeight: 199.6714
   m_PreferredWidth: -1
-  m_PreferredHeight: 126.20225
+  m_PreferredHeight: 199.6714
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9475,9 +9495,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 126.20225
+  m_MinHeight: 199.6714
   m_PreferredWidth: -1
-  m_PreferredHeight: 126.20225
+  m_PreferredHeight: 199.6714
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -10850,7 +10870,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1686877494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03b7e51249dab4347b9532bd93b86400, type: 3}
+  m_Script: {fileID: 11500000, guid: 6438218298e1a42e3ba7677ea545a2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Header: {fileID: 1302097835}
@@ -10926,7 +10946,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1713111402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03b7e51249dab4347b9532bd93b86400, type: 3}
+  m_Script: {fileID: 11500000, guid: 6438218298e1a42e3ba7677ea545a2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Header: {fileID: 1476751730}

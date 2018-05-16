@@ -61,7 +61,7 @@ namespace GQ.Client.UI
 			// scale the marker so that it fits inside the surrouding tile holder which is a square:
 			float markerWidth = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.width / (float)texture.height));
 			float markerHeight = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.height / (float)texture.width));
-			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) * MapLayoutConfig.MarkerHeightUnits * MARKER_SCALE_FACTOR;
+			markerGO.transform.localScale = new Vector3 (markerWidth, 1.0f, markerHeight) * FoyerMapScreenLayout.MarkerHeightUnits * MARKER_SCALE_FACTOR;
 			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
 			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
 			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();

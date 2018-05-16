@@ -351,6 +351,7 @@ GameObject:
   - component: {fileID: 95263548}
   - component: {fileID: 95263547}
   - component: {fileID: 95263546}
+  - component: {fileID: 95263550}
   - component: {fileID: 95263549}
   m_Layer: 5
   m_Name: MapScreen
@@ -442,7 +443,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 95263544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 030d428d92aef414d835f33bbe7930fd, type: 3}
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!114 &95263550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 95263544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0557c03dcfc43189d10b25c8195c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Header: {fileID: 1389843863}
@@ -502,7 +522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48235294, g: 0.4117647, b: 0.16862746, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -685,7 +705,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -751,9 +771,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 74.1639
+  m_MinHeight: 265.9689
   m_PreferredWidth: -1
-  m_PreferredHeight: 74.1639
+  m_PreferredHeight: 265.9689
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -851,9 +871,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 815.8029
+  m_MinHeight: 2925.6582
   m_PreferredWidth: -1
-  m_PreferredHeight: 815.8029
+  m_PreferredHeight: 2925.6582
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -942,7 +962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48235294, g: 0.4117647, b: 0.16862746, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1344,9 +1364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 59.331123
+  m_MinHeight: 230.5064
   m_PreferredWidth: -1
-  m_PreferredHeight: 59.331123
+  m_PreferredHeight: 230.5064
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1741,7 +1761,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: d802adde759184f27ae6d331addd9090, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c395fb7f3658f45a4a50424c38410120, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1830,10 +1850,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 78.551834
-  m_MinHeight: 78.551834
-  m_PreferredWidth: 78.551834
-  m_PreferredHeight: 78.551834
+  m_MinWidth: 230.5064
+  m_MinHeight: 230.5064
+  m_PreferredWidth: 230.5064
+  m_PreferredHeight: 230.5064
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1901,7 +1921,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3254902, g: 0.92941177, b: 0.3019608, a: 0.6627451}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2019,7 +2039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48235294, g: 0.4117647, b: 0.16862746, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2091,9 +2111,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 815.8029
+  m_MinHeight: 2925.6582
   m_PreferredWidth: -1
-  m_PreferredHeight: 815.8029
+  m_PreferredHeight: 2925.6582
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2543,10 +2563,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 78.551834
-  m_MinHeight: 78.551834
-  m_PreferredWidth: 78.551834
-  m_PreferredHeight: 78.551834
+  m_MinWidth: 230.5064
+  m_MinHeight: 230.5064
+  m_PreferredWidth: 230.5064
+  m_PreferredHeight: 230.5064
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2614,7 +2634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3254902, g: 0.92941177, b: 0.3019608, a: 0.6627451}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2660,14 +2680,13 @@ GameObject:
   - component: {fileID: 1260760255}
   - component: {fileID: 1260760254}
   - component: {fileID: 1260760258}
-  - component: {fileID: 1260760253}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1260760252
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2683,24 +2702,11 @@ RectTransform:
   m_Father: {fileID: 601923249}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70, y: -233.83086}
-  m_SizeDelta: {x: 90, y: 447.6617}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1260760253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114056384082163908, guid: f8361c2fc90d94856ae2ef57f7b95aad,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1260760251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0126e8b9468aa428f8d1599e31ad340c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  whatToToggle: {fileID: 0}
 --- !u!114 &1260760254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2861,9 +2867,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 59.331123
+  m_MinHeight: 230.5064
   m_PreferredWidth: -1
-  m_PreferredHeight: 59.331123
+  m_PreferredHeight: 230.5064
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2920,7 +2926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1447122409
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3430,14 +3436,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48235294, g: 0.4117647, b: 0.16862746, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 5cbba09d040c540a3aff6d2e604bfa18, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 07d0a66b961c647e689c46eb4f9ba478, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -3502,7 +3508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48235294, g: 0.4117647, b: 0.16862746, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3863,10 +3869,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 78.551834
-  m_MinHeight: 78.551834
-  m_PreferredWidth: 78.551834
-  m_PreferredHeight: 78.551834
+  m_MinWidth: 230.5064
+  m_MinHeight: 230.5064
+  m_PreferredWidth: 230.5064
+  m_PreferredHeight: 230.5064
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3934,7 +3940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3254902, g: 0.92941177, b: 0.3019608, a: 0.6627451}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

@@ -16,14 +16,17 @@ namespace GQ.Client.UI
 	{
 
 		#region Inspector Fields
+
 		public RawImage image;
 		public GameObject imagePanel;
 		public GameObject contentPanel;
 		public Transform dialogItemContainer;
 		public Text forwardButtonText;
+
 		#endregion
 
 		#region Runtime API
+
 		protected PageNPCTalk npcPage;
 
 		/// <summary>
@@ -51,23 +54,11 @@ namespace GQ.Client.UI
 				npcPage.End ();
 			}
 		}
-		#endregion
 
-		#region Layout
-		public override int NumberOfSpacesInContent ()
-		{
-			return Math.Max (npcPage.NumberOfDialogItems () - 1, 0);
-		}
-
-		protected float ContentImageHeight {
-			get {
-				float units = LayoutConfig.ScreenHeightUnits - (LayoutConfig.HeaderHeightUnits + LayoutConfig.FooterHeightUnits + ContentDividerUnits);
-				return LayoutConfig.Units2Pixels (units);
-			}
-		}
 		#endregion
 
 		#region View Update Methods
+
 		void ShowImage ()
 		{
 			// show (or hide completely) image:
@@ -83,10 +74,10 @@ namespace GQ.Client.UI
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
 					loader = new Downloader (
-							url: npcPage.ImageUrl, 
-							timeout: ConfigurationManager.Current.timeoutMS,
-							maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
-						);
+						url: npcPage.ImageUrl, 
+						timeout: ConfigurationManager.Current.timeoutMS,
+						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+					);
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
@@ -102,7 +93,7 @@ namespace GQ.Client.UI
 						imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
 					}
 
-					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
+					imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels (imageAreaHeight);
 					contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
 
 					fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
@@ -120,9 +111,10 @@ namespace GQ.Client.UI
 			}
 		}
 
-		void ClearText() {
+		void ClearText ()
+		{
 			foreach (Transform dialogItem in dialogItemContainer) {
-				GameObject.Destroy(dialogItem.gameObject);
+				GameObject.Destroy (dialogItem.gameObject);
 			}
 		}
 
@@ -140,6 +132,7 @@ namespace GQ.Client.UI
 			// update forward button text:
 			forwardButtonText.text = npcPage.HasMoreDialogItems () ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
 		}
+
 		#endregion
 	}
 

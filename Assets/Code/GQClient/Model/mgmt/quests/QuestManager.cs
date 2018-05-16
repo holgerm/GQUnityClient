@@ -63,7 +63,7 @@ namespace GQ.Client.Model
 
 		public Scene CurrentScene { 
 			get { 
-				Scene curScene = SceneManager.GetSceneByName (CurrentPage.GetType ().Name.Substring (4)); 
+				Scene curScene = SceneManager.GetSceneByName (CurrentPage.PageSceneName); 
 				return curScene;
 			} 
 		}
@@ -154,10 +154,11 @@ namespace GQ.Client.Model
 		/// <param name="xml">Xml.</param>
 		public void SetCurrentQuestFromXML (string xml)
 		{
-			CurrentQuest = DeserializeQuest(xml);
+			CurrentQuest = DeserializeQuest (xml);
 		}
 
-		public Quest DeserializeQuest(string xml) {
+		public Quest DeserializeQuest (string xml)
+		{
 			// Creates an instance of the XmlSerializer class;
 			// specifies the type of object to be deserialized.
 			XmlSerializer serializer = new XmlSerializer (typeof(Quest));

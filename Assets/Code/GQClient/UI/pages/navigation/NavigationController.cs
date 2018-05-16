@@ -6,11 +6,13 @@ using GQ.Client.Model;
 namespace GQ.Client.UI
 {
 
-	public class NavigationController : PageController {
+	public class NavigationController : PageController
+	{
 
 
 
 		#region Runtime API
+
 		protected PageNavigation navPage;
 
 		/// <summary>
@@ -24,16 +26,12 @@ namespace GQ.Client.UI
 			enableOptions ();
 		}
 
-		void enableOptions() {
+		void enableOptions ()
+		{
 			// TODO
 		}
+
 		#endregion
 
-		#region Layout
-		public override int NumberOfSpacesInContent ()
-		{
-			return 0;
-		}
-		#endregion
 	}
 }

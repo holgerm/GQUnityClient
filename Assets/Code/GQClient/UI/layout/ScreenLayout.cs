@@ -10,10 +10,10 @@ namespace GQ.Client.UI
 {
 
 	/// <summary>
-	/// Configures the header layout based on the seetings in the current apps config data. Attach this script to all header game objects.
+	/// Makes the layout for all screens, i.e. all pages plus all foyer views and all additional full screen views (imprint, author login etc.).
 	/// </summary>
 	[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
-	public class ScreenLayoutConfig : LayoutConfig
+	public class ScreenLayout : LayoutConfig
 	{
 
 		public GameObject Header;

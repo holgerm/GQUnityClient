@@ -7,9 +7,11 @@ using System.Xml;
 namespace GQ.Client.Model
 {
 	[XmlRoot (GQML.PAGE)]
-	public class PageMapOSM : PageNavigation {
+	public class PageMapOSM : PageNavigation
+	{
 
 		#region XML Serialization
+
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			// we actually do not read from xml but already know what the values should be:
@@ -32,18 +34,21 @@ namespace GQ.Client.Model
 			iBeaconText = "";
 			iBeaconNotFoundText = "";
 		}
+
 		#endregion
 
 		#region Runtime API
+
 		/// <summary>
 		/// Maps the scene to this model for a page (mission).
 		/// </summary>
 		/// <value>The name of the page scene.</value>
-		protected override string PageSceneName {
+		public override string PageSceneName {
 			get {
 				return GQML.PAGE_TYPE_NAVIGATION;
 			}
 		}
+
 		#endregion
 	}
 }

@@ -101,6 +101,9 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public List<SceneExtension> sceneExtensions { get; set; }
 
+		[ShowInProductEditor]
+		public bool 	offerLeaveQuestOnEachPage  { get; set; }
+
 
 		#region Map
 
@@ -145,7 +148,7 @@ namespace GQ.Client.Conf
 		public ImagePath marker { 
 			get {
 				if (_marker == null) {
-					return new ImagePath ("defaults/readable/defaultMarker");
+					_marker = new ImagePath ("defaults/readable/defaultMarker");
 				}
 				return _marker;
 			}
@@ -457,6 +460,7 @@ namespace GQ.Client.Conf
 			sceneMappings = new List<SceneMapping> ();
 			scenePaths = new string[0];
 			sceneExtensions = new List<SceneExtension> ();
+			offerLeaveQuestOnEachPage = true;
 
 			// Map:
 			mapProvider = MapProvider.OpenStreetMap;

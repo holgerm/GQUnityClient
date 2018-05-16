@@ -11,7 +11,7 @@ namespace GQ.Client.UI
 	/// <summary>
 	/// Add this script to the foyer list screen.
 	/// </summary>
-	public class FoyerListLayoutConfig : ScreenLayoutConfig
+	public class FoyerListLayoutConfig : ScreenLayout
 	{
 
 		public Transform questInfoList;
@@ -35,7 +35,7 @@ namespace GQ.Client.UI
 
 		static public void SetListEntryHeight (GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
-			ScreenLayoutConfig.SetEntryHeight (ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor);
+			ScreenLayout.SetEntryHeight (ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor);
 		}
 
 		static public float ListEntryHeightUnits {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.UI;
+using Candlelight.UI;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using System.Text.RegularExpressions;
@@ -11,54 +12,44 @@ using GQ.Client.Conf;
 namespace GQ.Client.UI
 {
 	
-	public class StartAndExitScreenController : PageController
+	public class ImageWithTextController : PageController
 	{
 
 		#region Inspector Fields
 
 		public RawImage image;
-
-		#endregion
-
-		#region Other Fields
-
-		protected PageStartAndExitScreen saesPage;
+		public HyperText text;
 
 		#endregion
 
 
 		#region Runtime API
 
-		//		// Use this for initialization
-		//		public override void Start ()
-		//		{
-		//			base.Start ();
-		//
-		//			if (page == null)
-		//				return;
-		//
-		//		}
+		protected PageImageWithText iwtPage;
 
 		public override void Initialize ()
 		{
-			saesPage = (PageStartAndExitScreen)page;
+			iwtPage = (PageImageWithText)page;
+
+			// show text:
+			text.text = TextHelper.Decode4HyperText (iwtPage.Text);
 
 			// show (or hide completely) image:
 			GameObject imagePanel = image.transform.parent.gameObject;
-			if (saesPage.ImageUrl == "") {
+			if (iwtPage.ImageUrl == "") {
 				imagePanel.SetActive (false);
 				return;
 			} else {
 				imagePanel.SetActive (true);
 				AbstractDownloader loader;
-				if (saesPage.Parent.MediaStore.ContainsKey (saesPage.ImageUrl)) {
+				if (iwtPage.Parent.MediaStore.ContainsKey (iwtPage.ImageUrl)) {
 					MediaInfo mediaInfo;
-					saesPage.Parent.MediaStore.TryGetValue (saesPage.ImageUrl, out mediaInfo);
+					iwtPage.Parent.MediaStore.TryGetValue (iwtPage.ImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
 					loader = 
 						new Downloader (
-						url: saesPage.ImageUrl, 
+						url: iwtPage.ImageUrl, 
 						timeout: ConfigurationManager.Current.timeoutMS,
 						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 					);
@@ -73,15 +64,27 @@ namespace GQ.Client.UI
 			}
 		}
 
-		#endregion
-
-
-		#region implemented abstract members of PageController
-
-		public override int NumberOfSpacesInContent ()
+		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
 		{
-			// we only have spaces between header and content as well as between content and footer:
-			return 2;
+			string href = extractHREF (linkInfo);
+			if (href != null) {
+				Application.OpenURL (href);
+			}
+		}
+
+		private string extractHREF (Candlelight.UI.HyperText.LinkInfo info)
+		{
+			string href = null;
+
+			string pattern = @".*?href=""(?'href'[^""]*?)(?:["" \s]|$)";
+			Match match = Regex.Match (info.Name, pattern);
+			if (match.Success) {
+				href = match.Groups ["href"].ToString ();
+				if (!href.StartsWith ("http://") && !href.StartsWith ("https://")) {
+					href = "http://" + href;
+				}
+			}
+			return href;
 		}
 
 		#endregion

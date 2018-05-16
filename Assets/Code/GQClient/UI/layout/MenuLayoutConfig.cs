@@ -13,7 +13,7 @@ namespace GQ.Client.UI
 	/// Configures the header layout based on the seetings in the current apps config data. Attach this script to all header game objects.
 	/// </summary>
 	[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
-	public class MenuLayoutConfig : ScreenLayoutConfig
+	public class MenuLayoutConfig : ScreenLayout
 	{
 
 		public Image MenuBackgroundImage;
@@ -82,7 +82,7 @@ namespace GQ.Client.UI
 
 		static public void SetMenuEntryHeight (GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
 		{
-			ScreenLayoutConfig.SetEntryHeight (MenuEntryHeightUnits, menuEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor);
+			ScreenLayout.SetEntryHeight (MenuEntryHeightUnits, menuEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor);
 		}
 
 	}
