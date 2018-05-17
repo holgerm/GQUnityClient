@@ -7,7 +7,8 @@
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
   "autoUpdateQuestInfos": false,
-  "timeoutMS": 10000,
+  "timeoutMS": 60000,
+  "maxIdleTimeMS": 9000,
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
@@ -20,11 +21,13 @@
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
   "acceptedPageTypes": [
-    "NPCTalk"
+    "NPCTalk",
+    "MetaData",
+    "ImageWithText"
   ],
   "sceneMappings": [
     {
-      "pageTypeName": "NPCTalk",
+      "pageTypeName": "MetaData",
       "scenePath": "Assets/ConfigAssets/Resources/Scenes/Pages/SLS_Spielbeschreibung.unity"
     }
   ],
@@ -33,6 +36,7 @@
     "Assets/ConfigAssets/Resources/Scenes/Pages/SLS_Spielbeschreibung.unity"
   ],
   "sceneExtensions": [],
+  "offerLeaveQuestOnEachPage": true,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -445,11 +449,18 @@
     "a": 255
   },
   "menuInhibitsInteraction": false,
+  "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 50.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
   "listEntryColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "eumlationColor": {
     "r": 255,
     "g": 255,
     "b": 255,
