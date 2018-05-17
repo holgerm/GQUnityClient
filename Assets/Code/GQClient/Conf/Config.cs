@@ -454,7 +454,8 @@ namespace GQ.Client.Conf
 			hideHiddenQuests = false;
 			DownloadStrategy = DownloadStrategy.UPFRONT;
 			autoUpdateQuestInfos = false;
-			timeoutMS = 10000L;
+			timeoutMS = 60000L;
+			maxIdleTimeMS = 9000L;
 
 			acceptedPageTypes = new string[0];
 			sceneMappings = new List<SceneMapping> ();
