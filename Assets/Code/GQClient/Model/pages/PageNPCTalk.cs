@@ -14,6 +14,7 @@ namespace GQ.Client.Model
 	{
 
 		#region State
+
 		public string EndButtonText { get; set ; }
 
 		public string ImageUrl { get; set; }
@@ -30,7 +31,8 @@ namespace GQ.Client.Model
 
 		protected List<DialogItem> dialogItems = new List<DialogItem> ();
 
-		public int NumberOfDialogItems() {
+		public int NumberOfDialogItems ()
+		{
 			return dialogItems.Count;
 		}
 
@@ -59,10 +61,12 @@ namespace GQ.Client.Model
 				curDialogItemNo = Math.Max (0, Math.Min (curDialogItemNo + 1, dialogItems.Count));
 			}
 		}
+
 		#endregion
 
 
 		#region Runtime API
+
 		public override void Start ()
 		{
 			CurDialogItemNo++;
@@ -74,19 +78,21 @@ namespace GQ.Client.Model
 			if (dialogItems.Count > CurDialogItemNo) {
 				CurDialogItemNo++;
 				return true;
-			}
-			else {
+			} else {
 				return false;
 			}
 		}
 
-		public bool HasMoreDialogItems() {
+		public bool HasMoreDialogItems ()
+		{
 			return (dialogItems.Count > CurDialogItemNo);
 		}
+
 		#endregion
 
 
 		#region XML Serialization
+
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
@@ -130,7 +136,7 @@ namespace GQ.Client.Model
 	public class DialogItem : IXmlSerializable
 	{
 
-		#region Runtime API
+		#region State
 
 		public int Id {
 			get;

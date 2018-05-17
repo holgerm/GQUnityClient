@@ -151,20 +151,6 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public bool CanStart ()
-		{
-			bool result;
-			switch (PageType) {
-			case GQML.PAGE_TYPE_METADATA:
-				result = false;
-				break;
-			default:
-				result = true;
-				break;
-			}
-			return result;
-		}
-
 		#endregion
 
 		#region Runtime API
@@ -199,8 +185,20 @@ namespace GQ.Client.Model
 
 		private const string GO_PATH_PAGE_CONTROLLER = "PageController";
 
+		/// <summary>
+		/// Always returns true. Override this in subtypes if the according page type can not be started.
+		/// </summary>
+		/// <returns><c>true</c> if this instance can start; otherwise, <c>false</c>.</returns>
+		public virtual bool CanStart ()
+		{
+			return true;
+		}
+
 		public virtual void Start ()
 		{
+			if (!CanStart ())
+				return;
+			
 			Resources.UnloadUnusedAssets ();
 
 			// set this page as current in QM

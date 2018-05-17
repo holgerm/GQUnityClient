@@ -12,13 +12,11 @@ namespace GQ.Client.Model
 	[XmlRoot (GQML.PAGE)]
 	public class PageMetaData : Page
 	{
-
 		#region Runtime API
 
-		public override void Start ()
+		public override bool CanStart ()
 		{
-//			base.Start ();
-//			Quest.End ();
+			return false;
 		}
 
 		#endregion
