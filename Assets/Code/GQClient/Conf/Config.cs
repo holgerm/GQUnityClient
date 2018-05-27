@@ -260,6 +260,7 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	mainColorFG  { get; set; }
 
+		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	mainColorBG  { get; set; }
 
