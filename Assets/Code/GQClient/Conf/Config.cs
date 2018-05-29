@@ -21,6 +21,9 @@ namespace GQ.Client.Conf
 		public string   id     { get; set; }
 
 		[ShowInProductEditor]
+		public string   idExtension     { get; set; }
+
+		[ShowInProductEditor]
 		public string   name   { get; set; }
 
 		[ShowInProductEditor]
@@ -444,6 +447,7 @@ namespace GQ.Client.Conf
 		public Config ()
 		{			
 			// set default values:
+			idExtension = "";
 			autoStartQuestID = 0;
 			autostartIsPredeployed = false;
 			keepAutoStarting = true;
