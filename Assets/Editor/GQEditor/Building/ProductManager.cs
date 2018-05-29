@@ -151,7 +151,8 @@ namespace GQ.Editor.Building
 				return null;
 		}
 
-		public void SetProductConfig(string id, Config config) {
+		public void SetProductConfig (string id, Config config)
+		{
 //			if (_productDict.ContainsKey(id)) {
 //				_productDict.Remove (id);
 //			}
@@ -400,10 +401,11 @@ namespace GQ.Editor.Building
 			}
 
 			PlayerSettings.productName = newProduct.Config.name;
-			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
-			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
-			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
-			PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.WebGL, ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id);
+			string appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
+			PlayerSettings.SetApplicationIdentifier (BuildTargetGroup.Android, appIdentifier);
+			PlayerSettings.SetApplicationIdentifier (BuildTargetGroup.iOS, appIdentifier);
+			PlayerSettings.SetApplicationIdentifier (BuildTargetGroup.Standalone, appIdentifier);
+			PlayerSettings.SetApplicationIdentifier (BuildTargetGroup.WebGL, appIdentifier);
 
 //			formerly we loaded the start scene: replaceLoadingLogoInScene (START_SCENE);
 
