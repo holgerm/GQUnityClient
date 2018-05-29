@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml.Serialization;
 using System.Xml;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -29,7 +30,7 @@ namespace GQ.Client.Model
 
 		public string BackGroundImage { get; set; }
 
-		protected List<Answer> Answers = new List<Answer> ();
+		public List<Answer> Answers = new List<Answer> ();
 
 		#endregion
 
@@ -70,11 +71,26 @@ namespace GQ.Client.Model
 				Answer a = (Answer)serializer.Deserialize (reader);
 				Answers.Add (a);
 				break;
+			case GQML.ON_SUCCESS:
+				xmlRootAttr.ElementName = GQML.ON_SUCCESS;
+				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
+				SuccessTrigger = (Trigger)serializer.Deserialize (reader);
+				SuccessTrigger.Parent = this;
+				break;
+			case GQML.ON_FAIL:
+				xmlRootAttr.ElementName = GQML.ON_FAIL;
+				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
+				FailTrigger = (Trigger)serializer.Deserialize (reader);
+				FailTrigger.Parent = this;
+				break;
 			default:
 				base.ReadContent (reader, xmlRootAttr);
 				break;
 			}
 		}
+
+		protected Trigger SuccessTrigger = Trigger.Null;
+		protected Trigger FailTrigger = Trigger.Null;
 
 		#endregion
 
@@ -84,6 +100,28 @@ namespace GQ.Client.Model
 		public override void Start ()
 		{
 			base.Start ();
+		}
+
+		public void Succeed ()
+		{
+			State = GQML.STATE_SUCCEEDED;
+			if (SuccessTrigger != Trigger.Null) {
+				SuccessTrigger.Initiate ();
+			}
+
+			// end this page after succeeding:
+			End ();
+		}
+
+		public void Fail ()
+		{
+			State = GQML.STATE_FAILED;
+			if (FailTrigger != Trigger.Null) {
+				FailTrigger.Initiate ();
+			}
+
+			// end this page after failing:
+			End ();
 		}
 
 		#endregion
@@ -132,7 +170,7 @@ namespace GQ.Client.Model
 
 		public void ReadXml (XmlReader reader)
 		{
-			GQML.AssertReaderAtStart (reader, GQML.PAGE_NPCTALK_DIALOGITEM);
+			GQML.AssertReaderAtStart (reader, GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER);
 
 			// Read Attributes:
 			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);

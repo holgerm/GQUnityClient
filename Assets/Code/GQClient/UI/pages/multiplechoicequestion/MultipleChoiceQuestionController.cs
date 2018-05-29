@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
+using UnityEngine.UI;
 
 namespace GQ.Client.UI
 {
 
 	public class MultipleChoiceQuestionController : PageController
 	{
+		#region Inspector Features
+
+		public Text questionText;
+		public Transform answersContainer;
+
+		#endregion
 
 		#region Runtime API
 
@@ -20,11 +27,14 @@ namespace GQ.Client.UI
 		{
 			mcqPage = (PageMultipleChoiceQuestion)page;
 
-			// show the content:
-//			ShowImage ();
-//			ClearText ();
-//			AddCurrentText ();
-//			UpdateForwardButton ();
+			// show the question:
+			questionText.text = mcqPage.Question;
+
+			// show the answers:
+			foreach (Answer a in mcqPage.Answers) {
+				// create dialog item GO from prefab:
+				AnswerCtrl.Create (mcqPage, answersContainer, a);
+			}
 		}
 
 		#endregion
