@@ -234,11 +234,18 @@ namespace GQ.Client.Model
 			return result;
 		}
 
+		/// accepts "1" as true and "0" as false plus the usual string representations for bools.
 		public static bool GetRequiredBoolAttribute (string attributeName, XmlReader reader)
 		{
 			string attString = getAttr (attributeName, "Bool", reader);
 			bool val = false;
 			if (!bool.TryParse (attString, out val)) {
+				if (attString == "1") {
+					return true;
+				}
+				if (attString == "0") {
+					return false;
+				}
 				Log.SignalErrorToDeveloper (
 					"Bool attribute {0} for a page could not be parsed. We found: {1}.", 
 					attributeName, 

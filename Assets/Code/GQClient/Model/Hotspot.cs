@@ -44,8 +44,8 @@ namespace GQ.Client.Model
 			ReadAttributes (reader);
 
 			if (reader.IsEmptyElement) {
+				// empty hotspot without events:
 				reader.Read ();
-				Log.WarnAuthor ("Empty xml hotspot element found.");
 				return;
 			}
 
