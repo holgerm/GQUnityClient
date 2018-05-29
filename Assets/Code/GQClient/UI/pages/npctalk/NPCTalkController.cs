@@ -62,7 +62,6 @@ namespace GQ.Client.UI
 		void ShowImage ()
 		{
 			// show (or hide completely) image:
-			GameObject imagePanel = image.transform.parent.gameObject;
 			if (npcPage.ImageUrl == "") {
 				imagePanel.SetActive (false);
 				return;
