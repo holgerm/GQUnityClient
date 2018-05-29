@@ -129,7 +129,7 @@ namespace GQ.Client.Model
 		public Page ()
 		{
 			State = GQML.STATE_NEW;
-			result = null;
+			Result = "";
 		}
 
 		public virtual Quest Parent { get; set; }
@@ -138,16 +138,37 @@ namespace GQ.Client.Model
 
 		public string PageType { get; protected set; }
 
+		private string state = GQML.STATE_NEW;
+
 		public string State {
-			get;
-			protected set;
+			get {
+				return state;
+			}
+			protected set {
+				switch (value) {
+				case GQML.STATE_NEW:
+				case GQML.STATE_RUNNING:
+				case GQML.STATE_SUCCEEDED:
+				case GQML.STATE_FAILED:
+					state = value;
+					Variables.SetInternalVariable ("$_mission_" + Id + ".state", new Value (value));
+					break;
+				default:
+					Log.SignalErrorToDeveloper ("Invalid Page State found: {0}", value);
+					break;
+				}
+			}
 		}
 
-		public string result;
+		private string result = "";
 
-		public string Result {
+		public virtual string Result {
 			get {
 				return result;
+			}
+			set {
+				result = value;
+				Variables.SetInternalVariable ("$_mission_" + Id + ".result", new Value (value));
 			}
 		}
 
@@ -247,6 +268,7 @@ namespace GQ.Client.Model
 		public virtual void End ()
 		{
 			State = GQML.STATE_SUCCEEDED;
+
 			if (EndTrigger == Trigger.Null) {
 				Log.SignalErrorToAuthor (
 					"Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
@@ -258,6 +280,11 @@ namespace GQ.Client.Model
 				EndTrigger.Initiate ();
 			}
 			Resources.UnloadUnusedAssets ();
+		}
+
+		public void SaveResultInVariable ()
+		{
+			Variables.SetInternalVariable ("$_mission_" + Id + ".result", new Value (Result));
 		}
 
 		#endregion

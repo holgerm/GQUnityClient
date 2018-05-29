@@ -124,8 +124,13 @@ namespace GQ.Client.Model
 			if (!IsValidUserDefinedVariableName (varName)) {
 				Log.SignalErrorToAuthor ("Variable Name may not start with '$' Symbol, so you may not use {0} as you did in a SetVariable action.", varName);
 				return false;
-			}
+			} 
 
+			return SetInternalVariable (varName, newValue);
+		}
+
+		public static bool SetInternalVariable (string varName, Value newValue)
+		{
 			bool existedAlready = variables.ContainsKey (varName);
 			if (existedAlready) {
 				variables.Remove (varName);

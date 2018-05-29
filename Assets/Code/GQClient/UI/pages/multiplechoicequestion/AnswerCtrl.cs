@@ -8,11 +8,14 @@ public class AnswerCtrl : MonoBehaviour
 {
 
 
-	#region Inspector Features
+	#region Inspector & internal features
 
 	public Image answerImage;
 	public Text answerText;
 	public Button answerButton;
+
+	private PageMultipleChoiceQuestion page;
+	private Answer answer;
 
 	#endregion
 
@@ -29,16 +32,23 @@ public class AnswerCtrl : MonoBehaviour
 		go.SetActive (true);
 
 		AnswerCtrl answerCtrl = go.GetComponent<AnswerCtrl> ();
+		answerCtrl.page = mcqPage;
+		answerCtrl.answer = answer;
 		answerCtrl.answerText.text = answer.Text;
-		if (answer.Correct) {
-			answerCtrl.answerButton.onClick.AddListener (mcqPage.Succeed);
-		} else {
-			answerCtrl.answerButton.onClick.AddListener (mcqPage.Fail);
-		}
+		answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
 
 		return answerCtrl;
 	}
 
+	public void Select ()
+	{
+		page.Result = answer.Text;
+		if (answer.Correct) {
+			page.Succeed ();
+		} else {
+			page.Fail ();
+		}
+	}
 
 	#endregion
 
