@@ -9,7 +9,7 @@
   "DownloadStrategy": "UPFRONT",
   "autoUpdateQuestInfos": false,
   "timeoutMS": 60000,
-  "maxIdleTimeMS": 9000,
+  "maxIdleTimeMS": 9089,
   "nameForQuestSg": null,
   "nameForQuestsPl": null,
   "questInfoViews": [
@@ -26,7 +26,8 @@
     "NPCTalk",
     "MultipleChoiceQuestion",
     "Navigation",
-    "ImageWithText"
+    "ImageWithText",
+    "TextQuestion"
   ],
   "sceneMappings": [],
   "scenePaths": [
@@ -34,7 +35,8 @@
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
     "Assets/Scenes/Pages/Navigation.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
-    "Assets/Scenes/Pages/StartAndExitScreen.unity"
+    "Assets/Scenes/Pages/StartAndExitScreen.unity",
+    "Assets/Scenes/Pages/TextQuestion.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
@@ -46,6 +48,7 @@
   "useMapOffline": true,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartPositionType": "CenterOfMarkers",
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
@@ -62,8 +65,8 @@
     "a": 0
   },
   "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 0.0,
-  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightUnits": 50.0,
+  "mapButtonHeightMinMM": 5.0,
   "mapButtonHeightMaxMM": 0.0,
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
