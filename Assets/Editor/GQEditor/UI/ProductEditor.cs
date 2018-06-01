@@ -1277,6 +1277,31 @@ namespace GQ.Editor.UI
 		}
 	}
 
+	public class ProductEditorPart4MapStartPositionType  : ProductEditorPart
+	{
+		int selectedMapStartPositionType;
+		string[] mapStartPositionTypeNames = Enum.GetNames (typeof(MapStartPositionType));
+
+		override protected bool doCreateGui (PropertyInfo curPropInfo)
+		{
+			configIsDirty = false;
+
+			int oldMapSTartPositionType = selectedMapStartPositionType;
+			selectedMapStartPositionType = 
+				EditorGUILayout.Popup (
+					"Map Start Position", 
+					selectedMapStartPositionType, 
+					mapStartPositionTypeNames
+				);
+			if (oldMapSTartPositionType != selectedMapStartPositionType) {
+				configIsDirty = true;
+				curPropInfo.SetValue (ProductEditor.SelectedConfig, (MapStartPositionType)selectedMapStartPositionType, null);
+			}
+
+			return configIsDirty;
+		}
+	}
+
 
 	public class ProductEditorPart4Single : ProductEditorPart
 	{

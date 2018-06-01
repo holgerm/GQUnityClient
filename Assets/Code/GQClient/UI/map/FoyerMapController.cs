@@ -87,7 +87,7 @@ namespace GQ.Client.UI.Foyer
 
 		#endregion
 
-		#region Markers
+		#region Map & Markers
 
 		protected override void populateMarkers ()
 		{
@@ -122,6 +122,56 @@ namespace GQ.Client.UI.Foyer
 		}
 
 		public Texture MarkerSymbolTexture;
+
+		protected override void locateAtStart ()
+		{
+			switch (ConfigurationManager.Current.mapStartPositionType) {
+			case MapStartPositionType.CenterOfMarkers:
+				// calculate center of markers / quests:
+				double sumLong = 0f;
+				double sumLat = 0f;
+				int counter = 0;
+				foreach (QuestInfo qi in QuestInfoManager.Instance.GetListOfQuestInfos()) {
+					HotspotInfo hi = qi.MarkerHotspot;
+					if (hi == HotspotInfo.NULL)
+						continue;
+
+					sumLong += hi.Longitude;
+					sumLat += hi.Latitude;
+					counter++;
+				}
+				if (counter == 0) {
+					locateAtFixedConfiguredPosition ();
+				}
+				else {
+					map.CenterWGS84 = new double[2] {
+						sumLong / counter,
+						sumLat / counter
+					};
+				}
+				break;
+			case MapStartPositionType.FixedPosition:
+				locateAtFixedConfiguredPosition();
+				break;
+			case MapStartPositionType.PlayerPosition:
+				if (Input.location.isEnabledByUser &&
+					Input.location.status != LocationServiceStatus.Running) {
+					map.CenterOnLocation ();
+				} else {
+					locateAtFixedConfiguredPosition();
+				}
+				break;
+			}
+		}
+
+		private void locateAtFixedConfiguredPosition() {
+			map.CenterWGS84 = new double[2] {
+				ConfigurationManager.Current.mapStartAtLongitude,
+				ConfigurationManager.Current.mapStartAtLatitude
+			};
+		}
+
+
 
 		#endregion
 	}

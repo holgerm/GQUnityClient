@@ -11,6 +11,7 @@ using GQ.Client.Err;
 using GQ.Client.Util;
 using UnitySlippyMap.Layers;
 using QM.Util;
+using GQ.Client.Model;
 
 namespace GQ.Client.UI
 {
@@ -273,19 +274,7 @@ namespace GQ.Client.UI
 			DestroyImmediate (go);
 		}
 
-		void locateAtStart ()
-		{
-			if (ConfigurationManager.Current.mapStartAtLocation &&
-			    Input.location.isEnabledByUser &&
-			    Input.location.status != LocationServiceStatus.Running) {
-				map.CenterOnLocation ();
-			} else {
-				map.CenterWGS84 = new double[2] {
-					ConfigurationManager.Current.mapStartAtLongitude,
-					ConfigurationManager.Current.mapStartAtLatitude
-				};
-			}
-		}
+		protected abstract void locateAtStart ();
 
 		protected abstract void populateMarkers ();
 

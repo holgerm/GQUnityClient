@@ -136,6 +136,10 @@ namespace GQ.Client.Conf
 
 
 		[ShowInProductEditor]
+		[JsonConverter (typeof(StringEnumConverter))]
+		public MapStartPositionType mapStartPositionType { get; set; }
+
+		[ShowInProductEditor]
 		public bool mapStartAtLocation { get; set; }
 
 		[ShowInProductEditor]
@@ -452,6 +456,7 @@ namespace GQ.Client.Conf
 			autostartIsPredeployed = false;
 			keepAutoStarting = true;
 			questInfoViews = new string[] { QuestInfoView.List.ToString (), QuestInfoView.Map.ToString () };
+			mapStartPositionType = MapStartPositionType.CenterOfMarkers;
 			cloudQuestsVisible = true;
 			showCloudQuestsImmediately = false;
 			downloadAllCloudQuestOnStart = false;
@@ -540,6 +545,12 @@ namespace GQ.Client.Conf
 	{
 		List,
 		Map
+	}
+
+	public enum MapStartPositionType {
+		CenterOfMarkers,
+		PlayerPosition,
+		FixedPosition
 	}
 
 	public enum PageType

@@ -22,6 +22,36 @@ namespace GQ.Client.UI
 			UpdateView ();
 		}
 
+		#region Map
+
+		protected override void locateAtStart ()
+		{
+			// calculate center of hotspots:
+			double sumLong = 0f;
+			double sumLat = 0f;
+			int counter = 0;
+			foreach (Hotspot h in QuestManager.Instance.CurrentQuest.AllHotspots) {
+//				if (!h.IsVisible())  // TODO check Visibility and / or Activity of each Hotspot
+//					continue;
+
+				sumLong += h.Longitude;
+				sumLat += h.Latitude;
+				counter++;
+			}
+			if (counter == 0) {
+				map.CenterOnLocation ();
+			}
+			else {
+				map.CenterWGS84 = new double[2] {
+					sumLong / counter,
+					sumLat / counter
+				};
+			}
+		}
+
+		#endregion
+
+
 		#region Markers
 		protected override void populateMarkers() {
 			Quest q = qm.CurrentQuest;
