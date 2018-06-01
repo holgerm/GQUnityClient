@@ -13,13 +13,12 @@ namespace GQ.Client.UI
 
 		protected override void setHeader ()
 		{
-			if (ConfigurationManager.Current.offerLeaveQuestOnEachPage)
-				enableLeaveQuestButton ();
+			enableLeaveQuestButton (ConfigurationManager.Current.offerLeaveQuestOnEachPage);
 
 			base.setHeader ();
 		}
 
-		void enableLeaveQuestButton ()
+		void enableLeaveQuestButton (bool enable)
 		{
 			// gather game objects and components:
 			Transform menuButtonT = Header.transform.Find ("ButtonPanel/MenuButton");
@@ -34,8 +33,8 @@ namespace GQ.Client.UI
 			menuButton.enabled = true;
 
 			// show:
-			menuButton.gameObject.SetActive (true);
-			image.gameObject.SetActive (true);
+			menuButton.gameObject.SetActive (enable);
+			image.gameObject.SetActive (enable);
 		}
 
 		void leaveQuest ()
