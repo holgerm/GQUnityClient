@@ -72,6 +72,7 @@ namespace GQ.Client.Model
 	public class QuestInfo : IComparable<QuestInfo>
 	{
 		#region Serialized Features
+
 		[JsonProperty]
 		private 	int id;
 
@@ -220,10 +221,12 @@ namespace GQ.Client.Model
 			get;
 			set;
 		}
+
 		#endregion
 
 
 		#region Derived features
+
 		[JsonIgnore]
 		public HotspotInfo MarkerHotspot {
 			get {
@@ -304,10 +307,12 @@ namespace GQ.Client.Model
 				return QuestInfoManager.Instance.Filter.CategoryToShow (this);
 			}
 		}
+
 		#endregion
 
 
 		#region Runtime API
+
 		public delegate void ChangeHandler ();
 
 		public event ChangeHandler OnChanged;
@@ -347,9 +352,11 @@ namespace GQ.Client.Model
 		{
 			OnChanged = null;
 		}
+
 		#endregion
 
 		#region Sorting Comparison
+
 		/// <summary>
 		/// Returns a value greater than zero in case this object is considered greater than the given other. 
 		/// A return value of 0 signals that both objects are equal and 
@@ -391,10 +398,12 @@ namespace GQ.Client.Model
 				};
 			}
 		}
+
 		#endregion
 
 
 		#region Runtime Functions
+
 		public Task DownloadTask ()
 		{
 			// Load quest data: game.xml
@@ -464,7 +473,8 @@ namespace GQ.Client.Model
 		/// <summary>
 		/// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
 		/// </summary>
-		public void Download() {
+		public void Download ()
+		{
 			DownloadTask ().Start ();
 		}
 
@@ -479,7 +489,8 @@ namespace GQ.Client.Model
 		/// 2. The represented quest game.xml is downloaded and replaces the old version.
 		/// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
 		/// </summary>
-		public void Update() {
+		public void Update ()
+		{
 			// update the quest info:
 			if (NewVersionOnServer != null) {
 				//				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
@@ -487,9 +498,8 @@ namespace GQ.Client.Model
 
 				// Update the quest info list ...
 				download.OnTaskCompleted += 
-					(object sender, TaskEventArgs e) => 
-				{ 
-					QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(NewVersionOnServer.Id);
+					(object sender, TaskEventArgs e) => { 
+					QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest (NewVersionOnServer.Id);
 				};
 
 				download.Start ();
@@ -540,6 +550,7 @@ namespace GQ.Client.Model
 
 			return t;
 		}
+
 		#endregion
 	}
 
