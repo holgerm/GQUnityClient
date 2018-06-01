@@ -38,7 +38,6 @@ namespace QM.UI
 
 		public void ToggleOnOff ()
 		{
-			Debug.Log ("ONOFF: " + whatToToggle.name + " was " + whatToToggle.activeSelf);
 			whatToToggle.SetActive (!whatToToggle.activeSelf);
 			Canvas canvasToToggle = whatToToggle.GetComponent<Canvas> ();
 			if (canvasToToggle != null) {

@@ -111,19 +111,21 @@ namespace GQ.Client.Util
 			return htmlText;
 		}
 
-		public static string StripQuotes(this string original) {
+		public static string StripQuotes (this string original)
+		{
 			string result = original;
-			if (result.StartsWith("\"")) {
+			if (result.StartsWith ("\"")) {
 				result = result.Substring (1);
 			}
-			if (result.EndsWith("\"")) {
+			if (result.EndsWith ("\"")) {
 				result = result.Substring (0, result.Length - 1);
 			}
 			return result;
 		}
 
-		public static string Capitalize(this string original) {
-			if (original == null || original == "" || !Char.IsLetter(original[0]))
+		public static string Capitalize (this string original)
+		{
+			if (original == null || original == "" || !Char.IsLetter (original [0]))
 				return original;
 			return (original.Substring (0, 1).ToUpper () + original.Substring (1));
 		}

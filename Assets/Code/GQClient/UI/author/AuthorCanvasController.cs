@@ -56,10 +56,11 @@ public class AuthorCanvasController : MonoBehaviour
 
 	void checkInput (string mail, string passwd)
 	{
-		LoginButton.interactable =
-			mail.Contains ("@") &&
-		mail.Length >= 6 &&
-		passwd.Length >= 3;
+		LoginButton.interactable = (
+		    mail.Contains ("@") &&
+		    mail.Length >= 6 &&
+		    passwd.Length >= 3
+		);
 	}
 
 	/// <summary>

@@ -85,13 +85,6 @@ namespace GQ.Client.Conf
 		
 		}
 
-		public void Start ()
-		{
-//		if (!overrideProductSettingsInInspector)
-//			initProductDefinitions ();
-		}
-
-
 		public bool metaCategoryIsSearchable (string category)
 		{
 

@@ -79,6 +79,7 @@ namespace GQ.Client.UI
 					);
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
+
 					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
 					float imageRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
 					float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
