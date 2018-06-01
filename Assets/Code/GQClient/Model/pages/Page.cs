@@ -196,6 +196,7 @@ namespace GQ.Client.Model
 		{
 			SceneManager.SetActiveScene (scene);
 			foreach (Scene sceneToUnload in scenesToUnload) {
+				Debug.Log ("unloading scene: " + sceneToUnload.path);
 				SceneManager.UnloadSceneAsync (sceneToUnload);
 			}
 			scenesToUnload.Clear ();
@@ -234,6 +235,7 @@ namespace GQ.Client.Model
 				SceneManager.sceneLoaded += OnSceneLoaded;
 				SceneManager.LoadSceneAsync (PageSceneName, LoadSceneMode.Additive);
 				if (scene.name != Base.FOYER_SCENE_NAME) {
+					Debug.Log ("Add scene to unload: " + scene.path);
 					scenesToUnload.Add (scene);
 				}
 			} else {
