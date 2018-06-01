@@ -31,7 +31,7 @@ namespace GQ.Client.UI
 			questionText.text = mcqPage.Question;
 
 			// show the answers:
-			foreach (Answer a in mcqPage.Answers) {
+			foreach (MCQAnswer a in mcqPage.Answers) {
 				// create dialog item GO from prefab:
 				AnswerCtrl.Create (mcqPage, answersContainer, a);
 			}

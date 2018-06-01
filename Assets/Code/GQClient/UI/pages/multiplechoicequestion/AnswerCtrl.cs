@@ -15,14 +15,14 @@ public class AnswerCtrl : MonoBehaviour
 	public Button answerButton;
 
 	private PageMultipleChoiceQuestion page;
-	private Answer answer;
+	private MCQAnswer answer;
 
 	#endregion
 
 
 	#region Runtime API
 
-	public static AnswerCtrl Create (PageMultipleChoiceQuestion mcqPage, Transform rootTransform, Answer answer)
+	public static AnswerCtrl Create (PageMultipleChoiceQuestion mcqPage, Transform rootTransform, MCQAnswer answer)
 	{
 		GameObject go = (GameObject)Instantiate (
 			                Resources.Load ("Answer"),

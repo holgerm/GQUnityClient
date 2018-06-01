@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml.Serialization;
 using System.Xml;
+using System;
 using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
 
 	[XmlRoot (GQML.PAGE)]
-	public class PageMultipleChoiceQuestion : DecidablePage
+	public class PageTextQuestion : DecidablePage
 	{
-
+		
 		#region State
 
 		public string LoopButtonText { get; set ; }
@@ -24,13 +25,11 @@ namespace GQ.Client.Model
 
 		public string Question { get; set ; }
 
-		public bool ShowOnlyImages { get; set; }
-
-		public bool Shuffle { get; set; }
+		public string Prompt { get; set ; }
 
 		public string BackGroundImage { get; set; }
 
-		public List<MCQAnswer> Answers = new List<MCQAnswer> ();
+		private List<TQAnswer> Answers = new List<TQAnswer> ();
 
 		#endregion
 
@@ -53,9 +52,7 @@ namespace GQ.Client.Model
 
 			Question = GQML.GetStringAttribute (GQML.PAGE_QUESTION_QUESTION, reader);
 
-			ShowOnlyImages = GQML.GetOptionalBoolAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_SHOW_ONLY_IMAGES, reader);
-
-			Shuffle = GQML.GetOptionalBoolAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_SHUFFLE, reader);
+			Prompt = GQML.GetStringAttribute (GQML.PAGE_TEXTQUESTION_PROMPT, reader);
 
 			BackGroundImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_BACKGROUND_IMAGE, reader);
 			if (BackGroundImage != "")
@@ -69,8 +66,8 @@ namespace GQ.Client.Model
 			switch (reader.LocalName) {
 			case GQML.PAGE_QUESTION_ANSWER:
 				xmlRootAttr.ElementName = GQML.PAGE_QUESTION_ANSWER;
-				serializer = new XmlSerializer (typeof(MCQAnswer), xmlRootAttr);
-				MCQAnswer a = (MCQAnswer)serializer.Deserialize (reader);
+				serializer = new XmlSerializer (typeof(TQAnswer), xmlRootAttr);
+				TQAnswer a = (TQAnswer)serializer.Deserialize (reader);
 				Answers.Add (a);
 				break;
 			default:
@@ -89,20 +86,71 @@ namespace GQ.Client.Model
 			base.Start ();
 		}
 
+		public bool AnswerCorrect (string input)
+		{
+			foreach (TQAnswer a in Answers) {
+				string aText = a.Text.Trim ();
+
+				// Text comparison:
+				if (aText == input.Trim ())
+					return true;
+				
+				// Number Ranges:
+				if (aText.StartsWith ("[[") && aText.EndsWith ("]]")) {
+					string[] rangeBounds = aText.Substring (2, aText.Length - 4).Split ('-');
+					if (rangeBounds.Length == 2) {
+						try {
+							double lowerBound = Convert.ToDouble (rangeBounds [0]);
+							double upperBound = Convert.ToDouble (rangeBounds [1]);
+
+							if (upperBound < lowerBound) {
+								double swapTmp = upperBound;
+								upperBound = lowerBound;
+								lowerBound = swapTmp;
+							}
+
+							// bounds are ok:
+							double number;
+							try {
+								number = Convert.ToDouble (input.Trim ());
+
+								// now we test wether input is in range:
+								return (lowerBound <= number && number <= upperBound);
+							} catch (FormatException) {
+								Log.SignalErrorToUser ("Eingabe '{0}' kann nicht als Zahl erkannt werden.", input);
+								return false;
+							} catch (OverflowException) {
+								Log.SignalErrorToUser ("Eingabe '{0}' zu groß oder zu klein um als Zahl benutzt zu werden.", input);
+								return false;
+							}
+						} catch (Exception) {
+							Log.SignalErrorToAuthor (
+								"In Quest {0} auf Seite {1} kann Antwort '{2}' nicht als Zahlenbereich erkannt werden.", 
+								Quest.Id,
+								Id,
+								a.Text);
+							return false;
+						} 
+					}
+				}
+
+				// TODO RegExp
+			}
+
+
+			return false;
+		}
+
 		#endregion
+
 	}
 
-	public class MCQAnswer : IXmlSerializable
+	public class TQAnswer : IXmlSerializable
 	{
 
 		#region State
 
 		public int Id {
-			get;
-			set;
-		}
-
-		public bool Correct {
 			get;
 			set;
 		}
@@ -139,7 +187,6 @@ namespace GQ.Client.Model
 
 			// Read Attributes:
 			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
-			Correct = GQML.GetRequiredBoolAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER_CORRECT, reader);
 			Image = GQML.GetStringAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER_IMAGE, reader);
 			if (Image != "")
 				QuestManager.CurrentlyParsingQuest.AddMedia (Image);

@@ -34,20 +34,27 @@ namespace GQ.Client.Model
 		public const string PAGE_IMAGEWITHTEXT_TEXT = "text";
 		public const string PAGE_IMAGEWITHTEXT_ENDBUTTONTEXT = "endbuttontext";
 
+		// QUESTION PAGE COMMONS:
+		public const string PAGE_QUESTION_LOOP_UNTIL_SUCCESS = "loopUntilSuccess";
+		public const string PAGE_QUESTION_LOOP_BUTTON_TEXT = "loopButtonText";
+		public const string PAGE_QUESTION_LOOP_TEXT = "loopText";
+		public const string PAGE_QUESTION_LOOP_IMAGE = "loopImage";
+		public const string PAGE_QUESTION_QUESTION = "question";
+		public const string PAGE_QUESTION_BACKGROUND_IMAGE = "bg";
+		// ANSWER:
+		public const string PAGE_QUESTION_ANSWER = "answer";
+
 		// MULTIPLE_CHOICE_QUESTION PAGE:
 		public const string PAGE_TYPE_MULTIPLECHOICEQUESTION = "MultipleChoiceQuestion";
-		public const string PAGE_MULTIPLECHOICEQUESTION_LOOP_BUTTON_TEXT = "loopButtonText";
-		public const string PAGE_MULTIPLECHOICEQUESTION_LOOP_TEXT = "loopText";
-		public const string PAGE_MULTIPLECHOICEQUESTION_LOOP_IMAGE = "loopImage";
-		public const string PAGE_MULTIPLECHOICEQUESTION_LOOP_UNTIL_SUCCESS = "loopUntilSuccess";
-		public const string PAGE_MULTIPLECHOICEQUESTION_QUESTION = "question";
 		public const string PAGE_MULTIPLECHOICEQUESTION_SHOW_ONLY_IMAGES = "showOnlyImages";
 		public const string PAGE_MULTIPLECHOICEQUESTION_SHUFFLE = "shuffle";
-		public const string PAGE_MULTIPLECHOICEQUESTION_BACKGROUND_IMAGE = "bg";
 		// ANSWER:
-		public const string PAGE_MULTIPLECHOICEQUESTION_ANSWER = "answer";
 		public const string PAGE_MULTIPLECHOICEQUESTION_ANSWER_CORRECT = "correct";
 		public const string PAGE_MULTIPLECHOICEQUESTION_ANSWER_IMAGE = "image";
+
+		// TEXT_QUESTION PAGE:
+		public const string PAGE_TYPE_TEXTQUESTION = "TextQuestion";
+		public const string PAGE_TEXTQUESTION_PROMPT = "prompt";
 
 
 		// NPC_TALK PAGE:
