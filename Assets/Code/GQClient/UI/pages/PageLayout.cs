@@ -16,6 +16,12 @@ namespace GQ.Client.UI
 			enableLeaveQuestButton (ConfigurationManager.Current.offerLeaveQuestOnEachPage);
 
 			base.setHeader ();
+
+			Canvas headerCanvas = Header.GetComponent<Canvas> ();
+			if (headerCanvas != null) {
+				headerCanvas.overrideSorting = true;
+				headerCanvas.sortingOrder = 3;
+			}
 		}
 
 		void enableLeaveQuestButton (bool enable)

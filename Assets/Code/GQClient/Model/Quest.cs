@@ -303,7 +303,8 @@ namespace GQ.Client.Model
 			Audio.Clear ();
 			Variables.ClearAll (); // persistente variablen nicht löschen
 			Scene sceneToUnload = QuestManager.Instance.CurrentScene;
-			SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
+			if (sceneToUnload.isLoaded)
+				SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
 			Base.Instance.ShowFoyerCanvases ();
 			Resources.UnloadUnusedAssets ();
 		}

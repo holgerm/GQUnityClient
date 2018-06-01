@@ -194,13 +194,19 @@ namespace GQ.Client.Model
 		// called when a scene has been loaded:
 		void OnSceneLoaded (Scene scene, LoadSceneMode mode)
 		{
+			Debug.Log ("New scene loaded. Frame# " + Time.frameCount);
 			SceneManager.SetActiveScene (scene);
 			foreach (Scene sceneToUnload in scenesToUnload) {
-				Debug.Log ("unloading scene: " + sceneToUnload.path);
-				SceneManager.UnloadSceneAsync (sceneToUnload);
+				Debug.Log ("unloading scene: " + sceneToUnload.path + " that scene is loaded?: " + sceneToUnload.isLoaded);
+				if (sceneToUnload.isLoaded) {
+					SceneManager.UnloadSceneAsync (sceneToUnload);
+				}
 			}
+			Debug.Log ("Cleaning scenes to unload.");
 			scenesToUnload.Clear ();
 			SceneManager.sceneLoaded -= OnSceneLoaded;
+
+			Resources.UnloadUnusedAssets ();
 		}
 
 		public static List<Scene> scenesToUnload = new List<Scene> ();
@@ -221,21 +227,22 @@ namespace GQ.Client.Model
 			if (!CanStart ())
 				return;
 			
-			Resources.UnloadUnusedAssets ();
-
 			// set this page as current in QM
 			QuestManager.Instance.CurrentQuest = Parent;
 			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
 
+			Resources.UnloadUnusedAssets ();
+
 			// ensure that the adequate scene is loaded:
 			Scene scene = SceneManager.GetActiveScene ();
+			Debug.Log ("Starting page with type: " + PageType + " active scene: " + scene.path + " at frame# " + Time.frameCount);
 
 			if (!scene.name.Equals (PageSceneName)) {
 				SceneManager.sceneLoaded += OnSceneLoaded;
 				SceneManager.LoadSceneAsync (PageSceneName, LoadSceneMode.Additive);
 				if (scene.name != Base.FOYER_SCENE_NAME) {
-					Debug.Log ("Add scene to unload: " + scene.path);
+					Debug.Log ("Adding scene to unload: " + scene.path);
 					scenesToUnload.Add (scene);
 				}
 			} else {
