@@ -59,7 +59,10 @@ namespace GQ.Client.Model
 				start_slsspiele ();
 				break;
 			default:
-				gameObject.SetActive (false);
+				// disable the Rights component and deactivate its gameobjects:
+				copyrightTextBG4FittingImage.gameObject.SetActive (false);
+				copyrightTextBG4EnvelopingImage.gameObject.SetActive (false);
+				enabled = false;
 				break;
 			}	
 		}
