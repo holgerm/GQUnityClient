@@ -25,7 +25,8 @@
     "StartAndExitScreen",
     "NPCTalk",
     "MultipleChoiceQuestion",
-    "Navigation"
+    "Navigation",
+    "ImageWithText"
   ],
   "sceneMappings": [],
   "scenePaths": [
