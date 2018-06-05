@@ -1,5 +1,6 @@
 {
   "id": "museumsdorf",
+  "idExtension": "",
   "name": "Neue Museumsdorf App",
   "portal": 461,
   "autoStartQuestID": 0,
@@ -54,6 +55,7 @@
   "useMapOffline": false,
   "mapMinimalZoom": 13.0,
   "mapDeltaZoom": 0.5,
+  "mapStartPositionType": "CenterOfMarkers",
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 8.054064,
   "mapStartAtLatitude": 52.850121,
@@ -244,7 +246,7 @@
     "b": 51,
     "a": 255
   },
-  "menuInhibitsInteraction": false,
+  "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 55.0,
