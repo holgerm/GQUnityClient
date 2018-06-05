@@ -19,6 +19,13 @@ namespace GQ.Client.Model
 	[XmlRoot (GQML.PAGE)]
 	public class PageSLS_Spielbeschreibung : PageMetaData
 	{
+		#region State
+
+		public string KeyWords { get; set; }
+		public string Necessities { get; set; }
+		public string ImageUrl { get; set; }
+
+		#endregion
 
 
 		#region XML Serialization
@@ -33,9 +40,20 @@ namespace GQ.Client.Model
 				if (smde.Key == null)
 					break;
 				if (!QuestManager.CurrentlyParsingQuest.metadata.ContainsKey (smde.Key)) {
-					QuestManager.CurrentlyParsingQuest.metadata.Add (smde.Key, smde.Value);
-					if (isMedia (smde)) {
-						QuestManager.CurrentlyParsingQuest.AddMedia (smde.Value);
+					switch (smde.Key) {
+					case "Bild":
+						ImageUrl = smde.Value;
+						QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+						break;
+					case "Stichworte":
+						KeyWords = smde.Value;
+						break;
+					case "Material":
+						Necessities = smde.Value;
+						break;
+					default:
+						QuestManager.CurrentlyParsingQuest.metadata.Add (smde.Key, smde.Value);
+						break;
 					}
 				}
 				break;
@@ -43,11 +61,6 @@ namespace GQ.Client.Model
 				base.ReadContent (reader, xmlRootAttr);
 				break;
 			}
-		}
-
-		bool isMedia (StringMetaData smd)
-		{
-			return ("Bild".Equals (smd.Key));
 		}
 
 		#endregion
