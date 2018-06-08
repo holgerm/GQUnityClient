@@ -151,10 +151,20 @@ namespace GQ.Client.Util
 
 		public string LoggedInAs { 
 			get {
+				if (loggedInAs == null || loggedInAs == "") {
+					if (PlayerPrefs.HasKey(GQPrefKeys.LOGGED_IN_AS.ToString())) {
+						loggedInAs = PlayerPrefs.GetString (GQPrefKeys.LOGGED_IN_AS.ToString ());
+					}
+				}
 				return loggedInAs;
 			}
 			set {
 				loggedInAs = value;
+				PlayerPrefs.SetString (GQPrefKeys.LOGGED_IN_AS.ToString (), loggedInAs);
+				if (loggedInAs == null || loggedInAs == "") {
+					PlayerPrefs.DeleteKey (GQPrefKeys.LOGGED_IN_AS.ToString ());
+				}
+				PlayerPrefs.Save ();
 			}
 		}
 
@@ -162,6 +172,15 @@ namespace GQ.Client.Util
 			get {
 				return (LoggedInAs != null);
 			}
+		}
+
+		#endregion
+
+
+		#region PlayerPrefs Keys
+
+		public enum GQPrefKeys {
+			LOGGED_IN_AS
 		}
 
 		#endregion

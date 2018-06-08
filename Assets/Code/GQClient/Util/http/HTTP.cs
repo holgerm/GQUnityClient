@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Net;
 using GQ.Client.Err;
 using System;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Util {
 
@@ -23,6 +24,7 @@ namespace GQ.Client.Util {
 			WebRequest webRequest = null;
 			try {
 				webRequest = HttpWebRequest.Create(url);
+				webRequest.Timeout = (int) ConfigurationManager.Current.maxIdleTimeMS;
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("HTTP.GetRequestHeaders could not create WebRequest. " + e.Message);
@@ -32,8 +34,12 @@ namespace GQ.Client.Util {
 			webRequest.Method = "HEAD";
 			try {
 				using ( WebResponse webResponse = webRequest.GetResponse() ) {
+					Debug.Log("Response Content-Length: " + webResponse.ContentLength);
+					// use HTTPWebResponse instead:
+					// extract timeModified like this: (long)(webResponse.TimeModified - new DateTime(1970, 1, 1)).TotalMilliseconds
 					foreach ( string header in webResponse.Headers ) {
 						headers.Add(header, webResponse.Headers[header]);
+						Debug.Log("Header found: " + header);
 					}
 				}
 			}
