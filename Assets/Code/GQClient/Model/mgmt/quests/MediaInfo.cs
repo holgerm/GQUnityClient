@@ -137,6 +137,22 @@ namespace GQ.Client.Model
 			this.RemoteSize = UNKNOWN;
 		}
 
+		/// <summary>
+		/// Version for runtime media files:
+		/// </summary>
+		/// <param name="questID">Quest I.</param>
+		/// <param name="url">URL.</param>
+		/// <param name="dir">Dir.</param>
+		/// <param name="filename">Filename.</param>
+		public MediaInfo (int questID, string pseudoVariable, string dir, string filename) {
+			this.Url = pseudoVariable;
+			this.LocalDir = dir;
+			this.LocalFileName = filename;
+			this.localTimestamp = 0L; // TODO set to now in milliseconds
+			this.RemoteTimestamp = 0L;
+			this.RemoteSize = NOT_AVAILABLE;
+		}
+
 		public bool IsLocallyAvailable {
 			get {
 				return !(LocalSize == NOT_AVAILABLE);

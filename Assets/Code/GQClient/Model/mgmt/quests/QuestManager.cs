@@ -93,6 +93,14 @@ namespace GQ.Client.Model
 			return QuestInfoManager.LocalQuestsPath + questID + "/";
 		}
 
+		public static string GetRuntimeMediaPath( int questID) {
+			string path = Files.CombinePath (QuestManager.GetLocalPath4Quest (questID), "runtime");
+			if (!Directory.Exists(path)) {
+				Directory.CreateDirectory (path);
+			}
+			return path;
+		}
+
 		public const string QUEST_FILE_NAME = "game.xml";
 
 		/// <summary>

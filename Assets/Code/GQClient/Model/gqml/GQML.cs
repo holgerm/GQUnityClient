@@ -56,6 +56,11 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_TEXTQUESTION = "TextQuestion";
 		public const string PAGE_TEXTQUESTION_PROMPT = "prompt";
 
+		// IMAGE CAPTURE PAGE:
+		public const string PAGE_TYPE_IMAGECAPTURE = "ImageCapture";
+		public const string PAGE_IMAGECAPTURE_BUTTONTEXT = "buttontext";
+		public const string PAGE_IMAGECAPTURE_FILE = "file";
+		public const string PAGE_IMAGECAPTURE_TASK = "task";
 
 		// NPC_TALK PAGE:
 		public const string PAGE_TYPE_NPCTALK = "NPCTalk";
@@ -178,6 +183,9 @@ namespace GQ.Client.Model
 
 		// SYSTEM VARIABLE NAME PREFIXES:
 		public const string VAR_PAGE_PREFIX = "$_mission_";
+
+		// RUNTIME MEDIA PATH PREFIX:
+		public const string PREFIX_RUNTIME_MEDIA = "@_";
 
 		// SYSTEM VARIABLE NAME PARTS:
 		public const string VAR_PAGE_STATE = ".state";
