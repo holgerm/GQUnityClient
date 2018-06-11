@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 using System.Xml.Serialization;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -52,10 +53,11 @@ namespace GQ.Client.Model
 			State = GQML.STATE_SUCCEEDED;
 			if (SuccessTrigger != Trigger.Null) {
 				SuccessTrigger.Initiate ();
+				End (false);
+			} else {
+				// end this page after succeeding:
+				End (true);
 			}
-
-			// end this page after succeeding:
-			End ();
 		}
 
 		public void Fail ()
@@ -63,10 +65,31 @@ namespace GQ.Client.Model
 			State = GQML.STATE_FAILED;
 			if (FailTrigger != Trigger.Null) {
 				FailTrigger.Initiate ();
+				End (false);
+			} else {
+				// end this page after failing:
+				End (true);
 			}
+		}
 
-			// end this page after failing:
-			End ();
+		public override void End() {
+			End (true);
+		}
+
+		void End(bool needsContinuation) {
+			if (EndTrigger == Trigger.Null) {
+				if (needsContinuation) {
+					Log.SignalErrorToAuthor (
+						"Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
+						Quest.Name, Quest.Id,
+						Id
+					);
+					Quest.End ();
+				}
+			} else {
+				EndTrigger.Initiate ();
+			}
+			Resources.UnloadUnusedAssets ();
 		}
 
 		#endregion

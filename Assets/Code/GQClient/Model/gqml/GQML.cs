@@ -191,6 +191,9 @@ namespace GQ.Client.Model
 		public const string VAR_PAGE_STATE = ".state";
 		public const string VAR_PAGE_RESULT = ".result";
 
+		// PREDEFINED VARIABLES:
+		public const string VAR_SCORE = "score";
+
 		#endregion
 
 
