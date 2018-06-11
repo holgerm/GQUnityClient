@@ -267,6 +267,7 @@ namespace GQ.Client.Model
 			Hotspot hotspot = (Hotspot)serializer.Deserialize (reader);
 			hotspot.Parent = this;
 			hotspotDict.Add (hotspot.Id, hotspot);
+			Debug.Log ("READ HOTSPOT: " + hotspot.Id);
 		}
 
 

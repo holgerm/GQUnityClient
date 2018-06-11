@@ -78,7 +78,8 @@ namespace GQ.Client.Util
 			string url, 
 			long timeout = 0,
 			string targetPath = null,
-			long maxIdleTime = 2000L) : base (true)
+			long maxIdleTime = 2000L,
+			bool verbose = true) : base (true)
 		{
 			Result = "";
 			this.Url = url;
@@ -87,11 +88,13 @@ namespace GQ.Client.Util
 			TargetPath = targetPath;
 			stopwatch = new Stopwatch ();
 			idlewatch = new Stopwatch ();
-			OnStart += defaultLogInformationHandler;
-			OnError += defaultLogErrorHandler;
-			OnTimeout += defaultLogErrorHandler;
-			OnSuccess += defaultLogInformationHandler;
-			OnProgress += defaultLogInformationHandler;
+			if (verbose) {
+				OnStart += defaultLogInformationHandler;
+				OnError += defaultLogErrorHandler;
+				OnTimeout += defaultLogErrorHandler;
+				OnSuccess += defaultLogInformationHandler;
+				OnProgress += defaultLogInformationHandler;
+			}
 		}
 
 		protected IEnumerator Download ()
@@ -158,7 +161,7 @@ namespace GQ.Client.Util
 
 				yield return null;
 
-				msg = string.Format ("Speichere Datei ...");
+				msg = string.Format ("Speichere Datei ... {0}", Url);
 				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
 
 				if (TargetPath != null) {

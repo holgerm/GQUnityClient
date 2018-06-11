@@ -52,6 +52,9 @@ namespace GQ.Client.Conf
 		public long   	maxIdleTimeMS   { get; set; }
 
 		[ShowInProductEditor]
+		public int   	maxParallelDownloads   { get; set; }
+
+		[ShowInProductEditor]
 		public string 	nameForQuestSg { get; set; }
 
 		[ShowInProductEditor]
@@ -466,6 +469,7 @@ namespace GQ.Client.Conf
 			autoUpdateQuestInfos = false;
 			timeoutMS = 60000L;
 			maxIdleTimeMS = 9000L;
+			maxParallelDownloads = 15;
 
 			acceptedPageTypes = new string[0];
 			sceneMappings = new List<SceneMapping> ();

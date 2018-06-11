@@ -194,15 +194,12 @@ namespace GQ.Client.Model
 		// called when a scene has been loaded:
 		void OnSceneLoaded (Scene scene, LoadSceneMode mode)
 		{
-			Debug.Log ("New scene loaded. Frame# " + Time.frameCount);
 			SceneManager.SetActiveScene (scene);
 			foreach (Scene sceneToUnload in scenesToUnload) {
-				Debug.Log ("unloading scene: " + sceneToUnload.path + " that scene is loaded?: " + sceneToUnload.isLoaded);
 				if (sceneToUnload.isLoaded) {
 					SceneManager.UnloadSceneAsync (sceneToUnload);
 				}
 			}
-			Debug.Log ("Cleaning scenes to unload.");
 			scenesToUnload.Clear ();
 			SceneManager.sceneLoaded -= OnSceneLoaded;
 

@@ -431,7 +431,7 @@ namespace GQ.Client.Model
 			// download all missing media info
 			MultiDownloader downloadMediaFiles =
 				new MultiDownloader (
-					maxParallelDownloads: 5,
+					maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
 					timeout: ConfigurationManager.Current.timeoutMS
 				);
 			new SimpleDialogBehaviour (
