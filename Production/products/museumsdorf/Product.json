@@ -45,7 +45,8 @@
     "Assets/Scenes/Pages/StartAndExitScreen.unity",
     "Assets/Scenes/Pages/Navigation.unity",
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
-    "Assets/Scenes/Pages/TextQuestion.unity"
+    "Assets/Scenes/Pages/TextQuestion.unity",
+    "Assets/Scenes/Pages/ImageCapture.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
