@@ -29,7 +29,6 @@ namespace GQ.Client.Model
 			int oldScore = Variables.GetValue (GQML.VAR_SCORE).AsInt ();
 
 			Variables.SetVariableValue (GQML.VAR_SCORE, new Value (oldScore + scoreToAdd));
-			Debug.Log (string.Format("ADD {0} to {1} SCORE: {2}", scoreToAdd, oldScore, Variables.GetValue(GQML.VAR_SCORE).AsInt()).Yellow());
 		}
 
 		#endregion
