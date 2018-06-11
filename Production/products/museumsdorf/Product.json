@@ -8,8 +8,9 @@
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
   "autoUpdateQuestInfos": false,
-  "timeoutMS": 60000,
-  "maxIdleTimeMS": 10000,
+  "timeoutMS": 0,
+  "maxIdleTimeMS": 15000,
+  "maxParallelDownloads": 15,
   "nameForQuestSg": null,
   "nameForQuestsPl": null,
   "questInfoViews": [
