@@ -18,6 +18,9 @@ namespace GQ.Client.Util
 		public long Timeout { get; set; }
 		public long MaxIdleTime { get; set; }
 
+		public float Weight { get; set; }
+		public const float DEFAULT_WEIGHT = 8000000f; // 800 KB as default size for a file to download
+
 		protected Stopwatch stopwatch;
 		protected Stopwatch idlewatch;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Util;
+using System;
 
 namespace GQ.Client.UI.Dialogs {
 
@@ -42,6 +43,11 @@ namespace GQ.Client.UI.Dialogs {
 
 			// show the dialog:
 			Dialog.Show ();
+		}
+
+		public void UpdateLoadingScreenProgress (string percentText)
+		{
+			Dialog.Details.text = details + percentText;
 		}
 
 	}

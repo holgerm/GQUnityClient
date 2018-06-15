@@ -13,7 +13,6 @@ namespace GQ.Client.UI
 	/// 
 	/// For details cf. @ref TasksAndUI
 	/// 
-	/// Overview: @image html UpdateQuestInfoDialogOverview.png width=8cm
 	/// </summary>
 	public abstract class UIBehaviour
 	{

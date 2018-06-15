@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using GQ.Client.Model;
 using GQ.Client.FileIO;
 using GQ.Client.Conf;
+using GQ.Client.UI.Dialogs;
 
 namespace GQ.Client.Util
 {
@@ -41,6 +42,8 @@ namespace GQ.Client.Util
 			stopwatch = new Stopwatch ();
 		}
 
+		SimpleDialogBehaviour dialogBehaviour;
+
 		List<MediaInfo> listOfFilesNotStartedYet;
 
 		public override void ReadInput (object sender, TaskEventArgs e)
@@ -70,6 +73,9 @@ namespace GQ.Client.Util
 			}
 		}
 
+		float downloadedSumOfWeights = 0f;
+		float totalSumOfWeights = 0f;
+
 		/// <summary>
 		/// Actually starts the download.
 		/// </summary>
@@ -81,8 +87,12 @@ namespace GQ.Client.Util
 				yield break;
 			}
 
-			int totalNrOfFilesToLoad = listOfFilesNotStartedYet.Count;
-			int nrOfFilesCompleted = 0;
+			// init SimpleBehaviour:
+			dialogBehaviour = (SimpleDialogBehaviour) behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
+			// init totalSumOfWeights:
+			foreach (MediaInfo curInfo in listOfFilesNotStartedYet) {
+				totalSumOfWeights += ((curInfo.RemoteSize == MediaInfo.UNKNOWN) ? DEFAULT_WEIGHT : curInfo.RemoteSize);
+			}
 
 			CurrentlyRunningDownloads = 0;
 			stopwatch.Start ();
@@ -93,18 +103,11 @@ namespace GQ.Client.Util
 				while (LimitOfParallelDownloadsExceeded && !TimeIsUp) {
 					yield return null;
 				}
-				UnityEngine.Debug.Log(("Start loop again: " + listOfFilesNotStartedYet.Count + ", " + filesCurrentlyDownloading.Count + ", " + nrOfFilesCompleted).Yellow());
 				yield return null;
 
 
 				if (TimeIsUp) {
-					UnityEngine.Debug.Log(("Time is up.").Yellow());
 					stopwatch.Stop ();
-//					string msg = 
-//						string.Format (
-//							"Timeout: Schon {0} ms vergangen", 
-//							stopwatch.ElapsedMilliseconds
-//						);
 					Raise (DownloadEventType.Timeout, new DownloadEvent (elapsedTime: Timeout));
 					RaiseTaskFailed (); 
 					yield break;
@@ -120,7 +123,8 @@ namespace GQ.Client.Util
 							timeout: 0L, 
 							maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS, 
 							targetPath: info.LocalPath,
-							verbose: false
+							verbose: false,
+							weight: ((info.RemoteSize == MediaInfo.UNKNOWN) ? DEFAULT_WEIGHT : info.RemoteSize)
 						);
 					filesCurrentlyDownloading.Add (d, info);
 					CurrentlyRunningDownloads++;
@@ -129,34 +133,30 @@ namespace GQ.Client.Util
 						if (filesCurrentlyDownloading.TryGetValue (d, out infoToRestart)) {
 							listOfFilesNotStartedYet.Add (infoToRestart);
 							filesCurrentlyDownloading.Remove (d);
-							UnityEngine.Debug.Log ("Restarted to load file: " + d.Url);
 						}
 					};
 					d.OnTaskEnded += (object sender, TaskEventArgs e) => {
 						CurrentlyRunningDownloads--;
-//						UnityEngine.Debug.Log (("Files still waiting to load: " + listOfFilesNotStartedYet.Count).Yellow ());
-//						UnityEngine.Debug.Log (("Files currently loading: " + filesCurrentlyDownloading.Count).Yellow ());
 					};
 					d.OnTaskCompleted += (object sender, TaskEventArgs e) => {
 						info.LocalSize = info.RemoteSize;
 						info.LocalTimestamp = info.RemoteTimestamp;
 						filesCurrentlyDownloading.Remove (d);
-						nrOfFilesCompleted++;
-						UnityEngine.Debug.Log (("completed: " + d.Url).Yellow ());
 					};
+					d.OnProgress += ContributeToTotalProgress;
 					listOfFilesNotStartedYet.Remove (info);
 					d.Start ();
 				}
 			}
-			UnityEngine.Debug.Log("Exited load loop.".Yellow());
 
-//			// wait until the last download is finished:
-//			while (CurrentlyRunningDownloads > 0) {
-//				UnityEngine.Debug.Log("wait for last downloads.".Yellow());
-//
-//				yield return null;
-//			}
 			RaiseTaskCompleted ();
+		}
+			
+		public void ContributeToTotalProgress (object callbackSender, DownloadEvent args)
+		{
+			downloadedSumOfWeights += args.Progress;
+			float percent = Math.Min (100.0f, (downloadedSumOfWeights / totalSumOfWeights) * 100f);
+			dialogBehaviour.UpdateLoadingScreenProgress (String.Format (" ({0:#0.0}% erledigt)", percent));
 		}
 
 		public override object Result { get; set; }

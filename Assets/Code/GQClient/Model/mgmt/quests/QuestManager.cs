@@ -14,6 +14,7 @@ using GQ.Client.Util;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using System.Net;
+using QM.Util;
 
 namespace GQ.Client.Model
 {
@@ -254,6 +255,10 @@ namespace GQ.Client.Model
 			// 1. we create a list of files to be downloaded / updated (as Dictionary with all neeeded data for multi downloader:
 			List<MediaInfo> filesToDownload = new List<MediaInfo> ();
 
+			int infoNotReceived = 0;
+			float summedSize = 0f;
+			new WATCH ().Start ();
+
 			MediaInfo info;
 			foreach (KeyValuePair<string,MediaInfo> kvpEntry in CurrentQuest.MediaStore) {
 				info = kvpEntry.Value;
@@ -266,7 +271,7 @@ namespace GQ.Client.Model
 				HttpWebRequest httpWReq = 
 					(HttpWebRequest)WebRequest.Create(info.Url);
 				httpWReq.Timeout = (int) Math.Min(
-					ConfigurationManager.Current.timeoutMS,
+					3000,
 					ConfigurationManager.Current.maxIdleTimeMS
 				);
 
@@ -277,6 +282,7 @@ namespace GQ.Client.Model
 					Log.SignalErrorToDeveloper ("Timeout while getting WebResponse for url {1}", HTTP.CONTENT_LENGTH, info.Url);
 					info.RemoteSize = MediaInfo.UNKNOWN;
 					info.RemoteTimestamp = MediaInfo.UNKNOWN;
+					infoNotReceived++;
 					// Since we do not know the timestamp of this file we load it:
 					filesToDownload.Add (info);
 					continue;
@@ -284,6 +290,8 @@ namespace GQ.Client.Model
 				// got a response so we can use the data from server:
 				info.RemoteSize = httpWResp.ContentLength;
 				info.RemoteTimestamp = (long)(httpWResp.LastModified - new DateTime(1970, 1, 1)).TotalMilliseconds;
+
+				summedSize += info.RemoteSize;
 				// if the remote file is newer we update: 
 				// or if media is not locally available we load it:
 				if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable) {
@@ -322,6 +330,10 @@ namespace GQ.Client.Model
 //					}								
 //				}
 			}
+
+			Debug.LogWarning ("SIze NOT FOUND for " + infoNotReceived + " of " + CurrentQuest.MediaStore.Count);
+			Debug.LogWarning ("SUMMED SIZE: " + summedSize);
+			WATCH._StopAndShow ();
 
 			return filesToDownload;
 		}
