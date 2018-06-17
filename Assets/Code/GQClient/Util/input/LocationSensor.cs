@@ -8,7 +8,7 @@ namespace GQ.Client.Util {
 	
 	/*
 	 * Wenn sich ein Listener anmeldet, starten wir eine Coroutine (PollData), die solange in einer Schleife läuft, 
-	 * wie Listener angemeldet sind. In dieser Schleife wird gewartet wie die Frquenz es vorgibt (WaitForSecondsRealtime().
+	 * wie Listener angemeldet sind. In dieser Schleife wird gewartet wie die Frequenz es vorgibt (WaitForSecondsRealtime().
 	 * Dann wird ein neuer LocationInfo Wert erhoben.
 	 * Wenn dieser Wert um mehr als die Minimalsdistanz vom bisher letzten Wert abweicht (oder der letzte Wert null ist)
 	 * werden die Listener über ein Update mit dem neuen Wert informiert (event.Invoke();
