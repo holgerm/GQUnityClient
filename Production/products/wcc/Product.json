@@ -1,5 +1,6 @@
 {
   "id": "wcc",
+  "idExtension": "",
   "name": "Wiki Culture City",
   "portal": 281,
   "autoStartQuestID": 0,
@@ -9,6 +10,7 @@
   "autoUpdateQuestInfos": false,
   "timeoutMS": 60000,
   "maxIdleTimeMS": 9000,
+  "maxParallelDownloads": 15,
   "nameForQuestSg": "Ort",
   "nameForQuestsPl": "Orte",
   "questInfoViews": [
@@ -38,6 +40,7 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartPositionType": "CenterOfMarkers",
   "mapStartAtLocation": true,
   "mapStartAtLongitude": 7.100114,
   "mapStartAtLatitude": 50.73381,
@@ -367,7 +370,7 @@
     "b": 0,
     "a": 255
   },
-  "menuInhibitsInteraction": false,
+  "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
   "listEntryHeightUnits": 50.0,
