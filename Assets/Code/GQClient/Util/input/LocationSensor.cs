@@ -191,10 +191,12 @@ namespace GQ.Client.Util {
 				Input.location.Stop();
 
 				while (Activated && ListenersAttached) {
-					switch (Input.location.status) 
+					UnityEngine.Debug.Log("Device.location.isEnabledByUser: " + Device.location.isEnabledByUser);
+
+					switch (Device.location.status) 
 					{
 					case LocationServiceStatus.Running:
-//						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
+						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
 						LocationInfo newLocation = Input.location.lastData;
 
 						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
@@ -206,12 +208,14 @@ namespace GQ.Client.Util {
 						lastLocation = newLocation;
 						break;
 					case LocationServiceStatus.Stopped:
-//						UnityEngine.Debug.Log("GPS_____: STOPPED: ");
+						UnityEngine.Debug.Log("GPS_____: STOPPED: ");
 						if (
 							Input.location.isEnabledByUser || 
 							Application.platform == RuntimePlatform.IPhonePlayer
 						) {
 							Input.location.Start(10f, 10f);
+							UnityEngine.Debug.Log("GPS_____: STARTING: ");
+
 						}
 						else {
 							if (!failed) {

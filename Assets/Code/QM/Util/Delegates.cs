@@ -6,4 +6,6 @@ namespace QM.Util {
 
 	public delegate string Void2String();
 
+	public delegate LocationService Void2LocationService();
+
 }

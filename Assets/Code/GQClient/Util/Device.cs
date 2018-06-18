@@ -37,6 +37,21 @@ namespace GQ.Client.Util
 			_getPersistentDatapath = method;
 		}
 		#endregion
+
+		#region Location Service
+		private static LocationServiceExt _location;
+		public static LocationServiceExt location {
+			get {
+				if (_location == null) {
+					_location = new LocationServiceExt ();
+				}
+				return _location;
+			}
+			set {
+				_location = value;
+			}
+		}
+		#endregion
 	}
 
 }
