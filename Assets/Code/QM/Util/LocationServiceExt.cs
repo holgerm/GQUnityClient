@@ -10,7 +10,7 @@ namespace QM.Util {
 
 		private bool useMockLocation = false;
 		private LocationInfoExt mockedLastData;
-		private LocationServiceStatusExt mockedStatus;
+		private LocationServiceStatus mockedStatus;
 		private bool mIsEnabledByUser = false;
 
 		public LocationServiceExt(bool mockLocation = false)
@@ -42,9 +42,9 @@ namespace QM.Util {
 			set { mockedLastData = value; }
 		}
 
-		public LocationServiceStatusExt status
+		public LocationServiceStatus status
 		{
-			get { return useMockLocation ? mockedStatus : getRealStatus(); }
+			get { return useMockLocation ? mockedStatus : realLocation.status; }
 			set { mockedStatus = value; }
 		}
 
@@ -52,7 +52,7 @@ namespace QM.Util {
 		{
 			if (useMockLocation)
 			{
-				mockedStatus = LocationServiceStatusExt.Running;
+				mockedStatus = LocationServiceStatus.Running;
 			}
 			else
 			{
@@ -64,7 +64,7 @@ namespace QM.Util {
 		{
 			if (useMockLocation)
 			{
-				mockedStatus = LocationServiceStatusExt.Running;
+				mockedStatus = LocationServiceStatus.Running;
 			}
 			else
 			{
@@ -76,7 +76,7 @@ namespace QM.Util {
 		{
 			if (useMockLocation)
 			{
-				mockedStatus = LocationServiceStatusExt.Running;
+				mockedStatus = LocationServiceStatus.Running;
 			}
 			else
 			{
@@ -88,7 +88,7 @@ namespace QM.Util {
 		{
 			if (useMockLocation)
 			{
-				mockedStatus = LocationServiceStatusExt.Stopped;
+				mockedStatus = LocationServiceStatus.Stopped;
 			}
 			else
 			{
@@ -125,25 +125,6 @@ namespace QM.Util {
 			return location;
 		}
 
-		private LocationServiceStatusExt getRealStatus()
-		{
-			LocationServiceStatus realStatus = realLocation.status;
-			LocationServiceStatusExt stats = LocationServiceStatusExt.Stopped;
-
-			if (realStatus == LocationServiceStatus.Stopped)
-				stats = LocationServiceStatusExt.Stopped;
-
-			if (realStatus == LocationServiceStatus.Initializing)
-				stats = LocationServiceStatusExt.Initializing;
-
-			if (realStatus == LocationServiceStatus.Running)
-				stats = LocationServiceStatusExt.Running;
-
-			if (realStatus == LocationServiceStatus.Failed)
-				stats = LocationServiceStatusExt.Failed;
-
-			return stats;
-		}
 	}
 
 	public struct LocationInfoExt
@@ -156,11 +137,4 @@ namespace QM.Util {
 		public float verticalAccuracy { get; set; }
 	}
 
-	public enum LocationServiceStatusExt
-	{
-		Stopped = 0,
-		Initializing = 1,
-		Running = 2,
-		Failed = 3,
-	}
 }

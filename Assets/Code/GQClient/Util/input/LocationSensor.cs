@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Diagnostics;
 using GQ.Client.Err;
+using QM.Util;
 
 namespace GQ.Client.Util {
 	
@@ -77,7 +78,7 @@ namespace GQ.Client.Util {
 
 		private bool WaitingForInitialization {
 			get {
-				return (Input.location.status == LocationServiceStatus.Initializing && stillWait > 0);
+				return (Device.location.status == LocationServiceStatus.Initializing && stillWait > 0);
 			}
 		}
 
@@ -87,12 +88,12 @@ namespace GQ.Client.Util {
 			UnityEngine.Debug.Log("GPS_____: WAITING FOR INIT  stillWait: " + stillWait);
 		}
 
-		public static readonly LocationInfo NullLocationInfo = new LocationInfo();
+		public static readonly LocationInfoExt NullLocationInfo = new LocationInfoExt();
 
 		/// <summary>
 		/// We remember the last location received from the location service and initialize this with a Null object.
 		/// </summary>
-		private LocationInfo lastLocation = NullLocationInfo;
+		private LocationInfoExt lastLocation = NullLocationInfo;
 
 		private bool _actvated = true;
 		public bool Activated {
@@ -123,11 +124,11 @@ namespace GQ.Client.Util {
 		{
 			public LocationEventType Kind { get; }
 
-			public LocationInfo Location { get; }
+			public LocationInfoExt Location { get; }
 
 			public LocationEventArgs(
 				LocationEventType kind,
-				LocationInfo location)
+				LocationInfoExt location)
 			{
 				Kind = kind;
 				Location = location;
@@ -151,15 +152,15 @@ namespace GQ.Client.Util {
 				}
 
 //				// Tell the new listener asap if the service is not available:
-//				if (!Input.location.isEnabledByUser) {
+//				if (!Device.location.isEnabledByUser) {
 //					_onLocationUpdate += value;
-//					// StartWaiting for Enabling of Location Input by user. Do we need another frequency and timeout?
+//					// StartWaiting for Enabling of Location Device by user. Do we need another frequency and timeout?
 //					return;
 //				}
 //				if (!ListenersAttached) {
 //					_onLocationUpdate += value;
-//					if (Input.location.status != LocationServiceStatus.Initializing && Input.location.status != LocationServiceStatus.Running) {
-//						Input.location.Start();
+//					if (Device.location.status != LocationServiceStatus.Initializing && Device.location.status != LocationServiceStatus.Running) {
+//						Device.location.Start();
 //					}
 //					else {
 //						
@@ -188,32 +189,32 @@ namespace GQ.Client.Util {
 				currentlyPolling = true;
 				bool failed = false;
 
-				Input.location.Stop();
+				Device.location.Stop();
 
 				while (Activated && ListenersAttached) {
-					UnityEngine.Debug.Log("Device.location.isEnabledByUser: " + Device.location.isEnabledByUser);
+//					UnityEngine.Debug.Log("Device.location.isEnabledByUser: " + Device.location.isEnabledByUser);
 
 					switch (Device.location.status) 
 					{
 					case LocationServiceStatus.Running:
-						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
-						LocationInfo newLocation = Input.location.lastData;
+//						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
+						LocationInfoExt newLocation = Device.location.lastData;
 
 						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
 //						UnityEngine.Debug.Log("GPS_____: time: " + timeSpan.ToString() + " lat: " + newLocation.latitude + " long: " + newLocation.longitude);
 
 						if (!lastLocation.WithinDistance(UpdateDistance, newLocation)) {
-							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Input.location.lastData));
+							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Device.location.lastData));
 						}
 						lastLocation = newLocation;
 						break;
 					case LocationServiceStatus.Stopped:
-						UnityEngine.Debug.Log("GPS_____: STOPPED: ");
+//						UnityEngine.Debug.Log("GPS_____: STOPPED: ");
 						if (
-							Input.location.isEnabledByUser || 
+							Device.location.isEnabledByUser || 
 							Application.platform == RuntimePlatform.IPhonePlayer
 						) {
-							Input.location.Start(10f, 10f);
+							Device.location.Start(10f, 10f);
 							UnityEngine.Debug.Log("GPS_____: STARTING: ");
 
 						}
@@ -254,7 +255,7 @@ namespace GQ.Client.Util {
 						}
 						break;
 					default:
-						Log.SignalErrorToDeveloper ("LocationService in unknown state {0}.", Input.location.status.ToString ());
+						Log.SignalErrorToDeveloper ("LocationService in unknown state {0}.", Device.location.status.ToString ());
 						break;
 					}
 
@@ -322,7 +323,7 @@ namespace GQ.Client.Util {
 
 	public static class LocationExtensions {
 
-		public static bool WithinDistance(this LocationInfo thisLoc, double distance, LocationInfo otherLoc) {
+		public static bool WithinDistance(this LocationInfoExt thisLoc, double distance, LocationInfoExt otherLoc) {
 			// TODO calculate weather the distance is larger than UpdateDistance
 			return true;
 		} 
