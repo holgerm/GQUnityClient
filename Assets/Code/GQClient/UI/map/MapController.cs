@@ -243,17 +243,19 @@ namespace GQ.Client.UI
 			LocationSensor.Instance.OnLocationUpdate += 
 				(object sender, LocationSensor.LocationEventArgs e) => {
 				if (e.Kind == LocationSensor.LocationEventType.Update) {
-					Debug.Log (
-						string.Format ("--- LOC: {0}, {1}", e.Location.longitude, e.Location.latitude)
-						.Yellow ()
-					);
+//					Debug.Log (
+//						string.Format ("--- LOC: {0}, {1}", e.Location.longitude, e.Location.latitude)
+//						.Yellow ()
+//					);
 				}
 				if (e.Kind == LocationSensor.LocationEventType.NotAvailable) {
-					Debug.Log (("--- LOC: Unavailable. enabled: " + Input.location.isEnabledByUser).Yellow ());
+//					Debug.Log (("--- LOC: Unavailable. enabled: " + Input.location.isEnabledByUser).Yellow ());
 				}
 			};
 
-			map.UsesLocation = true;
+
+			LocationSensor.Instance.OnLocationUpdate += map.UpdatePosition;
+//			map.UsesLocation = true;
 			map.InputsEnabled = true;
 			map.ShowsGUIControls = false;
 

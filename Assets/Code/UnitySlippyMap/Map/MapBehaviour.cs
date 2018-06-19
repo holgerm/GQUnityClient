@@ -39,6 +39,7 @@ using UnitySlippyMap.GUI;
 using UnitySlippyMap.Input;
 using UnitySlippyMap.Helpers;
 using GQ.Client.Util;
+using GQ.Client.Err;
 
 namespace UnitySlippyMap.Map
 {
@@ -232,7 +233,7 @@ namespace UnitySlippyMap.Map
 				FitVerticalBorder ();
 				IsDirty = true;
 
-				Debug.Log ("POSITION MApController set to: (" + centerWGS84 [0] + ", " + centerWGS84 [1] + ")");
+//				Debug.Log ("POSITION MApController set to: (" + centerWGS84 [0] + ", " + centerWGS84 [1] + ")");
 			}
 		}
 
@@ -529,20 +530,20 @@ namespace UnitySlippyMap.Map
 				usesLocation = value;
 			
 				if (usesLocation) {
-					if (UnityEngine.Input.location.isEnabledByUser
-					    && (UnityEngine.Input.location.status == LocationServiceStatus.Stopped
-					    || UnityEngine.Input.location.status == LocationServiceStatus.Failed)) {
-						UnityEngine.Input.location.Start ();
+					if (Device.location.isEnabledByUser
+						&& (Device.location.status == LocationServiceStatus.Stopped
+							|| Device.location.status == LocationServiceStatus.Failed)) {
+						Device.location.Start ();
 					} else {
 #if DEBUG_LOG
 					Debug.LogError("ERROR: Map.UseLocation: Location is not authorized on the device.");
 #endif
 					}
 				} else {
-					if (UnityEngine.Input.location.isEnabledByUser
-					    && (UnityEngine.Input.location.status == LocationServiceStatus.Initializing
-					    || UnityEngine.Input.location.status == LocationServiceStatus.Running)) {
-						UnityEngine.Input.location.Start ();
+					if (Device.location.isEnabledByUser
+						&& (Device.location.status == LocationServiceStatus.Initializing
+							|| Device.location.status == LocationServiceStatus.Running)) {
+						Device.location.Start ();
 					}
 				}
 			}
@@ -955,6 +956,32 @@ namespace UnitySlippyMap.Map
 		
 		}
 
+		public void UpdatePosition(object sender, GQ.Client.Util.LocationSensor.LocationEventArgs e) {
+			if (e.Kind == LocationSensor.LocationEventType.NotAvailable) {
+				Debug.Log (("--- LOC: Unavailable. enabled: " + Device.location.isEnabledByUser).Yellow ());
+				return;
+			}
+
+			if (e.Kind == LocationSensor.LocationEventType.Update) {
+				// update the centerWGS84 with the last location if enabled
+				if (updatesCenterWithLocation) {
+					CenterWGS84 = new double[2] {
+						e.Location.longitude,
+						e.Location.latitude
+					};
+				}
+
+				if (locationMarker != null) {
+					if (locationMarker.gameObject.activeSelf == false)
+						locationMarker.gameObject.SetActive (true);
+					locationMarker.CoordinatesWGS84 = new double[2] {
+						e.Location.longitude,
+						e.Location.latitude
+					};
+				}
+			}
+		}
+
 		/// <summary>
 		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Update().
 		/// During an update cycle:
@@ -975,52 +1002,6 @@ namespace UnitySlippyMap.Map
 #if DEBUG_PROFILE
 		UnitySlippyMap.Profiler.Begin("Map.Update");
 #endif
-		
-			// update the centerWGS84 with the last location if enabled
-			if (usesLocation
-			    && UnityEngine.Input.location.status == LocationServiceStatus.Running) {
-				if (updatesCenterWithLocation) {
-					if (UnityEngine.Input.location.lastData.longitude <= 180.0f
-					    && UnityEngine.Input.location.lastData.longitude >= -180.0f
-					    && UnityEngine.Input.location.lastData.latitude <= 90.0f
-					    && UnityEngine.Input.location.lastData.latitude >= -90.0f) {
-						if (CenterWGS84 [0] != UnityEngine.Input.location.lastData.longitude
-						    || CenterWGS84 [1] != UnityEngine.Input.location.lastData.latitude)
-							CenterWGS84 = new double[2] {
-								UnityEngine.Input.location.lastData.longitude,
-								UnityEngine.Input.location.lastData.latitude
-							};
-					
-						//Debug.Log("DEBUG: Map.Update: new location: " + Input.location.lastData.longitude + " " + Input.location.lastData.latitude + ":  " + Input.location.status);					
-					} else {
-						Debug.LogWarning ("WARNING: Map.Update: bogus location (bailing): " + UnityEngine.Input.location.lastData.longitude + " " + UnityEngine.Input.location.lastData.latitude + ":  " + UnityEngine.Input.location.status);
-					}
-				}
-			
-				if (locationMarker != null) {
-#if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9
-				if (locationMarker.gameObject.active == false)
-					locationMarker.gameObject.SetActiveRecursively(true);
-#else
-					if (locationMarker.gameObject.activeSelf == false)
-						locationMarker.gameObject.SetActive (true);
-#endif
-					if (UnityEngine.Input.location.lastData.longitude <= 180.0f
-					    && UnityEngine.Input.location.lastData.longitude >= -180.0f
-					    && UnityEngine.Input.location.lastData.latitude <= 90.0f
-					    && UnityEngine.Input.location.lastData.latitude >= -90.0f) {
-						locationMarker.CoordinatesWGS84 = new double[2] {
-							UnityEngine.Input.location.lastData.longitude,
-							UnityEngine.Input.location.lastData.latitude
-						};
-					} else {
-//#if DEBUG_LOG
-						Debug.LogWarning ("WARNING: Map.Update: bogus location (bailing): " + UnityEngine.Input.location.lastData.longitude + " " + UnityEngine.Input.location.lastData.latitude + ":  " + UnityEngine.Input.location.status);
-//#endif
-					}
-				}
-			}
-		
 			// update the orientation of the location marker
 			if (usesOrientation) {
 				float heading = 0.0f;

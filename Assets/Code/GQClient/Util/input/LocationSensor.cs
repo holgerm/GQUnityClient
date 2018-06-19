@@ -203,8 +203,9 @@ namespace GQ.Client.Util {
 						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
 //						UnityEngine.Debug.Log("GPS_____: time: " + timeSpan.ToString() + " lat: " + newLocation.latitude + " long: " + newLocation.longitude);
 
-						if (!lastLocation.WithinDistance(UpdateDistance, newLocation)) {
+						if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation)) {
 							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Device.location.lastData));
+							failed = false;
 						}
 						lastLocation = newLocation;
 						break;
@@ -215,7 +216,7 @@ namespace GQ.Client.Util {
 							Application.platform == RuntimePlatform.IPhonePlayer
 						) {
 							Device.location.Start(10f, 10f);
-							UnityEngine.Debug.Log("GPS_____: STARTING: ");
+//							UnityEngine.Debug.Log("GPS_____: STARTING: ");
 
 						}
 						else {
@@ -325,7 +326,7 @@ namespace GQ.Client.Util {
 
 		public static bool WithinDistance(this LocationInfoExt thisLoc, double distance, LocationInfoExt otherLoc) {
 			// TODO calculate weather the distance is larger than UpdateDistance
-			return true;
+			return false;
 		} 
 	}
 
