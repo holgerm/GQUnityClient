@@ -200,7 +200,7 @@ namespace GQ.Client.Util {
 //						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
 						LocationInfoExt newLocation = Device.location.lastData;
 
-						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
+//						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
 //						UnityEngine.Debug.Log("GPS_____: time: " + timeSpan.ToString() + " lat: " + newLocation.latitude + " long: " + newLocation.longitude);
 
 						if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation)) {
@@ -284,36 +284,35 @@ namespace GQ.Client.Util {
 
 		#region Helpers
 
-		private double distance (double lat1, double lon1, double lat2, double lon2, char unit) {
+//		public static double distanceSimple(double lat1, double lon1, double lat2, double lon2) {
+//			
+//		}
+
+		/// <summary>
+		/// Distance between the two given geopoints in Meters.
+		/// </summary>
+		/// <param name="lat1">Lat1.</param>
+		/// <param name="lon1">Lon1.</param>
+		/// <param name="lat2">Lat2.</param>
+		/// <param name="lon2">Lon2.</param>
+		public static double distance (double lat1, double lon1, double lat2, double lon2) {
 
 			double theta = lon1 - lon2;
 
 			double dist = Math.Sin(deg2rad(lat1)) * Math.Sin(deg2rad(lat2)) + Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) * Math.Cos(deg2rad(theta));
 			dist = Math.Acos(dist);
 			dist = rad2deg(dist);
-			dist = dist * 60 * 1.1515;
-
-			if ( unit == 'K' ) {
-				dist = dist * 1.609344;
-			}
-			else
-				if ( unit == 'N' ) {
-					dist = dist * 0.8684;
-				}
-				else
-					if ( unit == 'M' ) {
-						dist = dist * 1609;
-					}
+			dist = dist * 60 * 1.1515 * 1609;
 
 			return (dist);
 		}
 
-		private double deg2rad (double deg) {
+		private static double deg2rad (double deg) {
 
 			return (deg * Math.PI / 180.0);
 		}
 
-		private double rad2deg (double rad) {
+		private static double rad2deg (double rad) {
 
 			return (rad / Math.PI * 180.0);
 		}

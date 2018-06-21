@@ -133,14 +133,17 @@ namespace GQ.Client.Util
 			DontDestroyOnLoad (Instance);
 			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
 			canvasStates = new Dictionary<string, bool> ();
+
+			#if UNITY_EDITOR
+			Device.awakeLocationMock ();
+			#endif
 		}
 
-		//		void Start() {
-		//			ImprintCanvas.gameObject.SetActive (false);
-		//			PrivacyCanvas.gameObject.SetActive (false);
-		//			AuthorCanvas.gameObject.SetActive (false);
-		//		}
-		//
+		void Update() {
+			#if UNITY_EDITOR
+			Device.updateMockedLocation ();
+			#endif
+		}
 
 		#endregion
 
@@ -184,7 +187,6 @@ namespace GQ.Client.Util
 		}
 
 		#endregion
-
 	}
 
 }

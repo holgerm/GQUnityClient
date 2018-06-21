@@ -77,18 +77,64 @@ namespace GQ.Client.Model
 
 		#region Hotspots
 
-		protected Dictionary<int, Hotspot> hotspotDict = new Dictionary<int, Hotspot> ();
+		private Dictionary<int, Hotspot> _hotspotDict = new Dictionary<int, Hotspot> ();
 
+		/// <summary>
+		/// Adds the hotspot and starts trigger detection for entering/leaving hotspots if this is the first hotspot.
+		/// </summary>
+		/// <param name="hotspot">Hotspot.</param>
+		protected void AddHotspot(Hotspot hotspot) {
+			bool firstAdd = _hotspotDict.Count == 0;
+			_hotspotDict[hotspot.Id] = hotspot;
+			if (firstAdd && _hotspotDict.Count == 1) {
+				LocationSensor.Instance.OnLocationUpdate += UpdateHotspotMarkers;
+			}
+		}
+
+
+		/// <summary>
+		/// Removes the hotspot and stops trigger detection for entering/leaving hotspots if this was the last hotspot.
+		/// </summary>
+		/// <param name="hotspot">Hotspot.</param>
+		protected void RemoveHotspot(Hotspot hotspot) {
+			_hotspotDict.Remove(hotspot.Id);
+			if (_hotspotDict.Count == 0) {
+				LocationSensor.Instance.OnLocationUpdate -= UpdateHotspotMarkers;
+			}
+		}
+
+		public void UpdateHotspotMarkers(System.Object sender, LocationSensor.LocationEventArgs e) {
+			// TODO
+			foreach (Hotspot h in AllHotspots) {
+				if (h.Active) {
+					if (h.Status == Hotspot.StatusValue.UNDEFINED || h.Status == Hotspot.StatusValue.OUTSIDE) {
+						if (LocationSensor.distance(e.Location.latitude, e.Location.longitude, h.Latitude, h.Longitude) <= h.Radius) {
+							// ENTERED the Hotspot h:
+							h.Status = Hotspot.StatusValue.INSIDE;
+							h.Enter ();
+						}
+					}
+					if (h.Status == Hotspot.StatusValue.UNDEFINED || h.Status == Hotspot.StatusValue.INSIDE) {
+						if (LocationSensor.distance(e.Location.latitude, e.Location.longitude, h.Latitude, h.Longitude) <= h.Radius) {
+							// LEFT the Hotspot h:
+							h.Status = Hotspot.StatusValue.OUTSIDE;
+							h.Leave ();
+						}
+					}
+				} 
+			}
+		}
+			
 		public Hotspot GetHotspotWithID (int id)
 		{
 			Hotspot hotspot;
-			hotspotDict.TryGetValue (id, out hotspot);
+			_hotspotDict.TryGetValue (id, out hotspot);
 			return hotspot;
 		}
 
 		public Dictionary<int, Hotspot>.ValueCollection AllHotspots {
 			get {
-				return hotspotDict.Values;
+				return _hotspotDict.Values;
 			}
 		}
 
@@ -266,8 +312,7 @@ namespace GQ.Client.Model
 			XmlSerializer serializer = new XmlSerializer (typeof(Hotspot));
 			Hotspot hotspot = (Hotspot)serializer.Deserialize (reader);
 			hotspot.Parent = this;
-			hotspotDict.Add (hotspot.Id, hotspot);
-			Debug.Log ("READ HOTSPOT: " + hotspot.Id);
+			AddHotspot (hotspot);
 		}
 
 
@@ -308,63 +353,6 @@ namespace GQ.Client.Model
 				SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
 			Base.Instance.ShowFoyerCanvases ();
 			Resources.UnloadUnusedAssets ();
-		}
-
-		public void GoBackOnePage ()
-		{
-			// TODO was is an OLD implementation!
-
-//			Page show = previouspages [previouspages.Count - 1];
-//			previouspages.Remove (previouspages [previouspages.Count - 1]);
-//
-//			if (_allowReturn > 0)
-//				_allowReturn--;
-//
-//			questdatabase questdb = GameObject.Find ("QuestDatabase").GetComponent<questdatabase> ();
-//			questdb.changePage (show.Id);
-//
-		}
-
-		[SerializeField]
-		//		private int _allowReturn = 0;
-
-		//		public bool AllowReturn {
-		//			get {
-		//				if (IndividualReturnDefinitions) {
-		//					return (
-		//					    _allowReturn > 0
-		//					    && previouspages.Count > 0
-		//					    && previouspages [previouspages.Count - 1] != null
-		//					);
-		//				} else {
-		//					return (
-		//					    previouspages.Count > 0
-		//					    && previouspages [previouspages.Count - 1] != null
-		//					    && !previouspages [previouspages.Count - 1].type.Equals (GQML.PAGE_TYPE_TEXT_QUESTION)
-		//					    && !previouspages [previouspages.Count - 1].type.Equals (GQML.PAGE_TYPE_MULTIPLE_CHOICE_QUESTION)
-		//					);
-		//				}
-		//			}
-		//			set {
-		//				if (value == false)
-		//					_allowReturn = 0;
-		//				else
-		//					_allowReturn++;
-		//			}
-		//		}
-
-		public bool UsesLocation {
-			get {
-				return hotspotDict.Count > 0;
-				// TODO check whether this quest contains map page or uses location system variables
-			}
-		}
-
-		public bool SendsDataToServer {
-			get {
-				return false;
-				// TODO check whether this quest contains map page or uses location system variables
-			}
 		}
 
 		#endregion

@@ -80,7 +80,19 @@ namespace GQ.Client.Model
 
 		public bool InitialActivity { get; protected set; }
 
+		public bool Active { get; protected set; }
+
 		public bool InitialVisibility { get; protected set; }
+
+		public bool Visible { get; protected set; }
+
+		public StatusValue Status { get; set; }
+
+		public enum StatusValue {
+			UNDEFINED,
+			INSIDE,
+			OUTSIDE
+		}
 
 		protected string LatLong { 
 			set {
@@ -142,9 +154,11 @@ namespace GQ.Client.Model
 
 			// InitialActivity:
 			InitialActivity = GQML.GetOptionalBoolAttribute (GQML.HOTSPOT_INITIAL_ACTIVITY, reader, true);
+			Active = InitialActivity;
 
 			// InitialVisibility:
 			InitialVisibility = GQML.GetOptionalBoolAttribute (GQML.HOTSPOT_INITIAL_VISIBILITY, reader, true);
+			Visible = InitialVisibility;
 
 			// LatLong: TODO parse and transform in a location type etc.
 			LatLong = GQML.GetStringAttribute (GQML.HOTSPOT_LATLONG, reader);
@@ -212,20 +226,13 @@ namespace GQ.Client.Model
 
 		public Hotspot ()
 		{
-			State = GQML.STATE_NEW;
+			Status = StatusValue.UNDEFINED;
 
 			result = null;
 
 			EnterTrigger = Trigger.Null;
 			LeaveTrigger = Trigger.Null;
 			TapTrigger = Trigger.Null;
-		}
-
-		private string state;
-
-		public string State {
-			get;
-			protected set;
 		}
 
 		public string result;

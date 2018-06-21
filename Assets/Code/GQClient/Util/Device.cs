@@ -9,6 +9,7 @@ using GQ.Client.Conf;
 using GQ.Client.Model;
 using QM.Util;
 using GQ.Client.FileIO;
+using System;
 
 namespace GQ.Client.Util
 {
@@ -51,6 +52,63 @@ namespace GQ.Client.Util
 				_location = value;
 			}
 		}
+
+		#if UNITY_EDITOR
+		static public void awakeLocationMock() {
+			Device.location = new LocationServiceExt(true);
+		}
+
+		const float LOCATION_MOCK_STEP_MIN = 0.0000001f;
+		const float LOCATION_MOCK_STEP_MAX = 1.0f;
+		static float locationMockStep = 0.0001f;
+
+		static public void updateMockedLocation() {
+			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+				LocationInfoExt newLoc = location.lastData.clone ();
+				newLoc.latitude = Math.Min(location.lastData.latitude + locationMockStep, 90.0f);
+				Device.location.MockedLocation = newLoc;
+				return;
+			}
+			
+			if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) {
+				LocationInfoExt newLoc = location.lastData.clone ();
+				newLoc.latitude = Math.Max(location.lastData.latitude - locationMockStep, -90.0f);
+				Device.location.MockedLocation = newLoc;
+				return;
+			}
+
+			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
+				LocationInfoExt newLoc = location.lastData.clone ();
+				newLoc.longitude -= locationMockStep;
+				if (newLoc.longitude < -180.0f) {
+					newLoc.longitude += 360.0f;
+				}
+				Device.location.MockedLocation = newLoc;
+				return;
+			}
+
+			if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
+				LocationInfoExt newLoc = location.lastData.clone ();
+				newLoc.longitude += locationMockStep;
+				if (newLoc.longitude > 180.0f) {
+					newLoc.longitude -= 360.0f;
+				}
+				Device.location.MockedLocation = newLoc;
+				return;
+			}
+
+			if (Input.GetKeyDown(KeyCode.Plus) && locationMockStep < LOCATION_MOCK_STEP_MAX) {
+				locationMockStep *= 2;
+				return;
+			}
+
+			if (Input.GetKeyDown(KeyCode.Minus) &&  LOCATION_MOCK_STEP_MIN < locationMockStep) {
+				locationMockStep /= 2;
+				return;
+			}
+		}
+		#endif
+
 		#endregion
 	}
 

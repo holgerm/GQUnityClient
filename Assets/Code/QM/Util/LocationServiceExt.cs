@@ -9,7 +9,22 @@ namespace QM.Util {
 		private LocationService realLocation;
 
 		private bool useMockLocation = false;
-		private LocationInfoExt mockedLastData;
+
+		public static LocationInfoExt NULL_LOCATION = new LocationInfoExt ();
+		private LocationInfoExt _mockedLocation = NULL_LOCATION;
+		public LocationInfoExt MockedLocation {
+			get {
+				if (_mockedLocation.Equals(NULL_LOCATION)) {
+					_mockedLocation = new LocationInfoExt ();
+
+				}
+				return _mockedLocation;
+			}
+			set {
+				_mockedLocation = value;
+			}
+		}
+
 		private LocationServiceStatus mockedStatus;
 		private bool mIsEnabledByUser = false;
 
@@ -20,7 +35,7 @@ namespace QM.Util {
 			if (mockLocation)
 			{
 				mIsEnabledByUser = true;
-				mockedLastData = getMockLocation();
+//				MockedLocation = getMockLocation();
 			}
 			else
 			{
@@ -38,8 +53,7 @@ namespace QM.Util {
 
 		public LocationInfoExt lastData
 		{
-			get { return useMockLocation ? mockedLastData : getRealLocation(); }
-			set { mockedLastData = value; }
+			get { return useMockLocation ? MockedLocation : getRealLocation(); }
 		}
 
 		public LocationServiceStatus status
@@ -135,6 +149,10 @@ namespace QM.Util {
 		public float longitude { get; set; }
 		public double timestamp { get; set; }
 		public float verticalAccuracy { get; set; }
+
+		public LocationInfoExt clone() {
+			return (LocationInfoExt) MemberwiseClone();
+		}
 	}
 
 }

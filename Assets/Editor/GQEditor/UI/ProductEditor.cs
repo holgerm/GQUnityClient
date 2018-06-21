@@ -287,8 +287,6 @@ namespace GQ.Editor.UI
 
 		internal static Config updateFromCurrentConfig ()
 		{
-			string build = null;
-
 			try {
 				string configFile = Files.CombinePath (ProductManager.Instance.BuildExportPath, ConfigurationManager.CONFIG_FILE);
 				if (!File.Exists (configFile))
@@ -396,7 +394,6 @@ namespace GQ.Editor.UI
 				EditorGUI.BeginDisabledGroup (!allowChanges || !configIsDirty);
 				{
 					if (GUILayout.Button ("Save")) {
-						ProductSpec p = Pm.AllProducts.ElementAt (selectedProductIndex);
 						Pm.serializeConfig (SelectedConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
 						configIsDirty = false;
 						LayoutConfig.ResetAll (); // TODO check and implement update all layout components in editor
@@ -1473,7 +1470,6 @@ namespace GQ.Editor.UI
 			}
 			List<string> allElements = new List<string> (ProductEditor.SelectedConfig.acceptedPageTypes);
 
-			int selectedPageTypeToAdd;
 			List<string> pageTypesToAdd = new List<string> ();
 			foreach (string pageType in Enum.GetNames (typeof(PageType))) {
 				if (!allElements.Contains (pageType)) {
