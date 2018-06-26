@@ -104,20 +104,15 @@ namespace GQ.Client.Model
 		}
 
 		public void UpdateHotspotMarkers(System.Object sender, LocationSensor.LocationEventArgs e) {
-			// TODO
 			foreach (Hotspot h in AllHotspots) {
 				if (h.Active) {
 					if (h.Status == Hotspot.StatusValue.UNDEFINED || h.Status == Hotspot.StatusValue.OUTSIDE) {
-						if (LocationSensor.distance(e.Location.latitude, e.Location.longitude, h.Latitude, h.Longitude) <= h.Radius) {
-							// ENTERED the Hotspot h:
-							h.Status = Hotspot.StatusValue.INSIDE;
+						if (h.InsideRadius(e.Location)) {
 							h.Enter ();
 						}
 					}
-					if (h.Status == Hotspot.StatusValue.UNDEFINED || h.Status == Hotspot.StatusValue.INSIDE) {
-						if (LocationSensor.distance(e.Location.latitude, e.Location.longitude, h.Latitude, h.Longitude) <= h.Radius) {
-							// LEFT the Hotspot h:
-							h.Status = Hotspot.StatusValue.OUTSIDE;
+					if (h.Status == Hotspot.StatusValue.INSIDE) {
+						if (h.OutsideRadius(e.Location)) {
 							h.Leave ();
 						}
 					}
@@ -351,6 +346,7 @@ namespace GQ.Client.Model
 			Scene sceneToUnload = QuestManager.Instance.CurrentScene;
 			if (sceneToUnload.isLoaded)
 				SceneManager.UnloadSceneAsync (QuestManager.Instance.CurrentScene);
+			QuestManager.Instance.CurrentQuest = Quest.Null;
 			Base.Instance.ShowFoyerCanvases ();
 			Resources.UnloadUnusedAssets ();
 		}
@@ -379,6 +375,7 @@ namespace GQ.Client.Model
 			{
 				Log.WarnDeveloper ("Null Quest started.");
 			}
+
 		}
 
 		#endregion

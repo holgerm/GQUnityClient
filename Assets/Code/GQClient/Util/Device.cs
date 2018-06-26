@@ -53,7 +53,7 @@ namespace GQ.Client.Util
 			}
 		}
 
-		#if UNITY_EDITOR
+		#if UNITY_EDITOR || UNITY_STANDALONE
 		static public void awakeLocationMock() {
 			Device.location = new LocationServiceExt(true);
 		}

@@ -120,7 +120,7 @@ public class SqliteDatabase
             throw new SqliteException("Could not execute SQL statement.");
         }
         
-        Finalize(stmHandle);
+        CleanUp(stmHandle);
     }
 
     public DataTable ExecuteQuery(string query)
@@ -179,7 +179,7 @@ public class SqliteDatabase
             dataTable.AddRow(row);
         }
         
-        Finalize(stmHandle);
+        CleanUp(stmHandle);
         
         return dataTable;
     }
@@ -214,7 +214,7 @@ public class SqliteDatabase
         return stmHandle;
     }
  
-    private void Finalize(IntPtr stmHandle)
+    private void CleanUp(IntPtr stmHandle)
     {
         if (sqlite3_finalize(stmHandle) != SQLITE_OK)
         {

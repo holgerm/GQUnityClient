@@ -83,6 +83,13 @@ namespace GQ.Client.UI
 			page.End ();
 		}
 
+		/// <summary>
+		/// Clean up before the page controlled by this controller is left.
+		/// </summary>
+		public virtual void CleanUp() {
+			
+		}
+
 		#endregion
 
 

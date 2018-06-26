@@ -11,10 +11,11 @@
   "timeoutMS": 0,
   "maxIdleTimeMS": 15000,
   "maxParallelDownloads": 15,
-  "nameForQuestSg": null,
-  "nameForQuestsPl": null,
+  "nameForQuestSg": "Tour",
+  "nameForQuestsPl": "Touren",
   "questInfoViews": [
-    "List"
+    "List",
+    "Map"
   ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,

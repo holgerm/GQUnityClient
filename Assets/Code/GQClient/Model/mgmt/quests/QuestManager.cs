@@ -45,7 +45,7 @@ namespace GQ.Client.Model
 
 		private QuestManager ()
 		{
-			CurrentQuest = Quest.Null;
+			_currentQuest = Quest.Null;
 			CurrentPage = Page.Null;
 		}
 
@@ -54,7 +54,16 @@ namespace GQ.Client.Model
 
 		#region quest management functions
 
-		public Quest CurrentQuest { get; set; }
+		private Quest _currentQuest = Quest.Null;
+		public Quest CurrentQuest { 
+			get {
+				return _currentQuest;
+			} 
+			set {
+				_currentQuest = value;
+				Device.location.InitLocationMock ();
+			}
+		}
 
 		public void StartQuest (int id)
 		{

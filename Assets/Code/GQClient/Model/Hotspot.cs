@@ -7,6 +7,7 @@ using System;
 using System.Globalization;
 using GQ.Client.Util;
 using GQ.Client.Emulate;
+using QM.Util;
 
 namespace GQ.Client.Model
 {
@@ -250,13 +251,23 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
+		public bool InsideRadius(LocationInfoExt loc) {
+			return LocationSensor.distance (loc.latitude, loc.longitude, Latitude, Longitude) <= Radius - 0.001d;
+		}
+
+		public bool OutsideRadius(LocationInfoExt loc) {
+			return LocationSensor.distance (loc.latitude, loc.longitude, Latitude, Longitude) > Radius + 0.001d;
+		}
+
 		public virtual void Enter ()
 		{
+			Status = Hotspot.StatusValue.INSIDE;
 			EnterTrigger.Initiate ();
 		}
 
 		public virtual void Leave ()
 		{
+			Status = Hotspot.StatusValue.OUTSIDE;
 			LeaveTrigger.Initiate ();
 		}
 

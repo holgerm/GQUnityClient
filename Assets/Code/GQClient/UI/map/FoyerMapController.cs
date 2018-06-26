@@ -154,8 +154,8 @@ namespace GQ.Client.UI.Foyer
 				locateAtFixedConfiguredPosition();
 				break;
 			case MapStartPositionType.PlayerPosition:
-				if (Input.location.isEnabledByUser &&
-					Input.location.status != LocationServiceStatus.Running) {
+				if (Device.location.isEnabledByUser &&
+					Device.location.status != LocationServiceStatus.Running) {
 					map.CenterOnLocation ();
 				} else {
 					locateAtFixedConfiguredPosition();

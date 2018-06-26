@@ -593,10 +593,10 @@ namespace UnitySlippyMap.Map
 					// Note, that if you want Input.compass.trueHeading property to contain a valid value,
 					// you must also enable location updates by calling Input.location.Start().
 					if (usesLocation == false) {
-						if (UnityEngine.Input.location.isEnabledByUser
-						    && (UnityEngine.Input.location.status == LocationServiceStatus.Stopped
-						    || UnityEngine.Input.location.status == LocationServiceStatus.Failed)) {
-							UnityEngine.Input.location.Start ();
+						if (Device.location.isEnabledByUser
+							&& (Device.location.status == LocationServiceStatus.Stopped
+								|| Device.location.status == LocationServiceStatus.Failed)) {
+							Device.location.Start ();
 						} else {
 #if DEBUG_LOG
 						Debug.LogError("ERROR: Map.UseOrientation: Location is not authorized on the device.");
@@ -606,10 +606,10 @@ namespace UnitySlippyMap.Map
 					UnityEngine.Input.compass.enabled = true;
 				} else {
 					if (usesLocation == false) {
-						if (UnityEngine.Input.location.isEnabledByUser
-						    && (UnityEngine.Input.location.status == LocationServiceStatus.Initializing
-						    || UnityEngine.Input.location.status == LocationServiceStatus.Running))
-							UnityEngine.Input.location.Start ();
+						if (Device.location.isEnabledByUser
+							&& (Device.location.status == LocationServiceStatus.Initializing
+								|| Device.location.status == LocationServiceStatus.Running))
+							Device.location.Start ();
 					}
 					UnityEngine.Input.compass.enabled = false;
 				}
@@ -1161,11 +1161,10 @@ namespace UnitySlippyMap.Map
 		
 			// setup the marker
 			marker.Map = this;
-			if (usesLocation
-			    && UnityEngine.Input.location.status == LocationServiceStatus.Running)
+			if (Device.location.status == LocationServiceStatus.Running)
 				marker.CoordinatesWGS84 = new double[2] {
-					UnityEngine.Input.location.lastData.longitude,
-					UnityEngine.Input.location.lastData.latitude
+					Device.location.lastData.longitude,
+					Device.location.lastData.latitude
 				};
 			else
 #if UNITY_3_0 || UNITY_3_1 || UNITY_3_2 || UNITY_3_3 || UNITY_3_4 || UNITY_3_5 || UNITY_3_6 || UNITY_3_7 || UNITY_3_8 || UNITY_3_9

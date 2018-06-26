@@ -20,7 +20,7 @@ namespace GQ.Client.UI
 	{
 
 		private List<LayerBehaviour> layers;
-		protected MapBehaviour map;
+		public MapBehaviour map;
 
 		#region Markers
 

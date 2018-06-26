@@ -224,8 +224,13 @@ namespace GQ.Client.Model
 			if (!CanStart ())
 				return;
 			
-			// set this page as current in QM
+			// set this quest as current in QM
 			QuestManager.Instance.CurrentQuest = Parent;
+
+			// clean up old page and set this as new:
+			if (QuestManager.Instance.CurrentPage != null) {
+				QuestManager.Instance.CurrentPage.CleanUp ();
+			}
 			QuestManager.Instance.CurrentPage = this; 
 			State = GQML.STATE_RUNNING;
 
@@ -291,6 +296,12 @@ namespace GQ.Client.Model
 		public void SaveResultInVariable ()
 		{
 			Variables.SetInternalVariable ("$_mission_" + Id + ".result", new Value (Result));
+		}
+
+		public void CleanUp() {
+			if (PageCtrl != null) {
+				PageCtrl.CleanUp ();
+			}
 		}
 
 		#endregion

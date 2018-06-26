@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using GQ.Client.Model;
 
 namespace QM.Util {
 
@@ -16,12 +17,54 @@ namespace QM.Util {
 			get {
 				if (_mockedLocation.Equals(NULL_LOCATION)) {
 					_mockedLocation = new LocationInfoExt ();
-
+					InitLocationMock ();
 				}
 				return _mockedLocation;
 			}
 			set {
 				_mockedLocation = value;
+			}
+		}
+
+
+		public void InitLocationMock() {
+			Quest curQuest = QuestManager.Instance.CurrentQuest;
+			// Initialize mocked location near relevant hotspots, i.e. in-quest hotspots or quest starting points.
+			if (curQuest == Quest.Null || curQuest == null) {
+				// we are in foyer situation and use the central location of all quests:
+				float sumOfLongitudes = 0f;
+				float sumOfLatitudes = 0f;
+				int nrOfQuests = 0;
+				foreach (QuestInfo qi in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
+					if (qi.MarkerHotspot != HotspotInfo.NULL) {
+						sumOfLongitudes += (float)qi.MarkerHotspot.Longitude;
+						sumOfLatitudes += (float)qi.MarkerHotspot.Latitude;
+						nrOfQuests++;
+					}
+				}
+				_mockedLocation.longitude = nrOfQuests > 0 ? sumOfLongitudes / nrOfQuests : sumOfLongitudes;
+				_mockedLocation.latitude = nrOfQuests > 0 ? sumOfLatitudes / nrOfQuests : sumOfLatitudes;
+			}
+			else {
+				// we are in a quest and use a position south of the southern-most hotspot:
+				float sumOfLongitudes = 0f;
+				float southernMostLatitude = 90f;
+				float radiusOfSelectedHotspot = 0f;
+				int nrOfQuests = 0;
+				foreach (Hotspot h in curQuest.AllHotspots) {
+					// we search the southern most hotpot latitude:
+					if (h.Latitude < southernMostLatitude) {
+						southernMostLatitude = (float) h.Latitude;
+						radiusOfSelectedHotspot = (float) h.Radius;
+					}
+					sumOfLongitudes += (float) h.Longitude;
+					nrOfQuests++;
+				}
+				// we go a bit more than the radius south of the hotspot, 
+				// by dividing the radius through 100000m instead of 111000m and subtracting it:
+				southernMostLatitude -= radiusOfSelectedHotspot / 100000;
+				_mockedLocation.longitude = nrOfQuests > 0 ? sumOfLongitudes / nrOfQuests : sumOfLongitudes;
+				_mockedLocation.latitude = southernMostLatitude;
 			}
 		}
 
@@ -35,7 +78,6 @@ namespace QM.Util {
 			if (mockLocation)
 			{
 				mIsEnabledByUser = true;
-//				MockedLocation = getMockLocation();
 			}
 			else
 			{

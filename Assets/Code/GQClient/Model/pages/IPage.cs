@@ -21,6 +21,11 @@ namespace GQ.Client.Model
 		void Start ();
 
 		void End ();
+
+		/// <summary>
+		/// Called just before this page is left and another page type or the foyer will follow. You might use overriding implementations to unregister listeners etc.
+		/// </summary>
+		void CleanUp ();
 	}
 
 }

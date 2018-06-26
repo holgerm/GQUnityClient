@@ -84,8 +84,6 @@ namespace GQ.Client.Util {
 
 		private void WaitedForInitialization() {
 			stillWait--;
-		
-			UnityEngine.Debug.Log("GPS_____: WAITING FOR INIT  stillWait: " + stillWait);
 		}
 
 		public static readonly LocationInfoExt NullLocationInfo = new LocationInfoExt();
@@ -150,23 +148,8 @@ namespace GQ.Client.Util {
 				else {
 					_onLocationUpdate += value;	
 				}
-
-//				// Tell the new listener asap if the service is not available:
-//				if (!Device.location.isEnabledByUser) {
-//					_onLocationUpdate += value;
-//					// StartWaiting for Enabling of Location Device by user. Do we need another frequency and timeout?
-//					return;
-//				}
-//				if (!ListenersAttached) {
-//					_onLocationUpdate += value;
-//					if (Device.location.status != LocationServiceStatus.Initializing && Device.location.status != LocationServiceStatus.Running) {
-//						Device.location.Start();
-//					}
-//					else {
-//						
-//					}
-//				}
 			}
+
 			remove {
 				_onLocationUpdate -= value;
 			}
@@ -197,13 +180,14 @@ namespace GQ.Client.Util {
 					switch (Device.location.status) 
 					{
 					case LocationServiceStatus.Running:
-//						UnityEngine.Debug.Log("GPS_____: RUNNING: ");
+//						UnityEngine.Debug.Log("GPS_____: RUNNING: " + _onLocationUpdate.GetInvocationList ().Length);
 						LocationInfoExt newLocation = Device.location.lastData;
 
 //						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
 //						UnityEngine.Debug.Log("GPS_____: time: " + timeSpan.ToString() + " lat: " + newLocation.latitude + " long: " + newLocation.longitude);
-
+//
 						if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation)) {
+//							UnityEngine.Debug.Log("###1: failed: " + failed);
 							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Device.location.lastData));
 							failed = false;
 						}
@@ -220,7 +204,9 @@ namespace GQ.Client.Util {
 
 						}
 						else {
+//							UnityEngine.Debug.Log("###2: ");
 							if (!failed) {
+//								UnityEngine.Debug.Log("###2.1: ");
 								_onLocationUpdate (
 									this, 
 									new LocationEventArgs (
@@ -233,7 +219,7 @@ namespace GQ.Client.Util {
 						}
 						break;
 					case LocationServiceStatus.Initializing:
-						UnityEngine.Debug.Log("GPS_____: INITIALIZING: ");
+//						UnityEngine.Debug.Log("GPS_____: INITIALIZING: ");
 						StartWaitingForInitialization();
 						do {
 							yield return new WaitForSeconds (1);
@@ -242,7 +228,7 @@ namespace GQ.Client.Util {
 						//						continue;
 						break;
 					case LocationServiceStatus.Failed:
-						UnityEngine.Debug.Log("GPS_____: FAILED: ");
+//						UnityEngine.Debug.Log("GPS_____: FAILED: ");
 
 						if (!failed) {
 							_onLocationUpdate (
@@ -256,6 +242,7 @@ namespace GQ.Client.Util {
 						}
 						break;
 					default:
+//						UnityEngine.Debug.Log("###5: ");
 						Log.SignalErrorToDeveloper ("LocationService in unknown state {0}.", Device.location.status.ToString ());
 						break;
 					}

@@ -134,9 +134,13 @@ namespace GQ.Client.Util
 			SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
 			canvasStates = new Dictionary<string, bool> ();
 
-			#if UNITY_EDITOR
+			#if UNITY_EDITOR || UNITY_STANDALONE
 			Device.awakeLocationMock ();
 			#endif
+
+//			#if UNITY_STANDALONE
+//			Screen.SetResolution(1080,1920,true);
+//			#endif
 		}
 
 		void Update() {

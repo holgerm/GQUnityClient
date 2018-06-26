@@ -14,6 +14,9 @@ namespace GQ.Client.UI
 	public class QuestMapController : MapController {
 		protected QuestManager qm;
 
+
+		#region Runtime API
+
 		protected override void Start() {
 			base.Start ();
 
@@ -21,6 +24,16 @@ namespace GQ.Client.UI
 
 			UpdateView ();
 		}
+
+		/// <summary>
+		/// Cleans up, e.g. unregisters itself as listener of map position updates.
+		/// </summary>
+		public void CleanUp() {
+			LocationSensor.Instance.OnLocationUpdate -= map.UpdatePosition;
+		}
+
+		#endregion
+
 
 		#region Map
 
