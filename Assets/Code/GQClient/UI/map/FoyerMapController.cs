@@ -45,6 +45,7 @@ namespace GQ.Client.UI.Foyer
 			Marker m;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
+//				Debug.Log (string.Format("FMC.OnMarkerChanged: AddedInfo {0} #{1}", e.Message, QuestInfoManager.Instance.QuestDict.Count).Yellow());
 //				qiCtrl = 
 //					QuestMapMarkerController.Create (
 //					root: InfoList.gameObject,
@@ -53,8 +54,10 @@ namespace GQ.Client.UI.Foyer
 //				).GetComponent<QuestMapMarkerController> ();
 //				QuestInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
 //				qiCtrl.Show ();
+				UpdateView ();
 				break;
 			case ChangeType.ChangedInfo:
+//				Debug.Log (string.Format("FMC.OnMarkerChanged: ChangedInfo {0} #{1}", e.Message, QuestInfoManager.Instance.QuestDict.Count).Yellow());
 				if (!Markers.TryGetValue (e.OldQuestInfo.Id, out m)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
@@ -66,6 +69,7 @@ namespace GQ.Client.UI.Foyer
 				m.Show ();
 				break;
 			case ChangeType.RemovedInfo:
+//				Debug.Log (string.Format("FMC.OnMarkerChanged: RemovedInfo {0}", e.Message).Yellow());
 				if (!Markers.TryGetValue (e.OldQuestInfo.Id, out m)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Remove event occurred.",
@@ -77,9 +81,11 @@ namespace GQ.Client.UI.Foyer
 				Markers.Remove (e.OldQuestInfo.Id);
 				break;							
 			case ChangeType.ListChanged:
+//				Debug.Log (string.Format("FMC.OnMarkerChanged: ListChanged {0} #{1}", e.Message, QuestInfoManager.Instance.QuestDict.Count).Yellow());
 				UpdateView ();
 				break;							
 			case ChangeType.FilterChanged:
+//				Debug.Log (string.Format("FMC.OnMarkerChanged: FilterChanged {0}", e.Message).Yellow());
 				UpdateView ();
 				break;							
 			}
