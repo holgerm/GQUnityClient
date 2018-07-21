@@ -103,6 +103,11 @@ namespace GQ.Client.Model
 		public const string PAGE_STARTANDEXITSCREEN_FPS = "fps";
 		public const string PAGE_STARTANDEXITSCREEN_LOOP = "loop";
 
+		// VIDEO PLAY PAGE:
+		public const string PAGE_TYPE_VIDEOPLAY = "VideoPlay";
+		public const string PAGE_VIDEOPLAY_CONTROLLABLE = "controllable";
+		public const string PAGE_VIDEOPLAY_PORTRAIT = "portrait";
+
 		// READ_NFC PAGE:
 		public const string PAGE_TYPE_READNFC = "ReadNFC";
 		public const string PAGE_READNFC_IMAGEURL = "image";
