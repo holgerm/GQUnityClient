@@ -103,6 +103,12 @@ namespace GQ.Client.Model
 		public const string PAGE_STARTANDEXITSCREEN_FPS = "fps";
 		public const string PAGE_STARTANDEXITSCREEN_LOOP = "loop";
 
+		// READ_NFC PAGE:
+		public const string PAGE_TYPE_READNFC = "ReadNFC";
+		public const string PAGE_READNFC_IMAGEURL = "image";
+		public const string PAGE_READNFC_SAVE2VAR = "saveToVar";
+		public const string PAGE_READNFC_TEXT = "text";
+
 		// METADATA PAGE:
 		public const string PAGE_TYPE_METADATA = "MetaData";
 		public const string PAGE_METADATA_STRINGMETA = "stringmeta";
@@ -113,6 +119,7 @@ namespace GQ.Client.Model
 		public const string ON_START = "onStart";
 		public const string ON_SUCCESS = "onSuccess";
 		public const string ON_FAIL = "onFail";
+		public const string ON_READ = "onRead";
 		public const string ON_END = "onEnd";
 		public const string ON_ENTER = "onEnter";
 		public const string ON_LEAVE = "onLeave";

@@ -439,7 +439,7 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor (StartSection = "Internal:")]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	eumlationColor  { get; set; }
+		public Color32	emulationColor  { get; set; }
 
 		#endregion
 
@@ -530,7 +530,7 @@ namespace GQ.Client.Conf
 			menu2ShownInQuests = true;
 
 			// Internal:
-			eumlationColor = new Color (255f, 182f, 182f, 255f);
+			emulationColor = new Color (255f, 182f, 182f, 255f);
 		}
 
 		#endregion
