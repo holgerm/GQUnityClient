@@ -9,7 +9,20 @@ namespace GQ.Client.UI
 
 	public class DialogItemCtrl : MonoBehaviour {
 
+		#region Unity Inspektor
+
 		public HyperText DialogItemHyperText;
+
+		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
+		{
+			string href = extractHREF (linkInfo);
+			if (href != null) {
+				Application.OpenURL (href);
+			}
+		}
+
+		#endregion
+
 
 		public void Initialize(string itemText) {
 			this.DialogItemHyperText.text = itemText;
@@ -29,13 +42,6 @@ namespace GQ.Client.UI
 			return diCtrl;
 		}
 
-		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
-		{
-			string href = extractHREF (linkInfo);
-			if (href != null) {
-				Application.OpenURL (href);
-			}
-		}
 		private string extractHREF (Candlelight.UI.HyperText.LinkInfo info)
 		{
 			string href = null;
