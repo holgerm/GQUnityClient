@@ -62,6 +62,11 @@ namespace GQ.Client.Model
 		public const string PAGE_IMAGECAPTURE_FILE = "file";
 		public const string PAGE_IMAGECAPTURE_TASK = "task";
 
+		// AUDIO RECORD PAGE:
+		public const string PAGE_TYPE_AUDIORECORD = "AudioRecord";
+		public const string PAGE_AUDIORECORD_FILE = "file";
+		public const string PAGE_AUDIORECORD_TASK = "task";
+
 		// NPC_TALK PAGE:
 		public const string PAGE_TYPE_NPCTALK = "NPCTalk";
 		public const string PAGE_NPCTALK_ENDBUTTONTEXT = "endbuttontext";
