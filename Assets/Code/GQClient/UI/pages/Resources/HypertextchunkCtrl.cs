@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace GQ.Client.UI
 {
 
-	public class DialogItemCtrl : MonoBehaviour {
+	public class HypertextchunkCtrl : MonoBehaviour {
 
 		#region Unity Inspektor
 
@@ -28,15 +28,15 @@ namespace GQ.Client.UI
 			this.DialogItemHyperText.text = itemText;
 		}
 
-		public static DialogItemCtrl Create(Transform rootTransform, string text) {
+		public static HypertextchunkCtrl Create(Transform rootTransform, string text) {
 			GameObject go = (GameObject)Instantiate (
-				Resources.Load ("DialogItem"),
+				Resources.Load ("HypertextChunk"),
 				rootTransform,
 				false
 			);
 			go.SetActive (true);
 
-			DialogItemCtrl diCtrl = go.GetComponent<DialogItemCtrl> ();
+			HypertextchunkCtrl diCtrl = go.GetComponent<HypertextchunkCtrl> ();
 			diCtrl.Initialize (text);
 
 			return diCtrl;

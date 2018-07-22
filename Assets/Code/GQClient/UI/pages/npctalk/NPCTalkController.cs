@@ -128,7 +128,7 @@ namespace GQ.Client.UI
 			string currentText = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
 
 			// create dialog item GO from prefab:
-			DialogItemCtrl.Create (dialogItemContainer, currentText);
+			HypertextchunkCtrl.Create (dialogItemContainer, currentText);
 		}
 
 		void UpdateForwardButton ()

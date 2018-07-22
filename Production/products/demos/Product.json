@@ -32,7 +32,8 @@
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
     "Assets/Scenes/Pages/StartAndExitScreen.unity",
-    "Assets/Scenes/Pages/TextQuestion.unity"
+    "Assets/Scenes/Pages/TextQuestion.unity",
+    "Assets/Scenes/Pages/Menu.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,

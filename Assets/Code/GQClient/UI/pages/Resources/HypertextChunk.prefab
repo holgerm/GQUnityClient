@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114511052788354194}
   - component: {fileID: 114954937088945366}
   m_Layer: 5
-  m_Name: DialogItem
+  m_Name: HypertextChunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
