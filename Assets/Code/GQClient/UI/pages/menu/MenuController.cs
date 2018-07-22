@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.UI;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
@@ -28,7 +29,7 @@ namespace GQ.Client.UI
 			myPage = (PageMenu)page;
 
 			// show the question:
-			questionText.text = myPage.Question;
+			questionText.text = myPage.Question.MakeReplacements();
 
 			// show the answers:
 			foreach (MenuChoice a in myPage.Choices) {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
@@ -25,7 +26,7 @@ namespace GQ.Client.UI
 
 
 		public void Initialize(string itemText) {
-			this.DialogItemHyperText.text = itemText;
+			this.DialogItemHyperText.text = itemText.MakeReplacements();
 		}
 
 		public static HypertextchunkCtrl Create(Transform rootTransform, string text) {
