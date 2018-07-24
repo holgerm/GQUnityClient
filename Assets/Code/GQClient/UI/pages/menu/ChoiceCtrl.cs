@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
+using GQ.Client.Util;
+using GQ.Client.Conf;
 
 public class ChoiceCtrl : MonoBehaviour
 {
@@ -34,7 +36,8 @@ public class ChoiceCtrl : MonoBehaviour
 		ChoiceCtrl choiceCtrl = go.GetComponent<ChoiceCtrl> ();
 		choiceCtrl.page = myPage;
 		choiceCtrl.choice = choice;
-		choiceCtrl.choiceText.text = choice.Text;
+		choiceCtrl.choiceText.color = ConfigurationManager.Current.mainColorFG;
+		choiceCtrl.choiceText.text = choice.Text.Decode4HyperText(false);
 		choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
 
 		return choiceCtrl;

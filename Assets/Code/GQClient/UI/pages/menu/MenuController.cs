@@ -29,7 +29,7 @@ namespace GQ.Client.UI
 			myPage = (PageMenu)page;
 
 			// show the question:
-			questionText.text = myPage.Question.MakeReplacements();
+			questionText.text = myPage.Question.Decode4HyperText();
 
 			// show the answers:
 			foreach (MenuChoice a in myPage.Choices) {

@@ -67,11 +67,13 @@ namespace GQ.Client.Util
 		/// </summary>
 		/// <returns>The hyper text.</returns>
 		/// <param name="rawText">Raw text.</param>
-		public static string Decode4HyperText (string rawText)
+		/// <param name="supportHtmlLinks">Support clickable links within the text, defaults to true.</param>
+		public static string Decode4HyperText (this string rawText, bool supportHtmlLinks = true)
 		{
 			string result = HTMLDecode (rawText);
 			result = MakeReplacements (result);
-			result = EnhanceHTMLAnchors4HyperText (result);
+			if (supportHtmlLinks)
+				result = EnhanceHTMLAnchors4HyperText (result);
 
 			return result;
 		}

@@ -5,7 +5,13 @@ licenseType: Pro
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - answerImage: {fileID: 114793755501227358, guid: cc3844e940dd843cc9e7e65b46d1cf78,
+      type: 2}
+  - choiceText: {fileID: 114523966292447536, guid: cc3844e940dd843cc9e7e65b46d1cf78,
+      type: 2}
+  - choiceButton: {fileID: 114895349484029110, guid: cc3844e940dd843cc9e7e65b46d1cf78,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

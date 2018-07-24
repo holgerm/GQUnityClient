@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Xml.Serialization;
 using System.Xml;
 using GQ.Client.Err;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -99,7 +100,7 @@ namespace GQ.Client.Model
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_QUESTION_ANSWER);
 
 			// Content: Read and implicitly proceed the reader so that this node is completely consumed:
-			Text = reader.ReadInnerXml ();
+			Text = reader.ReadInnerXml ().MakeReplacements();
 		}
 
 		#endregion

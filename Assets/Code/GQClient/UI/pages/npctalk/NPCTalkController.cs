@@ -125,7 +125,7 @@ namespace GQ.Client.UI
 		void AddCurrentText ()
 		{
 			// decode text for HyperText Component:
-			string currentText = TextHelper.Decode4HyperText (npcPage.CurrentDialogItem.Text);
+			string currentText = npcPage.CurrentDialogItem.Text.Decode4HyperText();
 
 			// create dialog item GO from prefab:
 			HypertextchunkCtrl.Create (dialogItemContainer, currentText);

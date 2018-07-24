@@ -25,11 +25,11 @@ namespace GQ.Client.UI
 		#endregion
 
 
-		public void Initialize(string itemText) {
-			this.DialogItemHyperText.text = itemText.MakeReplacements();
+		public void Initialize(string itemText, bool supportHtmlLinks) {
+			this.DialogItemHyperText.text = itemText.Decode4HyperText(supportHtmlLinks : supportHtmlLinks);
 		}
 
-		public static HypertextchunkCtrl Create(Transform rootTransform, string text) {
+		public static HypertextchunkCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true) {
 			GameObject go = (GameObject)Instantiate (
 				Resources.Load ("HypertextChunk"),
 				rootTransform,
@@ -38,7 +38,7 @@ namespace GQ.Client.UI
 			go.SetActive (true);
 
 			HypertextchunkCtrl diCtrl = go.GetComponent<HypertextchunkCtrl> ();
-			diCtrl.Initialize (text);
+			diCtrl.Initialize (text, supportHtmlLinks);
 
 			return diCtrl;
 		}
