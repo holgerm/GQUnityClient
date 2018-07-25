@@ -114,6 +114,11 @@ namespace GQ.Client.Model
 		public const string PAGE_VIDEOPLAY_CONTROLLABLE = "controllable";
 		public const string PAGE_VIDEOPLAY_PORTRAIT = "portrait";
 
+		// WEBPAGE PAGE:
+		public const string PAGE_TYPE_WEBPAGE = "WebPage";
+		public const string PAGE_WEBPAGE_FILE = "file";
+		public const string PAGE_WEBPAGE_URL = "url";
+
 		// QR TAG SCANNER PAGE:
 		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";
 		public const string PAGE_TYPE_QRTAGSCANNER_PROMPT = "taskdescription";
