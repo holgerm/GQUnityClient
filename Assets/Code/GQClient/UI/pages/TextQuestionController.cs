@@ -34,8 +34,11 @@ namespace GQ.Client.UI
 
 			// show the question:
 			questionText.color = ConfigurationManager.Current.mainColorFG;
+			questionText.fontSize = ConfigurationManager.Current.mainFontSize;
 			questionText.text = myPage.Question.Decode4HyperText();
 			promptPlaceholder.text = myPage.Prompt;
+			promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
+			answerGiven.fontSize = ConfigurationManager.Current.mainFontSize;
 			forwardButton.transform.Find ("Text").GetComponent<Text> ().text = "Eingeben";
 		}
 

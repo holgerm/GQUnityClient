@@ -83,6 +83,7 @@
     "b": 255,
     "a": 255
   },
+  "mainFontSize": 60,
   "showShadows": true,
   "headerBgColor": {
     "r": 255,

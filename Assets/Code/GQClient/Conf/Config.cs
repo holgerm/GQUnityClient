@@ -275,6 +275,9 @@ namespace GQ.Client.Conf
 		public Color32	mainColorBG  { get; set; }
 
 		[ShowInProductEditor]
+		public int	mainFontSize  { get; set; }
+
+		[ShowInProductEditor]
 		public bool showShadows { get; set; }
 
 		[ShowInProductEditor]
@@ -494,6 +497,7 @@ namespace GQ.Client.Conf
 			// Layout:
 			mainColorBG = Color.white;
 			mainColorFG = Color.black;
+			mainFontSize = 60;
 			showShadows = true;
 			headerHeightUnits = 60f;
 			contentHeightUnits = 750f;

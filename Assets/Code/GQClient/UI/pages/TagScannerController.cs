@@ -33,6 +33,7 @@ namespace GQ.Client.UI
 
 			// show the content:
 			prompt.color = ConfigurationManager.Current.mainColorFG;
+			prompt.fontSize = ConfigurationManager.Current.mainFontSize;
 			prompt.text = myPage.Prompt.Decode4HyperText();
 			showInfo ();
 			forwardButtonText.text = "Ok";
