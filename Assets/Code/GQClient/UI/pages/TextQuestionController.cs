@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
+using GQ.Client.Util;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -21,27 +23,28 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
-		protected PageTextQuestion tqPage;
+		protected PageTextQuestion myPage;
 
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
 		/// </summary>
 		public override void Initialize ()
 		{
-			tqPage = (PageTextQuestion)page;
+			myPage = (PageTextQuestion)page;
 
 			// show the question:
-			questionText.text = tqPage.Question;
-			promptPlaceholder.text = tqPage.Prompt;
+			questionText.color = ConfigurationManager.Current.mainColorFG;
+			questionText.text = myPage.Question.Decode4HyperText();
+			promptPlaceholder.text = myPage.Prompt;
 			forwardButton.transform.Find ("Text").GetComponent<Text> ().text = "Eingeben";
 		}
 
 		public override void OnForward ()
 		{
-			if (tqPage.AnswerCorrect (answerGiven.text)) {
-				tqPage.Succeed ();
+			if (myPage.AnswerCorrect (answerGiven.text)) {
+				myPage.Succeed ();
 			} else {
-				tqPage.Fail ();
+				myPage.Fail ();
 			}
 		}
 

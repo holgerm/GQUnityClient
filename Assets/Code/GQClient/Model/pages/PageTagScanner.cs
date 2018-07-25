@@ -10,26 +10,16 @@ namespace GQ.Client.Model
 {
 
 	[XmlRoot (GQML.PAGE)]
-	public class PageTextQuestion : DecidablePage
+	public class PageTagScanner : DecidablePage
 	{
 		
 		#region State
 
-		public string LoopButtonText { get; set ; }
-
-		public string LoopText { get; set ; }
-
-		public string LoopImage { get; set; }
-
-		public bool LoopUntilSuccess { get; set; }
-
-		public string Question { get; set ; }
+		public bool ShowTagContent { get; set; }
 
 		public string Prompt { get; set ; }
 
-		public string BackGroundImage { get; set; }
-
-		private List<TQAnswer> Answers = new List<TQAnswer> ();
+		private List<ExpectedCode> ExpectedCodes = new List<ExpectedCode> ();
 
 		#endregion
 
@@ -40,23 +30,9 @@ namespace GQ.Client.Model
 		{
 			base.ReadAttributes (reader);
 
-			LoopButtonText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_BUTTON_TEXT, reader);
+			ShowTagContent = GQML.GetRequiredBoolAttribute (GQML.PAGE_TYPE_QRTAGSCANNER_SHOWTAGCONTENT, reader);
 
-			LoopText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_TEXT, reader);
-
-			LoopImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_IMAGE, reader);
-			if (LoopImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (LoopImage);
-
-			LoopUntilSuccess = GQML.GetOptionalBoolAttribute (GQML.PAGE_QUESTION_LOOP_UNTIL_SUCCESS, reader);
-
-			Question = GQML.GetStringAttribute (GQML.PAGE_QUESTION_QUESTION, reader);
-
-			Prompt = GQML.GetStringAttribute (GQML.PAGE_TEXTQUESTION_PROMPT, reader);
-
-			BackGroundImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_BACKGROUND_IMAGE, reader);
-			if (BackGroundImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (BackGroundImage);
+			Prompt = GQML.GetStringAttribute (GQML.PAGE_TYPE_QRTAGSCANNER_PROMPT, reader);
 		}
 
 		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
@@ -64,11 +40,11 @@ namespace GQ.Client.Model
 			XmlSerializer serializer; 
 
 			switch (reader.LocalName) {
-			case GQML.PAGE_QUESTION_ANSWER:
-				xmlRootAttr.ElementName = GQML.PAGE_QUESTION_ANSWER;
-				serializer = new XmlSerializer (typeof(TQAnswer), xmlRootAttr);
-				TQAnswer a = (TQAnswer)serializer.Deserialize (reader);
-				Answers.Add (a);
+			case GQML.PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE:
+				xmlRootAttr.ElementName = GQML.PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE;
+				serializer = new XmlSerializer (typeof(ExpectedCode), xmlRootAttr);
+				ExpectedCode a = (ExpectedCode)serializer.Deserialize (reader);
+				ExpectedCodes.Add (a);
 				break;
 			default:
 				base.ReadContent (reader, xmlRootAttr);
@@ -88,7 +64,8 @@ namespace GQ.Client.Model
 
 		public bool AnswerCorrect (string input)
 		{
-			foreach (TQAnswer a in Answers) {
+			foreach (ExpectedCode a in ExpectedCodes) {
+				// TODO: Extract this into a reusable method that will be called from here and from TextQuestionPage as well.
 				string aText = a.Text.Trim ();
 
 				// Text comparison:
@@ -145,7 +122,7 @@ namespace GQ.Client.Model
 
 	}
 
-	public class TQAnswer : IXmlSerializable
+	public class ExpectedCode : IXmlSerializable
 	{
 
 		#region State
@@ -178,11 +155,10 @@ namespace GQ.Client.Model
 
 		public void ReadXml (XmlReader reader)
 		{
-			GQML.AssertReaderAtStart (reader, GQML.PAGE_QUESTION_ANSWER);
+			GQML.AssertReaderAtStart (reader, GQML.PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE);
 
 			// Read Attributes:
 			Id = GQML.GetIntAttribute (GQML.ID, reader);
-
 			// Content: Read and implicitly proceed the reader so that this node is completely consumed:
 			Text = reader.ReadInnerXml ();
 		}
@@ -191,12 +167,12 @@ namespace GQ.Client.Model
 
 		#region Null
 
-		public static NullAnswer Null = new NullAnswer ();
+		public static NullExpectedCode Null = new NullExpectedCode ();
 
-		public class NullAnswer : TQAnswer
+		public class NullExpectedCode : ExpectedCode
 		{
 
-			internal NullAnswer ()
+			internal NullExpectedCode ()
 			{
 
 			}

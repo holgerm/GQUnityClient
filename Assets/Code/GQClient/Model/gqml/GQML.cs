@@ -13,9 +13,11 @@ namespace GQ.Client.Model
 
 		#region Tag Names
 
+		// GENERIC:
+		public const string ID = "id";
+
 		// QUEST:
 		public const string QUEST = "game";
-		public const string QUEST_ID = "id";
 		public const string QUEST_NAME = "name";
 		public const string QUEST_LASTUPDATE = "lastUpdate";
 		public const string QUEST_XMLFORMAT = "xmlformat";
@@ -23,7 +25,6 @@ namespace GQ.Client.Model
 
 		// PAGES GENERIC:
 		public const string PAGE = "mission";
-		public const string PAGE_ID = "id";
 		public const string PAGE_TYPE = "type";
 		public const string PAGE_TYPE_TEXT_QUESTION = "TextQuestion";
 
@@ -112,6 +113,14 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_VIDEOPLAY = "VideoPlay";
 		public const string PAGE_VIDEOPLAY_CONTROLLABLE = "controllable";
 		public const string PAGE_VIDEOPLAY_PORTRAIT = "portrait";
+
+		// QR TAG SCANNER PAGE:
+		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";
+		public const string PAGE_TYPE_QRTAGSCANNER_PROMPT = "taskdescription";
+		public const string PAGE_TYPE_QRTAGSCANNER_SHOWTAGCONTENT = "showTagContent";
+		// EXPECTED CODE:
+		public const string PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE = "expectedCode";
+
 
 		// READ_NFC PAGE:
 		public const string PAGE_TYPE_READNFC = "ReadNFC";

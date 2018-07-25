@@ -145,7 +145,7 @@ namespace GQ.Client.Model
 			if (Int32.TryParse (reader.GetAttribute (GQML.HOTSPOT_ID), out id)) {
 				Id = id;
 			} else {
-				Log.SignalErrorToDeveloper ("Id for a hotspot could not be parsed. We found: " + reader.GetAttribute (GQML.QUEST_ID));
+				Log.SignalErrorToDeveloper ("Id for a hotspot could not be parsed. We found: " + reader.GetAttribute (GQML.ID));
 			}
 
 			// Marker Image:

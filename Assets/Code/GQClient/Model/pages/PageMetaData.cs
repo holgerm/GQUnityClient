@@ -89,7 +89,7 @@ namespace GQ.Client.Model
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_METADATA_STRINGMETA);
 
 			// Read Attributes:
-			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
+			Id = GQML.GetIntAttribute (GQML.ID, reader);
 			Key = GQML.GetStringAttribute (GQML.PAGE_METADATA_STRINGMETA_KEY, reader);
 			Value = GQML.GetStringAttribute (GQML.PAGE_METADATA_STRINGMETA_VALUE, reader);
 

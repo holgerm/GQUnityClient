@@ -76,10 +76,10 @@ namespace GQ.Client.Model
 		{
 			// Id:
 			int id;
-			if (Int32.TryParse (reader.GetAttribute (GQML.PAGE_ID), out id)) {
+			if (Int32.TryParse (reader.GetAttribute (GQML.ID), out id)) {
 				Id = id;
 			} else {
-				Log.SignalErrorToDeveloper ("Id for a page could not be parsed. We found: " + reader.GetAttribute (GQML.QUEST_ID));
+				Log.SignalErrorToDeveloper ("Id for a page could not be parsed. We found: " + reader.GetAttribute (GQML.ID));
 			}
 
 			PageType = GQML.GetStringAttribute (GQML.PAGE_TYPE, reader);

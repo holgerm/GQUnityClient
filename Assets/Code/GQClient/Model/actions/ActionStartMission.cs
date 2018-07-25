@@ -23,7 +23,7 @@ namespace GQ.Client.Model
 
 		protected override void ReadAttributes (XmlReader reader)
 		{
-			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
+			Id = GQML.GetIntAttribute (GQML.ID, reader);
 			AllowReturn = GQML.GetOptionalBoolAttribute (GQML.ACTION_STARTMISSION_ALLOWRETURN, reader, false);
 		}
 

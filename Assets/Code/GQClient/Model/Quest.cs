@@ -209,7 +209,7 @@ namespace GQ.Client.Model
 			}
 
 			// we need the id first, because it is used in createing the media store...
-			Id = GQML.GetIntAttribute (GQML.QUEST_ID, reader);
+			Id = GQML.GetIntAttribute (GQML.ID, reader);
 
 			// set up the media store, depends on the id of the quest for paths:
 			initMediaStore ();

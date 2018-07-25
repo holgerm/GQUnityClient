@@ -138,7 +138,7 @@ namespace GQ.Client.Model
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_QUESTION_ANSWER);
 
 			// Read Attributes:
-			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
+			Id = GQML.GetIntAttribute (GQML.ID, reader);
 			Correct = GQML.GetRequiredBoolAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER_CORRECT, reader);
 			Image = GQML.GetStringAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER_IMAGE, reader);
 			if (Image != "")

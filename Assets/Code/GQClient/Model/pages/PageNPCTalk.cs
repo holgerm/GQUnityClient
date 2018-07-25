@@ -183,7 +183,7 @@ namespace GQ.Client.Model
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_NPCTALK_DIALOGITEM);
 
 			// Read Attributes:
-			Id = GQML.GetIntAttribute (GQML.PAGE_ID, reader);
+			Id = GQML.GetIntAttribute (GQML.ID, reader);
 			IsBlocking = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
 			Speaker = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_SPEAKER, reader);
 			AudioURL = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL, reader);
