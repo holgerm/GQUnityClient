@@ -81,7 +81,7 @@ namespace UnityTest.IntegrationTests
 
 			AssetDatabase.Refresh ();
 
-			if (!string.IsNullOrEmpty (result)) {
+            if (result.summary.totalErrors != 0) {
 				if (InternalEditorUtility.inBatchMode)
 					EditorApplication.Exit (Batch.returnCodeRunError);
 				return;

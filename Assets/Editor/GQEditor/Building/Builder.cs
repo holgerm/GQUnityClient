@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using GQ.Client.Conf;
 using UnityEditor.Callbacks;
+using UnityEditor.Build.Reporting;
 
 #if UNITY_IOS
 using UnityEditor.iOS.Xcode;
@@ -99,7 +100,8 @@ namespace GQ.Editor.Building {
 				Directory.CreateDirectory(outDir + "/");
 			}
 			string outPath = outDir + "/gq_" + productID + ".apk";
-			errorMsg = BuildPipeline.BuildPlayer(GetScenes(), outPath, BuildTarget.Android, BuildOptions.None);
+            BuildReport buildReport = BuildPipeline.BuildPlayer(GetScenes(), outPath, BuildTarget.Android, BuildOptions.None);
+            errorMsg = "Errors during build: " + outPath + " # " + buildReport.summary.totalErrors;
 			if ( errorMsg != null && !errorMsg.Equals("") ) {
 				Debug.LogError("ERROR while trying to build Android player: " + errorMsg);
 			}
@@ -125,8 +127,9 @@ namespace GQ.Editor.Building {
 			// in case we did not build that project vefore, we can not append to it:
 			if ( !File.Exists(outDir + "/" + UNITY_IOS_ProjectFileName) )
 				buildOptions = BuildOptions.None;
-			errorMsg = BuildPipeline.BuildPlayer(GetScenes(), outDir, BuildTarget.iOS, buildOptions);
-			if ( errorMsg != null && !errorMsg.Equals("") ) {
+            BuildReport buildReport = BuildPipeline.BuildPlayer(GetScenes(), outDir, BuildTarget.iOS, buildOptions);
+            errorMsg = "Errors during build: " + outDir + " # " + buildReport.summary.totalErrors;
+		    if ( errorMsg != null && !errorMsg.Equals("") ) {
 				Debug.LogError("ERROR while trying to build iOS player: " + errorMsg);
 				Debug.LogError("  args follow:");
 				foreach ( string arg in Environment.GetCommandLineArgs () ) {

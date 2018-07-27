@@ -120,9 +120,9 @@ namespace GQ.Client.Util {
 
 		public class LocationEventArgs : EventArgs 
 		{
-			public LocationEventType Kind { get; }
+            public LocationEventType Kind { get; set; }
 
-			public LocationInfoExt Location { get; }
+            public LocationInfoExt Location { get; set; }
 
 			public LocationEventArgs(
 				LocationEventType kind,
@@ -249,8 +249,6 @@ namespace GQ.Client.Util {
 
 					yield return new WaitForSecondsRealtime(PollingInterval);
 				}
-			} catch(Exception e) {
-				Log.SignalErrorToDeveloper ("An exception occurred while polling for location data: " + e.Message);
 			} finally {
 				currentlyPolling = false;
 			}

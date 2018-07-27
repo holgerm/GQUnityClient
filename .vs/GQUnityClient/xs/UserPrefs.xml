@@ -1,0 +1,23 @@
+﻿<Properties RefactoringSettings.EnableRefactorings="True" StartupConfiguration="{0579B895-D11E-6140-BF53-6560ECC0ABAA}|Unit Tests">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/UnityTestTools/IntegrationTestsFramework/TestRunner/Editor/PlatformRunner/PlatformRunner.cs">
+    <Files>
+      <File FileName="Assets/Code/GQClient/Util/input/LocationSensor.cs" Line="252" Column="1" />
+      <File FileName="Assets/Editor/GQEditor/Building/Builder.cs" Line="104" Column="57" />
+      <File FileName="Assets/UnityTestTools/IntegrationTestsFramework/TestRunner/Editor/PlatformRunner/PlatformRunner.cs" Line="84" Column="31" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/qeeveedeveloper/GeoQuest/GQUnityClient/Assets/Code/GQClient/Model/pages/Page.cs" relfile="Assets/Code/GQClient/Model/pages/Page.cs" line="231" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets/Code/GQClient/Util/tasks/Download.cs" line="158" offsetX="452" offsetY="2355" expression="targetDir" liveUpdate="False" />
+    <Watch file="Assets/Code/GQClient/Err/Log.cs" line="55" offsetX="459" offsetY="810" expression="logtext" liveUpdate="False" />
+    <Watch file="Assets/Editor/GQEditor/UI/ProductEditor.cs" line="612" offsetX="647" offsetY="9165" expression="className" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp-Editor-firstpass PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>
