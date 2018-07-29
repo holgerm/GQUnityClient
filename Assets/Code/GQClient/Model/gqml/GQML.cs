@@ -111,6 +111,7 @@ namespace GQ.Client.Model
 
 		// VIDEO PLAY PAGE:
 		public const string PAGE_TYPE_VIDEOPLAY = "VideoPlay";
+        public const string PAGE_VIDEOPLAY_FILE = "file";
 		public const string PAGE_VIDEOPLAY_CONTROLLABLE = "controllable";
 		public const string PAGE_VIDEOPLAY_PORTRAIT = "portrait";
 

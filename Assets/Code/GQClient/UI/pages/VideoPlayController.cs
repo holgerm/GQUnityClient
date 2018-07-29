@@ -41,6 +41,7 @@ namespace GQ.Client.UI
 				"Diese Funktion steht leider noch nicht zur Verfügung. Hier werden als Test die Informationen angezeigt, die in der Quest-Seite gespeichert wurden:\n\n" +
 				"type:\t\t\t" + myPage.PageType + "\n" +
 				"id:\t\t\t\t\t" + myPage.Id + "\n" +
+                "file:\t\t\t" + myPage.VideoFile + "\n" +
 				"cotrollable:\t" + myPage.Controllable + "\n" +
 				"text:\t\t\t\t" + myPage.Portrait; 
 		}

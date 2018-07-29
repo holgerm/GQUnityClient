@@ -17,6 +17,7 @@ namespace GQ.Client.Model
 
 		public bool Controllable { get; set; }
 		public bool Portrait { get; set; }
+        public string VideoFile { get; set; }
 
 		#endregion
 
@@ -26,6 +27,10 @@ namespace GQ.Client.Model
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
+
+            VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
+            if (VideoFile != "")
+                QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile);
 
 			Controllable = GQML.GetRequiredBoolAttribute (GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);
 			Portrait = GQML.GetRequiredBoolAttribute (GQML.PAGE_VIDEOPLAY_PORTRAIT, reader);
