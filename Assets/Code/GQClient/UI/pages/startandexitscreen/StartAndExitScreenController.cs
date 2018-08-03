@@ -22,7 +22,7 @@ namespace GQ.Client.UI
 
 		#region Other Fields
 
-		protected PageStartAndExitScreen saesPage;
+		protected PageStartAndExitScreen myPage;
 
 		#endregion
 
@@ -41,24 +41,24 @@ namespace GQ.Client.UI
 
 		public override void Initialize ()
 		{
-			saesPage = (PageStartAndExitScreen)page;
+            myPage = (PageStartAndExitScreen)page;
 
 			// show (or hide completely) image:
 			GameObject imagePanel = image.transform.parent.gameObject;
-			if (saesPage.ImageUrl == "") {
+			if (myPage.ImageUrl == "") {
 				imagePanel.SetActive (false);
 				return;
 			} else {
 				imagePanel.SetActive (true);
 				AbstractDownloader loader;
-				if (saesPage.Parent.MediaStore.ContainsKey (saesPage.ImageUrl)) {
+				if (myPage.Parent.MediaStore.ContainsKey (myPage.ImageUrl)) {
 					MediaInfo mediaInfo;
-					saesPage.Parent.MediaStore.TryGetValue (saesPage.ImageUrl, out mediaInfo);
+					myPage.Parent.MediaStore.TryGetValue (myPage.ImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
 					loader = 
 						new Downloader (
-						url: saesPage.ImageUrl, 
+						url: myPage.ImageUrl, 
 						timeout: ConfigurationManager.Current.timeoutMS,
 						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 					);

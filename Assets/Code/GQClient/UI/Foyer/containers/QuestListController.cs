@@ -112,6 +112,16 @@ namespace GQ.Client.UI.Foyer
 			Base.Instance.StartCoroutine (updateViewAsCoroutine ());
 		}
 
+        /// <summary>
+        /// Updates the view in coroutine mode. 
+        /// 
+        /// What happens is: 
+        /// First all quest infos are deleted and the internal list is cleared. 
+        /// Collect all filtered quest infos from the QuestInfoManager and create new controls for each.
+        /// Sort the list according to the current sorting settings.
+        /// 
+        /// </summary>
+        /// <returns>The view as coroutine.</returns>
 		private IEnumerator updateViewAsCoroutine ()
 		{
 			if (this == null) {

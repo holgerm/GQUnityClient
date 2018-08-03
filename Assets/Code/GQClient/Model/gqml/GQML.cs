@@ -113,7 +113,9 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_VIDEOPLAY = "VideoPlay";
         public const string PAGE_VIDEOPLAY_FILE = "file";
 		public const string PAGE_VIDEOPLAY_CONTROLLABLE = "controllable";
-		public const string PAGE_VIDEOPLAY_PORTRAIT = "portrait";
+        public const string PAGE_VIDEOPLAY_VIDEOTYPE = "videotype";
+        public const string PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL = "Normal";
+        public const string PAGE_VIDEOPLAY_VIDEOTYPE_360 = "360 Grad";
 
 		// WEBPAGE PAGE:
 		public const string PAGE_TYPE_WEBPAGE = "WebPage";

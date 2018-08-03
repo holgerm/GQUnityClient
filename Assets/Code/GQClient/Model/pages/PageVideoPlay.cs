@@ -5,49 +5,50 @@ using System.Xml.Serialization;
 using System.Xml;
 using System;
 using GQ.Client.Err;
+using GQ.Client.UI;
 
 namespace GQ.Client.Model
 {
 
-	[XmlRoot (GQML.PAGE)]
-	public class PageVideoPlay : Page
-	{
-		
-		#region State
+    [XmlRoot(GQML.PAGE)]
+    public class PageVideoPlay : Page
+    {
 
-		public bool Controllable { get; set; }
-		public bool Portrait { get; set; }
+        #region State
+
+        public bool Controllable { get; set; }
         public string VideoFile { get; set; }
+        public string VideoType { get; set; }
 
-		#endregion
+        #endregion
 
 
-		#region XML Serialization
+        #region XML Serialization
 
-		protected override void ReadAttributes (XmlReader reader)
-		{
-			base.ReadAttributes (reader);
+        protected override void ReadAttributes(XmlReader reader)
+        {
+            base.ReadAttributes(reader);
 
             VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
             if (VideoFile != "")
                 QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile);
 
-			Controllable = GQML.GetRequiredBoolAttribute (GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);
-			Portrait = GQML.GetRequiredBoolAttribute (GQML.PAGE_VIDEOPLAY_PORTRAIT, reader);
-		}
+            Controllable = GQML.GetRequiredBoolAttribute(GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);
+            VideoType = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_VIDEOTYPE, reader, GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL);
+        }
 
-		#endregion
+        #endregion
 
 
-		#region Runtime API
+        #region Runtime API
 
-		public override void Start ()
-		{
-			base.Start ();
-		}
+        public override void Start()
+        {
+            base.Start();
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }

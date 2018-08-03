@@ -1,18 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.UI;
 using Candlelight.UI;
 using GQ.Client.Util;
-using GQ.Client.Err;
 using System.Text.RegularExpressions;
 using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
-	
-	public class ImageWithTextController : PageController
+
+    public class ImageWithTextController : PageController
 	{
 
 		#region Inspector Fields

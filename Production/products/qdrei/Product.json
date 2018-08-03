@@ -8,10 +8,11 @@
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
   "autoUpdateQuestInfos": false,
-  "timeoutMS": 60000,
+  "timeoutMS": 0,
   "maxIdleTimeMS": 9089,
-  "nameForQuestSg": null,
-  "nameForQuestsPl": null,
+  "maxParallelDownloads": 15,
+  "nameForQuestSg": "Spiel",
+  "nameForQuestsPl": "Spiele",
   "questInfoViews": [
     "List",
     "Map"
@@ -32,11 +33,18 @@
   "sceneMappings": [],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
-    "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
-    "Assets/Scenes/Pages/Navigation.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
+    "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
+    "Assets/Scenes/Pages/TextQuestion.unity",
     "Assets/Scenes/Pages/StartAndExitScreen.unity",
-    "Assets/Scenes/Pages/TextQuestion.unity"
+    "Assets/Scenes/Pages/Menu.unity",
+    "Assets/Scenes/Pages/Navigation.unity",
+    "Assets/Scenes/Pages/VideoPlay.unity",
+    "Assets/Scenes/Pages/WebPage.unity",
+    "Assets/Scenes/Pages/AudioRecord.unity",
+    "Assets/Scenes/Pages/ImageCapture.unity",
+    "Assets/Scenes/Pages/TagScanner.unity",
+    "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
@@ -88,7 +96,8 @@
     "b": 255,
     "a": 255
   },
-  "showShadows": true,
+  "mainFontSize": 60,
+  "showShadows": false,
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -180,13 +189,13 @@
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0
+    "a": 255
   },
   "menuPartBGColor": {
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0
+    "a": 255
   },
   "menuInhibitsInteraction": false,
   "menu2ShownInQuests": true,
@@ -200,7 +209,7 @@
     "b": 255,
     "a": 255
   },
-  "eumlationColor": {
+  "emulationColor": {
     "r": 255,
     "g": 255,
     "b": 255,

@@ -84,7 +84,7 @@ namespace GQ.Client.UI
 		}
 
 		/// <summary>
-		/// Clean up before the page controlled by this controller is left.
+		/// Clean up just before the page controlled by this controller is left, e.g. when starting a new page.
 		/// </summary>
 		public virtual void CleanUp() {
 			

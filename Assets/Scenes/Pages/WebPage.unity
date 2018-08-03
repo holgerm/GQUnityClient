@@ -936,6 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0126e8b9468aa428f8d1599e31ad340c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whatToToggle: {fileID: 0}
 --- !u!114 &489062701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1611,7 +1612,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000041222916}
+  m_AnchoredPosition: {x: 0, y: -0.00006860861}
   m_SizeDelta: {x: 0, y: 128.4}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -1761,6 +1762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abe7662a0d0db44f998b1fa209b8a96e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showOnlyWhenActive: {fileID: 0}
 --- !u!1 &988022697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2895,12 +2897,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e809b6a0c8843ea9ef00e82fe46c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Header: {fileID: 0}
-  TopMargin: {fileID: 0}
-  ContentArea: {fileID: 0}
-  Divider: {fileID: 0}
-  BottomMargin: {fileID: 0}
-  Footer: {fileID: 0}
+  Header: {fileID: 1095057061}
+  TopMargin: {fileID: 485913647}
+  ContentArea: {fileID: 215277135}
+  Divider: {fileID: 515129376}
+  BottomMargin: {fileID: 498327046}
+  Footer: {fileID: 1804547552}
 --- !u!114 &2125452551
 MonoBehaviour:
   m_ObjectHideFlags: 0
