@@ -10,128 +10,140 @@ using GQ.Client.Err;
 namespace GQ.Client.Util
 {
 
-	public static class TextHelper
-	{
+    public static class TextHelper
+    {
 
-		public const string regexPattern4Varnames = @"@[a-zA-Z.]+[a-zA-Z.0-9\-_]*@";
-		public const string regexPattern4HTMLAnchors = @"<a +(?:(?:[a-zA-Z]+) *= *(?:""[^""]*?""|'[^']*?'))*.*?>(?'content'.*?)<\/a>";
-		public const string regexPattern4HTMLAttributes = @"(?'name'[a-zA-Z]+) *= *(?'val'""[^""]*?""|'[^']*?')";
+        public const string regexPattern4Varnames = @"@[a-zA-Z.]+[a-zA-Z.0-9\-_]*@";
+        public const string regexPattern4HTMLAnchors = @"<a +(?:(?:[a-zA-Z]+) *= *(?:""[^""]*?""|'[^']*?'))*.*?>(?'content'.*?)<\/a>";
+        public const string regexPattern4HTMLAttributes = @"(?'name'[a-zA-Z]+) *= *(?'val'""[^""]*?""|'[^']*?')";
 
 
-		public static string MakeReplacements (this string rawText)
-		{
-			if (rawText == null) {
-				return "";
-			}
+        public static string MakeReplacements(this string rawText)
+        {
+            if (rawText == null)
+            {
+                return "";
+            }
 
-			MatchEvaluator replaceVarNamesMethod = new MatchEvaluator (replaceVariableNames);
-			string result = Regex.Replace (rawText, regexPattern4Varnames, replaceVarNamesMethod);
+            MatchEvaluator replaceVarNamesMethod = new MatchEvaluator(replaceVariableNames);
+            string result = Regex.Replace(rawText, regexPattern4Varnames, replaceVarNamesMethod);
 
-			result = result.Replace ("<br>", "\n");
-			return result;
-		}
+            result = result.Replace("<br>", "\n");
+            return result;
+        }
 
-		static string replaceVariableNames (Match match)
-		{
-			string varName = match.Value.Substring (1, match.Value.Length - 2);
-			Debug.Log (("Replacing Variable: " + varName).Yellow());
-			string value = Variables.GetValue (varName).AsString ();
-			return value;
-		}
+        static string replaceVariableNames(Match match)
+        {
+            string varName = match.Value.Substring(1, match.Value.Length - 2);
+            Debug.Log(("Replacing Variable: " + varName).Yellow());
+            string value = Variables.GetValue(varName).AsString();
+            return value;
+        }
 
-		public static string FirstLetterToUpper (string str)
-		{
-			if (str == null)
-				return null;
+        public static string FirstLetterToUpper(string str)
+        {
+            if (str == null)
+                return null;
 
-			if (str.Length > 1)
-				return char.ToUpper (str [0]) + str.Substring (1);
+            if (str.Length > 1)
+                return char.ToUpper(str[0]) + str.Substring(1);
 
-			return str.ToUpper ();
-		}
+            return str.ToUpper();
+        }
 
-		public static string HTMLDecode (string rawText)
-		{
-			if (rawText == null || rawText == "")
-				return rawText;
-			
-			string result = rawText.Replace ("&lt;", "<");
-			result = result.Replace ("&gt;", ">");
-			result = result.Replace ("&amp;", "&");
+        public static string HTMLDecode(string rawText)
+        {
+            if (rawText == null || rawText == "")
+                return rawText;
 
-			return result;
-		}
+            string result = rawText.Replace("&lt;", "<");
+            result = result.Replace("&gt;", ">");
+            result = result.Replace("&amp;", "&");
 
-		/// <summary>
-		/// Decodes HTML encodings (such as &lt;), replaces special tags (like <br>) and replaces Variable names with their current values.
-		/// </summary>
-		/// <returns>The hyper text.</returns>
-		/// <param name="rawText">Raw text.</param>
-		/// <param name="supportHtmlLinks">Support clickable links within the text, defaults to true.</param>
-		public static string Decode4HyperText (this string rawText, bool supportHtmlLinks = true)
-		{
-			string result = HTMLDecode (rawText);
-			result = MakeReplacements (result);
-			if (supportHtmlLinks)
-				result = EnhanceHTMLAnchors4HyperText (result);
+            return result;
+        }
 
-			return result;
-		}
+        /// <summary>
+        /// Decodes HTML encodings (such as &lt;), replaces special tags (like <br>) and replaces Variable names with their current values.
+        /// </summary>
+        /// <returns>The hyper text.</returns>
+        /// <param name="rawText">Raw text.</param>
+        /// <param name="supportHtmlLinks">Support clickable links within the text, defaults to true.</param>
+        public static string Decode4HyperText(this string rawText, bool supportHtmlLinks = true)
+        {
+            string result = HTMLDecode(rawText);
+            result = MakeReplacements(result);
+            if (supportHtmlLinks)
+                result = EnhanceHTMLAnchors4HyperText(result);
 
-		private static string EnhanceHTMLAnchors4HyperText (string htmlText)
-		{
-			Dictionary<string, string> replacements = new Dictionary<string, string> ();
-			MatchCollection matchedAnchors = Regex.Matches (htmlText, regexPattern4HTMLAnchors);
-			foreach (Match matchedAnchor in matchedAnchors) {
-				if (!matchedAnchor.Success || replacements.ContainsKey (matchedAnchor.Value))
-					continue;
+            return result;
+        }
 
-				StringBuilder newAnchorStartAndNameAttr = new StringBuilder ("<a name=\"link\"");
-				StringBuilder newAnchorFurtherAttributes = new StringBuilder ("");
+        private static string EnhanceHTMLAnchors4HyperText(string htmlText)
+        {
+            Dictionary<string, string> replacements = new Dictionary<string, string>();
+            MatchCollection matchedAnchors = Regex.Matches(htmlText, regexPattern4HTMLAnchors);
+            foreach (Match matchedAnchor in matchedAnchors)
+            {
+                if (!matchedAnchor.Success || replacements.ContainsKey(matchedAnchor.Value))
+                    continue;
 
-				MatchCollection matchedAttributes = Regex.Matches (matchedAnchor.Value, regexPattern4HTMLAttributes);
+                StringBuilder newAnchorStartAndNameAttr = new StringBuilder("<a name=\"link\"");
+                StringBuilder newAnchorFurtherAttributes = new StringBuilder("");
 
-				foreach (Match matchedAttr in matchedAttributes) {
-					// we add all attributes but ignore when we already find a name attribute:
-					if (!matchedAttr.Groups ["name"].ToString ().Equals ("name")) {
-						newAnchorFurtherAttributes.Append (" " + matchedAttr.Groups ["name"] + "=" + matchedAttr.Groups ["val"]);
-					}
-				}
+                MatchCollection matchedAttributes = Regex.Matches(matchedAnchor.Value, regexPattern4HTMLAttributes);
 
-				string enhancedAnchor = 
-					newAnchorStartAndNameAttr.ToString () +
-					newAnchorFurtherAttributes.ToString () + ">" +
-					matchedAnchor.Groups ["content"] +
-					"</a>";
-				// store the anchor replacement (old, new):
-				replacements.Add (matchedAnchor.Value, enhancedAnchor);
-			}
+                foreach (Match matchedAttr in matchedAttributes)
+                {
+                    // we add all attributes but ignore when we already find a name attribute:
+                    if (!matchedAttr.Groups["name"].ToString().Equals("name"))
+                    {
+                        newAnchorFurtherAttributes.Append(" " + matchedAttr.Groups["name"] + "=" + matchedAttr.Groups["val"]);
+                    }
+                }
 
-			// execute all anchor replacements:
-			Dictionary<string, string>.Enumerator enumerator = replacements.GetEnumerator ();
-			while (enumerator.MoveNext ()) {
-				htmlText = htmlText.Replace (enumerator.Current.Key, enumerator.Current.Value);
-			}
-			return htmlText;
-		}
+                string enhancedAnchor =
+                    newAnchorStartAndNameAttr.ToString() +
+                    newAnchorFurtherAttributes.ToString() + ">" +
+                    matchedAnchor.Groups["content"] +
+                    "</a>";
+                // store the anchor replacement (old, new):
+                replacements.Add(matchedAnchor.Value, enhancedAnchor);
+            }
 
-		public static string StripQuotes (this string original)
-		{
-			string result = original;
-			if (result.StartsWith ("\"")) {
-				result = result.Substring (1);
-			}
-			if (result.EndsWith ("\"")) {
-				result = result.Substring (0, result.Length - 1);
-			}
-			return result;
-		}
+            // execute all anchor replacements:
+            Dictionary<string, string>.Enumerator enumerator = replacements.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                htmlText = htmlText.Replace(enumerator.Current.Key, enumerator.Current.Value);
+            }
+            return htmlText;
+        }
 
-		public static string Capitalize (this string original)
-		{
-			if (original == null || original == "" || !Char.IsLetter (original [0]))
-				return original;
-			return (original.Substring (0, 1).ToUpper () + original.Substring (1));
-		}
-	}
+        public static string StripQuotes(this string original)
+        {
+            string result = original;
+            if (result.StartsWith("\"", StringComparison.CurrentCulture))
+            {
+                result = result.Substring(1);
+            }
+            if (result.EndsWith("\"", StringComparison.CurrentCulture))
+            {
+                result = result.Substring(0, result.Length - 1);
+            }
+            return result;
+        }
+
+        public static string Capitalize(this string original)
+        {
+            if (original == null || original == "" || !Char.IsLetter(original[0]))
+                return original;
+            return (original.Substring(0, 1).ToUpper() + original.Substring(1));
+        }
+
+        public static bool HasVideoEnding(this string url)
+        {
+            return (url.ToLower().EndsWith(".mp4", StringComparison.CurrentCulture));
+        }
+    }
 }

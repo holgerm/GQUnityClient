@@ -51,7 +51,6 @@ namespace GQ.Client.Model
 
 			if (reader.IsEmptyElement) {
 				reader.Read ();
-				Log.SignalErrorToDeveloper ("Empty xml page element found.");
 				return;
 			}
 

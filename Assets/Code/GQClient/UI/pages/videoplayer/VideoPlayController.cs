@@ -19,13 +19,16 @@ namespace GQ.Client.UI
         public Text infoText;
         public Text forwardButtonText;
         public RawImage videoImage;
+        public AudioSource audioSource;
         public VideoPlayer videoPlayerNormal;
+        public GameObject containerNormal;
         public VideoPlayer videoPlayer360;
         public Camera camera360;
-        protected Camera cameraMain;
-        public GameObject containerNormal;
         public GameObject container360;
-        public AudioSource audioSource;
+        public GameObject containerWebPlayer;
+        public UniWebView uniWebView;
+
+        protected Camera cameraMain;
 
         #endregion
 
@@ -42,12 +45,18 @@ namespace GQ.Client.UI
         {
             myPage = (PageVideoPlay)page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+            forwardButtonText.text = "Ok";
 
+            containerWebPlayer.SetActive(false);
+            // DIRECT MP4 LINK TO VIDEO: 
             // setup according to videotype:
-            switch (myPage.VideoType) {
+            switch (myPage.VideoType)
+            {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL:
                     videoPlayer = videoPlayerNormal;
                     // enable camera & canvas:
+                    containerNormal.SetActive(true);
+                    CoroutineStarter.Run(playVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
                     videoPlayer = videoPlayer360;
@@ -57,18 +66,33 @@ namespace GQ.Client.UI
                     // switch to sphere:
                     containerNormal.SetActive(false);
                     container360.SetActive(true);
+                    CoroutineStarter.Run(playVideo());
+                    break;
+                case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE:
+                    // USE HTML WEBVIEW FOR VIDEO:
+                    containerWebPlayer.SetActive(true);
+                    float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits) + 30;
+                    uniWebView.Frame = new Rect(0, headerHeight, Device.width, Device.height - headerHeight);
+                    string videoHtml = string.Format(YoutubeHTMLFormatString, myPage.VideoFile);
+                    uniWebView.LoadHTMLString(videoHtml, "https://www.youtube.com/");
+                    uniWebView.Show();
                     break;
                 default:
                     Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", myPage.VideoType, myPage.Id);
                     break;
             }
-
-            // show the content:
-            showInfo();
-            forwardButtonText.text = "Ok";
-
-            CoroutineStarter.Run(playVideo());
         }
+
+        private string YoutubeHTMLFormatString =
+            @"<html>
+                <head></head>
+                <body style=""margin:0\"">
+                    <iframe width = ""100%"" height=""100%"" 
+                        src=""https://www.youtube.com/embed/{0}"" frameborder=""0"" 
+                        allow=""autoplay; encrypted-media"" allowfullscreen>
+                    </iframe>
+                </body>
+            </html>";
 
         IEnumerator playVideo()
         {
@@ -81,6 +105,7 @@ namespace GQ.Client.UI
             {
                 MediaInfo mediaInfo;
                 myPage.Parent.MediaStore.TryGetValue(myPage.VideoFile, out mediaInfo);
+                Debug.Log("MEDIA INFO LOOKUP: " + myPage.VideoFile + " LOCAL PATH: " + mediaInfo.LocalPath);
                 videoPlayer.url = mediaInfo.LocalPath;
             }
             else
@@ -99,7 +124,8 @@ namespace GQ.Client.UI
                 secondsWaited++;
             }
 
-            videoPlayer.loopPointReached += (VideoPlayer source) => {
+            videoPlayer.loopPointReached += (VideoPlayer source) =>
+            {
                 OnForward();
             };
             // set the rawimage texture:

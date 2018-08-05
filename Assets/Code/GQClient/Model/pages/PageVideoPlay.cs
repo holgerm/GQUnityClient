@@ -6,6 +6,7 @@ using System.Xml;
 using System;
 using GQ.Client.Err;
 using GQ.Client.UI;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -30,7 +31,7 @@ namespace GQ.Client.Model
             base.ReadAttributes(reader);
 
             VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
-            if (VideoFile != "")
+            if (VideoFile.HasVideoEnding())
                 QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile);
 
             Controllable = GQML.GetRequiredBoolAttribute(GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);

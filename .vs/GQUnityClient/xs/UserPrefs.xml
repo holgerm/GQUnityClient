@@ -1,15 +1,18 @@
 ﻿<Properties RefactoringSettings.EnableRefactorings="True" StartupConfiguration="{DAF88807-3F71-A95C-253C-B7A5AAE38234}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Code/GQClient/UI/pages/videoplayer/VideoPlayController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Code/GQClient/Model/pages/PageVideoPlay.cs">
     <Files>
-      <File FileName="Assets/Code/GQClient/Model/pages/PageVideoPlay.cs" Line="50" Column="1" />
-      <File FileName="Assets/Code/GQClient/UI/pages/videoplayer/VideoPlayController.cs" Line="12" Column="1" />
-      <File FileName="Assets/Code/GQClient/Model/gqml/GQML.cs" Line="311" Column="24" />
-      <File FileName="Assets/Code/GQClient/UI/pages/PageController.cs" Line="90" Column="4" />
-      <File FileName="Assets/Code/GQClient/Model/pages/Page.cs" Line="279" Column="23" />
-      <File FileName="Assets/Code/GQClient/UI/pages/videoplayer/MouseLook.cs" Line="80" Column="40" />
-      <File FileName="Assets/Code/GQClient/Util/tasks/Task.cs" Line="159" Column="1" />
-      <File FileName="Assets/Code/GQClient/Model/mgmt/quests/QuestManager.cs" Line="345" Column="26" />
+      <File FileName="Assets/Code/GQClient/UI/Dialogs/DialogController.cs" Line="63" Column="38" />
+      <File FileName="Assets/Code/GQClient/UI/Dialogs/DialogBehaviour.cs" Line="13" Column="32" />
+      <File FileName="Assets/Code/GQClient/UI/Dialogs/MessageDialog.cs" Line="13" Column="15" />
+      <File FileName="Assets/Code/GQClient/Model/actions/ActionShowMessage.cs" Line="38" Column="31" />
+      <File FileName="Assets/Code/GQClient/UI/Dialogs/SimpleDialogBehaviour.cs" Line="21" Column="24" />
+      <File FileName="Assets/Code/GQClient/Model/mgmt/questinfos/QuestInfo.cs" Line="449" Column="8" />
+      <File FileName="Assets/Code/GQClient/UI/Dialogs/DownloadDialogBehaviour.cs" Line="12" Column="15" />
+      <File FileName="Assets/Code/GQClient/UI/pages/videoplayer/VideoPlayController.cs" Line="46" Column="30" />
+      <File FileName="Assets/Code/GQClient/Model/gqml/GQML.cs" Line="119" Column="72" />
+      <File FileName="Assets/Code/GQClient/Model/mgmt/quests/QuestManager.cs" Line="281" Column="50" />
+      <File FileName="Assets/Code/GQClient/Model/pages/PageVideoPlay.cs" Line="34" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

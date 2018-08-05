@@ -116,6 +116,7 @@ namespace GQ.Client.Model
         public const string PAGE_VIDEOPLAY_VIDEOTYPE = "videotype";
         public const string PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL = "Normal";
         public const string PAGE_VIDEOPLAY_VIDEOTYPE_360 = "360 Grad";
+        public const string PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE = "YouTube";
 
 		// WEBPAGE PAGE:
 		public const string PAGE_TYPE_WEBPAGE = "WebPage";
