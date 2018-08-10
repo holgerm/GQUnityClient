@@ -1,10 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
-using GQ.Client.Conf;
 using UnityEngine.Video;
 using GQ.Client.Err;
 
@@ -105,12 +103,11 @@ namespace GQ.Client.UI
             {
                 MediaInfo mediaInfo;
                 myPage.Parent.MediaStore.TryGetValue(myPage.VideoFile, out mediaInfo);
-                Debug.Log("MEDIA INFO LOOKUP: " + myPage.VideoFile + " LOCAL PATH: " + mediaInfo.LocalPath);
                 videoPlayer.url = mediaInfo.LocalPath;
             }
             else
             {
-                Debug.Log("Video file was not loaded into media store, so we let the VideoPlayer load it ... " +
+                Log.WarnDeveloper("Video file was not loaded into media store, so we let the VideoPlayer load it ... " +
                           myPage.VideoFile);
                 videoPlayer.url = myPage.VideoFile;
             }
@@ -133,15 +130,6 @@ namespace GQ.Client.UI
 
             // start Playing:
             videoPlayer.Play();
-
-            // loop while playing:
-            Debug.Log("VideoPlayer started.");
-            //while (videoPlayer.isPlaying)
-            //{
-            //    Debug.LogWarning("Video Time: " + Mathf.FloorToInt((float)videoPlayer.time));
-            //}
-
-            Debug.Log("Done with VideoPlaying.");
         }
 
         public override void CleanUp()
@@ -151,17 +139,6 @@ namespace GQ.Client.UI
             // switch back to main camera:
             camera360.enabled = false;
             cameraMain.enabled = true;
-        }
-
-        void showInfo()
-        {
-            infoText.text =
-                "Diese Funktion steht leider noch nicht zur Verfügung. Hier werden als Test die Informationen angezeigt, die in der Quest-Seite gespeichert wurden:\n\n" +
-                "type:\t\t\t" + myPage.PageType + "\n" +
-                "id:\t\t\t\t\t" + myPage.Id + "\n" +
-                "file:\t\t\t" + myPage.VideoFile + "\n" +
-                "cotrollable:\t" + myPage.Controllable + "\n" +
-                        "videotype:\t\t\t\t" + myPage.VideoType;
         }
 
         #endregion
