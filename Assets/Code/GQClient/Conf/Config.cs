@@ -16,7 +16,7 @@ namespace GQ.Client.Conf
 		//////////////////////////////////
 		// THE ACTUAL PRODUCT CONFIG DATA:	
 		
-		[ShowInProductEditor]
+        [ShowInProductEditor (StartSection = "General:")]
 		public string   id     { get; set; }
 
 		[ShowInProductEditor]
@@ -27,6 +27,9 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor]
 		public int   	portal   { get; set; }
+
+        [ShowInProductEditor]
+        public string[] assetAddOns { get; set; }
 
 		[ShowInProductEditor]
 		public int   	autoStartQuestID   { get; set; }
@@ -457,6 +460,7 @@ namespace GQ.Client.Conf
 		{			
 			// set default values:
 			idExtension = "";
+            assetAddOns = new string[] { };
 			autoStartQuestID = 0;
 			autostartIsPredeployed = false;
 			keepAutoStarting = true;
@@ -586,7 +590,12 @@ namespace GQ.Client.Conf
 		MapBox
 	}
 
-	public class Color32Converter : JsonConverter
+    public enum AssetAddOn
+    {
+        UniWebView
+    }
+
+    public class Color32Converter : JsonConverter
 	{
 		public override bool CanConvert (Type objectType)
 		{
