@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System;
-using GQ.Client.Err;
 using Newtonsoft.Json.Converters;
 using GQ.Client.FileIO;
 
@@ -675,7 +674,7 @@ namespace GQ.Client.Conf
 
 	public class ImagePath
 	{
-		public string path;
+		public readonly string path;
 
 		public ImagePath (string path)
 		{
@@ -687,17 +686,17 @@ namespace GQ.Client.Conf
 			return "ImagePath: " + path;
 		}
 
-		public override bool Equals (System.Object other)
+		public override bool Equals (System.Object obj)
 		{
 			// Other null?
-			if (other == null)
+			if (obj == null)
 				return path == null || path.Equals ("");
 
 			// Compare run-time types.
-			if (GetType () != other.GetType ())
+			if (GetType () != obj.GetType ())
 				return false;
 
-			return path == ((ImagePath)other).path;
+			return path == ((ImagePath)obj).path;
 		}
 
 		public override int GetHashCode ()
@@ -732,7 +731,7 @@ namespace GQ.Client.Conf
 		{
 			this.id = id;
 			this.name = name;
-			this.folderName = folderName == null ? "" : folderName;
+			this.folderName = folderName ?? "";
 			this.symbol = new ImagePath (symbolPath);
 		}
 

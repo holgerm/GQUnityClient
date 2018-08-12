@@ -30,9 +30,10 @@
             <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
         </activity>
    </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.location.gps" android:required="true" />
-    <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
-    <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="true" />
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-feature android:name="android.hardware.location.gps" android:required="true" />
+   <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
+   <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="true" />
+   <uses-sdk tools:overrideLibrary="com.onevcat.uniwebview"/>
 </manifest>
 <!-- product id: wcc -->

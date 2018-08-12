@@ -7,6 +7,7 @@ using System.IO;
 using GQ.Client.Conf;
 using UnityEditor.Callbacks;
 using UnityEditor.Build.Reporting;
+using GQ.Client.Err;
 
 #if UNITY_IOS
 using UnityEditor.iOS.Xcode;
@@ -93,7 +94,7 @@ namespace GQ.Editor.Building {
 			string errorMsg;
 
 			// Build Android:
-			Debug.Log("Building Android player ...");
+			Debug.Log("Building Android player ...".Yellow());
 			PlayerSettings.SetIconsForTargetGroup(BuildTargetGroup.Android, GetAppIcons(BuildTarget.Android));
 			string outDir = PRODUCTS_DIR + productID + "/Android";
 			if ( !Directory.Exists(outDir) ) {
