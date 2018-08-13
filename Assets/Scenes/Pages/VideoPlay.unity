@@ -150,8 +150,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 984.5487, y: -75.956665}
-  m_SizeDelta: {x: 140.90262, y: 131.91333}
+  m_AnchoredPosition: {x: 984.5487, y: -107.167946}
+  m_SizeDelta: {x: 140.90262, y: 194.33589}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &39874143
 MonoBehaviour:
@@ -492,8 +492,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -949.4584}
-  m_SizeDelta: {x: 1080, y: 1898.9167}
+  m_AnchoredPosition: {x: 540, y: -1339.5994}
+  m_SizeDelta: {x: 1080, y: 2679.1987}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &215277137
 MonoBehaviour:
@@ -637,8 +637,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 459.5487, y: -75.956665}
-  m_SizeDelta: {x: 869.0974, y: 131.91333}
+  m_AnchoredPosition: {x: 459.5487, y: -107.167946}
+  m_SizeDelta: {x: 869.0974, y: 194.33589}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &219813618
 MonoBehaviour:
@@ -1751,7 +1751,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000017549552}
+  m_AnchoredPosition: {x: 0, y: -0.000014220684}
   m_SizeDelta: {x: 0, y: 124.96363}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -1970,8 +1970,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1101.3717}
-  m_SizeDelta: {x: 1080, y: 1898.9167}
+  m_AnchoredPosition: {x: 540, y: -1553.9353}
+  m_SizeDelta: {x: 1080, y: 2679.1987}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &988022699
 MonoBehaviour:
@@ -1987,9 +1987,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1898.9167
+  m_MinHeight: 2679.1987
   m_PreferredWidth: -1
-  m_PreferredHeight: 1898.9167
+  m_PreferredHeight: 2679.1987
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2173,7 +2173,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 540, y: 0}
-  m_SizeDelta: {x: 1080, y: 151.91333}
+  m_SizeDelta: {x: 1080, y: 214.33589}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1095057063
 MonoBehaviour:
@@ -2189,9 +2189,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 151.91333
+  m_MinHeight: 214.33589
   m_PreferredWidth: -1
-  m_PreferredHeight: 151.91333
+  m_PreferredHeight: 214.33589
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2332,8 +2332,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -949.4584}
-  m_SizeDelta: {x: 1080, y: 1898.9167}
+  m_AnchoredPosition: {x: 540, y: -1339.5994}
+  m_SizeDelta: {x: 1080, y: 2679.1987}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1208498929
 GameObject:
@@ -2508,8 +2508,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -94.94584}
-  m_SizeDelta: {x: 1080, y: 189.89168}
+  m_AnchoredPosition: {x: 540, y: -133.95993}
+  m_SizeDelta: {x: 1080, y: 267.91986}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1488490923
 MonoBehaviour:
@@ -2976,8 +2976,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -2050.83}
-  m_SizeDelta: {x: 1080, y: 189.89168}
+  m_AnchoredPosition: {x: 540, y: -2893.5347}
+  m_SizeDelta: {x: 1080, y: 267.91986}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1804547554
 MonoBehaviour:
@@ -2992,9 +2992,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 189.89168
+  m_MinHeight: 267.91986
   m_PreferredWidth: -1
-  m_PreferredHeight: 189.89168
+  m_PreferredHeight: 267.91986
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

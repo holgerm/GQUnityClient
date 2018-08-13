@@ -6,9 +6,9 @@
       <File FileName="Assets/ConfigAssets/Resources/Code/CategoryReader.cs" Line="1" Column="1" />
       <File FileName="Assets/Code/GQClient/Model/mgmt/questinfos/QuestInfo.cs" Line="297" Column="35" />
       <File FileName="Assets/ConfigAssets/Resources/Code/VideoPlayerExtraModes.cs" Line="19" Column="6" />
-      <File FileName="Assets/Code/GQClient/Conf/Config.cs" Line="555" Column="14" />
-      <File FileName="Assets/Editor/GQEditor/Building/Builder.cs" Line="100" Column="4" />
-      <File FileName="Assets/Editor/GQEditor/UI/ProductEditor.cs" Line="1611" Column="33" />
+      <File FileName="Assets/Code/GQClient/Conf/Config.cs" Line="1" Column="1" />
+      <File FileName="Assets/Editor/GQEditor/Building/Builder.cs" Line="32" Column="25" />
+      <File FileName="Assets/Editor/GQEditor/UI/ProductEditor.cs" Line="170" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
