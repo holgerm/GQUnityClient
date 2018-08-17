@@ -3,6 +3,9 @@
   "idExtension": "2",
   "name": "Neue Digitale Lehrpfade",
   "portal": 502,
+  "assetAddOns": [
+    "UniWebView"
+  ],
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,

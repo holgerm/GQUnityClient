@@ -3,6 +3,7 @@
   "idExtension": "",
   "name": "Wiki Culture City",
   "portal": 281,
+  "assetAddOns": [],
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
@@ -270,6 +271,7 @@
     "b": 255,
     "a": 255
   },
+  "mainFontSize": 60,
   "showShadows": true,
   "headerBgColor": {
     "r": 255,
@@ -382,7 +384,7 @@
     "b": 232,
     "a": 255
   },
-  "eumlationColor": {
+  "emulationColor": {
     "r": 255,
     "g": 255,
     "b": 255,
