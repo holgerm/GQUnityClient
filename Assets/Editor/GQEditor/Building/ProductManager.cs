@@ -587,10 +587,15 @@ namespace GQ.Editor.Building
                 Files.DeleteFile(assetFile);
             }
             // check wether only the marking file is left: then delete the directory itself too:
-            string[] leftFiles = Directory.GetFiles(assetDir);
-            if (leftFiles.Length == 1 && leftFiles[0] == AAO_MARKERFILE)
+            //string[] leftFiles = Directory.GetFiles(assetDir);
+            if (File.Exists(Files.CombinePath(assetDir, AAO_MARKERFILE)))
             {
-                Files.DeleteDir(assetDir);
+                Debug.Log(string.Format("Dir {0} contains AAO Marker and gets deleted.", assetDir));
+                Files.DeleteDir(Assets.RelativeAssetPath(assetDir));
+            }
+            else {
+                Debug.Log(string.Format("Dir {0} does NOT contain AAO Marker and is kept.", assetDir));
+
             }
         }
 
@@ -617,18 +622,21 @@ namespace GQ.Editor.Building
             string aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
             foreach (string file in Directory.GetFiles(aaoPath))
             {
+                if (file.EndsWith(".DS_Store")) {
+                    continue;
+                }
                 if (file.EndsWith(AAO_MARKERFILE, StringComparison.CurrentCulture))
                 {
                     Log.SignalErrorToDeveloper(
-                        "Asset Add On {0} is not compatible with our add-on-system: it includes itself a .AssetAddOn file.",
+                        "Asset-Add-On {0} is not compatible with our add-on-system: it includes itself a .AssetAddOn file.",
                         assetAddOn);
                 }
-                if (File.Exists(file))
+                if (File.Exists(Files.CombinePath(assetDir, Files.FileName(file))))
                 {
                     Log.SignalErrorToDeveloper(
-                        "Asset Add On {0} is not compatible with another add-on or our add-on-system: the file {1} already exists and will not be overridden.",
+                        "Asset-Add-On {0} is not compatible with another add-on or our add-on-system: the file {1} already exists and will not be overridden.",
                         assetAddOn,
-                        file
+                        Files.CombinePath(assetDir, Files.FileName(file))
                     );
                 }
                 Debug.Log("AAO File Copy: " + file);
