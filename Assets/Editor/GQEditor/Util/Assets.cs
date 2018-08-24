@@ -39,12 +39,12 @@ namespace GQ.Editor.Util
 			if (!Files.IsValidPath (path))
 				return false;
 			
-			if (path.StartsWith ("/")) {
+            if (path.StartsWith ("/", StringComparison.CurrentCulture)) {
 				// we have an absolute path:
-				return path.StartsWith (Application.dataPath);
+				return path.StartsWith (Application.dataPath, StringComparison.CurrentCulture);
 			} else {
 				// we have a relative path:
-				return path.StartsWith ("Assets/");
+				return path.StartsWith ("Assets/", StringComparison.CurrentCulture);
 			}
 
 		}
@@ -55,7 +55,7 @@ namespace GQ.Editor.Util
 				throw new ArgumentException ("Given path is not a valid asset path.");
 			
 			string projectParentPath = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
-			if (!relativeAssetPath.StartsWith (projectParentPath))
+			if (!relativeAssetPath.StartsWith (projectParentPath, StringComparison.CurrentCulture))
 				return Files.CombinePath (projectParentPath, relativeAssetPath);
 			else
 				return relativeAssetPath;

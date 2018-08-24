@@ -459,8 +459,6 @@ namespace GQ.Editor.Building
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, appIdentifier);
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.WebGL, appIdentifier);
 
-            //			formerly we loaded the start scene: replaceLoadingLogoInScene (START_SCENE);
-
             ProductEditor.BuildIsDirty = false;
             CurrentProduct = newProduct; // remember the new product for the editor time access point.
             ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
@@ -478,87 +476,10 @@ namespace GQ.Editor.Building
             LayoutConfig.ResetAll();
         }
 
-        private void replaceLoadingLogoInScene(string scenePath)
-        {
-            // save currently open scenes and open start scene:
-            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-            EditorSceneManager.OpenScene(scenePath);
-            Scene startScene = SceneManager.GetSceneByPath(scenePath);
-
-            if (!startScene.IsValid())
-            {
-                Errors.Add("Start scene is not valid or not found.");
-                return;
-            }
-
-            // destroy old loading canvas if exists:
-            foreach (GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG))
-            {
-                foreach (Transform child in lcc.transform)
-                {
-                    UnityEngine.Object.DestroyImmediate(child.gameObject);
-                }
-            }
-
-
-            // load prefab for loading canvas:
-            GameObject loadingCanvasPrefab = Resources.Load<GameObject>(LOADING_CANVAS_PREFAB);
-            if (loadingCanvasPrefab == null)
-            {
-                Errors.Add("Product misses LoadingCanvas prefab.");
-                return;
-            }
-
-            // instantiate new loading canvas(es) from prefab into all LCCs:
-            foreach (GameObject lcc in GameObject.FindGameObjectsWithTag(LOADING_CANVAS_CONTAINER_TAG))
-            {
-                foreach (Transform child in lcc.transform)
-                {
-                    UnityEngine.Object.DestroyImmediate(child.gameObject);
-                }
-
-                GameObject loadingCanvas = (GameObject)PrefabUtility.InstantiatePrefab(loadingCanvasPrefab, startScene);
-                if (loadingCanvas == null)
-                {
-                    Errors.Add("Unable to create LoadingCanvas.");
-                    return;
-                }
-                loadingCanvas.transform.parent = lcc.transform;
-                loadingCanvas.name = LOADING_CANVAS_NAME;
-
-                // if product has initializer call it:
-                Type loadingCanvasType = null;
-                try
-                {
-                    loadingCanvasType = Type.GetType("GQ.Client.Conf.LoadingCanvas");
-                }
-                catch (Exception e)
-                {
-                    Debug.Log("Exception: " + e.Message);
-                    loadingCanvasType = null;
-                }
-                if (loadingCanvasType != null)
-                {
-                    Debug.Log("found type: " + loadingCanvasType.FullName);
-                    MethodInfo initMethod =
-                        loadingCanvasType.GetMethod(
-                            "Init",
-                            new Type[] {
-                                typeof(UnityEngine.GameObject)
-                            }
-                        );
-                    if (initMethod != null)
-                        initMethod.Invoke(null, new GameObject[] {
-                            loadingCanvas
-                        });
-                }
-            }
-        }
-
         #endregion
 
 
-        #region AssetAddOns Loading and Unloading
+        #region AssetAddOns
 
         private void unloadAssetAddOns(string[] assetAddOns)
         {
@@ -578,6 +499,7 @@ namespace GQ.Editor.Building
             {
                 unloadAaoRecursively(assetAddOn, Files.CombinePath(relPath, Files.DirName(dir)));
             }
+
             // set the according dir within Assets:
             string assetDir = Files.CombinePath(Application.dataPath, relPath);
             foreach (string file in Directory.GetFiles(aaoPath))
@@ -586,16 +508,74 @@ namespace GQ.Editor.Building
                 string assetFile = Files.CombinePath(assetDir, Files.FileName(file));
                 Files.DeleteFile(assetFile);
             }
-            // check wether only the marking file is left: then delete the directory itself too:
-            //string[] leftFiles = Directory.GetFiles(assetDir);
-            if (File.Exists(Files.CombinePath(assetDir, AAO_MARKERFILE)))
+
+            // shall this dricetory be deleted?:
+            if (!Array.Exists(
+                Directory.GetFiles(assetDir),
+                element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
+            ))
             {
-                Debug.Log(string.Format("Dir {0} contains AAO Marker and gets deleted.", assetDir));
-                Files.DeleteDir(Assets.RelativeAssetPath(assetDir));
+                // case 1: no marker file, i.e. this dir is independent of AAOs and is kept. We reduce gitignore.
+                Debug.Log(string.Format("Dir {0} does NOT contain AAO Marker and is kept.", assetDir));
+                deleteAaoSectionFromGitignore(assetDir, assetAddOn);
             }
             else {
-                Debug.Log(string.Format("Dir {0} does NOT contain AAO Marker and is kept.", assetDir));
+                Debug.Log(string.Format("Dir {0} DOES contain AAO Marker ...", assetDir));
+                if (File.Exists(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn)))
+                {
+                    // this dir depended on the current AAO, hence we delete the according marker file:
+                    bool deleted = Files.DeleteFile(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
+                    Debug.Log(string.Format("Dir {0} contains our AAO Marker {1} and has been deleted: {2}.", 
+                                            assetDir, AAO_MARKERFILE_PREFIX + assetAddOn, deleted));
+                }
+                if (Array.Exists(
+                    Directory.GetFiles(assetDir),
+                    element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
+                ))
+                {
+                    // case 2: this dir depends also on other AAOs and is kept. We reduce the gitignore.
+                    Debug.Log(string.Format("Dir {0} contains other AAO Markers hence we keep it.", assetDir));
+                    deleteAaoSectionFromGitignore(assetDir, assetAddOn);
+                }
+                else {
+                    // case 3: this dir depended only on this AAO, hence we can delete it (including the gitignore)
+                    Debug.Log(string.Format("Dir {0} contains NO other AAO Markers hence we DELETE it.", assetDir));
+                    Files.DeleteDir(assetDir);
+                }
+            }
 
+        }
+
+        private void deleteAaoSectionFromGitignore(string dirPath, string assetAddOn) {
+            if (!File.Exists(Files.CombinePath(dirPath, ".gitignore"))) {
+                return;
+            }
+
+            string gitSectionRegExp = 
+                @"([\s\S]*)(# BEGIN GQ AAO: " + assetAddOn + 
+                @"[\s\S]*# END GQ AAO: " +assetAddOn +
+                @")([\s\S]*)";
+
+            string gitignoreText = File.ReadAllText(Files.CombinePath(dirPath, ".gitignore"));
+
+            Regex regex = new Regex(gitSectionRegExp);
+            Match match = regex.Match(gitignoreText);
+            if (match.Success) {
+                string before = match.Groups[1].Value;
+                string after = match.Groups[3].Value;
+                gitignoreText = before + "\n" + after;
+                Debug.Log("deleteAaoSectionFromGitignore: MATCHES: before: " + before + ", after: " + after);
+            }
+            else {
+                Debug.Log("deleteAaoSectionFromGitignore: DID NOT MATCH");
+            }
+
+            gitignoreText = gitignoreText.Trim();
+
+            if (gitignoreText.Length > 0) {
+                File.WriteAllText(Files.CombinePath(dirPath, ".gitignore"), gitignoreText);
+            } else {
+                Files.DeleteFile(Files.CombinePath(dirPath, ".gitignore"));
             }
         }
 
@@ -607,29 +587,54 @@ namespace GQ.Editor.Building
             }
         }
 
-        private void loadAaoRecursively(string assetAddOn, string relPath = "")
+        /// <summary>
+        /// Loads the aao recursively.
+        /// </summary>
+        /// <returns><c>true</c>, if the current directory was created by this AAO and 
+        /// should therefore be included in gitignore, <c>false</c> otherwise.</returns>
+        /// <param name="assetAddOn">Asset add on.</param>
+        /// <param name="relPath">Rel path.</param>
+        private bool loadAaoRecursively(string assetAddOn, string relPath = "")
         {
+            bool dirIsCreated = false;
+            List<string> gitignorePatterns = new List<string>();
+
             Debug.Log("AAO Loading: " + relPath);
             // set the according dir within Assets:
             string assetDir = Files.CombinePath(Application.dataPath, relPath);
             // if dir does not exist in asstes create and mark it:
             if (!Directory.Exists(assetDir))
             {
+                // this dir does not exist yet, we create it, mark it and return true for the gitignore in the parent dir:
                 Files.CreateDir(assetDir);
-                File.Create(Files.CombinePath(assetDir, AAO_MARKERFILE));
+                File.Create(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
+                gitignorePatterns.Add(AAO_MARKERFILE_PREFIX + assetAddOn);
+                dirIsCreated = true;
+            }
+            else
+            {
+                if (Array.Exists(
+                    Directory.GetFiles(assetDir),
+                    element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
+                ))
+                {
+                    // this dir hab been created by another aao so we add our marker file:
+                    File.Create(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
+                }
             }
             // copy all files from corresponding aao dir into this asset dir:
             string aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
             foreach (string file in Directory.GetFiles(aaoPath))
             {
-                if (file.EndsWith(".DS_Store")) {
+                if (file.EndsWith(".DS_Store"))
+                {
                     continue;
                 }
-                if (file.EndsWith(AAO_MARKERFILE, StringComparison.CurrentCulture))
+                if (file.EndsWith(AAO_MARKERFILE_PREFIX + assetAddOn, StringComparison.CurrentCulture))
                 {
                     Log.SignalErrorToDeveloper(
-                        "Asset-Add-On {0} is not compatible with our add-on-system: it includes itself a .AssetAddOn file.",
-                        assetAddOn);
+                        "Asset-Add-On {0} is not compatible with our add-on-system: it includes itself an .AssetAddOn file.",
+                        AAO_MARKERFILE_PREFIX + assetAddOn);
                 }
                 if (File.Exists(Files.CombinePath(assetDir, Files.FileName(file))))
                 {
@@ -645,12 +650,39 @@ namespace GQ.Editor.Building
                     toDirPath: assetDir,
                     overwrite: false
                 );
+                gitignorePatterns.Add(Files.FileName(file));
+                gitignorePatterns.Add(Files.FileName(file) + ".meta");
             }
             // recursively go into every dir in the AssetAddOn tree:
             foreach (string dir in Directory.GetDirectories(aaoPath))
             {
-                loadAaoRecursively(assetAddOn, Files.CombinePath(relPath, Files.DirName(dir)));
+                if (loadAaoRecursively(assetAddOn, Files.CombinePath(relPath, Files.DirName(dir))))
+                {
+                    gitignorePatterns.Add(Files.DirName(dir) + "/");
+                    gitignorePatterns.Add(Files.DirName(dir) + ".meta");
+                };
             }
+
+            if (gitignorePatterns.Count > 0)
+            {
+                string gitignoreFile = Files.CombinePath(assetDir, ".gitignore");
+                if (!File.Exists(gitignoreFile))
+                {
+                    // ignore the gitignore itself if it is only created for this aao:
+                    gitignorePatterns.Add(".gitignore");
+                    // TODO THIS DOES NOT YET WORK FOR MULTIPLE AAOs AND ARBITRARY ORDER!
+                }
+                // Store additions to local gitignore
+                string gitignoreSection = "\n\n# BEGIN GQ AAO: " + assetAddOn + "\n";
+                foreach (string pattern in gitignorePatterns)
+                {
+                    gitignoreSection += pattern + "\n";
+                }
+                gitignoreSection += "# END GQ AAO: " + assetAddOn + "\n";
+                File.AppendAllText(gitignoreFile, gitignoreSection);
+            }
+
+            return dirIsCreated;
         }
 
         /// <summary>
@@ -658,7 +690,7 @@ namespace GQ.Editor.Building
         /// </summary>
         private static string ASSET_ADD_ON_DIR_PATH = Files.CombinePath(GQAssert.PROJECT_PATH, "Production/AssetAddOns/");
 
-        private static string AAO_MARKERFILE = ".AssetAddOn";
+        private static string AAO_MARKERFILE_PREFIX = ".AssetAddOn_";
 
         #endregion
 
