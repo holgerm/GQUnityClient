@@ -142,6 +142,7 @@ namespace GQ.Editor.Util
                     return false;
                 else
                 {
+                    dirPath = Assets.RelativeAssetPath(dirPath);
                     return AssetDatabase.DeleteAsset(dirPath);
                 }
             }
