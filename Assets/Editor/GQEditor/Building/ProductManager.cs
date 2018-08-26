@@ -381,7 +381,7 @@ namespace GQ.Editor.Building
 
             ProductEditor.IsCurrentlyPreparingProduct = true;
 
-            Debug.Log("STarting to prepare new product. Old product was: " + ConfigurationManager.Current.id);
+            Debug.Log("Starting to prepare new product. Old product was: " + ConfigurationManager.Current.id);
             unloadAssetAddOns(ConfigurationManager.Current.assetAddOns);
 
             string productDirPath = Files.CombinePath(ProductsDirPath, productID);
@@ -486,6 +486,8 @@ namespace GQ.Editor.Building
             foreach (string assetAddOn in assetAddOns)
             {
                 unloadAaoRecursively(assetAddOn);
+
+                deleteAaoSectionFromGitignore(assetAddOn);
             }
         }
 
@@ -509,7 +511,11 @@ namespace GQ.Editor.Building
                 Files.DeleteFile(assetFile);
             }
 
-            // shall this dricetory be deleted?:
+            // shall this directory be deleted?:
+            if (!Directory.Exists(assetDir))
+                // continue recursion if this dir does not exist (e.g. manually deleted)
+                return;
+
             if (!Array.Exists(
                 Directory.GetFiles(assetDir),
                 element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
@@ -517,15 +523,16 @@ namespace GQ.Editor.Building
             {
                 // case 1: no marker file, i.e. this dir is independent of AAOs and is kept. We reduce gitignore.
                 Debug.Log(string.Format("Dir {0} does NOT contain AAO Marker and is kept.", assetDir));
-                deleteAaoSectionFromGitignore(assetDir, assetAddOn);
+                //deleteAaoSectionFromGitignore(assetDir, assetAddOn);
             }
-            else {
+            else
+            {
                 Debug.Log(string.Format("Dir {0} DOES contain AAO Marker ...", assetDir));
                 if (File.Exists(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn)))
                 {
                     // this dir depended on the current AAO, hence we delete the according marker file:
                     bool deleted = Files.DeleteFile(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
-                    Debug.Log(string.Format("Dir {0} contains our AAO Marker {1} and has been deleted: {2}.", 
+                    Debug.Log(string.Format("Dir {0} contains our AAO Marker {1} and has been deleted: {2}.",
                                             assetDir, AAO_MARKERFILE_PREFIX + assetAddOn, deleted));
                 }
                 if (Array.Exists(
@@ -535,9 +542,10 @@ namespace GQ.Editor.Building
                 {
                     // case 2: this dir depends also on other AAOs and is kept. We reduce the gitignore.
                     Debug.Log(string.Format("Dir {0} contains other AAO Markers hence we keep it.", assetDir));
-                    deleteAaoSectionFromGitignore(assetDir, assetAddOn);
+                    //deleteAaoSectionFromGitignore(assetDir, assetAddOn);
                 }
-                else {
+                else
+                {
                     // case 3: this dir depended only on this AAO, hence we can delete it (including the gitignore)
                     Debug.Log(string.Format("Dir {0} contains NO other AAO Markers hence we DELETE it.", assetDir));
                     Files.DeleteDir(assetDir);
@@ -546,45 +554,63 @@ namespace GQ.Editor.Building
 
         }
 
-        private void deleteAaoSectionFromGitignore(string dirPath, string assetAddOn) {
-            if (!File.Exists(Files.CombinePath(dirPath, ".gitignore"))) {
-                return;
+        private void deleteAaoSectionFromGitignore(string assetAddOn)
+        {
+            if (!File.Exists(Files.GIT_EXCLUDE_FILE))
+            {
+                File.Create(Files.GIT_EXCLUDE_FILE);
             }
 
-            string gitSectionRegExp = 
-                @"([\s\S]*)(# BEGIN GQ AAO: " + assetAddOn + 
-                @"[\s\S]*# END GQ AAO: " +assetAddOn +
+            string gitSectionRegExp =
+                @"([\s\S]*)(# BEGIN GQ AAO: " + assetAddOn +
+                @"[\s\S]*# END GQ AAO: " + assetAddOn +
                 @")([\s\S]*)";
 
-            string gitignoreText = File.ReadAllText(Files.CombinePath(dirPath, ".gitignore"));
+            string gitignoreText = File.ReadAllText(Files.GIT_EXCLUDE_FILE);
 
             Regex regex = new Regex(gitSectionRegExp);
             Match match = regex.Match(gitignoreText);
-            if (match.Success) {
+            if (match.Success)
+            {
                 string before = match.Groups[1].Value;
                 string after = match.Groups[3].Value;
                 gitignoreText = before + "\n" + after;
                 Debug.Log("deleteAaoSectionFromGitignore: MATCHES: before: " + before + ", after: " + after);
             }
-            else {
+            else
+            {
                 Debug.Log("deleteAaoSectionFromGitignore: DID NOT MATCH");
             }
 
             gitignoreText = gitignoreText.Trim();
 
-            if (gitignoreText.Length > 0) {
-                File.WriteAllText(Files.CombinePath(dirPath, ".gitignore"), gitignoreText);
-            } else {
-                Files.DeleteFile(Files.CombinePath(dirPath, ".gitignore"));
+            if (gitignoreText.Length > 0)
+            {
+                File.WriteAllText(Files.GIT_EXCLUDE_FILE, gitignoreText);
             }
         }
 
         private void loadAssetAddOns(string[] assetAddOns)
         {
+            List<string> gitignorePatterns = new List<string>();
+
             foreach (string assetAddOn in assetAddOns)
             {
-                loadAaoRecursively(assetAddOn);
+                loadAaoRecursively(assetAddOn, gitignorePatterns, true);
+
+                if (gitignorePatterns.Count > 0)
+                {
+                    // Store additions to git exclude file:
+                    string gitExcludeSection = "\n\n# BEGIN GQ AAO: " + assetAddOn + "\n";
+                    foreach (string pattern in gitignorePatterns)
+                    {
+                        gitExcludeSection += pattern + "\n";
+                    }
+                    gitExcludeSection += "# END GQ AAO: " + assetAddOn;
+                    File.AppendAllText(Files.GIT_EXCLUDE_FILE, gitExcludeSection);
+                }
             }
+
         }
 
         /// <summary>
@@ -593,23 +619,27 @@ namespace GQ.Editor.Building
         /// <returns><c>true</c>, if the current directory was created by this AAO and 
         /// should therefore be included in gitignore, <c>false</c> otherwise.</returns>
         /// <param name="assetAddOn">Asset add on.</param>
+        /// <param name="gitCollectIgnores">Flag controlling wether gitignores are collected (not within created and completely ignored dirs).</param>
         /// <param name="relPath">Rel path.</param>
-        private bool loadAaoRecursively(string assetAddOn, string relPath = "")
+        private void loadAaoRecursively(string assetAddOn, List<string> gitignorePatterns, bool gitCollectIgnores, string relPath = "")
         {
-            bool dirIsCreated = false;
-            List<string> gitignorePatterns = new List<string>();
-
+            bool gitCollectIgnoresInSubdirs = gitCollectIgnores;
             Debug.Log("AAO Loading: " + relPath);
             // set the according dir within Assets:
             string assetDir = Files.CombinePath(Application.dataPath, relPath);
             // if dir does not exist in asstes create and mark it:
             if (!Directory.Exists(assetDir))
             {
-                // this dir does not exist yet, we create it, mark it and return true for the gitignore in the parent dir:
+                // this dir does not exist yet, we create it, mark it and collect git ignores if we are not in an already ignored subdir:
                 Files.CreateDir(assetDir);
-                File.Create(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
-                gitignorePatterns.Add(AAO_MARKERFILE_PREFIX + assetAddOn);
-                dirIsCreated = true;
+                string dirMarkerFile = Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn);
+                File.Create(dirMarkerFile);
+                if (gitCollectIgnores)
+                {
+                    gitignorePatterns.Add(Assets.RelativeAssetPath(assetDir) + "/");
+                    gitignorePatterns.Add(Assets.RelativeAssetPath(assetDir) + ".meta");
+                    gitCollectIgnoresInSubdirs = false;
+                }
             }
             else
             {
@@ -618,15 +648,18 @@ namespace GQ.Editor.Building
                     element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
                 ))
                 {
-                    // this dir hab been created by another aao so we add our marker file:
-                    File.Create(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
+                    // this dir has been created by another aao so we add our marker file:
+                    string newAAOMarkerfile = Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn);
+                    File.Create(newAAOMarkerfile);
+                    if (gitCollectIgnores)
+                        gitignorePatterns.Add(Assets.RelativeAssetPath(newAAOMarkerfile));
                 }
             }
             // copy all files from corresponding aao dir into this asset dir:
             string aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
             foreach (string file in Directory.GetFiles(aaoPath))
             {
-                if (file.EndsWith(".DS_Store"))
+                if (file.EndsWith(".DS_Store", StringComparison.CurrentCulture))
                 {
                     continue;
                 }
@@ -650,39 +683,19 @@ namespace GQ.Editor.Building
                     toDirPath: assetDir,
                     overwrite: false
                 );
-                gitignorePatterns.Add(Files.FileName(file));
-                gitignorePatterns.Add(Files.FileName(file) + ".meta");
+                if (gitCollectIgnores)
+                {
+                    gitignorePatterns.Add(
+                    Files.CombinePath(Assets.RelativeAssetPath(assetDir), Files.FileName(file)));
+                    gitignorePatterns.Add(
+                        Files.CombinePath(Assets.RelativeAssetPath(assetDir), Files.FileName(file) + ".meta"));
+                }
             }
             // recursively go into every dir in the AssetAddOn tree:
             foreach (string dir in Directory.GetDirectories(aaoPath))
             {
-                if (loadAaoRecursively(assetAddOn, Files.CombinePath(relPath, Files.DirName(dir))))
-                {
-                    gitignorePatterns.Add(Files.DirName(dir) + "/");
-                    gitignorePatterns.Add(Files.DirName(dir) + ".meta");
-                };
+                loadAaoRecursively(assetAddOn, gitignorePatterns, gitCollectIgnoresInSubdirs, Files.CombinePath(relPath, Files.DirName(dir)));
             }
-
-            if (gitignorePatterns.Count > 0)
-            {
-                string gitignoreFile = Files.CombinePath(assetDir, ".gitignore");
-                if (!File.Exists(gitignoreFile))
-                {
-                    // ignore the gitignore itself if it is only created for this aao:
-                    gitignorePatterns.Add(".gitignore");
-                    // TODO THIS DOES NOT YET WORK FOR MULTIPLE AAOs AND ARBITRARY ORDER!
-                }
-                // Store additions to local gitignore
-                string gitignoreSection = "\n\n# BEGIN GQ AAO: " + assetAddOn + "\n";
-                foreach (string pattern in gitignorePatterns)
-                {
-                    gitignoreSection += pattern + "\n";
-                }
-                gitignoreSection += "# END GQ AAO: " + assetAddOn + "\n";
-                File.AppendAllText(gitignoreFile, gitignoreSection);
-            }
-
-            return dirIsCreated;
         }
 
         /// <summary>

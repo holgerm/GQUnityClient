@@ -63,11 +63,11 @@ namespace GQ.Editor.Util
 
 		public static string RelativeAssetPath (string path)
 		{
-			if (path.StartsWith (Application.dataPath)) {
+            if (path.StartsWith (Application.dataPath, StringComparison.CurrentCulture)) {
 				string projectParentPath = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
 				return path.Substring (projectParentPath.Length + 1);
 			}
-			if (path.StartsWith ("Assets")) {
+			if (path.StartsWith ("Assets", StringComparison.CurrentCulture)) {
 				return path;
 			}
 				

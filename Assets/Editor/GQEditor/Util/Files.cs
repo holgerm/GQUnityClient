@@ -10,6 +10,25 @@ namespace GQ.Editor.Util
 
     public class Files : GQ.Client.FileIO.Files
     {
+        #region Special Files and Directories
+
+        static private string _PROJECT_PATH = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
+
+        public static string PROJECT_PATH
+        {
+            get
+            {
+                return _PROJECT_PATH;
+            }
+        }
+
+        public static string GIT_EXCLUDE_FILE {
+            get {
+                return Files.CombinePath(PROJECT_PATH, ".git", "info", "exclude");
+            }
+        }
+
+        #endregion
 
         #region Asset Agnostic API
 
