@@ -22,14 +22,14 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
-		PageSLS_Spielbeschreibung slsPage;
+		PageSLS_Spielbeschreibung myPage;
 
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
 		/// </summary>
 		public override void Initialize ()
 		{
-			slsPage = (PageSLS_Spielbeschreibung)page;
+            myPage = (PageSLS_Spielbeschreibung)page;
 
 			// set title:
 			titleText.text = page.Quest.Name;
@@ -41,18 +41,18 @@ namespace GQ.Client.UI
 		void ShowImage ()
 		{
 			// show (or hide completely) image:
-			if (slsPage.ImageUrl == "") {
+			if (myPage.ImageUrl == "") {
 				imagePanel.SetActive (false);
 				return;
 			} else {
 				AbstractDownloader loader;
-				if (slsPage.Parent.MediaStore.ContainsKey (slsPage.ImageUrl)) {
+				if (myPage.Parent.MediaStore.ContainsKey (myPage.ImageUrl)) {
 					MediaInfo mediaInfo;
-					slsPage.Parent.MediaStore.TryGetValue (slsPage.ImageUrl, out mediaInfo);
+					myPage.Parent.MediaStore.TryGetValue (myPage.ImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
 					loader = new Downloader (
-						url: slsPage.ImageUrl, 
+						url: myPage.ImageUrl, 
 						timeout: ConfigurationManager.Current.timeoutMS,
 						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 					);

@@ -24,8 +24,6 @@ namespace GQ.Client.Model
 					break;
 				case "Spieltyp2":
 				case "Spieltyp3":
-				case "Stichworte":
-				case "Weitere Stichworte":
 				case "Spieleranzahl":
 				case "Dauer":
 				case "Wetter":
