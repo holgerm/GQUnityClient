@@ -39,8 +39,17 @@ namespace GQ.Editor.Building
 				return;
 
 			foreach (string str in importedAssets) {
+                if (ProductManager.Instance.IsImportingPackage &&
+                    str.StartsWith(ConfigurationManager.RUNTIME_PRODUCT_DIR + "/" + "ImportedPackage", StringComparison.CurrentCulture))
+                {
+                    // ignore "changes" due to importing the package file:
+                    DateTime time = DateTime.Now;
+                    Debug.Log("IMPORTED PACKAGE FILE ignored " + str + 
+                              " at " + time.Hour + ":" + time.Minute + ":" + time.Second + "." + time.Millisecond);
+                    continue;
+                }
 
-				setChangeFlags (str);
+                setChangeFlags(str);
 			}
 
 			foreach (string str in deletedAssets) {
@@ -73,16 +82,16 @@ namespace GQ.Editor.Building
 				ProductEditor.Instance.Repaint ();
 		}
 
-		private static bool isRealAsset (string assetPath)
+        private static bool isMonitoredAsset (string assetPath)
 		{
-			if (assetPath.StartsWith (GQAssert.TEST_DATA_BASE_DIR))
+			if (assetPath.StartsWith (GQAssert.TEST_DATA_BASE_DIR, StringComparison.CurrentCulture))
 				// test assets are NOT REAL assets:
 				return false;
 
 			if (assetPath.Equals (ConfigurationManager.BUILD_TIME_FILE_PATH))
 				// buildtime.txt is NOT a REAL asset:
 				return false;
-
+                
 			return true;
 		}
 
@@ -94,13 +103,13 @@ namespace GQ.Editor.Building
 				productDirHasChanges = true;
 			}
 
-			if (!buildTimeChanged && isRealAsset (str)) {
+			if (!buildTimeChanged && isMonitoredAsset (str)) {
 				buildTimeChanged = true;
 			}
 
 			if (!configHasChanged &&
 			    !ProductEditor.IsCurrentlyPreparingProduct &&
-			    isRealAsset (str) &&
+			    isMonitoredAsset (str) &&
 			    str.StartsWith (ProductManager.Instance.BuildExportPath)) {
 				configHasChanged = true;
 			}

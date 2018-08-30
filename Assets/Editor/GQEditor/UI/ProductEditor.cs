@@ -235,17 +235,7 @@ namespace GQ.Editor.UI
                 {
                     if (GUILayout.Button("Persist"))
                     {
-                        Files.CopyDirContents(
-                            ConfigurationManager.RUNTIME_PRODUCT_DIR,
-                            Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
-                            copyContentsOnly: true
-                        );
-                        Files.CopyDir(
-                            Pm.STREAMING_ASSET_PATH,
-                            Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
-                            replace: false
-                        );
-                        Pm.ConfigFilesHaveChanges = false;
+                        persistProduct();
                     }
                 }
             }
@@ -317,6 +307,47 @@ namespace GQ.Editor.UI
                 EditorGUILayout.EndHorizontal();
 
             } // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
+        }
+
+        private void persistProduct()
+        {
+            string productDir = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName);
+            string importedPackageDir = Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage");
+
+            foreach (string dir in Directory.GetDirectories(ConfigurationManager.RUNTIME_PRODUCT_DIR)) {
+                if (dir.Equals(importedPackageDir))
+                {
+                    // do not copy the ImportedPackage dir to the product, but export it as unity package:
+                    string productPackageFile =
+                       Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName, CurrentBuildName + ".unitypackage");
+                    AssetDatabase.ExportPackage(
+                        importedPackageDir,
+                        productPackageFile,
+                        ExportPackageOptions.Recurse
+                    );
+                }
+                else
+                {
+                    Files.CopyDir(dir, productDir, replace: true);
+                }
+            }
+
+            foreach (string file in Directory.GetFiles(ConfigurationManager.RUNTIME_PRODUCT_DIR)) {
+                Files.CopyFile(file, productDir, overwrite: true);
+            }
+            //// TODO replace by manually walk through all dirs and files except "ImportedPackage".
+
+            //Files.CopyDirContents(
+            //    ConfigurationManager.RUNTIME_PRODUCT_DIR,
+            //    Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
+            //    copyContentsOnly: true
+            //);
+            //Files.CopyDir(
+            //    Pm.STREAMING_ASSET_PATH,
+            //    Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
+            //    replace: false
+            //);
+            Pm.ConfigFilesHaveChanges = false;
         }
 
         internal static Config updateFromCurrentConfig()

@@ -117,7 +117,6 @@ namespace GQ.Editor.Building
 
         #region State
 
-
         private bool _configFilesHaveChanges;
 
         /// <summary>
@@ -236,6 +235,7 @@ namespace GQ.Editor.Building
         {
             _errors = new List<string>();
             InitProductDictionary();
+            IsImportingPackage = false;
         }
 
         internal void InitProductDictionary()
@@ -406,6 +406,51 @@ namespace GQ.Editor.Building
 
             Files.ClearDir(BuildExportPath);
 
+            string packageFile = Files.CombinePath(productDirPath, productID + ".unitypackage");
+            if (File.Exists(packageFile))
+            {
+                // import unity packages instead of just copying the files:
+                // TODO might have a problem when multiple package files are present! 
+                // (cf. https://answers.unity.com/questions/135233/running-assetdatabaseimportpackage-on-multiple-pac.html)
+                AssetDatabase.importPackageStarted += (string packageName) =>
+                {
+                    Debug.Log(("Importing package " + packageName + " started!").Yellow());
+                    Instance.IsImportingPackage = true;
+                };
+                AssetDatabase.importPackageFailed += (string packageName, string errorMessage) =>
+                {
+                    Instance.IsImportingPackage = false;
+                    Log.SignalErrorToDeveloper("Importing package " + packageName + " failed! " + errorMessage);
+                };
+                AssetDatabase.importPackageCancelled += (string packageName) =>
+                {
+                    Debug.Log(("Importing package " + packageName + " cancelled! ").Yellow());
+                    Instance.IsImportingPackage = false;
+                    Log.SignalErrorToDeveloper("Importing package " + packageName + " cancelled! Why?");
+                };
+                AssetDatabase.importPackageCompleted += (string packageName) =>
+                {
+                    Debug.Log(("Importing package " + packageName + " completed! ").Yellow());
+                    Instance.IsImportingPackage = false;
+                    prepareProductTheRestAfterPackageIsImported(newProduct, productDirPath);
+                };
+                DateTime startAt = DateTime.Now;
+                AssetDatabase.ImportPackage(packageFile, false);
+                startAt = DateTime.Now;
+            }
+            else {
+                // if we have no package file:
+                prepareProductTheRestAfterPackageIsImported(newProduct, productDirPath);
+            }
+        }
+
+        public bool IsImportingPackage {
+            set;
+            get;
+        }
+
+        private void prepareProductTheRestAfterPackageIsImported(ProductSpec newProduct, string productDirPath) {
+            // Do the rest to activate the new product:
             DirectoryInfo productDirInfo = new DirectoryInfo(productDirPath);
 
             foreach (FileInfo file in productDirInfo.GetFiles())
@@ -414,11 +459,8 @@ namespace GQ.Editor.Building
                     // ignore hidden files and unity meta files:
                     continue;
 
-                if (file.Name.EndsWith(".unitypackage", StringComparison.CurrentCulture)) {
-                    // import unity packages instead of just copying the files:
-                    // TODO might have a problem when multiple package files are present! 
-                    // (cf. https://answers.unity.com/questions/135233/running-assetdatabaseimportpackage-on-multiple-pac.html)
-                    AssetDatabase.ImportPackage(file.FullName, false);
+                if (file.Name.EndsWith(".unitypackage", StringComparison.CurrentCulture))
+                {
                     continue;
                 }
 
@@ -480,6 +522,9 @@ namespace GQ.Editor.Building
 
             // update view in editor:
             LayoutConfig.ResetAll();
+
+            DateTime completedAt = DateTime.Now;
+            Debug.LogWarning("COMPLETED Prepraing product at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
         }
 
         #endregion
