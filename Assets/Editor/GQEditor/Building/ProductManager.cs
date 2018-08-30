@@ -410,8 +410,17 @@ namespace GQ.Editor.Building
 
             foreach (FileInfo file in productDirInfo.GetFiles())
             {
-                if (file.Name.StartsWith(".") || file.Name.EndsWith(".meta"))
+                if (file.Name.StartsWith(".", StringComparison.CurrentCulture) || file.Name.EndsWith(".meta", StringComparison.CurrentCulture))
+                    // ignore hidden files and unity meta files:
                     continue;
+
+                if (file.Name.EndsWith(".unitypackage", StringComparison.CurrentCulture)) {
+                    // import unity packages instead of just copying the files:
+                    // TODO might have a problem when multiple package files are present! 
+                    // (cf. https://answers.unity.com/questions/135233/running-assetdatabaseimportpackage-on-multiple-pac.html)
+                    AssetDatabase.ImportPackage(file.FullName, false);
+                    continue;
+                }
 
                 Files.CopyFile(
                     Files.CombinePath(productDirPath, file.Name),
@@ -421,7 +430,7 @@ namespace GQ.Editor.Building
 
             foreach (DirectoryInfo dir in productDirInfo.GetDirectories())
             {
-                if (dir.Name.StartsWith("_") || dir.Name.Equals("StreamingAssets"))
+                if (dir.Name.StartsWith("_", StringComparison.CurrentCulture) || dir.Name.Equals("StreamingAssets"))
                     continue;
 
                 Files.CopyDir(

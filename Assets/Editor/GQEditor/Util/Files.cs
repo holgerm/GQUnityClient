@@ -321,8 +321,8 @@ namespace GQ.Editor.Util
         }
 
         /// <summary>
-        /// Copies the given dir fromDir into the given toDir. 
-        /// The third parameter specifies if also recursively all contained folders are copied - default is true.
+        /// Copies the given dir fromDir (including all subdirs) into the given toDir. 
+        /// The third parameter specifies if existing dirs or subdirs will be replced - default is true.
         /// 
         /// This method works on assets as well as on "normal" files and directories.
         /// </summary>
