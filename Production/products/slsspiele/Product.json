@@ -1,7 +1,9 @@
 {
   "id": "slsspiele",
+  "idExtension": "",
   "name": "SLS Spiele",
   "portal": 421,
+  "assetAddOns": [],
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
@@ -9,6 +11,7 @@
   "autoUpdateQuestInfos": false,
   "timeoutMS": 60000,
   "maxIdleTimeMS": 9000,
+  "maxParallelDownloads": 15,
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
@@ -45,6 +48,7 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapStartPositionType": "CenterOfMarkers",
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
@@ -348,6 +352,7 @@
     "b": 255,
     "a": 255
   },
+  "mainFontSize": 60,
   "showShadows": true,
   "headerBgColor": {
     "r": 255,
@@ -460,7 +465,7 @@
     "b": 255,
     "a": 255
   },
-  "eumlationColor": {
+  "emulationColor": {
     "r": 255,
     "g": 255,
     "b": 255,
