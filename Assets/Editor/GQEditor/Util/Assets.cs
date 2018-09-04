@@ -61,6 +61,12 @@ namespace GQ.Editor.Util
 				return relativeAssetPath;
 		}
 
+        /// <summary>
+        /// Normalizes the given path relative to the Assets main directory (including Asstes itself) 
+        /// when the given path points into Assets subtree.
+        /// </summary>
+        /// <returns>The asset path.</returns>
+        /// <param name="path">Path.</param>
 		public static string RelativeAssetPath (string path)
 		{
             if (path.StartsWith (Application.dataPath, StringComparison.CurrentCulture)) {

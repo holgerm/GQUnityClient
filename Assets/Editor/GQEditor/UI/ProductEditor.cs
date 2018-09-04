@@ -335,18 +335,7 @@ namespace GQ.Editor.UI
             foreach (string file in Directory.GetFiles(ConfigurationManager.RUNTIME_PRODUCT_DIR)) {
                 Files.CopyFile(file, productDir, overwrite: true);
             }
-            //// TODO replace by manually walk through all dirs and files except "ImportedPackage".
 
-            //Files.CopyDirContents(
-            //    ConfigurationManager.RUNTIME_PRODUCT_DIR,
-            //    Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
-            //    copyContentsOnly: true
-            //);
-            //Files.CopyDir(
-            //    Pm.STREAMING_ASSET_PATH,
-            //    Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName),
-            //    replace: false
-            //);
             Pm.ConfigFilesHaveChanges = false;
         }
 
@@ -2054,6 +2043,11 @@ namespace GQ.Editor.UI
                         }
                     }
                     EditorBuildSettings.scenes = editorBuildScenes.ToArray();
+
+                    foreach (EditorBuildSettingsScene sc in EditorBuildSettings.scenes)
+                    {
+                        Debug.Log(("After Create GUI in Editor: EditorBuildSettings.scenes contains: " + sc.path).Red());
+                    }
                 }
             }
 

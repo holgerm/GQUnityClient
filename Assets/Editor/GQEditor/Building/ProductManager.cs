@@ -503,6 +503,26 @@ namespace GQ.Editor.Building
                     STREAMING_ASSET_PATH);
             }
 
+            // gather scenes ans set them in EditorBuidlSettings:
+            List<string> scenes = 
+                gatherScenesFromPackage(
+                    new List<string>(), 
+                    Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
+                );
+            foreach (string scenePath in newProduct.Config.scenePaths) {
+                scenes.Add(scenePath);
+            }
+
+            List<EditorBuildSettingsScene> ebsScenes = new List<EditorBuildSettingsScene>();
+            foreach (string scenePath in scenes) {
+                ebsScenes.Add(new EditorBuildSettingsScene(scenePath.Substring("Assets/".Length), true));
+            }
+            EditorBuildSettings.scenes = ebsScenes.ToArray();
+
+            foreach (EditorBuildSettingsScene sc in EditorBuildSettings.scenes) {
+                Debug.Log(("After Prepare Prodct: EditorBuildSettings.scenes contains: " + sc.path + " active: " + sc.enabled).Red());
+            }
+
             PlayerSettings.productName = newProduct.Config.name;
             string appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, appIdentifier);
@@ -525,6 +545,27 @@ namespace GQ.Editor.Building
 
             DateTime completedAt = DateTime.Now;
             Debug.LogWarning("COMPLETED Prepraing product at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
+        }
+
+        List<string> gatherScenesFromPackage(List<string> gatheredScenes, string dir) {
+
+            if (Directory.Exists(dir))
+            {
+                foreach (string file in Directory.GetFiles(dir))
+                {
+                    if (file.EndsWith(".unity", StringComparison.CurrentCulture))
+                    {
+                        gatheredScenes.Add(Assets.RelativeAssetPath(file));
+                    }
+                }
+
+                foreach (string subdir in Directory.GetDirectories(dir))
+                {
+                    gatheredScenes = gatherScenesFromPackage(gatheredScenes, subdir);
+                }
+            }
+
+            return gatheredScenes;
         }
 
         #endregion

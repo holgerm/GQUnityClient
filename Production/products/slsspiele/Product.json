@@ -31,12 +31,12 @@
   "sceneMappings": [
     {
       "pageTypeName": "MetaData",
-      "scenePath": "Assets/ConfigAssets/Resources/Scenes/Pages/SLS_Spielbeschreibung.unity"
+      "scenePath": "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity"
     }
   ],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
-    "Assets/ConfigAssets/Resources/Scenes/Pages/SLS_Spielbeschreibung.unity"
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
