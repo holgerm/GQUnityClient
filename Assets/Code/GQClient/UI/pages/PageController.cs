@@ -135,13 +135,13 @@ namespace GQ.Client.UI
 			}
 		}
 
-		protected float ImageRatioMinimum {
+        static public float ImageRatioMinimum {
 			get {
 				return ContentWidthUnits / ConfigurationManager.Current.imageAreaHeightMaxUnits;
 			}
 		}
 
-		protected float ImageRatioMaximum {
+        static public float ImageRatioMaximum {
 			get {
 				return ContentWidthUnits / ConfigurationManager.Current.imageAreaHeightMinUnits;
 

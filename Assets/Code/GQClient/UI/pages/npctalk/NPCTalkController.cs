@@ -80,15 +80,18 @@ namespace GQ.Client.UI
 				);
 			}
 			loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
-				fitInAndShowImage(d.Www.texture);
+                float imageAreaHeight = fitInAndShowImage(d.Www.texture);
 
-				// Dispose www including it s Texture and take some logs for preformace surveillance:
-				d.Www.Dispose ();
+                imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
+                contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
+
+                // Dispose www including it s Texture and take some logs for preformace surveillance:
+                d.Www.Dispose ();
 			};
 			loader.Start ();
 		}
 
-		void fitInAndShowImage(Texture2D texture) {
+		float fitInAndShowImage(Texture2D texture) {
 			AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
 			float imageRatio = (float)texture.width / (float)texture.height;
 			float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
@@ -102,8 +105,8 @@ namespace GQ.Client.UI
 				imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
 			}
 
-			imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels (imageAreaHeight);
-			contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
+			//imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels (imageAreaHeight);
+			//contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
 
 			fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
 			fitter.aspectMode = 
@@ -113,7 +116,10 @@ namespace GQ.Client.UI
 
 			image.texture = texture;
 			imagePanel.SetActive (true);
-		}
+
+            return imageAreaHeight;
+
+        }
 
 		void ClearText ()
 		{

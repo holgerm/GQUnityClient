@@ -36,7 +36,8 @@
   ],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
-    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity"
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity",
+    "Assets/Scenes/Pages/NPCTalk.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
@@ -337,9 +338,6 @@
       ]
     }
   ],
-  "topLogo": {
-    "path": "TopLogo"
-  },
   "mainColorFG": {
     "r": 0,
     "g": 0,
@@ -354,6 +352,9 @@
   },
   "mainFontSize": 60,
   "showShadows": true,
+  "topLogo": {
+    "path": "TopLogo"
+  },
   "headerBgColor": {
     "r": 255,
     "g": 255,

@@ -265,9 +265,6 @@ namespace GQ.Client.Conf
 
 		#region Layout
 
-		[ShowInProductEditor]
-		public ImagePath topLogo { get; set; }
-
 		[ShowInProductEditor (StartSection = "Layout & Colors:")]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	mainColorFG  { get; set; }
@@ -282,7 +279,10 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public bool showShadows { get; set; }
 
-		[ShowInProductEditor]
+        [ShowInProductEditor]
+        public ImagePath topLogo { get; set; }
+
+        [ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	headerBgColor  { get; set; }
 
