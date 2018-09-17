@@ -462,7 +462,8 @@ namespace GQ.Client.Model
 		RemovedInfo,
 		ChangedInfo,
 		ListChanged,
-		FilterChanged
+		FilterChanged,
+        SorterChanged
 	}
 		
 

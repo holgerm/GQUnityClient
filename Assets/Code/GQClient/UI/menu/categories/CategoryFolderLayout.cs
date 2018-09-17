@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GQ.Client.Conf;
 using UnityEngine;
 
 namespace GQ.Client.UI
@@ -11,10 +12,10 @@ namespace GQ.Client.UI
 		public override void layout ()
 		{
 			// set heights of text and image:
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject);
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "FolderImage", sizeScaleFactor: FolderImageScaleFactor);
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Name");
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Number");
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: ConfigurationManager.Current.menuBGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "FolderImage", sizeScaleFactor: FolderImageScaleFactor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Name");
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Number");
 		}
 
 	}

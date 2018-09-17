@@ -32,7 +32,7 @@ namespace GQ.Client.UI
 			myPage = (PageTagScanner)page;
 
 			// show the content:
-			prompt.color = ConfigurationManager.Current.mainColorFG;
+			prompt.color = ConfigurationManager.Current.mainFgColor;
 			prompt.fontSize = ConfigurationManager.Current.mainFontSize;
 			prompt.text = myPage.Prompt.Decode4HyperText();
 			showInfo ();

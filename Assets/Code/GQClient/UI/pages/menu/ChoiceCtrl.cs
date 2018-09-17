@@ -36,7 +36,7 @@ public class ChoiceCtrl : MonoBehaviour
 		ChoiceCtrl choiceCtrl = go.GetComponent<ChoiceCtrl> ();
 		choiceCtrl.page = myPage;
 		choiceCtrl.choice = choice;
-		choiceCtrl.choiceText.color = ConfigurationManager.Current.mainColorFG;
+		choiceCtrl.choiceText.color = ConfigurationManager.Current.mainFgColor;
 		choiceCtrl.choiceText.text = choice.Text.Decode4HyperText(false);
 		choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
 

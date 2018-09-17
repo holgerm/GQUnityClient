@@ -12,21 +12,24 @@ namespace GQ.Client.UI
 
 		public override void layout ()
 		{
-			// set entry background color:
-			Image image = GetComponent<Image> ();
-			if (image != null) {
-				image.color = ConfigurationManager.Current.listEntryColor;
-			}
+			//// set entry background color:
+			//Image image = GetComponent<Image> ();
+			//if (image != null) {
+			//	image.color = ConfigurationManager.Current.listEntryBgColor;
+			//}
 
-			// set heights of text and image:
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject);
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject, "InfoButton", sizeScaleFactor: 0.65f);
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject, "Name");
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject, "DownloadButton");
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject, "StartButton");
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject, "DeleteButton");
-			FoyerListLayoutConfig.SetListEntryHeight (gameObject, "UpdateButton");
-		}
+			// set heights and colors of text and image:
+            FoyerListLayoutConfig.SetListEntryLayout (gameObject, fgColor: ConfigurationManager.Current.listEntryBgColor);
+            FoyerListLayoutConfig.SetListEntryLayout (gameObject, "InfoButton", sizeScaleFactor: 0.65f, fgColor: ConfigurationManager.Current.listEntryFgColor);
+			FoyerListLayoutConfig.SetListEntryLayout (gameObject, "Name", fgColor: ConfigurationManager.Current.listEntryFgColor);
+			FoyerListLayoutConfig.SetListEntryLayout (gameObject, "DownloadButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
+			FoyerListLayoutConfig.SetListEntryLayout (gameObject, "StartButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
+			FoyerListLayoutConfig.SetListEntryLayout (gameObject, "DeleteButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
+			FoyerListLayoutConfig.SetListEntryLayout (gameObject, "UpdateButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
 
-	}
+            Debug.Log("COLORS: Layout called.");
+
+        }
+
+    }
 }

@@ -33,7 +33,7 @@ namespace GQ.Client.UI
 			myPage = (PageTextQuestion)page;
 
 			// show the question:
-			questionText.color = ConfigurationManager.Current.mainColorFG;
+			questionText.color = ConfigurationManager.Current.mainFgColor;
 			questionText.fontSize = ConfigurationManager.Current.mainFontSize;
 			questionText.text = myPage.Question.Decode4HyperText();
 			promptPlaceholder.text = myPage.Prompt;

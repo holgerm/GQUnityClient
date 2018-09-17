@@ -13,7 +13,7 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void layout ()
 		{
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject);
 		}
 
 	}

@@ -314,7 +314,8 @@ namespace GQ.Editor.UI
             string productDir = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName);
             string importedPackageDir = Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage");
 
-            foreach (string dir in Directory.GetDirectories(ConfigurationManager.RUNTIME_PRODUCT_DIR)) {
+            foreach (string dir in Directory.GetDirectories(ConfigurationManager.RUNTIME_PRODUCT_DIR))
+            {
                 if (dir.Equals(importedPackageDir))
                 {
                     // do not copy the ImportedPackage dir to the product, but export it as unity package:
@@ -332,7 +333,8 @@ namespace GQ.Editor.UI
                 }
             }
 
-            foreach (string file in Directory.GetFiles(ConfigurationManager.RUNTIME_PRODUCT_DIR)) {
+            foreach (string file in Directory.GetFiles(ConfigurationManager.RUNTIME_PRODUCT_DIR))
+            {
                 Files.CopyFile(file, productDir, overwrite: true);
             }
 
@@ -752,11 +754,17 @@ namespace GQ.Editor.UI
             return disabled;
         }
 
+        /// <summary>
+        /// Says wether the given entry should be hidden:
+        /// </summary>
         static internal bool entryHidden(PropertyInfo propInfo)
         {
             bool hidden = false;
 
+            // Unreadable properties:
             hidden |= !propInfo.CanRead;
+
+            // Map Providers:
             hidden |= (
                 ProductEditor.SelectedConfig.mapProvider == MapProvider.OpenStreetMap
             ) && (
@@ -771,6 +779,24 @@ namespace GQ.Editor.UI
                 propInfo.Name.Equals("mapBaseUrl") ||
                 propInfo.Name.Equals("mapTileImageExtension")
             );
+
+            // List Entry Dividing Modes:
+            hidden |= (
+                ProductEditor.SelectedConfig.listEntryDividingMode == ListEntryDividingMode.SeparationLines
+            ) && (
+                propInfo.Name.Equals("listEntrySecondBgColor") ||
+                propInfo.Name.Equals("listEntrySecondFgColor")
+            );
+            hidden |= (
+                ProductEditor.SelectedConfig.listEntryDividingMode == ListEntryDividingMode.AlternatingColors
+            ) && (
+                propInfo.Name.Equals("listLineColor") ||
+                propInfo.Name.Equals("listStartLineWidth") ||
+                propInfo.Name.Equals("dividingLineWidth") || 
+                propInfo.Name.Equals("listEndLineWidth") 
+            );
+
+            // Undefined properties:
             hidden |= !Attribute.IsDefined(propInfo, typeof(ShowInProductEditor));
 
             return hidden;
@@ -1416,6 +1442,33 @@ namespace GQ.Editor.UI
             {
                 configIsDirty = true;
                 curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapProvider)selectedMapProvider, null);
+            }
+
+            return configIsDirty;
+        }
+    }
+
+    // TODO can't we make these classes generic?
+    public class ProductEditorPart4ListEntryDividingMode : ProductEditorPart
+    {
+        int selectedListEntryDividingMode;
+        string[] names = Enum.GetNames(typeof(ListEntryDividingMode));
+
+        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+
+            int oldMode = selectedListEntryDividingMode;
+            selectedListEntryDividingMode =
+                EditorGUILayout.Popup(
+                    "List Entry Dividing Mode:",
+                selectedListEntryDividingMode,
+                names
+            );
+            if (oldMode != selectedListEntryDividingMode)
+            {
+                configIsDirty = true;
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (ListEntryDividingMode)selectedListEntryDividingMode, null);
             }
 
             return configIsDirty;

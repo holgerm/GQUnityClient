@@ -267,11 +267,11 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor (StartSection = "Layout & Colors:")]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	mainColorFG  { get; set; }
+		public Color32	mainFgColor  { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	mainColorBG  { get; set; }
+		public Color32	mainBgColor  { get; set; }
 
 		[ShowInProductEditor]
 		public int	mainFontSize  { get; set; }
@@ -428,7 +428,7 @@ namespace GQ.Client.Conf
 			}
 		}
 
-		[ShowInProductEditor]
+		[ShowInProductEditor(StartSection = "List Entries:")]
 		public float listEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
@@ -437,12 +437,45 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float listEntryHeightMaxMM { get; set; }
 
-		[ShowInProductEditor]
+        [ShowInProductEditor]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ListEntryDividingMode listEntryDividingMode { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 listLineColor { get; set; }
+
+        [ShowInProductEditor]
+        public int listStartLineWidth { get; set; }
+
+        [ShowInProductEditor]
+        public int dividingLineWidth { get; set; }
+
+        [ShowInProductEditor]
+        public int listEndLineWidth { get; set; }
+
+        [ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	listEntryColor  { get; set; }
+		public Color32	listEntryFgColor  { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 listEntryBgColor { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 listEntrySecondFgColor { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 listEntrySecondBgColor { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 listBgColor { get; set; }
 
 
-		[ShowInProductEditor (StartSection = "Internal:")]
+        [ShowInProductEditor (StartSection = "Internal:")]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	emulationColor  { get; set; }
 
@@ -498,8 +531,8 @@ namespace GQ.Client.Conf
 			markerHeightUnits = 75f;
 
 			// Layout:
-			mainColorBG = Color.white;
-			mainColorFG = Color.black;
+			mainBgColor = Color.white;
+			mainFgColor = Color.black;
 			mainFontSize = 60;
 			showShadows = true;
 			headerHeightUnits = 60f;
@@ -523,10 +556,16 @@ namespace GQ.Client.Conf
 
 			// Foyer List:
 			listEntryHeightUnits = 45f;
-			listEntryColor = new Color (159f, 159f, 159f, 255f);
+			listEntryFgColor = new Color (159f, 159f, 159f, 255f);
+            listEntryBgColor = mainFgColor;
+            listEntryDividingMode = ListEntryDividingMode.SeparationLines;
+            listLineColor = mainFgColor;
+            listStartLineWidth = 5;
+            dividingLineWidth = 5;
+            listEndLineWidth = 5;
 
-			// Menu:
-			showEmptyMenuEntries = false;
+            // Menu:
+            showEmptyMenuEntries = false;
 			categoryDict = new Dictionary<string, Category> ();
 			foldableCategoryFilters = true;
 			categoryFiltersStartFolded = true;
@@ -535,6 +574,7 @@ namespace GQ.Client.Conf
 			menuEntryWidthUnits = 400f;
 			menuInhibitsInteraction = false;
 			menu2ShownInQuests = true;
+            menuBGColor = Color.white;
 
 			// Internal:
 			emulationColor = new Color (255f, 182f, 182f, 255f);
@@ -589,6 +629,11 @@ namespace GQ.Client.Conf
 		OpenStreetMap,
 		MapBox
 	}
+
+    public enum ListEntryDividingMode {
+        SeparationLines,
+        AlternatingColors
+    }
 
     public enum AssetAddOn
     {

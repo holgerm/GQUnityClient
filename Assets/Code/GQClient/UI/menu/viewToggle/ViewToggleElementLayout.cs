@@ -16,8 +16,8 @@ namespace GQ.Client.UI
 		public override void layout ()
 		{
 			// set heights of text and image:
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Text");
-			MenuLayoutConfig.SetMenuEntryHeight (gameObject, "Image");
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Text");
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Image");
 		}
 	}
 }

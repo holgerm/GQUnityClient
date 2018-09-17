@@ -171,8 +171,10 @@ namespace GQ.Client.UI
 
 		#region Static Helpers
 
-		protected static void SetEntryHeight (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f)
+        protected static void SetEntryLayout (float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
 		{
+            Color fgCol = (Color) ((fgColor == null) ? ConfigurationManager.Current.mainFgColor : fgColor);
+
 			// set layout height:
 			Transform transf = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find (gameObjectPath));
 			if (transf != null) {
@@ -185,15 +187,26 @@ namespace GQ.Client.UI
 					if (transf.GetComponent<Image> () != null) {
 						layElem.minWidth = layElem.minHeight;
 						layElem.preferredWidth = layElem.minHeight;
-					}
+                        transf.GetComponent<Image>().color = fgCol;
+                    }
 
 					// for texts we adapt the font size to be at most two thirds of the container element height:
 					Text text = transf.GetComponent<Text> ();
 					if (text != null) {
 						text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 
-					}
-				}
-			} else {
+                        text.color = fgCol;
+                    }
+
+                    // for Buttons we set the fgColor:
+                    Button button = transf.GetComponent<Button>();
+                    if (button != null)
+                    {
+                        ColorBlock newColors = button.colors;
+                        newColors.normalColor = fgCol;
+                        button.colors = newColors;
+                    }
+                }
+            } else {
 				Log.SignalErrorToDeveloper ("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
 			}
 		}
