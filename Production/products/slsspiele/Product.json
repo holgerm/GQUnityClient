@@ -121,7 +121,9 @@
           "id": "slsspiele.darstellen",
           "name": "Darstellen",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typdarstellen"
+          }
         },
         {
           "id": "slsspiele.erzaehlen",
@@ -135,7 +137,9 @@
           "id": "slsspiele.geschicklichkeit",
           "name": "Geschicklichkeit",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typgeschicklichkeit"
+          }
         },
         {
           "id": "slsspiele.rallye",
@@ -149,7 +153,9 @@
           "id": "slsspiele.kennenlernen",
           "name": "Kennenlernen",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typkennenlernen"
+          }
         },
         {
           "id": "slsspiele.kooperationsspiel",
@@ -171,19 +177,25 @@
           "id": "slsspiele.naturspiel",
           "name": "Natur",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typnaturspiel"
+          }
         },
         {
           "id": "slsspiele.ratespiel",
           "name": "Raten",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typratespiel"
+          }
         },
         {
           "id": "slsspiele.reaktionsspiel",
           "name": "Reaktion",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typreaktionsspiel"
+          }
         },
         {
           "id": "slsspiele.schreiben_malen",
@@ -197,13 +209,17 @@
           "id": "slsspiele.sportspiel",
           "name": "Sport & Mannschaft",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typsportspiel"
+          }
         },
         {
           "id": "slsspiele.strategiespiel",
           "name": "Strategie",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typstrategiespiel"
+          }
         },
         {
           "id": "slsspiele.suchspiel",
@@ -225,7 +241,9 @@
           "id": "slsspiele.sonstige_spielform",
           "name": "Sonstiges",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/typsonstige_spielform"
+          }
         }
       ]
     },
@@ -265,19 +283,25 @@
           "id": "slsspiele.kurz",
           "name": "Kurz",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/dauerkurz"
+          }
         },
         {
           "id": "slsspiele.mittellang",
           "name": "Mittel",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/dauermittellang"
+          }
         },
         {
           "id": "slsspiele.lang",
           "name": "Lang",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/dauerlang"
+          }
         }
       ]
     },
@@ -333,7 +357,9 @@
           "id": "slsspiele.spezielle_orte",
           "name": "Speziell",
           "folderName": "",
-          "symbol": null
+          "symbol": {
+            "path": "textures/readable/ortspezielle_orte"
+          }
         }
       ]
     }
