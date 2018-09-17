@@ -231,11 +231,11 @@ namespace GQ.Client.Conf
 
 		public CategorySet GetMainCategorySet ()
 		{
-			return categorySets.Find (cat => cat.name == mainCategorySet);
+			return CategorySets.Find (cat => cat.name == mainCategorySet);
 		}
 
 		[ShowInProductEditor]
-		public List<CategorySet> categorySets {
+		public List<CategorySet> CategorySets {
 			get {
 				if (_categorySets == null) {
 					_categorySets = new List<CategorySet> ();

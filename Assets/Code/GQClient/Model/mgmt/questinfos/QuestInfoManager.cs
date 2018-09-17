@@ -415,7 +415,7 @@ namespace GQ.Client.Model
 			Filter = new QuestInfoFilter.All ();
 			// init category filters:
 			CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter> ();
-			List<CategorySet> catSets = ConfigurationManager.Current.categorySets;
+			List<CategorySet> catSets = ConfigurationManager.Current.CategorySets;
 			foreach (CategorySet catSet in catSets) {
 				CategoryFilters [catSet.name] = new QuestInfoFilter.CategoryFilter (catSet);
 				FilterAnd (CategoryFilters [catSet.name]);
@@ -423,7 +423,7 @@ namespace GQ.Client.Model
 
 			// create UI for Category Filters:
 			GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint> ().MenuTopLeftContent;
-			foreach (CategorySet catSet in ConfigurationManager.Current.categorySets) {
+			foreach (CategorySet catSet in ConfigurationManager.Current.CategorySets) {
 				CategoryTreeCtrl.Create (menuContent, CategoryFilters [catSet.name], catSet.categories);
 			}
 		}
