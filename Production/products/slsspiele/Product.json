@@ -73,7 +73,7 @@
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": "Spieltyp",
-  "categorySets": [
+  "CategorySets": [
     {
       "name": "Spieltyp",
       "categories": [
@@ -118,14 +118,6 @@
           }
         },
         {
-          "id": "slsspiele.darstellen",
-          "name": "Darstellen",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/typdarstellen"
-          }
-        },
-        {
           "id": "slsspiele.erzaehlen",
           "name": "Erzählen",
           "folderName": "",
@@ -139,14 +131,6 @@
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typgeschicklichkeit"
-          }
-        },
-        {
-          "id": "slsspiele.rallye",
-          "name": "Rallyes",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/typrallye"
           }
         },
         {
@@ -190,35 +174,11 @@
           }
         },
         {
-          "id": "slsspiele.reaktionsspiel",
-          "name": "Reaktion",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/typreaktionsspiel"
-          }
-        },
-        {
           "id": "slsspiele.schreiben_malen",
           "name": "Schreiben und Malen",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typmalen"
-          }
-        },
-        {
-          "id": "slsspiele.sportspiel",
-          "name": "Sport & Mannschaft",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/typsportspiel"
-          }
-        },
-        {
-          "id": "slsspiele.strategiespiel",
-          "name": "Strategie",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/typstrategiespiel"
           }
         },
         {
@@ -235,6 +195,14 @@
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typwahrnehmung"
+          }
+        },
+        {
+          "id": "slsspiele.typeinfach",
+          "name": "Einfach",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/typeinfach"
           }
         },
         {
@@ -377,6 +345,7 @@
     "a": 255
   },
   "mainFontSize": 60,
+  "maxFontSize": 100,
   "showShadows": false,
   "topLogo": {
     "path": "TopLogo"
@@ -483,9 +452,10 @@
   "menuInhibitsInteraction": false,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
-  "listEntryHeightUnits": 70.0,
+  "listEntryHeightUnits": 100.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
+  "listEntryUseTwoLines": true,
   "listEntryDividingMode": "AlternatingColors",
   "listLineColor": {
     "r": 64,
