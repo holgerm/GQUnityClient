@@ -203,10 +203,10 @@ namespace GQ.Client.UI.Foyer
 				DownloadButton.interactable = true;
 			}
 			// Show START button if needed:
-			if (ShowStartOption (data)) {
-				StartButton.gameObject.SetActive (true);
-				StartButton.interactable = true;
-			}
+			//if (ShowStartOption (data)) {
+			//	StartButton.gameObject.SetActive (true);
+			//	StartButton.interactable = true;
+			//}
 			// Show UPDATE button if needed:
 			if (ShowUpdateOption (data)) {
 				UpdateButton.gameObject.SetActive (true);
