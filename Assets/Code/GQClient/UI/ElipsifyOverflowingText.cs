@@ -7,6 +7,7 @@ using GQ.Client.Err;
 public class ElipsifyOverflowingText : MonoBehaviour {
 
 	public Text Text;
+    public int maxLineNumbers = 1; // TODO: DOES NOT WORK WITH DOUBLE LINES!
 
 	public string FullText {
 		get;
@@ -39,7 +40,12 @@ public class ElipsifyOverflowingText : MonoBehaviour {
 
 
 		Canvas.ForceUpdateCanvases ();
-		if (LayoutUtility.GetPreferredWidth (Text.rectTransform) <= Text.rectTransform.rect.width) {
+
+        float maxWidth = maxLineNumbers * Text.rectTransform.rect.width;
+
+        float preferredWidth = LayoutUtility.GetPreferredWidth(Text.rectTransform);
+
+        if (preferredWidth <= maxWidth) {
 			// text just fits well:
 			return;
 		}
@@ -50,8 +56,11 @@ public class ElipsifyOverflowingText : MonoBehaviour {
 		do {
 			Text.text = Text.text.Substring (0, Text.text.Length - reduceLastChars) + "...";
 			reduceLastChars++;
-			// already increase for next round in this loop.
-		}
-		while (LayoutUtility.GetPreferredWidth (Text.rectTransform) > Text.rectTransform.rect.width);
+            // already increase for next round in this loop.
+            preferredWidth = LayoutUtility.GetPreferredWidth(Text.rectTransform);
+        }
+		while (preferredWidth > maxWidth);
+
+        return;
 	}
 }

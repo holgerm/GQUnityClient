@@ -276,7 +276,10 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public int	mainFontSize  { get; set; }
 
-		[ShowInProductEditor]
+        [ShowInProductEditor]
+        public int maxFontSize { get; set; }
+
+        [ShowInProductEditor]
 		public bool showShadows { get; set; }
 
         [ShowInProductEditor]
@@ -438,6 +441,9 @@ namespace GQ.Client.Conf
 		public float listEntryHeightMaxMM { get; set; }
 
         [ShowInProductEditor]
+        public bool listEntryUseTwoLines { get; set; }
+
+        [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public ListEntryDividingMode listEntryDividingMode { get; set; }
 
@@ -534,6 +540,7 @@ namespace GQ.Client.Conf
 			mainBgColor = Color.white;
 			mainFgColor = Color.black;
 			mainFontSize = 60;
+            maxFontSize = 100;
 			showShadows = true;
 			headerHeightUnits = 60f;
 			contentHeightUnits = 750f;
@@ -554,8 +561,9 @@ namespace GQ.Client.Conf
 			overlayButtonFgColor = Color.black;
 			overlayButtonFgDisabledColor = new Color (159f, 159f, 159f, 187f);
 
-			// Foyer List:
-			listEntryHeightUnits = 45f;
+            // Foyer List:
+            listEntryUseTwoLines = false;
+            listEntryHeightUnits = 45f;
 			listEntryFgColor = new Color (159f, 159f, 159f, 255f);
             listEntryBgColor = mainFgColor;
             listEntryDividingMode = ListEntryDividingMode.SeparationLines;

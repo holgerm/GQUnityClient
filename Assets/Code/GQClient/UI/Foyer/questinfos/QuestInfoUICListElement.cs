@@ -166,6 +166,10 @@ namespace GQ.Client.UI.Foyer
 			// set data and event management:
 			ctrl.data = qInfo;
 			ctrl.containerController = containerController;
+            ElipsifyOverflowingText eot = ctrl.Name.transform.GetComponent<ElipsifyOverflowingText>();
+            if (eot != null) {
+                eot.maxLineNumbers = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
+            }
 			ctrl.data.OnChanged += ctrl.UpdateView;
 			ctrl.UpdateView ();
 			return go;
