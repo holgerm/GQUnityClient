@@ -430,10 +430,10 @@
     "a": 255
   },
   "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 40.0,
+  "menuEntryHeightUnits": 45.0,
   "menuEntryHeightMinMM": 5.0,
   "menuEntryHeightMaxMM": 0.0,
-  "menuEntryWidthUnits": 365.0,
+  "menuEntryWidthUnits": 405.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuBGColor": {
