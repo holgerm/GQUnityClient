@@ -82,7 +82,7 @@ namespace GQ.Client.UI
 
 		static public void SetMenuEntryLayout (GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
 		{
-			ScreenLayout.SetEntryLayout (MenuEntryHeightUnits, menuEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
+			ScreenLayout.SetMenuEntryLayout (MenuEntryHeightUnits, menuEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
 		}
 
 	}

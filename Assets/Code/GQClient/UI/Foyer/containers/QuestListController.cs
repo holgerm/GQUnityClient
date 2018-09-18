@@ -232,16 +232,14 @@ namespace GQ.Client.UI.Foyer
 
 
                 qic.gameObject.GetComponent<Image>().color = bgCol;
-                FoyerListLayoutConfig.SetListEntryLayout(qic.gameObject, "InfoButton", sizeScaleFactor: 0.65f, fgColor: fgCol);
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "InfoButton", sizeScaleFactor: 0.65f, fgColor: fgCol);
                 qic.transform.Find("InfoButton/Image").GetComponent<Image>().color = fgCol;
-                FoyerListLayoutConfig.SetListEntryLayout(qic.gameObject, "Name", fgColor: fgCol);
-                FoyerListLayoutConfig.SetListEntryLayout(qic.gameObject, "DownloadButton", fgColor: fgCol);
-                FoyerListLayoutConfig.SetListEntryLayout(qic.gameObject, "StartButton", fgColor: fgCol);
-                FoyerListLayoutConfig.SetListEntryLayout(qic.gameObject, "DeleteButton", fgColor: fgCol);
-                FoyerListLayoutConfig.SetListEntryLayout(qic.gameObject, "UpdateButton", fgColor: fgCol);
-
-                Debug.Log("COLORS: Updated. FG: " + fgCol.r + ", " + fgCol.g + ", " + fgCol.b);
-            }
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "Name", fgColor: fgCol);
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "DownloadButton", fgColor: fgCol);
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "StartButton", fgColor: fgCol);
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "DeleteButton", fgColor: fgCol);
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "UpdateButton", fgColor: fgCol);
+                            }
         }
 
 

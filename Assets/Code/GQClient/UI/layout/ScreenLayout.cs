@@ -183,7 +183,12 @@ namespace GQ.Client.UI
 
         #region Static Helpers
 
-        protected static void SetEntryLayout(float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        protected enum ListEntryKind {
+            QuestInfo,
+            Menu
+        }
+
+        protected static void SetEntryLayout(float heightUnits, GameObject menuEntry, ListEntryKind listEntryKind, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
         {
             Color fgCol = (Color)((fgColor == null) ? ConfigurationManager.Current.mainFgColor : fgColor);
 
@@ -210,13 +215,19 @@ namespace GQ.Client.UI
                     Text text = transf.GetComponent<Text>();
                     if (text != null)
                     {
-                        //text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 
-                        float fontSizeFactor = ConfigurationManager.Current.listEntryUseTwoLines ? 2.7f : 1.53f;
-                        // these factors have been determined by some manual test measures on the UI.
-                        text.fontSize =
-                            Math.Min(
-                                ConfigurationManager.Current.maxFontSize,
-                                (int)Math.Floor(layElem.minHeight / fontSizeFactor));
+                        switch (listEntryKind) {
+                            case ListEntryKind.Menu:
+                                text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 
+                                break;
+                            case ListEntryKind.QuestInfo:
+                                float fontSizeFactor = ConfigurationManager.Current.listEntryUseTwoLines ? 2.7f : 1.53f;
+                                // these factors have been determined by some manual test measures on the UI.
+                                text.fontSize =
+                                    Math.Min(
+                                        ConfigurationManager.Current.maxFontSize,
+                                        (int)Math.Floor(layElem.minHeight / fontSizeFactor));
+                                break;
+                        }
                         text.color = fgCol;
                     }
 
@@ -234,6 +245,16 @@ namespace GQ.Client.UI
             {
                 Log.SignalErrorToDeveloper("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
             }
+        }
+
+        protected static void SetMenuEntryLayout(float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        {
+            SetEntryLayout(heightUnits, menuEntry, ListEntryKind.Menu, gameObjectPath, sizeScaleFactor, fgColor);
+        }
+
+        protected static void SetQuestInfoEntryLayout(float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        {
+            SetEntryLayout(heightUnits, menuEntry, ListEntryKind.QuestInfo, gameObjectPath, sizeScaleFactor, fgColor);
         }
 
         #endregion

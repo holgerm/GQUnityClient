@@ -54,9 +54,9 @@ namespace GQ.Client.UI
 
 		#region Static Layout Helpers
 
-		static public void SetListEntryLayout (GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+		static public void SetQuestInfoEntryLayout (GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
 		{
-            ScreenLayout.SetEntryLayout (ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
+            ScreenLayout.SetQuestInfoEntryLayout (ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
 		}
 
 		static public float ListEntryHeightUnits {
