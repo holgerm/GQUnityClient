@@ -15,8 +15,7 @@
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
-    "List",
-    "Map"
+    "List"
   ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
@@ -198,7 +197,7 @@
           }
         },
         {
-          "id": "slsspiele.typeinfach",
+          "id": "slsspiele.einfach",
           "name": "Einfach",
           "folderName": "",
           "symbol": {
@@ -473,27 +472,27 @@
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 228,
-    "g": 225,
-    "b": 225,
+    "r": 149,
+    "g": 201,
+    "b": 248,
     "a": 255
   },
   "listEntrySecondFgColor": {
-    "r": 59,
-    "g": 88,
-    "b": 221,
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
   "listEntrySecondBgColor": {
-    "r": 254,
-    "g": 255,
-    "b": 210,
+    "r": 249,
+    "g": 240,
+    "b": 0,
     "a": 255
   },
   "listBgColor": {
-    "r": 101,
-    "g": 178,
-    "b": 247,
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "emulationColor": {
