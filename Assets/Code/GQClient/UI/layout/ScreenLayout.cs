@@ -53,7 +53,7 @@ namespace GQ.Client.UI
             // set background color:
             Image image = Header.GetComponent<Image>();
             if (image != null)
-            {
+            {   
                 image.color = ConfigurationManager.Current.headerBgColor;
             }
 

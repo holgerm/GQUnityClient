@@ -29,8 +29,7 @@ namespace GQ.Client.Model
 			base.ReadAttributes (reader);
 
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_READNFC_IMAGEURL, reader);
-			if (ImageUrl != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
 			SaveToVar = GQML.GetStringAttribute (GQML.PAGE_READNFC_SAVE2VAR, reader);
 			PromptText = GQML.GetStringAttribute (GQML.PAGE_READNFC_TEXT, reader);
 		}

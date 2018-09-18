@@ -100,8 +100,7 @@ namespace GQ.Client.Model
 			EndButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_ENDBUTTONTEXT, reader);
 
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_IMAGEURL, reader);
-			if (ImageUrl != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
 
 			DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
 

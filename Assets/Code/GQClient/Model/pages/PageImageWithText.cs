@@ -63,8 +63,7 @@ namespace GQ.Client.Model
 			EndButtonText = GQML.GetStringAttribute (GQML.PAGE_IMAGEWITHTEXT_ENDBUTTONTEXT, reader);
 
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_IMAGEWITHTEXT_IMAGEURL, reader);
-			if (ImageUrl != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
 
 			Text = GQML.GetStringAttribute (GQML.PAGE_IMAGEWITHTEXT_TEXT, reader);
 

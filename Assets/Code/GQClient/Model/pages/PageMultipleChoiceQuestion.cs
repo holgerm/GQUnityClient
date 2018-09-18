@@ -46,8 +46,7 @@ namespace GQ.Client.Model
 			LoopText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_TEXT, reader);
 
 			LoopImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_IMAGE, reader);
-			if (LoopImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (LoopImage);
+			QuestManager.CurrentlyParsingQuest.AddMedia (LoopImage);
 
 			LoopUntilSuccess = GQML.GetOptionalBoolAttribute (GQML.PAGE_QUESTION_LOOP_UNTIL_SUCCESS, reader);
 
@@ -58,8 +57,7 @@ namespace GQ.Client.Model
 			Shuffle = GQML.GetOptionalBoolAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_SHUFFLE, reader);
 
 			BackGroundImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_BACKGROUND_IMAGE, reader);
-			if (BackGroundImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (BackGroundImage);
+			QuestManager.CurrentlyParsingQuest.AddMedia (BackGroundImage);
 		}
 
 		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
@@ -141,8 +139,7 @@ namespace GQ.Client.Model
 			Id = GQML.GetIntAttribute (GQML.ID, reader);
 			Correct = GQML.GetRequiredBoolAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER_CORRECT, reader);
 			Image = GQML.GetStringAttribute (GQML.PAGE_MULTIPLECHOICEQUESTION_ANSWER_IMAGE, reader);
-			if (Image != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (Image);
+			QuestManager.CurrentlyParsingQuest.AddMedia (Image);
 
 			// Content: Read and implicitly proceed the reader so that this node is completely consumed:
 			Text = reader.ReadInnerXml ();
