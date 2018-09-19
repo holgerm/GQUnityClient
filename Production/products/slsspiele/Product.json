@@ -23,9 +23,7 @@
   "localQuestsDeletable": true,
   "hideHiddenQuests": true,
   "acceptedPageTypes": [
-    "NPCTalk",
-    "MetaData",
-    "ImageWithText"
+    "MetaData"
   ],
   "sceneMappings": [
     {
@@ -35,8 +33,7 @@
   ],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
-    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity",
-    "Assets/Scenes/Pages/NPCTalk.unity"
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
