@@ -152,7 +152,7 @@ namespace GQ.Client.UI.Foyer
 
             QuestInfoControllers.Clear();
 
-            int steps = 0;
+            //int steps = 0;
             foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos())
             {
                 // create new list elements
@@ -165,11 +165,11 @@ namespace GQ.Client.UI.Foyer
                 QuestInfoControllers[info.Id] = qiCtrl;
                 qiCtrl.Show();
 
-                if (steps % 3 == 0)
-                {
-                    yield return null;
-                    steps = 0;
-                }
+                //if (steps % 3 == 0)
+                //{
+                //    yield return null;
+                //    steps = 0;
+                //}
             }
 
             updateListSorting();
@@ -239,7 +239,7 @@ namespace GQ.Client.UI.Foyer
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "StartButton", fgColor: fgCol);
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "DeleteButton", fgColor: fgCol);
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "UpdateButton", fgColor: fgCol);
-                            }
+            }
         }
 
 
