@@ -448,6 +448,8 @@
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
+  "offerFeedback": true,
+  "offerAuthorLogin": false,
   "listEntryHeightUnits": 100.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
