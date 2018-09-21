@@ -571,9 +571,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -957,9 +957,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2205,9 +2205,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -3037,9 +3037,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3163,6 +3163,7 @@ GameObject:
   - component: {fileID: 523054186}
   - component: {fileID: 523054185}
   - component: {fileID: 523054184}
+  - component: {fileID: 523054188}
   m_Layer: 5
   m_Name: InfoList
   m_TagString: Untagged
@@ -3186,7 +3187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000010526149}
+  m_AnchoredPosition: {x: 0, y: 0.00001775153}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &523054184
@@ -3262,6 +3263,19 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
+--- !u!114 &523054188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 523054182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3135002d62954c98ae70ca77ce53a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoList: {fileID: 523054183}
+  HiddenQuests: {fileID: 1388860328}
 --- !u!1 &565583937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3831,6 +3845,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 523054183}
+  - {fileID: 1388860329}
   m_Father: {fileID: 1580102627}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4579,7 +4594,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 540, y: 0}
-  m_SizeDelta: {x: 1080, y: 160}
+  m_SizeDelta: {x: 1080, y: 320.57523}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &749231823
 MonoBehaviour:
@@ -4595,9 +4610,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5438,9 +5453,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5620,8 +5635,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70, y: -80}
-  m_SizeDelta: {x: 90, y: 140}
+  m_AnchoredPosition: {x: 70, y: -160.28761}
+  m_SizeDelta: {x: 90, y: 300.57523}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &922808554
 MonoBehaviour:
@@ -5779,8 +5794,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 515, y: -80}
-  m_SizeDelta: {x: 760, y: 140}
+  m_AnchoredPosition: {x: 515, y: -160.28761}
+  m_SizeDelta: {x: 760, y: 300.57523}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &934354592
 MonoBehaviour:
@@ -5954,10 +5969,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 117.333336
-  m_MinHeight: 117.333336
-  m_PreferredWidth: 117.333336
-  m_PreferredHeight: 117.333336
+  m_MinWidth: 235.0885
+  m_MinHeight: 235.0885
+  m_PreferredWidth: 235.0885
+  m_PreferredHeight: 235.0885
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6488,8 +6503,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1040}
-  m_SizeDelta: {x: 1080, y: 1760}
+  m_AnchoredPosition: {x: 540, y: -2083.739}
+  m_SizeDelta: {x: 1080, y: 3526.3274}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &990637106
 MonoBehaviour:
@@ -6504,9 +6519,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6755,9 +6770,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 864
+  m_MinWidth: 1731.1062
   m_MinHeight: -1
-  m_PreferredWidth: 864
+  m_PreferredWidth: 1731.1062
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -7069,9 +7084,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7647,10 +7662,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 117.333336
-  m_MinHeight: 117.333336
-  m_PreferredWidth: 117.333336
-  m_PreferredHeight: 117.333336
+  m_MinWidth: 235.0885
+  m_MinHeight: 235.0885
+  m_PreferredWidth: 235.0885
+  m_PreferredHeight: 235.0885
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8280,9 +8295,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8409,9 +8424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8667,9 +8682,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8837,6 +8852,39 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1379045432}
   m_CullTransparentMesh: 0
+--- !u!1 &1388860328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1388860329}
+  m_Layer: 5
+  m_Name: HiddenQuests
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1388860329
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1388860328}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 628661635}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1389843863
 GameObject:
   m_ObjectHideFlags: 0
@@ -8889,9 +8937,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9366,7 +9414,6 @@ GameObject:
   - component: {fileID: 1460940680}
   - component: {fileID: 1460940679}
   - component: {fileID: 1460940678}
-  - component: {fileID: 1460940677}
   m_Layer: 5
   m_Name: List
   m_TagString: Untagged
@@ -9374,19 +9421,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1460940677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114184205793611318, guid: f358de3384d394793ade23dfe13f0566,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1460940676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3135002d62954c98ae70ca77ce53a7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InfoList: {fileID: 523054183}
 --- !u!114 &1460940678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9526,9 +9560,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 604.8
+  m_MinWidth: 1211.7743
   m_MinHeight: -1
-  m_PreferredWidth: 604.8
+  m_PreferredWidth: 1211.7743
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -9703,9 +9737,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9886,8 +9920,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 985, y: -80}
-  m_SizeDelta: {x: 140, y: 140}
+  m_AnchoredPosition: {x: 985, y: -160.28761}
+  m_SizeDelta: {x: 140, y: 300.57523}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1493922784
 MonoBehaviour:
@@ -11681,9 +11715,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1760
+  m_MinHeight: 3526.3274
   m_PreferredWidth: -1
-  m_PreferredHeight: 1760
+  m_PreferredHeight: 3526.3274
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -12103,10 +12137,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 117.333336
-  m_MinHeight: 117.333336
-  m_PreferredWidth: 117.333336
-  m_PreferredHeight: 117.333336
+  m_MinWidth: 235.0885
+  m_MinHeight: 235.0885
+  m_PreferredWidth: 235.0885
+  m_PreferredHeight: 235.0885
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -12496,9 +12530,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 160
+  m_MinHeight: 320.57523
   m_PreferredWidth: -1
-  m_PreferredHeight: 160
+  m_PreferredHeight: 320.57523
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1

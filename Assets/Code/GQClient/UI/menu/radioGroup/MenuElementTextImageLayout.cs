@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GQ.Client.UI
 {
 
-	public class RadioEntryLayout : MenuElementLayout
+	public class MenuElementTextImageLayout : MenuElementLayout
 	{
 
 		public override void layout ()
