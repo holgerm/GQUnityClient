@@ -14,12 +14,14 @@ namespace GQ.Client.UI
 		public Canvas canvas4TopRightMenu;
 
 		public Canvas imprintCanvas;
-		public Canvas privacyCanvas;
+        public Canvas feedbackCanvas;
+        public Canvas privacyCanvas;
 		public Canvas authorCanvas;
 
 		public void LeftMenuButtonPressed() {
 			imprintCanvas.gameObject.SetActive (false);
-			privacyCanvas.gameObject.SetActive (false);
+            privacyCanvas.gameObject.SetActive(false);
+            feedbackCanvas.gameObject.SetActive (false);
 			authorCanvas.gameObject.SetActive (false);
 
 			canvas4TopLeftMenu.gameObject.SetActive (!canvas4TopLeftMenu.gameObject.activeSelf);
@@ -34,7 +36,13 @@ namespace GQ.Client.UI
 				return;
 			}
 
-			if (privacyCanvas.gameObject.activeSelf) {
+            if (feedbackCanvas.gameObject.activeSelf)
+            {
+                feedbackCanvas.gameObject.SetActive(false);
+                return;
+            }
+
+            if (privacyCanvas.gameObject.activeSelf) {
 				privacyCanvas.gameObject.SetActive (false);
 				return;
 			}
