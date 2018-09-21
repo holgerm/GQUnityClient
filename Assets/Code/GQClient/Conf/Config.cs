@@ -480,6 +480,8 @@ namespace GQ.Client.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 listBgColor { get; set; }
 
+        [ShowInProductEditor]
+        public bool showDeleteOptionForLocalQuests { get; set; }
 
         [ShowInProductEditor (StartSection = "Internal:")]
 		[JsonConverter (typeof(Color32Converter))]		
@@ -571,6 +573,7 @@ namespace GQ.Client.Conf
             listStartLineWidth = 5;
             dividingLineWidth = 5;
             listEndLineWidth = 5;
+            showDeleteOptionForLocalQuests = true;
 
             // Menu:
             showEmptyMenuEntries = false;

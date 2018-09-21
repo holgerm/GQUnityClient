@@ -39,20 +39,20 @@ namespace GQ.Client.UI
 		/// <summary>
 		/// Shows the prefab for at least one frame duration.
 		/// </summary>
-		public void Show ()
-		{
+		public virtual void Show ()
+        {
 			Base.Instance.StartCoroutine (showAsCoroutine (true));
 		}
 
 		/// <summary>
 		/// Hides the prefab for at least one frame duration.
 		/// </summary>
-		public void Hide ()
+		public virtual void Hide ()
 		{
 			Base.Instance.StartCoroutine (showAsCoroutine (false));
 		}
 
-		private IEnumerator showAsCoroutine (bool show)
+		protected virtual IEnumerator showAsCoroutine (bool show)
 		{
 			yield return new WaitForEndOfFrame ();
 			gameObject.SetActive (show);

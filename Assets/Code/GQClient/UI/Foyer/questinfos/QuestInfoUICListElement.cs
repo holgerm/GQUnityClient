@@ -49,7 +49,7 @@ namespace GQ.Client.UI.Foyer
 		/// </summary>
 		public Button UpdateButton;
 
-		protected QuestContainerController containerController { get; set; }
+		protected QuestListController listController { get; set; }
 
 		/// <summary>
 		/// The delete button is available WHEN this quest is locally on device.
@@ -83,12 +83,23 @@ namespace GQ.Client.UI.Foyer
 			}
 		}
 
-		#endregion
+        #endregion
 
 
-		#region Internal UI Control Functions
+        #region Internal UI Control Functions
 
-		protected void HideAllButtons ()
+        public override void Hide()
+        {
+            transform.parent = listController.HiddenQuests.transform;
+        }
+
+        public override void Show()
+        {
+            transform.parent = listController.InfoList.transform;
+            gameObject.SetActive(true);
+        }
+
+        protected void HideAllButtons ()
 		{
 			DownloadButton.gameObject.SetActive (false);
 			StartButton.gameObject.SetActive (false);
@@ -149,7 +160,7 @@ namespace GQ.Client.UI.Foyer
 
 		#region Runtime API
 
-		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestContainerController containerController)
+		public static GameObject Create (GameObject root, QuestInfo qInfo, QuestListController containerController)
 		{
 			// Create the view object for this controller:
 			GameObject go = PrefabController.Create (PREFAB, root);
@@ -165,7 +176,7 @@ namespace GQ.Client.UI.Foyer
 
 			// set data and event management:
 			ctrl.data = qInfo;
-			ctrl.containerController = containerController;
+			ctrl.listController = containerController;
             ElipsifyOverflowingText eot = ctrl.Name.transform.GetComponent<ElipsifyOverflowingText>();
             if (eot != null) {
                 eot.maxLineNumbers = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
@@ -248,7 +259,7 @@ namespace GQ.Client.UI.Foyer
 
 		public static bool ShowDeleteOption (QuestInfo data)
 		{
-			return data.IsOnDevice;
+            return ConfigurationManager.Current.showDeleteOptionForLocalQuests && data.IsOnDevice;
 		}
 
 		private void setCategorySymbol (QuestInfo qInfo)

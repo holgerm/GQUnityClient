@@ -19,6 +19,7 @@ namespace GQ.Client.UI.Foyer
     public class QuestListController : QuestContainerController
     {
         public Transform InfoList;
+        public GameObject HiddenQuests;
 
 
         #region React on Events
@@ -213,6 +214,7 @@ namespace GQ.Client.UI.Foyer
             }
 
             updateElementOrderLayout();
+            updateListSorting();
         }
 
 
@@ -220,13 +222,14 @@ namespace GQ.Client.UI.Foyer
         {
             if (ConfigurationManager.Current.listEntryDividingMode != ListEntryDividingMode.AlternatingColors)
                 return;
-
-            foreach (QuestInfoUIC qic in QuestInfoControllers.Values)
+                
+            for (int i = 0; i < InfoList.childCount; i++)
             {
-                Color bgCol = qic.transform.GetSiblingIndex() % 2 == 0 ?
+                QuestInfoUIC qic = InfoList.GetChild(i).GetComponent<QuestInfoUIC>();
+                Color bgCol = i % 2 == 0 ?
                     ConfigurationManager.Current.listEntryBgColor :
                     ConfigurationManager.Current.listEntrySecondBgColor;
-                Color fgCol = qic.transform.GetSiblingIndex() % 2 == 0 ?
+                Color fgCol = i % 2 == 0 ?
                     ConfigurationManager.Current.listEntryFgColor :
                     ConfigurationManager.Current.listEntrySecondFgColor;
 
