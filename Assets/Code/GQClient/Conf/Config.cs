@@ -431,7 +431,13 @@ namespace GQ.Client.Conf
 			}
 		}
 
-		[ShowInProductEditor(StartSection = "List Entries:")]
+        [ShowInProductEditor]
+        public bool offerFeedback { get; set; }
+
+        [ShowInProductEditor]
+        public bool offerAuthorLogin { get; set; }
+
+        [ShowInProductEditor(StartSection = "List Entries:")]
 		public float listEntryHeightUnits { get; set; }
 
 		[ShowInProductEditor]
@@ -586,9 +592,11 @@ namespace GQ.Client.Conf
 			menuInhibitsInteraction = false;
 			menu2ShownInQuests = true;
             menuBGColor = Color.white;
+            offerFeedback = false;
+            offerAuthorLogin = false;
 
-			// Internal:
-			emulationColor = new Color (255f, 182f, 182f, 255f);
+            // Internal:
+            emulationColor = new Color (255f, 182f, 182f, 255f);
 		}
 
 		#endregion
