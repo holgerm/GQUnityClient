@@ -108,20 +108,23 @@ namespace GQ.Client.UI
 			}
 		}
 
-		static protected float calculateRestrictedHeight (float units, float minMM, float maxMM)
+		public static float calculateRestrictedHeight (float units, float minMM, float maxMM)
 		{
 			float result = units;
 
 			if (minMM > 0f) {
-				// check wether specified units obeye the contraint:
-				if (Units2MM (units) < minMM) {
+                // check wether specified units obeye the contraint:
+                float calcMM = Units2MM(units);
+                if (calcMM < minMM) {
 					// if not, adapt to nearest value and return that:
 					result = MM2Units (minMM);
 				}
 			}
+
 			if (maxMM > 0f) {
-				// check wether specified units obeye the contraint:
-				if (Units2MM (units) > maxMM) {
+                // check wether specified units obeye the contraint:
+                float calcMM = Units2MM(units);
+                if (calcMM > maxMM) {
 					// if not, adapt to nearest value and return that:
 					result = MM2Units (maxMM);
 				}

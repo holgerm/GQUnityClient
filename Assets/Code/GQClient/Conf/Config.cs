@@ -363,7 +363,16 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public float borderWidthUnits  { get; set; }
 
-		[ShowInProductEditor]
+        [ShowInProductEditor]
+        public float overlayButtonSizeUnits { get; set; }
+
+        [ShowInProductEditor]
+        public float overlayButtonSizeMinMM { get; set; }
+
+        [ShowInProductEditor]
+        public float overlayButtonSizeMaxMM { get; set; }
+
+        [ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	overlayButtonBgColor  { get; set; }
 
@@ -565,6 +574,9 @@ namespace GQ.Client.Conf
 			footerBgColor = Color.white;
 			footerButtonBgColor = GQColor.transparent;
 			footerButtonFgColor = Color.black;
+            overlayButtonSizeUnits = 50;
+            overlayButtonSizeMinMM = 6;
+            overlayButtonSizeMaxMM = 16;
 			overlayButtonBgColor = GQColor.transparent;
 			overlayButtonFgColor = Color.black;
 			overlayButtonFgDisabledColor = new Color (159f, 159f, 159f, 187f);
