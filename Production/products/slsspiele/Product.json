@@ -408,6 +408,9 @@
     "a": 255
   },
   "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 0.0,
+  "overlayButtonSizeMaxMM": 0.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
