@@ -57,6 +57,12 @@
     "b": 33,
     "a": 255
   },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
   "markerBGAlpha": 150,
   "mapButtonHeightUnits": 55.0,
   "mapButtonHeightMinMM": 7.0,
@@ -65,7 +71,7 @@
   "categoryFiltersStartFolded": false,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": "Kategorien",
-  "categorySets": [
+  "CategorySets": [
     {
       "name": "Kategorien",
       "categories": [
@@ -256,23 +262,24 @@
       ]
     }
   ],
-  "topLogo": {
-    "path": "TopLogo"
-  },
-  "mainColorFG": {
-    "r": 116,
-    "g": 103,
-    "b": 33,
+  "mainFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
-  "mainColorBG": {
+  "mainBgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
     "a": 255
   },
   "mainFontSize": 60,
+  "maxFontSize": 100,
   "showShadows": true,
+  "topLogo": {
+    "path": "TopLogo"
+  },
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -323,9 +330,9 @@
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 116,
-    "g": 103,
-    "b": 33,
+    "r": 153,
+    "g": 136,
+    "b": 44,
     "a": 255
   },
   "footerButtonFgColor": {
@@ -335,6 +342,9 @@
     "a": 255
   },
   "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 6.0,
+  "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -360,34 +370,78 @@
   "menuEntryWidthUnits": 365.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
+  "menuFrameColor": {
+    "r": 79,
+    "g": 70,
+    "b": 23,
+    "a": 255
+  },
   "menuBGColor": {
     "r": 116,
     "g": 103,
     "b": 33,
     "a": 255
   },
-  "menuPartBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+  "menuFGColor": {
+    "r": 255,
+    "g": 251,
+    "b": 232,
     "a": 255
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
+  "offerFeedback": true,
+  "offerAuthorLogin": false,
   "listEntryHeightUnits": 50.0,
   "listEntryHeightMinMM": 6.0,
   "listEntryHeightMaxMM": 10.0,
-  "listEntryColor": {
-    "r": 232,
-    "g": 232,
-    "b": 232,
+  "listEntryUseTwoLines": false,
+  "listEntryDividingMode": "SeparationLines",
+  "listLineColor": {
+    "r": 76,
+    "g": 68,
+    "b": 22,
     "a": 255
   },
-  "emulationColor": {
+  "listStartLineWidth": 5,
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 5,
+  "listEntryFgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
+    "a": 255
+  },
+  "listEntryBgColor": {
+    "r": 153,
+    "g": 136,
+    "b": 44,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listEntrySecondBgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listBgColor": {
+    "r": 76,
+    "g": 68,
+    "b": 22,
+    "a": 255
+  },
+  "showDeleteOptionForLocalQuests": false,
+  "emulationColor": {
+    "r": 255,
+    "g": 95,
+    "b": 167,
     "a": 255
   }
 }
