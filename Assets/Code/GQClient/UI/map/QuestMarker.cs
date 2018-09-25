@@ -90,6 +90,7 @@ namespace GQ.Client.UI
 					Texture2D alphaBG = Resources.Load<Texture2D> (MARKER_ALPHA_BG_PATH);
 					Color32[] alphaColors = alphaBG.GetPixels32 ();
 					Color32[] symbolColors = null;
+
 					int symbolXMin = 0;
 					int symbolXMax = 0;
 					int symbolYMin = 0;
@@ -114,8 +115,13 @@ namespace GQ.Client.UI
 							if (symbolYMin <= y && y <= symbolYMax && symbolXMin <= x && x <= symbolXMax) {
 								if (alphaColors [i].a == 255) {
 									if (symbolColors [j].a > 0) {
-										// we take symbol pixels if we find them above the opaque white circle:
-										alphaColors [i] = symbolColors [j];
+                                        // replace white base color with fg color:
+                                        symbolColors[j].r = ConfigurationManager.Current.markerSymbolFGColor.r;
+                                        symbolColors[j].g = ConfigurationManager.Current.markerSymbolFGColor.g;
+                                        symbolColors[j].b = ConfigurationManager.Current.markerSymbolFGColor.b;
+ 
+                                        // we take symbol pixels if we find them above the opaque white circle:
+                                        alphaColors[i] = symbolColors [j];
 									} else {
 										// we take the marker background alpha as specified for this product:
 										alphaColors [i].a = ConfigurationManager.Current.markerBGAlpha;
