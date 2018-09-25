@@ -26,7 +26,7 @@ namespace GQ.Client.UI
 
 			// set menu background color:
 			if (MenuBackgroundImage != null) {
-				MenuBackgroundImage.color = ConfigurationManager.Current.menuBGColor;
+				MenuBackgroundImage.color = ConfigurationManager.Current.menuFrameColor;
 			}
 
 			// set menu width:

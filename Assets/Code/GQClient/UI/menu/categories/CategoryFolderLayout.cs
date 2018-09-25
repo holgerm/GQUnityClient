@@ -12,10 +12,10 @@ namespace GQ.Client.UI
 		public override void layout ()
 		{
 			// set heights of text and image:
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: ConfigurationManager.Current.menuBGColor);
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "FolderImage", sizeScaleFactor: FolderImageScaleFactor);
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Name");
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Number");
+            MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: ConfigurationManager.Current.menuBGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "FolderImage", sizeScaleFactor: FolderImageScaleFactor, fgColor: ConfigurationManager.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Name", fgColor: ConfigurationManager.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Number", fgColor: ConfigurationManager.Current.menuFGColor);
 		}
 
 	}

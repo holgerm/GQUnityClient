@@ -182,7 +182,11 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	markerColor  { get; set; }
 
-		[JsonIgnore]
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 markerSymbolFGColor { get; set; }
+
+        [JsonIgnore]
 		private byte _markerBGAlpha = 168;
 
 		[ShowInProductEditor]
@@ -407,13 +411,17 @@ namespace GQ.Client.Conf
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	menuBGColor  { get; set; }
+		public Color32	menuFrameColor  { get; set; }
 
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	menuPartBGColor  { get; set; }
+        public Color32	menuBGColor  { get; set; }
 
-		[ShowInProductEditor]
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 menuFGColor { get; set; }
+
+        [ShowInProductEditor]
 		public bool menuInhibitsInteraction { get; set; }
 
 		[ShowInProductEditor]
@@ -552,9 +560,10 @@ namespace GQ.Client.Conf
 			mapMinimalZoom = 7.0f;
 			mapDeltaZoom = 0.5f;
 			markerHeightUnits = 75f;
+            markerSymbolFGColor = Color.black;
 
-			// Layout:
-			mainBgColor = Color.white;
+            // Layout:
+            mainBgColor = Color.white;
 			mainFgColor = Color.black;
 			mainFontSize = 60;
             maxFontSize = 100;
@@ -603,7 +612,9 @@ namespace GQ.Client.Conf
 			menuEntryWidthUnits = 400f;
 			menuInhibitsInteraction = false;
 			menu2ShownInQuests = true;
+            menuFrameColor = Color.grey;
             menuBGColor = Color.white;
+            menuFGColor = Color.black;
             offerFeedback = false;
             offerAuthorLogin = false;
 

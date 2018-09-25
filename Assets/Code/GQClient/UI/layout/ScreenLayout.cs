@@ -53,7 +53,7 @@ namespace GQ.Client.UI
             // set background color:
             Image image = Header.GetComponent<Image>();
             if (image != null)
-            {   
+            {
                 image.color = ConfigurationManager.Current.headerBgColor;
             }
 
@@ -183,7 +183,8 @@ namespace GQ.Client.UI
 
         #region Static Helpers
 
-        protected enum ListEntryKind {
+        protected enum ListEntryKind
+        {
             QuestInfo,
             Menu
         }
@@ -201,44 +202,46 @@ namespace GQ.Client.UI
                 {
                     layElem.minHeight = Units2Pixels(heightUnits) * sizeScaleFactor;
                     layElem.preferredHeight = layElem.minHeight;
+                    float height = Math.Min(100f, layElem.minHeight);
+                    layElem.minWidth = height;
+                    layElem.preferredWidth = height;
+                }
 
-                    // for images we set the width too:
-                    if (transf.GetComponent<Image>() != null)
-                    {
-                        float height = Math.Min(100f, layElem.minHeight);
-                        layElem.minWidth = height;
-                        layElem.preferredWidth = height;
-                        transf.GetComponent<Image>().color = fgCol;
-                    }
+                Image image = transf.GetComponent<Image>();
+                // for images we set the width too:
+                if (image != null)
+                {
+                    transf.GetComponent<Image>().color = fgCol;
+                }
 
-                    // for texts we adapt the font size to be at most two thirds of the container element height:
-                    Text text = transf.GetComponent<Text>();
-                    if (text != null)
+                // for texts we adapt the font size to be at most two thirds of the container element height:
+                Text text = transf.GetComponent<Text>();
+                if (text != null)
+                {
+                    switch (listEntryKind)
                     {
-                        switch (listEntryKind) {
-                            case ListEntryKind.Menu:
-                                text.fontSize = (int)Math.Floor (layElem.minHeight * 0.66f * sizeScaleFactor); 
-                                break;
-                            case ListEntryKind.QuestInfo:
-                                float fontSizeFactor = ConfigurationManager.Current.listEntryUseTwoLines ? 2.7f : 1.53f;
-                                // these factors have been determined by some manual test measures on the UI.
-                                text.fontSize =
-                                    Math.Min(
-                                        ConfigurationManager.Current.maxFontSize,
-                                        (int)Math.Floor(layElem.minHeight / fontSizeFactor));
-                                break;
-                        }
-                        text.color = fgCol;
+                        case ListEntryKind.Menu:
+                            text.fontSize = (int)Math.Floor(layElem.minHeight * 0.66f * sizeScaleFactor);
+                            break;
+                        case ListEntryKind.QuestInfo:
+                            float fontSizeFactor = ConfigurationManager.Current.listEntryUseTwoLines ? 2.7f : 1.53f;
+                            // these factors have been determined by some manual test measures on the UI.
+                            text.fontSize =
+                                Math.Min(
+                                    ConfigurationManager.Current.maxFontSize,
+                                    (int)Math.Floor(layElem.minHeight / fontSizeFactor));
+                            break;
                     }
+                    text.color = fgCol;
+                }
 
-                    // for Buttons we set the fgColor:
-                    Button button = transf.GetComponent<Button>();
-                    if (button != null)
-                    {
-                        ColorBlock newColors = button.colors;
-                        newColors.normalColor = fgCol;
-                        button.colors = newColors;
-                    }
+                // for Buttons' normal color we set the fgColor if there is no image, otherwise we set it to white:
+                Button button = transf.GetComponent<Button>();
+                if (button != null)
+                {
+                    ColorBlock newColors = button.colors;
+                    newColors.normalColor = (image == null ? fgCol : Color.white);
+                    button.colors = newColors;
                 }
             }
             else

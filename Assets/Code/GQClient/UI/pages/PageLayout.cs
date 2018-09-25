@@ -39,8 +39,8 @@ namespace GQ.Client.UI
 			menuButton.enabled = true;
 
 			// show:
-			menuButton.gameObject.SetActive (enable);
-			image.gameObject.SetActive (enable);
+            menuButton.enabled = enable;
+            image.enabled = enable;
 		}
 
 		void leaveQuest ()

@@ -1227,7 +1227,6 @@ namespace UnitySlippyMap.Map
 			GameObject markerObject = new GameObject (name);
 			markerObject.transform.parent = this.gameObject.transform;
 		
-			//go.name = "go - " + name;
 			go.transform.parent = markerObject.gameObject.transform;
 			go.transform.localPosition = Vector3.zero;
 		

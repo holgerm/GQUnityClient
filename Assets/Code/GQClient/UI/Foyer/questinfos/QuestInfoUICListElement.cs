@@ -276,6 +276,7 @@ namespace GQ.Client.UI.Foyer
 
 				Image infoImage = InfoButton.transform.Find ("Image").GetComponent<Image> ();
 				infoImage.enabled = true;
+                infoImage.color = ConfigurationManager.Current.listEntryFgColor;
 				InfoButton.enabled = false;
 				InfoButton.gameObject.SetActive (true); // show info icon
 

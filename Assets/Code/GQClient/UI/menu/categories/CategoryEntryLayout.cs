@@ -13,10 +13,10 @@ namespace GQ.Client.UI
 		{
 			// set heights of text and image:
             MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: ConfigurationManager.Current.menuBGColor);
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "FolderImage", sizeScaleFactor: CategoryFolderLayout.FolderImageScaleFactor);
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Name");
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Number");
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Symbol");
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "FolderImage", sizeScaleFactor: CategoryFolderLayout.FolderImageScaleFactor, fgColor: ConfigurationManager.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Name", fgColor: ConfigurationManager.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Number", fgColor: ConfigurationManager.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Symbol", fgColor: ConfigurationManager.Current.menuFGColor);
 		}
 
 	}
