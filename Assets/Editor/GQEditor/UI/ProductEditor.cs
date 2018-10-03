@@ -792,8 +792,8 @@ namespace GQ.Editor.UI
             ) && (
                 propInfo.Name.Equals("listLineColor") ||
                 propInfo.Name.Equals("listStartLineWidth") ||
-                propInfo.Name.Equals("dividingLineWidth") || 
-                propInfo.Name.Equals("listEndLineWidth") 
+                propInfo.Name.Equals("dividingLineWidth") ||
+                propInfo.Name.Equals("listEndLineWidth")
             );
 
             // Undefined properties:
@@ -1451,26 +1451,28 @@ namespace GQ.Editor.UI
     // TODO can't we make these classes generic?
     public class ProductEditorPart4ListEntryDividingMode : ProductEditorPart
     {
-        int selectedListEntryDividingMode;
+        int selection;
         string[] names = Enum.GetNames(typeof(ListEntryDividingMode));
 
         override protected bool doCreateGui(PropertyInfo curPropInfo)
         {
             configIsDirty = false;
 
-            int oldMode = selectedListEntryDividingMode;
-            selectedListEntryDividingMode =
+            int oldSelection = selection;
+            selection =
                 EditorGUILayout.Popup(
                     "List Entry Dividing Mode:",
-                selectedListEntryDividingMode,
+                selection,
                 names
             );
-            if (oldMode != selectedListEntryDividingMode)
+            if (oldSelection != selection)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (ListEntryDividingMode)selectedListEntryDividingMode, null);
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (ListEntryDividingMode)selection, null);
             }
 
+            ListEntryDividingMode mode = (ListEntryDividingMode)selection;
+            Debug.Log("Sel: " + selection + "     mode: " + mode.ToString());
             return configIsDirty;
         }
     }

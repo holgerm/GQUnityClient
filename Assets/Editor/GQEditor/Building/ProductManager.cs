@@ -434,9 +434,7 @@ namespace GQ.Editor.Building
                     Instance.IsImportingPackage = false;
                     prepareProductTheRestAfterPackageIsImported(newProduct, productDirPath);
                 };
-                DateTime startAt = DateTime.Now;
                 AssetDatabase.ImportPackage(packageFile, false);
-                startAt = DateTime.Now;
             }
             else {
                 // if we have no package file:

@@ -466,9 +466,19 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool listEntryUseTwoLines { get; set; }
 
+
+        ListEntryDividingMode _listEntryDividingMode;
+
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        public ListEntryDividingMode listEntryDividingMode { get; set; }
+        public ListEntryDividingMode listEntryDividingMode { 
+            get {
+                return _listEntryDividingMode;
+            }
+            set {
+                _listEntryDividingMode = value;
+            } 
+        }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
@@ -595,7 +605,7 @@ namespace GQ.Client.Conf
             listEntryHeightUnits = 45f;
 			listEntryFgColor = new Color (159f, 159f, 159f, 255f);
             listEntryBgColor = mainFgColor;
-            listEntryDividingMode = ListEntryDividingMode.SeparationLines;
+
             listLineColor = mainFgColor;
             listStartLineWidth = 5;
             dividingLineWidth = 5;
