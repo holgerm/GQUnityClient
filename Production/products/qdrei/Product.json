@@ -50,7 +50,7 @@
     "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
-  "offerLeaveQuestOnEachPage": true,
+  "offerLeaveQuestOnEachPage": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -59,7 +59,7 @@
   "useMapOffline": true,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
-  "mapStartPositionType": "CenterOfMarkers",
+  "mapStartPositionType": "PlayerPosition",
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
@@ -75,6 +75,12 @@
     "b": 0,
     "a": 0
   },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
   "markerBGAlpha": 168,
   "mapButtonHeightUnits": 50.0,
   "mapButtonHeightMinMM": 5.0,
@@ -83,24 +89,25 @@
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": null,
-  "categorySets": [],
-  "topLogo": {
-    "path": "TopLogo"
-  },
-  "mainColorFG": {
+  "CategorySets": [],
+  "mainFgColor": {
     "r": 0,
     "g": 0,
     "b": 0,
     "a": 255
   },
-  "mainColorBG": {
+  "mainBgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
     "a": 255
   },
   "mainFontSize": 60,
+  "maxFontSize": 100,
   "showShadows": false,
+  "topLogo": {
+    "path": "TopLogo"
+  },
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -163,6 +170,9 @@
     "a": 255
   },
   "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 6.0,
+  "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
     "r": 255,
     "g": 255,
@@ -188,34 +198,78 @@
   "menuEntryWidthUnits": 400.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
+  "menuFrameColor": {
+    "r": 127,
+    "g": 127,
+    "b": 127,
+    "a": 255
+  },
   "menuBGColor": {
     "r": 0,
     "g": 0,
     "b": 0,
     "a": 255
   },
-  "menuPartBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+  "menuFGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "menuInhibitsInteraction": false,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
-  "listEntryHeightUnits": 45.0,
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "listEntryHeightUnits": 55.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
-  "listEntryColor": {
+  "listEntryUseTwoLines": true,
+  "listEntryDividingMode": "AlternatingColors",
+  "listLineColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listStartLineWidth": 5,
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 5,
+  "listEntryFgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
     "a": 255
   },
-  "emulationColor": {
+  "listEntryBgColor": {
+    "r": 0,
+    "g": 175,
+    "b": 239,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
+    "a": 255
+  },
+  "listEntrySecondBgColor": {
+    "r": 49,
+    "g": 49,
+    "b": 148,
+    "a": 255
+  },
+  "listBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "showDeleteOptionForLocalQuests": false,
+  "emulationColor": {
+    "r": 247,
+    "g": 80,
+    "b": 80,
     "a": 255
   }
 }
