@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using QM.UI;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -13,7 +14,7 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void layout ()
 		{
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: ConfigurationManager.Current.menuBGColor);
 		}
 
 	}
