@@ -1472,7 +1472,7 @@ namespace GQ.Editor.UI
             }
 
             ListEntryDividingMode mode = (ListEntryDividingMode)selection;
-            Debug.Log("Sel: " + selection + "     mode: " + mode.ToString());
+            //Debug.Log("Sel: " + selection + "     mode: " + mode.ToString());
             return configIsDirty;
         }
     }
