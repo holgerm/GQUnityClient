@@ -80,7 +80,29 @@ namespace GQ.Client.Model
 			}
 		}
 
-		public class CategoryFilter : QuestInfoFilter
+        public class HiddenQuestsFilter : QuestInfoFilter {
+
+
+            public override bool Accept(QuestInfo qi)
+            {
+                return !qi.IsHidden();
+            }
+
+
+            public override string ToString()
+            {
+                return "HiddenQuestsFilter";
+            }
+
+
+            public override List<string> AcceptedCategories(QuestInfo qi)
+            {
+                return qi.Categories;
+            }
+        }
+
+
+        public class CategoryFilter : QuestInfoFilter
 		{
 
 			public string Name;

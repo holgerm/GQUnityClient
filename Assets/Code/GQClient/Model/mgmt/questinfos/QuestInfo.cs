@@ -308,6 +308,10 @@ namespace GQ.Client.Model
 			}
 		}
 
+        public bool IsHidden() {
+            return name.StartsWith("---", StringComparison.CurrentCulture);
+        }
+
 		#endregion
 
 

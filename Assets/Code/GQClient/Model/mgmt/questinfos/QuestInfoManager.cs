@@ -409,10 +409,18 @@ namespace GQ.Client.Model
 			ViewToggleController.Create (menuContent);
 		}
 
+        /// <summary>
+        /// Initializes the quest info filters, e.g. called at start when the QuestInfoManager is initialized.
+        /// </summary>
 		void initFilters ()
 		{
 			// init filters
 			Filter = new QuestInfoFilter.All ();
+            // init hidden quests filter:
+            if (!Base.Instance.ShowHiddenQuests) {
+                FilterAnd(new QuestInfoFilter.HiddenQuestsFilter());
+            }
+
 			// init category filters:
 			CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter> ();
 			List<CategorySet> catSets = ConfigurationManager.Current.CategorySets;

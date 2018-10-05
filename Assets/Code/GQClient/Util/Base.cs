@@ -210,6 +210,32 @@ namespace GQ.Client.Util
             }
         }
 
+        bool? _showHiddenQuests = null;
+
+        public bool ShowHiddenQuests
+        {
+            get
+            {
+                if (_showHiddenQuests == null) {
+                    if (PlayerPrefs.HasKey(GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()))
+                    {
+                        _showHiddenQuests = PlayerPrefs.GetInt(GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()) == 1;
+                    }
+                    else
+                    {
+                        _showHiddenQuests = false;
+                    }
+                }
+                return (bool)_showHiddenQuests;
+            }
+            set
+            {
+                _showHiddenQuests = value;
+                PlayerPrefs.SetInt(GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString(), _showHiddenQuests == true ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
         #endregion
 
 
@@ -217,7 +243,8 @@ namespace GQ.Client.Util
 
         public enum GQPrefKeys
         {
-            LOGGED_IN_AS
+            LOGGED_IN_AS,
+            SHOW_HIDDEN_QUESTS
         }
 
         #endregion
