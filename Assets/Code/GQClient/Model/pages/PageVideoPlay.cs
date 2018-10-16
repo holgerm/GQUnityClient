@@ -21,6 +21,12 @@ namespace GQ.Client.Model
         public string VideoFile { get; set; }
         public string VideoType { get; set; }
 
+        public override string ToString() {
+            return base.ToString() 
+                       + "\n\tvideo: " + VideoFile
+                       + "\n\tvidType: " + VideoType;
+        }
+
         #endregion
 
 

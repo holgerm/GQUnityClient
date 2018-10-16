@@ -94,12 +94,12 @@ namespace GQ.Client.UI.Foyer
 
         public override void Hide()
         {
-            transform.parent = listController.HiddenQuests.transform;
+            transform.SetParent(listController.HiddenQuests.transform);
         }
 
         public override void Show()
         {
-            transform.parent = listController.InfoList.transform;
+            transform.SetParent(listController.InfoList.transform);
             gameObject.SetActive(true);
         }
 

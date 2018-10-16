@@ -25,6 +25,9 @@ namespace GQ.Client.UI
 
         public override void layout()
         {
+            if (ConfigurationManager.Current == null)
+                return;
+
             setMainBackgroundColor();
 
             setHeader();
@@ -48,7 +51,10 @@ namespace GQ.Client.UI
         protected virtual void setHeader()
         {
             if (Header == null)
+            {
+                Log.SignalErrorToDeveloper("Header is null.");
                 return;
+            }
 
             // set background color:
             Image image = Header.GetComponent<Image>();
@@ -77,7 +83,10 @@ namespace GQ.Client.UI
 
             LayoutElement layElem = Header.GetComponent<LayoutElement>();
             if (layElem == null)
+            {
+                Log.SignalErrorToDeveloper("LayoutElement for Header is null.");
                 return;
+            }
 
             float height = Units2Pixels(HeaderHeightUnits);
             SetLayoutElementHeight(layElem, height);
@@ -89,11 +98,17 @@ namespace GQ.Client.UI
         protected virtual void setContentHeight()
         {
             if (ContentArea == null)
+            {
+                Log.SignalErrorToDeveloper("Content Area is null.");
                 return;
+            }
 
             LayoutElement layElem = ContentArea.GetComponent<LayoutElement>();
             if (layElem == null)
+            {
+                Log.SignalErrorToDeveloper("LayoutElement for Content is null.");
                 return;
+            }
 
             float height = Units2Pixels(ContentHeightUnits);
             SetLayoutElementHeight(layElem, height);
@@ -164,7 +179,10 @@ namespace GQ.Client.UI
         protected virtual void setFooter()
         {
             if (Footer == null)
+            {
+                Log.SignalErrorToDeveloper("Footer is null.");
                 return;
+            }
 
             // set background color:
             Image image = Footer.GetComponent<Image>();
@@ -175,7 +193,10 @@ namespace GQ.Client.UI
 
             LayoutElement layElem = Footer.GetComponent<LayoutElement>();
             if (layElem == null)
+            {
+                Log.SignalErrorToDeveloper("LayoutElement for Footer is null.");
                 return;
+            }
 
             layElem.minHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
             layElem.preferredHeight = layElem.minHeight;

@@ -13,7 +13,7 @@ namespace GQ.Client.UI
 
         #region Inspector Fields
 
-        public GameObject contentPanel;
+        public GameObject videoPlayerPanel;
         public Text infoText;
         public Text forwardButtonText;
         public RawImage videoImage;
@@ -24,7 +24,7 @@ namespace GQ.Client.UI
         public Camera camera360;
         public GameObject container360;
         public GameObject containerWebPlayer;
-
+        public RectTransform webPlayerContent;
         protected Camera cameraMain;
 
         #endregion
@@ -53,6 +53,9 @@ namespace GQ.Client.UI
                     videoPlayer = videoPlayerNormal;
                     // enable camera & canvas:
                     containerNormal.SetActive(true);
+                    videoImage.enabled = true;
+                    containerWebPlayer.SetActive(false);
+                    container360.SetActive(false);
                     CoroutineStarter.Run(playVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
@@ -61,11 +64,15 @@ namespace GQ.Client.UI
                     cameraMain.enabled = false;
                     camera360.enabled = true;
                     // switch to sphere:
-                    containerNormal.SetActive(false);
+                    //containerNormal.SetActive(false);
+                    containerWebPlayer.SetActive(false);
                     container360.SetActive(true);
                     CoroutineStarter.Run(playVideo());
                     break;
                default:
+                    //containerNormal.SetActive(false);
+                    videoImage.enabled = false;
+                    container360.SetActive(false);
                     VideoPlayerExtraModes.Initialize(myPage, containerWebPlayer);
                     break;
             }
@@ -114,6 +121,8 @@ namespace GQ.Client.UI
         public override void CleanUp()
         {
             base.CleanUp();
+
+            VideoPlayerExtraModes.CleanUp(containerWebPlayer);
 
             // switch back to main camera:
             camera360.enabled = false;

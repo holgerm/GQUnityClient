@@ -19,11 +19,21 @@ namespace GQ.Client.UI
 
         public override void layout()
         {
+            if (ConfigurationManager.Current == null) 
+                return;
+
             base.layout();
             Image im = questInfoList.GetComponent<Image>();
 
             // set background above and below the list:
-            listBackgroundImage.color = ConfigurationManager.Current.listBgColor;
+            if (listBackgroundImage == null)
+            {
+                Debug.LogWarning("listBackgroundImage is null");
+            }
+            else
+            {
+                listBackgroundImage.color = ConfigurationManager.Current.listBgColor;
+            }
 
             // set spacing, i.e. separation lines width between list elements:
             VerticalLayoutGroup vlg = questInfoList.gameObject.GetComponent<VerticalLayoutGroup>();
