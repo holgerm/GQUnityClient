@@ -40,6 +40,7 @@ using UnitySlippyMap.Input;
 using UnitySlippyMap.Helpers;
 using GQ.Client.Util;
 using GQ.Client.Err;
+using QM.Util;
 
 namespace UnitySlippyMap.Map
 {

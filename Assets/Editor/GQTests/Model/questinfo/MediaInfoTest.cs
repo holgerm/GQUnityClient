@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using UnityEngine.TestTools;
 using NUnit.Framework;
-using System.Collections;
 using GQ.Client.Model;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using GQ.Client.Util;
+using QM.Util;
 
-namespace GQTests.Model {
-	public class MediaInfoTest {
+namespace GQTests.Model
+{
+    public class MediaInfoTest {
 
 		[Test]
 		public void LocalMediaRelativeDir() {

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
 using System;
@@ -8,10 +7,12 @@ using GQTests;
 using GQ.Editor.Util;
 using QM.Mocks;
 using GQ.Client.Conf;
+using QM.Util;
 
-namespace QM.Tests {
+namespace QM.Tests
+{
 
-	public class MockTest {
+    public class MockTest {
 
 
 		[Test]

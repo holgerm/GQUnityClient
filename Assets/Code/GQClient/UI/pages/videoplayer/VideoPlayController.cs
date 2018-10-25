@@ -111,11 +111,58 @@ namespace GQ.Client.UI
             {
                 OnForward();
             };
+
             // set the rawimage texture:
+            //videoImage.rectTransform.localScale = new Vector3(1f, videoPlayer.texture.height / videoPlayer.texture.width, 1f);
             videoImage.texture = videoPlayer.texture;
+
+            SizeVideoToFitInside();
 
             // start Playing:
             videoPlayer.Play();
+        }
+
+        private void SizeVideoToFitInside()
+        {
+            float screenWidth = containerNormal.GetComponent<RectTransform>().rect.width;
+            float screenHeight = containerNormal.GetComponent<RectTransform>().rect.height;
+
+
+            if (videoPlayer.texture.width / videoPlayer.texture.height >= screenWidth / screenHeight)
+            {
+                // movie is too wide:
+                float targetWidth = screenWidth;
+                float targetHeight = videoPlayer.texture.height * screenWidth / videoPlayer.texture.width; 
+
+                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
+                    RectTransform.Edge.Left, 
+                    0f, 
+                    targetWidth);
+
+                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
+                    RectTransform.Edge.Top,
+                    (videoImage.transform.parent.GetComponent<RectTransform>().rect.height - targetHeight) / 2,
+                    targetHeight);
+            }
+            else {
+                // movie is too tall:
+                float targetWidth = videoPlayer.texture.width * screenHeight / videoPlayer.texture.height;
+                float targetHeight = screenHeight;
+
+                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
+                    RectTransform.Edge.Left,
+                    (videoImage.transform.parent.GetComponent<RectTransform>().rect.width - targetWidth) / 2,
+                    targetWidth);
+
+                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
+                    RectTransform.Edge.Top,
+                    0f,
+                    targetHeight);
+            }
+        }
+
+        public void OnRectTransformDimensionsChange() {
+            Debug.Log("OnRectTransformDimensionsChange() called. Orientation: " + Screen.orientation.ToString());
         }
 
         public override void CleanUp()

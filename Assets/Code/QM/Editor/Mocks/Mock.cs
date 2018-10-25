@@ -8,6 +8,7 @@ using GQTests;
 using System.IO;
 using GQ.Client.Conf;
 using GQ.Client.Err;
+using QM.Util;
 
 namespace QM.Mocks {
 

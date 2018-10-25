@@ -169,6 +169,7 @@ namespace GQ.Client.Util
 			idlewatch.Stop ();
 
 			if (Www.error != null && Www.error != "") {
+                UnityEngine.Debug.LogWarning("ERROR: " + Www.error);
 				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
 				RaiseTaskFailed ();
 			} else {

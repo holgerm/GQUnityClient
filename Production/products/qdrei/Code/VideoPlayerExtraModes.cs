@@ -15,21 +15,15 @@ namespace GQ.Client.UI
             {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE:
                     // USE HTML WEBVIEW FOR VIDEO:                    
-                    Debug.Log("YOUTUBE PLAYER: start.");
-
                     uniWebView = containerWebPlayer.GetComponent<UniWebView>();
                     if (uniWebView == null)
+                    {
                         uniWebView = containerWebPlayer.AddComponent<UniWebView>();
-                    Debug.Log("YOUTUBE PLAYER: UniWebView component added.");
 
-                    uniWebView.OnPageStarted += (view, url) => {
-                        Debug.Log("YOUTUBE PLAYER: OnPageStarted with url: " + url);
-                    };
-                    uniWebView.OnPageFinished += (view, statusCode, url) => {
-                        Debug.Log("YOUTUBE PLAYER: OnPageFinished with status code: " + statusCode);
-                    };
+                    }
+
                     uniWebView.OnPageErrorReceived += (UniWebView webView, int errorCode, string errorMessage) => {
-                        Debug.Log("YOUTUBE PLAYER: OnPageErrorReceived errCode: " + errorCode
+                        Log.SignalErrorToDeveloper("YOUTUBE PLAYER: OnPageErrorReceived errCode: " + errorCode
                                   + "\n\terrMessage: " + errorMessage);
                     };
                     uniWebView.OnShouldClose += (webView) => {
@@ -42,25 +36,22 @@ namespace GQ.Client.UI
                     UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
 
                     containerWebPlayer.SetActive(true);
-                    Debug.Log("YOUTUBE PLAYER: component set active.");
+
                     float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits); // + 30;
                     float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits); // + 30;
                     uniWebView.Frame = 
                         new Rect(
-                            50, headerHeight, 
+                            0, headerHeight, 
                             Device.width, Device.height - (headerHeight + footerHeight)
                         );
-                    Debug.Log("YOUTUBE PLAYER: frame set.");
-                    VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
+
+                    //VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
                     //uniWebView.ReferenceRectTransform = vpCtrl.webPlayerContent;
+                    uniWebView.SetShowSpinnerWhileLoading(true);
+                    uniWebView.Show(true);
+
                     string videoHtml = string.Format(YoutubeHTMLFormatString, myPage.VideoFile);
                     uniWebView.LoadHTMLString(videoHtml, "https://www.youtube.com/");
-                    Debug.Log("YOUTUBE PLAYER: htmlString loaded.");
-                    uniWebView.SetShowSpinnerWhileLoading(true);
-                    Debug.Log("YOUTUBE PLAYER: spinner set.");
-
-                    uniWebView.Show(true);
-                    Debug.Log("YOUTUBE PLAYER: after show()");
                     break;
                 default:
                     Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", myPage.VideoType, myPage.Id);
@@ -82,9 +73,9 @@ namespace GQ.Client.UI
         public static void CleanUp(GameObject containerWebPlayer) {
             if (uniWebView != null)
             {
-                Debug.Log("YOUTUBE PLAYER: Hiding.");
+                uniWebView.Stop();
                 uniWebView.Hide(true);
-                uniWebView = null;
+                Object.Destroy(uniWebView);
             }
 
             if (containerWebPlayer != null) {

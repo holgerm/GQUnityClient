@@ -1,13 +1,9 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
-using GQ.Client.Conf;
-using GQ.Client.Util;
+﻿using QM.Util;
 
 namespace GQTests.Layout
 {
 
-	public static class DeviceDefinitions {
+    public static class DeviceDefinitions {
 
 		public enum DeviceType {
 			iPad4,

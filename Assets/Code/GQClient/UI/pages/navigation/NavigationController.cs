@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.Model;
+﻿using GQ.Client.Model;
 using GQ.Client.Util;
+using QM.Util;
 
 namespace GQ.Client.UI
 {
 
-	public class NavigationController : PageController
+    public class NavigationController : PageController
 	{
 
 
