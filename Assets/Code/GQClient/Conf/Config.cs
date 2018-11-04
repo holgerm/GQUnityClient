@@ -454,6 +454,15 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool offerAuthorLogin { get; set; }
 
+        [ShowInProductEditor]
+        public bool defineAuthorBackDoor { get; set; }
+
+        [ShowInProductEditor]
+        public string acceptedAuthorEmail { get; set; }
+
+        [ShowInProductEditor]
+        public string acceptedAuthorPassword { get; set; }
+
         [ShowInProductEditor(StartSection = "List Entries:")]
 		public float listEntryHeightUnits { get; set; }
 
@@ -627,6 +636,9 @@ namespace GQ.Client.Conf
             menuFGColor = Color.black;
             offerFeedback = false;
             offerAuthorLogin = false;
+            defineAuthorBackDoor = false;
+            acceptedAuthorEmail = "author@email.com";
+            acceptedAuthorPassword = "secret";
 
             // Internal:
             emulationColor = new Color (255f, 182f, 182f, 255f);

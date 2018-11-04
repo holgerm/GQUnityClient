@@ -161,10 +161,10 @@ namespace GQ.Client.UI
             }
         }
 
-        public void OnRectTransformDimensionsChange(ScreenOrientation oldOrientation, ScreenOrientation newOrientation) {
-            Debug.Log("OnRectTransformDimensionsChange() called. Orientation changed from: " + 
-                      oldOrientation.ToString() + " to: " + newOrientation.ToString());
-        }
+        //public void OnRectTransformDimensionsChange(ScreenOrientation oldOrientation, ScreenOrientation newOrientation) {
+        //    Debug.Log("OnRectTransformDimensionsChange() called. Orientation changed from: " + 
+        //              oldOrientation.ToString() + " to: " + newOrientation.ToString());
+        //}
 
         public override void CleanUp()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Util;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -97,8 +98,17 @@ namespace GQ.Client.UI
         bool tryToLogin(string email, string password)
         {
             // TODO ask server for permissions ...
-            Base.Instance.LoggedInAs = email;
-            return true;
+            if (ConfigurationManager.Current.defineAuthorBackDoor) {
+                if (email == ConfigurationManager.Current.acceptedAuthorEmail &&
+                    password == ConfigurationManager.Current.acceptedAuthorPassword) 
+                {
+                    Base.Instance.LoggedInAs = email;
+                    return true;
+                }
+            }
+
+            // check for correct login server-side:
+            return false;
         }
 
         public void LoginPressed()

@@ -796,6 +796,20 @@ namespace GQ.Editor.UI
                 propInfo.Name.Equals("listEndLineWidth")
             );
 
+            // AuthorLogin BackDoor:
+            hidden |= (
+                !ProductEditor.SelectedConfig.offerAuthorLogin
+            ) && (
+                propInfo.Name.Equals("defineAuthorBackDoor")
+            );
+            hidden |= (
+                !ProductEditor.SelectedConfig.defineAuthorBackDoor ||
+                !ProductEditor.SelectedConfig.offerAuthorLogin
+            ) && (
+                propInfo.Name.Equals("acceptedAuthorEmail") ||
+                propInfo.Name.Equals("acceptedAuthorPassword")
+            );
+
             // Undefined properties:
             hidden |= !Attribute.IsDefined(propInfo, typeof(ShowInProductEditor));
 
