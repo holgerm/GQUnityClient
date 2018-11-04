@@ -182,12 +182,9 @@ namespace GQ.Client.Util {
 					case LocationServiceStatus.Running:
 //						UnityEngine.Debug.Log("GPS_____: RUNNING: " + _onLocationUpdate.GetInvocationList ().Length);
 						LocationInfoExt newLocation = Device.location.lastData;
-
-//						TimeSpan timeSpan = TimeSpan.FromMilliseconds(newLocation.timestamp);
-//						UnityEngine.Debug.Log("GPS_____: time: " + timeSpan.ToString() + " lat: " + newLocation.latitude + " long: " + newLocation.longitude);
-//
+                        UnityEngine.Debug.Log("UPDATE DISTANCE: " + UpdateDistance);
 						if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation)) {
-//							UnityEngine.Debug.Log("###1: failed: " + failed);
+                                UnityEngine.Debug.Log("LOCATION UPDATE lat: " + newLocation.latitude + " long: " + newLocation.longitude);
 							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Device.location.lastData));
 							failed = false;
 						}
@@ -199,7 +196,7 @@ namespace GQ.Client.Util {
 							Device.location.isEnabledByUser || 
 							Application.platform == RuntimePlatform.IPhonePlayer
 						) {
-							Device.location.Start(10f, 10f);
+							Device.location.Start(1f, 1f);
 //							UnityEngine.Debug.Log("GPS_____: STARTING: ");
 
 						}
