@@ -14,8 +14,10 @@ namespace GQ.Client.Model
 
 		protected override void ReadAttributes (XmlReader reader)
 		{
-			// we actually do not read from xml but already know what the values should be:
-			mapOption = true;
+            base.ReadAttributes(reader);
+
+            // we actually do not read from xml but already know what the values should be:
+            mapOption = true;
 			listOption = false; 
 
 			qrOption = false;
