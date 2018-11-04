@@ -4,7 +4,9 @@ using UnityEngine.Events;
 
 namespace QM.Events
 {
-
+    /// <summary>
+    /// Orientation changed event. Uses two arguments: firt the old and second the new orientation.
+    /// </summary>
     [System.Serializable]
     public class OrientationChangedEvent : UnityEvent<ScreenOrientation, ScreenOrientation>
     {
@@ -13,7 +15,7 @@ namespace QM.Events
     public class OrientationChangeNotifier : MonoBehaviour
     {
 
-        public OrientationChangedEvent orientationChangedEvent;
+        public OrientationChangedEvent oce;
 
         private ScreenOrientation orientation;
 
@@ -28,7 +30,7 @@ namespace QM.Events
         {
             if (Screen.orientation != orientation) {
                 ScreenOrientation oldOrientation = orientation;
-                orientationChangedEvent.Invoke(oldOrientation, Screen.orientation);
+                oce.Invoke(oldOrientation, Screen.orientation);
                 orientation = Screen.orientation;
             }
         }
