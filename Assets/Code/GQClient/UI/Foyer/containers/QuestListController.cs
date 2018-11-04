@@ -202,7 +202,16 @@ namespace GQ.Client.UI.Foyer
                 }
                 else
                 {
-                    Log.SignalErrorToDeveloper("We are calling QuestInfoControllers[info.Id].Show() on non existent qiCtrl! Why?");
+                    // Create not yet created qi controller, 
+                    // e.g. after starting with this qi filtered out and changed the filter
+                    // so we see it now for the first time.
+                    QuestInfoUICListElement missingQICtrl =
+                        QuestInfoUICListElement.Create(
+                            root: InfoList.gameObject,
+                            qInfo: info,
+                            containerController: this
+                        ).GetComponent<QuestInfoUICListElement>();
+                    QuestInfoControllers[info.Id] = missingQICtrl;
                     QuestInfoControllers[info.Id].Show();
                 }
             }

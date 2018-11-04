@@ -1,23 +1,12 @@
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
-using System;
-using GQ.Client.Util;
 using GQ.Client.Conf;
-using GQ.Client.Model;
-using Newtonsoft.Json;
-using System.IO;
-using GQ.Client.Err;
-using GQ.Client.UI.Dialogs;
 using System.Text;
-using QM.Util;
-
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
 
-	public abstract class QuestInfoFilter
+    public abstract class QuestInfoFilter
 	{
 
 		public delegate void OnFilterChanged ();
@@ -82,10 +71,34 @@ namespace GQ.Client.Model
 
         public class HiddenQuestsFilter : QuestInfoFilter {
 
+            private static HiddenQuestsFilter _instance;
+            public static HiddenQuestsFilter Instance {
+                get {
+                    if (_instance == null) {
+                        _instance = new HiddenQuestsFilter();
+                    }
+                    return _instance;
+                }
+            }
+
+            private HiddenQuestsFilter() {
+                IsActive = !Base.Instance.ShowHiddenQuests;
+            }
+
+            private bool _isActive;
+            public bool IsActive {
+                get {
+                    return _isActive;
+                }
+                set {
+                    _isActive = value;
+                    RaiseFilterChangeEvent();
+                }
+            }
 
             public override bool Accept(QuestInfo qi)
             {
-                return !qi.IsHidden();
+                return !IsActive || !qi.IsHidden();
             }
 
 

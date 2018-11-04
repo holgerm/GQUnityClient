@@ -416,10 +416,9 @@ namespace GQ.Client.Model
 		{
 			// init filters
 			Filter = new QuestInfoFilter.All ();
+
             // init hidden quests filter:
-            if (!Base.Instance.ShowHiddenQuests) {
-                FilterAnd(new QuestInfoFilter.HiddenQuestsFilter());
-            }
+            FilterAnd(QuestInfoFilter.HiddenQuestsFilter.Instance);
 
 			// init category filters:
 			CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter> ();

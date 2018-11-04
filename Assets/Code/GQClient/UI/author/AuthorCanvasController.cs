@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Util;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 
 namespace GQ.Client.UI
 {
@@ -103,6 +104,7 @@ namespace GQ.Client.UI
                     password == ConfigurationManager.Current.acceptedAuthorPassword) 
                 {
                     Base.Instance.LoggedInAs = email;
+                    //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = true;
                     return true;
                 }
             }
@@ -126,6 +128,7 @@ namespace GQ.Client.UI
                     break;
                 case LOGOUT_TEXT:
                     Base.Instance.LoggedInAs = null;
+                    //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = false;
                     checkStatus();
                     checkLoginButtonText();
                     break;

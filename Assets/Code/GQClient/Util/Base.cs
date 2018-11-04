@@ -223,7 +223,7 @@ namespace GQ.Client.Util
                     }
                     else
                     {
-                        _showHiddenQuests = false;
+                        _showHiddenQuests = ConfigurationManager.Current.hideHiddenQuests;
                     }
                 }
                 return (bool)_showHiddenQuests;
