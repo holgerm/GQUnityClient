@@ -280,7 +280,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 39874141}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -2115,9 +2115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 814.0482
+  m_MinHeight: 4576.271
   m_PreferredWidth: -1
-  m_PreferredHeight: 814.0482
+  m_PreferredHeight: 4576.271
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2391,9 +2391,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 65.12386
+  m_MinHeight: 366.10168
   m_PreferredWidth: -1
-  m_PreferredHeight: 65.12386
+  m_PreferredHeight: 366.10168
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3266,9 +3266,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 81.40482
+  m_MinHeight: 457.6271
   m_PreferredWidth: -1
-  m_PreferredHeight: 81.40482
+  m_PreferredHeight: 457.6271
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1
