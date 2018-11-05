@@ -34,7 +34,7 @@
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": false,
   "mapProvider": "MapBox",
-  "mapBaseUrl": "http://a.tile.openstreetmap.org",
+  "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
   "mapID": "mapbox.streets",
   "mapTileImageExtension": ".png",

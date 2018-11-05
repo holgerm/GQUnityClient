@@ -49,7 +49,7 @@
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
   "mapProvider": "OpenStreetMap",
-  "mapBaseUrl": "http://a.tile.openstreetmap.org",
+  "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
   "mapID": "",
   "mapTileImageExtension": ".png",
