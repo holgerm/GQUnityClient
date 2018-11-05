@@ -175,35 +175,25 @@ namespace GQ.Client.Util {
 				Device.location.Stop();
 
 				while (Activated && ListenersAttached) {
-//					UnityEngine.Debug.Log("Device.location.isEnabledByUser: " + Device.location.isEnabledByUser);
-
 					switch (Device.location.status) 
 					{
 					case LocationServiceStatus.Running:
-//						UnityEngine.Debug.Log("GPS_____: RUNNING: " + _onLocationUpdate.GetInvocationList ().Length);
 						LocationInfoExt newLocation = Device.location.lastData;
-                        UnityEngine.Debug.Log("UPDATE DISTANCE: " + UpdateDistance);
 						if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation)) {
-                                UnityEngine.Debug.Log("LOCATION UPDATE lat: " + newLocation.latitude + " long: " + newLocation.longitude);
 							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Device.location.lastData));
 							failed = false;
 						}
 						lastLocation = newLocation;
 						break;
 					case LocationServiceStatus.Stopped:
-//						UnityEngine.Debug.Log("GPS_____: STOPPED: ");
 						if (
 							Device.location.isEnabledByUser || 
 							Application.platform == RuntimePlatform.IPhonePlayer
 						) {
 							Device.location.Start(1f, 1f);
-//							UnityEngine.Debug.Log("GPS_____: STARTING: ");
-
 						}
 						else {
-//							UnityEngine.Debug.Log("###2: ");
 							if (!failed) {
-//								UnityEngine.Debug.Log("###2.1: ");
 								_onLocationUpdate (
 									this, 
 									new LocationEventArgs (
@@ -216,7 +206,6 @@ namespace GQ.Client.Util {
 						}
 						break;
 					case LocationServiceStatus.Initializing:
-//						UnityEngine.Debug.Log("GPS_____: INITIALIZING: ");
 						StartWaitingForInitialization();
 						do {
 							yield return new WaitForSeconds (1);
@@ -225,8 +214,6 @@ namespace GQ.Client.Util {
 						//						continue;
 						break;
 					case LocationServiceStatus.Failed:
-//						UnityEngine.Debug.Log("GPS_____: FAILED: ");
-
 						if (!failed) {
 							_onLocationUpdate (
 								this, 
@@ -239,7 +226,6 @@ namespace GQ.Client.Util {
 						}
 						break;
 					default:
-//						UnityEngine.Debug.Log("###5: ");
 						Log.SignalErrorToDeveloper ("LocationService in unknown state {0}.", Device.location.status.ToString ());
 						break;
 					}

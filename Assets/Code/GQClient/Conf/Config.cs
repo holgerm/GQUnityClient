@@ -568,7 +568,7 @@ namespace GQ.Client.Conf
 
 			// Map:
 			mapProvider = MapProvider.OpenStreetMap;
-			mapBaseUrl = "http://a.tile.openstreetmap.org";
+			mapBaseUrl = "https://a.tile.openstreetmap.org";
 			mapKey = "";
 			mapID = "";
 			mapTileImageExtension = ".png";

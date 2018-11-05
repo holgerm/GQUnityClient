@@ -31,6 +31,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using GQ.Client.Conf;
 
 namespace UnitySlippyMap.Map
 {
@@ -244,6 +245,10 @@ namespace UnitySlippyMap.Map
 				job.Kill ();
 			}
 
+            private string url2filename(string input) {
+                return input.Replace('/', '_').Replace('.', '-').Replace(':', '=');
+            }
+
 			/// <summary>
 			/// The download the coroutine.
 			/// </summary>
@@ -255,13 +260,15 @@ namespace UnitySlippyMap.Map
 				if (ext.Contains ("?"))
 					ext = ext.Substring (0, ext.IndexOf ('?'));
 
-				if (cached && File.Exists (Application.temporaryCachePath + "/" + this.guid + ext)) {
-					www = new WWW ("file:///" + Application.temporaryCachePath + "/" + this.guid + ext);
+                string path = Application.temporaryCachePath + "/" + url2filename(url) + ext;
+
+                if (/* cached && */ File.Exists (path)) {
+					www = new WWW ("file:///" + path);
 #if DEBUG_LOG
                 	Debug.Log("DEBUG: TileDownloader.DownloadCoroutine: loading tile from cache: url: " + www.url);
 #endif
 				} else {
-					www = new WWW (url);
+                    www = new WWW (url);
 #if DEBUG_LOG
                 	Debug.Log("DEBUG: TileDownloader.DownloadCoroutine: loading tile from provider: url: " + www.url
                     	+ "(cached: " + cached + ")"
@@ -309,7 +316,8 @@ namespace UnitySlippyMap.Map
 						byte[] bytes = www.bytes;
 						
 						this.size = bytes.Length;
-						this.guid = Guid.NewGuid ().ToString ();
+                        //						this.guid = Guid.NewGuid ().ToString ();
+                        this.guid = url2filename(url); // TODO
 #if DEBUG_PROFILE
 						UnitySlippyMap.Profiler.End("set TileEntry members");
 #endif
@@ -446,7 +454,7 @@ namespace UnitySlippyMap.Map
 		/// <summary>
 		/// The size of the cache.
 		/// </summary>
-		private int cacheSize = 0;
+		public static int cacheSize = 0;
 
 		#endregion
 
