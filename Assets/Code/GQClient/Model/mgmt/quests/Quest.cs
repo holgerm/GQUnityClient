@@ -94,12 +94,7 @@ namespace GQ.Client.Model
         /// <param name="hotspot">Hotspot.</param>
         protected void AddHotspot(Hotspot hotspot)
         {
-            bool firstAdd = _hotspotDict.Count == 0;
             _hotspotDict[hotspot.Id] = hotspot;
-            if (firstAdd && _hotspotDict.Count == 1)
-            {
-                LocationSensor.Instance.OnLocationUpdate += UpdateHotspotMarkers;
-            }
         }
 
 
@@ -110,10 +105,6 @@ namespace GQ.Client.Model
         protected void RemoveHotspot(Hotspot hotspot)
         {
             _hotspotDict.Remove(hotspot.Id);
-            if (_hotspotDict.Count == 0)
-            {
-                LocationSensor.Instance.OnLocationUpdate -= UpdateHotspotMarkers;
-            }
         }
 
         public void UpdateHotspotMarkers(System.Object sender, LocationSensor.LocationEventArgs e)

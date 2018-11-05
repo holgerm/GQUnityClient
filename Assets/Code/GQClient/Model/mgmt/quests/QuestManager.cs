@@ -298,7 +298,6 @@ namespace GQ.Client.Model
 
             int infoNotReceived = 0;
             float summedSize = 0f;
-            new WATCH().Start();
 
             MediaInfo info;
             foreach (KeyValuePair<string, MediaInfo> kvpEntry in CurrentQuest.MediaStore)
@@ -387,10 +386,6 @@ namespace GQ.Client.Model
                 //					}								
                 //				}
             }
-
-            Debug.LogWarning("SIze NOT FOUND for " + infoNotReceived + " of " + CurrentQuest.MediaStore.Count);
-            Debug.LogWarning("SUMMED SIZE: " + summedSize);
-            WATCH._StopAndShow();
 
             return filesToDownload;
         }

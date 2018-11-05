@@ -233,7 +233,7 @@ namespace GQ.Client.Model
             }
             scenesToUnload.Clear();
             SceneManager.sceneLoaded -= OnSceneLoaded;
-
+            
             Resources.UnloadUnusedAssets();
         }
 
@@ -270,7 +270,6 @@ namespace GQ.Client.Model
 
             // ensure that the adequate scene is loaded:
             Scene scene = SceneManager.GetActiveScene();
-            Debug.Log(ToString());
 
             if (!scene.name.Equals(PageSceneName))
             {
@@ -278,7 +277,6 @@ namespace GQ.Client.Model
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
                 {
-                    Debug.Log("Adding scene to unload: " + scene.path);
                     scenesToUnload.Add(scene);
                 }
             }
@@ -331,6 +329,7 @@ namespace GQ.Client.Model
             {
                 EndTrigger.Initiate();
             }
+            Debug.Log("#### PAGE.End() before Resources.UnloadUnusedAssets().");
             Resources.UnloadUnusedAssets();
         }
 

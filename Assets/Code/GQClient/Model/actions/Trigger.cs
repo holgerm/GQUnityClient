@@ -101,7 +101,7 @@ namespace GQ.Client.Model
 
 		public virtual void Initiate ()
 		{
-			foreach (Rule rule in containedRules) {
+            foreach (Rule rule in containedRules) {
 				rule.Apply ();
 			}
 		}
@@ -122,9 +122,8 @@ namespace GQ.Client.Model
 
 			public override void Initiate ()
 			{
-				
-			}
-		}
+            }
+        }
 
 		#endregion
 

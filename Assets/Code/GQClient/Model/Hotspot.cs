@@ -260,7 +260,7 @@ namespace GQ.Client.Model
 
 		public virtual void Enter ()
 		{
-			Status = Hotspot.StatusValue.INSIDE;
+            Status = Hotspot.StatusValue.INSIDE;
 			EnterTrigger.Initiate ();
 		}
 

@@ -35,8 +35,10 @@ namespace GQ.Client.Model
 		public override void Execute ()
 		{
 			IPage pageToStart = Quest.GetPageWithID (Id);
-			if (pageToStart.PageType != "MetaData")
-				pageToStart.Start ();
+            if (pageToStart.PageType != "MetaData")
+            {
+                pageToStart.Start();
+            }
 			else {
 				Quest.End ();
 			}
