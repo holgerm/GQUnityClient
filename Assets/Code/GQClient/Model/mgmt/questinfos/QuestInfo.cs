@@ -504,7 +504,7 @@ namespace GQ.Client.Model
 				download.OnTaskCompleted += 
 					(object sender, TaskEventArgs e) => { 
 					QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest (NewVersionOnServer.Id);
-                    new ExportMediaInfoList().Start();
+                    new ExportQuestInfosToJSON().Start();
                 };
 
 				download.Start ();
