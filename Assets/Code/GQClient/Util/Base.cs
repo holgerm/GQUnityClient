@@ -65,7 +65,6 @@ namespace GQ.Client.Util
 
         #region Foyer
 
-        public const string FOYER_SCENE = "Scenes/Foyer";
         public const string FOYER_SCENE_NAME = "Foyer";
 
         private bool listShown;

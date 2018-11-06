@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.SceneManagement;
-using GQ.Client.Util;
 using GQ.Client.Err;
 using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
 
-	public abstract class PageController : UIController
+    public abstract class PageController : UIController
 	{
+        public const string FOYER_SCENE = "Scenes/Foyer";
 
-		protected Page page;
+        protected Page page;
 		protected QuestManager qm;
 
 		#region Start
@@ -26,7 +24,7 @@ namespace GQ.Client.UI
 
 			qm = QuestManager.Instance;
 			if (qm.CurrentQuest == null || qm.CurrentPage == Page.Null) {
-				SceneManager.LoadSceneAsync (Base.FOYER_SCENE);
+				SceneManager.LoadScene (FOYER_SCENE);
 				resumingToFoyer = true;
 				return;
 			}
