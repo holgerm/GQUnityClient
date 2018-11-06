@@ -227,7 +227,7 @@ namespace GQ.Client.UI.Foyer
             // Update Buttons:
             HideAllButtons();
             // Show DOWNLOAD button if needed:
-            if (ShowDownloadOption(data))
+            if (data.ShowDownloadOption)
             {
                 DownloadButton.gameObject.SetActive(true);
                 DownloadButton.interactable = true;
@@ -238,13 +238,13 @@ namespace GQ.Client.UI.Foyer
             //	StartButton.interactable = true;
             //}
             // Show UPDATE button if needed:
-            if (ShowUpdateOption(data))
+            if (data.ShowUpdateOption)
             {
                 UpdateButton.gameObject.SetActive(true);
                 UpdateButton.interactable = true;
             }
             // Show DELETE button if needed:
-            if (ShowDeleteOption(data))
+            if (data.ShowDeleteOption)
             {
                 DeleteButton.gameObject.SetActive(true);
                 DeleteButton.interactable = true;
@@ -258,29 +258,6 @@ namespace GQ.Client.UI.Foyer
             // TODO make elipsify automatic when content of name text changes....???!!!
 
             // TODO call the lists sorter ...
-        }
-
-        public static bool ShowDownloadOption(QuestInfo data)
-        {
-            return data.IsOnServer && !data.IsOnDevice;
-        }
-
-        public static bool ShowStartOption(QuestInfo data)
-        {
-            return data.IsOnDevice;
-        }
-
-        public static bool ShowUpdateOption(QuestInfo data)
-        {
-            return data.HasUpdate;
-        }
-
-        public static bool ShowDeleteOption(QuestInfo data)
-        {
-            return
-                data.IsOnDevice
-                // either configurated to offer delete or logged in as author:
-                && (ConfigurationManager.Current.showDeleteOptionForLocalQuests || Base.Instance.LoggedInAs != null);
         }
 
         private void setCategorySymbol(QuestInfo qInfo)

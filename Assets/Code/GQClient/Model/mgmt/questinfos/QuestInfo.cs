@@ -13,583 +13,673 @@ using GQ.Client.FileIO;
 namespace GQ.Client.Model
 {
 
-	/// <summary>
-	/// Stores meta data about a quest, i.e. name, id, and some limited details about its content as well as usage data.
-	/// 
-	/// A questInfo object has the following live cycle / states:
-	/// 
-	/// - The Quest exists only on Server and has not been downloaded yet or has just been deleted. 
-	///   (Initially if not predeployed)
-	/// 	- Can be downloaded
-	/// 	- Can NOT be started
-	/// 	- Can NOT be updated
-	/// 	- Can NOT be deleted
-	/// - The Quest has been downloaded and exists locally as well as on server with same version. (After download)
-	/// 	- Can NOT be downloaded
-	/// 	- Can be started
-	/// 	- Can NOT be updated
-	/// 	- Can be deleted
-	/// - The quest exists locally but has been updated on Server:
-	/// 	- Can NOT be downloaded
-	/// 	- Can be started
-	/// 	- Can be updated
-	/// 	- Can be deleted
-	/// - The quest exists locally but has been removed from Server:
-	/// 	- Can NOT be downloaded
-	/// 	- Can be started
-	/// 	- Can NOT be updated
-	/// 	- Can be deleted but a warning should be shown
-	/// The life cycle for quest loaded from server can be seen here: @ref QuestsFromServerLifeCycle
-	/// 
-	/// With predeployed quest:
-	/// - The quest has been predeployed locally and there is no newer version on server:
-	/// 	- Can NOT be downloaded
-	/// 	- Can be started
-	/// 	- Can NOT be updated
-	/// 	- Can NOT be deleted
-	/// - The quest has been predeployed locally but has been updated on Server:
-	/// 	- Can NOT be downloaded
-	/// 	- Can be started
-	/// 	- Can be updated
-	/// 	- Can NOT be deleted
-	/// - The quest has been predeployed locally but updated locally to the newest server version:
-	/// 	- Can NOT be downloaded
-	/// 	- Can be started
-	/// 	- Can be downgraded (set back to the older predeployed version)
-	/// 	- Can NOT be deleted
-	/// The life cycle for predeployed quest can be seen here: @ref QuestsPredeployedLifeCycle
-	/// 
-	/// We represent these states by four features with two or three values each:
-	/// 
-	/// - Downloadable (true, false)
-	/// - Startable (true, false)
-	/// - Updatable (true, false)
-	/// - Deletable (Yes, YesWithWarning, No, Downgrade)
+    /// <summary>
+    /// Stores meta data about a quest, i.e. name, id, and some limited details about its content as well as usage data.
+    /// 
+    /// A questInfo object has the following live cycle / states:
+    /// 
+    /// - The Quest exists only on Server and has not been downloaded yet or has just been deleted. 
+    ///   (Initially if not predeployed)
+    /// 	- Can be downloaded
+    /// 	- Can NOT be started
+    /// 	- Can NOT be updated
+    /// 	- Can NOT be deleted
+    /// - The Quest has been downloaded and exists locally as well as on server with same version. (After download)
+    /// 	- Can NOT be downloaded
+    /// 	- Can be started
+    /// 	- Can NOT be updated
+    /// 	- Can be deleted
+    /// - The quest exists locally but has been updated on Server:
+    /// 	- Can NOT be downloaded
+    /// 	- Can be started
+    /// 	- Can be updated
+    /// 	- Can be deleted
+    /// - The quest exists locally but has been removed from Server:
+    /// 	- Can NOT be downloaded
+    /// 	- Can be started
+    /// 	- Can NOT be updated
+    /// 	- Can be deleted but a warning should be shown
+    /// The life cycle for quest loaded from server can be seen here: @ref QuestsFromServerLifeCycle
+    /// 
+    /// With predeployed quest:
+    /// - The quest has been predeployed locally and there is no newer version on server:
+    /// 	- Can NOT be downloaded
+    /// 	- Can be started
+    /// 	- Can NOT be updated
+    /// 	- Can NOT be deleted
+    /// - The quest has been predeployed locally but has been updated on Server:
+    /// 	- Can NOT be downloaded
+    /// 	- Can be started
+    /// 	- Can be updated
+    /// 	- Can NOT be deleted
+    /// - The quest has been predeployed locally but updated locally to the newest server version:
+    /// 	- Can NOT be downloaded
+    /// 	- Can be started
+    /// 	- Can be downgraded (set back to the older predeployed version)
+    /// 	- Can NOT be deleted
+    /// The life cycle for predeployed quest can be seen here: @ref QuestsPredeployedLifeCycle
+    /// 
+    /// We represent these states by four features with two or three values each:
+    /// 
+    /// - Downloadable (true, false)
+    /// - Startable (true, false)
+    /// - Updatable (true, false)
+    /// - Deletable (Yes, YesWithWarning, No, Downgrade)
 
 
-	/// </summary>
-	[JsonObject (MemberSerialization.OptIn)]
-	public class QuestInfo : IComparable<QuestInfo>
-	{
-		#region Serialized Features
+    /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
+    public class QuestInfo : IComparable<QuestInfo>
+    {
+        #region Serialized Features
 
-		[JsonProperty]
-		private 	int id;
+        [JsonProperty]
+        private int id;
 
-		public 		int  	Id { 
-			get {
-				return id;
-			} 
-		}
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+        }
 
-		[JsonProperty]
-		private 	string	name;
+        [JsonProperty]
+        private string name;
 
-		public 		string	Name { 
-			get {
-				return name;
-			} 
-			set {
-				name = value;
-			}
-		}
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
-		[JsonProperty]
-		private 	string	featuredImagePath;
+        [JsonProperty]
+        private string featuredImagePath;
 
-		public 		string 	FeaturedImagePath { 
-			get {
-				return featuredImagePath;
-			} 
-		}
+        public string FeaturedImagePath
+        {
+            get
+            {
+                return featuredImagePath;
+            }
+        }
 
-		[JsonProperty]
-		private 	int? typeID;
+        [JsonProperty]
+        private int? typeID;
 
-		public 		int?	TypeID { 
-			get {
-				return typeID;
-			}
-		}
+        public int? TypeID
+        {
+            get
+            {
+                return typeID;
+            }
+        }
 
-		[JsonProperty]
-		private 	string	iconPath;
+        [JsonProperty]
+        private string iconPath;
 
-		public 		string 	IconPath { 
-			get {
-				return iconPath;
-			} 
-		}
+        public string IconPath
+        {
+            get
+            {
+                return iconPath;
+            }
+        }
 
-		/// <summary>
-		/// Server-side update timestamp.
-		/// </summary>
-		/// <value>The last update.</value>
-		[JsonProperty]
-		private 	long? lastUpdate;
+        /// <summary>
+        /// Server-side update timestamp.
+        /// </summary>
+        /// <value>The last update.</value>
+        [JsonProperty]
+        private long? lastUpdate;
 
-		public 		long? 	LastUpdateOnServer {
-			get {
-				return lastUpdate;
-			}
-			set {
-				lastUpdate = value;
-			}
-		}
+        public long? LastUpdateOnServer
+        {
+            get
+            {
+                return lastUpdate;
+            }
+            set
+            {
+                lastUpdate = value;
+            }
+        }
 
-		[JsonProperty]
-		private 	HotspotInfo[]	hotspots;
+        [JsonProperty]
+        private HotspotInfo[] hotspots;
 
-		public 		HotspotInfo[] 	Hotspots { 
-			get {
-				return hotspots;
-			}
-			set {
-				hotspots = value;
-			}
-		}
+        public HotspotInfo[] Hotspots
+        {
+            get
+            {
+                return hotspots;
+            }
+            set
+            {
+                hotspots = value;
+            }
+        }
 
-		[JsonProperty]
-		private 	MetaDataInfo[] metadata;
+        [JsonProperty]
+        private MetaDataInfo[] metadata;
 
-		public 		MetaDataInfo[] 	Metadata { 
-			get {
-				return metadata;
-			}
-			set {
-				metadata = value;
-				// reset categories which are lazily evaluated
-				_categories = null;
-			}
-		}
+        public MetaDataInfo[] Metadata
+        {
+            get
+            {
+                return metadata;
+            }
+            set
+            {
+                metadata = value;
+                // reset categories which are lazily evaluated
+                _categories = null;
+            }
+        }
 
-		[JsonProperty]
-		private 	long?	_lastUpdateOnDevice = null;
+        [JsonProperty]
+        private long? _lastUpdateOnDevice = null;
 
-		public 		long? 	LastUpdateOnDevice {
-			get {
-				return _lastUpdateOnDevice;
-			}
-			set {
-				if (value != _lastUpdateOnDevice) {
-					_lastUpdateOnDevice = value;
-					if (OnChanged != null)
-						OnChanged ();
-				}
-			}
-		}
+        public long? LastUpdateOnDevice
+        {
+            get
+            {
+                return _lastUpdateOnDevice;
+            }
+            set
+            {
+                if (value != _lastUpdateOnDevice)
+                {
+                    _lastUpdateOnDevice = value;
+                    if (OnChanged != null)
+                        OnChanged();
+                }
+            }
+        }
 
-		[JsonProperty]
-		private 	long?	_timestampOfPredeployedVersion = null;
+        [JsonProperty]
+        private long? _timestampOfPredeployedVersion = null;
 
-		public 		long? 	TimestampOfPredeployedVersion {
-			get {
-				return _timestampOfPredeployedVersion;
-			}
-			set {
-				// TODO how will we set this value?
-				_timestampOfPredeployedVersion = value;
-			}
-		}
+        public long? TimestampOfPredeployedVersion
+        {
+            get
+            {
+                return _timestampOfPredeployedVersion;
+            }
+            set
+            {
+                // TODO how will we set this value?
+                _timestampOfPredeployedVersion = value;
+            }
+        }
 
-		[JsonProperty]
-		private 	int _playedTimes = 0;
+        [JsonProperty]
+        private int _playedTimes = 0;
 
-		public 		int 	PlayedTimes {
-			get {
-				return _playedTimes;
-			}
-			set {
-				if (value != _playedTimes) {
-					QuestInfo oldInfo = (QuestInfo)this.MemberwiseClone ();
-					_playedTimes = value;
-					QuestInfoManager.Instance.raiseDataChange (
-						new QuestInfoChangedEvent (
-							String.Format ("Info for quest {0} changed.", Name),
-							ChangeType.ChangedInfo,
-							newQuestInfo: this,
-							oldQuestInfo: oldInfo
-						)
-					);
+        public int PlayedTimes
+        {
+            get
+            {
+                return _playedTimes;
+            }
+            set
+            {
+                if (value != _playedTimes)
+                {
+                    QuestInfo oldInfo = (QuestInfo)this.MemberwiseClone();
+                    _playedTimes = value;
+                    QuestInfoManager.Instance.raiseDataChange(
+                        new QuestInfoChangedEvent(
+                            String.Format("Info for quest {0} changed.", Name),
+                            ChangeType.ChangedInfo,
+                            newQuestInfo: this,
+                            oldQuestInfo: oldInfo
+                        )
+                    );
 
-				}
-			}
-		}
+                }
+            }
+        }
 
-		[JsonProperty]
-		public QuestInfo NewVersionOnServer {
-			get;
-			set;
-		}
+        [JsonProperty]
+        public QuestInfo NewVersionOnServer
+        {
+            get;
+            set;
+        }
 
-		#endregion
+        #endregion
 
 
-		#region Derived features
+        #region Derived features
 
-		[JsonIgnore]
-		public HotspotInfo MarkerHotspot {
-			get {
-				double sumLong = 0f;
-				double sumLat = 0f;
-				foreach (HotspotInfo h in Hotspots) {
-					sumLong += h.Longitude;
-					sumLat += h.Latitude;
-				}
-				if (Hotspots.Length == 0)
-					return HotspotInfo.NULL;
-				else
-					return new HotspotInfo (sumLat / Hotspots.Length, sumLong / Hotspots.Length);
-			}
-		}
+        [JsonIgnore]
+        public HotspotInfo MarkerHotspot
+        {
+            get
+            {
+                double sumLong = 0f;
+                double sumLat = 0f;
+                foreach (HotspotInfo h in Hotspots)
+                {
+                    sumLong += h.Longitude;
+                    sumLat += h.Latitude;
+                }
+                if (Hotspots.Length == 0)
+                    return HotspotInfo.NULL;
+                else
+                    return new HotspotInfo(sumLat / Hotspots.Length, sumLong / Hotspots.Length);
+            }
+        }
 
-		[JsonIgnore]
-		public bool IsOnServer {
-			get {
-				return (LastUpdateOnServer != null);
-			}
-		}
+        [JsonIgnore]
+        public bool IsOnServer
+        {
+            get
+            {
+                return (LastUpdateOnServer != null);
+            }
+        }
 
-		[JsonIgnore]
-		public bool IsOnDevice {
-			get {
-				return (LastUpdateOnDevice != null);
-			}
-		}
+        [JsonIgnore]
+        public bool IsOnDevice
+        {
+            get
+            {
+                return (LastUpdateOnDevice != null);
+            }
+        }
 
-		[JsonIgnore]
-		public bool IsPredeployed {
-			get {
-				return (TimestampOfPredeployedVersion != null);
-			}
-		}
+        [JsonIgnore]
+        public bool IsPredeployed
+        {
+            get
+            {
+                return (TimestampOfPredeployedVersion != null);
+            }
+        }
 
-		[JsonIgnore]
-		public bool HasUpdate {
-			get {
-				return (
-				    // exists on both device and server:
-				    IsOnDevice && IsOnServer
-					// server update is newer (bigger number):
-				    && LastUpdateOnServer > LastUpdateOnDevice
-				);
-			}
-		}
+        [JsonIgnore]
+        public bool HasUpdate
+        {
+            get
+            {
+                return (
+                    // exists on both device and server:
+                    IsOnDevice && IsOnServer
+                    // server update is newer (bigger number):
+                    && LastUpdateOnServer > LastUpdateOnDevice
+                );
+            }
+        }
 
-		/// <summary>
-		/// Determines whether this quest is new. This feature will be used in the UI in future versions.
-		/// </summary>
-		/// <returns><c>true</c> if this instance is new; otherwise, <c>false</c>.</returns>
-		[JsonIgnore]
-		public bool IsNew {
-			get {
-				return PlayedTimes == 0;
-			}
-		}
+        /// <summary>
+        /// Determines whether this quest is new. This feature will be used in the UI in future versions.
+        /// </summary>
+        /// <returns><c>true</c> if this instance is new; otherwise, <c>false</c>.</returns>
+        [JsonIgnore]
+        public bool IsNew
+        {
+            get
+            {
+                return PlayedTimes == 0;
+            }
+        }
 
-		[JsonIgnore]
-		private List<string> _categories;
+        [JsonIgnore]
+        private List<string> _categories;
 
-		[JsonIgnore]
-		public List<string> Categories {
-			get {
-				if (_categories == null) {
-					_categories = CategoryReader.ReadCategoriesFromMetadata (Metadata);
-				}
-				return _categories;
-			}
-		}
+        [JsonIgnore]
+        public List<string> Categories
+        {
+            get
+            {
+                if (_categories == null)
+                {
+                    _categories = CategoryReader.ReadCategoriesFromMetadata(Metadata);
+                }
+                return _categories;
+            }
+        }
 
-		public const string WITHOUT_CATEGORY_ID = "withoutcategory";
+        public const string WITHOUT_CATEGORY_ID = "withoutcategory";
 
-		public string CurrentCategoryId {
-			get {
-				return QuestInfoManager.Instance.Filter.CategoryToShow (this);
-			}
-		}
+        public string CurrentCategoryId
+        {
+            get
+            {
+                return QuestInfoManager.Instance.Filter.CategoryToShow(this);
+            }
+        }
 
-        public bool IsHidden() {
+        public bool IsHidden()
+        {
             return name.StartsWith("---", StringComparison.CurrentCulture);
         }
 
-		#endregion
+        public bool ShowDownloadOption
+        {
+            get
+            {
+                return IsOnServer && !IsOnDevice;
+            }
+        }
+
+        public bool ShowStartOption
+        {
+            get { return IsOnDevice; }
+        }
+
+        public bool ShowUpdateOption
+        {
+            get { return HasUpdate; }
+        }
+
+        public bool ShowDeleteOption
+        {
+            get
+            {
+                return
+                IsOnDevice
+                // either configurated to offer delete or logged in as author:
+                && (ConfigurationManager.Current.showDeleteOptionForLocalQuests || Base.LoggedInAs != null);
+            }
+        }
+        #endregion
 
 
-		#region Runtime API
+        #region Runtime API
+        public delegate void ChangeHandler();
 
-		public delegate void ChangeHandler ();
+        public event ChangeHandler OnChanged;
 
-		public event ChangeHandler OnChanged;
+        public int HowManyListerners()
+        {
+            return OnChanged.GetInvocationList().Length;
+        }
 
-		public int HowManyListerners ()
-		{
-			return OnChanged.GetInvocationList ().Length;
-		}
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
 
-		public override string ToString ()
-		{
-			StringBuilder sb = new StringBuilder ();
+            sb.AppendFormat("{0} (id: {1})\n", Name, Id);
+            sb.AppendFormat("\t last server update: {0}", LastUpdateOnServer);
+            sb.AppendFormat("\t type id: {0}", TypeID);
+            sb.AppendFormat("\t icon path: {0}", IconPath);
+            sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
+            sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
+            sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
 
-			sb.AppendFormat ("{0} (id: {1})\n", Name, Id);
-			sb.AppendFormat ("\t last server update: {0}", LastUpdateOnServer);
-			sb.AppendFormat ("\t type id: {0}", TypeID);
-			sb.AppendFormat ("\t icon path: {0}", IconPath);
-			sb.AppendFormat ("\t featured image path: {0}", FeaturedImagePath);
-			sb.AppendFormat ("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
-			sb.AppendFormat ("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
+            return sb.ToString();
+        }
 
-			return sb.ToString ();
-		}
+        public string GetMetadata(string key)
+        {
 
-		public string GetMetadata (string key)
-		{
+            foreach (MetaDataInfo md in Metadata)
+            {
+                if (md.Key.Equals(key))
+                    return md.Value;
+            }
 
-			foreach (MetaDataInfo md in Metadata) {
-				if (md.Key.Equals (key))
-					return md.Value;
-			}
+            return null;
+        }
 
-			return null;
-		}
+        public void Dispose()
+        {
+            OnChanged = null;
+        }
 
-		public void Dispose ()
-		{
-			OnChanged = null;
-		}
+        #endregion
 
-		#endregion
+        #region Sorting Comparison
 
-		#region Sorting Comparison
+        /// <summary>
+        /// Returns a value greater than zero in case this object is considered greater than the given other. 
+        /// A return value of 0 signals that both objects are equal and 
+        /// a value less than zero means that this object is less than the given other one.
+        /// </summary>
+        /// <param name="otherInfo">Other info.</param>
+        public int CompareTo(QuestInfo otherInfo)
+        {
+            if (SortAscending)
+                return Compare(this, otherInfo);
+            else
+                return -Compare(this, otherInfo);
+        }
 
-		/// <summary>
-		/// Returns a value greater than zero in case this object is considered greater than the given other. 
-		/// A return value of 0 signals that both objects are equal and 
-		/// a value less than zero means that this object is less than the given other one.
-		/// </summary>
-		/// <param name="otherInfo">Other info.</param>
-		public int CompareTo (QuestInfo otherInfo)
-		{
-			if (SortAscending)
-				return Compare (this, otherInfo);
-			else
-				return -Compare (this, otherInfo);
-		}
+        public delegate int CompareMethod(QuestInfo one, QuestInfo other);
 
-		public delegate int CompareMethod (QuestInfo one,QuestInfo other);
+        static public bool SortAscending = true;
 
-		static public bool SortAscending = true;
+        private static CompareMethod _compare;
 
-		private static CompareMethod _compare;
+        static public CompareMethod Compare
+        {
+            get
+            {
+                if (_compare == null)
+                {
+                    _compare = DEFAULT_COMPARE;
+                }
+                return _compare;
+            }
+            set
+            {
+                _compare = value;
+            }
+        }
 
-		static public CompareMethod Compare {
-			get {
-				if (_compare == null) {
-					_compare = DEFAULT_COMPARE;
-				}
-				return _compare;
-			}
-			set {
-				_compare = value;
-			}
-		}
+        static public CompareMethod DEFAULT_COMPARE = ByName;
 
-		static public CompareMethod DEFAULT_COMPARE = ByName;
-
-		static public CompareMethod ByName {
-			get {
-				return (QuestInfo one, QuestInfo other) => {
-					return one.Name.CompareTo (other.Name);
-				};
-			}
-		}
-
-		#endregion
-
-
-		#region Runtime Functions
-
-		public Task DownloadTask ()
-		{
-			// Load quest data: game.xml
-			Downloader downloadGameXML = 
-				new Downloader (
-					url: QuestManager.GetQuestURI (Id), 
-					timeout: ConfigurationManager.Current.timeoutMS,
-					maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS, 
-					targetPath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
-				);
-			new DownloadDialogBehaviour (
-				downloadGameXML, 
-				string.Format ("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
-			);
-
-			// analyze game.xml, gather all media info compare to local media info and detect missing media
-			PrepareMediaInfoList prepareMediaInfosToDownload = 
-				new PrepareMediaInfoList ();
-			new SimpleDialogBehaviour (
-				prepareMediaInfosToDownload,
-				string.Format ("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
-				"Medien werden vorbereitet"
-			);
-
-			// download all missing media info
-			MultiDownloader downloadMediaFiles =
-				new MultiDownloader (
-					maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
-					timeout: ConfigurationManager.Current.timeoutMS
-				);
-			new SimpleDialogBehaviour (
-				downloadMediaFiles,
-				string.Format ("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
-				"Mediendateien werden geladen"
-			);
-			downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => {
-				LastUpdateOnDevice = LastUpdateOnServer;
-			};
-
-			// store current media info locally
-			ExportMediaInfoList exportLocalMediaInfo =
-				new ExportMediaInfoList ();
-			new SimpleDialogBehaviour (
-				exportLocalMediaInfo,
-				string.Format ("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
-				"Medieninformationen werden lokal gespeichert"
-			);
-
-			ExportQuestInfosToJSON exportQuestsInfoJSON = 
-				new ExportQuestInfosToJSON ();
-			new SimpleDialogBehaviour (
-				exportQuestsInfoJSON,
-				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format ("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
-			);
-
-			TaskSequence t = 
-				new TaskSequence (downloadGameXML);
-			t.AppendIfCompleted (prepareMediaInfosToDownload);
-			t.Append (downloadMediaFiles);
-			t.AppendIfCompleted (exportLocalMediaInfo);
-			t.Append (exportQuestsInfoJSON);
-
-			return t;
-		}
-
-		/// <summary>
-		/// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
-		/// </summary>
-		public void Download ()
-		{
-			DownloadTask ().Start ();
-		}
-
-		/// <summary>
-		/// Updates the quest represented by this info, i.e. its content is replaced by the current server content. 
-		/// It is assumed that this info already has a link to the new server version stored (cf. NewVersionOnServer property).
-		/// Is called from the UI (Button e.g.).
-		/// 
-		/// Updating a local quest means three steps: 
-		/// 
-		/// 1. This info is replaced by the info of the new version (hence the list etc. in the foyer will be updated)
-		/// 2. The represented quest game.xml is downloaded and replaces the old version.
-		/// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
-		/// </summary>
-		public void Update ()
-		{
-			// update the quest info:
-			if (NewVersionOnServer != null) {
-				//				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
-				Task download = NewVersionOnServer.DownloadTask ();
-
-				// Update the quest info list ...
-				download.OnTaskCompleted += 
-					(object sender, TaskEventArgs e) => { 
-					QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest (NewVersionOnServer.Id);
-                    new ExportQuestInfosToJSON().Start();
+        static public CompareMethod ByName
+        {
+            get
+            {
+                return (QuestInfo one, QuestInfo other) =>
+                {
+                    return one.Name.CompareTo(other.Name);
                 };
+            }
+        }
 
-				download.Start ();
-			}
-		}
-
-		/// <summary>
-		/// Deletes the local quest represented by this info. Is called from the UI (Button e.g.).
-		/// </summary>
-		public void Delete ()
-		{
-			Files.DeleteDirCompletely (QuestManager.GetLocalPath4Quest (Id));
-			LastUpdateOnDevice = null;
-
-			ExportQuestInfosToJSON exportQuestsInfoJSON = 
-				new ExportQuestInfosToJSON ();
-			new SimpleDialogBehaviour (
-				exportQuestsInfoJSON,
-				string.Format ("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-				string.Format ("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
-			);
-
-			exportQuestsInfoJSON.Start ();
-		}
-
-		/// <summary>
-		/// Starts the local quest represented by this info. Is called from the UI (Button e.g.).
-		/// </summary>
-		public Task Play ()
-		{
-			// Close menu if open:
-			Base.Instance.MenuCanvas.SetActive (false);
-
-			// Load quest data: game.xml
-			LocalFileLoader loadGameXML = 
-				new LocalFileLoader (
-					filePath: QuestManager.GetLocalPath4Quest (Id) + QuestManager.QUEST_FILE_NAME
-				);
-			new DownloadDialogBehaviour (
-				loadGameXML, 
-				string.Format ("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
-			);
-
-			QuestStarter questStarter = new QuestStarter ();
-
-			TaskSequence t = 
-				new TaskSequence (loadGameXML, questStarter);
-
-			return t;
-		}
-
-		#endregion
-	}
+        #endregion
 
 
-	public class HotspotInfo
-	{
+        #region Runtime Functions
 
-		public HotspotInfo (double lat, double lon)
-		{
-			Latitude = lat;
-			Longitude = lon;
-		}
+        public Task DownloadTask()
+        {
+            // Load quest data: game.xml
+            Downloader downloadGameXML =
+                new Downloader(
+                    url: QuestManager.GetQuestURI(Id),
+                    timeout: ConfigurationManager.Current.timeoutMS,
+                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
+                    targetPath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
+                );
+            new DownloadDialogBehaviour(
+                downloadGameXML,
+                string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
+            );
 
-		public double Latitude { get; set; }
+            // analyze game.xml, gather all media info compare to local media info and detect missing media
+            PrepareMediaInfoList prepareMediaInfosToDownload =
+                new PrepareMediaInfoList();
+            new SimpleDialogBehaviour(
+                prepareMediaInfosToDownload,
+                string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+                "Medien werden vorbereitet"
+            );
 
-		public double Longitude { get; set; }
+            // download all missing media info
+            MultiDownloader downloadMediaFiles =
+                new MultiDownloader(
+                    maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
+                    timeout: ConfigurationManager.Current.timeoutMS
+                );
+            new SimpleDialogBehaviour(
+                downloadMediaFiles,
+                string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+                "Mediendateien werden geladen"
+            );
+            downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
+            {
+                LastUpdateOnDevice = LastUpdateOnServer;
+            };
 
-		public static HotspotInfo NULL = new HotspotInfo (0f, 0f);
-	}
+            // store current media info locally
+            ExportMediaInfoList exportLocalMediaInfo =
+                new ExportMediaInfoList();
+            new SimpleDialogBehaviour(
+                exportLocalMediaInfo,
+                string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+                "Medieninformationen werden lokal gespeichert"
+            );
+
+            ExportQuestInfosToJSON exportQuestsInfoJSON =
+                new ExportQuestInfosToJSON();
+            new SimpleDialogBehaviour(
+                exportQuestsInfoJSON,
+                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+                string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+            );
+
+            TaskSequence t =
+                new TaskSequence(downloadGameXML);
+            t.AppendIfCompleted(prepareMediaInfosToDownload);
+            t.Append(downloadMediaFiles);
+            t.AppendIfCompleted(exportLocalMediaInfo);
+            t.Append(exportQuestsInfoJSON);
+
+            return t;
+        }
+
+        /// <summary>
+        /// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
+        /// </summary>
+        public void Download()
+        {
+            Task download = DownloadTask();
+            download.Start();
+        }
+
+        /// <summary>
+        /// Updates the quest represented by this info, i.e. its content is replaced by the current server content. 
+        /// It is assumed that this info already has a link to the new server version stored (cf. NewVersionOnServer property).
+        /// Is called from the UI (Button e.g.).
+        /// 
+        /// Updating a local quest means three steps: 
+        /// 
+        /// 1. This info is replaced by the info of the new version (hence the list etc. in the foyer will be updated)
+        /// 2. The represented quest game.xml is downloaded and replaces the old version.
+        /// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
+        /// </summary>
+        public void Update()
+        {
+            // update the quest info:
+            if (NewVersionOnServer != null)
+            {
+                //				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
+                Task download = NewVersionOnServer.DownloadTask();
+
+                // Update the quest info list ...
+                download.OnTaskCompleted +=
+                    (object sender, TaskEventArgs e) =>
+                    {
+                        QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(NewVersionOnServer.Id);
+                        new ExportQuestInfosToJSON().Start();
+                    };
+
+                download.Start();
+            }
+        }
+
+        /// <summary>
+        /// Deletes the local quest represented by this info. Is called from the UI (Button e.g.).
+        /// </summary>
+        public void Delete()
+        {
+            Files.DeleteDirCompletely(QuestManager.GetLocalPath4Quest(Id));
+            LastUpdateOnDevice = null;
+
+            ExportQuestInfosToJSON exportQuestsInfoJSON =
+                new ExportQuestInfosToJSON();
+            new SimpleDialogBehaviour(
+                exportQuestsInfoJSON,
+                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+                string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+            );
+
+            exportQuestsInfoJSON.Start();
+        }
+
+        /// <summary>
+        /// Starts the local quest represented by this info. Is called from the UI (Button e.g.).
+        /// </summary>
+        public Task Play()
+        {
+            // Close menu if open:
+            Base.Instance.MenuCanvas.SetActive(false);
+
+            // Load quest data: game.xml
+            LocalFileLoader loadGameXML =
+                new LocalFileLoader(
+                    filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
+                );
+            new DownloadDialogBehaviour(
+                loadGameXML,
+                string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
+            );
+
+            QuestStarter questStarter = new QuestStarter();
+
+            TaskSequence t =
+                new TaskSequence(loadGameXML, questStarter);
+
+            return t;
+        }
+
+        #endregion
+    }
 
 
-	public class MetaDataInfo
-	{
+    public class HotspotInfo
+    {
 
-		public MetaDataInfo (string key, string val)
-		{
-			Key = key;
-			Value = val;
-		}
+        public HotspotInfo(double lat, double lon)
+        {
+            Latitude = lat;
+            Longitude = lon;
+        }
 
-		public string Key { get; set; }
+        public double Latitude { get; set; }
 
-		public string Value { get; set; }
-	}
+        public double Longitude { get; set; }
+
+        public static HotspotInfo NULL = new HotspotInfo(0f, 0f);
+    }
+
+
+    public class MetaDataInfo
+    {
+
+        public MetaDataInfo(string key, string val)
+        {
+            Key = key;
+            Value = val;
+        }
+
+        public string Key { get; set; }
+
+        public string Value { get; set; }
+    }
 
 
 }

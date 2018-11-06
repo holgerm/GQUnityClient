@@ -189,26 +189,26 @@ namespace GQTests.Management {
 
 		void ASSERT_ShowOptions_Download() {
 			QuestInfo info = QM.GetQuestInfo(10557);
-			Assert.That (QuestInfoUICListElement.ShowDownloadOption (info));
-			Assert.IsFalse (QuestInfoUICListElement.ShowStartOption (info));
-			Assert.IsFalse (QuestInfoUICListElement.ShowUpdateOption (info));
-			Assert.IsFalse (QuestInfoUICListElement.ShowDeleteOption (info));
+			Assert.That (info.ShowDownloadOption);
+			Assert.IsFalse (info.ShowStartOption);
+			Assert.IsFalse (info.ShowUpdateOption);
+			Assert.IsFalse (info.ShowDeleteOption);
 		}
 
 		void ASSERT_ShowOptions_Play_Delete () {
 			QuestInfo info = QM.GetQuestInfo(10557);
-			Assert.IsFalse (QuestInfoUICListElement.ShowDownloadOption (info));
-			Assert.That (QuestInfoUICListElement.ShowStartOption (info));
-			Assert.IsFalse (QuestInfoUICListElement.ShowUpdateOption (info));
-			Assert.That (QuestInfoUICListElement.ShowDeleteOption (info));
+			Assert.IsFalse (info.ShowDownloadOption);
+			Assert.That (info.ShowStartOption);
+			Assert.IsFalse (info.ShowUpdateOption);
+			Assert.That (info.ShowDeleteOption);
 		}
 
 		void ASSERT_ShowOptions_Play_Delete_Update() {
 			QuestInfo info = QM.GetQuestInfo(10557);
-			Assert.IsFalse (QuestInfoUICListElement.ShowDownloadOption (info));
-			Assert.That (QuestInfoUICListElement.ShowStartOption (info));
-			Assert.That (QuestInfoUICListElement.ShowUpdateOption (info));
-			Assert.That (QuestInfoUICListElement.ShowDeleteOption (info));
+			Assert.IsFalse (info.ShowDownloadOption);
+			Assert.That (info.ShowStartOption);
+			Assert.That (info.ShowUpdateOption);
+			Assert.That (info.ShowDeleteOption);
 		}
 
 		void ASSERT_ShowsOldCategory() {

@@ -55,8 +55,8 @@ namespace GQ.Client.UI
         {
             LoginButton.interactable = (
                 (
-                    Base.Instance.LoggedInAs != null &&
-                    Base.Instance.LoggedInAs != ""
+                    Base.LoggedInAs != null &&
+                    Base.LoggedInAs != ""
                 ) ||
                 (
                     mail.Contains("@") &&
@@ -71,7 +71,7 @@ namespace GQ.Client.UI
         /// </summary>
         void checkStatus()
         {
-            if (Base.Instance.LoggedInAs == null)
+            if (Base.LoggedInAs == null)
             {
                 StatusText.text = NOT_LOGGED_IN_TEXT;
                 AccountInput.gameObject.SetActive(true);
@@ -80,7 +80,7 @@ namespace GQ.Client.UI
             }
             else
             {
-                StatusText.text = string.Format(LOGGED_IN_TEXTFORMAT, Base.Instance.LoggedInAs);
+                StatusText.text = string.Format(LOGGED_IN_TEXTFORMAT, Base.LoggedInAs);
                 AccountInput.gameObject.SetActive(false);
                 PasswordInput.gameObject.SetActive(false);
                 SettingsPanel.gameObject.SetActive(true);
@@ -91,7 +91,7 @@ namespace GQ.Client.UI
         void checkLoginButtonText()
         {
             LoginButtonText.text =
-                Base.Instance.LoggedInAs == null ?
+                Base.LoggedInAs == null ?
                 LOGIN_TEXT :
                 LOGOUT_TEXT;
         }
@@ -103,7 +103,7 @@ namespace GQ.Client.UI
                 if (email == ConfigurationManager.Current.acceptedAuthorEmail &&
                     password == ConfigurationManager.Current.acceptedAuthorPassword) 
                 {
-                    Base.Instance.LoggedInAs = email;
+                    Base.LoggedInAs = email;
                     //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = true;
                     return true;
                 }
@@ -127,7 +127,7 @@ namespace GQ.Client.UI
                     checkLoginButtonText();
                     break;
                 case LOGOUT_TEXT:
-                    Base.Instance.LoggedInAs = null;
+                    Base.LoggedInAs = null;
                     //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = false;
                     checkStatus();
                     checkLoginButtonText();

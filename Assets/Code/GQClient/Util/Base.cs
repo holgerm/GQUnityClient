@@ -142,12 +142,6 @@ namespace GQ.Client.Util
                         canv.gameObject.SetActive(false);
                     }
                 }
-
-                Debug.Log("Device h: " + Device.height + ", w:" + Device.width + ", dpi: " + Device.dpi);
-                Debug.Log("MapButtonHeight in pixels: " + LayoutConfig.Units2Pixels(ConfigurationManager.Current.mapButtonHeightUnits));
-                Debug.Log("MapButtonHeight in mm: " + LayoutConfig.Units2MM(ConfigurationManager.Current.mapButtonHeightUnits));
-                Debug.Log("MapButtonHeight calculated: " + LayoutConfig.Units2Pixels(FoyerMapScreenLayout.MapButtonHeightUnits));
-                Debug.Log("MarkerHeight calculated: " + LayoutConfig.Units2Pixels(FoyerMapScreenLayout.MarkerHeightUnits));
             }
 
             DontDestroyOnLoad(Instance);
@@ -175,9 +169,9 @@ namespace GQ.Client.Util
 
         #region Global Runtime State
 
-        string loggedInAs = null;
+        static string loggedInAs = null;
 
-        public string LoggedInAs
+        public static string LoggedInAs
         {
             get
             {
@@ -202,7 +196,7 @@ namespace GQ.Client.Util
             }
         }
 
-        public bool EmulationMode
+        public static bool EmulationMode
         {
             get
             {

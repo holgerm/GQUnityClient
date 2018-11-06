@@ -260,19 +260,21 @@ namespace GQ.Client.Model
 
 		public virtual void Enter ()
 		{
+            Debug.Log("HOTSPO TRIGGERS ONENTER: " + Id);
             Status = Hotspot.StatusValue.INSIDE;
 			EnterTrigger.Initiate ();
 		}
 
 		public virtual void Leave ()
 		{
-			Status = Hotspot.StatusValue.OUTSIDE;
+            Debug.Log("HOTSPO TRIGGERS ONLEAVE: " + Id);
+            Status = Hotspot.StatusValue.OUTSIDE;
 			LeaveTrigger.Initiate ();
 		}
 
 		public virtual void Tap ()
 		{
-			if (Base.Instance.EmulationMode) {
+			if (Base.EmulationMode) {
 				EmuHotspotDialog.CreateAndShow (EnterTrigger, LeaveTrigger, TapTrigger);
 			} else {
 				TapTrigger.Initiate ();
