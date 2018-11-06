@@ -85,8 +85,9 @@ namespace GQ.Client.Model
 			xmlRootAttr.ElementName = GQML.ACTION;
 			XmlSerializer serializer;
 
-			// consume starting branch element (then or else):				
-			reader.Read ();
+			// consume starting branch element (then or else) if it is NOT EMPTY:	
+            if (!reader.IsEmptyElement)
+			    reader.Read ();
 
 			while (!GQML.IsReaderAtEnd (reader, branchName)) {
 
