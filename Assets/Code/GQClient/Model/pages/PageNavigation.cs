@@ -62,14 +62,23 @@ namespace GQ.Client.Model
 
 
         #region Runtime API
+
+        private int testCount = 0;
         public override void Start() {
             base.Start();
+            Debug.Log("HOTSPOTS ENABLED: " + ++testCount);
             LocationSensor.Instance.OnLocationUpdate += Quest.UpdateHotspotMarkers;
         }
 
         public override void End()
         {
             base.End();
+        }
+
+        public override void CleanUp()
+        {
+            base.CleanUp();
+            Debug.Log("HOTSPOTS DISABLED: " + --testCount);
             LocationSensor.Instance.OnLocationUpdate -= Quest.UpdateHotspotMarkers;
         }
         #endregion

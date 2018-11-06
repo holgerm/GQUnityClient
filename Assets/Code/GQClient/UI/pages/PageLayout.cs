@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Conf;
 using GQ.Client.Model;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
@@ -13,7 +14,7 @@ namespace GQ.Client.UI
 
 		protected override void setHeader ()
 		{
-			enableLeaveQuestButton (ConfigurationManager.Current.offerLeaveQuestOnEachPage);
+            enableLeaveQuestButton (ConfigurationManager.Current.offerLeaveQuestOnEachPage || Base.EmulationMode);
 
 			base.setHeader ();
 

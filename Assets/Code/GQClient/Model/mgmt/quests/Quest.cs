@@ -117,6 +117,7 @@ namespace GQ.Client.Model
                     {
                         if (h.InsideRadius(e.Location))
                         {
+                            Debug.Log("ENTER HOTSPOT: " + h.Id);
                             h.Enter();
                         }
                     }
@@ -124,6 +125,7 @@ namespace GQ.Client.Model
                     {
                         if (h.OutsideRadius(e.Location))
                         {
+                            Debug.Log("LEAVE HOTSPOT: " + h.Id);
                             h.Leave();
                         }
                     }
@@ -210,12 +212,22 @@ namespace GQ.Client.Model
                 return Files.CombinePath(QuestManager.GetLocalPath4Quest(Id), "media.json");
             }
         }
+        #endregion
 
+        #region Dependent Quests
+        protected List<int> dependees;
+
+        public void AddDependeeQuest(int dependeeID)
+        {
+            if (dependees == null) {
+                dependees = new List<int>();
+            }
+            dependees.Add(dependeeID);
+        }
         #endregion
 
 
         #region XML Reading
-
         public System.Xml.Schema.XmlSchema GetSchema()
         {
             return null;

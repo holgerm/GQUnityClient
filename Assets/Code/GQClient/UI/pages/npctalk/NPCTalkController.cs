@@ -126,6 +126,11 @@ namespace GQ.Client.UI
 			foreach (Transform dialogItem in dialogItemContainer) {
 				GameObject.Destroy (dialogItem.gameObject);
 			}
+
+            Image bgImg = contentPanel.GetComponent<Image>();
+            if (bgImg != null) {
+                bgImg.color = ConfigurationManager.Current.mainBgColor;
+            }
 		}
 
 		void AddCurrentText ()

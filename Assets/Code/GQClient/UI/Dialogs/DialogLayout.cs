@@ -12,6 +12,7 @@ namespace GQ.Client.UI.Dialogs
 	/// </summary>
 	public class DialogLayout : LayoutConfig
 	{
+        public Image TopLogoImage;
 
 		public override void layout ()
 		{
@@ -30,6 +31,8 @@ namespace GQ.Client.UI.Dialogs
 			if (contentImage != null) {
 				contentImage.color = ConfigurationManager.Current.contentBackgroundColor;
 			}
+
+            TopLogoImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
 		}
 	}
 }

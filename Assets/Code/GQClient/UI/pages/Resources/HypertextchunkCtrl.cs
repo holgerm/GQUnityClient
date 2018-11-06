@@ -4,6 +4,7 @@ using UnityEngine;
 using Candlelight.UI;
 using System.Text.RegularExpressions;
 using GQ.Client.Util;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -27,7 +28,10 @@ namespace GQ.Client.UI
 
 		public void Initialize(string itemText, bool supportHtmlLinks) {
 			this.DialogItemHyperText.text = itemText.Decode4HyperText(supportHtmlLinks : supportHtmlLinks);
-		}
+            this.DialogItemHyperText.color = ConfigurationManager.Current.mainFgColor;
+            this.DialogItemHyperText.fontSize = ConfigurationManager.Current.mainFontSize;
+
+        }
 
 		public static HypertextchunkCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true) {
 			GameObject go = (GameObject)Instantiate (

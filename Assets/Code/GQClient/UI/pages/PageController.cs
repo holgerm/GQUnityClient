@@ -76,7 +76,7 @@ namespace GQ.Client.UI
 		}
 
 		/// <summary>
-		/// Override this method to react on Forward Button CLick (or similar events).
+		/// Override this method to react on Forward Button Click (or similar events).
 		/// </summary>
 		public virtual void OnForward ()
 		{

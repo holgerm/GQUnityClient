@@ -65,7 +65,7 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		public string[] 	questInfoViews { get; set; }
 
-		public bool 	cloudQuestsVisible  { get; set; }
+        public bool 	cloudQuestsVisible  { get; set; }
 
 		public bool 	showCloudQuestsImmediately  { get; set; }
 
@@ -73,7 +73,8 @@ namespace GQ.Client.Conf
 
 		public bool 	localQuestsDeletable  { get; set; }
 
-		public bool 	hideHiddenQuests  { get; set; }
+        [ShowInProductEditor]
+        public bool 	hideHiddenQuests  { get; set; }
 
 		[ShowInProductEditor (StartSection = "Pages & Scenes:")]
 		public string[]	acceptedPageTypes { get; set; }
@@ -304,10 +305,6 @@ namespace GQ.Client.Conf
 		[ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	contentBackgroundColor  { get; set; }
-
-		[ShowInProductEditor]
-		[JsonConverter (typeof(Color32Converter))]		
-		public Color32	contentFontColor  { get; set; }
 
 		[ShowInProductEditor]
 		public float 		headerHeightUnits { get; set; }
@@ -598,7 +595,6 @@ namespace GQ.Client.Conf
 			headerButtonBgColor = GQColor.transparent;
 			headerButtonFgColor = Color.black;
 			contentBackgroundColor = Color.white;
-			contentFontColor = Color.black;
 			footerBgColor = Color.white;
 			footerButtonBgColor = GQColor.transparent;
 			footerButtonFgColor = Color.black;

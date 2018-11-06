@@ -252,6 +252,7 @@ namespace GQ.Client.Model
 
         public virtual void Start()
         {
+            Debug.Log("PAGE START: " + Id);
             if (!CanStart())
                 return;
 
@@ -314,6 +315,7 @@ namespace GQ.Client.Model
 
         public virtual void End()
         {
+            Debug.Log("#### PAGE.End(): " + Id);
             State = GQML.STATE_SUCCEEDED;
 
             if (EndTrigger == Trigger.Null)
@@ -329,7 +331,6 @@ namespace GQ.Client.Model
             {
                 EndTrigger.Initiate();
             }
-            Debug.Log("#### PAGE.End() before Resources.UnloadUnusedAssets().");
             Resources.UnloadUnusedAssets();
         }
 
@@ -338,7 +339,7 @@ namespace GQ.Client.Model
             Variables.SetInternalVariable("$_mission_" + Id + ".result", new Value(Result));
         }
 
-        public void CleanUp()
+        public virtual void CleanUp()
         {
             if (PageCtrl != null)
             {
