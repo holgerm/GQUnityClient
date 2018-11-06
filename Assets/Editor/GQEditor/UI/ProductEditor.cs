@@ -875,10 +875,35 @@ namespace GQ.Editor.UI
         }
     }
 
+    public class ProductEditorPart4HeaderMiddleButtonPolicy : ProductEditorPart {
+        int selected;
+        string[] values = Enum.GetNames(typeof(HeaderMiddleButtonPolicy));
+
+        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+
+            // TODO implement all three strategies
+            int previouslySelected = selected;
+            selected =
+                EditorGUILayout.Popup(
+                "Header Middle Button Policy",
+                selected,
+                values
+            );
+            if (previouslySelected != selected)
+            {
+                configIsDirty = true;
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (HeaderMiddleButtonPolicy)selected, null);
+            }
+
+            return configIsDirty;
+        }
+    }
+
 
     public class ProductEditorPart4DownloadStrategy : ProductEditorPart
     {
-
         int selectedDownloadStrategy;
         string[] downloadStrategyNames = Enum.GetNames(typeof(DownloadStrategy));
 

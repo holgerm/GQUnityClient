@@ -1286,7 +1286,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000010586554}
+  m_AnchoredPosition: {x: 0, y: 0.0000997146}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -1495,9 +1495,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 924.7881
+  m_MinHeight: 964.0678
   m_PreferredWidth: -1
-  m_PreferredHeight: 924.7881
+  m_PreferredHeight: 964.0678
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1720,8 +1720,8 @@ MonoBehaviour:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224939189311781928, guid: 061e4f3f0c0104238a98c0f0f73491b0,
     type: 2}
-  m_PrefabInternal: {fileID: 1097764752}
---- !u!1001 &1097764752
+  m_PrefabInternal: {fileID: 1228597399}
+--- !u!1001 &1228597399
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2708,9 +2708,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 92.47881
+  m_MinHeight: 96.406784
   m_PreferredWidth: -1
-  m_PreferredHeight: 92.47881
+  m_PreferredHeight: 96.406784
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

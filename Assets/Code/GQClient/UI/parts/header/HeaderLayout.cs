@@ -11,6 +11,7 @@ namespace GQ.Client.UI
     public class HeaderLayout : LayoutConfig
     {
         public GameObject Header;
+        public GameObject MiddleButton; 
 
         public override void layout()
         {
@@ -32,10 +33,36 @@ namespace GQ.Client.UI
                 image.color = ConfigurationManager.Current.headerBgColor;
             }
 
+            setMiddleButton();
+
+            LayoutElement layElem = Header.GetComponent<LayoutElement>();
+            if (layElem == null)
+            {
+                Log.SignalErrorToDeveloper("LayoutElement for Header is null.");
+                return;
+            }
+
+            float height = Units2Pixels(HeaderHeightUnits);
+            SetLayoutElementHeight(layElem, height);
+        }
+
+        protected virtual void setMiddleButton()
+        {
+            setTopLogo();
+        }
+
+        protected void setTopLogo() {
             // set MiddleTopLogo:
             try
             {
-                Transform middleTopLogo = Header.transform.Find("ButtonPanel/MiddleTopLogo");
+                // hide tite text:
+                Transform titleText = MiddleButton.transform.Find("TitleText");
+                titleText.gameObject.SetActive(false);
+
+                // show top logo and load image:
+                Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+                middleTopLogo.gameObject.SetActive(true);
+
                 if (middleTopLogo != null)
                 {
                     Image mtlImage = middleTopLogo.GetComponent<Image>();
@@ -49,17 +76,6 @@ namespace GQ.Client.UI
             {
                 Log.SignalErrorToDeveloper("Could not set Middle Top Logo Image. Exception occurred: " + e.Message);
             }
-
-            LayoutElement layElem = Header.GetComponent<LayoutElement>();
-            if (layElem == null)
-            {
-                Log.SignalErrorToDeveloper("LayoutElement for Header is null.");
-                return;
-            }
-
-            float height = Units2Pixels(HeaderHeightUnits);
-            SetLayoutElementHeight(layElem, height);
         }
-
     }
 }

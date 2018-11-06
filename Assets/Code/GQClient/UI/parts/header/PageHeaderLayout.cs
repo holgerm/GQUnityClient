@@ -6,7 +6,7 @@ using GQ.Client.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace GQ.Client.UI 
 {
     public class PageHeaderLayout : HeaderLayout
     {
@@ -22,7 +22,35 @@ namespace GQ.Client.UI
                 headerCanvas.overrideSorting = true;
                 headerCanvas.sortingOrder = 3;
             }
+
+
         }
+
+        protected override void setMiddleButton()
+        {
+            switch (ConfigurationManager.Current.headerMiddleButtonPolicy) {
+                case HeaderMiddleButtonPolicy.TopLogo:
+                    setTopLogo();
+                    break;
+                case HeaderMiddleButtonPolicy.QuestTitle:
+                    setTitle();
+                    break;
+            } 
+        }
+
+        protected void setTitle() {
+            // hide top logo and load image:
+            Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+            middleTopLogo.gameObject.SetActive(false);
+
+            // show tite and set its text:
+            Transform titleText = MiddleButton.transform.Find("TitleText");
+            titleText.gameObject.SetActive(true);
+            Text ttt = titleText.GetComponent<Text>();
+            ttt.text = QuestManager.Instance.CurrentQuest.Name;
+            ttt.color = ConfigurationManager.Current.mainFgColor;
+        }
+
 
         void enableLeaveQuestButton(bool enable)
         {

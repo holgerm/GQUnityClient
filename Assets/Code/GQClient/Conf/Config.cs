@@ -291,6 +291,10 @@ namespace GQ.Client.Conf
         public ImagePath topLogo { get; set; }
 
         [ShowInProductEditor]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public HeaderMiddleButtonPolicy headerMiddleButtonPolicy { get; set; }
+
+        [ShowInProductEditor]
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	headerBgColor  { get; set; }
 
@@ -306,7 +310,7 @@ namespace GQ.Client.Conf
 		[JsonConverter (typeof(Color32Converter))]		
 		public Color32	contentBackgroundColor  { get; set; }
 
-		[ShowInProductEditor]
+        [ShowInProductEditor]
 		public float 		headerHeightUnits { get; set; }
 
 		[ShowInProductEditor]
@@ -584,7 +588,8 @@ namespace GQ.Client.Conf
 			mainFontSize = 60;
             maxFontSize = 100;
 			showShadows = true;
-			headerHeightUnits = 60f;
+            headerMiddleButtonPolicy = HeaderMiddleButtonPolicy.TopLogo;
+            headerHeightUnits = 60f;
 			contentHeightUnits = 750f;
 			imageAreaHeightMinUnits = 150f;
 			imageAreaHeightMaxUnits = 350f;
@@ -644,8 +649,13 @@ namespace GQ.Client.Conf
 
 	}
 
+    public enum HeaderMiddleButtonPolicy {
+        TopLogo,
+        QuestTitle
+    }
 
-	public enum DownloadStrategy
+
+    public enum DownloadStrategy
 	{
 		UPFRONT,
 		LAZY,
