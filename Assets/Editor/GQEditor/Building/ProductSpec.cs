@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Text;
 using Newtonsoft.Json;
 using GQ.Editor.Util;
+using GQ.Editor.UI;
 
 namespace GQ.Editor.Building {
 
@@ -143,7 +144,7 @@ namespace GQ.Editor.Building {
 			// init and check Config:
 			try {
 				string configJSON = File.ReadAllText(ConfigPath);
-				Config = JsonConvert.DeserializeObject<Config>(configJSON);
+                Config = Config._doDeserializeConfig(configJSON);
 			} catch ( Exception exc ) {
 				throw new ArgumentException("Invalid product definition. Config file could not be read.", exc);
 			}

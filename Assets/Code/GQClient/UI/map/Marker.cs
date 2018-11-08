@@ -14,7 +14,7 @@ namespace GQ.Client.UI
 	public abstract class Marker : MarkerBehaviour {
 		
 		protected const string MARKER_ALPHA_BG_PATH = "defaults/readable/defaultMarkerBG";
-		protected const string DEFAULT_MARKER_PATH = "defaults/readable/defaultMarker";
+		public const string DEFAULT_MARKER_PATH = "defaults/readable/defaultMarker";
 
 		public virtual void UpdateView () {}
 

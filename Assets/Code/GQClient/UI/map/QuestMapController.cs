@@ -73,16 +73,40 @@ namespace GQ.Client.UI
 			}
 		}
 
-		private void CreateMarker (Hotspot hotspot)
-		{
+        private void CreateMarker(Hotspot hotspot)
+        {
+            // TODO detect which marker to use.
+
+            // Hotspot-specific markers:
+            if (hotspot.MarkerImageUrl !=  HotspotMarker.SERVER_DEFAULT_MARKER_URL)
+            {
+                loadHotspotMarker(hotspot, hotspot.MarkerImageUrl);
+                return;
+            }
+
+            // Quest-specific markers: they are defined as metadata:
+            if (qm.CurrentQuest.metadata.ContainsKey(HotspotMarker.QUEST_SPECIFIC_MARKER_MDKEY)) {
+                string markerUrl;
+                qm.CurrentQuest.metadata.TryGetValue(HotspotMarker.QUEST_SPECIFIC_MARKER_MDKEY, out markerUrl);
+                loadHotspotMarker(hotspot, markerUrl);
+                return;
+            }
+         
+            // App-specific markers (which can be the GeoQuest default marker, too:
+            Texture2D markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.marker.path);
+            Debug.Log("MARKER PATH: " + ConfigurationManager.Current.marker.path);
+            showLoadedMarker(hotspot, markerTexture);
+        }
+
+        private void loadHotspotMarker(Hotspot hotspot, string markerUrl) {
 			AbstractDownloader loader;
-			if (qm.CurrentQuest.MediaStore.ContainsKey (hotspot.MarkerImageUrl)) {
+			if (qm.CurrentQuest.MediaStore.ContainsKey (markerUrl)) {
 				MediaInfo mediaInfo;
-				qm.CurrentQuest.MediaStore.TryGetValue (hotspot.MarkerImageUrl, out mediaInfo);
+				qm.CurrentQuest.MediaStore.TryGetValue (markerUrl, out mediaInfo);
 				loader = new LocalFileLoader (mediaInfo.LocalPath);
 			} else {
 				loader = new Downloader (
-					url: hotspot.MarkerImageUrl, 
+					url: markerUrl, 
 					timeout: ConfigurationManager.Current.timeoutMS,
 					maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 				);

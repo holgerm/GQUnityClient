@@ -234,7 +234,7 @@ namespace GQ.Client.Conf
 			string json = RetrieveProductJSONText ();
 
 			try {
-				_current = JsonConvert.DeserializeObject<Config> (json);
+                _current = Config._doDeserializeConfig (json);
 			} catch (Exception e) {
 				Debug.LogWarning ("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
 			}

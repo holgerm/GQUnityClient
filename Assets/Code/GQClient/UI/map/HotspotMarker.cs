@@ -8,7 +8,10 @@ namespace GQ.Client.UI
 
 	public class HotspotMarker : Marker
 	{
-		public Texture DefaultTexture;
+        public const string SERVER_DEFAULT_MARKER_URL = "https://quest-mill.intertech.de/assets/img/erzbistummarker.png";
+        public const string QUEST_SPECIFIC_MARKER_MDKEY = "gq.questspecific.marker";
+
+        public Texture DefaultTexture;
 
 		public void Awake ()
 		{

@@ -349,7 +349,7 @@ namespace GQ.Editor.UI
                 if (!File.Exists(configFile))
                     return null;
                 string configText = File.ReadAllText(configFile);
-                Config buildConfig = JsonConvert.DeserializeObject<Config>(configText);
+                Config buildConfig = Config._doDeserializeConfig(configText);
                 updateEditorBuildSceneSettings(buildConfig);
                 return buildConfig;
             }

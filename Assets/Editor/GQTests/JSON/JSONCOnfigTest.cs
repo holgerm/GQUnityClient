@@ -6,6 +6,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using GQ.Client.Conf;
 using GQ.Client.Err;
+using GQ.Editor.UI;
 
 namespace GQTests.Editor.JSON {
 
@@ -20,7 +21,7 @@ namespace GQTests.Editor.JSON {
 				
 			string json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
 
-			Config configRead = JsonConvert.DeserializeObject<Config> (json);
+			Config configRead = Config._doDeserializeConfig (json);
 
 			Color r1 = configRead.headerBgColor;
 
