@@ -64,7 +64,7 @@
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
   "marker": {
-    "path": "defaults/readable/defaultMarker"
+    "path": "Marker"
   },
   "markerHeightUnits": 75.0,
   "markerHeightMinMM": 0.0,
