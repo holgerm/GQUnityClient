@@ -281,7 +281,7 @@
   "topLogo": {
     "path": "TopLogo"
   },
-  "headerMiddleButtonPolicy": "TopLogo",
+  "headerMiddleButtonPolicy": "QuestTitle",
   "headerBgColor": {
     "r": 255,
     "g": 255,
