@@ -774,52 +774,6 @@ namespace GQ.Client.Conf
         UniWebView
     }
 
-#if UNITY_EDITOR
-    public class AndroidSdkVersionsConverter : JsonConverter {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(AndroidSdkVersions);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            reader.Read();
-            string stringVal = reader.ReadAsString();
-            reader.Read();
-
-            AndroidSdkVersions sdkVersion = (AndroidSdkVersions) Enum.Parse(typeof(AndroidSdkVersions), stringVal);
-            return sdkVersion;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            string stringVal = valueNameByIndex[(int) value];
-            writer.WriteValue(stringVal);
-            //writer.WriteEndObject();
-        }
-
-        static readonly string[] names = Enum.GetNames(typeof(AndroidSdkVersions));
-        private static Dictionary<int, string> _valueNameByIndex;
-        private static Dictionary<int, string> valueNameByIndex
-        {
-            get
-            {
-                if (_valueNameByIndex == null)
-                {
-                    _valueNameByIndex = new Dictionary<int, string>();
-                    for (int i = 0; i < names.Length; i++)
-                    {
-                        _valueNameByIndex.Add(i, names[i]);
-                    }
-                }
-                return _valueNameByIndex;
-            }
-        }
-
-
-    }
-#endif
-
     public class Color32Converter : JsonConverter
     {
         public override bool CanConvert(Type objectType)

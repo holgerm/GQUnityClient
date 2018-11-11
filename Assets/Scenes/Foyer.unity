@@ -1194,9 +1194,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2304,9 +2304,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 66.94915
+  m_MinHeight: 96.406784
   m_PreferredWidth: -1
-  m_PreferredHeight: 66.94915
+  m_PreferredHeight: 96.406784
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -3437,9 +3437,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3717,7 +3717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00007660082}
+  m_AnchoredPosition: {x: 0, y: -0.000013480761}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &523054184
@@ -4648,9 +4648,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5425,9 +5425,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 53.559322
+  m_MinHeight: 77.12543
   m_PreferredWidth: -1
-  m_PreferredHeight: 53.559322
+  m_PreferredHeight: 77.12543
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6283,9 +6283,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7000,10 +7000,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 49.096046
-  m_MinHeight: 49.096046
-  m_PreferredWidth: 49.096046
-  m_PreferredHeight: 49.096046
+  m_MinWidth: 70.69831
+  m_MinHeight: 70.69831
+  m_PreferredWidth: 70.69831
+  m_PreferredHeight: 70.69831
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7550,9 +7550,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7981,9 +7981,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 325.8192
+  m_MinWidth: 469.1797
   m_MinHeight: -1
-  m_PreferredWidth: 325.8192
+  m_PreferredWidth: 469.1797
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -8433,9 +8433,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9523,10 +9523,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 49.096046
-  m_MinHeight: 49.096046
-  m_PreferredWidth: 49.096046
-  m_PreferredHeight: 49.096046
+  m_MinWidth: 70.69831
+  m_MinHeight: 70.69831
+  m_PreferredWidth: 70.69831
+  m_PreferredHeight: 70.69831
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -10285,9 +10285,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -10815,9 +10815,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 53.559322
+  m_MinHeight: 77.12543
   m_PreferredWidth: -1
-  m_PreferredHeight: 53.559322
+  m_PreferredHeight: 77.12543
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -11457,9 +11457,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 276.94632
+  m_MinWidth: 398.80273
   m_MinHeight: -1
-  m_PreferredWidth: 276.94632
+  m_PreferredWidth: 398.80273
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -14221,9 +14221,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 736.4407
+  m_MinHeight: 1060.4746
   m_PreferredWidth: -1
-  m_PreferredHeight: 736.4407
+  m_PreferredHeight: 1060.4746
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -14649,10 +14649,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 49.096046
-  m_MinHeight: 49.096046
-  m_PreferredWidth: 49.096046
-  m_PreferredHeight: 49.096046
+  m_MinWidth: 70.69831
+  m_MinHeight: 70.69831
+  m_PreferredWidth: 70.69831
+  m_PreferredHeight: 70.69831
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1

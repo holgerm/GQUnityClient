@@ -517,10 +517,6 @@ namespace GQ.Editor.Building
             }
             EditorBuildSettings.scenes = ebsScenes.ToArray();
 
-            foreach (EditorBuildSettingsScene sc in EditorBuildSettings.scenes) {
-                Debug.Log(("After Prepare Prodct: EditorBuildSettings.scenes contains: " + sc.path + " active: " + sc.enabled).Red());
-            }
-
             PlayerSettings.productName = newProduct.Config.name;
             string appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, appIdentifier);

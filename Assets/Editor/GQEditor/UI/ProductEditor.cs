@@ -115,7 +115,7 @@ namespace GQ.Editor.UI
 
         static ProductManager _pm;
 
-        public ProductManager Pm
+        public static ProductManager Pm
         {
             get
             {
@@ -285,7 +285,11 @@ namespace GQ.Editor.UI
                     guiContentListOfProducts.Add(new GUIContent(productIds[i]));
                 }
 
-                int newIndex = EditorGUILayout.Popup(availableProductsPopupGUIContent, selectedProductIndex, guiContentListOfProducts.ToArray());
+                int newIndex = EditorGUILayout.Popup(
+                    availableProductsPopupGUIContent, 
+                    selectedProductIndex, 
+                    guiContentListOfProducts.ToArray()
+                );
                 selectProduct(newIndex);
 
                 // Create New Product row:
@@ -877,7 +881,22 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4HeaderMiddleButtonPolicy : ProductEditorPart
     {
-        int selected;
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.headerMiddleButtonPolicy;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
         string[] values = Enum.GetNames(typeof(HeaderMiddleButtonPolicy));
 
         override protected bool doCreateGui(PropertyInfo curPropInfo)
@@ -905,7 +924,22 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4DownloadStrategy : ProductEditorPart
     {
-        int selectedDownloadStrategy;
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.DownloadStrategy;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
         string[] downloadStrategyNames = Enum.GetNames(typeof(DownloadStrategy));
 
         override protected bool doCreateGui(PropertyInfo curPropInfo)
@@ -913,17 +947,17 @@ namespace GQ.Editor.UI
             configIsDirty = false;
 
             // TODO implement all three strategies
-            int oldDownloadStrategy = selectedDownloadStrategy;
-            selectedDownloadStrategy =
+            int oldDownloadStrategy = selected;
+            selected =
                 EditorGUILayout.Popup(
                 "Download Strategy",
-                selectedDownloadStrategy,
+                selected,
                 downloadStrategyNames
             );
-            if (oldDownloadStrategy != selectedDownloadStrategy)
+            if (oldDownloadStrategy != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (DownloadStrategy)selectedDownloadStrategy, null);
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (DownloadStrategy)selected, null);
             }
 
             return configIsDirty;
@@ -1464,24 +1498,40 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4MapProvider : ProductEditorPart
     {
-        int selectedMapProvider;
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.mapProvider;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
+
         string[] mapProviderNames = Enum.GetNames(typeof(MapProvider));
 
         override protected bool doCreateGui(PropertyInfo curPropInfo)
         {
             configIsDirty = false;
 
-            int oldMapProvider = selectedMapProvider;
-            selectedMapProvider =
+            int oldMapProvider = selected;
+            selected =
                 EditorGUILayout.Popup(
                 "Map Provider",
-                selectedMapProvider,
+                selected,
                 mapProviderNames
             );
-            if (oldMapProvider != selectedMapProvider)
+            if (oldMapProvider != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapProvider)selectedMapProvider, null);
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapProvider)selected, null);
             }
 
             return configIsDirty;
@@ -1491,7 +1541,18 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4AndroidSdkVersions : ProductEditorPart
     {
-        int selected;
+        int? _selected;
+        int selected {
+            get {
+                if (_selected == null) {
+                    _selected = valueIndexByNumber[(int) ProductEditor.SelectedConfig.androidMinSDKVersion];
+                }
+                return (int)_selected;
+            }
+            set {
+                _selected = value;
+            }
+        }
         static readonly string[] names = Enum.GetNames(typeof(AndroidSdkVersions));
         static readonly Array vals = Enum.GetValues(typeof(AndroidSdkVersions));
 
@@ -1553,27 +1614,42 @@ namespace GQ.Editor.UI
     // TODO can't we make these classes generic?
     public class ProductEditorPart4ListEntryDividingMode : ProductEditorPart
     {
-        int selection;
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.listEntryDividingMode;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
         string[] names = Enum.GetNames(typeof(ListEntryDividingMode));
 
         override protected bool doCreateGui(PropertyInfo curPropInfo)
         {
             configIsDirty = false;
 
-            int oldSelection = selection;
-            selection =
+            int oldSelection = selected;
+            selected =
                 EditorGUILayout.Popup(
                     "List Entry Dividing Mode:",
-                selection,
+                selected,
                 names
             );
-            if (oldSelection != selection)
+            if (oldSelection != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (ListEntryDividingMode)selection, null);
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (ListEntryDividingMode)selected, null);
             }
 
-            ListEntryDividingMode mode = (ListEntryDividingMode)selection;
+            ListEntryDividingMode mode = (ListEntryDividingMode)selected;
             //Debug.Log("Sel: " + selection + "     mode: " + mode.ToString());
             return configIsDirty;
         }
@@ -1581,24 +1657,39 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4MapStartPositionType : ProductEditorPart
     {
-        int selectedMapStartPositionType;
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.mapStartPositionType;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
         string[] mapStartPositionTypeNames = Enum.GetNames(typeof(MapStartPositionType));
 
         override protected bool doCreateGui(PropertyInfo curPropInfo)
         {
             configIsDirty = false;
 
-            int oldMapSTartPositionType = selectedMapStartPositionType;
-            selectedMapStartPositionType =
+            int oldMapSTartPositionType = selected;
+            selected =
                 EditorGUILayout.Popup(
                     "Map Start Position",
-                    selectedMapStartPositionType,
+                    selected,
                     mapStartPositionTypeNames
                 );
-            if (oldMapSTartPositionType != selectedMapStartPositionType)
+            if (oldMapSTartPositionType != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapStartPositionType)selectedMapStartPositionType, null);
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapStartPositionType)selected, null);
             }
 
             return configIsDirty;
