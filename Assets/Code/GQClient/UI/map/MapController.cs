@@ -213,7 +213,7 @@ namespace GQ.Client.UI
 			get {
 				if (_mapBoxLayer == null) {
 					_mapBoxLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
-					_mapBoxLayer.BaseURL = "http://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/";
+					_mapBoxLayer.BaseURL = "https://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/";
 					_mapBoxLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapKey;
 				}
 				return _mapBoxLayer;
