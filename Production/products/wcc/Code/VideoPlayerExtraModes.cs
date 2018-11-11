@@ -16,5 +16,11 @@ namespace GQ.Client.UI
                     break;
             }
         }
+
+        public static void CleanUp(GameObject containerWebPlayer)
+        {
+            Log.SignalErrorToAuthor("VideoPlayerExtraModes: Nothing to cleanup.");
+        }
+
     }
 }
