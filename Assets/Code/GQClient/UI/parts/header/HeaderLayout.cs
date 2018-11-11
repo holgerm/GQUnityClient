@@ -48,34 +48,19 @@ namespace GQ.Client.UI
 
         protected virtual void setMiddleButton()
         {
-            setTopLogo();
-        }
+            // show top logo and load image:
+            Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+            middleTopLogo.gameObject.SetActive(true);
 
-        protected void setTopLogo() {
-            // set MiddleTopLogo:
-            try
+            if (middleTopLogo != null)
             {
-                // hide tite text:
-                Transform titleText = MiddleButton.transform.Find("TitleText");
-                titleText.gameObject.SetActive(false);
-
-                // show top logo and load image:
-                Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
-                middleTopLogo.gameObject.SetActive(true);
-
-                if (middleTopLogo != null)
+                Image mtlImage = middleTopLogo.GetComponent<Image>();
+                if (mtlImage != null)
                 {
-                    Image mtlImage = middleTopLogo.GetComponent<Image>();
-                    if (mtlImage != null)
-                    {
-                        mtlImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
-                    }
+                    mtlImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
                 }
             }
-            catch (Exception e)
-            {
-                Log.SignalErrorToDeveloper("Could not set Middle Top Logo Image. Exception occurred: " + e.Message);
-            }
         }
+
     }
 }

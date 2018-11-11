@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using GQ.Client.Conf;
+using GQ.Client.Err;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using UnityEngine;
@@ -36,6 +38,34 @@ namespace GQ.Client.UI
                     setTitle();
                     break;
             } 
+        }
+
+        protected void setTopLogo()
+        {
+            // set MiddleTopLogo:
+            try
+            {
+                // hide tite text:
+                Transform titleText = MiddleButton.transform.Find("TitleText");
+                titleText.gameObject.SetActive(false);
+
+                // show top logo and load image:
+                Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+                middleTopLogo.gameObject.SetActive(true);
+
+                if (middleTopLogo != null)
+                {
+                    Image mtlImage = middleTopLogo.GetComponent<Image>();
+                    if (mtlImage != null)
+                    {
+                        mtlImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.SignalErrorToDeveloper("Could not set Middle Top Logo Image. Exception occurred: " + e.Message);
+            }
         }
 
         protected void setTitle() {
