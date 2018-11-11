@@ -875,7 +875,8 @@ namespace GQ.Editor.UI
         }
     }
 
-    public class ProductEditorPart4HeaderMiddleButtonPolicy : ProductEditorPart {
+    public class ProductEditorPart4HeaderMiddleButtonPolicy : ProductEditorPart
+    {
         int selected;
         string[] values = Enum.GetNames(typeof(HeaderMiddleButtonPolicy));
 
@@ -1481,6 +1482,68 @@ namespace GQ.Editor.UI
             {
                 configIsDirty = true;
                 curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapProvider)selectedMapProvider, null);
+            }
+
+            return configIsDirty;
+        }
+    }
+
+
+    public class ProductEditorPart4AndroidSdkVersions : ProductEditorPart
+    {
+        int selected;
+        static readonly string[] names = Enum.GetNames(typeof(AndroidSdkVersions));
+        static readonly Array vals = Enum.GetValues(typeof(AndroidSdkVersions));
+
+        private static Dictionary<int, int> _valueIndexByNumber;
+        public static Dictionary<int, int> valueIndexByNumber {
+            get {
+                if (_valueIndexByNumber == null) {
+                    _valueIndexByNumber = new Dictionary<int, int>();
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        _valueIndexByNumber.Add((int)vals.GetValue(i), i);
+                    }
+                }
+                return _valueIndexByNumber;
+            }
+        }
+
+        private static Dictionary<int, string> _valueNameByIndex;
+        public static Dictionary<int, string> valueNameByIndex
+        {
+            get
+            {
+                if (_valueNameByIndex == null)
+                {
+                    _valueNameByIndex = new Dictionary<int, string>();
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        _valueNameByIndex.Add(i, names[i]);
+                    }
+                }
+                return _valueNameByIndex;
+            }
+        }
+
+        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+            int old = selected;
+            int curIndex;
+            valueIndexByNumber.TryGetValue((int)ProductEditor.SelectedConfig.androidMinSDKVersion, out curIndex);
+            selected =
+                EditorGUILayout.Popup(
+                    "Android Min SDK Version",
+                    selected,
+                    names
+                );
+            if (old != selected)
+            {
+                configIsDirty = true;
+                PlayerSettings.Android.minSdkVersion = 
+                    (AndroidSdkVersions) Enum.Parse(typeof(AndroidSdkVersions), valueNameByIndex[selected]);
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, PlayerSettings.Android.minSdkVersion, null);
             }
 
             return configIsDirty;

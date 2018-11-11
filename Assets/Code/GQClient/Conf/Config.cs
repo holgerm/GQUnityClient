@@ -6,6 +6,10 @@ using Newtonsoft.Json.Converters;
 using GQ.Client.FileIO;
 using GQ.Client.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace GQ.Client.Conf
 {
     /// <summary>
@@ -29,6 +33,9 @@ namespace GQ.Client.Conf
         //////////////////////////////////
         // THE ACTUAL PRODUCT CONFIG DATA:	
 
+
+        #region General
+
         [ShowInProductEditor(StartSection = "General:")]
         public string id { get; set; }
 
@@ -43,6 +50,13 @@ namespace GQ.Client.Conf
 
         [ShowInProductEditor]
         public string[] assetAddOns { get; set; }
+
+#if UNITY_EDITOR
+        [ShowInProductEditor]
+        [JsonConverter(typeof(StringEnumConverter))]
+        //[JsonConverter(typeof(AndroidSdkVersionsConverter))]
+        public AndroidSdkVersions androidMinSDKVersion { get; set; }
+#endif
 
         [ShowInProductEditor]
         public int autoStartQuestID { get; set; }
@@ -130,10 +144,9 @@ namespace GQ.Client.Conf
 
         [ShowInProductEditor]
         public bool offerLeaveQuestOnEachPage { get; set; }
+#endregion
 
-
-        #region Map
-
+#region Map
         [ShowInProductEditor(StartSection = "Map & Markers:")]
         [JsonConverter(typeof(StringEnumConverter))]
         public MapProvider mapProvider { get; set; }
@@ -180,7 +193,6 @@ namespace GQ.Client.Conf
         {
             get
             {
-                Debug.Log("MARKER get: " + (_marker == null ? "null" : "path: >" + _marker.path + "<"));
                 if (!__JSON_Currently_Parsing && _marker == null)
                 {
                     _marker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
@@ -189,15 +201,12 @@ namespace GQ.Client.Conf
             }
             set
             {
-                Debug.Log("MARKER set: " + (value == null ? "null" : "path: >" + value.path + "<"));
                 if (value == null || value.path == null || value.path.Equals(""))
                 {
-                    Debug.Log(".... set to default.");
                     _marker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
                 }
                 else
                 {
-                    Debug.Log(".... set to: >" + value.path + "<");
                     _marker = value;
                 }
             }
@@ -309,10 +318,10 @@ namespace GQ.Client.Conf
         [JsonIgnore]
         public Dictionary<string, Category> categoryDict;
 
-        #endregion
+#endregion
 
 
-        #region Layout
+#region Layout
 
         [ShowInProductEditor(StartSection = "Layout & Colors:")]
         [JsonConverter(typeof(Color32Converter))]
@@ -582,10 +591,10 @@ namespace GQ.Client.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 emulationColor { get; set; }
 
-        #endregion
+#endregion
 
 
-        #region Defaults
+#region Defaults
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class and intializes it with generic default values.
@@ -697,7 +706,7 @@ namespace GQ.Client.Conf
             emulationColor = new Color(255f, 182f, 182f, 255f);
         }
 
-        #endregion
+#endregion
 
     }
 
@@ -764,6 +773,52 @@ namespace GQ.Client.Conf
     {
         UniWebView
     }
+
+#if UNITY_EDITOR
+    public class AndroidSdkVersionsConverter : JsonConverter {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(AndroidSdkVersions);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            reader.Read();
+            string stringVal = reader.ReadAsString();
+            reader.Read();
+
+            AndroidSdkVersions sdkVersion = (AndroidSdkVersions) Enum.Parse(typeof(AndroidSdkVersions), stringVal);
+            return sdkVersion;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            string stringVal = valueNameByIndex[(int) value];
+            writer.WriteValue(stringVal);
+            //writer.WriteEndObject();
+        }
+
+        static readonly string[] names = Enum.GetNames(typeof(AndroidSdkVersions));
+        private static Dictionary<int, string> _valueNameByIndex;
+        private static Dictionary<int, string> valueNameByIndex
+        {
+            get
+            {
+                if (_valueNameByIndex == null)
+                {
+                    _valueNameByIndex = new Dictionary<int, string>();
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        _valueNameByIndex.Add(i, names[i]);
+                    }
+                }
+                return _valueNameByIndex;
+            }
+        }
+
+
+    }
+#endif
 
     public class Color32Converter : JsonConverter
     {
