@@ -6,6 +6,7 @@
   "assetAddOns": [
     "UniWebView"
   ],
+  "androidMinSDKVersion": "AndroidApiLevel21",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
