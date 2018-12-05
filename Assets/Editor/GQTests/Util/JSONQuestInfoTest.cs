@@ -8,70 +8,82 @@ using GQ.Client.Util;
 using GQ.Client.Model;
 using NUnit.Framework;
 
-namespace GQTests.Util {
+namespace GQTests.Util
+{
 
-	public class JSONQuestInfoTest {
-		
-		protected ImportQuestInfos importTask;
-		protected QuestInfoManager qim;
-		protected TestChangeListener testListener;
+    public class JSONQuestInfoTest
+    {
 
-		[SetUp]
-		public void SetupTask () {
-			QuestInfoManager.Reset ();
-			qim = QuestInfoManager.Instance;
+        protected ImportQuestInfos importTask;
+        protected QuestInfoManager qim;
+        protected TestChangeListener testListener;
 
-			testListener = new TestChangeListener();
-			qim.OnDataChange += testListener.OnChange;
+        [SetUp]
+        public void SetupTask()
+        {
+            QuestInfoManager.Reset();
+            qim = QuestInfoManager.Instance;
 
-			importTask = new ImportServerQuestInfos ();
-		}
+            testListener = new TestChangeListener();
+            qim.OnDataChange += testListener.OnChange;
+
+            importTask = new ImportServerQuestInfos();
+        }
 
 
-		protected const string JSON_QUEST_A_10557 = "jsonQuest_A_10557";
-		protected const string JSON_QUEST_B_10558 = "jsonQuest_B_10558";
+        protected const string JSON_QUEST_A_10557 = "jsonQuest_A_10557";
+        protected const string JSON_QUEST_B_10558 = "jsonQuest_B_10558";
 
-		protected void loadJSON (string jsonFileName)
-		{
-			string filePath = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "JSON/QuestInfos", jsonFileName);
-			string json = File.ReadAllText (filePath);
-			StringProviderTask provideTestJSON = new StringProviderTask (json);
-			TaskSequence seq = new TaskSequence (provideTestJSON, importTask);
-			seq.Start ();
-		}
+        protected void loadJSON(string jsonFileName)
+        {
+            string filePath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "JSON/QuestInfos", jsonFileName);
+            string json = File.ReadAllText(filePath);
+            StringProviderTask provideTestJSON = new StringProviderTask(json);
+            TaskSequence seq = new TaskSequence(provideTestJSON, importTask);
+            seq.Start();
+        }
 
-	}
+    }
 
-	class StringProviderTask : Task {
+    class StringProviderTask : Task
+    {
 
-		public StringProviderTask(string providedString) : base() {
-			Result = providedString;
-		}
-	}
+        public StringProviderTask(string providedString) : base()
+        {
+            Result = providedString;
+        }
+    }
 
-	public class TestChangeListener {
+    public class TestChangeListener
+    {
 
-		public int added = 0;
-		public int removed = 0;
-		public int changed = 0;
+        public int added = 0;
+        public int removed = 0;
+        public int infoChanged = 0;
+        public int listChanged = 0;
 
-		public void OnChange(object sender, QuestInfoChangedEvent e) {
-			switch (e.ChangeType) {
-			case ChangeType.AddedInfo:
-				added++;
-				break;
-			case ChangeType.RemovedInfo:
-				removed++;
-				break;
-			case ChangeType.ChangedInfo:
-				changed++;
-				break;
-			default:
-				Assert.Fail ("Unexpected Change Type: " + e.ChangeType.ToString ());
-				break;
-			}
-		}
-	}
+        public void OnChange(object sender, QuestInfoChangedEvent e)
+        {
+            switch (e.ChangeType)
+            {
+                case ChangeType.AddedInfo:
+                    added++;
+                    break;
+                case ChangeType.RemovedInfo:
+                    removed++;
+                    break;
+                case ChangeType.ChangedInfo:
+                    infoChanged++;
+                    break;
+                case ChangeType.ListChanged:
+                    listChanged++;
+                    break;
+                default:
+                    Assert.Fail("Unexpected Change Type: " + e.ChangeType.ToString());
+                    break;
+            }
+        }
+    }
 
 
 }
