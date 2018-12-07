@@ -617,7 +617,7 @@ namespace GQ.Client.Conf
             localQuestsDeletable = true;
             hideHiddenQuests = false;
             DownloadStrategy = DownloadStrategy.UPFRONT;
-            autoUpdateQuestInfos = false;
+            autoUpdateQuestInfos = true;
             timeoutMS = 60000L;
             maxIdleTimeMS = 9000L;
             maxParallelDownloads = 15;

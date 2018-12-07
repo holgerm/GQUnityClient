@@ -232,7 +232,7 @@ namespace GQ.Client.Model
                 );
             }
         }
-
+        
         /// <summary>
         /// Updates the quest infos from the server and intergrates the gathered data into the local data. 
         /// 
@@ -241,6 +241,7 @@ namespace GQ.Client.Model
         /// </summary>
         public void UpdateQuestInfos()
         {
+            Debug.Log("UPDATEN WILL BE PERFORMED");
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             new SimpleDialogBehaviour(
@@ -285,6 +286,23 @@ namespace GQ.Client.Model
             t.Append(autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
             t.Start();
+        }
+
+        /// <summary>
+        /// Updates quest infos based on the local infos only. No server connection needed.
+        /// </summary>
+        public void UpdateLocalQuestInfosOnly()
+        {
+            Debug.Log("LOCAL UPDATE WILL BE PERFORMED");
+            ImportQuestInfos importLocal =
+                new ImportLocalQuestInfos();
+            //new SimpleDialogBehaviour(
+            //    importLocal,
+            //    string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+            //    string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
+            //);
+
+            importLocal.Start();
         }
 
         /// <summary>

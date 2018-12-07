@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using GQ.Client.Conf;
 using UnityEngine;
 
-namespace GQ.Client.Util
+namespace GQ.Client.UI
 {
 
-    public class MenuConfig : MonoBehaviour
+    public class Menu2Config : MonoBehaviour
     {
         public GameObject feedbackMenuEntry;
         public GameObject authorLoginMenuEntry;
@@ -18,6 +18,5 @@ namespace GQ.Client.Util
             feedbackMenuEntry.SetActive(ConfigurationManager.Current.offerFeedback);
             authorLoginMenuEntry.SetActive(ConfigurationManager.Current.offerAuthorLogin);
         }
-
     }
 }

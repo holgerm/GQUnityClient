@@ -48,12 +48,15 @@ namespace GQ.Client.UI
 
         protected virtual void setMiddleButton()
         {
+            if (MiddleButton == null)
+                return;
+
             // show top logo and load image:
             Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
-            middleTopLogo.gameObject.SetActive(true);
 
             if (middleTopLogo != null)
             {
+                middleTopLogo.gameObject.SetActive(true);
                 Image mtlImage = middleTopLogo.GetComponent<Image>();
                 if (mtlImage != null)
                 {
