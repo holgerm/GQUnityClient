@@ -642,6 +642,9 @@ namespace GQ.Client.Conf
             mapDeltaZoom = 0.5f;
             markerHeightUnits = 75f;
             markerSymbolFGColor = Color.black;
+            mapButtonHeightUnits = 55f;
+            mapButtonHeightMinMM = 7f;
+            mapButtonHeightMaxMM = 12f;
 
             // Layout:
             mainBgColor = Color.white;

@@ -143,7 +143,10 @@ namespace GQ.Client.Model
 
 
         #region Quest Info Changes
-
+        /// <summary>
+        /// Adds of updates the quest info.
+        /// </summary>
+        /// <param name="newInfo">New info.</param>
         public void AddInfo(QuestInfo newInfo)
         {
             QuestInfo oldInfo = null;
