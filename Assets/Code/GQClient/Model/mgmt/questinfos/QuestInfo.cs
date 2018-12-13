@@ -147,7 +147,12 @@ namespace GQ.Client.Model
             }
             set
             {
-                lastUpdate = value;
+                if (value != lastUpdate)
+                {
+                    lastUpdate = value;
+                    if (OnChanged != null)
+                        OnChanged();
+                }
             }
         }
 
@@ -399,10 +404,10 @@ namespace GQ.Client.Model
 
         public event ChangeHandler OnChanged;
 
-        public int HowManyListerners()
-        {
-            return OnChanged.GetInvocationList().Length;
-        }
+        //public int HowManyListerners()
+        //{
+        //    return OnChanged.GetInvocationList().Length;
+        //}
 
         public override string ToString()
         {
@@ -567,6 +572,14 @@ namespace GQ.Client.Model
         public void Download()
         {
             Task download = DownloadTask();
+            // Update the quest info list ...
+            download.OnTaskCompleted +=
+                (object sender, TaskEventArgs e) =>
+                {
+                    QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(Id);
+                    new ExportQuestInfosToJSON().Start();
+                };
+            // DO IT:
             download.Start();
         }
 

@@ -159,12 +159,12 @@ namespace GQ.Client.Model
                     if (oldInfo.IsOnDevice)
                     {
                         // Quest has already been downloaded before, hence we only show the option of update:
-                        oldInfo.NewVersionOnServer = newInfo;
-                        oldInfo.LastUpdateOnServer = newInfo.LastUpdateOnServer;
+                        QuestDict[newInfo.Id].NewVersionOnServer = newInfo;
+                        QuestDict[newInfo.Id].LastUpdateOnServer = newInfo.LastUpdateOnServer;
                     }
                     else
                     {
-                        // Quest was not yet donloaded, hence we should replace the old one with the new info:
+                        // Quest was not yet downloaded, hence we should replace the old one with the new info:
                         QuestDict.Remove(newInfo.Id);
                         QuestDict.Add(newInfo.Id, newInfo);
                     }
@@ -241,7 +241,7 @@ namespace GQ.Client.Model
         /// </summary>
         public void UpdateQuestInfos()
         {
-            Debug.Log("UPDATEN WILL BE PERFORMED");
+            Debug.Log("UpdateQuestInfos()");
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             new SimpleDialogBehaviour(
@@ -293,7 +293,7 @@ namespace GQ.Client.Model
         /// </summary>
         public void UpdateLocalQuestInfosOnly()
         {
-            Debug.Log("LOCAL UPDATE WILL BE PERFORMED");
+            Debug.Log("UpdateLocalQuestInfosOnly()");
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             //new SimpleDialogBehaviour(

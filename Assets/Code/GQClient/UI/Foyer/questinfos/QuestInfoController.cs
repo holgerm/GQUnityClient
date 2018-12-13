@@ -31,7 +31,8 @@ namespace GQ.Client.UI.Foyer
 		/// Performs an update of the controller data to the given newQuestInfo.
 		/// </summary>
 		public void PerformUpdate(QuestInfo newInfo) {
-			data = newInfo;
+            // some values will be kept (until we really do the quest update, this here is only the quest-info update!):
+            data.LastUpdateOnServer = newInfo.LastUpdateOnServer;
 			UpdateView ();
 		}
 

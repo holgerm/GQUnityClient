@@ -20,20 +20,24 @@ namespace GQ.Client.Model
             int updateCounter = 0;
 
             foreach (QuestInfo qi in questInfoList) {
+                //if (qi.Name == "Neue Quest 2") {
+                //    Debug.Log("Found");
+                //}
+
                 if (qi.IsHidden() || ConfigurationManager.Current.autoUpdateQuestInfos) {
                     if (qi.ShowDownloadOption) {
                         loadCounter++;
-                        Debug.Log("#### AUTOLOAD quest: " + qi.Id);
+                       //Debug.Log("#### AUTOLOAD quest: " + qi.Id);
                         //qi.Download();
                     } else if (qi.ShowUpdateOption) {
                         updateCounter++;
-                        Debug.Log("#### AUTOUPDATE quest: " + qi.Id);
+                        //Debug.Log("#### AUTOUPDATE quest: " + qi.Id);
                         //qi.Update();
                     }
                 }
             }
 
-            Debug.Log("#### AUTO HAS loaded: " + loadCounter + " and updated: " + updateCounter);
+            //Debug.Log("#### AUTO HAS loaded: " + loadCounter + " and updated: " + updateCounter);
 
             return true;
         }

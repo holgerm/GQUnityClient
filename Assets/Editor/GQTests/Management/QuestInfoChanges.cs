@@ -162,6 +162,10 @@ namespace GQTests.Management {
 			// PREPARATION: publish quest and download it:
 			MOCK_Server_PublishQuest ();
 			QM.UpdateQuestInfos();
+
+            // Now only the download option should be shown:
+            ASSERT_ShowOptions_Download();
+
 			MOCK_DownloadQuest();
 
 			// ACT: publish new version of game.xml where only content changed but metadata and media stay the same:
@@ -176,6 +180,8 @@ namespace GQTests.Management {
 
 			// TEST: new game.xml is now downloaded:
 			ASSERT_ChangedQuestXmlOnDevice();
+            // Now update is not shown any more but play and delete still are:
+            ASSERT_ShowOptions_Play_Delete();
 		}
 		#endregion
 

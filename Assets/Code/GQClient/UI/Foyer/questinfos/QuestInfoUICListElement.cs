@@ -198,6 +198,8 @@ namespace GQ.Client.UI.Foyer
 
         public override void UpdateView()
         {
+            Debug.Log("UpdateView() on " + data.Name);
+
             // Update Info-Icon:
             // set info button as configured:
             setCategorySymbol(data);
@@ -223,6 +225,10 @@ namespace GQ.Client.UI.Foyer
                 });
             }
 
+            if (data.Name == "Neue Quest 2") {
+                int a = 0;
+                a++;
+            }
 
             // Update Buttons:
             HideAllButtons();
@@ -231,6 +237,7 @@ namespace GQ.Client.UI.Foyer
             {
                 DownloadButton.gameObject.SetActive(true);
                 DownloadButton.interactable = true;
+                Debug.Log("Down");
             }
             // Show START button if needed:
             //if (ShowStartOption (data)) {
@@ -242,12 +249,14 @@ namespace GQ.Client.UI.Foyer
             {
                 UpdateButton.gameObject.SetActive(true);
                 UpdateButton.interactable = true;
+                Debug.Log("Up");
             }
             // Show DELETE button if needed:
             if (data.ShowDeleteOption)
             {
                 DeleteButton.gameObject.SetActive(true);
                 DeleteButton.interactable = true;
+                Debug.Log("Del");
             }
 
             ElipsifyOverflowingText elipsify = Name.GetComponent<ElipsifyOverflowingText>();

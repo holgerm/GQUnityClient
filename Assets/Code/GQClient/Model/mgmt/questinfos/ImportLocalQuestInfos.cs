@@ -45,7 +45,7 @@ namespace GQ.Client.Model
 
 		protected override void updateQuestInfoManager (QuestInfo[] quests) {
 			foreach (var q in quests) {
-				if (q.Id <= 0)
+                if (q.Id <= 0 || qim.QuestDict.ContainsKey(q.Id))
 					continue;
 
 				qim.AddInfo (q);
