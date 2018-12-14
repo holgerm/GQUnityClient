@@ -217,7 +217,7 @@
     "b": 0,
     "a": 255
   },
-  "menuInhibitsInteraction": false,
+  "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
   "offerFeedback": false,
