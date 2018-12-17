@@ -72,7 +72,7 @@ namespace GQ.Client.Conf
         public DownloadStrategy DownloadStrategy { get; set; }
 
         [ShowInProductEditor]
-        public bool autoUpdateQuestInfos { get; set; }
+        public bool autoSynchQuestInfos { get; set; }
 
         [ShowInProductEditor]
         public long timeoutMS { get; set; }
@@ -617,7 +617,7 @@ namespace GQ.Client.Conf
             localQuestsDeletable = true;
             hideHiddenQuests = false;
             DownloadStrategy = DownloadStrategy.UPFRONT;
-            autoUpdateQuestInfos = true;
+            autoSynchQuestInfos = true;
             timeoutMS = 60000L;
             maxIdleTimeMS = 9000L;
             maxParallelDownloads = 15;

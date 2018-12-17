@@ -7,7 +7,6 @@ namespace GQ.Client.UI.Dialogs
 	public class MessageDialog : DialogBehaviour
 	{
 		private string message { get; set; }
-
 		private string buttontext { get; set; }
 
 		public MessageDialog (string message, string buttontext = "Ok") : base (null) 

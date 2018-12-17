@@ -168,9 +168,11 @@ namespace GQ.Client.Util
 			stopwatch.Stop ();
 			idlewatch.Stop ();
 
-			if (Www.error != null && Www.error != "") {
-                UnityEngine.Debug.LogWarning("ERROR: " + Www.error);
-				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
+			if (!string.IsNullOrEmpty(Www.error)) {
+                UnityEngine.Debug.LogWarning("ERROR loading " + Www.url + ": " + Www.error);
+                string dialogMessage = Www.url.EndsWith("clientxml", StringComparison.CurrentCulture) ?
+                                          "Quest nicht gefunden." : Www.error;
+                Raise (DownloadEventType.Error, new DownloadEvent (message: dialogMessage));
 				RaiseTaskFailed ();
 			} else {
 				Result = Www.text;

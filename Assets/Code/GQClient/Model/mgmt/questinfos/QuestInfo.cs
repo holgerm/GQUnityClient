@@ -619,8 +619,36 @@ namespace GQ.Client.Model
         /// </summary>
         public void Delete()
         {
+            if (LastUpdateOnServer == null)
+            {
+                // this quest is not available on the server anymore ...
+                if (!ConfigurationManager.Current.autoSynchQuestInfos)
+                {
+                    // in manual synch mode we warn the user to delete this quest, since he can not restore it again:
+                    CancelableFunctionDialog dialog =
+                        new CancelableFunctionDialog(
+                            title: "Löschen?",
+                            message: "Diese Quest können Sie nicht wieder herstellen, wenn Sie sie gelöscht haben.",
+                            cancelableFunction: doDelete
+                        );
+                    dialog.Start();
+                }
+            }
+            else
+            {
+                doDelete();
+            }
+        }
+
+        private void doDelete()
+        {
             Files.DeleteDirCompletely(QuestManager.GetLocalPath4Quest(Id));
             LastUpdateOnDevice = null;
+
+            if (LastUpdateOnServer == null) {
+                // delete this quest info completely when it is not even on the server anymore:
+                QuestInfoManager.Instance.RemoveInfo(Id);
+            }
 
             ExportQuestInfosToJSON exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();

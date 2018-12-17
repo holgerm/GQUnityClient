@@ -16,7 +16,7 @@ namespace GQ.Client.UI
         // Use this for initialization
         void Start()
         {
-            updateQuestInfos_MenuEntry.SetActive(!ConfigurationManager.Current.autoUpdateQuestInfos);
+            updateQuestInfos_MenuEntry.SetActive(!ConfigurationManager.Current.autoSynchQuestInfos);
         }
 
         public void UpdateQuestInfos()

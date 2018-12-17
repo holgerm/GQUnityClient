@@ -64,7 +64,7 @@ namespace GQ.Client.UI.Foyer
                     //					);
                     //					break;
                     //				}
-                    qiCtrl.PerformUpdate(e.NewQuestInfo);
+                    qiCtrl.UpdateData(e.NewQuestInfo);
                     qiCtrl.Show();
                     updateListSorting();
                     break;
@@ -118,6 +118,9 @@ namespace GQ.Client.UI.Foyer
             updateElementOrderLayout();
         }
 
+        /// <summary>
+        /// Updates the view.
+        /// </summary>
         public override void UpdateView()
         {
             Base.Instance.StartCoroutine(updateViewAsCoroutine());

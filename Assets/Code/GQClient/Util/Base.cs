@@ -54,7 +54,7 @@ namespace GQ.Client.Util
                     _instance = (Base)baseGO.GetComponent(typeof(Base));
 
                     // Initialize QuestInfoManager:
-                    if (ConfigurationManager.Current.autoUpdateQuestInfos)
+                    if (ConfigurationManager.Current.autoSynchQuestInfos)
                     {
                         QuestInfoManager.Instance.UpdateQuestInfos();
                     } else {

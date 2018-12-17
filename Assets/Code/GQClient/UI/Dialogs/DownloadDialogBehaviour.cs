@@ -119,7 +119,7 @@ namespace GQ.Client.UI.Dialogs
 
 			// Use Yes button for Retry:
 			Dialog.SetYesButton (
-				"Erneut versuchen",
+				"Wiederholen",
 				(GameObject yesButton, EventArgs e) => {
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
 					EnterDownloadMode ();
@@ -150,7 +150,7 @@ namespace GQ.Client.UI.Dialogs
 
 			// Use Yes button for Retry:
 			Dialog.SetYesButton (
-				"Erneut versuchen",
+				"Wiederholen",
 				(GameObject yesButton, EventArgs e) => {
 					// in error case when user clicks the retry button, we initialize this behaviour and start the update again:
 					EnterDownloadMode ();

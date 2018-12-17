@@ -24,7 +24,7 @@ namespace GQ.Client.Model
                 //    Debug.Log("Found");
                 //}
 
-                if (qi.IsHidden() || ConfigurationManager.Current.autoUpdateQuestInfos) {
+                if (qi.IsHidden() || ConfigurationManager.Current.autoSynchQuestInfos) {
                     if (qi.ShowDownloadOption) {
                         loadCounter++;
                        //Debug.Log("#### AUTOLOAD quest: " + qi.Id);

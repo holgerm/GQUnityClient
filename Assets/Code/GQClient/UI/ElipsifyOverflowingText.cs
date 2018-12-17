@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Err;
 
+[RequireComponent(typeof(Text))]
 public class ElipsifyOverflowingText : MonoBehaviour {
 
 	public Text Text;

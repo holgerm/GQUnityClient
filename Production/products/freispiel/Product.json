@@ -9,7 +9,7 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
-  "autoUpdateQuestInfos": false,
+  "autoSynchQuestInfos": false,
   "timeoutMS": 60000,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
