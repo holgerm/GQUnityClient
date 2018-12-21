@@ -39,7 +39,7 @@ namespace GQ.Client.Model
             get
             {
                 // TODO change the latter two checks to test a flag stored in game.xml base element as an attribute and move to QuestInfo
-                return (Base.Instance.ShowHiddenQuests && Name != null && Name.StartsWith("---"));
+                return (Author.ShowHiddenQuests && Name != null && Name.StartsWith("---"));
             }
         }
 

@@ -814,6 +814,14 @@ namespace GQ.Editor.UI
                 propInfo.Name.Equals("acceptedAuthorPassword")
             );
 
+            // Synchronization features:
+            hidden |= (
+                propInfo.Name.Equals("autoUpdateFrequency")
+            ) && (
+                !ProductEditor.SelectedConfig.autoSynchQuestInfos &&
+                ProductEditor.SelectedConfig.manualUpdateQuestInfos
+            );
+
             // Undefined properties:
             hidden |= !Attribute.IsDefined(propInfo, typeof(ShowInProductEditor));
 

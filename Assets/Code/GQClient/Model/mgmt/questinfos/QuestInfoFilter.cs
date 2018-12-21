@@ -82,7 +82,7 @@ namespace GQ.Client.Model
             }
 
             private HiddenQuestsFilter() {
-                IsActive = !Base.Instance.ShowHiddenQuests;
+                IsActive = !Author.ShowHiddenQuests;
             }
 
             private bool _isActive;

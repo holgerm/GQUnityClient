@@ -8,21 +8,20 @@ using UnityEngine.UI;
 namespace GQ.Client.UI
 {
 
-    public class ShowHiddenQuestsOption : MonoBehaviour
+    public class ManualUpdateOption : MonoBehaviour
     {
 
         public Toggle toggle;
 
         public void Start()
         {
-            toggle.isOn = Author.ShowHiddenQuests;
+            toggle.isOn = Author.OfferManualUpdate;
         }
 
         public void OnValueChange(bool newValue)
         {
-            Author.ShowHiddenQuests = newValue;
-            // obeye: filter logic is reverse to Base instance flag logic here:
-            QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = !newValue;
+            Author.OfferManualUpdate = newValue;
+            Debug.Log("ManualUpdateOption NEWVALUE: " + newValue);
         }
     }
 }

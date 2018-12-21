@@ -44,8 +44,13 @@ namespace GQ.Client.UI.Foyer
 			}
 		}
 
-		#endregion
+        public void Update()
+        {
+            //Debug.Log("QuestContainerController.Update()");
+        }
 
-	}
+        #endregion
+
+    }
 
 }

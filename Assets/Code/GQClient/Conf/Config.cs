@@ -5,6 +5,7 @@ using System;
 using Newtonsoft.Json.Converters;
 using GQ.Client.FileIO;
 using GQ.Client.UI;
+using GQ.Client.Util;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -70,9 +71,6 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public DownloadStrategy DownloadStrategy { get; set; }
-
-        [ShowInProductEditor]
-        public bool autoSynchQuestInfos { get; set; }
 
         [ShowInProductEditor]
         public long timeoutMS { get; set; }
@@ -144,9 +142,18 @@ namespace GQ.Client.Conf
 
         [ShowInProductEditor]
         public bool offerLeaveQuestOnEachPage { get; set; }
-#endregion
+        #endregion
 
-#region Map
+        #region Synching
+        [ShowInProductEditor]
+        public bool autoSynchQuestInfos { get; set; }
+
+        [ShowInProductEditor]
+        public bool manualUpdateQuestInfos { get; set; }
+        #endregion
+
+
+        #region Map
         [ShowInProductEditor(StartSection = "Map & Markers:")]
         [JsonConverter(typeof(StringEnumConverter))]
         public MapProvider mapProvider { get; set; }
@@ -617,10 +624,13 @@ namespace GQ.Client.Conf
             localQuestsDeletable = true;
             hideHiddenQuests = false;
             DownloadStrategy = DownloadStrategy.UPFRONT;
-            autoSynchQuestInfos = true;
+
             timeoutMS = 60000L;
             maxIdleTimeMS = 9000L;
             maxParallelDownloads = 15;
+
+            autoSynchQuestInfos = true;
+            manualUpdateQuestInfos = !autoSynchQuestInfos;
 
             acceptedPageTypes = new string[0];
             sceneMappings = new List<SceneMapping>();

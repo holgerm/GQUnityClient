@@ -52,14 +52,6 @@ namespace GQ.Client.Util
                         baseGO.AddComponent(typeof(Base));
 
                     _instance = (Base)baseGO.GetComponent(typeof(Base));
-
-                    // Initialize QuestInfoManager:
-                    if (ConfigurationManager.Current.autoSynchQuestInfos)
-                    {
-                        QuestInfoManager.Instance.UpdateQuestInfos();
-                    } else {
-                        QuestInfoManager.Instance.UpdateLocalQuestInfosOnly();
-                    }
                 }
                 return _instance;
             }
@@ -171,81 +163,6 @@ namespace GQ.Client.Util
         #endregion
 
 
-        #region Global Runtime State
-
-        static string loggedInAs = null;
-
-        public static string LoggedInAs
-        {
-            get
-            {
-                if (loggedInAs == null || loggedInAs == "")
-                {
-                    if (PlayerPrefs.HasKey(GQPrefKeys.LOGGED_IN_AS.ToString()))
-                    {
-                        loggedInAs = PlayerPrefs.GetString(GQPrefKeys.LOGGED_IN_AS.ToString());
-                    }
-                }
-                return loggedInAs;
-            }
-            set
-            {
-                loggedInAs = value;
-                PlayerPrefs.SetString(GQPrefKeys.LOGGED_IN_AS.ToString(), loggedInAs);
-                if (loggedInAs == null || loggedInAs == "")
-                {
-                    PlayerPrefs.DeleteKey(GQPrefKeys.LOGGED_IN_AS.ToString());
-                }
-                PlayerPrefs.Save();
-            }
-        }
-
-        public static bool EmulationMode
-        {
-            get
-            {
-                return (LoggedInAs != null);
-            }
-        }
-
-        bool? _showHiddenQuests = null;
-
-        public bool ShowHiddenQuests
-        {
-            get
-            {
-                if (_showHiddenQuests == null) {
-                    if (PlayerPrefs.HasKey(GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()))
-                    {
-                        _showHiddenQuests = PlayerPrefs.GetInt(GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()) == 1;
-                    }
-                    else
-                    {
-                        _showHiddenQuests = !ConfigurationManager.Current.hideHiddenQuests;
-                    }
-                }
-                return (bool)_showHiddenQuests;
-            }
-            set
-            {
-                _showHiddenQuests = value;
-                PlayerPrefs.SetInt(GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString(), _showHiddenQuests == true ? 1 : 0);
-                PlayerPrefs.Save();
-            }
-        }
-
-        #endregion
-
-
-        #region PlayerPrefs Keys
-
-        public enum GQPrefKeys
-        {
-            LOGGED_IN_AS,
-            SHOW_HIDDEN_QUESTS
-        }
-
-        #endregion
     }
 
 }

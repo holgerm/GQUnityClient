@@ -274,7 +274,7 @@ namespace GQ.Client.Model
 
 		public virtual void Tap ()
 		{
-			if (Base.EmulationMode) {
+			if (Author.EmulationMode) {
 				EmuHotspotDialog.CreateAndShow (EnterTrigger, LeaveTrigger, TapTrigger);
 			} else {
 				TapTrigger.Initiate ();
