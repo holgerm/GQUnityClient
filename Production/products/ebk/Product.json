@@ -6,11 +6,11 @@
   "assetAddOns": [
     "UniWebView"
   ],
+  "androidMinSDKVersion": "AndroidApiLevel21",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
-  "autoUpdateQuestInfos": false,
   "timeoutMS": 0,
   "maxIdleTimeMS": 9089,
   "maxParallelDownloads": 15,
@@ -51,6 +51,8 @@
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": false,
+  "autoSynchQuestInfos": true,
+  "_offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -108,6 +110,7 @@
   "topLogo": {
     "path": "TopLogo"
   },
+  "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -130,12 +133,6 @@
     "r": 255,
     "g": 255,
     "b": 255,
-    "a": 255
-  },
-  "contentFontColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
     "a": 255
   },
   "headerHeightUnits": 60.0,
@@ -221,30 +218,33 @@
   "disabledAlpha": 0.5,
   "offerFeedback": true,
   "offerAuthorLogin": true,
-  "listEntryHeightUnits": 55.0,
+  "defineAuthorBackDoor": true,
+  "acceptedAuthorEmail": "author@email.com",
+  "acceptedAuthorPassword": "secret",
+  "listEntryHeightUnits": 60.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
-  "listEntryUseTwoLines": true,
-  "listEntryDividingMode": "AlternatingColors",
+  "listEntryUseTwoLines": false,
+  "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
     "r": 0,
     "g": 0,
     "b": 0,
     "a": 255
   },
-  "listStartLineWidth": 5,
-  "dividingLineWidth": 5,
-  "listEndLineWidth": 5,
+  "listStartLineWidth": 6,
+  "dividingLineWidth": 3,
+  "listEndLineWidth": 6,
   "listEntryFgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 0,
-    "g": 175,
-    "b": 239,
+    "r": 252,
+    "g": 121,
+    "b": 36,
     "a": 255
   },
   "listEntrySecondFgColor": {
@@ -260,9 +260,9 @@
     "a": 255
   },
   "listBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 105,
+    "g": 105,
+    "b": 105,
     "a": 255
   },
   "showDeleteOptionForLocalQuests": false,
