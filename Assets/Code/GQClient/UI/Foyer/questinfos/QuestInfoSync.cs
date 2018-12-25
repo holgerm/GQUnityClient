@@ -9,7 +9,7 @@ public class QuestInfoSync : MonoBehaviour {
     bool updateStarted;
 	// Use this for initialization
 	void Start () {
-        if (!ConfigurationManager.Current.manualUpdateQuestInfos)
+        if (!ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
         {
             QuestInfoManager.Instance.UpdateQuestInfos();
         }
@@ -22,7 +22,7 @@ public class QuestInfoSync : MonoBehaviour {
     }
 
     void OnApplicationPause(bool paused) {
-        if (!ConfigurationManager.Current.manualUpdateQuestInfos && updateStarted && !paused) {
+        if (!ConfigurationManager.Current.OfferManualUpdate4QuestInfos && updateStarted && !paused) {
             QuestInfoManager.Instance.UpdateQuestInfos();
         }
     }

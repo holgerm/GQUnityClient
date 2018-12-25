@@ -148,8 +148,14 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool autoSynchQuestInfos { get; set; }
 
-        [ShowInProductEditor]
-        public bool manualUpdateQuestInfos { get; set; }
+        [ShowInProductEditor, JsonProperty]
+        private bool _offerManualUpdate4QuestInfos { get; set; }
+        [JsonIgnore]
+        public bool OfferManualUpdate4QuestInfos { 
+            get {
+                return _offerManualUpdate4QuestInfos || Author.OfferManualUpdate;
+            }
+        }
         #endregion
 
 
@@ -630,7 +636,7 @@ namespace GQ.Client.Conf
             maxParallelDownloads = 15;
 
             autoSynchQuestInfos = true;
-            manualUpdateQuestInfos = !autoSynchQuestInfos;
+            _offerManualUpdate4QuestInfos = !autoSynchQuestInfos;
 
             acceptedPageTypes = new string[0];
             sceneMappings = new List<SceneMapping>();

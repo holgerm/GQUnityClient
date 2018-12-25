@@ -60,14 +60,6 @@ namespace GQ.Client.Util
         }
         private static string loggedInAs = null;
 
-        public static bool EmulationMode
-        {
-            get
-            {
-                return (LoggedInAs != null);
-            }
-        }
-
         public static bool ShowHiddenQuests
         {
             get
@@ -83,7 +75,7 @@ namespace GQ.Client.Util
                         _showHiddenQuests = !ConfigurationManager.Current.hideHiddenQuests;
                     }
                 }
-                return (bool)_showHiddenQuests;
+                return (bool)_showHiddenQuests && LoggedIn;
             }
             set
             {
@@ -113,7 +105,7 @@ namespace GQ.Client.Util
                         _offerManualUpdate = !ConfigurationManager.Current.hideHiddenQuests;
                     }
                 }
-                return (bool) _offerManualUpdate;
+                return (bool) _offerManualUpdate && LoggedIn;
             }
             set
             {

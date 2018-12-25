@@ -397,24 +397,24 @@ namespace GQ.Editor.UI
                 {
                     // ScrollView begins (optionally disabled):
 
-                    PropertyInfo[] propertyInfos = typeof(Config).GetProperties();
+                    PropertyInfo[] propertyInfos = typeof(Config).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
                     // get max widths for names and values:
                     float allNamesMax = 0f, allValuesMax = 0f;
 
                     foreach (PropertyInfo curPropInfo in propertyInfos)
                     {
-                        //		TODO				if (entryHidden (curPropInfo))
-                        //							continue;
+                        if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
+                        	continue;
 
-                        string name = curPropInfo.Name + ":";
+                        string propName = curPropInfo.Name + ":";
                         string value = Objects.ToString(curPropInfo.GetValue(SelectedConfig, null));
 
                         float nameMin, nameMax;
                         float valueMin, valueMax;
                         GUIStyle guiStyle = new GUIStyle();
 
-                        guiStyle.CalcMinMaxWidth(new GUIContent(name + ":"), out nameMin, out nameMax);
+                        guiStyle.CalcMinMaxWidth(new GUIContent(propName + ":"), out nameMin, out nameMax);
                         allNamesMax = Math.Max(allNamesMax, nameMax);
                         guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
                         allValuesMax = Math.Max(allValuesMax, valueMax);
@@ -819,7 +819,7 @@ namespace GQ.Editor.UI
                 propInfo.Name.Equals("autoUpdateFrequency")
             ) && (
                 !ProductEditor.SelectedConfig.autoSynchQuestInfos &&
-                ProductEditor.SelectedConfig.manualUpdateQuestInfos
+                ProductEditor.SelectedConfig.OfferManualUpdate4QuestInfos
             );
 
             // Undefined properties:

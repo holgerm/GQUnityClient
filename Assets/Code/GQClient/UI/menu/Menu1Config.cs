@@ -17,7 +17,7 @@ namespace GQ.Client.UI
         void Start()
         {
             updateQuestInfos_MenuEntry.SetActive(
-                ConfigurationManager.Current.manualUpdateQuestInfos || Author.OfferManualUpdate
+                ConfigurationManager.Current.OfferManualUpdate4QuestInfos
             );
             Author.SettingsChanged += Author_SettingsChanged;
         }
