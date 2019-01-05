@@ -76,11 +76,11 @@ namespace GQ.Client.Model
             {
                 if (ConfigurationManager.Current.autoSynchQuestInfos)
                 {
-                    // with autoSynch we automatically delete the quest infos from the list ...
-                    qim.RemoveInfo(oldID);
-
                     // and also remove the local quest data:
                     qim.QuestDict[oldID].Delete();
+
+                    // with autoSynch we automatically delete the quest infos from the list ...
+                    qim.RemoveInfo(oldID);
                 } else {
                     // when manually synching ...
                     if (qim.QuestDict[oldID].LastUpdateOnDevice == null)
