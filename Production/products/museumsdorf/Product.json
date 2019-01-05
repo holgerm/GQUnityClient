@@ -3,11 +3,14 @@
   "idExtension": "",
   "name": "Neue Museumsdorf App",
   "portal": 461,
+  "assetAddOns": [
+    "UniWebView"
+  ],
+  "androidMinSDKVersion": "AndroidApiLevelAuto",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "DownloadStrategy": "UPFRONT",
-  "autoUpdateQuestInfos": false,
   "timeoutMS": 0,
   "maxIdleTimeMS": 15000,
   "maxParallelDownloads": 15,
@@ -52,6 +55,8 @@
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
+  "autoSynchQuestInfos": true,
+  "_offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -76,6 +81,12 @@
     "b": 0,
     "a": 0
   },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
   "markerBGAlpha": 168,
   "mapButtonHeightUnits": 65.0,
   "mapButtonHeightMinMM": 0.0,
@@ -84,7 +95,7 @@
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": "Medienart",
-  "categorySets": [
+  "CategorySets": [
     {
       "name": "Medienart",
       "categories": [
@@ -136,22 +147,25 @@
       ]
     }
   ],
-  "topLogo": {
-    "path": "TopLogo"
-  },
-  "mainColorFG": {
-    "r": 51,
-    "g": 51,
-    "b": 51,
+  "mainFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
-  "mainColorBG": {
+  "mainBgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
     "a": 255
   },
+  "mainFontSize": 60,
+  "maxFontSize": 100,
   "showShadows": false,
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -174,12 +188,6 @@
     "r": 255,
     "g": 255,
     "b": 255,
-    "a": 255
-  },
-  "contentFontColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
     "a": 255
   },
   "headerHeightUnits": 65.0,
@@ -214,6 +222,9 @@
     "a": 255
   },
   "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 6.0,
+  "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
     "r": 83,
     "g": 237,
@@ -239,31 +250,78 @@
   "menuEntryWidthUnits": 350.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
-  "menuBGColor": {
-    "r": 51,
-    "g": 51,
-    "b": 51,
+  "menuFrameColor": {
+    "r": 127,
+    "g": 127,
+    "b": 127,
     "a": 255
   },
-  "menuPartBGColor": {
-    "r": 51,
-    "g": 51,
-    "b": 51,
+  "menuBGColor": {
+    "r": 223,
+    "g": 223,
+    "b": 223,
+    "a": 255
+  },
+  "menuFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "disabledAlpha": 0.5,
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "defineAuthorBackDoor": true,
+  "acceptedAuthorEmail": "author@email.com",
+  "acceptedAuthorPassword": "secret",
   "listEntryHeightUnits": 55.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
-  "listEntryColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+  "listEntryUseTwoLines": false,
+  "listEntryDividingMode": "SeparationLines",
+  "listLineColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
-  "eumlationColor": {
+  "listStartLineWidth": 5,
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 5,
+  "listEntryFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listEntryBgColor": {
+    "r": 13,
+    "g": 218,
+    "b": 29,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listEntrySecondBgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listBgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 77
+  },
+  "showDeleteOptionForLocalQuests": true,
+  "emulationColor": {
     "r": 255,
     "g": 255,
     "b": 255,
