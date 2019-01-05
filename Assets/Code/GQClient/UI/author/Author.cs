@@ -7,6 +7,10 @@ namespace GQ.Client.Util
 
     public class Author : MonoBehaviour
     {
+        public void Awake()
+        {
+            Debug.Log("Author.Awake()");
+        }
 
         public static event EventHandler<EventArgs> SettingsChanged;
 
@@ -25,7 +29,7 @@ namespace GQ.Client.Util
         {
             get
             {
-                return !string.IsNullOrEmpty(loggedInAs);
+                return !string.IsNullOrEmpty(LoggedInAs);
             }
 
         }
@@ -34,23 +38,23 @@ namespace GQ.Client.Util
         {
             get
             {
-                if (string.IsNullOrEmpty(loggedInAs))
+                if (string.IsNullOrEmpty(_loggedInAs))
                 {
                     if (PlayerPrefs.HasKey(GQPrefKeys.LOGGED_IN_AS.ToString()))
                     {
-                        loggedInAs = PlayerPrefs.GetString(GQPrefKeys.LOGGED_IN_AS.ToString());
+                        _loggedInAs = PlayerPrefs.GetString(GQPrefKeys.LOGGED_IN_AS.ToString());
                     }
                 }
-                return loggedInAs;
+                return _loggedInAs;
             }
             set
             {
-                if (value != loggedInAs)
+                if (value != _loggedInAs)
                 {
-                    loggedInAs = value;
+                    _loggedInAs = value;
                     OnSettingsChanged();
-                    PlayerPrefs.SetString(GQPrefKeys.LOGGED_IN_AS.ToString(), loggedInAs);
-                    if (loggedInAs == null || loggedInAs == "")
+                    PlayerPrefs.SetString(GQPrefKeys.LOGGED_IN_AS.ToString(), _loggedInAs);
+                    if (_loggedInAs == null || _loggedInAs == "")
                     {
                         PlayerPrefs.DeleteKey(GQPrefKeys.LOGGED_IN_AS.ToString());
                     }
@@ -58,7 +62,7 @@ namespace GQ.Client.Util
                 }
             }
         }
-        private static string loggedInAs = null;
+        private static string _loggedInAs = null;
 
         public static bool ShowHiddenQuests
         {
