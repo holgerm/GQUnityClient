@@ -3,7 +3,9 @@
   "idExtension": "",
   "name": "Frei Spiel",
   "portal": 561,
-  "assetAddOns": [],
+  "assetAddOns": [
+    "UniWebView"
+  ],
   "androidMinSDKVersion": "AndroidApiLevelAuto",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
@@ -57,7 +59,7 @@
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": false,
   "autoSynchQuestInfos": true,
-  "manualUpdateQuestInfos": false,
+  "_offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -115,7 +117,7 @@
   "topLogo": {
     "path": "toplogo"
   },
-  "headerMiddleButtonPolicy": "TopLogo",
+  "headerMiddleButtonPolicy": "QuestTitle",
   "headerBgColor": {
     "r": 255,
     "g": 255,
