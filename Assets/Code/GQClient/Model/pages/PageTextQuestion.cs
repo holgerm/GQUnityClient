@@ -46,7 +46,7 @@ namespace GQ.Client.Model
 
 			LoopImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_IMAGE, reader);
 			if (LoopImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (LoopImage);
+				QuestManager.CurrentlyParsingQuest.AddMedia (LoopImage, "TextQuestion." + GQML.PAGE_QUESTION_LOOP_IMAGE);
 
 			LoopUntilSuccess = GQML.GetOptionalBoolAttribute (GQML.PAGE_QUESTION_LOOP_UNTIL_SUCCESS, reader);
 
@@ -56,7 +56,7 @@ namespace GQ.Client.Model
 
 			BackGroundImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_BACKGROUND_IMAGE, reader);
 			if (BackGroundImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (BackGroundImage);
+				QuestManager.CurrentlyParsingQuest.AddMedia (BackGroundImage, "TextQuestion." + GQML.PAGE_QUESTION_BACKGROUND_IMAGE);
 		}
 
 		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)

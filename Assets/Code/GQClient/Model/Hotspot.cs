@@ -150,7 +150,7 @@ namespace GQ.Client.Model
 
 			// Marker Image:
 			MarkerImageUrl = GQML.GetStringAttribute (GQML.HOTSPOT_MARKERURL, reader);
-			QuestManager.CurrentlyParsingQuest.AddMedia (MarkerImageUrl);
+			QuestManager.CurrentlyParsingQuest.AddMedia (MarkerImageUrl, "Hotspot." + GQML.HOTSPOT_MARKERURL);
 
 			// InitialActivity:
 			InitialActivity = GQML.GetOptionalBoolAttribute (GQML.HOTSPOT_INITIAL_ACTIVITY, reader, true);

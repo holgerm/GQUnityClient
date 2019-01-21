@@ -49,7 +49,7 @@ namespace GQ.Client.Model
 
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_STARTANDEXITSCREEN_IMAGEURL, reader);
 			if (ImageUrl != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+				QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl, "StartAndExitScreen." + GQML.PAGE_STARTANDEXITSCREEN_IMAGEURL);
 
 			Loop = GQML.GetOptionalBoolAttribute (GQML.PAGE_STARTANDEXITSCREEN_LOOP, reader);
 

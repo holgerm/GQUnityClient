@@ -38,7 +38,10 @@ namespace GQ.Client.Model
 
             VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
             if (VideoFile.HasVideoEnding())
-                QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile);
+                QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile, "VideoPlay." + GQML.PAGE_VIDEOPLAY_FILE);
+            else {
+                Log.SignalErrorToAuthor("VideoPlay page (" + Id + ") has invalid vide url: " + VideoFile);
+            }
 
             Controllable = GQML.GetRequiredBoolAttribute(GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);
             VideoType = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_VIDEOTYPE, reader, GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL);

@@ -92,7 +92,10 @@ namespace GQ.Client.Util
 				};
 				loader.Start ();
 
-                return audioSource.clip == null ? 0f: audioSource.clip.length;
+                return 
+                    audioSource == null || audioSource.clip == null 
+                        ? 0f
+                        : audioSource.clip.length;
 			}
 		}
 

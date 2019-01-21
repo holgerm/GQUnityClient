@@ -167,14 +167,12 @@ namespace GQ.Client.UI
 
             float usedTime = 0f;
             float startPosition = contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition;
-            Debug.Log(("ADJUSTING: start: " + startPosition + " timespan: " + timespan).Yellow());
 
             do
             {
                 usedTime += Time.deltaTime;
                 contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition =
                                 Mathf.Lerp(startPosition, 0f, usedTime / timespan);
-                Debug.Log(("ADJUST: " + contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition + " usedTime: " + usedTime).Yellow());
                 yield return null;
             }
             while (contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition > 0.0001);

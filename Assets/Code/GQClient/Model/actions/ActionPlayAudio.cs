@@ -30,7 +30,7 @@ namespace GQ.Client.Model
 			StopOthers = GQML.GetOptionalBoolAttribute (GQML.ACTION_PLAYAUDIO_STOPOTHERS, reader, true);
 
 			AudioUrl = GQML.GetStringAttribute (GQML.ACTION_PLAYAUDIO_FILE, reader);
-			QuestManager.CurrentlyParsingQuest.AddMedia (AudioUrl);
+			QuestManager.CurrentlyParsingQuest.AddMedia (AudioUrl, "PlayAudio." + GQML.ACTION_PLAYAUDIO_FILE);
 		}
 
 		#endregion

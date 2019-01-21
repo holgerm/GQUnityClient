@@ -190,11 +190,11 @@ namespace GQ.Client.Model
             }
         }
 
-        public void AddMedia(string url)
+        public void AddMedia(string url, string contextDescription = "no context given")
         {
             if (url == "")
             {
-                Log.SignalErrorToAuthor("Found an empty url and can not add media for it.");
+                Log.SignalErrorToAuthor("Found an empty url and can not add media for it ({0}).", contextDescription);
                 return;
             }
 

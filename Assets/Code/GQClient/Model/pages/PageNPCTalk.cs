@@ -100,7 +100,7 @@ namespace GQ.Client.Model
 			EndButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_ENDBUTTONTEXT, reader);
 
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_IMAGEURL, reader);
-			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl);
+			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl, "NPCTalk." + GQML.PAGE_NPCTALK_IMAGEURL);
 
 			DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
 
@@ -186,7 +186,7 @@ namespace GQ.Client.Model
 			IsBlocking = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
 			Speaker = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_SPEAKER, reader);
 			AudioURL = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL, reader);
-            QuestManager.CurrentlyParsingQuest.AddMedia(AudioURL);
+            QuestManager.CurrentlyParsingQuest.AddMedia(AudioURL, "NPCTalk#DialogItem." + GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL);
 
             // Content: Read and implicitly proceed the reader so that this node is completely consumed:
             Text = reader.ReadInnerXml ();
