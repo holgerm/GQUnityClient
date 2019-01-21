@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
+using GQ.Client.UI;
 
 public class AnswerCtrl : MonoBehaviour
 {
@@ -46,7 +47,14 @@ public class AnswerCtrl : MonoBehaviour
 		if (answer.Correct) {
 			page.Succeed ();
 		} else {
-			page.Fail ();
+            if (page.RepeatUntilSuccess)
+            {
+                ((MultipleChoiceQuestionController)page.PageCtrl).Repeat();
+            }
+            else
+            {
+                page.Fail();
+            }
 		}
 	}
 
