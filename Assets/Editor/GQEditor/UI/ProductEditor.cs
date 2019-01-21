@@ -250,7 +250,7 @@ namespace GQ.Editor.UI
             if (configIsDirty)
             {
                 // adding tooltip to explain why these elements are disabled:
-                string explanation = "You must Save or Revert your changes first.";
+                string explanation = "Please Save or Revert your changes first.";
                 prepareBuildButtonGUIContent = new GUIContent("Prepare Build", explanation);
                 availableProductsPopupGUIContent = new GUIContent("Available Products:", explanation);
                 newProductLabelGUIContent = new GUIContent("New product (id):", explanation);
@@ -264,7 +264,7 @@ namespace GQ.Editor.UI
                 createProductButtonGUIContent = new GUIContent("Create");
             }
 
-            using (new EditorGUI.DisabledGroupScope((configIsDirty)))
+            using (new EditorGUI.DisabledGroupScope(false)) // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
             {
                 // Prepare Build Button:
                 EditorGUILayout.BeginHorizontal();
@@ -670,6 +670,11 @@ namespace GQ.Editor.UI
             STYLE_FOLDOUT_Bold.fontStyle = FontStyle.Bold;
         }
 
+        /// <summary>
+        /// Creates the GUI.
+        /// </summary>
+        /// <returns>the dirty state of this property.</returns>
+        /// <param name="curPropInfo">Current property info.</param>
         static public bool CreateGui(PropertyInfo curPropInfo)
         {
             Type propertyType = curPropInfo.PropertyType;
@@ -719,7 +724,7 @@ namespace GQ.Editor.UI
             }
 
             if (ProductEditorPart.entryHidden(curPropInfo))
-                return false;
+                return false; 
             else if (Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
             {
                 var attributes = curPropInfo.GetCustomAttributes(typeof(ShowInProductEditor), false);
@@ -743,7 +748,7 @@ namespace GQ.Editor.UI
                 NamePrefixGUIContent = new GUIContent(name + ":");
 
             accordingEditorPart.doCreateGui(curPropInfo);
-            return configIsDirty;
+            return configIsDirty; 
         }
 
         abstract protected bool doCreateGui(PropertyInfo curPropInfo);
@@ -925,6 +930,8 @@ namespace GQ.Editor.UI
                 curPropInfo.SetValue(ProductEditor.SelectedConfig, (HeaderMiddleButtonPolicy)selected, null);
             }
 
+            if (configIsDirty) 
+                Debug.Log("HeaderMiddleButtonPolicy changed");
             return configIsDirty;
         }
     }

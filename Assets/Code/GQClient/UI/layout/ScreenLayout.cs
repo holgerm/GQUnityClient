@@ -134,7 +134,6 @@ namespace GQ.Client.UI
         {
             if (Footer == null)
             {
-                Log.SignalErrorToDeveloper("Footer is null.");
                 return;
             }
 
@@ -146,14 +145,11 @@ namespace GQ.Client.UI
             }
 
             LayoutElement layElem = Footer.GetComponent<LayoutElement>();
-            if (layElem == null)
+            if (layElem != null)
             {
-                Log.SignalErrorToDeveloper("LayoutElement for Footer is null.");
-                return;
+                layElem.minHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
+                layElem.preferredHeight = layElem.minHeight;
             }
-
-            layElem.minHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
-            layElem.preferredHeight = layElem.minHeight;
         }
 
         #region Static Helpers

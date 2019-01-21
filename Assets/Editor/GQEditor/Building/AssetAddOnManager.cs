@@ -18,6 +18,7 @@ namespace GQ.Editor.Building
 
         public static void switchAssetAddOns(Config oldConfig, Config newConfig)
         {
+            Debug.Log("AAO: switchAssetAddOns(" + oldConfig.name + ", " + newConfig.name + ")");
             AssetAddOnManager.unloadAssetAddOns(oldConfig, newConfig);
             AssetAddOnManager.loadAssetAddOns(oldConfig, newConfig);
         }
@@ -49,6 +50,7 @@ namespace GQ.Editor.Building
         public static void unloadAssetAddOns(Config oldProdConfig, Config newProdConfig)
         {
             List<string> assetAddOns = calculateAAOsToUnload(oldProdConfig, newProdConfig);
+            Debug.Log("AAO: unloadAssetAddOns(" + oldProdConfig.name + ", " + newProdConfig.name + "): #assets: " + assetAddOns.Count);
             foreach (string assetAddOn in assetAddOns)
             {
                 unloadAaoRecursively(assetAddOn);
@@ -59,7 +61,7 @@ namespace GQ.Editor.Building
 
         private static void unloadAaoRecursively(string assetAddOn, string relPath = "")
         {
-            Debug.Log("AAO UN-loading: " + relPath);
+            Debug.Log("AAO: unloadAaoRecursively(" + assetAddOn + "," + relPath + ")");
 
             // recursively go into every dir in the AssetAddOn tree:
             string aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
@@ -122,6 +124,8 @@ namespace GQ.Editor.Building
 
         private static void deleteAaoSectionFromGitignore(string assetAddOn)
         {
+            Debug.Log("AAO: deleteAaoSectionFromGitignore(" + assetAddOn + ")");
+
             if (!File.Exists(Files.GIT_EXCLUDE_FILE))
             {
                 File.Create(Files.GIT_EXCLUDE_FILE);
@@ -161,12 +165,14 @@ namespace GQ.Editor.Building
             List<string> gitignorePatterns = new List<string>();
 
             List<string> assetAddOns = calculateAAOsToLoad(oldProdConfig, newProdConfig);
+            Debug.Log("AAO: loadAssetAddOns(" + oldProdConfig.name + ", " + newProdConfig.name + "): #assets: " + assetAddOns.Count);
             foreach (string assetAddOn in assetAddOns)
             {
                 loadAaoRecursively(assetAddOn, gitignorePatterns, true);
 
                 if (gitignorePatterns.Count > 0)
                 {
+                    Debug.Log("AAO: loadAssetAddOns: adding to gitExclude: #" + gitignorePatterns.Count + " entries.");
                     // Store additions to git exclude file:
                     string gitExcludeSection = "\n\n# BEGIN GQ AAO: " + assetAddOn + "\n";
                     foreach (string pattern in gitignorePatterns)
@@ -177,7 +183,6 @@ namespace GQ.Editor.Building
                     File.AppendAllText(Files.GIT_EXCLUDE_FILE, gitExcludeSection);
                 }
             }
-
         }
 
         /// <summary>

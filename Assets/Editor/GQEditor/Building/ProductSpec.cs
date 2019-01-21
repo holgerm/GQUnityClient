@@ -211,20 +211,20 @@ namespace GQ.Editor.Building {
 				}
 
 				// AppIcon.png
-				if ( "AppIcon.png".Equals(file.Name) ) {
-					appIconFound = true;// TODO do more detailed checks here
+				if ( "appicon.png".Equals(file.Name.ToLower()) ) {
+					appIconFound = true;
 					continue;
 				}
 
 				// SplashScreen.jpg
-				if ( "SplashScreen.jpg".Equals(file.Name) ) {
-					splashScreenFound = true;// TODO do more detailed checks here
+				if ( "splashscreen.jpg".Equals(file.Name.ToLower()) || "splashscreen.png".Equals(file.Name.ToLower())) {
+					splashScreenFound = true;
 					continue;
 				}
 
 				// TopLogo.jpg
-				if ( "TopLogo.jpg".Equals(file.Name) ) {
-					topLogoFound = true;// TODO do more detailed checks here
+                if ( "toplogo.jpg".Equals(file.Name.ToLower()) || "toplogo.png".Equals(file.Name.ToLower())) {
+					topLogoFound = true;
 					continue;
 				}
 
