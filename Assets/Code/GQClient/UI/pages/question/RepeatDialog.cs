@@ -22,6 +22,7 @@ namespace GQ.Client.UI.Dialogs
             Dialog.Title.gameObject.SetActive(true);
             Dialog.Title.text = "Wiederholen";
 
+            Dialog.Img.gameObject.SetActive(false);
             //if (question.RepeatImage != "")
             //{
             //    Dialog.Img.gameObject.SetActive(true);
