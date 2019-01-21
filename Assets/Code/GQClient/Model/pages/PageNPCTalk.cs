@@ -186,9 +186,10 @@ namespace GQ.Client.Model
 			IsBlocking = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
 			Speaker = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_SPEAKER, reader);
 			AudioURL = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL, reader);
+            QuestManager.CurrentlyParsingQuest.AddMedia(AudioURL);
 
-			// Content: Read and implicitly proceed the reader so that this node is completely consumed:
-			Text = reader.ReadInnerXml ();
+            // Content: Read and implicitly proceed the reader so that this node is completely consumed:
+            Text = reader.ReadInnerXml ();
 		}
 
 		#endregion

@@ -28,18 +28,42 @@ namespace GQ.Client.Util
 			audioSources = new Dictionary<string, AudioSource> ();
 		}
 
-		public static void PlayFromFile(string path, bool loop, bool stopOtherAudio) {
+        /// <summary>
+        /// Plays audio from media store.
+        /// </summary>
+        /// <returns>The length of the played audio in seconds.</returns>
+        /// <param name="Url">URL.</param>
+        /// <param name="loop">If set to <c>true</c> loop.</param>
+        /// <param name="stopOtherAudio">If set to <c>true</c> stop other audio.</param>
+        public static float PlayFromMediaStore(string Url, bool loop = false, bool stopOtherAudio = true)
+        {
+            MediaInfo audioInfo = null;
+            if (QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue(Url, out audioInfo))
+            {
+                return Audio.PlayFromFile(Url, loop, stopOtherAudio);
+            }
+            else
+            {
+                Log.SignalErrorToAuthor("Audio file referenced at {0} not locally stored.", Url);
+                return 0f;
+            }
+        }
+
+        /// <summary>
+        /// Plays audio from given file.
+        /// </summary>
+        /// <returns>The length of the played audio in seconds.</returns>
+        /// <param name="path">Path.</param>
+        /// <param name="loop">If set to <c>true</c> loop.</param>
+        /// <param name="stopOtherAudio">If set to <c>true</c> stop other audio.</param>
+        public static float PlayFromFile(string path, bool loop, bool stopOtherAudio) {
 			// lookup the dictionary of currently prepared audiosources
 			AudioSource audioSource = null;
 			if (audioSources.TryGetValue(path, out audioSource)) {
 				_internalStartPlaying (audioSource, loop, stopOtherAudio);
-				return;
+                return audioSource.clip.length;
 			}
 			else {
-//				// First load the audio file asynch and then play it:
-//				MediaInfo mediaInfo;
-//				QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue (path, out mediaInfo);
-
 				// NEW:
 				AbstractDownloader loader;
 				if (QuestManager.Instance.CurrentQuest.MediaStore.ContainsKey (path)) {
@@ -67,9 +91,8 @@ namespace GQ.Client.Util
 					d.Www.Dispose ();
 				};
 				loader.Start ();
-//
-//
-//				Base.Instance.StartCoroutine(PlayAudioFileAsynch(mediaInfo.LocalPath, loop, stopOtherAudio));
+
+                return audioSource.clip == null ? 0f: audioSource.clip.length;
 			}
 		}
 

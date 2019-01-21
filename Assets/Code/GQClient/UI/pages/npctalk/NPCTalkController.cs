@@ -140,7 +140,20 @@ namespace GQ.Client.UI
 
 			// create dialog item GO from prefab:
 			HypertextchunkCtrl.Create (dialogItemContainer, currentText);
-		}
+
+            // play audio if specified:
+            float duration = 0f;
+            if (npcPage.CurrentDialogItem.AudioURL != "")
+                duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
+
+            if (Math.Abs(duration) < 0.01)
+                duration = npcPage.CurrentDialogItem.Text.Length / 13f; 
+                // ca. 130 Worten a 6 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
+
+            // scroll to bottom:
+            Base.Instance.StartCoroutine(adjustScrollRect(duration));
+
+        }
 
 		void UpdateForwardButton ()
 		{
@@ -148,7 +161,29 @@ namespace GQ.Client.UI
 			forwardButtonText.text = npcPage.HasMoreDialogItems () ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
 		}
 
-		#endregion
-	}
+        private IEnumerator adjustScrollRect(float timespan)
+        {
+            yield return new WaitForEndOfFrame();
+
+            float usedTime = 0f;
+            float startPosition = contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition;
+            Debug.Log(("ADJUSTING: start: " + startPosition + " timespan: " + timespan).Yellow());
+
+            do
+            {
+                usedTime += Time.deltaTime;
+                contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition =
+                                Mathf.Lerp(startPosition, 0f, usedTime / timespan);
+                Debug.Log(("ADJUST: " + contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition + " usedTime: " + usedTime).Yellow());
+                yield return null;
+            }
+            while (contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition > 0.0001);
+
+            // stop when nearly at bottom:
+            contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        }
+
+        #endregion
+    }
 
 }

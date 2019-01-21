@@ -40,13 +40,7 @@ namespace GQ.Client.Model
 
 		public override void Execute ()
 		{
-			MediaInfo audioInfo = null;
-			if (QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue(AudioUrl, out audioInfo)) {
-				Audio.PlayFromFile (AudioUrl, Loop, StopOthers);
-			}
-			else {
-				Log.SignalErrorToAuthor ("Audio file refenrenced at {0} not locally stored.", AudioUrl);
-			}
+            Audio.PlayFromMediaStore(AudioUrl, Loop, StopOthers);
 		}
 
 		#endregion
