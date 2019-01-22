@@ -174,6 +174,9 @@ namespace GQ.Client.UI
                 contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition =
                                 Mathf.Lerp(startPosition, 0f, usedTime / timespan);
                 yield return null;
+                if (contentPanel == null)
+                    // if page already left:
+                    yield break;
             }
             while (contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition > 0.0001);
 
