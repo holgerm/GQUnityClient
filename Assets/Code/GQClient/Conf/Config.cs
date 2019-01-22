@@ -139,9 +139,6 @@ namespace GQ.Client.Conf
 
         [ShowInProductEditor]
         public List<SceneExtension> sceneExtensions { get; set; }
-
-        [ShowInProductEditor]
-        public bool offerLeaveQuestOnEachPage { get; set; }
         #endregion
 
         #region Synching
@@ -331,11 +328,35 @@ namespace GQ.Client.Conf
         [JsonIgnore]
         public Dictionary<string, Category> categoryDict;
 
-#endregion
+        [JsonIgnore]
+        private float _disabledAlpha = 0.5f;
+
+        [ShowInProductEditor]
+        public float disabledAlpha
+        {
+            get
+            {
+                return _disabledAlpha;
+            }
+            set
+            {
+                if (value < 0f)
+                {
+                    _disabledAlpha = 0f;
+                    return;
+                }
+                if (value > 1f)
+                {
+                    _disabledAlpha = 1f;
+                    return;
+                }
+                _disabledAlpha = value;
+            }
+        }
+        #endregion
 
 
-#region Layout
-
+        #region Layout
         [ShowInProductEditor(StartSection = "Layout & Colors:")]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 mainFgColor { get; set; }
@@ -494,31 +515,8 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool menu2ShownInQuests { get; set; }
 
-        [JsonIgnore]
-        private float _disabledAlpha = 0.5f;
-
         [ShowInProductEditor]
-        public float disabledAlpha
-        {
-            get
-            {
-                return _disabledAlpha;
-            }
-            set
-            {
-                if (value < 0f)
-                {
-                    _disabledAlpha = 0f;
-                    return;
-                }
-                if (value > 1f)
-                {
-                    _disabledAlpha = 1f;
-                    return;
-                }
-                _disabledAlpha = value;
-            }
-        }
+        public bool offerLeaveQuestOnEachPage { get; set; }
 
         [ShowInProductEditor]
         public bool offerFeedback { get; set; }
