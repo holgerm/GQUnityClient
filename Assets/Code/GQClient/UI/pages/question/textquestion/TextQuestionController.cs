@@ -8,7 +8,7 @@ using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
-	public class TextQuestionController : PageController
+	public class TextQuestionController : QuestionController
 	{
 		
 		#region Inspector Features
@@ -47,9 +47,17 @@ namespace GQ.Client.UI
 			if (myPage.AnswerCorrect (answerGiven.text)) {
 				myPage.Succeed ();
 			} else {
-				myPage.Fail ();
-			}
-		}
+                if (myPage.RepeatUntilSuccess)
+                {
+                    ((TextQuestionController)myPage.PageCtrl).Repeat();
+                }
+                else
+                {
+                    myPage.Fail();
+                }
+
+            }
+        }
 
 		#endregion
 	}

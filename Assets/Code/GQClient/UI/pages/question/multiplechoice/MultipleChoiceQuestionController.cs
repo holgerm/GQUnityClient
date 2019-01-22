@@ -9,7 +9,7 @@ using GQ.Client.UI.Dialogs;
 namespace GQ.Client.UI
 {
 
-	public class MultipleChoiceQuestionController : PageController
+	public class MultipleChoiceQuestionController : QuestionController
 	{
 		#region Inspector Features
 
@@ -56,12 +56,6 @@ namespace GQ.Client.UI
                 list[k] = list[n];
                 list[n] = value;
             }
-        }
-
-        public void Repeat()
-        {
-            RepeatDialog dialog = new RepeatDialog(mcqPage);
-            dialog.Start();
         }
 
         #endregion

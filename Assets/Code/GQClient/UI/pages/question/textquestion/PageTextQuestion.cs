@@ -10,18 +10,10 @@ namespace GQ.Client.Model
 {
 
 	[XmlRoot (GQML.PAGE)]
-	public class PageTextQuestion : DecidablePage
-	{
+	public class PageTextQuestion : QuestionPage
+    {
 		
 		#region State
-
-		public string LoopButtonText { get; set ; }
-
-		public string LoopText { get; set ; }
-
-		public string LoopImage { get; set; }
-
-		public bool LoopUntilSuccess { get; set; }
 
 		public string Question { get; set ; }
 
@@ -40,15 +32,15 @@ namespace GQ.Client.Model
 		{
 			base.ReadAttributes (reader);
 
-			LoopButtonText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_BUTTON_TEXT, reader);
+			RepeatButtonText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_BUTTON_TEXT, reader);
 
-			LoopText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_TEXT, reader);
+			RepeatText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_TEXT, reader);
 
-			LoopImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_IMAGE, reader);
-			if (LoopImage != "")
-				QuestManager.CurrentlyParsingQuest.AddMedia (LoopImage, "TextQuestion." + GQML.PAGE_QUESTION_LOOP_IMAGE);
+			RepeatImage = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_IMAGE, reader);
+			if (RepeatImage != "")
+				QuestManager.CurrentlyParsingQuest.AddMedia (RepeatImage, "TextQuestion." + GQML.PAGE_QUESTION_LOOP_IMAGE);
 
-			LoopUntilSuccess = GQML.GetOptionalBoolAttribute (GQML.PAGE_QUESTION_LOOP_UNTIL_SUCCESS, reader);
+			RepeatUntilSuccess = GQML.GetOptionalBoolAttribute (GQML.PAGE_QUESTION_LOOP_UNTIL_SUCCESS, reader);
 
 			Question = GQML.GetStringAttribute (GQML.PAGE_QUESTION_QUESTION, reader);
 

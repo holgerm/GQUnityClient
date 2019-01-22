@@ -9,18 +9,10 @@ namespace GQ.Client.Model
 {
 
 	[XmlRoot (GQML.PAGE)]
-    public class PageMultipleChoiceQuestion : DecidablePage, Repeatable
+    public class PageMultipleChoiceQuestion : QuestionPage
 	{
 
 		#region State
-
-        public string RepeatButtonText { get; set ; }
-
-		public string RepeatText { get; set ; }
-
-        public string RepeatImage { get; set; }
-
-		public bool RepeatUntilSuccess { get; set; }
 
 		public string Question { get; set ; }
 
