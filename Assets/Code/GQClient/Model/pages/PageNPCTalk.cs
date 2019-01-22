@@ -58,7 +58,7 @@ namespace GQ.Client.Model
 				return curDialogItemNo;
 			}
 			protected set {
-				curDialogItemNo = Math.Max (0, Math.Min (curDialogItemNo + 1, dialogItems.Count));
+				curDialogItemNo = Math.Max (0, Math.Min (value, dialogItems.Count));
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace GQ.Client.Model
 
 		public override void Start ()
 		{
-			CurDialogItemNo++;
+			CurDialogItemNo = 1;
 			base.Start ();
 		}
 
