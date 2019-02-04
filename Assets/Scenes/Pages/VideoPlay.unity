@@ -304,6 +304,36 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 061e4f3f0c0104238a98c0f0f73491b0, type: 2}
   m_IsPrefabAsset: 0
@@ -2207,9 +2237,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1220.339
+  m_MinHeight: 4194.005
   m_PreferredWidth: -1
-  m_PreferredHeight: 1220.339
+  m_PreferredHeight: 4194.005
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3292,9 +3322,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1220.339
+  m_MinHeight: 4194.005
   m_PreferredWidth: -1
-  m_PreferredHeight: 1220.339
+  m_PreferredHeight: 4194.005
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3747,9 +3777,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 122.0339
+  m_MinHeight: 419.4005
   m_PreferredWidth: -1
-  m_PreferredHeight: 122.0339
+  m_PreferredHeight: 419.4005
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -3948,32 +3978,32 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224704143509668698, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224704143509668698, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224704143509668698, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224704143509668698, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224704143509668698, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224704143509668698, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -4132,9 +4162,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 122.0339
+  m_MinHeight: 419.4005
   m_PreferredWidth: -1
-  m_PreferredHeight: 122.0339
+  m_PreferredHeight: 419.4005
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

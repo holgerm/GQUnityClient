@@ -64,7 +64,7 @@ namespace GQ.Client.UI
                     cameraMain.enabled = false;
                     camera360.enabled = true;
                     // switch to sphere:
-                    //containerNormal.SetActive(false);
+                    containerNormal.SetActive(false);
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(true);
                     CoroutineStarter.Run(playVideo());
