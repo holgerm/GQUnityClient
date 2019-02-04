@@ -467,7 +467,7 @@ namespace GQ.Client.Model
                 return;
 
             // Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
-            GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
+            GameObject menuContent = Base.Instance.MenuTopLeftContent;
             ViewToggleController.Create(menuContent);
         }
 
@@ -492,7 +492,7 @@ namespace GQ.Client.Model
             }
 
             // create UI for Category Filters:
-            GameObject menuContent = Base.Instance.GetComponent<MenuAccessPoint>().MenuTopLeftContent;
+            GameObject menuContent = Base.Instance.MenuTopLeftContent;
             foreach (CategorySet catSet in ConfigurationManager.Current.CategorySets)
             {
                 CategoryTreeCtrl.Create(menuContent, CategoryFilters[catSet.name], catSet.categories);

@@ -18,18 +18,25 @@ namespace GQ.Client.Util
     public class Base : MonoBehaviour
     {
         #region Inspector Global Values
-
         public GameObject ListCanvas;
         public GameObject MapCanvas;
         public GameObject MapHolder;
         public GameObject MenuCanvas;
         public GameObject DialogCanvas;
 
+        public Canvas imprintCanvas;
+        public Canvas feedbackCanvas;
+        public Canvas privacyCanvas;
+        public Canvas authorCanvas;
+
+        public GameObject MenuTopLeftContent;
+        public Canvas canvas4TopLeftMenu;
+        public GameObject MenuTopRightContent;
+        public Canvas canvas4TopRightMenu;
         #endregion
 
 
         #region Singleton
-
         public const string BASE = "Base";
 
         private static Base _instance = null;
@@ -56,7 +63,6 @@ namespace GQ.Client.Util
                 return _instance;
             }
         }
-
         #endregion
 
 
