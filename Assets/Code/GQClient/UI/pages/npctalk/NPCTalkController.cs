@@ -147,8 +147,8 @@ namespace GQ.Client.UI
                 duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
 
             if (Math.Abs(duration) < 0.01)
-                duration = npcPage.CurrentDialogItem.Text.Length / 13f; 
-                // ca. 130 Worten a 6 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
+                duration = npcPage.CurrentDialogItem.Text.Length / 13f;
+            // ca. 130 Worten a 6 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
 
             // scroll to bottom:
             Base.Instance.StartCoroutine(adjustScrollRect(duration));
@@ -167,18 +167,20 @@ namespace GQ.Client.UI
 
             float usedTime = 0f;
             float startPosition = contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition;
+            float newPos;
 
             do
             {
                 usedTime += Time.deltaTime;
-                contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition =
-                                Mathf.Lerp(startPosition, 0f, usedTime / timespan);
+                newPos = Mathf.Lerp(startPosition, 0f, usedTime / timespan);
+                contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = newPos;
+                                
                 yield return null;
                 if (contentPanel == null)
                     // if page already left:
                     yield break;
             }
-            while (contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition > 0.0001);
+            while (newPos > 0.0001);
 
             // stop when nearly at bottom:
             contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
