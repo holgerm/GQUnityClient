@@ -5,6 +5,8 @@ using GQ.Client.Model;
 using GQ.Client.Util;
 using UnityEngine.Video;
 using GQ.Client.Err;
+using QM.Util;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -26,6 +28,9 @@ namespace GQ.Client.UI
         public GameObject containerWebPlayer;
         public RectTransform webPlayerContent;
         protected Camera cameraMain;
+        public GameObject header;
+        public GameObject footer;
+        public Image background;
 
         #endregion
 
@@ -109,62 +114,132 @@ namespace GQ.Client.UI
 
             videoPlayer.loopPointReached += (VideoPlayer source) =>
             {
-                OnForward();
+                showControls(true);
+
+                //OnForward();
             };
 
             // set the rawimage texture:
             //videoImage.rectTransform.localScale = new Vector3(1f, videoPlayer.texture.height / videoPlayer.texture.width, 1f);
             videoImage.texture = videoPlayer.texture;
 
-            SizeVideoToFitInside();
+            // If the device is faceUp or down at start, we use portrait:
+            if (Device.Orientation == DeviceOrientation.FaceDown || Device.Orientation == DeviceOrientation.FaceUp)
+            {
+                SizeVideoToFitInside(DeviceOrientation.Portrait);
+            }
+            else
+            {
+                SizeVideoToFitInside(Device.Orientation);
+            }
+
+            videoPlayer.SetTargetAudioSource(0, audioSource);
+            play();
+        }
+
+        private void play()
+        {
+            showControls(false);
 
             // start Playing:
             videoPlayer.Play();
         }
 
-        private void SizeVideoToFitInside()
+        private void showControls(bool show) {
+            header.SetActive(show);
+            footer.SetActive(show);
+            if (show)
+                background.color = ConfigurationManager.Current.contentBackgroundColor;
+            else
+                background.color = Color.black;
+        }
+
+        private static DeviceOrientation orientation;
+
+        private void SizeVideoToFitInside(DeviceOrientation curOrientation)
         {
-            float screenWidth = containerNormal.GetComponent<RectTransform>().rect.width;
-            float screenHeight = containerNormal.GetComponent<RectTransform>().rect.height;
+            orientation = curOrientation;
+            rotateVideo(orientation);
+            scaleVideo(orientation);
+        }
 
-
-            if (videoPlayer.texture.width / videoPlayer.texture.height >= screenWidth / screenHeight)
+        private void rotateVideo(DeviceOrientation orient)
+        {
+            switch (orient)
             {
-                // movie is too wide:
-                float targetWidth = screenWidth;
-                float targetHeight = videoPlayer.texture.height * screenWidth / videoPlayer.texture.width; 
-
-                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
-                    RectTransform.Edge.Left, 
-                    0f, 
-                    targetWidth);
-
-                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
-                    RectTransform.Edge.Top,
-                    (videoImage.transform.parent.GetComponent<RectTransform>().rect.height - targetHeight) / 2,
-                    targetHeight);
-            }
-            else {
-                // movie is too tall:
-                float targetWidth = videoPlayer.texture.width * screenHeight / videoPlayer.texture.height;
-                float targetHeight = screenHeight;
-
-                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
-                    RectTransform.Edge.Left,
-                    (videoImage.transform.parent.GetComponent<RectTransform>().rect.width - targetWidth) / 2,
-                    targetWidth);
-
-                videoImage.rectTransform.SetInsetAndSizeFromParentEdge(
-                    RectTransform.Edge.Top,
-                    0f,
-                    targetHeight);
+                case DeviceOrientation.Portrait:
+                    videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 0);
+                    break;
+                case DeviceOrientation.Unknown: // TEST
+                case DeviceOrientation.LandscapeRight:
+                    videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 90);
+                    break;
+                case DeviceOrientation.PortraitUpsideDown:
+                    videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 180);
+                    break;
+                case DeviceOrientation.LandscapeLeft:
+                    videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 270);
+                    break;
+                default:
+                    break;
             }
         }
 
-        //public void OnRectTransformDimensionsChange(ScreenOrientation oldOrientation, ScreenOrientation newOrientation) {
-        //    Debug.Log("OnRectTransformDimensionsChange() called. Orientation changed from: " + 
-        //              oldOrientation.ToString() + " to: " + newOrientation.ToString());
-        //}
+        void scaleVideo(DeviceOrientation orient) {
+            float videoRatio = (float)videoPlayer.texture.width / (float)videoPlayer.texture.height;
+            float screenRatio =
+                (float)containerNormal.GetComponent<RectTransform>().rect.width /
+                (float)containerNormal.GetComponent<RectTransform>().rect.height;
+
+            float xScale = 1.0f;
+            float yScale = 1.0f;
+
+            switch (orient)
+            {
+                case DeviceOrientation.Portrait:
+                case DeviceOrientation.PortraitUpsideDown:
+                    if (videoRatio >= screenRatio)
+                    {
+                        // CASE 1:
+                        xScale = 1.0f;
+                        yScale = screenRatio / videoRatio;
+                    }
+                    else
+                    {
+                        // CASE 2:
+                        xScale = videoRatio / screenRatio;
+                        yScale = 1.0f;
+                    }
+                    videoImage.rectTransform.localScale = new Vector3(xScale, yScale, 1.0f);
+                    break;
+                case DeviceOrientation.Unknown: // TEST
+                case DeviceOrientation.LandscapeRight:
+                case DeviceOrientation.LandscapeLeft:
+                    if (videoRatio >= 1 / screenRatio)
+                    {
+                        // CASE 3:
+                        xScale = 1 / screenRatio;
+                        yScale = xScale * (screenRatio / videoRatio);
+                    }
+                    else
+                    {
+                        // CASE 4:
+                        xScale = videoRatio;
+                        yScale = screenRatio;
+                    }
+                    videoImage.rectTransform.localScale = new Vector3(xScale, yScale, 1.0f);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void Update()
+        {
+            if (Device.Orientation != orientation) {
+                SizeVideoToFitInside(Device.Orientation);
+            }
+        }
 
         public override void CleanUp()
         {

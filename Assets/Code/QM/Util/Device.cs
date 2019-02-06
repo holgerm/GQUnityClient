@@ -15,9 +15,9 @@ namespace QM.Util
 		public static int height = Screen.height; 
 		public static int width = Screen.width; 
 
-        public static ScreenOrientation orientation {
+        public static DeviceOrientation Orientation {
             get {
-                return Screen.orientation;
+                return Input.deviceOrientation;
             }
         } 
 		#endregion

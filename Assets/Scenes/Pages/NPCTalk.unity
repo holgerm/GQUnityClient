@@ -1286,7 +1286,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000009359262}
+  m_AnchoredPosition: {x: 0, y: 0.000031481857}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &885299351
@@ -1685,9 +1685,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1759.2477
+  m_MinHeight: 845.3541
   m_PreferredWidth: -1
-  m_PreferredHeight: 1759.2477
+  m_PreferredHeight: 845.3541
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2708,9 +2708,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 175.92477
+  m_MinHeight: 84.535416
   m_PreferredWidth: -1
-  m_PreferredHeight: 175.92477
+  m_PreferredHeight: 84.535416
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

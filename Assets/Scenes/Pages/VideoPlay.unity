@@ -383,6 +383,9 @@ MonoBehaviour:
   container360: {fileID: 1960432035}
   containerWebPlayer: {fileID: 898327359}
   webPlayerContent: {fileID: 1535840093}
+  header: {fileID: 1718371824}
+  footer: {fileID: 1804547552}
+  background: {fileID: 988022700}
 --- !u!4 &128488592
 Transform:
   m_ObjectHideFlags: 0
@@ -2237,9 +2240,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 4194.005
+  m_MinHeight: 906.5167
   m_PreferredWidth: -1
-  m_PreferredHeight: 4194.005
+  m_PreferredHeight: 906.5167
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2636,7 +2639,6 @@ GameObject:
   - component: {fileID: 1137276116}
   - component: {fileID: 1137276115}
   - component: {fileID: 1137276114}
-  - component: {fileID: 1137276117}
   m_Layer: 5
   m_Name: VideoPlaneRawImage
   m_TagString: Untagged
@@ -2695,33 +2697,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1137276117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1137276113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f3b0f3fb293b4faf8cc2bac1ece5ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  oce:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 128488591}
-        m_MethodName: OnRectTransformDimensionsChange
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: QM.Events.OrientationChangedEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1166667249
 GameObject:
   m_ObjectHideFlags: 0
@@ -3322,9 +3297,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 4194.005
+  m_MinHeight: 906.5167
   m_PreferredWidth: -1
-  m_PreferredHeight: 4194.005
+  m_PreferredHeight: 906.5167
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3777,9 +3752,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 419.4005
+  m_MinHeight: 90.65167
   m_PreferredWidth: -1
-  m_PreferredHeight: 419.4005
+  m_PreferredHeight: 90.65167
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -4016,6 +3991,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224939189311781928, guid: 061e4f3f0c0104238a98c0f0f73491b0,
     type: 2}
   m_PrefabInternal: {fileID: 1702295770}
+--- !u!1 &1718371824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1407445880234336, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1702295770}
 --- !u!1 &1720581775
 GameObject:
   m_ObjectHideFlags: 0
@@ -4162,9 +4142,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 419.4005
+  m_MinHeight: 90.65167
   m_PreferredWidth: -1
-  m_PreferredHeight: 419.4005
+  m_PreferredHeight: 90.65167
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

@@ -8,7 +8,7 @@ namespace QM.Events
     /// Orientation changed event. Uses two arguments: firt the old and second the new orientation.
     /// </summary>
     [System.Serializable]
-    public class OrientationChangedEvent : UnityEvent<ScreenOrientation, ScreenOrientation>
+    public class OrientationChangedEvent : UnityEvent<DeviceOrientation, DeviceOrientation>
     {
     }
 
@@ -17,21 +17,21 @@ namespace QM.Events
 
         public OrientationChangedEvent oce;
 
-        private ScreenOrientation orientation;
+        private DeviceOrientation orientation;
 
         // Use this for initialization
         void Start()
         {
-            orientation = Device.orientation;
+            orientation = Device.Orientation;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Screen.orientation != orientation) {
-                ScreenOrientation oldOrientation = orientation;
-                oce.Invoke(oldOrientation, Screen.orientation);
-                orientation = Screen.orientation;
+            if (Device.Orientation != orientation) {
+                DeviceOrientation oldOrientation = orientation;
+                oce.Invoke(oldOrientation, Device.Orientation);
+                orientation = Device.Orientation;
             }
         }
     }
