@@ -116,7 +116,9 @@ namespace GQ.Client.UI
             {
                 showControls(true);
 
-                //OnForward();
+                if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360) {
+                    OnForward();
+                }
             };
 
             // set the rawimage texture:
