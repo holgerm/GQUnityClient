@@ -331,24 +331,6 @@ namespace GQ.Client.Model
             info.Name = q.Name;
             info.LastUpdateOnServer = q.LastUpdate;
             info.LastUpdateOnDevice = info.LastUpdateOnServer;
-            //// hotspots:
-            //HotspotInfo[] hInfos = new HotspotInfo[q.AllHotspots.Count];
-            //int i = 0;
-            //foreach (Hotspot h in q.AllHotspots)
-            //{
-            //    hInfos[i++] = new HotspotInfo(h.Latitude, h.Longitude);
-            //}
-            //info.Hotspots = hInfos;
-            //// metadata:
-            //MetaDataInfo[] mInfos = new MetaDataInfo[q.metadata.Count];
-            //i = 0;
-            //foreach (string key in q.metadata.Keys)
-            //{
-            //    string value = null;
-            //    q.metadata.TryGetValue(key, out value);
-            //    mInfos[i++] = new MetaDataInfo(key, value);
-            //}
-            //info.Metadata = mInfos;
             //// TimestampOfPredeployedVersion remains unchanged
             //// PlayedTimes remains unchanged (TODO if we want to count for versions separately we should enhance it here!)
             info.NewVersionOnServer = null;
@@ -363,7 +345,7 @@ namespace GQ.Client.Model
                         String.Format("Info for quest {0} changed.", info.Name),
                         ChangeType.ChangedInfo,
                         newQuestInfo: info,
-                        oldQuestInfo: null
+                        oldQuestInfo: info
                     )
                 );
             }
