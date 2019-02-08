@@ -78,14 +78,6 @@
       "name": "Kategorien",
       "categories": [
         {
-          "id": "wcc.antiquariate",
-          "name": "Antiquariat",
-          "folderName": "Kultur",
-          "symbol": {
-            "path": "textures/readable/antiquariat"
-          }
-        },
-        {
           "id": "wcc.architecture",
           "name": "Architektur",
           "folderName": "Kultur",
@@ -126,17 +118,41 @@
           }
         },
         {
+          "id": "wcc.sports",
+          "name": "Leibesübungen",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/sports"
+          }
+        },
+        {
+          "id": "wcc.antiquariate",
+          "name": "Antiquariat",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "path": "textures/readable/antiquariat"
+          }
+        },
+        {
           "id": "wcc.gallery",
           "name": "Galerie",
-          "folderName": "Kultur",
+          "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/gallery"
           }
         },
         {
+          "id": "wcc.designshop",
+          "name": "Designer Shop",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "path": "textures/readable/designshop"
+          }
+        },
+        {
           "id": "wcc.cinema",
           "name": "Kino",
-          "folderName": "Kultur",
+          "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/cinema"
           }
@@ -144,7 +160,7 @@
         {
           "id": "wcc.concerthall",
           "name": "Konzertsaal",
-          "folderName": "Kultur",
+          "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/concerthall"
           }
@@ -152,17 +168,9 @@
         {
           "id": "wcc.theatre",
           "name": "Theater",
-          "folderName": "Kultur",
+          "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/theatre"
-          }
-        },
-        {
-          "id": "wcc.sports",
-          "name": "Leibesübungen",
-          "folderName": "Kultur",
-          "symbol": {
-            "path": "textures/readable/sports"
           }
         },
         {

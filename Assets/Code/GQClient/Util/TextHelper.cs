@@ -35,7 +35,6 @@ namespace GQ.Client.Util
         static string replaceVariableNames(Match match)
         {
             string varName = match.Value.Substring(1, match.Value.Length - 2);
-            Debug.Log(("Replacing Variable: " + varName).Yellow());
             string value = Variables.GetValue(varName).AsString();
             return value;
         }
