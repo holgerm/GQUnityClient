@@ -147,8 +147,8 @@ namespace GQ.Client.UI
                 duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
 
             if (Math.Abs(duration) < 0.01)
-                duration = npcPage.CurrentDialogItem.Text.Length / 13f;
-            // ca. 130 Worten a 6 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
+                duration = currentText.Length / 14f;
+            // ca. 130 Worten à 6,5 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
 
             // scroll to bottom:
             Base.Instance.StartCoroutine(adjustScrollRect(duration));
@@ -174,16 +174,19 @@ namespace GQ.Client.UI
                 usedTime += Time.deltaTime;
                 newPos = Mathf.Lerp(startPosition, 0f, usedTime / timespan);
                 contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = newPos;
+
+                Debug.Log("Scroll Adjust: Used Time: " + usedTime + " / " + timespan);
                                 
                 yield return null;
                 if (contentPanel == null)
                     // if page already left:
                     yield break;
             }
-            while (newPos > 0.0001);
+            while (newPos > 0.0001 && Input.touchCount == 0 && !Input.GetMouseButtonDown(0));
 
-            // stop when nearly at bottom:
-            contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+            // when it was not touched scroll to the perfect button:
+            if (Input.touchCount == 0 && !Input.GetMouseButtonDown(0))
+                contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
         }
 
         #endregion
