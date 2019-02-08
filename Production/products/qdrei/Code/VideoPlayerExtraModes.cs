@@ -45,8 +45,6 @@ namespace GQ.Client.UI
                             Device.width, Device.height - (headerHeight + footerHeight)
                         );
 
-                    //VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
-                    //uniWebView.ReferenceRectTransform = vpCtrl.webPlayerContent;
                     uniWebView.SetShowSpinnerWhileLoading(true);
                     uniWebView.Show(true);
 
