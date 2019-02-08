@@ -32,7 +32,6 @@
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
   "sceneExtensions": [],
-  "offerLeaveQuestOnEachPage": false,
   "autoSynchQuestInfos": true,
   "_offerManualUpdate4QuestInfos": false,
   "mapProvider": "MapBox",
@@ -135,7 +134,7 @@
         },
         {
           "id": "wcc.gallery",
-          "name": "Galerie",
+          "name": "Galerie / Atelier",
           "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/gallery"
@@ -268,10 +267,19 @@
           "symbol": {
             "path": "textures/readable/bike"
           }
+        },
+        {
+          "id": "wcc.nachtdermuseen",
+          "name": "Nacht der Museen",
+          "folderName": "Aktuelle Events",
+          "symbol": {
+            "path": "textures/readable/bike"
+          }
         }
       ]
     }
   ],
+  "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 0,
     "g": 0,
@@ -395,9 +403,9 @@
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
-  "disabledAlpha": 0.5,
+  "offerLeaveQuestOnEachPage": false,
   "offerFeedback": true,
-  "offerAuthorLogin": false,
+  "offerAuthorLogin": true,
   "defineAuthorBackDoor": false,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
