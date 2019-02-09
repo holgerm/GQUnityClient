@@ -92,12 +92,12 @@ namespace GQ.Client.Model
 
             private HiddenQuestsFilter()
             {
-                IsActive = !Author.ShowHiddenQuests;
+                IsActive = !ConfigurationManager.Current.showHiddenQuests;
                 Debug.Log("HiddenQuestsFilter(): IsActive: " + IsActive);
                 Author.SettingsChanged +=
                     (object sender, System.EventArgs e) =>
                     {
-                        IsActive = !Author.ShowHiddenQuests;
+                        IsActive = !ConfigurationManager.Current.showHiddenQuests;
                         Debug.Log("HiddenQuestsFilter: Event Author.SettingsChanged set active to: " + IsActive);
                     };
             }

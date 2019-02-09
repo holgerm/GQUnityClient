@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using GQ.Client.Conf;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace GQ.Client.UI
 
         public void Start()
         {
-            toggle.isOn = Author.ShowHiddenQuests;
+            toggle.isOn = ConfigurationManager.Current.showHiddenQuests;
         }
 
         public void OnValueChange(bool newValue)

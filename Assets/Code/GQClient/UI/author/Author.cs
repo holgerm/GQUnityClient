@@ -52,19 +52,19 @@ namespace GQ.Client.Util
                 if (value != _loggedInAs)
                 {
                     _loggedInAs = value;
-                    OnSettingsChanged();
                     PlayerPrefs.SetString(GQPrefKeys.LOGGED_IN_AS.ToString(), _loggedInAs);
                     if (_loggedInAs == null || _loggedInAs == "")
                     {
                         PlayerPrefs.DeleteKey(GQPrefKeys.LOGGED_IN_AS.ToString());
                     }
                     PlayerPrefs.Save();
+                    OnSettingsChanged();
                 }
             }
         }
         private static string _loggedInAs = null;
 
-        public static bool ShowHiddenQuests
+        internal static bool ShowHiddenQuests
         {
             get
             {
@@ -94,7 +94,7 @@ namespace GQ.Client.Util
         }
         private static bool? _showHiddenQuests = null;
 
-        public static bool OfferManualUpdate
+        public static bool offerManualUpdate
         {
             get
             {
@@ -106,10 +106,10 @@ namespace GQ.Client.Util
                     }
                     else
                     {
-                        _offerManualUpdate = !ConfigurationManager.Current.showHiddenQuests;
+                        _offerManualUpdate = ConfigurationManager.Current.OfferManualUpdate4QuestInfos;
                     }
                 }
-                return (bool) _offerManualUpdate && LoggedIn;
+                return (bool) _offerManualUpdate;
             }
             set
             {

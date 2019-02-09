@@ -24,8 +24,8 @@ namespace GQ.Client.UI
 
         void Author_SettingsChanged(object sender, System.EventArgs e)
         {
-            updateQuestInfos_MenuEntry.SetActive(Author.OfferManualUpdate);
-            Debug.Log("SEt Entry Update to : " + Author.OfferManualUpdate);
+            updateQuestInfos_MenuEntry.SetActive(Author.offerManualUpdate);
+            Debug.Log("SEt Entry Update to : " + Author.offerManualUpdate);
         }
 
 

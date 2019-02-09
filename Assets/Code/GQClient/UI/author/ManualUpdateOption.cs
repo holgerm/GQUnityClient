@@ -15,12 +15,12 @@ namespace GQ.Client.UI
 
         public void Start()
         {
-            toggle.isOn = Author.OfferManualUpdate;
+            toggle.isOn = Author.offerManualUpdate;
         }
 
         public void OnValueChange(bool newValue)
         {
-            Author.OfferManualUpdate = newValue;
+            Author.offerManualUpdate = newValue;
             Debug.Log("ManualUpdateOption NEWVALUE: " + newValue);
         }
     }
