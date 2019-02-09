@@ -22,7 +22,7 @@
   "showCloudQuestsImmediately": true,
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
-  "showHiddenQuests": true,
+  "showHiddenQuests": false,
   "acceptedPageTypes": [
     "NPCTalk"
   ],
@@ -33,7 +33,7 @@
   ],
   "sceneExtensions": [],
   "autoSynchQuestInfos": true,
-  "_offerManualUpdate4QuestInfos": false,
+  "OfferManualUpdate4QuestInfos": false,
   "mapProvider": "MapBox",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
