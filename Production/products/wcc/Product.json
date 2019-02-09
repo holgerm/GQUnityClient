@@ -22,7 +22,7 @@
   "showCloudQuestsImmediately": true,
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
-  "hideHiddenQuests": true,
+  "showHiddenQuests": true,
   "acceptedPageTypes": [
     "NPCTalk"
   ],
@@ -406,7 +406,7 @@
   "offerLeaveQuestOnEachPage": false,
   "offerFeedback": true,
   "offerAuthorLogin": true,
-  "defineAuthorBackDoor": false,
+  "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
   "listEntryHeightUnits": 50.0,

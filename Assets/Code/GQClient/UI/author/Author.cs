@@ -76,10 +76,10 @@ namespace GQ.Client.Util
                     }
                     else
                     {
-                        _showHiddenQuests = !ConfigurationManager.Current.hideHiddenQuests;
+                        _showHiddenQuests = ConfigurationManager.Current.showHiddenQuests;
                     }
                 }
-                return (bool)_showHiddenQuests && LoggedIn;
+                return (bool)_showHiddenQuests;
             }
             set
             {
@@ -106,7 +106,7 @@ namespace GQ.Client.Util
                     }
                     else
                     {
-                        _offerManualUpdate = !ConfigurationManager.Current.hideHiddenQuests;
+                        _offerManualUpdate = !ConfigurationManager.Current.showHiddenQuests;
                     }
                 }
                 return (bool) _offerManualUpdate && LoggedIn;
@@ -124,12 +124,45 @@ namespace GQ.Client.Util
         }
         private static bool? _offerManualUpdate = null;
 
+        public static bool ShowEmptyMenuEntries
+        {
+            get
+            {
+                if (_showEmptyMenuEntries == null)
+                {
+                    if (PlayerPrefs.HasKey(GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()))
+                    {
+                        // use stored value when called first time this run but already called in earlier runs::
+                        _showEmptyMenuEntries = PlayerPrefs.GetInt(GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()) == 1;
+                    }
+                    else
+                    {
+                        // Default value: Use config value when first time called:
+                        _showEmptyMenuEntries = ConfigurationManager.Current.showEmptyMenuEntries;
+                    }
+                }
+                return (bool)_showEmptyMenuEntries && LoggedIn;
+            }
+            set
+            {
+                if (value != _showEmptyMenuEntries)
+                {
+                    _showEmptyMenuEntries = value;
+                    OnSettingsChanged();
+                    PlayerPrefs.SetInt(GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString(), _showEmptyMenuEntries == true ? 1 : 0);
+                    PlayerPrefs.Save();
+                }
+            }
+        }
+        private static bool? _showEmptyMenuEntries = null;
+
 
         public enum GQPrefKeys
         {
             LOGGED_IN_AS,
             SHOW_HIDDEN_QUESTS,
-            OFFER_MANUAL_UPDATES
+            OFFER_MANUAL_UPDATES,
+            SHOW_EMPTY_MENU_ENTRIES
         }
 
     }

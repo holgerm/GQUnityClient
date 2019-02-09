@@ -99,7 +99,19 @@ namespace GQ.Client.Conf
         public bool localQuestsDeletable { get; set; }
 
         [ShowInProductEditor]
-        public bool hideHiddenQuests { get; set; }
+        public bool showHiddenQuests { 
+            get {
+                if (Application.isPlaying && Author.LoggedIn) {
+                    return (Author.ShowHiddenQuests);
+                } else {
+                    return _showHiddenQuests;
+                }
+            }
+            set {
+                _showHiddenQuests = value;
+            }
+        }
+        private bool _showHiddenQuests;
 
         [ShowInProductEditor(StartSection = "Pages & Scenes:")]
         public string[] acceptedPageTypes { get; set; }
@@ -626,7 +638,7 @@ namespace GQ.Client.Conf
             showCloudQuestsImmediately = false;
             downloadAllCloudQuestOnStart = false;
             localQuestsDeletable = true;
-            hideHiddenQuests = false;
+            showHiddenQuests = false;
             DownloadStrategy = DownloadStrategy.UPFRONT;
 
             timeoutMS = 60000L;

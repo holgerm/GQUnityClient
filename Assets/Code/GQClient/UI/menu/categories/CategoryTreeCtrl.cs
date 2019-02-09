@@ -150,7 +150,7 @@ namespace GQ.Client.UI
 					CategoryEntry catEntry;
 					if (!categoryEntries.TryGetValue (cat, out catEntry)) {
 						// if a quest has an unknown category we skip that:
-						Log.SignalErrorToAuthor ("Quest {0} has unkown category {1}.", info.Name, cat);
+						Log.SignalErrorToAuthor ("Quest {0} has unkown category '{1}'.", info.Name, cat);
 						continue;
 					}
 					// we take note of the category of the current quest in our tree model:
