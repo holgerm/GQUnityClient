@@ -9,19 +9,19 @@ using UnityEngine.UI;
 namespace GQ.Client.UI
 {
 
-    public class ManualUpdateOption : MonoBehaviour
+    public class ShowEmptyMenuEntriesOption : MonoBehaviour
     {
 
         public Toggle toggle;
 
         public void Start()
         {
-            toggle.isOn = ConfigurationManager.Current.OfferManualUpdate4QuestInfos;
+            toggle.isOn = ConfigurationManager.Current.ShowEmptyMenuEntries;
         }
 
         public void OnValueChange(bool newValue)
         {
-            ConfigurationManager.Current.OfferManualUpdate4QuestInfos = newValue;
+            ConfigurationManager.Current.ShowEmptyMenuEntries = newValue;
         }
     }
 }

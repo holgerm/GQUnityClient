@@ -6,6 +6,7 @@ using Newtonsoft.Json.Converters;
 using GQ.Client.FileIO;
 using GQ.Client.UI;
 using GQ.Client.Util;
+using GQ.Client.Err;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -98,20 +99,44 @@ namespace GQ.Client.Conf
 
         public bool localQuestsDeletable { get; set; }
 
-        [ShowInProductEditor]
-        public bool showHiddenQuests { 
-            get {
-                if (Application.isPlaying && Author.LoggedIn) {
-                    return (Author.ShowHiddenQuests);
-                } else {
-                    return _showHiddenQuests;
+        [ShowInProductEditor, JsonProperty]
+        private bool showHiddenQuests { get; set; }
+        [JsonIgnore]
+        private bool? _showHiddenQuests;
+        [JsonIgnore]
+        public bool ShowHiddenQuests
+        {
+            get
+            {
+                if (_showHiddenQuests == null)
+                {
+                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()))
+                    {
+                        // use stored value when called first time this run but already called in earlier runs::
+                        _showHiddenQuests = PlayerPrefs.GetInt(Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()) == 1;
+                    }
+                    else
+                    {
+                        // Default value: Use config value when first time called:
+                        _showHiddenQuests = showEmptyMenuEntries;
+                    }
+                }
+                return (bool)_showHiddenQuests;
+            }
+            set
+            {
+                if (value != _showHiddenQuests)
+                {
+                    _showHiddenQuests = value;
+                    PlayerPrefs.SetInt(
+                        Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString(),
+                        _showHiddenQuests == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
                 }
             }
-            set {
-                _showHiddenQuests = value;
-            }
         }
-        private bool _showHiddenQuests;
 
         [ShowInProductEditor(StartSection = "Pages & Scenes:")]
         public string[] acceptedPageTypes { get; set; }
@@ -157,23 +182,42 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool autoSynchQuestInfos { get; set; }
 
-        [ShowInProductEditor]
-        public bool OfferManualUpdate4QuestInfos { 
-            get {
-                if (Application.isPlaying && Author.LoggedIn)
+        [ShowInProductEditor, JsonProperty]
+        public bool offerManualUpdate4QuestInfos { get; set; }
+        [JsonIgnore]
+        private bool? _offerManualUpdate4QuestInfos = null;
+        [JsonIgnore]
+        public bool OfferManualUpdate4QuestInfos
+        {
+            get
+            {
+                if (_offerManualUpdate4QuestInfos == null)
                 {
-                    return (Author.offerManualUpdate);
+                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString()))
+                    {
+                        _offerManualUpdate4QuestInfos = PlayerPrefs.GetInt(Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString()) == 1;
+                    }
+                    else
+                    {
+                        _offerManualUpdate4QuestInfos = ConfigurationManager.Current.OfferManualUpdate4QuestInfos;
+                    }
                 }
-                else
+                return (bool)_offerManualUpdate4QuestInfos;
+            }
+            set
+            {
+                if (value != _offerManualUpdate4QuestInfos)
                 {
-                    return _offerManualUpdate4QuestInfos;
+                    _offerManualUpdate4QuestInfos = value;
+                    PlayerPrefs.SetInt(
+                        Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString(),
+                        _showEmptyMenuEntries == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
                 }
-            } 
-            set {
-                _offerManualUpdate4QuestInfos = value;
             }
         }
-        private bool _offerManualUpdate4QuestInfos { get; set; }
         #endregion
 
 
@@ -497,8 +541,44 @@ namespace GQ.Client.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 overlayButtonFgDisabledColor { get; set; }
 
-        [ShowInProductEditor(StartSection = "Menu:")]
-        public bool showEmptyMenuEntries { get; set; }
+        [ShowInProductEditor(StartSection = "Menu:"), JsonProperty]
+        private bool showEmptyMenuEntries { get; set; }
+        [JsonIgnore]
+        private bool? _showEmptyMenuEntries = null;
+        [JsonIgnore]
+        public bool ShowEmptyMenuEntries
+        {
+            get
+            {
+                if (_showEmptyMenuEntries == null)
+                {
+                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()))
+                    {
+                        // use stored value when called first time this run but already called in earlier runs::
+                        _showEmptyMenuEntries = PlayerPrefs.GetInt(Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()) == 1;
+                    }
+                    else
+                    {
+                        // Default value: Use config value when first time called:
+                        _showEmptyMenuEntries = showEmptyMenuEntries;
+                    }
+                }
+                return (bool)_showEmptyMenuEntries;
+            }
+            set
+            {
+                if (value != _showEmptyMenuEntries)
+                {
+                    _showEmptyMenuEntries = value;
+                    PlayerPrefs.SetInt(
+                        Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString(),
+                        _showEmptyMenuEntries == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
+                }
+            }
+        }
 
         [ShowInProductEditor]
         public float menuEntryHeightUnits { get; set; }
@@ -623,10 +703,10 @@ namespace GQ.Client.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 emulationColor { get; set; }
 
-#endregion
+        #endregion
 
 
-#region Defaults
+        #region Defaults
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class and intializes it with generic default values.
@@ -647,7 +727,7 @@ namespace GQ.Client.Conf
             showCloudQuestsImmediately = false;
             downloadAllCloudQuestOnStart = false;
             localQuestsDeletable = true;
-            showHiddenQuests = false;
+            ShowHiddenQuests = false;
             DownloadStrategy = DownloadStrategy.UPFRONT;
 
             timeoutMS = 60000L;
@@ -744,7 +824,7 @@ namespace GQ.Client.Conf
             emulationColor = new Color(255f, 182f, 182f, 255f);
         }
 
-#endregion
+        #endregion
 
     }
 

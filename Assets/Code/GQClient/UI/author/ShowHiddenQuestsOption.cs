@@ -14,12 +14,12 @@ namespace GQ.Client.UI
 
         public void Start()
         {
-            toggle.isOn = ConfigurationManager.Current.showHiddenQuests;
+            toggle.isOn = ConfigurationManager.Current.ShowHiddenQuests;
         }
 
         public void OnValueChange(bool newValue)
         {
-            Author.ShowHiddenQuests = newValue;
+            ConfigurationManager.Current.ShowHiddenQuests = newValue;
             // obeye: filter logic is reverse to Base instance flag logic here:
             QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = !newValue;
         }

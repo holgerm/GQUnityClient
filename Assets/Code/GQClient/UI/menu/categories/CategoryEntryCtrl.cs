@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using GQ.Client.Conf;
 using QM.UI;
 using QM.Util;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {
@@ -76,10 +77,11 @@ namespace GQ.Client.UI
 			}
 		}
 
-		override protected bool showMenuItem ()
+		protected override bool showMenuItem ()
 		{
 			bool entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
-			if (ConfigurationManager.Current.showEmptyMenuEntries)
+   
+            if (ConfigurationManager.Current.ShowEmptyMenuEntries)
 				return (entryVisible);
 			else
 				return (categoryEntry.NumberOfQuests () > 0 && entryVisible);

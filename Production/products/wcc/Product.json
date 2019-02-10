@@ -33,7 +33,7 @@
   ],
   "sceneExtensions": [],
   "autoSynchQuestInfos": true,
-  "OfferManualUpdate4QuestInfos": false,
+  "offerManualUpdate4QuestInfos": false,
   "mapProvider": "MapBox",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
@@ -376,7 +376,7 @@
     "b": 159,
     "a": 187
   },
-  "showEmptyMenuEntries": true,
+  "showEmptyMenuEntries": false,
   "menuEntryHeightUnits": 40.0,
   "menuEntryHeightMinMM": 5.0,
   "menuEntryHeightMaxMM": 0.0,

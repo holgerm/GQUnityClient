@@ -5,6 +5,7 @@ using GQ.Client.UI;
 using UnityEngine.UI;
 using GQ.Client.Conf;
 using QM.UI;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {
@@ -96,11 +97,15 @@ namespace GQ.Client.UI
 
 		override protected bool showMenuItem ()
 		{
-			if (ConfigurationManager.Current.showEmptyMenuEntries)
-				return (folder.Name != "");
-			else
-				return (folder.Name != "" && folder.Entries.Count >= 1);
-		}
+			if (ConfigurationManager.Current.ShowEmptyMenuEntries)
+            {
+                return (folder.Name != "");
+            }
+            else
+            {
+                return (folder.Name != "" && folder.Entries.Count > 0);
+            }
+        }
 
 		#endregion
 
