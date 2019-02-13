@@ -946,7 +946,7 @@ namespace GQ.Editor.UI
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.DownloadStrategy;
+                    _selected = (int?)ProductEditor.SelectedConfig.downloadStrategy;
                 }
                 return (int)_selected;
             }

@@ -71,7 +71,7 @@ namespace GQ.Client.Conf
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        public DownloadStrategy DownloadStrategy { get; set; }
+        public DownloadStrategy downloadStrategy { get; set; }
 
         [ShowInProductEditor]
         public long timeoutMS { get; set; }
@@ -118,7 +118,7 @@ namespace GQ.Client.Conf
                     else
                     {
                         // Default value: Use config value when first time called:
-                        _showHiddenQuests = showEmptyMenuEntries;
+                        _showHiddenQuests = showHiddenQuests;
                     }
                 }
                 return (bool)_showHiddenQuests;
@@ -199,7 +199,7 @@ namespace GQ.Client.Conf
                     }
                     else
                     {
-                        _offerManualUpdate4QuestInfos = ConfigurationManager.Current.OfferManualUpdate4QuestInfos;
+                        _offerManualUpdate4QuestInfos = ConfigurationManager.Current.offerManualUpdate4QuestInfos;
                     }
                 }
                 return (bool)_offerManualUpdate4QuestInfos;
@@ -617,7 +617,19 @@ namespace GQ.Client.Conf
         public bool menu2ShownInQuests { get; set; }
 
         [ShowInProductEditor]
-        public bool offerLeaveQuestOnEachPage { get; set; }
+        public bool offerLeaveQuestOnEachPage
+        {
+            get
+            {
+                return _offerLeaveQuestOnEachPage || Author.LoggedIn;
+            }
+            set
+            {
+                _offerLeaveQuestOnEachPage = value;
+            }
+        }
+        [JsonIgnore]
+        private bool _offerLeaveQuestOnEachPage;
 
         [ShowInProductEditor]
         public bool offerFeedback { get; set; }
@@ -697,7 +709,19 @@ namespace GQ.Client.Conf
         public Color32 listBgColor { get; set; }
 
         [ShowInProductEditor]
-        public bool showDeleteOptionForLocalQuests { get; set; }
+        public bool showDeleteOptionForLocalQuests
+        {
+            get
+            {
+                return _showDeleteOptionForLocalQuests || Author.LoggedIn;
+            }
+            set
+            {
+                _showDeleteOptionForLocalQuests = value;
+            }
+        }
+        [JsonIgnore]
+        private bool _showDeleteOptionForLocalQuests;
 
         [ShowInProductEditor(StartSection = "Internal:")]
         [JsonConverter(typeof(Color32Converter))]
@@ -727,15 +751,15 @@ namespace GQ.Client.Conf
             showCloudQuestsImmediately = false;
             downloadAllCloudQuestOnStart = false;
             localQuestsDeletable = true;
-            ShowHiddenQuests = false;
-            DownloadStrategy = DownloadStrategy.UPFRONT;
+            showHiddenQuests = false;
+            downloadStrategy = DownloadStrategy.UPFRONT;
 
             timeoutMS = 60000L;
             maxIdleTimeMS = 9000L;
             maxParallelDownloads = 15;
 
             autoSynchQuestInfos = true;
-            OfferManualUpdate4QuestInfos = !autoSynchQuestInfos;
+            offerManualUpdate4QuestInfos = !autoSynchQuestInfos;
 
             acceptedPageTypes = new string[0];
             sceneMappings = new List<SceneMapping>();
