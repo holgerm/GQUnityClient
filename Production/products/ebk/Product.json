@@ -10,7 +10,7 @@
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
-  "DownloadStrategy": "UPFRONT",
+  "downloadStrategy": "UPFRONT",
   "timeoutMS": 0,
   "maxIdleTimeMS": 9089,
   "maxParallelDownloads": 15,
@@ -24,14 +24,19 @@
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
-  "hideHiddenQuests": true,
+  "showHiddenQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
     "MultipleChoiceQuestion",
     "Navigation",
     "ImageWithText",
-    "TextQuestion"
+    "TextQuestion",
+    "Menu",
+    "VideoPlay",
+    "AudioRecord",
+    "ImageCapture",
+    "MetaData"
   ],
   "sceneMappings": [],
   "scenePaths": [
@@ -50,9 +55,8 @@
     "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
-  "offerLeaveQuestOnEachPage": false,
   "autoSynchQuestInfos": true,
-  "_offerManualUpdate4QuestInfos": false,
+  "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -91,7 +95,102 @@
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": null,
-  "CategorySets": [],
+  "CategorySets": [
+    {
+      "name": "Filter",
+      "categories": [
+        {
+          "id": "ebk.bibel",
+          "name": "Bibel",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/bibel"
+          }
+        },
+        {
+          "id": "ebk.feste",
+          "name": "Christliche Feste",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/feste"
+          }
+        },
+        {
+          "id": "ebk.glauben",
+          "name": "Glauben",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/glauben"
+          }
+        },
+        {
+          "id": "ebk.krippe",
+          "name": "Krippenweg",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/krippe"
+          }
+        },
+        {
+          "id": "ebk.kultur",
+          "name": "Kunst & Kultur",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/kultur"
+          }
+        },
+        {
+          "id": "ebk.natur",
+          "name": "Natur",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/natur"
+          }
+        },
+        {
+          "id": "ebk.quiz",
+          "name": "Quiz",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/quiz"
+          }
+        },
+        {
+          "id": "ebk.familie",
+          "name": "Kinder & Familie",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/familie"
+          }
+        },
+        {
+          "id": "ebk.zufuss",
+          "name": "Zu Fuss",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/zufuss"
+          }
+        },
+        {
+          "id": "ebk.mitkarte",
+          "name": "Orientierung",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/mitkarte"
+          }
+        },
+        {
+          "id": "ebk.imsitzen",
+          "name": "Im Sitzen",
+          "folderName": "Inhalte",
+          "symbol": {
+            "path": "textures/readable/imsitzen"
+          }
+        }
+      ]
+    }
+  ],
+  "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 0,
     "g": 0,
@@ -215,7 +314,7 @@
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
-  "disabledAlpha": 0.5,
+  "offerLeaveQuestOnEachPage": true,
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
@@ -265,7 +364,7 @@
     "b": 105,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": false,
+  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 247,
     "g": 80,
