@@ -393,7 +393,7 @@ namespace GQ.Client.Model
                 return
                 IsOnDevice
                 // either configurated to offer delete or logged in as author:
-                && (ConfigurationManager.Current.showDeleteOptionForLocalQuests || Author.LoggedInAs != null);
+                && (ConfigurationManager.Current.showDeleteOptionForLocalQuests);
             }
         }
         #endregion
