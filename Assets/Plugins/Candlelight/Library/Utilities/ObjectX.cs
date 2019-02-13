@@ -23,6 +23,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEngine;
 
 namespace Candlelight
 {
@@ -51,19 +53,27 @@ namespace Candlelight
 					{
 						continue;
 					}
-					System.Reflection.ConstructorInfo constructor = type.GetConstructor(
-						System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static |
-						System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
-						null,
-						System.Type.EmptyTypes,
-						null
-					);
-					if (constructor == null || constructor.IsPublic)
-					{
-						UnityEngine.Debug.LogError(
-							string.Format("<b>{0}</b> has no protected, parameterless constructor.", type)
-						);
-					}
+                    try
+                    {
+                        System.Reflection.ConstructorInfo constructor = type.GetConstructor(
+                            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static |
+                            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
+                            null,
+                            System.Type.EmptyTypes,
+                            null
+                        );
+                        if (constructor == null || constructor.IsPublic)
+                        {
+                            UnityEngine.Debug.LogError(
+                                string.Format("<b>{0}</b> has no protected, parameterless constructor.", type)
+                            );
+                        }
+                    }
+                    catch (AmbiguousMatchException exc)
+                    {
+                        Debug.Log("Igrnored Exception in Candelelight ObjectX: " + exc.Message);
+                        continue;
+                    }
 				}
 			}
 		}

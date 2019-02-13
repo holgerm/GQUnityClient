@@ -234,11 +234,18 @@ namespace Candlelight
 			HashSet<System.Type> sequenceTypesThatCannotBeBackingFields = new HashSet<System.Type>();
 			foreach (System.Type incompatibleType in typesThatCannotBeBackingFields)
 			{
-				sequenceTypesThatCannotBeBackingFields.Add(incompatibleType.MakeArrayType());
-				sequenceTypesThatCannotBeBackingFields.Add(
-					typeof(List<>).MakeGenericType(new System.Type[] { incompatibleType })
-				);
-			}
+                if (incompatibleType != typeof (void))
+                {
+                    sequenceTypesThatCannotBeBackingFields.Add(incompatibleType.MakeArrayType());
+                    sequenceTypesThatCannotBeBackingFields.Add(
+                        typeof(List<>).MakeGenericType(new System.Type[] { incompatibleType }));
+                }
+                else
+                {
+                    Debug.LogWarning("Void filtered out");
+                }
+
+            }
 			// collect any fields that will cause problems with types that cannot be marked as backing fields
 			Dictionary<System.Type, List<FieldInfo>> problematicFields = new Dictionary<System.Type, List<FieldInfo>>();
 			// examine all fields on the scripted types to find any problematic usages
