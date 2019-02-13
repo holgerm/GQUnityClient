@@ -210,7 +210,11 @@ namespace GQ.Client.Model
             {
                 foreach (string cat in acceptedCategories)
                 {
-                    if (qi.Categories.Contains(cat))
+                    if (qi.Categories.Contains(cat) ||
+                        (
+                            qi.NewVersionOnServer != null && qi.NewVersionOnServer.Categories.Contains(cat)
+                        )
+                    )
                         return true;
                 }
                 return false;
