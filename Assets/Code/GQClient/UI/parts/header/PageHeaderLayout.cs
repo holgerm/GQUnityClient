@@ -14,7 +14,7 @@ namespace GQ.Client.UI
     {
         protected override void setHeader()
         {
-            enableLeaveQuestButton(ConfigurationManager.Current.offerLeaveQuestOnEachPage || Author.LoggedIn);
+            enableLeaveQuestButton(ConfigurationManager.Current.offerLeaveQuestOnEachPage);
 
             base.setHeader();
 
