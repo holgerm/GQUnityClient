@@ -143,7 +143,7 @@ namespace GQ.Client.UI
 
             // play audio if specified:
             float duration = 0f;
-            if (npcPage.CurrentDialogItem.AudioURL != "")
+            if (npcPage.CurrentDialogItem.AudioURL != null && npcPage.CurrentDialogItem.AudioURL != "")
                 duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
 
             if (Math.Abs(duration) < 0.01)
@@ -175,8 +175,6 @@ namespace GQ.Client.UI
                 newPos = Mathf.Lerp(startPosition, 0f, usedTime / timespan);
                 contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = newPos;
 
-                Debug.Log("Scroll Adjust: Used Time: " + usedTime + " / " + timespan);
-                                
                 yield return null;
                 if (contentPanel == null)
                     // if page already left:
