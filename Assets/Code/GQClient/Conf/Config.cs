@@ -386,9 +386,11 @@ namespace GQ.Client.Conf
             }
         }
 
+        [ShowInProductEditor]
+        public string defaultCategory { get; set; }
+
         [JsonIgnore]
         private List<CategorySet> _categorySets;
-
 
         [JsonIgnore]
         public Dictionary<string, Category> categoryDict;

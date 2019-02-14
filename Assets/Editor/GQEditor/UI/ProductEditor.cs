@@ -286,8 +286,8 @@ namespace GQ.Editor.UI
                 }
 
                 int newIndex = EditorGUILayout.Popup(
-                    availableProductsPopupGUIContent, 
-                    selectedProductIndex, 
+                    availableProductsPopupGUIContent,
+                    selectedProductIndex,
                     guiContentListOfProducts.ToArray()
                 );
                 selectProduct(newIndex);
@@ -405,7 +405,7 @@ namespace GQ.Editor.UI
                     foreach (PropertyInfo curPropInfo in propertyInfos)
                     {
                         if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
-                        	continue;
+                            continue;
 
                         string propName = curPropInfo.Name + ":";
                         string value = Objects.ToString(curPropInfo.GetValue(SelectedConfig, null));
@@ -724,7 +724,7 @@ namespace GQ.Editor.UI
             }
 
             if (ProductEditorPart.entryHidden(curPropInfo))
-                return false; 
+                return false;
             else if (Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
             {
                 var attributes = curPropInfo.GetCustomAttributes(typeof(ShowInProductEditor), false);
@@ -748,7 +748,7 @@ namespace GQ.Editor.UI
                 NamePrefixGUIContent = new GUIContent(name + ":");
 
             accordingEditorPart.doCreateGui(curPropInfo);
-            return configIsDirty; 
+            return configIsDirty;
         }
 
         abstract protected bool doCreateGui(PropertyInfo curPropInfo);
@@ -930,7 +930,7 @@ namespace GQ.Editor.UI
                 curPropInfo.SetValue(ProductEditor.SelectedConfig, (HeaderMiddleButtonPolicy)selected, null);
             }
 
-            if (configIsDirty) 
+            if (configIsDirty)
                 Debug.Log("HeaderMiddleButtonPolicy changed");
             return configIsDirty;
         }
@@ -1557,14 +1557,18 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4AndroidSdkVersions : ProductEditorPart
     {
         int? _selected;
-        int selected {
-            get {
-                if (_selected == null) {
-                    _selected = valueIndexByNumber[(int) ProductEditor.SelectedConfig.androidMinSDKVersion];
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = valueIndexByNumber[(int)ProductEditor.SelectedConfig.androidMinSDKVersion];
                 }
                 return (int)_selected;
             }
-            set {
+            set
+            {
                 _selected = value;
             }
         }
@@ -1572,9 +1576,12 @@ namespace GQ.Editor.UI
         static readonly Array vals = Enum.GetValues(typeof(AndroidSdkVersions));
 
         private static Dictionary<int, int> _valueIndexByNumber;
-        public static Dictionary<int, int> valueIndexByNumber {
-            get {
-                if (_valueIndexByNumber == null) {
+        public static Dictionary<int, int> valueIndexByNumber
+        {
+            get
+            {
+                if (_valueIndexByNumber == null)
+                {
                     _valueIndexByNumber = new Dictionary<int, int>();
                     for (int i = 0; i < names.Length; i++)
                     {
@@ -1617,8 +1624,8 @@ namespace GQ.Editor.UI
             if (old != selected)
             {
                 configIsDirty = true;
-                PlayerSettings.Android.minSdkVersion = 
-                    (AndroidSdkVersions) Enum.Parse(typeof(AndroidSdkVersions), valueNameByIndex[selected]);
+                PlayerSettings.Android.minSdkVersion =
+                    (AndroidSdkVersions)Enum.Parse(typeof(AndroidSdkVersions), valueNameByIndex[selected]);
                 curPropInfo.SetValue(ProductEditor.SelectedConfig, PlayerSettings.Android.minSdkVersion, null);
             }
 
