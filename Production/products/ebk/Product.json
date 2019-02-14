@@ -94,7 +94,7 @@
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
-  "mainCategorySet": null,
+  "mainCategorySet": "Filter",
   "CategorySets": [
     {
       "name": "Filter",
@@ -102,7 +102,7 @@
         {
           "id": "ebk.bibel",
           "name": "Bibel",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/bibel"
           }
@@ -110,7 +110,7 @@
         {
           "id": "ebk.feste",
           "name": "Christliche Feste",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/feste"
           }
@@ -118,7 +118,7 @@
         {
           "id": "ebk.glauben",
           "name": "Glauben",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/glauben"
           }
@@ -126,7 +126,7 @@
         {
           "id": "ebk.krippe",
           "name": "Krippenweg",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/krippe"
           }
@@ -134,7 +134,7 @@
         {
           "id": "ebk.kultur",
           "name": "Kunst & Kultur",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/kultur"
           }
@@ -142,7 +142,7 @@
         {
           "id": "ebk.natur",
           "name": "Natur",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/natur"
           }
@@ -150,7 +150,7 @@
         {
           "id": "ebk.quiz",
           "name": "Quiz",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/quiz"
           }
@@ -158,38 +158,55 @@
         {
           "id": "ebk.familie",
           "name": "Kinder & Familie",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/familie"
           }
         },
         {
-          "id": "ebk.zufuss",
-          "name": "Zu Fuss",
-          "folderName": "Inhalte",
-          "symbol": {
-            "path": "textures/readable/zufuss"
-          }
-        },
-        {
           "id": "ebk.mitkarte",
           "name": "Orientierung",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/mitkarte"
           }
         },
         {
+          "id": "ebk.zufuss",
+          "name": "Zu Fuss",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/zufuss"
+          }
+        },
+        {
+          "id": "ebk.mitdemrad",
+          "name": "Mit dem Rad",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/mitdemrad"
+          }
+        },
+        {
           "id": "ebk.imsitzen",
           "name": "Im Sitzen",
-          "folderName": "Inhalte",
+          "folderName": "",
           "symbol": {
             "path": "textures/readable/imsitzen"
+          }
+        },
+        {
+          "id": "ebk.default",
+          "name": "Sonstiges",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/sonstiges"
           }
         }
       ]
     }
   ],
+  "defaultCategory": "ebk.default",
   "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 0,
@@ -301,15 +318,15 @@
     "a": 255
   },
   "menuBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 252,
+    "g": 230,
+    "b": 215,
     "a": 255
   },
   "menuFGColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
   "menuInhibitsInteraction": true,
@@ -323,8 +340,8 @@
   "listEntryHeightUnits": 60.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
-  "listEntryUseTwoLines": false,
-  "listEntryDividingMode": "SeparationLines",
+  "listEntryUseTwoLines": true,
+  "listEntryDividingMode": "AlternatingColors",
   "listLineColor": {
     "r": 0,
     "g": 0,
@@ -342,20 +359,20 @@
   },
   "listEntryBgColor": {
     "r": 252,
-    "g": 121,
-    "b": 36,
+    "g": 230,
+    "b": 215,
     "a": 255
   },
   "listEntrySecondFgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
   "listEntrySecondBgColor": {
-    "r": 49,
-    "g": 49,
-    "b": 148,
+    "r": 255,
+    "g": 198,
+    "b": 162,
     "a": 255
   },
   "listBgColor": {

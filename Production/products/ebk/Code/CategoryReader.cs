@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GQ.Client.Conf;
 using GQ.Client.Util;
 
 namespace GQ.Client.Model
@@ -30,6 +31,10 @@ namespace GQ.Client.Model
                             categories.Add(netVal);
                         break;
                 }
+            }
+            if (categories.Count == 0 && ConfigurationManager.Current.defaultCategory != null)
+            {
+                categories.Add(ConfigurationManager.Current.defaultCategory);
             }
             return categories;
         }
