@@ -8,7 +8,7 @@
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
-  "DownloadStrategy": "UPFRONT",
+  "downloadStrategy": "UPFRONT",
   "timeoutMS": 60000,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
@@ -74,7 +74,7 @@
   "mainCategorySet": "Kategorien",
   "CategorySets": [
     {
-      "name": "Filter",
+      "name": "Kategorien",
       "categories": [
         {
           "id": "wcc.architecture",
@@ -279,6 +279,7 @@
       ]
     }
   ],
+  "defaultCategory": null,
   "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 0,
@@ -376,7 +377,7 @@
     "b": 159,
     "a": 187
   },
-  "showEmptyMenuEntries": false,
+  "showEmptyMenuEntries": true,
   "menuEntryHeightUnits": 40.0,
   "menuEntryHeightMinMM": 5.0,
   "menuEntryHeightMaxMM": 0.0,
@@ -403,7 +404,7 @@
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
-  "offerLeaveQuestOnEachPage": false,
+  "offerLeaveQuestOnEachPage": true,
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
@@ -453,7 +454,7 @@
     "b": 22,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": false,
+  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 255,
     "g": 95,

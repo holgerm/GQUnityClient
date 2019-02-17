@@ -21,7 +21,7 @@ namespace GQ.Client.UI
 
         public void OnValueChange(bool newValue)
         {
-            ConfigurationManager.Current.ShowEmptyMenuEntries = newValue;
+            Author.ShowEmptyMenuEntries = newValue;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using GQ.Client.Conf;
+using GQ.Client.Model;
 using UnityEngine;
 
 namespace GQ.Client.Util
@@ -63,6 +64,108 @@ namespace GQ.Client.Util
             }
         }
         private static string _loggedInAs = null;
+
+        private static bool? _offerManualUpdate = null;
+        public static bool OfferManualUpdate
+        {
+            get
+            {
+                if (_offerManualUpdate == null)
+                {
+                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString()))
+                    {
+                        _offerManualUpdate = PlayerPrefs.GetInt(Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString()) == 1;
+                    }
+                    else
+                    {
+                        _offerManualUpdate = false;
+                    }
+                }
+                return (bool)_offerManualUpdate;
+            }
+            set
+            {
+                if (_offerManualUpdate != value)
+                {
+                    _offerManualUpdate = value;
+                    PlayerPrefs.SetInt(
+                        Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString(),
+                        _offerManualUpdate == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
+                }
+            }
+        }
+
+        private static bool? _showHiddenQuests = null;
+        public static bool ShowHiddenQuests
+        {
+            get
+            {
+                if (_showHiddenQuests == null)
+                {
+                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()))
+                    {
+                        _showHiddenQuests = PlayerPrefs.GetInt(Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()) == 1;
+                    }
+                    else
+                    {
+                        _showHiddenQuests = false;
+                    }
+                }
+                return (bool)_showHiddenQuests;
+            }
+            set
+            {
+                if (_showHiddenQuests != value)
+                {
+                    _showHiddenQuests = value;
+                    PlayerPrefs.SetInt(
+                        Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString(),
+                        _showHiddenQuests == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
+
+                    // obeye: filter logic is reverse to Base instance flag logic here:
+                    QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = !value;
+                }
+            }
+        }
+
+        private static bool? _showEmptyMenuEntries = null;
+        public static bool ShowEmptyMenuEntries
+        {
+            get
+            {
+                if (_showEmptyMenuEntries == null)
+                {
+                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()))
+                    {
+                        _showEmptyMenuEntries = PlayerPrefs.GetInt(Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()) == 1;
+                    }
+                    else
+                    {
+                        _showEmptyMenuEntries = false;
+                    }
+                }
+                return (bool)_showEmptyMenuEntries;
+            }
+            set
+            {
+                if (_showEmptyMenuEntries != value)
+                {
+                    _showEmptyMenuEntries = value;
+                    PlayerPrefs.SetInt(
+                        Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString(),
+                        _showEmptyMenuEntries == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
+                }
+            }
+        }
 
         public enum GQPrefKeys
         {

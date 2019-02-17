@@ -16,15 +16,17 @@ namespace GQ.Client.UI
         // Use this for initialization
         void Start()
         {
+            Config cf = ConfigurationManager.Current;
             updateQuestInfos_MenuEntry.SetActive(
-                ConfigurationManager.Current.OfferManualUpdate4QuestInfos
+                cf.OfferManualUpdate4QuestInfos
             );
             Author.SettingsChanged += Author_SettingsChanged;
         }
 
         void Author_SettingsChanged(object sender, System.EventArgs e)
         {
-            updateQuestInfos_MenuEntry.SetActive(ConfigurationManager.Current.OfferManualUpdate4QuestInfos);
+            Config cf = ConfigurationManager.Current;
+            updateQuestInfos_MenuEntry.SetActive(cf.OfferManualUpdate4QuestInfos);
         }
 
         public void UpdateQuestInfos()

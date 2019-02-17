@@ -21,7 +21,7 @@ namespace GQ.Client.UI
 
         public void OnValueChange(bool newValue)
         {
-            ConfigurationManager.Current.OfferManualUpdate4QuestInfos = newValue;
+            Author.OfferManualUpdate = newValue;
         }
     }
 }

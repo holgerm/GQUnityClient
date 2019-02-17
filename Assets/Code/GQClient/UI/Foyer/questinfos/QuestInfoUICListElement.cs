@@ -267,6 +267,9 @@ namespace GQ.Client.UI.Foyer
             if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "")
             {
                 CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet();
+                if (mainCategorySet == null)
+                    return;
+
                 Category determiningCategory = null;
                 foreach (string myCatId in qInfo.Categories)
                 {
