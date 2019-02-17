@@ -60,7 +60,8 @@ namespace GQ.Client.UI
                 Image mtlImage = middleTopLogo.GetComponent<Image>();
                 if (mtlImage != null)
                 {
-                    mtlImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
+                    Config cf = ConfigurationManager.Current;
+                    mtlImage.sprite = Resources.Load<Sprite>(cf.topLogo.path);
                 }
             }
         }

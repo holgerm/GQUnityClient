@@ -1,4 +1,3 @@
-using GQ.Client.Model;
 using GQ.Client.Err;
 using UnityEngine.SceneManagement;
 using System.Xml;
@@ -8,9 +7,6 @@ using UnityEngine;
 using GQ.Client.Util;
 using GQ.Client.UI;
 using System.Collections.Generic;
-using System.IO;
-using GQ.Client.FileIO;
-using GQ.Client.Conf;
 
 namespace GQ.Client.Model
 {
@@ -223,11 +219,14 @@ namespace GQ.Client.Model
         // called when a scene has been loaded:
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            Debug.Log(("Scene has been loaded: " + scene.name).Yellow());
             SceneManager.SetActiveScene(scene);
             foreach (Scene sceneToUnload in scenesToUnload)
             {
                 if (sceneToUnload.isLoaded)
                 {
+                    Debug.Log(("Scene still to unload: " + sceneToUnload.name + " ... unloading ...").Yellow());
+
                     SceneManager.UnloadSceneAsync(sceneToUnload);
                 }
             }
@@ -235,6 +234,9 @@ namespace GQ.Client.Model
             SceneManager.sceneLoaded -= OnSceneLoaded;
             
             Resources.UnloadUnusedAssets();
+
+            // Trigger OnStart Actions of this page:
+            StartTrigger.Initiate();
         }
 
         public static List<Scene> scenesToUnload = new List<Scene>();
@@ -252,6 +254,7 @@ namespace GQ.Client.Model
 
         public virtual void Start()
         {
+            Debug.Log(("Starting Page: " + PageType).Yellow());
             if (!CanStart())
                 return;
 
@@ -274,6 +277,10 @@ namespace GQ.Client.Model
             if (!scene.name.Equals(PageSceneName))
             {
                 SceneManager.sceneLoaded += OnSceneLoaded;
+
+                Debug.Log(("Loading Page from current page with scene: " + scene.name + 
+                            " to new page with scene type: " + PageSceneName).Yellow());
+
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
                 {
@@ -306,10 +313,10 @@ namespace GQ.Client.Model
                 }
 
                 pageCtrl.InitPage();
+                // Trigger OnStart Actions of this page:
+                StartTrigger.Initiate();
             }
 
-            // Trigger OnStart Actions of this page:
-            StartTrigger.Initiate();
         }
 
         public virtual void End()
@@ -339,6 +346,8 @@ namespace GQ.Client.Model
 
         public virtual void CleanUp()
         {
+            Debug.Log(("Cleaning up Page: " + PageType).Yellow());
+
             if (PageCtrl != null)
             {
                 PageCtrl.CleanUp();
