@@ -3,6 +3,7 @@ using GQ.Client.Model;
 using UnityEngine.SceneManagement;
 using GQ.Client.Err;
 using GQ.Client.Conf;
+using System.Collections;
 
 namespace GQ.Client.UI
 {
@@ -30,8 +31,13 @@ namespace GQ.Client.UI
 			}
 		}
 
-		public virtual void Start ()
+		public IEnumerator Start ()
 		{
+            while (!QuestManager.Instance.PageReadyToStart) {
+                Debug.Log("Waiting for Page to be ready to start ...");
+                yield return null;
+            }
+                
 			InitPage ();
 		}
 

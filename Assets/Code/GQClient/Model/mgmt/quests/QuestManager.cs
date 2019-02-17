@@ -51,6 +51,7 @@ namespace GQ.Client.Model
         {
             _currentQuest = Quest.Null;
             CurrentPage = Page.Null;
+            PageReadyToStart = true;
         }
 
         #endregion
@@ -178,6 +179,8 @@ namespace GQ.Client.Model
                 currentlyParsingQuest = value;
             }
         }
+
+        public bool PageReadyToStart { get; internal set; }
 
         /// <summary>
         /// Reads the quest from its game.xml file and creates a complete model hierarchy in memory and 

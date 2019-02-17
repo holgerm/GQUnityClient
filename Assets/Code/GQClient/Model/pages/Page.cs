@@ -219,14 +219,11 @@ namespace GQ.Client.Model
         // called when a scene has been loaded:
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            Debug.Log(("Scene has been loaded: " + scene.name).Yellow());
             SceneManager.SetActiveScene(scene);
             foreach (Scene sceneToUnload in scenesToUnload)
             {
                 if (sceneToUnload.isLoaded)
                 {
-                    Debug.Log(("Scene still to unload: " + sceneToUnload.name + " ... unloading ...").Yellow());
-
                     SceneManager.UnloadSceneAsync(sceneToUnload);
                 }
             }
@@ -235,6 +232,35 @@ namespace GQ.Client.Model
             
             Resources.UnloadUnusedAssets();
 
+            QuestManager.Instance.PageReadyToStart = true;
+        }
+
+        private void InitializePageController(Scene scene)
+        {
+            // if we use the same page again, we have to initialize the UI controller again with the new data.
+            GameObject goPageScreen = GameObject.Find(GO_PATH_PAGE_CONTROLLER);
+            if (goPageScreen == null)
+            {
+                Log.SignalErrorToDeveloper(
+                    "Page {0} using scene {1} does not have a PageController at {2}",
+                    Id, scene.name, GO_PATH_PAGE_CONTROLLER
+                );
+                Quest.End();
+                return;
+            }
+
+            PageController pageCtrl = goPageScreen.GetComponent<PageController>();
+            if (pageCtrl == null)
+            {
+                Log.SignalErrorToDeveloper(
+                    "Page {0} using scene {1} does not have a PageController at {2}",
+                    Id, scene.name, GO_PATH_PAGE_CONTROLLER
+                );
+                Quest.End();
+                return;
+            }
+
+            pageCtrl.InitPage();
             // Trigger OnStart Actions of this page:
             StartTrigger.Initiate();
         }
@@ -254,7 +280,7 @@ namespace GQ.Client.Model
 
         public virtual void Start()
         {
-            Debug.Log(("Starting Page: " + PageType).Yellow());
+
             if (!CanStart())
                 return;
 
@@ -276,10 +302,9 @@ namespace GQ.Client.Model
 
             if (!scene.name.Equals(PageSceneName))
             {
-                SceneManager.sceneLoaded += OnSceneLoaded;
+                QuestManager.Instance.PageReadyToStart = false; // make new page wait for switching scene and unloading old page.
 
-                Debug.Log(("Loading Page from current page with scene: " + scene.name + 
-                            " to new page with scene type: " + PageSceneName).Yellow());
+                SceneManager.sceneLoaded += OnSceneLoaded;
 
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
@@ -289,32 +314,7 @@ namespace GQ.Client.Model
             }
             else
             {
-                // if we use the same page again, we have to initialize the UI controller again with the new data.
-                GameObject goPageScreen = GameObject.Find(GO_PATH_PAGE_CONTROLLER);
-                if (goPageScreen == null)
-                {
-                    Log.SignalErrorToDeveloper(
-                        "Page {0} using scene {1} does not have a PageController at {2}",
-                        Id, scene.name, GO_PATH_PAGE_CONTROLLER
-                    );
-                    Quest.End();
-                    return;
-                }
-
-                PageController pageCtrl = goPageScreen.GetComponent<PageController>();
-                if (pageCtrl == null)
-                {
-                    Log.SignalErrorToDeveloper(
-                        "Page {0} using scene {1} does not have a PageController at {2}",
-                        Id, scene.name, GO_PATH_PAGE_CONTROLLER
-                    );
-                    Quest.End();
-                    return;
-                }
-
-                pageCtrl.InitPage();
-                // Trigger OnStart Actions of this page:
-                StartTrigger.Initiate();
+                InitializePageController(scene);
             }
 
         }
@@ -346,8 +346,6 @@ namespace GQ.Client.Model
 
         public virtual void CleanUp()
         {
-            Debug.Log(("Cleaning up Page: " + PageType).Yellow());
-
             if (PageCtrl != null)
             {
                 PageCtrl.CleanUp();
