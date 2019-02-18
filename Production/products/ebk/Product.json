@@ -300,7 +300,8 @@
     "g": 43,
     "b": 120,
     "a": 255
-    "overlayButtonFgDisabledColor": {
+  },
+  "overlayButtonFgDisabledColor": {
     "r": 255,
     "g": 255,
     "b": 255,
