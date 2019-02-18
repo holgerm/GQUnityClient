@@ -72,27 +72,27 @@
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 75.0,
-  "markerHeightMinMM": 0.0,
+  "markerHeightUnits": 55.0,
+  "markerHeightMinMM": 10.0,
   "markerHeightMaxMM": 0.0,
   "markerColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 190,
+    "g": 166,
+    "b": 7,
+    "a": 255
   },
   "markerSymbolFGColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
-  "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 50.0,
-  "mapButtonHeightMinMM": 5.0,
-  "mapButtonHeightMaxMM": 0.0,
-  "foldableCategoryFilters": true,
-  "categoryFiltersStartFolded": true,
+  "markerBGAlpha": 150,
+  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightMinMM": 7.0,
+  "mapButtonHeightMaxMM": 12.0,
+  "foldableCategoryFilters": false,
+  "categoryFiltersStartFolded": false,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": "Filter",
   "CategorySets": [
@@ -210,45 +210,45 @@
   "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "mainBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 224,
+    "g": 210,
+    "b": 147,
     "a": 255
   },
   "mainFontSize": 60,
   "maxFontSize": 100,
   "showShadows": false,
   "topLogo": {
-    "path": "TopLogo"
+    "path": "topLogoBlau"
   },
   "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 190,
+    "g": 166,
+    "b": 7,
     "a": 255
   },
   "headerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 190,
+    "g": 166,
+    "b": 7,
+    "a": 255
   },
   "headerButtonFgColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "contentBackgroundColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 224,
+    "g": 210,
+    "b": 147,
     "a": 255
   },
   "headerHeightUnits": 60.0,
@@ -265,21 +265,21 @@
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 208,
+    "g": 188,
+    "b": 89,
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 208,
+    "g": 188,
+    "b": 89,
+    "a": 255
   },
   "footerButtonFgColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "borderWidthUnits": 0.0,
@@ -287,15 +287,15 @@
   "overlayButtonSizeMinMM": 6.0,
   "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 208,
+    "g": 188,
+    "b": 89,
+    "a": 255
   },
   "overlayButtonFgColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "overlayButtonFgDisabledColor": {
@@ -312,21 +312,21 @@
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuFrameColor": {
-    "r": 127,
-    "g": 127,
-    "b": 127,
+    "r": 208,
+    "g": 188,
+    "b": 89,
     "a": 255
   },
   "menuBGColor": {
-    "r": 252,
-    "g": 230,
-    "b": 215,
+    "r": 190,
+    "g": 166,
+    "b": 7,
     "a": 255
   },
   "menuFGColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "menuInhibitsInteraction": true,
@@ -353,32 +353,32 @@
   "listEndLineWidth": 6,
   "listEntryFgColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 252,
-    "g": 230,
-    "b": 215,
+    "r": 241,
+    "g": 232,
+    "b": 201,
     "a": 255
   },
   "listEntrySecondFgColor": {
     "r": 0,
-    "g": 0,
-    "b": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "listEntrySecondBgColor": {
-    "r": 255,
-    "g": 198,
-    "b": 162,
+    "r": 224,
+    "g": 210,
+    "b": 147,
     "a": 255
   },
   "listBgColor": {
-    "r": 105,
-    "g": 105,
-    "b": 105,
+    "r": 150,
+    "g": 172,
+    "b": 203,
     "a": 255
   },
   "showDeleteOptionForLocalQuests": true,
