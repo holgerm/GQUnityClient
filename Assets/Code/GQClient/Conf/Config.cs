@@ -220,8 +220,31 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public double mapStartAtLatitude { get; set; }
 
+        [ShowInProductEditor]
+        public ImagePath hotspotMarker
+        {
+            get
+            {
+                if (!__JSON_Currently_Parsing && _hotspotMarker == null)
+                {
+                    _hotspotMarker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
+                }
+                return _hotspotMarker;
+            }
+            set
+            {
+                if (value == null || value.path == null || value.path.Equals(""))
+                {
+                    _hotspotMarker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
+                }
+                else
+                {
+                    _hotspotMarker = value;
+                }
+            }
+        }
         [JsonIgnore]
-        private ImagePath _marker;
+        private ImagePath _hotspotMarker;
 
         [ShowInProductEditor]
         public ImagePath marker
@@ -246,6 +269,8 @@ namespace GQ.Client.Conf
                 }
             }
         }
+        [JsonIgnore]
+        private ImagePath _marker;
 
         [ShowInProductEditor]
         public float markerHeightUnits { get; set; }

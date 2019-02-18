@@ -92,9 +92,8 @@ namespace GQ.Client.UI
                 return;
             }
          
-            // App-specific markers (which can be the GeoQuest default marker, too:
-            Texture2D markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.marker.path);
-            Debug.Log("MARKER PATH: " + ConfigurationManager.Current.marker.path);
+            // App-specific hotspot marker (defaults to the default geoqeust marker):
+            Texture2D markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.hotspotMarker.path);
             showLoadedMarker(hotspot, markerTexture);
         }
 
