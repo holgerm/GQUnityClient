@@ -25,7 +25,7 @@ namespace GQ.Client.UI
         public GameObject containerNormal;
         public GameObject videoControllerPanelNormal;
         public GameObject videoControllerPanel360;
-        private GameObject videoControllerPanel;
+        internal GameObject videoControllerPanel;
         private Slider videoControllerSlider;
         public VideoPlayer videoPlayer360;
         public Camera camera360;
@@ -61,10 +61,10 @@ namespace GQ.Client.UI
             {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL:
                     videoPlayer = videoPlayerNormal;
-                    videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct; 
+                    videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
                     videoControllerPanel = videoControllerPanelNormal;
+                    videoControllerSlider = videoControllerPanel.GetComponentInChildren<Slider>();
                     videoControllerPanel.SetActive(false);
-                    videoControllerSlider = videoControllerPanelNormal.GetComponentInChildren<Slider>();
                     // enable camera & canvas:
                     containerNormal.SetActive(true);
                     videoImage.enabled = true;
@@ -79,29 +79,37 @@ namespace GQ.Client.UI
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
                     videoPlayer = videoPlayer360;
                     videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
-                    videoControllerPanel = videoControllerPanel360;
-                    //videoControllerSlider = videoControllerPanel360.GetComponentInChildren<Slider>();
+                    videoControllerPanel = videoControllerPanelNormal;
+                    videoControllerSlider = videoControllerPanel.GetComponentInChildren<Slider>();
+                    videoControllerPanel.SetActive(false);
                     // switch to 360 Cam:
                     cameraMain.enabled = false;
                     camera360.enabled = true;
                     // switch to sphere:
-                    containerNormal.SetActive(false);
+                    containerNormal.SetActive(true);
+                    hideNormalVideo(true);
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(true);
-                    videoControllerPanel.SetActive(false);
                     videoPlayer.started += (source) =>
                     {
                         videoControllerPanel.SetActive(myPage.Controllable);
                     };
                     CoroutineStarter.Run(playVideo());
                     break;
-               default:
+                default:
                     //containerNormal.SetActive(false);
                     videoImage.enabled = false;
                     container360.SetActive(false);
                     VideoPlayerExtraModes.Initialize(myPage, containerWebPlayer);
                     break;
             }
+        }
+
+        private void hideNormalVideo(bool hide)
+        {
+            containerNormal.transform.Find("Screen").GetComponent<Image>().enabled = !hide;
+            videoImage.GetComponent<RawImage>().enabled = !hide;
+            videoPlayerNormal.enabled = !hide;
         }
 
         IEnumerator playVideo()
@@ -137,7 +145,8 @@ namespace GQ.Client.UI
             {
                 showPageControls(true);
 
-                if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360) {
+                if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360)
+                {
                     OnForward();
                 }
             };
@@ -168,7 +177,8 @@ namespace GQ.Client.UI
             videoPlayer.Play();
         }
 
-        private void showPageControls(bool show) {
+        private void showPageControls(bool show)
+        {
             header.SetActive(show);
             footer.SetActive(show);
             if (show)
@@ -188,15 +198,37 @@ namespace GQ.Client.UI
 
         private void rotateVideo(DeviceOrientation orient)
         {
+            if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360)
+            {
+                Transform camTransform = container360.transform.Find("Camera").transform;
+                float new360CamZAngle;
+                float newControlsZAngle;
+                if (orient == DeviceOrientation.LandscapeLeft)
+                {
+                    new360CamZAngle = 90f;
+                    newControlsZAngle = 270f;
+                }
+                else
+                {
+                    new360CamZAngle = 270f;
+                    newControlsZAngle = 90f;
+                }
+                camTransform.eulerAngles =
+                  new Vector3(camTransform.eulerAngles.x, camTransform.eulerAngles.y, new360CamZAngle);
+                // rotate "normal" video image to rotate controls:
+                videoImage.rectTransform.eulerAngles = new Vector3(0, 0, newControlsZAngle);
+                return;
+            }
+
             switch (orient)
             {
                 case DeviceOrientation.Portrait:
                     videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 0);
                     break;
-                case DeviceOrientation.Unknown: // TEST
                 case DeviceOrientation.LandscapeRight:
                     videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 90);
                     break;
+                case DeviceOrientation.Unknown: // TEST
                 case DeviceOrientation.PortraitUpsideDown:
                     videoImage.rectTransform.eulerAngles = new Vector3(0, 0, 180);
                     break;
@@ -208,7 +240,15 @@ namespace GQ.Client.UI
             }
         }
 
-        void scaleVideo(DeviceOrientation orient) {
+        void scaleVideo(DeviceOrientation orient)
+        {
+            if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360)
+            {
+                if (orient == DeviceOrientation.Portrait || orient == DeviceOrientation.PortraitUpsideDown)
+                {
+                    orient = DeviceOrientation.LandscapeRight;
+                }
+            }
             float videoRatio = (float)videoPlayer.texture.width / (float)videoPlayer.texture.height;
             float screenRatio =
                 (float)containerNormal.GetComponent<RectTransform>().rect.width /
@@ -262,11 +302,12 @@ namespace GQ.Client.UI
             if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE)
                 return;
 
-            if (Device.Orientation != orientation) {
+            if (Device.Orientation != orientation)
+            {
                 SizeVideoToFitInside(Device.Orientation);
             }
 
-            if (!Input.GetMouseButton(0) && myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL)
+            if (!Input.GetMouseButton(0))
             {
                 // auto-proceed the movie slider only when no interaction:
                 videoControllerSlider.value = (float)videoPlayer.frame / videoPlayer.frameCount;
@@ -289,7 +330,7 @@ namespace GQ.Client.UI
                 return;
             }
 
-            videoPlayer.frame = (long) (videoPlayer.frameCount * newValue);
+            videoPlayer.frame = (long)(videoPlayer.frameCount * newValue);
         }
 
         public override void CleanUp()
@@ -301,6 +342,8 @@ namespace GQ.Client.UI
             // switch back to main camera:
             camera360.enabled = false;
             cameraMain.enabled = true;
+
+            hideNormalVideo(false);
         }
 
         #endregion

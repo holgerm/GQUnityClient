@@ -38,7 +38,7 @@ namespace GQ.Client.UI
         float rotationX = 0F;
         float rotationY = 0F;
 
-        Quaternion originalRotation;
+        public Quaternion originalRotation;
 
         void Update()
         {
