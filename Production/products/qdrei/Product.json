@@ -28,10 +28,14 @@
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
-    "MultipleChoiceQuestion",
-    "Navigation",
     "ImageWithText",
-    "TextQuestion"
+    "Menu",
+    "MultipleChoiceQuestion",
+    "TextQuestion",
+    "AudioRecord",
+    "ImageCapture",
+    "VideoPlay",
+    "Navigation"
   ],
   "sceneMappings": [],
   "scenePaths": [
