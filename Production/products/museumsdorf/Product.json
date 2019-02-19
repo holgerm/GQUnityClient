@@ -35,8 +35,8 @@
     "AudioRecord",
     "ImageCapture",
     "VideoPlay",
-    "MapOSM",
-    "MetaData"
+    "Navigation",
+    "MapOSM"
   ],
   "sceneMappings": [
     {
@@ -47,11 +47,17 @@
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
-    "Assets/Scenes/Pages/StartAndExitScreen.unity",
-    "Assets/Scenes/Pages/Navigation.unity",
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
     "Assets/Scenes/Pages/TextQuestion.unity",
-    "Assets/Scenes/Pages/ImageCapture.unity"
+    "Assets/Scenes/Pages/StartAndExitScreen.unity",
+    "Assets/Scenes/Pages/Menu.unity",
+    "Assets/Scenes/Pages/Navigation.unity",
+    "Assets/Scenes/Pages/VideoPlay.unity",
+    "Assets/Scenes/Pages/WebPage.unity",
+    "Assets/Scenes/Pages/AudioRecord.unity",
+    "Assets/Scenes/Pages/ImageCapture.unity",
+    "Assets/Scenes/Pages/TagScanner.unity",
+    "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
   "offerLeaveQuestOnEachPage": true,
