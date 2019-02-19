@@ -7,6 +7,7 @@ using UnityEngine.Video;
 using GQ.Client.Err;
 using QM.Util;
 using GQ.Client.Conf;
+using System;
 
 namespace GQ.Client.UI
 {
@@ -22,6 +23,10 @@ namespace GQ.Client.UI
         public AudioSource audioSource;
         public VideoPlayer videoPlayerNormal;
         public GameObject containerNormal;
+        public GameObject videoControllerPanelNormal;
+        public GameObject videoControllerPanel360;
+        private GameObject videoControllerPanel;
+        private Slider videoControllerSlider;
         public VideoPlayer videoPlayer360;
         public Camera camera360;
         public GameObject container360;
@@ -56,15 +61,26 @@ namespace GQ.Client.UI
             {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL:
                     videoPlayer = videoPlayerNormal;
+                    videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct; 
+                    videoControllerPanel = videoControllerPanelNormal;
+                    videoControllerPanel.SetActive(false);
+                    videoControllerSlider = videoControllerPanelNormal.GetComponentInChildren<Slider>();
                     // enable camera & canvas:
                     containerNormal.SetActive(true);
                     videoImage.enabled = true;
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(false);
+                    videoPlayer.started += (source) =>
+                    {
+                        videoControllerPanel.SetActive(myPage.Controllable);
+                    };
                     CoroutineStarter.Run(playVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
                     videoPlayer = videoPlayer360;
+                    videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
+                    videoControllerPanel = videoControllerPanel360;
+                    //videoControllerSlider = videoControllerPanel360.GetComponentInChildren<Slider>();
                     // switch to 360 Cam:
                     cameraMain.enabled = false;
                     camera360.enabled = true;
@@ -72,6 +88,11 @@ namespace GQ.Client.UI
                     containerNormal.SetActive(false);
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(true);
+                    videoControllerPanel.SetActive(false);
+                    videoPlayer.started += (source) =>
+                    {
+                        videoControllerPanel.SetActive(myPage.Controllable);
+                    };
                     CoroutineStarter.Run(playVideo());
                     break;
                default:
@@ -114,7 +135,7 @@ namespace GQ.Client.UI
 
             videoPlayer.loopPointReached += (VideoPlayer source) =>
             {
-                showControls(true);
+                showPageControls(true);
 
                 if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360) {
                     OnForward();
@@ -141,13 +162,13 @@ namespace GQ.Client.UI
 
         private void play()
         {
-            showControls(false);
+            showPageControls(false);
 
             // start Playing:
             videoPlayer.Play();
         }
 
-        private void showControls(bool show) {
+        private void showPageControls(bool show) {
             header.SetActive(show);
             footer.SetActive(show);
             if (show)
@@ -238,9 +259,37 @@ namespace GQ.Client.UI
 
         public void Update()
         {
+            if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE)
+                return;
+
             if (Device.Orientation != orientation) {
                 SizeVideoToFitInside(Device.Orientation);
             }
+
+            if (!Input.GetMouseButton(0) && myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL)
+            {
+                // auto-proceed the movie slider only when no interaction:
+                videoControllerSlider.value = (float)videoPlayer.frame / videoPlayer.frameCount;
+            }
+        }
+
+        public void ToggleVideoController()
+        {
+            videoControllerPanelNormal.SetActive(myPage.Controllable && !videoControllerPanelNormal.activeSelf);
+        }
+
+        public void ControlVideoBySlider(float newValue)
+        {
+            if (!videoControllerSlider.IsActive())
+                return;
+
+            if (!Input.GetMouseButton(0))
+            {
+                // prevent a normal update on the slider when the film runs to change frame, hence inhibit cycle.
+                return;
+            }
+
+            videoPlayer.frame = (long) (videoPlayer.frameCount * newValue);
         }
 
         public override void CleanUp()
