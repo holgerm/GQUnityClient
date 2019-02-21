@@ -16,8 +16,7 @@ namespace GQ.Client.UI
 
         #region Inspector Features
 
-        public Text prompt;
-        public Text scannedText;
+        public Text shownText;
         public Text forwardButtonText;
 
         WebCamTexture camTexture;
@@ -26,6 +25,8 @@ namespace GQ.Client.UI
 
         private Thread qrThread;
         private Color32[] c;
+
+        private bool stateAfterScan = false;
 
         #endregion
 
@@ -43,9 +44,9 @@ namespace GQ.Client.UI
             myPage = (PageTagScanner)page;
 
             // show the content:
-            prompt.color = ConfigurationManager.Current.mainFgColor;
-            prompt.fontSize = ConfigurationManager.Current.mainFontSize;
-            prompt.text = myPage.Prompt.Decode4HyperText();
+            shownText.color = ConfigurationManager.Current.mainFgColor;
+            shownText.fontSize = ConfigurationManager.Current.mainFontSize;
+            shownText.text = myPage.Prompt.Decode4HyperText();
             forwardButtonText.text = "Ok";
 
             CoroutineStarter.Run(InitQRCamera());
@@ -153,11 +154,11 @@ namespace GQ.Client.UI
         {
             if (scannedTextShouldBeChecked)
             {
-                checkResult(qrContent);
+                checkResult();
                 scannedTextShouldBeChecked = false;
             }
 
-            if (camTexture.didUpdateThisFrame)
+            if (camTexture.isPlaying && camTexture.didUpdateThisFrame)
             {
                 camTexture.GetPixels32(c);
                 pixelsShouldBeDecoded = true;
@@ -165,53 +166,35 @@ namespace GQ.Client.UI
         }
 
 
-        private void checkResult(string result)
+        private void checkResult()
         {
-            Debug.Log("QR CODE gescannt:" + result);
-
-            myPage.Result = result;
-
             if (myPage.ShowTagContent)
             {
-                scannedText.text = result;
-                //ergebnis_text.enabled = true;
-                //ergebnis_textbg.enabled = true;
-            }
-
-            if (myPage.AnswerCorrect(result))
-            {
-                myPage.Succeed();
+                shownText.text = "Inhalt des QR Codes:\n\n" + qrContent;
             }
             else
             {
-                myPage.Fail();
+                shownText.text = "Scan ist fertig.";
             }
-        }
 
+            myPage.Result = qrContent;
 
-        public override void OnForward()
-        {
-            if (myPage.AnswerCorrect(scannedText.text))
+            if (myPage.AnswerCorrect(qrContent))
             {
-                myPage.Succeed();
+                myPage.Succeed(alsoEnd: false);
+                finishScanning();
             }
             else
             {
-                myPage.Fail();
+                myPage.Fail(alsoEnd: false);
+                // TODO implement specification of maximal number of trials, before we leave the page failing ...
+                // we now default to 1:
+                finishScanning();
             }
         }
 
-        void OnDisable()
+        private void finishScanning()
         {
-            Debug.Log("OnDisable()");
-            if (camTexture != null)
-                camTexture.Pause();
-        }
-
-        void OnDestroy()
-        {
-            Debug.Log("OnDestroy()");
-
             if (qrThread != null)
             {
                 decoderRunning = false;
@@ -219,6 +202,32 @@ namespace GQ.Client.UI
 
             if (camTexture != null)
                 camTexture.Stop();
+        }
+
+        public override void OnForward()
+        {
+            if (myPage.AnswerCorrect(qrContent))
+            {
+                myPage.Succeed();
+            }
+            else
+            {
+                myPage.Fail();
+            }
+        }
+
+        void OnEnable()
+        {
+            Debug.Log("OnEnable()");
+            if (camTexture != null)
+                camTexture.Play();
+        }
+
+        void OnDisable()
+        {
+            Debug.Log("OnDisable()");
+            if (camTexture != null)
+                camTexture.Pause();
         }
 
         #endregion

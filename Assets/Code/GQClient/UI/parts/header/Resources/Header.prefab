@@ -437,7 +437,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Null Quest
+  m_Text: Test Fotostation
 --- !u!114 &114550066104581586
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -584,9 +584,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 71.05619
+  m_MinHeight: 190.09126
   m_PreferredWidth: -1
-  m_PreferredHeight: 71.05619
+  m_PreferredHeight: 190.09126
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
