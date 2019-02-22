@@ -233,6 +233,9 @@ namespace GQ.Client.Model
             Resources.UnloadUnusedAssets();
 
             QuestManager.Instance.PageReadyToStart = true;
+
+            // Trigger OnStart Actions of this page:
+            StartTrigger.Initiate();
         }
 
         private void InitializePageController(Scene scene)
