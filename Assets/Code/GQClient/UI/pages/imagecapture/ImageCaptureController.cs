@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
@@ -12,7 +11,7 @@ using GQ.Client.FileIO;
 namespace GQ.Client.UI
 {
 
-	public class ImageCaptureController : PageController {
+    public class ImageCaptureController : PageController {
 
 		#region Inspector Features
 
@@ -43,7 +42,18 @@ namespace GQ.Client.UI
 			// show the task and button:
 			if (myPage.Task != null && myPage.Task != "") {
 				text.text = myPage.Task;
-			} else {
+
+                /*  Adjust the text size after, because it is rotated by 
+                    -90 degrees relative to its parent, but it should be 
+                    same position: */
+                Rect textRect = text.rectTransform.rect;
+                Vector2 textSizeDelta = text.rectTransform.sizeDelta;
+                text.rectTransform.sizeDelta = new Vector2(
+                    textRect.height - textRect.width,
+                    textRect.width - textRect.height
+                );
+            }
+            else {
 				text.gameObject.SetActive (false);
 			}
 
@@ -52,7 +62,6 @@ namespace GQ.Client.UI
 		}
 
 		IEnumerator initWebCam() {
-			Debug.Log ("########### CAMERA: 1");
 			string deviceName = null;
 			foreach (WebCamDevice wcd in WebCamTexture.devices) {
 				if (!wcd.isFrontFacing) {
@@ -62,7 +71,6 @@ namespace GQ.Client.UI
 			}
 
 			cameraTexture = new WebCamTexture (deviceName);
-			Debug.Log ("########### CAMERA: 2");
 
 			cameraTexture.requestedHeight = 2000;
 			cameraTexture.requestedWidth = 3000;
@@ -73,13 +81,11 @@ namespace GQ.Client.UI
 			while (!cameraTexture.didUpdateThisFrame)
 				yield return null;
 
-			Debug.Log ("########### CAMERA: 3");
-
 			// rotate if needed:
 			camRawImage.transform.rotation *= Quaternion.AngleAxis (cameraTexture.videoRotationAngle, Vector3.back);
 
 			camIsRotated = Math.Abs (cameraTexture.videoRotationAngle) == 90 || Math.Abs (cameraTexture.videoRotationAngle) == 270;
-			Debug.Log ("########### CAMERA: 4");
+
 			float camHeight = (camIsRotated ? cameraTexture.width : cameraTexture.height);
 			float camWidth = (camIsRotated ? cameraTexture.height : cameraTexture.width);
 
@@ -98,11 +104,11 @@ namespace GQ.Client.UI
 
 			float mirrorAdjustment = cameraTexture.videoVerticallyMirrored ? -1F : 1F;
 			// TODO adjust mirror also correct if cam is not rotated:
-			Debug.Log ("########### CAMERA: 5");
+
 			camRawImage.transform.localScale = new Vector3 (widthScale, heightScale * mirrorAdjustment, 1F);
 
 			camRawImage.texture = cameraTexture;
-			Debug.Log ("########### CAMERA: 6");
+
 		}
 
 //		public void Update () {

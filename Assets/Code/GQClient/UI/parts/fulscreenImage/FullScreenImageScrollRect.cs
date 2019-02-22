@@ -245,12 +245,10 @@ namespace GQ.Client.UI
         public void ApplyARF()
         {
             RectTransform rt = Image.GetComponent<RectTransform>();
-            Debug.Log("BEFORE ARF: w: " + rt.rect.width + ", h: " + rt.rect.height);
             aspectRatioFitter.enabled = true;
             aspectRatioFitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
             aspectRatioFitter.aspectRatio =
                 (float)Image.texture.width / (float)Image.texture.height;
-            Debug.Log("AFTER ARF: w: " + rt.rect.width + ", h: " + rt.rect.height);
             rt.localScale = new Vector3(1f, 1f, 1f);
         }
 
