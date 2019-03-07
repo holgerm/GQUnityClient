@@ -33,7 +33,7 @@ namespace GQ.Client.Model
 		{
 			base.ReadAttributes (reader);
 
-			RepeatButtonText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_BUTTON_TEXT, reader);
+			RepeatButtonText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_BUTTON_TEXT, reader, GQML.PAGE_QUESTION_LOOP_BUTTON_TEXT_DEFAULT);
 
 			RepeatText = GQML.GetStringAttribute (GQML.PAGE_QUESTION_LOOP_TEXT, reader);
 
