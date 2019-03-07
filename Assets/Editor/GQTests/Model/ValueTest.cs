@@ -33,9 +33,21 @@ namespace GQTests.Model
 				new Value (-10), 
 				Value.CreateValueFromRawString ("-10")
 			);
-		}
+            Assert.AreEqual(
+                new Value(10),
+                Value.CreateValueFromRawString(" 10")
+            );
+            Assert.AreEqual(
+                new Value(10),
+                Value.CreateValueFromRawString(" 10 ")
+            );
+            Assert.AreEqual(
+                new Value(10),
+                Value.CreateValueFromRawString("10  ")
+            );
+        }
 
-		[Test]
+        [Test]
 		public void CreateFloatFromRawStrings ()
 		{
 			Assert.AreEqual (

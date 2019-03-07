@@ -53,7 +53,40 @@ namespace GQTests.Model
 			Assert.AreEqual (true, numberExpr.Evaluate ().AsBool ());
 		}
 
-		[Test]
+        [Test]
+        public void Number_XML_123_Spaces_Test()
+        {
+            number_XML_123_Common_Asserts(@"<num>123  </num>");
+        }
+
+        [Test]
+        public void Number_XML_Spaces_123_Test()
+        {
+            number_XML_123_Common_Asserts(@"<num>   123</num>");
+        }
+
+        [Test]
+        public void Number_XML_Spaces_123_Spaces_Test()
+        {
+            number_XML_123_Common_Asserts(@"<num>   123  </num>");
+        }
+
+        private void number_XML_123_Common_Asserts(string xmlNum)
+        {
+            NumberExpression numberExpr = parseXML<NumberExpression>(xmlNum);
+
+            // Assert:
+            Assert.IsNotNull(numberExpr);
+            Value val = numberExpr.Evaluate();
+            Assert.IsNotNull(val);
+            Assert.AreEqual(123, numberExpr.Evaluate().AsInt());
+            Assert.That(Values.NearlyEqual(123d, numberExpr.Evaluate().AsDouble()));
+            Assert.AreEqual("123", numberExpr.Evaluate().AsString());
+            Assert.AreEqual(Variables.UNDEFINED_VAR, numberExpr.Evaluate().AsVariableName());
+            Assert.AreEqual(true, numberExpr.Evaluate().AsBool());
+        }
+
+        [Test]
 		public void Number_XML_MaxInt_Test ()
 		{
 			// Act:

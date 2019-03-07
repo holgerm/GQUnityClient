@@ -13,6 +13,8 @@ namespace GQ.Client.Model
 
 		protected override void setValue (string valueAsString)
 		{
+            valueAsString = valueAsString.Trim();
+
 			int valueAsInt;
 			if (Int32.TryParse (valueAsString, out valueAsInt)) {
 				value = new Value (valueAsString, Value.Type.Integer);
