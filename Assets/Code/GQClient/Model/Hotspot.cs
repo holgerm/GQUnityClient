@@ -81,11 +81,34 @@ namespace GQ.Client.Model
 
 		public bool InitialActivity { get; protected set; }
 
-		public bool Active { get; protected set; }
+        private bool _active;
+		public bool Active
+        {
+            get
+            {
+                return _active;
+            }
+            set
+            {
+                _active = value;
+                InvokeHotspotChanged(this);
+            }
+        }
 
 		public bool InitialVisibility { get; protected set; }
 
-		public bool Visible { get; protected set; }
+        private bool _visible;
+		public bool Visible {
+            get
+            {
+                return _visible;
+            }
+            set
+            {
+                _visible = value;
+                InvokeHotspotChanged(this);
+            }
+        }
 
 		public StatusValue Status { get; set; }
 
@@ -281,8 +304,21 @@ namespace GQ.Client.Model
 			}
 		}
 
-		#endregion
+        #endregion
 
-	}
+
+        #region Events
+        public delegate void HotspotChangeCallBack(Hotspot h);
+
+        public event HotspotChangeCallBack HotspotChanged;
+
+        protected void InvokeHotspotChanged(Hotspot h)
+        {
+            if (HotspotChanged != null)
+                HotspotChanged(h);
+        }
+        #endregion
+
+    }
 
 }

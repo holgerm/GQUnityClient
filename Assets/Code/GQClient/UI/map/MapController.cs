@@ -301,7 +301,7 @@ namespace GQ.Client.UI
 			populateMarkers ();
 		}
 
-		void OnApplicationQuit ()
+        void OnApplicationQuit ()
 		{
 			map = null;
 		}

@@ -28,7 +28,10 @@ namespace GQ.Client.UI
 
 		public override void OnTouch ()
 		{
-			Hotspot.Tap ();
+            if (Hotspot.Active)
+            {
+                Hotspot.Tap();
+            }
 		}
 
 	}

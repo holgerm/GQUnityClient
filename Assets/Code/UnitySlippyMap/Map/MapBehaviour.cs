@@ -859,6 +859,9 @@ namespace UnitySlippyMap.Map
 		/// <param name="pos">Position.</param>
 		private double[] ComputeCenterEPSG900913 (double[] pos)
 		{
+            if (this == null || this.gameObject == null)
+                return pos;
+
 			Vector3 displacement = new Vector3 ((float)(centerEPSG900913 [0] - pos [0]) * roundedScaleMultiplier, 0.0f, (float)(centerEPSG900913 [1] - pos [1]) * roundedScaleMultiplier);
 			Vector3 rootPosition = this.gameObject.transform.position;
 			this.gameObject.transform.position = new Vector3 (
