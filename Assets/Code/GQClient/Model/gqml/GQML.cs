@@ -164,7 +164,14 @@ namespace GQ.Client.Model
 		public const string ACTION_PLAYAUDIO_LOOP = "loop";
 		public const string ACTION_PLAYAUDIO_STOPOTHERS = "stopOthers";
 		public const string ACTION_SETVARIABLE_VALUE = "value";
-		public const string ACTION_SHOWMESSAGE_BUTTONTEXT = "buttontext";
+        public const string ACTION_SETHOTSPOTSTATE_ACTIVITY = "activity";
+        public const string ACTIVE = "aktiv";
+        public const string INACTIVE = "inaktiv";
+        public const string ACTION_SETHOTSPOTSTATE_VISIBILITY = "visibility";
+        public const string VISIBLE = "sichtbar";
+        public const string INVISIBLE = "unsichtbar";
+        public const string ACTION_SETHOTSPOTSTATE_APPLYTOALL = "applyToAll";
+        public const string ACTION_SHOWMESSAGE_BUTTONTEXT = "buttontext";
 		public const string ACTION_SHOWMESSAGE_MESSAGE = "message";
 		public const string ACTION_STARTMISSION_ALLOWRETURN = "allowReturn";
 		public const string ACTION_STARTQUEST_QUEST = "quest";
