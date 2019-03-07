@@ -73,11 +73,6 @@ namespace GQ.Client.Model
             }
         }
 
-        public void StartQuest(int id)
-        {
-            // TODO
-        }
-
         public Page CurrentPage { get; set; }
 
         public Scene CurrentScene
