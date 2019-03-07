@@ -13,31 +13,6 @@ namespace GQ.Client.Model
 	public class PageImageWithText : PageNPCTalk
 	{
 
-		#region State
-
-		private string text;
-
-		public string Text { 
-			get {
-				return text;
-			} 
-			set {
-				text = value;
-				// adapt to NPCTalk: set the text as dialog item:
-				DialogItem d = new DialogItem ();
-				d.Id = -1; // not applicable
-				d.IsBlocking = false;
-				d.AudioURL = null;
-				d.Speaker = null;
-				d.Text = text;
-				dialogItems.Clear (); // we have only this dialog item
-				dialogItems.Add (d);
-			} 
-		}
-
-		#endregion
-
-
 		#region Runtime API
 
 		public override void Start ()

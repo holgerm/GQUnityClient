@@ -14,12 +14,36 @@ namespace GQ.Client.Model
 	{
 
 		#region State
-
 		public string EndButtonText { get; set ; }
 
 		public string ImageUrl { get; set; }
 
-		public string NextDialogButtonText { get; set; }
+        private string text;
+
+        public string Text
+        {
+            get
+            {
+                return text;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                    return;
+
+                text = value;
+                // adapt to NPCTalk: set the text as dialog item:
+                DialogItem d = new DialogItem();
+                d.Id = -1; // not applicable
+                d.IsBlocking = false;
+                d.AudioURL = null;
+                d.Speaker = null;
+                d.Text = text;
+                dialogItems.Add(d);
+            }
+        }
+
+        public string NextDialogButtonText { get; set; }
 
 		public string DisplayMode { get; set; }
 
@@ -61,7 +85,6 @@ namespace GQ.Client.Model
 				curDialogItemNo = Math.Max (0, Math.Min (value, dialogItems.Count));
 			}
 		}
-
 		#endregion
 
 
@@ -102,7 +125,9 @@ namespace GQ.Client.Model
 			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_IMAGEURL, reader);
 			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl, "NPCTalk." + GQML.PAGE_NPCTALK_IMAGEURL);
 
-			DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
+            Text = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_TEXT, reader);
+
+            DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
 
 			NextDialogButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
 

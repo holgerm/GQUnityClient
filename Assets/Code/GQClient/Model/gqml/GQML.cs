@@ -38,7 +38,8 @@ namespace GQ.Client.Model
 		// QUESTION PAGE COMMONS:
 		public const string PAGE_QUESTION_LOOP_UNTIL_SUCCESS = "loopUntilSuccess";
 		public const string PAGE_QUESTION_LOOP_BUTTON_TEXT = "loopButtonText";
-		public const string PAGE_QUESTION_LOOP_TEXT = "loopText";
+        public const string PAGE_QUESTION_LOOP_BUTTON_TEXT_DEFAULT = ">>";
+        public const string PAGE_QUESTION_LOOP_TEXT = "loopText";
 		public const string PAGE_QUESTION_LOOP_IMAGE = "loopImage";
 		public const string PAGE_QUESTION_QUESTION = "question";
 		public const string PAGE_QUESTION_BACKGROUND_IMAGE = "bg";
@@ -72,6 +73,7 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_NPCTALK = "NPCTalk";
 		public const string PAGE_NPCTALK_ENDBUTTONTEXT = "endbuttontext";
 		public const string PAGE_NPCTALK_IMAGEURL = "image";
+        public const string PAGE_NPCTALK_TEXT = "text";
 		public const string PAGE_NPCTALK_DISPLAYMODE = "mode";
 		public const string PAGE_NPCTALK_DISPLAYMODE_ALL_AT_ONCE = "Komplett anzeigen";
 		public const string PAGE_NPCTALK_DISPLAYMODE_WORD_BY_WORD = "Wordticker";
