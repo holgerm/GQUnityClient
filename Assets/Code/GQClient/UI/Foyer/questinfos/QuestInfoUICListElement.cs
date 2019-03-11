@@ -208,7 +208,7 @@ namespace GQ.Client.UI.Foyer
             Button nameButton = Name.gameObject.GetComponent<Button>();
             Button.ButtonClickedEvent namebuttonEvent = nameButton.onClick;
             namebuttonEvent.RemoveAllListeners();
-            if (data.IsOnServer && !data.IsOnDevice)
+            if (data.ShowDownloadOption)
             {
                 namebuttonEvent.AddListener(() =>
                 {

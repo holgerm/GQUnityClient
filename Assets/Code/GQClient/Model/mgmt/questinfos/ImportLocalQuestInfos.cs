@@ -43,18 +43,14 @@ namespace GQ.Client.Model
 			}
 		}
 
-		protected override void updateQuestInfoManager (QuestInfo[] quests) {
-			foreach (var q in quests) {
+		protected override void updateQuestInfoManager (QuestInfo[] newQuests) {
+			foreach (var q in newQuests) {
                 if (q.Id <= 0 || qim.QuestDict.ContainsKey(q.Id))
 					continue;
 
 				qim.AddInfo (q);
 			}
-
-			// TODO: If we receive JSON from server and a quest is missing, 
-			// we either need to remove it (when it was only downloadable)
-			// or we need to change its info, so that it can only be deleted with a warning.
-		}
+   		}
 
 	}
 }

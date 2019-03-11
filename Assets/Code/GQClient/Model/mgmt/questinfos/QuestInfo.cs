@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Text;
+﻿using System.Text;
 using System;
 using GQ.Client.Err;
 using Newtonsoft.Json;
@@ -93,7 +91,7 @@ namespace GQ.Client.Model
             {
                 return name;
             }
-            set
+            private set
             {
                 name = value;
             }
@@ -108,6 +106,10 @@ namespace GQ.Client.Model
             {
                 return featuredImagePath;
             }
+            private set
+            {
+                featuredImagePath = value;
+            }
         }
 
         [JsonProperty]
@@ -118,6 +120,10 @@ namespace GQ.Client.Model
             get
             {
                 return typeID;
+            }
+            private set
+            {
+                typeID = value;
             }
         }
 
@@ -130,29 +136,9 @@ namespace GQ.Client.Model
             {
                 return iconPath;
             }
-        }
-
-        /// <summary>
-        /// Server-side update timestamp.
-        /// </summary>
-        /// <value>The last update.</value>
-        [JsonProperty]
-        private long? lastUpdate;
-
-        public long? LastUpdateOnServer
-        {
-            get
+            private set
             {
-                return lastUpdate;
-            }
-            set
-            {
-                if (value != lastUpdate)
-                {
-                    lastUpdate = value;
-                    if (OnChanged != null)
-                        OnChanged();
-                }
+                iconPath = value;
             }
         }
 
@@ -165,7 +151,7 @@ namespace GQ.Client.Model
             {
                 return hotspots;
             }
-            set
+            private set
             {
                 hotspots = value;
             }
@@ -180,7 +166,7 @@ namespace GQ.Client.Model
             {
                 return metadata;
             }
-            set
+            private set
             {
                 metadata = value;
                 // reset categories which are lazily evaluated
@@ -188,29 +174,56 @@ namespace GQ.Client.Model
             }
         }
 
+        public string GetMetadata(string key)
+        {
+
+            foreach (MetaDataInfo md in Metadata)
+            {
+                if (md.Key.Equals(key))
+                    return md.Value;
+            }
+
+            return null;
+        }
+
         [JsonProperty]
         private long? _lastUpdateOnDevice = null;
 
-        public long? LastUpdateOnDevice
+        public long? TimeStamp
         {
             get
             {
                 return _lastUpdateOnDevice;
             }
-            set
+            private set
             {
-                if (value != _lastUpdateOnDevice)
-                {
-                    _lastUpdateOnDevice = value;
-                    if (OnChanged != null)
-                        OnChanged();
-                }
+                _lastUpdateOnDevice = value;
             }
         }
 
         [JsonProperty]
-        private long? _timestampOfPredeployedVersion = null;
+        private long? lastUpdate;
 
+        public long? ServerTimeStamp
+        {
+            get
+            {
+                return lastUpdate;
+            }
+            private set
+            {
+                lastUpdate = value;
+            }
+        }
+
+        internal void DeletedFromServer()
+        {
+            NewVersionOnServer = null;
+            InvokeOnChanged();
+        }
+        [JsonProperty]
+        private long? _timestampOfPredeployedVersion = null;
+        // TODO: move to a local data structure
         public long? TimestampOfPredeployedVersion
         {
             get
@@ -219,14 +232,18 @@ namespace GQ.Client.Model
             }
             set
             {
-                // TODO how will we set this value?
+                // TODO how will we set this value? Do we need to invoke onChanged?
+                if (_timestampOfPredeployedVersion == value)
+                    return;
+
                 _timestampOfPredeployedVersion = value;
+                InvokeOnChanged();
             }
         }
 
         [JsonProperty]
         private int _playedTimes = 0;
-
+        // TODO: move to a local data structure
         public int PlayedTimes
         {
             get
@@ -235,28 +252,88 @@ namespace GQ.Client.Model
             }
             set
             {
-                if (value != _playedTimes)
-                {
-                    QuestInfo oldInfo = (QuestInfo)this.MemberwiseClone();
-                    _playedTimes = value;
-                    QuestInfoManager.Instance.raiseDataChange(
-                        new QuestInfoChangedEvent(
-                            String.Format("Info for quest {0} changed.", Name),
-                            ChangeType.ChangedInfo,
-                            newQuestInfo: this,
-                            oldQuestInfo: oldInfo
-                        )
-                    );
-
-                }
+                if (_playedTimes == value)
+                    return;
+                _playedTimes = value;
+                InvokeOnChanged();
             }
         }
 
         [JsonProperty]
         public QuestInfo NewVersionOnServer
         {
-            get;
-            set;
+            get
+            {
+                return newVersionOnServer;
+            }
+            private set
+            {
+                newVersionOnServer = value;
+            }
+        }
+        [JsonIgnore]
+        QuestInfo newVersionOnServer;
+
+        public void QuestContentHasBeenUpdated()
+        {
+            if (!IsUpdateValid(NewVersionOnServer))
+            {
+                return;
+            }
+
+            // OK. Let's go:
+            Name = NewVersionOnServer.Name;
+            FeaturedImagePath = NewVersionOnServer.FeaturedImagePath;
+            TypeID = NewVersionOnServer.TypeID;
+            IconPath = NewVersionOnServer.IconPath;
+            TimeStamp = NewVersionOnServer.TimeStamp;
+            Hotspots = NewVersionOnServer.Hotspots;
+            Metadata = NewVersionOnServer.Metadata;
+            // unchanged: TimestampOfPredeployedVersion
+            // unchanged: PlayedTimes
+            NewVersionOnServer = null;
+
+            InvokeOnChanged();
+        }
+
+        public void QuestInfoHasBeenUpdatedTo(QuestInfo newQuestInfo)
+        {
+            if (!IsUpdateValid(newQuestInfo))
+            {
+                return;
+            }
+
+            // OK. Let's go:
+            ServerTimeStamp = newQuestInfo.ServerTimeStamp;
+            NewVersionOnServer = newQuestInfo;
+            // the rest remains unchanged until content gets updated
+
+            InvokeOnChanged();
+        }
+
+        private bool IsUpdateValid(QuestInfo newQuestInfo)
+        {
+            if (newQuestInfo == null)
+            {
+                Log.SignalErrorToDeveloper("QuestInfo Update to new server version failed: NO NEW server VERSION given. For Quest Id {0}", Id);
+                return false;
+            }
+
+            if (Id != newQuestInfo.Id)
+            {
+                Log.SignalErrorToDeveloper("QuestInfo Update to new server version failed: Ids DIFFER for Quest Id {0} --> {1}",
+                    Id, newQuestInfo.Id);
+                return false;
+            }
+
+            if (TimeStamp >= newQuestInfo.ServerTimeStamp)
+            {
+                Log.SignalErrorToDeveloper("QuestInfo Update to new server version failedfor Quest Id {0}: server version NOT NEWER: local timestamp: {1} vs server timestamp: {2}",
+                    Id, TimeStamp, ServerTimeStamp);
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
@@ -284,20 +361,19 @@ namespace GQ.Client.Model
         }
 
         [JsonIgnore]
-        public bool IsOnServer
-        {
-            get
-            {
-                return (LastUpdateOnServer != null);
-            }
-        }
-
-        [JsonIgnore]
         public bool IsOnDevice
         {
             get
             {
-                return (LastUpdateOnDevice != null);
+                return (TimeStamp != null);
+            }
+        }
+
+        public bool IsOnServer
+        {
+            get
+            {
+                return (ServerTimeStamp != null);
             }
         }
 
@@ -319,7 +395,7 @@ namespace GQ.Client.Model
                     // exists on both device and server:
                     IsOnDevice && IsOnServer
                     // server update is newer (bigger number):
-                    && LastUpdateOnServer > LastUpdateOnDevice
+                    && ServerTimeStamp > TimeStamp
                 );
             }
         }
@@ -350,6 +426,10 @@ namespace GQ.Client.Model
                     _categories = CategoryReader.ReadCategoriesFromMetadata(Metadata);
                 }
                 return _categories;
+            }
+            set
+            {
+                _categories = value;
             }
         }
 
@@ -404,17 +484,20 @@ namespace GQ.Client.Model
 
         public event ChangeHandler OnChanged;
 
-        //public int HowManyListerners()
-        //{
-        //    return OnChanged.GetInvocationList().Length;
-        //}
+        protected void InvokeOnChanged()
+        {
+            if (OnChanged != null)
+            {
+                OnChanged();
+            }
+        }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
             sb.AppendFormat("{0} (id: {1})\n", Name, Id);
-            sb.AppendFormat("\t last server update: {0}", LastUpdateOnServer);
+            sb.AppendFormat("\t last server update: {0}", NewVersionOnServer == null ? "null" : NewVersionOnServer.TimeStamp.ToString());
             sb.AppendFormat("\t type id: {0}", TypeID);
             sb.AppendFormat("\t icon path: {0}", IconPath);
             sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
@@ -422,18 +505,6 @@ namespace GQ.Client.Model
             sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
 
             return sb.ToString();
-        }
-
-        public string GetMetadata(string key)
-        {
-
-            foreach (MetaDataInfo md in Metadata)
-            {
-                if (md.Key.Equals(key))
-                    return md.Value;
-            }
-
-            return null;
         }
 
         public void Dispose()
@@ -536,7 +607,7 @@ namespace GQ.Client.Model
             );
             downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
             {
-                LastUpdateOnDevice = LastUpdateOnServer;
+                TimeStamp = ServerTimeStamp;
             };
 
             // store current media info locally
@@ -576,7 +647,8 @@ namespace GQ.Client.Model
             download.OnTaskCompleted +=
                 (object sender, TaskEventArgs e) =>
                 {
-                    QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(Id);
+                    InvokeOnChanged();
+
                     new ExportQuestInfosToJSON().Start();
                 };
             // DO IT:
@@ -606,7 +678,8 @@ namespace GQ.Client.Model
                 download.OnTaskCompleted +=
                     (object sender, TaskEventArgs e) =>
                     {
-                        QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(NewVersionOnServer.Id);
+                        QuestContentHasBeenUpdated();
+                        //QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(NewVersionOnServer.Id);
                         new ExportQuestInfosToJSON().Start();
                     };
 
@@ -619,7 +692,7 @@ namespace GQ.Client.Model
         /// </summary>
         public void Delete()
         {
-            if (LastUpdateOnServer == null)
+            if (ServerTimeStamp == null)
             {
                 // this quest is not available on the server anymore ...
                 if (!ConfigurationManager.Current.autoSynchQuestInfos)
@@ -643,11 +716,16 @@ namespace GQ.Client.Model
         private void doDelete()
         {
             Files.DeleteDirCompletely(QuestManager.GetLocalPath4Quest(Id));
-            LastUpdateOnDevice = null;
+            TimeStamp = null;
 
-            if (LastUpdateOnServer == null) {
+            if (ServerTimeStamp == null)
+            {
                 // delete this quest info completely when it is not even on the server anymore:
                 QuestInfoManager.Instance.RemoveInfo(Id);
+            }
+            else
+            {
+                InvokeOnChanged();
             }
 
             ExportQuestInfosToJSON exportQuestsInfoJSON =

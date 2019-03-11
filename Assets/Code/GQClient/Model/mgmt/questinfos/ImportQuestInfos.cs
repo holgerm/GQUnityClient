@@ -72,7 +72,7 @@ namespace GQ.Client.Model
 			return true;
 		}
 
-		protected abstract void updateQuestInfoManager (QuestInfo[] quests);
+		protected abstract void updateQuestInfoManager (QuestInfo[] newQuests);
 
 		public override object Result {
 			get {
