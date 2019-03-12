@@ -31,7 +31,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			myPage = (PageTextQuestion)page;
+            base.Initialize();
+
+            myPage = (PageTextQuestion)page;
 
 			// show the question:
 			questionText.color = ConfigurationManager.Current.mainFgColor;

@@ -41,6 +41,8 @@ namespace GQ.Client.UI
 
 		public override void Initialize ()
 		{
+            base.Initialize();
+
             myPage = (PageStartAndExitScreen)page;
 
 			// show (or hide completely) image:

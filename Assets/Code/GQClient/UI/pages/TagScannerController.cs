@@ -40,6 +40,8 @@ namespace GQ.Client.UI
         /// </summary>
         public override void Initialize()
         {
+            base.Initialize();
+
             Debug.Log(("PageTagScanner starting, page has type: " + page.GetType().Name).Yellow());
             myPage = (PageTagScanner)page;
 

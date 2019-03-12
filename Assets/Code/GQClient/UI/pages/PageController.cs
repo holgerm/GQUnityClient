@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using GQ.Client.Err;
 using GQ.Client.Conf;
 using System.Collections;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
@@ -69,12 +70,15 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
-		public abstract void Initialize ();
+		public virtual void Initialize ()
+        {
+            Audio.StopAllAudio();
+        }
 
-		/// <summary>
-		/// Override this method to react on Back Button CLick (or similar events).
-		/// </summary>
-		public virtual void OnBack ()
+        /// <summary>
+        /// Override this method to react on Back Button CLick (or similar events).
+        /// </summary>
+        public virtual void OnBack ()
 		{
 			Debug.Log ("OnBack() not yet implemented for page controller " + GetType ().Name);
 		}

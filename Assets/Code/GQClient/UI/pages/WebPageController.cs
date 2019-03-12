@@ -29,7 +29,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			myPage = (PageWebPage)page;
+            base.Initialize();
+
+            myPage = (PageWebPage)page;
 
 			// show the content:
 			showInfo ();

@@ -26,7 +26,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			myPage = (PageMenu)page;
+            base.Initialize();
+
+            myPage = (PageMenu)page;
 
 			// show the question:
 			questionText.text = myPage.Question.Decode4HyperText();

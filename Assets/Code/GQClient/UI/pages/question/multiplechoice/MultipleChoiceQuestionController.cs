@@ -27,7 +27,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			mcqPage = (PageMultipleChoiceQuestion)page;
+            base.Initialize();
+
+            mcqPage = (PageMultipleChoiceQuestion)page;
 
 			// show the question:
 			questionText.text = mcqPage.Question;

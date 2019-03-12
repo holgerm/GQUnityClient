@@ -50,6 +50,8 @@ namespace GQ.Client.UI
         /// </summary>
         public override void Initialize()
         {
+            base.Initialize();
+
             myPage = (PageVideoPlay)page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";

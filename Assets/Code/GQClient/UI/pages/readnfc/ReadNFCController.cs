@@ -31,7 +31,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			myPage = (PageReadNFC)page;
+            base.Initialize();
+
+            myPage = (PageReadNFC)page;
 
 			// show the content:
 			showImage ();

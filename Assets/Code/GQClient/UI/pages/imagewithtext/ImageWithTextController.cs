@@ -26,7 +26,9 @@ namespace GQ.Client.UI
 
 		public override void Initialize ()
 		{
-			iwtPage = (PageImageWithText)page;
+            base.Initialize();
+
+            iwtPage = (PageImageWithText)page;
 
 			// show text:
 			text.text = TextHelper.Decode4HyperText (iwtPage.Text);

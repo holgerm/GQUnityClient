@@ -29,6 +29,8 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
+            base.Initialize();
+
 			myPage = (PageAudioRecord)page;
 
 			// show the content:

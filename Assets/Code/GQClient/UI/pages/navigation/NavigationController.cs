@@ -20,7 +20,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			navPage = (PageNavigation)page;
+            base.Initialize();
+
+            navPage = (PageNavigation)page;
 
 			// enable all defined options:
 			enableOptions ();

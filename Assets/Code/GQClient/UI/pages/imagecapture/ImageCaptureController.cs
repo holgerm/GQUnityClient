@@ -37,7 +37,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			myPage = (PageImageCapture)page;
+            base.Initialize();
+
+            myPage = (PageImageCapture)page;
 
 			// show the task and button:
 			if (myPage.Task != null && myPage.Task != "") {

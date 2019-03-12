@@ -34,7 +34,9 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void Initialize ()
 		{
-			npcPage = (PageNPCTalk)page;
+            base.Initialize();
+
+            npcPage = (PageNPCTalk)page;
 
 			// show the content:
 			ShowImage ();
