@@ -16,7 +16,7 @@ namespace GQ.Client.UI
 
 		public abstract void layout ();
 
-		protected void Start ()
+		protected virtual void Start ()
 		{
 			layout ();
 		}

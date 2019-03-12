@@ -15,6 +15,7 @@ namespace GQ.Client.UI
 
         protected Page page;
 		protected QuestManager qm;
+        public PageLayout layout;
 
 		#region Start
 
@@ -38,15 +39,15 @@ namespace GQ.Client.UI
                 Debug.Log("Waiting for Page to be ready to start ...");
                 yield return null;
             }
-                
-			InitPage ();
-		}
 
-		/// <summary>
-		/// Must be called manually if you want to reuse the page model, i.e. for the second of two consecutive pages 
-		/// of the same model type.
-		/// </summary>
-		public void InitPage ()
+            InitPage();
+        }
+
+        /// <summary>
+        /// Must be called manually if you want to reuse the page model, i.e. for the second of two consecutive pages 
+        /// of the same model type.
+        /// </summary>
+        public void InitPage ()
 		{
 			page = qm.CurrentPage;
 

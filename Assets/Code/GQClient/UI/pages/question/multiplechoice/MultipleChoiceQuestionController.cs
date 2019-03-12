@@ -20,12 +20,16 @@ namespace GQ.Client.UI
 
 		#region Runtime API
 
-		protected PageMultipleChoiceQuestion mcqPage;
+		public PageMultipleChoiceQuestion mcqPage
+        {
+            get;
+            protected set;
+        }
 
-		/// <summary>
-		/// Is called during Start() of the base class, which is a MonoBehaviour.
-		/// </summary>
-		public override void Initialize ()
+        /// <summary>
+        /// Is called during Start() of the base class, which is a MonoBehaviour.
+        /// </summary>
+        public override void Initialize ()
 		{
             base.Initialize();
 
@@ -38,11 +42,19 @@ namespace GQ.Client.UI
             if (mcqPage.Shuffle)
                 Shuffle<MCQAnswer>(mcqPage.Answers);
 
+            // clear answers (maybe we had another mcq just before ...
+            foreach (Transform child in answersContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
             // show answers:
             foreach (MCQAnswer a in mcqPage.Answers) {
 				// create dialog item GO from prefab:
 				AnswerCtrl.Create (mcqPage, answersContainer, a);
 			}
+
+            layout.layout();
         }
 
         private static System.Random rng = new System.Random();

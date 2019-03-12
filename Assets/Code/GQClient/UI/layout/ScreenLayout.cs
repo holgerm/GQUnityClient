@@ -12,7 +12,6 @@ namespace GQ.Client.UI
     /// <summary>
     /// Makes the layout for all screens, i.e. all pages plus all foyer views and all additional full screen views (imprint, author login etc.).
     /// </summary>
-    [RequireComponent(typeof(Image)), RequireComponent(typeof(LayoutElement))]
     public class ScreenLayout : LayoutConfig
     {
 
@@ -27,7 +26,7 @@ namespace GQ.Client.UI
             if (ConfigurationManager.Current == null)
                 return;
 
-            setMainBackgroundColor();
+            setMainBackground();
 
             setContentHeight();
             setTopMargin();
@@ -36,13 +35,13 @@ namespace GQ.Client.UI
             setFooter();
         }
 
-        protected virtual void setMainBackgroundColor()
+        protected virtual void setMainBackground()
         {
             Image image = GetComponent<Image>();
-            if (image != null)
-            {
-                image.color = ConfigurationManager.Current.contentBackgroundColor;
-            }
+            if (image == null)
+                return;
+
+            image.color = ConfigurationManager.Current.contentBackgroundColor;
         }
 
         /// <summary>
