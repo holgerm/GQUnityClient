@@ -38,7 +38,6 @@ namespace GQ.Client.UI
 
         protected virtual void setMainBackgroundColor()
         {
-            // set background color:
             Image image = GetComponent<Image>();
             if (image != null)
             {
