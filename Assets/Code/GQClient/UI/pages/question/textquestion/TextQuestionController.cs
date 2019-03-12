@@ -8,62 +8,72 @@ using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
-	public class TextQuestionController : QuestionController
-	{
-		
-		#region Inspector Features
+    public class TextQuestionController : QuestionController
+    {
 
-		public Text questionText;
+        #region Inspector Features
+
+        public Text questionText;
         public InputField inputField;
-		public Text promptPlaceholder;
-		public Text answerGiven;
-		public Button forwardButton;
+        public Text promptPlaceholder;
+        public Text answerGiven;
+        public Button forwardButton;
 
-		#endregion
+        #endregion
 
 
-		#region Runtime API
+        #region Runtime API
 
-		protected PageTextQuestion myPage;
+        public PageTextQuestion tqPage
+        {
+            get;
+            protected set;
+        }
 
-		/// <summary>
-		/// Is called during Start() of the base class, which is a MonoBehaviour.
-		/// </summary>
-		public override void Initialize ()
-		{
+
+        /// <summary>
+        /// Is called during Start() of the base class, which is a MonoBehaviour.
+        /// </summary>
+        public override void Initialize()
+        {
             base.Initialize();
 
-            myPage = (PageTextQuestion)page;
+            tqPage = (PageTextQuestion)page;
 
-			// show the question:
-			questionText.color = ConfigurationManager.Current.mainFgColor;
-			questionText.fontSize = ConfigurationManager.Current.mainFontSize;
-			questionText.text = myPage.Question.Decode4HyperText();
-			promptPlaceholder.text = myPage.Prompt;
-			promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
-			answerGiven.fontSize = ConfigurationManager.Current.mainFontSize;
+            // show the question:
+            questionText.color = ConfigurationManager.Current.mainFgColor;
+            questionText.fontSize = ConfigurationManager.Current.mainFontSize;
+            questionText.text = tqPage.Question.Decode4HyperText();
+            promptPlaceholder.text = tqPage.Prompt;
+            promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
+            answerGiven.fontSize = ConfigurationManager.Current.mainFontSize;
             answerGiven.text = "";
             inputField.text = "";
-			forwardButton.transform.Find ("Text").GetComponent<Text> ().text = "Eingeben";
-		}
+            forwardButton.transform.Find("Text").GetComponent<Text>().text = "Eingeben";
 
-		public override void OnForward ()
-		{
-			if (myPage.AnswerCorrect (answerGiven.text)) {
-				myPage.Succeed ();
-			} else {
-                if (myPage.RepeatUntilSuccess)
+            layout.layout();
+        }
+
+        public override void OnForward()
+        {
+            if (tqPage.AnswerCorrect(answerGiven.text))
+            {
+                tqPage.Succeed();
+            }
+            else
+            {
+                if (tqPage.RepeatUntilSuccess)
                 {
-                    ((TextQuestionController)myPage.PageCtrl).Repeat();
+                    ((TextQuestionController)tqPage.PageCtrl).Repeat();
                 }
                 else
                 {
-                    myPage.Fail();
+                    tqPage.Fail();
                 }
 
             }
         }
 
-		#endregion
-	}
+        #endregion
+    }
 }

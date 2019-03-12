@@ -1,4 +1,6 @@
-﻿using GQ.Client.Conf;
+﻿using System.Collections;
+using System.Collections.Generic;
+using GQ.Client.Conf;
 using GQ.Client.Err;
 using GQ.Client.Model;
 using GQ.Client.Util;
@@ -8,35 +10,34 @@ using UnityEngine.UI;
 namespace GQ.Client.UI
 {
 
-    [RequireComponent(typeof(MultipleChoiceQuestionController))]
-    public class MultipleChoiceQuestionLayout : PageLayout
+    [RequireComponent(typeof(TextQuestionController))]
+    public class TextQuestionLayout : PageLayout
     {
+
         public RawImage BackgroundImage;
         public Image QuestionBackgroundImage;
 
-        PageMultipleChoiceQuestion myPage;
+        PageTextQuestion myPage;
 
         protected override void setMainBackground()
         {
-            Image image = ContentArea.GetComponent<Image>();
-            if (image == null)
+            Image pageBG = ContentArea.GetComponent<Image>();
+            if (pageBG == null)
             {
-                Log.SignalErrorToDeveloper("Scene MultipleChoiceQuestion broken: ContentArea must have an Image component!");
+                Log.SignalErrorToDeveloper("Scene TextQuestion broken: ContentArea must have an Image component!");
                 return;
             }
 
-            myPage = gameObject.GetComponent<MultipleChoiceQuestionController>().mcqPage;
+            myPage = gameObject.GetComponent<TextQuestionController>().tqPage;
 
             if (myPage == null || string.IsNullOrEmpty(myPage.BackGroundImage))
             {
                 // NO Background Image given => 
                 // - we use standard bg color:
-                image.color = ConfigurationManager.Current.contentBackgroundColor;
-                image.enabled = true;
-
+                pageBG.color = ConfigurationManager.Current.contentBackgroundColor;
+                pageBG.enabled = true;
                 // - and hide Background Image:
                 BackgroundImage.gameObject.SetActive(false);
-
                 // - and do not use questionBG:
                 QuestionBackgroundImage.enabled = false;
             }
@@ -44,18 +45,18 @@ namespace GQ.Client.UI
             {
                 // A Backgroudn Image is given =>
                 // - we disabe normal bg image:
-                image.enabled = false;
+                pageBG.enabled = false;
 
                 // - we do use questionBG:
                 QuestionBackgroundImage.enabled = true;
                 QuestionBackgroundImage.color = new Color(
-                    (float)ConfigurationManager.Current.contentBackgroundColor.r / 256f,
+                    (float) ConfigurationManager.Current.contentBackgroundColor.r / 256f,
                     (float)ConfigurationManager.Current.contentBackgroundColor.g / 256f,
                     (float)ConfigurationManager.Current.contentBackgroundColor.b / 256f,
                     a: 200f / 256f // make question background semi transparent
                 );
 
-                // - we load Texture and set to Background Image:
+                // - and we load Texture and set to Background Image:
                 BackgroundImage.gameObject.SetActive(true);
 
                 AbstractDownloader loader;
