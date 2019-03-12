@@ -267,6 +267,7 @@ namespace GQ.Client.Model
             }
 
             // Step 2b determine missing local filenames for new urls:
+            // MediaStore now has all needed mediainfos including local data for this quest.
             foreach (KeyValuePair<string, MediaInfo> kvpEntry in CurrentQuest.MediaStore)
             {
                 if (kvpEntry.Value.LocalFileName == null || kvpEntry.Value.LocalFileName == "")
@@ -342,7 +343,9 @@ namespace GQ.Client.Model
                 }
                 // got a response so we can use the data from server:
                 info.RemoteSize = httpWResp.ContentLength;
-                info.RemoteTimestamp = (long)(httpWResp.LastModified - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                info.RemoteTimestamp = ParseLastModifiedHeader(httpWResp.GetResponseHeader("Last-Modified"));
+
+                Debug.Log(("MEDIAFILE: " + info.Url + " REMOTE_TIME: " + info.RemoteTimestamp + " LOCAL_TIME: " + info.LocalTimestamp).Yellow());
 
                 summedSize += info.RemoteSize;
                 // if the remote file is newer we update: 
@@ -351,41 +354,35 @@ namespace GQ.Client.Model
                 {
                     filesToDownload.Add(info);
                 }
+                else
+                {
+                    Debug.Log(("MEDIAFILE SKIPPED: " + info.Url).Yellow());
+                }
 
                 httpWResp.Close();
-
-
-                //				// Request file header
-                //				// TODO WHAT IF OFFLINE?
-                //				Debug.Log (("Before getHeaders for " + info.Url + " time: " + Time.time + " frame:" + Time.frameCount).Red());
-                //				Dictionary<string, string> headers = HTTP.GetRequestHeaders (info.Url);
-                //				Debug.Log("After getHeaders time: " + Time.time + " frame:" + Time.frameCount);
-                //
-                //				string headerValue;
-                //				if (!headers.TryGetValue (HTTP.CONTENT_LENGTH, out headerValue)) {
-                //					Log.SignalErrorToDeveloper ("{0} header missing for url {1}", HTTP.CONTENT_LENGTH, info.Url);
-                //					info.RemoteSize = MediaInfo.UNKNOWN;
-                //				} else {
-                //					info.RemoteSize = long.Parse (headerValue);
-                //				}
-                //
-                //				if (!headers.TryGetValue (HTTP.LAST_MODIFIED, out headerValue)) {
-                //					Log.SignalErrorToDeveloper ("{0} header missing for url {1}", HTTP.LAST_MODIFIED, info.Url);
-                //					info.RemoteTimestamp = MediaInfo.UNKNOWN;
-                //					// Since we do not know the timestamp of this file we load it:
-                //					filesToDownload.Add (info);
-                //				} else {
-                //					info.RemoteTimestamp = long.Parse (headerValue);
-                //
-                //					// if the remote file is newer we update: 
-                //					// or if media is not locally available we load it:
-                //					if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable) {
-                //						filesToDownload.Add (info);
-                //					}								
-                //				}
             }
 
             return filesToDownload;
+        }
+
+        private long ParseLastModifiedHeader(string lastmodHeader)
+        {
+            try
+            {
+                return Convert.ToInt64(lastmodHeader);
+            }
+            catch (FormatException)
+            {
+                try
+                {
+                    DateTime dt = DateTime.Parse(lastmodHeader);
+                    return (long)(dt - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                }
+                catch (FormatException)
+                {
+                    return MediaInfo.UNKNOWN;
+                }
+            }
         }
 
         #endregion

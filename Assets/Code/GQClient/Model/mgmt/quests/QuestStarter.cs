@@ -43,9 +43,10 @@ namespace GQ.Client.Model
 		{
 			// step 1 deserialize game.xml:
 			QuestManager.Instance.SetCurrentQuestFromXML (gameXML);
+            QuestManager.Instance.CurrentQuest.InitMediaStore();
 
-			// step 2 start the quest:
-			QuestManager.Instance.CurrentQuest.Start ();
+            // step 2 start the quest:
+            QuestManager.Instance.CurrentQuest.Start ();
 
 			return true;
 		}

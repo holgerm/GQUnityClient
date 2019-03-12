@@ -160,11 +160,22 @@ namespace GQ.Client.Model
 
         #region Media
 
-        public Dictionary<string, MediaInfo> MediaStore = new Dictionary<string, MediaInfo>();
+        private Dictionary<string, MediaInfo> _mediaStore = null;
 
-        private void initMediaStore()
+        public Dictionary<string, MediaInfo> MediaStore {
+            get
+            {
+                if (_mediaStore == null)
+                {
+                    _mediaStore = new Dictionary<string, MediaInfo>();
+                }
+                return _mediaStore;
+            }
+        } 
+
+        public void InitMediaStore()
         {
-            MediaStore = new Dictionary<string, MediaInfo>();
+            _mediaStore = new Dictionary<string, MediaInfo>();
 
             string mediaJSON = "";
             try
@@ -186,7 +197,7 @@ namespace GQ.Client.Model
             foreach (LocalMediaInfo localInfo in localInfos)
             {
                 MediaInfo info = new MediaInfo(localInfo);
-                MediaStore.Add(info.Url, info);
+                _mediaStore.Add(info.Url, info);
             }
         }
 
@@ -252,7 +263,7 @@ namespace GQ.Client.Model
             Id = GQML.GetIntAttribute(GQML.ID, reader);
 
             // set up the media store, depends on the id of the quest for paths:
-            initMediaStore();
+            //InitMediaStore();
 
             // read all further attributes
             ReadFurtherAttributes(reader);

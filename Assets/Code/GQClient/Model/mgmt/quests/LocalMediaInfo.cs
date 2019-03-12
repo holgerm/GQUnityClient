@@ -63,9 +63,9 @@ namespace GQ.Client.Model
 			this.filename = filename;
 			this.size = size;
 			this.time = time;
-		}
+        }
 
-		[JsonIgnore]
+        [JsonIgnore]
 		public string LocalPath {
 			get {
 				return absDir + "/" + filename;
