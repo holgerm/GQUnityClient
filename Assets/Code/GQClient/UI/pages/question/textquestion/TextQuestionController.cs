@@ -14,6 +14,7 @@ namespace GQ.Client.UI
 		#region Inspector Features
 
 		public Text questionText;
+        public InputField inputField;
 		public Text promptPlaceholder;
 		public Text answerGiven;
 		public Button forwardButton;
@@ -39,6 +40,8 @@ namespace GQ.Client.UI
 			promptPlaceholder.text = myPage.Prompt;
 			promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
 			answerGiven.fontSize = ConfigurationManager.Current.mainFontSize;
+            answerGiven.text = "";
+            inputField.text = "";
 			forwardButton.transform.Find ("Text").GetComponent<Text> ().text = "Eingeben";
 		}
 

@@ -2013,6 +2013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionText: {fileID: 1940589448}
+  inputField: {fileID: 1642730937}
   promptPlaceholder: {fileID: 1291846818}
   answerGiven: {fileID: 590498960}
   forwardButton: {fileID: 1488490923}
@@ -2313,7 +2314,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000043642314}
+  m_AnchoredPosition: {x: 0, y: -0.000039698916}
   m_SizeDelta: {x: 0, y: -0.11616175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1940589447
