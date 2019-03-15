@@ -32,6 +32,7 @@ namespace GQ.Client.UI
         public GameObject container360;
         public GameObject containerWebPlayer;
         public RectTransform webPlayerContent;
+        public GameObject webPlayerFooterButtonPanel;
         protected Camera cameraMain;
         public GameObject header;
         public GameObject footer;
@@ -48,10 +49,8 @@ namespace GQ.Client.UI
         /// <summary>
         /// Is called during Start() of the base class, which is a MonoBehaviour.
         /// </summary>
-        public override void Initialize()
+        public override void InitPage_TypeSpecific()
         {
-            base.Initialize();
-
             myPage = (PageVideoPlay)page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";

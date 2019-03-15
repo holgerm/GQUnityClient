@@ -17,7 +17,6 @@ namespace GQ.Client.UI
         public InputField inputField;
         public Text promptPlaceholder;
         public Text answerGiven;
-        public Button forwardButton;
 
         #endregion
 
@@ -34,10 +33,8 @@ namespace GQ.Client.UI
         /// <summary>
         /// Is called during Start() of the base class, which is a MonoBehaviour.
         /// </summary>
-        public override void Initialize()
+        public override void InitPage_TypeSpecific()
         {
-            base.Initialize();
-
             tqPage = (PageTextQuestion)page;
 
             // show the question:

@@ -57,7 +57,7 @@ namespace GQTests.Model
 				26831,
 				26832
 			};
-			IPage[] pages = new IPage[ids.Length];
+			Page[] pages = new Page[ids.Length];
 
 			int i = 0;
 			foreach (int id in ids) {

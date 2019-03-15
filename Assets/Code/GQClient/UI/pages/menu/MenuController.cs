@@ -24,23 +24,46 @@ namespace GQ.Client.UI
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
 		/// </summary>
-		public override void Initialize ()
+		public override void InitPage_TypeSpecific ()
 		{
-            base.Initialize();
-
             myPage = (PageMenu)page;
 
 			// show the question:
 			questionText.text = myPage.Question.Decode4HyperText();
 
-			// show the answers:
-			foreach (MenuChoice a in myPage.Choices) {
+            // shuffle anwers:
+            if (myPage.Shuffle)
+                Shuffle<MenuChoice>(myPage.Choices);
+
+            // show the answers:
+            foreach (MenuChoice a in myPage.Choices) {
 				// create dialog item GO from prefab:
 				ChoiceCtrl.Create (myPage, choicesContainer, a);
 			}
-		}
 
-		#endregion
+            // footer:
+            // hide footer if no return possible:
+            FooterButtonPanel.transform.parent.gameObject.SetActive(myPage.Quest.History.CanGoBackToPreviousPage);
+            forwardButton.gameObject.SetActive(false);
+            // TODO when we enhance to real multiple choice mode we have to adapt this ...
+        }
 
-	}
+        #endregion
+
+        private static System.Random rng = new System.Random();
+
+        private static void Shuffle<T>(IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+
+    }
 }

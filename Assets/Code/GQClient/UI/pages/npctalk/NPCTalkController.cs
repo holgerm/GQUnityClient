@@ -21,7 +21,6 @@ namespace GQ.Client.UI
 		public GameObject imagePanel;
 		public GameObject contentPanel;
 		public Transform dialogItemContainer;
-		public Text forwardButtonText;
 
 		#endregion
 
@@ -32,10 +31,8 @@ namespace GQ.Client.UI
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
 		/// </summary>
-		public override void Initialize ()
+		public override void InitPage_TypeSpecific ()
 		{
-            base.Initialize();
-
             npcPage = (PageNPCTalk)page;
 
 			// show the content:
@@ -159,7 +156,8 @@ namespace GQ.Client.UI
 
 		void UpdateForwardButton ()
 		{
-			// update forward button text:
+            // update forward button text:
+            Text forwardButtonText = forwardButton.transform.Find("Text").GetComponent<Text>();
 			forwardButtonText.text = npcPage.HasMoreDialogItems () ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
 		}
 

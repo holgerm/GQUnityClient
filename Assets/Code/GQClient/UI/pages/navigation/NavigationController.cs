@@ -18,14 +18,17 @@ namespace GQ.Client.UI
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
 		/// </summary>
-		public override void Initialize ()
+		public override void InitPage_TypeSpecific ()
 		{
-            base.Initialize();
-
             navPage = (PageNavigation)page;
 
-			// enable all defined options:
-			enableOptions ();
+            // footer:
+            // hide footer if no return possible:
+            FooterButtonPanel.transform.parent.gameObject.SetActive(navPage.Quest.History.CanGoBackToPreviousPage);
+            forwardButton.gameObject.SetActive(false);
+
+            // enable all defined options:
+            enableOptions();
 		}
 
 		void enableOptions ()

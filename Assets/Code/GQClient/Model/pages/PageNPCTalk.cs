@@ -90,10 +90,10 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
-		public override void Start ()
+		public override void Start (bool canReturnToPrevious = false)
 		{
 			CurDialogItemNo = 1;
-			base.Start ();
+			base.Start (canReturnToPrevious);
 		}
 
 		public bool Next ()

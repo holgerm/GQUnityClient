@@ -24,10 +24,8 @@ namespace GQ.Client.UI
 
 		protected PageImageWithText iwtPage;
 
-		public override void Initialize ()
+		public override void InitPage_TypeSpecific ()
 		{
-            base.Initialize();
-
             iwtPage = (PageImageWithText)page;
 
 			// show text:

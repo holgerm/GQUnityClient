@@ -148,7 +148,7 @@ namespace GQTests.Model.Deserialization
 			// Assert:
 			Assert.AreEqual ("QuestWith1NPCTalk", q.Name);
 			Assert.AreEqual (9802, q.Id);
-			IPage npcPage = q.GetPageWithID (26821);
+			Page npcPage = q.GetPageWithID (26821);
 			Assert.NotNull (npcPage);
 		}
 
@@ -285,10 +285,10 @@ namespace GQTests.Model.Deserialization
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert before started:
-			IPage p1 = q.GetPageWithID (30194);
+			Page p1 = q.GetPageWithID (30194);
 			Assert.NotNull (p1);
 			Assert.AreEqual (GQML.STATE_NEW, p1.State);
-			IPage p2 = q.GetPageWithID (30195);
+			Page p2 = q.GetPageWithID (30195);
 			Assert.NotNull (p2);
 			Assert.AreEqual (GQML.STATE_NEW, p2.State);
 

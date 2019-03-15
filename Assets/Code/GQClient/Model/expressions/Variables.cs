@@ -168,7 +168,7 @@ namespace GQ.Client.Model
 					Log.WarnDeveloper ("Page ID {0} cannot be interpreted.", pageIdString);
 					return Value.Null;
 				}
-				IPage page = QuestManager.Instance.CurrentQuest.GetPageWithID (pageId);
+				Page page = QuestManager.Instance.CurrentQuest.GetPageWithID (pageId);
 				if (page == null) {
 					Log.WarnDeveloper ("Page with id {0} not found in quest.", pageId);
 					return Value.Null;

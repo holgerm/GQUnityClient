@@ -50,7 +50,6 @@ namespace GQ.Client.Model
         private QuestManager()
         {
             _currentQuest = Quest.Null;
-            CurrentPage = Page.Null;
             PageReadyToStart = true;
         }
 
@@ -73,7 +72,24 @@ namespace GQ.Client.Model
             }
         }
 
-        public Page CurrentPage { get; set; }
+        private Page _currentPage;
+        public Page CurrentPage {
+            get
+            {
+                return CurrentQuest.CurrentPage;
+            }
+            //set
+            //{
+            //    _currentPage = value;
+
+            //    if (_currentPage != null)
+            //    {
+
+            //        Debug.Log(("Started Page: " + _currentPage.Id + " (" + _currentPage.PageType + ")").Green());
+
+            //    }
+            //}
+        }
 
         public Scene CurrentScene
         {

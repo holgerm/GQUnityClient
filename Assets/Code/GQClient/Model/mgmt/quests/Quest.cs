@@ -47,11 +47,11 @@ namespace GQ.Client.Model
 
         #region State Pages
 
-        protected Dictionary<int, IPage> pageDict = new Dictionary<int, IPage>();
+        protected Dictionary<int, Page> pageDict = new Dictionary<int, Page>();
 
-        public IPage GetPageWithID(int id)
+        public Page GetPageWithID(int id)
         {
-            IPage page;
+            Page page;
             if (pageDict.TryGetValue(id, out page))
             {
                 return page;
@@ -62,15 +62,15 @@ namespace GQ.Client.Model
             }
         }
 
-        public IPage StartPage
+        public Page StartPage
         {
             get;
             set;
         }
 
-        protected IPage currentPage;
+        protected Page currentPage;
 
-        public IPage CurrentPage
+        public Page CurrentPage
         {
             get
             {
@@ -79,6 +79,24 @@ namespace GQ.Client.Model
             internal set
             {
                 currentPage = value;
+            }
+        }
+
+        private QuestHistory _history = null;
+        internal QuestHistory History
+        {
+            get
+            {
+                if (_history == null)
+                {
+                    _history = new QuestHistory(this);
+                }
+
+                return _history;
+            }
+            private set
+            {
+                _history = value;
             }
         }
 
@@ -304,7 +322,7 @@ namespace GQ.Client.Model
             Name = GQML.GetStringAttribute(GQML.QUEST_NAME, reader);
             XmlFormat = GQML.GetStringAttribute(GQML.QUEST_XMLFORMAT, reader);
             LastUpdate = GQML.GetLongAttribute(GQML.QUEST_LASTUPDATE, reader);
-            IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader);
+            IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader, defaultVal:false);
         }
 
         private void ReadPage(XmlReader reader)
@@ -345,7 +363,7 @@ namespace GQ.Client.Model
             }
 
             XmlSerializer serializer = new XmlSerializer(pageType);
-            IPage page = (IPage)serializer.Deserialize(reader);
+            Page page = (Page)serializer.Deserialize(reader);
             page.Parent = this;
             if (StartPage == null && page.CanStart())
                 StartPage = page;
@@ -395,7 +413,7 @@ namespace GQ.Client.Model
 
             Variables.SetVariableValue("quest.name", new Value(Name));
 
-            QuestManager.Instance.CurrentPage = null;
+            CurrentPage = Page.Null;
 
             Base.Instance.HideFoyerCanvases();
             StartPage.Start();
@@ -431,6 +449,7 @@ namespace GQ.Client.Model
                 LastUpdate = 0;
                 XmlFormat = "0";
                 IndividualReturnDefinitions = false;
+                CurrentPage = Page.Null;
             }
 
             public override void Start()

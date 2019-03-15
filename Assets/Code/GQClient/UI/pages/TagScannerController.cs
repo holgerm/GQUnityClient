@@ -17,7 +17,6 @@ namespace GQ.Client.UI
         #region Inspector Features
 
         public Text shownText;
-        public Text forwardButtonText;
 
         WebCamTexture camTexture;
 
@@ -38,10 +37,8 @@ namespace GQ.Client.UI
         /// <summary>
         /// Is called during Start() of the base class, which is a MonoBehaviour.
         /// </summary>
-        public override void Initialize()
+        public override void InitPage_TypeSpecific()
         {
-            base.Initialize();
-
             Debug.Log(("PageTagScanner starting, page has type: " + page.GetType().Name).Yellow());
             myPage = (PageTagScanner)page;
 
@@ -49,7 +46,7 @@ namespace GQ.Client.UI
             shownText.color = ConfigurationManager.Current.mainFgColor;
             shownText.fontSize = ConfigurationManager.Current.mainFontSize;
             shownText.text = myPage.Prompt.Decode4HyperText();
-            forwardButtonText.text = "Ok";
+            forwardButton.transform.Find("Text").GetComponent<Text>().text = "Ok";
 
             CoroutineStarter.Run(InitQRCamera());
         }

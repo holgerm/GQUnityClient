@@ -37,6 +37,10 @@ namespace GQ.Client.UI
 
                     containerWebPlayer.SetActive(true);
 
+                    myPage.PageCtrl.FooterButtonPanel = ((VideoPlayController)myPage.PageCtrl).webPlayerFooterButtonPanel;
+                    Transform backButtonGO = myPage.PageCtrl.FooterButtonPanel.transform.Find("BackButton");
+                    backButtonGO.gameObject.SetActive(myPage.Quest.History.CanGoBackToPreviousPage);
+
                     float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits); // + 30;
                     float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits); // + 30;
                     uniWebView.Frame = 

@@ -371,6 +371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede5359a1c2b94200b93e40624ba5480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layout: {fileID: 2125452550}
+  FooterButtonPanel: {fileID: 561690669}
   videoPlayerPanel: {fileID: 215277135}
   infoText: {fileID: 1625870278}
   forwardButtonText: {fileID: 1862011691}
@@ -385,6 +387,7 @@ MonoBehaviour:
   container360: {fileID: 1960432035}
   containerWebPlayer: {fileID: 898327359}
   webPlayerContent: {fileID: 1535840093}
+  webPlayerFooterButtonPanel: {fileID: 309316265}
   header: {fileID: 1718371824}
   footer: {fileID: 1804547552}
   background: {fileID: 2125452546}
@@ -567,8 +570,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -546.316}
-  m_SizeDelta: {x: 1080, y: 1092.632}
+  m_AnchoredPosition: {x: 540, y: -651.63513}
+  m_SizeDelta: {x: 1080, y: 1303.2703}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &215277137
 MonoBehaviour:
@@ -872,7 +875,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 303860048}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 128488591}
+        m_MethodName: OnBackward
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &303860048
@@ -1844,7 +1858,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 779427905}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 128488591}
+        m_MethodName: OnBackward
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &779427905
@@ -2398,8 +2423,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -639.0327}
-  m_SizeDelta: {x: 1080, y: 1092.632}
+  m_AnchoredPosition: {x: 540, y: -758.2039}
+  m_SizeDelta: {x: 1080, y: 1303.2703}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &988022699
 MonoBehaviour:
@@ -2415,9 +2440,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1086.8644
+  m_MinHeight: 1300.7625
   m_PreferredWidth: -1
-  m_PreferredHeight: 1086.8644
+  m_PreferredHeight: 1300.7625
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3335,8 +3360,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -270.62668}
-  m_SizeDelta: {x: 1080, y: 541.25336}
+  m_AnchoredPosition: {x: 540, y: -159.08044}
+  m_SizeDelta: {x: 1080, y: 318.1609}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1488490923
 MonoBehaviour:
@@ -3532,9 +3557,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1086.8644
+  m_MinHeight: 1300.7625
   m_PreferredWidth: -1
-  m_PreferredHeight: 1086.8644
+  m_PreferredHeight: 1300.7625
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -4083,9 +4108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 108.68644
+  m_MinHeight: 130.07625
   m_PreferredWidth: -1
-  m_PreferredHeight: 108.68644
+  m_PreferredHeight: 130.07625
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -4188,7 +4213,7 @@ Prefab:
     - target: {fileID: 224939189311781928, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 92.716705
+      value: 106.568794
       objectReference: {fileID: 0}
     - target: {fileID: 224939189311781928, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
@@ -4242,7 +4267,7 @@ Prefab:
     - target: {fileID: 224498494851081384, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -46.358353
+      value: -53.284397
       objectReference: {fileID: 0}
     - target: {fileID: 224498494851081384, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
@@ -4252,7 +4277,7 @@ Prefab:
     - target: {fileID: 224498494851081384, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 72.716705
+      value: 86.568794
       objectReference: {fileID: 0}
     - target: {fileID: 224214530150563052, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
@@ -4272,7 +4297,7 @@ Prefab:
     - target: {fileID: 224214530150563052, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -46.358353
+      value: -53.284397
       objectReference: {fileID: 0}
     - target: {fileID: 224214530150563052, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
@@ -4282,7 +4307,7 @@ Prefab:
     - target: {fileID: 224214530150563052, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 72.716705
+      value: 86.568794
       objectReference: {fileID: 0}
     - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
@@ -4302,7 +4327,7 @@ Prefab:
     - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -46.358353
+      value: -53.284397
       objectReference: {fileID: 0}
     - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
@@ -4312,7 +4337,7 @@ Prefab:
     - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 72.716705
+      value: 86.568794
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 061e4f3f0c0104238a98c0f0f73491b0, type: 2}
@@ -4475,8 +4500,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1185.3486}
-  m_SizeDelta: {x: 1080, y: 541.25336}
+  m_AnchoredPosition: {x: 540, y: -1409.8391}
+  m_SizeDelta: {x: 1080, y: 318.1609}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1804547554
 MonoBehaviour:
@@ -4491,9 +4516,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 108.68644
+  m_MinHeight: 130.07625
   m_PreferredWidth: -1
-  m_PreferredHeight: 108.68644
+  m_PreferredHeight: 130.07625
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

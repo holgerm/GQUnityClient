@@ -5,6 +5,7 @@ using GQ.Client.Err;
 using GQ.Client.Conf;
 using System.Collections;
 using GQ.Client.Util;
+using UnityEngine.UI;
 
 namespace GQ.Client.UI
 {
@@ -17,23 +18,33 @@ namespace GQ.Client.UI
 		protected QuestManager qm;
         public PageLayout layout;
 
-		#region Start
+        public GameObject FooterButtonPanel;
+        protected Button forwardButton;
 
-		bool resumingToFoyer;
+
+        #region Start
+
+        bool resumingToFoyer;
 
 		public virtual void Awake ()
 		{
 			resumingToFoyer = false;
 
 			qm = QuestManager.Instance;
-			if (qm.CurrentQuest == null || qm.CurrentPage == Page.Null) {
+			if (qm.CurrentQuest == null || Page.IsNull(qm.CurrentPage)) {
 				SceneManager.LoadScene (FOYER_SCENE);
 				resumingToFoyer = true;
 				return;
 			}
 		}
 
-		public IEnumerator Start ()
+		/// <summary>
+        /// Called when this page does NOT HAVE A PREDECESSOR OF SAME TYPE. 
+        /// Otherwise the page scene and also this page controller gets reused. 
+        /// In that case only InitPage() is called directly from the Page model class.
+        /// </summary>
+        /// <returns>The start.</returns>
+        public IEnumerator Start ()
 		{
             while (!QuestManager.Instance.PageReadyToStart) {
                 Debug.Log("Waiting for Page to be ready to start ...");
@@ -49,9 +60,8 @@ namespace GQ.Client.UI
         /// </summary>
         public void InitPage ()
 		{
-			page = qm.CurrentPage;
-
-			if (page == null) {
+            page = qm.CurrentPage;
+            if (page == null) {
 				if (!resumingToFoyer)
 					Log.SignalErrorToDeveloper (
 						"Page is null in quest {0}", 
@@ -61,28 +71,32 @@ namespace GQ.Client.UI
 				// TODO What should we do now? End quest?
 			}
 
-			page.PageCtrl = this;
+            page.PageCtrl = this;
 
-			Initialize ();
+            Audio.StopAllAudio();
+
+            // Footer:
+            forwardButton = FooterButtonPanel.transform.Find("ForwardButton").GetComponent<Button>();
+            Transform backButtonGO = FooterButtonPanel.transform.Find("BackButton");
+            backButtonGO.gameObject.SetActive(page.Quest.History.CanGoBackToPreviousPage);
+
+			InitPage_TypeSpecific ();
 		}
 
-		#endregion
+        #endregion
 
 
-		#region Runtime API
+        #region Runtime API
 
-		public virtual void Initialize ()
-        {
-            Audio.StopAllAudio();
-        }
+        public abstract void InitPage_TypeSpecific();
 
         /// <summary>
         /// Override this method to react on Back Button CLick (or similar events).
         /// </summary>
-        public virtual void OnBack ()
+        public virtual void OnBackward ()
 		{
-			Debug.Log ("OnBack() not yet implemented for page controller " + GetType ().Name);
-		}
+            int prevPageId = page.Quest.History.GoBackToPreviousPage();
+        }
 
 		/// <summary>
 		/// Override this method to react on Forward Button Click (or similar events).

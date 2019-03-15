@@ -14,8 +14,8 @@ namespace GQTests.Model.Runtime
 			// Arrange:
 			string xml = parseXmlFromFile ("XML/Quests/TwoPages/game.xml");
 			Quest quest = parseXML<Quest> (xml);
-			IPage page1 = quest.GetPageWithID (30194);
-			IPage page2 = quest.GetPageWithID (30195);
+			Page page1 = quest.GetPageWithID (30194);
+			Page page2 = quest.GetPageWithID (30195);
 
 			// Assert page states before uest is started
 			Assert.AreEqual (GQML.STATE_NEW, page1.State);

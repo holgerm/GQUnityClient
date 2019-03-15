@@ -29,10 +29,8 @@ namespace GQ.Client.UI
         /// <summary>
         /// Is called during Start() of the base class, which is a MonoBehaviour.
         /// </summary>
-        public override void Initialize ()
+        public override void InitPage_TypeSpecific ()
 		{
-            base.Initialize();
-
             mcqPage = (PageMultipleChoiceQuestion)page;
 
 			// show the question:
@@ -53,6 +51,12 @@ namespace GQ.Client.UI
 				// create dialog item GO from prefab:
 				AnswerCtrl.Create (mcqPage, answersContainer, a);
 			}
+
+            // footer:
+            // hide footer if no return possible:
+            FooterButtonPanel.transform.parent.gameObject.SetActive(mcqPage.Quest.History.CanGoBackToPreviousPage);
+            forwardButton.gameObject.SetActive(false);
+            // TODO when we enhance to real multiple choice mode we have to adapt this ...
 
             layout.layout();
         }

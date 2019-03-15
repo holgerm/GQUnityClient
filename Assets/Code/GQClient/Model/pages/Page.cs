@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace GQ.Client.Model
 {
     [XmlRoot(GQML.PAGE)]
-    public abstract class Page : IPage
+    public abstract class Page : IXmlSerializable, ITriggerContainer
     {
 
         #region XML Parsing
@@ -169,7 +169,7 @@ namespace GQ.Client.Model
 
         private string result = "";
 
-        public virtual string Result
+        public string Result
         {
             get
             {
@@ -281,21 +281,25 @@ namespace GQ.Client.Model
             return true;
         }
 
-        public virtual void Start()
+        public virtual void Start(bool canReturnToPrevious = false)
         {
 
             if (!CanStart())
                 return;
 
+            bool canReturn = canReturnToPrevious || !Quest.IndividualReturnDefinitions;
+            Quest.History.Record(new PageStarted(this, canReturn));
+
             // set this quest as current in QM
             QuestManager.Instance.CurrentQuest = Parent;
 
             // clean up old page and set this as new:
-            if (QuestManager.Instance.CurrentPage != null)
+            if (!Page.IsNull(Quest.CurrentPage))
             {
-                QuestManager.Instance.CurrentPage.CleanUp();
+                Quest.CurrentPage.CleanUp();
             }
-            QuestManager.Instance.CurrentPage = this;
+            Quest.CurrentPage = this;
+            //QuestManager.Instance.CurrentPage = this;
             State = GQML.STATE_RUNNING;
 
             Resources.UnloadUnusedAssets();
@@ -355,6 +359,11 @@ namespace GQ.Client.Model
             }
         }
 
+        public static bool IsNull(Page page)
+        {
+            return (page == null || page == Page.Null);
+        }
+
         #endregion
 
 
@@ -370,7 +379,6 @@ namespace GQ.Client.Model
             {
                 Id = 0;
                 State = GQML.STATE_NEW;
-                Parent.CurrentPage = this;
             }
 
             public override Quest Parent
@@ -381,13 +389,14 @@ namespace GQ.Client.Model
                 }
             }
 
-            public override void Start()
+            public override void Start(bool canReturnToPrevious = false)
             {
                 Log.WarnDeveloper("Null Page started in quest {0} (id: {1})", Parent.Name, Parent.Id);
                 Parent.CurrentPage = this;
                 State = GQML.STATE_RUNNING;
                 StartTrigger.Initiate();
             }
+
         }
 
         #endregion

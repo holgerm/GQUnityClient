@@ -36,9 +36,9 @@ namespace GQ.Client.Model
 
 		#region Runtime API
 
-		public override void Start ()
+		public override void Start (bool canReturnToPrevious = false)
 		{
-			base.Start ();
+			base.Start (canReturnToPrevious);
 		}
 
 		#endregion

@@ -35,10 +35,8 @@ namespace GQ.Client.UI
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
 		/// </summary>
-		public override void Initialize ()
+		public override void InitPage_TypeSpecific ()
 		{
-            base.Initialize();
-
             myPage = (PageImageCapture)page;
 
 			// show the task and button:

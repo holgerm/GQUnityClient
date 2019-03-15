@@ -64,8 +64,8 @@ namespace GQ.Client.Model
         #region Runtime API
 
         private int testCount = 0;
-        public override void Start() {
-            base.Start();
+        public override void Start(bool canReturnToPrevious = false) {
+            base.Start(canReturnToPrevious);
             Debug.Log("HOTSPOTS ENABLED: " + ++testCount);
             LocationSensor.Instance.OnLocationUpdate += Quest.UpdateHotspotMarkers;
         }
