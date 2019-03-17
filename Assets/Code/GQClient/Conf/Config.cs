@@ -155,6 +155,9 @@ namespace GQ.Client.Conf
 
         [ShowInProductEditor]
         public List<SceneExtension> sceneExtensions { get; set; }
+
+        [ShowInProductEditor]
+        public bool stopAudioWhenLeavingPage { get; set; }
         #endregion
 
         #region Synching
@@ -732,6 +735,7 @@ namespace GQ.Client.Conf
             scenePaths = new string[0];
             sceneExtensions = new List<SceneExtension>();
             offerLeaveQuestOnEachPage = true;
+            stopAudioWhenLeavingPage = true;
 
             // Map:
             mapProvider = MapProvider.OpenStreetMap;
@@ -745,7 +749,7 @@ namespace GQ.Client.Conf
             useMapOffline = false;
             mapMinimalZoom = 7.0f;
             mapDeltaZoom = 0.5f;
-            markerHeightUnits = 75f;
+            markerHeightUnits = 55f;
             markerSymbolFGColor = Color.black;
             mapButtonHeightUnits = 55f;
             mapButtonHeightMinMM = 7f;

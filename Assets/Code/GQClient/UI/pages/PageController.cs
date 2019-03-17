@@ -73,7 +73,10 @@ namespace GQ.Client.UI
 
             page.PageCtrl = this;
 
-            Audio.StopAllAudio();
+            if (ConfigurationManager.Current.stopAudioWhenLeavingPage)
+            {
+                Audio.StopAllAudio();
+            }
 
             // Footer:
             forwardButton = FooterButtonPanel.transform.Find("ForwardButton").GetComponent<Button>();
