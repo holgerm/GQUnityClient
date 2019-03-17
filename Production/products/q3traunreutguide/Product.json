@@ -1,21 +1,30 @@
 {
   "id": "q3traunreutguide",
+  "idExtension": "",
   "name": "Traunreut Guide",
   "portal": 521,
+  "assetAddOns": [
+    "UniWebView"
+  ],
+  "androidMinSDKVersion": "AndroidApiLevelAuto",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
-  "DownloadStrategy": "UPFRONT",
+  "downloadStrategy": "UPFRONT",
   "timeoutMS": 100000,
+  "maxIdleTimeMS": 9000,
+  "maxParallelDownloads": 15,
   "nameForQuestSg": "Ort",
   "nameForQuestsPl": "Orte",
-  "questVisualization": "list",
-  "questVisualizationChangeable": false,
+  "questInfoViews": [
+    "List",
+    "Map"
+  ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
-  "hideHiddenQuests": false,
+  "showHiddenQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk"
@@ -27,6 +36,9 @@
     "Assets/Scenes/Pages/StartAndExitScreen.unity"
   ],
   "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": false,
+  "autoSynchQuestInfos": true,
+  "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -35,31 +47,40 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
-  "mapStartAtLocation": false,
+  "mapStartPositionType": "CenterOfMarkers",
+  "mapStartAtLocation": true,
   "mapStartAtLongitude": 12.593101,
   "mapStartAtLatitude": 47.961851,
+  "hotspotMarker": {
+    "path": "defaults/readable/defaultMarker"
+  },
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 0,
-  "markerHeightMinimumMM": 0,
-  "markerHeightMaximumMM": 0,
-  "markerScale": 1.0,
+  "markerHeightUnits": 50.0,
+  "markerHeightMinMM": 9.0,
+  "markerHeightMaxMM": 0.0,
   "markerColor": {
     "r": 0,
     "g": 0,
     "b": 0,
     "a": 0
   },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
   "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 0,
-  "mapButtonHeightMinimumMM": 0,
-  "mapButtonHeightMaximumMM": 0,
+  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightMinMM": 7.0,
+  "mapButtonHeightMaxMM": 12.0,
   "foldableCategoryFilters": false,
   "categoryFiltersStartFolded": false,
-  "categoryFolderStartFolded": true,
+  "categoryFoldersStartFolded": true,
   "mainCategorySet": "Kategorie",
-  "categorySets": [
+  "CategorySets": [
     {
       "name": "Kategorie",
       "categories": [
@@ -106,15 +127,27 @@
       ]
     }
   ],
+  "defaultCategory": null,
+  "disabledAlpha": 0.5,
+  "mainFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "mainBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "mainFontSize": 60,
+  "maxFontSize": 100,
+  "showShadows": true,
   "topLogo": {
     "path": "TopLogo"
   },
-  "mainColor": {
-    "r": 128,
-    "g": 186,
-    "b": 39,
-    "a": 255
-  },
+  "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
     "r": 255,
     "g": 255,
@@ -139,15 +172,9 @@
     "b": 255,
     "a": 255
   },
-  "contentFontColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 255
-  },
   "headerHeightUnits": 60.0,
-  "headerHeightMinimumMM": 0.0,
-  "headerHeightMaximumMM": 0.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
@@ -156,8 +183,8 @@
   "imageAreaHeightMaxUnits": 380.0,
   "fitExceedingImagesIntoArea": false,
   "footerHeightUnits": 75.0,
-  "footerHeightMinimumMM": 0.0,
-  "footerHeightMaximumMM": 0.0,
+  "footerHeightMinMM": 0.0,
+  "footerHeightMaxMM": 0.0,
   "footerBgColor": {
     "r": 128,
     "g": 186,
@@ -177,11 +204,14 @@
     "a": 255
   },
   "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 6.0,
+  "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 128
   },
   "overlayButtonFgColor": {
     "r": 0,
@@ -190,29 +220,93 @@
     "a": 255
   },
   "overlayButtonFgDisabledColor": {
+    "r": 153,
+    "g": 153,
+    "b": 153,
+    "a": 255
+  },
+  "showEmptyMenuEntries": true,
+  "menuEntryHeightUnits": 40.0,
+  "menuEntryHeightMinMM": 0.0,
+  "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 400.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
+  "menuFrameColor": {
+    "r": 127,
+    "g": 127,
+    "b": 127,
+    "a": 255
+  },
+  "menuBGColor": {
+    "r": 218,
+    "g": 218,
+    "b": 218,
+    "a": 255
+  },
+  "menuFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "menuInhibitsInteraction": false,
+  "menu2ShownInQuests": true,
+  "offerLeaveQuestOnEachPage": true,
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "defineAuthorBackDoor": true,
+  "acceptedAuthorEmail": "author@email.com",
+  "acceptedAuthorPassword": "secret",
+  "listEntryHeightUnits": 50.0,
+  "listEntryHeightMinMM": 0.0,
+  "listEntryHeightMaxMM": 0.0,
+  "listEntryUseTwoLines": false,
+  "listEntryDividingMode": "SeparationLines",
+  "listLineColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listStartLineWidth": 5,
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 5,
+  "listEntryFgColor": {
+    "r": 49,
+    "g": 72,
+    "b": 14,
+    "a": 255
+  },
+  "listEntryBgColor": {
+    "r": 185,
+    "g": 211,
+    "b": 142,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listEntrySecondBgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listBgColor": {
+    "r": 128,
+    "g": 186,
+    "b": 39,
+    "a": 255
+  },
+  "showDeleteOptionForLocalQuests": true,
+  "emulationColor": {
     "r": 255,
     "g": 255,
     "b": 255,
     "a": 255
-  },
-  "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 0.0,
-  "menuEntryHeightMinimumMM": 0.0,
-  "menuEntryHeightMaximumMM": 0.0,
-  "menuBGColor": {
-    "r": 100,
-    "g": 99,
-    "b": 99,
-    "a": 255
-  },
-  "menuPartBGColor": {
-    "r": 100,
-    "g": 99,
-    "b": 99,
-    "a": 255
-  },
-  "disabledAlpha": 0.5,
-  "listEntryHeightUnits": 0.0,
-  "listEntryHeightMinimumMM": 0.0,
-  "listEntryHeightMaximumMM": 0.0
+  }
 }
