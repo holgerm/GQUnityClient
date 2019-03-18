@@ -34,12 +34,12 @@ namespace GQ.Client.Model
 
         public bool IndividualReturnDefinitions { get; set; }
 
-        public virtual bool IsHidden
+        public virtual bool IsShown
         {
             get
             {
                 // TODO change the latter two checks to test a flag stored in game.xml base element as an attribute and move to QuestInfo
-                return (ConfigurationManager.Current.ShowHiddenQuests && Name != null && Name.StartsWith("---"));
+                return ConfigurationManager.Current.ShowHiddenQuests || (Name != null && !Name.StartsWith("---"));
             }
         }
 
@@ -460,11 +460,11 @@ namespace GQ.Client.Model
                 Log.WarnDeveloper("Null Quest started.");
             }
 
-            public override bool IsHidden
+            public override bool IsShown
             {
                 get
                 {
-                    return true;
+                    return false;
                 }
             }
 

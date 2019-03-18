@@ -20,7 +20,16 @@ namespace GQ.Client.UI
             updateQuestInfos_MenuEntry.SetActive(
                 cf.OfferManualUpdate4QuestInfos
             );
+        }
+
+        void OnEnable()
+        {
             Author.SettingsChanged += Author_SettingsChanged;
+        }
+
+        private void OnDisable()
+        {
+            Author.SettingsChanged -= Author_SettingsChanged;
         }
 
         void Author_SettingsChanged(object sender, System.EventArgs e)

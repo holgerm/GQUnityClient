@@ -303,7 +303,7 @@ namespace UnitySlippyMap.Map
 		/// <param name="texture">Texture.</param>
 		public void SetTexture (Texture2D texture)
 		{
-            if (this.gameObject == null || this.gameObject.GetComponent<Renderer>() == null)
+            if (this == null || this.gameObject == null || this.gameObject.GetComponent<Renderer>() == null)
                 return;
 
 			material = this.gameObject.GetComponent<Renderer> ().material;

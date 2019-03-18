@@ -1,5 +1,6 @@
 ﻿using System;
 using GQ.Client.Conf;
+using GQ.Client.Err;
 using GQ.Client.Model;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ namespace GQ.Client.Util
             EventHandler<EventArgs> handler = SettingsChanged;
             if (handler != null)
             {
+                Debug.Log("AuthorSettings Changed - Event Fired!".Green());
                 handler(null, null);
             }
         }

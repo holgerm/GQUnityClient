@@ -10,7 +10,7 @@
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
-  "DownloadStrategy": "UPFRONT",
+  "downloadStrategy": "UPFRONT",
   "timeoutMS": 0,
   "maxIdleTimeMS": 9089,
   "maxParallelDownloads": 15,
@@ -24,7 +24,7 @@
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
-  "hideHiddenQuests": true,
+  "showHiddenQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
@@ -54,9 +54,9 @@
     "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
-  "offerLeaveQuestOnEachPage": false,
+  "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
-  "manualUpdateQuestInfos": false,
+  "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "",
@@ -69,6 +69,9 @@
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
+  "hotspotMarker": {
+    "path": "defaults/readable/defaultMarker"
+  },
   "marker": {
     "path": "Marker"
   },
@@ -96,6 +99,8 @@
   "categoryFoldersStartFolded": true,
   "mainCategorySet": null,
   "CategorySets": [],
+  "defaultCategory": null,
+  "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 21,
     "g": 21,
@@ -139,7 +144,7 @@
     "b": 230,
     "a": 255
   },
-  "headerHeightUnits": 60.0,
+  "headerHeightUnits": 55.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
@@ -219,7 +224,7 @@
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
-  "disabledAlpha": 0.5,
+  "offerLeaveQuestOnEachPage": true,
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
@@ -269,7 +274,7 @@
     "b": 255,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": false,
+  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 247,
     "g": 80,

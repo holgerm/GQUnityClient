@@ -12,6 +12,17 @@ namespace GQ.Client.UI
 {
     public class PageHeaderLayout : HeaderLayout
     {
+        public void OnEnable()
+        {
+            Author.SettingsChanged += Author_SettingsChanged;
+        }
+
+        public void OnDisable()
+        {
+            Author.SettingsChanged -= Author_SettingsChanged;
+        }
+
+
         protected override void setHeader()
         {
             enableLeaveQuestButton(ConfigurationManager.Current.offerLeaveQuestOnEachPage);
@@ -77,10 +88,17 @@ namespace GQ.Client.UI
             Transform titleText = MiddleButton.transform.Find("TitleText");
             titleText.gameObject.SetActive(true);
             Text ttt = titleText.GetComponent<Text>();
-            ttt.text = QuestManager.Instance.CurrentQuest.Name;
+
+            ttt.text = Author.LoggedIn ? QuestManager.Instance.CurrentQuest.Name : QuestManager.Instance.CurrentQuestName4User; 
+            // TODO aktualisieren wenn es im AUtorenpanel umgestellt wird?
+
             ttt.color = ConfigurationManager.Current.mainFgColor;
         }
 
+        void Author_SettingsChanged(object sender, System.EventArgs e)
+        {
+            setTitle();
+        }
 
         void enableLeaveQuestButton(bool enable)
         {

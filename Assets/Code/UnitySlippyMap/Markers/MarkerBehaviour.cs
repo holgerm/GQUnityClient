@@ -69,9 +69,9 @@ namespace UnitySlippyMap.Markers
 					value [0] += 360.0;
 
 				coordinatesWGS84 = value;
-				coordinatesEPSG900913 = Map.WGS84ToEPSG900913Transform.Transform (coordinatesWGS84); //GeoHelpers.WGS84ToMeters(coordinatesWGS84[0], coordinatesWGS84[1]);
-
-				Reposition ();
+                coordinatesEPSG900913 = Map.WGS84ToEPSG900913Transform.Transform(coordinatesWGS84); //GeoHelpers.WGS84ToMeters(coordinatesWGS84[0], coordinatesWGS84[1]);
+				
+                Reposition ();
 			}
 		}
 	

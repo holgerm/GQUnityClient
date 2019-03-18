@@ -58,6 +58,12 @@ namespace GQ.Client.Model
 
         #region quest management functions
 
+        public string CurrentQuestName4User
+        {
+            get;
+            private set;
+        }
+
         private Quest _currentQuest = Quest.Null;
         public Quest CurrentQuest
         {
@@ -68,12 +74,17 @@ namespace GQ.Client.Model
             set
             {
                 _currentQuest = value;
-                Device.location.InitLocationMock();
+                if (value.IsShown)
+                {
+                    CurrentQuestName4User = value.Name;
+                }
+                Device.location.InitLocationMock(); // TODO really? Always?
             }
         }
 
         private Page _currentPage;
-        public Page CurrentPage {
+        public Page CurrentPage
+        {
             get
             {
                 return CurrentQuest.CurrentPage;
