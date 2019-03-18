@@ -62,11 +62,18 @@ namespace GQ.Client.UI
                 return;
             }
 
-            float height = Units2Pixels(ContentHeightUnits);
-            SetLayoutElementHeight(layElem, height);
             if (Footer == null || !Footer.gameObject.activeSelf)
             {
-                SetLayoutElementHeight(layElem, layElem.minHeight + Units2Pixels(FooterHeightUnits));
+                Debug.Log("ScreenLayout: Units2Pixels(ContentHeightUnits + FooterHeightUnits) = " + Units2Pixels(ContentHeightUnits + FooterHeightUnits));
+                Debug.Log("ScreenLayout: Units2Pixels(ContentHeightUnits) =  " + Units2Pixels(ContentHeightUnits));
+                Debug.Log("ScreenLayout: Units2Pixels(FooterHeightUnits) =  " + Units2Pixels(FooterHeightUnits));
+                float extendedHeight = Units2Pixels(ContentHeightUnits + FooterHeightUnits);
+                SetLayoutElementHeight(layElem, extendedHeight);
+            }
+            else
+            {
+                float height = Units2Pixels(ContentHeightUnits);
+                SetLayoutElementHeight(layElem, height);
             }
         }
 
@@ -130,6 +137,7 @@ namespace GQ.Client.UI
 
         protected virtual void setFooter()
         {
+            Debug.Log("Setting Footer: " + (FOOTER == null ? "is NULL" : "non null"));
             if (Footer == null)
             {
                 return;

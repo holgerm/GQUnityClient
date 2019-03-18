@@ -8,7 +8,7 @@ using GQ.Client.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI 
+namespace GQ.Client.UI
 {
     public class PageHeaderLayout : HeaderLayout
     {
@@ -41,14 +41,15 @@ namespace GQ.Client.UI
 
         protected override void setMiddleButton()
         {
-            switch (ConfigurationManager.Current.headerMiddleButtonPolicy) {
+            switch (ConfigurationManager.Current.headerMiddleButtonPolicy)
+            {
                 case HeaderMiddleButtonPolicy.TopLogo:
                     setTopLogo();
                     break;
                 case HeaderMiddleButtonPolicy.QuestTitle:
                     setTitle();
                     break;
-            } 
+            }
         }
 
         protected void setTopLogo()
@@ -79,7 +80,8 @@ namespace GQ.Client.UI
             }
         }
 
-        protected void setTitle() {
+        protected void setTitle()
+        {
             // hide top logo and load image:
             Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
             middleTopLogo.gameObject.SetActive(false);
@@ -89,8 +91,9 @@ namespace GQ.Client.UI
             titleText.gameObject.SetActive(true);
             Text ttt = titleText.GetComponent<Text>();
 
-            ttt.text = Author.LoggedIn ? QuestManager.Instance.CurrentQuest.Name : QuestManager.Instance.CurrentQuestName4User; 
-            // TODO aktualisieren wenn es im AUtorenpanel umgestellt wird?
+            ttt.text = Author.LoggedIn || "".Equals(QuestManager.Instance.CurrentQuestName4User)
+                ? QuestManager.Instance.CurrentQuest.Name
+                : QuestManager.Instance.CurrentQuestName4User;
 
             ttt.color = ConfigurationManager.Current.mainFgColor;
         }

@@ -1,6 +1,7 @@
 ﻿using GQ.Client.Model;
 using GQ.Client.Util;
 using QM.Util;
+using UnityEngine;
 
 namespace GQ.Client.UI
 {
@@ -20,11 +21,13 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void InitPage_TypeSpecific ()
 		{
+
             navPage = (PageNavigation)page;
 
             // footer:
             // hide footer if no return possible:
             FooterButtonPanel.transform.parent.gameObject.SetActive(navPage.Quest.History.CanGoBackToPreviousPage);
+            Debug.Log("Nav Ctrl: Set Footer to " + navPage.Quest.History.CanGoBackToPreviousPage);
             forwardButton.gameObject.SetActive(false);
 
             // enable all defined options:
