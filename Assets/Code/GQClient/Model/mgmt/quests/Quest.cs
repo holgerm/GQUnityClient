@@ -34,7 +34,7 @@ namespace GQ.Client.Model
 
         public bool IndividualReturnDefinitions { get; set; }
 
-        public bool IsHidden
+        public virtual bool IsHidden
         {
             get
             {
@@ -438,6 +438,9 @@ namespace GQ.Client.Model
 
         public static readonly Quest Null = new NullQuest();
 
+        /// <summary>
+        /// Null quest is used as a functional null object for quests. Is hidden and has some standard values (id:0, name:"NullQuest" etc.).
+        /// </summary>
         private class NullQuest : Quest
         {
 
@@ -455,6 +458,14 @@ namespace GQ.Client.Model
             public override void Start()
             {
                 Log.WarnDeveloper("Null Quest started.");
+            }
+
+            public override bool IsHidden
+            {
+                get
+                {
+                    return true;
+                }
             }
 
         }
