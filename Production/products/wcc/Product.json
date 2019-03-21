@@ -32,6 +32,7 @@
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
   "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "MapBox",
@@ -46,6 +47,9 @@
   "mapStartAtLocation": true,
   "mapStartAtLongitude": 7.100114,
   "mapStartAtLatitude": 50.73381,
+  "hotspotMarker": {
+    "path": "defaults/readable/defaultMarker"
+  },
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -53,9 +57,9 @@
   "markerHeightMinMM": 10.0,
   "markerHeightMaxMM": 0.0,
   "markerColor": {
-    "r": 116,
-    "g": 103,
-    "b": 33,
+    "r": 181,
+    "g": 143,
+    "b": 44,
     "a": 255
   },
   "markerSymbolFGColor": {
@@ -313,9 +317,9 @@
     "a": 0
   },
   "headerButtonFgColor": {
-    "r": 116,
-    "g": 103,
-    "b": 33,
+    "r": 105,
+    "g": 83,
+    "b": 24,
     "a": 255
   },
   "contentBackgroundColor": {
@@ -344,8 +348,8 @@
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 153,
-    "g": 136,
+    "r": 181,
+    "g": 143,
     "b": 44,
     "a": 255
   },
@@ -366,10 +370,10 @@
     "a": 164
   },
   "overlayButtonFgColor": {
-    "r": 116,
-    "g": 103,
-    "b": 33,
-    "a": 187
+    "r": 105,
+    "g": 83,
+    "b": 24,
+    "a": 194
   },
   "overlayButtonFgDisabledColor": {
     "r": 159,
@@ -385,15 +389,15 @@
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuFrameColor": {
-    "r": 79,
-    "g": 70,
-    "b": 23,
+    "r": 76,
+    "g": 60,
+    "b": 17,
     "a": 255
   },
   "menuBGColor": {
-    "r": 116,
-    "g": 103,
-    "b": 33,
+    "r": 137,
+    "g": 107,
+    "b": 31,
     "a": 255
   },
   "menuFGColor": {
@@ -413,12 +417,12 @@
   "listEntryHeightUnits": 50.0,
   "listEntryHeightMinMM": 6.0,
   "listEntryHeightMaxMM": 10.0,
-  "listEntryUseTwoLines": false,
+  "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
-    "r": 76,
-    "g": 68,
-    "b": 22,
+    "r": 105,
+    "g": 83,
+    "b": 24,
     "a": 255
   },
   "listStartLineWidth": 5,
@@ -431,8 +435,8 @@
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 153,
-    "g": 136,
+    "r": 181,
+    "g": 143,
     "b": 44,
     "a": 255
   },
@@ -449,9 +453,9 @@
     "a": 0
   },
   "listBgColor": {
-    "r": 76,
-    "g": 68,
-    "b": 22,
+    "r": 62,
+    "g": 49,
+    "b": 14,
     "a": 255
   },
   "showDeleteOptionForLocalQuests": true,
