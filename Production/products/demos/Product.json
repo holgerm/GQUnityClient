@@ -25,7 +25,23 @@
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
-  "acceptedPageTypes": [],
+  "acceptedPageTypes": [
+    "StartAndExitScreen",
+    "NPCTalk",
+    "ImageWithText",
+    "Menu",
+    "MultipleChoiceQuestion",
+    "TextQuestion",
+    "AudioRecord",
+    "ImageCapture",
+    "VideoPlay",
+    "WebPage",
+    "Navigation",
+    "TagScanner",
+    "ReadNFC",
+    "Custom",
+    "MetaData"
+  ],
   "sceneMappings": [],
   "scenePaths": [
     "Assets/Scenes/Foyer.unity",
@@ -43,6 +59,7 @@
     "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
@@ -90,9 +107,9 @@
   "defaultCategory": null,
   "disabledAlpha": 0.5,
   "mainFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 31,
+    "g": 31,
+    "b": 31,
     "a": 255
   },
   "mainBgColor": {
@@ -121,9 +138,9 @@
     "a": 0
   },
   "headerButtonFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 31,
+    "g": 31,
+    "b": 31,
     "a": 255
   },
   "contentBackgroundColor": {
@@ -132,7 +149,7 @@
     "b": 255,
     "a": 255
   },
-  "headerHeightUnits": 60.0,
+  "headerHeightUnits": 55.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
@@ -140,27 +157,27 @@
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
   "imageAreaHeightMinUnits": 150.0,
-  "imageAreaHeightMaxUnits": 350.0,
+  "imageAreaHeightMaxUnits": 400.0,
   "fitExceedingImagesIntoArea": false,
-  "footerHeightUnits": 75.0,
+  "footerHeightUnits": 60.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 95,
+    "g": 194,
+    "b": 120,
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 95,
+    "g": 194,
+    "b": 120,
+    "a": 255
   },
   "footerButtonFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 31,
+    "g": 31,
+    "b": 31,
     "a": 255
   },
   "borderWidthUnits": 0.0,
@@ -168,24 +185,24 @@
   "overlayButtonSizeMinMM": 6.0,
   "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
+    "r": 59,
+    "g": 121,
+    "b": 75,
+    "a": 255
   },
   "overlayButtonFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 31,
+    "g": 31,
+    "b": 31,
     "a": 255
   },
   "overlayButtonFgDisabledColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 165,
+    "g": 165,
+    "b": 165,
     "a": 255
   },
-  "showEmptyMenuEntries": false,
+  "showEmptyMenuEntries": true,
   "menuEntryHeightUnits": 35.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
@@ -199,29 +216,29 @@
     "a": 255
   },
   "menuBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 95,
+    "g": 194,
+    "b": 120,
+    "a": 255
   },
   "menuFGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 31,
+    "g": 31,
+    "b": 31,
     "a": 255
   },
   "menuInhibitsInteraction": false,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
-  "offerFeedback": false,
-  "offerAuthorLogin": false,
-  "defineAuthorBackDoor": false,
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
   "listEntryHeightUnits": 45.0,
-  "listEntryHeightMinMM": 0.0,
-  "listEntryHeightMaxMM": 0.0,
-  "listEntryUseTwoLines": false,
+  "listEntryHeightMinMM": 5.0,
+  "listEntryHeightMaxMM": 10.0,
+  "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
     "r": 0,
@@ -233,15 +250,15 @@
   "dividingLineWidth": 5,
   "listEndLineWidth": 5,
   "listEntryFgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 31,
+    "g": 31,
+    "b": 31,
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 143,
+    "g": 226,
+    "b": 164,
     "a": 255
   },
   "listEntrySecondFgColor": {
@@ -257,16 +274,16 @@
     "a": 0
   },
   "listBgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 59,
+    "g": 121,
+    "b": 75,
+    "a": 255
   },
   "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 255,
-    "g": 255,
-    "b": 255,
+    "g": 78,
+    "b": 78,
     "a": 255
   }
 }
