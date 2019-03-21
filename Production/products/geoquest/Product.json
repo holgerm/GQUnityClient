@@ -1,21 +1,289 @@
-
 {
-    "id" : "geoquest",
-    "name" : "GeoQuest",
-    "portal" : 61,
-    "autoStartQuestID" : 0,
-    "autostartIsPredeployed" : false,
-    "downloadTimeOutSeconds" : 0,
-    "nameForQuest"           : "Quest",
-    "questVisualization"     : "list",
-    "questVisualizationChangeable" : true,
-    "showCloudQuestsImmediately"   : false,
-    "showTextInLoadingLogo"        : true,
-    "showNetConnectionWarning"     : false,
-    "colorProfile"                 : "[null]",
-    "mapboxKey"                    : "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
-    "mapboxMapID"                  : "mapbox.streets",
-    "imprint"                      : "[null]",
-    "markers"                      : [
-    ]
+  "id": "geoquest",
+  "idExtension": "",
+  "name": "GeoQuest",
+  "portal": 61,
+  "assetAddOns": [
+    "UniWebView"
+  ],
+  "androidMinSDKVersion": "AndroidApiLevelAuto",
+  "autoStartQuestID": 0,
+  "autostartIsPredeployed": false,
+  "keepAutoStarting": false,
+  "downloadStrategy": "UPFRONT",
+  "timeoutMS": 60000,
+  "maxIdleTimeMS": 9000,
+  "maxParallelDownloads": 15,
+  "nameForQuestSg": "Quest",
+  "nameForQuestsPl": "Quests",
+  "questInfoViews": [
+    "List",
+    "Map"
+  ],
+  "cloudQuestsVisible": true,
+  "showCloudQuestsImmediately": false,
+  "downloadAllCloudQuestOnStart": false,
+  "localQuestsDeletable": true,
+  "showHiddenQuests": false,
+  "acceptedPageTypes": [
+    "StartAndExitScreen",
+    "NPCTalk",
+    "ImageWithText",
+    "Menu",
+    "MultipleChoiceQuestion",
+    "TextQuestion",
+    "AudioRecord",
+    "ImageCapture",
+    "VideoPlay",
+    "WebPage",
+    "Navigation",
+    "TagScanner",
+    "ReadNFC",
+    "Custom",
+    "MetaData"
+  ],
+  "sceneMappings": [],
+  "scenePaths": [
+    "Assets/Scenes/Foyer.unity",
+    "Assets/Scenes/Pages/NPCTalk.unity",
+    "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
+    "Assets/Scenes/Pages/TextQuestion.unity",
+    "Assets/Scenes/Pages/StartAndExitScreen.unity",
+    "Assets/Scenes/Pages/Menu.unity",
+    "Assets/Scenes/Pages/Navigation.unity",
+    "Assets/Scenes/Pages/VideoPlay.unity",
+    "Assets/Scenes/Pages/WebPage.unity",
+    "Assets/Scenes/Pages/AudioRecord.unity",
+    "Assets/Scenes/Pages/ImageCapture.unity",
+    "Assets/Scenes/Pages/TagScanner.unity",
+    "Assets/Scenes/Pages/ReadNFC.unity"
+  ],
+  "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": true,
+  "autoSynchQuestInfos": true,
+  "offerManualUpdate4QuestInfos": false,
+  "mapProvider": "OpenStreetMap",
+  "mapBaseUrl": "http://a.tile.openstreetmap.org",
+  "mapKey": "",
+  "mapID": "",
+  "mapTileImageExtension": ".png",
+  "useMapOffline": false,
+  "mapMinimalZoom": 7.0,
+  "mapDeltaZoom": 0.5,
+  "mapStartPositionType": "CenterOfMarkers",
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 0.0,
+  "mapStartAtLatitude": 0.0,
+  "hotspotMarker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "marker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerHeightUnits": 75.0,
+  "markerHeightMinMM": 0.0,
+  "markerHeightMaxMM": 0.0,
+  "markerColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "markerBGAlpha": 168,
+  "mapButtonHeightUnits": 0.0,
+  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightMaxMM": 0.0,
+  "foldableCategoryFilters": true,
+  "categoryFiltersStartFolded": true,
+  "categoryFoldersStartFolded": true,
+  "mainCategorySet": null,
+  "CategorySets": [],
+  "defaultCategory": null,
+  "disabledAlpha": 0.5,
+  "mainFgColor": {
+    "r": 31,
+    "g": 31,
+    "b": 31,
+    "a": 255
+  },
+  "mainBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "mainFontSize": 60,
+  "maxFontSize": 100,
+  "showShadows": true,
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "headerMiddleButtonPolicy": "TopLogo",
+  "headerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "headerButtonFgColor": {
+    "r": 31,
+    "g": 31,
+    "b": 31,
+    "a": 255
+  },
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerHeightUnits": 55.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
+  "contentHeightUnits": 750.0,
+  "contentTopMarginUnits": 0.0,
+  "contentDividerUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "imageAreaHeightMinUnits": 150.0,
+  "imageAreaHeightMaxUnits": 400.0,
+  "fitExceedingImagesIntoArea": false,
+  "footerHeightUnits": 60.0,
+  "footerHeightMinMM": 0.0,
+  "footerHeightMaxMM": 0.0,
+  "footerBgColor": {
+    "r": 95,
+    "g": 194,
+    "b": 120,
+    "a": 255
+  },
+  "footerButtonBgColor": {
+    "r": 95,
+    "g": 194,
+    "b": 120,
+    "a": 255
+  },
+  "footerButtonFgColor": {
+    "r": 31,
+    "g": 31,
+    "b": 31,
+    "a": 255
+  },
+  "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 6.0,
+  "overlayButtonSizeMaxMM": 16.0,
+  "overlayButtonBgColor": {
+    "r": 59,
+    "g": 121,
+    "b": 75,
+    "a": 255
+  },
+  "overlayButtonFgColor": {
+    "r": 31,
+    "g": 31,
+    "b": 31,
+    "a": 255
+  },
+  "overlayButtonFgDisabledColor": {
+    "r": 165,
+    "g": 165,
+    "b": 165,
+    "a": 255
+  },
+  "showEmptyMenuEntries": true,
+  "menuEntryHeightUnits": 35.0,
+  "menuEntryHeightMinMM": 0.0,
+  "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 400.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
+  "menuFrameColor": {
+    "r": 127,
+    "g": 127,
+    "b": 127,
+    "a": 255
+  },
+  "menuBGColor": {
+    "r": 95,
+    "g": 194,
+    "b": 120,
+    "a": 255
+  },
+  "menuFGColor": {
+    "r": 31,
+    "g": 31,
+    "b": 31,
+    "a": 255
+  },
+  "menuInhibitsInteraction": false,
+  "menu2ShownInQuests": true,
+  "offerLeaveQuestOnEachPage": true,
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "defineAuthorBackDoor": true,
+  "acceptedAuthorEmail": "author@email.com",
+  "acceptedAuthorPassword": "secret",
+  "listEntryHeightUnits": 45.0,
+  "listEntryHeightMinMM": 5.0,
+  "listEntryHeightMaxMM": 10.0,
+  "listEntryUseTwoLines": true,
+  "listEntryDividingMode": "SeparationLines",
+  "listLineColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listStartLineWidth": 5,
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 5,
+  "listEntryFgColor": {
+    "r": 31,
+    "g": 31,
+    "b": 31,
+    "a": 255
+  },
+  "listEntryBgColor": {
+    "r": 143,
+    "g": 226,
+    "b": 164,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listEntrySecondBgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listBgColor": {
+    "r": 59,
+    "g": 121,
+    "b": 75,
+    "a": 255
+  },
+  "showDeleteOptionForLocalQuests": true,
+  "emulationColor": {
+    "r": 255,
+    "g": 78,
+    "b": 78,
+    "a": 255
+  }
 }
