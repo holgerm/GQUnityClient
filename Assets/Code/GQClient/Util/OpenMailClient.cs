@@ -12,7 +12,7 @@ namespace GQ.Client.Util
         // Use this for initialization
         void Start()
         {
-            mailto = ConfigurationManager.Current.id + "@quest-mill.com";
+            mailto = "gq_" + ConfigurationManager.Current.id + "@quest-mill.com";
             subject = "Feedback zur App " + ConfigurationManager.Current.name;
             string version = Resources.Load<TextAsset>("buildtime").text;
             body = string.Format("Ich benutze Version {0} der App {1} und möchte dazu etwas mitteilen:", version, ConfigurationManager.Current.name);
