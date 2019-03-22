@@ -75,7 +75,7 @@
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
   "hotspotMarker": {
-    "path": "defaults/readable/defaultMarker"
+    "path": "textures/readable/marker"
   },
   "marker": {
     "path": "defaults/readable/defaultMarker"
@@ -96,9 +96,9 @@
     "a": 255
   },
   "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 0.0,
-  "mapButtonHeightMinMM": 0.0,
-  "mapButtonHeightMaxMM": 0.0,
+  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightMinMM": 7.0,
+  "mapButtonHeightMaxMM": 12.0,
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
