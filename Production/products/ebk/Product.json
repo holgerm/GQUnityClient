@@ -55,6 +55,7 @@
     "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
