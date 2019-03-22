@@ -6,7 +6,7 @@
   "assetAddOns": [
     "UniWebView"
   ],
-  "androidMinSDKVersion": "AndroidApiLevelAuto",
+  "androidMinSDKVersion": "AndroidApiLevel21",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
@@ -75,7 +75,7 @@
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
   "hotspotMarker": {
-    "path": "defaults/readable/defaultMarker"
+    "path": "textures/readable/marker"
   },
   "marker": {
     "path": "defaults/readable/defaultMarker"
@@ -96,9 +96,9 @@
     "a": 255
   },
   "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 0.0,
-  "mapButtonHeightMinMM": 0.0,
-  "mapButtonHeightMaxMM": 0.0,
+  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightMinMM": 7.0,
+  "mapButtonHeightMaxMM": 12.0,
   "foldableCategoryFilters": true,
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
@@ -188,7 +188,7 @@
     "r": 59,
     "g": 121,
     "b": 75,
-    "a": 255
+    "a": 180
   },
   "overlayButtonFgColor": {
     "r": 31,
@@ -200,7 +200,7 @@
     "r": 165,
     "g": 165,
     "b": 165,
-    "a": 255
+    "a": 148
   },
   "showEmptyMenuEntries": true,
   "menuEntryHeightUnits": 35.0,
