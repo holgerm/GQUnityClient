@@ -185,9 +185,17 @@ namespace GQ.Client.Err
 			Level = level;
 			Recipient = recipient;
 			Timestamp = DateTime.Now;
-			QuestID = QuestManager.CurrentlyParsingQuest.Id;
-			QuestName = QuestManager.CurrentlyParsingQuest.Name;
-		}
+            if (QuestManager.Instance.CurrentQuest == Quest.Null)
+            {
+                QuestID = QuestManager.CurrentlyParsingQuest.Id;
+                QuestName = QuestManager.CurrentlyParsingQuest.Name;
+            }
+            else
+            {
+                QuestID = QuestManager.Instance.CurrentQuest.Id;
+                QuestName = QuestManager.Instance.CurrentQuest.Name;
+            }
+        }
 	}
 
 
