@@ -37,7 +37,7 @@ namespace GQ.Client.UI
 		void enableOptions ()
 		{
 			if (navPage.mapOption) {
-				Device.location.InitLocationMock ();
+				//Device.location.InitLocationMock ();
 			}
 			// TODO
 		}

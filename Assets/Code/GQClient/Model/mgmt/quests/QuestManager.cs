@@ -78,7 +78,7 @@ namespace GQ.Client.Model
                 {
                     CurrentQuestName4User = value.Name;
                 }
-                Device.location.InitLocationMock(); // TODO really? Always?
+                //Device.location.InitLocationMock(); // TODO really? Always?
             }
         }
 
