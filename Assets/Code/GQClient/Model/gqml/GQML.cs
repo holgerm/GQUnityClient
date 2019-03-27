@@ -90,7 +90,8 @@ namespace GQ.Client.Model
 		// NAVIGATION PAGE:
 		public const string PAGE_TYPE_NAVIGATION = "Navigation";
 		public const string PAGE_NAVIGATION_OPTION_MAP = "map";
-		public const string PAGE_NAVIGATION_OPTION_LIST = "list";
+        public const string PAGE_NAVIGATION_MAP_ZOOMLEVEL = "zoomlevel";
+        public const string PAGE_NAVIGATION_OPTION_LIST = "list";
 		public const string PAGE_NAVIGATION_OPTION_QR = "qr";
 		public const string PAGE_NAVIGATION_TEXT_QR = "text_qr";
 		public const string PAGE_NAVIGATION_TEXT_QR_NOTFOUND = "text_qr_notfound";

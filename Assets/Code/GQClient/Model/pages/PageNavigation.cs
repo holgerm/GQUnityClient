@@ -13,6 +13,7 @@ namespace GQ.Client.Model
 
         #region State
         public bool mapOption { get; set; }
+        public int initialZoomLevel { get; set; }
 
         public bool listOption { get; set; }
 
@@ -39,6 +40,7 @@ namespace GQ.Client.Model
             base.ReadAttributes(reader);
 
             mapOption = GQML.GetOptionalBoolAttribute(GQML.PAGE_NAVIGATION_OPTION_MAP, reader);
+            initialZoomLevel = GQML.GetIntAttribute(GQML.PAGE_NAVIGATION_MAP_ZOOMLEVEL, reader);
 
             listOption = false; // GQML.GetRequiredBoolAttribute (GQML.PAGE_NAVIGATION_OPTION_LIST, reader);
 
