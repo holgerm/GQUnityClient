@@ -32,6 +32,9 @@ namespace GQ.Client.UI
 
             // enable all defined options:
             enableOptions();
+
+            // initial Zoom:
+            mapCtrl.map.CurrentZoom = navPage.initialZoomLevel;
 		}
 
 		void enableOptions ()
