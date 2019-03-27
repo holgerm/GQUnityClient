@@ -169,7 +169,7 @@ namespace GQ.Client.UI
             calculateMarkerDetails(texture, markerGO);
 
             if (newMarker != null)
-                Markers.Add(hotspot.Id, newMarker);
+                Markers[hotspot.Id] = newMarker;
         }
         #endregion
 
