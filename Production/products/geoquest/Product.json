@@ -144,12 +144,12 @@
     "a": 255
   },
   "contentBackgroundColor": {
-    "r": 157,
-    "g": 192,
-    "b": 165,
+    "r": 187,
+    "g": 187,
+    "b": 187,
     "a": 255
   },
-  "headerHeightUnits": 55.0,
+  "headerHeightUnits": 62.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
@@ -163,15 +163,15 @@
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
-    "r": 95,
-    "g": 194,
-    "b": 120,
+    "r": 192,
+    "g": 192,
+    "b": 192,
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 95,
-    "g": 194,
-    "b": 120,
+    "r": 192,
+    "g": 192,
+    "b": 192,
     "a": 255
   },
   "footerButtonFgColor": {
@@ -185,9 +185,9 @@
   "overlayButtonSizeMinMM": 6.0,
   "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 59,
-    "g": 121,
-    "b": 75,
+    "r": 86,
+    "g": 86,
+    "b": 86,
     "a": 180
   },
   "overlayButtonFgColor": {
@@ -203,22 +203,22 @@
     "a": 148
   },
   "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 35.0,
+  "menuEntryHeightUnits": 48.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
-  "menuEntryWidthUnits": 400.0,
+  "menuEntryWidthUnits": 310.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuFrameColor": {
-    "r": 127,
-    "g": 127,
-    "b": 127,
+    "r": 45,
+    "g": 45,
+    "b": 45,
     "a": 255
   },
   "menuBGColor": {
-    "r": 95,
-    "g": 194,
-    "b": 120,
+    "r": 228,
+    "g": 227,
+    "b": 227,
     "a": 255
   },
   "menuFGColor": {
@@ -227,7 +227,7 @@
     "b": 31,
     "a": 255
   },
-  "menuInhibitsInteraction": false,
+  "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
   "offerFeedback": true,
@@ -235,20 +235,20 @@
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
-  "listEntryHeightUnits": 45.0,
-  "listEntryHeightMinMM": 5.0,
-  "listEntryHeightMaxMM": 10.0,
+  "listEntryHeightUnits": 78.0,
+  "listEntryHeightMinMM": 10.0,
+  "listEntryHeightMaxMM": 18.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 218,
+    "g": 218,
+    "b": 218,
     "a": 255
   },
-  "listStartLineWidth": 5,
-  "dividingLineWidth": 5,
-  "listEndLineWidth": 5,
+  "listStartLineWidth": 7,
+  "dividingLineWidth": 7,
+  "listEndLineWidth": 7,
   "listEntryFgColor": {
     "r": 31,
     "g": 31,
@@ -256,9 +256,9 @@
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 143,
-    "g": 226,
-    "b": 164,
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "listEntrySecondFgColor": {
