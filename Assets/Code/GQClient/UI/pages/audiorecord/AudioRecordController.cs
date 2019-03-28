@@ -6,6 +6,7 @@ using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {
@@ -50,20 +51,37 @@ namespace GQ.Client.UI
             HasRecorded = false;
             UpdateView();
 
-            InitMicrophone();
+            CoroutineStarter.Instance.StartCoroutine(InitMicrophone());
         }
 
-        private void InitMicrophone()
+        protected string microphoneName;
+
+        private IEnumerator InitMicrophone()
         {
+            yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
+            if (!Application.HasUserAuthorization(UserAuthorization.Microphone))
+            {
+                //TODO Throw a warning message at the console that we can not record audio without permission:
+                Debug.Log("NO MICROPHONE PERMISSION!");
+                Log.SignalErrorToUser("No permission to use microphone. Can not record audio.");
+            }
+            else
+            {
+                Debug.Log("Permission received. Thank you!");
+            }
+
             //Check if there is at least one microphone connected  
             if (Microphone.devices.Length <= 0)
             {
-                //TOTO Throw a warning message at the console if there isn't  
+                //TODO Throw a warning message at the console if there isn't  
+                Debug.Log("NO MICROPHONE FOUND!");
+                Log.SignalErrorToUser("No microphone found. Can not record audio. Occurred on device of type {0}.", SystemInfo.deviceModel);
             }
             else
             {
                 //Get the default microphone recording capabilities  
-                Microphone.GetDeviceCaps(null, out minFreq, out maxFreq);
+                microphoneName = Microphone.devices[0];
+                Microphone.GetDeviceCaps(microphoneName, out minFreq, out maxFreq);
 
                 //According to the documentation, if minFreq and maxFreq are zero, the microphone supports any frequency...  
                 if (minFreq == 0 && maxFreq == 0)
@@ -153,23 +171,36 @@ namespace GQ.Client.UI
         {
             if (IsPlaying)
             {
+                audioSource.Stop();
                 IsPlaying = false;
             }
             else
             {
+                audioSource.Play();
                 IsPlaying = true;
             }
             UpdateView();
-        }
 
+        }
+        
         public void PressRecord()
         {
             if (IsRecording)
             {
+                Microphone.End(microphoneName);
+                audioSource.Play();
+                // TODO save audio to file!
                 IsRecording = false;
             }
             else
             {
+                // Length is fixed to 60 seconds. This should be sepcified by author in quest.
+                Debug.Log("Recording started with microphone: " + microphoneName + 
+                    " ac.length: " + (audioSource.clip == null ? "null" : audioSource.clip.length.ToString()) + 
+                    " samples: " + (audioSource.clip == null ? "null" : audioSource.clip.samples.ToString()));
+                int freq = Math.Min(maxFreq, 44100);
+                Debug.Log("MaxFreq: " + freq);
+                audioSource.clip = Microphone.Start(microphoneName, true, 10, freq);
                 IsRecording = true;
                 HasRecorded = true;
             }
@@ -178,10 +209,43 @@ namespace GQ.Client.UI
 
         public void PressDelete()
         {
+            // TODO: remove audio file.
             HasRecorded = false;
             IsRecording = false;
             IsPlaying = false;
             UpdateView();
+        }
+
+        private float length = 0f;
+        private float playlength = 0f;
+
+        void Update()
+        {
+            if (Microphone.IsRecording(microphoneName))
+            {
+                length += Time.deltaTime;
+            }
+            if (IsRecording)
+            {
+                Debug.Log("Recording ...");
+                if (!Microphone.IsRecording(microphoneName))
+                {
+                    Debug.Log("RECORDING HAS ENDED.".Yellow());
+                }
+                else
+                {
+                    Debug.Log("@ pos: " + Microphone.GetPosition(microphoneName));
+                }
+            }
+            if (IsPlaying)
+            {
+                playlength += Time.deltaTime;
+
+                if (!audioSource.isPlaying)
+                {
+                    IsPlaying = false;
+                }
+            }
         }
         #endregion
 

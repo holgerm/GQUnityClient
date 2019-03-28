@@ -177,8 +177,8 @@ namespace GQ.Client.Model
             }
             set
             {
-                result = value;
-                Variables.SetInternalVariable("$_mission_" + Id + ".result", new Value(value));
+                result = value ?? ""; // never store null, but an empty string instead
+                Variables.SetInternalVariable("$_mission_" + Id + ".result", new Value(result));
             }
         }
 
@@ -326,11 +326,11 @@ namespace GQ.Client.Model
 
         }
 
-        public virtual void End()
+        public virtual void End(Boolean leaveQuestIfEmpty = true)
         {
             State = GQML.STATE_SUCCEEDED;
 
-            if (EndTrigger == Trigger.Null)
+            if (EndTrigger == Trigger.Null && leaveQuestIfEmpty)
             {
                 Log.SignalErrorToAuthor(
                     "Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",

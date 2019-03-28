@@ -72,11 +72,6 @@ namespace GQ.Client.Model
             LocationSensor.Instance.OnLocationUpdate += Quest.UpdateHotspotMarkers;
         }
 
-        public override void End()
-        {
-            base.End();
-        }
-
         public override void CleanUp()
         {
             base.CleanUp();

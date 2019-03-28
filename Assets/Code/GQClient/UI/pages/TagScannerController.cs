@@ -147,8 +147,6 @@ namespace GQ.Client.UI
             }
         }
 
-        private string lastQrResult = "";
-
         void Update()
         {
             if (scannedTextShouldBeChecked)
@@ -180,15 +178,15 @@ namespace GQ.Client.UI
 
             if (myPage.AnswerCorrect(qrContent))
             {
-                myPage.Succeed(alsoEnd: false);
                 finishScanning();
+                myPage.Succeed(alsoEnd: false);
             }
             else
             {
+                finishScanning();
                 myPage.Fail(alsoEnd: false);
                 // TODO implement specification of maximal number of trials, before we leave the page failing ...
                 // we now default to 1:
-                finishScanning();
             }
         }
 
@@ -205,14 +203,7 @@ namespace GQ.Client.UI
 
         public override void OnForward()
         {
-            if (myPage.AnswerCorrect(qrContent))
-            {
-                myPage.Succeed();
-            }
-            else
-            {
-                myPage.Fail();
-            }
+            myPage.End(leaveQuestIfEmpty: false);
         }
 
         void OnEnable()
@@ -227,6 +218,12 @@ namespace GQ.Client.UI
             Debug.Log("OnDisable()");
             if (camTexture != null)
                 camTexture.Pause();
+        }
+
+        public override void CleanUp()
+        {
+            base.CleanUp();
+            finishScanning();
         }
 
         #endregion

@@ -53,15 +53,14 @@ namespace GQ.Client.Model
 		{
             State = GQML.STATE_SUCCEEDED;
 
-            if (!alsoEnd)
-                return;
-
             if (SuccessTrigger != Trigger.Null) {
 				SuccessTrigger.Initiate ();
-				End (false);
+				if (alsoEnd) 
+                    End (false);
 			} else {
                 // end this page after succeeding:
-                End(true);
+                if (alsoEnd) 
+                    End(true);
 			}
 		}
 
@@ -69,25 +68,20 @@ namespace GQ.Client.Model
 		{
 			State = GQML.STATE_FAILED;
 
-            if (!alsoEnd)
-                return;
-
 			if (FailTrigger != Trigger.Null) {
 				FailTrigger.Initiate ();
-                End(false);
+                if (alsoEnd) 
+                    End(false);
 			} else {
                 // end this page after failing:
-                End(true);
+                if (alsoEnd)
+                    End(true);
 			}
 		}
 
-		public override void End() {
-			End (true);
-		}
-
-		void End(bool needsContinuation) {
+		public override void End(bool leaveQuestIfEmpty = true) {
 			if (EndTrigger == Trigger.Null) {
-				if (needsContinuation) {
+				if (leaveQuestIfEmpty) {
 					Log.SignalErrorToAuthor (
 						"Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
 						Quest.Name, Quest.Id,
