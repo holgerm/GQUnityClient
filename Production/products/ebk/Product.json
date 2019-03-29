@@ -309,7 +309,7 @@
     "a": 255
   },
   "showEmptyMenuEntries": false,
-  "menuEntryHeightUnits": 35.0,
+  "menuEntryHeightUnits": 48.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
   "menuEntryWidthUnits": 400.0,
@@ -341,9 +341,9 @@
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
-  "listEntryHeightUnits": 60.0,
-  "listEntryHeightMinMM": 0.0,
-  "listEntryHeightMaxMM": 0.0,
+  "listEntryHeightUnits": 78.0,
+  "listEntryHeightMinMM": 10.0,
+  "listEntryHeightMaxMM": 18.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "AlternatingColors",
   "listLineColor": {
