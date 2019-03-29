@@ -516,7 +516,7 @@
     "b": 255,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": false,
+  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 250,
     "g": 105,
