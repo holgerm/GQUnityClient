@@ -282,10 +282,10 @@
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
-  "listEntryHeightUnits": 55.0,
-  "listEntryHeightMinMM": 0.0,
-  "listEntryHeightMaxMM": 0.0,
-  "listEntryUseTwoLines": false,
+  "listEntryHeightUnits": 78.0,
+  "listEntryHeightMinMM": 10.0,
+  "listEntryHeightMaxMM": 18.0,
+  "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
     "r": 0,
@@ -293,9 +293,9 @@
     "b": 0,
     "a": 255
   },
-  "listStartLineWidth": 5,
-  "dividingLineWidth": 5,
-  "listEndLineWidth": 5,
+  "listStartLineWidth": 7,
+  "dividingLineWidth": 7,
+  "listEndLineWidth": 7,
   "listEntryFgColor": {
     "r": 0,
     "g": 0,
