@@ -528,8 +528,8 @@ namespace GQ.Editor.Building
             CurrentProduct = newProduct; // remember the new product for the editor time access point.
             ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
 
-            Scene currentScene = SceneManager.GetActiveScene();
-            EditorSceneManager.OpenScene(currentScene.path);
+            if (ebsScenes.Count > 0) 
+                EditorSceneManager.OpenScene(ebsScenes[0].path);
 
             ProductEditor.IsCurrentlyPreparingProduct = false;
             GQAssetChangePostprocessor.writeBuildDate();
