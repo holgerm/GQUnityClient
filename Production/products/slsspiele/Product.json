@@ -511,9 +511,9 @@
     "a": 255
   },
   "listBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 216,
+    "g": 215,
+    "b": 215,
     "a": 255
   },
   "showDeleteOptionForLocalQuests": true,
