@@ -538,7 +538,7 @@ namespace GQ.Editor.Building
             LayoutConfig.ResetAll();
 
             DateTime completedAt = DateTime.Now;
-            Debug.LogWarning("COMPLETED Preparing product at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
+            Debug.LogWarning("COMPLETED Preparing product " + newProduct.Id + " at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
         }
 
         List<string> gatherScenesFromPackage(List<string> gatheredScenes, string dir) {
