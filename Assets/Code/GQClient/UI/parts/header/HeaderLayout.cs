@@ -43,8 +43,7 @@ namespace GQ.Client.UI
             }
 
             float height = Units2Pixels(HeaderHeightUnits);
-            Debug.Log(("Setting the header height to: " + height).Green());
-            SetLayoutElementHeight(layElem, height);
+             SetLayoutElementHeight(layElem, height);
         }
 
         protected virtual void setMiddleButton()

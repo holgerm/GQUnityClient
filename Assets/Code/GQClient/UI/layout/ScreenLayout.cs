@@ -64,9 +64,6 @@ namespace GQ.Client.UI
 
             if (Footer == null || !Footer.gameObject.activeSelf)
             {
-                Debug.Log("ScreenLayout: Units2Pixels(ContentHeightUnits + FooterHeightUnits) = " + Units2Pixels(ContentHeightUnits + FooterHeightUnits));
-                Debug.Log("ScreenLayout: Units2Pixels(ContentHeightUnits) =  " + Units2Pixels(ContentHeightUnits));
-                Debug.Log("ScreenLayout: Units2Pixels(FooterHeightUnits) =  " + Units2Pixels(FooterHeightUnits));
                 float extendedHeight = Units2Pixels(ContentHeightUnits + FooterHeightUnits);
                 SetLayoutElementHeight(layElem, extendedHeight);
             }
@@ -137,7 +134,6 @@ namespace GQ.Client.UI
 
         protected virtual void setFooter()
         {
-            Debug.Log("Setting Footer: " + (FOOTER == null ? "is NULL" : "non null"));
             if (Footer == null)
             {
                 return;
