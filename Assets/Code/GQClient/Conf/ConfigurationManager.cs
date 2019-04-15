@@ -53,7 +53,6 @@ namespace GQ.Client.Conf
 		public const string TOPLOGO_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + TOPLOGO_FILE_NAME;
 
 		public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
-		// "http://qeevee.org:9091";
 
 		public static string UrlPublicQuestsJSON {
 			get {
