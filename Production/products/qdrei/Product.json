@@ -127,9 +127,9 @@
     "a": 255
   },
   "headerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 230,
+    "g": 230,
+    "b": 230,
     "a": 255
   },
   "headerButtonFgColor": {
