@@ -37,14 +37,15 @@ namespace GQ.Client.Model {
 			
 		public override bool Run() 
 		{
-			// step 1 deserialize game.xml:
-			QuestManager.Instance.SetCurrentQuestFromXML(gameXML);
+            // step 1 deserialize game.xml:
+            //QuestManager.Instance.SetCurrentQuestFromXML(gameXML);
+            Quest quest = QuestManager.Instance.DeserializeQuest(gameXML);
 
-			// step 2 import local media info:
-			QuestManager.Instance.ImportLocalMediaInfo();
+            // step 2 import local media info:
+            quest.ImportLocalMediaInfo();
 
 			// step 3 include remote media info:
-			Result = QuestManager.Instance.GetListOfFilesNeedDownload();
+			Result = quest.GetListOfFilesNeedDownload();
 
 			return true;
 		}

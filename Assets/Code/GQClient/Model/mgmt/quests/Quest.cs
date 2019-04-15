@@ -10,6 +10,7 @@ using GQ.Client.Err;
 using System.IO;
 using System.Xml;
 using GQ.Client.Util;
+using System.Net;
 
 namespace GQ.Client.Model
 {
@@ -238,6 +239,173 @@ namespace GQ.Client.Model
             get
             {
                 return Files.CombinePath(QuestManager.GetLocalPath4Quest(Id), "media.json");
+            }
+        }
+
+
+        /// <summary>
+        /// Imports the local media infos fomr the game-media.json file and updates the existing media store. 
+        /// This is step 2 of 4 in media sync (download or update of a quest).
+        /// </summary>
+        public void ImportLocalMediaInfo()
+        {
+            string mediaJSON = "";
+            try
+            {
+                mediaJSON = File.ReadAllText(MediaJsonPath);
+            }
+            catch (FileNotFoundException)
+            {
+                mediaJSON = @"[]"; // we use an empty list then
+            }
+            catch (Exception e)
+            {
+                Log.SignalErrorToDeveloper("Error reading media.json for quest " + Id + ": " + e.Message);
+                mediaJSON = @"[]"; // we use an empty list then
+            }
+
+            List<LocalMediaInfo> localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
+
+            List<string> occupiedFileNames = new List<string>();
+
+            foreach (LocalMediaInfo localInfo in localInfos)
+            {
+                MediaInfo info;
+                if (MediaStore.TryGetValue(localInfo.url, out info))
+                {
+                    // add local information to media store:
+                    info.LocalDir = localInfo.absDir;
+                    info.LocalFileName = localInfo.filename;
+                    info.LocalSize = localInfo.size;
+                    info.LocalTimestamp = localInfo.time;
+                    // remember filenames as occupied for later creation of new unique filenames
+                    occupiedFileNames.Add(info.LocalFileName);
+                }
+                else
+                {
+                    // this media file is not useful anymore, we delete it:
+                    string filePath = localInfo.LocalPath;
+                    try
+                    {
+                        File.Delete(filePath);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.SignalErrorToDeveloper(
+                            "Error while deleting media file " + filePath +
+                            " : " + e.Message);
+                    }
+                }
+            }
+
+            // Step 2b determine missing local filenames for new urls:
+            // MediaStore now has all needed mediainfos including local data for this quest.
+            foreach (KeyValuePair<string, MediaInfo> kvpEntry in MediaStore)
+            {
+                if (kvpEntry.Value.LocalFileName == null || kvpEntry.Value.LocalFileName == "")
+                {
+                    string fileName = Files.FileName(kvpEntry.Value.Url);
+                    string fileNameCandidate = fileName;
+                    int discriminationNr = 1;
+                    string discriminiationAppendix = "";
+                    while (occupiedFileNames.Contains(fileNameCandidate))
+                    {
+                        fileNameCandidate = fileName + discriminiationAppendix;
+                        discriminiationAppendix = "-" + discriminationNr++;
+                    }
+                    kvpEntry.Value.LocalFileName = fileNameCandidate;
+                }
+            }
+        }
+        /// <summary>
+        /// This is step 3 of 4 during quest media sync. Downloads or updates the media files needed for this quest.
+        /// </summary>
+        public List<MediaInfo> GetListOfFilesNeedDownload()
+        {
+            // 1. we create a list of files to be downloaded / updated (as Dictionary with all neeeded data for multi downloader:
+            List<MediaInfo> filesToDownload = new List<MediaInfo>();
+
+            int infoNotReceived = 0;
+            float summedSize = 0f;
+
+            MediaInfo info;
+            foreach (KeyValuePair<string, MediaInfo> kvpEntry in MediaStore)
+            {
+                info = kvpEntry.Value;
+
+                if (info.Url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA, StringComparison.Ordinal))
+                {
+                    // not an url but instead a local reference to media that is created at runtime within a quest.
+                    continue;
+                }
+
+                HttpWebRequest httpWReq = null;
+                try
+                {
+                    httpWReq =
+                        (HttpWebRequest)WebRequest.Create(info.Url);
+                    httpWReq.Timeout = (int)Math.Min(
+                        3000,
+                        ConfigurationManager.Current.maxIdleTimeMS
+                    );
+                }
+                catch (UriFormatException)
+                {
+                    Log.SignalErrorToAuthor("Quest contains a wrong formatted URI: {0}.", info.Url);
+                    continue;
+                }
+
+
+                HttpWebResponse httpWResp;
+                try
+                {
+                    httpWResp = (HttpWebResponse)httpWReq.GetResponse();
+                }
+                catch (WebException)
+                {
+                    Log.SignalErrorToDeveloper("Timeout while getting WebResponse for url {1}", HTTP.CONTENT_LENGTH, info.Url);
+                    info.RemoteSize = MediaInfo.UNKNOWN;
+                    info.RemoteTimestamp = MediaInfo.UNKNOWN;
+                    infoNotReceived++;
+                    // Since we do not know the timestamp of this file we load it:
+                    filesToDownload.Add(info);
+                    continue;
+                }
+                // got a response so we can use the data from server:
+                info.RemoteSize = httpWResp.ContentLength;
+                info.RemoteTimestamp = ParseLastModifiedHeader(httpWResp.GetResponseHeader("Last-Modified"));
+
+                summedSize += info.RemoteSize;
+                // if the remote file is newer we update: 
+                // or if media is not locally available we load it:
+                if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
+                {
+                    filesToDownload.Add(info);
+                }
+
+                httpWResp.Close();
+            }
+
+            return filesToDownload;
+        }
+
+        private long ParseLastModifiedHeader(string lastmodHeader)
+        {
+            try
+            {
+                return Convert.ToInt64(lastmodHeader);
+            }
+            catch (FormatException)
+            {
+                try
+                {
+                    DateTime dt = DateTime.Parse(lastmodHeader);
+                    return (long)(dt - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                }
+                catch (FormatException)
+                {
+                    return MediaInfo.UNKNOWN;
+                }
             }
         }
         #endregion
