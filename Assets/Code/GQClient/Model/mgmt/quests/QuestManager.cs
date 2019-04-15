@@ -372,18 +372,12 @@ namespace GQ.Client.Model
                 info.RemoteSize = httpWResp.ContentLength;
                 info.RemoteTimestamp = ParseLastModifiedHeader(httpWResp.GetResponseHeader("Last-Modified"));
 
-                Debug.Log(("MEDIAFILE: " + info.Url + " REMOTE_TIME: " + info.RemoteTimestamp + " LOCAL_TIME: " + info.LocalTimestamp).Yellow());
-
                 summedSize += info.RemoteSize;
                 // if the remote file is newer we update: 
                 // or if media is not locally available we load it:
                 if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
                 {
                     filesToDownload.Add(info);
-                }
-                else
-                {
-                    Debug.Log(("MEDIAFILE SKIPPED: " + info.Url).Yellow());
                 }
 
                 httpWResp.Close();

@@ -129,7 +129,7 @@ namespace GQ.Client.Util
 					Raise (
 						DownloadEventType.Progress, 
 						new DownloadEvent (
-							// when wieght is given, we signal the delta of weight (e.g. bytes) which sums up from 0 to Weight:
+							// when weight is given, we signal the delta of weight (e.g. bytes) which sums up from 0 to Weight:
 							progress: prog, 
 							message: msg
 						)
