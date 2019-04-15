@@ -17,7 +17,9 @@ namespace GQ.Client.Model
         protected override void ReadAttributes(XmlReader reader)
         {
             questId = GQML.GetIntAttribute(GQML.ACTION_STARTQUEST_QUEST, reader);
-            QuestManager.CurrentlyParsingQuest.AddDependeeQuest(questId);
+            // add the quest that can be started to the subquests of this quest info:
+            QuestInfo qiForThisQuest = QuestInfoManager.Instance.GetQuestInfo(QuestManager.CurrentlyParsingQuest.Id);
+            qiForThisQuest.AddSubQuest(questId);
         }
         #endregion
 

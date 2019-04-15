@@ -11,7 +11,7 @@ namespace GQ.Client.Util
 {
 	public class LocalFileLoader : AbstractDownloader
 	{
-		protected string filePath;
+		public string filePath;
 
 		WWW _www;
 
@@ -75,7 +75,7 @@ namespace GQ.Client.Util
 			} 
 				
 			if (Www.error != null && Www.error != "") {
-				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error));
+				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error + " file: " + filePath));
 				RaiseTaskFailed ();
 			} else {
 				Result = Www.text;

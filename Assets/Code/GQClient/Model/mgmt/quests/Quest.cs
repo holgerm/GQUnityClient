@@ -242,19 +242,6 @@ namespace GQ.Client.Model
         }
         #endregion
 
-        #region Dependent Quests
-        protected List<int> dependees;
-
-        public void AddDependeeQuest(int dependeeID)
-        {
-            if (dependees == null) {
-                dependees = new List<int>();
-            }
-            dependees.Add(dependeeID);
-        }
-        #endregion
-
-
         #region XML Reading
         public System.Xml.Schema.XmlSchema GetSchema()
         {

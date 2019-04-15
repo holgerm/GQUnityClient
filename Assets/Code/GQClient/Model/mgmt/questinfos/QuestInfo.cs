@@ -338,6 +338,25 @@ namespace GQ.Client.Model
 
         #endregion
 
+        #region Sub- and Super-Quests
+        [JsonProperty]
+        private List<int> superQuests = new List<int>();
+
+        [JsonProperty]
+        private List<int> subQuests = new List<int>();
+
+        public void AddSubQuest(int subQuestID)
+        {
+            if (subQuests == null)
+            {
+                subQuests = new List<int>();
+            }
+            subQuests.Add(subQuestID);
+        }
+        #endregion
+
+
+
 
         #region Derived features
 
@@ -642,6 +661,9 @@ namespace GQ.Client.Model
         /// </summary>
         public void Download()
         {
+            Task testDownload = new DownloadQuest();
+            testDownload.Start();
+
             Task download = DownloadTask();
             // Update the quest info list ...
             download.OnTaskCompleted +=
