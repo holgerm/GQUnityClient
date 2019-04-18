@@ -342,6 +342,15 @@ namespace GQ.Client.Model
         [JsonProperty]
         private List<int> superQuests = new List<int>();
 
+        public void AddSuperQuest(int superQuestID)
+        {
+            if (superQuests == null)
+            {
+                superQuests = new List<int>();
+            }
+            superQuests.Add(superQuestID);
+        }
+
         [JsonProperty]
         private List<int> subQuests = new List<int>();
 
