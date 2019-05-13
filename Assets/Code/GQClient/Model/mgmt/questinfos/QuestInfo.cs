@@ -608,7 +608,7 @@ namespace GQ.Client.Model
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
                     targetPath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
                 );
-            new DownloadDialogBehaviour(
+            var unused = new DownloadDialogBehaviour(
                 downloadGameXML,
                 string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
             );
@@ -616,7 +616,7 @@ namespace GQ.Client.Model
             // analyze game.xml, gather all media info compare to local media info and detect missing media
             PrepareMediaInfoList prepareMediaInfosToDownload =
                 new PrepareMediaInfoList();
-            new SimpleDialogBehaviour(
+            var unused1 = new SimpleDialogBehaviour(
                 prepareMediaInfosToDownload,
                 string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
                 "Medien werden vorbereitet"
@@ -628,7 +628,7 @@ namespace GQ.Client.Model
                     maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
                     timeout: ConfigurationManager.Current.timeoutMS
                 );
-            new SimpleDialogBehaviour(
+            var unused2 = new SimpleDialogBehaviour(
                 downloadMediaFiles,
                 string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
                 "Mediendateien werden geladen"
@@ -641,7 +641,7 @@ namespace GQ.Client.Model
             // store current media info locally
             ExportMediaInfoList exportLocalMediaInfo =
                 new ExportMediaInfoList();
-            new SimpleDialogBehaviour(
+            var unused3 = new SimpleDialogBehaviour(
                 exportLocalMediaInfo,
                 string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
                 "Medieninformationen werden lokal gespeichert"
@@ -649,7 +649,7 @@ namespace GQ.Client.Model
 
             ExportQuestInfosToJSON exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
-            new SimpleDialogBehaviour(
+            var unused4 = new SimpleDialogBehaviour(
                 exportQuestsInfoJSON,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
@@ -670,8 +670,8 @@ namespace GQ.Client.Model
         /// </summary>
         public void Download()
         {
-            Task testDownload = new DownloadQuest();
-            testDownload.Start();
+            //Task testDownload = new DownloadQuest(Id);
+            //testDownload.Start();
 
             Task download = DownloadTask();
             // Update the quest info list ...
