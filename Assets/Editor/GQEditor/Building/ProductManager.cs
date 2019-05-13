@@ -56,6 +56,14 @@ namespace GQ.Editor.Building
             }
         }
 
+        public static string PRODUCT_ADDON_PATH
+        {
+            get
+            {
+                return GQAssert.PROJECT_PATH + "/" + "Production/products addon/";
+            }
+        }
+
         private string _buildExportPath = ConfigurationManager.RUNTIME_PRODUCT_DIR;
 
         public string BuildExportPath
