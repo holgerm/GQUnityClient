@@ -1264,16 +1264,21 @@ namespace UnitySlippyMap.Map
 		/// </exception>
 		public void RemoveMarker (MarkerBehaviour m)
 		{
-			if (m == null)
-				throw new ArgumentNullException ("m");
+			//if (m == null)
+			//	throw new ArgumentNullException ("m");
         
-			if (markers.Contains (m) == false)
-				throw new ArgumentOutOfRangeException ("m");
+			//if (markers.Contains (m) == false)
+				//throw new ArgumentOutOfRangeException ("m");
         
-			markers.Remove (m);
-        
-			DestroyImmediate (m.gameObject);
-		}
+            if (m!= null && markers.Contains(m))
+            {
+                markers.Remove(m);
+
+                Debug.Log("##### marker removed : " + m.name);
+
+                DestroyImmediate(m.gameObject);
+            }
+        }
 
 		/// <summary>
 		/// Zooms the map at the specified zoomSpeed.

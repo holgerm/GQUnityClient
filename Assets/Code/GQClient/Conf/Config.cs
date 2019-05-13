@@ -739,7 +739,7 @@ namespace GQ.Client.Conf
 
             // Map:
             mapProvider = MapProvider.OpenStreetMap;
-            mapBaseUrl = "https://a.tile.openstreetmap.org";
+            mapBaseUrl = "https://b.tile.openstreetmap.org";
             mapKey = "";
             mapID = "";
             mapTileImageExtension = ".png";

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using GQ.Client.Err;
 using GQ.Client.UI;
 using System.IO;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Util
 {
@@ -65,19 +66,20 @@ namespace GQ.Client.Util
 			}
 		}
 
-		/// <summary>
-		/// Initializes a new Downloader object. 
-		/// You can start the download as Coroutine: StartCoroutine(download.startDownload).
-		/// All callbacks are intialized with defaults. You can customize the behaviour via method delegates 
-		/// onStart, onError, onTimeout, onSuccess, onProgress.
-		/// </summary>
-		/// <param name="url">URL.</param>
-		/// <param name="timeout">Timeout in milliseconds (optional).</param>
-		/// <param name="maxIdleTime">Idle Timeout in milliseconds (optional).</param>
-		/// <param name="targetPath">Target path where the downloaded file will be stored (optional).</param>
-		/// <param name="weight">If bigger than zero, the progress will send delta bytes compared to last progress message 
-		/// instead of an absolute progress value in [0,1].</param>
-		public Downloader (
+        /// <summary>
+        /// Initializes a new Downloader object. 
+        /// You can start the download as Coroutine: StartCoroutine(download.startDownload).
+        /// All callbacks are intialized with defaults. You can customize the behaviour via method delegates 
+        /// onStart, onError, onTimeout, onSuccess, onProgress.
+        /// </summary>
+        /// <param name="url">URL.</param>
+        /// <param name="timeout">Timeout in milliseconds (optional).</param>
+        /// <param name="maxIdleTime">Idle Timeout in milliseconds (optional).</param>
+        /// <param name="targetPath">Target path where the downloaded file will be stored (optional).</param>
+        /// <param name="weight">If bigger than zero, the progress will send delta bytes compared to last progress message.</param>
+        /// <param name="verbose">If true (default) standard event managers will be used that protocol all events to the log.</param>
+        /// instead of an absolute progress value in [0,1].</param>
+        public Downloader (
 			string url, 
 			long timeout = 0,
 			string targetPath = null,

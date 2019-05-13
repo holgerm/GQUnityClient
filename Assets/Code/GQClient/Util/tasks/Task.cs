@@ -118,7 +118,7 @@ namespace GQ.Client.Util
 
 		#region Events
 
-		public delegate void TaskCallback (object sender,TaskEventArgs e);
+		public delegate void TaskCallback (object sender, TaskEventArgs e);
 
 		public event TaskCallback OnTaskCompleted;
 		public event TaskCallback OnTaskFailed;

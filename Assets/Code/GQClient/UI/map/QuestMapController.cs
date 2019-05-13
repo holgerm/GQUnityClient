@@ -95,7 +95,7 @@ namespace GQ.Client.UI
             if (marker == null)
                 return;
 
-            marker.Hide();
+            //marker.gameObject.SetActive(false);
             map.RemoveMarker(marker);
             // do unregister for hotspot change events
             hotspot.HotspotChanged -= UpdateMarker;
@@ -159,7 +159,7 @@ namespace GQ.Client.UI
         {
             GameObject markerGO = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
-            HotspotMarker newMarker = map.CreateMarker<HotspotMarker>(
+            HotspotMarker newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(
                 hotspot.Id.ToString(), // if ever we intorduce hotspots names in game.xml use it here.
                 new double[2] { hotspot.Longitude, hotspot.Latitude },
                 markerGO

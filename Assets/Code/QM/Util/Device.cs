@@ -50,10 +50,10 @@ namespace QM.Util
 			}
 		}
 
-		#if UNITY_EDITOR || UNITY_STANDALONE
-		static public void awakeLocationMock() {
-			Device.location = new LocationServiceExt(true);
-		}
+	//	#if UNITY_EDITOR || UNITY_STANDALONE
+		//static public void awakeLocationMock() {
+		//	Device.location = new LocationServiceExt(true);
+		//}
 
 		const float LOCATION_MOCK_STEP_MIN = 0.0000001f;
 		const float LOCATION_MOCK_STEP_MAX = 1.0f;
@@ -104,7 +104,7 @@ namespace QM.Util
 				return;
 			}
 		}
-		#endif
+		//#endif
 
 		#endregion
 	}
