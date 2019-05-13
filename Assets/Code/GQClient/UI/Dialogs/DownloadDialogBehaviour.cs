@@ -5,6 +5,7 @@ using GQ.Client.Conf;
 using GQ.Client.Util;
 using UnityEngine.UI;
 using GQ.Client.Model;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI.Dialogs
 {
@@ -19,7 +20,10 @@ namespace GQ.Client.UI.Dialogs
 
 			if (Task is AbstractDownloader) {
 				DownloadTask = Task as AbstractDownloader;
-			}
+			} else
+            {
+                Log.SignalErrorToDeveloper("DownloadDialogBehaviour may only be used with Tasks that are AbstractDownloaders.");
+            }
 
 			this.title = title;
 		}
@@ -44,6 +48,9 @@ namespace GQ.Client.UI.Dialogs
 
 		void attachUpdateListeners ()
 		{
+            if (DownloadTask == null)
+                return;
+
 			DownloadTask.OnStart += OnDownloadStarted;
 			DownloadTask.OnProgress += UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess += CloseDialog;
@@ -53,7 +60,10 @@ namespace GQ.Client.UI.Dialogs
 
 		void detachUpdateListeners ()
 		{
-			DownloadTask.OnStart -= OnDownloadStarted;
+            if (DownloadTask == null)
+                return;
+
+            DownloadTask.OnStart -= OnDownloadStarted;
 			DownloadTask.OnProgress -= UpdateLoadingScreenProgress;
 			DownloadTask.OnSuccess -= CloseDialog;
 			DownloadTask.OnError -= UpdateLoadingScreenError;
