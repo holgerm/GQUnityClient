@@ -47,7 +47,11 @@ namespace GQ.Client.Model {
 			// step 3 include remote media info:
 			Result = quest.GetListOfFilesNeedDownload();
 
-			return true;
+            // TODO BAD HACK:
+            QuestManager.Instance.CurrentQuest = quest;
+
+
+            return true;
 		}
 	}
 }
