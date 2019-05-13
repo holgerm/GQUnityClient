@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using GQ.Client.Err;
 using System.Xml;
 using GQ.Client.UI.Dialogs;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -35,7 +36,7 @@ namespace GQ.Client.Model
 
 		public override void Execute ()
 		{
-			MessageDialog dialog = new MessageDialog (Message, Buttontext);
+			MessageDialog dialog = new MessageDialog (Message.MakeReplacements(), Buttontext);
 			dialog.Start ();
 		}
 
