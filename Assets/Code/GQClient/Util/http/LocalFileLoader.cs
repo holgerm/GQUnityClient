@@ -53,7 +53,7 @@ namespace GQ.Client.Util
 			OnProgress += defaultLogInformationHandler;
 		}
 
-		public override IEnumerator RunAsCoroutine ()
+		protected override IEnumerator DoTheWork ()
 		{
 			string url = Files.AbsoluteLocalPath (filePath);
 

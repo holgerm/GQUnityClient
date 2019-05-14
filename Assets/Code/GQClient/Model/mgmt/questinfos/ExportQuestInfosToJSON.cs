@@ -16,7 +16,7 @@ namespace GQ.Client.Model {
 
 		public ExportQuestInfosToJSON() : base() { }
 
-		public override bool Run() 
+		protected override IEnumerator DoTheWork() 
 		{
 			List<QuestInfo> questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
 
@@ -29,10 +29,11 @@ namespace GQ.Client.Model {
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export quest info json file: " + e.Message);
-				return false;
-			}
+                RaiseTaskFailed();
+                yield break;
+            }
 
-			return true;
+			RaiseTaskCompleted();
 		}
 
 		public override object Result {

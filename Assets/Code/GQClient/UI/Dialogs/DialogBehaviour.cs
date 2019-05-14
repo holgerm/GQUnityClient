@@ -60,12 +60,14 @@ namespace GQ.Client.UI.Dialogs
 		/// <summary>
 		/// Should be called before the dialog is made invisible or disposed.
 		/// </summary>
-		public virtual void Stop ()
+		public override void Stop ()
 		{
 			HideAndClearButtons ();
 
 			Dialog.YesButton.onClick.RemoveAllListeners ();
 			Dialog.NoButton.onClick.RemoveAllListeners ();
+
+            Dialog.Hide();
 		}
 
 		/// <summary>

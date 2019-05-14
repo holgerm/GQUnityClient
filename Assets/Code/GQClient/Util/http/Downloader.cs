@@ -43,7 +43,7 @@ namespace GQ.Client.Util
 			set;
 		}
 
-		public override IEnumerator RunAsCoroutine ()
+		protected override IEnumerator DoTheWork ()
 		{
 			return CoroutineRunner (this);
 		}

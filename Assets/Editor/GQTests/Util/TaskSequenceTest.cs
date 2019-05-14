@@ -74,10 +74,7 @@ namespace GQTests.Util
 			SucceedingTask t1 = new SucceedingTask ();
 			SucceedingTask t2 = new SucceedingTask ();
 			SucceedingTask t3 = new SucceedingTask ();
-			TaskSequence ts = new TaskSequence ();
-			ts.AppendIfCompleted (t1);
-			ts.AppendIfCompleted (t2);
-			ts.AppendIfCompleted (t3);
+			TaskSequence ts = new TaskSequence (t1, t2, t3);
 
 			ts.Start ();
 
@@ -108,12 +105,8 @@ namespace GQTests.Util
 			SucceedingTask t1 = new SucceedingTask ();
 			FailingTask t2 = new FailingTask ();
 			SucceedingTask t3 = new SucceedingTask ();
-			TaskSequence ts = new TaskSequence ();
-			ts.AppendIfCompleted (t1);
-			ts.AppendIfCompleted (t2);
-			ts.AppendIfCompleted (t3);
-
-			ts.Start ();
+			TaskSequence ts = new TaskSequence (t1, t2, t3);
+            ts.Start ();
 
 			Assert.NotNull (t1.GetOnCompletedInvocationList ());
 			Assert.AreEqual (1, t1.GetOnCompletedInvocationList ().Length);
@@ -174,10 +167,9 @@ namespace GQTests.Util
 
 			public bool started = false;
 
-			public override bool Run() {
+			protected override IEnumerator DoTheWork() {
 				started = true;
-
-				return true;
+                yield break;
 			}
 
 			public bool completed = false;
@@ -192,10 +184,9 @@ namespace GQTests.Util
 
 			public bool started = false;
 
-			public override bool Run() {
+			protected override IEnumerator DoTheWork() {
 				started = true;
-
-				return false;
+                yield break;
 			}
 
 			public bool completed = false;

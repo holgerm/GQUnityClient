@@ -21,17 +21,6 @@ namespace GQTests.Util
 
 		}
 
-		[Test]
-		public void TaskRunningNOTAsCoroutine() {
-
-			TestTaskNonCR t = new TestTaskNonCR ();
-			Assert.IsFalse (t.RunsAsCoroutine);
-
-			t.Start ();
-			Assert.IsTrue (t.started);
-
-		}
-
 		public class TestTaskCR : Task {
 
 			public bool started = false;
@@ -40,27 +29,12 @@ namespace GQTests.Util
 
 			}
 
-			public override IEnumerator RunAsCoroutine() {
+			protected override IEnumerator DoTheWork() {
 				started = true;
-
 				yield break;
 			}
 		}
 
-		public class TestTaskNonCR : Task {
-
-			public bool started = false;
-
-			public TestTaskNonCR() : base() {
-
-			}
-
-			public override bool Run() {
-				started = true;
-
-				return true;
-			}
-		}
 	}
 
 }

@@ -10,48 +10,54 @@ using GQ.Client.Err;
 using System.IO;
 using GQ.Client.FileIO;
 
-namespace GQ.Client.Model {
+namespace GQ.Client.Model
+{
 
-	public class PrepareMediaInfoList : Task {
+    public class PrepareMediaInfoList : Task
+    {
 
-		public PrepareMediaInfoList() : base() { }
+        public PrepareMediaInfoList() : base() { }
 
-		private string gameXML { get; set; } 
+        private string gameXML { get; set; }
 
-		public override void ReadInput(object sender, TaskEventArgs e) {
-			if (e == null || e.Content == null) {
-				RaiseTaskFailed ();
-				return;
-			}
+        protected override void ReadInput(object input)
+        {
+            if (input == null)
+            {
+                RaiseTaskFailed();
+                return;
+            }
 
-			if (e.Content is string) {
-				gameXML = e.Content as string;
-			}
-			else {
-				// TODO End this task somehow (UI?)
-				Log.SignalErrorToDeveloper(
-					"Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " + 
-					e.Content.GetType().Name);
-			}
-		}
-			
-		public override bool Run() 
-		{
+            if (input is string)
+            {
+                gameXML = input as string;
+            }
+            else
+            {
+                Log.SignalErrorToDeveloper(
+                    "Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " +
+                    input.GetType().Name);
+                RaiseTaskFailed();
+                return;
+            }
+        }
+
+        protected override IEnumerator DoTheWork()
+        {
             // step 1 deserialize game.xml:
             //QuestManager.Instance.SetCurrentQuestFromXML(gameXML);
             Quest quest = QuestManager.Instance.DeserializeQuest(gameXML);
+            yield return null;
 
             // step 2 import local media info:
             quest.ImportLocalMediaInfo();
+            yield return null;
 
-			// step 3 include remote media info:
-			Result = quest.GetListOfFilesNeedDownload();
+            // step 3 include remote media info:
+            Result = quest.GetListOfFilesNeedDownload();
 
             // TODO BAD HACK:
             QuestManager.Instance.CurrentQuest = quest;
-
-
-            return true;
-		}
-	}
+        }
+    }
 }

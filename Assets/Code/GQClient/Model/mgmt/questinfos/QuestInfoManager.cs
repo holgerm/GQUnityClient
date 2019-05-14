@@ -251,10 +251,13 @@ namespace GQ.Client.Model
             AutoLoadAndUpdate autoLoader =
                 new AutoLoadAndUpdate();
 
-            TaskSequence t = new TaskSequence(importLocal, downloader);
-            t.AppendIfCompleted(importFromServer);
-            t.Append(exporter);
-            t.Append(autoLoader);
+            TaskSequence t = 
+                new TaskSequence(
+                    importLocal, 
+                    downloader, 
+                    importFromServer, 
+                    exporter, 
+                    autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
             t.Start();
         }
@@ -267,68 +270,9 @@ namespace GQ.Client.Model
             Debug.Log("UpdateLocalQuestInfosOnly()");
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
-            //new SimpleDialogBehaviour(
-            //    importLocal,
-            //    string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-            //    string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
-            //);
 
             importLocal.Start();
         }
-
-        ///// <summary>
-        ///// Updates the quest info from local quest. 
-        ///// This method should be called immediately after downloading or updating a quest from server.
-        ///// </summary>
-        ///// <param name="questId">Quest identifier.</param>
-        //public void UpdateQuestInfoFromLocalQuest(int questId)
-        //{
-        //    //// read quest from local xml:
-        //    //string gameXmlPath = Files.CombinePath(QuestManager.GetLocalPath4Quest(questId), "game.xml");
-        //    //string xml = File.ReadAllText(gameXmlPath);
-        //    //Quest q = QuestManager.Instance.DeserializeQuest(xml);
-
-        //    QuestInfo oldInfo = null;
-        //    //QuestInfo newInfo = null;
-        //    if (!QuestDict.TryGetValue(questId, out oldInfo))
-        //    {
-        //        Log.SignalErrorToDeveloper(
-        //            "Trying to update quest info {0} but it deos not exist in QuestInfoManager.",
-        //            questId
-        //        );
-        //        return;
-        //    }
-
-        //    // In CASE OF UPDATE:
-        //    if (oldInfo.NewVersionOnServer != null)
-        //    {
-        //        newInfo = oldInfo.NewVersionOnServer;
-
-        //        // update the info element:
-        //        QuestDict[newInfo.Id] = newInfo;
-        //        // keep some local values:
-        //        QuestDict[newInfo.Id].LastUpdateOnDevice = newInfo.LastUpdateOnServer;
-        //        QuestDict[newInfo.Id].TimestampOfPredeployedVersion = newInfo.TimestampOfPredeployedVersion;
-        //        QuestDict[newInfo.Id].PlayedTimes = newInfo.PlayedTimes;
-
-        //        newInfo = QuestDict[newInfo.Id]; // make update event below work ...
-        //    }
-
-        //    // tell the UIC for this quest info to refresh: 
-        //    if (Filter.Accept(newInfo))
-        //    {
-        //        // Run through filter and raise event if involved
-
-        //        raiseDataChange(
-        //            new QuestInfoChangedEvent(
-        //                String.Format("Info for quest {0} changed.", newInfo.Name),
-        //                ChangeType.ChangedInfo,
-        //                newQuestInfo: newInfo,
-        //                oldQuestInfo: newInfo
-        //            )
-        //        );
-        //    }
-        //}
 
         /// <summary>
         /// Here one can register listeners that will be called each time when the quest infos are successfully updated.

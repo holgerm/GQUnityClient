@@ -52,6 +52,12 @@ namespace GQTests.Util
         {
             Result = providedString;
         }
+
+        protected override IEnumerator DoTheWork()
+        {
+            RaiseTaskCompleted();
+            yield break;
+        }
     }
 
     public class TestChangeListener

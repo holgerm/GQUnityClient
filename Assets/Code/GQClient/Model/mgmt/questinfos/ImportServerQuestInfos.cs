@@ -34,18 +34,6 @@ namespace GQ.Client.Model
         {
         }
 
-        public override void ReadInput(object sender, TaskEventArgs e)
-        {
-            if (e != null && e.Content != null && e.Content is string)
-            {
-                InputJSON = e.Content as string;
-            }
-            else
-            {
-                Log.SignalErrorToDeveloper("ImportFromInputString task should read from Input but got no input string.");
-            }
-        }
-
         protected override void updateQuestInfoManager(QuestInfo[] newQuests)
         {
 

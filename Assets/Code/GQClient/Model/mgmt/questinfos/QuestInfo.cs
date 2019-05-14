@@ -656,11 +656,12 @@ namespace GQ.Client.Model
             );
 
             TaskSequence t =
-                new TaskSequence(downloadGameXML);
-            t.AppendIfCompleted(prepareMediaInfosToDownload);
-            t.Append(downloadMediaFiles);
-            t.AppendIfCompleted(exportLocalMediaInfo);
-            t.Append(exportQuestsInfoJSON);
+                new TaskSequence(
+                    downloadGameXML, 
+                    prepareMediaInfosToDownload, 
+                    downloadMediaFiles, 
+                    exportLocalMediaInfo, 
+                    exportQuestsInfoJSON);
 
             return t;
         }

@@ -23,8 +23,10 @@ namespace GQ.Client.UI
 			if (!Data.IsOnDevice && Data.IsOnServer) {
 				Task download = Data.DownloadTask ();
 				Task play = Data.Play ();
-				TaskSequence t = new TaskSequence (download);
-				t.AppendIfCompleted (play);
+				TaskSequence t = 
+                    new TaskSequence (
+                        download, 
+                        play);
 				t.Start ();
 			}
 			if (Data.IsOnDevice) {

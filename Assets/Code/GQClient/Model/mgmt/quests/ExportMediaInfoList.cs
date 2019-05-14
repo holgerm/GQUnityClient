@@ -21,7 +21,7 @@ namespace GQ.Client.Model {
 		public ExportMediaInfoList() : base() { 
 		}
 			
-		public override bool Run() 
+		protected override IEnumerator DoTheWork() 
 		{
 			// step 4 persist the updated local media info:
 			List<LocalMediaInfo> localInfos = new List<LocalMediaInfo> ();
@@ -41,6 +41,7 @@ namespace GQ.Client.Model {
 					(localInfos.Count == 0) 
 					? "[]"
 					: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
+
 				string dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJSONPath);
 				if (!Directory.Exists(dir4MediaJSON)) {
 					Directory.CreateDirectory(dir4MediaJSON);
@@ -49,10 +50,8 @@ namespace GQ.Client.Model {
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export media info json file: " + e.Message);
-				return false;
+                yield break;
 			}
-
-			return true;
 		}
 	}
 }

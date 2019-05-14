@@ -21,25 +21,14 @@ namespace GQTests.Util
 			Assert.IsTrue (Files.ExistsFile (filePath), "File should exist at " + filePath);
 
 			string url = Files.LocalPath4WWW (filePath);
-			Debug.Log ("Files.LocalPath4WWW does:\n" + filePath + "\n" + url);
 			WWW www = new WWW (url);
-
-			Debug.Log ("text zu beginn: " + www.text);
-
-			while (!www.isDone) {
-				Debug.Log ("alive from " + www.url);
-			}
-
-			Debug.Log ("done.");
 
 			if (www.error != null && www.error != "") {
 				string errMsg = www.error;
 				www.Dispose ();
-				Debug.Log ("error: " + errMsg);
 				Assert.Fail ();
 			} else {
 				Assert.AreEqual ("Hello!", www.text);
-				Debug.Log ("Yeah!");
 			}
 
 		}

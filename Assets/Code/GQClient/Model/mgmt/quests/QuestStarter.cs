@@ -22,33 +22,37 @@ namespace GQ.Client.Model
 
 		private string gameXML { get; set; }
 
-		public override void ReadInput (object sender, TaskEventArgs e)
-		{
-			if (e == null || e.Content == null) {
-				RaiseTaskFailed ();
-				return;
-			}
+        protected override void ReadInput(object input = null)
+        {
+            if (input == null)
+            {
+                RaiseTaskFailed();
+                return;
+            }
 
-			if (e.Content is string) {
-				gameXML = e.Content as string;
-			} else {
-				// TODO End this task somehow (UI?)
-				Log.SignalErrorToDeveloper (
-					"Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " +
-					e.Content.GetType ().Name);
-			}
-		}
+            if (input is string)
+            {
+                gameXML = input as string;
+            }
+            else
+            {
+                Log.SignalErrorToDeveloper(
+                    "Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " +
+                    input.GetType().Name);
+                RaiseTaskFailed();
+                return;
+            }
+        }
 
-		public override bool Run ()
+        protected override IEnumerator DoTheWork ()
 		{
-			// step 1 deserialize game.xml:
-			QuestManager.Instance.SetCurrentQuestFromXML (gameXML);
+            // step 1 deserialize game.xml:
+            QuestManager.Instance.SetCurrentQuestFromXML (gameXML);
             QuestManager.Instance.CurrentQuest.InitMediaStore();
+            yield return null;
 
             // step 2 start the quest:
             QuestManager.Instance.CurrentQuest.Start ();
-
-			return true;
 		}
 	}
 }
