@@ -164,6 +164,12 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool autoSynchQuestInfos { get; set; }
 
+        /// <summary>
+        /// If set, quests called by StartQuest actions will update before being started if possible and load if needed.
+        /// </summary>
+        [ShowInProductEditor]
+        public bool autoUpdateSubquests { get; set; }
+
         [ShowInProductEditor, JsonProperty]
         private bool offerManualUpdate4QuestInfos { get; set; }
         [JsonIgnore]
@@ -728,6 +734,7 @@ namespace GQ.Client.Conf
             maxParallelDownloads = 15;
 
             autoSynchQuestInfos = true;
+            autoUpdateSubquests = false;
             offerManualUpdate4QuestInfos = !autoSynchQuestInfos;
 
             acceptedPageTypes = new string[0];

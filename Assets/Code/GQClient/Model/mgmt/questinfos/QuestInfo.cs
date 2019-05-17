@@ -657,10 +657,10 @@ namespace GQ.Client.Model
 
             TaskSequence t =
                 new TaskSequence(
-                    downloadGameXML, 
-                    prepareMediaInfosToDownload, 
-                    downloadMediaFiles, 
-                    exportLocalMediaInfo, 
+                    downloadGameXML,
+                    prepareMediaInfosToDownload,
+                    downloadMediaFiles,
+                    exportLocalMediaInfo,
                     exportQuestsInfoJSON);
 
             return t;
@@ -671,9 +671,6 @@ namespace GQ.Client.Model
         /// </summary>
         public void Download()
         {
-            //Task testDownload = new DownloadQuest(Id);
-            //testDownload.Start();
-
             Task download = DownloadTask();
             // Update the quest info list ...
             download.OnTaskCompleted +=
@@ -762,7 +759,7 @@ namespace GQ.Client.Model
 
             ExportQuestInfosToJSON exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
-            new SimpleDialogBehaviour(
+            var unused = new SimpleDialogBehaviour(
                 exportQuestsInfoJSON,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
@@ -779,12 +776,58 @@ namespace GQ.Client.Model
             // Close menu if open:
             Base.Instance.MenuCanvas.SetActive(false);
 
+            if (!IsOnDevice && !IsOnServer)
+            {
+                Log.SignalErrorToAuthor("Unable to load missing quest with id {0} - not found.", Id);
+                return null;
+            }
+
+            if (!IsOnDevice && IsOnServer)
+            {
+                // TODO config flag for auto-loads or even auto-update??
+                return CreateLoadAndPlayTask();
+            }
+
+            // ------------------------------
+            // from here on holds IsOnDevice:
+
+            if (IsOnDevice && HasUpdate && ConfigurationManager.Current.autoUpdateSubquests)
+            {
+                return CreateLoadAndPlayTask();
+            }
+
+            return CreatePlayTask();
+        }
+
+        private Task CreateLoadAndPlayTask()
+        {
+            // Quest has to be loaded first:
+            Task download = DownloadTask();
+            // Update the quest info list ...
+            download.OnTaskCompleted +=
+                (object sender, TaskEventArgs e) =>
+                {
+                    InvokeOnChanged();
+
+                    new ExportQuestInfosToJSON().Start();
+                };
+            Task playTask = CreatePlayTask();
+            Task loadAndPlay = new TaskSequence(download, playTask);
+            return loadAndPlay;
+        }
+
+        /// <summary>
+        /// Creates a task that just plays the locally existing quest, checks have to applied beforehand:
+        /// </summary>
+        /// <returns>The play.</returns>
+        protected Task CreatePlayTask()
+        {
             // Load quest data: game.xml
             LocalFileLoader loadGameXML =
                 new LocalFileLoader(
                     filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
                 );
-            new DownloadDialogBehaviour(
+            DownloadDialogBehaviour unused = new DownloadDialogBehaviour(
                 loadGameXML,
                 string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
             );
