@@ -27,7 +27,7 @@ namespace GQTests.Model
 						</action>
 					</rule>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("A")); 
 
 			// Act:
@@ -62,7 +62,7 @@ namespace GQTests.Model
 						</action>
 					</rule>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("A")); 
 			Assert.AreEqual (Value.Null, Variables.GetValue ("B")); 
 			Assert.AreEqual (Value.Null, Variables.GetValue ("C")); 

@@ -62,7 +62,7 @@ namespace GQTests.Model
 		public void UnknownVariableGetsNullValue ()
 		{
 			// Arrange:
-			Variables.ClearAll ();
+			Variables.Clear ();
 
 			// Act:
 			Value notExistingVariableValue = Variables.GetValue ("X");

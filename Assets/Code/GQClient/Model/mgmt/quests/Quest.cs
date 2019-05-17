@@ -574,10 +574,10 @@ namespace GQ.Client.Model
             StartPage.Start();
         }
 
-        public void End()
+        public void End(bool clearAlsoUpperCaseVariables = true)
         {
             Audio.Clear();
-            Variables.ClearAll(); // persistente variablen nicht löschen
+            Variables.Clear(clearAlsoUpperCaseVariables); // persistente variablen nicht löschen
             CurrentPage.PageCtrl.CleanUp();
             Scene sceneToUnload = QuestManager.Instance.CurrentScene;
             if (sceneToUnload.isLoaded)

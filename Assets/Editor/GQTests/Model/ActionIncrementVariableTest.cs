@@ -28,7 +28,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 			
-			Variables.ClearAll ();
+			Variables.Clear ();
 			actSetVar.Execute ();
 			Assert.AreEqual (10, Variables.GetValue ("x").AsInt ()); 
 
@@ -46,7 +46,7 @@ namespace GQTests.Model
 		public void UndefinedVar ()
 		{
 			// Arrange:
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:
@@ -76,7 +76,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 			
-			Variables.ClearAll ();
+			Variables.Clear ();
 			actSetVarF.Execute ();
 			actSetVarT.Execute ();
 			Assert.IsFalse (Variables.GetValue ("f").AsBool ()); 
@@ -108,7 +108,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			actSetVar.Execute ();
 			Assert.That (Values.NearlyEqual (10.05d, Variables.GetValue ("x").AsDouble ())); 
 
@@ -134,7 +134,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			actSetVar.Execute ();
 			Assert.AreEqual (Value.Type.Text, Variables.GetValue ("x").ValType);
 			Assert.AreEqual ("Hallo", Variables.GetValue ("x").AsString ()); 
@@ -163,7 +163,7 @@ namespace GQTests.Model
 						</action>
 						<action type=""IncrementVariable"" var=""x""/>
 					</rule>");
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:

@@ -20,7 +20,7 @@ namespace GQTests.Model.Deserialization
 		public void OnStart_1Rule3Actions ()
 		{
 			// Arrange:
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("A")); 
 			Assert.AreEqual (Value.Null, Variables.GetValue ("B")); 
 			Assert.AreEqual (Value.Null, Variables.GetValue ("C")); 
@@ -77,7 +77,7 @@ namespace GQTests.Model.Deserialization
 		public void OnStart_3RulesEach1Action ()
 		{
 			// Arrange:
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("A")); 
 			Assert.AreEqual (Value.Null, Variables.GetValue ("B")); 
 			Assert.AreEqual (Value.Null, Variables.GetValue ("C")); 

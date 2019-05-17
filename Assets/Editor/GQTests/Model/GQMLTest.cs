@@ -54,7 +54,7 @@ namespace GQTests.Model
 
 			QuestManager.Reset ();
 			qm = QuestManager.Instance;
-			Variables.ClearAll ();
+			Variables.Clear ();
 		}
 
 

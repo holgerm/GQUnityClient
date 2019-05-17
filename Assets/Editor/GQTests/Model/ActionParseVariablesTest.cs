@@ -15,7 +15,7 @@ namespace GQTests.Model
 		public void Init ()
 		{
 			XmlRoot = "action";
-			Variables.ClearAll ();
+			Variables.Clear ();
 		}
 
 		[Test]

@@ -28,7 +28,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 			
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:
@@ -57,7 +57,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 			
-			Variables.ClearAll ();
+			Variables.Clear ();
 			action1.Execute ();
 			Assert.AreEqual (Value.Type.Bool, Variables.GetValue ("x").ValType);
 			Assert.AreEqual (true, Variables.GetValue ("x").AsBool ());
@@ -82,7 +82,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("$x")); 
 
 			// Act:
@@ -103,7 +103,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:
@@ -125,7 +125,7 @@ namespace GQTests.Model
 						</value>
 					</action>");
 
-			Variables.ClearAll ();
+			Variables.Clear ();
 			Assert.AreEqual (Value.Null, Variables.GetValue ("x")); 
 
 			// Act:
