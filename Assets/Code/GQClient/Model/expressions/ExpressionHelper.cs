@@ -35,6 +35,9 @@ namespace GQ.Client.Model
 			string surroundingElementName = reader.LocalName;
 			GQML.AssertReaderAtStart (reader, surroundingElementName);
 
+            // consume start tag of surrounding element:
+            reader.Read(); 
+
 			List<IExpression> containedExpressions = new List<IExpression> ();
 
 			while (!GQML.IsReaderAtEnd (reader, surroundingElementName)) {
