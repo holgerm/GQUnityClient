@@ -250,7 +250,7 @@ namespace GQ.Client.Model
 			int val = defaultVal;
 			if (!Int32.TryParse (attString, out val)) {
 				Log.SignalErrorToDeveloper (
-					"Int attribute {0} for a page could not be parsed. We found: {1}.", 
+					"Int attribute {0} for a page could not be parsed. We found: '{1}'.", 
 					attributeName, 
 					attString);
 			}
@@ -264,7 +264,7 @@ namespace GQ.Client.Model
 			long val = defaultVal;
 			if (!Int64.TryParse (attString, out val)) {
 				Log.SignalErrorToDeveloper (
-					"Long attribute {0} for a page could not be parsed. We found: {1}.", 
+					"Long attribute {0} for a page could not be parsed. We found: '{1}'.", 
 					attributeName, 
 					attString);
 			}
@@ -278,7 +278,7 @@ namespace GQ.Client.Model
 			double val = defaultVal;
 			if (!Double.TryParse (attString, out val)) {
 				Log.SignalErrorToDeveloper (
-					"Double attribute {0} for a page could not be parsed. We found: {1}.", 
+					"Double attribute {0} for a page could not be parsed. We found: '{1}'.", 
 					attributeName, 
 					attString);
 			}
@@ -311,7 +311,7 @@ namespace GQ.Client.Model
 					return false;
 				}
 				Log.SignalErrorToDeveloper (
-					"Bool attribute {0} for a page could not be parsed. We found: {1}.", 
+					"Bool attribute {0} for a page could not be parsed. We found: '{1}'.", 
 					attributeName, 
 					attString);
 			}
@@ -377,7 +377,7 @@ namespace GQ.Client.Model
 		{
 			if (!IsReaderAtStart (reader, nodeName)) {
 				Log.SignalErrorToDeveloper (
-					"Expected a {0} element but we got a {1} with name {2}", 
+					"Expected a {0} element but we got a {1} with name '{2}'", 
 					nodeName,
 					reader.NodeType.ToString (),
 					reader.LocalName
@@ -394,7 +394,7 @@ namespace GQ.Client.Model
 		{
 			if (!IsReaderAtEnd (reader, nodeName)) {
 				Log.SignalErrorToDeveloper (
-					"Expected a {0} end element but we got a {1} with name {2}", 
+					"Expected a {0} end element but we got a {1} with name '{2}'", 
 					nodeName,
 					reader.NodeType.ToString (),
 					reader.LocalName
