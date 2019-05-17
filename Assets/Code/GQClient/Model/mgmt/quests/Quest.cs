@@ -181,7 +181,8 @@ namespace GQ.Client.Model
 
         private Dictionary<string, MediaInfo> _mediaStore = null;
 
-        public Dictionary<string, MediaInfo> MediaStore {
+        public Dictionary<string, MediaInfo> MediaStore
+        {
             get
             {
                 if (_mediaStore == null)
@@ -190,7 +191,7 @@ namespace GQ.Client.Model
                 }
                 return _mediaStore;
             }
-        } 
+        }
 
         public void InitMediaStore()
         {
@@ -477,7 +478,7 @@ namespace GQ.Client.Model
             Name = GQML.GetStringAttribute(GQML.QUEST_NAME, reader);
             XmlFormat = GQML.GetStringAttribute(GQML.QUEST_XMLFORMAT, reader);
             LastUpdate = GQML.GetLongAttribute(GQML.QUEST_LASTUPDATE, reader);
-            IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader, defaultVal:false);
+            IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader, defaultVal: false);
         }
 
         private void ReadPage(XmlReader reader)
@@ -578,7 +579,8 @@ namespace GQ.Client.Model
         {
             Audio.Clear();
             Variables.Clear(clearAlsoUpperCaseVariables); // persistente variablen nicht löschen
-            CurrentPage.PageCtrl.CleanUp();
+            if (CurrentPage != null && CurrentPage.PageCtrl != null)
+                CurrentPage.PageCtrl.CleanUp();
             Scene sceneToUnload = QuestManager.Instance.CurrentScene;
             if (sceneToUnload.isLoaded)
                 SceneManager.UnloadSceneAsync(QuestManager.Instance.CurrentScene);
