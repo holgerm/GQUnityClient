@@ -229,7 +229,7 @@ namespace GQ.Client.Model
             }
             scenesToUnload.Clear();
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            
+
             Resources.UnloadUnusedAssets();
 
             QuestManager.Instance.PageReadyToStart = true;
@@ -332,11 +332,11 @@ namespace GQ.Client.Model
 
             if (EndTrigger == Trigger.Null && leaveQuestIfEmpty)
             {
-                Log.SignalErrorToAuthor(
+                Debug.Log(
+                    string.Format(
                     "Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
                     Quest.Name, Quest.Id,
-                    Id
-                );
+                    Id));
                 Quest.End();
             }
             else
