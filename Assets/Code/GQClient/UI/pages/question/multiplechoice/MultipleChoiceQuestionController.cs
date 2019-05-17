@@ -5,6 +5,7 @@ using GQ.Client.Model;
 using UnityEngine.UI;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
+using GQ.Client.Util;
 
 namespace GQ.Client.UI
 {
@@ -34,7 +35,7 @@ namespace GQ.Client.UI
             mcqPage = (PageMultipleChoiceQuestion)page;
 
 			// show the question:
-			questionText.text = mcqPage.Question;
+			questionText.text = mcqPage.Question.MakeReplacements();
 
             // shuffle anwers:
             if (mcqPage.Shuffle)
