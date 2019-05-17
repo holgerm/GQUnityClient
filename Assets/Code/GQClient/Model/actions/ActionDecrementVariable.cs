@@ -14,25 +14,25 @@ namespace GQ.Client.Model
 
 		public override void Execute ()
 		{
-			if (varName == null) {
+			if (VarName == null) {
 				Log.SignalErrorToDeveloper ("IncrementVariableAction Action without varname can not be executed. (Ignored)");
 				return;
 			}
 
-			Value previousVal = Variables.GetValue (varName);
+			Value previousVal = Variables.GetValue (VarName);
 
 			switch (previousVal.ValType) {
 			case Value.Type.NULL:
-				Variables.SetVariableValue (varName, new Value (-1));
+				Variables.SetVariableValue (VarName, new Value (-1));
 				break;
 			case Value.Type.Integer:
-				Variables.SetVariableValue (varName, new Value (previousVal.AsInt () - 1));
+				Variables.SetVariableValue (VarName, new Value (previousVal.AsInt () - 1));
 				break;
 			case Value.Type.Float:
-				Variables.SetVariableValue (varName, new Value (previousVal.AsDouble () - 1d));
+				Variables.SetVariableValue (VarName, new Value (previousVal.AsDouble () - 1d));
 				break;
 			case Value.Type.Bool:
-				Variables.SetVariableValue (varName, new Value (false));
+				Variables.SetVariableValue (VarName, new Value (false));
 				break;
 			case Value.Type.VariableName:
 				Log.SignalErrorToAuthor ("IncrementVariable must not be used on Variables representing Variable Names.", previousVal.ValType);
@@ -43,7 +43,7 @@ namespace GQ.Client.Model
 				if (lastChar > 0)
 					lastChar--;
 				string newText = previousText.Substring (0, previousText.Length - 1) + lastChar.ToString ();
-				Variables.SetVariableValue (varName, new Value (newText));
+				Variables.SetVariableValue (VarName, new Value (newText));
 				break;
 			default:
 				Log.SignalErrorToDeveloper ("IncrementVariable not implemented for value type {0}.", previousVal.ValType);
