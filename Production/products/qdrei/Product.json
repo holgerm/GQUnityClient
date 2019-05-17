@@ -1,7 +1,7 @@
 {
   "id": "qdrei",
   "idExtension": "2",
-  "name": "Neue Digitale Lehrpfade",
+  "name": "Digitale Lehrpfade",
   "portal": 502,
   "assetAddOns": [
     "UniWebView"
@@ -56,6 +56,7 @@
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
+  "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
@@ -127,9 +128,9 @@
     "a": 255
   },
   "headerButtonBgColor": {
-    "r": 230,
-    "g": 230,
-    "b": 230,
+    "r": 255,
+    "g": 253,
+    "b": 253,
     "a": 255
   },
   "headerButtonFgColor": {

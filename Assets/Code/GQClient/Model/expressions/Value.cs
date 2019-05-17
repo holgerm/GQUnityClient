@@ -68,7 +68,7 @@ namespace GQ.Client.Model
             Text,
             Integer,
             Float,
-            VariableName,
+            VarExpression,
             NULL
         }
 
@@ -174,7 +174,7 @@ namespace GQ.Client.Model
                     double asDouble = Convert.ToDouble(internalValue);
                     result = Convert.ToBoolean(asDouble);
                 }
-                else if (ValType == Type.VariableName)
+                else if (ValType == Type.VarExpression)
                 {
                     result = Variables.GetValue(internalValue).AsBool();
                 }
@@ -240,7 +240,7 @@ namespace GQ.Client.Model
                 return result;
             }
 
-            if (ValType == Type.VariableName)
+            if (ValType == Type.VarExpression)
             {
                 return Variables.GetValue(internalValue).AsDouble();
             }
@@ -264,7 +264,7 @@ namespace GQ.Client.Model
                 {
                     return Convert.ToInt32(Convert.ToDouble(extractNumberString(internalValue)));
                 }
-                if (ValType == Type.VariableName)
+                if (ValType == Type.VarExpression)
                 {
                     return Variables.GetValue(internalValue).AsInt();
                 }
@@ -409,10 +409,10 @@ namespace GQ.Client.Model
                 }
             }
 
-            if (this.ValType == Type.VariableName)
+            if (this.ValType == Type.VarExpression)
             {
                 Value thisValue = Variables.GetValue(this.internalValue);
-                if (other.ValType == Type.VariableName)
+                if (other.ValType == Type.VarExpression)
                 {
                     Value otherValue = Variables.GetValue(other.internalValue);
                     return thisValue.IsEqual(otherValue);
@@ -480,10 +480,10 @@ namespace GQ.Client.Model
                 }
             }
 
-            if (this.ValType == Type.VariableName)
+            if (this.ValType == Type.VarExpression)
             {
                 Value thisValue = Variables.GetValue(this.internalValue);
-                if (other.ValType == Type.VariableName)
+                if (other.ValType == Type.VarExpression)
                 {
                     Value otherValue = Variables.GetValue(other.internalValue);
                     return thisValue.IsGreaterThan(otherValue);
@@ -553,10 +553,10 @@ namespace GQ.Client.Model
                 }
             }
 
-            if (this.ValType == Type.VariableName)
+            if (this.ValType == Type.VarExpression)
             {
                 Value thisValue = Variables.GetValue(this.internalValue);
-                if (other.ValType == Type.VariableName)
+                if (other.ValType == Type.VarExpression)
                 {
                     Value otherValue = Variables.GetValue(other.internalValue);
                     return thisValue.IsGreaterOrEqual(otherValue);  
@@ -624,10 +624,10 @@ namespace GQ.Client.Model
                 }
             }
 
-            if (this.ValType == Type.VariableName)
+            if (this.ValType == Type.VarExpression)
             {
                 Value thisValue = Variables.GetValue(this.internalValue);
-                if (other.ValType == Type.VariableName)
+                if (other.ValType == Type.VarExpression)
                 {
                     Value otherValue = Variables.GetValue(other.internalValue);
                     return thisValue.IsLessThan(otherValue);
@@ -695,10 +695,10 @@ namespace GQ.Client.Model
                 }
             }
 
-            if (this.ValType == Type.VariableName)
+            if (this.ValType == Type.VarExpression)
             {
                 Value thisValue = Variables.GetValue(this.internalValue);
-                if (other.ValType == Type.VariableName)
+                if (other.ValType == Type.VarExpression)
                 {
                     Value otherValue = Variables.GetValue(other.internalValue);
                     return thisValue.IsLessOrEqual(otherValue);

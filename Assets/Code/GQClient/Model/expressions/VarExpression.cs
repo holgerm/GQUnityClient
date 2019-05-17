@@ -4,7 +4,7 @@ using System.Collections;
 namespace GQ.Client.Model
 {
 
-	public class VariableExpression : SimpleExpression
+	public class VarExpression : SimpleExpression
 	{
 
 		#region Structure
@@ -13,7 +13,7 @@ namespace GQ.Client.Model
 		{
             valueAsString = valueAsString.Trim();
 
-            value = new Value (valueAsString, Value.Type.VariableName);
+            value = new Value (valueAsString, Value.Type.VarExpression);
 		}
 
 		#endregion

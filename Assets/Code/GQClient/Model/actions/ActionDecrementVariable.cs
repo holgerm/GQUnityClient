@@ -34,7 +34,7 @@ namespace GQ.Client.Model
 			case Value.Type.Bool:
 				Variables.SetVariableValue (VarName, new Value (false));
 				break;
-			case Value.Type.VariableName:
+			case Value.Type.VarExpression:
 				Log.SignalErrorToAuthor ("IncrementVariable must not be used on Variables representing Variable Names.", previousVal.ValType);
 				break;
 			case Value.Type.Text:

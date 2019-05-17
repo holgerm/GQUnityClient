@@ -82,8 +82,8 @@ namespace GQ.Client.Model
 			switch (reader.LocalName) {
 			// COMPOUND CONDITIONS:
 			case GQML.VARIABLE:
-				serializer = new XmlSerializer (typeof(VariableExpression), XmlRootAttr);
-				resultExpression = (VariableExpression)serializer.Deserialize (reader);
+				serializer = new XmlSerializer (typeof(VarExpression), XmlRootAttr);
+				resultExpression = (VarExpression)serializer.Deserialize (reader);
 				break;
 			case GQML.BOOL:
 				serializer = new XmlSerializer (typeof(BoolExpression), XmlRootAttr);

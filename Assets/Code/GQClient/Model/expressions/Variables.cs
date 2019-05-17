@@ -143,7 +143,7 @@ namespace GQ.Client.Model
             }
 
             // if right hand side is a variablename we use the value of the variable:
-            if (newValue.ValType == Value.Type.VariableName)
+            if (newValue.ValType == Value.Type.VarExpression)
             {
                 SetInternalVariable(varName, Variables.GetValue(newValue.AsVariableName()));
                 return;
