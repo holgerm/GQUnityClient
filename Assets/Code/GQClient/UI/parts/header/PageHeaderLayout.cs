@@ -91,7 +91,7 @@ namespace GQ.Client.UI
             titleText.gameObject.SetActive(true);
             Text ttt = titleText.GetComponent<Text>();
 
-            ttt.text = Author.LoggedIn || "".Equals(QuestManager.Instance.CurrentQuestName4User)
+            ttt.text = (Author.LoggedIn && Author.ShowHiddenQuests) || "".Equals(QuestManager.Instance.CurrentQuestName4User)
                 ? QuestManager.Instance.CurrentQuest.Name
                 : QuestManager.Instance.CurrentQuestName4User;
 

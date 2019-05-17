@@ -83,7 +83,7 @@ namespace GQ.Client.Util
                         _offerManualUpdate = false;
                     }
                 }
-                return (bool)_offerManualUpdate;
+                return (bool)_offerManualUpdate && LoggedIn;
             }
             set
             {
@@ -116,7 +116,7 @@ namespace GQ.Client.Util
                         _showHiddenQuests = false;
                     }
                 }
-                return (bool)_showHiddenQuests;
+                return (bool)_showHiddenQuests && LoggedIn;
             }
             set
             {
@@ -152,7 +152,7 @@ namespace GQ.Client.Util
                         _showEmptyMenuEntries = false;
                     }
                 }
-                return (bool)_showEmptyMenuEntries;
+                return (bool)_showEmptyMenuEntries && LoggedIn;
             }
             set
             {
