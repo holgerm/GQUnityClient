@@ -30,7 +30,6 @@ namespace GQ.Client.UI
 			this.DialogItemHyperText.text = itemText.Decode4HyperText(supportHtmlLinks : supportHtmlLinks);
             this.DialogItemHyperText.color = ConfigurationManager.Current.mainFgColor;
             this.DialogItemHyperText.fontSize = ConfigurationManager.Current.mainFontSize;
-
         }
 
 		public static HypertextchunkCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true) {

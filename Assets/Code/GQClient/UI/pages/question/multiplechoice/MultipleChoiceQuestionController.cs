@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
+using Candlelight.UI;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -14,7 +16,7 @@ namespace GQ.Client.UI
 	{
 		#region Inspector Features
 
-		public Text questionText;
+		public HyperText questionText;
 		public Transform answersContainer;
 
 		#endregion
@@ -34,8 +36,10 @@ namespace GQ.Client.UI
 		{
             mcqPage = (PageMultipleChoiceQuestion)page;
 
-			// show the question:
-			questionText.text = mcqPage.Question.MakeReplacements();
+            // show the question:
+            questionText.text = mcqPage.Question.Decode4HyperText();
+            questionText.color = ConfigurationManager.Current.mainFgColor;
+            questionText.fontSize = ConfigurationManager.Current.mainFontSize;
 
             // shuffle anwers:
             if (mcqPage.Shuffle)

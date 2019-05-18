@@ -437,7 +437,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '--- LQS_2 Bibelquiz'
+  m_Text: 
 --- !u!114 &114550066104581586
 MonoBehaviour:
   m_ObjectHideFlags: 1
