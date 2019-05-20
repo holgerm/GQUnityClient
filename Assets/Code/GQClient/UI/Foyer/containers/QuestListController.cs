@@ -82,10 +82,10 @@ namespace GQ.Client.UI.Foyer
                     updateElementOrderLayout();
                     break;
                 case ChangeType.ListChanged:
-                    UpdateView();
+                    RegenerateAll();
                     break;
                 case ChangeType.FilterChanged:
-                    UpdateViewAfterFilterChanged();
+                    RegenerateAllAfterFilterChanged();
                     break;
                 case ChangeType.SorterChanged:
                     updateListSorting();
@@ -121,9 +121,9 @@ namespace GQ.Client.UI.Foyer
         /// <summary>
         /// Updates the view.
         /// </summary>
-        public override void UpdateView()
+        public override void RegenerateAll()
         {
-            Base.Instance.StartCoroutine(updateViewAsCoroutine());
+            Base.Instance.StartCoroutine(regenerateAllAsCoroutine());
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace GQ.Client.UI.Foyer
         /// 
         /// </summary>
         /// <returns>The view as coroutine.</returns>
-		private IEnumerator updateViewAsCoroutine()
+		private IEnumerator regenerateAllAsCoroutine()
         {
             if (this == null)
             {
@@ -179,7 +179,7 @@ namespace GQ.Client.UI.Foyer
             updateListSorting();
         }
 
-        public void UpdateViewAfterFilterChanged()
+        public void RegenerateAllAfterFilterChanged()
         {
             if (this == null)
             {
@@ -257,11 +257,18 @@ namespace GQ.Client.UI.Foyer
             }
         }
 
-
-        private void updateMetaInfoDisplays()
+        /// <summary>
+        /// Assumes no element is new and no element has been removed, but their state or the context for showing them has changed.
+        /// </summary>
+        public override void UpdateElementViews()
         {
-            // TODO e.g. number of shown quests etc.
+            foreach (KeyValuePair<int, QuestInfoUIC> kvp in QuestInfoControllers)
+            {
+                kvp.Value.UpdateView();
+            }
         }
+
+
 
         #endregion
 

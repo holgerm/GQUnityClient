@@ -8,4 +8,6 @@ namespace QM.Util {
 
 	public delegate LocationService Void2LocationService();
 
+    public delegate void VoidToVoid();
+
 }

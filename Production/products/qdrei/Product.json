@@ -23,7 +23,7 @@
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": true,
-  "localQuestsDeletable": true,
+  "localQuestsDeletable": false,
   "showHiddenQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
@@ -275,7 +275,6 @@
     "b": 255,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 247,
     "g": 80,

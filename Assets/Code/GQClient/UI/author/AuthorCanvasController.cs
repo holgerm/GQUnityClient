@@ -71,14 +71,7 @@ namespace GQ.Client.UI
         /// </summary>
         void checkStatus()
         {
-            if (Author.LoggedInAs == null)
-            {
-                StatusText.text = NOT_LOGGED_IN_TEXT;
-                AccountInput.gameObject.SetActive(true);
-                PasswordInput.gameObject.SetActive(true);
-                SettingsPanel.gameObject.SetActive(false);
-            }
-            else
+            if (Author.LoggedIn)
             {
                 StatusText.text = string.Format(LOGGED_IN_TEXTFORMAT, Author.LoggedInAs);
                 AccountInput.gameObject.SetActive(false);
@@ -86,22 +79,30 @@ namespace GQ.Client.UI
                 SettingsPanel.gameObject.SetActive(true);
                 LoginButton.interactable = true;
             }
+            else
+            {
+                StatusText.text = NOT_LOGGED_IN_TEXT;
+                AccountInput.gameObject.SetActive(true);
+                PasswordInput.gameObject.SetActive(true);
+                SettingsPanel.gameObject.SetActive(false);
+            }
         }
 
         void checkLoginButtonText()
         {
             LoginButtonText.text =
-                Author.LoggedInAs == null ?
-                LOGIN_TEXT :
-                LOGOUT_TEXT;
+                Author.LoggedIn ?
+                LOGOUT_TEXT :
+                LOGIN_TEXT;
         }
 
         bool tryToLogin(string email, string password)
         {
             // TODO ask server for permissions ...
-            if (ConfigurationManager.Current.defineAuthorBackDoor) {
+            if (ConfigurationManager.Current.defineAuthorBackDoor)
+            {
                 if (email == ConfigurationManager.Current.acceptedAuthorEmail &&
-                    password == ConfigurationManager.Current.acceptedAuthorPassword) 
+                    password == ConfigurationManager.Current.acceptedAuthorPassword)
                 {
                     Author.LoggedInAs = email;
                     //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = true;
@@ -115,25 +116,21 @@ namespace GQ.Client.UI
 
         public void LoginPressed()
         {
-            switch (LoginButtonText.text)
+            if (Author.LoggedIn)
             {
-                case LOGIN_TEXT:
-                    if (tryToLogin(AccountEmail.text, Password.text))
-                    {
-                        AccountEmail.text = "";
-                        Password.text = "";
-                    }
-                    checkStatus();
-                    checkLoginButtonText();
-                    break;
-                case LOGOUT_TEXT:
-                    Author.LoggedInAs = null;
-                    //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = false;
-                    checkStatus();
-                    checkLoginButtonText();
-                    break;
+                Author.LoggedInAs = null;
             }
-        }
+            else
+            {
+                if (tryToLogin(AccountEmail.text, Password.text))
+                {
+                    AccountEmail.text = "";
+                    Password.text = "";
+                }
+            }
 
+            checkStatus();
+            checkLoginButtonText();
+        }
     }
 }

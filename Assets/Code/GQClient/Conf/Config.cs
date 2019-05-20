@@ -97,6 +97,7 @@ namespace GQ.Client.Conf
 
         public bool downloadAllCloudQuestOnStart { get; set; }
 
+        [ShowInProductEditor]
         public bool localQuestsDeletable { get; set; }
 
         [ShowInProductEditor, JsonProperty]
@@ -683,21 +684,6 @@ namespace GQ.Client.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 listBgColor { get; set; }
 
-        [ShowInProductEditor]
-        public bool showDeleteOptionForLocalQuests
-        {
-            get
-            {
-                return _showDeleteOptionForLocalQuests || Author.LoggedIn;
-            }
-            set
-            {
-                _showDeleteOptionForLocalQuests = value;
-            }
-        }
-        [JsonIgnore]
-        private bool _showDeleteOptionForLocalQuests;
-
         [ShowInProductEditor(StartSection = "Internal:")]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 emulationColor { get; set; }
@@ -800,7 +786,6 @@ namespace GQ.Client.Conf
             listStartLineWidth = 5;
             dividingLineWidth = 5;
             listEndLineWidth = 5;
-            showDeleteOptionForLocalQuests = true;
 
             // Menu:
             showEmptyMenuEntries = false;

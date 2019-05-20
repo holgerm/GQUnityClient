@@ -7,8 +7,8 @@ using UnityEngine;
 public class QuestInfoSync : MonoBehaviour {
 
     bool updateStarted;
-	// Use this for initialization
-	void Start () {
+	
+    void Start () {
         if (!ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
         {
             QuestInfoManager.Instance.UpdateQuestInfos();

@@ -43,26 +43,31 @@ namespace GQ.Client.Util
             {
                 if (string.IsNullOrEmpty(_loggedInAs))
                 {
-                    if (PlayerPrefs.HasKey(GQPrefKeys.LOGGED_IN_AS.ToString()))
+                    if (PlayerPrefs.HasKey(PREFKEY_LOGGED_IN_AS))
                     {
-                        _loggedInAs = PlayerPrefs.GetString(GQPrefKeys.LOGGED_IN_AS.ToString());
+                        _loggedInAs = PlayerPrefs.GetString(PREFKEY_LOGGED_IN_AS);
                     }
                 }
                 return _loggedInAs;
             }
             set
             {
-                if (value != _loggedInAs)
+                if (value == _loggedInAs)
+                    return;
+
+                _loggedInAs = value;
+
+                if (string.IsNullOrEmpty(value))
                 {
-                    _loggedInAs = value;
-                    PlayerPrefs.SetString(GQPrefKeys.LOGGED_IN_AS.ToString(), _loggedInAs);
-                    if (_loggedInAs == null || _loggedInAs == "")
-                    {
-                        PlayerPrefs.DeleteKey(GQPrefKeys.LOGGED_IN_AS.ToString());
-                    }
-                    PlayerPrefs.Save();
-                    OnSettingsChanged();
+                    PlayerPrefs.DeleteKey(PREFKEY_LOGGED_IN_AS);
                 }
+                else
+                {
+                    PlayerPrefs.SetString(PREFKEY_LOGGED_IN_AS, _loggedInAs);
+                }
+                PlayerPrefs.Save();
+
+                OnSettingsChanged();
             }
         }
         private static string _loggedInAs = null;
@@ -74,9 +79,9 @@ namespace GQ.Client.Util
             {
                 if (_offerManualUpdate == null)
                 {
-                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString()))
+                    if (PlayerPrefs.HasKey(PREFKEY_OFFER_MANUAL_UPDATES))
                     {
-                        _offerManualUpdate = PlayerPrefs.GetInt(Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString()) == 1;
+                        _offerManualUpdate = PlayerPrefs.GetInt(PREFKEY_OFFER_MANUAL_UPDATES) == 1;
                     }
                     else
                     {
@@ -91,7 +96,7 @@ namespace GQ.Client.Util
                 {
                     _offerManualUpdate = value;
                     PlayerPrefs.SetInt(
-                        Author.GQPrefKeys.OFFER_MANUAL_UPDATES.ToString(),
+                        PREFKEY_OFFER_MANUAL_UPDATES,
                         _offerManualUpdate == true ? 1 : 0
                     );
                     PlayerPrefs.Save();
@@ -107,13 +112,13 @@ namespace GQ.Client.Util
             {
                 if (_showHiddenQuests == null)
                 {
-                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()))
+                    if (PlayerPrefs.HasKey(PREFKEY_SHOW_HIDDEN_QUESTS))
                     {
-                        _showHiddenQuests = PlayerPrefs.GetInt(Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString()) == 1;
+                        _showHiddenQuests = PlayerPrefs.GetInt(PREFKEY_SHOW_HIDDEN_QUESTS) == 1;
                     }
                     else
                     {
-                        _showHiddenQuests = false;
+                        _showHiddenQuests = ConfigurationManager.Current.localQuestsDeletable;
                     }
                 }
                 return (bool)_showHiddenQuests && LoggedIn;
@@ -124,7 +129,7 @@ namespace GQ.Client.Util
                 {
                     _showHiddenQuests = value;
                     PlayerPrefs.SetInt(
-                        Author.GQPrefKeys.SHOW_HIDDEN_QUESTS.ToString(),
+                        PREFKEY_SHOW_HIDDEN_QUESTS,
                         _showHiddenQuests == true ? 1 : 0
                     );
                     PlayerPrefs.Save();
@@ -143,9 +148,9 @@ namespace GQ.Client.Util
             {
                 if (_showEmptyMenuEntries == null)
                 {
-                    if (PlayerPrefs.HasKey(Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()))
+                    if (PlayerPrefs.HasKey(PREFKEY_SHOW_EMPTY_MENU_ENTRIES))
                     {
-                        _showEmptyMenuEntries = PlayerPrefs.GetInt(Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString()) == 1;
+                        _showEmptyMenuEntries = PlayerPrefs.GetInt(PREFKEY_SHOW_EMPTY_MENU_ENTRIES) == 1;
                     }
                     else
                     {
@@ -160,7 +165,7 @@ namespace GQ.Client.Util
                 {
                     _showEmptyMenuEntries = value;
                     PlayerPrefs.SetInt(
-                        Author.GQPrefKeys.SHOW_EMPTY_MENU_ENTRIES.ToString(),
+                        PREFKEY_SHOW_EMPTY_MENU_ENTRIES,
                         _showEmptyMenuEntries == true ? 1 : 0
                     );
                     PlayerPrefs.Save();
@@ -169,14 +174,44 @@ namespace GQ.Client.Util
             }
         }
 
-        public enum GQPrefKeys
+        private static bool? _showDeleteOptionForLocalQuests = null;
+        public static bool ShowDeleteOptionForLocalQuests
         {
-            LOGGED_IN_AS,
-            SHOW_HIDDEN_QUESTS,
-            OFFER_MANUAL_UPDATES,
-            SHOW_EMPTY_MENU_ENTRIES
+            get
+            {
+                if (_showDeleteOptionForLocalQuests == null)
+                {
+                    if (PlayerPrefs.HasKey(PREFKEY_SHOW_DELETE_OPTION))
+                    {
+                        _showDeleteOptionForLocalQuests = PlayerPrefs.GetInt(PREFKEY_SHOW_DELETE_OPTION) == 1;
+                    }
+                    else
+                    {
+                        _showDeleteOptionForLocalQuests = ConfigurationManager.Current.localQuestsDeletable;
+                    }
+                }
+                return (bool)_showDeleteOptionForLocalQuests; // this flag does not need author to be logged in.
+            }
+            set
+            {
+                if (_showDeleteOptionForLocalQuests != value)
+                {
+                    _showDeleteOptionForLocalQuests = value;
+                    PlayerPrefs.SetInt(
+                        PREFKEY_SHOW_DELETE_OPTION,
+                        _showDeleteOptionForLocalQuests == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
+                }
+            }
         }
 
+        public const string PREFKEY_LOGGED_IN_AS = "gq.settings.login";
+        public const string PREFKEY_SHOW_HIDDEN_QUESTS = "gq.settings.show_hidden_quests";
+        public const string PREFKEY_OFFER_MANUAL_UPDATES = "gq.settings.offer_manual_updates";
+        public const string PREFKEY_SHOW_EMPTY_MENU_ENTRIES = "gq.settings.show_empty_menu_entries";
+        public const string PREFKEY_SHOW_DELETE_OPTION = "gq.settings.show_delete_option";
     }
 
 }
