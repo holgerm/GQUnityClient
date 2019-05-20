@@ -178,9 +178,10 @@ namespace GQ.Client.Model
 		public const string ACTION_SHOWMESSAGE_MESSAGE = "message";
 		public const string ACTION_STARTMISSION_ALLOWRETURN = "allowReturn";
 		public const string ACTION_STARTQUEST_QUEST = "quest";
+        public const string ACTION_WRITETONFC_CONTENT = "content";
 
-		// IF ACTION:
-		public const string IF = "if";
+        // IF ACTION:
+        public const string IF = "if";
 		public const string THEN = "then";
 		public const string ELSE = "else";
 

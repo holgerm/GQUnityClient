@@ -95,12 +95,13 @@ namespace QM.NFC {
 
 		private void emulateNFCRead (bool simpleMode) {
 			// grab the nfc receiver: 
-			GameObject nfcReceiver = GameObject.Find("/NFC_Connector");
+			GameObject nfcReceiver = GameObject.Find("/Base");
 			if ( nfcReceiver == null ) {
 				Debug.LogError("NFCReceiver missing. The NFC Plugin does not find the NFCReceiver GameObject, but it needs it.");
 				return;
 			}
-			NFC_Connector nfcConnector = nfcReceiver.GetComponent<NFC_Connector>();
+
+            NFC_Connector nfcConnector = nfcReceiver.AddComponent(typeof(NFC_Connector)) as NFC_Connector;
 			if ( nfcConnector == null ) {
 				Debug.LogError("NFC_Connector missing. The NFC Plugin finds the NFCReceiver GameObject, but it lacks the NFC_Connector Script Component.");
 				return;
