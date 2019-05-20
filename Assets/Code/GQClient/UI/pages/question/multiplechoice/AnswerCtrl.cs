@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.UI;
+using GQ.Client.Util;
 
 public class AnswerCtrl : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class AnswerCtrl : MonoBehaviour
 		AnswerCtrl answerCtrl = go.GetComponent<AnswerCtrl> ();
 		answerCtrl.page = mcqPage;
 		answerCtrl.answer = answer;
-		answerCtrl.answerText.text = answer.Text;
+		answerCtrl.answerText.text = answer.Text.MakeReplacements();
 		answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
 
 		return answerCtrl;
