@@ -201,7 +201,18 @@ namespace GQ.Client.Model
             }
         }
 
-        public bool PageReadyToStart { get; internal set; }
+        public bool PageReadyToStart
+        {
+            get
+            {
+                return _pageReadyToStart;
+            }
+            internal set
+            {
+                _pageReadyToStart = value;
+            }
+        }
+        private bool _pageReadyToStart;
 
         /// <summary>
         /// Reads the quest from its game.xml file and creates a complete model hierarchy in memory and 

@@ -33,6 +33,8 @@ namespace GQ.Client.Util
         public Canvas canvas4TopLeftMenu;
         public GameObject MenuTopRightContent;
         public Canvas canvas4TopRightMenu;
+
+        public GameObject InteractionBlocker;
         #endregion
 
 
@@ -115,12 +117,10 @@ namespace GQ.Client.Util
                 }
             }
         }
-
         #endregion
 
 
         #region LifeCycle
-
         public static void Init()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
@@ -150,9 +150,9 @@ namespace GQ.Client.Util
             SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
             canvasStates = new Dictionary<string, bool>();
 
-//#if UNITY_EDITOR || UNITY_STANDALONE
-//            Device.awakeLocationMock();
-//#endif
+            //#if UNITY_EDITOR || UNITY_STANDALONE
+            //            Device.awakeLocationMock();
+            //#endif
 
             //			#if UNITY_STANDALONE
             //			Screen.SetResolution(1080,1920,true);
@@ -161,13 +161,34 @@ namespace GQ.Client.Util
 
         void Update()
         {
-//#if UNITY_EDITOR || UNITY_STANDALONE
-            if (Author.LoggedIn) { 
+            //#if UNITY_EDITOR || UNITY_STANDALONE
+            if (Author.LoggedIn)
+            {
                 Device.updateMockedLocation();
             }
-//#endif
+            //#endif
+        }
+        #endregion
+
+
+        #region Global Functions
+        public void BlockInteractions(bool block)
+        {
+            if (block)
+            {
+                InteractionBlocker.SetActive(true); 
+            }
+            else
+            {
+                CoroutineStarter.Run(UnblockInCoroutine());
+            }
         }
 
+        private IEnumerator UnblockInCoroutine()
+        {
+            yield return new WaitForEndOfFrame();
+            InteractionBlocker.SetActive(false);
+        }
         #endregion
 
 

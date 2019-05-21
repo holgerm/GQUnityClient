@@ -236,7 +236,6 @@ namespace GQ.Client.Model
             SceneManager.sceneLoaded -= InitOnSceneLoaded;
 
             Resources.UnloadUnusedAssets();
-
             QuestManager.Instance.PageReadyToStart = true;
         }
 
@@ -287,6 +286,9 @@ namespace GQ.Client.Model
             if (!CanStart())
                 return;
 
+            QuestManager.Instance.PageReadyToStart = false; // make new page wait for switching scene and unloading old page.
+            Base.Instance.BlockInteractions(true);
+
             bool canReturn = canReturnToPrevious || !Quest.IndividualReturnDefinitions;
             Quest.History.Record(new PageStarted(this, canReturn));
 
@@ -309,8 +311,6 @@ namespace GQ.Client.Model
 
             if (!scene.name.Equals(PageSceneName))
             {
-                QuestManager.Instance.PageReadyToStart = false; // make new page wait for switching scene and unloading old page.
-
                 SceneManager.sceneLoaded += InitOnSceneLoaded;
 
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
@@ -321,6 +321,8 @@ namespace GQ.Client.Model
             }
             else
             {
+                QuestManager.Instance.PageReadyToStart = true; // in case of reuse we do not need to block & wait 
+                Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);
             }
 

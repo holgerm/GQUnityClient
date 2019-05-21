@@ -11,134 +11,154 @@ using System;
 
 namespace GQ.Client.UI
 {
-	
-	public class NPCTalkController : PageController
-	{
 
-		#region Inspector Fields
+    public class NPCTalkController : PageController
+    {
 
-		public RawImage image;
-		public GameObject imagePanel;
-		public GameObject contentPanel;
-		public Transform dialogItemContainer;
+        #region Inspector Fields
 
-		#endregion
+        public RawImage image;
+        public GameObject imagePanel;
+        public GameObject contentPanel;
+        public Transform dialogItemContainer;
 
-		#region Runtime API
+        #endregion
 
-		protected PageNPCTalk npcPage;
+        #region Runtime API
 
-		/// <summary>
-		/// Is called during Start() of the base class, which is a MonoBehaviour.
-		/// </summary>
-		public override void InitPage_TypeSpecific ()
-		{
-            npcPage = (PageNPCTalk)page;
+        protected PageNPCTalk npcPage;
 
-			// show the content:
-			ShowImage ();
-			ClearText ();
-			AddCurrentText ();
-			UpdateForwardButton ();
-		}
+        /// <summary>
+        /// Is called during Start() of the base class, which is a MonoBehaviour.
+        /// </summary>
+        public override void InitPage_TypeSpecific()
+        {
+            try
+            {
+                npcPage = (PageNPCTalk)page;
+            }
+            catch (InvalidCastException)
+            {
+                Debug.Log(("InvalidCastException: NPCTalk Page foun a page of type " + page.GetType()));    
+            }
 
-		public override void OnForward ()
-		{
-			if (npcPage.HasMoreDialogItems ()) {
-				npcPage.Next ();
-				// update the content:
-				AddCurrentText ();
-				UpdateForwardButton ();
-			} else {
-				npcPage.End ();
-			}
-		}
+            // show the content:
+            ShowImage();
+            ClearText();
+            AddCurrentText();
+            UpdateForwardButton();
+        }
 
-		#endregion
+        public override void OnForward()
+        {
+            if (npcPage.HasMoreDialogItems())
+            {
+                npcPage.Next();
+                // update the content:
+                AddCurrentText();
+                UpdateForwardButton();
+            }
+            else
+            {
+                npcPage.End();
+            }
+        }
 
-		#region View Update Methods
+        #endregion
 
-		void ShowImage ()
-		{
-			// show (or hide completely) image:
-			if (npcPage.ImageUrl == "") {
-				imagePanel.SetActive (false);
-				return;
-			} 
+        #region View Update Methods
 
-			AbstractDownloader loader;
-			if (npcPage.Parent.MediaStore.ContainsKey (npcPage.ImageUrl)) {
-				MediaInfo mediaInfo;
-				npcPage.Parent.MediaStore.TryGetValue (npcPage.ImageUrl, out mediaInfo);
-				loader = new LocalFileLoader (mediaInfo.LocalPath);
-			} else {
-				loader = new Downloader (
-					url: npcPage.ImageUrl, 
-					timeout: ConfigurationManager.Current.timeoutMS,
-					maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
-				);
-			}
-			loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
+        void ShowImage()
+        {
+            // show (or hide completely) image:
+            if (npcPage.ImageUrl == "")
+            {
+                imagePanel.SetActive(false);
+                return;
+            }
+
+            AbstractDownloader loader;
+            if (npcPage.Parent.MediaStore.ContainsKey(npcPage.ImageUrl))
+            {
+                MediaInfo mediaInfo;
+                npcPage.Parent.MediaStore.TryGetValue(npcPage.ImageUrl, out mediaInfo);
+                loader = new LocalFileLoader(mediaInfo.LocalPath);
+            }
+            else
+            {
+                loader = new Downloader(
+                    url: npcPage.ImageUrl,
+                    timeout: ConfigurationManager.Current.timeoutMS,
+                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                );
+            }
+            loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
+            {
                 float imageAreaHeight = fitInAndShowImage(d.Www.texture);
 
                 imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
                 contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
 
                 // Dispose www including it s Texture and take some logs for preformace surveillance:
-                d.Www.Dispose ();
-			};
-			loader.Start ();
-		}
+                d.Www.Dispose();
+            };
+            loader.Start();
+        }
 
-		float fitInAndShowImage(Texture2D texture) {
-			AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
-			float imageRatio = (float)texture.width / (float)texture.height;
-			float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
+        float fitInAndShowImage(Texture2D texture)
+        {
+            AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter>();
+            float imageRatio = (float)texture.width / (float)texture.height;
+            float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
 
-			if (imageRatio < ImageRatioMinimum) {
-				// image too high to fit:
-				imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMaxUnits;
-			}
-			if (ImageRatioMaximum < imageRatio) {
-				// image too wide to fit:
-				imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
-			}
+            if (imageRatio < ImageRatioMinimum)
+            {
+                // image too high to fit:
+                imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMaxUnits;
+            }
+            if (ImageRatioMaximum < imageRatio)
+            {
+                // image too wide to fit:
+                imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
+            }
 
-			//imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels (imageAreaHeight);
-			//contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
+            //imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels (imageAreaHeight);
+            //contentPanel.GetComponent<LayoutElement> ().flexibleHeight = CalculateMainAreaHeight (imageAreaHeight);
 
-			fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
-			fitter.aspectMode = 
-				ConfigurationManager.Current.fitExceedingImagesIntoArea 
-				? AspectRatioFitter.AspectMode.FitInParent 
-				: AspectRatioFitter.AspectMode.EnvelopeParent;
+            fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
+            fitter.aspectMode =
+                ConfigurationManager.Current.fitExceedingImagesIntoArea
+                ? AspectRatioFitter.AspectMode.FitInParent
+                : AspectRatioFitter.AspectMode.EnvelopeParent;
 
-			image.texture = texture;
-			imagePanel.SetActive (true);
+            image.texture = texture;
+            imagePanel.SetActive(true);
 
             return imageAreaHeight;
 
         }
 
-		void ClearText ()
-		{
-			foreach (Transform dialogItem in dialogItemContainer) {
-				GameObject.Destroy (dialogItem.gameObject);
-			}
+        void ClearText()
+        {
+            foreach (Transform dialogItem in dialogItemContainer)
+            {
+                GameObject.Destroy(dialogItem.gameObject);
+            }
 
             Image bgImg = contentPanel.GetComponent<Image>();
-            if (bgImg != null) {
+            if (bgImg != null)
+            {
                 bgImg.color = ConfigurationManager.Current.mainBgColor;
             }
-		}
+        }
 
-		void AddCurrentText ()
-		{
-			// decode text for HyperText Component:
-			string currentText = npcPage.CurrentDialogItem.Text.Decode4HyperText();
+        void AddCurrentText()
+        {
+            // decode text for HyperText Component:
+            string currentText = npcPage.CurrentDialogItem.Text.Decode4HyperText();
 
-			// create dialog item GO from prefab:
-			HypertextchunkCtrl.Create (dialogItemContainer, currentText);
+            // create dialog item GO from prefab:
+            HypertextchunkCtrl.Create(dialogItemContainer, currentText);
 
             // play audio if specified:
             float duration = 0f;
@@ -154,12 +174,12 @@ namespace GQ.Client.UI
 
         }
 
-		void UpdateForwardButton ()
-		{
+        void UpdateForwardButton()
+        {
             // update forward button text:
             Text forwardButtonText = forwardButton.transform.Find("Text").GetComponent<Text>();
-			forwardButtonText.text = npcPage.HasMoreDialogItems () ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
-		}
+            forwardButtonText.text = npcPage.HasMoreDialogItems() ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
+        }
 
         private IEnumerator adjustScrollRect(float timespan)
         {

@@ -52,8 +52,10 @@ namespace GQ.Client.Model
         public int GoBackToPreviousPage()
         {
             int id = -1;
+            int sizeBeforeException = -1;
             try
             {
+                sizeBeforeException = pageBackStack.Count;
                 // we leave the current page, hence we pop it from back stack:
                 pageBackStack.Pop();
 
@@ -61,12 +63,16 @@ namespace GQ.Client.Model
                 id = pageBackStack.Peek();
                 Page pageToStart = quest.GetPageWithID(id);
 
+
+
                 // if we still have a back page on stack, we can allow to go back further:
                 pageToStart.Start(CanGoBackToPreviousPage);
             }
             catch (InvalidOperationException)
             {
-                Log.SignalErrorToDeveloper("Tried to go back one page when no pages were on history stack (on page {0} in quest {1}).", quest.CurrentPage.Id, quest.Id);
+                Log.SignalErrorToDeveloper(
+                    "Tried to go back one page when no pages were on history stack (on page {0} in quest {1}). Stack size before pop() was: {2}.", 
+                    quest.CurrentPage.Id, quest.Id, sizeBeforeException.ToString());
             }
             return id;
         }
@@ -109,6 +115,11 @@ namespace GQ.Client.Model
                 // if this page is already on top of the back stack, we ignore its start:
                 history.pageBackStack.Push(pageId);
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("PageStarted ({0})", pageId);
         }
     }
 

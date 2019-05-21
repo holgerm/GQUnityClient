@@ -6,6 +6,7 @@ using GQ.Client.Conf;
 using System.Collections;
 using GQ.Client.Util;
 using UnityEngine.UI;
+using System;
 
 namespace GQ.Client.UI
 {
@@ -86,7 +87,8 @@ namespace GQ.Client.UI
             page.TriggerOnStart();
 
 			InitPage_TypeSpecific ();
-		}
+            Base.Instance.BlockInteractions(false);
+        }
 
         #endregion
 

@@ -145,7 +145,6 @@ namespace GQ.Client.Model
                 }
             }
 
-            Debug.Log(string.Format("ARTIHM: {0} --> {1}", input, currentvalue).Yellow());
             return currentvalue;
         }
 
