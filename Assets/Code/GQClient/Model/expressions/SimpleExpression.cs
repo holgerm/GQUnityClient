@@ -14,7 +14,6 @@ namespace GQ.Client.Model
 	{
 
 		#region Structure
-
 		public System.Xml.Schema.XmlSchema GetSchema ()
 		{
 			return null;
@@ -65,17 +64,14 @@ namespace GQ.Client.Model
 		}
 
 		protected abstract void setValue (string valueAsString);
-
 		#endregion
 
 
-		#region Function
-
+		#region Runtime
 		public virtual Value Evaluate ()
 		{
 			return value;
 		}
-
 		#endregion
 	
 	}
