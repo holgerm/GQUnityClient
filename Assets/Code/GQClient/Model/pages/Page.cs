@@ -88,6 +88,11 @@ namespace GQ.Client.Model
 
         }
 
+        internal void TriggerOnStart()
+        {
+            StartTrigger.Initiate();
+        }
+
         /// <summary>
         /// If you enhance this method by overriding it in subtypes to process additional content, 
         /// you should first process the additional content or alternatives and at the end 
@@ -217,7 +222,7 @@ namespace GQ.Client.Model
         }
 
         // called when a scene has been loaded:
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        void InitOnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             SceneManager.SetActiveScene(scene);
             foreach (Scene sceneToUnload in scenesToUnload)
@@ -228,17 +233,14 @@ namespace GQ.Client.Model
                 }
             }
             scenesToUnload.Clear();
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded -= InitOnSceneLoaded;
 
             Resources.UnloadUnusedAssets();
 
             QuestManager.Instance.PageReadyToStart = true;
-
-            // Trigger OnStart Actions of this page:
-            StartTrigger.Initiate();
         }
 
-        private void InitializePageController(Scene scene)
+        private void InitOnSceneReused(Scene scene)
         {
             // if we use the same page again, we have to initialize the UI controller again with the new data.
             GameObject goPageScreen = GameObject.Find(GO_PATH_PAGE_CONTROLLER);
@@ -264,8 +266,6 @@ namespace GQ.Client.Model
             }
 
             pageCtrl.InitPage();
-            // Trigger OnStart Actions of this page:
-            StartTrigger.Initiate();
         }
 
         public static List<Scene> scenesToUnload = new List<Scene>();
@@ -311,7 +311,7 @@ namespace GQ.Client.Model
             {
                 QuestManager.Instance.PageReadyToStart = false; // make new page wait for switching scene and unloading old page.
 
-                SceneManager.sceneLoaded += OnSceneLoaded;
+                SceneManager.sceneLoaded += InitOnSceneLoaded;
 
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
@@ -321,7 +321,7 @@ namespace GQ.Client.Model
             }
             else
             {
-                InitializePageController(scene);
+                InitOnSceneReused(scene);
             }
 
         }
