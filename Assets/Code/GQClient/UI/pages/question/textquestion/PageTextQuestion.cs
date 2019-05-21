@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System;
 using GQ.Client.Err;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -81,7 +82,7 @@ namespace GQ.Client.Model
 		public bool AnswerCorrect (string input)
 		{
 			foreach (TQAnswer a in Answers) {
-				string aText = a.Text.Trim ();
+				string aText = a.Text.Trim ().MakeReplacements();
 
 				// Text comparison:
 				if (aText == input.Trim ())
