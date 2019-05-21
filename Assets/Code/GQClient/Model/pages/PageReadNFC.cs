@@ -63,8 +63,17 @@ namespace GQ.Client.Model
 			base.Start (canReturnToPrevious);
 		}
 
-		#endregion
+        public void Read()
+        {
+            State = GQML.STATE_SUCCEEDED;
 
-	}
+            if (NFCReadTrigger != Trigger.Null)
+            {
+                NFCReadTrigger.Initiate();
+            }
+        }
+        #endregion
+
+    }
 
 }

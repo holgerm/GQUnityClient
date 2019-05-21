@@ -101,11 +101,11 @@ namespace QM.NFC {
 				return;
 			}
 
-            NFC_Connector nfcConnector = nfcReceiver.AddComponent(typeof(NFC_Connector)) as NFC_Connector;
-			if ( nfcConnector == null ) {
-				Debug.LogError("NFC_Connector missing. The NFC Plugin finds the NFCReceiver GameObject, but it lacks the NFC_Connector Script Component.");
-				return;
-			}
+            NFC_Connector nfcConnector = nfcReceiver.GetComponent<NFC_Connector>();
+            if (nfcConnector == null)
+            {
+                nfcConnector = nfcReceiver.AddComponent(typeof(NFC_Connector)) as NFC_Connector;
+            }
 
 			if ( simpleMode )
 				nfcConnector.NFCReadPayload(payload);

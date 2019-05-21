@@ -10,7 +10,7 @@ namespace QM.NFC {
 		private static bool textForPayloadAutosettingDone = false;
 
 		public override void OnGUI (Rect position, SerializedProperty property, GUIContent label) {
-			NFC_ReaderUI myComponent = (NFC_ReaderUI)property.serializedObject.targetObject;
+			NFC_Reader myComponent = (NFC_Reader)property.serializedObject.targetObject;
 			Text[] textElements = myComponent.gameObject.GetComponentsInChildren<Text>(true);
 			if ( !textForPayloadAutosettingDone && textElements.Length == 1 && myComponent.NFCPayloadText == null ) {
 				myComponent.NFCPayloadText = textElements[0];

@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
+using QM.NFC;
 
 namespace GQ.Client.UI
 {
-	public class ReadNFCController : PageController
+	public class ReadNFCController : PageController, NFC_Reader_I
 	{
 		
 		#region Inspector Fields
@@ -17,7 +18,8 @@ namespace GQ.Client.UI
 		public GameObject imagePanel;
 		public GameObject contentPanel;
 		public Text infoText;
-		public Text forwardButtonText;
+
+		protected Text forwardButtonText;
 
 		#endregion
 
@@ -26,20 +28,43 @@ namespace GQ.Client.UI
 
 		protected PageReadNFC myPage;
 
-		/// <summary>
-		/// Is called during Start() of the base class, which is a MonoBehaviour.
-		/// </summary>
-		public override void InitPage_TypeSpecific ()
-		{
+        void OnEnable()
+        {
+            NFC_Connector.Connector.RegisterReaderUI(this);
+        }
+
+        void OnDisable()
+        {
+            NFC_Connector.Connector.UnregisterReaderUI(this);
+        }
+
+        void OnDestroy()
+        {
+            NFC_Connector.Connector.UnregisterReaderUI(this);
+        }
+
+
+        /// <summary>
+        /// Is called during Start() of the base class, which is a MonoBehaviour.
+        /// </summary>
+        public override void InitPage_TypeSpecific ()
+        {
             myPage = (PageReadNFC)page;
 
-			// show the content:
-			showImage ();
-			showInfo ();
-			forwardButtonText.text = "Ok";
-		}
+            // show the content:
+            showImage();
+            showInfo();
+            initForwardButton();
+        }
 
-		void showImage ()
+        private void initForwardButton()
+        {
+            forwardButton.interactable = false;
+            forwardButtonText = forwardButton.GetComponentInChildren(typeof(Text), true) as Text;
+            forwardButtonText.text = "Ok";
+        }
+
+        void showImage ()
 		{
 			// show (or hide completely) image:
 			if (myPage.ImageUrl == "") {
@@ -69,12 +94,7 @@ namespace GQ.Client.UI
 		}
 
 		void showInfo() {
-			infoText.text = 
-				"Diese Funktion steht leider noch nicht zur Verfügung. Hier werden als Test die Informationen angezeigt, die in der Quest-Seite gespeichert wurden:\n\n" +
-				"type:\t\t\t\t" + myPage.PageType + "\n" +
-				"id:\t\t" + myPage.Id + "\n" +
-				"saveToVar:\t\t" + myPage.SaveToVar + "\n" +
-				"text:\t\t" + myPage.PromptText; 
+			infoText.text = myPage.PromptText.MakeReplacements(); 
 		}
 
 		void fitInAndShowImage(Texture2D texture) {
@@ -104,6 +124,25 @@ namespace GQ.Client.UI
 			imagePanel.SetActive (true);
 		}
 
-		#endregion
-	}
+        public void onNFCRead(string nfcPayload)
+        {
+            infoText.text = "NFC Chip wurde erfolgreich ausgelesen."; // should be defined by author in editor
+            Variables.SetVariableValue(myPage.SaveToVar, new Value(nfcPayload));
+            myPage.Read();
+            forwardButton.interactable = true;
+        }
+
+        public void OnNFCPayloadRead(string payload)
+        {
+            onNFCRead(payload);
+        }
+
+        public void OnNFCDetailsRead(NFC_Info info)
+        {
+            onNFCRead(info.Payload);
+        }
+
+
+        #endregion
+    }
 }
