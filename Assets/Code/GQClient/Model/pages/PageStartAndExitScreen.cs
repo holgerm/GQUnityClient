@@ -10,7 +10,7 @@ namespace GQ.Client.Model
 {
 
 	[XmlRoot (GQML.PAGE)]
-	public class PageStartAndExitScreen : Page
+    public class PageStartAndExitScreen : Page
 	{
 
 		#region State
@@ -53,7 +53,7 @@ namespace GQ.Client.Model
 
 			Loop = GQML.GetOptionalBoolAttribute (GQML.PAGE_STARTANDEXITSCREEN_LOOP, reader);
 
-			Duration = GQML.GetIntAttribute (GQML.PAGE_STARTANDEXITSCREEN_DURATION, reader);
+			Duration = GQML.GetIntAttribute (GQML.PAGE_STARTANDEXITSCREEN_DURATION, reader) / 1000;
 
 			Fps = GQML.GetIntAttribute (GQML.PAGE_STARTANDEXITSCREEN_FPS, reader);
 		}
