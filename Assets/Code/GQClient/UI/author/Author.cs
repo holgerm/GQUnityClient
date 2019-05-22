@@ -18,11 +18,10 @@ namespace GQ.Client.Util
 
         public static void OnSettingsChanged()
         {
-            EventHandler<EventArgs> handler = SettingsChanged;
-            if (handler != null)
+            if (SettingsChanged != null)
             {
                 Debug.Log("AuthorSettings Changed - Event Fired!".Green());
-                handler(null, null);
+                SettingsChanged(null, null);
             }
         }
 
@@ -141,6 +140,40 @@ namespace GQ.Client.Util
             }
         }
 
+        private static bool? _showOnlyLocalQuests = null;
+        public static bool ShowOnlyLocalQuests
+        {
+            get
+            {
+                if (_showOnlyLocalQuests == null)
+                {
+                    if (PlayerPrefs.HasKey(PREFKEY_SHOW_ONLY_LOCAL_QUESTS))
+                    {
+                        _showOnlyLocalQuests = PlayerPrefs.GetInt(PREFKEY_SHOW_ONLY_LOCAL_QUESTS) == 1;
+                    }
+                    else
+                    {
+                        _showOnlyLocalQuests = ConfigurationManager.Current.showOnlyLocalQuests;
+                    }
+                }
+                return (bool)_showOnlyLocalQuests; // this flag does not need author to be logged in.
+            }
+            set
+            {
+                if (_showOnlyLocalQuests != value)
+                {
+                    _showOnlyLocalQuests = value;
+                    PlayerPrefs.SetInt(
+                        PREFKEY_SHOW_ONLY_LOCAL_QUESTS,
+                        _showOnlyLocalQuests == true ? 1 : 0
+                    );
+                    PlayerPrefs.Save();
+                    Author.OnSettingsChanged();
+                    QuestInfoFilter.LocalQuestInfosFilter.Instance.IsActive = value;
+                }
+            }
+        }
+
         private static bool? _showEmptyMenuEntries = null;
         public static bool ShowEmptyMenuEntries
         {
@@ -208,6 +241,7 @@ namespace GQ.Client.Util
 
         public const string PREFKEY_LOGGED_IN_AS = "gq.settings.login";
         public const string PREFKEY_SHOW_HIDDEN_QUESTS = "gq.settings.show_hidden_quests";
+        public const string PREFKEY_SHOW_ONLY_LOCAL_QUESTS = "gq.settings.show_only_local_quests";
         public const string PREFKEY_OFFER_MANUAL_UPDATES = "gq.settings.offer_manual_updates";
         public const string PREFKEY_SHOW_EMPTY_MENU_ENTRIES = "gq.settings.show_empty_menu_entries";
         public const string PREFKEY_SHOW_DELETE_OPTION = "gq.settings.show_delete_option";

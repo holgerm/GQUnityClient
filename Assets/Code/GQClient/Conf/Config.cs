@@ -118,6 +118,25 @@ namespace GQ.Client.Conf
             }
         }
 
+        [ShowInProductEditor, JsonProperty]
+        public bool showOnlyLocalQuests { get; set; }
+        [JsonIgnore]
+        public bool ShowOnlyLocalQuests
+        {
+            get
+            {
+                if (Author.LoggedIn)
+                {
+                    return Author.ShowOnlyLocalQuests;
+                }
+                else
+                {
+                    return showOnlyLocalQuests;
+                }
+            }
+        }
+
+
         [ShowInProductEditor(StartSection = "Pages & Scenes:")]
         public string[] acceptedPageTypes { get; set; }
 

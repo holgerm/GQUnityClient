@@ -21,10 +21,10 @@ public class QuestInfoSync : MonoBehaviour {
         updateStarted = true;
     }
 
-    void OnApplicationPause(bool paused) {
-        if (!ConfigurationManager.Current.OfferManualUpdate4QuestInfos && updateStarted && !paused) {
-            QuestInfoManager.Instance.UpdateQuestInfos();
-        }
-    }
+    //void OnApplicationPause(bool paused) {
+    //    if (!ConfigurationManager.Current.OfferManualUpdate4QuestInfos && updateStarted && !paused) {
+    //        QuestInfoManager.Instance.UpdateQuestInfos();
+    //    }
+    //}
 
 }

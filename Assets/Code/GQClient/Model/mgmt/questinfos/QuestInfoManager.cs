@@ -386,6 +386,9 @@ namespace GQ.Client.Model
             // init hidden quests filter:
             FilterAnd(QuestInfoFilter.HiddenQuestsFilter.Instance);
 
+            // init local quests filter:
+            FilterAnd(QuestInfoFilter.LocalQuestInfosFilter.Instance);
+
             // init category filters:
             CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
             List<CategorySet> catSets = ConfigurationManager.Current.CategorySets;

@@ -123,7 +123,6 @@ namespace QM.NFC
 
         private void OnDisable()
         {
-            Debug.Log("Destroying NFC_Connector");
             Destroy(connectorGO);
         }
 

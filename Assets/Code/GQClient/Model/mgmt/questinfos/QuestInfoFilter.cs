@@ -131,6 +131,59 @@ namespace GQ.Client.Model
             }
         }
 
+        /// <summary>
+        /// If activated it only lets local quests pass through.
+        /// </summary>
+        public class LocalQuestInfosFilter : QuestInfoFilter
+        {
+            private static LocalQuestInfosFilter _instance;
+            public static LocalQuestInfosFilter Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new LocalQuestInfosFilter();
+                    }
+                    return _instance;
+                }
+            }
+
+            private LocalQuestInfosFilter()
+            {
+                IsActive = ConfigurationManager.Current.ShowOnlyLocalQuests;
+                Author.SettingsChanged +=
+                    (object sender, System.EventArgs e) =>
+                    {
+                        IsActive = ConfigurationManager.Current.ShowOnlyLocalQuests;
+                    };
+            }
+
+            private bool _isActive;
+            public bool IsActive
+            {
+                get
+                {
+                    return _isActive;
+                }
+                set
+                {
+                    _isActive = value;
+                    RaiseFilterChangeEvent();
+                }
+            }
+
+            public override bool Accept(QuestInfo qi)
+            {
+                return (!IsActive || qi.IsOnDevice);
+            }
+
+            public override List<string> AcceptedCategories(QuestInfo qi)
+            {
+                return qi.Categories;
+            }
+        }
+
 
         public class CategoryFilter : QuestInfoFilter
         {
