@@ -9,13 +9,13 @@ public class QuestInfoSync : MonoBehaviour {
     bool updateStarted;
 	
     void Start () {
-        if (!ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
+        if (ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
         {
-            QuestInfoManager.Instance.UpdateQuestInfos();
+            QuestInfoManager.Instance.UpdateLocalQuestInfosOnly();
         }
         else
         {
-            QuestInfoManager.Instance.UpdateLocalQuestInfosOnly();
+            QuestInfoManager.Instance.UpdateQuestInfos();
         }
 
         updateStarted = true;

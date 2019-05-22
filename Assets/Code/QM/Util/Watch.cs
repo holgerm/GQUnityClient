@@ -13,7 +13,11 @@ namespace QM.Util
 		static Dictionary<string, WATCH> watches = new Dictionary<string, WATCH> ();
 
 		private Stopwatch stopwatch;
-		private string name;
+		public string Name
+        {
+            get;
+            private set;
+        }
 		private long lastTimeStamp;
 
 		public WATCH () : this (new StackFrame (1).GetMethod ().DeclaringType.Name + "." + new StackFrame (1).GetMethod ().Name)
@@ -23,7 +27,7 @@ namespace QM.Util
 		public WATCH (string name)
 		{
 			stopwatch = new Stopwatch ();
-			this.name = name;
+			this.Name = name;
 			nameOfLastStarted = name;
 			this.lastTimeStamp = 0L;
 			watches [name] = this;
@@ -42,9 +46,9 @@ namespace QM.Util
 		{
 			lastTimeStamp = 0L;
 			nameOfLastStarted = 
-				this.name == null ? 
+				this.Name == null ? 
 				new StackFrame (1).GetType ().Name + "." + new StackFrame (1).GetMethod ().Name : 
-				this.name;
+				this.Name;
 			stopwatch.Start ();
 		}
 
@@ -53,7 +57,7 @@ namespace QM.Util
 			stopwatch.Stop ();
 			UnityEngine.Debug.Log (
 				string.Format ("WATCH {0} stopped after {1} ms ({2} delta)", 
-					name, 
+					Name, 
 					stopwatch.ElapsedMilliseconds, 
 					stopwatch.ElapsedMilliseconds - lastTimeStamp
 				)
@@ -90,7 +94,7 @@ namespace QM.Util
 			stopwatch.Stop ();
 			UnityEngine.Debug.Log (
 				string.Format ("WATCH {0} at {1} took {2} ms ({3} delta)", 
-					name, 
+					Name, 
 					pointName, 
 					stopwatch.ElapsedMilliseconds, 
 					stopwatch.ElapsedMilliseconds - lastTimeStamp
