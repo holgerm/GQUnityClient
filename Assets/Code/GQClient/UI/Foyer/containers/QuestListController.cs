@@ -179,7 +179,7 @@ namespace GQ.Client.UI.Foyer
             updateListSorting();
         }
 
-        public void RegenerateAllAfterFilterChanged()
+        protected void RegenerateAllAfterFilterChanged()
         {
             if (this == null)
             {
@@ -199,8 +199,9 @@ namespace GQ.Client.UI.Foyer
                 QuestInfoUIC qiCtrl;
                 if (QuestInfoControllers.TryGetValue(info.Id, out qiCtrl))
                 {
-                    qiCtrl.Show(); // why do we need to show them here again? Aren't they still shown? Why?
-                                   // this new element was already there, hence we keep it:
+                    qiCtrl.Show(); // shows also the hidden quests again???
+
+                    // this new element was already there, hence we keep it:
                     rememberedOldIDs.Remove(info.Id);
                 }
                 else
@@ -225,7 +226,6 @@ namespace GQ.Client.UI.Foyer
                 QuestInfoControllers[oldID].Hide();
             }
 
-            updateElementOrderLayout();
             updateListSorting();
         }
 
