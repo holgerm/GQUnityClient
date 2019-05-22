@@ -200,7 +200,7 @@
     "a": 255
   },
   "showEmptyMenuEntries": false,
-  "menuEntryHeightUnits": 35.0,
+  "menuEntryHeightUnits": 45.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
   "menuEntryWidthUnits": 400.0,
@@ -224,19 +224,19 @@
     "b": 255,
     "a": 255
   },
-  "menuInhibitsInteraction": false,
+  "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
   "offerFeedback": false,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
-  "acceptedAuthorEmail": "author@email.com",
-  "acceptedAuthorPassword": "secret",
-  "listEntryHeightUnits": 45.0,
+  "acceptedAuthorEmail": "spiel@punkte.de",
+  "acceptedAuthorPassword": "sls",
+  "listEntryHeightUnits": 60.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
-  "listEntryUseTwoLines": false,
-  "listEntryDividingMode": "SeparationLines",
+  "listEntryUseTwoLines": true,
+  "listEntryDividingMode": "AlternatingColors",
   "listLineColor": {
     "r": 0,
     "g": 0,
@@ -259,22 +259,22 @@
     "a": 255
   },
   "listEntrySecondFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
   },
   "listEntrySecondBgColor": {
-    "r": 40,
-    "g": 40,
-    "b": 40,
-    "a": 0
+    "r": 60,
+    "g": 60,
+    "b": 60,
+    "a": 255
   },
   "listBgColor": {
     "r": 0,
     "g": 0,
     "b": 0,
-    "a": 0
+    "a": 255
   },
   "emulationColor": {
     "r": 247,
