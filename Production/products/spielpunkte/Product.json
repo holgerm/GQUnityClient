@@ -226,7 +226,7 @@
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
-  "offerLeaveQuestOnEachPage": true,
+  "offerLeaveQuestOnEachPage": false,
   "offerFeedback": false,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
