@@ -18,7 +18,28 @@ namespace GQTests.Model
 			Variables.Clear ();
 		}
 
-		[Test]
+        [Test]
+        public void ParseEmptyStringVar()
+        {
+            // Arrange:
+            ActionSetVariable actSetVar = parseXML<ActionSetVariable>
+                (@" <action type=""SetVariable"" var=""x"">
+                        <value>
+                            <string></string>
+                        </value>
+                    </action>");
+            actSetVar.Execute();
+
+            // Act:
+            ActionParseVariables actParseVars = parseXML<ActionParseVariables>
+                (@" <action FromVar=""x"" type=""ParseVariables""/>");
+            actParseVars.Execute();
+
+            // Assert:
+            Assert.AreEqual(Value.Type.NULL, Variables.GetValue("a"));
+        }
+
+        [Test]
 		public void ParseSingleNumVar ()
 		{
 			// Arrange:

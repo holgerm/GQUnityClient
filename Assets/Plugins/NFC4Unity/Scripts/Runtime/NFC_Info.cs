@@ -59,7 +59,7 @@ namespace QM.NFC
 			}
 			private set {
 				if (_payload == null)
-					_payload = value;
+					_payload = (value == null) ? "" : value;
 			}
 		}
 

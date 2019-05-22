@@ -45,11 +45,17 @@ namespace GQ.Client.Model
 
 			string originalText = Variables.GetValue (fromVarName).AsString ();
 
+            if (originalText == null)
+            {
+                Log.WarnAuthor("ActionParseVariable called on empty variable named ‘{0}‘.", fromVarName);
+                return;
+            }
+
 			const char DELIMITER = ',';
 
 			char[] receivedChars = originalText.ToCharArray ();
 
-			int curIndex = 0;
+            int curIndex = 0;
 			char key = '\0';
 			System.Text.StringBuilder valueBuilder;
 

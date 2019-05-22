@@ -78,10 +78,11 @@ namespace QM.NFC
         /// <param name="payload">Payload.</param>
         public void NFCReadPayload(string payload)
         {
+            string nonNullPayLoad = (payload == null ? "" : payload);
 #if UNITY_ANDROID
             foreach (NFC_Reader_I reader in RegisteredReaderUIs)
             {
-                reader.OnNFCPayloadRead(payload);
+                reader.OnNFCPayloadRead(nonNullPayLoad);
             }
 
 #elif UNITY_EDITOR
