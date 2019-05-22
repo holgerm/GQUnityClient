@@ -46,6 +46,8 @@ namespace GQ.Client.UI
             answerGiven.fontSize = ConfigurationManager.Current.mainFontSize;
             answerGiven.text = "";
             inputField.text = "";
+            inputField.Select();
+            inputField.ActivateInputField();
             forwardButton.transform.Find("Text").GetComponent<Text>().text = "Eingeben";
 
             layout.layout();
