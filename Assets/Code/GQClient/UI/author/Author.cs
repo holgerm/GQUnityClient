@@ -202,7 +202,6 @@ namespace GQ.Client.Util
                         _showDeleteOptionForLocalQuests == true ? 1 : 0
                     );
                     PlayerPrefs.Save();
-                    Author.OnSettingsChanged();
                 }
             }
         }

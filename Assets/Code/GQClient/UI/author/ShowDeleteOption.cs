@@ -21,19 +21,11 @@ public class ShowDeleteOption : MonoBehaviour {
             return;
 
         Author.ShowDeleteOptionForLocalQuests = newValue;
-        OnSettingsChanged();
-    }
-
-    public static event VoidToVoid DeleteOptionVisibilityChanged;
-
-    public static void OnSettingsChanged()
-    {
-        VoidToVoid handler = DeleteOptionVisibilityChanged;
-        if (handler != null)
+        if (DeleteOptionVisibilityChanged != null)
         {
-            handler();
+            DeleteOptionVisibilityChanged();
         }
     }
 
-
+    public static event VoidToVoid DeleteOptionVisibilityChanged;
 }

@@ -234,7 +234,7 @@ namespace GQ.Client.UI.Foyer
         {
             if (ConfigurationManager.Current.listEntryDividingMode != ListEntryDividingMode.AlternatingColors)
                 return;
-                
+
             for (int i = 0; i < InfoList.childCount; i++)
             {
                 QuestInfoUIC qic = InfoList.GetChild(i).GetComponent<QuestInfoUIC>();
@@ -262,13 +262,17 @@ namespace GQ.Client.UI.Foyer
         /// </summary>
         public override void UpdateElementViews()
         {
+            CoroutineStarter.Run(UpdateElementViewsAsCoroutine());
+        }
+
+        private IEnumerator UpdateElementViewsAsCoroutine()
+        {
             foreach (KeyValuePair<int, QuestInfoUIC> kvp in QuestInfoControllers)
             {
                 kvp.Value.UpdateView();
+                yield return null;
             }
         }
-
-
 
         #endregion
 
