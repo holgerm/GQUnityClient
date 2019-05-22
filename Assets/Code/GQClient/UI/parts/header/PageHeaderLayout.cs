@@ -25,7 +25,7 @@ namespace GQ.Client.UI
 
         protected override void setHeader()
         {
-            enableLeaveQuestButton(ConfigurationManager.Current.offerLeaveQuestOnEachPage);
+            enableLeaveQuestButton(ConfigurationManager.Current.OfferLeaveQuests);
 
             base.setHeader();
 

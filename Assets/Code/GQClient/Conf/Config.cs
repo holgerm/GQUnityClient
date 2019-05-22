@@ -592,20 +592,21 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool menu2ShownInQuests { get; set; }
 
-        [ShowInProductEditor]
-        public bool offerLeaveQuestOnEachPage
+        [ShowInProductEditor, JsonProperty]
+        internal bool offerLeaveQuestOnEachPage { get; set; }
+        [JsonIgnore]
+        public bool OfferLeaveQuests
         {
             get
             {
-                return _offerLeaveQuestOnEachPage || Author.LoggedIn;
+                return offerLeaveQuestOnEachPage || Author.LoggedIn;
             }
             set
             {
-                _offerLeaveQuestOnEachPage = value;
+                offerLeaveQuestOnEachPage = value;
             }
         }
-        [JsonIgnore]
-        private bool _offerLeaveQuestOnEachPage;
+
 
         [ShowInProductEditor]
         public bool offerFeedback { get; set; }
