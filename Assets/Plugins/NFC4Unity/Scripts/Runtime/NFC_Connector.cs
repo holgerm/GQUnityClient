@@ -35,32 +35,40 @@ namespace QM.NFC
                 return _connector;
             }
         }
-        private static List<NFC_Reader_I> registeredReaderUIs;
+        private static List<NFC_Reader_I> _registeredReaderUIs;
+        private static List<NFC_Reader_I> RegisteredReaderUIs
+        {
+            get
+            {
+                if (_registeredReaderUIs == null)
+                {
+                    _registeredReaderUIs = new List<NFC_Reader_I>();
+                }
+                return _registeredReaderUIs;
+            }
+        }
+
 
         public bool RegisterReaderUI(NFC_Reader_I newNFCReaderUI)
         {
-            if (registeredReaderUIs == null)
-            {
-                registeredReaderUIs = new List<NFC_Reader_I>();
-            }
-            if (registeredReaderUIs.Contains(newNFCReaderUI))
+            if (RegisteredReaderUIs.Contains(newNFCReaderUI))
                 return false;
             else
             {
-                registeredReaderUIs.Add(newNFCReaderUI);
+                RegisteredReaderUIs.Add(newNFCReaderUI);
                 return true;
             }
         }
 
         public bool UnregisterReaderUI(NFC_Reader_I nfcReaderUI)
         {
-            if (registeredReaderUIs == null)
+            if (RegisteredReaderUIs == null)
             {
                 return false;
             }
             else
             {
-                return registeredReaderUIs.Remove(nfcReaderUI);
+                return RegisteredReaderUIs.Remove(nfcReaderUI);
             }
         }
 
@@ -71,7 +79,7 @@ namespace QM.NFC
         public void NFCReadPayload(string payload)
         {
 #if UNITY_ANDROID
-            foreach (NFC_Reader_I reader in registeredReaderUIs)
+            foreach (NFC_Reader_I reader in RegisteredReaderUIs)
             {
                 reader.OnNFCPayloadRead(payload);
             }
@@ -92,7 +100,7 @@ namespace QM.NFC
 #if UNITY_ANDROID
             NFC_Info info = new NFC_Info(marshalledContent);
 
-            foreach (NFC_Reader_I reader in registeredReaderUIs.ToArray())
+            foreach (NFC_Reader_I reader in RegisteredReaderUIs.ToArray())
             {
                 reader.OnNFCDetailsRead(info);
             }
