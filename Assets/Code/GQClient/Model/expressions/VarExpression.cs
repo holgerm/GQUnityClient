@@ -22,8 +22,19 @@ namespace GQ.Client.Model
 
 
         #region Runtime
+        /// <summary>
+        /// Currently we can only deal with two cases: a simple variable name or arithemtic expressions. 
+        /// TODO: Boolean or string expressions are to come.
+        /// </summary>
+        /// <returns>The evaluate.</returns>
         public override Value Evaluate()
         {
+            if (Variables.IsDefined(value.AsString()))
+            {
+                Value varValue = Variables.GetValue(value.AsString());
+                return varValue;
+            }
+
             return new Value(evaluateArithmetics(value.AsString()));
         }
 

@@ -70,6 +70,12 @@ namespace GQ.Client.Model
 
         #region API
 
+        public static bool IsDefined(string varName)
+        {
+            Value foundValue;
+            return variables.TryGetValue(varName, out foundValue);
+        }
+
         /// <summary>
         /// Get the Value of the Variables with the specified varName or Value.Null if no such variable is found. This method will never return null.
         /// </summary>
