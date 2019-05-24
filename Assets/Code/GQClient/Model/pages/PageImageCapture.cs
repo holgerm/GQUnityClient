@@ -18,12 +18,14 @@ namespace GQ.Client.Model
 
 		public string Task { get; set; }
 
-		#endregion
+        public bool PreferFrontCam { get; set; }
+
+        #endregion
 
 
-		#region XML Serialization
+        #region XML Serialization
 
-		protected override void ReadAttributes (XmlReader reader)
+        protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
 
@@ -32,7 +34,9 @@ namespace GQ.Client.Model
 			File = GQML.GetStringAttribute (GQML.PAGE_IMAGECAPTURE_FILE, reader);
 
 			Task = GQML.GetStringAttribute (GQML.PAGE_IMAGECAPTURE_TASK, reader);
-		}
+
+            PreferFrontCam = GQML.GetOptionalBoolAttribute(GQML.PAGE_IMAGECAPTURE_PREFER_FRONT_CAM, reader);
+        }
 
 		#endregion
 
