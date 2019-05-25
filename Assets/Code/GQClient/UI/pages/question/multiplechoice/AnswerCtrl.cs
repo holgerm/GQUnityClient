@@ -44,17 +44,18 @@ public class AnswerCtrl : MonoBehaviour
 
 	public void Select ()
 	{
-		page.Result = answer.Text;
+		page.Result = answer.Text.MakeReplacements();
 		if (answer.Correct) {
 			page.Succeed ();
 		} else {
+            page.Fail(alsoEnd: false);
             if (page.RepeatUntilSuccess)
             {
                 ((MultipleChoiceQuestionController)page.PageCtrl).Repeat();
             }
             else
             {
-                page.Fail();
+                page.Fail(alsoEnd: true);
             }
 		}
 	}
