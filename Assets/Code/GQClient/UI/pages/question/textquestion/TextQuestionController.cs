@@ -55,6 +55,8 @@ namespace GQ.Client.UI
 
         public override void OnForward()
         {
+            tqPage.Result = answerGiven.text;
+
             if (tqPage.AnswerCorrect(answerGiven.text))
             {
                 tqPage.Succeed();
