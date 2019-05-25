@@ -20,7 +20,7 @@ namespace GQ.Client.Util
 
         public static string MakeReplacements(this string rawText)
         {
-            if (rawText == null)
+            if (string.IsNullOrEmpty(rawText))
             {
                 return "";
             }
