@@ -70,24 +70,27 @@ namespace GQ.Client.UI
 
         void ShowImage()
         {
+            // allow for variables inside the image url:
+            string rtImageUrl = npcPage.ImageUrl.MakeReplacements();
+
             // show (or hide completely) image:
-            if (npcPage.ImageUrl == "")
+            if (rtImageUrl == "")
             {
                 imagePanel.SetActive(false);
                 return;
             }
 
             AbstractDownloader loader;
-            if (npcPage.Parent.MediaStore.ContainsKey(npcPage.ImageUrl))
+            if (npcPage.Parent.MediaStore.ContainsKey(rtImageUrl))
             {
                 MediaInfo mediaInfo;
-                npcPage.Parent.MediaStore.TryGetValue(npcPage.ImageUrl, out mediaInfo);
+                npcPage.Parent.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
                 loader = new LocalFileLoader(mediaInfo.LocalPath);
             }
             else
             {
                 loader = new Downloader(
-                    url: npcPage.ImageUrl,
+                    url: rtImageUrl,
                     timeout: ConfigurationManager.Current.timeoutMS,
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
                 );

@@ -33,20 +33,24 @@ namespace GQ.Client.UI
 
 			// show (or hide completely) image:
 			GameObject imagePanel = image.transform.parent.gameObject;
-			if (iwtPage.ImageUrl == "") {
+
+            // allow for variables inside the image url:
+            string rtImageUrl = iwtPage.ImageUrl.MakeReplacements();
+
+            if (rtImageUrl == "") {
 				imagePanel.SetActive (false);
 				return;
 			} else {
 				imagePanel.SetActive (true);
 				AbstractDownloader loader;
-				if (iwtPage.Parent.MediaStore.ContainsKey (iwtPage.ImageUrl)) {
+				if (iwtPage.Parent.MediaStore.ContainsKey (rtImageUrl)) {
 					MediaInfo mediaInfo;
-					iwtPage.Parent.MediaStore.TryGetValue (iwtPage.ImageUrl, out mediaInfo);
+					iwtPage.Parent.MediaStore.TryGetValue (rtImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
 					loader = 
 						new Downloader (
-						url: iwtPage.ImageUrl, 
+						url: rtImageUrl, 
 						timeout: ConfigurationManager.Current.timeoutMS,
 						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
 					);

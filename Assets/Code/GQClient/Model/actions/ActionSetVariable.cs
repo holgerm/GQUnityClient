@@ -4,6 +4,7 @@ using GQ.Client.Model;
 using System.Xml.Serialization;
 using GQ.Client.Err;
 using System.Xml;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -59,7 +60,7 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			Variables.SetVariableValue (VarName, valueExpression.Evaluate ());
+			Variables.SetVariableValue (VarName.MakeReplacements(), valueExpression.Evaluate ());
 		}
 
 		#endregion

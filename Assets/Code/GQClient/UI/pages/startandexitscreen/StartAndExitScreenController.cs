@@ -58,7 +58,11 @@ namespace GQ.Client.UI
         {
             // show (or hide completely) image:
             GameObject imagePanel = image.transform.parent.gameObject;
-            if (myPage.ImageUrl == "")
+
+            // allow for variables inside the image url:
+            string rtImageUrl = myPage.ImageUrl.MakeReplacements();
+
+            if (rtImageUrl == "")
             {
                 imagePanel.SetActive(false);
                 return;
@@ -67,17 +71,17 @@ namespace GQ.Client.UI
             {
                 imagePanel.SetActive(true);
                 AbstractDownloader loader;
-                if (myPage.Parent.MediaStore.ContainsKey(myPage.ImageUrl))
+                if (myPage.Parent.MediaStore.ContainsKey(rtImageUrl))
                 {
                     MediaInfo mediaInfo;
-                    myPage.Parent.MediaStore.TryGetValue(myPage.ImageUrl, out mediaInfo);
+                    myPage.Parent.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
                     loader = new LocalFileLoader(mediaInfo.LocalPath);
                 }
                 else
                 {
                     loader =
                         new Downloader(
-                        url: myPage.ImageUrl,
+                        url: rtImageUrl,
                         timeout: ConfigurationManager.Current.timeoutMS,
                         maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
                     );
