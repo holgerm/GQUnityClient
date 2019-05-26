@@ -8,6 +8,7 @@ using GQ.Client.Util;
 using System.IO;
 using GQ.Client.FileIO;
 using GQ.Client.Err;
+using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {
@@ -226,15 +227,7 @@ namespace GQ.Client.UI
             else
                 Debug.Log("CAMERA: ERROR tring to save shot to file: " + filepath);
 
-
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                //				GetComponent<AndroidCamera> ().SaveImageToGallery (texture, filename);
-            }
-            if (Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                //				GetComponent<IOSCamera> ().SaveTextureToCameraRoll (texture);
-            }
+            NativeGallery.SaveImageToGallery(texture, ConfigurationManager.Current.name, filename);
         }
         #endregion
     }
