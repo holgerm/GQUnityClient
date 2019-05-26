@@ -24,6 +24,7 @@
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "MetaData"
   ],
@@ -40,6 +41,7 @@
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
+  "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
@@ -104,7 +106,7 @@
         },
         {
           "id": "slsspiele.bauspiel",
-          "name": "Bauen & Konstruieren",
+          "name": "Bauen",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typbauen"
@@ -136,7 +138,7 @@
         },
         {
           "id": "slsspiele.geschicklichkeit",
-          "name": "Geschicklichkeit",
+          "name": "Geschick",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typgeschicklichkeit"
@@ -152,7 +154,7 @@
         },
         {
           "id": "slsspiele.kooperationsspiel",
-          "name": "Kooperationsspiele",
+          "name": "Kooperation",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typkooperation"
@@ -184,7 +186,7 @@
         },
         {
           "id": "slsspiele.schreiben_malen",
-          "name": "Schreiben und Malen",
+          "name": "Schreiben & Malen",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typmalen"
@@ -192,7 +194,7 @@
         },
         {
           "id": "slsspiele.suchspiel",
-          "name": "Suchen",
+          "name": "Suchspiele",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/typsuchen"
@@ -287,7 +289,7 @@
       "categories": [
         {
           "id": "slsspiele.sonne",
-          "name": "Gutes Wetter",
+          "name": "Sonnig",
           "folderName": "",
           "symbol": {
             "path": "textures/readable/wettersonne"
@@ -443,7 +445,7 @@
   "menuEntryHeightUnits": 45.0,
   "menuEntryHeightMinMM": 5.0,
   "menuEntryHeightMaxMM": 0.0,
-  "menuEntryWidthUnits": 330.0,
+  "menuEntryWidthUnits": 380.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuFrameColor": {
@@ -516,7 +518,6 @@
     "b": 215,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 250,
     "g": 105,
