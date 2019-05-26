@@ -12,17 +12,14 @@ namespace GQ.Client.UI
     {
 
         #region Inspector Features
-
         public Text questionText;
         public InputField inputField;
         public Text promptPlaceholder;
         public Text answerGiven;
-
         #endregion
 
 
         #region Runtime API
-
         public PageTextQuestion tqPage
         {
             get;
@@ -48,7 +45,7 @@ namespace GQ.Client.UI
             inputField.text = "";
             inputField.Select();
             inputField.ActivateInputField();
-            forwardButton.transform.Find("Text").GetComponent<Text>().text = "Eingeben";
+            forwardButton.transform.Find("Text").GetComponent<Text>().text = "Bestätigen";
 
             layout.layout();
         }
@@ -59,22 +56,21 @@ namespace GQ.Client.UI
 
             if (tqPage.AnswerCorrect(answerGiven.text))
             {
-                tqPage.Succeed();
+                tqPage.Succeed(alsoEnd: true);
             }
             else
             {
                 if (tqPage.RepeatUntilSuccess)
                 {
+                    tqPage.Fail(alsoEnd: false);
                     ((TextQuestionController)tqPage.PageCtrl).Repeat();
                 }
                 else
                 {
-                    tqPage.Fail();
+                    tqPage.Fail(alsoEnd: true);
                 }
-
             }
         }
-
         #endregion
     }
 }

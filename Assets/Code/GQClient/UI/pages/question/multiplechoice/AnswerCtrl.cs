@@ -46,12 +46,12 @@ public class AnswerCtrl : MonoBehaviour
 	{
 		page.Result = answer.Text.MakeReplacements();
 		if (answer.Correct) {
-			page.Succeed ();
+			page.Succeed (alsoEnd: true);
 		} else {
-            page.Fail(alsoEnd: false);
             if (page.RepeatUntilSuccess)
             {
-                ((MultipleChoiceQuestionController)page.PageCtrl).Repeat();
+                    page.Fail(alsoEnd: false);
+                    ((MultipleChoiceQuestionController)page.PageCtrl).Repeat();
             }
             else
             {

@@ -10716,7 +10716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &1264570028
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17413,16 +17413,6 @@ Prefab:
       propertyPath: m_Name
       value: ImpressumRadio
       objectReference: {fileID: 0}
-    - target: {fileID: 224563822903590466, guid: 77450e40e26324228950d5edbc91466f,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 310.37823
-      objectReference: {fileID: 0}
-    - target: {fileID: 224563822903590466, guid: 77450e40e26324228950d5edbc91466f,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 97.9004
-      objectReference: {fileID: 0}
     - target: {fileID: 224995598640514866, guid: 77450e40e26324228950d5edbc91466f,
         type: 2}
       propertyPath: m_AnchoredPosition.x
@@ -17433,12 +17423,16 @@ Prefab:
       propertyPath: m_SizeDelta.x
       value: 231.42804
       objectReference: {fileID: 0}
-    - target: {fileID: 114859511138523028, guid: 77450e40e26324228950d5edbc91466f,
+    - target: {fileID: 224563822903590466, guid: 77450e40e26324228950d5edbc91466f,
         type: 2}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 3e04cab0a429342dab0f4677c708e9fe,
-        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 310.37823
+      objectReference: {fileID: 0}
+    - target: {fileID: 224563822903590466, guid: 77450e40e26324228950d5edbc91466f,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 97.9004
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77450e40e26324228950d5edbc91466f, type: 2}
   m_IsPrefabAsset: 0
