@@ -223,7 +223,7 @@ namespace GQ.Client.Model
 
         #region Util Functions
 
-        private const string VARNAME_USERDEFINED_REGEXP = @"(?!$)[a-zA-Z]+[a-zA-Z0-9_.]*";
+        private const string VARNAME_USERDEFINED_REGEXP = @"(?!$)[a-zA-Z_]+[a-zA-Z0-9_.]*";
         private const string VARNAME_REGEXP = @"(\$?|\$_)?[a-zA-Z]+[a-zA-Z0-9_.]*";
         private const string REGEXP_START = @"^";
         private const string REGEXP_END = @"$";
