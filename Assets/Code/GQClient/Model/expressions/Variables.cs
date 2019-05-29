@@ -72,8 +72,7 @@ namespace GQ.Client.Model
 
         public static bool IsDefined(string varName)
         {
-            Value foundValue;
-            return variables.TryGetValue(varName, out foundValue);
+            return GetValue(varName) != Value.Null;
         }
 
         /// <summary>
@@ -208,7 +207,8 @@ namespace GQ.Client.Model
                 {
                     return new Value(page.Result, Value.Type.Text);
                 }
-                else if (varName.EndsWith(GQML.VAR_PAGE_STATE))
+
+                if (varName.EndsWith(GQML.VAR_PAGE_STATE))
                 {
                     return new Value(page.State, Value.Type.Text);
                 }
