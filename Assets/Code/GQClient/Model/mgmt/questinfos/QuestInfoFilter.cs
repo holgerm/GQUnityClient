@@ -151,12 +151,7 @@ namespace GQ.Client.Model
 
             private LocalQuestInfosFilter()
             {
-                IsActive = ConfigurationManager.Current.ShowOnlyLocalQuests;
-                Author.SettingsChanged +=
-                    (object sender, System.EventArgs e) =>
-                    {
-                        IsActive = ConfigurationManager.Current.ShowOnlyLocalQuests;
-                    };
+                IsActive = Author.ShowOnlyLocalQuests;
             }
 
             private bool _isActive;
