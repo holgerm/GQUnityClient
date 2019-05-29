@@ -25,6 +25,7 @@
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
