@@ -130,13 +130,6 @@ namespace GQ.Client.UI
 
         }
 
-        //		public void Update () {
-        //			Debug.Log ("########### CAMERA: 7");
-        //			Debug.Log ("Camera name: " + cameraTexture.deviceName);
-        //			Debug.Log ("Camera isPLaying: " + cameraTexture.isPlaying);
-        //			Debug.Log ("Camera height: " + cameraTexture.requestedHeight + " width: " + cameraTexture.requestedWidth);
-        //		}
-        //
         public void TakeSnapshot()
         {
 
@@ -166,7 +159,9 @@ namespace GQ.Client.UI
             rotatedClockwiseQuarters /= 90;  // going from degrees to quarters
             rotatedClockwiseQuarters %= 4; // reducing to 0, 1 ,2 or 3 quarters
 
+            cameraTexture.Pause();
             Color[] pixels = cameraTexture.GetPixels();
+            cameraTexture.Stop();
 
             switch (rotatedClockwiseQuarters)
             {
@@ -189,11 +184,6 @@ namespace GQ.Client.UI
                     break;
             }
             photo.Apply();
-
-            cameraTexture.Stop();
-
-            //			QuestRuntimeAsset qra = new QuestRuntimeAsset ("@_" + myPage.File, photo);
-            //			actioncontroller.addPhoto (qra);
 
             SaveTextureToCamera(photo);
 
@@ -227,7 +217,15 @@ namespace GQ.Client.UI
             else
                 Debug.Log("CAMERA: ERROR tring to save shot to file: " + filepath);
 
-            NativeGallery.SaveImageToGallery(texture, ConfigurationManager.Current.name, filename);
+            NativeGallery.Permission permission = NativeGallery.RequestPermission();
+            if (permission == NativeGallery.Permission.Denied && NativeGallery.CanOpenSettings())
+            {
+                NativeGallery.OpenSettings();
+            }
+            permission = NativeGallery.SaveImageToGallery(texture, ConfigurationManager.Current.name, filename);
+            Debug.Log("PHOTO EXPORTED: " + permission.ToString());
+
+            Destroy(texture); // avoid memory leaks
         }
         #endregion
     }
