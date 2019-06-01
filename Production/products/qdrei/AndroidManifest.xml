@@ -29,10 +29,13 @@
             <meta-data android:name = "unityplayer.UnityActivity" android:value = "true"/>
             <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
         </activity>
-   </application>
+    </application>
     <uses-permission android:name="android.permission.INTERNET" />
-   <uses-feature android:name="android.hardware.location.gps" android:required="true" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="true" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
     <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="true" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 </manifest>
 <!-- product id: qdrei -->
