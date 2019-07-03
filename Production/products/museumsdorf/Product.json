@@ -25,6 +25,7 @@
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
@@ -57,6 +58,7 @@
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
+  "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
@@ -216,9 +218,9 @@
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 144,
-    "g": 238,
-    "b": 140,
+    "r": 92,
+    "g": 146,
+    "b": 158,
     "a": 255
   },
   "footerButtonFgColor": {
@@ -232,10 +234,10 @@
   "overlayButtonSizeMinMM": 6.0,
   "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 83,
-    "g": 237,
-    "b": 77,
-    "a": 169
+    "r": 92,
+    "g": 146,
+    "b": 158,
+    "a": 141
   },
   "overlayButtonFgColor": {
     "r": 51,
@@ -288,13 +290,13 @@
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 221,
+    "g": 221,
+    "b": 221,
     "a": 255
   },
   "listStartLineWidth": 7,
-  "dividingLineWidth": 7,
+  "dividingLineWidth": 5,
   "listEndLineWidth": 7,
   "listEntryFgColor": {
     "r": 0,
@@ -303,9 +305,9 @@
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 13,
-    "g": 218,
-    "b": 29,
+    "r": 92,
+    "g": 146,
+    "b": 158,
     "a": 255
   },
   "listEntrySecondFgColor": {
@@ -321,12 +323,11 @@
     "a": 0
   },
   "listBgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 117,
+    "g": 117,
+    "b": 117,
     "a": 77
   },
-  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 252,
     "g": 115,
