@@ -287,6 +287,8 @@
   ],
   "defaultCategory": null,
   "disabledAlpha": 0.5,
+  "hideFooterIfPossible": true,
+  "autoScrollNewText": false,
   "mainFgColor": {
     "r": 0,
     "g": 0,
