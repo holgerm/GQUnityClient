@@ -37,13 +37,15 @@ namespace GQ.Client.Model
 
 			if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.THEN)) {
 				ReadThenOrElseElement (reader);
-			} else {
-				Log.SignalErrorToDeveloper ("If Action without THEN element found.");
-				reader.Skip ();
-				return;
 			}
+            else
+            {
+                Log.SignalErrorToDeveloper("If Action without THEN element found.");
+                reader.Skip();
+                return;
+            }
 
-			if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.ELSE)) {
+            if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.ELSE)) {
 				ReadThenOrElseElement (reader);
 			} 
 
@@ -74,9 +76,12 @@ namespace GQ.Client.Model
 			serializer = new XmlSerializer (typeof(Condition), xmlRootAttr);
 			condition = (Condition)serializer.Deserialize (reader);
 			condition.Parent = this;
-		}
 
-		public void ReadThenOrElseElement (System.Xml.XmlReader reader)
+            // consume the end element of the condition element:
+            reader.Read();
+        }
+
+        public void ReadThenOrElseElement (System.Xml.XmlReader reader)
 		{
 			string branchName = reader.LocalName;
 
