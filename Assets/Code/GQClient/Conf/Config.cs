@@ -6,7 +6,6 @@ using Newtonsoft.Json.Converters;
 using GQ.Client.FileIO;
 using GQ.Client.UI;
 using GQ.Client.Util;
-using GQ.Client.Err;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -56,7 +55,6 @@ namespace GQ.Client.Conf
 #if UNITY_EDITOR
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        //[JsonConverter(typeof(AndroidSdkVersionsConverter))]
         public AndroidSdkVersions androidMinSDKVersion { get; set; }
 #endif
 
@@ -437,6 +435,15 @@ namespace GQ.Client.Conf
         #endregion
 
 
+        #region UI Strategies
+        [ShowInProductEditor(StartSection = "UI Strategies:")]
+        public bool hideFooterIfPossible { get; set; }
+
+        [ShowInProductEditor]
+        public bool autoScrollNewText { get; set; }
+        #endregion
+
+
         #region Layout
         [ShowInProductEditor(StartSection = "Layout & Colors:")]
         [JsonConverter(typeof(Color32Converter))]
@@ -767,6 +774,10 @@ namespace GQ.Client.Conf
             mapButtonHeightUnits = 55f;
             mapButtonHeightMinMM = 7f;
             mapButtonHeightMaxMM = 12f;
+
+            // UI Strategies:
+            hideFooterIfPossible = false;
+            autoScrollNewText = true;
 
             // Layout:
             mainBgColor = Color.white;

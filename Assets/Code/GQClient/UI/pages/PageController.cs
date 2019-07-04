@@ -84,6 +84,15 @@ namespace GQ.Client.UI
             Transform backButtonGO = FooterButtonPanel.transform.Find("BackButton");
             backButtonGO.gameObject.SetActive(page.Quest.History.CanGoBackToPreviousPage);
 
+            if (ConfigurationManager.Current.hideFooterIfPossible)
+            {
+                Transform footer = FooterButtonPanel.transform.parent;
+                if (!page.HasEndEvents() && !backButtonGO.gameObject.activeInHierarchy)
+                {
+                    footer.gameObject.SetActive(false);
+                }
+            }
+
             page.TriggerOnStart();
 
 			InitPage_TypeSpecific ();

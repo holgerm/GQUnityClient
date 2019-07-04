@@ -39,7 +39,7 @@ namespace GQ.Client.UI
             }
             catch (InvalidCastException)
             {
-                Debug.Log(("InvalidCastException: NPCTalk Page foun a page of type " + page.GetType()));    
+                Debug.Log(("InvalidCastException: NPCTalk Page foun a page of type " + page.GetType()));
             }
 
             // show the content:
@@ -168,13 +168,15 @@ namespace GQ.Client.UI
             if (npcPage.CurrentDialogItem.AudioURL != null && npcPage.CurrentDialogItem.AudioURL != "")
                 duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
 
-            if (Math.Abs(duration) < 0.01)
-                duration = currentText.Length / 14f;
-            // ca. 130 Worten à 6,5 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
+            if (ConfigurationManager.Current.autoScrollNewText)
+            {
+                if (Math.Abs(duration) < 0.01)
+                    duration = currentText.Length / 14f;
+                // ca. 130 Worten à 6,5 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
 
-            // scroll to bottom:
-            Base.Instance.StartCoroutine(adjustScrollRect(duration));
-
+                // scroll to bottom:
+                Base.Instance.StartCoroutine(adjustScrollRect(duration));
+            }
         }
 
         void UpdateForwardButton()
@@ -195,7 +197,8 @@ namespace GQ.Client.UI
             do
             {
                 usedTime += Time.deltaTime;
-                newPos = Mathf.Lerp(startPosition, 0f, usedTime / timespan);
+                float share = timespan <= usedTime ? 1f : usedTime / timespan;
+                newPos = Mathf.Lerp(startPosition, 0f, share);
                 contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = newPos;
 
                 yield return null;

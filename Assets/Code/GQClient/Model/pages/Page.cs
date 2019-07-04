@@ -88,11 +88,6 @@ namespace GQ.Client.Model
 
         }
 
-        internal void TriggerOnStart()
-        {
-            StartTrigger.Initiate();
-        }
-
         /// <summary>
         /// If you enhance this method by overriding it in subtypes to process additional content, 
         /// you should first process the additional content or alternatives and at the end 
@@ -129,10 +124,15 @@ namespace GQ.Client.Model
         protected Trigger StartTrigger = Trigger.Null;
         protected Trigger EndTrigger = Trigger.Null;
 
+        public bool HasEndEvents()
+        {
+            return (EndTrigger != Trigger.Null && !EndTrigger.IsEmptyOrEndGameOnly());
+        }
+
         #endregion
 
 
-        #region State
+        #region Runtime
 
         public Page()
         {
@@ -172,6 +172,11 @@ namespace GQ.Client.Model
             }
         }
 
+        internal void TriggerOnStart()
+        {
+            StartTrigger.Initiate();
+        }
+
         private string result = "";
 
         public string Result
@@ -198,10 +203,6 @@ namespace GQ.Client.Model
                       + "\n\tscene: " + scene.path
                       + "\n\tframe: " + Time.frameCount;
         }
-
-        #endregion
-
-        #region Runtime API
 
         public PageController PageCtrl
         {
@@ -309,9 +310,12 @@ namespace GQ.Client.Model
             // ensure that the adequate scene is loaded:
             Scene scene = SceneManager.GetActiveScene();
 
+            Debug.Log("PAGE.Start(): ## BEFORE Scene Name Check page: " + Id);
+
             if (!scene.name.Equals(PageSceneName))
             {
                 SceneManager.sceneLoaded += InitOnSceneLoaded;
+                Debug.Log("PAGE.Start(): ## DIFFERENT SCENE NAME --- InitOnSceneLoaded Registered");
 
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
@@ -321,6 +325,8 @@ namespace GQ.Client.Model
             }
             else
             {
+                Debug.Log("PAGE.Start(): ## SAME SCENE NAME -- REUSING SCENE");
+
                 QuestManager.Instance.PageReadyToStart = true; // in case of reuse we do not need to block & wait 
                 Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);

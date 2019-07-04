@@ -38,6 +38,21 @@ namespace GQ.Client.Model
         /// </summary>
         protected List<Rule> containedRules = new List<Rule>();
 
+        public bool IsEmptyOrEndGameOnly()
+        {
+            foreach (Rule curRule in containedRules)
+            {
+                foreach (IAction curAction in curRule.containedActions)
+                {
+                    if (!(curAction is ActionEndGame))
+                        // some other action found than EndGame:
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Reads the xml within a given rule element until it finds an action element. 
         /// It then delegates further parsing to the specific action subclass depending on the actions type attribute.
