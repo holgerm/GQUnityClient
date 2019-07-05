@@ -244,12 +244,7 @@ namespace GQ.Client.Model
 		{
 			string attString = getAttr (attributeName, "Int", reader);
 			int val = defaultVal;
-			if (!Int32.TryParse (attString, out val)) {
-				Log.SignalErrorToDeveloper (
-					"Int attribute {0} for a page could not be parsed. We found: '{1}'.", 
-					attributeName, 
-					attString);
-			}
+            Int32.TryParse(attString, out val);
 
 			return val;
 		}
@@ -258,13 +253,7 @@ namespace GQ.Client.Model
 		{
 			string attString = getAttr (attributeName, "Long", reader);
 			long val = defaultVal;
-			if (!Int64.TryParse (attString, out val)) {
-				Log.SignalErrorToDeveloper (
-					"Long attribute {0} for a page could not be parsed. We found: '{1}'.", 
-					attributeName, 
-					attString);
-			}
-
+            Int64.TryParse(attString, out val);
 			return val;
 		}
 
@@ -272,12 +261,7 @@ namespace GQ.Client.Model
 		{
 			string attString = getAttr (attributeName, "Double", reader);
 			double val = defaultVal;
-			if (!Double.TryParse (attString, out val)) {
-				Log.SignalErrorToDeveloper (
-					"Double attribute {0} for a page could not be parsed. We found: '{1}'.", 
-					attributeName, 
-					attString);
-			}
+            Double.TryParse(attString, out val);
 
 			return val;
 		}

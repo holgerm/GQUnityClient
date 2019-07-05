@@ -478,7 +478,7 @@ namespace GQ.Client.Model
         {
             Name = GQML.GetStringAttribute(GQML.QUEST_NAME, reader);
             XmlFormat = GQML.GetStringAttribute(GQML.QUEST_XMLFORMAT, reader);
-            LastUpdate = GQML.GetLongAttribute(GQML.QUEST_LASTUPDATE, reader);
+            LastUpdate = GQML.GetLongAttribute(GQML.QUEST_LASTUPDATE, reader, 0L);
             IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader, defaultVal: false);
         }
 
