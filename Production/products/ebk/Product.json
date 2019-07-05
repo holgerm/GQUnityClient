@@ -25,6 +25,7 @@
   "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
@@ -57,6 +58,7 @@
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
+  "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
@@ -212,6 +214,8 @@
   ],
   "defaultCategory": "ebk.default",
   "disabledAlpha": 0.5,
+  "hideFooterIfPossible": false,
+  "autoScrollNewText": true,
   "mainFgColor": {
     "r": 0,
     "g": 43,
@@ -385,7 +389,6 @@
     "b": 203,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 247,
     "g": 80,
