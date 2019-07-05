@@ -38,12 +38,6 @@ namespace GQ.Client.Model
 			if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.THEN)) {
 				ReadThenOrElseElement (reader);
 			}
-            else
-            {
-                Log.SignalErrorToDeveloper("If Action without THEN element found.");
-                reader.Skip();
-                return;
-            }
 
             if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.ELSE)) {
 				ReadThenOrElseElement (reader);
