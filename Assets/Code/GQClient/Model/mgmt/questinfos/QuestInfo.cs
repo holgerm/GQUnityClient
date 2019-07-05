@@ -669,9 +669,12 @@ namespace GQ.Client.Model
         /// <summary>
         /// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
         /// </summary>
-        public void Download()
+        public void Download(Task.TaskCallback callbackAfterCompetion = null)
         {
             Task download = DownloadTask();
+            if (callbackAfterCompetion != null)
+                download.OnTaskCompleted += callbackAfterCompetion;
+
             // Update the quest info list ...
             download.OnTaskCompleted +=
                 (object sender, TaskEventArgs e) =>
@@ -695,16 +698,18 @@ namespace GQ.Client.Model
         /// 2. The represented quest game.xml is downloaded and replaces the old version.
         /// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
         /// </summary>
-        public void Update()
+        public void Update(Task.TaskCallback callbackAfterCompletion = null)
         {
             // update the quest info:
             if (NewVersionOnServer != null)
             {
                 //				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
                 Task download = NewVersionOnServer.DownloadTask();
+                if (callbackAfterCompletion != null)
+                    download.OnTaskEnded += callbackAfterCompletion;
 
                 // Update the quest info list ...
-                download.OnTaskCompleted +=
+                download.OnTaskEnded +=
                     (object sender, TaskEventArgs e) =>
                     {
                         QuestContentHasBeenUpdated();
@@ -771,7 +776,7 @@ namespace GQ.Client.Model
         /// <summary>
         /// Starts the local quest represented by this info. Is called from the UI (Button e.g.).
         /// </summary>
-        public Task Play()
+        public void Play(Task.TaskCallback callbackAfterCompletion = null)
         {
             // Close menu if open:
             Base.Instance.MenuCanvas.SetActive(false);
@@ -779,13 +784,15 @@ namespace GQ.Client.Model
             if (!IsOnDevice && !IsOnServer)
             {
                 Log.SignalErrorToAuthor("Unable to load missing quest with id {0} - not found.", Id);
-                return null;
+                return;
             }
+
+            Task playTask = null;
 
             if (!IsOnDevice && IsOnServer)
             {
                 // TODO config flag for auto-loads or even auto-update??
-                return CreateLoadAndPlayTask();
+                playTask = CreateLoadAndPlayTask();
             }
 
             // ------------------------------
@@ -793,10 +800,14 @@ namespace GQ.Client.Model
 
             if (IsOnDevice && HasUpdate && ConfigurationManager.Current.autoUpdateSubquests)
             {
-                return CreateLoadAndPlayTask();
+                playTask = CreateLoadAndPlayTask();
             }
 
-            return CreatePlayTask();
+            if (playTask == null)
+                playTask = CreatePlayTask();
+
+            playTask.OnTaskEnded += callbackAfterCompletion;
+            playTask.Start();
         }
 
         private Task CreateLoadAndPlayTask()
@@ -820,7 +831,7 @@ namespace GQ.Client.Model
         /// Creates a task that just plays the locally existing quest, checks have to applied beforehand:
         /// </summary>
         /// <returns>The play.</returns>
-        protected Task CreatePlayTask()
+        private Task CreatePlayTask()
         {
             // Load quest data: game.xml
             LocalFileLoader loadGameXML =

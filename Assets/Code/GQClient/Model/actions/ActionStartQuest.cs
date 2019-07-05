@@ -68,7 +68,7 @@ namespace GQ.Client.Model
             }
             else
             {
-                qi.Play().Start();
+                qi.Play();
             }
         }
 

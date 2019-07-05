@@ -130,7 +130,7 @@ namespace GQ.Client.UI.Foyer
                 namebuttonEvent.RemoveAllListeners();
                 namebuttonEvent.AddListener(() =>
                 {
-                    data.Play().Start();
+                    data.Play();
                 });
             }
             else
@@ -156,7 +156,7 @@ namespace GQ.Client.UI.Foyer
 
         public void Play()
         {
-            data.Play().Start();
+            data.Play();
         }
 
         public void UpdateQuest()
@@ -212,14 +212,14 @@ namespace GQ.Client.UI.Foyer
             {
                 namebuttonEvent.AddListener(() =>
                 {
-                    data.Download();
+                    Download();
                 });
             }
             if (data.IsOnDevice)
             {
                 namebuttonEvent.AddListener(() =>
                 {
-                    data.Play().Start();
+                    Play();
                 });
             }
 
