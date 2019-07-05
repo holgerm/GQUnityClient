@@ -267,11 +267,7 @@ namespace GQTests.Model.Deserialization
 			Assert.NotNull (npcPage);
 			Assert.AreEqual ("Ende", npcPage.EndButtonText);
 			Assert.AreEqual ("http://qeevee.org:9091/uploadedassets/21/editor/10370/1_bibliothekneuaubing.jpg", npcPage.ImageUrl);
-			Assert.AreEqual (GQML.PAGE_NPCTALK_DISPLAYMODE_ALL_AT_ONCE, npcPage.DisplayMode);
 			Assert.AreEqual ("Weiter", npcPage.NextDialogButtonText);
-			Assert.IsTrue (npcPage.SkipWordTicker);
-			Assert.AreEqual (20, npcPage.TextSize);
-			Assert.AreEqual (50, npcPage.TickerSpeed);
 		}
 
 		[Test]

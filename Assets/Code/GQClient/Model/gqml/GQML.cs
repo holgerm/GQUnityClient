@@ -75,13 +75,7 @@ namespace GQ.Client.Model
 		public const string PAGE_NPCTALK_ENDBUTTONTEXT = "endbuttontext";
 		public const string PAGE_NPCTALK_IMAGEURL = "image";
         public const string PAGE_NPCTALK_TEXT = "text";
-		public const string PAGE_NPCTALK_DISPLAYMODE = "mode";
-		public const string PAGE_NPCTALK_DISPLAYMODE_ALL_AT_ONCE = "Komplett anzeigen";
-		public const string PAGE_NPCTALK_DISPLAYMODE_WORD_BY_WORD = "Wordticker";
 		public const string PAGE_NPCTALK_NEXTBUTTONTEXT = "nextdialogbuttontext";
-		public const string PAGE_NPCTALK_SKIPWORDTICKER = "skipwordticker";
-		public const string PAGE_NPCTALK_TEXTSIZE = "textsize";
-		public const string PAGE_NPCTALK_TICKERSPEED = "tickerspeed";
 		// DIALOG_ITEM:
 		public const string PAGE_NPCTALK_DIALOGITEM = "dialogitem";
 		public const string PAGE_NPCTALK_DIALOGITEM_BLOCKING = "blocking";

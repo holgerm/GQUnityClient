@@ -45,14 +45,6 @@ namespace GQ.Client.Model
 
         public string NextDialogButtonText { get; set; }
 
-		public string DisplayMode { get; set; }
-
-		public bool SkipWordTicker { get; set; }
-
-		public int TextSize { get; set; }
-
-		public int TickerSpeed { get; set; }
-
 		protected List<DialogItem> dialogItems = new List<DialogItem> ();
 
 		public int NumberOfDialogItems ()
@@ -127,15 +119,15 @@ namespace GQ.Client.Model
 
             Text = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_TEXT, reader);
 
-            DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
+            //DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
 
 			NextDialogButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
 
-			SkipWordTicker = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader);
+			//SkipWordTicker = GQML.GetOptionalBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader, true);
 
-			TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
+			//TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
 
-			TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader);
+			//TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader, 0);
 		}
 
 		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
