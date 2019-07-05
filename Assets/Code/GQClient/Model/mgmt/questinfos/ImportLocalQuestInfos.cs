@@ -29,7 +29,6 @@ namespace GQ.Client.Model
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GQ.Client.Model.ImportQuestInfosFromJSON"/> class.
 		/// </summary>
-		/// <param name="importFromServer">If set to <c>true</c> import from server otherwise use the local infos.json file.</param>
 		public ImportLocalQuestInfos () : base ()
 		{ 
 			// import from local quest json file:
@@ -43,7 +42,12 @@ namespace GQ.Client.Model
 			}
 		}
 
-		protected override void updateQuestInfoManager (QuestInfo[] newQuests) {
+        protected override void ReadInput(object input = null)
+        {
+            // we read directly from local file cf. constructor.
+        }
+
+        protected override void updateQuestInfoManager (QuestInfo[] newQuests) {
 			foreach (var q in newQuests) {
                 if (q.Id <= 0 || qim.QuestDict.ContainsKey(q.Id))
 					continue;

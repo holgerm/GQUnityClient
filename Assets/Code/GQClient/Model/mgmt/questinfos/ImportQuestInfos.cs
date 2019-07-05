@@ -29,7 +29,6 @@ namespace GQ.Client.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="GQ.Client.Model.ImportQuestInfosFromJSON"/> class.
         /// </summary>
-        /// <param name="importFromServer">If set to <c>true</c> import from server otherwise use the local infos.json file.</param>
         public ImportQuestInfos() : base()
         {
             InputJSON = "[]";
