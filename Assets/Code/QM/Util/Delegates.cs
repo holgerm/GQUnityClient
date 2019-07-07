@@ -10,4 +10,6 @@ namespace QM.Util {
 
     public delegate void VoidToVoid();
 
+    public delegate void BoolToVoid(bool boolParam);
+
 }

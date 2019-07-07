@@ -49,6 +49,8 @@ namespace GQ.Client.UI.Foyer
         /// </summary>
         public Button UpdateButton;
 
+        public Button NameButton;
+
         protected QuestListController listController { get; set; }
 
         /// <summary>
@@ -138,7 +140,6 @@ namespace GQ.Client.UI.Foyer
                 namebuttonEvent.RemoveAllListeners();
             }
         }
-
         #endregion
 
 
@@ -185,6 +186,7 @@ namespace GQ.Client.UI.Foyer
 
             // set data and event management:
             ctrl.data = qInfo;
+            ctrl.data.ActivitiesBlockingChanged += ctrl.OnActivitiesBlockingChanged;
             ctrl.listController = containerController;
             ElipsifyOverflowingText eot = ctrl.Name.transform.GetComponent<ElipsifyOverflowingText>();
             if (eot != null)
@@ -194,6 +196,15 @@ namespace GQ.Client.UI.Foyer
             ctrl.data.OnChanged += ctrl.UpdateView;
             ctrl.UpdateView();
             return go;
+        }
+
+        private void OnActivitiesBlockingChanged(bool isBlocking)
+        {
+            DownloadButton.interactable = !isBlocking;
+            DeleteButton.interactable = !isBlocking;
+            StartButton.interactable = !isBlocking;
+            UpdateButton.interactable = !isBlocking;
+            NameButton.interactable = !isBlocking;
         }
 
         public override void UpdateView()
@@ -314,6 +325,7 @@ namespace GQ.Client.UI.Foyer
             StartButton = EnsurePrefabVariableIsSet<Button>(StartButton, "Start Button", "StartButton");
             DeleteButton = EnsurePrefabVariableIsSet<Button>(DeleteButton, "Delete Button", "DeleteButton");
             UpdateButton = EnsurePrefabVariableIsSet<Button>(UpdateButton, "Update Button", "UpdateButton");
+            NameButton = EnsurePrefabVariableIsSet<Button>(NameButton, "Name", "Name");
         }
 
         #endregion

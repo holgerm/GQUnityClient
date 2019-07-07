@@ -7,6 +7,7 @@ using GQ.Client.Util;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.FileIO;
+using QM.Util;
 
 namespace GQ.Client.Model
 {
@@ -507,10 +508,8 @@ namespace GQ.Client.Model
         #endregion
 
 
-        #region Runtime API
-        public delegate void ChangeHandler();
-
-        public event ChangeHandler OnChanged;
+        #region State & Events
+        public event VoidToVoid OnChanged;
 
         protected void InvokeOnChanged()
         {
@@ -518,26 +517,6 @@ namespace GQ.Client.Model
             {
                 OnChanged();
             }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendFormat("{0} (id: {1})\n", Name, Id);
-            sb.AppendFormat("\t last server update: {0}", NewVersionOnServer == null ? "null" : NewVersionOnServer.TimeStamp.ToString());
-            sb.AppendFormat("\t type id: {0}", TypeID);
-            sb.AppendFormat("\t icon path: {0}", IconPath);
-            sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
-            sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
-            sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
-
-            return sb.ToString();
-        }
-
-        public void Dispose()
-        {
-            OnChanged = null;
         }
 
         #endregion
@@ -598,7 +577,82 @@ namespace GQ.Client.Model
 
         #region Runtime Functions
 
-        public Task DownloadTask()
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendFormat("{0} (id: {1})\n", Name, Id);
+            sb.AppendFormat("\t last server update: {0}", NewVersionOnServer == null ? "null" : NewVersionOnServer.TimeStamp.ToString());
+            sb.AppendFormat("\t type id: {0}", TypeID);
+            sb.AppendFormat("\t icon path: {0}", IconPath);
+            sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
+            sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
+            sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
+
+            return sb.ToString();
+        }
+
+        public void Dispose()
+        {
+            OnChanged = null;
+        }
+
+        #region Downloading a Quest
+        public event BoolToVoid ActivitiesBlockingChanged;
+
+        protected void InvokeOnActivityBlockingChanged(bool newState)
+        {
+            if (ActivitiesBlockingChanged != null)
+            {
+                ActivitiesBlockingChanged(newState);
+            }
+        }
+
+        private bool _activitiesBlocking;
+        protected bool ActivitiesBlocking
+        {
+            get
+            {
+                return _activitiesBlocking;
+            }
+            set
+            {
+                _activitiesBlocking = value;
+                InvokeOnActivityBlockingChanged(_activitiesBlocking);
+            }
+        }
+
+        /// <summary>
+        /// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
+        /// </summary>
+        public void Download()
+        {
+            if (ActivitiesBlocking)
+                return;
+
+            Task download = DownloadTask();
+
+            // Set downloading state after download has ended:
+            download.OnTaskEnded += (object sender, TaskEventArgs e) =>
+            {
+                ActivitiesBlocking = false;
+            };
+
+            // chain exporting local qi json again after dowload has successfully completed:
+            download.OnTaskCompleted +=
+                (object sender, TaskEventArgs e) =>
+                {
+                    InvokeOnChanged();
+
+                    new ExportQuestInfosToJSON().Start();
+                };
+
+            // DO IT:
+            ActivitiesBlocking = true;
+            download.Start();
+        }
+
+        private Task DownloadTask()
         {
             // Load quest data: game.xml
             Downloader downloadGameXML =
@@ -665,27 +719,7 @@ namespace GQ.Client.Model
 
             return t;
         }
-
-        /// <summary>
-        /// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
-        /// </summary>
-        public void Download(Task.TaskCallback callbackAfterCompetion = null)
-        {
-            Task download = DownloadTask();
-            if (callbackAfterCompetion != null)
-                download.OnTaskCompleted += callbackAfterCompetion;
-
-            // Update the quest info list ...
-            download.OnTaskCompleted +=
-                (object sender, TaskEventArgs e) =>
-                {
-                    InvokeOnChanged();
-
-                    new ExportQuestInfosToJSON().Start();
-                };
-            // DO IT:
-            download.Start();
-        }
+        #endregion
 
         /// <summary>
         /// Updates the quest represented by this info, i.e. its content is replaced by the current server content. 
@@ -700,13 +734,18 @@ namespace GQ.Client.Model
         /// </summary>
         public void Update(Task.TaskCallback callbackAfterCompletion = null)
         {
+            if (ActivitiesBlocking)
+                return;
+
             // update the quest info:
             if (NewVersionOnServer != null)
             {
                 //				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
                 Task download = NewVersionOnServer.DownloadTask();
-                if (callbackAfterCompletion != null)
-                    download.OnTaskEnded += callbackAfterCompletion;
+                download.OnTaskEnded += (object sender, TaskEventArgs e) =>
+                {
+                    ActivitiesBlocking = false;
+                };
 
                 // Update the quest info list ...
                 download.OnTaskEnded +=
@@ -717,6 +756,7 @@ namespace GQ.Client.Model
                         new ExportQuestInfosToJSON().Start();
                     };
 
+                ActivitiesBlocking = true;
                 download.Start();
             }
         }
@@ -778,6 +818,9 @@ namespace GQ.Client.Model
         /// </summary>
         public void Play(Task.TaskCallback callbackAfterCompletion = null)
         {
+            if (ActivitiesBlocking)
+                return;
+
             // Close menu if open:
             Base.Instance.MenuCanvas.SetActive(false);
 
@@ -806,7 +849,12 @@ namespace GQ.Client.Model
             if (playTask == null)
                 playTask = CreatePlayTask();
 
-            playTask.OnTaskEnded += callbackAfterCompletion;
+            playTask.OnTaskEnded += (object sender, TaskEventArgs e) =>
+            {
+                ActivitiesBlocking = false;
+            };
+
+            ActivitiesBlocking = true;
             playTask.Start();
         }
 
