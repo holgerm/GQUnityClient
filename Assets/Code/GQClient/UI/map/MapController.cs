@@ -240,23 +240,11 @@ namespace GQ.Client.UI
 			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();
 			zoomOutButton = MapButtonPanel.transform.Find ("ZoomOutButton").GetComponent<OverlayButtonLayoutConfig> ();
 
-			LocationSensor.Instance.OnLocationUpdate += 
-				(object sender, LocationSensor.LocationEventArgs e) => {
-				if (e.Kind == LocationSensor.LocationEventType.Update) {
-//					Debug.Log (
-//						string.Format ("--- LOC: {0}, {1}", e.Location.longitude, e.Location.latitude)
-//						.Yellow ()
-//					);
-				}
-				if (e.Kind == LocationSensor.LocationEventType.NotAvailable) {
-//					Debug.Log (("--- LOC: Unavailable. enabled: " + Input.location.isEnabledByUser).Yellow ());
-				}
-			};
-
-
 			LocationSensor.Instance.OnLocationUpdate += map.UpdatePosition;
-//			map.UsesLocation = true;
-			map.InputsEnabled = true;
+            Debug.Log("#### Location Update Listener added");
+
+            //			map.UsesLocation = true;
+            map.InputsEnabled = true;
 			map.ShowsGUIControls = false;
 
 			locateAtStart ();

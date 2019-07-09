@@ -1,3 +1,4 @@
+#define DEBUG_LOG
 // 
 //  TileDownloader.cs
 //  
@@ -246,7 +247,11 @@ namespace UnitySlippyMap.Map
 			}
 
             private string url2filename(string input) {
+                if (input.IndexOf('?') > 0)
+                    input = input.Substring(0, input.IndexOf('?'));
                 return input.Replace('/', '_').Replace('.', '-').Replace(':', '=');
+
+                //return "testfile.png";
             }
 
 			/// <summary>
@@ -321,18 +326,19 @@ namespace UnitySlippyMap.Map
 #if DEBUG_PROFILE
 						UnitySlippyMap.Profiler.End("set TileEntry members");
 #endif
-					
+
 #if DEBUG_PROFILE
 						UnitySlippyMap.Profiler.Begin("new FileStream & FileStream.BeginWrite");
 #endif
-						FileStream fs = new FileStream (Application.temporaryCachePath + "/" + this.guid + ext, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
+                        string cachePath = Application.temporaryCachePath + "/" + this.guid + ext;
+                        FileStream fs = new FileStream (cachePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
 						fs.BeginWrite (bytes, 0, bytes.Length, new AsyncCallback (EndWriteCallback), new AsyncInfo (this, fs));
 #if DEBUG_PROFILE
 						UnitySlippyMap.Profiler.End("new FileStream & FileStream.BeginWrite");
 #endif
 				
 #if DEBUG_LOG
-						Debug.Log("DEBUG: TileEntry.DownloadCoroutine: done loading: " + www.url + ", writing to cache: " + fs.Name);
+						Debug.Log("DEBUG: TileEntry.DownloadCoroutine: CACHING to path: '" + cachePath + "'    fs.name: '" + fs.Name + "'");
 #endif
 					} else {
 #if DEBUG_PROFILE
@@ -358,7 +364,7 @@ namespace UnitySlippyMap.Map
 #endif
 					this.error = true;
 #if DEBUG_LOG
-					Debug.LogError("ERROR: TileEntry.DownloadCoroutine: done downloading: " + www.url + " with error: " + www.error);
+					Debug.LogError("ERROR: url: '" + www.url + "' with error: '" + www.error + "'");
 #endif
 				}
 			
@@ -382,7 +388,7 @@ namespace UnitySlippyMap.Map
 				info.FS.Close ();
 
 #if DEBUG_LOG
-				Debug.Log("DEBUG: TileEntry.EndWriteCallback: done writing: " + info.Entry.url + " [" + info.Entry.guid + "]");
+				Debug.Log("DEBUG: TileEntry.EndWriteCallback: CACHING done writing: " + info.Entry.url + " [" + info.FS.Name + "]");
 #endif
 			}
 		}
