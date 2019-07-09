@@ -65,10 +65,9 @@ namespace GQ.Client.Model
 			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
 			xmlRootAttr.IsNullable = true;
 			xmlRootAttr.ElementName = GQML.CONDITION;
-			XmlSerializer serializer;
-
-			serializer = new XmlSerializer (typeof(Condition), xmlRootAttr);
+            XmlSerializer serializer = new XmlSerializer (typeof(Condition), xmlRootAttr);
 			condition = (Condition)serializer.Deserialize (reader);
+            serializer = null;
 			condition.Parent = this;
 
             // consume the end element of the condition element:
@@ -82,7 +81,6 @@ namespace GQ.Client.Model
 			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
 			xmlRootAttr.IsNullable = true;
 			xmlRootAttr.ElementName = GQML.ACTION;
-			XmlSerializer serializer;
 
 			// consume starting branch element (then or else) if it is NOT EMPTY:	
             if (!reader.IsEmptyElement)
@@ -111,8 +109,9 @@ namespace GQ.Client.Model
 						continue;
 					}
 
-					serializer = new XmlSerializer (actionType, xmlRootAttr);
+                    XmlSerializer serializer = new XmlSerializer (actionType, xmlRootAttr);
 					IAction action = (IAction)serializer.Deserialize (reader);
+                    serializer = null;
 
 					if ("then".Equals (branchName)) {
 						thenActions.containedActions.Add (action);

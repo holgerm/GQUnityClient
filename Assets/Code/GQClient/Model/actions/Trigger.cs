@@ -77,7 +77,6 @@ namespace GQ.Client.Model
 
             XmlRootAttribute xmlRootAttr = new XmlRootAttribute();
             xmlRootAttr.IsNullable = true;
-            XmlSerializer serializer;
 
             // consume starting Trigger element:				
             reader.Read();
@@ -91,8 +90,9 @@ namespace GQ.Client.Model
                 if (GQML.IsReaderAtStart(reader, GQML.RULE))
                 {
                     xmlRootAttr.ElementName = GQML.RULE;
-                    serializer = new XmlSerializer(typeof(Rule), xmlRootAttr);
+                    XmlSerializer serializer = new XmlSerializer(typeof(Rule), xmlRootAttr);
                     Rule rule = (Rule)serializer.Deserialize(reader);
+                    serializer = null;
                     rule.Parent = this;
                     containedRules.Add(rule);
                 }

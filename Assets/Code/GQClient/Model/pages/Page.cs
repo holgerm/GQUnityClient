@@ -47,6 +47,11 @@ namespace GQ.Client.Model
 
             ReadAttributes(reader);
 
+            if (Id == 36085 )
+            {
+                Debug.Log("Treffer");
+            }
+
             if (reader.IsEmptyElement)
             {
                 reader.Read();
@@ -105,12 +110,18 @@ namespace GQ.Client.Model
                     xmlRootAttr.ElementName = GQML.ON_START;
                     serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
                     StartTrigger = (Trigger)serializer.Deserialize(reader);
+                    serializer = null;
                     StartTrigger.Parent = this;
                     break;
                 case GQML.ON_END:
                     xmlRootAttr.ElementName = GQML.ON_END;
                     serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
+
+                    IXmlLineInfo lineInfo = ((IXmlLineInfo)reader);
+                    Debug.Log("XML still alive: Page(" + Id + ").OnEnd line: " + lineInfo.LineNumber + " pos: " + lineInfo.LinePosition);
+
                     EndTrigger = (Trigger)serializer.Deserialize(reader);
+                    serializer = null;
                     EndTrigger.Parent = this;
                     break;
                 // UNKOWN CASE:

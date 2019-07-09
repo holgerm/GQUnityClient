@@ -9,14 +9,14 @@ using System;
 namespace GQ.Client.Model
 {
 
-	[XmlRoot (GQML.PAGE)]
-	public class PageNPCTalk : Page
-	{
+    [XmlRoot(GQML.PAGE)]
+    public class PageNPCTalk : Page
+    {
 
-		#region State
-		public string EndButtonText { get; set ; }
+        #region State
+        public string EndButtonText { get; set; }
 
-		public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
 
         private string text;
 
@@ -45,186 +45,201 @@ namespace GQ.Client.Model
 
         public string NextDialogButtonText { get; set; }
 
-		protected List<DialogItem> dialogItems = new List<DialogItem> ();
+        protected List<DialogItem> dialogItems = new List<DialogItem>();
 
-		public int NumberOfDialogItems ()
-		{
-			return dialogItems.Count;
-		}
+        public int NumberOfDialogItems()
+        {
+            return dialogItems.Count;
+        }
 
-		public DialogItem CurrentDialogItem {
-			get {
-				if (CurDialogItemNo == 0) 
-				// cannot be negative or beyond limit cf. property setter.
-					return DialogItem.Null;
-				else
-					return dialogItems [CurDialogItemNo - 1];
-			}
-		}
+        public DialogItem CurrentDialogItem
+        {
+            get
+            {
+                if (CurDialogItemNo == 0)
+                    // cannot be negative or beyond limit cf. property setter.
+                    return DialogItem.Null;
+                else
+                    return dialogItems[CurDialogItemNo - 1];
+            }
+        }
 
-		protected int curDialogItemNo = 0;
+        protected int curDialogItemNo = 0;
 
-		/// <summary>
-		/// The (1-based) index of the current dialog item. 
-		/// Limited by the available dialog items: If no dialog items are present it will always be zero.
-		/// </summary>
-		/// <value>The current dialog item no.</value>
-		public int CurDialogItemNo {
-			get {
-				return curDialogItemNo;
-			}
-			protected set {
-				curDialogItemNo = Math.Max (0, Math.Min (value, dialogItems.Count));
-			}
-		}
-		#endregion
-
-
-		#region Runtime API
-
-		public override void Start (bool canReturnToPrevious = false)
-		{
-			CurDialogItemNo = 1;
-			base.Start (canReturnToPrevious);
-		}
-
-		public bool Next ()
-		{
-			if (dialogItems.Count > CurDialogItemNo) {
-				CurDialogItemNo++;
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public bool HasMoreDialogItems ()
-		{
-			return (dialogItems.Count > CurDialogItemNo);
-		}
-
-		#endregion
+        /// <summary>
+        /// The (1-based) index of the current dialog item. 
+        /// Limited by the available dialog items: If no dialog items are present it will always be zero.
+        /// </summary>
+        /// <value>The current dialog item no.</value>
+        public int CurDialogItemNo
+        {
+            get
+            {
+                return curDialogItemNo;
+            }
+            protected set
+            {
+                curDialogItemNo = Math.Max(0, Math.Min(value, dialogItems.Count));
+            }
+        }
+        #endregion
 
 
-		#region XML Serialization
+        #region Runtime API
 
-		protected override void ReadAttributes (XmlReader reader)
-		{
-			base.ReadAttributes (reader);
+        public override void Start(bool canReturnToPrevious = false)
+        {
+            CurDialogItemNo = 1;
+            base.Start(canReturnToPrevious);
+        }
 
-			EndButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_ENDBUTTONTEXT, reader);
+        public bool Next()
+        {
+            if (dialogItems.Count > CurDialogItemNo)
+            {
+                CurDialogItemNo++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-			ImageUrl = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_IMAGEURL, reader);
-			QuestManager.CurrentlyParsingQuest.AddMedia (ImageUrl, "NPCTalk." + GQML.PAGE_NPCTALK_IMAGEURL);
+        public bool HasMoreDialogItems()
+        {
+            return (dialogItems.Count > CurDialogItemNo);
+        }
+
+        #endregion
+
+
+        #region XML Serialization
+
+        protected override void ReadAttributes(XmlReader reader)
+        {
+            base.ReadAttributes(reader);
+
+            EndButtonText = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_ENDBUTTONTEXT, reader);
+
+            ImageUrl = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_IMAGEURL, reader);
+            QuestManager.CurrentlyParsingQuest.AddMedia(ImageUrl, "NPCTalk." + GQML.PAGE_NPCTALK_IMAGEURL);
 
             Text = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_TEXT, reader);
 
             //DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
 
-			NextDialogButtonText = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
+            NextDialogButtonText = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
 
-			//SkipWordTicker = GQML.GetOptionalBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader, true);
+            //SkipWordTicker = GQML.GetOptionalBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader, true);
 
-			//TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
+            //TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
 
-			//TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader, 0);
-		}
+            //TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader, 0);
+        }
 
-		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
-		{
-			switch (reader.LocalName) {
-			case GQML.PAGE_NPCTALK_DIALOGITEM:
-				xmlRootAttr.ElementName = GQML.PAGE_NPCTALK_DIALOGITEM;
-				XmlSerializer serializer = new XmlSerializer (typeof(DialogItem), xmlRootAttr);
-				DialogItem d = (DialogItem)serializer.Deserialize (reader);
-				dialogItems.Add (d);
-				break;
-			default:
-				base.ReadContent (reader, xmlRootAttr);
-				break;
-			}
-		}
+        protected override void ReadContent(XmlReader reader, XmlRootAttribute xmlRootAttr)
+        {
+            switch (reader.LocalName)
+            {
+                case GQML.PAGE_NPCTALK_DIALOGITEM:
+                    xmlRootAttr.ElementName = GQML.PAGE_NPCTALK_DIALOGITEM;
+                    XmlSerializer serializer = new XmlSerializer(typeof(DialogItem), xmlRootAttr);
+                    DialogItem d = (DialogItem)serializer.Deserialize(reader);
+                    serializer = null;
+                    dialogItems.Add(d);
+                    break;
+                default:
+                    base.ReadContent(reader, xmlRootAttr);
+                    break;
+            }
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
-	public class DialogItem : IXmlSerializable
-	{
+    public class DialogItem : IXmlSerializable
+    {
 
-		#region State
+        #region State
 
-		public int Id {
-			get;
-			set;
-		}
+        public int Id
+        {
+            get;
+            set;
+        }
 
-		public bool IsBlocking {
-			get;
-			set;
-		}
+        public bool IsBlocking
+        {
+            get;
+            set;
+        }
 
-		public string Speaker {
-			get;
-			set;
-		}
+        public string Speaker
+        {
+            get;
+            set;
+        }
 
-		public string AudioURL {
-			get;
-			set;
-		}
+        public string AudioURL
+        {
+            get;
+            set;
+        }
 
-		public string Text {
-			get;
-			set;
-		}
+        public string Text
+        {
+            get;
+            set;
+        }
 
-		#endregion
+        #endregion
 
 
-		#region XML Serialization
+        #region XML Serialization
 
-		public System.Xml.Schema.XmlSchema GetSchema ()
-		{
-			return null;
-		}
+        public System.Xml.Schema.XmlSchema GetSchema()
+        {
+            return null;
+        }
 
-		public void WriteXml (System.Xml.XmlWriter writer)
-		{
-			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
-		}
+        public void WriteXml(System.Xml.XmlWriter writer)
+        {
+            Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
+        }
 
-		public void ReadXml (XmlReader reader)
-		{
-			GQML.AssertReaderAtStart (reader, GQML.PAGE_NPCTALK_DIALOGITEM);
+        public void ReadXml(XmlReader reader)
+        {
+            GQML.AssertReaderAtStart(reader, GQML.PAGE_NPCTALK_DIALOGITEM);
 
-			// Read Attributes:
-			Id = GQML.GetIntAttribute (GQML.ID, reader);
-			IsBlocking = GQML.GetRequiredBoolAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
-			Speaker = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_SPEAKER, reader);
-			AudioURL = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL, reader);
+            // Read Attributes:
+            Id = GQML.GetIntAttribute(GQML.ID, reader);
+            IsBlocking = GQML.GetRequiredBoolAttribute(GQML.PAGE_NPCTALK_DIALOGITEM_BLOCKING, reader);
+            Speaker = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_DIALOGITEM_SPEAKER, reader);
+            AudioURL = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL, reader);
             QuestManager.CurrentlyParsingQuest.AddMedia(AudioURL, "NPCTalk#DialogItem." + GQML.PAGE_NPCTALK_DIALOGITEM_AUDIOURL);
 
             // Content: Read and implicitly proceed the reader so that this node is completely consumed:
-            Text = reader.ReadInnerXml ();
-		}
+            Text = reader.ReadInnerXml();
+        }
 
-		#endregion
+        #endregion
 
-		#region Null
+        #region Null
 
-		public static NullDialogItem Null = new NullDialogItem ();
+        public static NullDialogItem Null = new NullDialogItem();
 
-		public class NullDialogItem : DialogItem
-		{
+        public class NullDialogItem : DialogItem
+        {
 
-			internal NullDialogItem ()
-			{
+            internal NullDialogItem()
+            {
 
-			}
-		}
+            }
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 }

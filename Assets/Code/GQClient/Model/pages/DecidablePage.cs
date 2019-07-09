@@ -8,92 +8,106 @@ using System;
 
 namespace GQ.Client.Model
 {
-	abstract public class DecidablePage : Page
-	{
+    abstract public class DecidablePage : Page
+    {
 
-		#region XML Serialization
+        #region XML Serialization
 
-		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
-		{
-			XmlSerializer serializer; 
+        protected override void ReadContent(XmlReader reader, XmlRootAttribute xmlRootAttr)
+        {
+            XmlSerializer serializer;
 
-			switch (reader.LocalName) {
-			case GQML.ON_SUCCESS:
-				xmlRootAttr.ElementName = GQML.ON_SUCCESS;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				SuccessTrigger = (Trigger)serializer.Deserialize (reader);
-				SuccessTrigger.Parent = this;
-				break;
-			case GQML.ON_FAIL:
-				xmlRootAttr.ElementName = GQML.ON_FAIL;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				FailTrigger = (Trigger)serializer.Deserialize (reader);
-				FailTrigger.Parent = this;
-				break;
-			default:
-				base.ReadContent (reader, xmlRootAttr);
-				break;
-			}
-		}
+            switch (reader.LocalName)
+            {
+                case GQML.ON_SUCCESS:
+                    xmlRootAttr.ElementName = GQML.ON_SUCCESS;
+                    serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
+                    SuccessTrigger = (Trigger)serializer.Deserialize(reader);
+                    serializer = null;
+                    SuccessTrigger.Parent = this;
+                    break;
+                case GQML.ON_FAIL:
+                    xmlRootAttr.ElementName = GQML.ON_FAIL;
+                    serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
+                    FailTrigger = (Trigger)serializer.Deserialize(reader);
+                    serializer = null;
+                    FailTrigger.Parent = this;
+                    break;
+                default:
+                    base.ReadContent(reader, xmlRootAttr);
+                    break;
+            }
+        }
 
-		protected Trigger SuccessTrigger = Trigger.Null;
-		protected Trigger FailTrigger = Trigger.Null;
+        protected Trigger SuccessTrigger = Trigger.Null;
+        protected Trigger FailTrigger = Trigger.Null;
 
-		#endregion
+        #endregion
 
 
-		#region Runtime API
+        #region Runtime API
 
-		public override void Start (bool canReturnToPrevious = false)
-		{
-			base.Start (canReturnToPrevious);
-		}
+        public override void Start(bool canReturnToPrevious = false)
+        {
+            base.Start(canReturnToPrevious);
+        }
 
-		public void Succeed (bool alsoEnd = true)
-		{
+        public void Succeed(bool alsoEnd = true)
+        {
             State = GQML.STATE_SUCCEEDED;
 
-            if (SuccessTrigger != Trigger.Null) {
-				SuccessTrigger.Initiate ();
-				if (alsoEnd) 
-                    End (false);
-			} else {
-                // end this page after succeeding:
-                if (alsoEnd) 
-                    End(true);
-			}
-		}
-
-		public void Fail (bool alsoEnd = true)
-		{
-			State = GQML.STATE_FAILED;
-
-			if (FailTrigger != Trigger.Null) {
-				FailTrigger.Initiate ();
-                if (alsoEnd) 
+            if (SuccessTrigger != Trigger.Null)
+            {
+                SuccessTrigger.Initiate();
+                if (alsoEnd)
                     End(false);
-			} else {
+            }
+            else
+            {
+                // end this page after succeeding:
+                if (alsoEnd)
+                    End(true);
+            }
+        }
+
+        public void Fail(bool alsoEnd = true)
+        {
+            State = GQML.STATE_FAILED;
+
+            if (FailTrigger != Trigger.Null)
+            {
+                FailTrigger.Initiate();
+                if (alsoEnd)
+                    End(false);
+            }
+            else
+            {
                 // end this page after failing:
                 if (alsoEnd)
                     End(true);
-			}
-		}
+            }
+        }
 
-		public override void End(bool leaveQuestIfEmpty = true) {
-			if (EndTrigger == Trigger.Null) {
-				if (leaveQuestIfEmpty) {
-					Log.SignalErrorToAuthor (
-						"Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
-						Quest.Name, Quest.Id,
-						Id
-					);
-					Quest.End ();
-				}
-			} else {
-				EndTrigger.Initiate ();
-			}
-			Resources.UnloadUnusedAssets ();
-		}
+        public override void End(bool leaveQuestIfEmpty = true)
+        {
+            if (EndTrigger == Trigger.Null)
+            {
+                if (leaveQuestIfEmpty)
+                {
+                    Log.SignalErrorToAuthor(
+                        "Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
+                        Quest.Name, Quest.Id,
+                        Id
+                    );
+                    Quest.End();
+                }
+            }
+            else
+            {
+                EndTrigger.Initiate();
+            }
+            Resources.UnloadUnusedAssets();
+        }
 
         protected List<IText> ExpectedCodes = new List<IText>();
 
