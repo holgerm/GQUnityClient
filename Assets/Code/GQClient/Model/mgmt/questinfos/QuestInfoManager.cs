@@ -267,7 +267,6 @@ namespace GQ.Client.Model
         /// </summary>
         public void UpdateLocalQuestInfosOnly()
         {
-            Debug.Log("UpdateLocalQuestInfosOnly()");
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
 

@@ -47,12 +47,14 @@ namespace GQ.Client.Model
         protected override IEnumerator DoTheWork ()
 		{
             // step 1 deserialize game.xml:
+            long xmlLength = gameXML.Length;
             QuestManager.Instance.SetCurrentQuestFromXML (gameXML);
             QuestManager.Instance.CurrentQuest.InitMediaStore();
             yield return null;
 
             // step 2 start the quest:
             QuestManager.Instance.CurrentQuest.Start ();
+            RaiseTaskCompleted();
 		}
 	}
 }

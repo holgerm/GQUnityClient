@@ -732,7 +732,7 @@ namespace GQ.Client.Model
         /// 2. The represented quest game.xml is downloaded and replaces the old version.
         /// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
         /// </summary>
-        public void Update(Task.TaskCallback callbackAfterCompletion = null)
+        public void Update()
         {
             if (ActivitiesBlocking)
                 return;
@@ -816,7 +816,7 @@ namespace GQ.Client.Model
         /// <summary>
         /// Starts the local quest represented by this info. Is called from the UI (Button e.g.).
         /// </summary>
-        public void Play(Task.TaskCallback callbackAfterCompletion = null)
+        public void Play()
         {
             if (ActivitiesBlocking)
                 return;
