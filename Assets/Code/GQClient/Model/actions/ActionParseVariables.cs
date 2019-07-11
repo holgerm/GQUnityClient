@@ -1,19 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Model;
-using System.Xml.Serialization;
-using GQ.Client.Err;
+﻿using GQ.Client.Err;
 using System.Xml;
-using System;
 
 namespace GQ.Client.Model
 {
 
-	public class ActionParseVariables : ActionAbstract
+    public class ActionParseVariables : Action
+   
 	{
-		#region Structure
+        #region Structure
+        public ActionParseVariables(XmlReader reader) : base(reader) { }
 
-		protected string fromVarName = null;
+        protected string fromVarName = null;
 
 		public string FromVarName {
 			get {
@@ -30,12 +27,10 @@ namespace GQ.Client.Model
 
 			FromVarName = GQML.GetStringAttribute (GQML.ACTION_ATTRIBUTE_FROMVARNAME, reader);
 		}
-
 		#endregion
 
 
 		#region Functions
-
 		public override void Execute ()
 		{
 			if (fromVarName == null) {
@@ -110,7 +105,6 @@ namespace GQ.Client.Model
 				);
 			}
 		}
-
 		#endregion
 	}
 }

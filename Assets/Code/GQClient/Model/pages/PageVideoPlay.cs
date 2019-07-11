@@ -1,21 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml.Serialization;
-using System.Xml;
-using System;
+﻿using System.Xml;
 using GQ.Client.Err;
-using GQ.Client.UI;
 using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
-
-    [XmlRoot(GQML.PAGE)]
     public class PageVideoPlay : Page
     {
-
         #region State
+        public PageVideoPlay(XmlReader reader) : base(reader) { }
 
         public bool Controllable { get; set; }
         public string VideoFile { get; set; }
@@ -26,12 +18,9 @@ namespace GQ.Client.Model
                        + "\n\tvideo: " + VideoFile
                        + "\n\tvidType: " + VideoType;
         }
-
         #endregion
 
-
         #region XML Serialization
-
         protected override void ReadAttributes(XmlReader reader)
         {
             base.ReadAttributes(reader);
@@ -46,19 +35,13 @@ namespace GQ.Client.Model
             Controllable = GQML.GetRequiredBoolAttribute(GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);
             VideoType = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_VIDEOTYPE, reader, GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL);
         }
-
         #endregion
 
-
         #region Runtime API
-
         public override void Start(bool canReturnToPrevious = false)
         {
             base.Start(canReturnToPrevious);
         }
-
         #endregion
-
     }
-
 }

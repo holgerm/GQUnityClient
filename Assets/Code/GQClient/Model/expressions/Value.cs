@@ -1,8 +1,3 @@
-using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Collections.Generic;
 using GQ.Client.Util;
 using System;
 using GQ.Client.Err;
@@ -349,12 +344,10 @@ namespace GQ.Client.Model
 
             return result;
         }
-
         #endregion
 
 
         #region Comparison Functions
-
         public bool IsEqual(Value other)
         {
             if (this.ValType == Type.Bool)
@@ -712,17 +705,13 @@ namespace GQ.Client.Model
             Log.WarnDeveloper("Unknown Value Type found when checking if IsLessOrEqual between " + this.ValType + " and " + other.ValType);
             return false;
         }
-
         #endregion
 
         #region Util Functions
-
         public override string ToString()
         {
             return String.Format("{0} ({1})", internalValue, ValType);
         }
-
         #endregion
-
     }
 }

@@ -1,16 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Model;
-using System.Xml.Serialization;
-using GQ.Client.Err;
-using System.Xml;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-    public abstract class ActionAbstractWithVar : ActionAbstract
+    public abstract class ActionAbstractWithVar : Action
+
     {
-        #region Structure
+        public ActionAbstractWithVar(XmlReader reader) : base(reader) { }
 
         private string varName = null;
 
@@ -32,8 +28,5 @@ namespace GQ.Client.Model
 
             VarName = GQML.GetStringAttribute(GQML.VARIABLE, reader);
         }
-
-        #endregion
-
     }
 }

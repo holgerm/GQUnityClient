@@ -1,14 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ConditionAnd : CompoundCondition
+    public class ConditionAnd : CompoundCondition
 	{
+        public ConditionAnd(XmlReader reader) : base(reader) { }
 
 		#region Function
-
 		/// <summary>
 		/// True if all contained condition are fulfilled (which is also the case if no condition at all is included). Computed in a lazy manner.
 		/// </summary>
@@ -22,7 +21,6 @@ namespace GQ.Client.Model
 			}
 			return allFulfilled;
 		}
-
 		#endregion
 	}
 }

@@ -1,19 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using GQ.Client.Util;
-using GQ.Client.Conf;
-using Newtonsoft.Json;
-using System;
-using GQ.Client.UI;
 using GQ.Client.Err;
-using System.IO;
-using GQ.Client.FileIO;
 
 namespace GQ.Client.Model
 {
 
-	public class QuestStarter : Task
+    public class QuestStarter : Task
 	{
 
 		public QuestStarter () : base ()

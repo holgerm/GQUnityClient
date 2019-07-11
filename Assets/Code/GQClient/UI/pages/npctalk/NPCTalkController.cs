@@ -97,7 +97,7 @@ namespace GQ.Client.UI
             }
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                float imageAreaHeight = fitInAndShowImage(d.Www.texture);
+                float imageAreaHeight = image == null ? 0f : fitInAndShowImage(d.Www.texture);
 
                 imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
                 contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);

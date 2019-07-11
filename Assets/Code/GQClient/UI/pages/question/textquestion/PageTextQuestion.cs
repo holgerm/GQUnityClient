@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
 using System.Xml;
 using System;
 using GQ.Client.Err;
@@ -9,26 +6,21 @@ using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
-
-	[XmlRoot (GQML.PAGE)]
-	public class PageTextQuestion : QuestionPage
+    public class PageTextQuestion : QuestionPage
     {
-		
-		#region State
+        public PageTextQuestion(XmlReader reader) : base (reader) { }
 
-		public string Question { get; set ; }
+        #region State
+        public string Question { get; set ; }
 
 		public string Prompt { get; set ; }
 
 		public string BackGroundImage { get; set; }
 
 		private List<TQAnswer> Answers = new List<TQAnswer> ();
-
 		#endregion
 
-
 		#region XML Serialization
-
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
@@ -52,34 +44,28 @@ namespace GQ.Client.Model
 				QuestManager.CurrentlyParsingQuest.AddMedia (BackGroundImage, "TextQuestion." + GQML.PAGE_QUESTION_BACKGROUND_IMAGE);
 		}
 
-		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
+		protected override void ReadContent (XmlReader reader)
 		{
-			XmlSerializer serializer; 
-
 			switch (reader.LocalName) {
 			case GQML.PAGE_QUESTION_ANSWER:
-				xmlRootAttr.ElementName = GQML.PAGE_QUESTION_ANSWER;
-				serializer = new XmlSerializer (typeof(TQAnswer), xmlRootAttr);
-				TQAnswer a = (TQAnswer)serializer.Deserialize (reader);
+				TQAnswer a = new TQAnswer(reader);
 				Answers.Add (a);
 				break;
 			default:
-				base.ReadContent (reader, xmlRootAttr);
+				base.ReadContent (reader);
 				break;
 			}
 		}
-
 		#endregion
 
 
 		#region Runtime API
-
 		public override void Start (bool canReturnToPrevious = false)
 		{
 			base.Start (canReturnToPrevious);
 		}
 
-		public bool AnswerCorrect (string input)
+		public override bool AnswerCorrect (string input)
 		{
 			foreach (TQAnswer a in Answers) {
 				string aText = a.Text.Trim ().MakeReplacements();
@@ -133,16 +119,13 @@ namespace GQ.Client.Model
 
 			return false;
 		}
-
 		#endregion
 
 	}
 
-	public class TQAnswer : IXmlSerializable
+	public class TQAnswer
 	{
-
 		#region State
-
 		public int Id {
 			get;
 			set;
@@ -153,23 +136,7 @@ namespace GQ.Client.Model
 			set;
 		}
 
-
-		#endregion
-
-
-		#region XML Serialization
-
-		public System.Xml.Schema.XmlSchema GetSchema ()
-		{
-			return null;
-		}
-
-		public void WriteXml (System.Xml.XmlWriter writer)
-		{
-			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
-		}
-
-		public void ReadXml (XmlReader reader)
+        public TQAnswer(XmlReader reader)
 		{
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_QUESTION_ANSWER);
 
@@ -180,22 +147,16 @@ namespace GQ.Client.Model
 			Text = reader.ReadInnerXml ();
 		}
 
-		#endregion
+        protected TQAnswer() { }
+        #endregion
 
-		#region Null
-
-		public static NullAnswer Null = new NullAnswer ();
+        #region Null
+        public static NullAnswer Null = new NullAnswer ();
 
 		public class NullAnswer : TQAnswer
 		{
-
-			internal NullAnswer ()
-			{
-
-			}
+			internal NullAnswer () { }
 		}
-
 		#endregion
-
 	}
 }

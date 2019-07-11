@@ -1,27 +1,13 @@
-using UnityEngine;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Collections;
-using GQ.Client.Model;
-using System.IO;
-using GQ.Client.Err;
-using System.Collections.Generic;
-using GQ.Client.Conf;
-using GQ.Client.FileIO;
-
-using System;
-using GQ.Client.Util;
-using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using QM.Util;
 
 namespace GQ.Client.Model
 {
 
-	/// <summary>
-	/// Media Info about the local game media that is persisted in JSON file game-media.json in the quest folder.
-	/// </summary>
-	public class LocalMediaInfo
+    /// <summary>
+    /// Media Info about the local game media that is persisted in JSON file game-media.json in the quest folder.
+    /// </summary>
+    public class LocalMediaInfo
 	{
 		public string url;
 		/// <summary>

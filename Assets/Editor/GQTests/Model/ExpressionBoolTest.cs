@@ -1,15 +1,11 @@
-﻿using UnityEngine;
-using UnityEditor;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using GQ.Client.Model;
-using System.IO;
-using System.Xml.Serialization;
 using GQ.Client.Util;
 
 namespace GQTests.Model
 {
 
-	public class ExpressionBoolTest : GQMLTest
+    public class ExpressionBoolTest : GQMLTest
 	{
 
 		[SetUp]

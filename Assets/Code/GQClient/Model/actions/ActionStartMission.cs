@@ -1,37 +1,30 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Model;
-using System.Xml.Serialization;
-using GQ.Client.Err;
-using System.Xml;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ActionStartMission : ActionAbstract
+    public class ActionStartMission : Action
+   
 	{
 		#region State
-
 		public int Id { get; set; }
 
 		public bool AllowReturn { get; set; }
+        #endregion
 
-		#endregion
 
+        #region Structure
+        public ActionStartMission(XmlReader reader) : base(reader) { }
 
-		#region Structure
-
-		protected override void ReadAttributes (XmlReader reader)
+        protected override void ReadAttributes (XmlReader reader)
 		{
 			Id = GQML.GetIntAttribute (GQML.ID, reader);
 			AllowReturn = GQML.GetOptionalBoolAttribute (GQML.ACTION_STARTMISSION_ALLOWRETURN, reader, false);
 		}
-
 		#endregion
 
 
 		#region Functions
-
 		public override void Execute ()
 		{
 			Page pageToStart = Quest.GetPageWithID (Id);
@@ -43,7 +36,6 @@ namespace GQ.Client.Model
 				Quest.End ();
 			}
 		}
-
 		#endregion
 	}
 }

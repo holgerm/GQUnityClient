@@ -1,42 +1,24 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Xml;
 using GQ.Client.Err;
 using System;
 using GQ.Client.Util;
+using System.Reflection;
 
 namespace GQ.Client.Model
 {
-    public class Rule : ActionList, IXmlSerializable
+    public class Rule : ActionList
     {
 
         #region Structure
-
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void WriteXml(System.Xml.XmlWriter writer)
-        {
-            Log.SignalErrorToDeveloper("WriteXML not implemented for " + GetType().Name);
-        }
-
         /// <summary>
         /// Reads the xml within a given rule element until it finds an action element. 
         /// It then delegates further parsing to the specific action subclass depending on the actions type attribute.
         /// </summary>
-        public void ReadXml(System.Xml.XmlReader reader)
+        public Rule(System.Xml.XmlReader reader)
         {
             GQML.AssertReaderAtStart(reader, GQML.RULE);
 
             string ruleName = reader.LocalName;
-
-            XmlRootAttribute xmlRootAttr = new XmlRootAttribute();
-            xmlRootAttr.IsNullable = true;
-            xmlRootAttr.ElementName = GQML.ACTION;
 
             if (reader.IsEmptyElement)
             {
@@ -70,20 +52,36 @@ namespace GQ.Client.Model
 
                     if (actionType == null)
                     {
-                        Log.SignalErrorToDeveloper("No Implementation for Action Type {0} found.", actionName);
+                        Log.SignalErrorToDeveloper(
+                            "No Implementation for Action Type {0} found at line {1} pos {2}",
+                            actionName,
+                            ((IXmlLineInfo)reader).LineNumber,
+                            ((IXmlLineInfo)reader).LinePosition
+                            );
                         reader.Skip();
                         continue;
                     }
 
-                    XmlSerializer serializer = new XmlSerializer(actionType, xmlRootAttr);
-                    IAction action = (IAction)serializer.Deserialize(reader);
-                    serializer = null;
+                    // get right constructor for page type:
+                    ConstructorInfo constructorInfoObj = actionType.GetConstructor(new Type[] { typeof(XmlReader) });
+                    if (constructorInfoObj == null)
+                    {
+                        Log.SignalErrorToDeveloper(
+                            "Action {0} misses a Constructor for creating the model from XmlReader.",
+                            actionName);
+                    }
+                    Action action = (Action)constructorInfoObj.Invoke(new object[] { reader });
                     action.Parent = this;
                     containedActions.Add(action);
                 }
                 else
                 {
-                    Log.SignalErrorToDeveloper("Unexcpected xml {0} named {1} inside rule found.", reader.NodeType, reader.LocalName);
+                    Log.SignalErrorToDeveloper(
+                        "Unexcpected xml {0} named {1} inside rule found at line {2} pos {3}",
+                        reader.NodeType,
+                        reader.LocalName,
+                        ((IXmlLineInfo)reader).LineNumber,
+                        ((IXmlLineInfo)reader).LinePosition);
                     reader.Read();
                 }
             }

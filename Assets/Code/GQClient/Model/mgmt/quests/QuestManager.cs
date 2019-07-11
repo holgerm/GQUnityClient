@@ -1,20 +1,8 @@
-﻿using UnityEngine;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Collections;
-using GQ.Client.Model;
+﻿using System.Xml;
 using System.IO;
-using GQ.Client.Err;
-using System.Collections.Generic;
 using GQ.Client.Conf;
 using GQ.Client.FileIO;
-
-using System;
-using GQ.Client.Util;
 using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
-using System.Net;
-using QM.Util;
 
 namespace GQ.Client.Model
 {
@@ -88,17 +76,6 @@ namespace GQ.Client.Model
             {
                 return CurrentQuest.CurrentPage;
             }
-            //set
-            //{
-            //    _currentPage = value;
-
-            //    if (_currentPage != null)
-            //    {
-
-            //        Debug.Log(("Started Page: " + _currentPage.Id + " (" + _currentPage.PageType + ")").Green());
-
-            //    }
-            //}
         }
 
         public Scene CurrentScene
@@ -170,21 +147,6 @@ namespace GQ.Client.Model
 
 
         #region Parsing
-
-        protected void serializer_UnknownNode
-            (object sender, XmlNodeEventArgs e)
-        {
-            Log.SignalErrorToDeveloper("Unknown XML Node found in Quest XML:" + e.Name + "\t" + e.Text);
-        }
-
-        protected void serializer_UnknownAttribute
-            (object sender, XmlAttributeEventArgs e)
-        {
-            System.Xml.XmlAttribute attr = e.Attr;
-            Log.SignalErrorToDeveloper("Unknown XML Attribute found in Quest XML:" +
-            attr.Name + "='" + attr.Value + "'");
-        }
-
         private static Quest currentlyParsingQuest;
 
         public static Quest CurrentlyParsingQuest
@@ -229,21 +191,9 @@ namespace GQ.Client.Model
 
         public Quest DeserializeQuest(string xml)
         {
-            // Creates an instance of the XmlSerializer class;
-            // specifies the type of object to be deserialized.
-            XmlSerializer serializer = new XmlSerializer(typeof(Quest));
-
-            // If the XML document has been altered with unknown 
-            // nodes or attributes, handles them with the 
-            // UnknownNode and UnknownAttribute events.
-            serializer.UnknownNode += new
-                XmlNodeEventHandler(serializer_UnknownNode);
-            serializer.UnknownAttribute += new
-                XmlAttributeEventHandler(serializer_UnknownAttribute);
-
-            using (TextReader reader = new StringReader(xml))
+            using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
             {
-                return (Quest)serializer.Deserialize(reader);
+                return new Quest(reader);
             }
         }
         #endregion

@@ -1,13 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ConditionLeq : ComparingCondition
+    public class ConditionLeq : ComparingCondition
 	{
+        public ConditionLeq(XmlReader reader) : base(reader) { }
 
-		protected override bool isFulfilledEmptyComparison ()
+        protected override bool isFulfilledEmptyComparison ()
 		{
 			return true;
 		}

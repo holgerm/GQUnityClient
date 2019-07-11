@@ -1,14 +1,11 @@
-﻿using UnityEngine;
-using UnityEditor;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using GQ.Client.Model;
 using GQ.Client.Util;
-using GQ.Client.Err;
 
 namespace GQTests.Model
 {
 
-	public class ActionDecrementVariableTest : GQMLTest
+    public class ActionDecrementVariableTest : GQMLTest
 	{
 
 		[SetUp]
@@ -21,12 +18,12 @@ namespace GQTests.Model
 		public void DecExistingIntegerVar ()
 		{
 			// Arrange:
-			ActionSetVariable actSetVar = parseXML<ActionSetVariable> 
-				(@"	<action type=""SetVariable"" var=""x"">
-						<value>
-							<num>10</num>
-						</value>
-					</action>");
+			ActionSetVariable actSetVar = parseXML<ActionSetVariable>(
+                @"	<action type=""SetVariable"" var=""x"">
+					    <value>
+						    <num>10</num>
+					    </value>
+				    </action>");
 			
 			Variables.Clear ();
 			actSetVar.Execute ();

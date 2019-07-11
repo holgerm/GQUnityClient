@@ -1,15 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
-
-	public class ConditionOr : CompoundCondition
+    public class ConditionOr : CompoundCondition
 	{
-		/// <summary>
-		/// True if at least one of the contained conditions is fulfilled.
-		/// </summary>
-		public override bool IsFulfilled ()
+        public ConditionOr(XmlReader reader) : base(reader) { }
+
+        /// <summary>
+        /// True if at least one of the contained conditions is fulfilled.
+        /// </summary>
+        public override bool IsFulfilled ()
 		{
 			bool oneFulfilled = false;
 			foreach (ICondition condition in containedConditions) {

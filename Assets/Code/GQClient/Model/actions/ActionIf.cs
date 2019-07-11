@@ -1,73 +1,74 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using GQ.Client.Err;
 using System;
+using System.Reflection;
 
 namespace GQ.Client.Model
 {
-	public class ActionIf : ActionAbstract
+	public class ActionIf : Action
 	{
 
-		#region Structure
-
-		protected Condition condition;
+        #region Structure
+        protected Condition condition;
 		protected ActionList thenActions = new ActionList ();
 		protected ActionList elseActions = new ActionList ();
 
-		/// <summary>
-		/// Is called with the reader positioned at the action (if) start element. It will consume the whole action.
-		/// </summary>
-		public override void ReadXml (System.Xml.XmlReader reader)
-		{
-			GQML.AssertReaderAtStart (reader, GQML.ACTION);
+        /// <summary>
+        /// Is called with the reader positioned at the action (if) start element. It will consume the whole action.
+        /// </summary>
+        public ActionIf(XmlReader reader) : base(reader) {
+        }
+
+        protected override void CheckStart(XmlReader reader)			
+        {
+            base.CheckStart(reader);
 
 			if (reader.IsEmptyElement) {
 				Log.SignalErrorToDeveloper ("If Action found with no content.");
 				reader.Read ();
 				return;
 			}
+        }
 
-			// consume the action start element:
-			reader.Read ();
-
-			ReadConditionElement (reader);
+        protected override void ReadContent(XmlReader reader)
+        {
+            ReadConditionElement (reader);
 
 			if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.THEN)) {
 				ReadThenOrElseElement (reader);
-			}
+ 			}
 
             if (reader.NodeType == XmlNodeType.Element && reader.LocalName.Equals (GQML.ELSE)) {
 				ReadThenOrElseElement (reader);
 			} 
 
 			if (reader.NodeType == XmlNodeType.EndElement && reader.LocalName.Equals (GQML.ACTION)) {
-				reader.Read ();
 				return;
 			}
-				
-			Log.SignalErrorToDeveloper ("Unexpected xml {0} {1} found in IF action.", reader.NodeType, reader.LocalName);
-			reader.Skip ();
-			return;
+
+            Log.SignalErrorToDeveloper(
+                "Unexpected xml {0} {1} found in condition element in line {2} at position {3}",
+                reader.NodeType,
+                reader.LocalName,
+                ((IXmlLineInfo)reader).LineNumber,
+                ((IXmlLineInfo)reader).LinePosition);
+            reader.Skip ();
+
+            // for further content we call super method:
+            base.ReadContent(reader);
 		}
 
 
 		public void ReadConditionElement (System.Xml.XmlReader reader)
 		{
 			if (!GQML.IsReaderAtStart (reader, GQML.CONDITION)) {
-				condition = new Condition ();
+				condition = new Condition (reader);
 				return;
 			}
 
 			// normal case when we found a condition:
-			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-			xmlRootAttr.IsNullable = true;
-			xmlRootAttr.ElementName = GQML.CONDITION;
-            XmlSerializer serializer = new XmlSerializer (typeof(Condition), xmlRootAttr);
-			condition = (Condition)serializer.Deserialize (reader);
-            serializer = null;
+			condition = new Condition(reader);
 			condition.Parent = this;
 
             // consume the end element of the condition element:
@@ -77,10 +78,6 @@ namespace GQ.Client.Model
         public void ReadThenOrElseElement (System.Xml.XmlReader reader)
 		{
 			string branchName = reader.LocalName;
-
-			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-			xmlRootAttr.IsNullable = true;
-			xmlRootAttr.ElementName = GQML.ACTION;
 
 			// consume starting branch element (then or else) if it is NOT EMPTY:	
             if (!reader.IsEmptyElement)
@@ -109,11 +106,14 @@ namespace GQ.Client.Model
 						continue;
 					}
 
-                    XmlSerializer serializer = new XmlSerializer (actionType, xmlRootAttr);
-					IAction action = (IAction)serializer.Deserialize (reader);
-                    serializer = null;
+                    ConstructorInfo constructorInfoObj = actionType.GetConstructor(new Type[] { typeof(XmlReader) });
+                    if (constructorInfoObj == null)
+                    {
+                        Log.SignalErrorToDeveloper("Action {0} misses a Constructor for creating the model from XmlReader.", actionName);
+                    }
+                    Action action = (Action)constructorInfoObj.Invoke(new object[] { reader });
 
-					if ("then".Equals (branchName)) {
+                    if ("then".Equals (branchName)) {
 						thenActions.containedActions.Add (action);
 						action.Parent = thenActions;
 						thenActions.Parent = this;

@@ -1,18 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml.Serialization;
-using System.Xml;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
-	[XmlRoot (GQML.PAGE)]
-	public class PageMapOSM : PageNavigation
+    public class PageMapOSM : PageNavigation
 	{
+        #region XML Serialization
+        public PageMapOSM(XmlReader reader) : base(reader) { }
 
-		#region XML Serialization
-
-		protected override void ReadAttributes (XmlReader reader)
+        protected override void ReadAttributes (XmlReader reader)
 		{
             base.ReadAttributes(reader);
 
@@ -36,11 +31,9 @@ namespace GQ.Client.Model
 			iBeaconText = "";
 			iBeaconNotFoundText = "";
 		}
-
 		#endregion
 
 		#region Runtime API
-
 		/// <summary>
 		/// Maps the scene to this model for a page (mission).
 		/// </summary>
@@ -50,7 +43,6 @@ namespace GQ.Client.Model
 				return GQML.PAGE_TYPE_NAVIGATION;
 			}
 		}
-
 		#endregion
 	}
 }

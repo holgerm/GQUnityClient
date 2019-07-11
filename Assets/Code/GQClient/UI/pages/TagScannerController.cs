@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
@@ -13,9 +12,7 @@ namespace GQ.Client.UI
 {
     public class TagScannerController : PageController
     {
-
         #region Inspector Features
-
         public Text shownText;
 
         WebCamTexture camTexture;
@@ -24,14 +21,10 @@ namespace GQ.Client.UI
 
         private Thread qrThread;
         private Color32[] c;
-
-        private bool stateAfterScan = false;
-
         #endregion
 
 
         #region Runtime API
-
         protected PageTagScanner myPage;
 
         /// <summary>
@@ -120,8 +113,9 @@ namespace GQ.Client.UI
             var barcodeReader = new BarcodeReader
             {
                 AutoRotate = false,
-                TryHarder = false
             };
+
+            barcodeReader.Options.TryHarder = false;
 
             decoderRunning = true;
 
@@ -225,7 +219,6 @@ namespace GQ.Client.UI
             base.CleanUp();
             finishScanning();
         }
-
         #endregion
     }
 }

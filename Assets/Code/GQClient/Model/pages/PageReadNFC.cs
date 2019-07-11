@@ -1,29 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml.Serialization;
-using System.Xml;
-using System;
-using GQ.Client.Err;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
-
-	[XmlRoot (GQML.PAGE)]
-	public class PageReadNFC : Page
+    public class PageReadNFC : Page
 	{
-		
-		#region State
+        #region State
+        public PageReadNFC(XmlReader reader) : base(reader) { }
 
-		public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
 		public string SaveToVar { get; set; }
 		public string PromptText { get; set; }
-
 		#endregion
 
-
 		#region XML Serialization
-
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
@@ -36,28 +25,21 @@ namespace GQ.Client.Model
 
 		protected Trigger NFCReadTrigger = Trigger.Null;
 
-		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
+		protected override void ReadContent (XmlReader reader)
 		{
-			XmlSerializer serializer; 
-
 			switch (reader.LocalName) {
 			case GQML.ON_READ:
-				xmlRootAttr.ElementName = GQML.ON_READ;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				NFCReadTrigger = (Trigger)serializer.Deserialize (reader);
+				NFCReadTrigger = new Trigger(reader);
 				NFCReadTrigger.Parent = this;
 				break;
 			default:
-				base.ReadContent (reader, xmlRootAttr);
+				base.ReadContent (reader);
 				break;
 			}
 		}
-
 		#endregion
 
-
 		#region Runtime API
-
 		public override void Start (bool canReturnToPrevious = false)
 		{
 			base.Start (canReturnToPrevious);
@@ -73,7 +55,5 @@ namespace GQ.Client.Model
             }
         }
         #endregion
-
     }
-
 }

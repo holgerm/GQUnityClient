@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml;
-using System.Xml.Serialization;
+﻿using System.Xml;
 using GQ.Client.Err;
 using System;
 using System.Globalization;
@@ -10,10 +6,13 @@ using System.Globalization;
 namespace GQ.Client.Model
 {
 
-    public class ActionStartQuest : ActionAbstract
+    public class ActionStartQuest : Action
+
     {
 
         #region Structure
+        public ActionStartQuest(XmlReader reader) : base(reader) { }
+
         protected string questIdString;
 
         protected override void ReadAttributes(XmlReader reader)
@@ -32,7 +31,6 @@ namespace GQ.Client.Model
 
 
         #region Functions
-
         public override void Execute()
         {
             // we evaluate the questId that we stored as raw string just in time, 
@@ -71,8 +69,6 @@ namespace GQ.Client.Model
                 qi.Play();
             }
         }
-
         #endregion
-
     }
 }

@@ -1,27 +1,27 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.IO;
-using System.Xml.Serialization;
+﻿using System.IO;
 using GQ.Client.Model;
 using GQ.Client.Err;
 using GQ.Editor.Util;
 using NUnit.Framework;
+using System.Reflection;
+using System;
+using System.Xml;
 
 namespace GQTests.Model
 {
 
-	public abstract class GQMLTest
+    public abstract class GQMLTest
 	{
 
 		protected virtual T parseXML<T> (string xml)
 		{
 			using (TextReader reader = new StringReader (xml)) {
-				XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-				xmlRootAttr.ElementName = XmlRoot;
-				xmlRootAttr.IsNullable = true;
-				XmlSerializer serializer = new XmlSerializer (typeof(T), xmlRootAttr);
-
-				return (T)serializer.Deserialize (reader);
+                ConstructorInfo constructorInfoObj = typeof(T).GetConstructor(new Type[] { typeof(XmlReader) });
+                if (constructorInfoObj == null)
+                {
+                    Log.SignalErrorToDeveloper("Type {0} misses a Constructor for creating the model from XmlReader.", typeof(T).Name);
+                }
+                return (T) constructorInfoObj.Invoke(new object[] { reader });
 			}
 		}
 

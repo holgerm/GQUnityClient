@@ -1,29 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml.Serialization;
-using System.Xml;
-using System;
-using GQ.Client.Err;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
-
-	[XmlRoot (GQML.PAGE)]
-	public class PageTagScanner : DecidablePage
+    public class PageTagScanner : DecidablePage
 	{
-		
-		#region State
+        public PageTagScanner(XmlReader reader) : base(reader) { }
 
-		public bool ShowTagContent { get; set; }
+        #region State
+        public bool ShowTagContent { get; set; }
 
 		public string Prompt { get; set ; }
-
 		#endregion
 
-
 		#region XML Serialization
-
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
@@ -33,42 +22,32 @@ namespace GQ.Client.Model
 			Prompt = GQML.GetStringAttribute (GQML.PAGE_TYPE_QRTAGSCANNER_PROMPT, reader);
 		}
 
-		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
+		protected override void ReadContent (XmlReader reader)
 		{
-			XmlSerializer serializer; 
-
 			switch (reader.LocalName) {
 			case GQML.PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE:
-				xmlRootAttr.ElementName = GQML.PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE;
-				serializer = new XmlSerializer (typeof(ExpectedCode), xmlRootAttr);
-				ExpectedCode a = (ExpectedCode)serializer.Deserialize (reader);
+				ExpectedCode a = new ExpectedCode(reader);
 				ExpectedCodes.Add (a);
 				break;
 			default:
-				base.ReadContent (reader, xmlRootAttr);
+				base.ReadContent (reader);
 				break;
 			}
 		}
-
 		#endregion
 
 
 		#region Runtime API
-
 		public override void Start (bool canReturnToPrevious = false)
 		{
 			base.Start (canReturnToPrevious);
 		}
-
 		#endregion
-
 	}
 
-	public class ExpectedCode : IXmlSerializable, IText
+	public class ExpectedCode : IText
 	{
-
 		#region State
-
 		public int Id {
 			get;
 			set;
@@ -78,24 +57,10 @@ namespace GQ.Client.Model
 			get;
 			set;
 		}
-
-
 		#endregion
 
-
 		#region XML Serialization
-
-		public System.Xml.Schema.XmlSchema GetSchema ()
-		{
-			return null;
-		}
-
-		public void WriteXml (System.Xml.XmlWriter writer)
-		{
-			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
-		}
-
-		public void ReadXml (XmlReader reader)
+		public ExpectedCode(XmlReader reader)
 		{
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_TYPE_QRTAGSCANNER_EXPECTEDCODE);
 
@@ -105,11 +70,11 @@ namespace GQ.Client.Model
 			Text = reader.ReadInnerXml ();
 		}
 
-		#endregion
+        protected ExpectedCode() { }
+        #endregion
 
-		#region Null
-
-		public static NullExpectedCode Null = new NullExpectedCode ();
+        #region Null
+        public static NullExpectedCode Null = new NullExpectedCode ();
 
 		public class NullExpectedCode : ExpectedCode
 		{
@@ -119,8 +84,6 @@ namespace GQ.Client.Model
 
 			}
 		}
-
 		#endregion
-
 	}
 }

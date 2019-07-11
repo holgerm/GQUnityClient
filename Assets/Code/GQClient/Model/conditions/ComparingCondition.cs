@@ -1,28 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
 using System.Xml;
-using System.Collections.Generic;
 
 namespace GQ.Client.Model
 {
 
-    public abstract class ComparingCondition : ICondition, IXmlSerializable
+    public abstract class ComparingCondition : ICondition
     {
-
         #region Structure
-
         public I_GQML Parent { get; set; }
-
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void WriteXml(System.Xml.XmlWriter writer)
-        {
-            Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
-        }
 
         protected List<IExpression> expressions;
 
@@ -31,16 +16,13 @@ namespace GQ.Client.Model
         /// It consumes the whole element with all contents including the closing end_element.
         /// </summary>
         /// <param name="reader">Reader.</param>
-        public void ReadXml(System.Xml.XmlReader reader)
+        public ComparingCondition(XmlReader reader)
         {
             expressions = ExpressionHelper.ParseExpressionListFromXML(reader);
         }
-
         #endregion
 
-
         #region Function
-
         public virtual bool IsFulfilled()
         {
             // handle case with no expressions at all, i.e. empty list:
@@ -71,7 +53,6 @@ namespace GQ.Client.Model
         protected abstract bool isFulfilledCompare(IExpression expression);
 
         protected abstract bool isFulfilledCompare(IExpression firstExpression, IExpression secondExpression);
-
         #endregion
     }
 }

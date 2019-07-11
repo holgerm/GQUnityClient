@@ -1,17 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using GQ.Client.Err;
+using System.Xml;
 
 namespace GQ.Client.Model
 {
 
     public class VarExpression : SimpleExpression
     {
-
         #region Structure
+        public VarExpression(XmlReader reader) : base(reader) { }
+
         protected override void setValue(string valueAsString)
         {
             valueAsString = valueAsString.Trim();

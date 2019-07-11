@@ -1,34 +1,20 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
 
-	[System.Serializable]
-	public class CompoundCondition : ICondition, IConditionContainer, IXmlSerializable
+    [System.Serializable]
+	public class CompoundCondition : ICondition, IConditionContainer
 	{
 		#region Structure
-
 		public I_GQML Parent { get; set; }
 
 		public Quest Quest {
 			get {
 				return Parent.Quest;
 			}
-		}
-
-		public System.Xml.Schema.XmlSchema GetSchema ()
-		{
-			return null;
-		}
-
-		public void WriteXml (System.Xml.XmlWriter writer)
-		{
-			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
 		}
 
 		/// <summary>
@@ -41,7 +27,7 @@ namespace GQ.Client.Model
 		/// Reader is at the condition element when we call this method. 
 		/// Reads the xml within a given condition element until it has consumed all elements witihn the condition including the ending element.
 		/// </summary>
-		public void ReadXml (System.Xml.XmlReader reader)
+		public CompoundCondition(XmlReader reader)
 		{
 			if (reader.IsEmptyElement) {
 				reader.Read ();
@@ -49,10 +35,6 @@ namespace GQ.Client.Model
 			}
 
 			string conditionName = reader.LocalName;
-
-			XmlSerializer serializer;
-			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-			xmlRootAttr.IsNullable = true;
 
 			// consume the begin of this compound condition
 			reader.Read ();
@@ -67,42 +49,32 @@ namespace GQ.Client.Model
 				if (reader.NodeType != XmlNodeType.Element)
 					continue;
 
-				xmlRootAttr.ElementName = reader.LocalName;
-
 				switch (reader.LocalName) {
 				// COMPOUND CONDITIONS:
 				case GQML.AND:
-					serializer = new XmlSerializer (typeof(ConditionAnd), xmlRootAttr);
-					containedConditions.Add ((ConditionAnd)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionAnd(reader));
 					break;
 				case GQML.OR:
-					serializer = new XmlSerializer (typeof(ConditionOr), xmlRootAttr);
-					containedConditions.Add ((ConditionOr)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionOr(reader));
 					break;
 				case GQML.NOT:
-					serializer = new XmlSerializer (typeof(ConditionNot), xmlRootAttr);
-					containedConditions.Add ((ConditionNot)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionNot(reader));
 					break;
 				// COMPARING CONDITIONS:
 				case GQML.EQUAL:
-					serializer = new XmlSerializer (typeof(ConditionEq), xmlRootAttr);
-					containedConditions.Add ((ConditionEq)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionEq(reader));
 					break;
 				case GQML.GREATER_THAN:
-					serializer = new XmlSerializer (typeof(ConditionGt), xmlRootAttr);
-					containedConditions.Add ((ConditionGt)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionGt(reader));
 					break;
 				case GQML.GREATER_EQUAL:
-					serializer = new XmlSerializer (typeof(ConditionGeq), xmlRootAttr);
-					containedConditions.Add ((ConditionGeq)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionGeq(reader));
 					break;
 				case GQML.LESS_THAN:
-					serializer = new XmlSerializer (typeof(ConditionLt), xmlRootAttr);
-					containedConditions.Add ((ConditionLt)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionLt(reader));
 					break;
 				case GQML.LESS_EQUAL:
-					serializer = new XmlSerializer (typeof(ConditionLeq), xmlRootAttr);
-					containedConditions.Add ((ConditionLeq)serializer.Deserialize (reader));
+					containedConditions.Add (new ConditionLeq(reader));
 					break;
 				// UNKOWN CASE:
 				default:

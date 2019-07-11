@@ -1,18 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Model;
-using System.Xml.Serialization;
-using GQ.Client.Err;
+﻿using GQ.Client.Err;
 using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ActionIncrementVariable : ActionAbstractWithVar
+    public class ActionIncrementVariable : ActionAbstractWithVar
 	{
-		#region Functions
+        public ActionIncrementVariable(XmlReader reader) : base(reader) { }
 
-		public override void Execute ()
+        #region Functions
+        public override void Execute ()
 		{
 			if (VarName == null) {
 				Log.SignalErrorToDeveloper ("IncrementVariableAction Action without varname can not be executed. (Ignored)");
@@ -49,7 +46,6 @@ namespace GQ.Client.Model
 				break;
 			}
 		}
-
 		#endregion
 	}
 }

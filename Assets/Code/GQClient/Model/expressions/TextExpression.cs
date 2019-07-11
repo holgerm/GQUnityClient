@@ -1,16 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
-
-	public class TextExpression : SimpleExpression
+    public class TextExpression : SimpleExpression
 	{
+        #region Structure
+        public TextExpression(XmlReader reader) : base(reader) { }
 
-		#region Structure
-
-		protected override void setValue (string valueAsString)
+        protected override void setValue (string valueAsString)
 		{
 			value = new Value (valueAsString, Value.Type.Text);
 		}

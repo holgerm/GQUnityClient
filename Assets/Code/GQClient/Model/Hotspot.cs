@@ -1,6 +1,3 @@
-using GQ.Client.Model;
-using System.Xml.Serialization;
-using UnityEngine;
 using GQ.Client.Err;
 using System.Xml;
 using System;
@@ -11,78 +8,69 @@ using QM.Util;
 
 namespace GQ.Client.Model
 {
-	
-	[XmlRoot (GQML.HOTSPOT)]
-	public class Hotspot : IXmlSerializable, ITriggerContainer
-	{
+    public class Hotspot : ITriggerContainer
+    {
 
-		#region XML Parsing
+        #region XML Parsing
+        public virtual Quest Quest
+        {
+            get
+            {
+                return Parent;
+            }
+        }
 
-		public System.Xml.Schema.XmlSchema GetSchema ()
-		{
-			return null;
-		}
+        /// <summary>
+        /// Reader must be at the hotspot element (start). When it returns the reader is position behind the hotspot end element. 
+        /// </summary>
+        /// <param name="reader">Reader.</param>
+        public Hotspot(XmlReader reader)
+        {
+            Status = StatusValue.UNDEFINED;
 
-		public void WriteXml (System.Xml.XmlWriter writer)
-		{
-			Debug.LogWarning ("WriteXML not implemented for " + GetType ().Name);
-		}
+            EnterTrigger = Trigger.Null;
+            LeaveTrigger = Trigger.Null;
+            TapTrigger = Trigger.Null;
 
-		public virtual Quest Quest {
-			get {
-				return Parent;
-			}
-		}
+            GQML.AssertReaderAtStart(reader, GQML.HOTSPOT);
 
-		/// <summary>
-		/// Reader must be at the hotspot element (start). When it returns the reader is position behind the hotspot end element. 
-		/// </summary>
-		/// <param name="reader">Reader.</param>
-		public void ReadXml (XmlReader reader)
-		{
-			GQML.AssertReaderAtStart (reader, GQML.HOTSPOT);
+            ReadAttributes(reader);
 
-			ReadAttributes (reader);
+            if (reader.IsEmptyElement)
+            {
+                // empty hotspot without events:
+                reader.Read();
+                return;
+            }
 
-			if (reader.IsEmptyElement) {
-				// empty hotspot without events:
-				reader.Read ();
-				return;
-			}
+            // consume the Begin Action Element:
+            reader.Read();
 
-			// consume the Begin Action Element:
-			reader.Read (); 
+            while (!GQML.IsReaderAtEnd(reader, GQML.HOTSPOT))
+            {
 
-			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-			xmlRootAttr.IsNullable = true;
+                if (reader.NodeType == XmlNodeType.Element)
+                    ReadContent(reader);
+            }
 
-			while (!GQML.IsReaderAtEnd (reader, GQML.HOTSPOT)) {
+            // consume the closing action tag (if not empty page element)
+            if (reader.NodeType == XmlNodeType.EndElement)
+                reader.Read();
+        }
+        #endregion
 
-				if (reader.NodeType == XmlNodeType.Element)
-					ReadContent (reader, xmlRootAttr);
-			}
+        #region Data
+        public const double DEFAULT_RADIUS = 20.0d;
+        public const string DEFAULT_NUMBER = "007";
 
-			// consume the closing action tag (if not empty page element)
-			if (reader.NodeType == XmlNodeType.EndElement)
-				reader.Read ();
-		}
+        public int Id { get; protected set; }
 
-		#endregion
+        public string MarkerImageUrl { get; protected set; }
 
-
-		#region Data
-
-		public const double DEFAULT_RADIUS = 20.0d;
-		public const string DEFAULT_NUMBER = "007";
-
-		public int Id { get; protected set; }
-
-		public string MarkerImageUrl { get; protected set; }
-
-		public bool InitialActivity { get; protected set; }
+        public bool InitialActivity { get; protected set; }
 
         private bool _active;
-		public bool Active
+        public bool Active
         {
             get
             {
@@ -95,10 +83,11 @@ namespace GQ.Client.Model
             }
         }
 
-		public bool InitialVisibility { get; protected set; }
+        public bool InitialVisibility { get; protected set; }
 
         private bool _visible;
-		public bool Visible {
+        public bool Visible
+        {
             get
             {
                 return _visible;
@@ -110,200 +99,187 @@ namespace GQ.Client.Model
             }
         }
 
-		public StatusValue Status { get; set; }
+        public StatusValue Status { get; set; }
 
-		public enum StatusValue {
-			UNDEFINED,
-			INSIDE,
-			OUTSIDE
-		}
+        public enum StatusValue
+        {
+            UNDEFINED,
+            INSIDE,
+            OUTSIDE
+        }
 
-		protected string LatLong { 
-			set {
-				string[] parts = value.Split (',');
-				if (parts.Length != 2) {
-					Log.SignalErrorToDeveloper (
-						"Hotspot {0} in quest {1} contains bad location string '{2}'",
-						Id,
-						QuestManager.CurrentlyParsingQuest.Id,
-						value
-					);
-				}
-				latitude = Convert.ToDouble (parts [0], new CultureInfo ("en-US"));
-				longitude = Convert.ToDouble (parts [1], new CultureInfo ("en-US"));
-			} 
-		}
+        protected string LatLong
+        {
+            set
+            {
+                string[] parts = value.Split(',');
+                if (parts.Length != 2)
+                {
+                    Log.SignalErrorToDeveloper(
+                        "Hotspot {0} in quest {1} contains bad location string '{2}'",
+                        Id,
+                        QuestManager.CurrentlyParsingQuest.Id,
+                        value
+                    );
+                }
+                latitude = Convert.ToDouble(parts[0], new CultureInfo("en-US"));
+                longitude = Convert.ToDouble(parts[1], new CultureInfo("en-US"));
+            }
+        }
 
-		private double latitude;
+        private double latitude;
 
-		public double Latitude {
-			get {
-				return latitude;
-			}
-		}
+        public double Latitude
+        {
+            get
+            {
+                return latitude;
+            }
+        }
 
-		private double longitude;
+        private double longitude;
 
-		public double Longitude {
-			get {
-				return longitude;
-			}
-		}
+        public double Longitude
+        {
+            get
+            {
+                return longitude;
+            }
+        }
 
-		public double Radius { get; protected set; }
+        public double Radius { get; protected set; }
 
-		public string Number { get; protected set; }
+        public string Number { get; protected set; }
 
-		public string QrCode { get; protected set; }
+        public string QrCode { get; protected set; }
 
-		public string Nfc { get; protected set; }
+        public string Nfc { get; protected set; }
 
-		public string IBeacon { get; protected set; }
-
-
-		protected virtual void ReadAttributes (XmlReader reader)
-		{
-			// Id:
-			int id;
-			if (Int32.TryParse (reader.GetAttribute (GQML.HOTSPOT_ID), out id)) {
-				Id = id;
-			} else {
-				Log.SignalErrorToDeveloper ("Id for a hotspot could not be parsed. We found: " + reader.GetAttribute (GQML.ID));
-			}
-
-			// Marker Image:
-			MarkerImageUrl = GQML.GetStringAttribute (GQML.HOTSPOT_MARKERURL, reader);
-			QuestManager.CurrentlyParsingQuest.AddMedia (MarkerImageUrl, "Hotspot." + GQML.HOTSPOT_MARKERURL);
-
-			// InitialActivity:
-			InitialActivity = GQML.GetOptionalBoolAttribute (GQML.HOTSPOT_INITIAL_ACTIVITY, reader, true);
-			Active = InitialActivity;
-
-			// InitialVisibility:
-			InitialVisibility = GQML.GetOptionalBoolAttribute (GQML.HOTSPOT_INITIAL_VISIBILITY, reader, true);
-			Visible = InitialVisibility;
-
-			// LatLong: TODO parse and transform in a location type etc.
-			LatLong = GQML.GetStringAttribute (GQML.HOTSPOT_LATLONG, reader);
-
-			// Radius:
-			Radius = GQML.GetDoubleAttribute (GQML.HOTSPOT_RADIUS, reader, DEFAULT_RADIUS);
-
-			// Number:
-			Number = GQML.GetStringAttribute (GQML.HOTSPOT_NUMBER, reader, DEFAULT_NUMBER);
-
-			// QR Code:
-			QrCode = GQML.GetStringAttribute (GQML.HOTSPOT_QRCODE, reader);
-
-			// NFC:
-			Nfc = GQML.GetStringAttribute (GQML.HOTSPOT_NFC, reader);
-
-			// iBeacon:
-			IBeacon = GQML.GetStringAttribute (GQML.HOTSPOT_IBEACON, reader);
-		}
-
-		#endregion
+        public string IBeacon { get; protected set; }
 
 
-		#region Triggers
+        protected virtual void ReadAttributes(XmlReader reader)
+        {
+            // Id:
+            int id;
+            if (Int32.TryParse(reader.GetAttribute(GQML.HOTSPOT_ID), out id))
+            {
+                Id = id;
+            }
+            else
+            {
+                Log.SignalErrorToDeveloper(
+                    "Id for a hotspot could not be parsed. We found: {0}, line {1} pos {2}",
+                    reader.GetAttribute(GQML.ID),
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition);
+            }
 
-		protected Trigger EnterTrigger = Trigger.Null;
-		protected Trigger LeaveTrigger = Trigger.Null;
-		protected Trigger TapTrigger = Trigger.Null;
+            // Marker Image:
+            MarkerImageUrl = GQML.GetStringAttribute(GQML.HOTSPOT_MARKERURL, reader);
+            QuestManager.CurrentlyParsingQuest.AddMedia(MarkerImageUrl, "Hotspot." + GQML.HOTSPOT_MARKERURL);
 
-		protected virtual void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
-		{
-			XmlSerializer serializer;
+            // InitialActivity:
+            InitialActivity = GQML.GetOptionalBoolAttribute(GQML.HOTSPOT_INITIAL_ACTIVITY, reader, true);
+            Active = InitialActivity;
 
-			switch (reader.LocalName) {
-			case GQML.ON_ENTER:
-				xmlRootAttr.ElementName = GQML.ON_ENTER;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				EnterTrigger = (Trigger)serializer.Deserialize (reader);
-				EnterTrigger.Parent = this;
-				break;
-			case GQML.ON_LEAVE:
-				xmlRootAttr.ElementName = GQML.ON_LEAVE;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				LeaveTrigger = (Trigger)serializer.Deserialize (reader);
-				LeaveTrigger.Parent = this;
-				break;
-			case GQML.ON_TAP:
-				xmlRootAttr.ElementName = GQML.ON_TAP;
-				serializer = new XmlSerializer (typeof(Trigger), xmlRootAttr);
-				TapTrigger = (Trigger)serializer.Deserialize (reader);
-				TapTrigger.Parent = this;
-				break;
-			// UNKOWN CASE:
-			default:
-				Log.WarnDeveloper ("Hotspot has additional unknown {0} element. (Ignored)", reader.LocalName);
-				reader.Skip ();
-				break;
-			}
-		}
+            // InitialVisibility:
+            InitialVisibility = GQML.GetOptionalBoolAttribute(GQML.HOTSPOT_INITIAL_VISIBILITY, reader, true);
+            Visible = InitialVisibility;
 
-		#endregion
+            // LatLong: TODO parse and transform in a location type etc.
+            LatLong = GQML.GetStringAttribute(GQML.HOTSPOT_LATLONG, reader);
 
+            // Radius:
+            Radius = GQML.GetDoubleAttribute(GQML.HOTSPOT_RADIUS, reader, DEFAULT_RADIUS);
 
-		#region State
+            // Number:
+            Number = GQML.GetStringAttribute(GQML.HOTSPOT_NUMBER, reader, DEFAULT_NUMBER);
 
-		public Hotspot ()
-		{
-			Status = StatusValue.UNDEFINED;
+            // QR Code:
+            QrCode = GQML.GetStringAttribute(GQML.HOTSPOT_QRCODE, reader);
 
-			result = null;
+            // NFC:
+            Nfc = GQML.GetStringAttribute(GQML.HOTSPOT_NFC, reader);
 
-			EnterTrigger = Trigger.Null;
-			LeaveTrigger = Trigger.Null;
-			TapTrigger = Trigger.Null;
-		}
-
-		public string result;
-
-		public string Result {
-			get {
-				return result;
-			}
-		}
-
-		public virtual Quest Parent { get; set; }
-
-		#endregion
+            // iBeacon:
+            IBeacon = GQML.GetStringAttribute(GQML.HOTSPOT_IBEACON, reader);
+        }
+        #endregion
 
 
-		#region Runtime API
+        #region Triggers
+        protected Trigger EnterTrigger = Trigger.Null;
+        protected Trigger LeaveTrigger = Trigger.Null;
+        protected Trigger TapTrigger = Trigger.Null;
 
-		public bool InsideRadius(LocationInfoExt loc) {
-			return LocationSensor.distance (loc.latitude, loc.longitude, Latitude, Longitude) <= Radius - 0.001d;
-		}
+        protected virtual void ReadContent(XmlReader reader)
+        {
+            switch (reader.LocalName)
+            {
+                case GQML.ON_ENTER:
+                    EnterTrigger = new Trigger(reader);
+                    EnterTrigger.Parent = this;
+                    break;
+                case GQML.ON_LEAVE:
+                    LeaveTrigger = new Trigger(reader);
+                    LeaveTrigger.Parent = this;
+                    break;
+                case GQML.ON_TAP:
+                    TapTrigger = new Trigger(reader);
+                    TapTrigger.Parent = this;
+                    break;
+                // UNKOWN CASE:
+                default:
+                    Log.WarnDeveloper("Hotspot has additional unknown {0} element. (Ignored) line {1} position {2}",
+                        reader.LocalName,
+                        ((IXmlLineInfo)reader).LineNumber,
+                        ((IXmlLineInfo)reader).LinePosition);
+                    reader.Skip();
+                    break;
+            }
+        }
+        #endregion
 
-		public bool OutsideRadius(LocationInfoExt loc) {
-			return LocationSensor.distance (loc.latitude, loc.longitude, Latitude, Longitude) > Radius + 0.001d;
-		}
+        #region State
+        public virtual Quest Parent { get; set; }
+        #endregion
 
-		public virtual void Enter ()
-		{
-            Debug.Log("HOTSPO TRIGGERS ONENTER: " + Id);
+
+        #region Runtime API
+        public bool InsideRadius(LocationInfoExt loc)
+        {
+            return LocationSensor.distance(loc.latitude, loc.longitude, Latitude, Longitude) <= Radius - 0.001d;
+        }
+
+        public bool OutsideRadius(LocationInfoExt loc)
+        {
+            return LocationSensor.distance(loc.latitude, loc.longitude, Latitude, Longitude) > Radius + 0.001d;
+        }
+
+        public virtual void Enter()
+        {
             Status = Hotspot.StatusValue.INSIDE;
-			EnterTrigger.Initiate ();
-		}
+            EnterTrigger.Initiate();
+        }
 
-		public virtual void Leave ()
-		{
-            Debug.Log("HOTSPO TRIGGERS ONLEAVE: " + Id);
+        public virtual void Leave()
+        {
             Status = Hotspot.StatusValue.OUTSIDE;
-			LeaveTrigger.Initiate ();
-		}
+            LeaveTrigger.Initiate();
+        }
 
-		public virtual void Tap ()
-		{
-            if (Author.LoggedIn) {
-				EmuHotspotDialog.CreateAndShow (EnterTrigger, LeaveTrigger, TapTrigger);
-			} else {
-				TapTrigger.Initiate ();
-			}
-		}
-
+        public virtual void Tap()
+        {
+            if (Author.LoggedIn)
+            {
+                EmuHotspotDialog.CreateAndShow(EnterTrigger, LeaveTrigger, TapTrigger);
+            }
+            else
+            {
+                TapTrigger.Initiate();
+            }
+        }
         #endregion
 
 

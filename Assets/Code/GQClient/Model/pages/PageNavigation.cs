@@ -1,16 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml.Serialization;
+﻿using UnityEngine;
 using System.Xml;
 using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
-    [XmlRoot(GQML.PAGE)]
     public class PageNavigation : Page
     {
-
         #region State
         public bool mapOption { get; set; }
         public int initialZoomLevel { get; set; }
@@ -35,6 +30,8 @@ namespace GQ.Client.Model
         #endregion
 
         #region XML Serialization
+        public PageNavigation(XmlReader reader) : base(reader) { }
+
         protected override void ReadAttributes(XmlReader reader)
         {
             base.ReadAttributes(reader);
@@ -64,7 +61,6 @@ namespace GQ.Client.Model
 
 
         #region Runtime API
-
         private int testCount = 0;
         public override void Start(bool canReturnToPrevious = false) {
             base.Start(canReturnToPrevious);

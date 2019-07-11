@@ -5,22 +5,13 @@ using QM.NFC;
 
 namespace GQ.Client.Model
 {
-    public class ActionWriteToNFC : ActionAbstract
+    public class ActionWriteToNFC : Action
+
     {
         #region Structure
-        private string _content = null;
+        public ActionWriteToNFC(XmlReader reader) : base(reader) { }
 
-        public string Content
-        {
-            get
-            {
-                return _content;
-            }
-            protected set
-            {
-                _content = value;
-            }
-        }
+        public string Content { get; protected set; } = null;
 
         protected override void ReadAttributes(XmlReader reader)
         {

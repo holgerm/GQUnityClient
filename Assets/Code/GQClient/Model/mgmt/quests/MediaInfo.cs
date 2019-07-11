@@ -1,23 +1,10 @@
-using UnityEngine;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Collections;
-using GQ.Client.Model;
-using System.IO;
 using GQ.Client.Err;
-using System.Collections.Generic;
-using GQ.Client.Conf;
 using GQ.Client.FileIO;
-
-using System;
-using GQ.Client.Util;
-using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
 
 namespace GQ.Client.Model
 {
 
-	public class MediaInfo
+    public class MediaInfo
 	{
 
 		string url;

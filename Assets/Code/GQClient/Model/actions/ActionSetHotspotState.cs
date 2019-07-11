@@ -1,17 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Model;
-using System.Xml.Serialization;
-using GQ.Client.Err;
-using System.Xml;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ActionSetHotspotState : ActionAbstract
+    public class ActionSetHotspotState : Action
+   
 	{
 		#region State
-
 		public int HotspotId { get; set; }
 
 		public bool ApplyToAll { get; set; }
@@ -19,11 +14,10 @@ namespace GQ.Client.Model
         public string Activity { get; set; }
 
         public string Visbility { get; set; }
-
         #endregion
 
-
         #region Structure
+        public ActionSetHotspotState(XmlReader reader) : base(reader) { }
 
         protected override void ReadAttributes (XmlReader reader)
 		{
@@ -32,12 +26,10 @@ namespace GQ.Client.Model
             Activity = GQML.GetStringAttribute(GQML.ACTION_SETHOTSPOTSTATE_ACTIVITY, reader, defaultVal:GQML.ACTIVE);
             Visbility = GQML.GetStringAttribute(GQML.ACTION_SETHOTSPOTSTATE_VISIBILITY, reader, defaultVal: GQML.VISIBLE);
         }
-
         #endregion
 
 
         #region Functions
-
         public override void Execute ()
 		{
             if (ApplyToAll)
@@ -55,12 +47,8 @@ namespace GQ.Client.Model
                     return;
                 hotspot.Active = (Activity == GQML.ACTIVE);
                 hotspot.Visible = (Visbility == GQML.VISIBLE);
-
-                Debug.Log(("Action SetHotspotState hotspot: " + HotspotId + ", activity: " + Activity + ", visibility: " + Visbility).Yellow());
             }
-
         }
-
 		#endregion
 	}
 }

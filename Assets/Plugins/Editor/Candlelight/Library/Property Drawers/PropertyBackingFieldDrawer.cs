@@ -218,7 +218,7 @@ namespace Candlelight
 			// register callbacks with UnityEditor.Undo
 			Undo.postprocessModifications += OnPerformUndoableAction;
 			Undo.undoRedoPerformed += OnUndoRedo;
-			EditorApplication.playmodeStateChanged += DeregisterAllPropertySetterCallbacks;
+			EditorApplication.playModeStateChanged += DeregisterAllPropertySetterCallbacks;
 			// get all types incompatible with this feature
 			List<System.SerializableAttribute> serializableAttrs = new List<System.SerializableAttribute>(1);
 			HashSet<System.Type> typesThatCannotBeBackingFields = new HashSet<System.Type>(
@@ -421,9 +421,9 @@ namespace Candlelight
 		/// <summary>
 		/// Deregisters all property setter callbacks.
 		/// </summary>
-		private static void DeregisterAllPropertySetterCallbacks()
+		private static void DeregisterAllPropertySetterCallbacks(PlayModeStateChange change)
 		{
-			HashableSerializedProperty.ResetCache();
+            HashableSerializedProperty.ResetCache();
 			s_PropertySetterCallbacks.Clear();
 			s_ValueCache.Clear();
 		}
@@ -1115,7 +1115,7 @@ namespace Candlelight
 			// clear all callbacks and cached values if the selection has changed
 			if (!s_CurrentSelection.SetEquals(Selection.objects))
 			{
-				DeregisterAllPropertySetterCallbacks();
+                DeregisterAllPropertySetterCallbacks(change: PlayModeStateChange.EnteredEditMode);
 				s_CurrentSelection.Clear();
 				foreach (Object obj in Selection.objects)
 				{

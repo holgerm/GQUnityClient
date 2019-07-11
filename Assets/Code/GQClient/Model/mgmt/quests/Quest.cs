@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using GQ.Client.FileIO;
 using UnityEngine.SceneManagement;
-using System.Xml.Serialization;
 using System;
 using GQ.Client.Conf;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.IO;
 using System.Xml;
 using GQ.Client.Util;
 using System.Net;
+using System.Reflection;
 
 namespace GQ.Client.Model
 {
@@ -18,9 +18,7 @@ namespace GQ.Client.Model
     /// <summary>
     /// The root object of a quests model at runtime. It represents all details of the quest at runtime.
     /// </summary>
-    [System.Serializable]
-    [XmlRoot(GQML.QUEST)]
-    public class Quest : IComparable<Quest>, IXmlSerializable
+    public class Quest : IComparable<Quest>
     {
 
         #region Attributes
@@ -167,19 +165,15 @@ namespace GQ.Client.Model
                 return _hotspotDict.Values;
             }
         }
-
         #endregion
 
 
         #region Metadata
-
         public Dictionary<string, string> metadata = new Dictionary<string, string>();
-
         #endregion
 
 
         #region Media
-
         private Dictionary<string, MediaInfo> _mediaStore = null;
 
         public Dictionary<string, MediaInfo> MediaStore
@@ -413,18 +407,7 @@ namespace GQ.Client.Model
         #endregion
 
         #region XML Reading
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// This method should only be called from the XML Serialization Framework. 
-        /// It will be indirectly used by the QuestManager method DeserializeQuest().
-        /// </summary>
-        /// <returns>The xml.</returns>
-        /// <param name="reader">Reader.</param>
-        public void ReadXml(System.Xml.XmlReader reader)
+        public Quest(System.Xml.XmlReader reader)
         {
             QuestManager.CurrentlyParsingQuest = this; // TODO use event system instead
 
@@ -445,10 +428,6 @@ namespace GQ.Client.Model
 
             // Start the xml content: consume the begin quest element:
             reader.Read();
-
-            // Content:
-            XmlRootAttribute xmlRootAttr = new XmlRootAttribute();
-            xmlRootAttr.IsNullable = true;
 
             while (!GQML.IsReaderAtEnd(reader, GQML.QUEST))
             {
@@ -472,6 +451,10 @@ namespace GQ.Client.Model
 
             // we are done with this quest:
             QuestManager.CurrentlyParsingQuest = Null;
+        }
+
+        protected Quest()
+        {
         }
 
         private void ReadFurtherAttributes(XmlReader reader)
@@ -519,8 +502,13 @@ namespace GQ.Client.Model
                 return;
             }
 
-            XmlSerializer serializer = new XmlSerializer(pageType);
-            Page page = (Page)serializer.Deserialize(reader);
+            // get right constructor for page type:
+            ConstructorInfo constructorInfoObj = pageType.GetConstructor(new Type[] { typeof(XmlReader) });
+            if (constructorInfoObj == null)
+            {
+                Log.SignalErrorToDeveloper("Page {0} misses a Constructor for creating the model from XmlReader.", pageTypeName);
+            }
+            Page page = (Page)constructorInfoObj.Invoke(new object[] { reader });
             page.Parent = this;
             if (StartPage == null && page.CanStart())
                 StartPage = page;
@@ -540,18 +528,10 @@ namespace GQ.Client.Model
 
         private void ReadHotspot(XmlReader reader)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Hotspot));
-            Hotspot hotspot = (Hotspot)serializer.Deserialize(reader);
+            Hotspot hotspot = new Hotspot(reader);
             hotspot.Parent = this;
             AddHotspot(hotspot);
         }
-
-
-        public void WriteXml(System.Xml.XmlWriter writer)
-        {
-            Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
-        }
-
         #endregion
 
 
@@ -603,8 +583,7 @@ namespace GQ.Client.Model
         private class NullQuest : Quest
         {
 
-            public NullQuest()
-                : base()
+            public NullQuest() : base()
             {
                 Name = "Null Quest";
                 Id = 0;

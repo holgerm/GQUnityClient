@@ -1,17 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-using System.Xml.Serialization;
+﻿using System;
 using GQ.Client.Err;
+using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class NumberExpression : SimpleExpression
+    public class NumberExpression : SimpleExpression
 	{
-		#region Structure
+        #region Structure
+        public NumberExpression(XmlReader reader) : base(reader) { }
 
-		protected override void setValue (string valueAsString)
+        protected override void setValue (string valueAsString)
 		{
             valueAsString = valueAsString.Trim();
 
@@ -29,8 +28,6 @@ namespace GQ.Client.Model
 				Log.WarnAuthor ("Tried to store {0} to a num typed value, but that does not work. We store 0 as Integer instead.", valueAsString);
 			}
 		}
-
 		#endregion
-
 	}
 }

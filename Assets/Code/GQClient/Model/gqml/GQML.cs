@@ -291,9 +291,11 @@ namespace GQ.Client.Model
 					return false;
 				}
 				Log.SignalErrorToDeveloper (
-					"Bool attribute {0} for a page could not be parsed. We found: '{1}'.", 
+					"Bool attribute {0} for a page could not be parsed. We found: '{1}' line {2} pos {3}.", 
 					attributeName, 
-					attString);
+					attString,
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition);
 			}
 
 			return val;
@@ -357,11 +359,13 @@ namespace GQ.Client.Model
 		{
 			if (!IsReaderAtStart (reader, nodeName)) {
 				Log.SignalErrorToDeveloper (
-					"Expected a {0} element but we got a {1} with name '{2}'", 
+					"Expected a {0} element but we got a {1} with name '{2}' line {3} pos {4}", 
 					nodeName,
 					reader.NodeType.ToString (),
-					reader.LocalName
-				);
+					reader.LocalName,
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition
+                );
 			}
 		}
 
@@ -374,11 +378,13 @@ namespace GQ.Client.Model
 		{
 			if (!IsReaderAtEnd (reader, nodeName)) {
 				Log.SignalErrorToDeveloper (
-					"Expected a {0} end element but we got a {1} with name '{2}'", 
+					"Expected a {0} end element but we got a {1} with name '{2}' line {3} pos {4}", 
 					nodeName,
 					reader.NodeType.ToString (),
-					reader.LocalName
-				);
+					reader.LocalName,
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition
+                );
 			}
 		}
 

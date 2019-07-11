@@ -1,7 +1,6 @@
 using GQ.Client.Err;
 using UnityEngine.SceneManagement;
 using System.Xml;
-using System.Xml.Serialization;
 using System;
 using UnityEngine;
 using GQ.Client.Util;
@@ -10,22 +9,9 @@ using System.Collections.Generic;
 
 namespace GQ.Client.Model
 {
-    [XmlRoot(GQML.PAGE)]
-    public abstract class Page : IXmlSerializable, ITriggerContainer
+    public abstract class Page : ITriggerContainer
     {
-
         #region XML Parsing
-
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void WriteXml(System.Xml.XmlWriter writer)
-        {
-            Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
-        }
-
         public virtual Quest Quest
         {
             get
@@ -41,16 +27,11 @@ namespace GQ.Client.Model
         /// and extend them by calling their base versions.
         /// </summary>
         /// <param name="reader">Reader.</param>
-        public void ReadXml(XmlReader reader)
+        public Page(XmlReader reader)
         {
             GQML.AssertReaderAtStart(reader, GQML.PAGE);
 
             ReadAttributes(reader);
-
-            if (Id == 36085 )
-            {
-                Debug.Log("Treffer");
-            }
 
             if (reader.IsEmptyElement)
             {
@@ -60,15 +41,11 @@ namespace GQ.Client.Model
 
             // consume the Begin Action Element:
             reader.Read();
-
-            XmlRootAttribute xmlRootAttr = new XmlRootAttribute();
-            xmlRootAttr.IsNullable = true;
-
             while (!GQML.IsReaderAtEnd(reader, GQML.PAGE))
             {
 
                 if (reader.NodeType == XmlNodeType.Element)
-                    ReadContent(reader, xmlRootAttr);
+                    ReadContent(reader);
             }
 
             // consume the closing action tag (if not empty page element)
@@ -86,7 +63,11 @@ namespace GQ.Client.Model
             }
             else
             {
-                Log.SignalErrorToDeveloper("Id for a page could not be parsed. We found: " + reader.GetAttribute(GQML.ID));
+                Log.SignalErrorToDeveloper(
+                    "Id for a page could not be parsed. We found: {0}, line {1} pos {2}",
+                    reader.GetAttribute(GQML.ID),
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition);
             }
 
             PageType = GQML.GetStringAttribute(GQML.PAGE_TYPE, reader);
@@ -98,35 +79,25 @@ namespace GQ.Client.Model
         /// you should first process the additional content or alternatives and at the end 
         /// call this implementation with base.ReadContent() as fallback.
         /// </summary>
-        /// <param name="reader">Reader.</param>
-        /// <param name="xmlRootAttr">Xml root attr.</param>
-        protected virtual void ReadContent(XmlReader reader, XmlRootAttribute xmlRootAttr)
+        protected virtual void ReadContent(XmlReader reader)
         {
-            XmlSerializer serializer;
-
             switch (reader.LocalName)
             {
                 case GQML.ON_START:
-                    xmlRootAttr.ElementName = GQML.ON_START;
-                    serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
-                    StartTrigger = (Trigger)serializer.Deserialize(reader);
-                    serializer = null;
+                    StartTrigger =  new Trigger(reader);
                     StartTrigger.Parent = this;
                     break;
                 case GQML.ON_END:
-                    xmlRootAttr.ElementName = GQML.ON_END;
-                    serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
-
-                    IXmlLineInfo lineInfo = ((IXmlLineInfo)reader);
-                    Debug.Log("XML still alive: Page(" + Id + ").OnEnd line: " + lineInfo.LineNumber + " pos: " + lineInfo.LinePosition);
-
-                    EndTrigger = (Trigger)serializer.Deserialize(reader);
-                    serializer = null;
+                    EndTrigger = new Trigger(reader);
                     EndTrigger.Parent = this;
                     break;
                 // UNKOWN CASE:
                 default:
-                    Log.WarnDeveloper("Page {0} has additional unknown {1} element. (Ignored)", Id, reader.LocalName);
+                    Log.WarnDeveloper("Page {0} has additional unknown {1} element. (Ignored) line {2} position {3}",
+                        Id,
+                        reader.LocalName,
+                        ((IXmlLineInfo)reader).LineNumber,
+                        ((IXmlLineInfo)reader).LinePosition);
                     reader.Skip();
                     break;
             }

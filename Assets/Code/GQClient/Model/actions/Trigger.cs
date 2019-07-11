@@ -1,28 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
-    public class Trigger : IXmlSerializable, IActionListContainer
+    public class Trigger : IActionListContainer
     {
 
         #region Structure
-
-        public System.Xml.Schema.XmlSchema GetSchema()
-        {
-            return null;
-        }
-
-        public void WriteXml(System.Xml.XmlWriter writer)
-        {
-            Debug.LogWarning("WriteXML not implemented for " + GetType().Name);
-        }
-
-
         public ITriggerContainer Parent { get; internal set; }
 
         public Quest Quest
@@ -42,7 +27,7 @@ namespace GQ.Client.Model
         {
             foreach (Rule curRule in containedRules)
             {
-                foreach (IAction curAction in curRule.containedActions)
+                foreach (Action curAction in curRule.containedActions)
                 {
                     if (!(curAction is ActionEndGame))
                         // some other action found than EndGame:
@@ -57,7 +42,7 @@ namespace GQ.Client.Model
         /// Reads the xml within a given rule element until it finds an action element. 
         /// It then delegates further parsing to the specific action subclass depending on the actions type attribute.
         /// </summary>
-        public void ReadXml(System.Xml.XmlReader reader)
+        public Trigger(System.Xml.XmlReader reader)
         {
             if (reader.IsEmptyElement)
             {
@@ -68,31 +53,28 @@ namespace GQ.Client.Model
             while (reader.NodeType != XmlNodeType.Element || !isTriggerType(reader.LocalName))
             {
                 // skip this unexpected inner node
-                Log.SignalErrorToDeveloper("Unexpected xml {0} {1} found where trigger was expected.",
-                    reader.NodeType, reader.LocalName);
+                Log.SignalErrorToDeveloper(
+                    "Unexpected xml {0} {1} found in condition element in line {2} at position {3}",
+                    reader.NodeType,
+                    reader.LocalName,
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition);
                 reader.Read();
             }
 
             string triggerName = reader.LocalName;
-
-            XmlRootAttribute xmlRootAttr = new XmlRootAttribute();
-            xmlRootAttr.IsNullable = true;
 
             // consume starting Trigger element:				
             reader.Read();
 
             while (!GQML.IsReaderAtEnd(reader, triggerName))
             {
-
                 if (reader.NodeType != XmlNodeType.Element)
                     continue;
 
                 if (GQML.IsReaderAtStart(reader, GQML.RULE))
                 {
-                    xmlRootAttr.ElementName = GQML.RULE;
-                    XmlSerializer serializer = new XmlSerializer(typeof(Rule), xmlRootAttr);
-                    Rule rule = (Rule)serializer.Deserialize(reader);
-                    serializer = null;
+                    Rule rule = new Rule(reader);
                     rule.Parent = this;
                     containedRules.Add(rule);
                 }
@@ -106,6 +88,8 @@ namespace GQ.Client.Model
             GQML.AssertReaderAtEnd(reader, triggerName);
             reader.Read();
         }
+
+        protected Trigger() { }
 
         private static List<string> triggerNodeNames =
             new List<string>(
@@ -122,12 +106,9 @@ namespace GQ.Client.Model
         {
             return triggerNodeNames.Contains(xmlTriggerCandidate);
         }
-
         #endregion
 
-
         #region Functions
-
         public virtual void Initiate()
         {
             foreach (Rule rule in containedRules)
@@ -135,12 +116,9 @@ namespace GQ.Client.Model
                 rule.Apply();
             }
         }
-
         #endregion
 
-
         #region Null
-
         public static readonly Trigger Null = new NullTrigger();
 
         private class NullTrigger : Trigger
@@ -154,8 +132,6 @@ namespace GQ.Client.Model
             {
             }
         }
-
         #endregion
-
     }
 }

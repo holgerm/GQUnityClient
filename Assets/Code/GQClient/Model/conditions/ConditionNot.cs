@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Err;
+﻿using GQ.Client.Err;
+using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ConditionNot : CompoundCondition
+    public class ConditionNot : CompoundCondition
 	{
+        public ConditionNot(XmlReader reader) : base(reader) { }
 
-		public const string NOT_CONDITION_PROBLEM_EMPTY = "Empty not Condition found. This is not allowed.";
+        public const string NOT_CONDITION_PROBLEM_EMPTY = "Empty not Condition found. This is not allowed.";
 		public const string NOT_CONDITION_PROBLEM_TOO_MANY_ATOMIC_CONIDITIONS = "Not Condition may only contain one Subcondition.";
 
 		/// <summary>
@@ -26,9 +26,7 @@ namespace GQ.Client.Model
 				return false;
 			}
 
-
 			return !(containedConditions [0].IsFulfilled ());
 		}
-
 	}
 }

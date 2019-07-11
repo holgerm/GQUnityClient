@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
-using System.Xml.Serialization;
 using GQ.Client.Err;
 using System;
 
@@ -12,29 +10,22 @@ namespace GQ.Client.Model
     {
 
         #region XML Serialization
+        public DecidablePage(XmlReader reader) : base(reader) { }
 
-        protected override void ReadContent(XmlReader reader, XmlRootAttribute xmlRootAttr)
+        protected override void ReadContent(XmlReader reader)
         {
-            XmlSerializer serializer;
-
             switch (reader.LocalName)
             {
                 case GQML.ON_SUCCESS:
-                    xmlRootAttr.ElementName = GQML.ON_SUCCESS;
-                    serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
-                    SuccessTrigger = (Trigger)serializer.Deserialize(reader);
-                    serializer = null;
+                    SuccessTrigger = new Trigger(reader);
                     SuccessTrigger.Parent = this;
                     break;
                 case GQML.ON_FAIL:
-                    xmlRootAttr.ElementName = GQML.ON_FAIL;
-                    serializer = new XmlSerializer(typeof(Trigger), xmlRootAttr);
-                    FailTrigger = (Trigger)serializer.Deserialize(reader);
-                    serializer = null;
+                    FailTrigger = new Trigger(reader);
                     FailTrigger.Parent = this;
                     break;
                 default:
-                    base.ReadContent(reader, xmlRootAttr);
+                    base.ReadContent(reader);
                     break;
             }
         }
@@ -111,7 +102,7 @@ namespace GQ.Client.Model
 
         protected List<IText> ExpectedCodes = new List<IText>();
 
-        public bool AnswerCorrect(string input)
+        public virtual bool AnswerCorrect(string input)
         {
             if (input == null)
                 return false;

@@ -1,36 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Xml;
-using System.Xml.Serialization;
-using GQ.Client.Err;
+﻿using System.Xml;
 
 namespace GQ.Client.Model
 {
 
-	public class ActionAddToScore : ActionAbstract {
+    public class ActionAddToScore : Action
+     {
 
-		#region Structure
+        #region Structure
+        public ActionAddToScore(XmlReader reader) : base(reader) { }
 
-		protected int scoreToAdd;
+        protected int scoreToAdd;
 
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			scoreToAdd = GQML.GetIntAttribute (GQML.ACTION_SETVARIABLE_VALUE, reader);
 		}
-
 		#endregion
 
-
-		#region Functions
-
+		#region Runtime
 		public override void Execute ()
 		{
 			int oldScore = Variables.GetValue (GQML.VAR_SCORE).AsInt ();
 
 			Variables.SetVariableValue (GQML.VAR_SCORE, new Value (oldScore + scoreToAdd));
 		}
-
 		#endregion
 		}
 }

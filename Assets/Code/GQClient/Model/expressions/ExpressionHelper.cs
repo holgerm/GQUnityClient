@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
 using System.Xml;
 using GQ.Client.Err;
 
@@ -10,23 +7,6 @@ namespace GQ.Client.Model
 
     public class ExpressionHelper
     {
-
-        static XmlRootAttribute xmlRootAttr;
-
-        protected static XmlRootAttribute XmlRootAttr
-        {
-            get
-            {
-                if (xmlRootAttr == null)
-                {
-                    xmlRootAttr = new XmlRootAttribute();
-                    xmlRootAttr.IsNullable = true;
-                }
-                return xmlRootAttr;
-            }
-        }
-
-        static int c = 1;
         /// <summary>
         /// Reader is at the surrounding element that contains a list of expressions.
         /// 
@@ -64,7 +44,12 @@ namespace GQ.Client.Model
                 else
                 {
                     // skip this unexpected inner node
-                    Log.WarnDeveloper("Unexpected xml {0} {1} found in expression list.", reader.NodeType, reader.LocalName);
+                    Log.SignalErrorToDeveloper(
+                        "Unexpected xml {0} {1} found in condition element in line {2} at position {3}",
+                        reader.NodeType,
+                        reader.LocalName,
+                        ((IXmlLineInfo)reader).LineNumber,
+                        ((IXmlLineInfo)reader).LinePosition);
                     reader.Read();
                     continue;
                 }
@@ -90,30 +75,22 @@ namespace GQ.Client.Model
                 return null;
             }
 
-            XmlRootAttr.ElementName = reader.LocalName;
-
-            XmlSerializer serializer;
-
             IExpression resultExpression = null;
 
             switch (reader.LocalName)
             {
                 // COMPOUND CONDITIONS:
                 case GQML.VARIABLE:
-                    serializer = new XmlSerializer(typeof(VarExpression), XmlRootAttr);
-                    resultExpression = (VarExpression)serializer.Deserialize(reader);
+                    resultExpression = new VarExpression(reader);
                     break;
                 case GQML.BOOL:
-                    serializer = new XmlSerializer(typeof(BoolExpression), XmlRootAttr);
-                    resultExpression = (BoolExpression)serializer.Deserialize(reader);
+                    resultExpression = new BoolExpression(reader);
                     break;
                 case GQML.NUMBER:
-                    serializer = new XmlSerializer(typeof(NumberExpression), XmlRootAttr);
-                    resultExpression = (NumberExpression)serializer.Deserialize(reader);
+                    resultExpression = new NumberExpression(reader);
                     break;
                 case GQML.STRING:
-                    serializer = new XmlSerializer(typeof(TextExpression), XmlRootAttr);
-                    resultExpression = (TextExpression)serializer.Deserialize(reader);
+                    resultExpression = new TextExpression(reader);
                     break;
                 default:
                     Log.SignalErrorToDeveloper("Expression found with unknown type {0}", reader.LocalName);

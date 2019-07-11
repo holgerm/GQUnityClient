@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Xml.Serialization;
 using System.Xml;
 using GQ.Client.Err;
 using System;
 using GQ.Client.Util;
+using System.Reflection;
 
 namespace GQ.Client.Model
 {
-	/// <summary>
-	/// Condition element may only contain exactly one conrete condition element, 
-	/// like a compund condition (OR, AND, NOT) or a comparing condition (e.g. LT, EQ, etc.).
-	/// </summary>
-	public class Condition : I_GQML, IConditionContainer, ICondition, IXmlSerializable {
+    /// <summary>
+    /// Condition element may only contain exactly one conrete condition element, 
+    /// like a compund condition (OR, AND, NOT) or a comparing condition (e.g. LT, EQ, etc.).
+    /// </summary>
+    public class Condition : I_GQML, IConditionContainer, ICondition {
 
 		#region Structure
 
@@ -35,7 +34,7 @@ namespace GQ.Client.Model
 		/// Reader must be at the start element of condition.
 		/// </summary>
 		/// <param name="reader">Reader.</param>
-		public void ReadXml (System.Xml.XmlReader reader)
+		public Condition(XmlReader reader)
 		{
 			GQML.AssertReaderAtStart (reader, GQML.CONDITION);
 
@@ -45,10 +44,12 @@ namespace GQ.Client.Model
 			if (reader.NodeType == XmlNodeType.Element && GQML.IsConditionType (reader.LocalName)) {
 				ReadConcreteCondition (reader);
 			} else {
-				Log.SignalErrorToDeveloper (
-					"Unexpected xml {0} {1} found in condition element",
+                Log.SignalErrorToDeveloper (
+					"Unexpected xml {0} {1} found in condition element in line {2} at position {3}",
 					reader.NodeType,
-					reader.LocalName);
+					reader.LocalName,
+                    ((IXmlLineInfo)reader).LineNumber,
+                    ((IXmlLineInfo)reader).LinePosition);
 				while (
 					!GQML.IsReaderAtEnd (reader, GQML.CONDITION)
 					&& !(reader.NodeType == XmlNodeType.None)) {
@@ -76,13 +77,14 @@ namespace GQ.Client.Model
 				return;
 			}
 
-			XmlRootAttribute xmlRootAttr = new XmlRootAttribute ();
-			xmlRootAttr.IsNullable = true;
-			xmlRootAttr.ElementName = reader.LocalName;
+            ConstructorInfo constructorInfoObj = conditionType.GetConstructor(new Type[] { typeof(XmlReader) });
+            if (constructorInfoObj == null)
+            {
+                Log.SignalErrorToDeveloper("Condition {0} misses a Constructor for creating the model from XmlReader.", conditionTypeName);
+            }
+            condition = (ICondition)constructorInfoObj.Invoke(new object[] { reader });
 
-			XmlSerializer serializer = new XmlSerializer (conditionType, xmlRootAttr);
-			condition = (ICondition)serializer.Deserialize (reader);
-			condition.Parent = this;
+            condition.Parent = this;
 		}
 
 		public void WriteXml (System.Xml.XmlWriter writer)
