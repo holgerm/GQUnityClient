@@ -192,8 +192,11 @@ namespace GQ.Editor.Building {
 			bool isValid = true;
 			bool productJSONFound = false;
 			bool appIconFound = false;
-			bool splashScreenFound = false;
-			bool topLogoFound = false;
+            bool appIconBGFound = false;
+            bool appIconFGFound = false;
+            bool splashScreenBGFound = false;
+            bool splashScreenFGFound = false;
+            bool topLogoFound = false;
 			bool androidManifestFound = false;
 
 			// Directory must exist:
@@ -210,20 +213,35 @@ namespace GQ.Editor.Building {
 					continue;
 				}
 
-				// AppIcon.png
-				if ( "appicon.png".Equals(file.Name.ToLower()) ) {
+				// AppIcon:
+				if ( "AppIcon.png".Equals(file.Name) ) {
 					appIconFound = true;
 					continue;
 				}
+                if ("AppIconFG.png".Equals(file.Name))
+                {
+                    appIconFGFound = true;
+                    continue;
+                }
+                if ("AppIconBG.png".Equals(file.Name))
+                {
+                    appIconBGFound = true;
+                    continue;
+                }
 
-				// SplashScreen.jpg
-				if ( "splashscreen.jpg".Equals(file.Name.ToLower()) || "splashscreen.png".Equals(file.Name.ToLower())) {
-					splashScreenFound = true;
+                // SplashScreen:
+                if ( "SplashScreenBG.png".Equals(file.Name)) {
+					splashScreenBGFound = true;
 					continue;
 				}
+                if ("SplashScreenFG.png".Equals(file.Name))
+                {
+                    splashScreenFGFound = true;
+                    continue;
+                }
 
-				// TopLogo.jpg
-                if ( "toplogo.jpg".Equals(file.Name.ToLower()) || "toplogo.png".Equals(file.Name.ToLower())) {
+                // TopLogo.jpg
+                if ( "TopLogo.png".Equals(file.Name)) {
 					topLogoFound = true;
 					continue;
 				}
@@ -250,13 +268,26 @@ namespace GQ.Editor.Building {
 			if ( !appIconFound ) {
 				StoreError("No AppIcon.png file found.");
 			}
+            if (!appIconBGFound)
+            {
+                StoreError("No AppIconBG.png file found.");
+            }
+            if (!appIconFGFound)
+            {
+                StoreError("No AppIconFG.png file found.");
+            }
 
-			if ( !splashScreenFound ) {
-				StoreError("No SplashScreen.jpg file found.");
-			}
+            if (!splashScreenBGFound)
+            {
+                StoreError("No SplashScreenBG.png file found.");
+            }
+            if (!splashScreenFGFound)
+            {
+                StoreError("No SplashScreenFG.png file found.");
+            }
 
-			if ( !topLogoFound ) {
-				StoreError("No TopLogo.jpg file found.");
+            if ( !topLogoFound ) {
+				StoreError("No TopLogo.png file found.");
 			}
 
 			if ( !androidManifestFound ) {
