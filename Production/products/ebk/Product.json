@@ -232,7 +232,7 @@
   "maxFontSize": 100,
   "showShadows": false,
   "topLogo": {
-    "path": "topLogoBlau"
+    "path": "TopLogo"
   },
   "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
