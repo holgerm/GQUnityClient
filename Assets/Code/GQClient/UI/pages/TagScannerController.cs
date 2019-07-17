@@ -180,7 +180,6 @@ namespace GQ.Client.UI
                 finishScanning();
                 myPage.Fail(alsoEnd: false);
                 // TODO implement specification of maximal number of trials, before we leave the page failing ...
-                // we now default to 1:
             }
         }
 
