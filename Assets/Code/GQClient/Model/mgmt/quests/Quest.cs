@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//#define DEBUG_LOG
+
+using UnityEngine;
 using Newtonsoft.Json;
 using GQ.Client.FileIO;
 using UnityEngine.SceneManagement;
@@ -135,7 +137,9 @@ namespace GQ.Client.Model
                     {
                         if (h.InsideRadius(e.Location))
                         {
+#if DEBUG_LOG
                             Debug.Log("ENTER HOTSPOT: " + h.Id);
+#endif
                             h.Enter();
                         }
                     }
@@ -143,7 +147,9 @@ namespace GQ.Client.Model
                     {
                         if (h.OutsideRadius(e.Location))
                         {
-                            Debug.Log("LEAVE HOTSPOT: " + h.Id);
+#if DEBUG_LOG
+                           Debug.Log("LEAVE HOTSPOT: " + h.Id);
+#endif
                             h.Leave();
                         }
                     }
@@ -165,15 +171,15 @@ namespace GQ.Client.Model
                 return _hotspotDict.Values;
             }
         }
-        #endregion
+#endregion
 
 
-        #region Metadata
+#region Metadata
         public Dictionary<string, string> metadata = new Dictionary<string, string>();
-        #endregion
+#endregion
 
 
-        #region Media
+#region Media
         private Dictionary<string, MediaInfo> _mediaStore = null;
 
         public Dictionary<string, MediaInfo> MediaStore
@@ -404,9 +410,9 @@ namespace GQ.Client.Model
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region XML Reading
+#region XML Reading
         public Quest(System.Xml.XmlReader reader)
         {
             QuestManager.CurrentlyParsingQuest = this; // TODO use event system instead
@@ -532,10 +538,10 @@ namespace GQ.Client.Model
             hotspot.Parent = this;
             AddHotspot(hotspot);
         }
-        #endregion
+#endregion
 
 
-        #region Runtime API
+#region Runtime API
 
         public virtual void Start()
         {
@@ -570,10 +576,10 @@ namespace GQ.Client.Model
             Resources.UnloadUnusedAssets();
         }
 
-        #endregion
+#endregion
 
 
-        #region Null Object
+#region Null Object
 
         public static readonly Quest Null = new NullQuest();
 
@@ -608,7 +614,7 @@ namespace GQ.Client.Model
 
         }
 
-        #endregion
+#endregion
 
 
         public int CompareTo(Quest q)

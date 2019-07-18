@@ -1,4 +1,4 @@
-#define DEBUG_LOG
+//#define DEBUG_LOG
 // 
 //  TileDownloader.cs
 //  
@@ -448,10 +448,7 @@ namespace UnitySlippyMap.Map
         /// </summary>
         private string tilePath;
 
-        /// <summary>
-        /// The max simultaneous downloads.
-        /// </summary>
-        private int maxSimultaneousDownloads = 2;
+        private int maxSimultaneousDownloads = 10;
 
         /// <summary>
         /// Gets or sets the max simultaneous downloads.
@@ -518,13 +515,13 @@ namespace UnitySlippyMap.Map
 
             if (cachedEntry == null)
             {
-//#if DEBUG_LOG
-//                Debug.Log("DEBUG: TileDownloader.Get: adding '" + url + "' to loading list");
-//#endif
+                //#if DEBUG_LOG
+                //                Debug.Log("DEBUG: TileDownloader.Get: adding '" + url + "' to loading list");
+                //#endif
                 tilesToLoad.Add(new TileEntry(url, tile));
-//#if DEBUG_LOG
-//                Debug.Log("DEBUG: TileDownloader.Get: now tilesToLoad.Count: " + tilesToLoad.Count + " tilesLoading#: " + tilesLoading.Count);
-//#endif
+                //#if DEBUG_LOG
+                //                Debug.Log("DEBUG: TileDownloader.Get: now tilesToLoad.Count: " + tilesToLoad.Count + " tilesLoading#: " + tilesLoading.Count);
+                //#endif
             }
             else
             {

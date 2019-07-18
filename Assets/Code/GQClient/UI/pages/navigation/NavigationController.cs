@@ -8,13 +8,9 @@ namespace GQ.Client.UI
 
     public class NavigationController : PageController
 	{
-
-
-
 		#region Runtime API
-
 		protected PageNavigation navPage;
-		public MapController mapCtrl;
+        public MapController mapCtrl;
 
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.
@@ -51,7 +47,6 @@ namespace GQ.Client.UI
 		public override void CleanUp() {
 			LocationSensor.Instance.OnLocationUpdate -= mapCtrl.map.UpdatePosition;
 		}
-
 		#endregion
 
 	}

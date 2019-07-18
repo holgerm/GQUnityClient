@@ -1,3 +1,5 @@
+//#define DEBUG_LOG
+
 using GQ.Client.Err;
 using UnityEngine.SceneManagement;
 using System.Xml;
@@ -84,7 +86,7 @@ namespace GQ.Client.Model
             switch (reader.LocalName)
             {
                 case GQML.ON_START:
-                    StartTrigger =  new Trigger(reader);
+                    StartTrigger = new Trigger(reader);
                     StartTrigger.Parent = this;
                     break;
                 case GQML.ON_END:
@@ -292,13 +294,12 @@ namespace GQ.Client.Model
             // ensure that the adequate scene is loaded:
             Scene scene = SceneManager.GetActiveScene();
 
+#if DEBUG_LOG
             Debug.Log("PAGE.Start(): ## BEFORE Scene Name Check page: " + Id);
-
+#endif
             if (!scene.name.Equals(PageSceneName))
             {
                 SceneManager.sceneLoaded += InitOnSceneLoaded;
-                Debug.Log("PAGE.Start(): ## DIFFERENT SCENE NAME --- InitOnSceneLoaded Registered");
-
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
                 {
@@ -307,8 +308,6 @@ namespace GQ.Client.Model
             }
             else
             {
-                Debug.Log("PAGE.Start(): ## SAME SCENE NAME -- REUSING SCENE");
-
                 QuestManager.Instance.PageReadyToStart = true; // in case of reuse we do not need to block & wait 
                 Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);
@@ -322,11 +321,13 @@ namespace GQ.Client.Model
 
             if (EndTrigger == Trigger.Null && leaveQuestIfEmpty)
             {
+#if DEBUG_LOG
                 Debug.Log(
-                    string.Format(
+                string.Format(
                     "Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
                     Quest.Name, Quest.Id,
                     Id));
+#endif
                 Quest.End();
             }
             else
