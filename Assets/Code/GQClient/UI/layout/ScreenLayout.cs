@@ -28,7 +28,7 @@ namespace GQ.Client.UI
 
             setMainBackground();
 
-            setContentHeight();
+            setContent();
             setTopMargin();
             setDivider();
             setBottomMargin();
@@ -47,7 +47,7 @@ namespace GQ.Client.UI
         /// <summary>
         /// Sets the height of the content. If the footer is not shown its height will be added to content.
         /// </summary>
-        protected virtual void setContentHeight()
+        protected virtual void setContent()
         {
             if (ContentArea == null)
             {
