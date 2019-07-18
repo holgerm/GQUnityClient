@@ -35,6 +35,12 @@ namespace GQ.Client.UI
             if (myPage.Shuffle)
                 Shuffle<MenuChoice>(myPage.Choices);
 
+            // clear answers (maybe we had another mcq just before ...
+            foreach (Transform child in choicesContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
             // show the answers:
             foreach (MenuChoice a in myPage.Choices) {
 				// create dialog item GO from prefab:
