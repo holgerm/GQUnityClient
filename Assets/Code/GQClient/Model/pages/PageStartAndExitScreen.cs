@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 
 namespace GQ.Client.Model
 {
@@ -43,6 +44,26 @@ namespace GQ.Client.Model
 
 			Fps = GQML.GetIntAttribute (GQML.PAGE_STARTANDEXITSCREEN_FPS, reader);
 		}
-		#endregion
-	}
+
+        protected Trigger TapTrigger = Trigger.Null;
+        protected override void ReadContent(XmlReader reader)
+        {
+            switch (reader.LocalName)
+            {
+                case GQML.ON_TAP:
+                    TapTrigger = new Trigger(reader);
+                    TapTrigger.Parent = this;
+                    break;
+                default:
+                    base.ReadContent(reader);
+                    break;
+            }
+        }
+
+        internal void Tap()
+        {
+            TapTrigger.Initiate();
+        }
+        #endregion
+    }
 }

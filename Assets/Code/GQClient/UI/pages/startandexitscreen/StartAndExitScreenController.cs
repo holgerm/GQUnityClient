@@ -48,6 +48,11 @@ namespace GQ.Client.UI
             }
         }
 
+        public void Tap()
+        {
+            myPage.Tap();
+        }
+
         private IEnumerator forwardAfterDurationWaited()
         {
             yield return new WaitForSeconds(myPage.Duration);
