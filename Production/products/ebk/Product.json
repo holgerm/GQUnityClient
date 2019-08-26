@@ -12,7 +12,7 @@
   "keepAutoStarting": true,
   "downloadStrategy": "UPFRONT",
   "timeoutMS": 0,
-  "maxIdleTimeMS": 9089,
+  "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
