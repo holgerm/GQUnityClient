@@ -3,6 +3,7 @@ using System.IO;
 using GQ.Client.Conf;
 using GQ.Client.FileIO;
 using UnityEngine.SceneManagement;
+using GQ.Client.Err;
 
 namespace GQ.Client.Model
 {
@@ -191,6 +192,11 @@ namespace GQ.Client.Model
 
         public Quest DeserializeQuest(string xml)
         {
+            if (string.IsNullOrEmpty(xml))
+            {
+                Log.SignalErrorToDeveloper("Tried to deserialize quest from emty or null xml.");
+                return Quest.Null;
+            }
             using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
             {
                 return new Quest(reader);

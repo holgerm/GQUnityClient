@@ -38,8 +38,15 @@ namespace GQ.Client.Model
 		{
 			GQML.AssertReaderAtStart (reader, GQML.CONDITION);
 
-			// consume the starting condition element:
-			reader.Read ();
+            if (reader.IsEmptyElement)
+            {
+                reader.Read();
+                condition = null;
+                return;
+            }
+
+            // consume the starting condition element:
+            reader.Read ();
 
 			if (reader.NodeType == XmlNodeType.Element && GQML.IsConditionType (reader.LocalName)) {
 				ReadConcreteCondition (reader);

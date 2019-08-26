@@ -70,9 +70,6 @@ namespace GQ.Client.Model
 			// normal case when we found a condition:
 			condition = new Condition(reader);
 			condition.Parent = this;
-
-            // consume the end element of the condition element:
-            reader.Read();
         }
 
         public void ReadThenOrElseElement (System.Xml.XmlReader reader)

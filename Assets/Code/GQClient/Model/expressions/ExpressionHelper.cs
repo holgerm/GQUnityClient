@@ -55,6 +55,18 @@ namespace GQ.Client.Model
                 }
             }
 
+            if (GQML.IsReaderAtEnd(reader, surroundingElementName))
+            {
+                // consume end tag:
+                reader.Read();
+            }
+            else
+            {
+                Log.SignalErrorToDeveloper(
+                    "Parsing an Expression missed an end element tag but found {0} instead.",
+                    reader.LocalName);
+            }
+
             return containedExpressions;
         }
 

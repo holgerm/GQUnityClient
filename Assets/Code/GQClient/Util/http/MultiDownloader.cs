@@ -177,7 +177,7 @@ namespace GQ.Client.Util
         {
             downloadedSumOfWeights += args.Progress;
             float percent = Math.Min(100.0f, (downloadedSumOfWeights / totalSumOfWeights) * 100f);
-            dialogBehaviour.UpdateLoadingScreenProgress(String.Format(" ({0:#0.0}% erledigt)", percent));
+            dialogBehaviour.OnProgress(percent);
         }
 
         public override object Result { get; set; }
