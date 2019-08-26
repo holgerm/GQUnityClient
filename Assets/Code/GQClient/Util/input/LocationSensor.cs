@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿// #define DEBUG_LOG
+
+using UnityEngine;
 using System.Collections;
 using System;
-using System.Diagnostics;
 using GQ.Client.Err;
 using QM.Util;
 
-namespace GQ.Client.Util {
-	
-	/*
+namespace GQ.Client.Util
+{
+
+    /*
 	 * Wenn sich ein Listener anmeldet, starten wir eine Coroutine (PollData), die solange in einer Schleife läuft, 
 	 * wie Listener angemeldet sind. In dieser Schleife wird gewartet wie die Frequenz es vorgibt (WaitForSecondsRealtime().
 	 * Dann wird ein neuer LocationInfo Wert erhoben.
@@ -25,7 +27,7 @@ namespace GQ.Client.Util {
 	 * Dies würde dann zusätzlich inder Whileschleife abgefragt.
 	 */
 
-	public class LocationSensor 
+    public class LocationSensor 
 	{
 		
 		#region Singleton
@@ -169,16 +171,25 @@ namespace GQ.Client.Util {
 
 		private IEnumerator PollData() {
 			try {
-				currentlyPolling = true;
-				bool failed = false;
+#if DEBUG_LOG
+                Debug.Log("LocationSensor is polling data");
+#endif
+                currentlyPolling = true;
+                bool failed = false;
 
 				Device.location.Stop();
 
 				while (Activated && ListenersAttached) {
-					switch (Device.location.status) 
+#if DEBUG_LOG
+                    Debug.Log("LocationSensor has listeners attached and is activated.");
+#endif
+                    switch (Device.location.status) 
 					{
 					case LocationServiceStatus.Running:
-						LocationInfoExt newLocation = Device.location.lastData;
+#if DEBUG_LOG
+                            Debug.Log("LocationSensor is running.");
+#endif
+                            LocationInfoExt newLocation = Device.location.lastData;
 						if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation)) {
 							_onLocationUpdate (this, new LocationEventArgs (LocationEventType.Update, Device.location.lastData));
 							failed = false;
@@ -186,11 +197,16 @@ namespace GQ.Client.Util {
 						lastLocation = newLocation;
 						break;
 					case LocationServiceStatus.Stopped:
-						if (
+#if DEBUG_LOG
+                            Debug.Log("LocationSensor is stopped.");
+                            Debug.Log("Device.location.isEnabledByUser: " + Device.location.isEnabledByUser);
+                            Debug.Log("Input.location.isEnabledByUser: " + Input.location.isEnabledByUser);
+#endif
+                            if (
 							Device.location.isEnabledByUser || 
 							Application.platform == RuntimePlatform.IPhonePlayer
 						) {
-							Device.location.Start(1f, 1f);
+                                Device.location.Start(1f, 1f);
 						}
 						else {
 							if (!failed) {
@@ -206,7 +222,10 @@ namespace GQ.Client.Util {
 						}
 						break;
 					case LocationServiceStatus.Initializing:
-						StartWaitingForInitialization();
+#if DEBUG_LOG
+                            Debug.Log("LocationSensor is initializing.");
+#endif
+                            StartWaitingForInitialization();
 						do {
 							yield return new WaitForSeconds (1);
 							WaitedForInitialization ();
@@ -214,7 +233,10 @@ namespace GQ.Client.Util {
 						//						continue;
 						break;
 					case LocationServiceStatus.Failed:
-						if (!failed) {
+#if DEBUG_LOG
+                            Debug.Log("LocationSensor is failed.");
+#endif
+                            if (!failed) {
 							_onLocationUpdate (
 								this, 
 								new LocationEventArgs (
@@ -251,10 +273,6 @@ namespace GQ.Client.Util {
 
 
 		#region Helpers
-
-//		public static double distanceSimple(double lat1, double lon1, double lat2, double lon2) {
-//			
-//		}
 
 		/// <summary>
 		/// Distance between the two given geopoints in Meters.
