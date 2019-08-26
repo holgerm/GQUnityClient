@@ -11,7 +11,7 @@
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
   "downloadStrategy": "UPFRONT",
-  "timeoutMS": 60000,
+  "timeoutMS": 0,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
   "nameForQuestSg": "Spiel",
@@ -25,6 +25,7 @@
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
@@ -105,6 +106,8 @@
   "CategorySets": [],
   "defaultCategory": null,
   "disabledAlpha": 0.5,
+  "hideFooterIfPossible": false,
+  "autoScrollNewText": true,
   "mainFgColor": {
     "r": 26,
     "g": 25,
@@ -121,7 +124,7 @@
   "maxFontSize": 100,
   "showShadows": true,
   "topLogo": {
-    "path": "toplogo"
+    "path": "TopLogo"
   },
   "headerMiddleButtonPolicy": "QuestTitle",
   "headerBgColor": {
@@ -237,7 +240,7 @@
   "listEntryHeightUnits": 55.0,
   "listEntryHeightMinMM": 8.0,
   "listEntryHeightMaxMM": 0.0,
-  "listEntryUseTwoLines": false,
+  "listEntryUseTwoLines": true,
   "listEntryDividingMode": "AlternatingColors",
   "listLineColor": {
     "r": 0,
