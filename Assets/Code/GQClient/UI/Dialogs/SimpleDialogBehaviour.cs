@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿//#define DEBUG_LOG
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Util;
 using System;
+using GQ.Client.Err;
 
 namespace GQ.Client.UI.Dialogs
 {
@@ -40,9 +43,15 @@ namespace GQ.Client.UI.Dialogs
             Dialog.Show();
         }
 
-        public void UpdateLoadingScreenProgress(string percentText)
+        public void OnProgress(float percent)
         {
-            Dialog.Details.text = details + percentText;
+            if (Dialog != null && Dialog.Details != null)
+            {
+                Dialog.Details.text = details + String.Format(" ({0:#0.0}% erledigt)", percent);
+#if DEBUG_LOG
+                Debug.Log(("SimpleDialog Text Update in frame: " + Time.frameCount + "\n" + Dialog.Details.text).Yellow());
+#endif
+            }
         }
 
     }

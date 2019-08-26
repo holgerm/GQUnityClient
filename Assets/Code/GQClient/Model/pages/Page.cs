@@ -31,17 +31,30 @@ namespace GQ.Client.Model
         /// <param name="reader">Reader.</param>
         public Page(XmlReader reader)
         {
+#if DEBUG_LOG
+            Debug.Log("XML Page start type: " + GetType());
+#endif
             GQML.AssertReaderAtStart(reader, GQML.PAGE);
 
             ReadAttributes(reader);
+#if DEBUG_LOG
+            Debug.Log("XML Page Attribtes read. page id: " + Id);
+            if (Id == 17945)
+            {
+                Debug.Log("Last order.");
+            }
+#endif
 
             if (reader.IsEmptyElement)
             {
                 reader.Read();
+#if DEBUG_LOG
+                Debug.Log("XML Page was empty.");
+#endif
                 return;
             }
 
-            // consume the Begin Action Element:
+            // consume the Begin Element:
             reader.Read();
             while (!GQML.IsReaderAtEnd(reader, GQML.PAGE))
             {
@@ -49,8 +62,11 @@ namespace GQ.Client.Model
                 if (reader.NodeType == XmlNodeType.Element)
                     ReadContent(reader);
             }
+#if DEBUG_LOG
+            Debug.Log("XML Page Content read.");
+#endif
 
-            // consume the closing action tag (if not empty page element)
+            // consume the closing tag (if not empty element)
             if (reader.NodeType == XmlNodeType.EndElement)
                 reader.Read();
         }
@@ -113,10 +129,10 @@ namespace GQ.Client.Model
             return (EndTrigger != Trigger.Null && !EndTrigger.IsEmptyOrEndGameOnly());
         }
 
-        #endregion
+#endregion
 
 
-        #region Runtime
+#region Runtime
 
         public Page()
         {
@@ -209,11 +225,17 @@ namespace GQ.Client.Model
         // called when a scene has been loaded:
         void InitOnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+#if DEBUG_LOG
+            Debug.Log(("Scene Loaded: " + scene.name).Yellow());
+#endif
             SceneManager.SetActiveScene(scene);
             foreach (Scene sceneToUnload in scenesToUnload)
             {
                 if (sceneToUnload.isLoaded)
                 {
+#if DEBUG_LOG
+                    SceneManager.sceneUnloaded += DebugShowSceneUnloaded;
+#endif
                     SceneManager.UnloadSceneAsync(sceneToUnload);
                 }
             }
@@ -223,6 +245,14 @@ namespace GQ.Client.Model
             Resources.UnloadUnusedAssets();
             QuestManager.Instance.PageReadyToStart = true;
         }
+
+#if DEBUG_LOG
+        void DebugShowSceneUnloaded(Scene unloadedScene)
+        {
+            Debug.LogFormat(("Scene unloaded: " + unloadedScene.name).Yellow());
+            SceneManager.sceneUnloaded -= DebugShowSceneUnloaded;
+        }
+#endif
 
         private void InitOnSceneReused(Scene scene)
         {
@@ -267,6 +297,11 @@ namespace GQ.Client.Model
 
         public virtual void Start(bool canReturnToPrevious = false)
         {
+#if DEBUG_LOG
+            Debug.LogFormat("Page start: {0} ({1})",
+                Id,
+                PageType);
+#endif
 
             if (!CanStart())
                 return;
@@ -294,11 +329,11 @@ namespace GQ.Client.Model
             // ensure that the adequate scene is loaded:
             Scene scene = SceneManager.GetActiveScene();
 
-#if DEBUG_LOG
-            Debug.Log("PAGE.Start(): ## BEFORE Scene Name Check page: " + Id);
-#endif
             if (!scene.name.Equals(PageSceneName))
             {
+#if DEBUG_LOG
+                Debug.Log("PAGE.Start(): ## DIFFERENT Type page: " + Id);
+#endif
                 SceneManager.sceneLoaded += InitOnSceneLoaded;
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
@@ -308,6 +343,9 @@ namespace GQ.Client.Model
             }
             else
             {
+#if DEBUG_LOG
+                Debug.Log("PAGE.Start(): ## SAME Type page: " + Id);
+#endif
                 QuestManager.Instance.PageReadyToStart = true; // in case of reuse we do not need to block & wait 
                 Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);
@@ -335,6 +373,11 @@ namespace GQ.Client.Model
                 EndTrigger.Initiate();
             }
             Resources.UnloadUnusedAssets();
+#if DEBUG_LOG
+            Debug.LogFormat("Page ended: {0} ({1})",
+                Id,
+                PageType);
+#endif
         }
 
         public void SaveResultInVariable()
@@ -355,10 +398,10 @@ namespace GQ.Client.Model
             return (page == null || page == Page.Null);
         }
 
-        #endregion
+#endregion
 
 
-        #region Null Object
+#region Null Object
 
         public static readonly Page Null = new NullPage();
 
@@ -390,7 +433,7 @@ namespace GQ.Client.Model
 
         }
 
-        #endregion
+#endregion
 
     }
 }

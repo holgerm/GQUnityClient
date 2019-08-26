@@ -148,7 +148,7 @@ namespace GQ.Client.Model
                         if (h.OutsideRadius(e.Location))
                         {
 #if DEBUG_LOG
-                           Debug.Log("LEAVE HOTSPOT: " + h.Id);
+                            Debug.Log("LEAVE HOTSPOT: " + h.Id);
 #endif
                             h.Leave();
                         }
@@ -171,15 +171,15 @@ namespace GQ.Client.Model
                 return _hotspotDict.Values;
             }
         }
-#endregion
+        #endregion
 
 
-#region Metadata
+        #region Metadata
         public Dictionary<string, string> metadata = new Dictionary<string, string>();
-#endregion
+        #endregion
 
 
-#region Media
+        #region Media
         private Dictionary<string, MediaInfo> _mediaStore = null;
 
         public Dictionary<string, MediaInfo> MediaStore
@@ -300,6 +300,10 @@ namespace GQ.Client.Model
                 }
             }
 
+#if DEBUG_LOG
+            Debug.Log("ImportLocalMediaInfo Part 1 done");
+#endif
+
             // Step 2b determine missing local filenames for new urls:
             // MediaStore now has all needed mediainfos including local data for this quest.
             foreach (KeyValuePair<string, MediaInfo> kvpEntry in MediaStore)
@@ -318,101 +322,13 @@ namespace GQ.Client.Model
                     kvpEntry.Value.LocalFileName = fileNameCandidate;
                 }
             }
+#if DEBUG_LOG
+            Debug.Log("ImportLocalMediaInfo Part 2 done");
+#endif
         }
-        /// <summary>
-        /// This is step 3 of 4 during quest media sync. Downloads or updates the media files needed for this quest.
-        /// </summary>
-        public List<MediaInfo> GetListOfFilesNeedDownload()
-        {
-            // 1. we create a list of files to be downloaded / updated (as Dictionary with all neeeded data for multi downloader:
-            List<MediaInfo> filesToDownload = new List<MediaInfo>();
+        #endregion
 
-            int infoNotReceived = 0;
-            float summedSize = 0f;
-
-            MediaInfo info;
-            foreach (KeyValuePair<string, MediaInfo> kvpEntry in MediaStore)
-            {
-                info = kvpEntry.Value;
-
-                if (info.Url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA, StringComparison.Ordinal))
-                {
-                    // not an url but instead a local reference to media that is created at runtime within a quest.
-                    continue;
-                }
-
-                HttpWebRequest httpWReq = null;
-                try
-                {
-                    httpWReq =
-                        (HttpWebRequest)WebRequest.Create(info.Url);
-                    httpWReq.Timeout = (int)Math.Min(
-                        3000,
-                        ConfigurationManager.Current.maxIdleTimeMS
-                    );
-                }
-                catch (UriFormatException)
-                {
-                    Log.SignalErrorToAuthor("Quest contains a wrong formatted URI: {0}.", info.Url);
-                    continue;
-                }
-
-
-                HttpWebResponse httpWResp;
-                try
-                {
-                    httpWResp = (HttpWebResponse)httpWReq.GetResponse();
-                }
-                catch (WebException)
-                {
-                    Log.SignalErrorToDeveloper("Timeout while getting WebResponse for url {1}", HTTP.CONTENT_LENGTH, info.Url);
-                    info.RemoteSize = MediaInfo.UNKNOWN;
-                    info.RemoteTimestamp = MediaInfo.UNKNOWN;
-                    infoNotReceived++;
-                    // Since we do not know the timestamp of this file we load it:
-                    filesToDownload.Add(info);
-                    continue;
-                }
-                // got a response so we can use the data from server:
-                info.RemoteSize = httpWResp.ContentLength;
-                info.RemoteTimestamp = ParseLastModifiedHeader(httpWResp.GetResponseHeader("Last-Modified"));
-
-                summedSize += info.RemoteSize;
-                // if the remote file is newer we update: 
-                // or if media is not locally available we load it:
-                if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
-                {
-                    filesToDownload.Add(info);
-                }
-
-                httpWResp.Close();
-            }
-
-            return filesToDownload;
-        }
-
-        private long ParseLastModifiedHeader(string lastmodHeader)
-        {
-            try
-            {
-                return Convert.ToInt64(lastmodHeader);
-            }
-            catch (FormatException)
-            {
-                try
-                {
-                    DateTime dt = DateTime.Parse(lastmodHeader);
-                    return (long)(dt - new DateTime(1970, 1, 1)).TotalMilliseconds;
-                }
-                catch (FormatException)
-                {
-                    return MediaInfo.UNKNOWN;
-                }
-            }
-        }
-#endregion
-
-#region XML Reading
+        #region XML Reading
         public Quest(System.Xml.XmlReader reader)
         {
             QuestManager.CurrentlyParsingQuest = this; // TODO use event system instead
@@ -431,6 +347,10 @@ namespace GQ.Client.Model
 
             // read all further attributes
             ReadFurtherAttributes(reader);
+
+#if DEBUG_LOG
+            Debug.Log("XML Quest Attrubutes read. Quest: " + Name + " id: " + Id);
+#endif
 
             // Start the xml content: consume the begin quest element:
             reader.Read();
@@ -538,10 +458,10 @@ namespace GQ.Client.Model
             hotspot.Parent = this;
             AddHotspot(hotspot);
         }
-#endregion
+        #endregion
 
 
-#region Runtime API
+        #region Runtime API
 
         public virtual void Start()
         {
@@ -576,10 +496,10 @@ namespace GQ.Client.Model
             Resources.UnloadUnusedAssets();
         }
 
-#endregion
+        #endregion
 
 
-#region Null Object
+        #region Null Object
 
         public static readonly Quest Null = new NullQuest();
 
@@ -614,7 +534,7 @@ namespace GQ.Client.Model
 
         }
 
-#endregion
+        #endregion
 
 
         public int CompareTo(Quest q)

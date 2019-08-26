@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//#define DEBUG_LOG
+
+using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.SceneManagement;
 using GQ.Client.Err;
@@ -61,6 +63,9 @@ namespace GQ.Client.UI
         /// </summary>
         public void InitPage ()
 		{
+#if DEBUG_LOG
+            Debug.Log("InitPage() on " + GetType());
+#endif
             page = qm.CurrentPage;
             if (page == null) {
 				if (!resumingToFoyer)
@@ -99,10 +104,10 @@ namespace GQ.Client.UI
             Base.Instance.BlockInteractions(false);
         }
 
-        #endregion
+#endregion
 
 
-        #region Runtime API
+#region Runtime API
 
         public abstract void InitPage_TypeSpecific();
 
@@ -129,10 +134,10 @@ namespace GQ.Client.UI
 			
 		}
 
-		#endregion
+#endregion
 
 
-		#region Layout
+#region Layout
 
 		/// <summary>
 		/// Margin between header and content in device-dependent units.
@@ -199,6 +204,6 @@ namespace GQ.Client.UI
 			return LayoutConfig.Units2Pixels (units);
 		}
 
-		#endregion
+#endregion
 	}
 }

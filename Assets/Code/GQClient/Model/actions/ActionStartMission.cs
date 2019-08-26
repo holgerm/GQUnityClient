@@ -1,4 +1,7 @@
-﻿using System.Xml;
+﻿//#define DEBUG_LOG
+
+using System.Xml;
+using UnityEngine;
 
 namespace GQ.Client.Model
 {
@@ -27,7 +30,13 @@ namespace GQ.Client.Model
 		#region Functions
 		public override void Execute ()
 		{
-			Page pageToStart = Quest.GetPageWithID (Id);
+#if DEBUG_LOG
+                    Debug.LogFormat("StartMission Action from page {0} ({1}) to id {2}",
+                        Quest.CurrentPage.Id,
+                        Quest.CurrentPage.PageType,
+                        Id);
+#endif
+            Page pageToStart = Quest.GetPageWithID (Id);
             if (pageToStart.PageType != "MetaData")
             {
                 pageToStart.Start(AllowReturn);
