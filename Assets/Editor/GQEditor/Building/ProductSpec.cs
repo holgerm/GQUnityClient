@@ -223,14 +223,14 @@ namespace GQ.Editor.Building {
                     appIconFGFound = true;
                     continue;
                 }
-                if ("AppIconBG.png".Equals(file.Name))
+                if ("AppIconBG.png".Equals(file.Name) || "AppIconBG.jpg".Equals(file.Name))
                 {
                     appIconBGFound = true;
                     continue;
                 }
 
                 // SplashScreen:
-                if ( "SplashScreenBG.png".Equals(file.Name)) {
+                if ("SplashScreenBG.png".Equals(file.Name) || "SplashScreenBG.jpg".Equals(file.Name)) {
 					splashScreenBGFound = true;
 					continue;
 				}
