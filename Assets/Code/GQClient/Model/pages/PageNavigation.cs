@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Xml;
+﻿using System.Xml;
 using GQ.Client.Util;
 
 namespace GQ.Client.Model
@@ -64,14 +63,13 @@ namespace GQ.Client.Model
         private int testCount = 0;
         public override void Start(bool canReturnToPrevious = false) {
             base.Start(canReturnToPrevious);
-            Debug.Log("HOTSPOTS ENABLED: " + ++testCount);
-            LocationSensor.Instance.OnLocationUpdate += Quest.UpdateHotspotMarkers;
+            //Debug.Log("HOTSPOTS ENABLED: " + ++testCount);
+            //LocationSensor.Instance.OnLocationUpdate += Quest.UpdateHotspotMarkers;
         }
 
         public override void CleanUp()
         {
             base.CleanUp();
-            Debug.Log("HOTSPOTS DISABLED: " + --testCount);
             LocationSensor.Instance.OnLocationUpdate -= Quest.UpdateHotspotMarkers;
         }
         #endregion

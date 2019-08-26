@@ -1,4 +1,5 @@
-﻿using GQ.Client.Model;
+﻿using System;
+using GQ.Client.Model;
 using GQ.Client.Util;
 using QM.Util;
 using UnityEngine;
@@ -17,8 +18,18 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void InitPage_TypeSpecific ()
 		{
+            LocationSensor.Instance.OnLocationUpdate += page.Quest.UpdateHotspotMarkers; // NEW: PROBLEM SOLVED?
 
-            navPage = (PageNavigation)page;
+            try
+            {
+                navPage = (PageNavigation)page;
+            }
+            catch(Exception e)
+            {
+                Debug.Log("Navigationctrl.InitPage() exception caught during cast: " +
+                    e.Message + "\ncurrent page is: " + page.Quest.CurrentPage +
+                    " given page is: " + page);
+            }
 
             // footer:
             // hide footer if no return possible:
