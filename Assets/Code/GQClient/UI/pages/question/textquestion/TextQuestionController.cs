@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -45,7 +46,7 @@ namespace GQ.Client.UI
             inputField.text = "";
             inputField.Select();
             inputField.ActivateInputField();
-            forwardButton.transform.Find("Text").GetComponent<Text>().text = "Bestätigen";
+            forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Bestätigen";
 
             layout.layout();
         }

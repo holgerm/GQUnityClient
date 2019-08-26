@@ -91,6 +91,8 @@ namespace GQ.Client.UI
 
             cameraTexture = new WebCamTexture(deviceName);
 
+            Debug.Log(cameraTexture == null ? "Cam Texture is null" : "Cam texture is ok");
+
             cameraTexture.requestedHeight = 2000;
             cameraTexture.requestedWidth = 3000;
 

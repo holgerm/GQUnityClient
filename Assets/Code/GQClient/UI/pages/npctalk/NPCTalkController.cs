@@ -1,13 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.UI;
-using Candlelight.UI;
 using GQ.Client.Util;
-using GQ.Client.Err;
 using GQ.Client.Conf;
 using System;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -182,7 +180,7 @@ namespace GQ.Client.UI
         void UpdateForwardButton()
         {
             // update forward button text:
-            Text forwardButtonText = forwardButton.transform.Find("Text").GetComponent<Text>();
+            TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             forwardButtonText.text = npcPage.HasMoreDialogItems() ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
         }
 

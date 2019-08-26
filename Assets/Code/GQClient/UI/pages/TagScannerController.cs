@@ -7,6 +7,7 @@ using GQ.Client.Conf;
 using System.Threading;
 using ZXing;
 using GQ.Client.Err;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -39,7 +40,7 @@ namespace GQ.Client.UI
             shownText.color = ConfigurationManager.Current.mainFgColor;
             shownText.fontSize = ConfigurationManager.Current.mainFontSize;
             shownText.text = myPage.Prompt.Decode4HyperText();
-            forwardButton.transform.Find("Text").GetComponent<Text>().text = "Ok";
+            forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Ok";
 
             CoroutineStarter.Run(InitQRCamera());
         }
