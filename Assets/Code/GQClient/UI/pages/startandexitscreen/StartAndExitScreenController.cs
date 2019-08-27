@@ -58,7 +58,12 @@ namespace GQ.Client.UI
         private IEnumerator forwardAfterDurationWaited()
         {
             yield return new WaitForSeconds(myPage.Duration);
-            OnForward();
+
+            // in case we exited the quest in the meantime we have to skip performing onForward:
+            if (QuestManager.Instance.CurrentQuest == page.Quest)
+            {
+                OnForward();
+            }
         }
 
         private void showImage()
