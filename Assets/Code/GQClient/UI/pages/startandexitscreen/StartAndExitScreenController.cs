@@ -38,12 +38,14 @@ namespace GQ.Client.UI
             if (myPage.Duration == 0)
             {
                 // interactive mode => show forwrd button:
-                forwardButton.gameObject.SetActive(true);
+                FooterButtonPanel.transform.parent.gameObject.SetActive(true);
+                //forwardButton.gameObject.SetActive(true);
                 return;
             } else
             {
                 // timed mode => hide forward button and start timer:
-                forwardButton.gameObject.SetActive(false);
+                FooterButtonPanel.transform.parent.gameObject.SetActive(false);
+                //forwardButton.gameObject.SetActive(false);
                 CoroutineStarter.Run(forwardAfterDurationWaited());
             }
         }
