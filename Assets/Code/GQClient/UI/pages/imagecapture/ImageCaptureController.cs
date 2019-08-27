@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define DEBUG_LOG
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
@@ -70,6 +72,9 @@ namespace GQ.Client.UI
         {
             string deviceName = null;
 
+#if DEBUG_LOG
+            Debug.Log("ImageCapture: ## 1");
+#endif
             // look for a cam in the preferred direction:
             foreach (WebCamDevice wcd in WebCamTexture.devices)
             {
@@ -79,8 +84,11 @@ namespace GQ.Client.UI
                     break;
                 }
             }
+#if DEBUG_LOG
+            Debug.Log("ImageCapture: ## 2");
+#endif
             // if we did not find a right cam, we use the first cam available:
-            if (deviceName == null)
+            if (deviceName == null && WebCamTexture.devices.Length > 0)
             {
                 deviceName = WebCamTexture.devices[0].name;
                 Log.SignalErrorToUser(
@@ -89,18 +97,43 @@ namespace GQ.Client.UI
                     );
             }
 
-            cameraTexture = new WebCamTexture(deviceName);
+            cameraTexture = new WebCamTexture(deviceName, 3000, 2000);
+
+#if DEBUG_LOG
+            Debug.Log("ImageCapture: ## 3");
+#endif
 
             Debug.Log(cameraTexture == null ? "Cam Texture is null" : "Cam texture is ok");
 
-            cameraTexture.requestedHeight = 2000;
-            cameraTexture.requestedWidth = 3000;
-
             cameraTexture.Play();
+
+#if DEBUG_LOG
+            Debug.Log("ImageCapture: ## 4");
+#endif
 
             // wait for web cam to be ready which is guaranteed after first image update:
             while (!cameraTexture.didUpdateThisFrame)
+            {
+                // if we did not have permission, the user had now the chance to give permission and we can proceed.
+                if (!cameraTexture.isPlaying)
+                {
+#if DEBUG_LOG
+                    Debug.Log("ImageCapture: ## 5: not playing");
+#endif
+                    cameraTexture = new WebCamTexture(deviceName, 3000, 2000);
+                    cameraTexture.Play();
+                }
+                else
+                {
+                    // the user did obviously not give us permission, hence we need to skip this page or even quest TODO
+                    Log.SignalErrorToUser("Without permission to access the camera we can not proceed correctly with the current quest.");
+                }
                 yield return null;
+            }
+
+#if DEBUG_LOG
+            Debug.Log("ImageCapture: ## 6: has updated and seems to be running");
+#endif
 
             // rotate if needed:
             camRawImage.transform.rotation *= Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.back);
@@ -128,8 +161,7 @@ namespace GQ.Client.UI
 
             camRawImage.transform.localScale = new Vector3(widthScale, heightScale * mirrorAdjustment, 1F);
 
-            camRawImage.texture = cameraTexture;
-
+            camRawImage.texture = cameraTexture;   // TODO evtl. auf zwischen speicherung verzichten und direkt in camRawImage.texture anlegen?
         }
 
         public void TakeSnapshot()
