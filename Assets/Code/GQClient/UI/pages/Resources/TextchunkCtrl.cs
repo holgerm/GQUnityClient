@@ -5,15 +5,16 @@ using Candlelight.UI;
 using System.Text.RegularExpressions;
 using GQ.Client.Util;
 using GQ.Client.Conf;
+using TMPro;
 
 namespace GQ.Client.UI
 {
 
-	public class HypertextchunkCtrl : MonoBehaviour {
+	public class TextchunkCtrl : MonoBehaviour {
 
 		#region Unity Inspektor
 
-		public HyperText DialogItemHyperText;
+		public TextMeshProUGUI DialogItemText;
 
 		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
 		{
@@ -27,20 +28,20 @@ namespace GQ.Client.UI
 
 
 		public void Initialize(string itemText, bool supportHtmlLinks) {
-			this.DialogItemHyperText.text = itemText.Decode4HyperText(supportHtmlLinks : supportHtmlLinks);
-            this.DialogItemHyperText.color = ConfigurationManager.Current.mainFgColor;
-            this.DialogItemHyperText.fontSize = ConfigurationManager.Current.mainFontSize;
+			this.DialogItemText.text = itemText.Decode4HyperText(supportHtmlLinks : supportHtmlLinks);
+            this.DialogItemText.color = ConfigurationManager.Current.mainFgColor;
+            this.DialogItemText.fontSize = ConfigurationManager.Current.mainFontSize;
         }
 
-		public static HypertextchunkCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true) {
+		public static TextchunkCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true) {
 			GameObject go = (GameObject)Instantiate (
-				Resources.Load ("HypertextChunk"),
+				Resources.Load ("TextChunk"),
 				rootTransform,
 				false
 			);
 			go.SetActive (true);
 
-			HypertextchunkCtrl diCtrl = go.GetComponent<HypertextchunkCtrl> ();
+			TextchunkCtrl diCtrl = go.GetComponent<TextchunkCtrl> ();
 			diCtrl.Initialize (text, supportHtmlLinks);
 
 			return diCtrl;

@@ -159,7 +159,7 @@ namespace GQ.Client.UI
             string currentText = npcPage.CurrentDialogItem.Text.Decode4HyperText();
 
             // create dialog item GO from prefab:
-            HypertextchunkCtrl.Create(dialogItemContainer, currentText);
+            TextchunkCtrl.Create(dialogItemContainer, currentText);
 
             // play audio if specified:
             float duration = 0f;
