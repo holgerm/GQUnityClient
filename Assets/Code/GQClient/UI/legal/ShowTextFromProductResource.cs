@@ -1,24 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Candlelight.UI;
-using System.IO;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using GQ.Client.Err;
+using TMPro;
 
-namespace GQ.UI {
-	
-    [RequireComponent(typeof(Text))]
+namespace GQ.UI
+{
+
+    [RequireComponent(typeof(TextMeshProUGUI))]
 	public class ShowTextFromProductResource : MonoBehaviour
 	{
         public RecourceFiles recourceTextType;
 
-		protected Text contentText;
+		protected TextMeshProUGUI contentText;
 
 		// Use this for initialization
 		void Start ()
         {
-			contentText = GetComponent<Text> ();
+			contentText = GetComponent<TextMeshProUGUI> ();
 
             string recourceTextFileName = recourceTextType.ToString().ToLower();
 

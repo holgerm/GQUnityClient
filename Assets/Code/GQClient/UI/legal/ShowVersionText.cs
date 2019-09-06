@@ -1,23 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Candlelight.UI;
-using System.IO;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using GQ.Client.Err;
+using TMPro;
 
-namespace GQ.UI {
+namespace GQ.UI
+{
 
-	[RequireComponent (typeof(Text))]
+    [RequireComponent (typeof(TextMeshProUGUI))]
 	public class ShowVersionText : MonoBehaviour
 	{
 
-		protected Text text;
+        protected TextMeshProUGUI text;
 
 		// Use this for initialization
 		void Start ()
 		{
-			text = GetComponent<Text> ();
+            text = GetComponent<TextMeshProUGUI>();
 
 			if (text == null) {
 				Log.SignalErrorToDeveloper ("Version Text: Text Component missing.");
