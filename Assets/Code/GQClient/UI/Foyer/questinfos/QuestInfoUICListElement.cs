@@ -1,15 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using GQ.Client.Model;
 using UnityEngine.UI;
-using System;
-using GQ.Client.Util;
-using GQ.Client.Err;
-using GQ.Client.GQEvents;
 using GQ.Client.Conf;
-using GQ.Client.UI.Dialogs;
-using System.IO;
-using GQ.Client.FileIO;
+using TMPro;
 
 //using UnityEngine.Events;
 
@@ -188,11 +181,6 @@ namespace GQ.Client.UI.Foyer
             ctrl.data = qInfo;
             ctrl.data.ActivitiesBlockingChanged += ctrl.OnActivitiesBlockingChanged;
             ctrl.listController = containerController;
-            ElipsifyOverflowingText eot = ctrl.Name.transform.GetComponent<ElipsifyOverflowingText>();
-            if (eot != null)
-            {
-                eot.maxLineNumbers = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
-            }
             ctrl.data.OnChanged += ctrl.UpdateView;
             ctrl.UpdateView();
             return go;
@@ -260,15 +248,6 @@ namespace GQ.Client.UI.Foyer
                 DeleteButton.interactable = true;
             }
 
-            ElipsifyOverflowingText elipsify = Name.GetComponent<ElipsifyOverflowingText>();
-            if (elipsify != null)
-            {
-                // set the name again: it might have changed
-                elipsify.FullText = data.Name;
-                elipsify.ElipsifyText();
-            }
-            // TODO make elipsify automatic when content of name text changes....???!!!
-
             // TODO call the lists sorter ...
         }
 
@@ -319,7 +298,7 @@ namespace GQ.Client.UI.Foyer
 
         public virtual void Reset()
         {
-            Name = EnsurePrefabVariableIsSet<Text>(Name, "Name", NAME_PATH);
+            Name = EnsurePrefabVariableIsSet<TextMeshProUGUI>(Name, "Name", NAME_PATH);
 
             DownloadButton = EnsurePrefabVariableIsSet<Button>(DownloadButton, "Download Button", "DownloadButton");
             StartButton = EnsurePrefabVariableIsSet<Button>(StartButton, "Start Button", "StartButton");

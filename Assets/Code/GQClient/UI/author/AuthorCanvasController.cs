@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Util;
 using GQ.Client.Conf;
-using GQ.Client.Model;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -13,14 +11,14 @@ namespace GQ.Client.UI
     {
 
         public Button LoginButton;
-        Text LoginButtonText;
+        TextMeshProUGUI LoginButtonText;
 
-        public Text AccountInput;
-        public Text PasswordInput;
+        public TMP_InputField AccountInput;
+        public TMP_InputField PasswordInput;
         public GameObject SettingsPanel;
-        private InputField AccountEmail;
-        private InputField Password;
-        public Text StatusText;
+        //public InputField AccountEmail;
+        //public InputField Password;
+        public TextMeshProUGUI StatusText;
 
         const string LOGIN_TEXT = "Login";
         const string LOGOUT_TEXT = "Logout";
@@ -32,23 +30,23 @@ namespace GQ.Client.UI
         // Use this for initialization
         void Start()
         {
-            AccountEmail = AccountInput.transform.Find("InputField").GetComponent<InputField>();
-            Password = PasswordInput.transform.Find("InputField").GetComponent<InputField>();
-            LoginButtonText = LoginButton.transform.Find("Text").GetComponent<Text>();
+            //AccountEmail = AccountInput.transform.Find("InputField").GetComponent<InputField>();
+            //Password = PasswordInput.transform.Find("InputField").GetComponent<InputField>();
+            LoginButtonText = LoginButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             checkLoginButtonText();
             checkStatus();
-            checkInput(AccountEmail.text, Password.text);
+            checkInput(AccountInput.text, PasswordInput.text);
         }
 
         public void EmailChanged(string newMail)
         {
-            checkInput(newMail, Password.text);
+            checkInput(newMail, PasswordInput.text);
         }
 
 
         public void PasswordChanged(string newPassword)
         {
-            checkInput(AccountEmail.text, newPassword);
+            checkInput(AccountInput.text, newPassword);
         }
 
         void checkInput(string mail, string passwd)
@@ -122,10 +120,10 @@ namespace GQ.Client.UI
             }
             else
             {
-                if (tryToLogin(AccountEmail.text, Password.text))
+                if (tryToLogin(AccountInput.text, PasswordInput.text))
                 {
-                    AccountEmail.text = "";
-                    Password.text = "";
+                    AccountInput.text = "";
+                    PasswordInput.text = "";
                 }
             }
 

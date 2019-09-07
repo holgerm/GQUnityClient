@@ -1,20 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.Model;
-using UnityEngine.UI;
+﻿using GQ.Client.Model;
 using GQ.Client.Err;
 using System;
+using TMPro;
 
 namespace GQ.Client.UI.Foyer
 {
-	/// <summary>
-	/// Abstact class for all kinds of view controllers presenting quest infos. E.g. list elements in the foyer list, or markers on the foyer map.
-	/// </summary>
-	public abstract class QuestInfoUIC : PrefabController, IComparable<QuestInfoUIC> {
+    /// <summary>
+    /// Abstact class for all kinds of view controllers presenting quest infos. E.g. list elements in the foyer list, or markers on the foyer map.
+    /// </summary>
+    public abstract class QuestInfoUIC : PrefabController, IComparable<QuestInfoUIC> {
 
 		protected QuestInfo data;
-		public Text Name;
+		public TextMeshProUGUI Name;
 
 		/// <summary>
 		/// Returns a value greater than zero in case this object is considered greater than the given other. 

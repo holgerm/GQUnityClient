@@ -1,0 +1,89 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using GQ.Client.Conf;
+using TMPro;
+using UnityEngine;
+
+[RequireComponent(typeof(TextMeshProUGUI))]
+public class TMPAdapter : MonoBehaviour
+{
+    public TextUsageType textUsageType;
+
+    TextMeshProUGUI text;
+
+    // Start is called before the first frame update
+    void Reset()
+    {
+        text = GetComponent<TextMeshProUGUI>();
+
+        text.font = Resources.Load("Font", typeof(TMP_FontAsset)) as TMP_FontAsset;
+        text.color = Color.black;
+
+        switch (textUsageType)
+        {
+            case TextUsageType.Title:
+                text.alignment = TextAlignmentOptions.Center;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 50;
+                text.fontSizeMax = 70;
+                text.enableWordWrapping = true;
+                break;
+            case TextUsageType.Body:
+                text.alignment = TextAlignmentOptions.TopJustified;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 40;
+                text.fontSizeMax = 55;
+                text.enableWordWrapping = true;
+                break;
+            case TextUsageType.Button:
+                text.alignment = TextAlignmentOptions.Center;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 45;
+                text.fontSizeMax = 60;
+                text.enableWordWrapping = true;
+                break;
+            case TextUsageType.Caption:
+                text.alignment = TextAlignmentOptions.Center;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 35;
+                text.fontSizeMax = 45;
+                text.enableWordWrapping = true;
+                break;
+            case TextUsageType.Option:
+                text.alignment = TextAlignmentOptions.Left;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 35;
+                text.fontSizeMax = 45;
+                text.enableWordWrapping = false;
+                text.overflowMode = TextOverflowModes.Truncate;
+                break;
+            case TextUsageType.ListEntry:
+                text.alignment = TextAlignmentOptions.Left;
+                text.enableAutoSizing = false;
+                text.fontSize = 70;
+                text.enableWordWrapping = true;
+                text.overflowMode = TextOverflowModes.Ellipsis;
+                text.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OnValidate()
+    {
+        Reset();
+    }
+
+}
+
+public enum TextUsageType
+{
+    Title,
+    Body,
+    Button,
+    Caption,
+    Option,
+    ListEntry
+}
