@@ -1,22 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
 using GQ.Client.Conf;
 using GQ.Client.Util;
 using GQ.Client.Err;
 using UnityEngine.UI;
-using QM.Util;
+using TMPro;
 
 namespace GQ.Client.UI
 {
 
-	public class CategoryTreeCtrl : MonoBehaviour
+    public class CategoryTreeCtrl : MonoBehaviour
 	{
 		#region Inspector & Initialization
 
-		public Text Title;
-		public Text Hint;
+		public TextMeshProUGUI Title;
+		public TextMeshProUGUI Hint;
 		public Image OnOff;
 
 		private QuestInfoManager qim;
@@ -50,7 +49,7 @@ namespace GQ.Client.UI
 			CategoryTreeCtrl treeCtrl = go.GetComponent<CategoryTreeCtrl> ();
 			treeCtrl.categories = categories;
 			treeCtrl.CategoryFilter = catFilter;
-			treeCtrl.Title.text = catFilter.Name;
+    			treeCtrl.Title.text = catFilter.Name;
 			treeCtrl.gameObject.SetActive (true);
 
 			return treeCtrl;

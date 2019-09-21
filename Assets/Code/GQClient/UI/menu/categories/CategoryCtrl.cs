@@ -1,19 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.UI;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Conf;
-using QM.UI;
+using TMPro;
 
 namespace GQ.Client.UI
 {
 
-	public abstract class CategoryCtrl : MonoBehaviour
+    public abstract class CategoryCtrl : MonoBehaviour
 	{
 
-		public Text categoryName;
-		public Text categoryCount;
+		public TextMeshProUGUI categoryName;
+		public TextMeshProUGUI categoryCount;
 
 		protected CategoryTreeCtrl treeCtrl;
 

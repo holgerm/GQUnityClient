@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DialogItemText: {fileID: 2469661399370938792}
+  TextElement: {fileID: 2469661399370938792}
 --- !u!114 &2469661399370938792
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -29,7 +29,7 @@ namespace GQ.Client.UI.Dialogs
             //    //Dialog.Img = 
             //}
 
-            Dialog.Details.text = question.RepeatText.Decode4HyperText(false);
+            Dialog.Details.text = question.RepeatText.Decode4TMP(false);
             Dialog.SetYesButton(question.RepeatButtonText, CloseDialog);
             Dialog.NoButton.gameObject.SetActive(false);
 

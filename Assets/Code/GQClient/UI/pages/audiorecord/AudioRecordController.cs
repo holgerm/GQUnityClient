@@ -1,12 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
-using GQ.Client.Conf;
 using System;
 using GQ.Client.Err;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -16,8 +15,8 @@ namespace GQ.Client.UI
         #region Inspector Fields
 
         public GameObject contentPanel;
-        public Text infoText;
-        public Text forwardButtonText;
+        public TextMeshProUGUI infoText;
+        public TextMeshProUGUI forwardButtonText;
         public AudioSource audioSource;
 
         #endregion

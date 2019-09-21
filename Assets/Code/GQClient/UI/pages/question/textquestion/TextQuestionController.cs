@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
@@ -13,10 +10,10 @@ namespace GQ.Client.UI
     {
 
         #region Inspector Features
-        public Text questionText;
-        public InputField inputField;
-        public Text promptPlaceholder;
-        public Text answerGiven;
+        public TextMeshProUGUI questionText;
+        public TMP_InputField inputField;
+        public TextMeshProUGUI promptPlaceholder;
+        public TextMeshProUGUI shownAnswer;
         #endregion
 
 
@@ -38,11 +35,11 @@ namespace GQ.Client.UI
             // show the question:
             questionText.color = ConfigurationManager.Current.mainFgColor;
             questionText.fontSize = ConfigurationManager.Current.mainFontSize;
-            questionText.text = tqPage.Question.Decode4HyperText();
+            questionText.text = tqPage.Question.Decode4TMP();
             promptPlaceholder.text = tqPage.Prompt;
             promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
-            answerGiven.fontSize = ConfigurationManager.Current.mainFontSize;
-            answerGiven.text = "";
+            //shownAnswer.fontSize = ConfigurationManager.Current.mainFontSize;
+            shownAnswer.text = "";
             inputField.text = "";
             inputField.Select();
             inputField.ActivateInputField();
@@ -53,9 +50,9 @@ namespace GQ.Client.UI
 
         public override void OnForward()
         {
-            tqPage.Result = answerGiven.text;
+            tqPage.Result = inputField.text;
 
-            if (tqPage.AnswerCorrect(answerGiven.text))
+            if (tqPage.AnswerCorrect(inputField.text))
             {
                 tqPage.Succeed(alsoEnd: true);
             }

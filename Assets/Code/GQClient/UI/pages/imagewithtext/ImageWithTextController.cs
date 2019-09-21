@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.UI;
-using Candlelight.UI;
 using GQ.Client.Util;
-using System.Text.RegularExpressions;
 using GQ.Client.Conf;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -15,7 +14,7 @@ namespace GQ.Client.UI
 		#region Inspector Fields
 
 		public RawImage image;
-		public HyperText text;
+		public TextMeshProUGUI text;
 
 		#endregion
 
@@ -29,7 +28,7 @@ namespace GQ.Client.UI
             iwtPage = (PageImageWithText)page;
 
 			// show text:
-			text.text = TextHelper.Decode4HyperText (iwtPage.Text);
+			text.text = TextHelper.Decode4TMP(iwtPage.Text);
 
 			// show (or hide completely) image:
 			GameObject imagePanel = image.transform.parent.gameObject;
@@ -63,29 +62,6 @@ namespace GQ.Client.UI
 				};
 				loader.Start ();
 			}
-		}
-
-		public void OnLinkClicked (HyperText text, Candlelight.UI.HyperText.LinkInfo linkInfo)
-		{
-			string href = extractHREF (linkInfo);
-			if (href != null) {
-				Application.OpenURL (href);
-			}
-		}
-
-		private string extractHREF (Candlelight.UI.HyperText.LinkInfo info)
-		{
-			string href = null;
-
-			string pattern = @".*?href=""(?'href'[^""]*?)(?:["" \s]|$)";
-			Match match = Regex.Match (info.Name, pattern);
-			if (match.Success) {
-				href = match.Groups ["href"].ToString ();
-				if (!href.StartsWith ("http://") && !href.StartsWith ("https://")) {
-					href = "http://" + href;
-				}
-			}
-			return href;
 		}
 
 		#endregion

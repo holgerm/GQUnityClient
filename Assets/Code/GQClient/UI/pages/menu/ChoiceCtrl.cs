@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
+using TMPro;
 
 public class ChoiceCtrl : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class ChoiceCtrl : MonoBehaviour
 	#region Inspector & internal features
 
 	public Image answerImage;
-	public Text choiceText;
+	public TextMeshProUGUI choiceText;
 	public Button choiceButton;
 
 	private PageMenu page;
@@ -37,7 +36,7 @@ public class ChoiceCtrl : MonoBehaviour
 		choiceCtrl.page = myPage;
 		choiceCtrl.choice = choice;
 		choiceCtrl.choiceText.color = ConfigurationManager.Current.mainFgColor;
-		choiceCtrl.choiceText.text = choice.Text.Decode4HyperText(false);
+		choiceCtrl.choiceText.text = choice.Text.Decode4TMP(false);
 		choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
 
 		return choiceCtrl;

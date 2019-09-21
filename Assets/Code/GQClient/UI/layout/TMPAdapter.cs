@@ -36,6 +36,13 @@ public class TMPAdapter : MonoBehaviour
                 text.fontSizeMax = 55;
                 text.enableWordWrapping = true;
                 break;
+            case TextUsageType.CenteredBody:
+                text.alignment = TextAlignmentOptions.Center;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 40;
+                text.fontSizeMax = 55;
+                text.enableWordWrapping = true;
+                break;
             case TextUsageType.Button:
                 text.alignment = TextAlignmentOptions.Center;
                 text.enableAutoSizing = true;
@@ -66,6 +73,21 @@ public class TMPAdapter : MonoBehaviour
                 text.overflowMode = TextOverflowModes.Ellipsis;
                 text.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
                 break;
+            case TextUsageType.MenuEntry:
+                text.alignment = TextAlignmentOptions.Left;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 40;
+                text.fontSizeMax = 60;
+                text.enableWordWrapping = false;
+                text.overflowMode = TextOverflowModes.Ellipsis;
+                break;
+            case TextUsageType.TextChunk:
+                text.alignment = TextAlignmentOptions.Justified;
+                text.enableAutoSizing = false;
+                text.fontSize = ConfigurationManager.Current.mainFontSize;
+                text.enableWordWrapping = true;
+                text.overflowMode = TextOverflowModes.Overflow;
+                break;
             default:
                 break;
         }
@@ -80,10 +102,14 @@ public class TMPAdapter : MonoBehaviour
 
 public enum TextUsageType
 {
-    Title,
-    Body,
-    Button,
-    Caption,
-    Option,
-    ListEntry
+    Title = 0,
+    Body = 1,
+    CenteredBody = 8,
+    Caption = 3,
+    Button = 2,
+    Option = 4,
+    ListEntry = 5,
+    MenuEntry = 6,
+    TextChunk = 7
+        // nextitem = 9
 }

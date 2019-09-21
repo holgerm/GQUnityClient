@@ -11,6 +11,7 @@ using System.IO;
 using GQ.Client.FileIO;
 using GQ.Client.Err;
 using GQ.Client.Conf;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -20,7 +21,7 @@ namespace GQ.Client.UI
 
         #region Inspector Features
 
-        public Text text;
+        public TextMeshProUGUI text;
         public Image textbg;
 
         public Button button;

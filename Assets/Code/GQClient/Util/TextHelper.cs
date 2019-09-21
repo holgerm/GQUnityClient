@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//#define DEBUG_LOG
+
 using System.Text.RegularExpressions;
 using GQ.Client.Model;
 using System.Collections.Generic;
 using System.Text;
 using System;
-using GQ.Client.Err;
+using UnityEngine;
 
 namespace GQ.Client.Util
 {
@@ -36,6 +36,9 @@ namespace GQ.Client.Util
         {
             string varName = match.Value.Substring(1, match.Value.Length - 2);
             string value = Variables.GetValue(varName).AsString();
+#if DEBUG_LOG
+            Debug.LogFormat("Replaced var {0} against value {1}", varName, value);
+#endif
             return value;
         }
 
@@ -68,17 +71,17 @@ namespace GQ.Client.Util
         /// <returns>The hyper text.</returns>
         /// <param name="rawText">Raw text.</param>
         /// <param name="supportHtmlLinks">Support clickable links within the text, defaults to true.</param>
-        public static string Decode4HyperText(this string rawText, bool supportHtmlLinks = true)
+        public static string Decode4TMP(this string rawText, bool supportHtmlLinks = true)
         {
             string result = HTMLDecode(rawText);
             result = MakeReplacements(result);
             if (supportHtmlLinks)
-                result = EnhanceHTMLAnchors4HyperText(result);
+                result = EnhanceHTMLAnchors4TMPText(result);
 
             return result;
         }
 
-        private static string EnhanceHTMLAnchors4HyperText(string htmlText)
+        private static string EnhanceHTMLAnchors4TMPText(string htmlText)
         {
             Dictionary<string, string> replacements = new Dictionary<string, string>();
             MatchCollection matchedAnchors = Regex.Matches(htmlText, regexPattern4HTMLAnchors);

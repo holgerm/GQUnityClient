@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
-using UnityEngine.UI;
 using GQ.Client.Util;
+using TMPro;
 
 namespace GQ.Client.UI
 {
 
-	public class MenuController : PageController
+    public class MenuController : PageController
 	{
 		#region Inspector Features
 
-		public Text questionText;
+		public TextMeshProUGUI questionText;
 		public Transform choicesContainer;
 
 		#endregion
@@ -29,7 +28,7 @@ namespace GQ.Client.UI
             myPage = (PageMenu)page;
 
 			// show the question:
-			questionText.text = myPage.Question.Decode4HyperText();
+			questionText.text = myPage.Question.Decode4TMP();
 
             // shuffle anwers:
             if (myPage.Shuffle)

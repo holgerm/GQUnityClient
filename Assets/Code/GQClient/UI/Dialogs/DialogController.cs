@@ -6,6 +6,7 @@ using GQ.Client.Util;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.GQEvents;
+using TMPro;
 
 namespace GQ.Client.UI.Dialogs
 {
@@ -36,10 +37,10 @@ namespace GQ.Client.UI.Dialogs
 
 		public const string DIALOG_CANVAS_PATH = "/DialogCanvas";
 
-		public Text Title;
+		public TextMeshProUGUI Title;
 		protected const string TITLE_PATH = "Panel/TitleText";
 		public Image Img;
-		public Text Details;
+		public TextMeshProUGUI Details;
 		protected const string DETAILS_PATH = "Panel/TextScrollView/Viewport/Content/DetailsText";
 		public Button YesButton;
 		protected const string YES_BUTTON_PATH = "Panel/Buttons/YesButton";
@@ -81,7 +82,7 @@ namespace GQ.Client.UI.Dialogs
 		/// <param name="yesButtonClicked">Yes button clicked.</param>
 		public void SetYesButton (string description, ClickCallBack yesButtonClicked)
 		{
-			Text buttonText = YesButton.transform.Find ("Text").GetComponent<Text> ();
+            TextMeshProUGUI buttonText = YesButton.transform.Find ("Text").GetComponent<TextMeshProUGUI> ();
 			buttonText.text = description;
 
 			Behaviour.OnYesButtonClicked += yesButtonClicked;
@@ -96,7 +97,7 @@ namespace GQ.Client.UI.Dialogs
 		/// <param name="noButtonClicked">No button clicked.</param>
 		public void SetNoButton (string description, ClickCallBack noButtonClicked)
 		{
-			Text buttonText = NoButton.transform.Find ("Text").GetComponent<Text> ();
+            TextMeshProUGUI buttonText = NoButton.transform.Find ("Text").GetComponent<TextMeshProUGUI> ();
 			buttonText.text = description;
 
 			Behaviour.OnNoButtonClicked += noButtonClicked;
@@ -111,8 +112,8 @@ namespace GQ.Client.UI.Dialogs
 
 		public virtual void Reset ()
 		{
-			Details = EnsurePrefabVariableIsSet<Text> (Details, "Details Label", DETAILS_PATH);
-			Title = EnsurePrefabVariableIsSet<Text> (Title, "Title Label", TITLE_PATH);
+			Details = EnsurePrefabVariableIsSet<TextMeshProUGUI> (Details, "Details Label", DETAILS_PATH);
+			Title = EnsurePrefabVariableIsSet<TextMeshProUGUI> (Title, "Title Label", TITLE_PATH);
 			YesButton = EnsurePrefabVariableIsSet<Button> (YesButton, "Yes Button", YES_BUTTON_PATH);
 			NoButton = EnsurePrefabVariableIsSet<Button> (NoButton, "No Button", NO_BUTTON_PATH);
 		}

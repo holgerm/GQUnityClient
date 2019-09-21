@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
 using GQ.Client.UI;
 using GQ.Client.Util;
+using TMPro;
 
 public class AnswerCtrl : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class AnswerCtrl : MonoBehaviour
 	#region Inspector & internal features
 
 	public Image answerImage;
-	public Text answerText;
+	public TextMeshProUGUI answerText;
 	public Button answerButton;
 
 	private PageMultipleChoiceQuestion page;

@@ -1,22 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
-using UnityEngine.UI;
-using GQ.Client.Err;
-using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
-using Candlelight.UI;
 using GQ.Client.Conf;
+using TMPro;
 
 namespace GQ.Client.UI
 {
 
-	public class MultipleChoiceQuestionController : QuestionController
+    public class MultipleChoiceQuestionController : QuestionController
 	{
 		#region Inspector Features
 
-		public HyperText questionText;
+		public TextMeshProUGUI questionText;
 		public Transform answersContainer;
 
 		#endregion
@@ -37,7 +33,7 @@ namespace GQ.Client.UI
             mcqPage = (PageMultipleChoiceQuestion)page;
 
             // show the question:
-            questionText.text = mcqPage.Question.Decode4HyperText();
+            questionText.text = mcqPage.Question.Decode4TMP();
             questionText.color = ConfigurationManager.Current.mainFgColor;
             questionText.fontSize = ConfigurationManager.Current.mainFontSize;
 

@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Candlelight.UI;
-using System.IO;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Err;
 
-namespace GQ.UI {
+namespace GQ.UI
+{
 
-	public class ShowLocalPrivacyText : MonoBehaviour
+    public class ShowLocalPrivacyText : MonoBehaviour
 	{
 
 		protected Text privacyText;

@@ -14,7 +14,7 @@ namespace GQ.Client.UI
     public class TagScannerController : PageController
     {
         #region Inspector Features
-        public Text shownText;
+        public TextMeshProUGUI shownText;
 
         WebCamTexture camTexture;
 
@@ -39,7 +39,7 @@ namespace GQ.Client.UI
             // show the content:
             shownText.color = ConfigurationManager.Current.mainFgColor;
             shownText.fontSize = ConfigurationManager.Current.mainFontSize;
-            shownText.text = myPage.Prompt.Decode4HyperText();
+            shownText.text = myPage.Prompt.Decode4TMP();
             forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Ok";
 
             CoroutineStarter.Run(InitQRCamera());
