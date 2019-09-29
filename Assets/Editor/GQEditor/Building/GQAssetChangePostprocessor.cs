@@ -155,25 +155,25 @@ namespace GQ.Editor.Building
 				TextureImporter textureImporter  = (TextureImporter)assetImporter;
 
 				TextureImporterPlatformSettings standaloneSettings = textureImporter.GetPlatformTextureSettings ("Standalone");
-				standaloneSettings.format = TextureImporterFormat.ARGB32;
+				standaloneSettings.format = TextureImporterFormat.RGBA32;
 				standaloneSettings.overridden = true;
 				textureImporter.ClearPlatformTextureSettings("Standalone");
 				textureImporter.SetPlatformTextureSettings (standaloneSettings);
 
 				TextureImporterPlatformSettings iPhoneSettings = textureImporter.GetPlatformTextureSettings ("iPhone");
-				iPhoneSettings.format = TextureImporterFormat.ARGB32;
+				iPhoneSettings.format = TextureImporterFormat.RGBA32;
 				iPhoneSettings.overridden = true;
 				textureImporter.ClearPlatformTextureSettings("iPhone");
 				textureImporter.SetPlatformTextureSettings (iPhoneSettings);
 
 				TextureImporterPlatformSettings androidSettings = textureImporter.GetPlatformTextureSettings ("Android");
-				androidSettings.format = TextureImporterFormat.ARGB32;
+				androidSettings.format = TextureImporterFormat.RGBA32;
 				androidSettings.overridden = true;
 				textureImporter.ClearPlatformTextureSettings ("Android");
 				textureImporter.SetPlatformTextureSettings (androidSettings);
 
 				TextureImporterPlatformSettings webGLSettings = textureImporter.GetPlatformTextureSettings ("WebGL");
-				webGLSettings.format = TextureImporterFormat.ARGB32;
+				webGLSettings.format = TextureImporterFormat.RGBA32;
 				webGLSettings.overridden = true;
 				textureImporter.ClearPlatformTextureSettings("WebGL");
 				textureImporter.SetPlatformTextureSettings (webGLSettings);

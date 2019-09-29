@@ -438,9 +438,6 @@ namespace GQ.Client.Conf
         #region UI Strategies
         [ShowInProductEditor(StartSection = "UI Strategies:")]
         public bool hideFooterIfPossible { get; set; }
-
-        [ShowInProductEditor]
-        public bool autoScrollNewText { get; set; }
         #endregion
 
 
@@ -482,10 +479,6 @@ namespace GQ.Client.Conf
         public Color32 headerButtonFgColor { get; set; }
 
         [ShowInProductEditor]
-        [JsonConverter(typeof(Color32Converter))]
-        public Color32 contentBackgroundColor { get; set; }
-
-        [ShowInProductEditor]
         public float headerHeightUnits { get; set; }
 
         [ShowInProductEditor]
@@ -494,7 +487,7 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public float headerHeightMaxMM { get; set; }
 
-        [ShowInProductEditor]
+        [ShowInProductEditor(StartSection = "Content:")]
         public float contentHeightUnits { get; set; }
 
         [ShowInProductEditor]
@@ -507,6 +500,10 @@ namespace GQ.Client.Conf
         public float contentBottomMarginUnits { get; set; }
 
         [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 contentBackgroundColor { get; set; }
+
+        [ShowInProductEditor]
         public float imageAreaHeightMinUnits { get; set; }
 
         [ShowInProductEditor]
@@ -515,7 +512,27 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool fitExceedingImagesIntoArea { get; set; }
 
+        [ShowInProductEditor(StartSection = "Scroll Views:")]
+        public bool showScrollbar { get; set; }
+
         [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 scrollbarHandleColor { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 scrollbarBGColor { get; set; }
+
+        [ShowInProductEditor]
+        public int scrollbarWidth { get; set; }
+
+        [ShowInProductEditor]
+        public bool margin4Scrollbar { get; set; }
+
+        [ShowInProductEditor]
+        public bool autoScrollNewText { get; set; }
+
+        [ShowInProductEditor(StartSection = "Footer:")]
         public float footerHeightUnits { get; set; }
 
         [ShowInProductEditor]
@@ -543,7 +560,7 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public float borderWidthUnits { get; set; }
 
-        [ShowInProductEditor]
+        [ShowInProductEditor(StartSection = "Overlays:")]
         public float overlayButtonSizeUnits { get; set; }
 
         [ShowInProductEditor]
@@ -790,6 +807,13 @@ namespace GQ.Client.Conf
             contentHeightUnits = 750f;
             imageAreaHeightMinUnits = 150f;
             imageAreaHeightMaxUnits = 350f;
+
+            showScrollbar = true;
+            scrollbarHandleColor = new Color(125f, 125f, 125f, 255f);
+            scrollbarBGColor = new Color(197f, 197f, 197f, 255f);
+            scrollbarWidth = 20;
+            margin4Scrollbar = true;
+
             footerHeightUnits = 75f;
             contentDividerUnits = 0;
             borderWidthUnits = 0;

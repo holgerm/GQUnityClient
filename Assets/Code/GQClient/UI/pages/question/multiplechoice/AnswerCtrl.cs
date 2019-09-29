@@ -4,6 +4,7 @@ using GQ.Client.Model;
 using GQ.Client.UI;
 using GQ.Client.Util;
 using TMPro;
+using GQ.Client.Conf;
 
 public class AnswerCtrl : MonoBehaviour
 {
@@ -37,6 +38,13 @@ public class AnswerCtrl : MonoBehaviour
 		answerCtrl.answer = answer;
 		answerCtrl.answerText.text = answer.Text.MakeReplacements();
 		answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
+
+        // adapt to current scrollbar policy:
+        if (ConfigurationManager.Current.showScrollbar && ConfigurationManager.Current.margin4Scrollbar)
+        {
+            HorizontalLayoutGroup hlg = go.GetComponent<HorizontalLayoutGroup>();
+            hlg.padding.right += ConfigurationManager.Current.scrollbarWidth;
+        }
 
 		return answerCtrl;
 	}
