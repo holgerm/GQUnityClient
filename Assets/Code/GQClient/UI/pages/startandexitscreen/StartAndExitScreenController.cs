@@ -50,17 +50,20 @@ namespace GQ.Client.UI
             }
         }
 
+        private bool tapped = false;
+
         public void Tap()
         {
             myPage.Tap();
+            tapped = true;
         }
 
         private IEnumerator forwardAfterDurationWaited()
         {
             yield return new WaitForSeconds(myPage.Duration);
 
-            // in case we exited the quest in the meantime we have to skip performing onForward:
-            if (QuestManager.Instance.CurrentQuest == page.Quest)
+            // in case we exited the page by tapping or the quest by leave-button in the meantime we have to skip performing onForward:
+            if (!tapped && QuestManager.Instance.CurrentQuest == page.Quest)
             {
                 OnForward();
             }
