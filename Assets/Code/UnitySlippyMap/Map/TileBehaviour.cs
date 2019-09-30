@@ -1,3 +1,5 @@
+#define DEBUG_LOG
+
 // 
 //  Tile.cs
 //  
@@ -37,7 +39,7 @@ namespace UnitySlippyMap.Map
 	/// </summary>
 	public class TileBehaviour : MonoBehaviour
 	{
-		#region Private members & properties
+        #region Private members & properties
 
 		/// <summary>
 		/// The texture identifier.
@@ -280,10 +282,11 @@ namespace UnitySlippyMap.Map
 				new Vector2 (0.0f, 0.0f),
 				new Vector2 (0.0f, 1.0f)
 			};
-			
-			// add a material
-			string shaderName = "Larku/UnlitTransparent";
-			Shader shader = Shader.Find (shaderName);
+
+            // add a material
+            string shaderName = "Larku/UnlitTransparent";
+            Shader shader = Resources.Load<Shader>("LarkuUnlitTransparent");
+			// was (did not work since 2019.2.6): Shader shader = Shader.Find (shaderName);
 			
 #if DEBUG_LOG
 		Debug.Log("DEBUG: shader for tile template: " + shaderName + ", exists: " + (shader != null));
