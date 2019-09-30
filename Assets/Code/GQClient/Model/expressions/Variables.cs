@@ -63,7 +63,19 @@ namespace GQ.Client.Model
 
         #region Registry
 
-        private static Dictionary<string, Value> variables = new Dictionary<string, Value>();
+        private static Dictionary<string, Value> _variables;
+        private static Dictionary<string, Value> variables
+        {
+            get
+            {
+                if (_variables == null)
+                {
+                    _variables = new Dictionary<string, Value>();
+                    _variables.Add("score", new Value(0f));
+                }
+                return _variables;
+            }
+        }
 
         #endregion
 
