@@ -36,8 +36,8 @@ public class AnswerCtrl : MonoBehaviour
 		AnswerCtrl answerCtrl = go.GetComponent<AnswerCtrl> ();
 		answerCtrl.page = mcqPage;
 		answerCtrl.answer = answer;
-		answerCtrl.answerText.text = answer.Text.MakeReplacements();
-		answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
+		answerCtrl.answerText.text = answer.Text.Decode4TMP(false);
+        answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
 
         // adapt to current scrollbar policy:
         if (ConfigurationManager.Current.showScrollbar && ConfigurationManager.Current.margin4Scrollbar)
