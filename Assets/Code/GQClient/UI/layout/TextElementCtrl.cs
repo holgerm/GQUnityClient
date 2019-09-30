@@ -23,7 +23,9 @@ namespace GQ.Client.UI
         public void Reset()
         {
             TextElement = GetComponent<TextMeshProUGUI>();
+#if UNITY_EDITOR
             UnityEditorInternal.InternalEditorUtility.SetIsInspectorExpanded(TextElement, false);
+#endif
 
             TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Font");
             if (font != null)
