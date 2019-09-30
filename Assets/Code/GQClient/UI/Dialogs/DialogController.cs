@@ -83,7 +83,7 @@ namespace GQ.Client.UI.Dialogs
 		public void SetYesButton (string description, ClickCallBack yesButtonClicked)
 		{
             TextMeshProUGUI buttonText = YesButton.transform.Find ("Text").GetComponent<TextMeshProUGUI> ();
-			buttonText.text = description;
+			buttonText.text = description.Decode4TMP(false);
 
 			Behaviour.OnYesButtonClicked += yesButtonClicked;
 			YesButton.gameObject.SetActive (true);
@@ -98,7 +98,7 @@ namespace GQ.Client.UI.Dialogs
 		public void SetNoButton (string description, ClickCallBack noButtonClicked)
 		{
             TextMeshProUGUI buttonText = NoButton.transform.Find ("Text").GetComponent<TextMeshProUGUI> ();
-			buttonText.text = description;
+			buttonText.text = description.Decode4TMP(false);
 
 			Behaviour.OnNoButtonClicked += noButtonClicked;
 			NoButton.gameObject.SetActive (true);

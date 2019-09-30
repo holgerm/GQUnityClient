@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Xml;
 using GQ.Client.Err;
 using System;
+using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {
@@ -110,10 +111,10 @@ namespace GQ.Client.Model
             foreach (ExpectedCode a in ExpectedCodes)
             {
                 // TODO: Extract this into a reusable method that will be called from here and from TextQuestionPage as well.
-                string aText = a.Text.Trim();
+                string aText = a.Text.Trim().MakeReplacements();
 
                 // Text comparison:
-                if (aText == input.Trim())
+                if (aText == input.Trim().MakeReplacements())
                     return true;
 
                 // Number Ranges:

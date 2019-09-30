@@ -71,7 +71,7 @@ namespace GQ.Client.Model
 			GQML.AssertReaderAtStart (reader, GQML.PAGE_QUESTION_ANSWER);
 
 			// Content: Read and implicitly proceed the reader so that this node is completely consumed:
-			Text = reader.ReadInnerXml ().MakeReplacements();
+			Text = reader.ReadInnerXml ();
 		}
 
         protected MenuChoice() { }

@@ -37,7 +37,7 @@ namespace GQ.Client.UI
             myPage = (PageAudioRecord)page;
 
             // show the content:
-            infoText.text = myPage.PromptText;
+            infoText.text = myPage.PromptText.Decode4TMP(true);
             forwardButtonText.text = "Ok";
 
             // init state:

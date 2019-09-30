@@ -181,7 +181,11 @@ namespace GQ.Client.UI
         {
             // update forward button text:
             TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            forwardButtonText.text = npcPage.HasMoreDialogItems() ? npcPage.NextDialogButtonText : npcPage.EndButtonText;
+            forwardButtonText.text = npcPage.HasMoreDialogItems()
+                ?
+                npcPage.NextDialogButtonText.Decode4TMP(false)
+                :
+                npcPage.EndButtonText.Decode4TMP(false);
         }
 
         private IEnumerator adjustScrollRect(float timespan)

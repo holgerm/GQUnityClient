@@ -36,9 +36,8 @@ namespace GQ.Client.UI
             questionText.color = ConfigurationManager.Current.mainFgColor;
             questionText.fontSize = ConfigurationManager.Current.mainFontSize;
             questionText.text = tqPage.Question.Decode4TMP();
-            promptPlaceholder.text = tqPage.Prompt;
+            promptPlaceholder.text = tqPage.Prompt.Decode4TMP(false);
             promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
-            //shownAnswer.fontSize = ConfigurationManager.Current.mainFontSize;
             shownAnswer.text = "";
             inputField.text = "";
             inputField.Select();

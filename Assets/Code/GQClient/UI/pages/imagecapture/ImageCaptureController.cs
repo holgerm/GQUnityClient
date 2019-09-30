@@ -48,7 +48,7 @@ namespace GQ.Client.UI
             // show the task and button:
             if (myPage.Task != null && myPage.Task != "")
             {
-                text.text = myPage.Task;
+                text.text = myPage.Task.Decode4TMP(false);
 
                 /*  Adjust the text size after, because it is rotated by 
                     -90 degrees relative to its parent, but it should be 

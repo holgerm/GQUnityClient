@@ -23,7 +23,6 @@ public class ChildrenSameHeight : MonoBehaviour
             {
                 float size = child.GetComponent<RectTransform>().rect.height;
                 maxSize = Mathf.Max(maxSize, size);
-                 Debug.Log("Child with h: " + size + " max: " + maxSize);
            }
             if (maxSize > 0.001f)
             {

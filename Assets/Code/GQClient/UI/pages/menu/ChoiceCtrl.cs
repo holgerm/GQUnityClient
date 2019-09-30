@@ -44,7 +44,7 @@ public class ChoiceCtrl : MonoBehaviour
 
 	public void Select ()
 	{
-		page.Result = choice.Text;
+		page.Result = choice.Text.MakeReplacements();
 		page.End ();
 	}
 
