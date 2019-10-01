@@ -6,6 +6,7 @@ using Newtonsoft.Json.Converters;
 using GQ.Client.FileIO;
 using GQ.Client.UI;
 using GQ.Client.Util;
+using TMPro;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -454,7 +455,11 @@ namespace GQ.Client.Conf
         public int mainFontSize { get; set; }
 
         [ShowInProductEditor]
-        public int maxFontSize { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AlignmentOption textAlignment { get; set; }
+
+        [ShowInProductEditor]
+        public float lineSpacing { get; set; }
 
         [ShowInProductEditor]
         public bool showShadows { get; set; }
@@ -800,7 +805,8 @@ namespace GQ.Client.Conf
             mainBgColor = Color.white;
             mainFgColor = Color.black;
             mainFontSize = 60;
-            maxFontSize = 100;
+            textAlignment = AlignmentOption.Left;
+            lineSpacing = 10f;
             showShadows = true;
             headerMiddleButtonPolicy = HeaderMiddleButtonPolicy.TopLogo;
             headerHeightUnits = 60f;
@@ -866,6 +872,14 @@ namespace GQ.Client.Conf
         }
         #endregion
 
+    }
+
+    public enum AlignmentOption
+    {
+        Left,
+        Center,
+        Right,
+        Justified,
     }
 
     public enum HeaderMiddleButtonPolicy

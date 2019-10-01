@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Text.RegularExpressions;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using TMPro;
@@ -22,6 +21,7 @@ namespace GQ.Client.UI
 
         public void Reset()
         {
+            Config config = ConfigurationManager.Current;
             TextElement = GetComponent<TextMeshProUGUI>();
 #if UNITY_EDITOR
             UnityEditorInternal.InternalEditorUtility.SetIsInspectorExpanded(TextElement, false);
@@ -38,75 +38,99 @@ namespace GQ.Client.UI
             switch (textUsageType)
             {
                 case TextUsageType.Title:
+                    TextElement.alignment = mapAlignment(config.textAlignment);
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.7f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.lineSpacing = config.lineSpacing;
+                    break;
+                case TextUsageType.Paragraph:
+                    TextElement.alignment = mapAlignment(config.textAlignment);
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.4f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.55f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.lineSpacing = config.lineSpacing;
+                    break;
+                 case TextUsageType.Caption:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 50;
-                    TextElement.fontSizeMax = 70;
-                    TextElement.enableWordWrapping = true;
-                    break;
-                case TextUsageType.Body:
-                    TextElement.alignment = TextAlignmentOptions.TopJustified;
-                    TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 40;
-                    TextElement.fontSizeMax = 55;
-                    TextElement.enableWordWrapping = true;
-                    break;
-                case TextUsageType.CenteredBody:
-                    TextElement.alignment = TextAlignmentOptions.Center;
-                    TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 40;
-                    TextElement.fontSizeMax = 55;
-                    TextElement.enableWordWrapping = true;
-                    break;
-                case TextUsageType.Button:
-                    TextElement.alignment = TextAlignmentOptions.Center;
-                    TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 45;
-                    TextElement.fontSizeMax = 60;
-                    TextElement.enableWordWrapping = true;
-                    break;
-                case TextUsageType.Caption:
-                    TextElement.alignment = TextAlignmentOptions.Center;
-                    TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 35;
-                    TextElement.fontSizeMax = 45;
+                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     break;
                 case TextUsageType.Option:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 35;
-                    TextElement.fontSizeMax = 45;
-                    TextElement.enableWordWrapping = false;
-                    TextElement.overflowMode = TextOverflowModes.Truncate;
-                    break;
-                case TextUsageType.ListEntry:
-                    TextElement.alignment = TextAlignmentOptions.Left;
-                    TextElement.enableAutoSizing = false;
-                    TextElement.fontSize = 70;
+                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
-                    TextElement.overflowMode = TextOverflowModes.Ellipsis;
-                    TextElement.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
+                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.overflowMode = TextOverflowModes.Overflow;
+                    TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.MenuEntry:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 40;
-                    TextElement.fontSizeMax = 60;
+                    TextElement.fontSizeMin = 0.4f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.6f * config.mainFontSize;
                     TextElement.enableWordWrapping = false;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
                     break;
-                case TextUsageType.TextChunk:
-                    TextElement.alignment = TextAlignmentOptions.Justified;
-                    TextElement.enableAutoSizing = false;
-                    TextElement.fontSize = ConfigurationManager.Current.mainFontSize;
+                case TextUsageType.Button:
+                    TextElement.alignment = TextAlignmentOptions.Center;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.45f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.6f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
-                    TextElement.overflowMode = TextOverflowModes.Overflow;
+                    TextElement.raycastTarget = false;
+                    break;
+                case TextUsageType.FoyerListEntry:
+                    TextElement.alignment = TextAlignmentOptions.Left;
+                    TextElement.enableAutoSizing = false;
+                    TextElement.fontSize = 0.7f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.overflowMode = TextOverflowModes.Ellipsis;
+                    TextElement.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
+                    break;
+                case TextUsageType.DialogTitle:
+                    TextElement.alignment = TextAlignmentOptions.Center;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.7f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    break;
+                case TextUsageType.DialogMessage:
+                    TextElement.alignment = TextAlignmentOptions.Center;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.4f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.55f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.lineSpacing = config.lineSpacing;
                     break;
                 default:
                     break;
             }
 
+        }
+
+        private TextAlignmentOptions mapAlignment(AlignmentOption configAligment)
+        {
+            switch (configAligment)
+            {
+                case
+                    AlignmentOption.Left:
+                    return TextAlignmentOptions.Left;
+                case AlignmentOption.Center:
+                    return TextAlignmentOptions.Center;
+                case AlignmentOption.Right:
+                    return TextAlignmentOptions.Right;
+                case AlignmentOption.Justified:
+                    return TextAlignmentOptions.Justified;
+                default:
+                    return TextAlignmentOptions.Left;
+            }
         }
 
         public void Initialize(string itemText, bool supportHtmlLinks)
@@ -150,14 +174,13 @@ namespace GQ.Client.UI
     public enum TextUsageType
     {
         Title = 0,
-        Body = 1,
-        CenteredBody = 8,
-        Caption = 3,
-        Button = 2,
+        Paragraph = 1,
+        Caption = 2,
+        Button = 3,
         Option = 4,
-        ListEntry = 5,
-        MenuEntry = 6,
-        TextChunk = 7
-        // nextitem = 9
+        MenuEntry = 5,
+        FoyerListEntry = 6,
+        DialogTitle = 7,
+        DialogMessage = 8,
     }
 }

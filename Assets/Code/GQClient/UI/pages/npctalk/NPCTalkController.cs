@@ -66,6 +66,17 @@ namespace GQ.Client.UI
 
         #region View Update Methods
 
+        /// <summary>
+        /// Shows top margin when no image is shown, i.e. text follows directly below header:
+        /// </summary>
+        public override bool ShowsTopMargin
+        {
+            get
+            {
+                return string.IsNullOrEmpty(npcPage.ImageUrl);
+            }
+        }
+
         void ShowImage()
         {
             // allow for variables inside the image url:
@@ -75,7 +86,11 @@ namespace GQ.Client.UI
             if (rtImageUrl == "")
             {
                 imagePanel.SetActive(false);
+                layout.TopMargin.SetActive(true);
                 return;
+            } else
+            {
+                layout.TopMargin.SetActive(false);
             }
 
             AbstractDownloader loader;

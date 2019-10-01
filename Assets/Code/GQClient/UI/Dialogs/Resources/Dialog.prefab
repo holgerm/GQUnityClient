@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 224000010865765202}
   - component: {fileID: 222000011601043546}
   - component: {fileID: 6731982200249926361}
-  - component: {fileID: 1867948263711055652}
+  - component: {fileID: 7166139483116008834}
   m_Layer: 5
   m_Name: DetailsText
   m_TagString: Untagged
@@ -159,10 +159,10 @@ RectTransform:
   m_Father: {fileID: 224000012790021186}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 71.08644, y: -389.81}
-  m_SizeDelta: {x: 142.17288, y: 739.62}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222000011601043546
 CanvasRenderer:
@@ -219,17 +219,17 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 45
+  m_fontSize: 40
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 45
-  m_fontSizeMax: 60
+  m_fontSizeMin: 40
+  m_fontSizeMax: 55
   m_fontStyle: 0
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -265,7 +265,7 @@ MonoBehaviour:
     spaceCount: 11
     wordCount: 12
     linkCount: 0
-    lineCount: 14
+    lineCount: 12
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1867948263711055652
+--- !u!114 &7166139483116008834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,10 +292,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010246002724}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d5cb9dbd15141dcbbbf4b2cc04fd0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textUsageType: 2
+  TextElement: {fileID: 6731982200249926361}
+  textUsageType: 8
 --- !u!1 &1000010608041976
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,7 +604,7 @@ GameObject:
   - component: {fileID: 222000014283147876}
   - component: {fileID: 114000011907486794}
   - component: {fileID: 4233751731529954370}
-  - component: {fileID: 6300583870428160108}
+  - component: {fileID: 7263330868092551947}
   m_Layer: 5
   m_Name: TitleText
   m_TagString: Untagged
@@ -705,7 +706,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 56.75
+  m_fontSize: 58.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -715,7 +716,7 @@ MonoBehaviour:
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -769,7 +770,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6300583870428160108
+--- !u!114 &7263330868092551947
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -778,10 +779,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000012917497214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d5cb9dbd15141dcbbbf4b2cc04fd0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textUsageType: 0
+  TextElement: {fileID: 4233751731529954370}
+  textUsageType: 7
 --- !u!1 &1000013530063016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,7 +1256,7 @@ GameObject:
   - component: {fileID: 222680628308835900}
   - component: {fileID: 114985881494859122}
   - component: {fileID: 7235131187390383648}
-  - component: {fileID: 9102992856113744164}
+  - component: {fileID: 4062024038134924014}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1350,17 +1352,17 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 49.5
+  m_fontSize: 49.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 45
-  m_fontSizeMax: 60
+  m_fontSizeMax: 60.000004
   m_fontStyle: 0
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1414,7 +1416,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &9102992856113744164
+--- !u!114 &4062024038134924014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1423,10 +1425,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1691578218573562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d5cb9dbd15141dcbbbf4b2cc04fd0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textUsageType: 2
+  TextElement: {fileID: 7235131187390383648}
+  textUsageType: 3
 --- !u!1 &1719541423400522
 GameObject:
   m_ObjectHideFlags: 0
@@ -1561,7 +1564,7 @@ GameObject:
   - component: {fileID: 222182800266384814}
   - component: {fileID: 114876935328161510}
   - component: {fileID: 4973030818258457384}
-  - component: {fileID: 3100950151273605959}
+  - component: {fileID: 1883247961378129955}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1657,17 +1660,17 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 49.5
+  m_fontSize: 49.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 45
-  m_fontSizeMax: 60
+  m_fontSizeMax: 60.000004
   m_fontStyle: 0
   m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1721,7 +1724,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3100950151273605959
+--- !u!114 &1883247961378129955
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1730,7 +1733,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1932936162313998}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d5cb9dbd15141dcbbbf4b2cc04fd0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textUsageType: 2
+  TextElement: {fileID: 4973030818258457384}
+  textUsageType: 3

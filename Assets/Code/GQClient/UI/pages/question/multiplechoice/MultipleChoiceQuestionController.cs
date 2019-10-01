@@ -11,15 +11,23 @@ namespace GQ.Client.UI
     public class MultipleChoiceQuestionController : QuestionController
 	{
 		#region Inspector Features
-
 		public TextMeshProUGUI questionText;
 		public Transform answersContainer;
+        #endregion
 
-		#endregion
+        #region Runtime API
+        /// <summary>
+        /// Shows top margin:
+        /// </summary>
+        public override bool ShowsTopMargin
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-		#region Runtime API
-
-		public PageMultipleChoiceQuestion mcqPage
+        public PageMultipleChoiceQuestion mcqPage
         {
             get;
             protected set;

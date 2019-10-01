@@ -23,7 +23,6 @@ namespace GQ.Client.UI
 
 
         #region Runtime API
-
         protected PageAudioRecord myPage;
 
         private int minFreq;
@@ -51,6 +50,17 @@ namespace GQ.Client.UI
             UpdateView();
 
             CoroutineStarter.Instance.StartCoroutine(InitMicrophone());
+        }
+
+        /// <summary>
+        /// Shows top margin:
+        /// </summary>
+        public override bool ShowsTopMargin
+        {
+            get
+            {
+                return true;
+            }
         }
 
         protected string microphoneName;

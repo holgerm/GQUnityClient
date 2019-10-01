@@ -18,6 +18,17 @@ namespace GQ.Client.UI
 
 
         #region Runtime API
+        /// <summary>
+        /// Shows top margin:
+        /// </summary>
+        public override bool ShowsTopMargin
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public PageTextQuestion tqPage
         {
             get;

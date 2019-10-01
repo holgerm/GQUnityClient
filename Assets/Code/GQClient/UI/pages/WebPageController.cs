@@ -12,17 +12,25 @@ namespace GQ.Client.UI
 	{
 		
 		#region Inspector Fields
-
 		public GameObject contentPanel;
 		public Text infoText;
 		public Text forwardButtonText;
+        #endregion
 
-		#endregion
 
+        #region Runtime API
+        /// <summary>
+        /// Shows top margin:
+        /// </summary>
+        public override bool ShowsTopMargin
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-		#region Runtime API
-
-		protected PageWebPage myPage;
+        protected PageWebPage myPage;
 
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.

@@ -14,11 +14,21 @@ namespace GQ.Client.UI
 		public TextMeshProUGUI questionText;
 		public Transform choicesContainer;
 
-		#endregion
+        #endregion
 
-		#region Runtime API
+        #region Runtime API
+        /// <summary>
+        /// Shows top margin:
+        /// </summary>
+        public override bool ShowsTopMargin
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-		protected PageMenu myPage;
+        protected PageMenu myPage;
 
 		/// <summary>
 		/// Is called during Start() of the base class, which is a MonoBehaviour.

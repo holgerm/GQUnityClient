@@ -133,21 +133,16 @@ namespace GQ.Client.UI
 		public virtual void CleanUp() {
 			
 		}
-
 #endregion
 
 
 #region Layout
-
-		/// <summary>
-		/// Margin between header and content in device-dependent units.
-		/// </summary>
-		static public float ContentTopMarginUnits {
-			get {
-				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.contentTopMarginUnits;
-			}
-		}
+        public virtual bool ShowsTopMargin {
+            get
+            {
+                return false;
+            }
+        }
 
 		/// <summary>
 		/// Margin between content and footer in device-dependent units.
@@ -196,7 +191,7 @@ namespace GQ.Client.UI
 		{
 			float units = LayoutConfig.ContentHeightUnits -
 			              (
-			                  ContentTopMarginUnits +
+                              ConfigurationManager.Current.contentTopMarginUnits +
 			                  imageAreaHeight +
 			                  ContentDividerUnits +
 			                  ContentBottomMarginUnits

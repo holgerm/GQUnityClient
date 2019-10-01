@@ -156,7 +156,6 @@
   "defaultCategory": null,
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
-  "autoScrollNewText": true,
   "mainFgColor": {
     "r": 0,
     "g": 0,
@@ -169,17 +168,18 @@
     "b": 255,
     "a": 255
   },
-  "mainFontSize": 60,
-  "maxFontSize": 100,
+  "mainFontSize": 100,
+  "textAlignment": "Left",
+  "lineSpacing": 10.0,
   "showShadows": false,
   "topLogo": {
     "path": "TopLogo"
   },
   "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 221,
+    "g": 221,
+    "b": 221,
     "a": 255
   },
   "headerButtonBgColor": {
@@ -198,7 +198,7 @@
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
-  "contentTopMarginUnits": 0.0,
+  "contentTopMarginUnits": 20.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
   "contentBackgroundColor": {
@@ -225,6 +225,7 @@
   },
   "scrollbarWidth": 20,
   "margin4Scrollbar": true,
+  "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,

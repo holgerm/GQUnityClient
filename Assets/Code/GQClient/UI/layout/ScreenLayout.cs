@@ -14,7 +14,7 @@ namespace GQ.Client.UI
     /// </summary>
     public class ScreenLayout : LayoutConfig
     {
-
+        public PageController pageCtrl;
         public GameObject TopMargin;
         public GameObject ContentArea;
         public GameObject Divider;
@@ -89,8 +89,9 @@ namespace GQ.Client.UI
             LayoutElement layElem = TopMargin.GetComponent<LayoutElement>();
             if (layElem == null)
                 return;
-            layElem.flexibleHeight = PageController.ContentTopMarginUnits;
-            TopMargin.SetActive(PageController.ContentTopMarginUnits > 0f);
+            layElem.preferredHeight = ConfigurationManager.Current.contentTopMarginUnits;
+            layElem.flexibleHeight = 0;
+            TopMargin.SetActive(pageCtrl.ShowsTopMargin && ConfigurationManager.Current.contentTopMarginUnits > 0.001f);
         }
 
         protected virtual void setBottomMargin()
@@ -191,20 +192,21 @@ namespace GQ.Client.UI
                 Text text = transf.GetComponent<Text>();
                 if (text != null)
                 {
-                    switch (listEntryKind)
-                    {
-                        case ListEntryKind.Menu:
-                            text.fontSize = (int)Math.Floor(layElem.minHeight * 0.66f * sizeScaleFactor);
-                            break;
-                        case ListEntryKind.QuestInfo:
-                            float fontSizeFactor = ConfigurationManager.Current.listEntryUseTwoLines ? 2.7f : 1.53f;
-                            // these factors have been determined by some manual test measures on the UI.
-                            text.fontSize =
-                                Math.Min(
-                                    ConfigurationManager.Current.maxFontSize,
-                                    (int)Math.Floor(layElem.minHeight / fontSizeFactor));
-                            break;
-                    }
+                    // replaced when introduced TextMeshPro and TextElementCtrl:
+                    //switch (listEntryKind)
+                    //{
+                    //    case ListEntryKind.Menu:
+                    //        text.fontSize = (int)Math.Floor(layElem.minHeight * 0.66f * sizeScaleFactor);
+                    //        break;
+                    //    case ListEntryKind.QuestInfo:
+                    //        float fontSizeFactor = ConfigurationManager.Current.listEntryUseTwoLines ? 2.7f : 1.53f;
+                    //        // these factors have been determined by some manual test measures on the UI.
+                    //        text.fontSize =
+                    //            Math.Min(
+                    //                ConfigurationManager.Current.maxFontSize,
+                    //                (int)Math.Floor(layElem.minHeight / fontSizeFactor));
+                    //        break;
+                    //}
                     text.color = fgCol;
                 }
 

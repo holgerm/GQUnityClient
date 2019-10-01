@@ -18,6 +18,7 @@ using GQTests;
 using UnityEditor.SceneManagement;
 using QM.Util;
 using GQ.Client.Err;
+using TMPro;
 
 namespace GQ.Editor.UI
 {
@@ -646,7 +647,9 @@ namespace GQ.Editor.UI
 
     abstract public class ProductEditorPart
     {
-        static private Dictionary<Type, ProductEditorPart> cachedEditorParts = new Dictionary<Type, ProductEditorPart>();
+        private static Dictionary<Type, ProductEditorPart> cachedEditorParts = new Dictionary<Type, ProductEditorPart>();
+
+        public static Dictionary<string, int> popupSelections = new Dictionary<string, int>();
 
         protected static bool configIsDirty;
 
@@ -891,6 +894,51 @@ namespace GQ.Editor.UI
             return configIsDirty;
         }
     }
+
+
+    public class ProductEditorPart4AlignmentOption : ProductEditorPart
+    {
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.textAlignment;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
+        string[] values = Enum.GetNames(typeof(AlignmentOption));
+
+        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+
+            int previouslySelected = selected;
+            selected =
+                EditorGUILayout.Popup(
+                curPropInfo.Name,
+                selected,
+                values
+            );
+            if (previouslySelected != selected)
+            {
+                configIsDirty = true;
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (AlignmentOption)selected, null);
+            }
+
+            if (configIsDirty)
+                Debug.Log(curPropInfo.Name + " (AlignmentOption) changed");
+            return configIsDirty;
+        }
+    }
+
 
     public class ProductEditorPart4HeaderMiddleButtonPolicy : ProductEditorPart
     {
