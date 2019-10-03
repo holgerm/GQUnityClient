@@ -91,7 +91,10 @@ namespace GQ.Client.UI
                 return;
             layElem.preferredHeight = ConfigurationManager.Current.contentTopMarginUnits;
             layElem.flexibleHeight = 0;
-            TopMargin.SetActive(pageCtrl.ShowsTopMargin && ConfigurationManager.Current.contentTopMarginUnits > 0.001f);
+            if (pageCtrl != null)
+            {
+                TopMargin.SetActive(pageCtrl.ShowsTopMargin && ConfigurationManager.Current.contentTopMarginUnits > 0.001f);
+            }
         }
 
         protected virtual void setBottomMargin()

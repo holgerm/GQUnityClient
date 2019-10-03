@@ -73,7 +73,14 @@ namespace GQ.Client.UI
         {
             get
             {
-                return string.IsNullOrEmpty(npcPage.ImageUrl);
+                if (npcPage == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(npcPage.ImageUrl);
+                }
             }
         }
 
