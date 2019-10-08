@@ -21,7 +21,7 @@ namespace GQ.Client.UI
 		public static ViewToggleController Create (GameObject root)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create ("ViewToggle", root);
+			GameObject go = PrefabController.Create ("prefabs", "ViewToggle", root);
 			go.name = "ViewToggle";
 
 			// set menu entry height:
@@ -34,7 +34,7 @@ namespace GQ.Client.UI
 			mtb.shownObjects = new GameObject[ConfigurationManager.Current.questInfoViews.Length];
 			for (int i = 0; i < ConfigurationManager.Current.questInfoViews.Length; i++) {
 				string mtbGoName = "ViewToggleTo" + ConfigurationManager.Current.questInfoViews [i];
-				mtb.shownObjects [i] = PrefabController.Create (mtbGoName, viewCtrl.gameObject);
+				mtb.shownObjects [i] = PrefabController.Create ("prefabs", mtbGoName, viewCtrl.gameObject);
 				mtb.shownObjects [i].name = mtbGoName;
 			}
 			// view no. 0 is set, view no. 1 is shown as next to reach by this menu entry:

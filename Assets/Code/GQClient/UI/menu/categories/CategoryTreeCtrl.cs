@@ -42,7 +42,7 @@ namespace GQ.Client.UI
 		public static CategoryTreeCtrl Create (GameObject root, QuestInfoFilter.CategoryFilter catFilter, List<Category> categories)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create (PREFAB, root);
+			GameObject go = PrefabController.Create ("prefabs", PREFAB, root);
 			go.name = PREFAB + " (" + catFilter.Name + ")";
 
 			// save tree controller & folder:

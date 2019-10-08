@@ -26,7 +26,7 @@ public class ChoiceCtrl : MonoBehaviour
 	public static ChoiceCtrl Create (PageMenu myPage, Transform rootTransform, MenuChoice choice)
 	{
 		GameObject go = (GameObject)Instantiate (
-			                Resources.Load ("Choice"),
+                            AssetBundles.Asset("prefabs", "Choice"),
 			                rootTransform,
 			                false
 		                );

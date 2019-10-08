@@ -27,7 +27,7 @@ public class AnswerCtrl : MonoBehaviour
 	public static AnswerCtrl Create (PageMultipleChoiceQuestion mcqPage, Transform rootTransform, MCQAnswer answer)
 	{
 		GameObject go = (GameObject)Instantiate (
-			                Resources.Load ("Answer"),
+			                AssetBundles.Asset ("prefabs", "Answer"),
 			                rootTransform,
 			                false
 		                );

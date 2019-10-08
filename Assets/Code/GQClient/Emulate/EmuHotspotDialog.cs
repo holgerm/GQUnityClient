@@ -19,9 +19,10 @@ namespace GQ.Client.Emulate
 	public class EmuHotspotDialog : PrefabController
 	{
 
-		#region Initialization
+        #region Initialization
 
-		static readonly string PREFAB = "EmuHotspotDialog";
+        static readonly string PREFAB_ASSETBUNDLE = "authormode";
+        static readonly string PREFAB_NAME = "EmuHotspotDialog";
 
 		Trigger enterTrigger;
 		Trigger leaveTrigger;
@@ -30,7 +31,7 @@ namespace GQ.Client.Emulate
 		public static void CreateAndShow (Trigger enterTrigger, Trigger leaveTrigger, Trigger tapTrigger)
 		{
 			// create:
-			GameObject emuDialogGO = Create (PREFAB, Base.Instance.DialogCanvas);
+			GameObject emuDialogGO = Create (PREFAB_ASSETBUNDLE, PREFAB_NAME, Base.Instance.DialogCanvas);
 			EmuHotspotDialog emuDialog = emuDialogGO.GetComponent<EmuHotspotDialog> ();
 
 			// init:

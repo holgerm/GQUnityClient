@@ -21,7 +21,7 @@ namespace GQ.Client.UI
 		public static CategoryEntryCtrl Create (GameObject root, CategoryTreeCtrl.CategoryEntry catEntry, CategoryTreeCtrl catTree)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create (PREFAB, root);
+			GameObject go = PrefabController.Create ("prefabs", PREFAB, root);
 			go.name = PREFAB + " (" + catEntry.category.name + ")";
 
 			CategoryEntryCtrl entryCtrl = go.GetComponent<CategoryEntryCtrl> ();

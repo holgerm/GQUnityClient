@@ -31,9 +31,10 @@ namespace GQ.Client.UI.Dialogs
 	public class DialogController : PrefabController
 	{
 
-		#region Content and Structure
+        #region Content and Structure
 
-		protected static readonly string PREFAB = "Dialog";
+        protected static readonly string PREFAB_ASSETBUNDLE = "prefabs";
+        protected static readonly string PREFAB_NAME = "Dialog";
 
 		public const string DIALOG_CANVAS_PATH = "/DialogCanvas";
 
@@ -64,7 +65,7 @@ namespace GQ.Client.UI.Dialogs
 		public static DialogController Instance {
 			get {
 				if (instance == null)
-					return Create (PREFAB, GameObject.Find (DIALOG_CANVAS_PATH)).GetComponent<DialogController> ();
+					return Create (PREFAB_ASSETBUNDLE, PREFAB_NAME, GameObject.Find (DIALOG_CANVAS_PATH)).GetComponent<DialogController> ();
 				else
 					return instance;
 			}

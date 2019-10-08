@@ -143,7 +143,7 @@ namespace GQ.Client.UI
         public static TextElementCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true)
         {
             GameObject go = (GameObject)Instantiate(
-                Resources.Load("TextChunk"),
+                AssetBundles.Asset("prefabs", "TextChunk"),
                 rootTransform,
                 false
             );

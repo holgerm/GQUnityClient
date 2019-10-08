@@ -166,7 +166,7 @@ namespace GQ.Client.UI.Foyer
         public static GameObject Create(GameObject root, QuestInfo qInfo, QuestListController containerController)
         {
             // Create the view object for this controller:
-            GameObject go = PrefabController.Create(PREFAB, root);
+            GameObject go = PrefabController.Create("prefabs", PREFAB, root);
             go.name = PREFAB + " (" + qInfo.Name + ")";
 
             // set entry height:

@@ -20,7 +20,7 @@ namespace GQ.Client.UI
 		public static CategoryFolderCtrl Create (GameObject root, CategoryTreeCtrl.CategoryFolder catFolder, CategoryTreeCtrl catTree)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create (PREFAB, root);
+			GameObject go = PrefabController.Create ("prefabs", PREFAB, root);
 			go.name = PREFAB + " (" + catFolder.Name + ")";
 
 			// save tree controller & folder:
