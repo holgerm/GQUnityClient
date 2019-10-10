@@ -88,9 +88,9 @@
     "a": 0
   },
   "markerSymbolFGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 46,
+    "g": 49,
+    "b": 146,
     "a": 255
   },
   "markerBGAlpha": 168,
@@ -104,10 +104,11 @@
   "CategorySets": [],
   "defaultCategory": null,
   "disabledAlpha": 0.5,
+  "hideFooterIfPossible": false,
   "mainFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 46,
+    "g": 49,
+    "b": 146,
     "a": 255
   },
   "mainBgColor": {
@@ -117,7 +118,8 @@
     "a": 255
   },
   "mainFontSize": 60,
-  "maxFontSize": 100,
+  "textAlignment": "Left",
+  "lineSpacing": 10.0,
   "showShadows": true,
   "topLogo": {
     "path": "TopLogo"
@@ -141,12 +143,6 @@
     "b": 146,
     "a": 255
   },
-  "contentBackgroundColor": {
-    "r": 230,
-    "g": 230,
-    "b": 230,
-    "a": 255
-  },
   "headerHeightUnits": 60.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
@@ -154,9 +150,31 @@
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
+  "contentBackgroundColor": {
+    "r": 230,
+    "g": 230,
+    "b": 230,
+    "a": 255
+  },
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
+  "showScrollbar": true,
+  "scrollbarHandleColor": {
+    "r": 151,
+    "g": 151,
+    "b": 151,
+    "a": 255
+  },
+  "scrollbarBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "scrollbarWidth": 20,
+  "margin4Scrollbar": true,
+  "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
@@ -167,9 +185,9 @@
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 0,
-    "g": 174,
-    "b": 239,
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "footerButtonFgColor": {
@@ -183,15 +201,15 @@
   "overlayButtonSizeMinMM": 6.0,
   "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 0,
-    "g": 174,
-    "b": 239,
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 162
   },
   "overlayButtonFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 46,
+    "g": 49,
+    "b": 146,
     "a": 255
   },
   "overlayButtonFgDisabledColor": {
@@ -214,15 +232,15 @@
     "a": 255
   },
   "menuBGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 255
-  },
-  "menuFGColor": {
     "r": 255,
     "g": 255,
     "b": 255,
+    "a": 255
+  },
+  "menuFGColor": {
+    "r": 21,
+    "g": 21,
+    "b": 21,
     "a": 255
   },
   "menuInhibitsInteraction": true,
@@ -248,33 +266,33 @@
   "dividingLineWidth": 5,
   "listEndLineWidth": 5,
   "listEntryFgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 0,
+    "g": 0,
+    "b": 0,
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 255
-  },
-  "listEntrySecondFgColor": {
     "r": 255,
     "g": 255,
     "b": 255,
     "a": 255
   },
+  "listEntrySecondFgColor": {
+    "r": 4,
+    "g": 4,
+    "b": 4,
+    "a": 255
+  },
   "listEntrySecondBgColor": {
-    "r": 60,
-    "g": 60,
-    "b": 60,
+    "r": 192,
+    "g": 192,
+    "b": 192,
     "a": 255
   },
   "listBgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 45,
+    "g": 154,
+    "b": 211,
     "a": 255
   },
   "emulationColor": {
