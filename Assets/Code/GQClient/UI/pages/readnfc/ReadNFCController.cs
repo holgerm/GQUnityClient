@@ -6,6 +6,7 @@ using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using QM.NFC;
+using TMPro;
 
 namespace GQ.Client.UI
 {
@@ -17,9 +18,9 @@ namespace GQ.Client.UI
         public RawImage image;
         public GameObject imagePanel;
         public GameObject contentPanel;
-        public Text infoText;
+        public TextMeshProUGUI infoText;
 
-        protected Text forwardButtonText;
+        protected TextMeshProUGUI forwardButtonText;
 
         #endregion
 
@@ -60,7 +61,7 @@ namespace GQ.Client.UI
         private void initForwardButton()
         {
             forwardButton.interactable = false;
-            forwardButtonText = forwardButton.GetComponentInChildren(typeof(Text), true) as Text;
+            forwardButtonText = forwardButton.GetComponentInChildren(typeof(TextMeshProUGUI), true) as TextMeshProUGUI;
             forwardButtonText.text = "Ok";
         }
 
