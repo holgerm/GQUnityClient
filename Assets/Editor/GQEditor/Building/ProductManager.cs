@@ -1,22 +1,16 @@
 ﻿using System.IO;
 using System;
 using System.Collections.Generic;
-using GQ.Client.Util;
 using GQ.Client.UI;
 using UnityEngine;
 using GQ.Client.Conf;
-using System.Text;
 using System.Linq;
-using System.Collections;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
-using UnityEngine.SceneManagement;
-using UnityEditor.SceneManagement;
-using System.Reflection;
 using GQ.Client.Err;
 
 namespace GQ.Editor.Building
@@ -520,6 +514,7 @@ namespace GQ.Editor.Building
             }
 
             List<EditorBuildSettingsScene> ebsScenes = new List<EditorBuildSettingsScene>();
+            ebsScenes.Add(new EditorBuildSettingsScene(START_SCENE.Substring("Assets/".Length), true));
             foreach (string scenePath in scenes) {
                 ebsScenes.Add(new EditorBuildSettingsScene(scenePath.Substring("Assets/".Length), true));
             }

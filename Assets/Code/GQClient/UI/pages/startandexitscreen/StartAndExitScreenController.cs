@@ -1,18 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Model;
 using UnityEngine.UI;
 using GQ.Client.Util;
-using GQ.Client.Err;
-using System.Text.RegularExpressions;
 using GQ.Client.Conf;
-using System;
 
 namespace GQ.Client.UI
 {
-	
-	public class StartAndExitScreenController : PageController
+
+    public class StartAndExitScreenController : PageController
 	{
 
 		#region Inspector Fields
