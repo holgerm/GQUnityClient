@@ -39,12 +39,13 @@ namespace GQ.Client.UI
             {
                 // interactive mode => show forwrd button:
                 FooterButtonPanel.transform.parent.gameObject.SetActive(true);
-                //forwardButton.gameObject.SetActive(true);
+                layout.ContentArea.GetComponent<Button>().enabled = true;
                 return;
             } else
             {
-                // timed mode => hide forward button and start timer:
+                // timed mode => hide forward button, disable touch on whole screen and start timer:
                 FooterButtonPanel.transform.parent.gameObject.SetActive(false);
+                layout.ContentArea.GetComponent<Button>().enabled = false;
                 //forwardButton.gameObject.SetActive(false);
                 CoroutineStarter.Run(forwardAfterDurationWaited());
             }
