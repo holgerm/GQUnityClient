@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
-using UnityEngine.Events;
+﻿//#define DEBUG_LOG
+
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace QM.NFC
@@ -100,6 +99,10 @@ namespace QM.NFC
         {
 #if UNITY_ANDROID
             NFC_Info info = new NFC_Info(marshalledContent);
+#if DEBUG_LOG
+            Debug.LogFormat("GQ: NFC CONNECTOR: marshalledCOntent: {0}", marshalledContent);
+            Debug.LogFormat("GQ: NFC CONNECTOR: info.payload: {0}", info.Payload);
+#endif
 
             foreach (NFC_Reader_I reader in RegisteredReaderUIs.ToArray())
             {

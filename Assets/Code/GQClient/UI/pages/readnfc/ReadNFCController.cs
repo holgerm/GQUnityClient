@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//#define DEBUG_LOG
+
 using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Model;
@@ -138,17 +138,26 @@ namespace GQ.Client.UI
         {
             infoText.text = "NFC Chip wurde erfolgreich ausgelesen."; // should be defined by author in editor
             Variables.SetVariableValue(myPage.SaveToVar, new Value(nfcPayload));
+#if DEBUG_LOG
+            Debug.LogFormat("GQ: NFC READER read: {0} and saved to var {1}", nfcPayload, myPage.SaveToVar);
+#endif
             myPage.Read();
             forwardButton.interactable = true;
         }
 
         public void OnNFCPayloadRead(string payload)
         {
+#if DEBUG_LOG
+            Debug.LogFormat("GQ: NFC READER rOnNFCPayloadReadead: {0}", payload);
+#endif
             onNFCRead(payload);
         }
 
         public void OnNFCDetailsRead(NFC_Info info)
         {
+#if DEBUG_LOG
+            Debug.LogFormat("GQ: NFC READER OnNFCDetailsRead: {0}", info.Payload);
+#endif
             onNFCRead(info.Payload);
         }
 
