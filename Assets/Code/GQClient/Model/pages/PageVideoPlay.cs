@@ -26,7 +26,7 @@ namespace GQ.Client.Model
             base.ReadAttributes(reader);
 
             VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
-            if (VideoFile.HasVideoEnding())
+            if (VideoType != GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE && VideoFile.HasVideoEnding())
                 QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile, "VideoPlay." + GQML.PAGE_VIDEOPLAY_FILE);
             else {
                 Log.SignalErrorToAuthor("VideoPlay page (" + Id + ") has invalid vide url: " + VideoFile);
