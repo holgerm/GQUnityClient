@@ -104,6 +104,14 @@ namespace GQ.Client.UI
             Base.Instance.BlockInteractions(false);
         }
 
+        internal virtual bool OfferLeaveQuest
+        {
+            get
+            {
+                return ConfigurationManager.Current.OfferLeaveQuests;
+            }
+        }
+
 #endregion
 
 

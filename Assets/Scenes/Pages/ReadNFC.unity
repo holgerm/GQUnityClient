@@ -438,6 +438,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114427369842163630, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 3}
+      propertyPath: pageCtrl
+      value: 
+      objectReference: {fileID: 128488591}
     - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -1869,8 +1874,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 539.99994, y: -29.375}
-  m_SizeDelta: {x: 1069.9999, y: 38.75}
+  m_AnchoredPosition: {x: 539.99994, y: -76.495}
+  m_SizeDelta: {x: 1069.9999, y: 132.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1625870278
 MonoBehaviour:
@@ -1941,12 +1946,12 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 33
+  m_fontSize: 55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 24
-  m_fontSizeMax: 33
+  m_fontSizeMin: 40
+  m_fontSizeMax: 55
   m_fontStyle: 0
   m_textAlignment: 513
   m_characterSpacing: 0
@@ -1987,7 +1992,7 @@ MonoBehaviour:
     spaceCount: 11
     wordCount: 12
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0

@@ -12,6 +12,8 @@ namespace GQ.Client.UI
 {
     public class PageHeaderLayout : HeaderLayout
     {
+        public PageController pageCtrl;
+
         public void OnEnable()
         {
             Author.SettingsChanged += Author_SettingsChanged;
@@ -25,7 +27,14 @@ namespace GQ.Client.UI
 
         protected override void setHeader()
         {
-            enableLeaveQuestButton(ConfigurationManager.Current.OfferLeaveQuests);
+            if (pageCtrl == null)
+            {
+                enableLeaveQuestButton(ConfigurationManager.Current.OfferLeaveQuests);
+            }
+            else
+            {
+                enableLeaveQuestButton(pageCtrl.OfferLeaveQuest);
+            }
 
             base.setHeader();
 

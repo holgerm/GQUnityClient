@@ -106,6 +106,18 @@ namespace GQ.Client.UI
             }
         }
 
+        /// <summary>
+        /// Video page does NOT offer leave quest, because it is confusing with leave video.
+        /// </summary>
+        internal override bool OfferLeaveQuest
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+
         private void hideNormalVideo(bool hide)
         {
             containerNormal.transform.Find("Screen").GetComponent<Image>().enabled = !hide;
