@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class StartScreen : MonoBehaviour
+public class StartSceneController : MonoBehaviour
 {
 	public Image FadeInImage;
     public float waitTime;
