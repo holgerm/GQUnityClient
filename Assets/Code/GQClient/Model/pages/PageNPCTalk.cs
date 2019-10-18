@@ -121,15 +121,7 @@ namespace GQ.Client.Model
 
             Text = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_TEXT, reader);
 
-            //DisplayMode = GQML.GetStringAttribute (GQML.PAGE_NPCTALK_DISPLAYMODE, reader);
-
             NextDialogButtonText = GQML.GetStringAttribute(GQML.PAGE_NPCTALK_NEXTBUTTONTEXT, reader);
-
-            //SkipWordTicker = GQML.GetOptionalBoolAttribute (GQML.PAGE_NPCTALK_SKIPWORDTICKER, reader, true);
-
-            //TextSize = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TEXTSIZE, reader);
-
-            //TickerSpeed = GQML.GetIntAttribute (GQML.PAGE_NPCTALK_TICKERSPEED, reader, 0);
         }
 
         protected override void ReadContent(XmlReader reader)
