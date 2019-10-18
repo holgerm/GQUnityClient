@@ -43,6 +43,7 @@
   ],
   "sceneMappings": [],
   "scenePaths": [
+    "Assets/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/AudioRecord.unity",
     "Assets/Scenes/Pages/ImageCapture.unity",
@@ -274,9 +275,9 @@
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 24,
-    "g": 41,
-    "b": 131,
+    "r": 14,
+    "g": 113,
+    "b": 180,
     "a": 255
   },
   "listEntrySecondFgColor": {
@@ -286,9 +287,9 @@
     "a": 255
   },
   "listEntrySecondBgColor": {
-    "r": 14,
-    "g": 113,
-    "b": 180,
+    "r": 79,
+    "g": 165,
+    "b": 222,
     "a": 255
   },
   "listBgColor": {
