@@ -1,4 +1,5 @@
 {
+  "preserveAspectOfSplashFG": true,
   "id": "wcc",
   "idExtension": "",
   "name": "Wiki Culture City",
@@ -6,7 +7,7 @@
   "assetAddOns": [],
   "androidMinSDKVersion": "AndroidApiLevel16",
   "autoStartQuestID": 0,
-  "autostartIsPredeployed": false,
+  "autostartIsPredeployed": true,
   "keepAutoStarting": false,
   "downloadStrategy": "UPFRONT",
   "timeoutMS": 60000,
@@ -25,11 +26,19 @@
   "showHiddenQuests": false,
   "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
+    "MetaData",
     "NPCTalk"
   ],
-  "sceneMappings": [],
+  "sceneMappings": [
+    {
+      "pageTypeName": "MetaData",
+      "scenePath": "Assets/ConfigAssets/Resources/Scenes/Pages/WCCPOI.unity"
+    }
+  ],
   "scenePaths": [
+    "Assets/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
+    "Assets/ConfigAssets/Resources/Scenes/pages/WCCPOI.unity",
     "Assets/Scenes/Pages/NPCTalk.unity"
   ],
   "sceneExtensions": [],
@@ -288,7 +297,6 @@
   "defaultCategory": null,
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": true,
-  "autoScrollNewText": false,
   "mainFgColor": {
     "r": 0,
     "g": 0,
@@ -302,7 +310,8 @@
     "a": 255
   },
   "mainFontSize": 60,
-  "maxFontSize": 100,
+  "textAlignment": "Left",
+  "lineSpacing": 10.0,
   "showShadows": true,
   "topLogo": {
     "path": "TopLogo"
@@ -326,12 +335,6 @@
     "b": 24,
     "a": 255
   },
-  "contentBackgroundColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
   "headerHeightUnits": 60.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
@@ -339,9 +342,31 @@
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "imageAreaHeightMinUnits": 250.0,
   "imageAreaHeightMaxUnits": 400.0,
   "fitExceedingImagesIntoArea": false,
+  "showScrollbar": true,
+  "scrollbarHandleColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "scrollbarBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "scrollbarWidth": 20,
+  "margin4Scrollbar": true,
+  "autoScrollNewText": false,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
