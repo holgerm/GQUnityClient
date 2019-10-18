@@ -398,6 +398,9 @@ namespace GQ.Editor.UI
                 {
                     // ScrollView begins (optionally disabled):
 
+                    // StartScene Layout:
+                    gui4StartScene();
+
                     PropertyInfo[] propertyInfos = typeof(Config).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
                     // get max widths for names and values:
@@ -482,6 +485,28 @@ namespace GQ.Editor.UI
 
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        static bool showDetailsStartScene;
+
+        void gui4StartScene()
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUILayout.Label("StartScene:", EditorStyles.boldLabel);
+
+                if (GUILayout.Button("Use Layout"))
+                {
+                    //SelectedConfig.preserveAspectOfSplashFG = 
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            showDetailsStartScene = EditorGUILayout.Foldout(showDetailsStartScene, "Details:");
+            if (showDetailsStartScene)
+            {
+
+            }
         }
 
         bool allowVersionChanges = false;

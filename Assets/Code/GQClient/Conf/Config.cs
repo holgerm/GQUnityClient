@@ -33,7 +33,12 @@ namespace GQ.Client.Conf
         #endregion
 
         //////////////////////////////////
-        // THE ACTUAL PRODUCT CONFIG DATA:	
+        // THE ACTUAL PRODUCT CONFIG DATA:
+
+        #region StartScene Layout
+        // Content is shown in special area of editor
+        public bool preserveAspectOfSplashFG { get; set; }
+        #endregion
 
 
         #region General
@@ -750,6 +755,11 @@ namespace GQ.Client.Conf
         public Config()
         {
             // set default values:
+
+            // start scene layout:
+            preserveAspectOfSplashFG = true;
+
+            // general:
             idExtension = "";
             assetAddOns = new string[] { };
             autoStartQuestID = 0;
