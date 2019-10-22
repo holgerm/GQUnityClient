@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#define DEBUG_LOG
+
 using UnityEngine;
-using GQ.Client.UI;
 using UnityEngine.UI;
-using GQ.Client.Model;
 using GQ.Client.Conf;
 using GQ.Client.Err;
+using TMPro;
 
 namespace GQ.Client.Model
 {
 
-	public class Rights : MonoBehaviour
+    public class Rights : MonoBehaviour
 	{
 		public Image copyrightTextBG4FittingImage;
-		public Text copyrightText4FittingImage;
+		public TextMeshProUGUI copyrightText4FittingImage;
 		public Image copyrightTextBG4EnvelopingImage;
-		public Text copyrightText4EnvelopingImage;
+		public TextMeshProUGUI copyrightText4EnvelopingImage;
 
 		private const string COPYRIGHT_PREFIX = "© ";
 
@@ -28,15 +27,20 @@ namespace GQ.Client.Model
 
 			RectTransform rt = GetComponent<RectTransform> ();
 
-			if (ConfigurationManager.Current.fitExceedingImagesIntoArea) {
+            float yDelta = copyrightText4FittingImage.fontSize * 1.45f;
+#if DEBUG_LOG
+            Debug.Log("DELTA: " + yDelta);
+#endif
+
+
+            if (ConfigurationManager.Current.fitExceedingImagesIntoArea) {
 				copyrightText4FittingImage.gameObject.SetActive (true);
 				copyrightText4EnvelopingImage.gameObject.SetActive (false);
 
 				if (rt != null) {
 					copyrightTextBG4FittingImage.rectTransform.sizeDelta = 
-						new Vector2 (0, copyrightText4FittingImage.fontSize * 1.45f);
-//					copyrightText4FittingImage.rectTransform.sizeDelta = 
-//						new Vector2 (0, copyrightText4FittingImage.fontSize * 1.2f);
+						new Vector2 (-5, yDelta);
+                    copyrightText4FittingImage.rectTransform.sizeDelta = new Vector2(0, 0);
 				}
 			} else {
 				copyrightTextBG4FittingImage.gameObject.SetActive (false);
@@ -44,11 +48,10 @@ namespace GQ.Client.Model
 
 				if (rt != null) {
 					copyrightTextBG4EnvelopingImage.rectTransform.sizeDelta = 
-						new Vector2 (0, copyrightText4EnvelopingImage.fontSize * 1.45f);
-//					copyrightText4EnvelopingImage.rectTransform.sizeDelta = 
-//						new Vector2 (0, copyrightText4EnvelopingImage.fontSize * 1.2f);
-				}
-			}
+						new Vector2 (-5, yDelta);
+                    copyrightText4EnvelopingImage.rectTransform.sizeDelta = new Vector2(0, 0);
+                }
+            }
 
 
 			switch (ConfigurationManager.Current.id) {

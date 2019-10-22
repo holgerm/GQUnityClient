@@ -60,6 +60,14 @@ namespace GQ.Client.UI
                     TextElement.fontSizeMax = 0.45f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     break;
+                case TextUsageType.CopyRight:
+                    TextElement.alignment = TextAlignmentOptions.Left;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.color = Color.white;
+                    break;
                 case TextUsageType.Option:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
@@ -182,5 +190,6 @@ namespace GQ.Client.UI
         FoyerListEntry = 6,
         DialogTitle = 7,
         DialogMessage = 8,
+        CopyRight = 9,
     }
 }
