@@ -1,3 +1,5 @@
+// #define DEBUG_LOG
+
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -2382,10 +2384,12 @@ namespace GQ.Editor.UI
                     }
                     EditorBuildSettings.scenes = editorBuildScenes.ToArray();
 
+#if DEBUG_LOG
                     foreach (EditorBuildSettingsScene sc in EditorBuildSettings.scenes)
                     {
                         Debug.Log(("After Create GUI in Editor: EditorBuildSettings.scenes contains: " + sc.path).Red());
                     }
+#endif
                 }
             }
 

@@ -31,15 +31,14 @@
   ],
   "sceneMappings": [
     {
-      "pageTypeName": "MetaData",
-      "scenePath": "Assets/ConfigAssets/Resources/Scenes/Pages/WCCPOI.unity"
+      "pageTypeName": "NPCTalk",
+      "scenePath": "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/Pages/WCCPOI.unity"
     }
   ],
   "scenePaths": [
     "Assets/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
-    "Assets/ConfigAssets/Resources/Scenes/pages/WCCPOI.unity",
-    "Assets/Scenes/Pages/NPCTalk.unity"
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/pages/WCCPOI.unity"
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,

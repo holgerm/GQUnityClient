@@ -452,7 +452,7 @@ namespace GQ.Client.Model
             {
                 if (_categories == null)
                 {
-                    _categories = CategoryReader.ReadCategoriesFromMetadata(Metadata);
+                    Categories = CategoryReader.ReadCategoriesFromMetadata(Metadata);
                 }
                 return _categories;
             }
