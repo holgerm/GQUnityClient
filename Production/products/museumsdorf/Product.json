@@ -1,4 +1,5 @@
 {
+  "preserveAspectOfSplashFG": true,
   "id": "museumsdorf",
   "idExtension": "",
   "name": "Museumsdorf App",
@@ -41,7 +42,7 @@
   ],
   "sceneMappings": [],
   "scenePaths": [
-    "Assets/Scenes/StartScene.unity",
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
