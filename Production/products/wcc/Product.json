@@ -36,7 +36,7 @@
     }
   ],
   "scenePaths": [
-    "Assets/Scenes/StartScene.unity",
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
     "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/pages/WCCPOI.unity"
   ],
