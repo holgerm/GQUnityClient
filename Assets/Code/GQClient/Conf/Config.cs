@@ -1003,11 +1003,6 @@ namespace GQ.Client.Conf
 
     public class SceneMapping
     {
-
-        public const string ProjectScenesRootPath = "Assets/Scenes/Pages/";
-        public static readonly string ProductScenesRootPath =
-            Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage/Scenes/Pages/");
-
         public SceneMapping(string pageType, string scenePath)
         {
             this.pageTypeName = pageType;

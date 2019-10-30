@@ -2243,6 +2243,11 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4ListOfSceneMapping : ProductEditorPart
     {
+        public const string ProjectScenesRootPath = "Assets/Scenes/Pages/";
+        public static readonly string ProductScenesRootPath =
+            Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage/Scenes/Pages/");
+
+
         bool showDetails = false;
 
         int selectedPageTypeToAdd = 0;
@@ -2275,15 +2280,15 @@ namespace GQ.Editor.UI
             // Collect all available page scenes:
             List<string> pageScenes = new List<string>();
             // general project page scenes:
-            foreach (string scenePath in Directory.GetFiles(SceneMapping.ProjectScenesRootPath, "*.unity"))
+            foreach (string scenePath in Directory.GetFiles(ProjectScenesRootPath, "*.unity"))
             {
                 pageScenes.Add(
                     scenePath.Substring(0, scenePath.Length - ".unity".Length)
                 );
             }
             // product specific page scenes:
-            if (Directory.Exists(SceneMapping.ProductScenesRootPath))
-                foreach (string scenePath in Directory.GetFiles(SceneMapping.ProductScenesRootPath, "*.unity"))
+            if (Directory.Exists(ProductScenesRootPath))
+                foreach (string scenePath in Directory.GetFiles(ProductScenesRootPath, "*.unity"))
                 {
                     pageScenes.Add(
                         scenePath.Substring(0, scenePath.Length - ".unity".Length)
@@ -2345,8 +2350,8 @@ namespace GQ.Editor.UI
                         );
                         EditorGUILayout.TextField(
                             allElements[i].scenePath.Substring(
-                                SceneMapping.ProjectScenesRootPath.Length,
-                                allElements[i].scenePath.Length - (SceneMapping.ProjectScenesRootPath.Length + ".unity".Length)
+                                ProjectScenesRootPath.Length,
+                                allElements[i].scenePath.Length - (ProjectScenesRootPath.Length + ".unity".Length)
                             )
                         );
                     }

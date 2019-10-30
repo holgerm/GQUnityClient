@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#define DEBUG_LOG
+
+using System.IO;
 using System;
 using System.Collections.Generic;
 using GQ.Client.UI;
@@ -12,6 +14,7 @@ using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
 using GQ.Client.Err;
+using UnityEditor.SceneManagement;
 
 namespace GQ.Editor.Building
 {
@@ -96,7 +99,7 @@ namespace GQ.Editor.Building
         }
 
 
-        public string _STREAMING_ASSET_PATH = "Assets/StreamingAssets";
+        public string _STREAMING_ASSET_PATH = "Assets/StreamingAssets/prod";
 
         public string STREAMING_ASSET_PATH
         {
@@ -110,7 +113,8 @@ namespace GQ.Editor.Building
             }
         }
 
-        public const string START_SCENE = "Assets/Scenes/StartScene.unity";
+        public const string DEFAULT_START_SCENE = "DefaultAssets/DefaultStartScene.unity";
+        public const string FOYER_SCENE = "Assets/Scenes/Foyer.unity";
         public const string LOADING_CANVAS_NAME = "LoadingCanvas";
         public const string LOADING_CANVAS_PREFAB = "loadingCanvas/LoadingCanvas";
         public const string LOADING_CANVAS_CONTAINER_TAG = "LoadingCanvasContainer";
@@ -400,6 +404,9 @@ namespace GQ.Editor.Building
                 throw new ArgumentException("Invalid product: " + newProduct.Id + "\n" + newProduct.AllErrorsAsString());
             }
 
+            // load Foyer scene (which exists for all products):
+            EditorSceneManager.OpenScene(FOYER_SCENE);
+
             // clear build folder:
             if (!Directory.Exists(BuildExportPath))
             {
@@ -438,18 +445,21 @@ namespace GQ.Editor.Building
                 };
                 AssetDatabase.ImportPackage(packageFile, false);
             }
-            else {
+            else
+            {
                 // if we have no package file:
                 prepareProductTheRestAfterPackageIsImported(newProduct, productDirPath);
             }
         }
 
-        public bool IsImportingPackage {
+        public bool IsImportingPackage
+        {
             set;
             get;
         }
 
-        private void prepareProductTheRestAfterPackageIsImported(ProductSpec newProduct, string productDirPath) {
+        private void prepareProductTheRestAfterPackageIsImported(ProductSpec newProduct, string productDirPath)
+        {
             // Do the rest to activate the new product:
             DirectoryInfo productDirInfo = new DirectoryInfo(productDirPath);
 
@@ -504,19 +514,55 @@ namespace GQ.Editor.Building
             }
 
             // gather scenes ans set them in EditorBuidlSettings:
-            List<string> scenes = 
-                gatherScenesFromPackage(
-                    new List<string>(), 
-                    Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
-                );
-            foreach (string scenePath in newProduct.Config.scenePaths) {
-                scenes.Add(scenePath);
+            List<string> scenes =
+                 gatherScenesFromPackage(
+                     new List<string>(),
+                     Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
+                 );
+
+            // add all config scenes:
+            scenes.AddRange(newProduct.Config.scenePaths);
+
+            // detect if we have start scene:
+            bool startSceneIncluded = false;
+            for (int i = 0; i < scenes.Count && !startSceneIncluded; i++)
+            {
+                if (scenes[i].EndsWith("StartScene.unity", StringComparison.Ordinal))
+                {
+                    startSceneIncluded = true;
+                    
+                    if (i > 0)
+                        // make start scene the first scene in the list:
+                    {
+                        string tmp = scenes[0];
+                        scenes.Insert(0, scenes[i]);
+                        scenes.Insert(i, tmp);
+#if DEBUG_LOG
+                        Debug.LogFormat("Start Scene found at index {0}: {1} - replaced it as first scene.", i, DEFAULT_START_SCENE);
+#endif
+                    }
+                }
             }
 
             List<EditorBuildSettingsScene> ebsScenes = new List<EditorBuildSettingsScene>();
-            ebsScenes.Add(new EditorBuildSettingsScene(START_SCENE.Substring("Assets/".Length), true));
-            foreach (string scenePath in scenes) {
-                ebsScenes.Add(new EditorBuildSettingsScene(scenePath.Substring("Assets/".Length), true));
+
+            if (!startSceneIncluded)
+            {
+                ebsScenes.Add(new EditorBuildSettingsScene(DEFAULT_START_SCENE, true));
+#if DEBUG_LOG
+                Debug.LogFormat("No Start Scene found - using default start scene: {0}", DEFAULT_START_SCENE);
+#endif
+            }
+#if DEBUG_LOG
+            Debug.LogFormat("Further scenes adding:  #{0}", scenes.Count);
+#endif
+            foreach (string scenePath in scenes)
+            {
+                string curScenePath = scenePath.Substring("Assets/".Length);
+                ebsScenes.Add(new EditorBuildSettingsScene(curScenePath, true));
+#if DEBUG_LOG
+                Debug.LogFormat("Scene added: {0}", curScenePath);
+#endif
             }
             EditorBuildSettings.scenes = ebsScenes.ToArray();
 
@@ -544,8 +590,8 @@ namespace GQ.Editor.Building
             Debug.LogWarning("COMPLETED Preparing product " + newProduct.Id + " at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
         }
 
-        List<string> gatherScenesFromPackage(List<string> gatheredScenes, string dir) {
-
+        List<string> gatherScenesFromPackage(List<string> gatheredScenes, string dir)
+        {
             if (Directory.Exists(dir))
             {
                 foreach (string file in Directory.GetFiles(dir))
