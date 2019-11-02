@@ -8,7 +8,7 @@ using QM.Util;
 namespace GQ.Client.UI
 {
 
-	public abstract class LayoutConfig : MonoBehaviour
+    public abstract class LayoutConfig : MonoBehaviour
 	{
 
 		public static string HEADER = "Header";
@@ -16,7 +16,7 @@ namespace GQ.Client.UI
 
 		public abstract void layout ();
 
-		protected virtual void Start ()
+        protected virtual void Start()
 		{
 			layout ();
 		}

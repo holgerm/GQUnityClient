@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using GQ.Client.Conf;
 using GQ.Client.Err;
 using GQ.Client.Model;
@@ -13,6 +11,12 @@ namespace GQ.Client.UI
     public class PageHeaderLayout : HeaderLayout
     {
         public PageController pageCtrl;
+
+        protected override void Start()
+        {
+            pageCtrl = GameObject.Find("/PageController").GetComponent<PageController>();
+            base.Start();
+        }
 
         public void OnEnable()
         {

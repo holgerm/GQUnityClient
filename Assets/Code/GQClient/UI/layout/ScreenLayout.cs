@@ -14,7 +14,7 @@ namespace GQ.Client.UI
     /// </summary>
     public class ScreenLayout : LayoutConfig
     {
-        public PageController pageCtrl;
+        public PageController pageCtrl; // TODO move into own subclass PageController and inherit all page controllers from that class.
         public GameObject TopMargin;
         public GameObject ContentArea;
         public GameObject Divider;
