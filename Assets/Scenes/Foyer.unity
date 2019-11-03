@@ -11219,13 +11219,13 @@ MonoBehaviour:
   m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 50
-  m_fontSizeMax: 70
+  m_fontSizeMin: 45
+  m_fontSizeMax: 63
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 513
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -11296,9 +11296,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1096143376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d5cb9dbd15141dcbbbf4b2cc04fd0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TextElement: {fileID: 1096143378}
   textUsageType: 0
 --- !u!1 &1109427507
 GameObject:

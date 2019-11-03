@@ -64,8 +64,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 3e04cab0a429342dab0f4677c708e9fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
@@ -108,7 +106,7 @@ GameObject:
   - component: {fileID: 222463970394138174}
   - component: {fileID: 114868042245547144}
   - component: {fileID: 9089031688525342184}
-  - component: {fileID: 6259737695505732571}
+  - component: {fileID: 1596382517702301274}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -177,24 +175,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Menu Element
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8fe2986154d1b433493a6d874dd53294, type: 2}
-  m_sharedMaterial: {fileID: -6685364396187757935, guid: 8fe2986154d1b433493a6d874dd53294,
+  m_fontAsset: {fileID: 11400000, guid: 6d72024c68c52478eabd3faf05257d42, type: 2}
+  m_sharedMaterial: {fileID: -6685364396187757935, guid: 6d72024c68c52478eabd3faf05257d42,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4293458943
+  m_fontColor: {r: 1, g: 0.9843137, b: 0.9098039, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -212,17 +208,17 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 60
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 40
-  m_fontSizeMax: 60
+  m_fontSizeMin: 24
+  m_fontSizeMax: 36
   m_fontStyle: 0
   m_textAlignment: 513
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -276,7 +272,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6259737695505732571
+--- !u!114 &1596382517702301274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -285,10 +281,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1122525625437868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d5cb9dbd15141dcbbbf4b2cc04fd0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textUsageType: 6
+  TextElement: {fileID: 9089031688525342184}
+  textUsageType: 5
 --- !u!1 &1216052609263472
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,8 +355,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -463,5 +458,3 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null

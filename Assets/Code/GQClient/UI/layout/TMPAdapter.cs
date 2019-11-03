@@ -15,7 +15,7 @@ public class TMPAdapter : MonoBehaviour
         text = GetComponent<TextMeshProUGUI>();
 
         text.font = Resources.Load("Font", typeof(TMP_FontAsset)) as TMP_FontAsset;
-        text.color = Color.black;
+        text.color = ConfigurationManager.Current.mainFgColor;
 
         switch (textUsageType)
         {
@@ -63,6 +63,7 @@ public class TMPAdapter : MonoBehaviour
                 text.overflowMode = TextOverflowModes.Truncate;
                 break;
             case TextUsageType.ListEntry:
+                text.color = ConfigurationManager.Current.listEntryFgColor;
                 text.alignment = TextAlignmentOptions.Left;
                 text.enableAutoSizing = false;
                 text.fontSize = 70;
@@ -71,6 +72,7 @@ public class TMPAdapter : MonoBehaviour
                 text.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
                 break;
             case TextUsageType.MenuEntry:
+                text.color = ConfigurationManager.Current.menuFGColor;
                 text.alignment = TextAlignmentOptions.Left;
                 text.enableAutoSizing = true;
                 text.fontSizeMin = 40;

@@ -33,7 +33,7 @@ namespace GQ.Client.UI
                 TextElement.font = font;
             }
 
-            TextElement.color = Color.black;
+            TextElement.color = config.mainFgColor;
 
             switch (textUsageType)
             {
@@ -79,6 +79,7 @@ namespace GQ.Client.UI
                     TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.MenuEntry:
+                    TextElement.color = config.menuFGColor;
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.4f * config.mainFontSize;
@@ -95,6 +96,7 @@ namespace GQ.Client.UI
                     TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.FoyerListEntry:
+                    TextElement.color = config.listEntryFgColor;
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = false;
                     TextElement.fontSize = 0.7f * config.mainFontSize;
