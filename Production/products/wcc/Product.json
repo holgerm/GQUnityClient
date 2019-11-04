@@ -434,6 +434,18 @@
     "b": 232,
     "a": 255
   },
+  "categoryFolderBGColor": {
+    "r": 137,
+    "g": 107,
+    "b": 31,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 168,
+    "g": 131,
+    "b": 38,
+    "a": 255
+  },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
