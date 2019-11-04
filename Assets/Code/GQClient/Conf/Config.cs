@@ -591,6 +591,9 @@ namespace GQ.Client.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 overlayButtonFgDisabledColor { get; set; }
 
+        // ----------------------------------------
+        // MENU:
+
         [ShowInProductEditor(StartSection = "Menu:"), JsonProperty]
         private bool showEmptyMenuEntries { get; set; }
         [JsonIgnore]
@@ -638,6 +641,14 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 menuFGColor { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 categoryFolderBGColor { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 categoryEntryBGColor { get; set; }
 
         [ShowInProductEditor]
         public bool menuInhibitsInteraction { get; set; }
@@ -871,6 +882,8 @@ namespace GQ.Client.Conf
             menuFrameColor = Color.grey;
             menuBGColor = Color.white;
             menuFGColor = Color.black;
+            categoryFolderBGColor = menuBGColor;
+            categoryEntryBGColor = menuBGColor;
             offerFeedback = false;
             offerAuthorLogin = false;
             defineAuthorBackDoor = false;
