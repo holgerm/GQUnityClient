@@ -296,9 +296,26 @@
     "b": 0,
     "a": 255
   },
+  "categoryFolderBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
+  "warnWhenLeavingQuest": true,
+  "warnDialogTitleWhenLeavingQuest": "Aktuelle Tour verlassen?",
+  "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie die Tour ...",
+  "warnDialogOKWhenLeavingQuest": "Verlassen",
+  "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
