@@ -82,10 +82,11 @@ namespace GQ.Client.UI
                     TextElement.color = config.menuFGColor;
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.4f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.6f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.45f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
                     TextElement.enableWordWrapping = false;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
+                    TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.Button:
                     TextElement.alignment = TextAlignmentOptions.Center;
@@ -93,6 +94,7 @@ namespace GQ.Client.UI
                     TextElement.fontSizeMin = 0.45f * config.mainFontSize;
                     TextElement.fontSizeMax = 0.6f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
+                    TextElement.raycastTarget = false;
                     TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.FoyerListEntry:
@@ -103,6 +105,7 @@ namespace GQ.Client.UI
                     TextElement.enableWordWrapping = true;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
                     TextElement.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
+                    TextElement.raycastTarget = true;
                     break;
                 case TextUsageType.DialogTitle:
                     TextElement.alignment = TextAlignmentOptions.Center;

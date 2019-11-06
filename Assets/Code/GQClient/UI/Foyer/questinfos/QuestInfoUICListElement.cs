@@ -205,18 +205,17 @@ namespace GQ.Client.UI.Foyer
             Name.text = data.Name;
             // Set Name button for download or play or nothing:
             Button nameButton = Name.gameObject.GetComponent<Button>();
-            Button.ButtonClickedEvent namebuttonEvent = nameButton.onClick;
-            namebuttonEvent.RemoveAllListeners();
+            nameButton.onClick.RemoveAllListeners();
             if (data.ShowDownloadOption)
             {
-                namebuttonEvent.AddListener(() =>
+                nameButton.onClick.AddListener(() =>
                 {
                     Download();
                 });
             }
             if (data.IsOnDevice)
             {
-                namebuttonEvent.AddListener(() =>
+                nameButton.onClick.AddListener(() =>
                 {
                     Play();
                 });

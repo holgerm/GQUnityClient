@@ -1,38 +1,28 @@
-﻿using System.Collections;
+﻿#define DEBUG_LOG
+
 using System.Collections.Generic;
 using UnityEngine;
-using GQ.Client.UI;
 using GQ.Client.Err;
 using GQ.Client.Util;
 using GQ.Client.Model;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Conf;
-using System;
-using UnityEngine.EventSystems;
 
 namespace GQ.Client.UI
 {
 
-	public class QuestMarker : Marker
+    public class QuestMarker : Marker
 	{
 
 		public QuestInfo Data { get; set; }
 
 		public override void OnTouch ()
 		{
+#if DEBUG_LOG
+            Debug.Break();
+#endif
+
             Data.Play();
-			//if (!Data.IsOnDevice && Data.IsOnServer) {
-			//	Task download = Data.DownloadTask ();
-			//	Task play = Data.Play ();
-			//	TaskSequence t = 
-   //                 new TaskSequence (
-   //                     download, 
-   //                     play);
-			//	t.Start ();
-			//}
-			//if (Data.IsOnDevice) {
-			//	Data.Play ().Start ();
-			//}
 		}
 
 		protected void Play ()
