@@ -308,7 +308,7 @@
     "b": 255,
     "a": 255
   },
-  "mainFontSize": 100,
+  "mainFontSize": 85,
   "textAlignment": "Left",
   "lineSpacing": 10.0,
   "showShadows": true,
