@@ -482,6 +482,11 @@ namespace GQ.Client.Model
             StartPage.Start();
         }
 
+        public void End()
+        {
+            End(true);
+        }
+
         public void End(bool clearAlsoUpperCaseVariables = true)
         {
             Audio.Clear();

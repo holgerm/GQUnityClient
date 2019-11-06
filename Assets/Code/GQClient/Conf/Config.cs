@@ -671,6 +671,21 @@ namespace GQ.Client.Conf
             }
         }
 
+        [ShowInProductEditor]
+        public bool warnWhenLeavingQuest { get; set; }
+
+        [ShowInProductEditor]
+        public string warnDialogTitleWhenLeavingQuest { get; set; }
+
+        [ShowInProductEditor]
+        public string warnDialogMessageWhenLeavingQuest { get; set; }
+
+        [ShowInProductEditor]
+        public string warnDialogOKWhenLeavingQuest { get; set; }
+
+        [ShowInProductEditor]
+        public string warnDialogCancelWhenLeavingQuest { get; set; }
+
 
         [ShowInProductEditor]
         public bool offerFeedback { get; set; }
@@ -785,6 +800,9 @@ namespace GQ.Client.Conf
             showHiddenQuests = false;
             downloadStrategy = DownloadStrategy.UPFRONT;
 
+            nameForQuestSg = "Quest";
+            nameForQuestsPl = "Quests";
+
             timeoutMS = 60000L;
             maxIdleTimeMS = 9000L;
             maxParallelDownloads = 15;
@@ -798,6 +816,11 @@ namespace GQ.Client.Conf
             scenePaths = new string[0];
             sceneExtensions = new List<SceneExtension>();
             offerLeaveQuestOnEachPage = true;
+            warnWhenLeavingQuest = true;
+            warnDialogTitleWhenLeavingQuest = "Aktuelles Quest verlassen?";
+            warnDialogMessageWhenLeavingQuest = "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...";
+            warnDialogOKWhenLeavingQuest = "Verlassen";
+            warnDialogCancelWhenLeavingQuest = "Fortsetzen";
             stopAudioWhenLeavingPage = true;
 
             // Map:

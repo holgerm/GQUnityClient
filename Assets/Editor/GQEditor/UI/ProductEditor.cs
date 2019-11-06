@@ -830,6 +830,16 @@ namespace GQ.Editor.UI
                 propInfo.Name.Equals("listEndLineWidth")
             );
 
+            // Text for warning dialog when leaving quest:
+            hidden |= (
+                !ProductEditor.SelectedConfig.warnWhenLeavingQuest
+            ) && (
+                propInfo.Name.Equals("warnDialogTitleWhenLeavingQuest") ||
+                propInfo.Name.Equals("warnDialogMessageWhenLeavingQuest") ||
+                propInfo.Name.Equals("warnDialogOKWhenLeavingQuest") ||
+                propInfo.Name.Equals("warnDialogCancelWhenLeavingQuest")
+            );
+
             // AuthorLogin BackDoor:
             hidden |= (
                 !ProductEditor.SelectedConfig.offerAuthorLogin

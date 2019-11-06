@@ -14,6 +14,32 @@ namespace GQ.Client.UI.Dialogs
         private string cancelText { get; set; }
         private Action doFunction { get; set; }
 
+        /// <summary>
+        /// Static convenience method that creates a dialog object and starts it.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="cancelableFunction"></param>
+        /// <param name="doButtonText"></param>
+        /// <param name="cancelText"></param>
+        public static void Show(
+            string title,
+            string message,
+            Action cancelableFunction,
+            string doButtonText = "Ok",
+            string cancelText = "Abbrechen"
+        )
+        {
+            CancelableFunctionDialog dialog = new CancelableFunctionDialog(
+                title,
+                message,
+                cancelableFunction,
+                doButtonText,
+                cancelText
+            );
+            dialog.Start();
+        }
+
         public CancelableFunctionDialog(
             string title,
             string message,
@@ -49,7 +75,5 @@ namespace GQ.Client.UI.Dialogs
             // show the dialog:
             Dialog.Show();
         }
-
-
     }
 }

@@ -2,6 +2,7 @@
 using GQ.Client.Conf;
 using GQ.Client.Err;
 using GQ.Client.Model;
+using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
 using UnityEngine;
 using UnityEngine.UI;
@@ -139,7 +140,21 @@ namespace GQ.Client.UI
         {
             Quest curQuest = QuestManager.Instance.CurrentQuest;
             if (curQuest != null)
-                curQuest.End();
+            {
+                if (ConfigurationManager.Current.warnWhenLeavingQuest)
+                {
+                    CancelableFunctionDialog.Show(
+                        ConfigurationManager.Current.warnDialogTitleWhenLeavingQuest,
+                        ConfigurationManager.Current.warnDialogMessageWhenLeavingQuest,
+                        curQuest.End,
+                        ConfigurationManager.Current.warnDialogOKWhenLeavingQuest,
+                        ConfigurationManager.Current.warnDialogCancelWhenLeavingQuest);
+                }
+                 else
+                {
+                    curQuest.End();
+                }
+            }
         }
 
     }
