@@ -47,9 +47,8 @@ namespace GQ.Client.UI
                     break;
                 case TextUsageType.Paragraph:
                     TextElement.alignment = mapAlignment(config.textAlignment);
-                    TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.4f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.55f * config.mainFontSize;
+                    TextElement.enableAutoSizing = false;
+                    TextElement.fontSize = 0.5f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     break;
