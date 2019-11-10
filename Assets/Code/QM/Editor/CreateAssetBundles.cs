@@ -7,12 +7,12 @@ namespace QM.EditUtils
 	public class CreateAssetBundles
 	{
 		[MenuItem("Assets/Build AssetBundles")]
-		static void BuildAllAssetBundles()
+		static void BuildAllAssetBundles4Android()
 		{
 			BuildPipeline.BuildAssetBundles(
                 Path.Combine(Application.streamingAssetsPath),
                 BuildAssetBundleOptions.None,
-                BuildTarget.Android);
+                EditorUserBuildSettings.activeBuildTarget);
 		}
-	}
+    }
 }
