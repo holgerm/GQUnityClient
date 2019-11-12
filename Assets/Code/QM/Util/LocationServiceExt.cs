@@ -1,11 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
+﻿#define DEBUG_LOG
+
+using UnityEngine;
 using GQ.Client.Model;
+using UnityEngine.Android;
 
-namespace QM.Util {
+namespace QM.Util
+{
 
-	public class LocationServiceExt
+    public class LocationServiceExt
 	{
 		private LocationService realLocation;
 
@@ -85,11 +87,50 @@ namespace QM.Util {
 			}
 		}
 
-		public bool isEnabledByUser
+        static bool askingUserForPermission = false;
+
+        public bool isEnabledByUser
 		{
 			//realLocation.isEnabledByUser seems to be failing on Android. Input.location.isEnabledByUser is the fix
-			get { return useMockLocation ? mIsEnabledByUser : Input.location.isEnabledByUser; }
-			set { mIsEnabledByUser = value; }
+			get {
+                if (useMockLocation)
+                {
+#if DEBUG_LOG
+                    Debug.Log("MockLocation always grants Permission for FineLocation.");
+#endif
+                    return mIsEnabledByUser;
+                }
+
+#if UNITY_IOS
+                return true;
+#endif
+
+#if UNITY_ANDROID
+                if (!askingUserForPermission && !Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+                {
+#if DEBUG_LOG
+                    Debug.Log("Asking User for Permission for FineLocation.");
+#endif
+                    askingUserForPermission = true;
+                    Permission.RequestUserPermission(Permission.FineLocation);
+                }
+
+                if (Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+                {
+#if DEBUG_LOG
+                    Debug.Log("User granted Permission for FineLocation.");
+#endif
+                    askingUserForPermission = false;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+#endif
+
+                }
+                set { mIsEnabledByUser = value; }
 		}
 
 

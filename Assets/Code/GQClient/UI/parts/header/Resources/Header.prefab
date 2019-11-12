@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8666667, g: 0.8666667, b: 0.8666667, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -108,9 +108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 88.75193
+  m_MinHeight: 96.67303
   m_PreferredWidth: -1
-  m_PreferredHeight: 88.75193
+  m_PreferredHeight: 96.67303
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -172,10 +172,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 224939189311781928}
     m_Modifications:
-    - target: {fileID: 1201403448935584, guid: f8f5ed896ae654552b23b403d0ac594a, type: 3}
-      propertyPath: m_Name
-      value: ButtonPanel
-      objectReference: {fileID: 0}
     - target: {fileID: 224655249844479036, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -296,6 +292,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.000025
       objectReference: {fileID: 0}
+    - target: {fileID: 1201403448935584, guid: f8f5ed896ae654552b23b403d0ac594a, type: 3}
+      propertyPath: m_Name
+      value: ButtonPanel
+      objectReference: {fileID: 0}
     - target: {fileID: 114474806008393548, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Sprite
@@ -308,6 +308,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 07d0a66b961c647e689c46eb4f9ba478,
         type: 3}
+    - target: {fileID: 114900283021528182, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114900283021528182, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114900283021528182, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6509634774654377050, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_IsActive
@@ -317,8 +332,32 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 6d72024c68c52478eabd3faf05257d42,
-        type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 114957906203628606, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066545200664488, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114179212173747836, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114179212173747836, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114179212173747836, guid: f8f5ed896ae654552b23b403d0ac594a,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8f5ed896ae654552b23b403d0ac594a, type: 3}
 --- !u!224 &2334038213825424729 stripped
