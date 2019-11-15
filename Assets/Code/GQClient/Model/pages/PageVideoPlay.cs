@@ -1,6 +1,9 @@
-﻿using System.Xml;
+﻿#define DEBUG_LOG
+
+using System.Xml;
 using GQ.Client.Err;
 using GQ.Client.Util;
+using UnityEngine;
 
 namespace GQ.Client.Model
 {
@@ -10,6 +13,7 @@ namespace GQ.Client.Model
         public PageVideoPlay(XmlReader reader) : base(reader) { }
 
         public bool Controllable { get; set; }
+        public bool Stream { get; set; } = true;
         public string VideoFile { get; set; }
         public string VideoType { get; set; }
 
@@ -27,8 +31,14 @@ namespace GQ.Client.Model
 
             VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
             if (VideoType != GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE && VideoFile.HasVideoEnding())
+            {
+#if DEBUG_LOG
+                Debug.Log("Vid-Player: VideoFile: " + VideoFile);
+#endif
                 QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile, "VideoPlay." + GQML.PAGE_VIDEOPLAY_FILE);
-            else {
+            }
+            else
+            {
                 Log.SignalErrorToAuthor("VideoPlay page (" + Id + ") has invalid vide url: " + VideoFile);
             }
 

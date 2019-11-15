@@ -132,17 +132,23 @@ namespace GQ.Client.UI
             audioSource.Pause();
 
             // set video path:
-            if (myPage.Parent.MediaStore.ContainsKey(myPage.VideoFile))
+            if (myPage.Stream)
             {
-                MediaInfo mediaInfo;
-                myPage.Parent.MediaStore.TryGetValue(myPage.VideoFile, out mediaInfo);
-                videoPlayer.url = mediaInfo.LocalPath;
-            }
-            else
-            {
-                Log.WarnDeveloper("Video file was not loaded into media store, so we let the VideoPlayer load it ... " +
-                          myPage.VideoFile);
                 videoPlayer.url = myPage.VideoFile;
+            } else
+            {
+                if (myPage.Parent.MediaStore.ContainsKey(myPage.VideoFile))
+                {
+                    MediaInfo mediaInfo;
+                    myPage.Parent.MediaStore.TryGetValue(myPage.VideoFile, out mediaInfo);
+                    videoPlayer.url = mediaInfo.LocalPath;
+                }
+                else
+                {
+                    Log.WarnDeveloper("Video file was not loaded into media store, so we let the VideoPlayer load it ... " +
+                              myPage.VideoFile);
+                    videoPlayer.url = myPage.VideoFile;
+                }
             }
 
             videoPlayer.Prepare();
