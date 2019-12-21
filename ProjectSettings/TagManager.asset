@@ -4,12 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - CenterToggleInMap
-  - ProductSpecific
-  - LoadingCanvasContainer
-  - RootCanvas
   - Dialog
-  - LoadingCanvas
+  - RootCanvas
   - Extension
   layers:
   - Default
@@ -20,7 +16,7 @@ TagManager:
   - UI
   - 
   - 
-  - Marker
+  - 
   - 
   - 
   - 
@@ -47,10 +43,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Foreground
-    uniqueID: 2583718753
-    locked: 0
-  - name: MapOverlay
-    uniqueID: 2536981123
     locked: 0
