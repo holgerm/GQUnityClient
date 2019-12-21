@@ -1,3 +1,4 @@
+//#define DEBUG_LOG
 // 
 //  OSMTileLayer.cs
 //  
@@ -117,7 +118,7 @@ namespace UnitySlippyMap.Layers
 		protected override void GetTileCountPerAxis (out int tileCountOnX, out int tileCountOnY)
 		{
 			tileCountOnX = tileCountOnY = (int)Mathf.Pow (2, Map.RoundedZoom);
-		}
+        }
 
 		/// <summary>
 		/// Gets the center tile. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.GetCenterTile"/>.
@@ -157,7 +158,12 @@ namespace UnitySlippyMap.Layers
 		/// <param name="nOffsetZ">N offset z.</param>
 		protected override bool GetNeighbourTile (int tileX, int tileY, float offsetX, float offsetZ, int tileCountOnX, int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX, out float nOffsetZ)
 		{
-			bool ret = false;
+#if DEBUG_LOG
+            Debug.LogFormat(
+                "GetNeighbourTile: tileX: {0}, tileY: {1}, dir: {2}",
+                tileX, tileY, dir.ToString());
+#endif
+            bool ret = false;
 			nTileX = 0;
 			nTileY = 0;
 			nOffsetX = 0.0f;

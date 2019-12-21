@@ -490,7 +490,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428356902783258}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -540,8 +540,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ToggleButton: {fileID: 114534073209083912}
   ToggleImage: {fileID: 114282918207415182}
-  OnSprite: {fileID: 21300000, guid: a658da9ae6a3a451393579035bf9d0da, type: 3}
-  OffSprite: {fileID: 21300000, guid: 6267bf0f28ac04d879359a2bdcb7b5bd, type: 3}
+  OnSprite: {fileID: 21300000, guid: cf268b56e17b24e48ba054a889544117, type: 3}
+  OffSprite: {fileID: 21300000, guid: 94944497c3872482f8c39286f7fcc14e, type: 3}
   stateIsOn: 0
   SwitchedOn:
     m_PersistentCalls:
@@ -663,12 +663,12 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 40
+  m_fontSize: 38.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 40
-  m_fontSizeMax: 60.000004
+  m_fontSizeMin: 38.25
+  m_fontSizeMax: 55.249996
   m_fontStyle: 0
   m_textAlignment: 513
   m_characterSpacing: 0

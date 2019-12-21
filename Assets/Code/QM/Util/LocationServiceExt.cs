@@ -127,9 +127,10 @@ namespace QM.Util
                 {
                     return false;
                 }
+#else
+                return true;
 #endif
-
-                }
+            }
                 set { mIsEnabledByUser = value; }
 		}
 

@@ -26,310 +26,324 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using UnityEngine;
-using GQ.Client.UI;
-using System.IO;
-using GQ.Client.FileIO;
-using GQ.Client.Err;
 
 namespace UnitySlippyMap.Map
 {
-	/// <summary>
-	/// The tile implementation inherits from MonoBehaviour.
-	/// </summary>
-	public class TileBehaviour : MonoBehaviour
-	{
+    /// <summary>
+    /// The tile implementation inherits from MonoBehaviour.
+    /// </summary>
+    public class TileBehaviour : MonoBehaviour
+    {
         #region Private members & properties
 
-		/// <summary>
-		/// The texture identifier.
-		/// </summary>
-		private int textureId;
+        /// <summary>
+        /// The showing flag.
+        /// </summary>
+        private bool showing = false;
 
-		/// <summary>
-		/// Gets or sets the texture identifier.
-		/// </summary>
-		/// <value>The texture identifier.</value>
-		public int			TextureId {
-			get {
-				return textureId;
-			}
-			set {
-				textureId = value;
-			}
-		}
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="UnitySlippyMap.Map.Tile"/> is showing.
+        /// </summary>
+        /// <value><c>true</c> if showing; otherwise, <c>false</c>.</value>
+        public bool Showing
+        {
+            get { return showing; }
+        }
 
-		/// <summary>
-		/// The showing flag.
-		/// </summary>
-		private bool showing = false;
+        /// <summary>
+        /// The material.
+        /// </summary>
+        private Material material;
 
-		/// <summary>
-		/// Gets a value indicating whether this <see cref="UnitySlippyMap.Map.Tile"/> is showing.
-		/// </summary>
-		/// <value><c>true</c> if showing; otherwise, <c>false</c>.</value>
-		public bool Showing {
-			get { return showing; }
-		}
+        /// <summary>
+        /// The duration of the apparition.
+        /// </summary>
+        private float apparitionDuration = 0.5f;
 
-		/// <summary>
-		/// The material.
-		/// </summary>
-		private Material material;
+        /// <summary>
+        /// The apparition start time.
+        /// </summary>
+        private float apparitionStartTime = 0.0f;
 
-		/// <summary>
-		/// The duration of the apparition.
-		/// </summary>
-		private float apparitionDuration = 0.5f;
-
-		/// <summary>
-		/// The apparition start time.
-		/// </summary>
-		private float apparitionStartTime = 0.0f;
+        public int xPos;
+        public int yPos;
+        public int zPos;
 
 
-		#endregion
+        #endregion
 
-		#region MonoBehaviour implementation
+        #region MonoBehaviour implementation
 
-		/// <summary>
-		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Update().
-		/// </summary>
-		private void Update ()
-		{
-			if (showing) {
-				float delta = Time.time - apparitionStartTime;
-				float a = 1.0f;
-				if (delta <= apparitionDuration) {
-					a = delta / apparitionDuration;
-				} else {
-					showing = false;
-					MapBehaviour.Instance.IsDirty = true;
-				}
-				Color color = material.color;
-				color.a = a;
-				material.color = color;
-			}
-		}
+        /// <summary>
+        /// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Update().
+        /// </summary>
+        private void Update()
+        {
+            if (showing)
+            {
+                float delta = Time.time - apparitionStartTime;
+                float a = 1.0f;
+                if (delta <= apparitionDuration)
+                {
+                    a = delta / apparitionDuration;
+                }
+                else
+                {
+                    showing = false;
+                    //               MapBehaviour.Instance.IsDirty = true;
+                }
+                Color color = material.color;
+                color.a = a;
+                material.color = color;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public enums
+        #region Public enums
 
-		/// <summary>
-		/// The anchor points enumeration.
-		/// </summary>
-		public enum AnchorPoint
-		{
-			TopLeft,
-			TopCenter,
-			TopRight,
-			MiddleLeft,
-			MiddleCenter,
-			MiddleRight,
-			BottomLeft,
-			BottomCenter,
-			BottomRight
-		}
+        /// <summary>
+        /// The anchor points enumeration.
+        /// </summary>
+        public enum AnchorPoint
+        {
+            TopLeft,
+            TopCenter,
+            TopRight,
+            MiddleLeft,
+            MiddleCenter,
+            MiddleRight,
+            BottomLeft,
+            BottomCenter,
+            BottomRight
+        }
 
-		#endregion
+        #endregion
 
-		#region Public methods
+        #region Public methods
 
-		/// <summary>
-		/// Show this instance.
-		/// </summary>
-		public void Show ()
-		{
-			showing = true;
-			Color color = material.color;
-			color.a = 0.0f;
-			material.color = color;
-			apparitionStartTime = Time.time;
-		}
+        public override string ToString()
+        {
+            return (string.Format("TileBehaviour: {0}, {1}, {2}", zPos, xPos, yPos));
+        }
 
-		/// <summary>
-		/// Creates a tile template GameObject.
-		/// </summary>
-		public static TileBehaviour CreateTileTemplate ()
-		{
-			return CreateTileTemplate ("[Tile Template]", AnchorPoint.MiddleCenter);
-		}
+        /// <summary>
+        /// Show this instance.
+        /// </summary>
+        public void Show()
+        {
+            showing = true;
+            Color color = material.color;
+            color.a = 0.0f;
+            material.color = color;
+            apparitionStartTime = Time.time;
+        }
 
-		/// <summary>
-		/// Creates a tile template GameObject.
-		/// </summary>
-		/// <returns>The tile template.</returns>
-		/// <param name="name">Name.</param>
-		public static TileBehaviour CreateTileTemplate (string name)
-		{
-			return CreateTileTemplate (name, AnchorPoint.MiddleCenter);
-		}
+        /// <summary>
+        /// Creates a tile template GameObject.
+        /// </summary>
+        public static TileBehaviour CreateTileTemplate()
+        {
+            return CreateTileTemplate("[Tile Template]", AnchorPoint.MiddleCenter);
+        }
 
-		/// <summary>
-		/// Creates a tile template GameObject.
-		/// </summary>
-		/// <returns>The tile template.</returns>
-		/// <param name="anchorPoint">Anchor point.</param>
-		public static TileBehaviour CreateTileTemplate (AnchorPoint anchorPoint)
-		{
-			return CreateTileTemplate ("[Tile Template]", anchorPoint);
-		}
+        /// <summary>
+        /// Creates a tile template GameObject.
+        /// </summary>
+        /// <returns>The tile template.</returns>
+        /// <param name="name">Name.</param>
+        public static TileBehaviour CreateTileTemplate(string name)
+        {
+            return CreateTileTemplate(name, AnchorPoint.MiddleCenter);
+        }
 
-		/// <summary>
-		/// Creates a tile template GameObject.
-		/// </summary>
-		/// <returns>The tile template.</returns>
-		/// <param name="tileName">Tile name.</param>
-		/// <param name="anchorPoint">Anchor point.</param>
-		public static TileBehaviour CreateTileTemplate (string tileName, AnchorPoint anchorPoint)
-		{
-			GameObject tileTemplate = new GameObject (tileName);
-			TileBehaviour tile = tileTemplate.AddComponent<TileBehaviour> ();
-			MeshFilter meshFilter = tileTemplate.AddComponent<MeshFilter> ();
-			MeshRenderer meshRenderer = tileTemplate.AddComponent<MeshRenderer> ();
-			BoxCollider boxCollider = tileTemplate.AddComponent<BoxCollider> ();
+        /// <summary>
+        /// Creates a tile template GameObject.
+        /// </summary>
+        /// <returns>The tile template.</returns>
+        /// <param name="anchorPoint">Anchor point.</param>
+        public static TileBehaviour CreateTileTemplate(AnchorPoint anchorPoint)
+        {
+            return CreateTileTemplate("[Tile Template]", anchorPoint);
+        }
 
-			// add the geometry
-			Mesh mesh = meshFilter.mesh;
-			switch (anchorPoint) {
-			case AnchorPoint.TopLeft:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (1.0f, 0.0f, 0.0f),
-					new Vector3 (1.0f, 0.0f, -1.0f),
-					new Vector3 (0.0f, 0.0f, -1.0f),
-					new Vector3 (0.0f, 0.0f, 0.0f)
-				};
-				break;
-			case AnchorPoint.TopCenter:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (0.5f, 0.0f, 0.0f),
-					new Vector3 (0.5f, 0.0f, -1.0f),
-					new Vector3 (-0.5f, 0.0f, -1.0f),
-					new Vector3 (-0.5f, 0.0f, 0.0f)
-				};
-				break;
-			case AnchorPoint.TopRight:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (0.0f, 0.0f, 0.0f),
-					new Vector3 (0.0f, 0.0f, -1.0f),
-					new Vector3 (-1.0f, 0.0f, -1.0f),
-					new Vector3 (-1.0f, 0.0f, 0.0f)
-				};
-				break;
-			case AnchorPoint.MiddleLeft:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (1.0f, 0.0f, 0.5f),
-					new Vector3 (1.0f, 0.0f, -0.5f),
-					new Vector3 (0.0f, 0.0f, -0.5f),
-					new Vector3 (0.0f, 0.0f, 0.5f)
-				};
-				break;
-			case AnchorPoint.MiddleRight:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (0.0f, 0.0f, 0.5f),
-					new Vector3 (0.0f, 0.0f, -0.5f),
-					new Vector3 (-1.0f, 0.0f, -0.5f),
-					new Vector3 (-1.0f, 0.0f, 0.5f)
-				};
-				break;
-			case AnchorPoint.BottomLeft:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (1.0f, 0.0f, 1.0f),
-					new Vector3 (1.0f, 0.0f, 0.0f),
-					new Vector3 (0.0f, 0.0f, 0.0f),
-					new Vector3 (0.0f, 0.0f, 1.0f)
-				};
-				break;
-			case AnchorPoint.BottomCenter:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (0.5f, 0.0f, 1.0f),
-					new Vector3 (0.5f, 0.0f, 0.0f),
-					new Vector3 (-0.5f, 0.0f, 0.0f),
-					new Vector3 (-0.5f, 0.0f, 1.0f)
-				};
-				break;
-			case AnchorPoint.BottomRight:
-				mesh.vertices = new Vector3[] {
-					new Vector3 (0.0f, 0.0f, 1.0f),
-					new Vector3 (0.0f, 0.0f, 0.0f),
-					new Vector3 (-1.0f, 0.0f, 0.0f),
-					new Vector3 (-1.0f, 0.0f, 1.0f)
-				};
-				break;
-			default: // MiddleCenter
-				mesh.vertices = new Vector3[] {
-					new Vector3 (0.5f, 0.0f, 0.5f),
-					new Vector3 (0.5f, 0.0f, -0.5f),
-					new Vector3 (-0.5f, 0.0f, -0.5f),
-					new Vector3 (-0.5f, 0.0f, 0.5f)
-				};
-				break;
-			}
-			mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-		
-			// add normals
-			mesh.normals = new Vector3[] {
-				Vector3.up,
-				Vector3.up,
-				Vector3.up,
-				Vector3.up
-			};
-			// add uv coordinates
-			mesh.uv = new Vector2[] {
-				new Vector2 (1.0f, 1.0f),
-				new Vector2 (1.0f, 0.0f),
-				new Vector2 (0.0f, 0.0f),
-				new Vector2 (0.0f, 1.0f)
-			};
+        /// <summary>
+        /// Creates a tile template GameObject.
+        /// </summary>
+        /// <returns>The tile template.</returns>
+        /// <param name="tileName">Tile name.</param>
+        /// <param name="anchorPoint">Anchor point.</param>
+        public static TileBehaviour CreateTileTemplate(string tileName, AnchorPoint anchorPoint)
+        {
+            GameObject tileTemplate = new GameObject(tileName);
+            TileBehaviour tile = tileTemplate.AddComponent<TileBehaviour>();
+            MeshFilter meshFilter = tileTemplate.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = tileTemplate.AddComponent<MeshRenderer>();
+            BoxCollider boxCollider = tileTemplate.AddComponent<BoxCollider>();
+
+            // add the geometry
+            Mesh mesh = meshFilter.mesh;
+            switch (anchorPoint)
+            {
+                case AnchorPoint.TopLeft:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (1.0f, 0.0f, 0.0f),
+                    new Vector3 (1.0f, 0.0f, -1.0f),
+                    new Vector3 (0.0f, 0.0f, -1.0f),
+                    new Vector3 (0.0f, 0.0f, 0.0f)
+                };
+                    break;
+                case AnchorPoint.TopCenter:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (0.5f, 0.0f, 0.0f),
+                    new Vector3 (0.5f, 0.0f, -1.0f),
+                    new Vector3 (-0.5f, 0.0f, -1.0f),
+                    new Vector3 (-0.5f, 0.0f, 0.0f)
+                };
+                    break;
+                case AnchorPoint.TopRight:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (0.0f, 0.0f, 0.0f),
+                    new Vector3 (0.0f, 0.0f, -1.0f),
+                    new Vector3 (-1.0f, 0.0f, -1.0f),
+                    new Vector3 (-1.0f, 0.0f, 0.0f)
+                };
+                    break;
+                case AnchorPoint.MiddleLeft:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (1.0f, 0.0f, 0.5f),
+                    new Vector3 (1.0f, 0.0f, -0.5f),
+                    new Vector3 (0.0f, 0.0f, -0.5f),
+                    new Vector3 (0.0f, 0.0f, 0.5f)
+                };
+                    break;
+                case AnchorPoint.MiddleRight:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (0.0f, 0.0f, 0.5f),
+                    new Vector3 (0.0f, 0.0f, -0.5f),
+                    new Vector3 (-1.0f, 0.0f, -0.5f),
+                    new Vector3 (-1.0f, 0.0f, 0.5f)
+                };
+                    break;
+                case AnchorPoint.BottomLeft:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (1.0f, 0.0f, 1.0f),
+                    new Vector3 (1.0f, 0.0f, 0.0f),
+                    new Vector3 (0.0f, 0.0f, 0.0f),
+                    new Vector3 (0.0f, 0.0f, 1.0f)
+                };
+                    break;
+                case AnchorPoint.BottomCenter:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (0.5f, 0.0f, 1.0f),
+                    new Vector3 (0.5f, 0.0f, 0.0f),
+                    new Vector3 (-0.5f, 0.0f, 0.0f),
+                    new Vector3 (-0.5f, 0.0f, 1.0f)
+                };
+                    break;
+                case AnchorPoint.BottomRight:
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (0.0f, 0.0f, 1.0f),
+                    new Vector3 (0.0f, 0.0f, 0.0f),
+                    new Vector3 (-1.0f, 0.0f, 0.0f),
+                    new Vector3 (-1.0f, 0.0f, 1.0f)
+                };
+                    break;
+                default: // MiddleCenter
+                    mesh.vertices = new Vector3[] {
+                    new Vector3 (0.5f, 0.0f, 0.5f),
+                    new Vector3 (0.5f, 0.0f, -0.5f),
+                    new Vector3 (-0.5f, 0.0f, -0.5f),
+                    new Vector3 (-0.5f, 0.0f, 0.5f)
+                };
+                    break;
+            }
+            mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+
+            // add normals
+            mesh.normals = new Vector3[] {
+                Vector3.up,
+                Vector3.up,
+                Vector3.up,
+                Vector3.up
+            };
+            // add uv coordinates
+            mesh.uv = new Vector2[] {
+                new Vector2 (1.0f, 1.0f),
+                new Vector2 (1.0f, 0.0f),
+                new Vector2 (0.0f, 0.0f),
+                new Vector2 (0.0f, 1.0f)
+            };
 
             // add a material
             string shaderName = "Larku/UnlitTransparent";
             Shader shader = Resources.Load<Shader>("LarkuUnlitTransparent");
-			// was (did not work since 2019.2.6): Shader shader = Shader.Find (shaderName);
-			
+            // was (did not work since 2019.2.6): Shader shader = Shader.Find (shaderName);
+
 #if DEBUG_LOG
 		Debug.Log("DEBUG: shader for tile template: " + shaderName + ", exists: " + (shader != null));
 #endif
-			
-			tile.material = meshRenderer.material = new Material (shader);
-			
-			// setup the collider
-			boxCollider.size = new Vector3 (1.0f, 0.0f, 1.0f);
-		
-			return tile;
-		}
 
-		/// <summary>
-		/// Sets the texture.
-		/// </summary>
-		/// <param name="texture">Texture.</param>
-		public void SetTexture (Texture2D texture)
-		{
+            tile.material = meshRenderer.material = new Material(shader);
+
+            // setup the collider
+            boxCollider.size = new Vector3(1.0f, 0.0f, 1.0f);
+
+
+#if DEBUG_LOG
+            Bounds b = boxCollider.bounds;
+            Debug.Log("CreateTileTemplate bounds: " + b);
+#endif
+
+            return tile;
+        }
+
+        /// <summary>
+        /// Sets the texture. Use null as argument to clear the texture.
+        /// </summary>
+        /// <param name="texture">Texture.</param>
+        public void SetTexture(Texture2D texture)
+        {
+#if DEBUG_LOG
+            Debug.Log(("Setting texture for tile " + gameObject.name).Green());
+#endif
             if (this == null || this.gameObject == null || this.gameObject.GetComponent<Renderer>() == null)
                 return;
 
-			material = this.gameObject.GetComponent<Renderer> ().material;
-			material.mainTexture = texture;
-			material.mainTexture.wrapMode = TextureWrapMode.Clamp;
-			material.mainTexture.filterMode = FilterMode.Trilinear;
-			this.GetComponent<Renderer> ().enabled = true;
-			this.Show ();
-		}
+            material = this.gameObject.GetComponent<Renderer>().material;
+            material.mainTexture = texture;
 
-		/// <summary>
-		/// Gets the tile key.
-		/// </summary>
-		/// <returns>The tile key.</returns>
-		/// <param name="roundedZoom">Rounded zoom.</param>
-		/// <param name="tileX">Tile x.</param>
-		/// <param name="tileY">Tile y.</param>
-		public static string GetTileKey (int roundedZoom, int tileX, int tileY)
-		{
-			return roundedZoom + "_" + tileX + "_" + tileY;
-		}
+            if (texture == null)
+                return;
 
-		#endregion
-	}
+            material.mainTexture.wrapMode = TextureWrapMode.Clamp;
+            material.mainTexture.filterMode = FilterMode.Trilinear;
+            this.GetComponent<Renderer>().enabled = true;
+            this.Show();
+        }
+
+        /// <summary>
+        /// Gets the tile key.
+        /// </summary>
+        /// <returns>The tile key.</returns>
+        /// <param name="roundedZoom">Rounded zoom.</param>
+        /// <param name="tileX">Tile x.</param>
+        /// <param name="tileY">Tile y.</param>
+        public static string GetTileKey(int roundedZoom, int tileX, int tileY)
+        {
+            return roundedZoom + "_" + tileX + "_" + tileY;
+        }
+
+        internal void SetPosition(int x, int y, int z)
+        {
+            this.xPos = x;
+            this.yPos = y;
+            this.zPos = z;
+        }
+
+        #endregion
+    }
 
 }

@@ -1,3 +1,4 @@
+//#define DEBUG_LOG
 // 
 //  TileLayer.cs
 //  
@@ -26,7 +27,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using GQ.Client.Err;
 using UnityEngine;
 
 using UnitySlippyMap.Map;
@@ -34,408 +35,654 @@ using UnitySlippyMap.Map;
 namespace UnitySlippyMap.Layers
 {
 
-	/// <summary>
-	/// An abstract class representing a tile layer.
-	/// One can derive from it to leverage specific or custom tile services.
-	/// </summary>
-	public abstract class TileLayerBehaviour : LayerBehaviour
-	{
-	#region Protected members & properties
+    /// <summary>
+    /// An abstract class representing a tile layer.
+    /// One can derive from it to leverage specific or custom tile services.
+    /// </summary>
+    public abstract class TileLayerBehaviour : LayerBehaviour
+    {
+        #region Protected members & properties
 
-		/// <summary>
-		/// The tile cache size limit.
-		/// </summary>
-		protected int tileCacheSizeLimit = 100;
+        /// <summary>
+        /// The tile cache size limit.
+        /// </summary>
+        protected int tileCacheSizeLimit = 100;
 
-		/// <summary>
-		/// Gets or sets the tile cache size limit.
-		/// </summary>
-		/// <value>The tile cache size limit.</value>
-		public int TileCacheSizeLimit {
-			get { return tileCacheSizeLimit; }
-			set { tileCacheSizeLimit = value; }
-		}
+        /// <summary>
+        /// Gets or sets the tile cache size limit.
+        /// </summary>
+        /// <value>The tile cache size limit.</value>
+        public int TileCacheSizeLimit
+        {
+            get { return tileCacheSizeLimit; }
+            set { tileCacheSizeLimit = value; }
+        }
 
-		//public int									TileSize = 256;
+        //public int									TileSize = 256;
 
-		/// <summary>
-		/// The shared tile template
-		/// </summary>
-		protected static TileBehaviour tileTemplate;
+        /// <summary>
+        /// The shared tile template
+        /// </summary>
+        protected static TileBehaviour tileTemplate;
 
-		/// <summary>
-		/// The tile template use count.
-		/// </summary>
-		protected static int tileTemplateUseCount = 0;
+        /// <summary>
+        /// The tile template use count.
+        /// </summary>
+        protected static int tileTemplateUseCount = 0;
 
-		/// <summary>
-		/// The tiles.
-		/// </summary>
-		protected Dictionary<string, TileBehaviour> tiles = new Dictionary<string, TileBehaviour> ();
+        /// <summary>
+        /// The tiles.
+        /// </summary>
+        protected Dictionary<string, TileBehaviour> tiles = new Dictionary<string, TileBehaviour>();
 
-		/// <summary>
-		/// The tile cache.
-		/// </summary>
-		protected List<TileBehaviour> tileCache = new List<TileBehaviour> ();
+        /// <summary>
+        /// The tile cache.
+        /// </summary>
+        protected List<TileBehaviour> tileCache = new List<TileBehaviour>();
 
-		/// <summary>
-		/// The visited tiles.
-		/// </summary>
-		protected List<string> visitedTiles = new List<string> ();
+        /// <summary>
+        /// The visited tiles.
+        /// </summary>
+        protected List<string> visitedTiles = new List<string>();
 
-		/// <summary>
-		/// The is ready to be queried flag.
-		/// </summary>
-		protected bool isReadyToBeQueried = false;
+        /// <summary>
+        /// The is ready to be queried flag.
+        /// </summary>
+        protected bool isReadyToBeQueried = false;
 
-		/// <summary>
-		/// The needs to be updated when ready flag.
-		/// </summary>
-		protected bool needsToBeUpdatedWhenReady = false;
-    
-	
-		/// <summary>
-		/// A enumeration of the tile directions.
-		/// </summary>
-		protected enum NeighbourTileDirection
-		{
-			North,
-			South,
-			East,
-			West
-		}
-	
-	#endregion
-	
-	#region MonoBehaviour implementation
-	
-		/// <summary>
-		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Awake().
-		/// </summary>
-		protected void Awake ()
-		{
-			// create the tile template if needed
-			if (tileTemplate == null) {
-				tileTemplate = TileBehaviour.CreateTileTemplate ();
-				tileTemplate.hideFlags = HideFlags.HideAndDontSave;
-				tileTemplate.GetComponent<Renderer>().enabled = false;
-			}
-			++tileTemplateUseCount;
-		}
+        /// <summary>
+        /// The needs to be updated when ready flag.
+        /// </summary>
+        protected bool needsToBeUpdatedWhenReady = false;
 
-		/// <summary>
-		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Start().
-		/// </summary>
-		private void Start ()
-		{		
-			if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
-				tileTemplate.transform.localScale = new Vector3 (Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
-		}
 
-		/// <summary>
-		/// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.OnDestroy().
-		/// </summary>
-		private void OnDestroy ()
-		{
-			--tileTemplateUseCount;
-		
-			// destroy the tile template if nobody is using anymore
-			if (tileTemplate != null && tileTemplateUseCount == 0)
-				DestroyImmediate (tileTemplate);
-		}
-	
-	#endregion
-	
-	#region Layer implementation
-	
-		/// <summary>
-		/// Updates the content. See <see cref="UnitySlippyMap.Layers.Layer.UpdateContent"/>.
-		/// </summary>
-		public override void UpdateContent ()
-		{
-			if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
-				tileTemplate.transform.localScale = new Vector3 (Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+        /// <summary>
+        /// A enumeration of the tile directions.
+        /// </summary>
+        protected enum NeighbourTileDirection
+        {
+            North,
+            South,
+            East,
+            West
+        }
 
-			if (Map.CurrentCamera != null && isReadyToBeQueried) {
-				Plane[] frustum = GeometryUtility.CalculateFrustumPlanes (Map.CurrentCamera);
+        #endregion
 
-				visitedTiles.Clear ();
+        #region MonoBehaviour implementation
 
-				UpdateTiles (frustum);
+        /// <summary>
+        /// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Awake().
+        /// </summary>
+        protected void Awake()
+        {
+            // create the tile template if needed
+            if (tileTemplate == null)
+            {
+                tileTemplate = TileBehaviour.CreateTileTemplate();
+                tileTemplate.hideFlags = HideFlags.HideAndDontSave;
+                tileTemplate.GetComponent<Renderer>().enabled = false;
+            }
+            ++tileTemplateUseCount;
+        }
 
-				CleanUpTiles (frustum, Map.RoundedZoom);
-			} else
-				needsToBeUpdatedWhenReady = true;
-		
-			// move the tiles by the map's root translation
-			Vector3 displacement = Map.gameObject.transform.position;
-			if (displacement != Vector3.zero) {
-				foreach (KeyValuePair<string, TileBehaviour> tile in tiles) {
-					tile.Value.transform.position += displacement;
-				}
-			}
-		}
-	
-	#endregion
-	
-	#region Protected methods
-	
-		/// <summary>
-		/// The tile address looked for.
-		/// </summary>
-		protected static string	tileAddressLookedFor;
+        /// <summary>
+        /// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Start().
+        /// </summary>
+        private void Start()
+        {
+            if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
+                tileTemplate.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+        }
 
-		/// <summary>
-		/// Visited tiles match predicate.
-		/// </summary>
-		/// <returns><c>true</c>, if tile address matched, <c>false</c> otherwise.</returns>
-		/// <param name="tileAddress">Tile address.</param>
-		protected static bool visitedTilesMatchPredicate (string tileAddress)
-		{
-			if (tileAddress == tileAddressLookedFor)
-				return true;
-			return false;
-		}
-	
-	#endregion
-		
-	#region Private methods
+        /// <summary>
+        /// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.OnDestroy().
+        /// </summary>
+        private void OnDestroy()
+        {
+            --tileTemplateUseCount;
 
-		/// <summary>
-		/// Checks if a tile is fully visible
-		/// </summary>
-		/// <returns><c>true</c>, if the tile exists, <c>false</c> otherwise.</returns>
-		/// <param name="tileRoundedZoom">Tile rounded zoom.</param>
-		/// <param name="tileX">Tile x.</param>
-		/// <param name="tileY">Tile y.</param>
-		private bool CheckTileExistence (int tileRoundedZoom, int tileX, int tileY)
-		{
-			string key = TileBehaviour.GetTileKey (tileRoundedZoom, tileX, tileY);
-			if (!tiles.ContainsKey (key))
-				return true; // the tile is out of the frustum
-			TileBehaviour tile = tiles [key];
-			Renderer r = tile.GetComponent<Renderer>();
-			return r.enabled && r.material.mainTexture != null && !tile.Showing;
-		}
+            // destroy the tile template if nobody is using anymore
+            if (tileTemplate != null && tileTemplateUseCount == 0)
+                DestroyImmediate(tileTemplate);
+        }
 
-		/// <summary>
-		/// Checks if a tile is covered by other tiles with a smaller rounded zoom 
-		/// </summary>
-		/// <returns><c>true</c>, if tile out existence was checked, <c>false</c> otherwise.</returns>
-		/// <param name="roundedZoom">Rounded zoom.</param>
-		/// <param name="tileRoundedZoom">Tile rounded zoom.</param>
-		/// <param name="tileX">Tile x.</param>
-		/// <param name="tileY">Tile y.</param>
-		private bool CheckTileOutExistence (int roundedZoom, int tileRoundedZoom, int tileX, int tileY)
-		{
-			if (roundedZoom == tileRoundedZoom)
-				return CheckTileExistence (tileRoundedZoom, tileX, tileY);
-			return CheckTileOutExistence (roundedZoom, tileRoundedZoom - 1, tileX / 2, tileY / 2); 
-		}
+        #endregion
 
-		/// <summary>
-		/// Checks if a tile is covered by other tiles with a upper rounded zoom
-		/// </summary>
-		/// <returns><c>true</c>, if tile in existence was checked, <c>false</c> otherwise.</returns>
-		/// <param name="roundedZoom">Rounded zoom.</param>
-		/// <param name="tileRoundedZoom">Tile rounded zoom.</param>
-		/// <param name="tileX">Tile x.</param>
-		/// <param name="tileY">Tile y.</param>
-		private bool CheckTileInExistence (int roundedZoom, int tileRoundedZoom, int tileX, int tileY)
-		{
-			if (roundedZoom == tileRoundedZoom)
-				return CheckTileExistence (tileRoundedZoom, tileX, tileY);
-			int currentRoundedZoom = tileRoundedZoom + 1;
-			int currentTileX = tileX * 2;
-			int currentTileY = tileY * 2;
-			return CheckTileInExistence (roundedZoom, currentRoundedZoom, currentTileX, currentTileY)
-				&& CheckTileInExistence (roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY)
-				&& CheckTileInExistence (roundedZoom, currentRoundedZoom, currentTileX, currentTileY + 1)
-				&& CheckTileInExistence (roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY + 1);
-		}
+        #region Layer implementation
 
-		/// <summary>
-		/// Removes the tiles outside of the camera frustum and zoom level.
-		/// </summary>
-		/// <param name="frustum">Frustum.</param>
-		/// <param name="roundedZoom">Rounded zoom.</param>
-		private void CleanUpTiles (Plane[] frustum, int roundedZoom)
-		{
-			List<string> tilesToRemove = new List<string> ();
-			foreach (KeyValuePair<string, TileBehaviour> pair in tiles) {
-				TileBehaviour tile = pair.Value;
-				string tileKey = pair.Key;
+        /// <summary>
+        /// Updates the content. See <see cref="UnitySlippyMap.Layers.Layer.UpdateContent"/>.
+        /// </summary>
+        public override void UpdateContent()
+        {
+            if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
+                tileTemplate.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
 
-				string[] tileAddressTokens = tileKey.Split ('_');
-				int tileRoundedZoom = Int32.Parse (tileAddressTokens [0]);
-				int tileX = Int32.Parse (tileAddressTokens [1]);
-				int tileY = Int32.Parse (tileAddressTokens [2]);
+            if (Map.CurrentCamera != null && isReadyToBeQueried)
+            {
+#if DEBUG_LOG
+                Debug.Log("Updating Content while Map " + (Map.IsDirty ? " DIRTY ".Red() : " CLEAN".Green()));
+#endif
+                Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(Map.CurrentCamera);
+                visitedTiles.Clear();
 
-				int roundedZoomDif = tileRoundedZoom - roundedZoom;
-				bool inFrustum = GeometryUtility.TestPlanesAABB (frustum, tile.GetComponent<Collider>().bounds);
+                UpdateTiles(frustum);
 
-				if (!inFrustum || roundedZoomDif != 0) {
-					CancelTileRequest (tileX, tileY, tileRoundedZoom);
+                CleanUpTiles(frustum, Map.RoundedZoom);
+            }
+            else
+                needsToBeUpdatedWhenReady = true;
 
-					if (!inFrustum
-						|| (roundedZoomDif > 0 && CheckTileOutExistence (roundedZoom, tileRoundedZoom, tileX, tileY))
-						|| (roundedZoomDif < 0 && CheckTileInExistence (roundedZoom, tileRoundedZoom, tileX, tileY))) {
-						tilesToRemove.Add (tileKey);
-					}
-				}
-			}
+            // move the tiles by the map's root translation
+            Vector3 displacement = Map.gameObject.transform.position;
+            if (displacement != Vector3.zero)
+            {
+                foreach (KeyValuePair<string, TileBehaviour> tile in tiles)
+                {
+                    tile.Value.transform.position += displacement;
+                }
+            }
+        }
 
-			foreach (string tileAddress in tilesToRemove) {
-				TileBehaviour tile = tiles [tileAddress];
+        #endregion
 
-				Renderer renderer = tile.GetComponent<Renderer>();
-				if (renderer != null) {
-					GameObject.DestroyImmediate (renderer.material.mainTexture);
-					//TextureAtlasManager.Instance.RemoveTexture(pair.Value.TextureId);
-					renderer.material.mainTexture = null;
+        #region Protected methods
 
-					renderer.enabled = false;
-				}
+        /// <summary>
+        /// The tile address looked for.
+        /// </summary>
+        protected static string tileAddressLookedFor;
+
+        /// <summary>
+        /// Visited tiles match predicate.
+        /// </summary>
+        /// <returns><c>true</c>, if tile address matched, <c>false</c> otherwise.</returns>
+        /// <param name="tileAddress">Tile address.</param>
+        protected static bool visitedTilesMatchPredicate(string tileAddress)
+        {
+            if (tileAddress == tileAddressLookedFor)
+                return true;
+            return false;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Checks if a tile is fully visible
+        /// </summary>
+        /// <returns><c>true</c>, if the tile exists, <c>false</c> otherwise.</returns>
+        /// <param name="tileRoundedZoom">Tile rounded zoom.</param>
+        /// <param name="tileX">Tile x.</param>
+        /// <param name="tileY">Tile y.</param>
+        private bool CheckTileExistence(int tileRoundedZoom, int tileX, int tileY)
+        {
+            string key = TileBehaviour.GetTileKey(tileRoundedZoom, tileX, tileY);
+            if (!tiles.ContainsKey(key))
+                return true; // the tile is out of the frustum
+            TileBehaviour tile = tiles[key];
+            Renderer r = tile.GetComponent<Renderer>();
+            return r.enabled && r.material.mainTexture != null && !tile.Showing;
+        }
+
+        /// <summary>
+        /// Checks if a tile is covered by other tiles with a smaller rounded zoom 
+        /// </summary>
+        /// <returns><c>true</c>, if tile out existence was checked, <c>false</c> otherwise.</returns>
+        /// <param name="roundedZoom">Rounded zoom.</param>
+        /// <param name="tileRoundedZoom">Tile rounded zoom.</param>
+        /// <param name="tileX">Tile x.</param>
+        /// <param name="tileY">Tile y.</param>
+        private bool CheckTileOutExistence(int roundedZoom, int tileRoundedZoom, int tileX, int tileY)
+        {
+            if (roundedZoom == tileRoundedZoom)
+                return CheckTileExistence(tileRoundedZoom, tileX, tileY);
+            return CheckTileOutExistence(roundedZoom, tileRoundedZoom - 1, tileX / 2, tileY / 2);
+        }
+
+        /// <summary>
+        /// Checks if a tile is covered by other tiles with a upper rounded zoom
+        /// </summary>
+        /// <returns><c>true</c>, if tile in existence was checked, <c>false</c> otherwise.</returns>
+        /// <param name="roundedZoom">Rounded zoom.</param>
+        /// <param name="tileRoundedZoom">Tile rounded zoom.</param>
+        /// <param name="tileX">Tile x.</param>
+        /// <param name="tileY">Tile y.</param>
+        private bool CheckTileInExistence(int roundedZoom, int tileRoundedZoom, int tileX, int tileY)
+        {
+            if (roundedZoom == tileRoundedZoom)
+                return CheckTileExistence(tileRoundedZoom, tileX, tileY);
+            int currentRoundedZoom = tileRoundedZoom + 1;
+            int currentTileX = tileX * 2;
+            int currentTileY = tileY * 2;
+            return CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX, currentTileY)
+                && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY)
+                && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX, currentTileY + 1)
+                && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY + 1);
+        }
+
+        /// <summary>
+        /// Removes the tiles outside of the camera frustum and zoom level.
+        /// </summary>
+        /// <param name="frustum">Frustum.</param>
+        /// <param name="roundedZoom">Rounded zoom.</param>
+        private void CleanUpTiles(Plane[] frustum, int roundedZoom)
+        {
+            List<string> tilesToRemove = new List<string>();
+            foreach (KeyValuePair<string, TileBehaviour> pair in tiles)
+            {
+                TileBehaviour tile = pair.Value;
+                string tileKey = pair.Key;
+
+                string[] tileAddressTokens = tileKey.Split('_');
+                int tileRoundedZoom = Int32.Parse(tileAddressTokens[0]);
+                int tileX = Int32.Parse(tileAddressTokens[1]);
+                int tileY = Int32.Parse(tileAddressTokens[2]);
+
+                int roundedZoomDif = tileRoundedZoom - roundedZoom;
+                //bool inFrustum = GeometryUtility.TestPlanesAABB(frustum, tile.GetComponent<Collider>().bounds);
+
+                //if (!inFrustum || roundedZoomDif != 0)
+                //{
+                //    CancelTileRequest(tileX, tileY, tileRoundedZoom);
+
+                //    if (!inFrustum
+                //        || (roundedZoomDif > 0 && CheckTileOutExistence(roundedZoom, tileRoundedZoom, tileX, tileY))
+                //        || (roundedZoomDif < 0 && CheckTileInExistence(roundedZoom, tileRoundedZoom, tileX, tileY)))
+                //    {
+                //        tilesToRemove.Add(tileKey);
+                //    }
+                //}
+            }
+
+            foreach (string tileAddress in tilesToRemove)
+            {
+                TileBehaviour tile = tiles[tileAddress];
+
+                Renderer renderer = tile.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    GameObject.DestroyImmediate(renderer.material.mainTexture);
+                    //TextureAtlasManager.Instance.RemoveTexture(pair.Value.TextureId);
+                    renderer.material.mainTexture = null;
+
+                    renderer.enabled = false;
+                }
+
+                tiles.Remove(tileAddress);
+                tileCache.Add(tile);
+            }
+        }
+
+        private int curX;
+        private int curY;
+
+        /// <summary>
+        /// Updates the tiles in respect to the camera frustum and the map's zoom level.
+        /// </summary>
+        /// <param name="frustum">Frustum.</param>
+        private void UpdateTiles(Plane[] frustum)
+        {
+            int tileX, tileY;
+            int tileCountOnX, tileCountOnY;
+            float offsetX, offsetZ;
+
+            GetTileCountPerAxis(out tileCountOnX, out tileCountOnY);
+            GetCenterTile(tileCountOnX, tileCountOnY, out tileX, out tileY, out offsetX, out offsetZ);
+            curX = tileX;
+            curY = tileY;
+#if DEBUG_LOG
+            Debug.Log("Start Downloading Tile Rings".Red());
+#endif
+            PrepareAndRequestTiles(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+        }
+
+        // this is a new version of GrowTiles():
+        void PrepareAndRequestTiles(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
+        {
+            // request the center itself:
+            PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            for (int i = 1; i <= RingsAroundCenterToLoad; i++)
+            {
+                PrepareAndRequestTilesOnRing(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ, i);
+            }
+
+            // deactivate all but the current zoom level tile holders:
+            activateCurrentZoomLevelTilesOnly();
+        }
+
+        // this is a new version of GrowTiles():
+        void PrepareAndRequestTilesOnRing(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ, int ringNr)
+        {
+#if DEBUG_LOG
+            Debug.Log(("Preparing Tiles on Ring: " + ringNr).Red());
+#endif
+            // let n be the ringNr.
+            // move into the start position, n tiles north of our center
+            for (int i = 1; i <= ringNr; i++)
+            {
+                if (!GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
+                    return;
+            }
+
+            // prepare start tile north of center:
+            PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+
+            // move and prepare n tiles east:
+            for (int i = 1; i <= ringNr; i++)
+            {
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
+                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            }
+
+            // move and prepare 2 * n tiles south:
+            for (int i = 1; i <= ringNr * 2; i++)
+            {
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
+                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            }
+
+            // move and prepare 2 * n tiles west:
+            for (int i = 1; i <= ringNr * 2; i++)
+            {
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
+                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            }
+
+            // move and prepare 2 * n tiles north:
+            for (int i = 1; i <= ringNr * 2; i++)
+            {
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
+                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            }
+
+            // move and prepare n - 1 tiles east again, just before the starting tile:
+            for (int i = 1; i <= ringNr * 2; i++)
+            {
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
+                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            }
+        }
+
+        void PrepareAndRequestTile(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
+        {
+#if DEBUG_LOG
+            Debug.Log(("Prep Tile: " + tileX + " / " + tileY).Red());
+            Debug.Log(
+                string.Format("Prep Tile: tileX: {0}, tileY: {1}, offsetX: {2}, offsetZ: {3}",
+                tileX, tileY, offsetX, offsetZ));
+#endif
+            tileTemplate.transform.position = new Vector3(offsetX, tileTemplate.transform.position.y, offsetZ);
+
+            // correct east and west exceedance:
+            if (tileX < 0)
+                tileX += tileCountOnX;
+            else if (tileX >= tileCountOnX)
+                tileX -= tileCountOnX;
+
+            string tileAddress = TileBehaviour.GetTileKey(Map.RoundedZoom, tileX, tileY);
+            if (tiles.ContainsKey(tileAddress) == false)
+            {
+                TileBehaviour tile = null;
+                tile = createTile(tileX, tileY);
+                tile.SetPosition(tileX, tileY, Map.RoundedZoom);
+                tile.transform.position = tileTemplate.transform.position;
+                tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+                tile.transform.parent = getTileParent(Map.RoundedZoom);
+
+                tile.name = tileAddress;
+                tiles.Add(tileAddress, tile);
 
 #if DEBUG_LOG
-			Debug.Log("DEBUG: remove tile: " + pair.Key);
+                Debug.Log("Requesting ...".Green());
 #endif
+                RequestTile(tileX, tileY, Map.RoundedZoom, tile);
+            }
+#if DEBUG_LOG
+            else
+            {
+                Debug.Log("Ignored.".Yellow());
 
-				tiles.Remove (tileAddress);
-				tileCache.Add (tile);
-			}
-		}
+            }
+#endif
+        }
 
-		/// <summary>
-		/// Updates the tiles in respect to the camera frustum and the map's zoom level.
-		/// </summary>
-		/// <param name="frustum">Frustum.</param>
-		private void UpdateTiles (Plane[] frustum)
-		{
-			int tileX, tileY;
-			int tileCountOnX, tileCountOnY;
-			float offsetX, offsetZ;
-		
-			GetTileCountPerAxis (out tileCountOnX, out tileCountOnY);
-			GetCenterTile (tileCountOnX, tileCountOnY, out tileX, out tileY, out offsetX, out offsetZ);
-			GrowTiles (frustum, tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
-		}
+        private Transform getTileParent(int zoomLevel)
+        {
+            Transform parent = this.transform.Find(zoomLevel.ToString());
+            if (parent == null)
+            {
+                GameObject parentGO = new GameObject(zoomLevel.ToString());
+                parent = parentGO.transform;
+                parent.parent = this.transform;
+            }
 
-		/// <summary>
-		/// Grows the tiles recursively starting from the map's center in all four directions.
-		/// </summary>
-		/// <param name="frustum">Frustum.</param>
-		/// <param name="tileX">Tile x.</param>
-		/// <param name="tileY">Tile y.</param>
-		/// <param name="tileCountOnX">Tile count on x.</param>
-		/// <param name="tileCountOnY">Tile count on y.</param>
-		/// <param name="offsetX">Offset x.</param>
-		/// <param name="offsetZ">Offset z.</param>
-		void GrowTiles (Plane[] frustum, int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
-		{
-			tileTemplate.transform.position = new Vector3 (offsetX, tileTemplate.transform.position.y, offsetZ);
-			if (GeometryUtility.TestPlanesAABB (frustum, tileTemplate.GetComponent<Collider>().bounds) == true) {
-				if (tileX < 0)
-					tileX += tileCountOnX;
-				else if (tileX >= tileCountOnX)
-					tileX -= tileCountOnX;
+            return parent;
+        }
 
-				string tileAddress = TileBehaviour.GetTileKey (Map.RoundedZoom, tileX, tileY);
-				//Debug.Log("DEBUG: tile address: " + tileAddress);
-				if (tiles.ContainsKey (tileAddress) == false) {
-					TileBehaviour tile = null;
-					if (tileCache.Count > 0) {
-						tile = tileCache [0];
-						tileCache.Remove (tile);
-						tile.transform.position = tileTemplate.transform.position;
-						tile.transform.localScale = new Vector3 (Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
-						//tile.gameObject.active = this.gameObject.active;
-					} else {
-						tile = (GameObject.Instantiate (tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour> ();
-						tile.transform.parent = this.gameObject.transform;
-					}
-				
-					tile.name = "tile_" + tileAddress;
-					tiles.Add (tileAddress, tile);
-				
-					RequestTile (tileX, tileY, Map.RoundedZoom, tile);
-				}
-			
-				tileAddressLookedFor = tileAddress;
-				if (visitedTiles.Exists (visitedTilesMatchPredicate) == false) {
-					visitedTiles.Add (tileAddress);
+        private void activateCurrentZoomLevelTilesOnly()
+        {
+            for (int i = (int)Math.Floor(Map.MinZoom); i <= (int)Math.Ceiling(Map.MaxZoom); i++)
+            {
+                Transform tileHolderForLevel = this.transform.Find(i.ToString());
+                if (tileHolderForLevel != null)
+                {
+                    tileHolderForLevel.gameObject.SetActive(i == Map.RoundedZoom);
+                }
+            }
+        }
 
-					// grow tiles in the four directions without getting outside of the coordinate range of the zoom level
-					int nTileX, nTileY;
-					float nOffsetX, nOffsetZ;
+        public int RingsAroundCenterToLoad
+        {
+            get
+            {
+                return 4;
+                // TODO: Calculate regarding display size
+            }
+        }
 
-					if (GetNeighbourTile (tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.South, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-						GrowTiles (frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+        public int MaxTilesInMemory
+        {
+            get
+            {
+                return 100;
+                // TODO: Calculate regarding display size and memory size and memory settings of user
+            }
+        }
 
-					if (GetNeighbourTile (tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-						GrowTiles (frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+        /// <summary>
+        /// Creates or resuses a tile behavior.
+        /// </summary>
+        /// <param name="x">The x position of the new tile.</param>
+        /// <param name="y">The y position of the new tile.</param>
+        /// <returns></returns>
+        private TileBehaviour createTile(int x, int y)
+        {
+            TileBehaviour tile;
 
-					if (GetNeighbourTile (tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-						GrowTiles (frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+            if (TileBehaviours.Count < MaxTilesInMemory)
+            {
+                tile = (Instantiate(tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour>();
+            }
+            else
+            {
+                tile = TileBehaviours.Dequeue();
+                while (CurrentlyNeeded(tile))
+                {
+                    TileBehaviours.Enqueue(tile);
+                    Debug.Log("Skipping Reuse of needed tile: " + tile.name);
+                    tile = TileBehaviours.Dequeue();
+                }
 
-					if (GetNeighbourTile (tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.West, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-						GrowTiles (frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
-				}
-			}
-		}
-	
-	#endregion
-	
-	#region TileLayer interface
-	
-		/// <summary>
-		/// Gets the numbers of tiles on each axis in respect to the map's zoom level.
-		/// </summary>
-		protected abstract void GetTileCountPerAxis (out int tileCountOnX, out int tileCountOnY);
+                Debug.Log("Reusing tile: " + tile.name + " --> (" + x + ", " + y + ")");
+                tiles.Remove(tile.name);
+                tile.SetTexture(null);
+            }
+            TileBehaviours.Enqueue(tile);
 
-		/// <summary>
-		/// Gets the tile coordinates and offsets to the origin for the tile under the center of the map.
-		/// </summary>
-		protected abstract void GetCenterTile (int tileCountOnX, int tileCountOnY, out int tileX, out int tileY, out float offsetX, out float offsetZ);
+            return tile;
+        }
 
-		/// <summary>
-		/// Gets the tile coordinates and offsets to the origin for the neighbour tile in the specified direction.
-		/// </summary>
-		protected abstract bool GetNeighbourTile (int tileX, int tileY, float offsetX, float offsetY, int tileCountOnX, int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX, out float nOffsetZ);
-	
-		/// <summary>
-		/// Requests the tile's texture and assign it.
-		/// </summary>
-		/// <param name='tileX'>
-		/// Tile x.
-		/// </param>
-		/// <param name='tileY'>
-		/// Tile y.
-		/// </param>
-		/// <param name='roundedZoom'>
-		/// Rounded zoom.
-		/// </param>
-		/// <param name='tile'>
-		/// Tile.
-		/// </param>
-		protected abstract void RequestTile (int tileX, int tileY, int roundedZoom, TileBehaviour tile);
-	
-		/// <summary>
-		/// Cancels the request for the tile's texture.
-		/// </summary>
-		/// <param name='tileX'>
-		/// Tile x.
-		/// </param>
-		/// <param name='tileY'>
-		/// Tile y.
-		/// </param>
-		/// <param name='roundedZoom'>
-		/// Rounded zoom.
-		/// </param>
-		protected abstract void CancelTileRequest (int tileX, int tileY, int roundedZoom);
-	
-	#endregion
-	
-	}
+        private bool CurrentlyNeeded(TileBehaviour tile)
+        {
+            bool needed =
+                tile.zPos == Map.RoundedZoom &&
+                tile.xPos >= curX - RingsAroundCenterToLoad &&
+                tile.xPos <= curX + RingsAroundCenterToLoad &&
+                tile.yPos >= curY - RingsAroundCenterToLoad &&
+                tile.yPos <= curY + RingsAroundCenterToLoad;
+            return needed;
+        }
+
+        private Queue<TileBehaviour> _tileBehaviours;
+        private Queue<TileBehaviour> TileBehaviours
+        {
+            get
+            {
+                if (_tileBehaviours == null)
+                {
+                    _tileBehaviours = new Queue<TileBehaviour>();
+                }
+                return _tileBehaviours;
+            }
+        }
+
+        private static int GrowRecursionDepth = 0;
+
+        /// <summary>
+        /// Grows the tiles recursively starting from the map's center in all four directions.
+        /// </summary>
+        /// <param name="frustum">Frustum.</param>
+        /// <param name="tileX">Tile x.</param>
+        /// <param name="tileY">Tile y.</param>
+        /// <param name="tileCountOnX">Tile count on x.</param>
+        /// <param name="tileCountOnY">Tile count on y.</param>
+        /// <param name="offsetX">Offset x.</param>
+        /// <param name="offsetZ">Offset z.</param>
+        void GrowTiles(Plane[] frustum, int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
+        {
+            GrowRecursionDepth++;
+#if DEBUG_LOG
+            Debug.Log(string.Format(
+                "GrowTiles Depth: {0} tileX: {1}, tileY: {2}, offsetX: {3}, offsetZ {4}",
+                GrowRecursionDepth, tileX, tileY, offsetX, offsetZ).Yellow());
+#endif
+            //tileTemplate.transform.position = new Vector3(offsetX, tileTemplate.transform.position.y, offsetZ);
+
+            //if (GeometryUtility.TestPlanesAABB(frustum, tileTemplate.GetComponent<Collider>().bounds) == true)
+            if (GrowRecursionDepth < 4)
+            {
+                if (tileX < 0)
+                    tileX += tileCountOnX;
+                else if (tileX >= tileCountOnX)
+                    tileX -= tileCountOnX;
+
+                string tileAddress = TileBehaviour.GetTileKey(Map.RoundedZoom, tileX, tileY);
+                //Debug.Log("DEBUG: tile address: " + tileAddress);
+                if (tiles.ContainsKey(tileAddress) == false)
+                {
+                    TileBehaviour tile = null;
+                    if (tileCache.Count > 0)
+                    {
+                        tile = tileCache[0];
+                        tileCache.Remove(tile);
+                        tile.transform.position = tileTemplate.transform.position;
+                        tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+                        //tile.gameObject.active = this.gameObject.active;
+                    }
+                    else
+                    {
+                        tile = (GameObject.Instantiate(tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour>();
+                        tile.transform.parent = this.gameObject.transform;
+                    }
+
+                    tile.name = "tile_" + tileAddress;
+                    tiles.Add(tileAddress, tile);
+
+                    RequestTile(tileX, tileY, Map.RoundedZoom, tile);
+                }
+
+                tileAddressLookedFor = tileAddress;
+                if (visitedTiles.Exists(visitedTilesMatchPredicate) == false)
+                {
+                    visitedTiles.Add(tileAddress);
+
+                    // grow tiles in the four directions without getting outside of the coordinate range of the zoom level
+                    int nTileX, nTileY;
+                    float nOffsetX, nOffsetZ;
+
+                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.South, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
+                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+
+                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
+                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+
+                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
+                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+
+                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.West, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
+                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
+                }
+            }
+#if DEBUG_LOG
+            Debug.Log("GrowTiles. Returning from Depth: " + GrowRecursionDepth--);
+#endif
+        }
+
+        #endregion
+
+        #region TileLayer interface
+
+        /// <summary>
+        /// Gets the numbers of tiles on each axis in respect to the map's zoom level.
+        /// </summary>
+        protected abstract void GetTileCountPerAxis(out int tileCountOnX, out int tileCountOnY);
+
+        /// <summary>
+        /// Gets the tile coordinates and offsets to the origin for the tile under the center of the map.
+        /// </summary>
+        protected abstract void GetCenterTile(int tileCountOnX, int tileCountOnY, out int tileX, out int tileY, out float offsetX, out float offsetZ);
+
+        /// <summary>
+        /// Gets the tile coordinates and offsets to the origin for the neighbour tile in the specified direction.
+        /// </summary>
+        protected abstract bool GetNeighbourTile(int tileX, int tileY, float offsetX, float offsetY, int tileCountOnX, int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX, out float nOffsetZ);
+
+        /// <summary>
+        /// Requests the tile's texture and assign it.
+        /// </summary>
+        /// <param name='tileX'>
+        /// Tile x.
+        /// </param>
+        /// <param name='tileY'>
+        /// Tile y.
+        /// </param>
+        /// <param name='roundedZoom'>
+        /// Rounded zoom.
+        /// </param>
+        /// <param name='tile'>
+        /// Tile.
+        /// </param>
+        protected abstract void RequestTile(int tileX, int tileY, int roundedZoom, TileBehaviour tile);
+
+        /// <summary>
+        /// Cancels the request for the tile's texture.
+        /// </summary>
+        /// <param name='tileX'>
+        /// Tile x.
+        /// </param>
+        /// <param name='tileY'>
+        /// Tile y.
+        /// </param>
+        /// <param name='roundedZoom'>
+        /// Rounded zoom.
+        /// </param>
+        protected abstract void CancelTileRequest(int tileX, int tileY, int roundedZoom);
+
+        #endregion
+
+    }
 
 }

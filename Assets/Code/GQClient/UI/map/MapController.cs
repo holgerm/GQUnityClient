@@ -1,9 +1,9 @@
-﻿using System.Collections;
+﻿//#define DEBUG_LOG
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnitySlippyMap.Markers;
-using GQ.Client.UI;
-using UnityEngine.UI;
 using UnitySlippyMap.Map;
 using GQ.Client.Conf;
 using System;
@@ -11,12 +11,11 @@ using GQ.Client.Err;
 using GQ.Client.Util;
 using UnitySlippyMap.Layers;
 using QM.Util;
-using GQ.Client.Model;
 
 namespace GQ.Client.UI
 {
 
-	public abstract class MapController : MonoBehaviour
+    public abstract class MapController : MonoBehaviour
 	{
 
 		private List<LayerBehaviour> layers;
@@ -241,8 +240,9 @@ namespace GQ.Client.UI
 			zoomOutButton = MapButtonPanel.transform.Find ("ZoomOutButton").GetComponent<OverlayButtonLayoutConfig> ();
 
 			LocationSensor.Instance.OnLocationUpdate += map.UpdatePosition;
+#if DEBUG_LOG
             Debug.Log("#### Location Update Listener added");
-
+#endif
             //			map.UsesLocation = true;
             map.InputsEnabled = true;
 			map.ShowsGUIControls = false;
@@ -294,6 +294,6 @@ namespace GQ.Client.UI
 			map = null;
 		}
 
-		#endregion
+#endregion
 	}
 }

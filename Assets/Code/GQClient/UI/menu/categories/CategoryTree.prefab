@@ -114,12 +114,12 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
+  m_fontSize: 38.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 36
-  m_fontSizeMax: 54.000004
+  m_fontSizeMin: 38.25
+  m_fontSizeMax: 55.249996
   m_fontStyle: 0
   m_textAlignment: 513
   m_characterSpacing: 0
@@ -561,7 +561,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690735236882380}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -951,7 +951,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 239b680418a63425a903c65c6201849a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3beae77c9f3f45fd916c2d1f9a500c9, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

@@ -1,15 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using GQ.Client.Model;
-using System.Diagnostics;
 using System.Text;
+using UnityEngine;
 
 namespace GQ.Client.Err
 {
 
-	public class Log
+    public class Log
 	{
 
 		private static Stack<Problem> stack;
@@ -36,7 +34,6 @@ namespace GQ.Client.Err
 			Problem problem = new Problem (message, level, recipient);
 			stack.Push (problem);
 
-//			#if UNITY_EDITOR
 			string logtext = 
 				string.Format (
 					"{0}. {1} for {2} in quest {3} ({4})", 
@@ -60,7 +57,6 @@ namespace GQ.Client.Err
 			default:
 				break;
 			}
-//			#endif		
 		}
 
 

@@ -41,7 +41,11 @@ namespace QM.Util
 		public static LocationServiceExt location {
 			get {
 				if (_location == null) {
-					_location = new LocationServiceExt ();
+#if UNITY_EDITOR
+                    _location = new LocationServiceExt(true);
+#else
+                    _location = new LocationServiceExt ();
+#endif
 				}
 				return _location;
 			}
@@ -106,7 +110,7 @@ namespace QM.Util
 		}
 		//#endif
 
-		#endregion
+#endregion
 	}
 
 }

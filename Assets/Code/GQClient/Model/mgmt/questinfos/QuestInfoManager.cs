@@ -1,19 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//#define DEBUG_LOG
+
+using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using System;
 using GQ.Client.Util;
 using GQ.Client.Conf;
-using GQ.Client.Model;
-using Newtonsoft.Json;
 using System.IO;
 using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using System.Linq;
 using QM.Util;
 using GQ.Client.UI;
-using GQ.Client.FileIO;
 
 
 namespace GQ.Client.Model
@@ -175,7 +172,9 @@ namespace GQ.Client.Model
 
         public void RemoveInfo(int oldInfoID)
         {
+#if DEBUG_LOG
             Debug.Log("RemoveInfo(" + oldInfoID + ")");
+#endif
 
             QuestInfo oldInfo = null;
             if (!QuestDict.TryGetValue(oldInfoID, out oldInfo))
@@ -212,9 +211,11 @@ namespace GQ.Client.Model
         /// </summary>
         public void UpdateQuestInfos()
         {
+#if DEBUG_LOG
             Debug.Log("UpdateQuestInfos()");
+#endif
             ImportQuestInfos importLocal =
-                new ImportLocalQuestInfos();
+            new ImportLocalQuestInfos();
             new SimpleDialogBehaviour(
                 importLocal,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
