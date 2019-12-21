@@ -76,16 +76,6 @@ namespace UnitySlippyMap.Layers
         protected Dictionary<string, TileBehaviour> tiles = new Dictionary<string, TileBehaviour>();
 
         /// <summary>
-        /// The tile cache.
-        /// </summary>
-        protected List<TileBehaviour> tileCache = new List<TileBehaviour>();
-
-        /// <summary>
-        /// The visited tiles.
-        /// </summary>
-        protected List<string> visitedTiles = new List<string>();
-
-        /// <summary>
         /// The is ready to be queried flag.
         /// </summary>
         protected bool isReadyToBeQueried = false;
@@ -164,10 +154,7 @@ namespace UnitySlippyMap.Layers
 #if DEBUG_LOG
                 Debug.Log("Updating Content while Map " + (Map.IsDirty ? " DIRTY ".Red() : " CLEAN".Green()));
 #endif
-                Plane[] frustum = GeometryUtility.CalculateFrustumPlanes(Map.CurrentCamera);
-                visitedTiles.Clear();
-
-                UpdateTiles(frustum);
+                UpdateTiles();
             }
             else
                 needsToBeUpdatedWhenReady = true;
@@ -264,11 +251,7 @@ namespace UnitySlippyMap.Layers
         private int curX;
         private int curY;
 
-        /// <summary>
-        /// Updates the tiles in respect to the camera frustum and the map's zoom level.
-        /// </summary>
-        /// <param name="frustum">Frustum.</param>
-        private void UpdateTiles(Plane[] frustum)
+        private void UpdateTiles()
         {
             int tileX, tileY;
             int tileCountOnX, tileCountOnY;
