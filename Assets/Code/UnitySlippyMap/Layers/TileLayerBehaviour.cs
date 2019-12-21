@@ -168,7 +168,7 @@ namespace UnitySlippyMap.Layers
                 visitedTiles.Clear();
 
                 UpdateTiles(frustum);
-c            }
+            }
             else
                 needsToBeUpdatedWhenReady = true;
 
@@ -494,89 +494,6 @@ c            }
                 return _tileBehaviours;
             }
         }
-
-        private static int GrowRecursionDepth = 0;
-
-        /// <summary>
-        /// Grows the tiles recursively starting from the map's center in all four directions.
-        /// </summary>
-        /// <param name="frustum">Frustum.</param>
-        /// <param name="tileX">Tile x.</param>
-        /// <param name="tileY">Tile y.</param>
-        /// <param name="tileCountOnX">Tile count on x.</param>
-        /// <param name="tileCountOnY">Tile count on y.</param>
-        /// <param name="offsetX">Offset x.</param>
-        /// <param name="offsetZ">Offset z.</param>
-        void GrowTiles(Plane[] frustum, int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
-        {
-            GrowRecursionDepth++;
-#if DEBUG_LOG
-            Debug.Log(string.Format(
-                "GrowTiles Depth: {0} tileX: {1}, tileY: {2}, offsetX: {3}, offsetZ {4}",
-                GrowRecursionDepth, tileX, tileY, offsetX, offsetZ).Yellow());
-#endif
-            //tileTemplate.transform.position = new Vector3(offsetX, tileTemplate.transform.position.y, offsetZ);
-
-            //if (GeometryUtility.TestPlanesAABB(frustum, tileTemplate.GetComponent<Collider>().bounds) == true)
-            if (GrowRecursionDepth < 4)
-            {
-                if (tileX < 0)
-                    tileX += tileCountOnX;
-                else if (tileX >= tileCountOnX)
-                    tileX -= tileCountOnX;
-
-                string tileAddress = TileBehaviour.GetTileKey(Map.RoundedZoom, tileX, tileY);
-                //Debug.Log("DEBUG: tile address: " + tileAddress);
-                if (tiles.ContainsKey(tileAddress) == false)
-                {
-                    TileBehaviour tile = null;
-                    if (tileCache.Count > 0)
-                    {
-                        tile = tileCache[0];
-                        tileCache.Remove(tile);
-                        tile.transform.position = tileTemplate.transform.position;
-                        tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
-                        //tile.gameObject.active = this.gameObject.active;
-                    }
-                    else
-                    {
-                        tile = (GameObject.Instantiate(tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour>();
-                        tile.transform.parent = this.gameObject.transform;
-                    }
-
-                    tile.name = "tile_" + tileAddress;
-                    tiles.Add(tileAddress, tile);
-
-                    RequestTile(tileX, tileY, Map.RoundedZoom, tile);
-                }
-
-                tileAddressLookedFor = tileAddress;
-                if (visitedTiles.Exists(visitedTilesMatchPredicate) == false)
-                {
-                    visitedTiles.Add(tileAddress);
-
-                    // grow tiles in the four directions without getting outside of the coordinate range of the zoom level
-                    int nTileX, nTileY;
-                    float nOffsetX, nOffsetZ;
-
-                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.South, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
-
-                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
-
-                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
-
-                    if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.West, out nTileX, out nTileY, out nOffsetX, out nOffsetZ))
-                        GrowTiles(frustum, nTileX, nTileY, tileCountOnX, tileCountOnY, nOffsetX, nOffsetZ);
-                }
-            }
-#if DEBUG_LOG
-            Debug.Log("GrowTiles. Returning from Depth: " + GrowRecursionDepth--);
-#endif
-        }
-
         #endregion
 
         #region TileLayer interface
