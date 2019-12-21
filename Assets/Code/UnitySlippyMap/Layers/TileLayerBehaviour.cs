@@ -168,9 +168,7 @@ namespace UnitySlippyMap.Layers
                 visitedTiles.Clear();
 
                 UpdateTiles(frustum);
-
-                CleanUpTiles(frustum, Map.RoundedZoom);
-            }
+c            }
             else
                 needsToBeUpdatedWhenReady = true;
 
@@ -261,59 +259,6 @@ namespace UnitySlippyMap.Layers
                 && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY)
                 && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX, currentTileY + 1)
                 && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY + 1);
-        }
-
-        /// <summary>
-        /// Removes the tiles outside of the camera frustum and zoom level.
-        /// </summary>
-        /// <param name="frustum">Frustum.</param>
-        /// <param name="roundedZoom">Rounded zoom.</param>
-        private void CleanUpTiles(Plane[] frustum, int roundedZoom)
-        {
-            List<string> tilesToRemove = new List<string>();
-            foreach (KeyValuePair<string, TileBehaviour> pair in tiles)
-            {
-                TileBehaviour tile = pair.Value;
-                string tileKey = pair.Key;
-
-                string[] tileAddressTokens = tileKey.Split('_');
-                int tileRoundedZoom = Int32.Parse(tileAddressTokens[0]);
-                int tileX = Int32.Parse(tileAddressTokens[1]);
-                int tileY = Int32.Parse(tileAddressTokens[2]);
-
-                int roundedZoomDif = tileRoundedZoom - roundedZoom;
-                //bool inFrustum = GeometryUtility.TestPlanesAABB(frustum, tile.GetComponent<Collider>().bounds);
-
-                //if (!inFrustum || roundedZoomDif != 0)
-                //{
-                //    CancelTileRequest(tileX, tileY, tileRoundedZoom);
-
-                //    if (!inFrustum
-                //        || (roundedZoomDif > 0 && CheckTileOutExistence(roundedZoom, tileRoundedZoom, tileX, tileY))
-                //        || (roundedZoomDif < 0 && CheckTileInExistence(roundedZoom, tileRoundedZoom, tileX, tileY)))
-                //    {
-                //        tilesToRemove.Add(tileKey);
-                //    }
-                //}
-            }
-
-            foreach (string tileAddress in tilesToRemove)
-            {
-                TileBehaviour tile = tiles[tileAddress];
-
-                Renderer renderer = tile.GetComponent<Renderer>();
-                if (renderer != null)
-                {
-                    GameObject.DestroyImmediate(renderer.material.mainTexture);
-                    //TextureAtlasManager.Instance.RemoveTexture(pair.Value.TextureId);
-                    renderer.material.mainTexture = null;
-
-                    renderer.enabled = false;
-                }
-
-                tiles.Remove(tileAddress);
-                tileCache.Add(tile);
-            }
         }
 
         private int curX;
@@ -434,6 +379,7 @@ namespace UnitySlippyMap.Layers
 
                 tile.name = tileAddress;
                 tiles.Add(tileAddress, tile);
+                Debug.Log("Tiles added one. Now # " + tiles.Count);
 
 #if DEBUG_LOG
                 Debug.Log("Requesting ...".Green());
