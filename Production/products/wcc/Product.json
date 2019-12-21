@@ -5,7 +5,7 @@
   "name": "Wiki Culture City",
   "portal": 281,
   "assetAddOns": [],
-  "androidMinSDKVersion": "AndroidApiLevel16",
+  "androidMinSDKVersion": "AndroidApiLevel19",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": true,
   "keepAutoStarting": false,
