@@ -190,64 +190,9 @@ namespace UnitySlippyMap.Layers
                 return true;
             return false;
         }
-
         #endregion
 
         #region Private methods
-
-        /// <summary>
-        /// Checks if a tile is fully visible
-        /// </summary>
-        /// <returns><c>true</c>, if the tile exists, <c>false</c> otherwise.</returns>
-        /// <param name="tileRoundedZoom">Tile rounded zoom.</param>
-        /// <param name="tileX">Tile x.</param>
-        /// <param name="tileY">Tile y.</param>
-        private bool CheckTileExistence(int tileRoundedZoom, int tileX, int tileY)
-        {
-            string key = TileBehaviour.GetTileKey(tileRoundedZoom, tileX, tileY);
-            if (!tiles.ContainsKey(key))
-                return true; // the tile is out of the frustum
-            TileBehaviour tile = tiles[key];
-            Renderer r = tile.GetComponent<Renderer>();
-            return r.enabled && r.material.mainTexture != null && !tile.Showing;
-        }
-
-        /// <summary>
-        /// Checks if a tile is covered by other tiles with a smaller rounded zoom 
-        /// </summary>
-        /// <returns><c>true</c>, if tile out existence was checked, <c>false</c> otherwise.</returns>
-        /// <param name="roundedZoom">Rounded zoom.</param>
-        /// <param name="tileRoundedZoom">Tile rounded zoom.</param>
-        /// <param name="tileX">Tile x.</param>
-        /// <param name="tileY">Tile y.</param>
-        private bool CheckTileOutExistence(int roundedZoom, int tileRoundedZoom, int tileX, int tileY)
-        {
-            if (roundedZoom == tileRoundedZoom)
-                return CheckTileExistence(tileRoundedZoom, tileX, tileY);
-            return CheckTileOutExistence(roundedZoom, tileRoundedZoom - 1, tileX / 2, tileY / 2);
-        }
-
-        /// <summary>
-        /// Checks if a tile is covered by other tiles with a upper rounded zoom
-        /// </summary>
-        /// <returns><c>true</c>, if tile in existence was checked, <c>false</c> otherwise.</returns>
-        /// <param name="roundedZoom">Rounded zoom.</param>
-        /// <param name="tileRoundedZoom">Tile rounded zoom.</param>
-        /// <param name="tileX">Tile x.</param>
-        /// <param name="tileY">Tile y.</param>
-        private bool CheckTileInExistence(int roundedZoom, int tileRoundedZoom, int tileX, int tileY)
-        {
-            if (roundedZoom == tileRoundedZoom)
-                return CheckTileExistence(tileRoundedZoom, tileX, tileY);
-            int currentRoundedZoom = tileRoundedZoom + 1;
-            int currentTileX = tileX * 2;
-            int currentTileY = tileY * 2;
-            return CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX, currentTileY)
-                && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY)
-                && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX, currentTileY + 1)
-                && CheckTileInExistence(roundedZoom, currentRoundedZoom, currentTileX + 1, currentTileY + 1);
-        }
-
         private int curX;
         private int curY;
 
