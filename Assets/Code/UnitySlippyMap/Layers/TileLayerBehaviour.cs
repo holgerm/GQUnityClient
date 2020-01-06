@@ -301,10 +301,7 @@ namespace UnitySlippyMap.Layers
             {
                 TileBehaviour tile = null;
                 tile = createTile(tileX, tileY);
-                //if (tile.zPos != Map.RoundedZoom)
-                //{
-                    tile.Showing = false;
-                //}
+                tile.Showing = false;
                 tile.SetPosition(tileX, tileY, Map.RoundedZoom);
                 tile.transform.position = tileTemplate.transform.position;
                 tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
@@ -381,7 +378,9 @@ namespace UnitySlippyMap.Layers
 
             if (TileBehaviours.Count < MaxTilesInMemory)
             {
-                tile = (Instantiate(tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour>();
+                tile =
+                    (Instantiate(tileTemplate.gameObject) as GameObject).
+                    GetComponent<TileBehaviour>();
             }
             else
             {

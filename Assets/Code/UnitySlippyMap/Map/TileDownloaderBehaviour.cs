@@ -258,26 +258,24 @@ namespace UnitySlippyMap.Map
                 return input.Replace('/', '_').Replace('.', '-').Replace(':', '=');
             }
 
-            /// <summary>
-            /// The download the coroutine.
-            /// </summary>
-            /// <returns>The coroutine.</returns>
             private IEnumerator DownloadCoroutine()
             {
                 tile.Showing = false;
                 WWW www = null;
                 string ext = ".png";
                 bool shouldBeCached = false;
-                string tileCachePath = Path.Combine(Application.persistentDataPath, "tilecache", tile.GetTileSubPath()) + ext;
+                string tileCachePath =
+                    Path.Combine(
+                        Application.persistentDataPath,
+                        "tilecache", tile.GetTileSubPath())
+                     + ext;
                 if (File.Exists(tileCachePath))
                 {
                     www = new WWW("file://" + tileCachePath);
-                    Debug.Log("File Cache found: " + tileCachePath);
                     shouldBeCached = false;
                 }
                 else
                 {
-                    Debug.Log("File cache NOT FOUND: " + url);
                     shouldBeCached = true;
                     www = new WWW(url);
                 }
@@ -293,7 +291,7 @@ namespace UnitySlippyMap.Map
                 {
                     Renderer renderer = tile.gameObject.GetComponent<Renderer>();
                     Destroy(renderer.material.mainTexture);
-                    renderer.material.mainTexture = www.texture; 
+                    renderer.material.mainTexture = www.texture;
                     tile.Showing = true;
                     // Note texture origin in tile:
                     tile.Url = www.url;
@@ -303,8 +301,7 @@ namespace UnitySlippyMap.Map
                         byte[] bytes = www.bytes;
 
                         this.size = bytes.Length;
-                        //						this.guid = Guid.NewGuid ().ToString ();
-                        this.guid = url2filename(url); // TODO
+                        this.guid = url2filename(url);
 
                         string tileDir = Path.GetDirectoryName(tileCachePath);
                         if (!Directory.Exists(tileDir))
@@ -450,7 +447,9 @@ namespace UnitySlippyMap.Map
 #if DEBUG_LOG
                 Debug.Log(("ADDING TILE to load NOT CACHED for url: " + url).Green());
 #endif
-                tilesToLoad.Add(new TileEntry(url, tile));
+                tilesToLoad.Add(
+                    new TileEntry(url, tile)
+                );
             }
             else
             {
@@ -580,8 +579,9 @@ namespace UnitySlippyMap.Map
         /// </summary>
         private void Update()
         {
-            while (tilesToLoad.Count > 0
-                   && tilesLoading.Count < MaxSimultaneousDownloads)
+            while (tilesToLoad.Count > 0 &&
+                tilesLoading.Count <
+                    MaxSimultaneousDownloads)
             {
                 DownloadNextTile();
             }
