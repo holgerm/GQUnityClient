@@ -134,7 +134,7 @@ namespace UnitySlippyMap.Layers
 
             // destroy the tile template if nobody is using anymore
             if (tileTemplate != null && tileTemplateUseCount == 0)
-                DestroyImmediate(tileTemplate);
+                Destroy(tileTemplate);
         }
 
         #endregion
@@ -167,6 +167,7 @@ namespace UnitySlippyMap.Layers
                 {
                     tile.Value.transform.position += displacement;
                 }
+                //TODO why can not we use this: Map.CurrentCamera.transform.position -= displacement;
             }
         }
 
@@ -300,6 +301,10 @@ namespace UnitySlippyMap.Layers
             {
                 TileBehaviour tile = null;
                 tile = createTile(tileX, tileY);
+                //if (tile.zPos != Map.RoundedZoom)
+                //{
+                    tile.Showing = false;
+                //}
                 tile.SetPosition(tileX, tileY, Map.RoundedZoom);
                 tile.transform.position = tileTemplate.transform.position;
                 tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
@@ -307,7 +312,6 @@ namespace UnitySlippyMap.Layers
 
                 tile.name = tileAddress;
                 tiles.Add(tileAddress, tile);
-                Debug.Log("Tiles added one. Now # " + tiles.Count);
 
 #if DEBUG_LOG
                 Debug.Log("Requesting ...".Green());
@@ -318,7 +322,6 @@ namespace UnitySlippyMap.Layers
             else
             {
                 Debug.Log("Ignored.".Yellow());
-
             }
 #endif
         }
@@ -386,13 +389,11 @@ namespace UnitySlippyMap.Layers
                 while (CurrentlyNeeded(tile))
                 {
                     TileBehaviours.Enqueue(tile);
-                    Debug.Log("Skipping Reuse of needed tile: " + tile.name);
                     tile = TileBehaviours.Dequeue();
                 }
 
-                Debug.Log("Reusing tile: " + tile.name + " --> (" + x + ", " + y + ")");
+                tile.Showing = false;
                 tiles.Remove(tile.name);
-                tile.SetTexture(null);
             }
             TileBehaviours.Enqueue(tile);
 

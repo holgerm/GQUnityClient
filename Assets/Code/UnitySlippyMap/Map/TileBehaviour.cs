@@ -28,6 +28,7 @@
 
 using System;
 using UnityEngine;
+using UnitySlippyMap.Layers;
 
 namespace UnitySlippyMap.Map
 {
@@ -38,10 +39,10 @@ namespace UnitySlippyMap.Map
     {
         #region Private members & properties
 
-        /// <summary>
-        /// The showing flag.
-        /// </summary>
-        private bool showing = false;
+        ///// <summary>
+        ///// The showing flag.
+        ///// </summary>
+        //private bool showing = false;
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="UnitySlippyMap.Map.Tile"/> is showing.
@@ -49,7 +50,11 @@ namespace UnitySlippyMap.Map
         /// <value><c>true</c> if showing; otherwise, <c>false</c>.</value>
         public bool Showing
         {
-            get { return showing; }
+            get { return GetComponent<Renderer>().enabled; }
+            set
+            {
+                GetComponent<Renderer>().enabled = value;
+            }
         }
 
         /// <summary>
@@ -71,39 +76,18 @@ namespace UnitySlippyMap.Map
         public int yPos;
         public int zPos;
 
-
-        #endregion
-
-        #region MonoBehaviour implementation
-
         /// <summary>
-        /// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.Update().
+        /// Debug purpose: shows origin of texture in inspector.
         /// </summary>
-        private void Update()
-        {
-            if (showing)
-            {
-                float delta = Time.time - apparitionStartTime;
-                float a = 1.0f;
-                if (delta <= apparitionDuration)
-                {
-                    a = delta / apparitionDuration;
-                }
-                else
-                {
-                    showing = false;
-                    //               MapBehaviour.Instance.IsDirty = true;
-                }
-                Color color = material.color;
-                color.a = a;
-                material.color = color;
-            }
-        }
+        public string Url;
 
+        public string GetTileSubPath()
+        {
+            return string.Format("{0}/{1}/{2}", zPos, xPos, yPos);
+        }
         #endregion
 
         #region Public enums
-
         /// <summary>
         /// The anchor points enumeration.
         /// </summary>
@@ -119,26 +103,12 @@ namespace UnitySlippyMap.Map
             BottomCenter,
             BottomRight
         }
-
         #endregion
 
         #region Public methods
-
         public override string ToString()
         {
             return (string.Format("TileBehaviour: {0}, {1}, {2}", zPos, xPos, yPos));
-        }
-
-        /// <summary>
-        /// Show this instance.
-        /// </summary>
-        public void Show()
-        {
-            showing = true;
-            Color color = material.color;
-            color.a = 0.0f;
-            material.color = color;
-            apparitionStartTime = Time.time;
         }
 
         /// <summary>
@@ -181,6 +151,7 @@ namespace UnitySlippyMap.Map
             TileBehaviour tile = tileTemplate.AddComponent<TileBehaviour>();
             MeshFilter meshFilter = tileTemplate.AddComponent<MeshFilter>();
             MeshRenderer meshRenderer = tileTemplate.AddComponent<MeshRenderer>();
+            meshRenderer.enabled = true;
             BoxCollider boxCollider = tileTemplate.AddComponent<BoxCollider>();
 
             // add the geometry
@@ -291,7 +262,6 @@ namespace UnitySlippyMap.Map
             // setup the collider
             boxCollider.size = new Vector3(1.0f, 0.0f, 1.0f);
 
-
 #if DEBUG_LOG
             Bounds b = boxCollider.bounds;
             Debug.Log("CreateTileTemplate bounds: " + b);
@@ -300,28 +270,17 @@ namespace UnitySlippyMap.Map
             return tile;
         }
 
-        /// <summary>
-        /// Sets the texture. Use null as argument to clear the texture.
-        /// </summary>
-        /// <param name="texture">Texture.</param>
-        public void SetTexture(Texture2D texture)
+        public Texture GetTexture()
         {
-#if DEBUG_LOG
-            Debug.Log(("Setting texture for tile " + gameObject.name).Green());
-#endif
-            if (this == null || this.gameObject == null || this.gameObject.GetComponent<Renderer>() == null)
-                return;
-
-            material = this.gameObject.GetComponent<Renderer>().material;
-            material.mainTexture = texture;
-
-            if (texture == null)
-                return;
-
-            material.mainTexture.wrapMode = TextureWrapMode.Clamp;
-            material.mainTexture.filterMode = FilterMode.Trilinear;
-            this.GetComponent<Renderer>().enabled = true;
-            this.Show();
+            Material material = this.gameObject.GetComponent<Renderer>().material;
+            if (material != null)
+            {
+                return material.mainTexture;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -342,8 +301,6 @@ namespace UnitySlippyMap.Map
             this.yPos = y;
             this.zPos = z;
         }
-
         #endregion
     }
-
 }

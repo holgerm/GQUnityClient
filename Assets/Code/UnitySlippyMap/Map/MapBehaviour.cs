@@ -281,7 +281,11 @@ namespace UnitySlippyMap.Map
                 centerEPSG900913 = ComputeCenterEPSG900913(value);
                 centerWGS84 = epsg900913ToWGS84Transform.Transform(centerEPSG900913);
 
-                FitVerticalBorder();
+                if (!CurentlyFittingVerticalBorder)
+                {
+                    FitVerticalBorder();
+                }
+
                 IsDirty = true;
             }
         }
@@ -894,11 +898,15 @@ namespace UnitySlippyMap.Map
 
         #region Private methods
 
+        private static bool CurentlyFittingVerticalBorder = false;
+
         /// <summary>
         /// Fits the vertical border.
         /// </summary>
         private void FitVerticalBorder()
         {
+            CurentlyFittingVerticalBorder = true;
+
             //TODO: take into account the camera orientation
 
             if (currentCamera != null)
@@ -908,6 +916,7 @@ namespace UnitySlippyMap.Map
                     centerEPSG900913 [1]
                 };
                 double offset = Mathf.Floor(currentCamera.pixelHeight * 0.5f) * metersPerPixel;
+
                 if (camCenter[1] + offset > GeoHelpers.HalfEarthCircumference)
                 {
                     camCenter[1] -= camCenter[1] + offset - GeoHelpers.HalfEarthCircumference;
@@ -919,6 +928,8 @@ namespace UnitySlippyMap.Map
                     CenterEPSG900913 = camCenter;
                 }
             }
+
+            CurentlyFittingVerticalBorder = false;
         }
 
         /// <summary>
