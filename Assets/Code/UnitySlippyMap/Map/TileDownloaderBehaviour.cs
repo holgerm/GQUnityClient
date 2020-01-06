@@ -290,6 +290,7 @@ namespace UnitySlippyMap.Map
                 if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
                 {
                     Renderer renderer = tile.gameObject.GetComponent<Renderer>();
+
                     Destroy(renderer.material.mainTexture);
                     renderer.material.mainTexture = www.texture;
                     tile.Showing = true;
