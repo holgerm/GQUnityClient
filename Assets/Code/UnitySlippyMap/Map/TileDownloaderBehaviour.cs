@@ -280,13 +280,16 @@ namespace UnitySlippyMap.Map
                     www = new WWW(url);
                 }
 
-                yield return www;
+                Debug.Log("L# 1: x: " + tile.xPos + "    y: " + tile.yPos + "  www: " + www.url + " progress: " + www.progress);
+                yield return null; // www;
 
                 while (!www.isDone)
                 {
+                    Debug.Log("L# 2: x: " + tile.xPos + "    y: " + tile.yPos + "  www: " + www.url + " progress: " + www.progress);
                     yield return null;
                 }
 
+                Debug.Log("L# 3: x: " + tile.xPos + "    y: " + tile.yPos + "  www: " + www.url + " progress: " + www.progress);
                 if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
                 {
                     Renderer renderer = tile.gameObject.GetComponent<Renderer>();
@@ -294,8 +297,6 @@ namespace UnitySlippyMap.Map
                     Destroy(renderer.material.mainTexture);
                     renderer.material.mainTexture = www.texture;
                     tile.Showing = true;
-                    // Note texture origin in tile:
-                    tile.Url = www.url;
 
                     if (shouldBeCached)
                     {
@@ -308,6 +309,12 @@ namespace UnitySlippyMap.Map
                         if (!Directory.Exists(tileDir))
                         {
                             Directory.CreateDirectory(tileDir);
+                        }
+
+                        if (!www.url.Contains(tile.xPos.ToString() + @"/" + tile.yPos.ToString()))
+                        {
+                            Debug.Log("TT 1. loaded from url: " + www.url);
+                            Debug.Log("TT 2. cached to file: " + tileCachePath + "   but x: " + tile.xPos + "  y: " + tile.yPos);
                         }
 
                         FileStream fs = new FileStream(tileCachePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
@@ -334,7 +341,6 @@ namespace UnitySlippyMap.Map
 
                 info.FS.EndWrite(result);
                 info.FS.Flush();
-                Debug.Log("File written: " + info.FS.Name);
                 info.FS.Dispose();
             }
         }

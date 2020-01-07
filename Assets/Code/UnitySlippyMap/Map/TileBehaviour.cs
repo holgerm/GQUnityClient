@@ -27,6 +27,11 @@
 // SOFTWARE.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using GQ.Client.Conf;
+using GQ.Client.Err;
 using UnityEngine;
 using UnitySlippyMap.Layers;
 
@@ -57,6 +62,9 @@ namespace UnitySlippyMap.Map
             }
         }
 
+        internal bool TextureIsDownloading;
+        internal bool DownloadingTextureIsCancelled;
+
         /// <summary>
         /// The material.
         /// </summary>
@@ -75,11 +83,6 @@ namespace UnitySlippyMap.Map
         public int xPos;
         public int yPos;
         public int zPos;
-
-        /// <summary>
-        /// Debug purpose: shows origin of texture in inspector.
-        /// </summary>
-        public string Url;
 
         public string GetTileSubPath()
         {
@@ -301,6 +304,102 @@ namespace UnitySlippyMap.Map
             this.yPos = y;
             this.zPos = z;
         }
+
+        private string URL
+        {
+            get
+            {
+                return
+                    @"https://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/" +
+                    GetTileSubPath() +
+                    "@2x.png?access_token=" + ConfigurationManager.Current.mapKey;
+            }
+        }
+
+        internal void LoadTexture()
+        {
+            StartCoroutine(LoadTextureCoroutine());
+        }
+
+        private IEnumerator LoadTextureCoroutine()
+        {
+            WWW www;
+            TextureIsDownloading = true;
+            string ext = ".png";
+            bool shouldBeCached = false;
+            string tileCachePath =
+                Path.Combine(
+                    Application.persistentDataPath,
+                    "tilecache", GetTileSubPath())
+                 + ext;
+            if (File.Exists(tileCachePath))
+            {
+                www = new WWW("file://" + tileCachePath);
+                shouldBeCached = false;
+            }
+            else
+            {
+                shouldBeCached = true;
+                www = new WWW(URL);
+            }
+
+            //Debug.Log("L# 1: x: " + xPos + "    y: " + yPos + "  www: " + www.url + " progress: " + www.progress);
+            yield return null; // www;
+
+            while (!www.isDone)
+            {
+                // We cancel download if zoom has changed:
+                DownloadingTextureIsCancelled =
+                    MapBehaviour.RoundedZoom != zPos;
+
+                if (DownloadingTextureIsCancelled)
+                {
+                    DownloadingTextureIsCancelled = false;
+                    TextureIsDownloading = false;
+                    www.Dispose();
+
+                    yield break;
+                    // TERMINATE LOADING
+                }
+                //Debug.Log("L# 2: x: " + xPos + "    y: " + yPos + "  www: " + www.url + " progress: " + www.progress);
+                yield return null;
+            }
+
+            //Debug.Log("L# 3: x: " + xPos + "    y: " + yPos + "  www: " + www.url + " progress: " + www.progress);
+            if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
+            {
+                Renderer myRenderer = gameObject.GetComponent<Renderer>();
+
+                myRenderer.material.mainTexture = www.texture;
+                Showing = true;
+
+                if (shouldBeCached)
+                {
+                    string tileDir = Path.GetDirectoryName(tileCachePath);
+                    if (!Directory.Exists(tileDir))
+                    {
+                        Directory.CreateDirectory(tileDir);
+                    }
+
+                    File.WriteAllBytes(tileCachePath, www.bytes);
+                }
+            }
+
+            www.Dispose();
+            TextureIsDownloading = false;
+        }
+
+        private void EndWriteCallback(IAsyncResult ar)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        public string oldName;
+        public int reuses;
+
+
         #endregion
     }
 }

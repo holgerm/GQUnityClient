@@ -46,7 +46,7 @@ namespace UnitySlippyMap.Layers
         /// <summary>
         /// The tile cache size limit.
         /// </summary>
-        protected int tileCacheSizeLimit = 100;
+        protected int tileCacheSizeLimit = 200;
 
         /// <summary>
         /// Gets or sets the tile cache size limit.
@@ -224,7 +224,7 @@ namespace UnitySlippyMap.Layers
             }
 
             // deactivate all but the current zoom level tile holders:
-            activateCurrentZoomLevelTilesOnly();
+            //activateCurrentZoomLevelTilesOnly();
         }
 
         // this is a new version of GrowTiles():
@@ -296,16 +296,15 @@ namespace UnitySlippyMap.Layers
             else if (tileX >= tileCountOnX)
                 tileX -= tileCountOnX;
 
-            string tileAddress = TileBehaviour.GetTileKey(Map.RoundedZoom, tileX, tileY);
+            string tileAddress = TileBehaviour.GetTileKey(MapBehaviour.RoundedZoom, tileX, tileY);
             if (tiles.ContainsKey(tileAddress) == false)
             {
-                TileBehaviour tile = null;
-                tile = createTile(tileX, tileY);
+                TileBehaviour tile = createTile(tileX, tileY);
                 tile.Showing = false;
-                tile.SetPosition(tileX, tileY, Map.RoundedZoom);
+                tile.SetPosition(tileX, tileY, MapBehaviour.RoundedZoom);
                 tile.transform.position = tileTemplate.transform.position;
                 tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
-                tile.transform.parent = getTileParent(Map.RoundedZoom);
+                tile.transform.parent = getTileParent(MapBehaviour.RoundedZoom);
 
                 tile.name = tileAddress;
                 tiles.Add(tileAddress, tile);
@@ -313,7 +312,8 @@ namespace UnitySlippyMap.Layers
 #if DEBUG_LOG
                 Debug.Log("Requesting ...".Green());
 #endif
-                RequestTile(tileX, tileY, Map.RoundedZoom, tile);
+                //RequestTile(tileX, tileY, Map.RoundedZoom, tile);
+                tile.LoadTexture();
             }
 #if DEBUG_LOG
             else
@@ -343,7 +343,7 @@ namespace UnitySlippyMap.Layers
                 Transform tileHolderForLevel = this.transform.Find(i.ToString());
                 if (tileHolderForLevel != null)
                 {
-                    tileHolderForLevel.gameObject.SetActive(i == Map.RoundedZoom);
+                    tileHolderForLevel.gameObject.SetActive(i == MapBehaviour.RoundedZoom);
                 }
             }
         }
@@ -393,6 +393,15 @@ namespace UnitySlippyMap.Layers
 
                 tile.Showing = false;
                 tiles.Remove(tile.name);
+
+                tile.reuses++;
+                tile.oldName = tile.name;
+
+                Destroy(tile.GetComponent<Renderer>().material.mainTexture);
+                if (tile.TextureIsDownloading)
+                {
+                    tile.DownloadingTextureIsCancelled = true;
+                }
             }
             TileBehaviours.Enqueue(tile);
 
@@ -402,7 +411,7 @@ namespace UnitySlippyMap.Layers
         private bool CurrentlyNeeded(TileBehaviour tile)
         {
             bool needed =
-                tile.zPos == Map.RoundedZoom &&
+                tile.zPos == MapBehaviour.RoundedZoom &&
                 tile.xPos >= curX - RingsAroundCenterToLoad &&
                 tile.xPos <= curX + RingsAroundCenterToLoad &&
                 tile.yPos >= curY - RingsAroundCenterToLoad &&
@@ -456,7 +465,7 @@ namespace UnitySlippyMap.Layers
         /// <param name='tile'>
         /// Tile.
         /// </param>
-        protected abstract void RequestTile(int tileX, int tileY, int roundedZoom, TileBehaviour tile);
+        //protected abstract void RequestTile(int tileX, int tileY, int roundedZoom, TileBehaviour tile);
 
         /// <summary>
         /// Cancels the request for the tile's texture.

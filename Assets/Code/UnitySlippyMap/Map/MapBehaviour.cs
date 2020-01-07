@@ -446,13 +446,13 @@ namespace UnitySlippyMap.Map
         /// The rounded zoom.
         /// </summary>
         /// <value>It is updated when <see cref="UnitySlippyMap.Map.CurrentZoom"/> is set.</value>
-        private int roundedZoom;
+        private static int roundedZoom;
 
         /// <summary>
         /// Gets the rounded zoom.
         /// </summary>
         /// <value>The rounded zoom is updated when <see cref="UnitySlippyMap.Map.CurrentZoom"/> is set.</value>
-        public int RoundedZoom { get { return roundedZoom; } }
+        public static int RoundedZoom { get { return roundedZoom; } }
 
         /// <summary>
         /// The half map scale.

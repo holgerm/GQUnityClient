@@ -67,10 +67,10 @@ namespace UnitySlippyMap.Layers
 		/// <param name="tileY">Tile y.</param>
 		/// <param name="roundedZoom">Rounded zoom.</param>
 		/// <param name="tile">Tile.</param>
-		protected override void RequestTile (int tileX, int tileY, int roundedZoom, TileBehaviour tile)
-		{
-			TileDownloaderBehaviour.Instance.Get (GetTileURL (tileX, tileY, roundedZoom), tile);
-		}
+		//protected override void RequestTile (int tileX, int tileY, int roundedZoom, TileBehaviour tile)
+		//{
+		//	TileDownloaderBehaviour.Instance.Get (GetTileURL (tileX, tileY, roundedZoom), tile);
+		//}
 
 		/// <summary>
 		/// Cancels the request for the tile's texture. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.CancelTileRequest"/>.

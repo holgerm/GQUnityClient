@@ -34,6 +34,7 @@ using ProjNet.CoordinateSystems;
 using UnityEngine;
 
 using UnitySlippyMap.Helpers;
+using UnitySlippyMap.Map;
 
 namespace UnitySlippyMap.Layers
 {
@@ -286,7 +287,7 @@ namespace UnitySlippyMap.Layers
 		/// <param name="tileCountOnY">Tile count on y.</param>
 		protected override void GetTileCountPerAxis (out int tileCountOnX, out int tileCountOnY)
 		{
-			tileCountOnX = tileCountOnY = (int)Mathf.Pow (2, Map.RoundedZoom);
+			tileCountOnX = tileCountOnY = (int)Mathf.Pow (2, MapBehaviour.RoundedZoom);
 		}
 	
 		/// <summary>
@@ -300,8 +301,8 @@ namespace UnitySlippyMap.Layers
 		/// <param name="offsetZ">Offset z.</param>
 		protected override void GetCenterTile (int tileCountOnX, int tileCountOnY, out int tileX, out int tileY, out float offsetX, out float offsetZ)
 		{
-			int[] tileCoordinates = GeoHelpers.WGS84ToTile (Map.CenterWGS84 [0], Map.CenterWGS84 [1], Map.RoundedZoom);
-			double[] centerTile = GeoHelpers.TileToWGS84 (tileCoordinates [0], tileCoordinates [1], Map.RoundedZoom);
+			int[] tileCoordinates = GeoHelpers.WGS84ToTile (Map.CenterWGS84 [0], Map.CenterWGS84 [1], MapBehaviour.RoundedZoom);
+			double[] centerTile = GeoHelpers.TileToWGS84 (tileCoordinates [0], tileCoordinates [1], MapBehaviour.RoundedZoom);
 			double[] centerTileMeters = Map.WGS84ToEPSG900913Transform.Transform (centerTile); //GeoHelpers.WGS84ToMeters(centerTile[0], centerTile[1]);
 
 			tileX = tileCoordinates [0];
