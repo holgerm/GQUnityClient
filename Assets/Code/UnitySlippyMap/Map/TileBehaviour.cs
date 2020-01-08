@@ -343,7 +343,6 @@ namespace UnitySlippyMap.Map
                 www = new WWW(URL);
             }
 
-            //Debug.Log("L# 1: x: " + xPos + "    y: " + yPos + "  www: " + www.url + " progress: " + www.progress);
             yield return null; // www;
 
             while (!www.isDone)
@@ -361,11 +360,22 @@ namespace UnitySlippyMap.Map
                     yield break;
                     // TERMINATE LOADING
                 }
-                //Debug.Log("L# 2: x: " + xPos + "    y: " + yPos + "  www: " + www.url + " progress: " + www.progress);
                 yield return null;
             }
 
-            //Debug.Log("L# 3: x: " + xPos + "    y: " + yPos + "  www: " + www.url + " progress: " + www.progress);
+            DownloadingTextureIsCancelled =
+                MapBehaviour.RoundedZoom != zPos;
+
+            if (DownloadingTextureIsCancelled)
+            {
+                DownloadingTextureIsCancelled = false;
+                TextureIsDownloading = false;
+                www.Dispose();
+
+                yield break;
+                // TERMINATE LOADING
+            }
+
             if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
             {
                 Renderer myRenderer = gameObject.GetComponent<Renderer>();
