@@ -11,7 +11,7 @@ namespace QM.Util
 	{
 		private LocationService realLocation;
 
-		private bool useMockLocation = false;
+        public bool useMockLocation = false;
 
 		public static LocationInfoExt NULL_LOCATION = new LocationInfoExt ();
 		private LocationInfoExt _mockedLocation = NULL_LOCATION;
@@ -142,7 +142,9 @@ namespace QM.Util
 
 		public LocationServiceStatus status
 		{
-			get { return useMockLocation ? mockedStatus : realLocation.status; }
+			get {
+                return useMockLocation ? mockedStatus : realLocation.status;
+            }
 			set { mockedStatus = value; }
 		}
 

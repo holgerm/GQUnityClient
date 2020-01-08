@@ -573,6 +573,10 @@ namespace GQ.Editor.Building
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, appIdentifier);
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.WebGL, appIdentifier);
 
+            PlayerSettings.iOS.cameraUsageDescription = "We use camera to enable interactive experiences.";
+            PlayerSettings.iOS.locationUsageDescription = "We use gps to show your location on the map.";
+            PlayerSettings.iOS.microphoneUsageDescription = "We use microphone to enable interactive experiences.";
+
             ProductEditor.BuildIsDirty = false;
             CurrentProduct = newProduct; // remember the new product for the editor time access point.
             ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.

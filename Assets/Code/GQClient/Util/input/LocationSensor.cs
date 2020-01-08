@@ -80,7 +80,7 @@ namespace GQ.Client.Util
         {
             get;
             set;
-        }
+        } = 2;
 
         /// <summary>
         /// Used to count down when waiting for Intialization to finish.
@@ -194,6 +194,10 @@ namespace GQ.Client.Util
 
         private void StartPolling()
         {
+#if DEBUG_LOG
+            Debug.Log("LocationSensor starts polling data");
+#endif
+
             if (!currentlyPolling)
                 Base.Instance.StartCoroutine(PollData());
         }
@@ -203,7 +207,7 @@ namespace GQ.Client.Util
             try
             {
 #if DEBUG_LOG
-                Debug.Log("LocationSensor is polling data");
+                Debug.Log("LocationSensor is polling data... mocked?: " + Device.location.useMockLocation);
 #endif
                 currentlyPolling = true;
                 bool failed = false;
@@ -255,10 +259,10 @@ namespace GQ.Client.Util
                             }
                             break;
                         case LocationServiceStatus.Initializing:
-#if DEBUG_LOG
-                            Debug.Log("LocationSensor is initializing.");
-#endif
                             StartWaitingForInitialization();
+#if DEBUG_LOG
+                            Debug.Log("LocationSensor is initializing. To wait: " + stillWait);
+#endif
                             do
                             {
                                 yield return new WaitForSeconds(1f);
