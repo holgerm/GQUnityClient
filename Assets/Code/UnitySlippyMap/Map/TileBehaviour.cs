@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 using GQ.Client.Conf;
 using GQ.Client.Err;
+using GQ.Client.Util;
 using UnityEngine;
 using UnitySlippyMap.Layers;
 
@@ -305,7 +306,7 @@ namespace UnitySlippyMap.Map
             this.zPos = z;
         }
 
-        private string URL
+        public string URL
         {
             get
             {
@@ -316,9 +317,15 @@ namespace UnitySlippyMap.Map
             }
         }
 
+
+
+        public string oldName;
+        public int reuses;
+
+
         internal void LoadTexture()
         {
-            StartCoroutine(LoadTextureCoroutine());
+            Base.Instance.StartCoroutine(LoadTextureCoroutine());
         }
 
         private IEnumerator LoadTextureCoroutine()
@@ -378,7 +385,7 @@ namespace UnitySlippyMap.Map
 
             if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
             {
-                Renderer myRenderer = gameObject.GetComponent<Renderer>();
+                Renderer myRenderer = GetComponent<Renderer>();
 
                 myRenderer.material.mainTexture = www.texture;
                 Showing = true;
@@ -403,11 +410,6 @@ namespace UnitySlippyMap.Map
         {
             throw new NotImplementedException();
         }
-
-
-
-        public string oldName;
-        public int reuses;
 
 
         #endregion

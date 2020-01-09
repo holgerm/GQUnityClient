@@ -26,8 +26,11 @@
 // SOFTWARE.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using GQ.Client.Err;
+using GQ.Client.Util;
 using UnityEngine;
 
 using UnitySlippyMap.Map;
@@ -42,24 +45,6 @@ namespace UnitySlippyMap.Layers
     public abstract class TileLayerBehaviour : LayerBehaviour
     {
         #region Protected members & properties
-
-        /// <summary>
-        /// The tile cache size limit.
-        /// </summary>
-        protected int tileCacheSizeLimit = 200;
-
-        /// <summary>
-        /// Gets or sets the tile cache size limit.
-        /// </summary>
-        /// <value>The tile cache size limit.</value>
-        public int TileCacheSizeLimit
-        {
-            get { return tileCacheSizeLimit; }
-            set { tileCacheSizeLimit = value; }
-        }
-
-        //public int									TileSize = 256;
-
         /// <summary>
         /// The shared tile template
         /// </summary>
@@ -138,6 +123,7 @@ namespace UnitySlippyMap.Layers
         }
 
         #endregion
+
 
         #region Layer implementation
 
@@ -224,7 +210,7 @@ namespace UnitySlippyMap.Layers
             }
 
             // deactivate all but the current zoom level tile holders:
-            //activateCurrentZoomLevelTilesOnly();
+            activateCurrentZoomLevelTilesOnly();
         }
 
         // this is a new version of GrowTiles():
@@ -312,7 +298,6 @@ namespace UnitySlippyMap.Layers
 #if DEBUG_LOG
                 Debug.Log("Requesting ...".Green());
 #endif
-                //RequestTile(tileX, tileY, Map.RoundedZoom, tile);
                 tile.LoadTexture();
             }
 #if DEBUG_LOG
@@ -352,7 +337,7 @@ namespace UnitySlippyMap.Layers
         {
             get
             {
-                return 4;
+                return 6;
                 // TODO: Calculate regarding display size
             }
         }
@@ -361,7 +346,7 @@ namespace UnitySlippyMap.Layers
         {
             get
             {
-                return 100;
+                return 500;
                 // TODO: Calculate regarding display size and memory size and memory settings of user
             }
         }
