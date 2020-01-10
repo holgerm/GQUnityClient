@@ -42,6 +42,7 @@ namespace GQ.Client.UI
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.5f * config.mainFontSize;
                     TextElement.fontSizeMax = 0.7f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     break;
@@ -72,6 +73,7 @@ namespace GQ.Client.UI
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.35f * config.mainFontSize;
                     TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     TextElement.overflowMode = TextOverflowModes.Overflow;
@@ -83,6 +85,7 @@ namespace GQ.Client.UI
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.45f * config.mainFontSize;
                     TextElement.fontSizeMax = 0.65f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = false;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
                     TextElement.raycastTarget = false;
@@ -91,7 +94,8 @@ namespace GQ.Client.UI
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.45f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.6f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.raycastTarget = false;
                     TextElement.raycastTarget = false;
@@ -101,6 +105,7 @@ namespace GQ.Client.UI
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = false;
                     TextElement.fontSize = 0.7f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
                     TextElement.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
@@ -111,6 +116,7 @@ namespace GQ.Client.UI
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.5f * config.mainFontSize;
                     TextElement.fontSizeMax = 0.7f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     break;
                 case TextUsageType.DialogMessage:
@@ -118,6 +124,7 @@ namespace GQ.Client.UI
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.4f * config.mainFontSize;
                     TextElement.fontSizeMax = 0.55f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     break;

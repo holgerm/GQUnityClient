@@ -1,4 +1,5 @@
 {
+  "preserveAspectOfSplashFG": true,
   "id": "ebk",
   "idExtension": "",
   "name": "Tap Erlebnis",
@@ -37,7 +38,8 @@
     "VideoPlay",
     "AudioRecord",
     "ImageCapture",
-    "MetaData"
+    "MetaData",
+    "WebPage"
   ],
   "sceneMappings": [],
   "scenePaths": [
@@ -215,7 +217,6 @@
   "defaultCategory": "ebk.default",
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
-  "autoScrollNewText": true,
   "mainFgColor": {
     "r": 0,
     "g": 43,
@@ -228,8 +229,9 @@
     "b": 147,
     "a": 255
   },
-  "mainFontSize": 60,
-  "maxFontSize": 100,
+  "mainFontSize": 90,
+  "textAlignment": "Left",
+  "lineSpacing": 10.0,
   "showShadows": false,
   "topLogo": {
     "path": "TopLogo"
@@ -253,12 +255,6 @@
     "b": 120,
     "a": 255
   },
-  "contentBackgroundColor": {
-    "r": 224,
-    "g": 210,
-    "b": 147,
-    "a": 255
-  },
   "headerHeightUnits": 60.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
@@ -266,9 +262,31 @@
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
+  "contentBackgroundColor": {
+    "r": 224,
+    "g": 210,
+    "b": 147,
+    "a": 255
+  },
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
+  "showScrollbar": true,
+  "scrollbarHandleColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "scrollbarBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "scrollbarWidth": 20,
+  "margin4Scrollbar": true,
+  "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
@@ -337,9 +355,26 @@
     "b": 120,
     "a": 255
   },
+  "categoryFolderBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
+  "warnWhenLeavingQuest": true,
+  "warnDialogTitleWhenLeavingQuest": "Aktuelles Quest verlassen?",
+  "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
+  "warnDialogOKWhenLeavingQuest": "Verlassen",
+  "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
