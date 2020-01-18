@@ -522,23 +522,6 @@ namespace GQ.Client.Conf
         [ShowInProductEditor]
         public bool fitExceedingImagesIntoArea { get; set; }
 
-        [ShowInProductEditor(StartSection = "Scroll Views:")]
-        public bool showScrollbar { get; set; }
-
-        [ShowInProductEditor]
-        [JsonConverter(typeof(Color32Converter))]
-        public Color32 scrollbarHandleColor { get; set; }
-
-        [ShowInProductEditor]
-        [JsonConverter(typeof(Color32Converter))]
-        public Color32 scrollbarBGColor { get; set; }
-
-        [ShowInProductEditor]
-        public int scrollbarWidth { get; set; }
-
-        [ShowInProductEditor]
-        public bool margin4Scrollbar { get; set; }
-
         [ShowInProductEditor]
         public bool autoScrollNewText { get; set; }
 
@@ -857,12 +840,6 @@ namespace GQ.Client.Conf
             contentHeightUnits = 750f;
             imageAreaHeightMinUnits = 150f;
             imageAreaHeightMaxUnits = 350f;
-
-            showScrollbar = true;
-            scrollbarHandleColor = new Color(125f, 125f, 125f, 255f);
-            scrollbarBGColor = new Color(197f, 197f, 197f, 255f);
-            scrollbarWidth = 20;
-            margin4Scrollbar = true;
 
             footerHeightUnits = 75f;
             contentDividerUnits = 0;

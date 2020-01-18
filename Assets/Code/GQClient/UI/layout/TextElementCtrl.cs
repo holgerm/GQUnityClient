@@ -19,6 +19,11 @@ namespace GQ.Client.UI
             Reset();
         }
 
+        public void Start()
+        {
+            Reset();
+        }
+
         public void Reset()
         {
             Config config = ConfigurationManager.Current;
@@ -49,7 +54,7 @@ namespace GQ.Client.UI
                 case TextUsageType.Paragraph:
                     TextElement.alignment = mapAlignment(config.textAlignment);
                     TextElement.enableAutoSizing = false;
-                    TextElement.fontSize = 0.5f * config.mainFontSize;
+                    TextElement.fontSize = 0.75f * config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     break;
@@ -71,8 +76,8 @@ namespace GQ.Client.UI
                 case TextUsageType.Option:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;

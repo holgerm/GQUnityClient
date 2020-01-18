@@ -39,13 +39,6 @@ public class AnswerCtrl : MonoBehaviour
 		answerCtrl.answerText.text = answer.Text.Decode4TMP(false);
         answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
 
-        // adapt to current scrollbar policy:
-        if (ConfigurationManager.Current.showScrollbar && ConfigurationManager.Current.margin4Scrollbar)
-        {
-            HorizontalLayoutGroup hlg = go.GetComponent<HorizontalLayoutGroup>();
-            hlg.padding.right += ConfigurationManager.Current.scrollbarWidth;
-        }
-
 		return answerCtrl;
 	}
 

@@ -271,7 +271,7 @@
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
-  "showScrollbar": true,
+  "showScrollbar": false,
   "scrollbarHandleColor": {
     "r": 255,
     "g": 255,
