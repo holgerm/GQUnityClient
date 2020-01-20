@@ -8,17 +8,22 @@ namespace QM.UI
     [RequireComponent(typeof(RectTransform), typeof(LayoutElement))]
     public class AdaptHeight : MonoBehaviour
     {
-        public RectTransform enclosedContent;
+        public RectTransform referredContent;
         public float MaxShareInParent = .5f;
 
-        public IEnumerator Start()
-        {
-            yield return new WaitForEndOfFrame();
+        LayoutElement layoutEl;
+        RectTransform parentRT;
 
-            LayoutElement layoutEl = GetComponent<LayoutElement>();
-            float parentHeight = transform.parent.GetComponent<RectTransform>().rect.height;
-            layoutEl.preferredHeight = Mathf.Min(enclosedContent.rect.height, parentHeight * MaxShareInParent);
-            Debug.LogFormat("Set height of {0} to {1}", GetType(), layoutEl.preferredHeight);
+        public void Start()
+        {
+            layoutEl = GetComponent<LayoutElement>();
+            parentRT = transform.parent.GetComponent<RectTransform>();
+        }
+
+        public void LateUpdate()
+        {
+            layoutEl.preferredHeight =
+                Mathf.Min(referredContent.rect.height, parentRT.rect.height * MaxShareInParent);
         }
     }
 }
