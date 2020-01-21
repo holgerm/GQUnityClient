@@ -259,7 +259,7 @@
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
   "listEntryHeightUnits": 45.0,
-  "listEntryHeightMinMM": 15.0,
+  "listEntryHeightMinMM": 6.5,
   "listEntryHeightMaxMM": 30.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
