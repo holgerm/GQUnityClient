@@ -350,21 +350,6 @@
   "imageAreaHeightMinUnits": 250.0,
   "imageAreaHeightMaxUnits": 400.0,
   "fitExceedingImagesIntoArea": false,
-  "showScrollbar": true,
-  "scrollbarHandleColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
-  "scrollbarBGColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
-  "scrollbarWidth": 20,
-  "margin4Scrollbar": true,
   "autoScrollNewText": false,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
@@ -410,8 +395,8 @@
     "a": 187
   },
   "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 40.0,
-  "menuEntryHeightMinMM": 5.0,
+  "menuEntryHeightUnits": 50.0,
+  "menuEntryHeightMinMM": 7.0,
   "menuEntryHeightMaxMM": 0.0,
   "menuEntryWidthUnits": 365.0,
   "menuEntryWidthMinMM": 0.0,
@@ -459,9 +444,9 @@
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
-  "listEntryHeightUnits": 50.0,
-  "listEntryHeightMinMM": 6.0,
-  "listEntryHeightMaxMM": 10.0,
+  "listEntryHeightUnits": 80.0,
+  "listEntryHeightMinMM": 22.0,
+  "listEntryHeightMaxMM": 30.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
