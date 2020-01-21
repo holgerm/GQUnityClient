@@ -1,4 +1,5 @@
 {
+  "preserveAspectOfSplashFG": true,
   "id": "freispiel",
   "idExtension": "",
   "name": "Frei Spiel",
@@ -162,21 +163,6 @@
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
-  "showScrollbar": true,
-  "scrollbarHandleColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
-  "scrollbarBGColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
-  "scrollbarWidth": 20,
-  "margin4Scrollbar": true,
   "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
@@ -246,9 +232,26 @@
     "b": 0,
     "a": 255
   },
+  "categoryFolderBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
+  "warnWhenLeavingQuest": true,
+  "warnDialogTitleWhenLeavingQuest": "Aktuelles Quest verlassen?",
+  "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
+  "warnDialogOKWhenLeavingQuest": "Verlassen",
+  "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,

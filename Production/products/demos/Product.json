@@ -1,4 +1,5 @@
 {
+  "preserveAspectOfSplashFG": true,
   "id": "demos",
   "idExtension": "",
   "name": "GeoQuest Showcase",
@@ -25,6 +26,7 @@
   "downloadAllCloudQuestOnStart": false,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
@@ -61,6 +63,7 @@
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
   "autoSynchQuestInfos": true,
+  "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "http://a.tile.openstreetmap.org",
@@ -106,6 +109,7 @@
   "CategorySets": [],
   "defaultCategory": null,
   "disabledAlpha": 0.5,
+  "hideFooterIfPossible": false,
   "mainFgColor": {
     "r": 31,
     "g": 31,
@@ -119,7 +123,8 @@
     "a": 255
   },
   "mainFontSize": 60,
-  "maxFontSize": 100,
+  "textAlignment": "Left",
+  "lineSpacing": 10.0,
   "showShadows": true,
   "topLogo": {
     "path": "TopLogo"
@@ -143,12 +148,6 @@
     "b": 31,
     "a": 255
   },
-  "contentBackgroundColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
   "headerHeightUnits": 55.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
@@ -156,9 +155,16 @@
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 400.0,
   "fitExceedingImagesIntoArea": false,
+  "autoScrollNewText": true,
   "footerHeightUnits": 60.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
@@ -227,17 +233,34 @@
     "b": 31,
     "a": 255
   },
+  "categoryFolderBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "menuInhibitsInteraction": false,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
+  "warnWhenLeavingQuest": true,
+  "warnDialogTitleWhenLeavingQuest": "Aktuelles Quest verlassen?",
+  "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
+  "warnDialogOKWhenLeavingQuest": "Verlassen",
+  "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
   "listEntryHeightUnits": 45.0,
-  "listEntryHeightMinMM": 5.0,
-  "listEntryHeightMaxMM": 10.0,
+  "listEntryHeightMinMM": 15.0,
+  "listEntryHeightMaxMM": 30.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
@@ -279,7 +302,6 @@
     "b": 75,
     "a": 255
   },
-  "showDeleteOptionForLocalQuests": true,
   "emulationColor": {
     "r": 255,
     "g": 78,
