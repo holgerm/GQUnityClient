@@ -23,6 +23,7 @@ namespace GQ.Client.UI
 
         public GameObject FooterButtonPanel;
         protected Button forwardButton;
+		public HeaderButtonPanel HeaderButtonPanel;
 
 
         #region Start

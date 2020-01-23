@@ -17,8 +17,9 @@ namespace GQ.Client.Model
         public string VideoFile { get; set; }
         public string VideoType { get; set; }
 
-        public override string ToString() {
-            return base.ToString() 
+        public override string ToString()
+        {
+            return base.ToString()
                        + "\n\tvideo: " + VideoFile
                        + "\n\tvidType: " + VideoType;
         }
@@ -30,20 +31,23 @@ namespace GQ.Client.Model
             base.ReadAttributes(reader);
 
             VideoFile = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_FILE, reader);
-            if (VideoType != GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE && VideoFile.HasVideoEnding())
+            VideoType = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_VIDEOTYPE, reader, GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL);
+            if (VideoType != GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE)
             {
+                if (VideoFile.HasVideoEnding())
+                {
 #if DEBUG_LOG
-                Debug.Log("Vid-Player: VideoFile: " + VideoFile);
+                    Debug.Log("Vid-Player: VideoFile: " + VideoFile);
 #endif
-                QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile, "VideoPlay." + GQML.PAGE_VIDEOPLAY_FILE);
-            }
-            else
-            {
-                Log.SignalErrorToAuthor("VideoPlay page (" + Id + ") has invalid vide url: " + VideoFile);
+                    QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile, "VideoPlay." + GQML.PAGE_VIDEOPLAY_FILE);
+                }
+                else
+                {
+                    Log.SignalErrorToAuthor("VideoPlay page (" + Id + ") has invalid video url: " + VideoFile + " videoType: " + VideoType);
+                }
             }
 
             Controllable = GQML.GetRequiredBoolAttribute(GQML.PAGE_VIDEOPLAY_CONTROLLABLE, reader);
-            VideoType = GQML.GetStringAttribute(GQML.PAGE_VIDEOPLAY_VIDEOTYPE, reader, GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL);
         }
         #endregion
 

@@ -9,6 +9,7 @@ namespace GQ.Client.Model
 
         public string File { get; set; }
 		public string URL { get; set; }
+		public string EndButtonText { get; set; }
 		#endregion
 
 		#region XML Serialization
@@ -18,6 +19,7 @@ namespace GQ.Client.Model
 
 			File = GQML.GetStringAttribute (GQML.PAGE_WEBPAGE_FILE, reader);
 			URL = GQML.GetStringAttribute (GQML.PAGE_WEBPAGE_URL, reader);
+			EndButtonText = GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_ENDBUTTONTEXT, reader);
 		}
 		#endregion
 

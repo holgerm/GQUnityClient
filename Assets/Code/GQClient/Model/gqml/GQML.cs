@@ -120,6 +120,7 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_WEBPAGE = "WebPage";
 		public const string PAGE_WEBPAGE_FILE = "file";
 		public const string PAGE_WEBPAGE_URL = "url";
+		public const string PAGE_WEBPAGE_ENDBUTTONTEXT = "endbuttontext";
 
 		// QR TAG SCANNER PAGE:
 		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";
