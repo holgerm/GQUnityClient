@@ -1,6 +1,8 @@
 ﻿using GQ.Client.Err;
 using GQ.Client.Model;
+using GQ.Client.Util;
 using QM.Util;
+using TMPro;
 using UnityEngine;
 
 namespace GQ.Client.UI
@@ -22,11 +24,13 @@ namespace GQ.Client.UI
 
                     }
 
-                    uniWebView.OnPageErrorReceived += (UniWebView webView, int errorCode, string errorMessage) => {
+                    uniWebView.OnPageErrorReceived += (UniWebView webView, int errorCode, string errorMessage) =>
+                    {
                         Log.SignalErrorToDeveloper("YOUTUBE PLAYER: OnPageErrorReceived errCode: " + errorCode
                                   + "\n\terrMessage: " + errorMessage);
                     };
-                    uniWebView.OnShouldClose += (webView) => {
+                    uniWebView.OnShouldClose += (webView) =>
+                    {
                         Debug.Log("YOUTUBE PLAYER: OnShouldClose.");
                         //webView = null;
                         containerWebPlayer.SetActive(false);
@@ -41,11 +45,11 @@ namespace GQ.Client.UI
                     Transform backButtonGO = myPage.PageCtrl.FooterButtonPanel.transform.Find("BackButton");
                     backButtonGO.gameObject.SetActive(myPage.Quest.History.CanGoBackToPreviousPage);
 
-                    float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits); // + 30;
-                    float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits); // + 30;
-                    uniWebView.Frame = 
+                    float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
+                    float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
+                    uniWebView.Frame =
                         new Rect(
-                            0, headerHeight, 
+                            0, headerHeight,
                             Device.width, Device.height - (headerHeight + footerHeight)
                         );
 
@@ -74,7 +78,66 @@ namespace GQ.Client.UI
                 </body>
             </html>";
 
-        public static void CleanUp(GameObject containerWebPlayer) {
+        public static void Initialize(WebPageController pageCtrl, RectTransform webContainer, string url)
+        {
+            // show the content:
+            UniWebView webView = webContainer.GetComponent<UniWebView>();
+            if (webView == null)
+            {
+                webView = webContainer.gameObject.AddComponent<UniWebView>();
+            }
+
+#if DEBUG_LOG
+            UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
+
+            webView.OnPageStarted += (view, myurl) => {
+                Debug.Log("Loading started for url: " + myurl);
+            };
+#endif
+            if (pageCtrl.myPage.ShouldEndOnLoadUrlPart)
+                // enable forward button only when a certain url is loaded:
+            {
+                webView.OnPageFinished += (view, statusCode, curUrl) =>
+                {
+                    checkURLToAllowForwardButton(pageCtrl, curUrl);
+                };
+
+                webView.OnPageStarted += (view, curUrl) =>
+                {
+                    checkURLToAllowForwardButton(pageCtrl, curUrl);
+                };
+            }
+
+            webView.OnPageErrorReceived += (view, error, message) =>
+            {
+                // TODO show error message also to user.
+                Debug.Log("Error: " + message);
+            };
+
+            float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
+            float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
+            webView.Frame =
+                new Rect(
+                    0, headerHeight,
+                    Device.width, Device.height - (headerHeight + footerHeight)
+                );
+            webView.SetShowSpinnerWhileLoading(true);
+            webView.Show(true);
+            webView.Load(url);
+        }
+
+        private static void checkURLToAllowForwardButton(WebPageController pageCtrl, string myurl)
+        {
+            if (myurl.Contains(pageCtrl.myPage.EndOnLoadUrlPart))
+            {
+                pageCtrl.ForwardButton.interactable = true;
+                TextMeshProUGUI forwardButtonText = pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+                forwardButtonText.text = pageCtrl.myPage.EndButtonText.Decode4TMP(false);
+            }
+        }
+
+        public static void CleanUp(GameObject containerWebPlayer)
+        {
             if (uniWebView != null)
             {
                 uniWebView.Stop();
@@ -82,7 +145,8 @@ namespace GQ.Client.UI
                 Object.Destroy(uniWebView);
             }
 
-            if (containerWebPlayer != null) {
+            if (containerWebPlayer != null)
+            {
                 containerWebPlayer.SetActive(false);
             }
         }

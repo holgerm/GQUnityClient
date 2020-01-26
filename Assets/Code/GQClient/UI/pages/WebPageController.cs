@@ -10,11 +10,13 @@ using QM.Util;
 namespace GQ.Client.UI
 {
     public class WebPageController : PageController
-	{
-		
-		#region Inspector Fields
-		public RectTransform webContainer;
+    {
+
+        #region Inspector Fields
+        public RectTransform webContainer;
         #endregion
+
+        internal Button ForwardButton => forwardButton;
 
 
         #region Runtime API
@@ -29,56 +31,30 @@ namespace GQ.Client.UI
             }
         }
 
-        protected PageWebPage myPage;
+        internal PageWebPage myPage;
 
-		/// <summary>
-		/// Is called during Start() of the base class, which is a MonoBehaviour.
-		/// </summary>
-		public override void InitPage_TypeSpecific ()
-		{
+        /// <summary>
+        /// Is called during Start() of the base class, which is a MonoBehaviour.
+        /// </summary>
+        public override void InitPage_TypeSpecific()
+        {
             myPage = (PageWebPage)page;
 
             // show the forward button text:
             TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            forwardButtonText.text = myPage.EndButtonText.Decode4TMP(false);
-
+            if (myPage.ShouldEndOnLoadUrlPart)
+            {
+                forwardButtonText.text = myPage.ForwardButtonTextBeforeFinished;
+                forwardButton.interactable = false;
+            } else
+            {
+                forwardButtonText.text = myPage.EndButtonText.Decode4TMP(false);
+                forwardButton.interactable = true;
+            }
+            
             // show the content:
-//            UniWebView webView = webContainer.GetComponent<UniWebView>();
-//            if (webView == null)
-//            {
-//                webView = webContainer.gameObject.AddComponent<UniWebView>();
-//            }
-
-//#if DEBUG_LOG
-//            UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
-
-//            webView.OnPageStarted += (view, url) => {
-//                print("Loading started for url: " + url);
-//            };
-
-//            webView.OnPageFinished += (view, statusCode, url) => {
-//                print(statusCode);
-//                print("Web view loading finished for: " + url);
-//            };
-//#endif
-
-//            webView.OnPageErrorReceived += (view, error, message) => {
-//                // TODO show error message also to user.
-//                print("Error: " + message);
-//            };
-
-//            float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
-//            float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
-//            webView.Frame =
-//                new Rect(
-//                    0, headerHeight,
-//                    Device.width, Device.height - (headerHeight + footerHeight)
-//                );
-//            webView.SetShowSpinnerWhileLoading(true);
-//            webView.Show(true);
             HeaderButtonPanel.SetInteractable(false); // disable top buttons
-            //webView.Load(myPage.URL);
-            VideoPlayerExtraModes.Initialize(webContainer, myPage.URL);
+            VideoPlayerExtraModes.Initialize(this, webContainer, myPage.URL);
         }
 
         /// <summary>

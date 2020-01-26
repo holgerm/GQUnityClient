@@ -307,5 +307,7 @@
     "g": 78,
     "b": 78,
     "a": 255
-  }
+  },
+  "webpageShouldEndOnLoadUrlPart": true,
+  "webpageEndOnLoadUrlPart": "https://www.umfrageonline.com/thank-you"
 }

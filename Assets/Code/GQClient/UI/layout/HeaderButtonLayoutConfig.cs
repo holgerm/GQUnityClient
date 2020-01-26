@@ -35,8 +35,6 @@ namespace GQ.Client.UI
 				Image fgImage = transform.Find ("Image").GetComponent<Image> ();
 				if (fgImage != null) {
 					fgImage.color = ConfigurationManager.Current.headerButtonFgColor;
-
-					Debug.Log("COLOR: Set for HeaderButtonLayoutConfig on " + name);
 				}
 			} catch (Exception) {
 			}	
