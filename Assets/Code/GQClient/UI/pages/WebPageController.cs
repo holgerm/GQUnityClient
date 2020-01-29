@@ -17,6 +17,7 @@ namespace GQ.Client.UI
         #endregion
 
         internal Button ForwardButton => forwardButton;
+        internal Button BackButton => backButton;
 
 
         #region Runtime API
@@ -44,8 +45,10 @@ namespace GQ.Client.UI
             TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             if (myPage.ShouldEndOnLoadUrlPart)
             {
-                forwardButtonText.text = myPage.ForwardButtonTextBeforeFinished;
+                forwardButtonText.text = myPage.ForwardButtonTextBeforeFinished.Decode4TMP(false);
                 forwardButton.interactable = false;
+                backButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "";
+                backButton.interactable = false;
             } else
             {
                 forwardButtonText.text = myPage.EndButtonText.Decode4TMP(false);
@@ -64,6 +67,15 @@ namespace GQ.Client.UI
         {
             HeaderButtonPanel.SetInteractable(true);
             base.OnForward();
+        }
+
+        /// <summary>
+        /// Override this method to react on Forward Button Click (or similar events).
+        /// </summary>
+        public override void OnBackward()
+        {
+            HeaderButtonPanel.SetInteractable(true);
+            base.OnBackward();
         }
         #endregion
     }

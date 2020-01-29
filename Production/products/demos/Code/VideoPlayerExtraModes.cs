@@ -133,6 +133,8 @@ namespace GQ.Client.UI
                 pageCtrl.ForwardButton.interactable = true;
                 TextMeshProUGUI forwardButtonText = pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
                 forwardButtonText.text = pageCtrl.myPage.EndButtonText.Decode4TMP(false);
+                pageCtrl.BackButton.interactable = true; // might be set even if back button is not shown but does not matter
+                pageCtrl.BackButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "<";
             }
         }
 
