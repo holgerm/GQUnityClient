@@ -259,7 +259,7 @@
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
   "listEntryHeightUnits": 45.0,
-  "listEntryHeightMinMM": 15.0,
+  "listEntryHeightMinMM": 6.5,
   "listEntryHeightMaxMM": 30.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
@@ -307,5 +307,7 @@
     "g": 78,
     "b": 78,
     "a": 255
-  }
+  },
+  "webpageShouldEndOnLoadUrlPart": true,
+  "webpageEndOnLoadUrlPart": "https://www.umfrageonline.com/thank-you"
 }

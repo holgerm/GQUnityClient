@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using GQ.Client.Conf;
 
 namespace GQ.Client.Model
 {
@@ -9,6 +10,10 @@ namespace GQ.Client.Model
 
         public string File { get; set; }
 		public string URL { get; set; }
+        public bool ShouldEndOnLoadUrlPart { get; internal set; }
+        public string EndOnLoadUrlPart { get; internal set; }
+		public string EndButtonText { get; set; }
+		public string ForwardButtonTextBeforeFinished { get; set; }
 		#endregion
 
 		#region XML Serialization
@@ -18,6 +23,13 @@ namespace GQ.Client.Model
 
 			File = GQML.GetStringAttribute (GQML.PAGE_WEBPAGE_FILE, reader);
 			URL = GQML.GetStringAttribute (GQML.PAGE_WEBPAGE_URL, reader);
+			EndButtonText = GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_ENDBUTTONTEXT, reader);
+			ForwardButtonTextBeforeFinished = ""; // TODO GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_FORWARDBUTTONTEXTBEFOREFINISHED, reader);
+
+			// TODO: read ShouldEndOnLoadUrlPart and EndOnLoadUrlPart
+			ShouldEndOnLoadUrlPart = ConfigurationManager.Current.webpageShouldEndOnLoadUrlPart; // TODO GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_FINISHURLCONTAINS, reader);
+			EndOnLoadUrlPart = ConfigurationManager.Current.webpageEndOnLoadUrlPart; // TODO GQML.GetOptionalBoolAttribute(GQML.PAGE_WEBPAGE_ENDONURLPART, reader, false);
+
 		}
 		#endregion
 

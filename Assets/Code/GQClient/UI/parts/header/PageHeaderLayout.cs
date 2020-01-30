@@ -105,6 +105,10 @@ namespace GQ.Client.UI
             titleText.gameObject.SetActive(true);
             Text ttt = titleText.GetComponent<Text>();
 
+            // ignore setting a title if we have no text element:
+            if (ttt == null)
+                return;
+
             ttt.text = (Author.LoggedIn && Author.ShowHiddenQuests) || "".Equals(QuestManager.Instance.CurrentQuestName4User)
                 ? QuestManager.Instance.CurrentQuest.Name
                 : QuestManager.Instance.CurrentQuestName4User;

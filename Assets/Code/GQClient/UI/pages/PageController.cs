@@ -23,6 +23,8 @@ namespace GQ.Client.UI
 
         public GameObject FooterButtonPanel;
         protected Button forwardButton;
+		protected Button backButton;
+		public HeaderButtonPanel HeaderButtonPanel;
 
 
         #region Start
@@ -86,7 +88,8 @@ namespace GQ.Client.UI
 
             // Footer:
             forwardButton = FooterButtonPanel.transform.Find("ForwardButton").GetComponent<Button>();
-            Transform backButtonGO = FooterButtonPanel.transform.Find("BackButton");
+			Transform backButtonGO = FooterButtonPanel.transform.Find("BackButton");
+			backButton = backButtonGO.GetComponent<Button>();
             backButtonGO.gameObject.SetActive(page.Quest.History.CanGoBackToPreviousPage);
 
             if (ConfigurationManager.Current.hideFooterIfPossible)

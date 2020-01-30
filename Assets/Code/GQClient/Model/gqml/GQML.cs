@@ -120,6 +120,10 @@ namespace GQ.Client.Model
 		public const string PAGE_TYPE_WEBPAGE = "WebPage";
 		public const string PAGE_WEBPAGE_FILE = "file";
 		public const string PAGE_WEBPAGE_URL = "url";
+		public const string PAGE_WEBPAGE_ENDBUTTONTEXT = "endbuttontext";
+		public const string PAGE_WEBPAGE_FORWARDBUTTONTEXTBEFOREFINISHED = "forwardbuttontextbeforefinished";
+		public const string PAGE_WEBPAGE_FINISHURLCONTAINS = "finishurlcontains";
+        public const string PAGE_WEBPAGE_ENDONURLPART = "endonurlpart";
 
 		// QR TAG SCANNER PAGE:
 		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";
@@ -342,8 +346,7 @@ namespace GQ.Client.Model
 			new List<string> (
 				new string[] { AND, OR, NOT, GREATER_THAN, GREATER_EQUAL, EQUAL, LESS_EQUAL, LESS_THAN });
 
-
-		internal static bool IsConditionType (string xmlConditionCandidate)
+        internal static bool IsConditionType (string xmlConditionCandidate)
 		{
 			return conditionNodeNames.Contains (xmlConditionCandidate);
 		}

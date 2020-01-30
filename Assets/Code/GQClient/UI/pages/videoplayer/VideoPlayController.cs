@@ -101,7 +101,7 @@ namespace GQ.Client.UI
                     //containerNormal.SetActive(false);
                     videoImage.enabled = false;
                     container360.SetActive(false);
-                    VideoPlayerExtraModes.Initialize(myPage, containerWebPlayer);
+                    WebViewExtras.Initialize(myPage, containerWebPlayer);
                     break;
             }
         }
@@ -135,7 +135,8 @@ namespace GQ.Client.UI
             if (myPage.Stream)
             {
                 videoPlayer.url = myPage.VideoFile;
-            } else
+            }
+            else
             {
                 if (myPage.Parent.MediaStore.ContainsKey(myPage.VideoFile))
                 {
@@ -356,7 +357,7 @@ namespace GQ.Client.UI
         {
             base.CleanUp();
 
-            VideoPlayerExtraModes.CleanUp(containerWebPlayer);
+            WebViewExtras.CleanUp(containerWebPlayer);
 
             // switch back to main camera:
             camera360.enabled = false;

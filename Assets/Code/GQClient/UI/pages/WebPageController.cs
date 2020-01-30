@@ -1,21 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿#define DEBUG_LOG
+
 using UnityEngine.UI;
 using GQ.Client.Model;
+using TMPro;
 using GQ.Client.Util;
-using GQ.Client.Conf;
+using UnityEngine;
+using QM.Util;
 
 namespace GQ.Client.UI
 {
-	public class WebPageController : PageController
-	{
-		
-		#region Inspector Fields
-		public GameObject contentPanel;
-		public Text infoText;
-		public Text forwardButtonText;
+    public class WebPageController : PageController
+    {
+
+        #region Inspector Fields
+        public RectTransform webContainer;
         #endregion
+
+        internal Button ForwardButton => forwardButton;
+        internal Button BackButton => backButton;
 
 
         #region Runtime API
@@ -30,29 +32,51 @@ namespace GQ.Client.UI
             }
         }
 
-        protected PageWebPage myPage;
+        internal PageWebPage myPage;
 
-		/// <summary>
-		/// Is called during Start() of the base class, which is a MonoBehaviour.
-		/// </summary>
-		public override void InitPage_TypeSpecific ()
-		{
+        /// <summary>
+        /// Is called during Start() of the base class, which is a MonoBehaviour.
+        /// </summary>
+        public override void InitPage_TypeSpecific()
+        {
             myPage = (PageWebPage)page;
 
-			// show the content:
-			showInfo ();
-			forwardButtonText.text = "Ok";
-		}
+            // show the forward button text:
+            TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            if (myPage.ShouldEndOnLoadUrlPart)
+            {
+                forwardButtonText.text = myPage.ForwardButtonTextBeforeFinished.Decode4TMP(false);
+                forwardButton.interactable = false;
+                backButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "";
+                backButton.interactable = false;
+            } else
+            {
+                forwardButtonText.text = myPage.EndButtonText.Decode4TMP(false);
+                forwardButton.interactable = true;
+            }
+            
+            // show the content:
+            HeaderButtonPanel.SetInteractable(false); // disable top buttons
+            WebViewExtras.Initialize(this, webContainer, myPage.URL);
+        }
 
-		void showInfo() {
-			infoText.text = 
-				"Diese Funktion steht leider noch nicht zur Verfügung. Hier werden als Test die Informationen angezeigt, die in der Quest-Seite gespeichert wurden:\n\n" +
-				"type:\t" + myPage.PageType + "\n" +
-				"id:\t\t\t" + myPage.Id + "\n" +
-				"file:\t" + myPage.File + "\n" +
-				"url:\t\t" + myPage.URL; 
-		}
+        /// <summary>
+        /// Override this method to react on Forward Button Click (or similar events).
+        /// </summary>
+        public override void OnForward()
+        {
+            HeaderButtonPanel.SetInteractable(true);
+            base.OnForward();
+        }
 
-		#endregion
-	}
+        /// <summary>
+        /// Override this method to react on Forward Button Click (or similar events).
+        /// </summary>
+        public override void OnBackward()
+        {
+            HeaderButtonPanel.SetInteractable(true);
+            base.OnBackward();
+        }
+        #endregion
+    }
 }
