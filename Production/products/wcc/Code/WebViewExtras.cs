@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GQ.Client.UI
 {
-    public static class VideoPlayerExtraModes
+    public static class WebViewExtras
     {
         public static void Initialize(PageVideoPlay myPage, GameObject containerWebPlayer)
         {

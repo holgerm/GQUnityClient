@@ -57,7 +57,7 @@ namespace GQ.Client.UI
             
             // show the content:
             HeaderButtonPanel.SetInteractable(false); // disable top buttons
-            VideoPlayerExtraModes.Initialize(this, webContainer, myPage.URL);
+            WebViewExtras.Initialize(this, webContainer, myPage.URL);
         }
 
         /// <summary>
