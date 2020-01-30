@@ -12,11 +12,15 @@ namespace GQ.Client.UI
         public Button RightButton;
         public Image RightImage;
 
+        public void Awake()
+        {
+            LeftImage.color = ConfigurationManager.Current.headerButtonFgColor;
+            RightImage.color = ConfigurationManager.Current.headerButtonFgColor;
+        }
+
         // Start is called before the first frame update
         public void SetInteractable(bool interactable)
         {
-            Debug.Log("COLOR: Set for HeaderButtonPanel");
-
             LeftButton.interactable = interactable;
             Image i = LeftButton.transform.Find("Image").GetComponent<Image>();
             i = LeftImage;

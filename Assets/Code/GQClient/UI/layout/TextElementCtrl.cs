@@ -45,8 +45,8 @@ namespace GQ.Client.UI
                 case TextUsageType.Title:
                     TextElement.alignment = mapAlignment(config.textAlignment);
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.7f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.85f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.95f * config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;

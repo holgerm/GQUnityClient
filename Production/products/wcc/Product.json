@@ -36,7 +36,7 @@
     }
   ],
   "scenePaths": [
-    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/StartScene.unity",
+    "Assets/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
     "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/pages/WCCPOI.unity"
   ],
@@ -444,9 +444,9 @@
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
-  "listEntryHeightUnits": 80.0,
-  "listEntryHeightMinMM": 22.0,
-  "listEntryHeightMaxMM": 30.0,
+  "listEntryHeightUnits": 60.0,
+  "listEntryHeightMinMM": 11.0,
+  "listEntryHeightMaxMM": 19.0,
   "listEntryUseTwoLines": true,
   "listEntryDividingMode": "SeparationLines",
   "listLineColor": {
@@ -493,5 +493,7 @@
     "g": 95,
     "b": 167,
     "a": 255
-  }
+  },
+  "webpageShouldEndOnLoadUrlPart": false,
+  "webpageEndOnLoadUrlPart": ""
 }
