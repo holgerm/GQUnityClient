@@ -1,4 +1,5 @@
-﻿using GQ.Client.Err;
+﻿using System;
+using GQ.Client.Err;
 using GQ.Client.Model;
 using UnityEngine;
 
@@ -18,8 +19,12 @@ namespace GQ.Client.UI
 
         public static void CleanUp(GameObject containerWebPlayer)
         {
-            Log.SignalErrorToAuthor("VideoPlayerExtraModes: Nothing to cleanup.");
+            Log.SignalErrorToAuthor("WebViewExtras: Nothing to cleanup.");
         }
 
+        internal static void Initialize(WebPageController webPageController, RectTransform webContainer, string uRL)
+        {
+            Log.SignalErrorToAuthor("WebViewExtras: Should not be used in this App.");
+        }
     }
 }
