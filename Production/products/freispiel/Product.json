@@ -252,6 +252,8 @@
   "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
   "warnDialogOKWhenLeavingQuest": "Verlassen",
   "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
+  "offerPartnersInfo": true,
+  "showPartnersInfoAtStart": true,
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,

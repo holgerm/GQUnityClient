@@ -24,6 +24,7 @@ namespace GQ.Client.Util
         public GameObject MenuCanvas;
         public GameObject DialogCanvas;
 
+        public Canvas partnersCanvas;
         public Canvas imprintCanvas;
         public Canvas feedbackCanvas;
         public Canvas privacyCanvas;
@@ -149,14 +150,12 @@ namespace GQ.Client.Util
             DontDestroyOnLoad(Instance);
             SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
             canvasStates = new Dictionary<string, bool>();
+        }
 
-            //#if UNITY_EDITOR || UNITY_STANDALONE
-            //            Device.awakeLocationMock();
-            //#endif
-
-            //			#if UNITY_STANDALONE
-            //			Screen.SetResolution(1080,1920,true);
-            //			#endif
+        private void Start()
+        {
+            partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
+            Debug.Log("Activated Partner Canvas.");
         }
 
         void Update()

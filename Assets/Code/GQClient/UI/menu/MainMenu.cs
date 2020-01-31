@@ -9,6 +9,7 @@ namespace GQ.Client.UI
         // Start is called before the first frame update
         public void MainMenuButtonPressed()
         {
+            Base.Instance.partnersCanvas.gameObject.SetActive(false);
             Base.Instance.imprintCanvas.gameObject.SetActive(false);
             Base.Instance.privacyCanvas.gameObject.SetActive(false);
             Base.Instance.feedbackCanvas.gameObject.SetActive(false);

@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GQ.Client.Util;
+﻿using GQ.Client.Util;
 using UnityEngine;
 
 namespace GQ.Client.UI
 {
 
-	public class MenuAccessPoint : MonoBehaviour
+    public class MenuAccessPoint : MonoBehaviour
 	{
         public void CloseLeftMenu()
         {

@@ -670,6 +670,12 @@ namespace GQ.Client.Conf
         public string warnDialogCancelWhenLeavingQuest { get; set; }
 
 
+        [ShowInProductEditor(StartSection = "Offered Canvases by 2nd Menu:")]
+        public bool offerPartnersInfo { get; set; }
+
+        [ShowInProductEditor]
+        public bool showPartnersInfoAtStart { get; set; }
+
         [ShowInProductEditor]
         public bool offerFeedback { get; set; }
 
@@ -890,6 +896,8 @@ namespace GQ.Client.Conf
             menuFGColor = Color.black;
             categoryFolderBGColor = menuBGColor;
             categoryEntryBGColor = menuBGColor;
+            offerPartnersInfo = false;
+            showPartnersInfoAtStart = false;
             offerFeedback = false;
             offerAuthorLogin = false;
             defineAuthorBackDoor = false;

@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace QM.UI
 {
 
-	public class MenuRadioGroup : MonoBehaviour
+    public class MenuRadioGroup : MonoBehaviour
 	{
 
 		public GameObject MenuCanvas;
