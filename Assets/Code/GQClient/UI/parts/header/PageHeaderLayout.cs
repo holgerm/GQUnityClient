@@ -129,7 +129,7 @@ namespace GQ.Client.UI
             Image image = menuButtonT.transform.Find("Image").GetComponent<Image>();
 
             // put icon:
-            image.sprite = Resources.Load<Sprite>("endQuest");
+            image.sprite = Resources.Load<Sprite>("icons/endQuest");
 
             // put function and activate button:
             menuButton.onClick.AddListener(leaveQuest);
