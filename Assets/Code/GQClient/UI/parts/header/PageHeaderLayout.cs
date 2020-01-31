@@ -4,6 +4,7 @@ using GQ.Client.Err;
 using GQ.Client.Model;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -103,7 +104,7 @@ namespace GQ.Client.UI
             // show tite and set its text:
             Transform titleText = MiddleButton.transform.Find("TitleText");
             titleText.gameObject.SetActive(true);
-            Text ttt = titleText.GetComponent<Text>();
+            TextMeshProUGUI ttt = titleText.GetComponent<TextMeshProUGUI>();
 
             // ignore setting a title if we have no text element:
             if (ttt == null)

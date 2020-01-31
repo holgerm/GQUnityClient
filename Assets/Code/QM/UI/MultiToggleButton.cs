@@ -127,7 +127,6 @@ namespace QM.UI
 
 			// invoke the onToggled Unity Event:
 			if (indexReferredByPressedButton > -1) {
-				Debug.Log ("MTB.onToggledEvent: index: " + indexReferredByPressedButton + " view: " + shownObjects [indexReferredByPressedButton].name);
 				onToggledEvent.Invoke (shownObjects [indexReferredByPressedButton]);
 			}
 		}

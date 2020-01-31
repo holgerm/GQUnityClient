@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.Err;
+﻿using UnityEngine;
 using GQ.Client.Util;
 using QM.UI;
 using GQ.Client.Conf;
-using System.Diagnostics;
 using QM.Util;
+using UnityEngine.UI;
 
 namespace GQ.Client.UI
 {
 
-	public class ViewToggleController : MonoBehaviour
+    public class ViewToggleController : MonoBehaviour
 	{
 
 		/// <summary>
@@ -33,9 +30,11 @@ namespace GQ.Client.UI
 			MultiToggleButton mtb = viewCtrl.GetComponent<MultiToggleButton> ();
 			mtb.shownObjects = new GameObject[ConfigurationManager.Current.questInfoViews.Length];
 			for (int i = 0; i < ConfigurationManager.Current.questInfoViews.Length; i++) {
-				string mtbGoName = "ViewToggleTo" + ConfigurationManager.Current.questInfoViews [i];
+                string viewName = ConfigurationManager.Current.questInfoViews[i];
+				string mtbGoName = "ViewToggleTo" + viewName;
 				mtb.shownObjects [i] = PrefabController.Create ("prefabs", mtbGoName, viewCtrl.gameObject);
 				mtb.shownObjects [i].name = mtbGoName;
+                mtb.shownObjects[i].transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("icons/" + viewName.ToLower());
 			}
 			// view no. 0 is set, view no. 1 is shown as next to reach by this menu entry:
 			mtb.SetSelectedStartIndex (1);
@@ -46,13 +45,11 @@ namespace GQ.Client.UI
 
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
-			new WATCH ().Start ();
 			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
 			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
 			Base.Instance.MapHolder.SetActive (viewer.name == "ViewToggleToMap");
 
 			Base.Instance.MenuCanvas.SetActive (false);
-			WATCH._StopAndShow ();
 		}
 
 	}

@@ -1,11 +1,10 @@
-﻿#define DEBUG_LOG
+﻿//#define DEBUG_LOG
 
 using UnityEngine.UI;
 using GQ.Client.Model;
 using TMPro;
 using GQ.Client.Util;
 using UnityEngine;
-using QM.Util;
 
 namespace GQ.Client.UI
 {
