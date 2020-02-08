@@ -62,7 +62,7 @@ namespace GQ.Client.Util
 
         }
 
-        SimpleDialogBehaviour dialogBehaviour;
+        SimpleBehaviour dialogBehaviour;
 
         List<MediaInfo> listOfFilesNotStartedYet;
 
@@ -100,7 +100,7 @@ namespace GQ.Client.Util
         protected override IEnumerator DoTheWork()
         {
             // init SimpleBehaviour:
-            dialogBehaviour = (SimpleDialogBehaviour)behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
+            dialogBehaviour = (SimpleBehaviour)behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
                                                                     // init totalSumOfWeights:
             foreach (MediaInfo curInfo in listOfFilesNotStartedYet)
             {

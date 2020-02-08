@@ -1,18 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using GQ.Client.Util;
-using GQ.Client.Conf;
 using Newtonsoft.Json;
 using System;
-using GQ.Client.UI;
-using System.IO;
 using GQ.Client.Err;
 using GQ.Client.FileIO;
 
-namespace GQ.Client.Model {
+namespace GQ.Client.Model
+{
 
-	public class ExportQuestInfosToJSON : Task {
+    public class ExportQuestInfosToJSON : Task {
 
 		public ExportQuestInfosToJSON() : base() { }
 

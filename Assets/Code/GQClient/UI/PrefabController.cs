@@ -18,17 +18,6 @@ namespace GQ.Client.UI
             return Create(prefab, root);
         }
 
-        //public static GameObject Create(string prefabName, GameObject root = null)
-        //{
-        //    Object prefab = Resources.Load(prefabName);
-        //    if (prefab == null)
-        //    {
-        //        Log.SignalErrorToDeveloper("Resource for prefab '{0}' could not be loaded.", prefabName);
-        //        return null;
-        //    }
-        //    return Create(prefab, root);
-        //}
-
         public static GameObject Create(Object prefab, GameObject root = null)
         {
             if (root == null)
@@ -51,16 +40,20 @@ namespace GQ.Client.UI
         /// <summary>
         /// Shows the prefab for at least one frame duration.
         /// </summary>
-        public virtual void Show()
+        public virtual void Show(GameObject go = null)
         {
+            if (go == null)
+                go = this.gameObject;
             Base.Instance.StartCoroutine(showAsCoroutine(true));
         }
 
         /// <summary>
         /// Hides the prefab for at least one frame duration.
         /// </summary>
-        public virtual void Hide()
+        public virtual void Hide(GameObject go = null)
         {
+            if (go == null)
+                go = this.gameObject;
             Base.Instance.StartCoroutine(showAsCoroutine(false));
         }
 

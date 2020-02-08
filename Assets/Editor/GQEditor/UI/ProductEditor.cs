@@ -1799,6 +1799,48 @@ namespace GQ.Editor.UI
     }
 
 
+    public class ProductEditorPart4TaskUIMode : ProductEditorPart
+    {
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.taskUI;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
+        string[] taskUIModeNames = Enum.GetNames(typeof(TaskUIMode));
+
+        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+
+            int oldTaskUI = selected;
+            selected =
+                EditorGUILayout.Popup(
+                    "Task UI Mode",
+                    selected,
+                    taskUIModeNames
+                );
+            if (oldTaskUI != selected)
+            {
+                configIsDirty = true;
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (TaskUIMode)selected, null);
+            }
+
+            return configIsDirty;
+        }
+    }
+
+
     public class ProductEditorPart4Single : ProductEditorPart
     {
 

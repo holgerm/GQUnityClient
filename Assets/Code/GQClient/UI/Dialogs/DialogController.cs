@@ -1,38 +1,33 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
-using GQ.Client.Conf;
 using GQ.Client.Util;
 using UnityEngine.UI;
-using GQ.Client.Model;
 using GQ.Client.GQEvents;
 using TMPro;
 
 namespace GQ.Client.UI.Dialogs
 {
 
-	/// <summary>
-	/// Connects the Dialog UI with the behaviour implemented in a subclass of DialogBehaviour. 
-	/// These behaviours are NOT MonoBehaviours but one of them must be set as connected in this component.
-	/// 
-	/// Why is this? It allows to use the dialog prefab for multiple purposes. 
-	/// Therefore one has to instantiate the one dialog prefab and initialize it with aone of the available behaviours
-	/// in a separate step by setting the connection. 
-	/// 
-	/// This can both be done by script. Manually in the editor only the first step can be done right now. 
-	/// We would need a little custom editor to enable selection of available behaviours in the gui.
-	/// 
-	/// Anyway, we typically drive the dialog by calling some functionality, 
-	/// hence it should be dynamically initialized and setup by script anyway
-	/// 
-	/// For details on how to link UI elements like this Dialog to Tasks cf. @ref TasksAndUI
+    /// <summary>
+    /// Connects the Dialog UI with the behaviour implemented in a subclass of DialogBehaviour. 
+    /// These behaviours are NOT MonoBehaviours but one of them must be set as connected in this component.
+    /// 
+    /// Why is this? It allows to use the dialog prefab for multiple purposes. 
+    /// Therefore one has to instantiate the one dialog prefab and initialize it with aone of the available behaviours
+    /// in a separate step by setting the connection. 
+    /// 
+    /// This can both be done by script. Manually in the editor only the first step can be done right now. 
+    /// We would need a little custom editor to enable selection of available behaviours in the gui.
+    /// 
+    /// Anyway, we typically drive the dialog by calling some functionality, 
+    /// hence it should be dynamically initialized and setup by script anyway
+    /// 
+    /// For details on how to link UI elements like this Dialog to Tasks cf. @ref TasksAndUI
 
-	/// </summary>
-	public class DialogController : PrefabController
+    /// </summary>
+    public class DialogController : PrefabController
 	{
 
         #region Content and Structure
-
         protected static readonly string PREFAB_ASSETBUNDLE = "prefabs";
         protected static readonly string PREFAB_NAME = "Dialog";
 
@@ -49,12 +44,10 @@ namespace GQ.Client.UI.Dialogs
 		protected const string NO_BUTTON_PATH = "Panel/Buttons/NoButton";
 
 		public DialogBehaviour Behaviour { get; set; }
-
 		#endregion
 
 
 		#region Singleton
-
 		private static DialogController instance = null;
 
 		/// <summary>
@@ -70,12 +63,10 @@ namespace GQ.Client.UI.Dialogs
 					return instance;
 			}
 		}
-
 		#endregion
 
 
 		#region Runtime API
-
 		/// <summary>
 		/// Sets the yes button with text and callback method.
 		/// </summary>
@@ -105,12 +96,10 @@ namespace GQ.Client.UI.Dialogs
 			NoButton.gameObject.SetActive (true);
 			NoButton.interactable = true;
 		}
-
 		#endregion
 
 
 		#region Initialization in Editor
-
 		public virtual void Reset ()
 		{
 			Details = EnsurePrefabVariableIsSet<TextMeshProUGUI> (Details, "Details Label", DETAILS_PATH);
@@ -118,7 +107,6 @@ namespace GQ.Client.UI.Dialogs
 			YesButton = EnsurePrefabVariableIsSet<Button> (YesButton, "Yes Button", YES_BUTTON_PATH);
 			NoButton = EnsurePrefabVariableIsSet<Button> (NoButton, "No Button", NO_BUTTON_PATH);
 		}
-
 		#endregion
 		 
 	}

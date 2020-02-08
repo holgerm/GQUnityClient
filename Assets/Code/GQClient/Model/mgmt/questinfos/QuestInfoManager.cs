@@ -215,8 +215,8 @@ namespace GQ.Client.Model
             Debug.Log("UpdateQuestInfos()");
 #endif
             ImportQuestInfos importLocal =
-            new ImportLocalQuestInfos();
-            new SimpleDialogBehaviour(
+                new ImportLocalQuestInfos();
+            var unused = Base.Instance.GetSimpleBehaviour(
                 importLocal,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
@@ -228,14 +228,14 @@ namespace GQ.Client.Model
                     timeout: ConfigurationManager.Current.timeoutMS,
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
                 );
-            new DownloadDialogBehaviour(
+            var unused2 = Base.Instance.GetDownloadBehaviour(
                 downloader,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
             );
 
             ImportQuestInfos importFromServer =
                 new ImportServerQuestInfos();
-            new SimpleDialogBehaviour(
+            var unused3 = Base.Instance.GetSimpleBehaviour(
                 importFromServer,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("Neue {0} werden lokal gespeichert", ConfigurationManager.Current.nameForQuestsPl)
@@ -243,7 +243,7 @@ namespace GQ.Client.Model
 
             ExportQuestInfosToJSON exporter =
                 new ExportQuestInfosToJSON();
-            new SimpleDialogBehaviour(
+            var unused4 = Base.Instance.GetSimpleBehaviour(
                 exporter,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)

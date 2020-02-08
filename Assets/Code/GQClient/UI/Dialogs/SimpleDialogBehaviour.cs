@@ -1,11 +1,7 @@
 ﻿//#define DEBUG_LOG
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using GQ.Client.Util;
 using System;
-using GQ.Client.Err;
 
 namespace GQ.Client.UI.Dialogs
 {
@@ -17,7 +13,7 @@ namespace GQ.Client.UI.Dialogs
     /// 
     /// When the task is completed the dialog will be closed. It will be shown for at least one frame.
     /// </summary>
-    public class SimpleDialogBehaviour : DialogBehaviour
+    public class SimpleDialogBehaviour : DialogBehaviour, SimpleBehaviour
     {
 
         private string title;

@@ -444,6 +444,10 @@ namespace GQ.Client.Conf
         #region UI Strategies
         [ShowInProductEditor(StartSection = "UI Strategies:")]
         public bool hideFooterIfPossible { get; set; }
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public TaskUIMode taskUI { get; set; }
         #endregion
 
 
@@ -838,6 +842,7 @@ namespace GQ.Client.Conf
 
             // UI Strategies:
             hideFooterIfPossible = false;
+            taskUI = TaskUIMode.ProgressAtBottom;
             autoScrollNewText = true;
 
             // Layout:
@@ -948,6 +953,12 @@ namespace GQ.Client.Conf
         CenterOfMarkers,
         PlayerPosition,
         FixedPosition
+    }
+
+    public enum TaskUIMode
+    {
+        Dialog,
+        ProgressAtBottom
     }
 
     public enum PageType

@@ -154,7 +154,7 @@ namespace GQTests.Model
 		public void Number_XML_IntWithThousandsSepDE_Test ()
 		{
 			// Act:
-			Base.Init ();
+			Base _unused = Base.Instance;
 			NumberExpression numberExpr = parseXML<NumberExpression> (@"<num>123.456.789</num>");
 
 			// Assert:

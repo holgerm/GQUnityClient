@@ -14,7 +14,7 @@ namespace GQ.Client.UI
 	/// For details cf. @ref TasksAndUI
 	/// 
 	/// </summary>
-	public abstract class UIBehaviour
+	public abstract class UIBehaviour : AbstractBehaviour
 	{
 
 		/// <summary>

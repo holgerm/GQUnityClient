@@ -87,12 +87,12 @@ namespace GQ.Client.UI.Foyer
 
         #region Internal UI Control Functions
 
-        public override void Hide()
+        public override void Hide(GameObject go = null)
         {
             transform.SetParent(listController.HiddenQuests.transform);
         }
 
-        public override void Show()
+        public override void Show(GameObject go = null)
         {
             transform.SetParent(listController.InfoList.transform);
             gameObject.SetActive(true);

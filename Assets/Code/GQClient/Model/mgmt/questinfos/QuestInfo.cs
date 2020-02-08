@@ -8,6 +8,7 @@ using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.FileIO;
 using QM.Util;
+using GQ.Client.UI.Progress;
 
 namespace GQ.Client.Model
 {
@@ -662,7 +663,7 @@ namespace GQ.Client.Model
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
                     targetPath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
                 );
-            var unused = new DownloadDialogBehaviour(
+            var unused = Base.Instance.GetDownloadBehaviour(
                 downloadGameXML,
                 string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
             );
@@ -670,11 +671,16 @@ namespace GQ.Client.Model
             // analyze game.xml, gather all media info compare to local media info and detect missing media
             PrepareMediaInfoList prepareMediaInfosToDownload =
                 new PrepareMediaInfoList();
-            var unused1 = new SimpleDialogBehaviour(
+            var unused1 = Base.Instance.GetSimpleBehaviour(
                 prepareMediaInfosToDownload,
                 string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
                 "Medien werden vorbereitet"
             );
+            //var unused1 = new SimpleDialogBehaviour(
+            //    prepareMediaInfosToDownload,
+            //    string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+            //    "Medien werden vorbereitet"
+            //);
 
             // download all missing media info
             MultiDownloader downloadMediaFiles =
@@ -682,11 +688,16 @@ namespace GQ.Client.Model
                     maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
                     timeout: ConfigurationManager.Current.timeoutMS
                 );
-            var unused2 = new SimpleDialogBehaviour(
+            var unused2 = Base.Instance.GetSimpleBehaviour(
                 downloadMediaFiles,
                 string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
                 "Mediendateien werden geladen"
             );
+            //var unused2 = new SimpleDialogBehaviour(
+            //    downloadMediaFiles,
+            //    string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+            //    "Mediendateien werden geladen"
+            //);
             downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
             {
                 TimeStamp = ServerTimeStamp;
@@ -695,19 +706,29 @@ namespace GQ.Client.Model
             // store current media info locally
             ExportMediaInfoList exportLocalMediaInfo =
                 new ExportMediaInfoList();
-            var unused3 = new SimpleDialogBehaviour(
+            var unused3 = Base.Instance.GetSimpleBehaviour(
                 exportLocalMediaInfo,
                 string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
                 "Medieninformationen werden lokal gespeichert"
             );
+            //var unused3 = new SimpleDialogBehaviour(
+            //    exportLocalMediaInfo,
+            //    string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+            //    "Medieninformationen werden lokal gespeichert"
+            //);
 
             ExportQuestInfosToJSON exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
-            var unused4 = new SimpleDialogBehaviour(
+            var unused4 = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
             );
+            //var unused4 = new SimpleDialogBehaviour(
+            //    exportQuestsInfoJSON,
+            //    string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
+            //    string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+            //);
 
             TaskSequence t =
                 new TaskSequence(

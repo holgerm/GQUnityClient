@@ -24,15 +24,15 @@ namespace GQ.Client.Util
         public Task(bool runsAsCoroutine = false)
         {
             RunsAsCoroutine = runsAsCoroutine;
-            behaviours = new List<UIBehaviour>();
+            behaviours = new List<AbstractBehaviour>();
         }
 
 
         #region Link to Behavious
 
-        protected List<UIBehaviour> behaviours;
+        protected List<AbstractBehaviour> behaviours;
 
-        public void AddBehaviour(UIBehaviour behaviour)
+        public void AddBehaviour(AbstractBehaviour behaviour)
         {
             behaviours.Add(behaviour);
         }
@@ -66,7 +66,7 @@ namespace GQ.Client.Util
         public virtual IEnumerator RunAsCoroutine(object input = null)
         {
             behaviours.ForEach(
-                (UIBehaviour behaviour) => behaviour.Start()
+                (AbstractBehaviour behaviour) => behaviour.Start()
             );
 
             ReadInput(input);
@@ -99,7 +99,6 @@ namespace GQ.Client.Util
 
 
         #region Events
-
         public delegate void TaskCallback(object sender, TaskEventArgs e);
 
         public event TaskCallback OnTaskCompleted;
@@ -130,7 +129,7 @@ namespace GQ.Client.Util
         public void StopBehaviours()
         {
             behaviours.ForEach(
-                (UIBehaviour behaviour) => behaviour.Stop()
+                (AbstractBehaviour behaviour) => behaviour.Stop()
             );
         }
 
@@ -165,12 +164,10 @@ namespace GQ.Client.Util
         {
             return;
         }
-
         #endregion
 
 
         #region Test Access
-
         public Delegate[] GetOnEndedInvocationList()
         {
             return OnTaskEnded != null ? OnTaskEnded.GetInvocationList() : null;
@@ -185,7 +182,6 @@ namespace GQ.Client.Util
         {
             return OnTaskFailed != null ? OnTaskFailed.GetInvocationList() : null;
         }
-
         #endregion
 
     }

@@ -10,6 +10,7 @@ using System.Net;
 using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using UnityEngine;
+using GQ.Client.UI;
 
 namespace GQ.Client.Model
 {
@@ -72,11 +73,11 @@ namespace GQ.Client.Model
         private int stepsTotal { get; set; }
         #endregion
 
-        SimpleDialogBehaviour dialogBehaviour;
+        SimpleBehaviour dialogBehaviour;
 
         protected override IEnumerator DoTheWork()
         {
-            dialogBehaviour = (SimpleDialogBehaviour)behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
+            dialogBehaviour = (SimpleBehaviour)behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
             OnProgress += dialogBehaviour.OnProgress;
 
             // step 1 deserialize game.xml:

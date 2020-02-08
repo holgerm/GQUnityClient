@@ -11,6 +11,7 @@ using GQ.Client.UI;
 using System;
 using QM.Util;
 using System.Collections.Generic;
+using GQ.Client.UI.Progress;
 
 namespace GQ.Client.Util
 {
@@ -23,6 +24,7 @@ namespace GQ.Client.Util
         public GameObject MapHolder;
         public GameObject MenuCanvas;
         public GameObject DialogCanvas;
+        public GameObject ProgressCanvas;
 
         public Canvas partnersCanvas;
         public Canvas imprintCanvas;
@@ -55,13 +57,16 @@ namespace GQ.Client.Util
                     if (baseGO == null)
                     {
                         baseGO = new GameObject(BASE);
-                        Init();
+                        Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
                     }
 
                     if (baseGO.GetComponent(typeof(Base)) == null)
                         baseGO.AddComponent(typeof(Base));
 
+                    // initialize the instance:
                     _instance = (Base)baseGO.GetComponent(typeof(Base));
+                    _instance.ProgressCanvas.SetActive(true);
+                    _instance.ProgressCanvas.GetComponent<Canvas>().enabled = false;
                 }
                 return _instance;
             }
@@ -70,7 +75,6 @@ namespace GQ.Client.Util
 
 
         #region Foyer
-
         public const string FOYER_SCENE_NAME = "Foyer";
 
         private bool listShown;
@@ -122,11 +126,6 @@ namespace GQ.Client.Util
 
 
         #region LifeCycle
-        public static void Init()
-        {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
-        }
-
         void Awake()
         {
             // hide all canvases at first, we show the needed ones in initViews()
@@ -155,7 +154,6 @@ namespace GQ.Client.Util
         private void Start()
         {
             partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
-            Debug.Log("Activated Partner Canvas.");
         }
 
         void Update()
@@ -175,7 +173,7 @@ namespace GQ.Client.Util
         {
             if (block)
             {
-                InteractionBlocker.SetActive(true); 
+                InteractionBlocker.SetActive(true);
             }
             else
             {
@@ -187,6 +185,34 @@ namespace GQ.Client.Util
         {
             yield return new WaitForEndOfFrame();
             InteractionBlocker.SetActive(false);
+        }
+
+        public DownloadBehaviour GetDownloadBehaviour(Downloader downloader, string title)
+        {
+            switch (ConfigurationManager.Current.taskUI)
+            {
+                case TaskUIMode.Dialog:
+                    return new DownloadDialogBehaviour(downloader, title);
+                case TaskUIMode.ProgressAtBottom:
+                    return new DownloadProgressBehaviour(downloader, title);
+                default:
+                    Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.", ConfigurationManager.Current.taskUI);
+                    return new DownloadDialogBehaviour(downloader, title);
+            }
+        }
+
+        public SimpleBehaviour GetSimpleBehaviour(Task task, string title, string details)
+        {
+            switch (ConfigurationManager.Current.taskUI)
+            {
+                case TaskUIMode.Dialog:
+                    return new SimpleDialogBehaviour(task, title, details);
+                case TaskUIMode.ProgressAtBottom:
+                    return new SimpleProgressBehaviour(task, title, details);
+                default:
+                    Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.", ConfigurationManager.Current.taskUI);
+                    return new SimpleDialogBehaviour(task, title, details);
+            }
         }
         #endregion
 

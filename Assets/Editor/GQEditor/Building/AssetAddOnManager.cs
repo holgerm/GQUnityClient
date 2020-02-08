@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define Debug_Log
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -13,12 +15,12 @@ namespace GQ.Editor.Building
     public static class AssetAddOnManager
     {
 
-
         #region AssetAddOns
-
         public static void switchAssetAddOns(Config oldConfig, Config newConfig)
         {
+#if Debug_Log
             Debug.Log("AAO: switchAssetAddOns(" + oldConfig.name + ", " + newConfig.name + ")");
+#endif
             AssetAddOnManager.unloadAssetAddOns(oldConfig, newConfig);
             AssetAddOnManager.loadAssetAddOns(oldConfig, newConfig);
         }
@@ -50,7 +52,9 @@ namespace GQ.Editor.Building
         public static void unloadAssetAddOns(Config oldProdConfig, Config newProdConfig)
         {
             List<string> assetAddOns = calculateAAOsToUnload(oldProdConfig, newProdConfig);
+#if Debug_Log
             Debug.Log("AAO: unloadAssetAddOns(" + oldProdConfig.name + ", " + newProdConfig.name + "): #assets: " + assetAddOns.Count);
+#endif
             foreach (string assetAddOn in assetAddOns)
             {
                 unloadAaoRecursively(assetAddOn);
@@ -61,7 +65,9 @@ namespace GQ.Editor.Building
 
         private static void unloadAaoRecursively(string assetAddOn, string relPath = "")
         {
+#if Debug_Log
             Debug.Log("AAO: unloadAaoRecursively(" + assetAddOn + "," + relPath + ")");
+#endif
 
             // recursively go into every dir in the AssetAddOn tree:
             string aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
@@ -74,7 +80,9 @@ namespace GQ.Editor.Building
             string assetDir = Files.CombinePath(Application.dataPath, relPath);
             foreach (string file in Directory.GetFiles(aaoPath))
             {
+#if Debug_Log
                 Debug.Log("AAO Deleting file: " + file);
+#endif
                 string assetFile = Files.CombinePath(assetDir, Files.FileName(file));
                 Files.DeleteFile(assetFile);
             }
@@ -90,32 +98,40 @@ namespace GQ.Editor.Building
             ))
             {
                 // case 1: no marker file, i.e. this dir is independent of AAOs and is kept. We reduce gitignore.
+#if Debug_Log
                 Debug.Log(string.Format("Dir {0} does NOT contain AAO Marker and is kept.", assetDir));
-                //deleteAaoSectionFromGitignore(assetDir, assetAddOn);
+#endif
             }
             else
             {
+#if Debug_Log
                 Debug.Log(string.Format("Dir {0} DOES contain AAO Marker ...", assetDir));
+#endif
                 if (File.Exists(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn)))
                 {
                     // this dir depended on the current AAO, hence we delete the according marker file:
                     bool deleted = Files.DeleteFile(Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn));
+#if Debug_Log
                     Debug.Log(string.Format("Dir {0} contains our AAO Marker {1} and has been deleted: {2}.",
                                             assetDir, AAO_MARKERFILE_PREFIX + assetAddOn, deleted));
+#endif
                 }
                 if (Array.Exists(
-                    Directory.GetFiles(assetDir),
-                    element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
-                ))
+                Directory.GetFiles(assetDir),
+                element => Files.FileName(element).StartsWith(AAO_MARKERFILE_PREFIX, StringComparison.CurrentCulture)
+            ))
                 {
                     // case 2: this dir depends also on other AAOs and is kept. We reduce the gitignore.
+#if Debug_Log
                     Debug.Log(string.Format("Dir {0} contains other AAO Markers hence we keep it.", assetDir));
-                    //deleteAaoSectionFromGitignore(assetDir, assetAddOn);
+#endif
                 }
                 else
                 {
                     // case 3: this dir depended only on this AAO, hence we can delete it (including the gitignore)
+#if Debug_Log
                     Debug.Log(string.Format("Dir {0} contains NO other AAO Markers hence we DELETE it.", assetDir));
+#endif
                     Files.DeleteDir(assetDir);
                 }
             }
@@ -124,7 +140,9 @@ namespace GQ.Editor.Building
 
         private static void deleteAaoSectionFromGitignore(string assetAddOn)
         {
+#if Debug_Log
             Debug.Log("AAO: deleteAaoSectionFromGitignore(" + assetAddOn + ")");
+#endif
 
             if (!File.Exists(Files.GIT_EXCLUDE_FILE))
             {
@@ -145,11 +163,15 @@ namespace GQ.Editor.Building
                 string before = match.Groups[1].Value;
                 string after = match.Groups[3].Value;
                 gitignoreText = before + "\n" + after;
+#if Debug_Log
                 Debug.Log("deleteAaoSectionFromGitignore: MATCHES: before: " + before + ", after: " + after);
+#endif
             }
             else
             {
+#if Debug_Log
                 Debug.Log("deleteAaoSectionFromGitignore: DID NOT MATCH");
+#endif
             }
 
             gitignoreText = gitignoreText.Trim();
@@ -165,14 +187,18 @@ namespace GQ.Editor.Building
             List<string> gitignorePatterns = new List<string>();
 
             List<string> assetAddOns = calculateAAOsToLoad(oldProdConfig, newProdConfig);
+#if Debug_Log
             Debug.Log("AAO: loadAssetAddOns(" + oldProdConfig.name + ", " + newProdConfig.name + "): #assets: " + assetAddOns.Count);
+#endif
             foreach (string assetAddOn in assetAddOns)
             {
                 loadAaoRecursively(assetAddOn, gitignorePatterns, true);
 
                 if (gitignorePatterns.Count > 0)
                 {
+#if Debug_Log
                     Debug.Log("AAO: loadAssetAddOns: adding to gitExclude: #" + gitignorePatterns.Count + " entries.");
+#endif
                     // Store additions to git exclude file:
                     string gitExcludeSection = "\n\n# BEGIN GQ AAO: " + assetAddOn + "\n";
                     foreach (string pattern in gitignorePatterns)
@@ -196,7 +222,9 @@ namespace GQ.Editor.Building
         private static void loadAaoRecursively(string assetAddOn, List<string> gitignorePatterns, bool gitCollectIgnores, string relPath = "")
         {
             bool gitCollectIgnoresInSubdirs = gitCollectIgnores;
+#if Debug_Log
             Debug.Log("AAO Loading: " + relPath);
+#endif
             // set the according dir within Assets:
             string assetDir = Files.CombinePath(Application.dataPath, relPath);
             // if dir does not exist in asstes create and mark it:
@@ -249,7 +277,9 @@ namespace GQ.Editor.Building
                         Files.CombinePath(assetDir, Files.FileName(file))
                     );
                 }
+#if Debug_Log
                 Debug.Log("AAO File Copy: " + file);
+#endif
                 Files.CopyFile(
                     fromFilePath: file,
                     toDirPath: assetDir,
