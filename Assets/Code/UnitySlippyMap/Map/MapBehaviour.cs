@@ -1359,9 +1359,6 @@ namespace UnitySlippyMap.Map
             if (m != null && markers.Contains(m))
             {
                 markers.Remove(m);
-
-                Debug.Log("##### marker removed : " + m.name);
-
                 DestroyImmediate(m.gameObject);
             }
         }

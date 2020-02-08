@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
-using GQ.Client.Conf;
 using GQ.Client.Util;
-using UnityEngine.UI;
-using GQ.Client.Model;
 using GQ.Client.Err;
 
 namespace GQ.Client.UI.Dialogs
 {
-	
-	public class DownloadDialogBehaviour : DialogBehaviour, DownloadBehaviour
+
+    public class DownloadDialogBehaviour : DialogBehaviour, DownloadBehaviour
 	{
 
 		AbstractDownloader DownloadTask { get; set; }

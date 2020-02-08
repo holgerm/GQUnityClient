@@ -109,6 +109,7 @@
   "defaultCategory": null,
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
+  "taskUI": "ProgressAtBottom",
   "mainFgColor": {
     "r": 26,
     "g": 25,

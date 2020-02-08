@@ -8,7 +8,7 @@ using GQ.Client.Conf;
 using GQ.Client.UI.Dialogs;
 using GQ.Client.FileIO;
 using QM.Util;
-using GQ.Client.UI.Progress;
+using GQ.Client.UI;
 
 namespace GQ.Client.Model
 {
@@ -825,7 +825,7 @@ namespace GQ.Client.Model
 
             ExportQuestInfosToJSON exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
-            var unused = new SimpleDialogBehaviour(
+            var unused = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
@@ -907,7 +907,7 @@ namespace GQ.Client.Model
                 new LocalFileLoader(
                     filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
                 );
-            DownloadDialogBehaviour unused = new DownloadDialogBehaviour(
+            DownloadBehaviour unused = Base.Instance.GetDownloadBehaviour(
                 loadGameXML,
                 string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
             );

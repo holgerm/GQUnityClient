@@ -6,9 +6,7 @@ using GQ.Client.Err;
 using GQ.Client.UI.Dialogs;
 using UnityEngine.SceneManagement;
 using GQ.Client.Conf;
-using GQ.Client.Model;
 using GQ.Client.UI;
-using System;
 using QM.Util;
 using System.Collections.Generic;
 using GQ.Client.UI.Progress;
@@ -187,7 +185,7 @@ namespace GQ.Client.Util
             InteractionBlocker.SetActive(false);
         }
 
-        public DownloadBehaviour GetDownloadBehaviour(Downloader downloader, string title)
+        public DownloadBehaviour GetDownloadBehaviour(AbstractDownloader downloader, string title)
         {
             switch (ConfigurationManager.Current.taskUI)
             {

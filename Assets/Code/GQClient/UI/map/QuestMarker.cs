@@ -5,7 +5,6 @@ using UnityEngine;
 using GQ.Client.Err;
 using GQ.Client.Util;
 using GQ.Client.Model;
-using GQ.Client.UI.Dialogs;
 using GQ.Client.Conf;
 
 namespace GQ.Client.UI
@@ -39,12 +38,12 @@ namespace GQ.Client.UI
 				new LocalFileLoader (
 					filePath: QuestManager.GetLocalPath4Quest (Data.Id) + QuestManager.QUEST_FILE_NAME
 				);
-			new DownloadDialogBehaviour (
-				loadGameXML, 
-				string.Format ("Loading {0}", ConfigurationManager.Current.nameForQuestSg)
-			);
+            _ = Base.Instance.GetDownloadBehaviour(
+                loadGameXML,
+                string.Format("Loading {0}", ConfigurationManager.Current.nameForQuestSg)
+            );
 
-			QuestStarter questStarter = new QuestStarter ();
+            QuestStarter questStarter = new QuestStarter ();
 
 			TaskSequence t = 
 				new TaskSequence (loadGameXML, questStarter);
