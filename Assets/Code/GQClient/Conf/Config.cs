@@ -185,7 +185,7 @@ namespace GQ.Client.Conf
         #endregion
 
         #region Synching
-        [ShowInProductEditor]
+        [ShowInProductEditor(StartSection = "Synchronization:")]
         public bool autoSynchQuestInfos { get; set; }
 
         /// <summary>
