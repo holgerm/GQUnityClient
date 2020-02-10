@@ -1,7 +1,8 @@
-﻿using System;
+﻿#define DEBUG_LOG
+
+using System;
 using GQ.Client.Model;
 using GQ.Client.Util;
-using QM.Util;
 using UnityEngine;
 
 namespace GQ.Client.UI
@@ -18,7 +19,10 @@ namespace GQ.Client.UI
 		/// </summary>
 		public override void InitPage_TypeSpecific ()
 		{
-            LocationSensor.Instance.OnLocationUpdate += page.Quest.UpdateHotspotMarkers; // NEW: PROBLEM SOLVED?
+#if DEBUG_LOG
+			Debug.Log("NavigationController.Init-TypeSpecific() started.");
+#endif
+			LocationSensor.Instance.OnLocationUpdate += page.Quest.UpdateHotspotMarkers; // NEW: PROBLEM SOLVED?
 
             try
             {

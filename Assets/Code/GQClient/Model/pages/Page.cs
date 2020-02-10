@@ -1,4 +1,4 @@
-//#define DEBUG_LOG
+#define DEBUG_LOG
 
 using GQ.Client.Err;
 using UnityEngine.SceneManagement;
@@ -249,7 +249,10 @@ namespace GQ.Client.Model
 #if DEBUG_LOG
         void DebugShowSceneUnloaded(Scene unloadedScene)
         {
-            Debug.LogFormat(("Scene unloaded: " + unloadedScene.name).Yellow());
+            Debug.Log(
+                string.Format("Scene unloaded: {0}. Frame# {1}.",
+                    unloadedScene.name,
+                    Time.frameCount).Yellow());
             SceneManager.sceneUnloaded -= DebugShowSceneUnloaded;
         }
 #endif
