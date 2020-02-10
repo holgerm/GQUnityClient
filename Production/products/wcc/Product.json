@@ -172,7 +172,7 @@
         },
         {
           "id": "wcc.concerthall",
-          "name": "Konzertsaal",
+          "name": "Schall & Klang",
           "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/concerthall"
