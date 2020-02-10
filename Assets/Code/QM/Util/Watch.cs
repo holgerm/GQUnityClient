@@ -24,13 +24,17 @@ namespace QM.Util
 		{
 		}
 
-		public WATCH (string name)
+		public WATCH (string name, bool log = false)
 		{
 			stopwatch = new Stopwatch ();
 			this.Name = name;
 			nameOfLastStarted = name;
 			this.lastTimeStamp = 0L;
 			watches [name] = this;
+            if (log)
+            {
+                UnityEngine.Debug.Log("WATCH started: " + name + " (frame# " + Time.frameCount + ")");
+            }
 		}
 
 		public static WATCH Get (string name)
@@ -56,22 +60,27 @@ namespace QM.Util
 		{
 			stopwatch.Stop ();
 			UnityEngine.Debug.Log (
-				string.Format ("WATCH {0} stopped after {1} ms ({2} delta)", 
+				string.Format ("WATCH {0} stopped after {1} ms ({2} delta in frame# {3})", 
 					Name, 
 					stopwatch.ElapsedMilliseconds, 
-					stopwatch.ElapsedMilliseconds - lastTimeStamp
+					stopwatch.ElapsedMilliseconds - lastTimeStamp,
+                    Time.frameCount
 				)
 			);
 		}
 
-		public static void Lap (string name)
+		public static void Lap(string name, bool log = false)
 		{
-			WATCH w = Get (name);
+			WATCH w = Get(name);
 			if (w == null) {
-				UnityEngine.Debug.Log (string.Format ("WATCH {0} not available.", name));
+				UnityEngine.Debug.Log(string.Format("WATCH {0} not available.", name));
 				return;
 			}
-			w.Lap ();
+			w.Lap();
+			if (log)
+            {
+				UnityEngine.Debug.Log("WATCH lap: " + name + " (frame# " + Time.frameCount + ")");
+			}
 		}
 
 		public void Lap ()
@@ -93,11 +102,12 @@ namespace QM.Util
 		{
 			stopwatch.Stop ();
 			UnityEngine.Debug.Log (
-				string.Format ("WATCH {0} at {1} took {2} ms ({3} delta)", 
+				string.Format ("WATCH {0} at {1} took {2} ms ({3} delta in frame# {4})", 
 					Name, 
 					pointName, 
 					stopwatch.ElapsedMilliseconds, 
-					stopwatch.ElapsedMilliseconds - lastTimeStamp
+					stopwatch.ElapsedMilliseconds - lastTimeStamp,
+					Time.frameCount
 				)
 			);
 			lastTimeStamp = stopwatch.ElapsedMilliseconds;
