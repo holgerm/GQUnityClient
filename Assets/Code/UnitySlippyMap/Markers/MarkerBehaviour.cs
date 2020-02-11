@@ -24,12 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
-using UnitySlippyMap.Map;
-using UnitySlippyMap.Helpers;
-
-namespace UnitySlippyMap.Markers
+namespace Code.UnitySlippyMap.Markers
 {
 	/// <summary>
 	/// A simple marker class.

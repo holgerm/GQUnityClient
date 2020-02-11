@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using GQ.Client.Conf;
 using System.Text;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.UI.author;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
     public abstract class QuestInfoFilter
@@ -198,7 +198,7 @@ namespace GQ.Client.Model
             }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="GQ.Client.Model.QuestInfoFilter+Category"/> class.
+            /// Initializes a new instance of the <see cref="QuestInfoFilter"/> class.
             /// </summary>
             /// <param name="firstCategory">First category to be accepted by this filter.</param>
             /// <param name="categories">Further categories to be accepted. In fact you can simply sepcify any number of acceptable categories in one row.</param>

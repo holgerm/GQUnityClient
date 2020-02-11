@@ -9,7 +9,7 @@
 using System;
 using System.Text;
 
-namespace Microsoft.MapPoint
+namespace Code.UnitySlippyMap.Helpers.VirtualEarth
 {
     static class TileSystem
     {

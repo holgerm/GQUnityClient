@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Err;
+using Code.GQClient.Model.actions;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Util;
+using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
-using GQ.Client.Util;
-using GQ.Client.Err;
 
 namespace GQTests.Model
 {

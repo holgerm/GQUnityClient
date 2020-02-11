@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Err;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Err;
 
-namespace GQ.UI
+namespace Code.GQClient.UI.legal
 {
 
     public class ShowLocalPrivacyText : MonoBehaviour

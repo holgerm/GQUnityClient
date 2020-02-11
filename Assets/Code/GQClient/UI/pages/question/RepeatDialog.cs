@@ -1,6 +1,7 @@
-﻿using GQ.Client.Util;
+﻿using Code.GQClient.UI.Dialogs;
+using Code.GQClient.Util;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.pages.question
 {
     public class RepeatDialog : DialogBehaviour
     {

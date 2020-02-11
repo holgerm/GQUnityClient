@@ -1,9 +1,8 @@
-﻿using GQ.Client.Model;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Util;
 using TMPro;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.question.textquestion
 {
     public class TextQuestionController : QuestionController
     {

@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using GQ.Client.Util;
-using QM.UI;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Util;
+using Code.QM.UI;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu.viewToggle
 {
 
     public class ViewToggleController : MonoBehaviour

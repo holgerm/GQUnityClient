@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.UI.author;
+using Code.GQClient.UI.Foyer.questinfos;
 using UnityEngine;
-using GQ.Client.Model;
 
-namespace GQ.Client.UI.Foyer
+namespace Code.GQClient.UI.Foyer.containers
 {
 	/// <summary>
 	/// Abstract super class of all viewer controllers that show quest sets. E.g. the quest list and map in the foyer.

@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using GQ.Client.Err;
-using GQ.Client.Conf;
-using UnityEngine.UI;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.QM.Util;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using QM.Util;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.layout
 {
 
     public abstract class LayoutConfig : MonoBehaviour

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System.IO;
 using GQ.Editor.UI;
 using System.Collections.Generic;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
 
 namespace GQTests.Editor.UI {
 

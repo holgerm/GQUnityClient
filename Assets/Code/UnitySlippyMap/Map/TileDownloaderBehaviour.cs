@@ -26,14 +26,15 @@
 // SOFTWARE.
 
 using System;
-using System.IO;
-using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.IO;
+using System.Xml.Serialization;
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Helpers.JobManager;
 using UnityEngine;
 
-namespace UnitySlippyMap.Map
+namespace Code.UnitySlippyMap.Map
 {
     /// <summary>
     /// A singleton class in charge of downloading, caching and serving tiles.

@@ -1,11 +1,14 @@
-﻿using UnityEngine;
-using System.Text.RegularExpressions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using GQ.Client.Err;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using UnityEngine;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.expressions
 {
 
     public class Variables

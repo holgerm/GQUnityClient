@@ -1,7 +1,4 @@
-﻿using GQ.Client.Model;
-using GQ.Client.UI.Dialogs;
-
-namespace GQ.Client.UI
+﻿namespace Code.GQClient.UI.pages.question
 {
 
     public abstract class QuestionController : PageController

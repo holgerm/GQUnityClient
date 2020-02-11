@@ -1,19 +1,22 @@
 ﻿//#define DEBUG_LOG
 
+using System;
 using System.Collections;
+using System.Globalization;
+using System.IO;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Model;
-using System;
-using System.Globalization;
-using GQ.Client.Util;
-using System.IO;
-using GQ.Client.FileIO;
-using GQ.Client.Err;
-using GQ.Client.Conf;
-using TMPro;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.imagecapture
 {
 
     public class ImageCaptureController : PageController

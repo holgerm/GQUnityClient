@@ -1,7 +1,7 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
-namespace QM.Util
+namespace Code.QM.Util
 {
 
 	/// <summary>

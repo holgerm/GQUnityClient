@@ -1,8 +1,9 @@
-﻿using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.UI.layout;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.parts.fulscreenImage
 {
 
     [RequireComponent(typeof(Button)), RequireComponent(typeof(RectTransform))]

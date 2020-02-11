@@ -24,11 +24,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
-using UnitySlippyMap.Map;
-
-namespace UnitySlippyMap.Layers
+namespace Code.UnitySlippyMap.Layers
 {
 
 	/// <summary>

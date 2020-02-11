@@ -1,15 +1,16 @@
-using System.Collections.Generic;
-using UnityEngine;
-using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using Code.GQClient.UI.author;
+using Code.GQClient.UI.map;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using GQ.Client.UI;
-using GQ.Client.Util;
-#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
+#if UNITY_EDITOR
+
 #endif
 
-namespace GQ.Client.Conf
+namespace Code.GQClient.Conf
 {
     /// <summary>
     /// Config class specifies textual parameters of a product. It is used both at runtime to initilize the app's branding details from and 
@@ -770,7 +771,7 @@ namespace GQ.Client.Conf
         #region Defaults
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GQ.Client.Conf.Config"/> class and intializes it with generic default values.
+        /// Initializes a new instance of the <see cref="Config"/> class and intializes it with generic default values.
         /// 
         /// This constructor is used by the ProductManager (explicit) as well as the JSON.Net deserialize method (via reflection).
         /// </summary>

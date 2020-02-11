@@ -1,10 +1,9 @@
 using System.IO;
 using System;
 using System.Collections.Generic;
-using GQ.Client.Util;
-using GQ.Client.Conf;
 using UnityEngine;
 using System.Text;
+using Code.GQClient.Conf;
 using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQ.Editor.UI;

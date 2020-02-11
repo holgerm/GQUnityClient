@@ -1,4 +1,4 @@
-﻿namespace GQ.Client.Model
+﻿namespace Code.GQClient.Model.gqml
 {
 
 	public interface IParentedXml {

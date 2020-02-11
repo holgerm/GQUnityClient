@@ -1,9 +1,13 @@
-﻿using System.Xml;
-using GQ.Client.Err;
-using System;
+﻿using System;
 using System.Globalization;
+using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Model.mgmt.quests;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
 
     public class ActionStartQuest : Action

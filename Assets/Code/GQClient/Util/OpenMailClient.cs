@@ -1,10 +1,10 @@
-﻿using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
 using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util
 {
 
-    public class OpenMailClient : QM.Util.OpenMailClient
+    public class OpenMailClient : global::QM.Util.OpenMailClient
     {
 
         // Use this for initialization

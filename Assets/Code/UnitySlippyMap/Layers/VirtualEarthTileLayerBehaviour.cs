@@ -25,18 +25,16 @@
 // SOFTWARE.
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Xml.Serialization;
-using System.Globalization;
-
-using Microsoft.MapPoint;
-
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Helpers.UnityThreading;
+using Code.UnitySlippyMap.Helpers.VirtualEarth;
+using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
-using UnitySlippyMap.Helpers;
-using UnitySlippyMap.Map;
-
-namespace UnitySlippyMap.Layers
+namespace Code.UnitySlippyMap.Layers
 {
 	/// <summary>
 	/// A class representing a VirtualEarth tile layer.
@@ -202,12 +200,12 @@ namespace UnitySlippyMap.Layers
 
 						UnityThreadHelper.CreateThread (() =>
 						{
-							UnitySlippyMap.VirtualEarth.Metadata metadata = null;
+							global::Code.UnitySlippyMap.Helpers.VirtualEarth.Metadata metadata = null;
 							try {
-								XmlSerializer xs = new XmlSerializer (typeof(UnitySlippyMap.VirtualEarth.Metadata), "http://schemas.microsoft.com/search/local/ws/rest/v1");
-								metadata = xs.Deserialize (new MemoryStream (bytes)) as UnitySlippyMap.VirtualEarth.Metadata;
+								XmlSerializer xs = new XmlSerializer (typeof(global::Code.UnitySlippyMap.Helpers.VirtualEarth.Metadata), "http://schemas.microsoft.com/search/local/ws/rest/v1");
+								metadata = xs.Deserialize (new MemoryStream (bytes)) as global::Code.UnitySlippyMap.Helpers.VirtualEarth.Metadata;
 
-								baseURL = (metadata.ResourceSets [0].Resources [0] as UnitySlippyMap.VirtualEarth.ImageryMetadata).ImageUrl.Replace ("{culture}", CultureInfo.CurrentCulture.ToString ());
+								baseURL = (metadata.ResourceSets [0].Resources [0] as global::Code.UnitySlippyMap.Helpers.VirtualEarth.ImageryMetadata).ImageUrl.Replace ("{culture}", CultureInfo.CurrentCulture.ToString ());
 							} catch (
                             Exception
 #if DEBUG_LOG

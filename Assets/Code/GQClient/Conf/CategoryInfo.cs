@@ -1,7 +1,7 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
-namespace GQ.Client.Conf {
+namespace Code.GQClient.Conf {
 
 	/// <summary>
 	/// This class is used for derserializing the JSON product configuration into at runtime. 

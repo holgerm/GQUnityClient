@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using GQ.Client.Model;
-using GQ.Client.Conf;
-using GQ.Client.Err;
-using UnitySlippyMap.Map;
-using QM.Util;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.QM.Util;
+using Code.UnitySlippyMap.Map;
+using UnityEngine;
 
-namespace GQ.Client.UI.Foyer
+namespace Code.GQClient.UI.map
 {
 
 	/// <summary>

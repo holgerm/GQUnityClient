@@ -1,8 +1,8 @@
-﻿using QM.Util;
+﻿using Code.QM.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace QM.Events
+namespace Code.QM.Events
 {
     /// <summary>
     /// Orientation changed event. Uses two arguments: firt the old and second the new orientation.

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.map
 {
 
 	public class QuestMarkerInteractions : MonoBehaviour {
@@ -24,7 +24,7 @@ namespace GQ.Client.UI
 		void Update () {
 			// if users touches buttons or header, we ignore that touch on the map and its markers
 			// also we ignore if the user starts a drag move from such an ui element (hence we ask for used events, c.f. UnitySlippyMap.Input.MapInput
-			if ((Event.current != null && Event.current.type == EventType.Used) 
+			if ((UnityEngine.Event.current != null && UnityEngine.Event.current.type == EventType.Used) 
 				|| EventSystem.current.IsPointerOverGameObject () 
 				|| MapController.IgnoreInteraction
 				|| (UnityEngine.Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject (UnityEngine.Input.GetTouch (0).fingerId))

@@ -2,10 +2,10 @@
 
 using System.Collections.Generic;
 using System.IO;
-using GQ.Client.Err;
+using Code.GQClient.Err;
 using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.start
 {
     public class AssetBundles : MonoBehaviour
     {

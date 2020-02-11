@@ -1,13 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Code.GQClient.Err;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Model;
-using GQ.Client.Util;
-using System;
-using GQ.Client.Err;
-using TMPro;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.audiorecord
 {
     public class AudioRecordController : PageController
     {

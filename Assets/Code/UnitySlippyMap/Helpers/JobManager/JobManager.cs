@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UnitySlippyMap
+namespace Code.UnitySlippyMap.Helpers.JobManager
 {
 
 public class JobManager : MonoBehaviour

@@ -1,13 +1,17 @@
 ﻿// #define DEBUG_LOG
 
 using System.Collections.Generic;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.media;
+using Code.GQClient.Util;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
 using UnityEngine;
-using GQ.Client.Err;
-using GQ.Client.Util;
-using GQ.Client.Model;
-using GQ.Client.Conf;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.map
 {
 
     public class QuestMarker : Marker

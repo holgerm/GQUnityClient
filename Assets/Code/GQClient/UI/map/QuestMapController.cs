@@ -1,11 +1,12 @@
-﻿using UnityEngine;
-using GQ.Client.Model;
-using UnitySlippyMap.Map;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Model;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.input;
+using Code.UnitySlippyMap.Map;
+using UnityEngine;
 
-
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.map
 {
     public class QuestMapController : MapController
     {

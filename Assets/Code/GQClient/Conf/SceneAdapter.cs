@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Err;
+using Code.GQClient.Util;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using GQ.Client.Err;
-using GQ.Client.Util;
 
-namespace GQ.Client.Conf
+namespace Code.GQClient.Conf
 {
 
 	public class SceneAdapter

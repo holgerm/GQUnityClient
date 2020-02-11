@@ -1,9 +1,10 @@
 ﻿#define DEBUG_LOG
 
+using Code.GQClient.UI.layout;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.navigation
 {
 
     public class NavigationMapLayout : PageLayout

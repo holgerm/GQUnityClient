@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Xml;
-using GQ.Client.Err;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.conditions;
+using Code.GQClient.Model.gqml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
 	public class ActionIf : Action
 	{

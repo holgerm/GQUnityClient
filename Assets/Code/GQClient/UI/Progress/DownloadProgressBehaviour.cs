@@ -1,8 +1,9 @@
 ﻿using System;
-using GQ.Client.Util;
-using GQ.Client.Err;
+using Code.GQClient.Err;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.UI.Progress
+namespace Code.GQClient.UI.Progress
 {
     public class DownloadProgressBehaviour : ProgressBehaviour, DownloadBehaviour
 	{

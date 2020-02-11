@@ -1,6 +1,9 @@
 ﻿using System.Xml;
+using Code.GQClient.Model.actions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public class PageStartAndExitScreen : Page
 	{

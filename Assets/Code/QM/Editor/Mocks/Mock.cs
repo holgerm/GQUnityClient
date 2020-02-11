@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GQ.Client.Util;
 using System;
 using GQ.Editor.Util;
 using GQTests;
 using System.IO;
-using GQ.Client.Conf;
-using GQ.Client.Err;
-using QM.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Util.http;
+using Code.QM.Util;
 
 namespace QM.Mocks {
 

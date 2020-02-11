@@ -1,16 +1,21 @@
-﻿using System.Text;
-using System;
-using GQ.Client.Err;
-using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
-using GQ.Client.Util;
-using GQ.Client.Conf;
-using GQ.Client.UI.Dialogs;
-using GQ.Client.FileIO;
-using QM.Util;
-using GQ.Client.UI;
+using System.Text;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI;
+using Code.GQClient.UI.author;
+using Code.GQClient.UI.Dialogs;
+using Code.GQClient.Util;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
+using Code.QM.Util;
+using ConfigAssets.Resources.Code;
+using Newtonsoft.Json;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
     /// <summary>

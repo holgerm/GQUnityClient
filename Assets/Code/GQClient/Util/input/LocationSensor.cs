@@ -1,12 +1,12 @@
 ﻿//#define DEBUG_LOG
 
-using UnityEngine;
-using System.Collections;
 using System;
-using GQ.Client.Err;
-using QM.Util;
+using System.Collections;
+using Code.GQClient.Err;
+using Code.QM.Util;
+using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.input
 {
 
     /*

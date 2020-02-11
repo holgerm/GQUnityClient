@@ -1,13 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using GQ.Client.Util;
-using Newtonsoft.Json;
-using System;
-using GQ.Client.Err;
 using System.IO;
-using GQ.Client.FileIO;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using Code.GQClient.Util.tasks;
+using Newtonsoft.Json;
 
-namespace GQ.Client.Model {
+namespace Code.GQClient.Model.mgmt.quests {
 
 	/// <summary>
 	/// This task performs step 4 of 4 during quest media sync. 

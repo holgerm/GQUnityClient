@@ -1,12 +1,13 @@
 ﻿//#define DEBUG_LOG
 
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.expressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Conf;
-using GQ.Client.Err;
-using TMPro;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.UI.parts.imageWithRights
 {
 
     public class Rights : MonoBehaviour

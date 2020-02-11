@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-
-namespace QM.Util {
+namespace Code.QM.Util {
 
 	public static class TransformE {
 

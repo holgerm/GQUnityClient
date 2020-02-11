@@ -1,6 +1,7 @@
-﻿using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.UI.layout;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu.categories
 {
 	public class CategoryFolderLayout : LayoutConfig
 	{

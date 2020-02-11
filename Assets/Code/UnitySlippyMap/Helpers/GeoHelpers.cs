@@ -26,12 +26,10 @@
 
 
 using System;
-
+using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
-using UnitySlippyMap.Map;
-
-namespace UnitySlippyMap.Helpers
+namespace Code.UnitySlippyMap.Helpers
 {
 	/// <summary>
 	/// Helper class ported mostly from: http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/

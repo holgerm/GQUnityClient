@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util
 {
 
 	public static class Matrix

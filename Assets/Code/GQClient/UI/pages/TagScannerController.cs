@@ -1,15 +1,15 @@
 ﻿using System.Collections;
+using System.Threading;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Model;
-using GQ.Client.Util;
-using GQ.Client.Conf;
-using System.Threading;
 using ZXing;
-using GQ.Client.Err;
-using TMPro;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages
 {
     public class TagScannerController : PageController
     {

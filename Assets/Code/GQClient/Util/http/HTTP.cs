@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
-using GQ.Client.Err;
-using System;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using UnityEngine;
 
-namespace GQ.Client.Util {
+namespace Code.GQClient.Util.http {
 
 	public class HTTP {
 

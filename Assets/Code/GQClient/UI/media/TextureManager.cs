@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace GQ.Client.UI {
+namespace Code.GQClient.UI.media {
 
 	public class TextureManager {
 

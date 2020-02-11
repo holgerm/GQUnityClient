@@ -1,4 +1,4 @@
-﻿using QM.Util;
+﻿using Code.QM.Util;
 
 namespace GQTests.Layout
 {

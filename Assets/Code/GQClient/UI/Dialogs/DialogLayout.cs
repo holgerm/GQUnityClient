@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.UI.layout;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Conf;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.Dialogs
 {
 	/// <summary>
 	/// Should be applied to the Dialog Prefab, which is placed at runtime into the DialogCanvas.

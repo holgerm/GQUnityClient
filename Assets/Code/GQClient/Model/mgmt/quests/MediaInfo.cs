@@ -1,7 +1,7 @@
-using GQ.Client.Err;
-using GQ.Client.FileIO;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.quests
 {
 
     public class MediaInfo

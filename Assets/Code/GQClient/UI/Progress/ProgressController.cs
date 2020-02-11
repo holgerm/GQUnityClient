@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using GQ.Client.Util;
-using UnityEngine.UI;
+﻿using Code.GQClient.Util;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI.Progress
+namespace Code.GQClient.UI.Progress
 {
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using UnityEngine;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
     public class ActionVibrate : Action
      {

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using System.Diagnostics;
-using GQ.Client.Err;
+﻿using System.Diagnostics;
+using Code.GQClient.Err;
+using Code.GQClient.Util.tasks;
+using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.http
 {
 	public abstract class AbstractDownloader : Task
 	{

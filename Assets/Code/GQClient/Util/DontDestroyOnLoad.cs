@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-public class DontDestroyOnLoad : MonoBehaviour
+namespace Code.GQClient.Util
 {
-
-	// Use this for initialization
-	void Awake ()
+	public class DontDestroyOnLoad : MonoBehaviour
 	{
-		DontDestroyOnLoad (this);
+
+		// Use this for initialization
+		void Awake ()
+		{
+			DontDestroyOnLoad (this);
+		}
 	}
 }

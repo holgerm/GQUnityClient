@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
-using GQ.Client.Err;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.expressions
 {
 
     public class ExpressionHelper

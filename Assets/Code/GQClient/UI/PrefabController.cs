@@ -1,9 +1,10 @@
 ﻿using System.Collections;
+using Code.GQClient.Err;
+using Code.GQClient.start;
+using Code.GQClient.Util;
 using UnityEngine;
-using GQ.Client.Err;
-using GQ.Client.Util;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI
 {
 
     public abstract class PrefabController : UIController

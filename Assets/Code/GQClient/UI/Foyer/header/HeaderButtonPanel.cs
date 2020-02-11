@@ -1,8 +1,8 @@
-﻿using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.Foyer.header
 {
 
     public class HeaderButtonPanel : MonoBehaviour

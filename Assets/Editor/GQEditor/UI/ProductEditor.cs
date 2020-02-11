@@ -7,15 +7,15 @@ using System.Linq;
 using System;
 using System.Text;
 using System.Reflection;
-using GQ.Client.Util;
-using GQ.Client.UI;
-using GQ.Client.Conf;
 using GQ.Editor.Building;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
+using Code.QM.Util;
 using GQ.Editor.Util;
 using UnityEditor.SceneManagement;
-using QM.Util;
-using GQ.Client.Err;
 
 namespace GQ.Editor.UI
 {

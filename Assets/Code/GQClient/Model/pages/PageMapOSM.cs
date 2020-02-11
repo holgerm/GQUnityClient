@@ -1,6 +1,7 @@
 ﻿using System.Xml;
+using Code.GQClient.Model.gqml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public class PageMapOSM : PageNavigation
 	{

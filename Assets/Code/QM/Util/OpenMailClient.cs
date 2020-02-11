@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace QM.Util
+namespace Code.QM.Util
 {
 
     public class OpenMailClient : MonoBehaviour

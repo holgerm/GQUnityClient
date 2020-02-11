@@ -1,12 +1,16 @@
-using GQ.Client.Err;
-using System.Xml;
 using System;
 using System.Globalization;
-using GQ.Client.Util;
-using GQ.Client.Emulate;
-using QM.Util;
+using System.Xml;
+using Code.GQClient.Emulate;
+using Code.GQClient.Err;
+using Code.GQClient.Model.actions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.author;
+using Code.GQClient.Util.input;
+using Code.QM.Util;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model
 {
     public class Hotspot : ITriggerContainer
     {

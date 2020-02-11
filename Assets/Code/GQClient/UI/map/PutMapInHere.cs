@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnitySlippyMap.Map;
-using GQ.Client.UI.Foyer;
+﻿using Code.UnitySlippyMap.Map;
+using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.map
 {
 	[RequireComponent (typeof(FoyerMapController))]
 	public class PutMapInHere : MonoBehaviour

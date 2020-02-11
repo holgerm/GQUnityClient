@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Err;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Err;
 
-namespace QM.UI
+namespace Code.QM.UI
 {
 	[RequireComponent (typeof(Button))]
 	public class MenuRadioElement : MonoBehaviour

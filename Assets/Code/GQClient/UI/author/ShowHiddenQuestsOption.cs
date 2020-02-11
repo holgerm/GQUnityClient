@@ -1,9 +1,8 @@
-﻿using GQ.Client.Conf;
-using GQ.Client.Util;
+﻿using Code.GQClient.Conf;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.author
 {
 
     public class ShowHiddenQuestsOption : MonoBehaviour

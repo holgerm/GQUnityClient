@@ -1,17 +1,20 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using GQ.Client.Err;
-using GQ.Client.UI.Dialogs;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.UI;
+using Code.GQClient.UI.author;
+using Code.GQClient.UI.Dialogs;
+using Code.GQClient.UI.Progress;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
+using Code.QM.Util;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using GQ.Client.Conf;
-using GQ.Client.UI;
-using QM.Util;
-using System.Collections.Generic;
-using GQ.Client.UI.Progress;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util
 {
 
     public class Base : MonoBehaviour

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Util.http;
 using UnityEngine;
-using GQ.Client.Err;
-using GQ.Client.Model;
-using GQ.Client.Conf;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util
 {
 
     public class Audio

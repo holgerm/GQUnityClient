@@ -1,13 +1,13 @@
 //#define DEBUG_LOG
 
 using System;
-using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
-using GQ.Client.Err;
 using System.IO;
+using Code.GQClient.Err;
+using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.http
 {
     public class Downloader : AbstractDownloader
     {

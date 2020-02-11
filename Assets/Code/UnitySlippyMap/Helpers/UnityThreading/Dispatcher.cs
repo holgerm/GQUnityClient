@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace UnityThreading
+namespace Code.UnitySlippyMap.Helpers.UnityThreading
 {
     public abstract class DispatcherBase : IDisposable
     {

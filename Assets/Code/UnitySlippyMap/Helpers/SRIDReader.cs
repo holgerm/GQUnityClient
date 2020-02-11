@@ -8,13 +8,11 @@
 //  Copyright (c) 2007 SharpGIS
 //  Copyright (c) 2012 Jonathan Derrough
 
+using System.Collections.Generic;
+using ProjNet.CoordinateSystems;
 using UnityEngine;
 
-using System.Collections.Generic;
-
-using ProjNet.CoordinateSystems;
-
-namespace UnitySlippyMap
+namespace Code.UnitySlippyMap.Helpers
 {
 	// a helper class from the ProjNet documentation: http://projnet.codeplex.com/wikipage?title=LoadByID
 	public class SridReader

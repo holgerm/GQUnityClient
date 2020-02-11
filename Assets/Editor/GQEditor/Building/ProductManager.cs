@@ -3,17 +3,17 @@
 using System.IO;
 using System;
 using System.Collections.Generic;
-using GQ.Client.UI;
 using UnityEngine;
-using GQ.Client.Conf;
 using System.Linq;
 using UnityEditor;
 using System.Text.RegularExpressions;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.UI.layout;
 using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
-using GQ.Client.Err;
 using UnityEditor.SceneManagement;
 
 namespace GQ.Editor.Building

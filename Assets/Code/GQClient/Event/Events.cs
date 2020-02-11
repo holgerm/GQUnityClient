@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
-namespace GQ.Client.GQEvents
+namespace Code.GQClient.Event
 {
 	
 	public delegate void ClickCallBack (GameObject sender,EventArgs e);

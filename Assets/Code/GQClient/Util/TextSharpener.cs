@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-
-namespace GQ.Client.Util
+namespace Code.GQClient.Util
 {
 	
 	public class TextSharpener : MonoBehaviour

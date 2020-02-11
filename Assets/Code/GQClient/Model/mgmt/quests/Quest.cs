@@ -1,19 +1,23 @@
 ﻿//#define DEBUG_LOG
 
-using UnityEngine;
-using Newtonsoft.Json;
-using GQ.Client.FileIO;
-using UnityEngine.SceneManagement;
 using System;
-using GQ.Client.Conf;
 using System.Collections.Generic;
-using GQ.Client.Err;
 using System.IO;
-using System.Xml;
-using GQ.Client.Util;
 using System.Reflection;
+using System.Xml;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using Code.GQClient.Util.input;
+using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.quests
 {
 
     /// <summary>

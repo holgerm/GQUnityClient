@@ -1,8 +1,9 @@
 ﻿using System.Xml;
-using GQ.Client.UI.Dialogs;
-using GQ.Client.Util;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.UI.Dialogs;
+using Code.GQClient.Util;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
 
     public class ActionShowMessage : Action

@@ -1,10 +1,10 @@
 ﻿using System;
-using GQ.Client.Conf;
-using GQ.Client.Err;
-using GQ.Client.Model;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.questinfos;
 using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.UI.author
 {
 
     public class Author : MonoBehaviour

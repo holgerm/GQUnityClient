@@ -6,16 +6,15 @@ using System.Linq;
 using System;
 using System.Text;
 using System.Reflection;
-using GQ.Client.Util;
-using GQ.Client.Conf;
 using GQ.Editor.Building;
 using System.Collections.Generic;
 using System.Globalization;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
-using GQ.Client.Err;
 
 namespace GQ.Editor.Building
 {

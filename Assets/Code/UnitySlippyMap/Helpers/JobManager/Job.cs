@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UnitySlippyMap
+namespace Code.UnitySlippyMap.Helpers.JobManager
 {
 
 public class JobEventArgs : EventArgs

@@ -1,53 +1,57 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using GQ.Client.Model;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Model.pages;
+using Code.GQClient.start;
+using Code.GQClient.Util;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class ChoiceCtrl : MonoBehaviour
+namespace Code.GQClient.UI.pages.menu
 {
-
-
-	#region Inspector & internal features
-
-	public Image answerImage;
-	public TextMeshProUGUI choiceText;
-	public Button choiceButton;
-
-	private PageMenu page;
-	private MenuChoice choice;
-
-	#endregion
-
-
-	#region Runtime API
-
-	public static ChoiceCtrl Create (PageMenu myPage, Transform rootTransform, MenuChoice choice)
+	public class ChoiceCtrl : MonoBehaviour
 	{
-		GameObject go = (GameObject)Instantiate (
-                            AssetBundles.Asset("prefabs", "Choice"),
-			                rootTransform,
-			                false
-		                );
-		go.SetActive (true);
 
-		ChoiceCtrl choiceCtrl = go.GetComponent<ChoiceCtrl> ();
-		choiceCtrl.page = myPage;
-		choiceCtrl.choice = choice;
-		choiceCtrl.choiceText.color = ConfigurationManager.Current.mainFgColor;
-		choiceCtrl.choiceText.text = choice.Text.Decode4TMP(false);
-		choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
 
-		return choiceCtrl;
+		#region Inspector & internal features
+
+		public Image answerImage;
+		public TextMeshProUGUI choiceText;
+		public Button choiceButton;
+
+		private PageMenu page;
+		private MenuChoice choice;
+
+		#endregion
+
+
+		#region Runtime API
+
+		public static ChoiceCtrl Create (PageMenu myPage, Transform rootTransform, MenuChoice choice)
+		{
+			GameObject go = (GameObject)Instantiate (
+				AssetBundles.Asset("prefabs", "Choice"),
+				rootTransform,
+				false
+			);
+			go.SetActive (true);
+
+			ChoiceCtrl choiceCtrl = go.GetComponent<ChoiceCtrl> ();
+			choiceCtrl.page = myPage;
+			choiceCtrl.choice = choice;
+			choiceCtrl.choiceText.color = ConfigurationManager.Current.mainFgColor;
+			choiceCtrl.choiceText.text = choice.Text.Decode4TMP(false);
+			choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
+
+			return choiceCtrl;
+		}
+
+		public void Select ()
+		{
+			page.Result = choice.Text.MakeReplacements();
+			page.End ();
+		}
+
+		#endregion
+
 	}
-
-	public void Select ()
-	{
-		page.Result = choice.Text.MakeReplacements();
-		page.End ();
-	}
-
-	#endregion
-
 }

@@ -1,10 +1,8 @@
-﻿using ICSharpCode.SharpZipLib.GZip;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using ICSharpCode.SharpZipLib.GZip;
 
-
-
-namespace UnitySlippyMap
+namespace Code.UnitySlippyMap.Helpers
 {
 
     /// <summary>

@@ -1,10 +1,10 @@
 using System;
-using UnityEngine;
 using System.Collections;
-using GQ.Client.Err;
-using GQ.Client.FileIO;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using UnityEngine;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.http
 {
 	public class LocalFileLoader : AbstractDownloader
 	{

@@ -1,12 +1,12 @@
 ﻿//#define DEBUG_LOG
 
-using System.Text.RegularExpressions;
-using GQ.Client.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using System;
+using System.Text.RegularExpressions;
+using Code.GQClient.Model.expressions;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util
 {
 
     public static class TextHelper

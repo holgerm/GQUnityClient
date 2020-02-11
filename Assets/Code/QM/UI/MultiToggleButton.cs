@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using GQ.Client.Err;
-using UnityEngine.UI;
+﻿using Code.GQClient.Err;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-namespace QM.UI
+namespace Code.QM.UI
 {
 
 	/// <summary>

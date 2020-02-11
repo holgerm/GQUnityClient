@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using GQ.Client.Conf;
+﻿using System.Collections.Generic;
+using Code.GQClient.Conf;
+using UnityEngine;
 
-namespace GQ.Lang {
+namespace Code.GQClient.Lang {
 
 	public sealed class GQDictionary {
 

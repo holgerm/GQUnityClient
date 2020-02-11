@@ -1,14 +1,18 @@
 ﻿//#define DEBUG_LOG
 
-using UnityEngine;
-using UnityEngine.UI;
-using GQ.Client.Model;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
+using Code.GQClient.Util.http;
 using QM.NFC;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.readnfc
 {
     public class ReadNFCController : PageController, NFC_Reader_I
     {

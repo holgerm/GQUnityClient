@@ -1,8 +1,8 @@
 ﻿using System;
-using GQ.Client.GQEvents;
-using GQ.Client.Util;
+using Code.GQClient.Event;
+using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.Dialogs
 {
 
 	public abstract class DialogBehaviour : UIBehaviour

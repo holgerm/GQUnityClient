@@ -1,9 +1,9 @@
-﻿using System.Xml;
-using System;
-using GQ.Client.Err;
+﻿using System;
 using System.Collections.Generic;
+using System.Xml;
+using Code.GQClient.Err;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.gqml
 {
 
 	public class GQML

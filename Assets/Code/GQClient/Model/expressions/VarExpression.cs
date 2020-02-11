@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.expressions
 {
 
     public class VarExpression : SimpleExpression

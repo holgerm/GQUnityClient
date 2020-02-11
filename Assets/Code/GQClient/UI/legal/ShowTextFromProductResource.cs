@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using GQ.Client.Err;
+﻿using Code.GQClient.Err;
 using TMPro;
+using UnityEngine;
 
-namespace GQ.UI
+namespace Code.GQClient.UI.legal
 {
 
     [RequireComponent(typeof(TextMeshProUGUI))]

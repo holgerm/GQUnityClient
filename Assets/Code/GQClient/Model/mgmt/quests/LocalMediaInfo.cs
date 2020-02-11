@@ -1,7 +1,7 @@
+using Code.QM.Util;
 using Newtonsoft.Json;
-using QM.Util;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.quests
 {
 
     /// <summary>

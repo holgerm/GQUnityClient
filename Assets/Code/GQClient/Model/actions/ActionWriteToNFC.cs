@@ -1,8 +1,9 @@
 ﻿using System.Xml;
-using GQ.Client.Util;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Util;
 using QM.NFC;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
     public class ActionWriteToNFC : Action
 

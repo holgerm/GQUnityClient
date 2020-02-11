@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Conf;
+using Code.QM.UI;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Conf;
-using QM.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu.categories
 {
 
 	public class CategoryFolderCtrl : CategoryCtrl

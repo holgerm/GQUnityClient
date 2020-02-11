@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using GQ.Client.Err;
+using Code.GQClient.Err;
+using Code.GQClient.Model.pages;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.quests
 {
     /// <summary>
     /// Quest History records all relevant events within the according quest, e.g. page starts.

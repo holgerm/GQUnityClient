@@ -1,13 +1,16 @@
-﻿using System.Collections;
-using UnityEngine;
-using GQ.Client.Model;
-using UnityEngine.UI;
-using GQ.Client.Util;
-using GQ.Client.Conf;
-using System;
+﻿using System;
+using System.Collections;
+using Code.GQClient.Conf;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
+using Code.GQClient.Util.http;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.npctalk
 {
 
     public class NPCTalkController : PageController

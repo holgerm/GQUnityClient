@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using GQ.Client.Conf;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Util;
 using GQ.Editor.Building;
 using UnityEditor;
 using UnityEngine;

@@ -25,10 +25,10 @@
 // SOFTWARE.
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
-namespace UnitySlippyMap
+namespace Code.UnitySlippyMap.Helpers
 {
 	// <summary>
 	// A simple profiler class

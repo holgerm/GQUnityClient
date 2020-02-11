@@ -1,7 +1,7 @@
-﻿using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
 using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu
 {
 
     public class Menu2Config : MonoBehaviour

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Conf;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Conf;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.layout
 {
 
 	/// <summary>

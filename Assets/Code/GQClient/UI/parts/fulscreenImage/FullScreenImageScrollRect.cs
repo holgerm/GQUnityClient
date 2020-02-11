@@ -1,8 +1,8 @@
-﻿using QM.Util;
+﻿using Code.QM.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.parts.fulscreenImage
 {
     public class FullScreenImageScrollRect : ScrollRect
     {

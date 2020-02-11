@@ -1,6 +1,8 @@
 ﻿using System.Xml;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
 
     public class ActionAddToScore : Action

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml;
-using System;
-using GQ.Client.Err;
-using GQ.Client.Util;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Util;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.UI.pages.question.textquestion
 {
     public class PageTextQuestion : QuestionPage
     {

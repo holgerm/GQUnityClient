@@ -1,11 +1,13 @@
-﻿using UnityEngine;
-using GQ.Client.Model;
-using UnityEngine.UI;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using Code.GQClient.Util.http;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.imagewithtext
 {
 
     public class ImageWithTextController : PageController

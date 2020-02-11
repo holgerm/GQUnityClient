@@ -4,10 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using UnityEditor.Callbacks;
 using UnityEditor.Build.Reporting;
-using GQ.Client.Err;
 
 #if UNITY_IOS
 using UnityEditor.iOS.Xcode;

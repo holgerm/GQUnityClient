@@ -1,11 +1,12 @@
 ﻿#define DEBUG_LOG
 
 using System;
-using GQ.Client.Model;
-using GQ.Client.Util;
+using Code.GQClient.Model.pages;
+using Code.GQClient.UI.map;
+using Code.GQClient.Util.input;
 using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.navigation
 {
 
     public class NavigationController : PageController

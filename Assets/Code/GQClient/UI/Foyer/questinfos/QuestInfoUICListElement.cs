@@ -1,13 +1,15 @@
-﻿using UnityEngine;
-using GQ.Client.Model;
-using UnityEngine.UI;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.UI.Foyer.containers;
+using Code.GQClient.UI.layout;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 //using UnityEngine.Events;
 
 
-namespace GQ.Client.UI.Foyer
+namespace Code.GQClient.UI.Foyer.questinfos
 {
 
     /// <summary>

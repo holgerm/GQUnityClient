@@ -1,11 +1,13 @@
-﻿using System.Xml;
-using System.IO;
-using GQ.Client.Conf;
-using GQ.Client.FileIO;
+﻿using System.IO;
+using System.Xml;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Model.pages;
 using UnityEngine.SceneManagement;
-using GQ.Client.Err;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.quests
 {
 
     public class QuestManager

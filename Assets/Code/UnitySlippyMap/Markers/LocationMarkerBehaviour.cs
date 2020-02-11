@@ -26,7 +26,7 @@
 
 using UnityEngine;
 
-namespace UnitySlippyMap.Markers
+namespace Code.UnitySlippyMap.Markers
 {
 	/// <summary>
 	/// The Location marker behaviour.

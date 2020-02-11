@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using GQ.Client.Err;
+using Code.GQClient.Err;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
 	/// <summary>

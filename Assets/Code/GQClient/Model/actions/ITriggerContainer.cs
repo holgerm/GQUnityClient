@@ -1,4 +1,6 @@
-﻿namespace GQ.Client.Model
+﻿using Code.GQClient.Model.mgmt.quests;
+
+namespace Code.GQClient.Model.actions
 {
 
 	public interface ITriggerContainer {

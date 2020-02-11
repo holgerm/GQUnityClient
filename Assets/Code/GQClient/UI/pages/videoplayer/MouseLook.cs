@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.videoplayer
 {
     
     // Script by IJM: http://answers.unity3d.com/questions/29741/mouse-look-script.html

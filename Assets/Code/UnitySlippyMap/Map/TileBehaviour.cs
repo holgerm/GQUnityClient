@@ -29,11 +29,11 @@
 using System;
 using System.Collections;
 using System.IO;
-using GQ.Client.Conf;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Util;
 using UnityEngine;
 
-namespace UnitySlippyMap.Map
+namespace Code.UnitySlippyMap.Map
 {
     /// <summary>
     /// The tile implementation inherits from MonoBehaviour.

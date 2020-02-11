@@ -28,15 +28,13 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Helpers.UnityThreading;
+using Code.UnitySlippyMap.Map;
 using ProjNet.CoordinateSystems;
-
 using UnityEngine;
 
-using UnitySlippyMap.Helpers;
-using UnitySlippyMap.Map;
-
-namespace UnitySlippyMap.Layers
+namespace Code.UnitySlippyMap.Layers
 {
 	/// <summary>
 	/// A class representing a Web Mapping Service tile layer.
@@ -149,13 +147,13 @@ namespace UnitySlippyMap.Layers
 		/// <summary>
 		/// The WMS capabilities.
 		/// </summary>
-		private UnitySlippyMap.WMS.WMT_MS_Capabilities  capabilities;
+		private global::UnitySlippyMap.WMS.WMT_MS_Capabilities  capabilities;
 
 		/// <summary>
 		/// Gets the capabilities.
 		/// </summary>
 		/// <value>The capabilities.</value>
-		public UnitySlippyMap.WMS.WMT_MS_Capabilities Capabilities { get { return capabilities; } }
+		public global::UnitySlippyMap.WMS.WMT_MS_Capabilities Capabilities { get { return capabilities; } }
 
     #endregion
 
@@ -199,7 +197,7 @@ namespace UnitySlippyMap.Layers
 						{
 							capabilities = null;
 							try {
-								XmlSerializer xs = new XmlSerializer (typeof(UnitySlippyMap.WMS.WMT_MS_Capabilities));
+								XmlSerializer xs = new XmlSerializer (typeof(global::UnitySlippyMap.WMS.WMT_MS_Capabilities));
 								using (XmlReader xr = XmlReader.Create(new MemoryStream(bytes),
 							new XmlReaderSettings {
 								ProhibitDtd = false
@@ -207,7 +205,7 @@ namespace UnitySlippyMap.Layers
 								, XmlResolver = null
 #endif
 							})) {
-									capabilities = xs.Deserialize (xr/*new MemoryStream(bytes)*/) as UnitySlippyMap.WMS.WMT_MS_Capabilities;
+									capabilities = xs.Deserialize (xr/*new MemoryStream(bytes)*/) as global::UnitySlippyMap.WMS.WMT_MS_Capabilities;
 								}
 							} catch (Exception
 #if DEBUG_LOG
@@ -421,7 +419,7 @@ namespace UnitySlippyMap.Layers
 			string[] layersArray = layers.Split (new Char[] { ',' });
 			foreach (string layersArrayItem in layersArray) {
 				bool exists = false;
-				foreach (UnitySlippyMap.WMS.Layer layer in capabilities.Capability.Layer.Layers) {
+				foreach (global::UnitySlippyMap.WMS.Layer layer in capabilities.Capability.Layer.Layers) {
 					if (layersArrayItem == layer.Name) {
 						exists = true;
 						break;

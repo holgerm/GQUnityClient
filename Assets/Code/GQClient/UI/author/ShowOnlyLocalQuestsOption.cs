@@ -1,20 +1,22 @@
-﻿using GQ.Client.Conf;
-using GQ.Client.Util;
+﻿using Code.GQClient.Conf;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShowOnlyLocalQuestsOption : MonoBehaviour {
+namespace Code.GQClient.UI.author
+{
+    public class ShowOnlyLocalQuestsOption : MonoBehaviour {
 
 
-    public Toggle toggle;
+        public Toggle toggle;
 
-    public void Start()
-    {
-        toggle.isOn = ConfigurationManager.Current.ShowOnlyLocalQuests;
-    }
+        public void Start()
+        {
+            toggle.isOn = ConfigurationManager.Current.ShowOnlyLocalQuests;
+        }
 
-    public void OnValueChange(bool newValue)
-    {
-        Author.ShowOnlyLocalQuests = newValue;
+        public void OnValueChange(bool newValue)
+        {
+            Author.ShowOnlyLocalQuests = newValue;
+        }
     }
 }

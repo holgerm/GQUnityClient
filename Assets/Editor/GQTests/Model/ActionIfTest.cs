@@ -2,8 +2,9 @@
 using UnityEditor;
 using NUnit.Framework;
 using GQ.Editor.Util;
-using GQ.Client.Model;
 using System.IO;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.mgmt.quests;
 
 namespace GQTests.Model
 {

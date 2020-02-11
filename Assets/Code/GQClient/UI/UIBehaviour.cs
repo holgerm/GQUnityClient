@@ -1,6 +1,6 @@
-﻿using GQ.Client.Util;
+﻿using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI
 {
 
 	/// <summary>

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using GQ.Client.Model;
+﻿using Code.GQClient.Model;
+using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.map
 {
 
 	public class HotspotMarker : Marker

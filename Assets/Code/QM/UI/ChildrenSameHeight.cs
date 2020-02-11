@@ -1,41 +1,44 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ChildrenSameHeight : MonoBehaviour
+namespace Code.QM.UI
 {
-
-    bool sizeCalculated;
-
-    // Use this for initialization
-    void Start()
+    public class ChildrenSameHeight : MonoBehaviour
     {
-    }
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        if (!sizeCalculated)
+        bool sizeCalculated;
+
+        // Use this for initialization
+        void Start()
         {
-            float maxSize = 0f;
-            foreach (Transform child in transform)
+        }
+
+        // Update is called once per frame
+        void LateUpdate()
+        {
+            if (!sizeCalculated)
             {
-                float size = child.GetComponent<RectTransform>().rect.height;
-                maxSize = Mathf.Max(maxSize, size);
-           }
-            if (maxSize > 0.001f)
-            {
+                float maxSize = 0f;
                 foreach (Transform child in transform)
                 {
-                    LayoutElement le = child.GetComponent<LayoutElement>();
-                    if (le == null)
+                    float size = child.GetComponent<RectTransform>().rect.height;
+                    maxSize = Mathf.Max(maxSize, size);
+                }
+                if (maxSize > 0.001f)
+                {
+                    foreach (Transform child in transform)
                     {
-                        le = child.gameObject.AddComponent<LayoutElement>();
+                        LayoutElement le = child.GetComponent<LayoutElement>();
+                        if (le == null)
+                        {
+                            le = child.gameObject.AddComponent<LayoutElement>();
+                        }
+
+                        le.preferredHeight = maxSize;
                     }
 
-                    le.preferredHeight = maxSize;
+                    sizeCalculated = true;
                 }
-
-                sizeCalculated = true;
             }
         }
     }

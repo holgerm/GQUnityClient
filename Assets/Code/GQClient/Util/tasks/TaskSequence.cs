@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GQ.Client.Err;
+using Code.GQClient.Err;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.tasks
 {
 
     public class TaskSequence : Task

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
     public class ActionList : I_GQML {
 

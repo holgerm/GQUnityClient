@@ -1,12 +1,12 @@
-﻿using System.IO;
-using UnityEngine;
-using System;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using GQ.Client.Err;
-using QM.Util;
+using Code.GQClient.Err;
+using Code.QM.Util;
+using UnityEngine;
 
-namespace GQ.Client.FileIO
+namespace Code.GQClient.FileIO
 {
 
     public class Files

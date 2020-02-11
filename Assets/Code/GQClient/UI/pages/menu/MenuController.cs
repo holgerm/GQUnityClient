@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.Model;
-using GQ.Client.Util;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
 using TMPro;
+using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.menu
 {
 
     public class MenuController : PageController

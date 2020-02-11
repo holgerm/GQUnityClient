@@ -2,9 +2,9 @@
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
-using GQ.Client.Conf;
 using GQ.Editor.Building;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
 
 namespace GQTests.Editor.Building
 {

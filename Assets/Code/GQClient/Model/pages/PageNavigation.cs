@@ -1,7 +1,8 @@
 ﻿using System.Xml;
-using GQ.Client.Util;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Util.input;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public class PageNavigation : Page
     {

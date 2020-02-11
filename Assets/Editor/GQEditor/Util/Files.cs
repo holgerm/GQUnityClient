@@ -8,7 +8,7 @@ using UnityEditor;
 namespace GQ.Editor.Util
 {
 
-    public class Files : GQ.Client.FileIO.Files
+    public class Files : Code.GQClient.FileIO.Files
     {
         #region Special Files and Directories
 

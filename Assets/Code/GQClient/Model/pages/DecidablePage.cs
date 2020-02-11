@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml;
-using GQ.Client.Err;
-using System;
-using GQ.Client.Util;
+using Code.GQClient.Err;
+using Code.GQClient.Model.actions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Util;
+using UnityEngine;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     abstract public class DecidablePage : Page
     {

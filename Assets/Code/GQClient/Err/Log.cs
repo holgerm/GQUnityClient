@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System;
-using GQ.Client.Model;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
+using Code.GQClient.Model.mgmt.quests;
 using UnityEngine;
 
-namespace GQ.Client.Err
+namespace Code.GQClient.Err
 {
 
     public class Log

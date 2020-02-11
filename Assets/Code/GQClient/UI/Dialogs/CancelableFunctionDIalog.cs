@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.Dialogs
 {
     public class CancelableFunctionDialog : DialogBehaviour
     {

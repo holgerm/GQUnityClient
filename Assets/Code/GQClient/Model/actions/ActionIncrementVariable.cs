@@ -1,7 +1,8 @@
-﻿using GQ.Client.Err;
-using System.Xml;
+﻿using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.expressions;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
 
     public class ActionIncrementVariable : ActionAbstractWithVar

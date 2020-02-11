@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.UI.pages;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Conf;
-using System;
-using GQ.Client.Err;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.layout
 {
 
     /// <summary>

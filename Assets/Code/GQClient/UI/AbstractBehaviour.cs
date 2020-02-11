@@ -1,4 +1,4 @@
-﻿namespace GQ.Client.UI
+﻿namespace Code.GQClient.UI
 {
     public interface AbstractBehaviour
     {

@@ -2,9 +2,7 @@
 using GQ.Editor.Building;
 using System.IO;
 using UnityEngine;
-using GQ.Client.Util;
 using System;
-using GQ.Client.Conf;
 using GQ.Editor.Util;
 
 namespace GQTests.Editor.Building {

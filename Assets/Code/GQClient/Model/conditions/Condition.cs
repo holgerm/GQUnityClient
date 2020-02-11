@@ -1,11 +1,13 @@
-﻿using UnityEngine;
-using System.Xml;
-using GQ.Client.Err;
-using System;
-using GQ.Client.Util;
+﻿using System;
 using System.Reflection;
+using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Util;
+using UnityEngine;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.conditions
 {
     /// <summary>
     /// Condition element may only contain exactly one conrete condition element, 

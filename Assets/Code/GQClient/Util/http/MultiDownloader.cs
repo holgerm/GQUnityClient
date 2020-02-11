@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
-using GQ.Client.Err;
-using GQ.Client.UI;
 using System.Collections.Generic;
-using GQ.Client.Model;
-using GQ.Client.Conf;
+using System.Diagnostics;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI;
+using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.http
 {
 
     public class MultiDownloader : AbstractDownloader

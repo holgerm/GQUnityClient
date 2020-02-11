@@ -1,9 +1,9 @@
-﻿using GQ.Client.Model;
-using GQ.Client.Err;
-using System;
+﻿using System;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.questinfos;
 using TMPro;
 
-namespace GQ.Client.UI.Foyer
+namespace Code.GQClient.UI.Foyer.questinfos
 {
     /// <summary>
     /// Abstact class for all kinds of view controllers presenting quest infos. E.g. list elements in the foyer list, or markers on the foyer map.

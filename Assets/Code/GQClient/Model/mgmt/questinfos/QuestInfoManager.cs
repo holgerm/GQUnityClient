@@ -1,18 +1,21 @@
 ﻿//#define DEBUG_LOG
 
-using UnityEngine;
-using System.Collections.Generic;
 using System;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+using System.Collections.Generic;
 using System.IO;
-using GQ.Client.Err;
 using System.Linq;
-using QM.Util;
-using GQ.Client.UI;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.menu.categories;
+using Code.GQClient.UI.menu.viewToggle;
+using Code.GQClient.Util;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
+using Code.QM.Util;
+using UnityEngine;
 
-
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
     /// <summary>

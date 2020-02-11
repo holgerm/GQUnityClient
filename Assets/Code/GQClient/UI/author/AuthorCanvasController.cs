@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.author
 {
 
     public class AuthorCanvasController : MonoBehaviour

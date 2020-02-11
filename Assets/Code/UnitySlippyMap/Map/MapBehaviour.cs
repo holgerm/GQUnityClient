@@ -26,23 +26,20 @@
 
 using System;
 using System.Collections.Generic;
-
+using Code.GQClient.Err;
+using Code.GQClient.Util.input;
+using Code.QM.Util;
+using Code.UnitySlippyMap.GUI;
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Input;
+using Code.UnitySlippyMap.Layers;
+using Code.UnitySlippyMap.Markers;
+using ProjNet.Converters.WellKnownText;
 using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
-using ProjNet.Converters.WellKnownText;
-
 using UnityEngine;
 
-using UnitySlippyMap.Markers;
-using UnitySlippyMap.Layers;
-using UnitySlippyMap.GUI;
-using UnitySlippyMap.Input;
-using UnitySlippyMap.Helpers;
-using GQ.Client.Util;
-using GQ.Client.Err;
-using QM.Util;
-
-namespace UnitySlippyMap.Map
+namespace Code.UnitySlippyMap.Map
 {
     /// <summary>
     /// The MapBehaviour class is a singleton handling layers and markers.
@@ -1042,7 +1039,7 @@ namespace UnitySlippyMap.Map
 
         }
 
-        public void UpdatePosition(object sender, GQ.Client.Util.LocationSensor.LocationEventArgs e)
+        public void UpdatePosition(object sender, LocationSensor.LocationEventArgs e)
         {
             if (e.Kind == LocationSensor.LocationEventType.NotAvailable)
             {

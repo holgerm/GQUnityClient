@@ -1,15 +1,19 @@
 #define DEBUG_LOG
 
-using GQ.Client.Err;
-using UnityEngine.SceneManagement;
-using System.Xml;
 using System;
-using UnityEngine;
-using GQ.Client.Util;
-using GQ.Client.UI;
 using System.Collections.Generic;
+using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.actions;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.pages;
+using Code.GQClient.Util;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public abstract class Page : ITriggerContainer
     {

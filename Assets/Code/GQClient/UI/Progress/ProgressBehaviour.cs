@@ -1,7 +1,7 @@
 ﻿using System;
-using GQ.Client.Util;
+using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.UI.Progress
+namespace Code.GQClient.UI.Progress
 {
 
 	public abstract class ProgressBehaviour : UIBehaviour

@@ -27,13 +27,11 @@
 
 using System;
 using System.IO;
-
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
-using UnitySlippyMap.Helpers;
-using UnitySlippyMap.Map;
-
-namespace UnitySlippyMap.Layers
+namespace Code.UnitySlippyMap.Layers
 {
 
 	/// <summary>

@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.UI;
 using UnityEngine;
-using System;
-using GQ.Client.UI;
 
-namespace GQ.Client.Util
+namespace Code.GQClient.Util.tasks
 {
 
     /// <summary>

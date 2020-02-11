@@ -1,10 +1,10 @@
-using GQ.Client.Util;
 using System;
-using GQ.Client.Err;
-using System.Text.RegularExpressions;
 using System.Text;
+using System.Text.RegularExpressions;
+using Code.GQClient.Err;
+using Code.GQClient.Util;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.expressions
 {
 
     /// <summary>
@@ -34,11 +34,11 @@ namespace GQ.Client.Model
 
 
         /// <summary>
-        /// Determines whether the specified <see cref="GQ.Client.Model.Value"/> is equal to the current <see cref="GQ.Client.Model.Value"/>.
+        /// Determines whether the specified <see cref="Value"/> is equal to the current <see cref="Value"/>.
         /// </summary>
-        /// <param name="other">The <see cref="GQ.Client.Model.Value"/> to compare with the current <see cref="GQ.Client.Model.Value"/>.</param>
-        /// <returns><c>true</c> if the specified <see cref="GQ.Client.Model.Value"/> is equal to the current
-        /// <see cref="GQ.Client.Model.Value"/>; otherwise, <c>false</c>.</returns>
+        /// <param name="other">The <see cref="Value"/> to compare with the current <see cref="Value"/>.</param>
+        /// <returns><c>true</c> if the specified <see cref="Value"/> is equal to the current
+        /// <see cref="Value"/>; otherwise, <c>false</c>.</returns>
         public override bool Equals(System.Object other)
         {
             var otherValue = other as Value;

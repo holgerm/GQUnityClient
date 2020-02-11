@@ -1,7 +1,8 @@
 ﻿using System.Xml;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
+using Code.GQClient.Model.gqml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public class PageWebPage : Page
 	{

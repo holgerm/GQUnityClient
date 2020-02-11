@@ -1,10 +1,10 @@
 //#define NO_UNITY
 
 using System;
-using System.Threading;
 using System.Collections;
+using System.Threading;
 
-namespace UnityThreading
+namespace Code.UnitySlippyMap.Helpers.UnityThreading
 {
     public class TaskDistributor : DispatcherBase
 	{

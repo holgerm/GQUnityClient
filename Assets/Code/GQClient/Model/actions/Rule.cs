@@ -1,10 +1,11 @@
-﻿using System.Xml;
-using GQ.Client.Err;
-using System;
-using GQ.Client.Util;
+﻿using System;
 using System.Reflection;
+using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Util;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
     public class Rule : ActionList
     {

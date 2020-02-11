@@ -1,7 +1,7 @@
-﻿using GQ.Client.Err;
-using System.Xml;
+﻿using System.Xml;
+using Code.GQClient.Err;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.conditions
 {
 
     public class ConditionNot : CompoundCondition

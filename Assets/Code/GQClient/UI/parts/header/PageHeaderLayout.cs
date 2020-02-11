@@ -1,14 +1,15 @@
 ﻿using System;
-using GQ.Client.Conf;
-using GQ.Client.Err;
-using GQ.Client.Model;
-using GQ.Client.UI.Dialogs;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.author;
+using Code.GQClient.UI.Dialogs;
+using Code.GQClient.UI.pages;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.parts.header
 {
     public class PageHeaderLayout : HeaderLayout
     {

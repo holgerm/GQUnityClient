@@ -1,6 +1,7 @@
 ﻿using System.Xml;
+using Code.GQClient.Model.pages;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.UI.pages.question
 {
     public abstract class QuestionPage : DecidablePage, Repeatable
     {

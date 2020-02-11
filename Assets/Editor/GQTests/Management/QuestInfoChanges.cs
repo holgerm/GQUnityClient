@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
 using GQ.Editor.Util;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using QM.Mocks;
-using GQ.Client.Conf;
 using System;
-using GQ.Client.UI.Foyer;
+using Code.GQClient.Conf;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Model.mgmt.quests;
 
 namespace GQTests.Management {
 

@@ -1,6 +1,6 @@
 ﻿//#define DEBUG_LOG
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI
 {
     public interface SimpleBehaviour : AbstractBehaviour
     {

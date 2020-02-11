@@ -25,10 +25,9 @@
 // SOFTWARE.
 
 using System;
+using Code.UnitySlippyMap.Map;
 
-using UnitySlippyMap.Map;
-
-namespace UnitySlippyMap.Layers
+namespace Code.UnitySlippyMap.Layers
 {
 	/// <summary>
 	/// An abstract class representing a web tile layer.

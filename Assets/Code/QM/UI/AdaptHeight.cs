@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace QM.UI
+namespace Code.QM.UI
 {
 
     [RequireComponent(typeof(RectTransform), typeof(LayoutElement))]

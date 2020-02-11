@@ -1,9 +1,9 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
-namespace GQ.Client.Conf
+namespace Code.GQClient.Conf
 {
 
 	public class Configuration : MonoBehaviour

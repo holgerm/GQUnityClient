@@ -1,18 +1,21 @@
 ﻿//#define DEBUG_LOG
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
+using Code.GQClient.Util.input;
+using Code.QM.Util;
+using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Layers;
+using Code.UnitySlippyMap.Map;
+using Code.UnitySlippyMap.Markers;
 using UnityEngine;
-using UnitySlippyMap.Markers;
-using UnitySlippyMap.Map;
-using GQ.Client.Conf;
-using System;
-using GQ.Client.Err;
-using GQ.Client.Util;
-using UnitySlippyMap.Layers;
-using QM.Util;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.map
 {
 
     public abstract class MapController : MonoBehaviour
@@ -231,7 +234,7 @@ namespace GQ.Client.UI
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
-			map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
+			map.InputDelegate += global::Code.UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
 			map.CurrentZoom = 15.0f;
 
 			Frame ();

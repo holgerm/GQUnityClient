@@ -1,7 +1,7 @@
-﻿using QM.Util;
+﻿using Code.QM.Util;
 using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.videoplayer
 {
 
     [AddComponentMenu("Camera-Control/Touch Look")]

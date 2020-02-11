@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu.categories
 {
 
     public abstract class CategoryCtrl : MonoBehaviour

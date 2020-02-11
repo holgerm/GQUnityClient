@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using GQ.Client.Util;
-using UnityEngine.UI;
-using GQ.Client.GQEvents;
+﻿using Code.GQClient.Event;
+using Code.GQClient.Util;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.Dialogs
 {
 
     /// <summary>

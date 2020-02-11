@@ -1,13 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
-using GQ.Client.Model;
+﻿using System.Collections;
 using System.Collections.Generic;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.UI.Foyer.questinfos;
+using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
+using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Err;
 
-namespace GQ.Client.UI.Foyer
+namespace Code.GQClient.UI.Foyer.containers
 {
 
     /// <summary>

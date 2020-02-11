@@ -1,14 +1,17 @@
 ﻿using System.Collections;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using Code.QM.Util;
+using ConfigAssets.Resources.Code;
 using UnityEngine;
 using UnityEngine.UI;
-using GQ.Client.Model;
-using GQ.Client.Util;
 using UnityEngine.Video;
-using GQ.Client.Err;
-using QM.Util;
-using GQ.Client.Conf;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.videoplayer
 {
     public class VideoPlayController : PageController
     {

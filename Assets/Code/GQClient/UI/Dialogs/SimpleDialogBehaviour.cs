@@ -1,9 +1,9 @@
 ﻿//#define DEBUG_LOG
 
-using GQ.Client.Util;
 using System;
+using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.Dialogs
 {
 
     /// <summary>

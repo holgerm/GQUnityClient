@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.conditions
 {
 
     public class ConditionAnd : CompoundCondition

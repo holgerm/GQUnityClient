@@ -1,22 +1,25 @@
-﻿using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PageHeaderController : MonoBehaviour
+namespace Code.GQClient.UI.parts.header
 {
-
-    public GameObject RightButton;
-
-    // Use this for initialization
-    void Start()
+    public class PageHeaderController : MonoBehaviour
     {
-        // show right button image and activate function if configured:
-        RefreshActivation(ConfigurationManager.Current.menu2ShownInQuests);
-    }
 
-    void RefreshActivation(bool newState) {
-        RightButton.GetComponent<Button>().enabled =  newState;
-        RightButton.transform.Find("Image").GetComponent<Image>().enabled = newState;
-    }
+        public GameObject RightButton;
 
+        // Use this for initialization
+        void Start()
+        {
+            // show right button image and activate function if configured:
+            RefreshActivation(ConfigurationManager.Current.menu2ShownInQuests);
+        }
+
+        void RefreshActivation(bool newState) {
+            RightButton.GetComponent<Button>().enabled =  newState;
+            RightButton.transform.Find("Image").GetComponent<Image>().enabled = newState;
+        }
+
+    }
 }

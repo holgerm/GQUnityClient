@@ -1,12 +1,13 @@
 ﻿//#define DEBUG_LOG
 
-using UnityEngine.UI;
-using GQ.Client.Model;
+using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
+using ConfigAssets.Resources.Code;
 using TMPro;
-using GQ.Client.Util;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages
 {
     public class WebPageController : PageController
     {

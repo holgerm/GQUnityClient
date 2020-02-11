@@ -1,4 +1,4 @@
-﻿namespace GQ.Client.Err
+﻿namespace Code.GQClient.Err
 {
 
 	public static class LogStringFormattings

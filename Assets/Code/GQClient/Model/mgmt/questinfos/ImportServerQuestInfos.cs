@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using GQ.Client.Conf;
+using Code.GQClient.Conf;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
     /// <summary>

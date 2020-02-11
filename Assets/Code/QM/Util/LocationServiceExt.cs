@@ -1,10 +1,12 @@
 ﻿//#define DEBUG_LOG
 
+using Code.GQClient.Model;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Model.mgmt.quests;
 using UnityEngine;
-using GQ.Client.Model;
 using UnityEngine.Android;
 
-namespace QM.Util
+namespace Code.QM.Util
 {
 
     public class LocationServiceExt

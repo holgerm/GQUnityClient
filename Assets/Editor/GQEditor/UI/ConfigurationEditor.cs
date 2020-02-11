@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Code.GQClient.Conf;
 using UnityEditor;
-using GQ.Client.Conf;
 
 namespace GQEditor.UI {
 

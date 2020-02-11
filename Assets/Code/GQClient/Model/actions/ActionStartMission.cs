@@ -1,9 +1,11 @@
 ﻿#define DEBUG_LOG
 
 using System.Xml;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.pages;
 using UnityEngine;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.actions
 {
 
     public class ActionStartMission : Action

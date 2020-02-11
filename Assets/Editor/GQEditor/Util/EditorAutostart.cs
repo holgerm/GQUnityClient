@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
+using Code.GQClient.UI.layout;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
-using GQ.Client.Conf;
 using UnityEditor.SceneManagement;
-using GQ.Client.UI;
 
 namespace GQ.Editor.Util
 {

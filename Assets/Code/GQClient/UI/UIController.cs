@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI
 {
 
 	public class UIController : MonoBehaviour

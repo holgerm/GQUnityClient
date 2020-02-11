@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using GQ.Client.UI;
-using GQ.Client.Util;
-using GQ.Client.Model;
+﻿using Code.GQClient.Model.actions;
+using Code.GQClient.UI;
+using Code.GQClient.Util;
+using UnityEngine;
 
-namespace GQ.Client.Emulate
+namespace Code.GQClient.Emulate
 {
 
 	/// <summary>

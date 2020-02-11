@@ -1,5 +1,5 @@
 ﻿
-namespace GQ.Client.Util {
+namespace Code.GQClient.Util {
 
 	public class Objects {
 

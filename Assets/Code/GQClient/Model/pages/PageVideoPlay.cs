@@ -1,11 +1,13 @@
 ﻿#define DEBUG_LOG
 
 using System.Xml;
-using GQ.Client.Err;
-using GQ.Client.Util;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Util;
 using UnityEngine;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public class PageVideoPlay : Page
     {

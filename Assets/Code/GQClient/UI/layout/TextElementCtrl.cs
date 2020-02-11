@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using GQ.Client.Util;
-using GQ.Client.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.start;
+using Code.GQClient.Util;
 using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.layout
 {
 
     [RequireComponent(typeof(TextMeshProUGUI))]

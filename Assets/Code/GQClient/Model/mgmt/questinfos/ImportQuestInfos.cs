@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using GQ.Client.Util;
+﻿using System;
+using System.Collections;
+using Code.GQClient.Err;
+using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
-using System;
-using GQ.Client.Err;
 using Newtonsoft.Json.Converters;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
     /// <summary>

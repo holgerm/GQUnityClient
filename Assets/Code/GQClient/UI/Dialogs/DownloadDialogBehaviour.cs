@@ -1,9 +1,10 @@
-﻿using UnityEngine;
-using System;
-using GQ.Client.Util;
-using GQ.Client.Err;
+﻿using System;
+using Code.GQClient.Err;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
+using UnityEngine;
 
-namespace GQ.Client.UI.Dialogs
+namespace Code.GQClient.UI.Dialogs
 {
 
     public class DownloadDialogBehaviour : DialogBehaviour, DownloadBehaviour

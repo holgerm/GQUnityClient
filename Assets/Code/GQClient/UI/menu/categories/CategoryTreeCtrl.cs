@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.Model;
-using GQ.Client.Conf;
-using GQ.Client.Util;
-using GQ.Client.Err;
-using UnityEngine.UI;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Util;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu.categories
 {
 
     public class CategoryTreeCtrl : MonoBehaviour

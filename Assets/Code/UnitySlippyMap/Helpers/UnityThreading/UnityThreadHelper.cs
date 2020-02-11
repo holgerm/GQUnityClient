@@ -1,137 +1,139 @@
-﻿using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
-using System;
+using UnityEngine;
 
-public class UnityThreadHelper : MonoBehaviour
+namespace Code.UnitySlippyMap.Helpers.UnityThreading
 {
-    #region Singleton stuff
-
-    private static UnityThreadHelper instance = null;
-
-    public static void EnsureHelper()
+    public class UnityThreadHelper : MonoBehaviour
     {
-        if (null == (object)instance)
+        #region Singleton stuff
+
+        private static UnityThreadHelper instance = null;
+
+        public static void EnsureHelper()
         {
-            instance = FindObjectOfType(typeof(UnityThreadHelper)) as UnityThreadHelper;
             if (null == (object)instance)
             {
-                var go = new GameObject("[UnityThreadHelper]");
-                go.hideFlags = HideFlags.NotEditable | HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-                instance = go.AddComponent<UnityThreadHelper>();
-                instance.EnsureHelperInstance();
+                instance = FindObjectOfType(typeof(UnityThreadHelper)) as UnityThreadHelper;
+                if (null == (object)instance)
+                {
+                    var go = new GameObject("[UnityThreadHelper]");
+                    go.hideFlags = HideFlags.NotEditable | HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+                    instance = go.AddComponent<UnityThreadHelper>();
+                    instance.EnsureHelperInstance();
+                }
             }
         }
-    }
 
-    private static UnityThreadHelper Instance
-    {
-        get
+        private static UnityThreadHelper Instance
         {
-            EnsureHelper();
-            return instance;
+            get
+            {
+                EnsureHelper();
+                return instance;
+            }
         }
-    }
 
-    #endregion
+        #endregion
 
-    #region Private members
+        #region Private members
 
-    /*
+        /*
     private static System.Reflection.MethodInfo waitOneInt;
     private static System.Reflection.MethodInfo waitOneTimeSpan;
      */
 
-    private static bool isWebPlayer;
-    public static bool IsWebPlayer
-    {
-        get { return isWebPlayer; }
-    }
-
-    #endregion
-
-    /// <summary>
-    /// Returns the GUI/Main Dispatcher.
-    /// </summary>
-    public static UnityThreading.Dispatcher Dispatcher
-    {
-        get
+        private static bool isWebPlayer;
+        public static bool IsWebPlayer
         {
-            return Instance.CurrentDispatcher;
+            get { return isWebPlayer; }
         }
-    }
 
-    /// <summary>
-    /// Returns the TaskDistributor.
-    /// </summary>
-    public static UnityThreading.TaskDistributor TaskDistributor
-    {
-        get
+        #endregion
+
+        /// <summary>
+        /// Returns the GUI/Main Dispatcher.
+        /// </summary>
+        public static UnityThreading.Dispatcher Dispatcher
         {
-            return Instance.CurrentTaskDistributor;
+            get
+            {
+                return Instance.CurrentDispatcher;
+            }
         }
-    }
 
-    private UnityThreading.Dispatcher dispatcher;
-    public UnityThreading.Dispatcher CurrentDispatcher
-    {
-        get
+        /// <summary>
+        /// Returns the TaskDistributor.
+        /// </summary>
+        public static UnityThreading.TaskDistributor TaskDistributor
         {
-            return dispatcher;
+            get
+            {
+                return Instance.CurrentTaskDistributor;
+            }
         }
-    }
 
-    private UnityThreading.TaskDistributor taskDistributor;
-    public UnityThreading.TaskDistributor CurrentTaskDistributor
-    {
-        get
+        private UnityThreading.Dispatcher dispatcher;
+        public UnityThreading.Dispatcher CurrentDispatcher
         {
-            return taskDistributor;
+            get
+            {
+                return dispatcher;
+            }
         }
-    }
 
-    private void EnsureHelperInstance()
-    {
-        if (dispatcher == null)
-            dispatcher = new UnityThreading.Dispatcher();
+        private UnityThreading.TaskDistributor taskDistributor;
+        public UnityThreading.TaskDistributor CurrentTaskDistributor
+        {
+            get
+            {
+                return taskDistributor;
+            }
+        }
 
-        if (taskDistributor == null)
-            taskDistributor = new UnityThreading.TaskDistributor();
+        private void EnsureHelperInstance()
+        {
+            if (dispatcher == null)
+                dispatcher = new UnityThreading.Dispatcher();
 
-		isWebPlayer = false; // Application.isWebPlayer;
-    }
+            if (taskDistributor == null)
+                taskDistributor = new UnityThreading.TaskDistributor();
 
-    public static bool WaitOne(ManualResetEvent evt, int ms)
-    {
-        System.Reflection.MethodInfo waitOneInt;
-        Type type = evt.GetType();
-        waitOneInt = type.GetMethod("WaitOne", new Type[1] { typeof(int) });
+            isWebPlayer = false; // Application.isWebPlayer;
+        }
 
-        return (bool)waitOneInt.Invoke(evt, new object[1] { ms });
-    }
+        public static bool WaitOne(ManualResetEvent evt, int ms)
+        {
+            System.Reflection.MethodInfo waitOneInt;
+            Type type = evt.GetType();
+            waitOneInt = type.GetMethod("WaitOne", new Type[1] { typeof(int) });
 
-    public static bool WaitOne(ManualResetEvent evt, TimeSpan ts)
-    {
-        System.Reflection.MethodInfo waitOneTimeSpan;
-        Type type = evt.GetType();
-        waitOneTimeSpan = type.GetMethod("WaitOne", new Type[1] { typeof(TimeSpan) });
+            return (bool)waitOneInt.Invoke(evt, new object[1] { ms });
+        }
 
-        return (bool)waitOneTimeSpan.Invoke(evt, new object[1] { ts });
-    }
+        public static bool WaitOne(ManualResetEvent evt, TimeSpan ts)
+        {
+            System.Reflection.MethodInfo waitOneTimeSpan;
+            Type type = evt.GetType();
+            waitOneTimeSpan = type.GetMethod("WaitOne", new Type[1] { typeof(TimeSpan) });
 
-    /// <summary>
-    /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The action which the new thread should run.</param>
-    /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ActionThread CreateThread(System.Action<UnityThreading.ActionThread> action, bool autoStartThread)
-    {
-        Instance.EnsureHelperInstance();
+            return (bool)waitOneTimeSpan.Invoke(evt, new object[1] { ts });
+        }
 
-        System.Action<UnityThreading.ActionThread> actionWrapper = currentThread =>
+        /// <summary>
+        /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The action which the new thread should run.</param>
+        /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ActionThread CreateThread(System.Action<UnityThreading.ActionThread> action, bool autoStartThread)
+        {
+            Instance.EnsureHelperInstance();
+
+            System.Action<UnityThreading.ActionThread> actionWrapper = currentThread =>
             {
                 try
                 {
@@ -142,129 +144,130 @@ public class UnityThreadHelper : MonoBehaviour
                     UnityEngine.Debug.LogError(ex);
                 }
             };
-        var thread = new UnityThreading.ActionThread(actionWrapper, autoStartThread);
-        Instance.RegisterThread(thread);
-        return thread;
-    }
-
-    /// <summary>
-    /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The action which the new thread should run.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ActionThread CreateThread(System.Action<UnityThreading.ActionThread> action)
-    {
-        return CreateThread(action, true);
-    }
-
-    /// <summary>
-    /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The action which the new thread should run.</param>
-    /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ActionThread CreateThread(System.Action action, bool autoStartThread)
-    {
-        return CreateThread((thread) => action(), autoStartThread);
-    }
-
-    /// <summary>
-    /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The action which the new thread should run.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ActionThread CreateThread(System.Action action)
-    {
-        return CreateThread((thread) => action(), true);
-    }
-
-    #region Enumeratable
-
-    /// <summary>
-    /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The enumeratable action which the new thread should run.</param>
-    /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ThreadBase CreateThread(System.Func<UnityThreading.ThreadBase, IEnumerator> action, bool autoStartThread)
-    {
-        Instance.EnsureHelperInstance();
-
-        var thread = new UnityThreading.EnumeratableActionThread(action, autoStartThread);
-        Instance.RegisterThread(thread);
-        return thread;
-    }
-
-    /// <summary>
-    /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The enumeratable action which the new thread should run.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ThreadBase CreateThread(System.Func<UnityThreading.ThreadBase, IEnumerator> action)
-    {
-        return CreateThread(action, true);
-    }
-
-    /// <summary>
-    /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The enumeratable action which the new thread should run.</param>
-    /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ThreadBase CreateThread(System.Func<IEnumerator> action, bool autoStartThread)
-    {
-        System.Func<UnityThreading.ThreadBase, IEnumerator> wrappedAction = (thread) => { return action(); };
-        return CreateThread(wrappedAction, autoStartThread);
-    }
-
-    /// <summary>
-    /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
-    /// </summary>
-    /// <param name="action">The action which the new thread should run.</param>
-    /// <returns>The instance of the created thread class.</returns>
-    public static UnityThreading.ThreadBase CreateThread(System.Func<IEnumerator> action)
-    {
-        System.Func<UnityThreading.ThreadBase, IEnumerator> wrappedAction = (thread) => { return action(); };
-        return CreateThread(wrappedAction, true);
-    }
-
-    #endregion
-
-    List<UnityThreading.ThreadBase> registeredThreads = new List<UnityThreading.ThreadBase>();
-    public void RegisterThread(UnityThreading.ThreadBase thread)
-    {
-        if (registeredThreads.Contains(thread))
-        {
-            return;
+            var thread = new UnityThreading.ActionThread(actionWrapper, autoStartThread);
+            Instance.RegisterThread(thread);
+            return thread;
         }
 
-        registeredThreads.Add(thread);
-    }
-
-    void OnDestroy()
-    {
-        foreach (var thread in registeredThreads)
-            thread.Dispose();
-
-        if (dispatcher != null)
-            dispatcher.Dispose();
-        dispatcher = null;
-
-        if (taskDistributor != null)
-            taskDistributor.Dispose();
-        taskDistributor = null;
-    }
-
-    void Update()
-    {
-        if (dispatcher != null)
-            dispatcher.ProcessTasks();
-
-        var finishedThreads = registeredThreads.Where(thread => !thread.IsAlive).ToArray();
-        foreach (var finishedThread in finishedThreads)
+        /// <summary>
+        /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The action which the new thread should run.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ActionThread CreateThread(System.Action<UnityThreading.ActionThread> action)
         {
-            finishedThread.Dispose();
-            registeredThreads.Remove(finishedThread);
+            return CreateThread(action, true);
+        }
+
+        /// <summary>
+        /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The action which the new thread should run.</param>
+        /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ActionThread CreateThread(System.Action action, bool autoStartThread)
+        {
+            return CreateThread((thread) => action(), autoStartThread);
+        }
+
+        /// <summary>
+        /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The action which the new thread should run.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ActionThread CreateThread(System.Action action)
+        {
+            return CreateThread((thread) => action(), true);
+        }
+
+        #region Enumeratable
+
+        /// <summary>
+        /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The enumeratable action which the new thread should run.</param>
+        /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ThreadBase CreateThread(System.Func<UnityThreading.ThreadBase, IEnumerator> action, bool autoStartThread)
+        {
+            Instance.EnsureHelperInstance();
+
+            var thread = new UnityThreading.EnumeratableActionThread(action, autoStartThread);
+            Instance.RegisterThread(thread);
+            return thread;
+        }
+
+        /// <summary>
+        /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The enumeratable action which the new thread should run.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ThreadBase CreateThread(System.Func<UnityThreading.ThreadBase, IEnumerator> action)
+        {
+            return CreateThread(action, true);
+        }
+
+        /// <summary>
+        /// Creates new thread which runs the given action. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The enumeratable action which the new thread should run.</param>
+        /// <param name="autoStartThread">True when the thread should start immediately after creation.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ThreadBase CreateThread(System.Func<IEnumerator> action, bool autoStartThread)
+        {
+            System.Func<UnityThreading.ThreadBase, IEnumerator> wrappedAction = (thread) => { return action(); };
+            return CreateThread(wrappedAction, autoStartThread);
+        }
+
+        /// <summary>
+        /// Creates new thread which runs the given action and starts it after creation. The given action will be wrapped so that any exception will be catched and logged.
+        /// </summary>
+        /// <param name="action">The action which the new thread should run.</param>
+        /// <returns>The instance of the created thread class.</returns>
+        public static UnityThreading.ThreadBase CreateThread(System.Func<IEnumerator> action)
+        {
+            System.Func<UnityThreading.ThreadBase, IEnumerator> wrappedAction = (thread) => { return action(); };
+            return CreateThread(wrappedAction, true);
+        }
+
+        #endregion
+
+        List<UnityThreading.ThreadBase> registeredThreads = new List<UnityThreading.ThreadBase>();
+        public void RegisterThread(UnityThreading.ThreadBase thread)
+        {
+            if (registeredThreads.Contains(thread))
+            {
+                return;
+            }
+
+            registeredThreads.Add(thread);
+        }
+
+        void OnDestroy()
+        {
+            foreach (var thread in registeredThreads)
+                thread.Dispose();
+
+            if (dispatcher != null)
+                dispatcher.Dispose();
+            dispatcher = null;
+
+            if (taskDistributor != null)
+                taskDistributor.Dispose();
+            taskDistributor = null;
+        }
+
+        void Update()
+        {
+            if (dispatcher != null)
+                dispatcher.ProcessTasks();
+
+            var finishedThreads = registeredThreads.Where(thread => !thread.IsAlive).ToArray();
+            foreach (var finishedThread in finishedThreads)
+            {
+                finishedThread.Dispose();
+                registeredThreads.Remove(finishedThread);
+            }
         }
     }
 }

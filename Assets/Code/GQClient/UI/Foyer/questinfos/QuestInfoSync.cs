@@ -1,17 +1,20 @@
-﻿using GQ.Client.Conf;
-using GQ.Client.Model;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Model.mgmt.questinfos;
 using UnityEngine;
 
-public class QuestInfoSync : MonoBehaviour {
+namespace Code.GQClient.UI.Foyer.questinfos
+{
+    public class QuestInfoSync : MonoBehaviour {
 
-    void Start () {
-        if (ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
-        {
-            QuestInfoManager.Instance.UpdateLocalQuestInfosOnly();
-        }
-        else
-        {
-            QuestInfoManager.Instance.UpdateQuestInfos();
+        void Start () {
+            if (ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
+            {
+                QuestInfoManager.Instance.UpdateLocalQuestInfosOnly();
+            }
+            else
+            {
+                QuestInfoManager.Instance.UpdateQuestInfos();
+            }
         }
     }
 }

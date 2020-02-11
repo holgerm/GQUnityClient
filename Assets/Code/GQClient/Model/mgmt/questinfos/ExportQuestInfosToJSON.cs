@@ -1,12 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using GQ.Client.Util;
+using Code.GQClient.Err;
+using Code.GQClient.FileIO;
+using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
-using System;
-using GQ.Client.Err;
-using GQ.Client.FileIO;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.questinfos
 {
 
     public class ExportQuestInfosToJSON : Task {

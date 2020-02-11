@@ -1,7 +1,7 @@
+using Code.QM.Util;
 using UnityEngine;
-using QM.Util;
 
-namespace GQ.Client.Util {
+namespace Code.GQClient.Util.http {
 
 	public static class LocalWWW {
 

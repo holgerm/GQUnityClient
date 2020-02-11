@@ -24,12 +24,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using Code.GQClient.UI.map;
+using Code.UnitySlippyMap.Map;
 using UnityEngine;
-
-using UnitySlippyMap.Map;
 using UnityEngine.EventSystems;
 
-namespace UnitySlippyMap.Input
+namespace Code.UnitySlippyMap.Input
 {
 
 	/// <summary>
@@ -65,16 +65,16 @@ namespace UnitySlippyMap.Input
 			if (EventSystem.current.IsPointerOverGameObject () || 
 				(UnityEngine.Input.touchCount > 0 && EventSystem.current.IsPointerOverGameObject (UnityEngine.Input.GetTouch (0).fingerId))) 
 			{
-				GQ.Client.UI.MapController.IgnoreInteraction = true;
+				MapController.IgnoreInteraction = true;
 				if (UnityEngine.Input.GetMouseButtonUp(0)) {
-					GQ.Client.UI.MapController.IgnoreInteraction = false;
+					MapController.IgnoreInteraction = false;
 				}
 				return;
 			}
 
-			if (GQ.Client.UI.MapController.IgnoreInteraction) {
+			if (MapController.IgnoreInteraction) {
 				if (UnityEngine.Input.GetMouseButtonUp(0)) {
-					GQ.Client.UI.MapController.IgnoreInteraction = false;	
+					MapController.IgnoreInteraction = false;	
 				}
 				return;
 			}

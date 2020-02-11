@@ -1,7 +1,7 @@
-﻿using GQ.Client.Util;
+﻿using Code.GQClient.Util;
 using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.menu
 {
 
     public class InfoMenu : MonoBehaviour

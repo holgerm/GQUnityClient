@@ -1,4 +1,4 @@
-namespace GQ.Lang {
+namespace Code.GQClient.Lang {
 
 	[System.Serializable]
 	public class Translation {

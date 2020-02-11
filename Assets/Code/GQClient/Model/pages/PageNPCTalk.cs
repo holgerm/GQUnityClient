@@ -1,10 +1,12 @@
 ﻿//#define DEBUG_LOG
 
+using System;
 using System.Collections.Generic;
 using System.Xml;
-using System;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.pages
 {
     public class PageNPCTalk : Page
     {

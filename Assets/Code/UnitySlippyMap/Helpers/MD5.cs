@@ -28,7 +28,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace UnitySlippyMap
+namespace Code.UnitySlippyMap.Helpers
 {
 	public static class MD5
 	{

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace QM.UI
+namespace Code.QM.UI
 {
 
     public class MenuRadioGroup : MonoBehaviour

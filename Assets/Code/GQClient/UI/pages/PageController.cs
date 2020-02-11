@@ -1,15 +1,18 @@
 ﻿#define DEBUG_LOG
 
-using UnityEngine;
-using GQ.Client.Model;
-using UnityEngine.SceneManagement;
-using GQ.Client.Err;
-using GQ.Client.Conf;
 using System.Collections;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using Code.GQClient.UI.Foyer.header;
+using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages
 {
 
     public abstract class PageController : UIController

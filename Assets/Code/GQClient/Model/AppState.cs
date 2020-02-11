@@ -1,4 +1,4 @@
-﻿namespace GQ.Model {
+﻿namespace Code.GQClient.Model {
 
 	public class AppState {
 

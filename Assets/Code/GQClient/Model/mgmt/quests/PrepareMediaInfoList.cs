@@ -1,15 +1,17 @@
 ﻿//#define DEBUG_LOG
 
-using System.Collections;
-using GQ.Client.Util;
-using GQ.Client.Err;
-using System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
-using GQ.Client.Conf;
-using GQ.Client.UI;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.UI;
+using Code.GQClient.Util.http;
+using Code.GQClient.Util.tasks;
 
-namespace GQ.Client.Model
+namespace Code.GQClient.Model.mgmt.quests
 {
 
     public class PrepareMediaInfoList : Task
