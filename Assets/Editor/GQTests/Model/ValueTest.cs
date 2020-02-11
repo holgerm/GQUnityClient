@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Model.expressions;
+using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
 
 namespace GQTests.Model
 {

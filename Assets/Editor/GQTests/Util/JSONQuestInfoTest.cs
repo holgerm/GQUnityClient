@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Util.tasks;
 using GQ.Editor.Util;
 using GQTests.Management;
-using GQ.Client.Util;
-using GQ.Client.Model;
 using NUnit.Framework;
 
 namespace GQTests.Util

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
 using GQ.Editor.Util;
 using System.IO;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
 
 namespace GQTests.Model.Deserialization
 {

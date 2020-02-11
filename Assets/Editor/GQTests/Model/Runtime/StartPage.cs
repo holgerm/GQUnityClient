@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
+using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
 
 namespace GQTests.Model.Runtime
 {

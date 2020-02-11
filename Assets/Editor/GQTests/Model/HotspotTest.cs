@@ -3,9 +3,12 @@ using UnityEditor;
 using NUnit.Framework;
 using GQ.Editor.Util;
 using GQTests;
-using GQ.Client.Model;
 using System;
 using System.IO;
+using Code.GQClient.Model;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 
 namespace GQTests.Model
 {

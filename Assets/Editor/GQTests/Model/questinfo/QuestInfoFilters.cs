@@ -3,8 +3,8 @@ using UnityEditor;
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
-using GQ.Client.Model;
 using System.Collections.Generic;
+using Code.GQClient.Model.mgmt.questinfos;
 using Newtonsoft.Json;
 
 namespace GQTests.Model {

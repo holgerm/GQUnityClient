@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Model.actions;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Model;
 
 namespace GQTests.Model
 {

@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
-using GQ.Client.Util;
+using Code.GQClient.Util.tasks;
 
 namespace GQTests.Util
 {

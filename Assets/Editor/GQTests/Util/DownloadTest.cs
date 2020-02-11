@@ -3,9 +3,9 @@ using UnityEditor;
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
+using Code.GQClient.Util.http;
 using GQTests;
 using GQ.Editor.Util;
-using GQ.Client.Util;
 
 namespace GQTests.Util
 {

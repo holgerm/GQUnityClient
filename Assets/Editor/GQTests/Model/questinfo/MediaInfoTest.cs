@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using NUnit.Framework;
-using GQ.Client.Model;
 using System.Collections.Generic;
+using Code.GQClient.Model.mgmt.quests;
+using Code.QM.Util;
 using Newtonsoft.Json;
-using QM.Util;
 
 namespace GQTests.Model
 {

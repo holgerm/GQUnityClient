@@ -1,11 +1,13 @@
 ﻿using System.IO;
-using GQ.Client.Model;
-using GQ.Client.Err;
 using GQ.Editor.Util;
 using NUnit.Framework;
 using System.Reflection;
 using System;
 using System.Xml;
+using Code.GQClient.Err;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 
 namespace GQTests.Model
 {

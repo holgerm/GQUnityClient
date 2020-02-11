@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using Code.GQClient.Util;
+using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
-using GQ.Client.Util;
 
 namespace GQTests.Util {
 	public class ObjectsTest {

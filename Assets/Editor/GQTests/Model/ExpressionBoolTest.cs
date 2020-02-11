@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using GQ.Client.Model;
-using GQ.Client.Util;
+﻿using Code.GQClient.Model.expressions;
+using Code.GQClient.Util;
+using NUnit.Framework;
 
 namespace GQTests.Model
 {

@@ -3,7 +3,6 @@ using UnityEditor;
 using NUnit.Framework;
 using System.IO;
 using GQTests;
-using GQ.Client.Util;
 using QM;
 using System;
 using System.Text;

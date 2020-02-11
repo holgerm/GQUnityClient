@@ -2,12 +2,12 @@
 using UnityEngine;
 using NUnit.Framework;
 using System;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Util.http;
+using Code.QM.Util;
 using GQTests;
 using GQ.Editor.Util;
 using QM.Mocks;
-using GQ.Client.Conf;
-using QM.Util;
 
 namespace QM.Tests
 {
