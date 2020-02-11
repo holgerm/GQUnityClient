@@ -21,8 +21,6 @@ namespace GQ.Client.UI
 		private List<LayerBehaviour> layers;
 		public MapBehaviour map;
 
-		#region Markers
-
 		private static Dictionary<int, Marker> markers;
 
 		/// <summary>
@@ -47,10 +45,6 @@ namespace GQ.Client.UI
 			}
 		}
 
-		#endregion
-
-
-		#region Global static behaviour
 
 		static protected void calculateMarkerDetails (Texture texture, GameObject markerGO)
 		{
@@ -92,10 +86,6 @@ namespace GQ.Client.UI
 			yield break;
 		}
 
-		#endregion
-
-
-		#region Centering
 
 		public GameObject MapButtonPanel;
 		public Texture CenterTexture;
@@ -138,10 +128,6 @@ namespace GQ.Client.UI
 			Center ();
 		}
 
-		#endregion
-
-
-		#region Zooming
 
 		public void ZoomInButtonPressed ()
 		{
@@ -152,23 +138,38 @@ namespace GQ.Client.UI
 
 		public void ZoomOutButtonPressed ()
 		{
-			map.CurrentZoom = Math.Max (map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
-			map.Zoom (0f);
-			UpdateZoomButtons ();
+            map.CurrentZoom = Math.Max (map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
+#if DEBUG_LOG
+            WATCH.Show("zoom", "ZoomOutButtonPressed #1");
+#endif
+            map.Zoom (0f);
+#if DEBUG_LOG
+			WATCH.Show("zoom", "ZoomOutButtonPressed #2");
+#endif
+            UpdateZoomButtons();
+#if DEBUG_LOG
+			WATCH.Show("zoom", "ZoomOutButtonPressed #3");
+#endif
 		}
 
-		protected void UpdateZoomButtons ()
+#if DEBUG_LOG
+        private void Update()
+        {
+			Debug.Log("ZoomOutButton: " + (zoomOutButton.enabled ? "ENABLED".Green() : "DISABLED".Red()));
+        }
+#endif
+
+		private void UpdateZoomButtons ()
 		{
 			// If further zooming IN is not possible disable ZoomInButton: 
 			zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
 
 			// If further zooming OUT is not possible disable ZoomOutButton: 
 			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
+#if DEBUG_LOG
+			//Debug.Log("zoomOutButton.Enabled: " + zoomOutButton.Enabled);
+#endif
 		}
-
-		#endregion
-
-		#region Map Layers
 
 		private LayerBehaviour MapLayer {
 			get {
@@ -219,15 +220,14 @@ namespace GQ.Client.UI
 			}
 		}
 
-		#endregion
-
-		#region Runtime
-
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
 
 		protected virtual void Start ()
 		{
+#if DEBUG_LOG
+			WATCH w = new WATCH("zoom", true);
+#endif
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
@@ -293,7 +293,5 @@ namespace GQ.Client.UI
 		{
 			map = null;
 		}
-
-#endregion
 	}
 }

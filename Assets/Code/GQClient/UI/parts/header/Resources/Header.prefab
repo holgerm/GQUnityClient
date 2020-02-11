@@ -108,9 +108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 113.6157
+  m_MinHeight: 130.23619
   m_PreferredWidth: -1
-  m_PreferredHeight: 113.6157
+  m_PreferredHeight: 130.23619
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -174,7 +174,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1167814668691722, guid: f8f5ed896ae654552b23b403d0ac594a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1201403448935584, guid: f8f5ed896ae654552b23b403d0ac594a, type: 3}
       propertyPath: m_Name
@@ -188,17 +188,17 @@ PrefabInstance:
     - target: {fileID: 114066545200664488, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.21960784
       objectReference: {fileID: 0}
     - target: {fileID: 114066545200664488, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.21960784
       objectReference: {fileID: 0}
     - target: {fileID: 114066545200664488, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.21960784
       objectReference: {fileID: 0}
     - target: {fileID: 114474806008393548, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
@@ -220,17 +220,17 @@ PrefabInstance:
     - target: {fileID: 114957906203628606, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.21960784
       objectReference: {fileID: 0}
     - target: {fileID: 114957906203628606, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.21960784
       objectReference: {fileID: 0}
     - target: {fileID: 114957906203628606, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.21960784
       objectReference: {fileID: 0}
     - target: {fileID: 224655249844479036, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
@@ -367,7 +367,7 @@ PrefabInstance:
     - target: {fileID: 6509634774654377050, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8f5ed896ae654552b23b403d0ac594a, type: 3}
