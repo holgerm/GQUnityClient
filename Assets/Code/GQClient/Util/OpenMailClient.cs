@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GQ.Client.Conf;
+﻿using GQ.Client.Conf;
 using UnityEngine;
 
 namespace GQ.Client.Util

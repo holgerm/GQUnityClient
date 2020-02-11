@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-namespace GQ.Model {
+﻿namespace GQ.Model {
 
 	public class AppState {
 

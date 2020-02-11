@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace GQ.Client.Err
+﻿namespace GQ.Client.Err
 {
 
 	public static class LogStringFormattings

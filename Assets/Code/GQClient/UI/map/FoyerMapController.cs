@@ -1,16 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using GQ.Client.Model;
-using System.Collections.Generic;
-using System;
-using GQ.Client.UI.Dialogs;
-using GQ.Client.Util;
 using GQ.Client.Conf;
-using UnityEngine.UI;
 using GQ.Client.Err;
 using UnitySlippyMap.Map;
-using UnitySlippyMap.Layers;
-using UnitySlippyMap.Markers;
 using QM.Util;
 
 namespace GQ.Client.UI.Foyer

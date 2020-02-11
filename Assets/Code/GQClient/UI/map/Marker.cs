@@ -1,9 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnitySlippyMap.Markers;
 using GQ.Client.Util;
-using GQ.Client.Conf;
 
 namespace GQ.Client.UI
 {

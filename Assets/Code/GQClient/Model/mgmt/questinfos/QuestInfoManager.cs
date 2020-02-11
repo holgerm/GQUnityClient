@@ -7,7 +7,6 @@ using GQ.Client.Util;
 using GQ.Client.Conf;
 using System.IO;
 using GQ.Client.Err;
-using GQ.Client.UI.Dialogs;
 using System.Linq;
 using QM.Util;
 using GQ.Client.UI;

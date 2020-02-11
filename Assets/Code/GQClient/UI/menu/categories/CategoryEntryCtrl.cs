@@ -1,12 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.UI;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using GQ.Client.Conf;
-using QM.UI;
-using QM.Util;
-using GQ.Client.Err;
 
 namespace GQ.Client.UI
 {

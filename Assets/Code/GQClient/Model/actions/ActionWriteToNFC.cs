@@ -1,5 +1,4 @@
 ﻿using System.Xml;
-using GQ.Client.Model;
 using GQ.Client.Util;
 using QM.NFC;
 

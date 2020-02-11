@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace GQ.Client.UI.Dialogs
+﻿namespace GQ.Client.UI.Dialogs
 {
 	public class MessageDialog : DialogBehaviour
 	{

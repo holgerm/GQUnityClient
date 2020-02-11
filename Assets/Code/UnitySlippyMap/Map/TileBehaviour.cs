@@ -28,13 +28,10 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using GQ.Client.Conf;
-using GQ.Client.Err;
 using GQ.Client.Util;
 using UnityEngine;
-using UnitySlippyMap.Layers;
 
 namespace UnitySlippyMap.Map
 {

@@ -21,7 +21,7 @@ sysinfo.txt
 # specific folders:
 /Library/
 /.vs/
-.idea/
+/.idea/
 
 
 /Logs/

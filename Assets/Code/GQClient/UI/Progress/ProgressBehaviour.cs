@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using GQ.Client.GQEvents;
-using UnityEngine.UI;
-using GQ.Client.Model;
+﻿using System;
 using GQ.Client.Util;
 
 namespace GQ.Client.UI.Progress

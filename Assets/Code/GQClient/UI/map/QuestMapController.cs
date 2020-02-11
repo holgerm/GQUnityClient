@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GQ.Client.Model;
 using UnitySlippyMap.Map;
-using System;
 using GQ.Client.Util;
 using GQ.Client.Conf;
-using UnityEngine.UI;
 
 
 namespace GQ.Client.UI

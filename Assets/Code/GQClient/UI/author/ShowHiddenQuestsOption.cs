@@ -1,5 +1,4 @@
 ﻿using GQ.Client.Conf;
-using GQ.Client.Model;
 using GQ.Client.Util;
 using UnityEngine;
 using UnityEngine.UI;

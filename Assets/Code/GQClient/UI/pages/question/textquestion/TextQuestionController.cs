@@ -1,5 +1,4 @@
-﻿using UnityEngine.UI;
-using GQ.Client.Model;
+﻿using GQ.Client.Model;
 using GQ.Client.Util;
 using GQ.Client.Conf;
 using TMPro;

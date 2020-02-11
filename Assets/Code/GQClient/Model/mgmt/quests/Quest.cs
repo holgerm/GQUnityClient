@@ -11,7 +11,6 @@ using GQ.Client.Err;
 using System.IO;
 using System.Xml;
 using GQ.Client.Util;
-using System.Net;
 using System.Reflection;
 
 namespace GQ.Client.Model

@@ -5,7 +5,6 @@ using GQ.Client.Model;
 using System.Collections.Generic;
 using System.Text;
 using System;
-using UnityEngine;
 
 namespace GQ.Client.Util
 {

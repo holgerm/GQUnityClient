@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GQ.Client.UI;
 using GQ.Client.Util;
 using GQ.Client.Model;

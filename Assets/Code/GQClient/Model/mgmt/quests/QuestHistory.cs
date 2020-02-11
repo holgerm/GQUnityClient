@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using GQ.Client.Err;
-using UnityEngine;
 
 namespace GQ.Client.Model
 {

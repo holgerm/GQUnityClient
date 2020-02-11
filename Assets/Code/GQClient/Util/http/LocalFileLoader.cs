@@ -1,10 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using System.Diagnostics;
 using GQ.Client.Err;
-using GQ.Client.UI;
-using System.IO;
 using GQ.Client.FileIO;
 
 namespace GQ.Client.Util

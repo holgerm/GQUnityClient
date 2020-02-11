@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using GQ.Client.Util;
 using GQ.Client.Err;
 

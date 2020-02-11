@@ -2,8 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using UnityEngine;
- 
+
 public class SqliteException : Exception
 {
     public SqliteException(string message) : base(message)

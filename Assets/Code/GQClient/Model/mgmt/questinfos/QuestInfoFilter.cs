@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using GQ.Client.Conf;
 using System.Text;
 using GQ.Client.Util;
-using UnityEngine;
 
 namespace GQ.Client.Model
 {

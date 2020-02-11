@@ -7,7 +7,6 @@ using UnityEngine.Video;
 using GQ.Client.Err;
 using QM.Util;
 using GQ.Client.Conf;
-using System;
 
 namespace GQ.Client.UI
 {

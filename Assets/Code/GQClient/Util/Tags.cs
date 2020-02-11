@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-namespace GQ.Client.Util {
+﻿namespace GQ.Client.Util {
 
 	public class Tags {
 

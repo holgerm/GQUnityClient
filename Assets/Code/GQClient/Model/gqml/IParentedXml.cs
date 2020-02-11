@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-namespace GQ.Client.Model
+﻿namespace GQ.Client.Model
 {
 
 	public interface IParentedXml {

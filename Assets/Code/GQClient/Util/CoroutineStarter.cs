@@ -1,12 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Globalization;
-using System.Threading;
-using GQ.Client.Err;
-using GQ.Client.UI.Dialogs;
-using UnityEngine.SceneManagement;
-using GQ.Client.Conf;
-using GQ.Client.Model;
 
 namespace GQ.Client.Util
 {

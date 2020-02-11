@@ -2,7 +2,6 @@
 using GQ.Client.Util;
 using QM.UI;
 using GQ.Client.Conf;
-using QM.Util;
 using UnityEngine.UI;
 
 namespace GQ.Client.UI

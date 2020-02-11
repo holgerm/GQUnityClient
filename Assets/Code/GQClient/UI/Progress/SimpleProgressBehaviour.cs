@@ -1,5 +1,4 @@
 ﻿using GQ.Client.Util;
-using UnityEngine;
 
 namespace GQ.Client.UI.Progress
 {

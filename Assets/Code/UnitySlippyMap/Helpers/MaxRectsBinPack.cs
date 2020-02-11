@@ -6,7 +6,6 @@
  	This version is also public domain - do whatever you want with it.
 */
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 

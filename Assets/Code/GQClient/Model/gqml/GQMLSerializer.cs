@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class GQMLSerializer
+﻿public class GQMLSerializer
 {
 
 	// Use this for initialization

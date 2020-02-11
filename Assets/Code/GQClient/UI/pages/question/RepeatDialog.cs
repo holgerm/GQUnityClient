@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GQ.Client.Util;
-using UnityEngine;
+﻿using GQ.Client.Util;
 
 namespace GQ.Client.UI.Dialogs
 {

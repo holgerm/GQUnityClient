@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
-using GQ.Client.Util;
 
 namespace GQ.Client.Model
 {

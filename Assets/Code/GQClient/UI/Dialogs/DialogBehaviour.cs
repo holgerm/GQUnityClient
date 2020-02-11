@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using System;
 using GQ.Client.GQEvents;
-using UnityEngine.UI;
-using GQ.Client.Model;
 using GQ.Client.Util;
 
 namespace GQ.Client.UI.Dialogs

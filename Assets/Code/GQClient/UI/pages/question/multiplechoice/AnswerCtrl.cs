@@ -4,7 +4,6 @@ using GQ.Client.Model;
 using GQ.Client.UI;
 using GQ.Client.Util;
 using TMPro;
-using GQ.Client.Conf;
 
 public class AnswerCtrl : MonoBehaviour
 {

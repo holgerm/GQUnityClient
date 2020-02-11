@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using GQ.Client.Err;
 using GQ.Client.Util;

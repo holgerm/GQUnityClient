@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using GQ.Client.UI;
-using GQ.Client.Err;
-using System.Text;
-using QM.Util;
 
 namespace GQ.Client.Util
 {

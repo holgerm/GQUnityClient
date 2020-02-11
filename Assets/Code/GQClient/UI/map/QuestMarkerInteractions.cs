@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.UI;
-using GQ.Client.Err;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace GQ.Client.UI
