@@ -1,8 +1,9 @@
-﻿using GQ.Client.Err;
-using GQ.Client.Model;
+﻿using Code.GQClient.Err;
+using Code.GQClient.Model.pages;
+using Code.GQClient.UI.pages;
 using UnityEngine;
 
-namespace GQ.Client.UI
+namespace ConfigAssets.Resources.Code
 {
     public static class WebViewExtras
     {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using GQ.Client.Util;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Util;
 
-namespace GQ.Client.Model
+namespace ConfigAssets.Resources.Code
 {
 
 	public class CategoryReader
