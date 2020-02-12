@@ -1,4 +1,5 @@
-﻿using Code.GQClient.start;
+﻿using Code.GQClient.Model.pages;
+using Code.GQClient.start;
 using Code.GQClient.Util;
 using TMPro;
 using UnityEngine;

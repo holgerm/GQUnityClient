@@ -2,8 +2,9 @@
 using System.Xml;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.pages.question;
 
-namespace Code.GQClient.UI.pages.question.multiplechoice
+namespace Code.GQClient.Model.pages
 {
     public class PageMultipleChoiceQuestion : QuestionPage
 	{

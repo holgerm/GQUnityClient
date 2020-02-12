@@ -4,9 +4,10 @@ using System.Xml;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.pages.question;
 using Code.GQClient.Util;
 
-namespace Code.GQClient.UI.pages.question.textquestion
+namespace Code.GQClient.Model.pages
 {
     public class PageTextQuestion : QuestionPage
     {

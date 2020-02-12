@@ -1,6 +1,7 @@
 ﻿using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.Model.pages;
 using Code.GQClient.Util.http;
 using UnityEngine;
 using UnityEngine.UI;
