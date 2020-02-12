@@ -361,8 +361,7 @@ namespace Code.GQClient.Util.input
 
         public static bool WithinDistance(this LocationInfoExt thisLoc, double distance, LocationInfoExt otherLoc)
         {
-            // TODO calculate weather the distance is larger than UpdateDistance
-            return false;
+            return (5d > LocationSensor.distance(thisLoc.latitude, thisLoc.longitude, otherLoc.latitude, otherLoc.longitude));
         }
     }
 
