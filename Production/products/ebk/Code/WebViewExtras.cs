@@ -1,7 +1,11 @@
-﻿using GQ.Client.Err;
-using GQ.Client.Model;
-using GQ.Client.Util;
-using QM.Util;
+﻿using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.pages;
+using Code.GQClient.UI.layout;
+using Code.GQClient.UI.pages;
+using Code.GQClient.UI.pages.videoplayer;
+using Code.GQClient.Util;
+using Code.QM.Util;
 using TMPro;
 using UnityEngine;
 

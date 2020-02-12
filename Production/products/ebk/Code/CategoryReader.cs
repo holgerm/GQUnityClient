@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using GQ.Client.Conf;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Util;
 
 namespace GQ.Client.Model
 {
