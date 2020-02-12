@@ -2,7 +2,7 @@
 
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
-using ConfigAssets.Resources.Code;
+using GQ.Client.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Code.GQClient.Util
 {
 
-    public class OpenMailClient : global::QM.Util.OpenMailClient
+    public class OpenMailClient : Code.QM.Util.OpenMailClient
     {
 
         // Use this for initialization

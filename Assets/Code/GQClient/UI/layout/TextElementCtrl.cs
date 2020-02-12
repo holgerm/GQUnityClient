@@ -85,6 +85,16 @@ namespace Code.GQClient.UI.layout
                     TextElement.overflowMode = TextOverflowModes.Overflow;
                     TextElement.raycastTarget = false;
                     break;
+                case TextUsageType.SettingsOption:
+                    TextElement.alignment = TextAlignmentOptions.Left;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.overflowMode = TextOverflowModes.Overflow;
+                    TextElement.raycastTarget = false;
+                    break;
                 case TextUsageType.MenuEntry:
                     TextElement.color = config.menuFGColor;
                     TextElement.alignment = TextAlignmentOptions.Left;
@@ -208,5 +218,6 @@ namespace Code.GQClient.UI.layout
         DialogTitle = 7,
         DialogMessage = 8,
         CopyRight = 9,
+        SettingsOption = 10
     }
 }

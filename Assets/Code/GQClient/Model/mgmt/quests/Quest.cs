@@ -407,7 +407,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
             // Determine the full name of the according page type (e.g. GQ.Client.Model.XML.PageNPCTalk) 
             //		where SetVariable is taken form ath type attribute of the xml action element.
-            string __myTypeName = this.GetType().FullName;
+            string __myTypeName = typeof(Page).FullName;
             int lastDotIndex = __myTypeName.LastIndexOf(".");
             string modelNamespace = __myTypeName.Substring(0, lastDotIndex);
             string targetScenePath = null;

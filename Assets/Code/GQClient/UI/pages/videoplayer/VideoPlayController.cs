@@ -6,7 +6,7 @@ using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.QM.Util;
-using ConfigAssets.Resources.Code;
+using GQ.Client.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
