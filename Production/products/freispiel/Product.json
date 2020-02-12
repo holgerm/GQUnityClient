@@ -122,7 +122,7 @@
     "b": 255,
     "a": 255
   },
-  "mainFontSize": 100,
+  "mainFontSize": 80,
   "textAlignment": "Left",
   "lineSpacing": 10.0,
   "showShadows": true,

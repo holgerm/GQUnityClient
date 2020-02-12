@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using GQ.Client.Util;
+﻿using System.Collections.Generic;
+using Code.GQClient.Model.mgmt.questinfos;
+using Code.GQClient.Util;
 
 namespace GQ.Client.Model
 {
