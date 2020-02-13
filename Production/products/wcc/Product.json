@@ -107,6 +107,14 @@
           }
         },
         {
+          "id": "wcc.freemusic",
+          "name": "Schall & Klang",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/concerthall"
+          }
+        },
+        {
           "id": "wcc.art",
           "name": "Kunst",
           "folderName": "Kultur",
@@ -171,19 +179,19 @@
           }
         },
         {
-          "id": "wcc.concerthall",
-          "name": "Schall & Klang",
-          "folderName": "KulturShoppen",
-          "symbol": {
-            "path": "textures/readable/concerthall"
-          }
-        },
-        {
           "id": "wcc.theatre",
           "name": "Theater",
           "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/theatre"
+          }
+        },
+        {
+          "id": "wcc.concerthall",
+          "name": "Konzert",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/concerthall"
           }
         },
         {
@@ -197,6 +205,14 @@
         {
           "id": "wcc.tour.beethoven",
           "name": "Beethoventour",
+          "folderName": "Touren",
+          "symbol": {
+            "path": "textures/readable/beethoventour"
+          }
+        },
+        {
+          "id": "wcc.bonnhoeren",
+          "name": "BonnHoeren",
           "folderName": "Touren",
           "symbol": {
             "path": "textures/readable/beethoventour"
@@ -261,7 +277,7 @@
         {
           "id": "wcc.tourist",
           "name": "Tourist Info",
-          "folderName": "Hilfe & Information",
+          "folderName": "Service & Information",
           "symbol": {
             "path": "textures/readable/touristinfo"
           }
@@ -269,7 +285,7 @@
         {
           "id": "wcc.wc",
           "name": "WC",
-          "folderName": "Hilfe & Information",
+          "folderName": "Service & Information",
           "symbol": {
             "path": "textures/readable/wc"
           }
@@ -277,7 +293,7 @@
         {
           "id": "wcc.bike",
           "name": "Fahrradvermietung",
-          "folderName": "Hilfe & Information",
+          "folderName": "Service & Information",
           "symbol": {
             "path": "textures/readable/bike"
           }
