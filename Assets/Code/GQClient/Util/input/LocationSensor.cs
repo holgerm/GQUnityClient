@@ -228,10 +228,11 @@ namespace Code.GQClient.Util.input
                             LocationInfoExt newLocation = Device.location.lastData;
                             if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation))
                             {
-                                _onLocationUpdate(this, new LocationEventArgs(LocationEventType.Update, Device.location.lastData));
+                                _onLocationUpdate?.Invoke(this,
+                                    new LocationEventArgs(LocationEventType.Update, Device.location.lastData));
+                                lastLocation = newLocation;
                                 failed = false;
                             }
-                            lastLocation = newLocation;
                             break;
                         case LocationServiceStatus.Stopped:
 #if DEBUG_LOG
@@ -361,7 +362,7 @@ namespace Code.GQClient.Util.input
 
         public static bool WithinDistance(this LocationInfoExt thisLoc, double distance, LocationInfoExt otherLoc)
         {
-            return (5d > LocationSensor.distance(thisLoc.latitude, thisLoc.longitude, otherLoc.latitude, otherLoc.longitude));
+            return (distance > LocationSensor.distance(thisLoc.latitude, thisLoc.longitude, otherLoc.latitude, otherLoc.longitude));
         }
     }
 
