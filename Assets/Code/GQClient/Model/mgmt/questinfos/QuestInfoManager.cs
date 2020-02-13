@@ -15,7 +15,7 @@ using Code.GQClient.Util.tasks;
 using Code.QM.Util;
 using UnityEngine;
 
-namespace Code.GQClient.Model.mgmt.questinfos
+namespace GQClient.Model
 {
 
     /// <summary>

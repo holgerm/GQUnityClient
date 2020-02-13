@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.media;
 using Code.GQClient.Util;

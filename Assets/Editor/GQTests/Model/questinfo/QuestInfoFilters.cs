@@ -4,7 +4,7 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Newtonsoft.Json;
 
 namespace GQTests.Model {

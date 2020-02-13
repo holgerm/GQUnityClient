@@ -6,7 +6,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.GQClient.Util.tasks;
 using GQTests.Util;
 

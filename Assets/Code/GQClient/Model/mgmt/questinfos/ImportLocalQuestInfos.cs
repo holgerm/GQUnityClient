@@ -2,7 +2,7 @@
 using System.IO;
 using Code.GQClient.Err;
 
-namespace Code.GQClient.Model.mgmt.questinfos
+namespace GQClient.Model
 {
 
 	/// <summary>

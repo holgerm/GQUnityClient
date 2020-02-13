@@ -3,7 +3,7 @@ using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
 
-namespace Code.GQClient.Model.mgmt.questinfos
+namespace GQClient.Model
 {
 
     public abstract class QuestInfoFilter
@@ -189,7 +189,7 @@ namespace Code.GQClient.Model.mgmt.questinfos
             public CategoryFilter(CategorySet catSet)
             {
                 NotificationPaused = true;
-                foreach (Conf.Category c in catSet.categories)
+                foreach (Category c in catSet.categories)
                 {
                     AddCategory(c.id);
                 }

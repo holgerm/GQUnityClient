@@ -1,6 +1,6 @@
 ﻿using System;
 using Code.GQClient.Err;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using TMPro;
 
 namespace Code.GQClient.UI.Foyer.questinfos

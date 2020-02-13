@@ -9,7 +9,7 @@ using System.Linq;
 using QM.Mocks;
 using System;
 using Code.GQClient.Conf;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
 
 namespace GQTests.Management {

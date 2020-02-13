@@ -12,10 +12,9 @@ using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
-using GQ.Client.Model;
 using Newtonsoft.Json;
 
-namespace Code.GQClient.Model.mgmt.questinfos
+namespace GQClient.Model
 {
 
     /// <summary>

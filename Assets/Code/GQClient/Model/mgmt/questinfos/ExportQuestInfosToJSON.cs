@@ -6,7 +6,7 @@ using Code.GQClient.FileIO;
 using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
 
-namespace Code.GQClient.Model.mgmt.questinfos
+namespace GQClient.Model
 {
 
     public class ExportQuestInfosToJSON : Task {

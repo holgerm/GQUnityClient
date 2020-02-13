@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.GQClient.Util;
 using TMPro;
 using UnityEngine;

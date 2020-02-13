@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.Foyer.questinfos;
 using UnityEngine;

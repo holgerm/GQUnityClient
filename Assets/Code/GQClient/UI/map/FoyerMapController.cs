@@ -1,6 +1,6 @@
 ﻿using Code.GQClient.Conf;
 using Code.GQClient.Err;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.QM.Util;
 using Code.UnitySlippyMap.Map;
 using UnityEngine;

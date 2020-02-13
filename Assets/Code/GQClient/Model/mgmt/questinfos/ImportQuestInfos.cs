@@ -5,7 +5,7 @@ using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Code.GQClient.Model.mgmt.questinfos
+namespace GQClient.Model
 {
 
     /// <summary>

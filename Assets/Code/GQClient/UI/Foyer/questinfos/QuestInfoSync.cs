@@ -1,5 +1,5 @@
 ﻿using Code.GQClient.Conf;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using UnityEngine;
 
 namespace Code.GQClient.UI.Foyer.questinfos

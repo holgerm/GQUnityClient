@@ -1,8 +1,8 @@
 ﻿//#define DEBUG_LOG
 
 using Code.GQClient.Model.pages;
+using Code.GQClient.UI.pages.videoplayer;
 using Code.GQClient.Util;
-using GQ.Client.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

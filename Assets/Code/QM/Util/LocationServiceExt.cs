@@ -1,7 +1,7 @@
 ﻿//#define DEBUG_LOG
 
 using Code.GQClient.Model;
-using Code.GQClient.Model.mgmt.questinfos;
+using GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
 using UnityEngine;
 using UnityEngine.Android;
