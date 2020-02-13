@@ -3,7 +3,7 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.UI.pages;
 using UnityEngine;
 
-namespace ConfigAssets.Resources.Code
+namespace Code.GQClient.UI.pages.videoplayer
 {
     public static class WebViewExtras
     {
