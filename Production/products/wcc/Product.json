@@ -107,14 +107,6 @@
           }
         },
         {
-          "id": "wcc.freemusic",
-          "name": "Schall & Klang",
-          "folderName": "Kultur",
-          "symbol": {
-            "path": "textures/readable/concerthall"
-          }
-        },
-        {
           "id": "wcc.art",
           "name": "Kunst",
           "folderName": "Kultur",
@@ -179,19 +171,19 @@
           }
         },
         {
+          "id": "wcc.concerthall",
+          "name": "Schall & Klang",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "path": "textures/readable/concerthall"
+          }
+        },
+        {
           "id": "wcc.theatre",
           "name": "Theater",
           "folderName": "KulturShoppen",
           "symbol": {
             "path": "textures/readable/theatre"
-          }
-        },
-        {
-          "id": "wcc.concerthall",
-          "name": "Konzert",
-          "folderName": "Kultur",
-          "symbol": {
-            "path": "textures/readable/concerthall"
           }
         },
         {
@@ -277,7 +269,7 @@
         {
           "id": "wcc.tourist",
           "name": "Tourist Info",
-          "folderName": "Service & Information",
+          "folderName": "Hilfe & Information",
           "symbol": {
             "path": "textures/readable/touristinfo"
           }
@@ -285,7 +277,7 @@
         {
           "id": "wcc.wc",
           "name": "WC",
-          "folderName": "Service & Information",
+          "folderName": "Hilfe & Information",
           "symbol": {
             "path": "textures/readable/wc"
           }
@@ -293,7 +285,7 @@
         {
           "id": "wcc.bike",
           "name": "Fahrradvermietung",
-          "folderName": "Service & Information",
+          "folderName": "Hilfe & Information",
           "symbol": {
             "path": "textures/readable/bike"
           }
@@ -325,7 +317,7 @@
     "b": 255,
     "a": 255
   },
-  "mainFontSize": 85,
+  "mainFontSize": 48,
   "textAlignment": "Left",
   "lineSpacing": 10.0,
   "showShadows": true,
