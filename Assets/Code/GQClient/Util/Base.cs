@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿// #define DEBUG_LOG
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -16,10 +19,10 @@ using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Util
 {
-
     public class Base : MonoBehaviour
     {
         #region Inspector Global Values
+
         public GameObject ListCanvas;
         public GameObject MapCanvas;
         public GameObject MapHolder;
@@ -39,10 +42,12 @@ namespace Code.GQClient.Util
         public Canvas canvas4TopRightMenu;
 
         public GameObject InteractionBlocker;
+
         #endregion
 
 
         #region Singleton
+
         public const string BASE = "Base";
 
         private static Base _instance = null;
@@ -65,17 +70,20 @@ namespace Code.GQClient.Util
                         baseGO.AddComponent(typeof(Base));
 
                     // initialize the instance:
-                    _instance = (Base)baseGO.GetComponent(typeof(Base));
+                    _instance = (Base) baseGO.GetComponent(typeof(Base));
                     _instance.ProgressCanvas.SetActive(true);
                     _instance.ProgressCanvas.GetComponent<Canvas>().enabled = false;
                 }
+
                 return _instance;
             }
         }
+
         #endregion
 
 
         #region Foyer
+
         public const string FOYER_SCENE_NAME = "Foyer";
 
         private bool listShown;
@@ -91,7 +99,8 @@ namespace Code.GQClient.Util
         public void HideFoyerCanvases()
         {
             // store current show state and hide:
-            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME).GetRootGameObjects();
+            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME)
+                .GetRootGameObjects();
             foreach (GameObject rootGo in rootGOs)
             {
                 Canvas canv = rootGo.GetComponent<Canvas>();
@@ -109,7 +118,8 @@ namespace Code.GQClient.Util
         public void ShowFoyerCanvases()
         {
             // show again accordingg to stored state:
-            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME).GetRootGameObjects();
+            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME)
+                .GetRootGameObjects();
             foreach (GameObject rootGo in rootGOs)
             {
                 Canvas canv = rootGo.GetComponent<Canvas>();
@@ -123,10 +133,12 @@ namespace Code.GQClient.Util
                 }
             }
         }
+
         #endregion
 
 
         #region LifeCycle
+
         void Awake()
         {
             // hide all canvases at first, we show the needed ones in initViews()
@@ -155,6 +167,15 @@ namespace Code.GQClient.Util
         private void Start()
         {
             partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
+
+#if DEBUG_LOG
+            float w = Device.width / Device.dpi;
+            float h = Device.height / Device.dpi;
+            double d = Math.Sqrt(w * w + h * h);
+            string s = string.Format("Display size: {0} inch", d);
+            MessageDialog dialog = new MessageDialog(s, "Ok");
+            dialog.Start();
+#endif
         }
 
         void Update()
@@ -164,12 +185,15 @@ namespace Code.GQClient.Util
             {
                 Device.updateMockedLocation();
             }
+
             //#endif
         }
+
         #endregion
 
 
         #region Global Functions
+
         public void BlockInteractions(bool block)
         {
             if (block)
@@ -197,7 +221,8 @@ namespace Code.GQClient.Util
                 case TaskUIMode.ProgressAtBottom:
                     return new DownloadProgressBehaviour(downloader, title);
                 default:
-                    Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.", ConfigurationManager.Current.taskUI);
+                    Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.",
+                        ConfigurationManager.Current.taskUI);
                     return new DownloadDialogBehaviour(downloader, title);
             }
         }
@@ -211,13 +236,12 @@ namespace Code.GQClient.Util
                 case TaskUIMode.ProgressAtBottom:
                     return new SimpleProgressBehaviour(task, title, details);
                 default:
-                    Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.", ConfigurationManager.Current.taskUI);
+                    Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.",
+                        ConfigurationManager.Current.taskUI);
                     return new SimpleDialogBehaviour(task, title, details);
             }
         }
+
         #endregion
-
-
     }
-
 }

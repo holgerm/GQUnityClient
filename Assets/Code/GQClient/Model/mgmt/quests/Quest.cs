@@ -428,6 +428,8 @@ namespace Code.GQClient.Model.mgmt.quests
             }
             pageTypeName = string.Format("{0}.Page{1}", modelNamespace, pageTypeName);
             Type pageType = Type.GetType(pageTypeName);
+            
+            Debug.Log(("PAGE TYPE FOUND: " + pageType.Name).Yellow());
 
             if (pageType == null)
             {
