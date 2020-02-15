@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
-using Code.GQClient.Model.mgmt.questinfos;
 using Code.GQClient.Util;
+using GQClient.Model;
 
-namespace GQ.Client.Model
+namespace GQClient.Model
 {
 
     public class CategoryReader

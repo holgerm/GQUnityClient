@@ -9,7 +9,7 @@ using Code.QM.Util;
 using TMPro;
 using UnityEngine;
 
-namespace GQ.Client.UI
+namespace Code.GQClient.UI.pages.videoplayer
 {
     public static class WebViewExtras
     {
