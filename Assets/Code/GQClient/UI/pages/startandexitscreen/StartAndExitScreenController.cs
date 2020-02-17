@@ -110,6 +110,11 @@ namespace Code.GQClient.UI.pages.startandexitscreen
                 loader.Start();
             }
         }
+        
+        public override void CleanUp() {
+            Destroy(image.texture);
+        }
+
         #endregion
 
 

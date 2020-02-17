@@ -1,6 +1,9 @@
-﻿using System;
+﻿#define DEBUG_LOG
+
+using System;
 using System.Collections;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.layout;
@@ -12,10 +15,8 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.npctalk
 {
-
     public class NPCTalkController : PageController
     {
-
         #region Inspector Fields
 
         public RawImage image;
@@ -36,7 +37,7 @@ namespace Code.GQClient.UI.pages.npctalk
         {
             try
             {
-                npcPage = (PageNPCTalk)page;
+                npcPage = (PageNPCTalk) page;
             }
             catch (InvalidCastException)
             {
@@ -63,6 +64,14 @@ namespace Code.GQClient.UI.pages.npctalk
             {
                 npcPage.End();
             }
+        }
+
+        public override void CleanUp()
+        {
+            Destroy(image.texture);
+#if DEBUG_LOG
+            Debug.Log("NPCTalkController cleaned up image texture.".Red());
+#endif
         }
 
         #endregion
@@ -98,7 +107,8 @@ namespace Code.GQClient.UI.pages.npctalk
                 imagePanel.SetActive(false);
                 layout.TopMargin.SetActive(true);
                 return;
-            } else
+            }
+            else
             {
                 layout.TopMargin.SetActive(false);
             }
@@ -118,6 +128,7 @@ namespace Code.GQClient.UI.pages.npctalk
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
                 );
             }
+
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
                 float imageAreaHeight = image == null ? 0f : fitInAndShowImage(d.Www.texture);
@@ -134,14 +145,16 @@ namespace Code.GQClient.UI.pages.npctalk
         float fitInAndShowImage(Texture2D texture)
         {
             AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter>();
-            float imageRatio = (float)texture.width / (float)texture.height;
-            float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
+            float imageRatio = (float) texture.width / (float) texture.height;
+            float imageAreaHeight =
+                ContentWidthUnits / imageRatio; // if image fits, so we use its height (adjusted to the area):
 
             if (imageRatio < ImageRatioMinimum)
             {
                 // image too high to fit:
                 imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMaxUnits;
             }
+
             if (ImageRatioMaximum < imageRatio)
             {
                 // image too wide to fit:
@@ -154,14 +167,13 @@ namespace Code.GQClient.UI.pages.npctalk
             fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
             fitter.aspectMode =
                 ConfigurationManager.Current.fitExceedingImagesIntoArea
-                ? AspectRatioFitter.AspectMode.FitInParent
-                : AspectRatioFitter.AspectMode.EnvelopeParent;
+                    ? AspectRatioFitter.AspectMode.FitInParent
+                    : AspectRatioFitter.AspectMode.EnvelopeParent;
 
             image.texture = texture;
             imagePanel.SetActive(true);
 
             return imageAreaHeight;
-
         }
 
         void ClearText()
@@ -207,10 +219,8 @@ namespace Code.GQClient.UI.pages.npctalk
             // update forward button text:
             TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             forwardButtonText.text = npcPage.HasMoreDialogItems()
-                ?
-                npcPage.NextDialogButtonText.Decode4TMP(false)
-                :
-                npcPage.EndButtonText.Decode4TMP(false);
+                ? npcPage.NextDialogButtonText.Decode4TMP(false)
+                : npcPage.EndButtonText.Decode4TMP(false);
         }
 
         private IEnumerator adjustScrollRect(float timespan)
@@ -232,8 +242,7 @@ namespace Code.GQClient.UI.pages.npctalk
                 if (contentPanel == null)
                     // if page already left:
                     yield break;
-            }
-            while (newPos > 0.0001 && Input.touchCount == 0 && !Input.GetMouseButtonDown(0));
+            } while (newPos > 0.0001 && Input.touchCount == 0 && !Input.GetMouseButtonDown(0));
 
             // when it was not touched scroll to the perfect button:
             if (Input.touchCount == 0 && !Input.GetMouseButtonDown(0))
@@ -242,5 +251,4 @@ namespace Code.GQClient.UI.pages.npctalk
 
         #endregion
     }
-
 }

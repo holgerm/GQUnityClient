@@ -65,6 +65,11 @@ namespace Code.GQClient.UI.pages.imagewithtext
 				loader.Start ();
 			}
 		}
+		
+		public override void CleanUp() {
+			Destroy(image.texture);
+			// Destroy(text);
+		}
 
 		#endregion
 

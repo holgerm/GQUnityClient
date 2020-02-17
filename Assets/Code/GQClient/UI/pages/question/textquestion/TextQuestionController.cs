@@ -78,6 +78,10 @@ namespace Code.GQClient.UI.pages.question.textquestion
                 }
             }
         }
+        
+        public override void CleanUp() {
+            Destroy(((TextQuestionLayout) layout).BackgroundImage.texture);
+        }
         #endregion
     }
 }

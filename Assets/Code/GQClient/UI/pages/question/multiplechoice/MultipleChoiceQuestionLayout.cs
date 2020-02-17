@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.question.multiplechoice
 {
-
     [RequireComponent(typeof(MultipleChoiceQuestionController))]
     public class MultipleChoiceQuestionLayout : PageLayout
     {
@@ -22,7 +21,8 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
             Image image = ContentArea.GetComponent<Image>();
             if (image == null)
             {
-                Log.SignalErrorToDeveloper("Scene MultipleChoiceQuestion broken: ContentArea must have an Image component!");
+                Log.SignalErrorToDeveloper(
+                    "Scene MultipleChoiceQuestion broken: ContentArea must have an Image component!");
                 return;
             }
 
@@ -50,9 +50,9 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 // - we do use questionBG:
                 QuestionBackgroundImage.enabled = true;
                 QuestionBackgroundImage.color = new Color(
-                    (float)ConfigurationManager.Current.contentBackgroundColor.r / 256f,
-                    (float)ConfigurationManager.Current.contentBackgroundColor.g / 256f,
-                    (float)ConfigurationManager.Current.contentBackgroundColor.b / 256f,
+                    (float) ConfigurationManager.Current.contentBackgroundColor.r / 256f,
+                    (float) ConfigurationManager.Current.contentBackgroundColor.g / 256f,
+                    (float) ConfigurationManager.Current.contentBackgroundColor.b / 256f,
                     a: 200f / 256f // make question background semi transparent
                 );
 
@@ -70,16 +70,17 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 {
                     loader =
                         new Downloader(
-                        url: myPage.BackGroundImage,
-                        timeout: ConfigurationManager.Current.timeoutMS,
-                        maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
-                    );
+                            url: myPage.BackGroundImage,
+                            timeout: ConfigurationManager.Current.timeoutMS,
+                            maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                        );
                     // TODO store the image locally ...
                 }
+
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
                     AspectRatioFitter fitter = BackgroundImage.gameObject.GetComponent<AspectRatioFitter>();
-                    fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
+                    fitter.aspectRatio = (float) d.Www.texture.width / (float) d.Www.texture.height;
                     BackgroundImage.texture = d.Www.texture;
                 };
                 loader.Start();

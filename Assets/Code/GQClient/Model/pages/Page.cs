@@ -305,7 +305,7 @@ namespace Code.GQClient.Model.pages
         public virtual void Start(bool canReturnToPrevious = false)
         {
 #if DEBUG_LOG
-            Debug.LogFormat("Page start: {0} ({1})",
+            Debug.LogFormat("Page start: {0} ({1})".Red(),
                 Id,
                 PageType);
 #endif
@@ -332,6 +332,9 @@ namespace Code.GQClient.Model.pages
             State = GQML.STATE_RUNNING;
 
             Resources.UnloadUnusedAssets();
+#if DEBUG_LOG
+            Debug.Log("Resources.UnloadUnusedAssets() called".Red());
+#endif
 
             // ensure that the adequate scene is loaded:
             Scene scene = SceneManager.GetActiveScene();

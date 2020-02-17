@@ -84,6 +84,10 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 list[n] = value;
             }
         }
+        
+        public override void CleanUp() {
+            Destroy(((MultipleChoiceQuestionLayout) layout).BackgroundImage.texture);
+        }
 
         #endregion
 
