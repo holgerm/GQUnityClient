@@ -35,11 +35,6 @@ using UnityEngine.EventSystems;
 namespace Code.UnitySlippyMap.Input
 {
     /// <summary>
-    /// Input delegate.
-    /// </summary>
-    public delegate void InputDelegate(MapBehaviour map, bool wasInputInterceptedByGUI);
-
-    /// <summary>
     /// A class defining a basic set of user inputs.
     /// </summary>
     public static class MapInput
@@ -89,14 +84,11 @@ namespace Code.UnitySlippyMap.Input
 
             if (MapController.IgnoreInteraction)
             {
-                if (UnityEngine.Input.GetMouseButtonUp(0))
+                if (UnityEngine.Input.GetMouseButtonUp(0) || !touchCounts)
                 {
                     MapController.IgnoreInteraction = false;
                 }
 
-#if DEBUG_LOG
-                // Debug.Log(("BasicTouchAndKeyboard: returns ignored INteraction").Red());
-#endif
                 return;
             }
             // GQ added part ends here.

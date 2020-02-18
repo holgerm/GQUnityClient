@@ -745,21 +745,6 @@ namespace Code.UnitySlippyMap.Map
         }
 
         /// <summary>
-        /// The "shows GUI controls" flag.
-        /// </summary>
-        private bool showsGUIControls = false;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="UnitySlippyMap.Map.MapBehaviour"/> shows GUI controls.
-        /// </summary>
-        /// <value><c>true</c> if show GUI controls; otherwise, <c>false</c>.</value>
-        public bool ShowsGUIControls
-        {
-            get { return showsGUIControls; }
-            set { showsGUIControls = value; }
-        }
-
-        /// <summary>
         /// The "inputs enabled" flag.
         /// </summary>
         private bool inputsEnabled = false;
@@ -824,21 +809,6 @@ namespace Code.UnitySlippyMap.Map
         {
             get { return guiDelegate; }
             set { guiDelegate = value; }
-        }
-
-        /// <summary>
-        /// The input delegate.
-        /// </summary>
-        private InputDelegate inputDelegate;
-
-        /// <summary>
-        /// Gets or sets the input delegate.
-        /// </summary>
-        /// <value>The input delegate.</value>
-        public InputDelegate InputDelegate
-        {
-            get { return inputDelegate; }
-            set { inputDelegate = value; }
         }
 
         /// <summary>
@@ -1037,9 +1007,6 @@ namespace Code.UnitySlippyMap.Map
 
         #region MonoBehaviour implementation
 
-        /// <summary>
-        /// Raises the Awake event.
-        /// </summary>
         private void Awake()
         {
             // initialize the coordinate transformation
@@ -1050,9 +1017,6 @@ namespace Code.UnitySlippyMap.Map
             epsg900913ToWGS84Transform = wgs84ToEPSG900913Transform.Inverse();
         }
 
-        /// <summary>
-        /// Raises the Start event.
-        /// </summary>
         private void Start()
         {
             // setup the gui scale according to the screen resolution
@@ -1068,66 +1032,40 @@ namespace Code.UnitySlippyMap.Map
             Zoom(0.0f);
         }
 
-        private void OnGUI()
-        {
-            // FIXME: gaps beween tiles appear when zooming and panning the map at the same time on iOS, precision ???
-            // TODO: optimise, use one mesh for the tiles and combine textures in a big one (might resolve the gap bug above)
-
-            // process the user defined GUI
-            if (ShowsGUIControls && guiDelegate != null)
-            {
-                wasInputInterceptedByGUI = guiDelegate(this);
-            }
-
-            if (Event.current.type != EventType.Repaint
-                && Event.current.type != EventType.MouseDown
-                && Event.current.type != EventType.MouseDrag
-                && Event.current.type != EventType.MouseMove
-                && Event.current.type != EventType.MouseUp)
-                return;
-
-            if (InputsEnabled)
-            {
-                InputDelegate?.Invoke(this, wasInputInterceptedByGUI);
-            }
-            else
-            {
-#if DEBUG_LOG
-                Debug.Log("InpuEnabled == false".Red());
-#endif
-            }
-        }
-
         public void UpdatePosition(object sender, LocationSensor.LocationEventArgs e)
         {
-            if (e.Kind == LocationSensor.LocationEventType.NotAvailable)
+            switch (e.Kind)
             {
-                Debug.Log(("--- LOC: Unavailable. enabled: " + Device.location.isEnabledByUser).Yellow());
-                return;
-            }
-
-            if (e.Kind == LocationSensor.LocationEventType.Update)
-            {
-                // update the centerWGS84 with the last location if enabled
-                if (updatesCenterWithLocation)
+                case LocationSensor.LocationEventType.NotAvailable:
+                    Debug.Log(("--- LOC: Unavailable. enabled: " + Device.location.isEnabledByUser).Yellow());
+                    return;
+                case LocationSensor.LocationEventType.Update:
                 {
-                    CenterWGS84 = new double[2]
+                    // update the centerWGS84 with the last location if enabled
+                    if (updatesCenterWithLocation)
                     {
-                        e.Location.longitude,
-                        e.Location.latitude
-                    };
-                }
+                        CenterWGS84 = new double[2]
+                        {
+                            e.Location.longitude,
+                            e.Location.latitude
+                        };
+                    }
 
-                if (locationMarker != null)
-                {
-                    if (locationMarker.gameObject.activeSelf == false)
-                        locationMarker.gameObject.SetActive(true);
-                    locationMarker.CoordinatesWGS84 = new double[2]
+                    if (locationMarker != null)
                     {
-                        e.Location.longitude,
-                        e.Location.latitude
-                    };
+                        if (locationMarker.gameObject.activeSelf == false)
+                            locationMarker.gameObject.SetActive(true);
+                        locationMarker.CoordinatesWGS84 = new double[2]
+                        {
+                            e.Location.longitude,
+                            e.Location.latitude
+                        };
+                    }
+
+                    break;
                 }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -1148,6 +1086,8 @@ namespace Code.UnitySlippyMap.Map
         /// </summary>
         private void Update()
         {
+            MapInput.BasicTouchAndKeyboard(this, wasInputInterceptedByGUI);
+
             // update the orientation of the location marker
             if (usesOrientation)
             {

@@ -10,6 +10,7 @@ using Code.GQClient.Util;
 using Code.GQClient.Util.input;
 using Code.QM.Util;
 using Code.UnitySlippyMap.Helpers;
+using Code.UnitySlippyMap.Input;
 using Code.UnitySlippyMap.Layers;
 using Code.UnitySlippyMap.Map;
 using Code.UnitySlippyMap.Markers;
@@ -20,7 +21,6 @@ namespace Code.GQClient.UI.map
 
     public abstract class MapController : MonoBehaviour
 	{
-
 		private List<LayerBehaviour> layers;
 		public MapBehaviour map;
 
@@ -228,7 +228,6 @@ namespace Code.GQClient.UI.map
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
-			map.InputDelegate += global::Code.UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
 			map.CurrentZoom = 15.0f;
 
 			Frame ();
@@ -240,14 +239,11 @@ namespace Code.GQClient.UI.map
 #if DEBUG_LOG
             Debug.Log("#### Location Update Listener added");
 #endif
-            //			map.UsesLocation = true;
             map.InputsEnabled = true;
-			map.ShowsGUIControls = false;
 
 			locateAtStart ();
 
 			layers = new List<LayerBehaviour> ();
-
 			layers.Add (MapLayer);
 
 			// create the location marker
