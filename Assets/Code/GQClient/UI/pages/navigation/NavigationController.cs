@@ -39,7 +39,6 @@ namespace Code.GQClient.UI.pages.navigation
             // footer:
             // hide footer if no return possible:
             FooterButtonPanel.transform.parent.gameObject.SetActive(navPage.Quest.History.CanGoBackToPreviousPage);
-            Debug.Log("Nav Ctrl: Set Footer to " + navPage.Quest.History.CanGoBackToPreviousPage);
             forwardButton.gameObject.SetActive(false);
 
             // enable all defined options:

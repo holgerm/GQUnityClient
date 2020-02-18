@@ -1,4 +1,5 @@
-//#define DEBUG_LOG
+// #define DEBUG_LOG
+
 // 
 //  TileLayer.cs
 //  
@@ -27,12 +28,14 @@
 
 using System;
 using System.Collections.Generic;
+using Code.GQClient.Err;
+using Code.QM.Util;
 using Code.UnitySlippyMap.Map;
 using UnityEngine;
+using UnitySlippyMap.WMS;
 
 namespace Code.UnitySlippyMap.Layers
 {
-
     /// <summary>
     /// An abstract class representing a tile layer.
     /// One can derive from it to leverage specific or custom tile services.
@@ -40,6 +43,7 @@ namespace Code.UnitySlippyMap.Layers
     public abstract class TileLayerBehaviour : LayerBehaviour
     {
         #region Protected members & properties
+
         /// <summary>
         /// The shared tile template
         /// </summary>
@@ -93,6 +97,7 @@ namespace Code.UnitySlippyMap.Layers
                 tileTemplate.hideFlags = HideFlags.HideAndDontSave;
                 tileTemplate.GetComponent<Renderer>().enabled = false;
             }
+
             ++tileTemplateUseCount;
         }
 
@@ -123,7 +128,7 @@ namespace Code.UnitySlippyMap.Layers
         #region Layer implementation
 
         /// <summary>
-        /// Updates the content. See <see cref="UnitySlippyMap.Layers.Layer.UpdateContent"/>.
+        /// Updates the content. See <see cref="Layer.UpdateContent"/>.
         /// </summary>
         public override void UpdateContent()
         {
@@ -148,6 +153,7 @@ namespace Code.UnitySlippyMap.Layers
                 {
                     tile.Value.transform.position += displacement;
                 }
+
                 //TODO why can not we use this: Map.CurrentCamera.transform.position -= displacement;
             }
         }
@@ -172,9 +178,11 @@ namespace Code.UnitySlippyMap.Layers
                 return true;
             return false;
         }
+
         #endregion
 
         #region Private methods
+
         private int curX;
         private int curY;
 
@@ -189,13 +197,16 @@ namespace Code.UnitySlippyMap.Layers
             curX = tileX;
             curY = tileY;
 #if DEBUG_LOG
-            Debug.Log("Start Downloading Tile Rings".Red());
+            Debug.Log("Start Downloading Tile Rings".Red() + " frame# " + Time.frameCount);
 #endif
+            WATCH w = new WATCH("PrepTiles", true);
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            w.StopAndShow();
         }
 
         // this is a new version of GrowTiles():
-        void PrepareAndRequestTiles(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
+        void PrepareAndRequestTiles(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
+            float offsetZ)
         {
             // request the center itself:
             PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
@@ -209,16 +220,18 @@ namespace Code.UnitySlippyMap.Layers
         }
 
         // this is a new version of GrowTiles():
-        void PrepareAndRequestTilesOnRing(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ, int ringNr)
+        void PrepareAndRequestTilesOnRing(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
+            float offsetZ, int ringNr)
         {
 #if DEBUG_LOG
-            Debug.Log(("Preparing Tiles on Ring: " + ringNr).Red());
+            Debug.Log(("Preparing Tiles on Ring: " + ringNr).Red() + " frame# " + Time.frameCount);
 #endif
             // let n be the ringNr.
             // move into the start position, n tiles north of our center
             for (int i = 1; i <= ringNr; i++)
             {
-                if (!GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
+                if (!GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                    NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
                     return;
             }
 
@@ -228,43 +241,49 @@ namespace Code.UnitySlippyMap.Layers
             // move and prepare n tiles east:
             for (int i = 1; i <= ringNr; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                    NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
                     PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
             }
 
             // move and prepare 2 * n tiles south:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                    NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
                     PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
             }
 
             // move and prepare 2 * n tiles west:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                    NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
                     PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
             }
 
             // move and prepare 2 * n tiles north:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                    NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
                     PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
             }
 
             // move and prepare n - 1 tiles east again, just before the starting tile:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY, NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
+                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                    NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
                     PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
             }
         }
 
-        void PrepareAndRequestTile(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX, float offsetZ)
+        void PrepareAndRequestTile(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
+            float offsetZ)
         {
 #if DEBUG_LOG
-            Debug.Log(("Prep Tile: " + tileX + " / " + tileY).Red());
+            Debug.Log(("Prep Tile: " + tileX + " / " + tileY).Red() + " frame# " + Time.frameCount);
             Debug.Log(
                 string.Format("Prep Tile: tileX: {0}, tileY: {1}, offsetX: {2}, offsetZ: {3}",
                 tileX, tileY, offsetX, offsetZ));
@@ -291,14 +310,14 @@ namespace Code.UnitySlippyMap.Layers
                 tiles.Add(tileAddress, tile);
 
 #if DEBUG_LOG
-                Debug.Log("Requesting ...".Green());
+                Debug.Log("Requesting ...".Green() + " frame# " + Time.frameCount);
 #endif
                 tile.LoadTexture();
             }
 #if DEBUG_LOG
             else
             {
-                Debug.Log("Ignored.".Yellow());
+                Debug.Log("Ignored.".Yellow() + " frame# " + Time.frameCount);
             }
 #endif
         }
@@ -318,7 +337,7 @@ namespace Code.UnitySlippyMap.Layers
 
         private void activateCurrentZoomLevelTilesOnly()
         {
-            for (int i = (int)Math.Floor(Map.MinZoom); i <= (int)Math.Ceiling(Map.MaxZoom); i++)
+            for (int i = (int) Math.Floor(Map.MinZoom); i <= (int) Math.Ceiling(Map.MaxZoom); i++)
             {
                 Transform tileHolderForLevel = this.transform.Find(i.ToString());
                 if (tileHolderForLevel != null)
@@ -359,8 +378,7 @@ namespace Code.UnitySlippyMap.Layers
             if (TileBehaviours.Count < MaxTilesInMemory)
             {
                 tile =
-                    (Instantiate(tileTemplate.gameObject) as GameObject).
-                    GetComponent<TileBehaviour>();
+                    (Instantiate(tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour>();
             }
             else
             {
@@ -383,6 +401,7 @@ namespace Code.UnitySlippyMap.Layers
                     tile.DownloadingTextureIsCancelled = true;
                 }
             }
+
             TileBehaviours.Enqueue(tile);
 
             return tile;
@@ -400,6 +419,7 @@ namespace Code.UnitySlippyMap.Layers
         }
 
         private Queue<TileBehaviour> _tileBehaviours;
+
         private Queue<TileBehaviour> TileBehaviours
         {
             get
@@ -408,9 +428,11 @@ namespace Code.UnitySlippyMap.Layers
                 {
                     _tileBehaviours = new Queue<TileBehaviour>();
                 }
+
                 return _tileBehaviours;
             }
         }
+
         #endregion
 
         #region TileLayer interface
@@ -423,12 +445,15 @@ namespace Code.UnitySlippyMap.Layers
         /// <summary>
         /// Gets the tile coordinates and offsets to the origin for the tile under the center of the map.
         /// </summary>
-        protected abstract void GetCenterTile(int tileCountOnX, int tileCountOnY, out int tileX, out int tileY, out float offsetX, out float offsetZ);
+        protected abstract void GetCenterTile(int tileCountOnX, int tileCountOnY, out int tileX, out int tileY,
+            out float offsetX, out float offsetZ);
 
         /// <summary>
         /// Gets the tile coordinates and offsets to the origin for the neighbour tile in the specified direction.
         /// </summary>
-        protected abstract bool GetNeighbourTile(int tileX, int tileY, float offsetX, float offsetY, int tileCountOnX, int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX, out float nOffsetZ);
+        protected abstract bool GetNeighbourTile(int tileX, int tileY, float offsetX, float offsetY, int tileCountOnX,
+            int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX,
+            out float nOffsetZ);
 
         /// <summary>
         /// Requests the tile's texture and assign it.
@@ -462,7 +487,5 @@ namespace Code.UnitySlippyMap.Layers
         protected abstract void CancelTileRequest(int tileX, int tileY, int roundedZoom);
 
         #endregion
-
     }
-
 }

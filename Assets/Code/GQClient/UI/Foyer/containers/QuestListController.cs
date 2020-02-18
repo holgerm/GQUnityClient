@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// #define DEBUG_LOG
+
+using System.Collections;
 using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
@@ -11,7 +13,6 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.Foyer.containers
 {
-
     /// <summary>
     /// Shows all Quest Info objects, e.g. in a scrollable list within the foyer. Drives a dialog while refreshing its content.
     /// </summary>
@@ -25,17 +26,19 @@ namespace Code.GQClient.UI.Foyer.containers
 
         public override void OnQuestInfoChanged(object sender, QuestInfoChangedEvent e)
         {
+#if DEBUG_LOG
             Debug.Log("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString());
+#endif
             QuestInfoUIC qiCtrl;
             switch (e.ChangeType)
             {
                 case ChangeType.AddedInfo:
                     qiCtrl =
                         QuestInfoUICListElement.Create(
-                        root: InfoList.gameObject,
-                        qInfo: e.NewQuestInfo,
-                        containerController: this
-                    ).GetComponent<QuestInfoUICListElement>();
+                            root: InfoList.gameObject,
+                            qInfo: e.NewQuestInfo,
+                            containerController: this
+                        ).GetComponent<QuestInfoUICListElement>();
                     QuestInfoControllers.Add(e.NewQuestInfo.Id, qiCtrl);
                     qiCtrl.Show();
                     updateListSorting();
@@ -56,6 +59,7 @@ namespace Code.GQClient.UI.Foyer.containers
                         );
                         break;
                     }
+
                     //				if (e.OldQuestInfo.Id != e.NewQuestInfo.Id) {
                     //					Log.SignalErrorToDeveloper (
                     //						"Quest Info Controller for quest id {0} got an update that changed the id to {1} which is not allowed and will be ignored.",
@@ -76,6 +80,7 @@ namespace Code.GQClient.UI.Foyer.containers
                         );
                         break;
                     }
+
                     qiCtrl.Hide();
                     QuestInfoControllers.Remove(e.OldQuestInfo.Id);
                     updateElementOrderLayout();
@@ -102,7 +107,6 @@ namespace Code.GQClient.UI.Foyer.containers
 
         private IEnumerator sortViewAsCoroutine()
         {
-
             List<QuestInfoUIC> qcList = new List<QuestInfoUIC>(QuestInfoControllers.Values);
             qcList.Sort();
 
@@ -135,12 +139,13 @@ namespace Code.GQClient.UI.Foyer.containers
         /// 
         /// </summary>
         /// <returns>The view as coroutine.</returns>
-		private IEnumerator regenerateAllAsCoroutine()
+        private IEnumerator regenerateAllAsCoroutine()
         {
             if (this == null)
             {
                 yield break;
             }
+
             if (InfoList == null)
             {
                 yield break;
@@ -184,6 +189,7 @@ namespace Code.GQClient.UI.Foyer.containers
             {
                 return;
             }
+
             if (InfoList == null)
             {
                 return;
@@ -237,16 +243,17 @@ namespace Code.GQClient.UI.Foyer.containers
             for (int i = 0; i < InfoList.childCount; i++)
             {
                 QuestInfoUIC qic = InfoList.GetChild(i).GetComponent<QuestInfoUIC>();
-                Color bgCol = i % 2 == 0 ?
-                    ConfigurationManager.Current.listEntryBgColor :
-                    ConfigurationManager.Current.listEntrySecondBgColor;
-                Color fgCol = i % 2 == 0 ?
-                    ConfigurationManager.Current.listEntryFgColor :
-                    ConfigurationManager.Current.listEntrySecondFgColor;
+                Color bgCol = i % 2 == 0
+                    ? ConfigurationManager.Current.listEntryBgColor
+                    : ConfigurationManager.Current.listEntrySecondBgColor;
+                Color fgCol = i % 2 == 0
+                    ? ConfigurationManager.Current.listEntryFgColor
+                    : ConfigurationManager.Current.listEntrySecondFgColor;
 
 
                 qic.gameObject.GetComponent<Image>().color = bgCol;
-                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "InfoButton", sizeScaleFactor: 0.65f, fgColor: fgCol);
+                FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "InfoButton", sizeScaleFactor: 0.65f,
+                    fgColor: fgCol);
                 qic.transform.Find("InfoButton/Image").GetComponent<Image>().color = fgCol;
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "Name", fgColor: fgCol);
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "DownloadButton", fgColor: fgCol);
@@ -274,6 +281,5 @@ namespace Code.GQClient.UI.Foyer.containers
         }
 
         #endregion
-
     }
 }

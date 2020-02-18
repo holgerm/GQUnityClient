@@ -14,12 +14,6 @@ namespace Code.GQClient.UI.pages.navigation
 
         public override void layout()
         {
-#if DEBUG_LOG
-            Debug.Log(string.Format("NavigationMapLayout.layout() started. MapButtonPanel active?: {0}. Frame# {1}",
-                MapButtonPanel.gameObject.activeInHierarchy,
-                Time.frameCount));
-#endif
-
             base.layout();
 
             // TODO set background color for button panel:

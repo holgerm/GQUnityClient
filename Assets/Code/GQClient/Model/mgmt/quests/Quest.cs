@@ -405,11 +405,6 @@ namespace Code.GQClient.Model.mgmt.quests
                 return;
             }
 
-            if (pageTypeName == "MultipleChoiceQuestion")
-            {
-                Debug.Log("Reading  a MultipleChoiceQuestion page.");
-            }
-
             // Determine the full name of the according page type (e.g. GQ.Client.Model.XML.PageNPCTalk) 
             //		where SetVariable is taken form ath type attribute of the xml action element.
             string __myTypeName = typeof(Page).FullName;
@@ -429,8 +424,6 @@ namespace Code.GQClient.Model.mgmt.quests
             pageTypeName = string.Format("{0}.Page{1}", modelNamespace, pageTypeName);
             Type pageType = Type.GetType(pageTypeName);
             
-            Debug.Log(("PAGE TYPE FOUND: " + pageType.Name).Yellow());
-
             if (pageType == null)
             {
                 Log.SignalErrorToDeveloper("No Implementation for Page Type {0}.", pageTypeName);

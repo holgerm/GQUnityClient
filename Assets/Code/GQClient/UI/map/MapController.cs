@@ -1,4 +1,4 @@
-﻿//#define DEBUG_LOG
+﻿// #define DEBUG_LOG
 
 using System;
 using System.Collections;
@@ -141,6 +141,10 @@ namespace Code.GQClient.UI.map
 
 		public void ZoomOutButtonPressed ()
 		{
+#if DEBUG_LOG
+			Debug.Log("------------------------------------------------");
+			WATCH.Show("zoom", "ZoomOutButtonPressed #0");
+#endif
             map.CurrentZoom = Math.Max (map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
 #if DEBUG_LOG
             WATCH.Show("zoom", "ZoomOutButtonPressed #1");
@@ -155,13 +159,6 @@ namespace Code.GQClient.UI.map
 #endif
 		}
 
-#if DEBUG_LOG
-        private void Update()
-        {
-			Debug.Log("ZoomOutButton: " + (zoomOutButton.enabled ? "ENABLED".Green() : "DISABLED".Red()));
-        }
-#endif
-
 		private void UpdateZoomButtons ()
 		{
 			// If further zooming IN is not possible disable ZoomInButton: 
@@ -169,9 +166,6 @@ namespace Code.GQClient.UI.map
 
 			// If further zooming OUT is not possible disable ZoomOutButton: 
 			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
-#if DEBUG_LOG
-			//Debug.Log("zoomOutButton.Enabled: " + zoomOutButton.Enabled);
-#endif
 		}
 
 		private LayerBehaviour MapLayer {

@@ -1,3 +1,5 @@
+// #define DEBUG_LOG
+
 // 
 //  Map.cs
 //  
@@ -122,10 +124,10 @@ namespace Code.UnitySlippyMap.Map
         {
             get
             {
-                if (null == (object)instance)
+                if (null == (object) instance)
                 {
                     instance = FindObjectOfType(typeof(MapBehaviour)) as MapBehaviour;
-                    if (null == (object)instance)
+                    if (null == (object) instance)
                     {
                         var go = new GameObject("[Map]");
                         //go.hideFlags = HideFlags.HideAndDontSave;
@@ -203,7 +205,7 @@ namespace Code.UnitySlippyMap.Map
             {
                 isDirty = value;
 #if DEBUG_LOG
-                Debug.Log("Map Dirty SET to: " + (value ? " DIRTY".Red() : " CLEAN".Green()));
+//                Debug.Log("Map Dirty SET to: " + (value ? " DIRTY".Red() : " CLEAN".Green()));
 #endif
             }
         }
@@ -228,7 +230,7 @@ namespace Code.UnitySlippyMap.Map
                 if (value == null)
                 {
 #if DEBUG_LOG
-				Debug.LogError("ERROR: Map.CenterWGS84: value cannot be null");
+                    Debug.LogError("ERROR: Map.CenterWGS84: value cannot be null");
 #endif
                     return;
                 }
@@ -261,16 +263,13 @@ namespace Code.UnitySlippyMap.Map
         /// <value>When set, the map is refreshed and the center coordinates of the map in WGS84 are also updated.</value>
         public double[] CenterEPSG900913
         {
-            get
-            {
-                return centerEPSG900913;
-            }
+            get { return centerEPSG900913; }
             set
             {
                 if (value == null)
                 {
 #if DEBUG_LOG
-				Debug.LogError("ERROR: Map.CenterEPSG900913: value cannot be null");
+                    Debug.LogError("ERROR: Map.CenterEPSG900913: value cannot be null");
 #endif
                     return;
                 }
@@ -311,11 +310,14 @@ namespace Code.UnitySlippyMap.Map
                     || value > maxZoom)
                 {
 #if DEBUG_LOG
-				Debug.LogError("ERROR: Map.Zoom: value must be inside range [" + minZoom + " - " + maxZoom + "]");
+                    Debug.LogError("ERROR: Map.Zoom: value must be inside range [" + minZoom + " - " + maxZoom + "]");
 #endif
                     return;
                 }
 
+#if DEBUG_LOG
+                WATCH.Show("zoom", "CurrentZoom set to " + value);
+#endif
                 if (currentZoom == value)
                     return;
 
@@ -323,13 +325,16 @@ namespace Code.UnitySlippyMap.Map
 
                 float diff = value - roundedZoom;
                 if (diff > 0.0f && diff >= zoomStepLowerThreshold)
-                    roundedZoom = (int)Mathf.Ceil(currentZoom);
+                    roundedZoom = (int) Mathf.Ceil(currentZoom);
                 else if (diff < 0.0f && diff <= -zoomStepUpperThreshold)
-                    roundedZoom = (int)Mathf.Floor(currentZoom);
+                    roundedZoom = (int) Mathf.Floor(currentZoom);
 
                 UpdateInternals();
 
                 FitVerticalBorder();
+#if DEBUG_LOG
+                WATCH.Show("zoom", "CurrentZoom setting ENDS");
+#endif
             }
         }
 
@@ -394,7 +399,8 @@ namespace Code.UnitySlippyMap.Map
                 if (minZoom > maxZoom)
                 {
 #if DEBUG_LOG
-				Debug.LogWarning("WARNING: Map.MinZoom: clamp value [" + minZoom + "] to max zoom [" + maxZoom + "]");
+                    Debug.LogWarning(
+                        "WARNING: Map.MinZoom: clamp value [" + minZoom + "] to max zoom [" + maxZoom + "]");
 #endif
                     minZoom = maxZoom;
                 }
@@ -432,7 +438,8 @@ namespace Code.UnitySlippyMap.Map
                 if (maxZoom < minZoom)
                 {
 #if DEBUG_LOG
-				Debug.LogWarning("WARNING: Map.MaxZoom: clamp value [" + maxZoom + "] to min zoom [" + minZoom + "]");
+                    Debug.LogWarning(
+                        "WARNING: Map.MaxZoom: clamp value [" + maxZoom + "] to min zoom [" + minZoom + "]");
 #endif
                     maxZoom = minZoom;
                 }
@@ -449,7 +456,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the rounded zoom.
         /// </summary>
         /// <value>The rounded zoom is updated when <see cref="UnitySlippyMap.Map.CurrentZoom"/> is set.</value>
-        public static int RoundedZoom { get { return roundedZoom; } }
+        public static int RoundedZoom
+        {
+            get { return roundedZoom; }
+        }
 
         /// <summary>
         /// The half map scale.
@@ -467,7 +477,10 @@ namespace Code.UnitySlippyMap.Map
         /// The half map scale is a value used throughout the implementation to rule the camera elevation
         /// and the size/scale of the tiles.
         /// </value>
-        public float HalfMapScale { get { return halfMapScale; } }
+        public float HalfMapScale
+        {
+            get { return halfMapScale; }
+        }
 
         /// <summary>
         /// The rounded half map scale.
@@ -478,7 +491,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the rounded half map scale.
         /// </summary>
         /// <value>See <see cref="UnitySlippyMap.Map.HalfMapScale"/> .</value>
-        public float RoundedHalfMapScale { get { return roundedHalfMapScale; } }
+        public float RoundedHalfMapScale
+        {
+            get { return roundedHalfMapScale; }
+        }
 
         /// <summary>
         /// The number of meters per pixel in respect to the latitude and zoom level of the map.
@@ -489,7 +505,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the meters per pixel.
         /// </summary>
         /// <value>The number of meters per pixel in respect to the latitude and zoom level of the map.</value>
-        public float MetersPerPixel { get { return metersPerPixel; } }
+        public float MetersPerPixel
+        {
+            get { return metersPerPixel; }
+        }
 
         /// <summary>
         /// The rounded meters per pixel.
@@ -500,7 +519,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the rounded meters per pixel.
         /// </summary>
         /// <value>See <see cref="UnitySlippyMap.Map.MetersPerPixel"/>.</value>
-        public float RoundedMetersPerPixel { get { return roundedMetersPerPixel; } }
+        public float RoundedMetersPerPixel
+        {
+            get { return roundedMetersPerPixel; }
+        }
 
         /// <summary>
         /// The scale multiplier.
@@ -512,7 +534,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the scale multiplier.
         /// </summary>
         /// <value>The scale multiplier helps converting meters (EPSG 900913) to Unity3D world coordinates.</value>
-        public float ScaleMultiplier { get { return scaleMultiplier; } }
+        public float ScaleMultiplier
+        {
+            get { return scaleMultiplier; }
+        }
 
         /// <summary>
         /// The rounded scale multiplier.
@@ -523,7 +548,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the rounded scale multiplier.
         /// </summary>
         /// <value>See <see cref="UnitySlippyMap.Map.ScaleMultiplier"/>.</value>
-        public float RoundedScaleMultiplier { get { return roundedScaleMultiplier; } }
+        public float RoundedScaleMultiplier
+        {
+            get { return roundedScaleMultiplier; }
+        }
 
         /// <summary>
         /// The scale divider.
@@ -542,7 +570,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the tile resolution.
         /// </summary>
         /// <value>The tile resolution in pixels.</value>
-        public float TileResolution { get { return tileResolution; } }
+        public float TileResolution
+        {
+            get { return tileResolution; }
+        }
 
         /// <summary>
         /// The screen scale.
@@ -580,7 +611,7 @@ namespace Code.UnitySlippyMap.Map
                     else
                     {
 #if DEBUG_LOG
-					Debug.LogError("ERROR: Map.UseLocation: Location is not authorized on the device.");
+                        Debug.LogError("ERROR: Map.UseLocation: Location is not authorized on the device.");
 #endif
                     }
                 }
@@ -610,15 +641,9 @@ namespace Code.UnitySlippyMap.Map
         /// </value>
         public bool UpdatesCenterWithLocation
         {
-            get
-            {
-                return updatesCenterWithLocation;
-            }
+            get { return updatesCenterWithLocation; }
 
-            set
-            {
-                updatesCenterWithLocation = value;
-            }
+            set { updatesCenterWithLocation = value; }
         }
 
         /// <summary>
@@ -656,10 +681,11 @@ namespace Code.UnitySlippyMap.Map
                         else
                         {
 #if DEBUG_LOG
-						Debug.LogError("ERROR: Map.UseOrientation: Location is not authorized on the device.");
+                            Debug.LogError("ERROR: Map.UseOrientation: Location is not authorized on the device.");
 #endif
                         }
                     }
+
                     UnityEngine.Input.compass.enabled = true;
                 }
                 else
@@ -671,6 +697,7 @@ namespace Code.UnitySlippyMap.Map
                                 || Device.location.status == LocationServiceStatus.Running))
                             Device.location.Start();
                     }
+
                     UnityEngine.Input.compass.enabled = false;
                 }
             }
@@ -712,7 +739,10 @@ namespace Code.UnitySlippyMap.Map
         /// Gets the list of markers.
         /// </summary>
         /// <value>The list of <see cref="UnitySlippyMap.Marker"/> instances.</value>
-        public List<MarkerBehaviour> Markers { get { return markers; } }
+        public List<MarkerBehaviour> Markers
+        {
+            get { return markers; }
+        }
 
         /// <summary>
         /// The "shows GUI controls" flag.
@@ -744,7 +774,13 @@ namespace Code.UnitySlippyMap.Map
         public bool InputsEnabled
         {
             get { return inputsEnabled; }
-            set { inputsEnabled = value; }
+            set
+            {
+                inputsEnabled = value;
+#if DEBUG_LOG
+                Debug.Log(("Inputs " + (value ? "enabled".Green() : "disabled".Red())));
+#endif
+            }
         }
 
         /// <summary>
@@ -811,7 +847,6 @@ namespace Code.UnitySlippyMap.Map
         private bool wasInputInterceptedByGUI;
 
 
-
         /// <summary>
         /// The Well-Known Text representation of the EPSG900913 projection.
         /// </summary>
@@ -839,7 +874,10 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// Gets the Well-Known Text representation of the EPSG900913 projection.
         /// </summary>
-        public static string WKTEPSG900913 { get { return wktEPSG900913; } }
+        public static string WKTEPSG900913
+        {
+            get { return wktEPSG900913; }
+        }
 
         /// <summary>
         /// The CoordinateTransformationFactory instance.
@@ -849,7 +887,10 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// Gets the CoordinateTransformationFactory instance.
         /// </summary>
-        public CoordinateTransformationFactory CTFactory { get { return ctFactory; } }
+        public CoordinateTransformationFactory CTFactory
+        {
+            get { return ctFactory; }
+        }
 
         /// <summary>
         /// The EPSG 900913 ICoordinateSystem instance.
@@ -859,7 +900,10 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// Gets the EPSG 900913 ICoordinateSystem instance.
         /// </summary>
-        public ICoordinateSystem EPSG900913 { get { return epsg900913; } }
+        public ICoordinateSystem EPSG900913
+        {
+            get { return epsg900913; }
+        }
 
         /// <summary>
         /// The WGS84 to EPSG 900913 ICoordinateTransformation instance.
@@ -869,7 +913,10 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// Gets the WGS84 to EPSG 900913 ICoordinateTransformation instance.
         /// </summary>
-        public ICoordinateTransformation WGS84ToEPSG900913 { get { return wgs84ToEPSG900913; } }
+        public ICoordinateTransformation WGS84ToEPSG900913
+        {
+            get { return wgs84ToEPSG900913; }
+        }
 
         /// <summary>
         /// The WGS84 to EPSG 900913 IMathTransform instance.
@@ -879,7 +926,10 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// Gets the WGS84 to EPSG900913 IMathTransform instance.
         /// </summary>
-        public IMathTransform WGS84ToEPSG900913Transform { get { return wgs84ToEPSG900913Transform; } }
+        public IMathTransform WGS84ToEPSG900913Transform
+        {
+            get { return wgs84ToEPSG900913Transform; }
+        }
 
         /// <summary>
         /// The EPSG 900913 to WGS84 IMathTransform instance.
@@ -889,7 +939,10 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// Gets the EPSG 900913 to WGS84 IMathTransform instance.
         /// </summary>
-        public IMathTransform EPSG900913ToWGS84Transform { get { return epsg900913ToWGS84Transform; } }
+        public IMathTransform EPSG900913ToWGS84Transform
+        {
+            get { return epsg900913ToWGS84Transform; }
+        }
 
         #endregion
 
@@ -908,9 +961,10 @@ namespace Code.UnitySlippyMap.Map
 
             if (currentCamera != null)
             {
-                double[] camCenter = new double[] {
-                    centerEPSG900913 [0],
-                    centerEPSG900913 [1]
+                double[] camCenter = new double[]
+                {
+                    centerEPSG900913[0],
+                    centerEPSG900913[1]
                 };
                 double offset = Mathf.Floor(currentCamera.pixelHeight * 0.5f) * metersPerPixel;
 
@@ -939,7 +993,8 @@ namespace Code.UnitySlippyMap.Map
             if (this == null || this.gameObject == null)
                 return pos;
 
-            Vector3 displacement = new Vector3((float)(centerEPSG900913[0] - pos[0]) * roundedScaleMultiplier, 0.0f, (float)(centerEPSG900913[1] - pos[1]) * roundedScaleMultiplier);
+            Vector3 displacement = new Vector3((float) (centerEPSG900913[0] - pos[0]) * roundedScaleMultiplier, 0.0f,
+                (float) (centerEPSG900913[1] - pos[1]) * roundedScaleMultiplier);
             Vector3 rootPosition = this.gameObject.transform.position;
             this.gameObject.transform.position = new Vector3(
                 rootPosition.x + displacement.x,
@@ -967,10 +1022,11 @@ namespace Code.UnitySlippyMap.Map
             // this is the right approach either, feels kinda voodooish...
 
             halfMapScale = GeoHelpers.OsmZoomLevelToMapScale(currentZoom, 0.0f, tileResolution, 72) / scaleDivider;
-            roundedHalfMapScale = GeoHelpers.OsmZoomLevelToMapScale(roundedZoom, 0.0f, tileResolution, 72) / scaleDivider;
+            roundedHalfMapScale =
+                GeoHelpers.OsmZoomLevelToMapScale(roundedZoom, 0.0f, tileResolution, 72) / scaleDivider;
 
-            metersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float)currentZoom);
-            roundedMetersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float)roundedZoom);
+            metersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float) currentZoom);
+            roundedMetersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float) roundedZoom);
 
             // FIXME: another voodoish value to help converting meters (EPSG 900913) to Unity3D world coordinates
             scaleMultiplier = halfMapScale / (metersPerPixel * tileResolution);
@@ -1002,7 +1058,8 @@ namespace Code.UnitySlippyMap.Map
             // setup the gui scale according to the screen resolution
             if (Application.platform == RuntimePlatform.Android
                 || Application.platform == RuntimePlatform.IPhonePlayer)
-                screenScale = (Screen.orientation == ScreenOrientation.Landscape ? Device.width : Device.height) / 480.0f;
+                screenScale = (Screen.orientation == ScreenOrientation.Landscape ? Device.width : Device.height) /
+                              480.0f;
             else
                 screenScale = 2.0f;
 
@@ -1011,9 +1068,6 @@ namespace Code.UnitySlippyMap.Map
             Zoom(0.0f);
         }
 
-        /// <summary>
-        /// Raises the GUI event.
-        /// </summary>
         private void OnGUI()
         {
             // FIXME: gaps beween tiles appear when zooming and panning the map at the same time on iOS, precision ???
@@ -1032,11 +1086,16 @@ namespace Code.UnitySlippyMap.Map
                 && Event.current.type != EventType.MouseUp)
                 return;
 
-            if (InputsEnabled && inputDelegate != null)
+            if (InputsEnabled)
             {
-                inputDelegate(this, wasInputInterceptedByGUI);
+                InputDelegate?.Invoke(this, wasInputInterceptedByGUI);
             }
-
+            else
+            {
+#if DEBUG_LOG
+                Debug.Log("InpuEnabled == false".Red());
+#endif
+            }
         }
 
         public void UpdatePosition(object sender, LocationSensor.LocationEventArgs e)
@@ -1052,7 +1111,8 @@ namespace Code.UnitySlippyMap.Map
                 // update the centerWGS84 with the last location if enabled
                 if (updatesCenterWithLocation)
                 {
-                    CenterWGS84 = new double[2] {
+                    CenterWGS84 = new double[2]
+                    {
                         e.Location.longitude,
                         e.Location.latitude
                     };
@@ -1062,7 +1122,8 @@ namespace Code.UnitySlippyMap.Map
                 {
                     if (locationMarker.gameObject.activeSelf == false)
                         locationMarker.gameObject.SetActive(true);
-                    locationMarker.CoordinatesWGS84 = new double[2] {
+                    locationMarker.CoordinatesWGS84 = new double[2]
+                    {
                         e.Location.longitude,
                         e.Location.latitude
                     };
@@ -1087,9 +1148,6 @@ namespace Code.UnitySlippyMap.Map
         /// </summary>
         private void Update()
         {
-#if DEBUG_PROFILE
-		UnitySlippyMap.Profiler.Begin("Map.Update");
-#endif
             // update the orientation of the location marker
             if (usesOrientation)
             {
@@ -1126,7 +1184,8 @@ namespace Code.UnitySlippyMap.Map
                         }
                         else
                         {
-                            currentCamera.transform.RotateAround(Vector3.zero, Vector3.up, heading - lastCameraOrientation);
+                            currentCamera.transform.RotateAround(Vector3.zero, Vector3.up,
+                                heading - lastCameraOrientation);
 
                             //Debug.Log("DEBUG: cam: " + lastCameraOrientation + ", heading: " + heading +  ", rel angle: " + relativeAngle);
                             lastCameraOrientation = heading;
@@ -1158,7 +1217,7 @@ namespace Code.UnitySlippyMap.Map
             if (IsDirty == true && hasMoved == false)
             {
 #if DEBUG_LOG
-			Debug.Log("DEBUG: Map.Update: update layers & markers");
+                Debug.Log("DEBUG: Map.Update: update layers & markers");
 #endif
 
                 IsDirty = false;
@@ -1172,9 +1231,6 @@ namespace Code.UnitySlippyMap.Map
                         && layer.enabled == true
                         && CurrentZoom >= layer.MinZoom
                         && CurrentZoom <= layer.MaxZoom)
-#if DEBUG_LOG
-                        Debug.Log("###############################".Red());
-#endif
                         layer.UpdateContent();
                 }
 
@@ -1189,16 +1245,12 @@ namespace Code.UnitySlippyMap.Map
                     this.gameObject.transform.position = Vector3.zero;
 
 #if DEBUG_LOG
-			Debug.Log("DEBUG: Map.Update: updated layers");
+                Debug.Log("DEBUG: Map.Update: updated layers");
 #endif
             }
 
             // reset the deferred update flag
             hasMoved = false;
-
-#if DEBUG_PROFILE
-		UnitySlippyMap.Profiler.End("Map.Update");
-#endif
         }
 
         #endregion
@@ -1253,7 +1305,8 @@ namespace Code.UnitySlippyMap.Map
             // setup the marker
             marker.Map = this;
             if (Device.location.status == LocationServiceStatus.Running)
-                marker.CoordinatesWGS84 = new double[2] {
+                marker.CoordinatesWGS84 = new double[2]
+                {
                     Device.location.lastData.longitude,
                     Device.location.lastData.latitude
                 };
@@ -1372,7 +1425,8 @@ namespace Code.UnitySlippyMap.Map
             // move the camera
             // FIXME: the camera jumps on the first zoom when tilted, because the cam altitude and zoom value are unsynced by the rotation
             Transform cameraTransform = currentCamera.transform;
-            float y = GeoHelpers.OsmZoomLevelToMapScale(currentZoom, 0.0f, tileResolution, 72) / scaleDivider * screenScale;
+            float y = GeoHelpers.OsmZoomLevelToMapScale(currentZoom, 0.0f, tileResolution, 72) / scaleDivider *
+                      screenScale;
             float t = y / cameraTransform.forward.y;
             cameraTransform.position = new Vector3(
                 t * cameraTransform.forward.x,
@@ -1385,7 +1439,5 @@ namespace Code.UnitySlippyMap.Map
         }
 
         #endregion
-
     }
-
 }
