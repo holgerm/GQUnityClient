@@ -100,7 +100,7 @@ namespace Code.QM.Util
 		{
 			stopwatch.Stop ();
 			UnityEngine.Debug.Log (
-				string.Format ("WATCH {0} at {1} took {2} ms ({3} delta in frame# {4})", 
+				string.Format ("WATCH {0} at {1} took {2} ms (<color=Red>{3}</color> delta in frame# {4})", 
 					Name, 
 					pointName, 
 					stopwatch.ElapsedMilliseconds, 

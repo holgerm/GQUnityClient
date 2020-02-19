@@ -30,7 +30,9 @@ using System;
 using System.Collections;
 using System.IO;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Util;
+using Code.QM.Util;
 using UnityEngine;
 
 namespace Code.UnitySlippyMap.Map
@@ -40,6 +42,16 @@ namespace Code.UnitySlippyMap.Map
     /// </summary>
     public class TileBehaviour : MonoBehaviour
     {
+        // private static WATCH w; 
+        // public void Start()
+        // {
+        //     if (w == null)
+        //     {
+        //         w = new WATCH("tile");
+        //     }
+        //     w.Start();
+        // }
+
         #region Private members & properties
 
         ///// <summary>
@@ -271,29 +283,19 @@ namespace Code.UnitySlippyMap.Map
             return tile;
         }
 
-        public Texture GetTexture()
-        {
-            Material material = this.gameObject.GetComponent<Renderer>().material;
-            if (material != null)
-            {
-                return material.mainTexture;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        private Material _myMaterial;
 
-        /// <summary>
-        /// Gets the tile key.
-        /// </summary>
-        /// <returns>The tile key.</returns>
-        /// <param name="roundedZoom">Rounded zoom.</param>
-        /// <param name="tileX">Tile x.</param>
-        /// <param name="tileY">Tile y.</param>
-        public static string GetTileKey(int roundedZoom, int tileX, int tileY)
+        public Material MyMaterial
         {
-            return roundedZoom + "_" + tileX + "_" + tileY;
+            get
+            {
+                if (_myMaterial == null)
+                {
+                    _myMaterial = GetComponent<Renderer>().material;
+                }
+
+                return _myMaterial;
+            }
         }
 
         internal void SetPosition(int x, int y, int z)
@@ -327,64 +329,71 @@ namespace Code.UnitySlippyMap.Map
 
         private IEnumerator LoadTextureCoroutine()
         {
+         //   w.Show(name + " START");
+            
             WWW www;
             TextureIsDownloading = true;
             string ext = ".png";
-            bool shouldBeCached = false;
+            bool shouldBeCached;
+            string tileDirPath = 
+                $"{Application.persistentDataPath}/tilecache/{zPos.ToString()}/{xPos.ToString()}";
             string tileCachePath =
-                Path.Combine(
-                    Application.persistentDataPath,
-                    "tilecache", GetTileSubPath())
-                 + ext;
+                $"{tileDirPath}/{yPos.ToString()}.png";
             if (File.Exists(tileCachePath))
             {
-                www = new WWW("file://" + tileCachePath);
+             //   w.Show(name + " LOCAL");
+                www = new WWW($"file://{tileCachePath}");
                 shouldBeCached = false;
             }
             else
             {
+             //   w.Show(name + " REMOTE");
                 shouldBeCached = true;
                 www = new WWW(URL);
             }
 
-            yield return null; // www;
+ //           w.Show(name + " BEFORE 1. YIELD");
+
+            // yield return null;
+
+ //           w.Show(name + " AFTER 1. YIELD");
 
             while (!www.isDone)
             {
+         //       w.Show(name + " STILL LOADING");
                 // We cancel download if zoom has changed:
                 DownloadingTextureIsCancelled =
                     MapBehaviour.RoundedZoom != zPos;
-
+            
                 if (DownloadingTextureIsCancelled)
                 {
                     DownloadingTextureIsCancelled = false;
                     TextureIsDownloading = false;
                     www.Dispose();
-
+            
                     yield break;
                     // TERMINATE LOADING
                 }
                 yield return null;
             }
-
+            
             DownloadingTextureIsCancelled =
                 MapBehaviour.RoundedZoom != zPos;
-
+            
             if (DownloadingTextureIsCancelled)
             {
                 DownloadingTextureIsCancelled = false;
                 TextureIsDownloading = false;
                 www.Dispose();
-
+            
                 yield break;
                 // TERMINATE LOADING
             }
-
+            
             if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
             {
-                Renderer myRenderer = GetComponent<Renderer>();
-
-                myRenderer.material.mainTexture = www.texture;
+                Destroy(MyMaterial.mainTexture);
+                MyMaterial.mainTexture = www.texture;
                 Showing = true;
 
                 if (shouldBeCached)
@@ -401,6 +410,7 @@ namespace Code.UnitySlippyMap.Map
 
             www.Dispose();
             TextureIsDownloading = false;
+          //  w.Show(name + " END");
         }
 
         private void EndWriteCallback(IAsyncResult ar)

@@ -199,9 +199,7 @@ namespace Code.UnitySlippyMap.Layers
 #if DEBUG_LOG
             Debug.Log("Start Downloading Tile Rings".Red() + " frame# " + Time.frameCount);
 #endif
-            WATCH w = new WATCH("PrepTiles", true);
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
-            w.StopAndShow();
         }
 
         // this is a new version of GrowTiles():
@@ -296,14 +294,15 @@ namespace Code.UnitySlippyMap.Layers
             else if (tileX >= tileCountOnX)
                 tileX -= tileCountOnX;
 
-            string tileAddress = TileBehaviour.GetTileKey(MapBehaviour.RoundedZoom, tileX, tileY);
+            string tileAddress = $"{MapBehaviour.RoundedZoom}_{tileX}_{tileY}";
             if (tiles.ContainsKey(tileAddress) == false)
             {
                 TileBehaviour tile = createTile(tileX, tileY);
                 tile.Showing = false;
                 tile.SetPosition(tileX, tileY, MapBehaviour.RoundedZoom);
-                tile.transform.position = tileTemplate.transform.position;
-                tile.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+                var transform1 = tile.transform;
+                transform1.position = tileTemplate.transform.position;
+                transform1.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
                 tile.transform.parent = getTileParent(MapBehaviour.RoundedZoom);
 
                 tile.name = tileAddress;
@@ -395,7 +394,7 @@ namespace Code.UnitySlippyMap.Layers
                 tile.reuses++;
                 tile.oldName = tile.name;
 
-                Destroy(tile.GetComponent<Renderer>().material.mainTexture);
+               // Destroy(tile.GetComponent<Renderer>().material.mainTexture);
                 if (tile.TextureIsDownloading)
                 {
                     tile.DownloadingTextureIsCancelled = true;

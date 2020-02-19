@@ -185,8 +185,9 @@ namespace Code.GQClient.Util
             {
                 Device.updateMockedLocation();
             }
-
             //#endif
+            
+            // Debug.Log($"Frame {Time.frameCount}, Time: {Time.time}, Deltatime: {Time.deltaTime}".Yellow());
         }
 
         #endregion
