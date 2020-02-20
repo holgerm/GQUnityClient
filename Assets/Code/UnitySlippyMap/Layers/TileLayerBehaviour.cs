@@ -106,6 +106,12 @@ namespace Code.UnitySlippyMap.Layers
         /// </summary>
         private void Start()
         {
+            if (w == null)
+            {
+                w = new WATCH("tile");
+            }
+            w.Start();
+
             if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
                 tileTemplate.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
         }
@@ -196,10 +202,10 @@ namespace Code.UnitySlippyMap.Layers
             GetCenterTile(tileCountOnX, tileCountOnY, out tileX, out tileY, out offsetX, out offsetZ);
             curX = tileX;
             curY = tileY;
-#if DEBUG_LOG
-            Debug.Log("Start Downloading Tile Rings".Red() + " frame# " + Time.frameCount);
-#endif
+            
+            WATCH.StartMeasure();
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            WATCH.ShowMeasure();
         }
 
         // this is a new version of GrowTiles():
@@ -276,7 +282,9 @@ namespace Code.UnitySlippyMap.Layers
                     PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
             }
         }
-
+        
+        private static WATCH w; 
+ 
         void PrepareAndRequestTile(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
             float offsetZ)
         {
@@ -286,7 +294,8 @@ namespace Code.UnitySlippyMap.Layers
                 string.Format("Prep Tile: tileX: {0}, tileY: {1}, offsetX: {2}, offsetZ: {3}",
                 tileX, tileY, offsetX, offsetZ));
 #endif
-            tileTemplate.transform.position = new Vector3(offsetX, tileTemplate.transform.position.y, offsetZ);
+            var tileTransform = tileTemplate.transform;
+            tileTransform.position = new Vector3(offsetX, tileTransform.position.y, offsetZ);
 
             // correct east and west exceedance:
             if (tileX < 0)
@@ -294,10 +303,10 @@ namespace Code.UnitySlippyMap.Layers
             else if (tileX >= tileCountOnX)
                 tileX -= tileCountOnX;
 
-            string tileAddress = $"{MapBehaviour.RoundedZoom}_{tileX}_{tileY}";
+            var tileAddress = $"{MapBehaviour.RoundedZoom}_{tileX}_{tileY}";
             if (tiles.ContainsKey(tileAddress) == false)
             {
-                TileBehaviour tile = createTile(tileX, tileY);
+                var tile = createTile(tileX, tileY);
                 tile.Showing = false;
                 tile.SetPosition(tileX, tileY, MapBehaviour.RoundedZoom);
                 var transform1 = tile.transform;
@@ -308,25 +317,17 @@ namespace Code.UnitySlippyMap.Layers
                 tile.name = tileAddress;
                 tiles.Add(tileAddress, tile);
 
-#if DEBUG_LOG
-                Debug.Log("Requesting ...".Green() + " frame# " + Time.frameCount);
-#endif
                 tile.LoadTexture();
             }
-#if DEBUG_LOG
-            else
-            {
-                Debug.Log("Ignored.".Yellow() + " frame# " + Time.frameCount);
-            }
-#endif
         }
 
         private Transform getTileParent(int zoomLevel)
         {
-            Transform parent = this.transform.Find(zoomLevel.ToString());
+            var parent = this.transform.Find(zoomLevel.ToString());
+            
             if (parent == null)
             {
-                GameObject parentGO = new GameObject(zoomLevel.ToString());
+                var parentGO = new GameObject(zoomLevel.ToString());
                 parent = parentGO.transform;
                 parent.parent = this.transform;
             }
@@ -350,7 +351,7 @@ namespace Code.UnitySlippyMap.Layers
         {
             get
             {
-                return 6;
+                return 5;
                 // TODO: Calculate regarding display size
             }
         }

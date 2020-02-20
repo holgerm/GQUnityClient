@@ -204,9 +204,8 @@ namespace Code.UnitySlippyMap.Map
             set
             {
                 isDirty = value;
-#if DEBUG_LOG
+
 //                Debug.Log("Map Dirty SET to: " + (value ? " DIRTY".Red() : " CLEAN".Green()));
-#endif
             }
         }
 
@@ -649,59 +648,59 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// The "uses orientation" flag.
         /// </summary>
-        private bool usesOrientation = false;
+//        private bool usesOrientation = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="UnitySlippyMap.Map.MapBehaviour"/> uses the host's orientation.
         /// </summary>
         /// <value><c>true</c> if use orientation; otherwise, <c>false</c>.</value>
-        public bool UsesOrientation
-        {
-            get { return usesOrientation; }
-            set
-            {
-                if (usesOrientation == value)
-                    return;
-
-                usesOrientation = value;
-
-                if (usesOrientation)
-                {
-                    // http://docs.unity3d.com/Documentation/ScriptReference/Compass-enabled.html
-                    // Note, that if you want Input.compass.trueHeading property to contain a valid value,
-                    // you must also enable location updates by calling Input.location.Start().
-                    if (usesLocation == false)
-                    {
-                        if (Device.location.isEnabledByUser
-                            && (Device.location.status == LocationServiceStatus.Stopped
-                                || Device.location.status == LocationServiceStatus.Failed))
-                        {
-                            Device.location.Start();
-                        }
-                        else
-                        {
-#if DEBUG_LOG
-                            Debug.LogError("ERROR: Map.UseOrientation: Location is not authorized on the device.");
-#endif
-                        }
-                    }
-
-                    UnityEngine.Input.compass.enabled = true;
-                }
-                else
-                {
-                    if (usesLocation == false)
-                    {
-                        if (Device.location.isEnabledByUser
-                            && (Device.location.status == LocationServiceStatus.Initializing
-                                || Device.location.status == LocationServiceStatus.Running))
-                            Device.location.Start();
-                    }
-
-                    UnityEngine.Input.compass.enabled = false;
-                }
-            }
-        }
+//         public bool UsesOrientation
+//         {
+//             get { return usesOrientation; }
+//             set
+//             {
+//                 if (usesOrientation == value)
+//                     return;
+//
+//                 usesOrientation = value;
+//
+//                 if (usesOrientation)
+//                 {
+//                     // http://docs.unity3d.com/Documentation/ScriptReference/Compass-enabled.html
+//                     // Note, that if you want Input.compass.trueHeading property to contain a valid value,
+//                     // you must also enable location updates by calling Input.location.Start().
+//                     if (usesLocation == false)
+//                     {
+//                         if (Device.location.isEnabledByUser
+//                             && (Device.location.status == LocationServiceStatus.Stopped
+//                                 || Device.location.status == LocationServiceStatus.Failed))
+//                         {
+//                             Device.location.Start();
+//                         }
+//                         else
+//                         {
+// #if DEBUG_LOG
+//                             Debug.LogError("ERROR: Map.UseOrientation: Location is not authorized on the device.");
+// #endif
+//                         }
+//                     }
+//
+//                     UnityEngine.Input.compass.enabled = true;
+//                 }
+//                 else
+//                 {
+//                     if (usesLocation == false)
+//                     {
+//                         if (Device.location.isEnabledByUser
+//                             && (Device.location.status == LocationServiceStatus.Initializing
+//                                 || Device.location.status == LocationServiceStatus.Running))
+//                             Device.location.Start();
+//                     }
+//
+//                     UnityEngine.Input.compass.enabled = false;
+//                 }
+//             }
+//         }
 
         /// <summary>
         /// The "camera follows orientation" flag.
@@ -1089,69 +1088,69 @@ namespace Code.UnitySlippyMap.Map
             MapInput.BasicTouchAndKeyboard(this, wasInputInterceptedByGUI);
 
             // update the orientation of the location marker
-            if (usesOrientation)
-            {
-                float heading = 0.0f;
-                // TODO: handle all device orientations
-                switch (Screen.orientation)
-                {
-                    case ScreenOrientation.LandscapeLeft:
-                        heading = UnityEngine.Input.compass.trueHeading;
-                        break;
-                    case ScreenOrientation.Portrait: // FIXME: not tested, likely wrong, legacy code
-                        heading = -UnityEngine.Input.compass.trueHeading;
-                        break;
-                }
-
-                if (cameraFollowsOrientation)
-                {
-                    if (lastCameraOrientation == 0.0f)
-                    {
-                        currentCamera.transform.RotateAround(Vector3.zero, Vector3.up, heading);
-
-                        lastCameraOrientation = heading;
-                    }
-                    else
-                    {
-                        float cameraRotationSpeed = 1.0f;
-                        float relativeAngle = (heading - lastCameraOrientation) * cameraRotationSpeed * Time.deltaTime;
-                        if (relativeAngle > 0.01f)
-                        {
-                            currentCamera.transform.RotateAround(Vector3.zero, Vector3.up, relativeAngle);
-
-                            //Debug.Log("DEBUG: cam: " + lastCameraOrientation + ", heading: " + heading +  ", rel angle: " + relativeAngle);
-                            lastCameraOrientation += relativeAngle;
-                        }
-                        else
-                        {
-                            currentCamera.transform.RotateAround(Vector3.zero, Vector3.up,
-                                heading - lastCameraOrientation);
-
-                            //Debug.Log("DEBUG: cam: " + lastCameraOrientation + ", heading: " + heading +  ", rel angle: " + relativeAngle);
-                            lastCameraOrientation = heading;
-                        }
-                    }
-
-                    IsDirty = true;
-                }
-
-                if (locationMarker != null
-                    && locationMarker.OrientationMarker != null)
-                {
-                    //Debug.Log("DEBUG: " + heading);
-                    locationMarker.OrientationMarker.rotation = Quaternion.AngleAxis(heading, Vector3.up);
-                }
-            }
+            // if (usesOrientation)
+            // {
+            //     float heading = 0.0f;
+            //     // TODO: handle all device orientations
+            //     switch (Screen.orientation)
+            //     {
+            //         case ScreenOrientation.LandscapeLeft:
+            //             heading = UnityEngine.Input.compass.trueHeading;
+            //             break;
+            //         case ScreenOrientation.Portrait: // FIXME: not tested, likely wrong, legacy code
+            //             heading = -UnityEngine.Input.compass.trueHeading;
+            //             break;
+            //     }
+            //
+            //     if (cameraFollowsOrientation)
+            //     {
+            //         if (lastCameraOrientation == 0.0f)
+            //         {
+            //             currentCamera.transform.RotateAround(Vector3.zero, Vector3.up, heading);
+            //
+            //             lastCameraOrientation = heading;
+            //         }
+            //         else
+            //         {
+            //             float cameraRotationSpeed = 1.0f;
+            //             float relativeAngle = (heading - lastCameraOrientation) * cameraRotationSpeed * Time.deltaTime;
+            //             if (relativeAngle > 0.01f)
+            //             {
+            //                 currentCamera.transform.RotateAround(Vector3.zero, Vector3.up, relativeAngle);
+            //
+            //                 //Debug.Log("DEBUG: cam: " + lastCameraOrientation + ", heading: " + heading +  ", rel angle: " + relativeAngle);
+            //                 lastCameraOrientation += relativeAngle;
+            //             }
+            //             else
+            //             {
+            //                 currentCamera.transform.RotateAround(Vector3.zero, Vector3.up,
+            //                     heading - lastCameraOrientation);
+            //
+            //                 //Debug.Log("DEBUG: cam: " + lastCameraOrientation + ", heading: " + heading +  ", rel angle: " + relativeAngle);
+            //                 lastCameraOrientation = heading;
+            //             }
+            //         }
+            //
+            //         IsDirty = true;
+            //     }
+            //
+            //     if (locationMarker != null
+            //         && locationMarker.OrientationMarker != null)
+            //     {
+            //         //Debug.Log("DEBUG: " + heading);
+            //         locationMarker.OrientationMarker.rotation = Quaternion.AngleAxis(heading, Vector3.up);
+            //     }
+            // }
 
             // pause the loading operations when moving
-            if (hasMoved == true)
-            {
-                TileDownloaderBehaviour.Instance.PauseAll();
-            }
-            else
-            {
-                TileDownloaderBehaviour.Instance.UnpauseAll();
-            }
+            // if (hasMoved == true)
+            // {
+            //     TileDownloaderBehaviour.Instance.PauseAll();
+            // }
+            // else
+            // {
+            //     TileDownloaderBehaviour.Instance.UnpauseAll();
+            // }
 
             // update the tiles if needed
             if (IsDirty == true && hasMoved == false)

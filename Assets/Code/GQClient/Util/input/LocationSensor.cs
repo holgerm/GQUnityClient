@@ -68,12 +68,8 @@ namespace Code.GQClient.Util.input
             }
         }
 
-        // The minimal distance (in m) that the location has to chnage in order to trigger a LocationEvent.
-        public double UpdateDistance
-        {
-            get;
-            set;
-        }
+        // The minimal distance (in m) that the location has to change in order to trigger a LocationEvent.
+        public double UpdateDistance { get; } = 2;
 
         // Timeout for starting a location service in seconds.
         public int InitializationTimeOut
@@ -226,7 +222,7 @@ namespace Code.GQClient.Util.input
                             Debug.Log("LocationSensor is running.");
 #endif
                             LocationInfoExt newLocation = Device.location.lastData;
-                            if (failed || !lastLocation.WithinDistance(UpdateDistance, newLocation))
+                            if (!lastLocation.WithinDistance(UpdateDistance, newLocation))
                             {
                                 _onLocationUpdate?.Invoke(this,
                                     new LocationEventArgs(LocationEventType.Update, Device.location.lastData));
@@ -362,7 +358,10 @@ namespace Code.GQClient.Util.input
 
         public static bool WithinDistance(this LocationInfoExt thisLoc, double distance, LocationInfoExt otherLoc)
         {
-            return (distance > LocationSensor.distance(thisLoc.latitude, thisLoc.longitude, otherLoc.latitude, otherLoc.longitude));
+            double curDist = 
+                LocationSensor.distance(thisLoc.latitude, thisLoc.longitude, otherLoc.latitude,
+                otherLoc.longitude);
+            return distance + double.Epsilon > curDist;
         }
     }
 

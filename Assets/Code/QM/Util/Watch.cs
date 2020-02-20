@@ -1,172 +1,200 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Debug = UnityEngine.Debug;
 
 namespace Code.QM.Util
 {
-	
-	public class WATCH
-	{
+    public class WATCH
+    {
+        static Dictionary<string, WATCH> watches = new Dictionary<string, WATCH>();
 
-		static Dictionary<string, WATCH> watches = new Dictionary<string, WATCH> ();
+        private Stopwatch stopwatch;
+        public string Name { get; private set; }
+        private long lastTimeStamp;
 
-		private Stopwatch stopwatch;
-		public string Name
+        public WATCH() : this(new StackFrame(1).GetMethod().DeclaringType.Name + "." +
+                              new StackFrame(1).GetMethod().Name)
         {
-            get;
-            private set;
         }
-		private long lastTimeStamp;
 
-		public WATCH () : this (new StackFrame (1).GetMethod ().DeclaringType.Name + "." + new StackFrame (1).GetMethod ().Name)
-		{
-		}
-
-		public WATCH (string name, bool log = false)
-		{
-			stopwatch = new Stopwatch ();
-			this.Name = name;
-			nameOfLastStarted = name;
-			this.lastTimeStamp = 0L;
-			watches [name] = this;
+        public WATCH(string name, bool log = false)
+        {
+            stopwatch = new Stopwatch();
+            this.Name = name;
+            nameOfLastStarted = name;
+            this.lastTimeStamp = 0L;
+            watches[name] = this;
             if (log)
             {
                 UnityEngine.Debug.Log("WATCH started: " + name + " (frame# " + Time.frameCount + ")");
             }
-		}
+        }
 
-		public static WATCH Get (string name)
-		{
-			WATCH watch;
-			if (!watches.TryGetValue (name, out watch)) {
-				return null;
-			}
-			return watch;
-		}
-
-		public void Start ()
-		{
-			lastTimeStamp = 0L;
-			nameOfLastStarted = 
-				this.Name == null ? 
-				new StackFrame (1).GetType ().Name + "." + new StackFrame (1).GetMethod ().Name : 
-				this.Name;
-			stopwatch.Start ();
-		}
-
-		public void StopAndShow ()
-		{
-			stopwatch.Stop ();
-			UnityEngine.Debug.Log (
-				string.Format ("WATCH {0} stopped after {1} ms ({2} delta in frame# {3})", 
-					Name, 
-					stopwatch.ElapsedMilliseconds, 
-					stopwatch.ElapsedMilliseconds - lastTimeStamp,
-                    Time.frameCount
-				)
-			);
-		}
-
-		public static void Lap(string name, bool log = false)
-		{
-			WATCH w = Get(name);
-			if (w == null) {
-				UnityEngine.Debug.Log(string.Format("WATCH {0} not available.", name));
-				return;
-			}
-			w.Lap();
-			if (log)
+        public static WATCH Get(string name)
+        {
+            WATCH watch;
+            if (!watches.TryGetValue(name, out watch))
             {
-				UnityEngine.Debug.Log("WATCH lap: " + name + " (frame# " + Time.frameCount + ")");
-			}
-		}
+                return null;
+            }
 
-		public void Lap ()
-		{
-			lastTimeStamp = 0L;
-		}
+            return watch;
+        }
 
-		public static void Show (string name, string pointName)
-		{
-			WATCH w = Get (name);
-			if (w == null) {
-				UnityEngine.Debug.Log (string.Format ("WATCH {0} not available at {1}.", name, pointName));
-				return;
-			}
-			w.Show (pointName);
-		}
+        public void Start()
+        {
+            lastTimeStamp = 0L;
+            nameOfLastStarted =
+                this.Name == null
+                    ? new StackFrame(1).GetType().Name + "." + new StackFrame(1).GetMethod().Name
+                    : this.Name;
+            stopwatch.Start();
+        }
 
-		public void Show (string pointName)
-		{
-			stopwatch.Stop ();
-			UnityEngine.Debug.Log (
-				string.Format ("WATCH {0} at {1} took {2} ms (<color=Red>{3}</color> delta in frame# {4})", 
-					Name, 
-					pointName, 
-					stopwatch.ElapsedMilliseconds, 
-					stopwatch.ElapsedMilliseconds - lastTimeStamp,
-					Time.frameCount
-				)
-			);
-			lastTimeStamp = stopwatch.ElapsedMilliseconds;
-			stopwatch.Start ();
-		}
+        public void StopAndShow()
+        {
+            stopwatch.Stop();
+            UnityEngine.Debug.Log(
+                string.Format("WATCH {0} stopped after {1} ms ({2} delta in frame# {3})",
+                    Name,
+                    stopwatch.ElapsedMilliseconds,
+                    stopwatch.ElapsedMilliseconds - lastTimeStamp,
+                    Time.frameCount
+                )
+            );
+        }
 
-		public static long Milliseconds (string name)
-		{
-			WATCH w = Get (name);
-			if (w == null)
-				return 0L;
-			return w.Milliseconds ();
-		}
+        public static void Lap(string name, bool log = false)
+        {
+            WATCH w = Get(name);
+            if (w == null)
+            {
+                UnityEngine.Debug.Log(string.Format("WATCH {0} not available.", name));
+                return;
+            }
 
-		public long Milliseconds ()
-		{
-			return stopwatch.ElapsedMilliseconds;
-		}
+            w.Lap();
+            if (log)
+            {
+                UnityEngine.Debug.Log("WATCH lap: " + name + " (frame# " + Time.frameCount + ")");
+            }
+        }
 
-		#region Static Quick Access Methods
+        public void Lap()
+        {
+            lastTimeStamp = 0L;
+        }
 
-		private static string nameOfLastStarted;
-		private static int nrOfShows = 0;
+        public static void Show(string name, string pointName)
+        {
+            WATCH w = Get(name);
+            if (w == null)
+            {
+                UnityEngine.Debug.Log(string.Format("WATCH {0} not available at {1}.", name, pointName));
+                return;
+            }
 
-		public static void _Start ()
-		{
-			_Start (new StackFrame (1).GetMethod ().DeclaringType.Name + "." + new StackFrame (1).GetMethod ().Name);
-		}
+            w.Show(pointName);
+        }
 
-		public static void _Start (string name)
-		{
-			nameOfLastStarted = name;
-			WATCH w = new WATCH (name);
-			w.Start ();
-		}
+        public void Show(string pointName)
+        {
+            stopwatch.Stop();
+            UnityEngine.Debug.Log(
+                string.Format("WATCH {0} at {1} took {2} ms (<color=Red>{3}</color> delta in frame# {4})",
+                    Name,
+                    pointName,
+                    stopwatch.ElapsedMilliseconds,
+                    stopwatch.ElapsedMilliseconds - lastTimeStamp,
+                    Time.frameCount
+                )
+            );
+            lastTimeStamp = stopwatch.ElapsedMilliseconds;
+            stopwatch.Start();
+        }
 
-		public static void _Show ()
-		{
-			WATCH w = Get (nameOfLastStarted);
-			if (w == null)
-				return;
+        public static long Milliseconds(string name)
+        {
+            WATCH w = Get(name);
+            if (w == null)
+                return 0L;
+            return w.Milliseconds();
+        }
 
-			w.Show ("" + nrOfShows++);
-		}
+        public long Milliseconds()
+        {
+            return stopwatch.ElapsedMilliseconds;
+        }
 
-		public static void _StopAndShow ()
-		{
-			_StopAndShow (nameOfLastStarted);
-		}
+        private static string nameOfLastStarted;
+        private static int nrOfShows = 0;
 
-		public static void _StopAndShow (string name)
-		{
-			WATCH w = Get (name);
-			if (w == null) {
-				UnityEngine.Debug.Log (string.Format ("WATCH {0} not available.", name));
-				return;
-			}
-			w.StopAndShow ();
-		}
+        public static void _Start()
+        {
+            _Start(new StackFrame(1).GetMethod().DeclaringType.Name + "." + new StackFrame(1).GetMethod().Name);
+        }
 
-		#endregion
+        public static void _Start(string name)
+        {
+            nameOfLastStarted = name;
+            WATCH w = new WATCH(name);
+            w.Start();
+        }
 
-	}
+        public static void _Show()
+        {
+            WATCH w = Get(nameOfLastStarted);
+            if (w == null)
+                return;
+
+            w.Show("" + nrOfShows++);
+        }
+
+        public static void _StopAndShow()
+        {
+            _StopAndShow(nameOfLastStarted);
+        }
+
+        public static void _StopAndShow(string name)
+        {
+            WATCH w = Get(name);
+            if (w == null)
+            {
+                UnityEngine.Debug.Log(string.Format("WATCH {0} not available.", name));
+                return;
+            }
+
+            w.StopAndShow();
+        }
+
+        private static Dictionary<string, long> measurements = new Dictionary<string, long>();
+
+        public static void StartMeasure(string name = "_")
+        {
+            if (measurements.ContainsKey(name))
+            {
+                measurements.Remove(name);
+            }
+
+            measurements.Add(name, DateTime.Now.Ticks);
+        }
+
+        public static long TakeMeasure(string name = "_")
+        {
+            long now = DateTime.Now.Ticks;
+
+            if (!measurements.ContainsKey(name))
+                return -1L;
+
+            return (now - measurements[name]);
+        }
+
+        public static void ShowMeasure(string name = "_")
+        {
+            Debug.Log($"MEASURE {name}: {TakeMeasure(name)}");
+        }
+    }
 }

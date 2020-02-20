@@ -42,16 +42,6 @@ namespace Code.UnitySlippyMap.Map
     /// </summary>
     public class TileBehaviour : MonoBehaviour
     {
-        // private static WATCH w; 
-        // public void Start()
-        // {
-        //     if (w == null)
-        //     {
-        //         w = new WATCH("tile");
-        //     }
-        //     w.Start();
-        // }
-
         #region Private members & properties
 
         ///// <summary>
@@ -329,7 +319,7 @@ namespace Code.UnitySlippyMap.Map
 
         private IEnumerator LoadTextureCoroutine()
         {
-         //   w.Show(name + " START");
+
             
             WWW www;
             TextureIsDownloading = true;
@@ -339,28 +329,21 @@ namespace Code.UnitySlippyMap.Map
                 $"{Application.persistentDataPath}/tilecache/{zPos.ToString()}/{xPos.ToString()}";
             string tileCachePath =
                 $"{tileDirPath}/{yPos.ToString()}.png";
+            
+            var begin = DateTime.Now.Ticks;
             if (File.Exists(tileCachePath))
             {
-             //   w.Show(name + " LOCAL");
                 www = new WWW($"file://{tileCachePath}");
                 shouldBeCached = false;
             }
             else
             {
-             //   w.Show(name + " REMOTE");
                 shouldBeCached = true;
                 www = new WWW(URL);
             }
 
- //           w.Show(name + " BEFORE 1. YIELD");
-
-            // yield return null;
-
- //           w.Show(name + " AFTER 1. YIELD");
-
             while (!www.isDone)
             {
-         //       w.Show(name + " STILL LOADING");
                 // We cancel download if zoom has changed:
                 DownloadingTextureIsCancelled =
                     MapBehaviour.RoundedZoom != zPos;
