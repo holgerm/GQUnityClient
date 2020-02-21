@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Util;
-using GQClient.Model;
 
 namespace GQClient.Model
 {

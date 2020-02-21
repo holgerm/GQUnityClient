@@ -1,24 +1,12 @@
 ﻿using System.Collections.Generic;
-using GQ.Client.Conf;
-using GQ.Client.Util;
+using Code.GQClient.Conf;
+using Code.GQClient.Util;
 
-namespace GQ.Client.Model
+namespace GQClient.Model
 {
 
     public class CategoryReader
     {
-        public static List<string> ReadCategoriesFromQuest(Quest q)
-        {
-            List<MetaDataInfo> mdList = new List<MetaDataInfo>();
-            int i = 0;
-            foreach (var kv in q.metadata)
-            {
-                MetaDataInfo md = new MetaDataInfo(kv.Key, kv.Value);
-                mdList.Add(md);
-            }
-
-            return ReadCategoriesFromMetadata(mdList.ToArray());
-        }
 
         public static List<string> ReadCategoriesFromMetadata(MetaDataInfo[] metadata)
         {
