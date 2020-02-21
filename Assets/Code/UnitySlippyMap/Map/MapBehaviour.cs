@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Util.input;
 using Code.QM.Util;
@@ -1010,7 +1011,9 @@ namespace Code.UnitySlippyMap.Map
                 screenScale = (Screen.orientation == ScreenOrientation.Landscape ? Device.width : Device.height) /
                               480.0f;
             else
-                screenScale = 2.0f;
+                screenScale = 1.0f;
+
+            Debug.Log($"SCREENSCALE: {screenScale}".Red());
 
             // initialize the camera position and rotation
             currentCamera.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
@@ -1351,7 +1354,7 @@ namespace Code.UnitySlippyMap.Map
             // FIXME: the camera jumps on the first zoom when tilted, because the cam altitude and zoom value are unsynced by the rotation
             Transform cameraTransform = currentCamera.transform;
             float y = GeoHelpers.OsmZoomLevelToMapScale(currentZoom, 0.0f, tileResolution, 72) / scaleDivider *
-                      screenScale;
+                      (screenScale / ConfigurationManager.Current.mapScale);
             float t = y / cameraTransform.forward.y;
             cameraTransform.position = new Vector3(
                 t * cameraTransform.forward.x,

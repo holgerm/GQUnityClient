@@ -237,6 +237,8 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor]
         public float mapDeltaZoom { get; set; }
 
+        [ShowInProductEditor]
+        public float mapScale { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -832,6 +834,7 @@ namespace Code.GQClient.Conf
             useMapOffline = false;
             mapMinimalZoom = 7.0f;
             mapDeltaZoom = 0.5f;
+            mapScale = 1.0f;
             markerHeightUnits = 55f;
             markerSymbolFGColor = Color.black;
             mapButtonHeightUnits = 55f;

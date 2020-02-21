@@ -246,17 +246,16 @@ namespace Code.UnitySlippyMap.Layers
         void PrepareAndRequestTilesOnRing(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
             float offsetZ, int ringNr)
         {
-#if DEBUG_LOG
-            Debug.Log(("Preparing Tiles on Ring: " + ringNr).Red() + " frame# " + Time.frameCount);
-#endif
+            // for (int i = 1; i <= ringNr; i++)
+            // {
+            //     if (!GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+            //         NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
+            //         return;
+            // }
+
             // let n be the ringNr.
             // move into the start position, n tiles north of our center
-            for (int i = 1; i <= ringNr; i++)
-            {
-                if (!GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                    NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
-                    return;
-            }
+            tileY -= ringNr;
 
             // prepare start tile north of center:
             tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
@@ -264,41 +263,46 @@ namespace Code.UnitySlippyMap.Layers
             // move and prepare n tiles east:
             for (int i = 1; i <= ringNr; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                    NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
-                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                tileX++;
+                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                //     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
+                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles south:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                    NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
-                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                tileY++;
+                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                //     NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
+                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles west:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                    NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
-                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                tileX--;
+                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                //     NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
+                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles north:
             for (int i = 1; i <= ringNr * 2; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                    NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
-                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                tileY--;
+                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                //     NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
+                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare n - 1 tiles east again, just before the starting tile:
-            for (int i = 1; i <= ringNr * 2; i++)
+            for (int i = 1; i < ringNr; i++)
             {
-                if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                    NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
-                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                tileX++;
+                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
+                //     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
+                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
         }
 
@@ -497,7 +501,7 @@ namespace Code.UnitySlippyMap.Layers
                 out offsetX, out offsetZ);
             offsetX += (tilePrepareSpec.TileX - centerTileX) * MapBehaviour.RoundedHalfMapScale;
             offsetZ -= (tilePrepareSpec.TileY - centerTileY) * MapBehaviour.RoundedHalfMapScale;
- 
+
             var tileAddress = $"{tilePrepareSpec.TileZ}_{tilePrepareSpec.TileX}_{tilePrepareSpec.TileY}";
             if (tiles.ContainsKey(tileAddress) == false)
             {

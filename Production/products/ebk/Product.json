@@ -70,6 +70,7 @@
   "useMapOffline": true,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapScale": 1.5,
   "mapStartPositionType": "PlayerPosition",
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
