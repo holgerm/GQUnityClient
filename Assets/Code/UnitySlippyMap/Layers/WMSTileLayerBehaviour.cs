@@ -305,8 +305,8 @@ namespace Code.UnitySlippyMap.Layers
 
 			tileX = tileCoordinates [0];
 			tileY = tileCoordinates [1];
-			offsetX = Map.RoundedHalfMapScale / 2.0f - (float)(Map.CenterEPSG900913 [0] - centerTileMeters [0]) * Map.RoundedScaleMultiplier;
-			offsetZ = -Map.RoundedHalfMapScale / 2.0f - (float)(Map.CenterEPSG900913 [1] - centerTileMeters [1]) * Map.RoundedScaleMultiplier;
+			offsetX = MapBehaviour.RoundedHalfMapScale / 2.0f - (float)(Map.CenterEPSG900913 [0] - centerTileMeters [0]) * Map.RoundedScaleMultiplier;
+			offsetZ = -MapBehaviour.RoundedHalfMapScale / 2.0f - (float)(Map.CenterEPSG900913 [1] - centerTileMeters [1]) * Map.RoundedScaleMultiplier;
 		}
 	
 		/// <summary>
@@ -338,7 +338,7 @@ namespace Code.UnitySlippyMap.Layers
 					nTileX = tileX;
 					nTileY = tileY + 1;
 					nOffsetX = offsetX;
-					nOffsetZ = offsetZ - Map.RoundedHalfMapScale;
+					nOffsetZ = offsetZ - MapBehaviour.RoundedHalfMapScale;
 					ret = true;
 				}
 				break;
@@ -348,7 +348,7 @@ namespace Code.UnitySlippyMap.Layers
 					nTileX = tileX;
 					nTileY = tileY - 1;
 					nOffsetX = offsetX;
-					nOffsetZ = offsetZ + Map.RoundedHalfMapScale;
+					nOffsetZ = offsetZ + MapBehaviour.RoundedHalfMapScale;
 					ret = true;
 				}
 				break;
@@ -356,7 +356,7 @@ namespace Code.UnitySlippyMap.Layers
 			case NeighbourTileDirection.East:
 				nTileX = tileX + 1;
 				nTileY = tileY;
-				nOffsetX = offsetX + Map.RoundedHalfMapScale;
+				nOffsetX = offsetX + MapBehaviour.RoundedHalfMapScale;
 				nOffsetZ = offsetZ;
 				ret = true;
 				break;
@@ -364,7 +364,7 @@ namespace Code.UnitySlippyMap.Layers
 			case NeighbourTileDirection.West:
 				nTileX = tileX - 1;
 				nTileY = tileY;
-				nOffsetX = offsetX - Map.RoundedHalfMapScale;
+				nOffsetX = offsetX - MapBehaviour.RoundedHalfMapScale;
 				nOffsetZ = offsetZ;
 				ret = true;
 				break;

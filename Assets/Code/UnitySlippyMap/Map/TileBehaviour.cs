@@ -393,7 +393,6 @@ namespace Code.UnitySlippyMap.Map
 
             www.Dispose();
             TextureIsDownloading = false;
-          //  w.Show(name + " END");
         }
 
         private void EndWriteCallback(IAsyncResult ar)

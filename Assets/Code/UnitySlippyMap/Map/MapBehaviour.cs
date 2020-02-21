@@ -228,9 +228,6 @@ namespace Code.UnitySlippyMap.Map
             {
                 if (value == null)
                 {
-#if DEBUG_LOG
-                    Debug.LogError("ERROR: Map.CenterWGS84: value cannot be null");
-#endif
                     return;
                 }
 
@@ -246,8 +243,6 @@ namespace Code.UnitySlippyMap.Map
                 centerEPSG900913 = ComputeCenterEPSG900913(newCenterESPG900913);
                 FitVerticalBorder();
                 IsDirty = true;
-
-                //				Debug.Log ("POSITION MApController set to: (" + centerWGS84 [0] + ", " + centerWGS84 [1] + ")");
             }
         }
 
@@ -308,15 +303,9 @@ namespace Code.UnitySlippyMap.Map
                 if (value < minZoom
                     || value > maxZoom)
                 {
-#if DEBUG_LOG
-                    Debug.LogError("ERROR: Map.Zoom: value must be inside range [" + minZoom + " - " + maxZoom + "]");
-#endif
                     return;
                 }
 
-#if DEBUG_LOG
-                WATCH.Show("zoom", "CurrentZoom set to " + value);
-#endif
                 if (currentZoom == value)
                     return;
 
@@ -331,9 +320,6 @@ namespace Code.UnitySlippyMap.Map
                 UpdateInternals();
 
                 FitVerticalBorder();
-#if DEBUG_LOG
-                WATCH.Show("zoom", "CurrentZoom setting ENDS");
-#endif
             }
         }
 
@@ -484,13 +470,13 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// The rounded half map scale.
         /// </summary>
-        private float roundedHalfMapScale = 0.0f;
+        private static float roundedHalfMapScale = 0.0f;
 
         /// <summary>
         /// Gets the rounded half map scale.
         /// </summary>
         /// <value>See <see cref="UnitySlippyMap.Map.HalfMapScale"/> .</value>
-        public float RoundedHalfMapScale
+        public static float RoundedHalfMapScale
         {
             get { return roundedHalfMapScale; }
         }

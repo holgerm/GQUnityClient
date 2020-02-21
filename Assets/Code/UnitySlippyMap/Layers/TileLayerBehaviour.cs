@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using Code.GQClient.Err;
+using Code.GQClient.UI.map;
 using Code.QM.Util;
 using Code.UnitySlippyMap.Map;
 using UnityEngine;
@@ -110,10 +111,12 @@ namespace Code.UnitySlippyMap.Layers
             {
                 w = new WATCH("tile");
             }
+
             w.Start();
 
-            if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
-                tileTemplate.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+            if (tileTemplate.transform.localScale.x != MapBehaviour.RoundedHalfMapScale)
+                tileTemplate.transform.localScale = new Vector3(MapBehaviour.RoundedHalfMapScale, 1.0f,
+                    MapBehaviour.RoundedHalfMapScale);
         }
 
         /// <summary>
@@ -138,8 +141,9 @@ namespace Code.UnitySlippyMap.Layers
         /// </summary>
         public override void UpdateContent()
         {
-            if (tileTemplate.transform.localScale.x != Map.RoundedHalfMapScale)
-                tileTemplate.transform.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
+            if (tileTemplate.transform.localScale.x != MapBehaviour.RoundedHalfMapScale)
+                tileTemplate.transform.localScale = new Vector3(MapBehaviour.RoundedHalfMapScale, 1.0f,
+                    MapBehaviour.RoundedHalfMapScale);
 
             if (Map.CurrentCamera != null && isReadyToBeQueried)
             {
@@ -202,18 +206,33 @@ namespace Code.UnitySlippyMap.Layers
             GetCenterTile(tileCountOnX, tileCountOnY, out tileX, out tileY, out offsetX, out offsetZ);
             curX = tileX;
             curY = tileY;
-            
-            WATCH.StartMeasure();
+
+            WATCH.StartMeasure($"M {++_measureCounter}");
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
-            WATCH.ShowMeasure();
+            WATCH.ShowMeasure($"M {_measureCounter}");
+            Debug.Log(
+                $"CREATE: {ADDED_CREATETILE} -- LOAD: {ADDED_LOADTEXTURE} -- UNCHANGED: {ADDED_UNCHANGEDTILES} -- CHANGED: {ADDED_CHANGEDTILES} --- NoNeighbor: {ADDED_NEIGHTBOURFALSETILES}");
+            ADDED_CREATETILE = 0;
+            ADDED_LOADTEXTURE = 0;
+            ADDED_UNCHANGEDTILES = 0;
+            ADDED_CHANGEDTILES = 0;
+            ADDED_NEIGHTBOURFALSETILES = 0;
         }
+
+        private static int _measureCounter = 0;
+        public static long ADDED_LOADTEXTURE = 0;
+        public static long ADDED_CREATETILE = 0;
+        public static long ADDED_UNCHANGEDTILES = 0;
+        public static long ADDED_CHANGEDTILES = 0;
+        public static long ADDED_NEIGHTBOURFALSETILES = 0;
+
 
         // this is a new version of GrowTiles():
         void PrepareAndRequestTiles(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
             float offsetZ)
         {
             // request the center itself:
-            PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             for (int i = 1; i <= RingsAroundCenterToLoad; i++)
             {
                 PrepareAndRequestTilesOnRing(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ, i);
@@ -240,14 +259,14 @@ namespace Code.UnitySlippyMap.Layers
             }
 
             // prepare start tile north of center:
-            PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+            tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
 
             // move and prepare n tiles east:
             for (int i = 1; i <= ringNr; i++)
             {
                 if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
-                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles south:
@@ -255,7 +274,7 @@ namespace Code.UnitySlippyMap.Layers
             {
                 if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                     NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
-                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles west:
@@ -263,7 +282,7 @@ namespace Code.UnitySlippyMap.Layers
             {
                 if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                     NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
-                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles north:
@@ -271,7 +290,7 @@ namespace Code.UnitySlippyMap.Layers
             {
                 if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                     NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
-                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare n - 1 tiles east again, just before the starting tile:
@@ -279,52 +298,17 @@ namespace Code.UnitySlippyMap.Layers
             {
                 if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
-                    PrepareAndRequestTile(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
+                    tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
         }
-        
-        private static WATCH w; 
- 
-        void PrepareAndRequestTile(int tileX, int tileY, int tileCountOnX, int tileCountOnY, float offsetX,
-            float offsetZ)
-        {
-#if DEBUG_LOG
-            Debug.Log(("Prep Tile: " + tileX + " / " + tileY).Red() + " frame# " + Time.frameCount);
-            Debug.Log(
-                string.Format("Prep Tile: tileX: {0}, tileY: {1}, offsetX: {2}, offsetZ: {3}",
-                tileX, tileY, offsetX, offsetZ));
-#endif
-            var tileTransform = tileTemplate.transform;
-            tileTransform.position = new Vector3(offsetX, tileTransform.position.y, offsetZ);
 
-            // correct east and west exceedance:
-            if (tileX < 0)
-                tileX += tileCountOnX;
-            else if (tileX >= tileCountOnX)
-                tileX -= tileCountOnX;
+        private static WATCH w;
 
-            var tileAddress = $"{MapBehaviour.RoundedZoom}_{tileX}_{tileY}";
-            if (tiles.ContainsKey(tileAddress) == false)
-            {
-                var tile = createTile(tileX, tileY);
-                tile.Showing = false;
-                tile.SetPosition(tileX, tileY, MapBehaviour.RoundedZoom);
-                var transform1 = tile.transform;
-                transform1.position = tileTemplate.transform.position;
-                transform1.localScale = new Vector3(Map.RoundedHalfMapScale, 1.0f, Map.RoundedHalfMapScale);
-                tile.transform.parent = getTileParent(MapBehaviour.RoundedZoom);
-
-                tile.name = tileAddress;
-                tiles.Add(tileAddress, tile);
-
-                tile.LoadTexture();
-            }
-        }
 
         private Transform getTileParent(int zoomLevel)
         {
             var parent = this.transform.Find(zoomLevel.ToString());
-            
+
             if (parent == null)
             {
                 var parentGO = new GameObject(zoomLevel.ToString());
@@ -347,24 +331,12 @@ namespace Code.UnitySlippyMap.Layers
             }
         }
 
-        public int RingsAroundCenterToLoad
-        {
-            get
-            {
-                return 5;
-                // TODO: Calculate regarding display size
-            }
-        }
+        private static int RingsAroundCenterToLoad => 5;
 
-        public int MaxTilesInMemory
-        {
-            get
-            {
-                return 500;
-                // TODO: Calculate regarding display size and memory size and memory settings of user
-            }
-        }
+        // TODO: Calculate regarding display size
+        private static int MaxTilesInMemory => 500;
 
+        // TODO: Calculate regarding display size and memory size and memory settings of user
         /// <summary>
         /// Creates or resuses a tile behavior.
         /// </summary>
@@ -395,7 +367,7 @@ namespace Code.UnitySlippyMap.Layers
                 tile.reuses++;
                 tile.oldName = tile.name;
 
-               // Destroy(tile.GetComponent<Renderer>().material.mainTexture);
+                // Destroy(tile.GetComponent<Renderer>().material.mainTexture);
                 if (tile.TextureIsDownloading)
                 {
                     tile.DownloadingTextureIsCancelled = true;
@@ -485,6 +457,84 @@ namespace Code.UnitySlippyMap.Layers
         /// Rounded zoom.
         /// </param>
         protected abstract void CancelTileRequest(int tileX, int tileY, int roundedZoom);
+
+        #endregion
+
+        #region Tile Downloader Coroutine
+
+        private struct TilePrepareSpec
+        {
+            public int TileX;
+            public int TileY;
+            public int TileZ;
+            public int TileCountOnX;
+            public float HalfMapScale;
+
+            public TilePrepareSpec(int tileX, int tileY, int tileCountOnX)
+            {
+                TileX = tileX;
+                TileY = tileY;
+                TileZ = MapBehaviour.RoundedZoom;
+                TileCountOnX = tileCountOnX;
+                HalfMapScale = MapBehaviour.RoundedHalfMapScale;
+            }
+        }
+
+        private static Queue<TilePrepareSpec> tilePreparationQueue =
+            new Queue<TilePrepareSpec>(MaxTilesInMemory);
+
+        void PrepareAndRequestTile(TilePrepareSpec tilePrepareSpec)
+        {
+            // correct east and west exceedance:
+            if (tilePrepareSpec.TileX < 0)
+                tilePrepareSpec.TileX += tilePrepareSpec.TileCountOnX;
+            else if (tilePrepareSpec.TileX >= tilePrepareSpec.TileCountOnX)
+                tilePrepareSpec.TileX -= tilePrepareSpec.TileCountOnX;
+
+            int centerTileX, centerTileY;
+            float offsetX, offsetZ;
+            GetCenterTile(0, 0, out centerTileX, out centerTileY,
+                out offsetX, out offsetZ);
+            offsetX += (tilePrepareSpec.TileX - centerTileX) * MapBehaviour.RoundedHalfMapScale;
+            offsetZ -= (tilePrepareSpec.TileY - centerTileY) * MapBehaviour.RoundedHalfMapScale;
+ 
+            var tileAddress = $"{tilePrepareSpec.TileZ}_{tilePrepareSpec.TileX}_{tilePrepareSpec.TileY}";
+            if (tiles.ContainsKey(tileAddress) == false)
+            {
+                WATCH.StartMeasure("createTile");
+                var tile = createTile(tilePrepareSpec.TileX, tilePrepareSpec.TileY);
+                ADDED_CREATETILE += WATCH.TakeMeasure("createTile");
+                tile.Showing = false;
+                tile.SetPosition(tilePrepareSpec.TileX, tilePrepareSpec.TileY, tilePrepareSpec.TileZ);
+                var transform1 = tile.transform;
+                transform1.position = new Vector3(offsetX, tileTemplate.transform.position.y, offsetZ);
+                transform1.localScale = new Vector3(tilePrepareSpec.HalfMapScale, 1.0f, tilePrepareSpec.HalfMapScale);
+                tile.transform.parent = getTileParent(tilePrepareSpec.TileZ);
+
+                tile.name = tileAddress;
+                tiles.Add(tileAddress, tile);
+
+                WATCH.StartMeasure("loadTexture");
+                tile.LoadTexture();
+                ADDED_LOADTEXTURE += WATCH.TakeMeasure("loadTexture");
+                ADDED_CHANGEDTILES++;
+            }
+            else
+            {
+                ADDED_UNCHANGEDTILES++;
+            }
+        }
+
+        public void Update()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if (tilePreparationQueue.Count == 0)
+                    return;
+
+                PrepareAndRequestTile(tilePreparationQueue.Dequeue());
+            }
+        }
 
         #endregion
     }
