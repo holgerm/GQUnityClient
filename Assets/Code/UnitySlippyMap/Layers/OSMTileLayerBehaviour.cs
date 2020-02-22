@@ -149,7 +149,7 @@ namespace Code.UnitySlippyMap.Layers
             offsetZ = -MapBehaviour.RoundedHalfMapScale / 2.0f -
                       (float) (Map.CenterEPSG900913[1] - centerTileMeters[1]) * Map.RoundedScaleMultiplier;
         }
-
+        
         /// <summary>
         /// Gets a neighbour tile. See <see cref="UnitySlippyMap.Layers.TileLayerBehaviour.GetNeighbourTile"/>.
         /// </summary>

@@ -259,7 +259,7 @@ namespace Code.UnitySlippyMap.Map
 
             private IEnumerator DownloadCoroutine()
             {
-                tile.Showing = false;
+                // tile.Showing = false;
                 WWW www = null;
                 string ext = ".png";
                 bool shouldBeCached = false;

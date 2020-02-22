@@ -1012,9 +1012,7 @@ namespace Code.UnitySlippyMap.Map
                               480.0f;
             else
                 screenScale = 1.0f;
-
-            Debug.Log($"SCREENSCALE: {screenScale}".Red());
-
+            
             // initialize the camera position and rotation
             currentCamera.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
             Zoom(0.0f);
@@ -1131,25 +1129,9 @@ namespace Code.UnitySlippyMap.Map
             //     }
             // }
 
-            // pause the loading operations when moving
-            // if (hasMoved == true)
-            // {
-            //     TileDownloaderBehaviour.Instance.PauseAll();
-            // }
-            // else
-            // {
-            //     TileDownloaderBehaviour.Instance.UnpauseAll();
-            // }
-            
-            Debug.Log((isDirty ? "DIRTY".Red() : "CLEAN".Green()) + (hasMoved ? "MOVED".Red() : "STILL".Green()));
-
             // update the tiles if needed
             if (IsDirty == true && hasMoved == false)
             {
-#if DEBUG_LOG
-                Debug.Log("DEBUG: Map.Update: update layers & markers");
-#endif
-
                 IsDirty = false;
 
                 if (locationMarker != null && locationMarker.gameObject.activeSelf == true)
@@ -1264,7 +1246,6 @@ namespace Code.UnitySlippyMap.Map
             // create a GameObject as the root of the layer and add the templated Layer component to it
             GameObject layerRoot = new GameObject(name);
             Transform layerRootTransform = layerRoot.transform;
-            //Debug.Log("DEBUG: layer root: " + layerRootTransform.position + " this position: " + this.gameObject.transform.position);
             layerRootTransform.parent = this.gameObject.transform;
             layerRootTransform.localPosition = Vector3.zero;
             T layer = layerRoot.AddComponent<T>();
@@ -1330,13 +1311,7 @@ namespace Code.UnitySlippyMap.Map
         /// </exception>
         public void RemoveMarker(MarkerBehaviour m)
         {
-            //if (m == null)
-            //	throw new ArgumentNullException ("m");
-
-            //if (markers.Contains (m) == false)
-            //throw new ArgumentOutOfRangeException ("m");
-
-            if (m != null && markers.Contains(m))
+             if (m != null && markers.Contains(m))
             {
                 markers.Remove(m);
                 DestroyImmediate(m.gameObject);
@@ -1349,8 +1324,10 @@ namespace Code.UnitySlippyMap.Map
         /// <param name="zoomSpeed">Zoom speed.</param>
         public void Zoom(float zoomSpeed)
         {
+            Debug.Log($"ZOOM: {zoomSpeed}");
+            
             // apply the zoom
-            CurrentZoom += 4.0f * zoomSpeed * Time.deltaTime;
+            CurrentZoom += zoomSpeed * Time.deltaTime;
 
             // move the camera
             // FIXME: the camera jumps on the first zoom when tilted, because the cam altitude and zoom value are unsynced by the rotation

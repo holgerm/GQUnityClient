@@ -306,21 +306,11 @@ namespace Code.UnitySlippyMap.Map
             }
         }
 
-
-
         public string oldName;
         public int reuses;
 
-
-        internal void LoadTexture()
+        internal IEnumerator LoadTexture()
         {
-            Base.Instance.StartCoroutine(LoadTextureCoroutine());
-        }
-
-        private IEnumerator LoadTextureCoroutine()
-        {
-
-            
             WWW www;
             TextureIsDownloading = true;
             string ext = ".png";
@@ -344,40 +334,14 @@ namespace Code.UnitySlippyMap.Map
 
             while (!www.isDone)
             {
-                // We cancel download if zoom has changed:
-                DownloadingTextureIsCancelled =
-                    MapBehaviour.RoundedZoom != zPos;
-            
-                if (DownloadingTextureIsCancelled)
-                {
-                    DownloadingTextureIsCancelled = false;
-                    TextureIsDownloading = false;
-                    www.Dispose();
-            
-                    yield break;
-                    // TERMINATE LOADING
-                }
                 yield return null;
-            }
-            
-            DownloadingTextureIsCancelled =
-                MapBehaviour.RoundedZoom != zPos;
-            
-            if (DownloadingTextureIsCancelled)
-            {
-                DownloadingTextureIsCancelled = false;
-                TextureIsDownloading = false;
-                www.Dispose();
-            
-                yield break;
-                // TERMINATE LOADING
             }
             
             if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
             {
                 Destroy(MyMaterial.mainTexture);
                 MyMaterial.mainTexture = www.texture;
-                Showing = true;
+              //  Showing = true;
 
                 if (shouldBeCached)
                 {
@@ -391,6 +355,7 @@ namespace Code.UnitySlippyMap.Map
                 }
             }
 
+            Showing = true;
             www.Dispose();
             TextureIsDownloading = false;
         }
