@@ -53,6 +53,7 @@
   "useMapOffline": false,
   "mapMinimalZoom": 7.0,
   "mapDeltaZoom": 0.5,
+  "mapScale": 1.5,
   "mapStartPositionType": "CenterOfMarkers",
   "mapStartAtLocation": true,
   "mapStartAtLongitude": 7.100114,
