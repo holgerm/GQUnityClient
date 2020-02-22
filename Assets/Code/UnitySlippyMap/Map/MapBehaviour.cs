@@ -1140,6 +1140,8 @@ namespace Code.UnitySlippyMap.Map
             // {
             //     TileDownloaderBehaviour.Instance.UnpauseAll();
             // }
+            
+            Debug.Log((isDirty ? "DIRTY".Red() : "CLEAN".Green()) + (hasMoved ? "MOVED".Red() : "STILL".Green()));
 
             // update the tiles if needed
             if (IsDirty == true && hasMoved == false)
@@ -1176,7 +1178,7 @@ namespace Code.UnitySlippyMap.Map
                 Debug.Log("DEBUG: Map.Update: updated layers");
 #endif
             }
-
+ 
             // reset the deferred update flag
             hasMoved = false;
         }

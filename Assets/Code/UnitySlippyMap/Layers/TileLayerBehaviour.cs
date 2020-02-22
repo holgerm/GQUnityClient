@@ -207,11 +207,11 @@ namespace Code.UnitySlippyMap.Layers
             curX = tileX;
             curY = tileY;
 
-            WATCH.StartMeasure($"M {++_measureCounter}");
+ //           WATCH.StartMeasure($"M {++_measureCounter}");
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ);
-            WATCH.ShowMeasure($"M {_measureCounter}");
-            Debug.Log(
-                $"CREATE: {ADDED_CREATETILE} -- LOAD: {ADDED_LOADTEXTURE} -- UNCHANGED: {ADDED_UNCHANGEDTILES} -- CHANGED: {ADDED_CHANGEDTILES} --- NoNeighbor: {ADDED_NEIGHTBOURFALSETILES}");
+//            WATCH.ShowMeasure($"M {_measureCounter}");
+            // Debug.Log(
+            //     $"CREATE: {ADDED_CREATETILE} -- LOAD: {ADDED_LOADTEXTURE} -- UNCHANGED: {ADDED_UNCHANGEDTILES} -- CHANGED: {ADDED_CHANGEDTILES} --- NoNeighbor: {ADDED_NEIGHTBOURFALSETILES}");
             ADDED_CREATETILE = 0;
             ADDED_LOADTEXTURE = 0;
             ADDED_UNCHANGEDTILES = 0;
@@ -232,7 +232,7 @@ namespace Code.UnitySlippyMap.Layers
             float offsetZ)
         {
             // request the center itself:
-            tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+            EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             for (int i = 1; i <= RingsAroundCenterToLoad; i++)
             {
                 PrepareAndRequestTilesOnRing(tileX, tileY, tileCountOnX, tileCountOnY, offsetX, offsetZ, i);
@@ -258,7 +258,7 @@ namespace Code.UnitySlippyMap.Layers
             tileY -= ringNr;
 
             // prepare start tile north of center:
-            tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+            EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
 
             // move and prepare n tiles east:
             for (int i = 1; i <= ringNr; i++)
@@ -266,7 +266,7 @@ namespace Code.UnitySlippyMap.Layers
                 tileX++;
                 // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                 //     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
-                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles south:
@@ -275,7 +275,7 @@ namespace Code.UnitySlippyMap.Layers
                 tileY++;
                 // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                 //     NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
-                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles west:
@@ -284,7 +284,7 @@ namespace Code.UnitySlippyMap.Layers
                 tileX--;
                 // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                 //     NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
-                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare 2 * n tiles north:
@@ -293,7 +293,7 @@ namespace Code.UnitySlippyMap.Layers
                 tileY--;
                 // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                 //     NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
-                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
 
             // move and prepare n - 1 tiles east again, just before the starting tile:
@@ -302,7 +302,7 @@ namespace Code.UnitySlippyMap.Layers
                 tileX++;
                 // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
                 //     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
-                tilePreparationQueue.Enqueue(new TilePrepareSpec(tileX, tileY, tileCountOnX));
+                EnqueueTileForPreparation(new TilePrepareSpec(tileX, tileY, tileCountOnX));
             }
         }
 
@@ -351,18 +351,18 @@ namespace Code.UnitySlippyMap.Layers
         {
             TileBehaviour tile;
 
-            if (TileBehaviours.Count < MaxTilesInMemory)
+            if (TileObjectCache.Count < MaxTilesInMemory)
             {
                 tile =
                     (Instantiate(tileTemplate.gameObject) as GameObject).GetComponent<TileBehaviour>();
             }
             else
             {
-                tile = TileBehaviours.Dequeue();
+                tile = TileObjectCache.Dequeue();
                 while (CurrentlyNeeded(tile))
                 {
-                    TileBehaviours.Enqueue(tile);
-                    tile = TileBehaviours.Dequeue();
+                    TileObjectCache.Enqueue(tile);
+                    tile = TileObjectCache.Dequeue();
                 }
 
                 tile.Showing = false;
@@ -378,7 +378,7 @@ namespace Code.UnitySlippyMap.Layers
                 }
             }
 
-            TileBehaviours.Enqueue(tile);
+            TileObjectCache.Enqueue(tile);
 
             return tile;
         }
@@ -396,7 +396,7 @@ namespace Code.UnitySlippyMap.Layers
 
         private Queue<TileBehaviour> _tileBehaviours;
 
-        private Queue<TileBehaviour> TileBehaviours
+        private Queue<TileBehaviour> TileObjectCache
         {
             get
             {
@@ -484,8 +484,32 @@ namespace Code.UnitySlippyMap.Layers
             }
         }
 
+        private static int MaxTiles2LoadAtOnce
+        {
+            get
+            {
+                return (RingsAroundCenterToLoad * 2 + 1) * (RingsAroundCenterToLoad * 2 + 1);
+            }
+        }
+        
         private static Queue<TilePrepareSpec> tilePreparationQueue =
-            new Queue<TilePrepareSpec>(MaxTilesInMemory);
+            new Queue<TilePrepareSpec>(MaxTiles2LoadAtOnce);
+
+        private void EnqueueTileForPreparation(TilePrepareSpec tileSpec)
+        {
+            if (tilePreparationQueue.Count == MaxTiles2LoadAtOnce)
+            {
+                tilePreparationQueue.Dequeue();
+            }
+            tilePreparationQueue.Enqueue((tileSpec));
+            Debug.Log($"TilePrepQueue ENQUEUE: {tilePreparationQueue.Count}".Yellow());
+        } 
+        
+        private TilePrepareSpec DequeueTileForPreparation()
+        {
+            Debug.Log($"TilePrepQueue DEQUEUE: {tilePreparationQueue.Count -1}".Yellow());
+            return tilePreparationQueue.Dequeue();
+        }
 
         void PrepareAndRequestTile(TilePrepareSpec tilePrepareSpec)
         {
@@ -536,7 +560,7 @@ namespace Code.UnitySlippyMap.Layers
                 if (tilePreparationQueue.Count == 0)
                     return;
 
-                PrepareAndRequestTile(tilePreparationQueue.Dequeue());
+                PrepareAndRequestTile(DequeueTileForPreparation());
             }
         }
 
