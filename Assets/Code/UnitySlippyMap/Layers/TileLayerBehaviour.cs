@@ -150,9 +150,6 @@ namespace Code.UnitySlippyMap.Layers
 
             if (Map.CurrentCamera != null && isReadyToBeQueried)
             {
-#if DEBUG_LOG
-                Debug.Log("Updating Content while Map " + (Map.IsDirty ? " DIRTY ".Red() : " CLEAN".Green()));
-#endif
                 UpdateTiles();
             }
             else
@@ -173,63 +170,16 @@ namespace Code.UnitySlippyMap.Layers
 
         #endregion
 
-        #region Protected methods
-
-        /// <summary>
-        /// The tile address looked for.
-        /// </summary>
-        protected static string tileAddressLookedFor;
-
-        /// <summary>
-        /// Visited tiles match predicate.
-        /// </summary>
-        /// <returns><c>true</c>, if tile address matched, <c>false</c> otherwise.</returns>
-        /// <param name="tileAddress">Tile address.</param>
-        protected static bool visitedTilesMatchPredicate(string tileAddress)
-        {
-            if (tileAddress == tileAddressLookedFor)
-                return true;
-            return false;
-        }
-
-        #endregion
-
         #region Private methods
-
-        // private int curX;
-        // private int curY;
 
         private void UpdateTiles()
         {
-            int tileX, tileY;
-            int tileCountOnX, tileCountOnY;
-            float offsetX, offsetZ;
+            GetTileCountPerAxis(out var tileCountOnX, out _);
+            GetCenterTile(0, 0, out var tileX, out var tileY, out _, out _);
 
-            GetTileCountPerAxis(out tileCountOnX, out tileCountOnY);
-            GetCenterTile(0, 0, out tileX, out tileY, out _, out _);
-            // curX = tileX;
-            // curY = tileY;
-
-            //           WATCH.StartMeasure($"M {++_measureCounter}");
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX);
-//            WATCH.ShowMeasure($"M {_measureCounter}");
-            // Debug.Log(
-            //     $"CREATE: {ADDED_CREATETILE} -- LOAD: {ADDED_LOADTEXTURE} -- UNCHANGED: {ADDED_UNCHANGEDTILES} -- CHANGED: {ADDED_CHANGEDTILES} --- NoNeighbor: {ADDED_NEIGHTBOURFALSETILES}");
-            ADDED_CREATETILE = 0;
-            ADDED_LOADTEXTURE = 0;
-            ADDED_UNCHANGEDTILES = 0;
-            ADDED_CHANGEDTILES = 0;
-            ADDED_NEIGHTBOURFALSETILES = 0;
-        }
-
-        private static int _measureCounter = 0;
-        public static long ADDED_LOADTEXTURE = 0;
-        public static long ADDED_CREATETILE = 0;
-        public static long ADDED_UNCHANGEDTILES = 0;
-        public static long ADDED_CHANGEDTILES = 0;
-        public static long ADDED_NEIGHTBOURFALSETILES = 0;
-
-
+       }
+        
         // this is a new version of GrowTiles():
         void PrepareAndRequestTiles(int tileX, int tileY, int tileCountOnX)
         {
@@ -435,24 +385,7 @@ namespace Code.UnitySlippyMap.Layers
             int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX,
             out float nOffsetZ);
 
-        /// <summary>
-        /// Requests the tile's texture and assign it.
-        /// </summary>
-        /// <param name='tileX'>
-        /// Tile x.
-        /// </param>
-        /// <param name='tileY'>
-        /// Tile y.
-        /// </param>
-        /// <param name='roundedZoom'>
-        /// Rounded zoom.
-        /// </param>
-        /// <param name='tile'>
-        /// Tile.
-        /// </param>
-        //protected abstract void RequestTile(int tileX, int tileY, int roundedZoom, TileBehaviour tile);
-
-        /// <summary>
+       /// <summary>
         /// Cancels the request for the tile's texture.
         /// </summary>
         /// <param name='tileX'>
@@ -547,9 +480,7 @@ namespace Code.UnitySlippyMap.Layers
             //          Debug.Log($"TilePrepQueue DEQUEUE: {tilePreparationQueue.Count -1}".Yellow());
             return tilePreparationQueue.Dequeue();
         }
-
-        private float __offsetXOld;
-
+        
         void PrepareAndRequestTile(TilePrepareSpec tilePrepareSpec)
         {
             // correct east and west exceedance:
@@ -558,27 +489,13 @@ namespace Code.UnitySlippyMap.Layers
             else if (tilePrepareSpec.TileX >= tilePrepareSpec.TileCountOnX)
                 tilePrepareSpec.TileX -= tilePrepareSpec.TileCountOnX;
 
-            // int centerTileX, centerTileY;
-            // float offsetX, offsetZ;
             CalculateOffsets(tilePrepareSpec.CenterX, tilePrepareSpec.CenterY, out var offsetX, out var offsetZ);
-            // GetCenterTile(0, 0, out centerTileX, out centerTileY,
-            //     out offsetX, out offsetZ);
-            //
-            // float offSetPure = offsetX;
-            //
             offsetX += (tilePrepareSpec.TileX - tilePrepareSpec.CenterX) * tilePrepareSpec.HalfMapScale;
             offsetZ -= (tilePrepareSpec.TileY - tilePrepareSpec.CenterY) * tilePrepareSpec.HalfMapScale;
 
-            Debug.Log(
-                $"Offset X: {offsetX} centerX {tilePrepareSpec.CenterX} x: {tilePrepareSpec.TileX}, halfscale: {tilePrepareSpec.HalfMapScale}");
-            __offsetXOld = offsetX;
-
             if (tiles.ContainsKey(tilePrepareSpec.Adress) == false)
             {
-                WATCH.StartMeasure("createTile");
                 var tile = createTile(tilePrepareSpec.TileX, tilePrepareSpec.TileY);
-                ADDED_CREATETILE += WATCH.TakeMeasure("createTile");
-                //     tile.Showing = false;
                 tile.SetPosition(tilePrepareSpec.TileX, tilePrepareSpec.TileY, tilePrepareSpec.TileZ);
                 var transform1 = tile.transform;
                 transform1.position = new Vector3(offsetX, tileTemplate.transform.position.y,
@@ -589,16 +506,8 @@ namespace Code.UnitySlippyMap.Layers
                 tile.name = tilePrepareSpec.Adress;
                 tiles.Add(tilePrepareSpec.Adress, tile);
 
-                WATCH.StartMeasure("loadTexture");
                 Base.Instance.StartCoroutine(tile.LoadTexture());
-                ADDED_LOADTEXTURE += WATCH.TakeMeasure("loadTexture");
-                ADDED_CHANGEDTILES++;
-            }
-            else
-            {
-                ADDED_UNCHANGEDTILES++;
-                Debug.Log("TILE DIRECTLY REUSED".Red());
-            }
+             }
         }
 
         public void Update()

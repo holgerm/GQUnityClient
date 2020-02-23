@@ -1324,8 +1324,6 @@ namespace Code.UnitySlippyMap.Map
         /// <param name="zoomSpeed">Zoom speed.</param>
         public void Zoom(float zoomSpeed)
         {
-            Debug.Log($"ZOOM: {zoomSpeed}");
-            
             // apply the zoom
             CurrentZoom += zoomSpeed * Time.deltaTime;
 

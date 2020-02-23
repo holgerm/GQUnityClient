@@ -218,11 +218,6 @@ namespace Code.UnitySlippyMap.Layers
                     break;
             }
 
-            if (!ret)
-            {
-                ADDED_NEIGHTBOURFALSETILES++;
-            }
-
             return ret;
         }
 
