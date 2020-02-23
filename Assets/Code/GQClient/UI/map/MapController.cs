@@ -251,7 +251,7 @@ namespace Code.GQClient.UI.map
 			// create the location marker
 			GameObject go = TileBehaviour.CreateTileTemplate ().gameObject;
 			go.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
-			go.GetComponent<Renderer> ().material.renderQueue = 4000;
+			go.GetComponent<Renderer> ().material.renderQueue = 4002;
 			go.transform.localScale /= (ConfigurationManager.Current.mapScale * 4f) ; 
 
 			GameObject markerGO = Instantiate (go) as GameObject;
