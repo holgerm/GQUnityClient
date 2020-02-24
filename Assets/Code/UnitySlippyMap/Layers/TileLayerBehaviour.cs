@@ -191,7 +191,8 @@ namespace Code.UnitySlippyMap.Layers
             }
 
             // deactivate all but the current zoom level tile holders:
-            activateCurrentZoomLevelTilesOnly();
+            // activateCurrentZoomLevelTilesOnly();
+            SwitchZoomLevelTiles(MapBehaviour.RoundedZoom, true);
         }
 
         // this is a new version of GrowTiles():
@@ -274,15 +275,21 @@ namespace Code.UnitySlippyMap.Layers
             return parent;
         }
 
+        private void SwitchZoomLevelTiles(int zoomLevel, bool on)
+        {
+            Transform tileHolderForLevel = transform.Find(zoomLevel.ToString());
+            if (tileHolderForLevel != null)
+            {
+                tileHolderForLevel.gameObject.SetActive(on);
+                Debug.Log($"##################### SwitchZoomLevel: {zoomLevel} to {(on ? "ON" : "OFF")}");
+            }
+        }
+
         private void activateCurrentZoomLevelTilesOnly()
         {
             for (int i = (int) Math.Floor(Map.MinZoom); i <= (int) Math.Ceiling(Map.MaxZoom); i++)
             {
-                Transform tileHolderForLevel = this.transform.Find(i.ToString());
-                if (tileHolderForLevel != null)
-                {
-                    tileHolderForLevel.gameObject.SetActive(i == MapBehaviour.RoundedZoom);
-                }
+                SwitchZoomLevelTiles(i, i == MapBehaviour.RoundedZoom);
             }
         }
 
@@ -477,8 +484,11 @@ namespace Code.UnitySlippyMap.Layers
 
         private TilePrepareSpec DequeueTileForPreparation()
         {
-            //          Debug.Log($"TilePrepQueue DEQUEUE: {tilePreparationQueue.Count -1}".Yellow());
-            return tilePreparationQueue.Dequeue();
+            if (tilePreparationQueue.Count == 1)
+            {
+                activateCurrentZoomLevelTilesOnly();
+            }
+           return tilePreparationQueue.Dequeue();
         }
         
         void PrepareAndRequestTile(TilePrepareSpec tilePrepareSpec)
@@ -515,7 +525,9 @@ namespace Code.UnitySlippyMap.Layers
             for (int i = 0; i < 5; i++)
             {
                 if (tilePreparationQueue.Count == 0)
+                {
                     return;
+                }
 
                 PrepareAndRequestTile(DequeueTileForPreparation());
             }

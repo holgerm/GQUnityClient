@@ -153,8 +153,6 @@ namespace Code.GQClient.UI.map
 
 			// If further zooming OUT is not possible disable ZoomOutButton: 
 			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
-			
-			Debug.Log($"''''''''''''''''###################'''''''''''''''  out: {zoomOutButton.Enabled} in: {zoomInButton.Enabled}");
 		}
 
 		private LayerBehaviour MapLayer {

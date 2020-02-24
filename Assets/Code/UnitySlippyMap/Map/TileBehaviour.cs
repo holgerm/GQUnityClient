@@ -341,7 +341,6 @@ namespace Code.UnitySlippyMap.Map
             {
                 Destroy(MyMaterial.mainTexture);
                 MyMaterial.mainTexture = www.texture;
-              //  Showing = true;
 
                 if (shouldBeCached)
                 {
