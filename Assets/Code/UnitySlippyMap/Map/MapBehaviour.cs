@@ -357,7 +357,7 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// The minimum zoom level for this map.
         /// </summary>
-        private float minZoom = 3.0f;
+        private float minZoom = ConfigurationManager.Current.mapMinimalZoom;
 
         /// <summary>
         /// Gets or sets the minimum zoom.
