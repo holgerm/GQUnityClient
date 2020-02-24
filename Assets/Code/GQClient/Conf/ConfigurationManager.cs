@@ -12,7 +12,7 @@ namespace Code.GQClient.Conf
 	/// This class will completely replace the currently still used class Configuration 
 	/// and additionally offer any information which is currently entered manually in the Unity Inspector View.
 	/// </summary>
-	public class ConfigurationManager : MonoBehaviour
+	public class ConfigurationManager 
 	{
 
 		#region Initialize
