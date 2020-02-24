@@ -138,36 +138,23 @@ namespace Code.GQClient.UI.map
 		{
 			map.CurrentZoom = Math.Min (map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
 			map.Zoom (0f);
-			UpdateZoomButtons ();
 		}
 
 		public void ZoomOutButtonPressed ()
 		{
-#if DEBUG_LOG
-			Debug.Log("------------------------------------------------");
-			WATCH.Show("zoom", "ZoomOutButtonPressed #0");
-#endif
             map.CurrentZoom = Math.Max (map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
-#if DEBUG_LOG
-            WATCH.Show("zoom", "ZoomOutButtonPressed #1");
-#endif
             map.Zoom (0f);
-#if DEBUG_LOG
-			WATCH.Show("zoom", "ZoomOutButtonPressed #2");
-#endif
-            UpdateZoomButtons();
-#if DEBUG_LOG
-			WATCH.Show("zoom", "ZoomOutButtonPressed #3");
-#endif
 		}
 
-		private void UpdateZoomButtons ()
+		internal void UpdateZoomButtons ()
 		{
 			// If further zooming IN is not possible disable ZoomInButton: 
 			zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
 
 			// If further zooming OUT is not possible disable ZoomOutButton: 
 			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
+			
+			Debug.Log($"''''''''''''''''###################'''''''''''''''  out: {zoomOutButton.Enabled} in: {zoomInButton.Enabled}");
 		}
 
 		private LayerBehaviour MapLayer {
@@ -231,6 +218,7 @@ namespace Code.GQClient.UI.map
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
 			map.CurrentZoom = 15.0f;
+			map.mapCtrl = this;
 
 			Frame ();
 			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;

@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
+using Code.GQClient.UI.map;
 using Code.GQClient.Util.input;
 using Code.QM.Util;
 using Code.UnitySlippyMap.GUI;
@@ -41,6 +42,7 @@ using ProjNet.Converters.WellKnownText;
 using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
 using UnityEngine;
+using UnitySlippyMap.WMS;
 
 namespace Code.UnitySlippyMap.Map
 {
@@ -174,6 +176,8 @@ namespace Code.UnitySlippyMap.Map
         #endregion
 
         #region Variables & properties
+        
+        internal MapController mapCtrl { get; set; }
 
         /// <summary>
         /// The current camera used to render the map.
@@ -301,25 +305,22 @@ namespace Code.UnitySlippyMap.Map
             get { return currentZoom; }
             set
             {
-                if (value < minZoom
-                    || value > maxZoom)
-                {
-                    return;
-                }
-
-                if (currentZoom == value)
+                var usedValue = Math.Min(MaxZoom, value);
+                usedValue = Math.Max(MinZoom, usedValue);
+                
+                if (currentZoom == usedValue)
                     return;
 
-                currentZoom = value;
+                currentZoom = usedValue;
 
-                float diff = value - roundedZoom;
+                var diff = usedValue - roundedZoom;
                 if (diff > 0.0f && diff >= zoomStepLowerThreshold)
                     roundedZoom = (int) Mathf.Ceil(currentZoom);
                 else if (diff < 0.0f && diff <= -zoomStepUpperThreshold)
                     roundedZoom = (int) Mathf.Floor(currentZoom);
-
+                
+                mapCtrl?.UpdateZoomButtons();
                 UpdateInternals();
-
                 FitVerticalBorder();
             }
         }
@@ -345,21 +346,6 @@ namespace Code.UnitySlippyMap.Map
         private float zoomStepLowerThreshold = 0.2f;
 
         /// <summary>
-        /// Gets or sets the zoom step lower threshold.
-        /// </summary>
-        /// <value>The zoom step upper threshold determines if the zoom level of the map should change when zooming in.</value>
-        public float ZoomStepLowerThreshold
-        {
-            get { return zoomStepLowerThreshold; }
-            set { zoomStepLowerThreshold = value; }
-        }
-
-        /// <summary>
-        /// The minimum zoom level for this map.
-        /// </summary>
-        private float minZoom = ConfigurationManager.Current.mapMinimalZoom;
-
-        /// <summary>
         /// Gets or sets the minimum zoom.
         /// </summary>
         /// <value>
@@ -367,38 +353,9 @@ namespace Code.UnitySlippyMap.Map
         /// Inferior zoom values are clamped when setting the <see cref="UnitySlippyMap.Map.CurrentZoom"/>.
         /// Additionally, values are always clamped between 3 and 19.
         /// </value>
-        public float MinZoom
-        {
-            get { return minZoom; }
-            set
-            {
-                if (value < 3.0f
-                    || value > 19.0f)
-                {
-                    minZoom = Mathf.Clamp(value, 3.0f, 19.0f);
-                }
-                else
-                {
-                    minZoom = value;
-                }
+        public float MinZoom => ConfigurationManager.Current.mapMinimalZoom;
 
-                if (minZoom > maxZoom)
-                {
-#if DEBUG_LOG
-                    Debug.LogWarning(
-                        "WARNING: Map.MinZoom: clamp value [" + minZoom + "] to max zoom [" + maxZoom + "]");
-#endif
-                    minZoom = maxZoom;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The maximum zoom level for this map.
-        /// </summary>
-        private float maxZoom = 19.0f;
-
-        /// <summary>
+         /// <summary>
         /// Gets or sets the maximum zoom.
         /// </summary>
         /// <value>
@@ -406,31 +363,7 @@ namespace Code.UnitySlippyMap.Map
         /// Superior zoom values are clamped when setting the <see cref="UnitySlippyMap.Map.CurrentZoom"/>.
         /// Additionally, values are always clamped between 3 and 19.
         /// </value>
-        public float MaxZoom
-        {
-            get { return maxZoom; }
-            set
-            {
-                if (value < 3.0f
-                    || value > 19.0f)
-                {
-                    maxZoom = Mathf.Clamp(value, 3.0f, 19.0f);
-                }
-                else
-                {
-                    maxZoom = value;
-                }
-
-                if (maxZoom < minZoom)
-                {
-#if DEBUG_LOG
-                    Debug.LogWarning(
-                        "WARNING: Map.MaxZoom: clamp value [" + maxZoom + "] to min zoom [" + minZoom + "]");
-#endif
-                    maxZoom = minZoom;
-                }
-            }
-        }
+        public float MaxZoom => 19.0f;
 
         /// <summary>
         /// The rounded zoom.
@@ -760,7 +693,7 @@ namespace Code.UnitySlippyMap.Map
         private LocationMarkerBehaviour locationMarker;
 
         /// <summary>
-        /// The list of <see cref="UnitySlippyMap.Layer"/> instances.
+        /// The list of <see cref="Layer"/> instances.
         /// </summary>
         private List<LayerBehaviour> layers = new List<LayerBehaviour>();
 
@@ -1252,8 +1185,8 @@ namespace Code.UnitySlippyMap.Map
 
             // setup the layer
             layer.Map = this;
-            layer.MinZoom = minZoom;
-            layer.MaxZoom = maxZoom;
+            layer.MinZoom = MinZoom;
+            layer.MaxZoom = MaxZoom;
 
             // add the layer to the layers' list
             layers.Add(layer);
