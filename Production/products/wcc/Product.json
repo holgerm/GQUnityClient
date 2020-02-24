@@ -51,7 +51,7 @@
   "mapID": "mapbox.streets",
   "mapTileImageExtension": ".png",
   "useMapOffline": false,
-  "mapMinimalZoom": 7.0,
+  "mapMinimalZoom": 5.0,
   "mapDeltaZoom": 0.5,
   "mapScale": 1.5,
   "mapStartPositionType": "CenterOfMarkers",
