@@ -30,9 +30,7 @@ using System;
 using System.Collections;
 using System.IO;
 using Code.GQClient.Conf;
-using Code.GQClient.Err;
-using Code.GQClient.Util;
-using Code.QM.Util;
+using Code.UnitySlippyMap.Layers;
 using UnityEngine;
 
 namespace Code.UnitySlippyMap.Map
@@ -64,11 +62,6 @@ namespace Code.UnitySlippyMap.Map
 
         internal bool TextureIsDownloading;
         internal bool DownloadingTextureIsCancelled;
-
-        /// <summary>
-        /// The material.
-        /// </summary>
-        private Material material;
 
         /// <summary>
         /// The duration of the apparition.
@@ -256,11 +249,7 @@ namespace Code.UnitySlippyMap.Map
             Shader shader = Resources.Load<Shader>("LarkuUnlitTransparent");
             // was (did not work since 2019.2.6): Shader shader = Shader.Find (shaderName);
 
-#if DEBUG_LOG
-		Debug.Log("DEBUG: shader for tile template: " + shaderName + ", exists: " + (shader != null));
-#endif
-
-            tile.material = meshRenderer.material = new Material(shader);
+            meshRenderer.material = new Material(shader);
 
             // setup the collider
             boxCollider.size = new Vector3(1.0f, 0.0f, 1.0f);
@@ -309,7 +298,7 @@ namespace Code.UnitySlippyMap.Map
         public string oldName;
         public int reuses;
 
-        internal IEnumerator LoadTexture()
+        internal IEnumerator LoadTexture(TileLayerBehaviour tlb)
         {
             WWW www;
             TextureIsDownloading = true;
@@ -357,6 +346,7 @@ namespace Code.UnitySlippyMap.Map
             Showing = true;
             www.Dispose();
             TextureIsDownloading = false;
+            tlb.TileLoadingFinished(this);
         }
 
         private void EndWriteCallback(IAsyncResult ar)

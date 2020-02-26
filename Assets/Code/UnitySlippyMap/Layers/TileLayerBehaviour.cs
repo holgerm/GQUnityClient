@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.UI.map;
 using Code.GQClient.Util;
@@ -110,17 +111,28 @@ namespace Code.UnitySlippyMap.Layers
         /// </summary>
         private void Start()
         {
-            if (w == null)
-            {
-                w = new WATCH("tile");
-            }
-
-            w.Start();
-
             if (tileTemplate.transform.localScale.x != MapBehaviour.RoundedHalfMapScale)
                 tileTemplate.transform.localScale = new Vector3(MapBehaviour.RoundedHalfMapScale, 1.0f,
                     MapBehaviour.RoundedHalfMapScale);
+            
+            _tileParents = new Dictionary<int, Transform>();
+            for (int i = (int) Math.Floor(Map.MinZoom); i <= (int) Math.Ceiling(Map.MaxZoom); i++)
+            {
+                var levelT = new GameObject(i.ToString()).transform;
+                levelT.parent = this.transform;
+                _tileParents.Add(i, levelT);
+                levelT.gameObject.SetActive(false);
+            }
         }
+
+        private Dictionary<int, Transform> _tileParents;
+        
+        private Transform GetTileParent(int zoomLevel)
+        {
+            return _tileParents[zoomLevel];
+        }
+
+
 
         /// <summary>
         /// Implementation of <see cref="http://docs.unity3d.com/ScriptReference/MonoBehaviour.html">MonoBehaviour</see>.OnDestroy().
@@ -178,8 +190,8 @@ namespace Code.UnitySlippyMap.Layers
             GetCenterTile(0, 0, out var tileX, out var tileY, out _, out _);
 
             PrepareAndRequestTiles(tileX, tileY, tileCountOnX);
-       }
-        
+        }
+
         // this is a new version of GrowTiles():
         void PrepareAndRequestTiles(int tileX, int tileY, int tileCountOnX)
         {
@@ -189,22 +201,11 @@ namespace Code.UnitySlippyMap.Layers
             {
                 PrepareAndRequestTilesOnRing(tileX, tileY, tileCountOnX, i);
             }
-
-            // deactivate all but the current zoom level tile holders:
-            // activateCurrentZoomLevelTilesOnly();
-            SwitchZoomLevelTiles(MapBehaviour.RoundedZoom, true);
-        }
+       }
 
         // this is a new version of GrowTiles():
         void PrepareAndRequestTilesOnRing(int tileX, int tileY, int tileCountOnX, int ringNr)
         {
-            // for (int i = 1; i <= ringNr; i++)
-            // {
-            //     if (!GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-            //         NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
-            //         return;
-            // }
-
             // let n be the ringNr.
             // move into the start position, n tiles north of our center
             tileY -= ringNr;
@@ -216,8 +217,6 @@ namespace Code.UnitySlippyMap.Layers
             for (int i = 1; i <= ringNr; i++)
             {
                 tileX++;
-                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                //     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
                 EnqueueTileForPreparation(tileX, tileY, tileCountOnX);
             }
 
@@ -225,8 +224,6 @@ namespace Code.UnitySlippyMap.Layers
             for (int i = 1; i <= ringNr * 2; i++)
             {
                 tileY++;
-                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                //     NeighbourTileDirection.South, out tileX, out tileY, out offsetX, out offsetZ))
                 EnqueueTileForPreparation(tileX, tileY, tileCountOnX);
             }
 
@@ -234,8 +231,6 @@ namespace Code.UnitySlippyMap.Layers
             for (int i = 1; i <= ringNr * 2; i++)
             {
                 tileX--;
-                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                //     NeighbourTileDirection.West, out tileX, out tileY, out offsetX, out offsetZ))
                 EnqueueTileForPreparation(tileX, tileY, tileCountOnX);
             }
 
@@ -243,8 +238,6 @@ namespace Code.UnitySlippyMap.Layers
             for (int i = 1; i <= ringNr * 2; i++)
             {
                 tileY--;
-                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                //     NeighbourTileDirection.North, out tileX, out tileY, out offsetX, out offsetZ))
                 EnqueueTileForPreparation(tileX, tileY, tileCountOnX);
             }
 
@@ -252,44 +245,15 @@ namespace Code.UnitySlippyMap.Layers
             for (int i = 1; i < ringNr; i++)
             {
                 tileX++;
-                // if (GetNeighbourTile(tileX, tileY, offsetX, offsetZ, tileCountOnX, tileCountOnY,
-                //     NeighbourTileDirection.East, out tileX, out tileY, out offsetX, out offsetZ))
                 EnqueueTileForPreparation(tileX, tileY, tileCountOnX);
             }
         }
-
-        private static WATCH w;
-
-
-        private Transform getTileParent(int zoomLevel)
-        {
-            var parent = this.transform.Find(zoomLevel.ToString());
-
-            if (parent == null)
-            {
-                var parentGO = new GameObject(zoomLevel.ToString());
-                parent = parentGO.transform;
-                parent.parent = this.transform;
-            }
-
-            return parent;
-        }
-
-        private void SwitchZoomLevelTiles(int zoomLevel, bool on)
-        {
-            Transform tileHolderForLevel = transform.Find(zoomLevel.ToString());
-            if (tileHolderForLevel != null)
-            {
-                tileHolderForLevel.gameObject.SetActive(on);
-                Debug.Log($"##################### SwitchZoomLevel: {zoomLevel} to {(on ? "ON" : "OFF")}");
-            }
-        }
-
+        
         private void activateCurrentZoomLevelTilesOnly()
         {
             for (int i = (int) Math.Floor(Map.MinZoom); i <= (int) Math.Ceiling(Map.MaxZoom); i++)
             {
-                SwitchZoomLevelTiles(i, i == MapBehaviour.RoundedZoom);
+                _tileParents[i].gameObject.SetActive(i == MapBehaviour.RoundedZoom);
             }
         }
 
@@ -323,7 +287,7 @@ namespace Code.UnitySlippyMap.Layers
                     tile = TileObjectCache.Dequeue();
                 }
 
-                //    tile.Showing = false;
+                tile.Showing = false;
                 tiles.Remove(tile.name);
 
                 tile.reuses++;
@@ -392,7 +356,7 @@ namespace Code.UnitySlippyMap.Layers
             int tileCountOnY, NeighbourTileDirection dir, out int nTileX, out int nTileY, out float nOffsetX,
             out float nOffsetZ);
 
-       /// <summary>
+        /// <summary>
         /// Cancels the request for the tile's texture.
         /// </summary>
         /// <param name='tileX'>
@@ -484,13 +448,14 @@ namespace Code.UnitySlippyMap.Layers
 
         private TilePrepareSpec DequeueTileForPreparation()
         {
-            if (tilePreparationQueue.Count == 1)
-            {
-                activateCurrentZoomLevelTilesOnly();
-            }
-           return tilePreparationQueue.Dequeue();
+            // if (tilePreparationQueue.Count == 1)
+            // {
+            //     activateCurrentZoomLevelTilesOnly();
+            // }
+
+            return tilePreparationQueue.Dequeue();
         }
-        
+
         void PrepareAndRequestTile(TilePrepareSpec tilePrepareSpec)
         {
             // correct east and west exceedance:
@@ -511,13 +476,25 @@ namespace Code.UnitySlippyMap.Layers
                 transform1.position = new Vector3(offsetX, tileTemplate.transform.position.y,
                     offsetZ);
                 transform1.localScale = new Vector3(tilePrepareSpec.HalfMapScale, 1.0f, tilePrepareSpec.HalfMapScale);
-                tile.transform.parent = getTileParent(tilePrepareSpec.TileZ);
+                tile.transform.parent = GetTileParent(tilePrepareSpec.TileZ);
 
                 tile.name = tilePrepareSpec.Adress;
                 tiles.Add(tilePrepareSpec.Adress, tile);
 
-                Base.Instance.StartCoroutine(tile.LoadTexture());
-             }
+                Base.Instance.StartCoroutine(tile.LoadTexture(this));
+                tilesLoading.Add(tile);
+            }
+        }
+
+        private HashSet<TileBehaviour> tilesLoading = new HashSet<TileBehaviour>();
+
+        public void TileLoadingFinished(TileBehaviour tile)
+        {
+            tilesLoading.Remove(tile);
+            if (tilesLoading.Count == 0)
+            {
+                activateCurrentZoomLevelTilesOnly();
+            }
         }
 
         public void Update()

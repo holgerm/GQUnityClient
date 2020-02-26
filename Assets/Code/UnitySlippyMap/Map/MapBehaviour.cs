@@ -294,7 +294,7 @@ namespace Code.UnitySlippyMap.Map
         /// <summary>
         /// The current zoom.
         /// </summary>
-        private float currentZoom;
+        private float _currentZoom;
 
         /// <summary>
         /// Gets or sets the current zoom.
@@ -302,22 +302,22 @@ namespace Code.UnitySlippyMap.Map
         /// <value>When set, the map is refreshed.</value>
         public float CurrentZoom
         {
-            get { return currentZoom; }
+            get { return _currentZoom; }
             set
             {
                 var usedValue = Math.Min(MaxZoom, value);
                 usedValue = Math.Max(MinZoom, usedValue);
                 
-                if (currentZoom == usedValue)
+                if (CurrentZoom == usedValue)
                     return;
 
-                currentZoom = usedValue;
+                _currentZoom = usedValue;
 
                 var diff = usedValue - roundedZoom;
                 if (diff > 0.0f && diff >= zoomStepLowerThreshold)
-                    roundedZoom = (int) Mathf.Ceil(currentZoom);
+                    roundedZoom = (int) Mathf.Ceil(CurrentZoom);
                 else if (diff < 0.0f && diff <= -zoomStepUpperThreshold)
-                    roundedZoom = (int) Mathf.Floor(currentZoom);
+                    roundedZoom = (int) Mathf.Floor(CurrentZoom);
                 
                 mapCtrl?.UpdateZoomButtons();
                 UpdateInternals();
@@ -910,11 +910,11 @@ namespace Code.UnitySlippyMap.Map
             // FIXME: the 'division by 20000' helps the values to be kept in range for the Unity3D engine, not sure
             // this is the right approach either, feels kinda voodooish...
 
-            halfMapScale = GeoHelpers.OsmZoomLevelToMapScale(currentZoom, 0.0f, tileResolution, 72) / scaleDivider;
+            halfMapScale = GeoHelpers.OsmZoomLevelToMapScale(CurrentZoom, 0.0f, tileResolution, 72) / scaleDivider;
             roundedHalfMapScale =
                 GeoHelpers.OsmZoomLevelToMapScale(roundedZoom, 0.0f, tileResolution, 72) / scaleDivider;
 
-            metersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float) currentZoom);
+            metersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float) CurrentZoom);
             roundedMetersPerPixel = GeoHelpers.MetersPerPixel(0.0f, (float) roundedZoom);
 
             // FIXME: another voodoish value to help converting meters (EPSG 900913) to Unity3D world coordinates
@@ -1263,7 +1263,7 @@ namespace Code.UnitySlippyMap.Map
             // move the camera
             // FIXME: the camera jumps on the first zoom when tilted, because the cam altitude and zoom value are unsynced by the rotation
             Transform cameraTransform = currentCamera.transform;
-            float y = GeoHelpers.OsmZoomLevelToMapScale(currentZoom, 0.0f, tileResolution, 72) / scaleDivider *
+            float y = GeoHelpers.OsmZoomLevelToMapScale(CurrentZoom, 0.0f, tileResolution, 72) / scaleDivider *
                       (screenScale / ConfigurationManager.Current.mapScale);
             float t = y / cameraTransform.forward.y;
             cameraTransform.position = new Vector3(
