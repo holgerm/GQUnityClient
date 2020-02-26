@@ -168,14 +168,25 @@ namespace Code.GQClient.Util
         {
             partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
 
-#if DEBUG_LOG
             float w = Device.width / Device.dpi;
             float h = Device.height / Device.dpi;
             double d = Math.Sqrt(w * w + h * h);
-            string s = string.Format("Display size: {0} inch", d);
-            MessageDialog dialog = new MessageDialog(s, "Ok");
+            
+            Resolution[] resolutions = Screen.resolutions;
+            string resText = $"{resolutions.Length} resolutions: ";
+            int i = 0;
+
+            // Print the resolutions
+            foreach (var res in resolutions)
+            {
+                resText += $"res {++i} w: {res.width} h: {res.height}";
+            }
+
+            MessageDialog dialog = 
+                new MessageDialog(
+                    $"diagonale: {d} zoll, dpi: {Device.dpi}, width: {Device.width}, height: {Device.height} \n {resText}", 
+                    "Ok");
             dialog.Start();
-#endif
         }
 
         void Update()
@@ -186,7 +197,7 @@ namespace Code.GQClient.Util
                 Device.updateMockedLocation();
             }
             //#endif
-            
+
             // Debug.Log($"Frame {Time.frameCount}, Time: {Time.time}, Deltatime: {Time.deltaTime}".Yellow());
         }
 
