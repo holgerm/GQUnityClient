@@ -1,4 +1,4 @@
-﻿#define DEBUG_LOG
+﻿// #define DEBUG_LOG
 
 using System;
 using Code.GQClient.Model.pages;
@@ -20,9 +20,6 @@ namespace Code.GQClient.UI.pages.navigation
 		/// </summary>
 		public override void InitPage_TypeSpecific ()
 		{
-#if DEBUG_LOG
-			Debug.Log("NavigationController.Init-TypeSpecific() started.");
-#endif
 			LocationSensor.Instance.OnLocationUpdate += page.Quest.UpdateHotspotMarkers; // NEW: PROBLEM SOLVED?
 
             try

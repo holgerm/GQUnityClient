@@ -170,7 +170,7 @@ namespace Code.UnitySlippyMap.Map
         /// </summary>
         private void OnApplicationQuit()
         {
-            DestroyImmediate(this.gameObject);
+            Destroy(this.gameObject);
         }
 
         #endregion

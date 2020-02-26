@@ -215,7 +215,7 @@ namespace Code.GQClient.UI.map
 			// create the map singleton
 			map = MapBehaviour.Instance;
 			map.CurrentCamera = Camera.main;
-			map.CurrentZoom = 15.0f;
+			map.CurrentZoom = 15.0f; // TODO remove in case we are within a quest
 			map.mapCtrl = this;
 
 			Frame ();

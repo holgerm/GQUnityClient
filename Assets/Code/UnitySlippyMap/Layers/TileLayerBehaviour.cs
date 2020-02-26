@@ -139,11 +139,19 @@ namespace Code.UnitySlippyMap.Layers
         /// </summary>
         private void OnDestroy()
         {
-            --tileTemplateUseCount;
-
+            --tileTemplateUseCount; 
             // destroy the tile template if nobody is using anymore
             if (tileTemplate != null && tileTemplateUseCount == 0)
                 Destroy(tileTemplate);
+
+            TileBehaviour tile = TileObjectCache.Dequeue();
+            while (tile != null)
+            {
+                DestroyImmediate(tile.MyMaterial.mainTexture);
+                DestroyImmediate(tile);
+                tile = TileObjectCache.Dequeue();
+            }
+            TileObjectCache = null;
         }
 
         #endregion
@@ -272,6 +280,8 @@ namespace Code.UnitySlippyMap.Layers
         private TileBehaviour createTile(int x, int y)
         {
             TileBehaviour tile;
+            
+            Debug.Log($"TileObjectCache.Count : {TileObjectCache.Count}");
 
             if (TileObjectCache.Count < MaxTilesInMemory)
             {
@@ -319,14 +329,20 @@ namespace Code.UnitySlippyMap.Layers
             return needed;
         }
 
-        private Queue<TileBehaviour> _tileBehaviours;
+        private static Queue<TileBehaviour> _tileBehaviours;
 
-        private Queue<TileBehaviour> TileObjectCache
+        private static Queue<TileBehaviour> TileObjectCache
         {
+            set
+            {
+                if (value == null)
+                    _tileBehaviours = null;
+            }
             get
             {
                 if (_tileBehaviours == null)
                 {
+                    Debug.Log("NEW TILEBEHAVIOUR QUEUE".Red());
                     _tileBehaviours = new Queue<TileBehaviour>();
                 }
 

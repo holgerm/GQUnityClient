@@ -53,7 +53,10 @@ namespace Code.UnitySlippyMap.Map
         /// <value><c>true</c> if showing; otherwise, <c>false</c>.</value>
         public bool Showing
         {
-            get { return GetComponent<Renderer>().enabled; }
+            get
+            {
+                return GetComponent<Renderer>().enabled;
+            }
             set
             {
                 GetComponent<Renderer>().enabled = value;
@@ -81,9 +84,11 @@ namespace Code.UnitySlippyMap.Map
         {
             return string.Format("{0}/{1}/{2}", zPos, xPos, yPos);
         }
+
         #endregion
 
         #region Public enums
+
         /// <summary>
         /// The anchor points enumeration.
         /// </summary>
@@ -99,9 +104,11 @@ namespace Code.UnitySlippyMap.Map
             BottomCenter,
             BottomRight
         }
+
         #endregion
 
         #region Public methods
+
         public override string ToString()
         {
             return (string.Format("TileBehaviour: {0}, {1}, {2}", zPos, xPos, yPos));
@@ -155,93 +162,105 @@ namespace Code.UnitySlippyMap.Map
             switch (anchorPoint)
             {
                 case AnchorPoint.TopLeft:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (1.0f, 0.0f, 0.0f),
-                    new Vector3 (1.0f, 0.0f, -1.0f),
-                    new Vector3 (0.0f, 0.0f, -1.0f),
-                    new Vector3 (0.0f, 0.0f, 0.0f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(1.0f, 0.0f, 0.0f),
+                        new Vector3(1.0f, 0.0f, -1.0f),
+                        new Vector3(0.0f, 0.0f, -1.0f),
+                        new Vector3(0.0f, 0.0f, 0.0f)
+                    };
                     break;
                 case AnchorPoint.TopCenter:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (0.5f, 0.0f, 0.0f),
-                    new Vector3 (0.5f, 0.0f, -1.0f),
-                    new Vector3 (-0.5f, 0.0f, -1.0f),
-                    new Vector3 (-0.5f, 0.0f, 0.0f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(0.5f, 0.0f, 0.0f),
+                        new Vector3(0.5f, 0.0f, -1.0f),
+                        new Vector3(-0.5f, 0.0f, -1.0f),
+                        new Vector3(-0.5f, 0.0f, 0.0f)
+                    };
                     break;
                 case AnchorPoint.TopRight:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (0.0f, 0.0f, 0.0f),
-                    new Vector3 (0.0f, 0.0f, -1.0f),
-                    new Vector3 (-1.0f, 0.0f, -1.0f),
-                    new Vector3 (-1.0f, 0.0f, 0.0f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(0.0f, 0.0f, 0.0f),
+                        new Vector3(0.0f, 0.0f, -1.0f),
+                        new Vector3(-1.0f, 0.0f, -1.0f),
+                        new Vector3(-1.0f, 0.0f, 0.0f)
+                    };
                     break;
                 case AnchorPoint.MiddleLeft:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (1.0f, 0.0f, 0.5f),
-                    new Vector3 (1.0f, 0.0f, -0.5f),
-                    new Vector3 (0.0f, 0.0f, -0.5f),
-                    new Vector3 (0.0f, 0.0f, 0.5f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(1.0f, 0.0f, 0.5f),
+                        new Vector3(1.0f, 0.0f, -0.5f),
+                        new Vector3(0.0f, 0.0f, -0.5f),
+                        new Vector3(0.0f, 0.0f, 0.5f)
+                    };
                     break;
                 case AnchorPoint.MiddleRight:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (0.0f, 0.0f, 0.5f),
-                    new Vector3 (0.0f, 0.0f, -0.5f),
-                    new Vector3 (-1.0f, 0.0f, -0.5f),
-                    new Vector3 (-1.0f, 0.0f, 0.5f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(0.0f, 0.0f, 0.5f),
+                        new Vector3(0.0f, 0.0f, -0.5f),
+                        new Vector3(-1.0f, 0.0f, -0.5f),
+                        new Vector3(-1.0f, 0.0f, 0.5f)
+                    };
                     break;
                 case AnchorPoint.BottomLeft:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (1.0f, 0.0f, 1.0f),
-                    new Vector3 (1.0f, 0.0f, 0.0f),
-                    new Vector3 (0.0f, 0.0f, 0.0f),
-                    new Vector3 (0.0f, 0.0f, 1.0f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(1.0f, 0.0f, 1.0f),
+                        new Vector3(1.0f, 0.0f, 0.0f),
+                        new Vector3(0.0f, 0.0f, 0.0f),
+                        new Vector3(0.0f, 0.0f, 1.0f)
+                    };
                     break;
                 case AnchorPoint.BottomCenter:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (0.5f, 0.0f, 1.0f),
-                    new Vector3 (0.5f, 0.0f, 0.0f),
-                    new Vector3 (-0.5f, 0.0f, 0.0f),
-                    new Vector3 (-0.5f, 0.0f, 1.0f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(0.5f, 0.0f, 1.0f),
+                        new Vector3(0.5f, 0.0f, 0.0f),
+                        new Vector3(-0.5f, 0.0f, 0.0f),
+                        new Vector3(-0.5f, 0.0f, 1.0f)
+                    };
                     break;
                 case AnchorPoint.BottomRight:
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (0.0f, 0.0f, 1.0f),
-                    new Vector3 (0.0f, 0.0f, 0.0f),
-                    new Vector3 (-1.0f, 0.0f, 0.0f),
-                    new Vector3 (-1.0f, 0.0f, 1.0f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(0.0f, 0.0f, 1.0f),
+                        new Vector3(0.0f, 0.0f, 0.0f),
+                        new Vector3(-1.0f, 0.0f, 0.0f),
+                        new Vector3(-1.0f, 0.0f, 1.0f)
+                    };
                     break;
                 default: // MiddleCenter
-                    mesh.vertices = new Vector3[] {
-                    new Vector3 (0.5f, 0.0f, 0.5f),
-                    new Vector3 (0.5f, 0.0f, -0.5f),
-                    new Vector3 (-0.5f, 0.0f, -0.5f),
-                    new Vector3 (-0.5f, 0.0f, 0.5f)
-                };
+                    mesh.vertices = new Vector3[]
+                    {
+                        new Vector3(0.5f, 0.0f, 0.5f),
+                        new Vector3(0.5f, 0.0f, -0.5f),
+                        new Vector3(-0.5f, 0.0f, -0.5f),
+                        new Vector3(-0.5f, 0.0f, 0.5f)
+                    };
                     break;
             }
-            mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+
+            mesh.triangles = new int[] {0, 1, 2, 0, 2, 3};
 
             // add normals
-            mesh.normals = new Vector3[] {
+            mesh.normals = new Vector3[]
+            {
                 Vector3.up,
                 Vector3.up,
                 Vector3.up,
                 Vector3.up
             };
             // add uv coordinates
-            mesh.uv = new Vector2[] {
-                new Vector2 (1.0f, 1.0f),
-                new Vector2 (1.0f, 0.0f),
-                new Vector2 (0.0f, 0.0f),
-                new Vector2 (0.0f, 1.0f)
+            mesh.uv = new Vector2[]
+            {
+                new Vector2(1.0f, 1.0f),
+                new Vector2(1.0f, 0.0f),
+                new Vector2(0.0f, 0.0f),
+                new Vector2(0.0f, 1.0f)
             };
 
             // add a material
@@ -268,6 +287,9 @@ namespace Code.UnitySlippyMap.Map
         {
             get
             {
+                if (this == null)
+                    return null;
+
                 if (_myMaterial == null)
                 {
                     _myMaterial = GetComponent<Renderer>().material;
@@ -304,11 +326,11 @@ namespace Code.UnitySlippyMap.Map
             TextureIsDownloading = true;
             string ext = ".png";
             bool shouldBeCached;
-            string tileDirPath = 
+            string tileDirPath =
                 $"{Application.persistentDataPath}/tilecache/{zPos.ToString()}/{xPos.ToString()}";
             string tileCachePath =
                 $"{tileDirPath}/{yPos.ToString()}.png";
-            
+
             var begin = DateTime.Now.Ticks;
             if (File.Exists(tileCachePath))
             {
@@ -325,7 +347,7 @@ namespace Code.UnitySlippyMap.Map
             {
                 yield return null;
             }
-            
+
             if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
             {
                 Destroy(MyMaterial.mainTexture);
@@ -353,7 +375,6 @@ namespace Code.UnitySlippyMap.Map
         {
             throw new NotImplementedException();
         }
-
 
         #endregion
     }
