@@ -52,6 +52,15 @@ namespace Code.GQClient.UI.layout
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     break;
+                case TextUsageType.TitleCentered:
+                    TextElement.alignment = TextAlignmentOptions.Center;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.85f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.95f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.lineSpacing = config.lineSpacing;
+                    break;
                 case TextUsageType.Paragraph:
                     TextElement.alignment = mapAlignment(config.textAlignment);
                     TextElement.enableAutoSizing = false;
@@ -218,6 +227,7 @@ namespace Code.GQClient.UI.layout
         DialogTitle = 7,
         DialogMessage = 8,
         CopyRight = 9,
-        SettingsOption = 10
+        SettingsOption = 10,
+        TitleCentered = 11
     }
 }
