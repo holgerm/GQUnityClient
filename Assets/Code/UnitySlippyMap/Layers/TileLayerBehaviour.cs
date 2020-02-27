@@ -144,11 +144,15 @@ namespace Code.UnitySlippyMap.Layers
             if (tileTemplate != null && tileTemplateUseCount == 0)
                 Destroy(tileTemplate);
 
-            TileBehaviour tile = TileObjectCache.Dequeue();
+            if (TileObjectCache.Count == 0) 
+                return;
+            
+            var tile = TileObjectCache.Dequeue();
             while (tile != null)
             {
                 DestroyImmediate(tile.MyMaterial.mainTexture);
                 DestroyImmediate(tile);
+                if (TileObjectCache.Count > 0)
                 tile = TileObjectCache.Dequeue();
             }
             TileObjectCache = null;
