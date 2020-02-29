@@ -365,6 +365,7 @@ namespace GQClient.Model
 
             string startView = ConfigurationManager.Current.questInfoViews[0];
             Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
+            Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
             Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
             Base.Instance.MapHolder.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
 

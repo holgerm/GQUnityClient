@@ -790,7 +790,12 @@ namespace Code.GQClient.Conf
             autoStartQuestID = 0;
             autostartIsPredeployed = false;
             keepAutoStarting = true;
-            questInfoViews = new string[] { QuestInfoView.List.ToString(), QuestInfoView.Map.ToString() };
+            questInfoViews = new string[]
+            {
+                QuestInfoView.List.ToString(), 
+                QuestInfoView.TopicTree.ToString(),
+                QuestInfoView.Map.ToString()
+            };
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
             cloudQuestsVisible = true;
             showCloudQuestsImmediately = false;
@@ -946,7 +951,8 @@ namespace Code.GQClient.Conf
     public enum QuestInfoView
     {
         List,
-        Map
+        Map,
+        TopicTree
     }
 
     public enum MapStartPositionType

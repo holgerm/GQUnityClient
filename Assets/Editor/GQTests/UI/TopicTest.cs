@@ -1,5 +1,6 @@
 using System;
 using Code.GQClient.UI.Foyer;
+using GQClient.Model;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -272,5 +273,125 @@ namespace GQTests.UI
             Assert.IsTrue(Topic.Cursor.Children.Exists(topic => topic.Name == "u1"));
             Assert.IsTrue(Topic.Cursor.Children.Exists(topic => topic.Name == "u2"));
         }
+
+        [Test]
+        public void AddSameAgain()
+        {
+            Assert.AreEqual(0, Topic.Cursor.Children.Count);
+            Topic.Create("r1");
+            Assert.AreEqual(1, Topic.Cursor.Children.Count);
+            Topic.Create("r1");
+            Assert.AreEqual(1, Topic.Cursor.Children.Count);
+
+            Topic.Create("r1/s1");
+            Topic.CursorSetTo("r1");
+            Assert.AreEqual(1, Topic.Cursor.Children.Count);
+            Topic.Create("r1/s1");
+            Assert.AreEqual(1, Topic.Cursor.Children.Count);
+            Topic.Create("r1/s2");
+            Assert.AreEqual(2, Topic.Cursor.Children.Count);
+            Topic.Create("r1/s2");
+            Assert.AreEqual(2, Topic.Cursor.Children.Count);
+            Topic.Create("r1/s1");
+            Topic.Create("r1/s1");
+            Topic.Create("r1/s2");
+            Topic.Create("r1/s2");
+            Assert.AreEqual(2, Topic.Cursor.Children.Count);
+            
+            Topic.Create("r2/s1/t1/u1");
+            Topic.Create("r2/s1/t1/u1");
+            Topic.Create("r2/s1/t1/u1");
+            Topic.Create("r2/s1/t1/u1");
+            Topic.CursorSetTo("r2/s1/t1");
+            Assert.AreEqual(1, Topic.Cursor.Children.Count);
+            
+            Topic.Create("r2/s1/t1/u2");
+            Topic.Create("r2/s1/t1/u2");
+            Topic.Create("r2/s1/t1/u2");
+            Topic.Create("r2/s1/t1/u2");
+            Assert.AreEqual(2, Topic.Cursor.Children.Count);
+        }
+
+        [Test]
+        public void Leaves()
+        {
+            Topic.Create("r2/s1/t1/u2");
+            Assert.That(Topic.Cursor.IsEmpty);
+            Topic.CursorSetTo("r2/s1/t1/u2");
+            Assert.That(Topic.Cursor.IsEmpty);
+            
+            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(1));
+            Assert.IsFalse(Topic.Cursor.IsEmpty);
+            Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
+            
+            // add same questinfo again should not change number:
+            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(1));
+            Assert.IsFalse(Topic.Cursor.IsEmpty);
+            Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
+            
+            // add another questinfo changes number:
+            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(2));
+            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(3));
+            Assert.AreEqual(3, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 1));
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 3));
+            
+            // removing the middle one:
+            Assert.IsTrue(Topic.Cursor.RemoveQuestFromTopic(new TestQuestInfo(2)));
+            Assert.AreEqual(2, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsFalse(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
+            
+            // remove the other two:
+            Assert.IsTrue(Topic.Cursor.RemoveQuestFromTopic(new TestQuestInfo(1)));
+            Assert.IsTrue(Topic.Cursor.RemoveQuestFromTopic(new TestQuestInfo(3)));
+            Assert.IsTrue(Topic.Cursor.IsEmpty);
+        }
+
+        [Test]
+        public void CollectLeavesAlongPath()
+        {
+            var a1b1 = Topic.Create("a1/b1");
+            var a1b2 = Topic.Create("a1/b2");
+            var a2 = Topic.Create("a2");
+            a1b1.AddQuestToTopic(new TestQuestInfo(1));
+            a1b2.AddQuestToTopic(new TestQuestInfo(2));
+            a2.AddQuestToTopic(new TestQuestInfo(3));
+
+            // check leaves:
+            Topic.CursorSetTo("a1/b1");
+            Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 1));
+
+            Topic.CursorSetTo("a1/b2");
+            Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
+
+            Topic.CursorSetTo("a2");
+            Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 3));
+
+            // check inner nodes:
+            Topic.CursorSetTo("a1");
+            Assert.AreEqual(2, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 1));
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
+         
+            Topic.CursorHome();
+            Assert.AreEqual(3, Topic.Cursor.NumberOfQuestInfos);
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 1));
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
+            Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 3));
+        }
+
+        private class TestQuestInfo : QuestInfo
+        {
+            public TestQuestInfo(int id)
+            {
+                Id = id;
+            }
+        }
     }
+    
+    
 }

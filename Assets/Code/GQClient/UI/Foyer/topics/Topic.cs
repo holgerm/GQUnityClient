@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using UnityEngine;
+using Code.GQClient.Model.mgmt.quests;
+using GQClient.Model;
 
 namespace Code.GQClient.UI.Foyer
 {
@@ -15,7 +13,7 @@ namespace Code.GQClient.UI.Foyer
             Root = new Topic("", Null);
             CursorHome();
         }
-        
+
         public static void ClearAll()
         {
             Roots.Clear();
@@ -29,9 +27,10 @@ namespace Code.GQClient.UI.Foyer
             {
                 if (Parent == null || Parent == Null)
                     return "";
-                
+
                 if (Parent == Root)
-                    return Name;
+                    return Name
+                        ;
 
                 return Parent.FullName + "/" + Name;
             }
@@ -74,8 +73,73 @@ namespace Code.GQClient.UI.Foyer
             {
                 if (_children == null)
                     _children = new List<Topic>();
-
                 return _children;
+            }
+        }
+
+        private List<QuestInfo> _questInfos;
+
+        protected List<QuestInfo> QuestInfos
+        {
+            get
+            {
+                if (_questInfos == null)
+                    _questInfos = new List<QuestInfo>();
+                return _questInfos;
+            }
+        }
+
+        public int NumberOfQuestInfos
+        {
+            get { return QuestInfos.Count + Children.Sum(topic => topic.NumberOfQuestInfos); }
+        }
+
+        /// <summary>
+        /// Returns all QuestInfo assigned to this topic and subtopics. Each QuestInfo is contained only once.
+        /// </summary>
+        /// <returns></returns>
+        public QuestInfo[] GetQuestInfos()
+        {
+            List<QuestInfo> gatheredInfos = new List<QuestInfo>(NumberOfQuestInfos);
+            GetQuestInfosRecursive(gatheredInfos);
+            return gatheredInfos.ToArray();
+        }
+
+        protected void GetQuestInfosRecursive(List<QuestInfo> questInfos)
+        {
+            foreach (var childTopic in Children)
+            {
+                childTopic.GetQuestInfosRecursive(questInfos);
+            }
+
+            foreach (var info in QuestInfos.Where(info => !questInfos.Contains(info)))
+            {
+                questInfos.Add(info);
+            }
+       }
+
+        public void AddQuestToTopic(QuestInfo questInfo)
+        {
+            if (!QuestInfos.Exists(info => info.Id == questInfo.Id))
+                QuestInfos.Add(questInfo);
+        }
+
+        public bool RemoveQuestFromTopic(QuestInfo questInfo)
+        {
+            var qi = QuestInfos.Find(info => info.Id == questInfo.Id);
+            if (qi != null)
+                return QuestInfos.Remove(qi);
+            return false;
+        }
+
+        public bool IsEmpty
+        {
+            get
+            {
+                if (QuestInfos.Count > 0)
+                    return false;
+
+                return Children.Aggregate(true, (current, topic) => current & topic.IsEmpty);
             }
         }
 
@@ -90,11 +154,16 @@ namespace Code.GQClient.UI.Foyer
             Parent = parent;
         }
 
+        /// <summary>
+        /// Creates a solitaire topic, without any leaves (quest infos) contained.
+        /// </summary>
+        /// <param name="topicPath"></param>
+        /// <returns></returns>
         public static Topic Create(string topicPath)
         {
             if (string.IsNullOrEmpty(topicPath))
                 return Null;
-            
+
             var segments = topicPath.Split('/');
             if (segments.Length == 0)
                 return Null;
@@ -106,14 +175,14 @@ namespace Code.GQClient.UI.Foyer
                 if (trimmedSegments[i] == "")
                     return Null;
             }
-            
+
             return CreateRecursive(Root, new List<string>(trimmedSegments));
         }
 
         private static Topic CreateRecursive(Topic baseTopic, List<string> nameSegments)
         {
-            var firstPartTopic = 
-                baseTopic.Children.Find(topic => topic.Name == nameSegments.First()) 
+            var firstPartTopic =
+                baseTopic.Children.Find(topic => topic.Name == nameSegments.First())
                 ?? new Topic(nameSegments.First(), baseTopic);
 
             if (nameSegments.Count > 1)
@@ -141,9 +210,9 @@ namespace Code.GQClient.UI.Foyer
 
         public static readonly Topic Null;
 
-         private class NullTopic : Topic
+        private class NullTopic : Topic
         {
-            protected internal NullTopic() : base()
+            protected internal NullTopic()
             {
                 Name = "";
             }

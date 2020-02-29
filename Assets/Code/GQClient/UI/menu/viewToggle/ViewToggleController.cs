@@ -45,6 +45,7 @@ namespace Code.GQClient.UI.menu.viewToggle
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
 			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
+			Base.Instance.TopicTreeCanvas.SetActive (viewer.name == "ViewToggleToTopicTree");
 			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
 			Base.Instance.MapHolder.SetActive (viewer.name == "ViewToggleToMap");
 

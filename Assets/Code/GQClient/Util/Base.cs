@@ -24,6 +24,7 @@ namespace Code.GQClient.Util
         #region Inspector Global Values
 
         public GameObject ListCanvas;
+        public GameObject TopicTreeCanvas;
         public GameObject MapCanvas;
         public GameObject MapHolder;
         public GameObject MenuCanvas;

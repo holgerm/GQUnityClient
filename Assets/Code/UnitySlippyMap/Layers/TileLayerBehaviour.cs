@@ -285,7 +285,7 @@ namespace Code.UnitySlippyMap.Layers
         {
             TileBehaviour tile;
             
-            Debug.Log($"TileObjectCache.Count : {TileObjectCache.Count}");
+//            Debug.Log($"TileObjectCache.Count : {TileObjectCache.Count}");
 
             if (TileObjectCache.Count < MaxTilesInMemory)
             {
@@ -346,7 +346,7 @@ namespace Code.UnitySlippyMap.Layers
             {
                 if (_tileBehaviours == null)
                 {
-                    Debug.Log("NEW TILEBEHAVIOUR QUEUE".Red());
+//                    Debug.Log("NEW TILEBEHAVIOUR QUEUE".Red());
                     _tileBehaviours = new Queue<TileBehaviour>();
                 }
 
