@@ -320,18 +320,18 @@ namespace GQTests.UI
             Topic.CursorSetTo("r2/s1/t1/u2");
             Assert.That(Topic.Cursor.IsEmpty);
             
-            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(1));
+            Topic.Cursor.AddQuest(new TestQuestInfo(1));
             Assert.IsFalse(Topic.Cursor.IsEmpty);
             Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
             
             // add same questinfo again should not change number:
-            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(1));
+            Topic.Cursor.AddQuest(new TestQuestInfo(1));
             Assert.IsFalse(Topic.Cursor.IsEmpty);
             Assert.AreEqual(1, Topic.Cursor.NumberOfQuestInfos);
             
             // add another questinfo changes number:
-            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(2));
-            Topic.Cursor.AddQuestToTopic(new TestQuestInfo(3));
+            Topic.Cursor.AddQuest(new TestQuestInfo(2));
+            Topic.Cursor.AddQuest(new TestQuestInfo(3));
             Assert.AreEqual(3, Topic.Cursor.NumberOfQuestInfos);
             Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 1));
             Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
@@ -354,9 +354,9 @@ namespace GQTests.UI
             var a1b1 = Topic.Create("a1/b1");
             var a1b2 = Topic.Create("a1/b2");
             var a2 = Topic.Create("a2");
-            a1b1.AddQuestToTopic(new TestQuestInfo(1));
-            a1b2.AddQuestToTopic(new TestQuestInfo(2));
-            a2.AddQuestToTopic(new TestQuestInfo(3));
+            a1b1.AddQuest(new TestQuestInfo(1));
+            a1b2.AddQuest(new TestQuestInfo(2));
+            a2.AddQuest(new TestQuestInfo(3));
 
             // check leaves:
             Topic.CursorSetTo("a1/b1");

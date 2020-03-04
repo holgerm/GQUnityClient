@@ -6,9 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//using UnityEngine.Events;
-
-
 namespace Code.GQClient.UI.Foyer.questinfos
 {
 
@@ -177,7 +174,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             QuestInfoUICListElement ctrl = go.GetComponent<QuestInfoUICListElement>();
 
             // set info button as configured:
-            ctrl.setCategorySymbol(qInfo);
+            ctrl.setCategorySymbol(qInfo); // TODO ist das doppelt gemacht?
 
             // set data and event management:
             ctrl.data = qInfo;

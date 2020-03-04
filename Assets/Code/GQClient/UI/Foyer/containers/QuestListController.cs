@@ -24,77 +24,77 @@ namespace Code.GQClient.UI.Foyer.containers
 
         #region React on Events
 
-        public override void OnQuestInfoChanged(object sender, QuestInfoChangedEvent e)
+        protected override void AddedInfo(QuestInfoChangedEvent e)
         {
-#if DEBUG_LOG
-            Debug.Log("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString());
-#endif
             QuestInfoUIC qiCtrl;
-            switch (e.ChangeType)
+            qiCtrl =
+                QuestInfoUICListElement.Create(
+                    root: InfoList.gameObject,
+                    qInfo: e.NewQuestInfo,
+                    containerController: this
+                ).GetComponent<QuestInfoUICListElement>();
+            QuestInfoControllers.Add(e.NewQuestInfo.Id, qiCtrl);
+            qiCtrl.Show();
+            updateListSorting();
+        }
+
+        protected override void ChangedInfo(QuestInfoChangedEvent e)
+        {
+            QuestInfoUIC qiCtrl;
+
+            //				if (e.OldQuestInfo == null || !QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
+            //					Log.SignalErrorToDeveloper (
+            //						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
+            //						e.OldQuestInfo.Id
+            //					);
+            //					break;
+            //				}
+            if (e.NewQuestInfo == null || !QuestInfoControllers.TryGetValue(e.NewQuestInfo.Id, out qiCtrl))
             {
-                case ChangeType.AddedInfo:
-                    qiCtrl =
-                        QuestInfoUICListElement.Create(
-                            root: InfoList.gameObject,
-                            qInfo: e.NewQuestInfo,
-                            containerController: this
-                        ).GetComponent<QuestInfoUICListElement>();
-                    QuestInfoControllers.Add(e.NewQuestInfo.Id, qiCtrl);
-                    qiCtrl.Show();
-                    updateListSorting();
-                    break;
-                case ChangeType.ChangedInfo:
-                    //				if (e.OldQuestInfo == null || !QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
-                    //					Log.SignalErrorToDeveloper (
-                    //						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
-                    //						e.OldQuestInfo.Id
-                    //					);
-                    //					break;
-                    //				}
-                    if (e.NewQuestInfo == null || !QuestInfoControllers.TryGetValue(e.NewQuestInfo.Id, out qiCtrl))
-                    {
-                        Log.SignalErrorToDeveloper(
-                            "Quest Info Controller for quest id {0} not found when a Change event occurred.",
-                            e.NewQuestInfo.Id
-                        );
-                        break;
-                    }
-
-                    //				if (e.OldQuestInfo.Id != e.NewQuestInfo.Id) {
-                    //					Log.SignalErrorToDeveloper (
-                    //						"Quest Info Controller for quest id {0} got an update that changed the id to {1} which is not allowed and will be ignored.",
-                    //						e.NewQuestInfo.Id, e.NewQuestInfo.Id
-                    //					);
-                    //					break;
-                    //				}
-                    qiCtrl.UpdateData(e.NewQuestInfo);
-                    qiCtrl.Show();
-                    updateListSorting();
-                    break;
-                case ChangeType.RemovedInfo:
-                    if (!QuestInfoControllers.TryGetValue(e.OldQuestInfo.Id, out qiCtrl))
-                    {
-                        Log.SignalErrorToDeveloper(
-                            "Quest Info Controller for quest id {0} not found when a Remove event occurred.",
-                            e.OldQuestInfo.Id
-                        );
-                        break;
-                    }
-
-                    qiCtrl.Hide();
-                    QuestInfoControllers.Remove(e.OldQuestInfo.Id);
-                    updateElementOrderLayout();
-                    break;
-                case ChangeType.ListChanged:
-                    RegenerateAll();
-                    break;
-                case ChangeType.FilterChanged:
-                    RegenerateAllAfterFilterChanged();
-                    break;
-                case ChangeType.SorterChanged:
-                    updateListSorting();
-                    break;
+                Log.SignalErrorToDeveloper(
+                    "Quest Info Controller for quest id {0} not found when a Change event occurred.",
+                    e.NewQuestInfo.Id
+                );
+                return;
             }
+
+            //				if (e.OldQuestInfo.Id != e.NewQuestInfo.Id) {
+            //					Log.SignalErrorToDeveloper (
+            //						"Quest Info Controller for quest id {0} got an update that changed the id to {1} which is not allowed and will be ignored.",
+            //						e.NewQuestInfo.Id, e.NewQuestInfo.Id
+            //					);
+            //					break;
+            //				}
+            qiCtrl.UpdateData(e.NewQuestInfo);
+            qiCtrl.Show();
+            updateListSorting();
+        }
+
+        protected override void RemovedInfo(QuestInfoChangedEvent e)
+        {
+            QuestInfoUIC qiCtrl;
+            if (!QuestInfoControllers.TryGetValue(e.OldQuestInfo.Id, out qiCtrl))
+            {
+                Log.SignalErrorToDeveloper(
+                    "Quest Info Controller for quest id {0} not found when a Remove event occurred.",
+                    e.OldQuestInfo.Id
+                );
+                return;
+            }
+
+            qiCtrl.Hide();
+            QuestInfoControllers.Remove(e.OldQuestInfo.Id);
+            updateElementOrderLayout();
+        }
+
+        protected override void FilterChanged()
+        {
+            RegenerateAllAfterFilterChanged();
+        }
+
+        protected override void SorterChanged()
+        {
+            updateListSorting();
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Code.GQClient.UI.Foyer.containers
         /// <summary>
         /// Updates the view.
         /// </summary>
-        public override void RegenerateAll()
+        protected override void ListChanged()
         {
             Base.Instance.StartCoroutine(regenerateAllAsCoroutine());
         }
@@ -260,23 +260,6 @@ namespace Code.GQClient.UI.Foyer.containers
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "StartButton", fgColor: fgCol);
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "DeleteButton", fgColor: fgCol);
                 FoyerListLayoutConfig.SetQuestInfoEntryLayout(qic.gameObject, "UpdateButton", fgColor: fgCol);
-            }
-        }
-
-        /// <summary>
-        /// Assumes no element is new and no element has been removed, but their state or the context for showing them has changed.
-        /// </summary>
-        public override void UpdateElementViews()
-        {
-            CoroutineStarter.Run(UpdateElementViewsAsCoroutine());
-        }
-
-        private IEnumerator UpdateElementViewsAsCoroutine()
-        {
-            foreach (KeyValuePair<int, QuestInfoUIC> kvp in QuestInfoControllers)
-            {
-                kvp.Value.UpdateView();
-                yield return null;
             }
         }
 

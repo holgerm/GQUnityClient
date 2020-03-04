@@ -118,7 +118,7 @@ namespace Code.GQClient.UI.Foyer
             }
        }
 
-        public void AddQuestToTopic(QuestInfo questInfo)
+        public void AddQuest(QuestInfo questInfo)
         {
             if (!QuestInfos.Exists(info => info.Id == questInfo.Id))
                 QuestInfos.Add(questInfo);
