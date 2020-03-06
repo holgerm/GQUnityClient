@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Code.GQClient.Model.mgmt.quests;
+using Code.QM.Util;
 using GQClient.Model;
+using UnityEditor;
 
 namespace Code.GQClient.UI.Foyer
 {
@@ -10,7 +11,7 @@ namespace Code.GQClient.UI.Foyer
         static Topic()
         {
             Null = new NullTopic();
-            Root = new Topic("", Null);
+            Root = new Topic("Alle Themen", Null);
             CursorHome();
         }
 
@@ -89,9 +90,29 @@ namespace Code.GQClient.UI.Foyer
             }
         }
 
-        public int NumberOfQuestInfos
+        public int NumberOfOwnQuestInfos => QuestInfos.Count;
+
+        public int NumberOfAllQuestInfos
         {
-            get { return QuestInfos.Count + Children.Sum(topic => topic.NumberOfQuestInfos); }
+            get
+            {
+                var gatheredInfoIds = new List<int>();
+                NumberOfAllQuestInfosRecursive(gatheredInfoIds);
+                return gatheredInfoIds.Count;
+            }
+        }
+
+        protected void NumberOfAllQuestInfosRecursive(List<int> gatheredQuestInfoIds)
+        {
+            foreach (var child in Children)
+            {
+                child.NumberOfAllQuestInfosRecursive(gatheredQuestInfoIds);
+            }
+
+            foreach (var info in QuestInfos.Where(info => !gatheredQuestInfoIds.Contains(info.Id)))
+            {
+                gatheredQuestInfoIds.Add(info.Id);
+            }
         }
 
         /// <summary>
@@ -100,7 +121,7 @@ namespace Code.GQClient.UI.Foyer
         /// <returns></returns>
         public QuestInfo[] GetQuestInfos()
         {
-            List<QuestInfo> gatheredInfos = new List<QuestInfo>(NumberOfQuestInfos);
+            List<QuestInfo> gatheredInfos = new List<QuestInfo>(NumberOfAllQuestInfos);
             GetQuestInfosRecursive(gatheredInfos);
             return gatheredInfos.ToArray();
         }
@@ -116,12 +137,47 @@ namespace Code.GQClient.UI.Foyer
             {
                 questInfos.Add(info);
             }
-       }
+        }
 
-        public void AddQuest(QuestInfo questInfo)
+        public void AddQuestInfo(QuestInfo questInfo)
         {
             if (!QuestInfos.Exists(info => info.Id == questInfo.Id))
                 QuestInfos.Add(questInfo);
+        }
+
+        public static void InsertQuestInfo(QuestInfo questInfo)
+        {
+            foreach (var topicPath in questInfo.Topics)
+            {
+                Create(topicPath).AddQuestInfo(questInfo);
+            }
+        }
+
+        public static bool RemoveQuestInfo(QuestInfo questInfo, bool clean = false)
+        {
+            var tmp = Topic.Cursor;
+            var success = false;
+            foreach (var topicPath in questInfo.Topics)
+            {
+                if (CursorSetTo(topicPath))
+                {
+                    success |= Cursor.QuestInfos.Remove(questInfo);
+
+                    if (clean)
+                    {
+                        if (Cursor.QuestInfos.Count == 0 && Cursor.IsLeaf)
+                        {
+                            var tpToDelete = Cursor;
+                            CursorMoveUp();
+                            Cursor.Children.Remove(tpToDelete);
+                        }
+                    }
+                }
+            }
+
+            Cursor = tmp;
+
+            return success;
         }
 
         public bool RemoveQuestFromTopic(QuestInfo questInfo)
@@ -139,7 +195,10 @@ namespace Code.GQClient.UI.Foyer
                 if (QuestInfos.Count > 0)
                     return false;
 
-                return Children.Aggregate(true, (current, topic) => current & topic.IsEmpty);
+                var result = true;
+                foreach (var child in Children)
+                    result &= child.IsEmpty;
+                return result;
             }
         }
 
@@ -218,7 +277,20 @@ namespace Code.GQClient.UI.Foyer
             }
         }
 
-        public static Topic Cursor { get; set; }
+        private static Topic _cursor;
+
+        public static Topic Cursor
+        {
+            get => _cursor;
+            private set
+            {
+                if (Cursor != value)
+                {
+                    _cursor = value;
+                    RaiseOnCursorChanged();
+                }
+            }
+        }
 
         public static bool CursorMoveDown(string childName)
         {
@@ -239,6 +311,13 @@ namespace Code.GQClient.UI.Foyer
 
             Cursor = Cursor.Parent;
             return true;
+        }
+
+        public static event VoidToVoid OnCursorChanged;
+
+        private static void RaiseOnCursorChanged()
+        {
+            OnCursorChanged?.Invoke();
         }
 
         public static void CursorHome()

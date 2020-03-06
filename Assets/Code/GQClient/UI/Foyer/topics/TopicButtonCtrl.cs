@@ -1,0 +1,37 @@
+﻿using Code.GQClient.UI;
+using Code.GQClient.UI.Foyer;
+using Code.GQClient.UI.menu.categories;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+[RequireComponent(typeof(Button))]
+public class TopicButtonCtrl : PrefabController
+{
+    private const string PREFAB = "TopicButton";
+
+    public static TopicButtonCtrl Create (GameObject root, Topic topic)
+    {
+        // Create the view object for this controller:
+        var go = PrefabController.Create ("prefabs", PREFAB, root);
+        go.name = PREFAB + " (" + topic.Name + ")";
+
+        var topicCtrl = go.GetComponent<TopicButtonCtrl> ();
+        topicCtrl._topic = topic;
+        topicCtrl.text.text = topic.Name;
+        // TODO: set color
+        
+        topicCtrl.gameObject.SetActive(true);
+
+        return topicCtrl;
+    }
+    
+    public TMP_Text text;
+
+    private Topic _topic;
+    
+    public void OnTopicSelected()
+    {
+        Topic.CursorMoveDown(_topic.Name);
+    }
+}

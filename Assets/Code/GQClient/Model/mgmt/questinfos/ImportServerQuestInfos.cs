@@ -25,10 +25,10 @@ namespace GQClient.Model
         {
 
             // we make a separate list of ids of all old quest infos:
-            List<int> oldIDsToBeRemoved = new List<int>(qim.QuestDict.Keys);
+            var oldIDsToBeRemoved = new List<int>(qim.QuestDict.Keys);
 
             // we create new qi elements and keep those we can reuse. We remove those from our helper list.
-            foreach (QuestInfo newInfo in newQuests)
+            foreach (var newInfo in newQuests)
             {
                 QuestInfo oldInfo = null;
                 if (qim.QuestDict.TryGetValue(newInfo.Id, out oldInfo))
@@ -36,7 +36,7 @@ namespace GQClient.Model
                     // this new element was already there, hence we keep it (remove from the remove list) and update if newer:
                     oldIDsToBeRemoved.Remove(newInfo.Id);
 
-                    if (oldInfo.TimeStamp < newInfo.ServerTimeStamp)
+                    if (oldInfo.TimeStamp == null || oldInfo.TimeStamp < newInfo.ServerTimeStamp)
                     {
                         qim.UpdateInfo(newInfo);
                     }
@@ -48,7 +48,7 @@ namespace GQClient.Model
             }
 
             // now in the helper list only the old elements that are not mentioned in the new list anymore are left. Hence we delete them:
-            foreach (int oldID in oldIDsToBeRemoved)
+            foreach (var oldID in oldIDsToBeRemoved)
             {
                 if (ConfigurationManager.Current.autoSynchQuestInfos)
                 {

@@ -438,7 +438,7 @@ namespace GQClient.Model
             {
                 if (_topics == null)
                 {
-                    Topics = TopicTreeReader.ReadTopicsFromMetadata(Metadata);
+                    Topics = TopicTreeReader.ReadTopicsFromMetadata(this);
                 }
 
                 return _topics;

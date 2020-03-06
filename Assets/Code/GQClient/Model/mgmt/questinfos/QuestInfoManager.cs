@@ -161,15 +161,30 @@ namespace GQClient.Model
 
         public void UpdateInfo(QuestInfo changedInfo)
         {
-            QuestInfo oldInfo = null;
-            if (QuestDict.TryGetValue(changedInfo.Id, out oldInfo))
+            if (!QuestDict.TryGetValue(changedInfo.Id, out var oldInfo))
             {
-                oldInfo.QuestInfoHasBeenUpdatedTo(changedInfo);
+                Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because ot was not found locally.",
+                    changedInfo.Id);
+                return;
             }
-            else
+
+            oldInfo.QuestInfoHasBeenUpdatedTo(changedInfo);
+
+            // React also as container to a change info event
+            if (Filter.Accept(oldInfo))
             {
-                Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because ot was not found locally.", changedInfo.Id);
+                // Run through filter and raise event if involved
+
+                raiseDataChange(
+                    new QuestInfoChangedEvent(
+                        message: $"Info for quest {oldInfo.Name} changed.",
+                        type: ChangeType.ChangedInfo,
+                        newQuestInfo: changedInfo,
+                        oldQuestInfo: oldInfo
+                    )
+                );
             }
+
         }
 
         public void RemoveInfo(int oldInfoID)
@@ -190,7 +205,7 @@ namespace GQClient.Model
 
             oldInfo.Dispose();
             QuestDict.Remove(oldInfoID);
-
+            
             if (Filter.Accept(oldInfo))
             {
                 // Run through filter and raise event if involved

@@ -8,23 +8,41 @@ namespace GQClient.Model
     public class TopicTreeReader
     {
 
-        public static List<string> ReadTopicsFromMetadata(MetaDataInfo[] metadata)
+        public static List<string> ReadTopicsFromMetadata(QuestInfo qi)
         {
-
             var topics = new List<string>();
-            string netVal;
-            foreach (var md in metadata)
+            
+            // read current metadata:
+            if (qi.Metadata != null)
             {
-                switch (md.Key)
+                foreach (var md in qi.Metadata)
                 {
-                    case "topic":
-                        netVal = md.Value.StripQuotes();
-                        if (netVal != "")
-                            topics.Add(netVal);
-                        break;
-                 }
+                    ReadMd(md, topics);
+                }
             }
-           return topics;
+            
+            // read new server info metadata:
+            if (qi.NewVersionOnServer != null && qi.NewVersionOnServer.Metadata != null)
+            {
+                foreach (var md in qi.NewVersionOnServer.Metadata)
+                {
+                    ReadMd(md, topics);
+                }
+            }
+
+            return topics;
+        }
+
+        private static void ReadMd(MetaDataInfo md, List<string> topics)
+        {
+            switch (md.Key)
+            {
+                case "topic":
+                    string netVal = md.Value.StripQuotes();
+                    if (netVal != "" && !topics.Contains(netVal))
+                        topics.Add(netVal);
+                    break;
+            }
         }
     }
 
