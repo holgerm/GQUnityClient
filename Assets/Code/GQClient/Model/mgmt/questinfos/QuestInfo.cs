@@ -443,7 +443,7 @@ namespace GQClient.Model
 
                 return _topics;
             }
-            set { _topics = value; }
+            set => _topics = value;
         }
 
         

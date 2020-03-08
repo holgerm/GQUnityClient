@@ -6,7 +6,7 @@ using Code.GQClient.UI.author;
 namespace GQClient.Model
 {
 
-    public abstract class QuestInfoFilter
+    public abstract partial class QuestInfoFilter
     {
 
         public delegate void OnFilterChanged();

@@ -149,10 +149,11 @@ namespace GQClient.Model
             if (Filter.Accept(newInfo))
             {
                 // Run through filter and raise event if involved:
-                raiseDataChange(
+                onDataChange?.Invoke(
+                    this,
                     new QuestInfoChangedEvent(
-                        String.Format("Info for quest {0} added.", newInfo.Name),
-                        ChangeType.AddedInfo,
+                        $"Info for quest {newInfo.Name} added.",
+                        type: ChangeType.AddedInfo,
                         newQuestInfo: newInfo
                     )
                 );
@@ -175,7 +176,8 @@ namespace GQClient.Model
             {
                 // Run through filter and raise event if involved
 
-                raiseDataChange(
+                onDataChange?.Invoke(
+                    this,
                     new QuestInfoChangedEvent(
                         message: $"Info for quest {oldInfo.Name} changed.",
                         type: ChangeType.ChangedInfo,
@@ -210,10 +212,11 @@ namespace GQClient.Model
             {
                 // Run through filter and raise event if involved
 
-                raiseDataChange(
+                onDataChange?.Invoke(
+                    this,
                     new QuestInfoChangedEvent(
-                        String.Format("Info for quest {0} removed.", oldInfo.Name),
-                        ChangeType.RemovedInfo,
+                        $"Info for quest {oldInfo.Name} removed.",
+                        type: ChangeType.RemovedInfo,
                         oldQuestInfo: oldInfo
                     )
                 );
@@ -321,19 +324,6 @@ namespace GQClient.Model
             }
         }
 
-        public int HowManyListerners()
-        {
-            return onDataChange.GetInvocationList().Length;
-        }
-
-
-
-        public virtual void raiseDataChange(QuestInfoChangedEvent e)
-        {
-            if (onDataChange != null)
-                onDataChange(this, e);
-        }
-
         #endregion
 
 
@@ -406,6 +396,9 @@ namespace GQClient.Model
 
             // init local quests filter:
             FilterAnd(QuestInfoFilter.LocalQuestInfosFilter.Instance);
+            
+            // init TopicFilter:
+            FilterAnd(TopicFilter.Instance);
 
             // init category filters:
             CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
@@ -420,7 +413,10 @@ namespace GQClient.Model
             GameObject menuContent = Base.Instance.MenuTopLeftContent;
             foreach (CategorySet catSet in ConfigurationManager.Current.CategorySets)
             {
-                CategoryTreeCtrl.Create(menuContent, CategoryFilters[catSet.name], catSet.categories);
+                CategoryTreeCtrl.Create(
+                    root: menuContent, 
+                    catFilter: CategoryFilters[catSet.name], 
+                    categories: catSet.categories);
             }
         }
 
@@ -450,6 +446,11 @@ namespace GQClient.Model
             OldQuestInfo = oldQuestInfo;
         }
 
+        public override string ToString()
+        {
+            var message = $"{ChangeType}: {Message}";
+            return message;
+        }
     }
 
     public enum ChangeType

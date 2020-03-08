@@ -118,7 +118,7 @@ namespace Code.GQClient.UI.Foyer.containers
                     yield return null;
             }
 
-            updateElementOrderLayout();
+            updateElementOrderLayout(); // TODO word sehr oft aufgerufen!!!
         }
 
         /// <summary>
@@ -161,10 +161,10 @@ namespace Code.GQClient.UI.Foyer.containers
             QuestInfoControllers.Clear();
 
             //int steps = 0;
-            foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos())
+            foreach (QuestInfo info in qim.GetFilteredQuestInfos())
             {
                 // create new list elements
-                QuestInfoUICListElement qiCtrl =
+                var qiCtrl =
                     QuestInfoUICListElement.Create(
                         root: InfoList.gameObject,
                         qInfo: info,

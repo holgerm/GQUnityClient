@@ -1,4 +1,5 @@
 using System.Text;
+using Code.GQClient.Util;
 using GQClient.Model;
 using TMPro;
 using UnityEngine;
@@ -20,28 +21,48 @@ namespace Code.GQClient.UI.Foyer.containers
         private new void Start()
         {
             base.Start();
-            Topic.OnCursorChanged += UpdateView;
+            Topic.OnCursorChanged += SetDirty;
             Topic.CursorHome();
         }
+        
+        private static bool _dirtyTopicTree;
+
+        internal static void SetDirty()
+        {
+            _dirtyTopicTree = true;
+        }
+
+        private void LateUpdate()
+        {
+            if (_dirtyTopicTree)
+            {
+                UpdateView();
+            }
+        }
+
+
 
         /// <summary>
         /// Update the Topic Tree View to reflect a change in the topic tree model.
         /// </summary>
         private void UpdateView()
         {
+            Debug.Log("Topic Tree Ctrl: UpdateView()");
             upwardButton.enabled = 
                 Topic.Cursor.Parent != Topic.Null;
             forwardButton.enabled = false;
             topicName.text = Topic.Cursor.Name;
             
-            if(Topic.Cursor.Children.Count > 0)
+            if (Topic.Cursor.Children.Count > 0)
                 ShowTopicArea();
             else
             {
                 topicArea.SetActive(false);
             }
-            
+
             questInfoArea.SetActive(Topic.Cursor.NumberOfOwnQuestInfos > 0);
+                
+            _dirtyTopicTree = false;
         }
         
         protected override void SorterChanged()
@@ -66,15 +87,15 @@ namespace Code.GQClient.UI.Foyer.containers
                 }
             }
             var t = Topic.Cursor;
-            
-            UpdateView();
+
+            SetDirty();
         }
 
         private void ShowTopicArea()
         {
             // clean topic area:
             var rootT = topicContentRoot.transform;
-            for (int i = 0; i < rootT.childCount; i++)
+            for (var i = 0; i < rootT.childCount; i++)
             {
                 var childGo = rootT.GetChild(i).gameObject;
                 childGo.SetActive(false);
@@ -84,7 +105,7 @@ namespace Code.GQClient.UI.Foyer.containers
             // create topic buttons:
             foreach (var topic in Topic.Cursor.Children)
             {
-                var topicButtonCtrl = TopicButtonCtrl.Create(topicContentRoot, topic);
+                TopicButtonCtrl.Create(topicContentRoot, topic);
             }
             
             // show topic area:
@@ -93,21 +114,18 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected override void RemovedInfo(QuestInfoChangedEvent e)
         {
-            Topic.RemoveQuestInfo(e.OldQuestInfo);
-            ShowTopicArea();
+            Topic.RemoveQuestInfo(e.OldQuestInfo, true);
         }
 
         protected override void ChangedInfo(QuestInfoChangedEvent e)
         {
-            Topic.RemoveQuestInfo(e.OldQuestInfo);
+            Topic.RemoveQuestInfo(e.OldQuestInfo, true);
             Topic.InsertQuestInfo(e.NewQuestInfo);
-            ShowTopicArea();
         }
 
         protected override void AddedInfo(QuestInfoChangedEvent e)
         {
             Topic.InsertQuestInfo(e.NewQuestInfo);
-            ShowTopicArea();
         }
 
         /// <summary>

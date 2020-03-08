@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Code.GQClient.Util;
 using Code.QM.Util;
 using GQClient.Model;
 using UnityEditor;
@@ -211,6 +212,8 @@ namespace Code.GQClient.UI.Foyer
         {
             Name = name;
             Parent = parent;
+            if (Parent == Cursor)
+                OnCursorChanged?.Invoke();
         }
 
         /// <summary>
@@ -287,10 +290,12 @@ namespace Code.GQClient.UI.Foyer
                 if (Cursor != value)
                 {
                     _cursor = value;
-                    RaiseOnCursorChanged();
+                    OnCursorChanged?.Invoke();
                 }
             }
         }
+
+        public static event VoidToVoid OnCursorChanged;
 
         public static bool CursorMoveDown(string childName)
         {
@@ -311,13 +316,6 @@ namespace Code.GQClient.UI.Foyer
 
             Cursor = Cursor.Parent;
             return true;
-        }
-
-        public static event VoidToVoid OnCursorChanged;
-
-        private static void RaiseOnCursorChanged()
-        {
-            OnCursorChanged?.Invoke();
         }
 
         public static void CursorHome()
