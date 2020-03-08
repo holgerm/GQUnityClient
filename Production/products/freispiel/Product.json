@@ -19,7 +19,7 @@
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
     "TopicTree",
-    "Map"
+    "List"
   ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
