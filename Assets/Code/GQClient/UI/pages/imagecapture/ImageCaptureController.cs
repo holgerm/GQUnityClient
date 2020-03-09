@@ -18,10 +18,8 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.imagecapture
 {
-
     public class ImageCaptureController : PageController
     {
-
         #region Inspector Features
 
         public TextMeshProUGUI text;
@@ -36,7 +34,6 @@ namespace Code.GQClient.UI.pages.imagecapture
         #endregion
 
 
-
         #region Runtime API
 
         protected PageImageCapture myPage;
@@ -46,7 +43,7 @@ namespace Code.GQClient.UI.pages.imagecapture
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
-            myPage = (PageImageCapture)page;
+            myPage = (PageImageCapture) page;
 
             // show the task and button:
             if (myPage.Task != null && myPage.Task != "")
@@ -98,7 +95,7 @@ namespace Code.GQClient.UI.pages.imagecapture
                 Log.SignalErrorToUser(
                     "Your device does not offer a {0} camera, os we can only use what we get: the default camera.",
                     myPage.PreferFrontCam ? "front" : "rear"
-                    );
+                );
             }
 
             cameraTexture = new WebCamTexture(deviceName, 3000, 2000);
@@ -130,8 +127,10 @@ namespace Code.GQClient.UI.pages.imagecapture
                 else
                 {
                     // the user did obviously not give us permission, hence we need to skip this page or even quest TODO
-                    Log.SignalErrorToUser("Without permission to access the camera we can not proceed correctly with the current quest.");
+                    Log.SignalErrorToUser(
+                        "Without permission to access the camera we can not proceed correctly with the current quest.");
                 }
+
                 yield return null;
             }
 
@@ -142,7 +141,8 @@ namespace Code.GQClient.UI.pages.imagecapture
             // rotate if needed:
             camRawImage.transform.rotation *= Quaternion.AngleAxis(cameraTexture.videoRotationAngle, Vector3.back);
 
-            camIsRotated = Math.Abs(cameraTexture.videoRotationAngle) == 90 || Math.Abs(cameraTexture.videoRotationAngle) == 270;
+            camIsRotated = Math.Abs(cameraTexture.videoRotationAngle) == 90 ||
+                           Math.Abs(cameraTexture.videoRotationAngle) == 270;
 
             float camHeight = (camIsRotated ? cameraTexture.width : cameraTexture.height);
             float camWidth = (camIsRotated ? cameraTexture.height : cameraTexture.width);
@@ -165,12 +165,12 @@ namespace Code.GQClient.UI.pages.imagecapture
 
             camRawImage.transform.localScale = new Vector3(widthScale, heightScale * mirrorAdjustment, 1F);
 
-            camRawImage.texture = cameraTexture;   // TODO evtl. auf zwischen speicherung verzichten und direkt in camRawImage.texture anlegen?
+            camRawImage.texture =
+                cameraTexture; // TODO evtl. auf zwischen speicherung verzichten und direkt in camRawImage.texture anlegen?
         }
 
         public void TakeSnapshot()
         {
-
             Texture2D photo;
 
             // we add 360 degrees to avoid any negative values:
@@ -194,7 +194,7 @@ namespace Code.GQClient.UI.pages.imagecapture
                     break;
             }
 
-            rotatedClockwiseQuarters /= 90;  // going from degrees to quarters
+            rotatedClockwiseQuarters /= 90; // going from degrees to quarters
             rotatedClockwiseQuarters %= 4; // reducing to 0, 1 ,2 or 3 quarters
 
             cameraTexture.Pause();
@@ -221,6 +221,7 @@ namespace Code.GQClient.UI.pages.imagecapture
                     photo.SetPixels(pixels);
                     break;
             }
+
             photo.Apply();
 
             SaveTextureToCamera(photo);
@@ -242,29 +243,27 @@ namespace Code.GQClient.UI.pages.imagecapture
             // save media info for local file under the pseudo variable (e.g. @_imagecapture):
             myPage.Quest.MediaStore[GQML.PREFIX_RUNTIME_MEDIA + myPage.File] =
                 new MediaInfo(
-                myPage.Quest.Id,
-                GQML.PREFIX_RUNTIME_MEDIA + myPage.File,
-                QuestManager.GetRuntimeMediaPath(myPage.Quest.Id),
-                filename
-            );
+                    myPage.Quest.Id,
+                    GQML.PREFIX_RUNTIME_MEDIA + myPage.File,
+                    QuestManager.GetRuntimeMediaPath(myPage.Quest.Id),
+                    filename
+                );
 
             // TODO save to mediainfos.json again
-
-            if (File.Exists(filepath))
-                Debug.Log("CAMERA: Shot saved to file: " + filepath);
-            else
-                Debug.Log("CAMERA: ERROR tring to save shot to file: " + filepath);
-
+            
             NativeGallery.Permission permission = NativeGallery.RequestPermission();
-            if (permission == NativeGallery.Permission.Denied && NativeGallery.CanOpenSettings())
+            if (permission == NativeGallery.Permission.Denied)
             {
-                NativeGallery.OpenSettings();
+                if (NativeGallery.CanOpenSettings())
+                {
+                    NativeGallery.OpenSettings();
+                }
             }
-            permission = NativeGallery.SaveImageToGallery(texture, ConfigurationManager.Current.name, filename);
-            Debug.Log("PHOTO EXPORTED: " + permission.ToString());
 
+            permission = NativeGallery.SaveImageToGallery(texture, ConfigurationManager.Current.name, filename);
             Destroy(texture); // avoid memory leaks
         }
+
         #endregion
     }
 }

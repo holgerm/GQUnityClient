@@ -105,16 +105,13 @@ namespace Code.GQClient.Model.expressions
                 return GetReadOnlyVariableValue(varName);
             }
 
-            Value foundValue;
-            if (variables.TryGetValue(varName, out foundValue))
+            if (variables.TryGetValue(varName, out var foundValue))
             {
                 return foundValue;
             }
-            else
-            {
-                Log.WarnAuthor("Variable {0} was not found.", varName);
-                return Value.Null;
-            }
+
+            Log.WarnAuthor("Variable {0} was not found.", varName);
+            return Value.Null;
         }
 
         public static void Clear(bool clearAlsoUpperCaseVariables = true)
