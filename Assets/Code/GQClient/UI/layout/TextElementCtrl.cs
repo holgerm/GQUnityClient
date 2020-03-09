@@ -153,6 +153,16 @@ namespace Code.GQClient.UI.layout
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = config.lineSpacing;
                     break;
+                case TextUsageType.TopicButton:
+                    TextElement.color = config.paletteFGColor;
+                    TextElement.alignment = TextAlignmentOptions.Center;
+                    TextElement.enableAutoSizing = true;
+                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
+                    TextElement.fontStyle = FontStyles.Bold;
+                    TextElement.enableWordWrapping = true;
+                    TextElement.lineSpacing = config.lineSpacing;
+                    break;
                 default:
                     break;
             }
@@ -228,6 +238,7 @@ namespace Code.GQClient.UI.layout
         DialogMessage = 8,
         CopyRight = 9,
         SettingsOption = 10,
-        TitleCentered = 11
+        TitleCentered = 11,
+        TopicButton = 12
     }
 }

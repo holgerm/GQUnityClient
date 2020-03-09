@@ -744,7 +744,7 @@ namespace GQ.Editor.UI
 
             if (accordingEditorPart == null)
             {
-                Log.SignalErrorToDeveloper("Unhandled property Type: {0} ({1})", curPropInfo.PropertyType.Name, className);
+                Log.SignalErrorToDeveloper($"Unhandled property Type: {curPropInfo.PropertyType.Name} ({className})");
                 return false;
             }
 
@@ -921,6 +921,40 @@ namespace GQ.Editor.UI
             {
                 configIsDirty = true;
                 curPropInfo.SetValue(ProductEditor.SelectedConfig, newColorVal, null);
+            }
+
+            return configIsDirty;
+        }
+    }
+
+
+    public class ProductEditorPart4Color32Array : ProductEditorPart
+    {
+
+        protected override bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+
+            if (ProductEditor.SelectedConfig.colorPaletteSize > 10)
+                ProductEditor.SelectedConfig.colorPaletteSize = 10;
+            
+            var oldColorValues = (Color32[])curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            var newColorValues = new Color32[10];
+            for (var i = 0; i < 10; i++)
+            {
+                newColorValues[i] =
+                    i < oldColorValues.Length ? oldColorValues[i] : ProductEditor.SelectedConfig.mainBgColor;
+            }
+
+            // show Color fields:
+            for (var i = 0; i < ProductEditor.SelectedConfig.colorPaletteSize; i++)
+            {
+                  newColorValues[i] = EditorGUILayout.ColorField(NamePrefixGUIContent, oldColorValues[i]);
+            }
+            if (!newColorValues.Equals(oldColorValues))
+            {
+                configIsDirty = true;
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, newColorValues, null);
             }
 
             return configIsDirty;

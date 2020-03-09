@@ -1,4 +1,5 @@
 using System.Text;
+using Code.GQClient.Conf;
 using Code.GQClient.Util;
 using GQClient.Model;
 using TMPro;
@@ -47,7 +48,6 @@ namespace Code.GQClient.UI.Foyer.containers
         /// </summary>
         private void UpdateView()
         {
-            Debug.Log("Topic Tree Ctrl: UpdateView()");
             upwardButton.enabled = 
                 Topic.Cursor.Parent != Topic.Null;
             forwardButton.enabled = false;
@@ -102,6 +102,7 @@ namespace Code.GQClient.UI.Foyer.containers
                 Destroy(childGo);
             }
 
+            Config.ResetColorPalette();
             // create topic buttons:
             foreach (var topic in Topic.Cursor.Children)
             {

@@ -1,4 +1,5 @@
-﻿using Code.GQClient.UI;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.UI;
 using Code.GQClient.UI.Foyer;
 using Code.GQClient.UI.menu.categories;
 using TMPro;
@@ -19,7 +20,8 @@ public class TopicButtonCtrl : PrefabController
         var topicCtrl = go.GetComponent<TopicButtonCtrl> ();
         topicCtrl._topic = topic;
         topicCtrl.text.text = topic.Name;
-        // TODO: set color
+        var topicImage = go.GetComponent<Image>();
+        topicImage.color = ConfigurationManager.Current.NextPaletteColor;
         
         topicCtrl.gameObject.SetActive(true);
 
