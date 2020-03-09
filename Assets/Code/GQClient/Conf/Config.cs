@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEditor;
 using UnityEngine;
+
 #if UNITY_EDITOR
 
 #endif
@@ -19,6 +20,7 @@ namespace Code.GQClient.Conf
     public class Config
     {
         #region Parse Helper
+
         public static bool __JSON_Currently_Parsing = false;
 
         public static Config _doDeserializeConfig(string configText)
@@ -28,14 +30,17 @@ namespace Code.GQClient.Conf
             Config.__JSON_Currently_Parsing = false;
             return config;
         }
+
         #endregion
 
         //////////////////////////////////
         // THE ACTUAL PRODUCT CONFIG DATA:
 
         #region StartScene Layout
+
         // Content is shown in special area of editor
         public bool preserveAspectOfSplashFG { get; set; }
+
         #endregion
 
 
@@ -44,17 +49,13 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor(StartSection = "General:")]
         public string id { get; set; }
 
-        [ShowInProductEditor]
-        public string idExtension { get; set; }
+        [ShowInProductEditor] public string idExtension { get; set; }
 
-        [ShowInProductEditor]
-        public string name { get; set; }
+        [ShowInProductEditor] public string name { get; set; }
 
-        [ShowInProductEditor]
-        public int portal { get; set; }
+        [ShowInProductEditor] public int portal { get; set; }
 
-        [ShowInProductEditor]
-        public string[] assetAddOns { get; set; }
+        [ShowInProductEditor] public string[] assetAddOns { get; set; }
 
 #if UNITY_EDITOR
         [ShowInProductEditor]
@@ -62,36 +63,27 @@ namespace Code.GQClient.Conf
         public AndroidSdkVersions androidMinSDKVersion { get; set; }
 #endif
 
-        [ShowInProductEditor]
-        public int autoStartQuestID { get; set; }
+        [ShowInProductEditor] public int autoStartQuestID { get; set; }
 
-        [ShowInProductEditor]
-        public bool autostartIsPredeployed { get; set; }
+        [ShowInProductEditor] public bool autostartIsPredeployed { get; set; }
 
-        [ShowInProductEditor]
-        public bool keepAutoStarting { get; set; }
+        [ShowInProductEditor] public bool keepAutoStarting { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public DownloadStrategy downloadStrategy { get; set; }
 
-        [ShowInProductEditor]
-        public long timeoutMS { get; set; }
+        [ShowInProductEditor] public long timeoutMS { get; set; }
 
-        [ShowInProductEditor]
-        public long maxIdleTimeMS { get; set; }
+        [ShowInProductEditor] public long maxIdleTimeMS { get; set; }
 
-        [ShowInProductEditor]
-        public int maxParallelDownloads { get; set; }
+        [ShowInProductEditor] public int maxParallelDownloads { get; set; }
 
-        [ShowInProductEditor]
-        public string nameForQuestSg { get; set; }
+        [ShowInProductEditor] public string nameForQuestSg { get; set; }
 
-        [ShowInProductEditor]
-        public string nameForQuestsPl { get; set; }
+        [ShowInProductEditor] public string nameForQuestsPl { get; set; }
 
-        [ShowInProductEditor]
-        public string[] questInfoViews { get; set; }
+        [ShowInProductEditor] public string[] questInfoViews { get; set; }
 
         public bool cloudQuestsVisible { get; set; }
 
@@ -99,11 +91,10 @@ namespace Code.GQClient.Conf
 
         public bool downloadAllCloudQuestOnStart { get; set; }
 
-        [ShowInProductEditor]
-        public bool localQuestsDeletable { get; set; }
+        [ShowInProductEditor] public bool localQuestsDeletable { get; set; }
 
-        [ShowInProductEditor, JsonProperty]
-        private bool showHiddenQuests { get; set; }
+        [ShowInProductEditor, JsonProperty] private bool showHiddenQuests { get; set; }
+
         [JsonIgnore]
         public bool ShowHiddenQuests
         {
@@ -120,8 +111,8 @@ namespace Code.GQClient.Conf
             }
         }
 
-        [ShowInProductEditor, JsonProperty]
-        public bool showOnlyLocalQuests { get; set; }
+        [ShowInProductEditor, JsonProperty] public bool showOnlyLocalQuests { get; set; }
+
         [JsonIgnore]
         public bool ShowOnlyLocalQuests
         {
@@ -149,11 +140,11 @@ namespace Code.GQClient.Conf
             {
                 smDict.Add(sm.pageTypeName, sm.scenePath);
             }
+
             return smDict;
         }
 
-        [ShowInProductEditor]
-        public List<SceneMapping> sceneMappings { get; set; }
+        [ShowInProductEditor] public List<SceneMapping> sceneMappings { get; set; }
 
         private string[] _scenePaths;
 
@@ -166,6 +157,7 @@ namespace Code.GQClient.Conf
                 {
                     _scenePaths = new string[0];
                 }
+
                 return _scenePaths;
             }
             set
@@ -175,14 +167,14 @@ namespace Code.GQClient.Conf
             }
         }
 
-        [ShowInProductEditor]
-        public List<SceneExtension> sceneExtensions { get; set; }
+        [ShowInProductEditor] public List<SceneExtension> sceneExtensions { get; set; }
 
-        [ShowInProductEditor]
-        public bool stopAudioWhenLeavingPage { get; set; }
+        [ShowInProductEditor] public bool stopAudioWhenLeavingPage { get; set; }
+
         #endregion
 
         #region Synching
+
         [ShowInProductEditor(StartSection = "Synchronization:")]
         public bool autoSynchQuestInfos { get; set; }
 
@@ -192,8 +184,8 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor]
         public bool autoUpdateSubquests { get; set; }
 
-        [ShowInProductEditor, JsonProperty]
-        private bool offerManualUpdate4QuestInfos { get; set; }
+        [ShowInProductEditor, JsonProperty] private bool offerManualUpdate4QuestInfos { get; set; }
+
         [JsonIgnore]
         public bool OfferManualUpdate4QuestInfos
         {
@@ -209,49 +201,41 @@ namespace Code.GQClient.Conf
                 }
             }
         }
+
         #endregion
 
 
         #region Map
+
         [ShowInProductEditor(StartSection = "Map & Markers:")]
         [JsonConverter(typeof(StringEnumConverter))]
         public MapProvider mapProvider { get; set; }
 
-        [ShowInProductEditor]
-        public string mapBaseUrl { get; set; }
+        [ShowInProductEditor] public string mapBaseUrl { get; set; }
 
-        [ShowInProductEditor]
-        public string mapKey { get; set; }
+        [ShowInProductEditor] public string mapKey { get; set; }
 
-        [ShowInProductEditor]
-        public string mapID { get; set; }
+        [ShowInProductEditor] public string mapID { get; set; }
 
-        [ShowInProductEditor]
-        public string mapTileImageExtension { get; set; }
+        [ShowInProductEditor] public string mapTileImageExtension { get; set; }
 
         public bool useMapOffline { get; set; }
 
-        [ShowInProductEditor]
-        public float mapMinimalZoom { get; set; }
+        [ShowInProductEditor] public float mapMinimalZoom { get; set; }
 
-        [ShowInProductEditor]
-        public float mapDeltaZoom { get; set; }
+        [ShowInProductEditor] public float mapDeltaZoom { get; set; }
 
-        [ShowInProductEditor]
-        public float mapScale { get; set; }
+        [ShowInProductEditor] public float mapScale { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public MapStartPositionType mapStartPositionType { get; set; }
 
-        [ShowInProductEditor]
-        public bool mapStartAtLocation { get; set; }
+        [ShowInProductEditor] public bool mapStartAtLocation { get; set; }
 
-        [ShowInProductEditor]
-        public double mapStartAtLongitude { get; set; }
+        [ShowInProductEditor] public double mapStartAtLongitude { get; set; }
 
-        [ShowInProductEditor]
-        public double mapStartAtLatitude { get; set; }
+        [ShowInProductEditor] public double mapStartAtLatitude { get; set; }
 
         [ShowInProductEditor]
         public ImagePath hotspotMarker
@@ -262,6 +246,7 @@ namespace Code.GQClient.Conf
                 {
                     _hotspotMarker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
                 }
+
                 return _hotspotMarker;
             }
             set
@@ -276,8 +261,8 @@ namespace Code.GQClient.Conf
                 }
             }
         }
-        [JsonIgnore]
-        private ImagePath _hotspotMarker;
+
+        [JsonIgnore] private ImagePath _hotspotMarker;
 
         [ShowInProductEditor]
         public ImagePath marker
@@ -288,6 +273,7 @@ namespace Code.GQClient.Conf
                 {
                     _marker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
                 }
+
                 return _marker;
             }
             set
@@ -302,17 +288,14 @@ namespace Code.GQClient.Conf
                 }
             }
         }
-        [JsonIgnore]
-        private ImagePath _marker;
 
-        [ShowInProductEditor]
-        public float markerHeightUnits { get; set; }
+        [JsonIgnore] private ImagePath _marker;
 
-        [ShowInProductEditor]
-        public float markerHeightMinMM { get; set; }
+        [ShowInProductEditor] public float markerHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float markerHeightMaxMM { get; set; }
+        [ShowInProductEditor] public float markerHeightMinMM { get; set; }
+
+        [ShowInProductEditor] public float markerHeightMaxMM { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
@@ -322,16 +305,12 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 markerSymbolFGColor { get; set; }
 
-        [JsonIgnore]
-        private byte _markerBGAlpha = 168;
+        [JsonIgnore] private byte _markerBGAlpha = 168;
 
         [ShowInProductEditor]
         public byte markerBGAlpha
         {
-            get
-            {
-                return _markerBGAlpha;
-            }
+            get { return _markerBGAlpha; }
             set
             {
                 if (value < 0)
@@ -339,33 +318,30 @@ namespace Code.GQClient.Conf
                     _markerBGAlpha = 0;
                     return;
                 }
+
                 if (value > 255)
                 {
                     _markerBGAlpha = 255;
                     return;
                 }
+
                 _markerBGAlpha = value;
             }
         }
 
-        [ShowInProductEditor]
-        public float mapButtonHeightUnits { get; set; }
+        [ShowInProductEditor] public float mapButtonHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float mapButtonHeightMinMM { get; set; }
+        [ShowInProductEditor] public float mapButtonHeightMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float mapButtonHeightMaxMM { get; set; }
+        [ShowInProductEditor] public float mapButtonHeightMaxMM { get; set; }
 
 
         [ShowInProductEditor(StartSection = "Categories & Filters:")]
         public bool foldableCategoryFilters { get; set; }
 
-        [ShowInProductEditor]
-        public bool categoryFiltersStartFolded { get; set; }
+        [ShowInProductEditor] public bool categoryFiltersStartFolded { get; set; }
 
-        [ShowInProductEditor]
-        public bool categoryFoldersStartFolded { get; set; }
+        [ShowInProductEditor] public bool categoryFoldersStartFolded { get; set; }
 
         /// <summary>
         /// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
@@ -388,6 +364,7 @@ namespace Code.GQClient.Conf
                 {
                     _categorySets = new List<CategorySet>();
                 }
+
                 categoryDict = new Dictionary<string, Category>();
                 foreach (CategorySet cs in _categorySets)
                 {
@@ -396,33 +373,24 @@ namespace Code.GQClient.Conf
                         categoryDict[c.id] = c;
                     }
                 }
+
                 return _categorySets;
             }
-            set
-            {
-                _categorySets = value;
-            }
+            set { _categorySets = value; }
         }
 
-        [ShowInProductEditor]
-        public string defaultCategory { get; set; }
+        [ShowInProductEditor] public string defaultCategory { get; set; }
 
-        [JsonIgnore]
-        private List<CategorySet> _categorySets;
+        [JsonIgnore] private List<CategorySet> _categorySets;
 
-        [JsonIgnore]
-        public Dictionary<string, Category> categoryDict;
+        [JsonIgnore] public Dictionary<string, Category> categoryDict;
 
-        [JsonIgnore]
-        private float _disabledAlpha = 0.5f;
+        [JsonIgnore] private float _disabledAlpha = 0.5f;
 
         [ShowInProductEditor]
         public float disabledAlpha
         {
-            get
-            {
-                return _disabledAlpha;
-            }
+            get { return _disabledAlpha; }
             set
             {
                 if (value < 0f)
@@ -430,28 +398,34 @@ namespace Code.GQClient.Conf
                     _disabledAlpha = 0f;
                     return;
                 }
+
                 if (value > 1f)
                 {
                     _disabledAlpha = 1f;
                     return;
                 }
+
                 _disabledAlpha = value;
             }
         }
+
         #endregion
 
 
         #region UI Strategies
+
         [ShowInProductEditor(StartSection = "UI Strategies:")]
         public bool hideFooterIfPossible { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public TaskUIMode taskUI { get; set; }
+
         #endregion
 
 
         #region Layout
+
         [ShowInProductEditor(StartSection = "Layout & Colors:")]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 mainFgColor { get; set; }
@@ -460,21 +434,47 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 mainBgColor { get; set; }
 
+        [ShowInProductEditor] public int colorPaletteSize { get; set; }
+
         [ShowInProductEditor]
-        public int mainFontSize { get; set; }
+        [JsonConverter(typeof(Color32ArrayConverter))]
+        public Color32[] colorPalette { get; set; }
+
+
+        [JsonIgnore]
+        public Color32 NextPaletteColor
+        {
+            get
+            {
+                var color = colorPalette[_paletteColorCounter];
+                _paletteColorCounter = (_paletteColorCounter + 1) % colorPaletteSize;
+                return color;
+            }
+        }
+
+        public static void ResetColorPalette()
+        {
+            _paletteColorCounter = 0;
+        }
+
+        public static int _paletteColorCounter = 0;
+
+
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 paletteFGColor { get; set; }
+
+        [ShowInProductEditor] public int mainFontSize { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public AlignmentOption textAlignment { get; set; }
 
-        [ShowInProductEditor]
-        public float lineSpacing { get; set; }
+        [ShowInProductEditor] public float lineSpacing { get; set; }
 
-        [ShowInProductEditor]
-        public bool showShadows { get; set; }
+        [ShowInProductEditor] public bool showShadows { get; set; }
 
-        [ShowInProductEditor]
-        public ImagePath topLogo { get; set; }
+        [ShowInProductEditor] public ImagePath topLogo { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -492,51 +492,39 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 headerButtonFgColor { get; set; }
 
-        [ShowInProductEditor]
-        public float headerHeightUnits { get; set; }
+        [ShowInProductEditor] public float headerHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float headerHeightMinMM { get; set; }
+        [ShowInProductEditor] public float headerHeightMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float headerHeightMaxMM { get; set; }
+        [ShowInProductEditor] public float headerHeightMaxMM { get; set; }
 
         [ShowInProductEditor(StartSection = "Content:")]
         public float contentHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float contentTopMarginUnits { get; set; }
+        [ShowInProductEditor] public float contentTopMarginUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float contentDividerUnits { get; set; }
+        [ShowInProductEditor] public float contentDividerUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float contentBottomMarginUnits { get; set; }
+        [ShowInProductEditor] public float contentBottomMarginUnits { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 contentBackgroundColor { get; set; }
 
-        [ShowInProductEditor]
-        public float imageAreaHeightMinUnits { get; set; }
+        [ShowInProductEditor] public float imageAreaHeightMinUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float imageAreaHeightMaxUnits { get; set; }
+        [ShowInProductEditor] public float imageAreaHeightMaxUnits { get; set; }
 
-        [ShowInProductEditor]
-        public bool fitExceedingImagesIntoArea { get; set; }
+        [ShowInProductEditor] public bool fitExceedingImagesIntoArea { get; set; }
 
-        [ShowInProductEditor]
-        public bool autoScrollNewText { get; set; }
+        [ShowInProductEditor] public bool autoScrollNewText { get; set; }
 
         [ShowInProductEditor(StartSection = "Footer:")]
         public float footerHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float footerHeightMinMM { get; set; }
+        [ShowInProductEditor] public float footerHeightMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float footerHeightMaxMM { get; set; }
+        [ShowInProductEditor] public float footerHeightMaxMM { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
@@ -560,11 +548,9 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor(StartSection = "Overlays:")]
         public float overlayButtonSizeUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float overlayButtonSizeMinMM { get; set; }
+        [ShowInProductEditor] public float overlayButtonSizeMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float overlayButtonSizeMaxMM { get; set; }
+        [ShowInProductEditor] public float overlayButtonSizeMaxMM { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
@@ -583,6 +569,7 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor(StartSection = "Menu:"), JsonProperty]
         private bool showEmptyMenuEntries { get; set; }
+
         [JsonIgnore]
         public bool ShowEmptyMenuEntries
         {
@@ -599,23 +586,17 @@ namespace Code.GQClient.Conf
             }
         }
 
-        [ShowInProductEditor]
-        public float menuEntryHeightUnits { get; set; }
+        [ShowInProductEditor] public float menuEntryHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float menuEntryHeightMinMM { get; set; }
+        [ShowInProductEditor] public float menuEntryHeightMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float menuEntryHeightMaxMM { get; set; }
+        [ShowInProductEditor] public float menuEntryHeightMaxMM { get; set; }
 
-        [ShowInProductEditor]
-        public float menuEntryWidthUnits { get; set; }
+        [ShowInProductEditor] public float menuEntryWidthUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float menuEntryWidthMinMM { get; set; }
+        [ShowInProductEditor] public float menuEntryWidthMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float menuEntryWidthMaxMM { get; set; }
+        [ShowInProductEditor] public float menuEntryWidthMaxMM { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
@@ -637,75 +618,53 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 categoryEntryBGColor { get; set; }
 
-        [ShowInProductEditor]
-        public bool menuInhibitsInteraction { get; set; }
+        [ShowInProductEditor] public bool menuInhibitsInteraction { get; set; }
 
-        [ShowInProductEditor]
-        public bool menu2ShownInQuests { get; set; }
+        [ShowInProductEditor] public bool menu2ShownInQuests { get; set; }
 
-        [ShowInProductEditor, JsonProperty]
-        internal bool offerLeaveQuestOnEachPage { get; set; }
+        [ShowInProductEditor, JsonProperty] internal bool offerLeaveQuestOnEachPage { get; set; }
+
         [JsonIgnore]
         public bool OfferLeaveQuests
         {
-            get
-            {
-                return offerLeaveQuestOnEachPage || Author.LoggedIn;
-            }
-            set
-            {
-                offerLeaveQuestOnEachPage = value;
-            }
+            get { return offerLeaveQuestOnEachPage || Author.LoggedIn; }
+            set { offerLeaveQuestOnEachPage = value; }
         }
 
-        [ShowInProductEditor]
-        public bool warnWhenLeavingQuest { get; set; }
+        [ShowInProductEditor] public bool warnWhenLeavingQuest { get; set; }
 
-        [ShowInProductEditor]
-        public string warnDialogTitleWhenLeavingQuest { get; set; }
+        [ShowInProductEditor] public string warnDialogTitleWhenLeavingQuest { get; set; }
 
-        [ShowInProductEditor]
-        public string warnDialogMessageWhenLeavingQuest { get; set; }
+        [ShowInProductEditor] public string warnDialogMessageWhenLeavingQuest { get; set; }
 
-        [ShowInProductEditor]
-        public string warnDialogOKWhenLeavingQuest { get; set; }
+        [ShowInProductEditor] public string warnDialogOKWhenLeavingQuest { get; set; }
 
-        [ShowInProductEditor]
-        public string warnDialogCancelWhenLeavingQuest { get; set; }
+        [ShowInProductEditor] public string warnDialogCancelWhenLeavingQuest { get; set; }
 
 
         [ShowInProductEditor(StartSection = "Offered Canvases by 2nd Menu:")]
         public bool offerPartnersInfo { get; set; }
 
-        [ShowInProductEditor]
-        public bool showPartnersInfoAtStart { get; set; }
+        [ShowInProductEditor] public bool showPartnersInfoAtStart { get; set; }
 
-        [ShowInProductEditor]
-        public bool offerFeedback { get; set; }
+        [ShowInProductEditor] public bool offerFeedback { get; set; }
 
-        [ShowInProductEditor]
-        public bool offerAuthorLogin { get; set; }
+        [ShowInProductEditor] public bool offerAuthorLogin { get; set; }
 
-        [ShowInProductEditor]
-        public bool defineAuthorBackDoor { get; set; }
+        [ShowInProductEditor] public bool defineAuthorBackDoor { get; set; }
 
-        [ShowInProductEditor]
-        public string acceptedAuthorEmail { get; set; }
+        [ShowInProductEditor] public string acceptedAuthorEmail { get; set; }
 
-        [ShowInProductEditor]
-        public string acceptedAuthorPassword { get; set; }
+        [ShowInProductEditor] public string acceptedAuthorPassword { get; set; }
 
         [ShowInProductEditor(StartSection = "List Entries:")]
         public float listEntryHeightUnits { get; set; }
 
-        [ShowInProductEditor]
-        public float listEntryHeightMinMM { get; set; }
+        [ShowInProductEditor] public float listEntryHeightMinMM { get; set; }
 
-        [ShowInProductEditor]
-        public float listEntryHeightMaxMM { get; set; }
+        [ShowInProductEditor] public float listEntryHeightMaxMM { get; set; }
 
-        [ShowInProductEditor]
-        public bool listEntryUseTwoLines { get; set; }
+        [ShowInProductEditor] public bool listEntryUseTwoLines { get; set; }
 
 
         ListEntryDividingMode _listEntryDividingMode;
@@ -714,28 +673,19 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(StringEnumConverter))]
         public ListEntryDividingMode listEntryDividingMode
         {
-            get
-            {
-                return _listEntryDividingMode;
-            }
-            set
-            {
-                _listEntryDividingMode = value;
-            }
+            get { return _listEntryDividingMode; }
+            set { _listEntryDividingMode = value; }
         }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 listLineColor { get; set; }
 
-        [ShowInProductEditor]
-        public int listStartLineWidth { get; set; }
+        [ShowInProductEditor] public int listStartLineWidth { get; set; }
 
-        [ShowInProductEditor]
-        public int dividingLineWidth { get; set; }
+        [ShowInProductEditor] public int dividingLineWidth { get; set; }
 
-        [ShowInProductEditor]
-        public int listEndLineWidth { get; set; }
+        [ShowInProductEditor] public int listEndLineWidth { get; set; }
 
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
@@ -764,8 +714,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor(StartSection = "Temporary stuff:")]
         public bool webpageShouldEndOnLoadUrlPart { get; set; }
 
-        [ShowInProductEditor]
-        public string webpageEndOnLoadUrlPart { get; set; }
+        [ShowInProductEditor] public string webpageEndOnLoadUrlPart { get; set; }
 
         #endregion
 
@@ -792,7 +741,7 @@ namespace Code.GQClient.Conf
             keepAutoStarting = true;
             questInfoViews = new string[]
             {
-                QuestInfoView.List.ToString(), 
+                QuestInfoView.List.ToString(),
                 QuestInfoView.TopicTree.ToString(),
                 QuestInfoView.Map.ToString()
             };
@@ -822,7 +771,8 @@ namespace Code.GQClient.Conf
             offerLeaveQuestOnEachPage = true;
             warnWhenLeavingQuest = true;
             warnDialogTitleWhenLeavingQuest = "Aktuelles Quest verlassen?";
-            warnDialogMessageWhenLeavingQuest = "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...";
+            warnDialogMessageWhenLeavingQuest =
+                "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...";
             warnDialogOKWhenLeavingQuest = "Verlassen";
             warnDialogCancelWhenLeavingQuest = "Fortsetzen";
             stopAudioWhenLeavingPage = true;
@@ -854,6 +804,9 @@ namespace Code.GQClient.Conf
             // Layout:
             mainBgColor = Color.white;
             mainFgColor = Color.black;
+            colorPaletteSize = 4;
+            colorPalette = new Color32[] {Color.blue, Color.green, Color.yellow, Color.red};
+            paletteFGColor = Color.white;
             mainFontSize = 60;
             textAlignment = AlignmentOption.Left;
             lineSpacing = 10f;
@@ -922,8 +875,8 @@ namespace Code.GQClient.Conf
             webpageShouldEndOnLoadUrlPart = false;
             webpageEndOnLoadUrlPart = "";
         }
-        #endregion
 
+        #endregion
     }
 
     public enum AlignmentOption
@@ -1012,25 +965,26 @@ namespace Code.GQClient.Conf
             return objectType == typeof(Color32);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             reader.Read();
-            byte r = (byte)reader.ReadAsInt32();
+            var r = (byte) reader.ReadAsInt32();
             reader.Read();
-            byte g = (byte)reader.ReadAsInt32();
+            var g = (byte) reader.ReadAsInt32();
             reader.Read();
-            byte b = (byte)reader.ReadAsInt32();
+            var b = (byte) reader.ReadAsInt32();
             reader.Read();
-            byte a = (byte)reader.ReadAsInt32();
+            var a = (byte) reader.ReadAsInt32();
             reader.Read();
 
-            Color32 c = new Color32(r, g, b, a);
+            var c = new Color32(r, g, b, a);
             return c;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            Color32 c = (Color32)value;
+            var c = (Color32) value;
             writer.WriteStartObject();
             writer.WritePropertyName("r");
             writer.WriteValue(c.r);
@@ -1044,9 +998,61 @@ namespace Code.GQClient.Conf
         }
     }
 
+    public class Color32ArrayConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Color32[]);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
+        {
+            var colors = new Color32[10];
+            reader.Read();
+            for (var i = 0; i < 10; i++)
+            {
+                reader.Read();
+                var r = (byte) reader.ReadAsInt32();
+                reader.Read();
+                var g = (byte) reader.ReadAsInt32();
+                reader.Read();
+                var b = (byte) reader.ReadAsInt32();
+                reader.Read();
+                var a = (byte) reader.ReadAsInt32();
+                reader.Read();
+                reader.Read();
+                colors[i] = new Color32(r, g, b, a);
+            }
+
+            return colors;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var colors = (Color32[]) value;
+            writer.WriteStartArray();
+
+            foreach (var c in colors)
+            {
+                writer.WriteStartObject();
+                writer.WritePropertyName("r");
+                writer.WriteValue(c.r);
+                writer.WritePropertyName("g");
+                writer.WriteValue(c.g);
+                writer.WritePropertyName("b");
+                writer.WriteValue(c.b);
+                writer.WritePropertyName("a");
+                writer.WriteValue(c.a);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+        }
+    }
+
     public static class GQColor
     {
-
         public static readonly Color32 transparent = new Color32(255, 255, 255, 0);
     }
 
@@ -1111,7 +1117,7 @@ namespace Code.GQClient.Conf
             if (GetType() != obj.GetType())
                 return false;
 
-            return path == ((ImagePath)obj).path;
+            return path == ((ImagePath) obj).path;
         }
 
         public override int GetHashCode()
@@ -1149,7 +1155,6 @@ namespace Code.GQClient.Conf
             this.folderName = folderName ?? "";
             this.symbol = new ImagePath(symbolPath);
         }
-
     }
 
     public class CategorySet
@@ -1179,5 +1184,3 @@ namespace Code.GQClient.Conf
         public string StartSection { get; set; }
     }
 }
-
-
