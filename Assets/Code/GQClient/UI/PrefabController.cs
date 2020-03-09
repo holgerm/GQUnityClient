@@ -14,7 +14,7 @@ namespace Code.GQClient.UI
 
         public static GameObject Create(string assetBundleName, string prefabName, GameObject root = null)
         {
-            Object prefab = AssetBundles.Asset(assetBundleName, prefabName);
+            var prefab = AssetBundles.Asset(assetBundleName, prefabName);
             return Create(prefab, root);
         }
 
@@ -27,7 +27,7 @@ namespace Code.GQClient.UI
                     Log.SignalErrorToDeveloper("No root game object found for prefab {0}", prefab.name);
             }
 
-            GameObject go = (GameObject)Instantiate(
+            var go = (GameObject)Instantiate(
                                 prefab,
                                 root.transform,
                                 false

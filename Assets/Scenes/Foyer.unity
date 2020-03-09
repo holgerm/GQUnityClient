@@ -156,10 +156,10 @@ RectTransform:
   m_Father: {fileID: 1482923519}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: 0}
-  m_SizeDelta: {x: 1080, y: 317.90912}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &4464232
 MonoBehaviour:
@@ -189,9 +189,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -973,9 +973,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1504,9 +1504,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3767,9 +3767,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -4004,7 +4004,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 485, y: 285.2941}
+  m_CellSize: {x: 131.5, y: 77.352936}
   m_Spacing: {x: 50, y: 50}
   m_Constraint: 1
   m_ConstraintCount: 2
@@ -4298,9 +4298,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5477,9 +5477,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -6254,10 +6254,10 @@ RectTransform:
   m_Father: {fileID: 1028144107}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -409.16498}
-  m_SizeDelta: {x: 498.15, y: 73.97}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &537544812
 MonoBehaviour:
@@ -6301,7 +6301,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286065408
+    rgba: 4279834906
   m_fontColor: {r: 0.101960786, g: 0.09803922, b: 0.09803922, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6320,7 +6320,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 63
+  m_fontSize: 56
   m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6445,10 +6445,10 @@ RectTransform:
   m_Father: {fileID: 1028144107}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -671.15}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &545777638
 MonoBehaviour:
@@ -7542,9 +7542,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8429,10 +8429,10 @@ RectTransform:
   m_Father: {fileID: 1028144107}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -173.59}
-  m_SizeDelta: {x: 1020, y: 247.18}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737186494
 MonoBehaviour:
@@ -8476,7 +8476,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286065408
+    rgba: 4279834906
   m_fontColor: {r: 0.101960786, g: 0.09803922, b: 0.09803922, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -8541,7 +8541,7 @@ MonoBehaviour:
     spaceCount: 8
     wordCount: 8
     linkCount: 0
-    lineCount: 3
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -8622,10 +8622,10 @@ RectTransform:
   m_Father: {fileID: 1482923519}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1239.5039}
-  m_SizeDelta: {x: 1080, y: 1360.9921}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &746709949
 MonoBehaviour:
@@ -8641,9 +8641,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -8770,9 +8770,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9964,9 +9964,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -10848,10 +10848,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 187.13535
-  m_MinHeight: 187.13535
-  m_PreferredWidth: 187.13535
-  m_PreferredHeight: 187.13535
+  m_MinWidth: 35.27559
+  m_MinHeight: 35.27559
+  m_PreferredWidth: 35.27559
+  m_PreferredHeight: 35.27559
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -11534,9 +11534,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -12075,9 +12075,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 2640.6875
+  m_MinWidth: 186.22223
   m_MinHeight: -1
-  m_PreferredWidth: 2640.6875
+  m_PreferredWidth: 186.22223
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -12236,7 +12236,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.00012207031}
-  m_SizeDelta: {x: 0, y: 1806.15}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1028144108
 MonoBehaviour:
@@ -12654,9 +12654,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -13123,7 +13123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1112353215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13196,8 +13196,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1482923519}
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_Father: {fileID: 1693580033}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -13216,8 +13216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2a1cf8a546948099ac86b0b0a7911f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToShow: 2
-  timeToFade: 1.3
+  timeToShow: 3.5
+  timeToFade: 2.3
   canvasGroup: {fileID: 0}
 --- !u!225 &1112353220
 CanvasGroup:
@@ -14541,10 +14541,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 187.13535
-  m_MinHeight: 187.13535
-  m_PreferredWidth: 187.13535
-  m_PreferredHeight: 187.13535
+  m_MinWidth: 35.27559
+  m_MinHeight: 35.27559
+  m_PreferredWidth: 35.27559
+  m_PreferredHeight: 35.27559
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -14963,9 +14963,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -15257,9 +15257,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -15443,9 +15443,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -15737,9 +15737,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -16041,9 +16041,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -16770,7 +16770,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4286065408
+    rgba: 4279834906
   m_fontColor: {r: 0.101960786, g: 0.09803922, b: 0.09803922, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -16789,7 +16789,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 58.499996
+  m_fontSize: 52
   m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -17131,9 +17131,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 2244.5845
+  m_MinWidth: 158.2889
   m_MinHeight: -1
-  m_PreferredWidth: 2244.5845
+  m_PreferredWidth: 158.2889
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -17315,9 +17315,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -18602,10 +18602,10 @@ RectTransform:
   m_Father: {fileID: 1028144107}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1421.15}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1574101363
 MonoBehaviour:
@@ -20027,10 +20027,10 @@ RectTransform:
   m_Father: {fileID: 1028144107}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1046.15}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1690927727
 MonoBehaviour:
@@ -20122,10 +20122,10 @@ RectTransform:
   m_Father: {fileID: 1028144107}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1721.15}
-  m_SizeDelta: {x: 300, y: 150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1691843316
 MonoBehaviour:
@@ -20183,6 +20183,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691843314}
   m_CullTransparentMesh: 0
+--- !u!1 &1693580032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1693580033}
+  m_Layer: 0
+  m_Name: CanvasRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1693580033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693580032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 995.059, y: 1698.484, z: -453.65463}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1112353218}
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1694997115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21358,9 +21389,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -21981,10 +22012,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 187.13535
-  m_MinHeight: 187.13535
-  m_PreferredWidth: 187.13535
-  m_PreferredHeight: 187.13535
+  m_MinWidth: 35.27559
+  m_MinHeight: 35.27559
+  m_PreferredWidth: 35.27559
+  m_PreferredHeight: 35.27559
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -22123,10 +22154,10 @@ RectTransform:
   m_Father: {fileID: 1482923519}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -438.45847}
-  m_SizeDelta: {x: 1080, y: 241.09868}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1904427201
 MonoBehaviour:
@@ -23074,7 +23105,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943071097}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -23228,9 +23259,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -23715,9 +23746,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 495.1289
+  m_MinHeight: 34.916668
   m_PreferredWidth: -1
-  m_PreferredHeight: 495.1289
+  m_PreferredHeight: 34.916668
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -25203,9 +25234,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 5446.418
+  m_MinHeight: 384.08334
   m_PreferredWidth: -1
-  m_PreferredHeight: 5446.418
+  m_PreferredHeight: 384.08334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
