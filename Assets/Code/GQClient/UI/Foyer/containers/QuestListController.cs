@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -26,6 +27,9 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected override void AddedInfo(QuestInfoChangedEvent e)
         {
+            if (QuestInfoControllers.ContainsKey(e.NewQuestInfo.Id))
+                return;
+            
             QuestInfoUIC qiCtrl;
             qiCtrl =
                 QuestInfoUICListElement.Create(
