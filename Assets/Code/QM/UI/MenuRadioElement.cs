@@ -1,4 +1,5 @@
 ﻿using Code.GQClient.Err;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,13 +8,16 @@ namespace Code.QM.UI
 	[RequireComponent (typeof(Button))]
 	public class MenuRadioElement : MonoBehaviour
 	{
-
+		
+		public static readonly string PREFAB = "MenuRadioElement";
+		public TMP_Text menuElementText;
+		public Image menuElementImage;
 		public GameObject activation;
 		MenuRadioGroup radioGroup;
 
-		void Start ()
+		private void Start ()
 		{
-			Button button = GetComponent<Button> ();
+			var button = GetComponent<Button> ();
 
 			if (button == null) {
 				Log.SignalErrorToDeveloper (
@@ -52,6 +56,14 @@ namespace Code.QM.UI
 		void SwitchOff ()
 		{
 			activation.SetActive (false);
+		}
+
+		public void Initialize(string elementName, string elementIconPath, GameObject elementActivationGO)
+		{
+			gameObject.name = $"menuElement for {elementName}";
+			menuElementText.text = elementName;
+			menuElementImage.sprite = Resources.Load<Sprite>(elementIconPath);
+			activation = elementActivationGO;
 		}
 	}
 }

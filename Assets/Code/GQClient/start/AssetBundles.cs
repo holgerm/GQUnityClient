@@ -9,8 +9,10 @@ namespace Code.GQClient.start
 {
     public class AssetBundles : MonoBehaviour
     {
+        public static readonly string PREFABS = "prefabs";
+
         // Start is called before the first frame update
-        void Awake()
+        private void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }
@@ -18,6 +20,7 @@ namespace Code.GQClient.start
         static Dictionary<string, AssetBundle> Bundles = new Dictionary<string, AssetBundle>();
 
         internal static Object Asset(string assetBundleName, string assetName)
+        // TODO create for iOS and Android at once
         {
             if (!Bundles.ContainsKey(assetBundleName))
             {
@@ -25,7 +28,7 @@ namespace Code.GQClient.start
                         Path.Combine(Application.streamingAssetsPath, assetBundleName));
                 if (newBundle == null)
                 {
-                    Log.SignalErrorToDeveloper("Failed to load AssetBundle '{0}'!", assetBundleName);
+                    Log.SignalErrorToDeveloper($"Failed to load AssetBundle '{assetBundleName}'!");
                     return null;
                 }
                 else

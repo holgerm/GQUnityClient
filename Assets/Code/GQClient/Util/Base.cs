@@ -30,7 +30,26 @@ namespace Code.GQClient.Util
         public GameObject DialogCanvas;
         public GameObject ProgressCanvas;
 
-        public Canvas partnersCanvas;
+        public Transform canvasRootT;
+        
+        private GameObject _partnersCanvas;
+        public GameObject partnersCanvas 
+        {
+            get
+            {
+                if (_partnersCanvas == null)
+                {
+                    var obj = Resources.Load("prefabs/PartnersCanvas");
+                    if (obj == null)
+                        return null;
+                    
+                    _partnersCanvas = (GameObject) Instantiate(obj, canvasRootT);
+                }
+
+                return _partnersCanvas;
+            }
+        }
+        
         public Canvas imprintCanvas;
         public Canvas feedbackCanvas;
         public Canvas privacyCanvas;

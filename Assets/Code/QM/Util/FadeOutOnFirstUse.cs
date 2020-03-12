@@ -45,10 +45,14 @@ namespace Code.QM.Util
                 yield return null;
             }
 
-            gameObject.SetActive(false); // TODO fade out?
+            gameObject.SetActive(false); 
+            _done = true;
+        }
+
+        public void OnDisable()
+        {
             if (canvasGroup != null)
                 canvasGroup.alpha = 1;
-            _done = true;
         }
     }
 }
