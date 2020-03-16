@@ -11,9 +11,9 @@ namespace GQClient.Model
         public static List<string> ReadCategoriesFromMetadata(MetaDataInfo[] metadata)
         {
 
-            List<string> categories = new List<string>();
+            var categories = new List<string>();
             string netVal;
-            foreach (MetaDataInfo md in metadata)
+            foreach (var md in metadata)
             {
                 switch (md.Key)
                 {

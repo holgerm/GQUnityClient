@@ -19,7 +19,7 @@
   "nameForQuestsPl": "Touren",
   "questInfoViews": [
     "List",
-    "Map"
+    "TopicTree"
   ],
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
@@ -70,6 +70,7 @@
   "useMapOffline": false,
   "mapMinimalZoom": 13.0,
   "mapDeltaZoom": 0.5,
+  "mapScale": 1.0,
   "mapStartPositionType": "CenterOfMarkers",
   "mapStartAtLocation": false,
   "mapStartAtLongitude": 8.054064,
@@ -158,6 +159,7 @@
   "defaultCategory": null,
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
+  "taskUI": "ProgressAtBottom",
   "mainFgColor": {
     "r": 0,
     "g": 0,
@@ -165,6 +167,75 @@
     "a": 255
   },
   "mainBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "colorPaletteSize": 4,
+  "colorPalette": [
+    {
+      "r": 0,
+      "g": 0,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 235,
+      "b": 4,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    }
+  ],
+  "paletteFGColor": {
     "r": 255,
     "g": 255,
     "b": 255,
@@ -212,21 +283,6 @@
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
-  "showScrollbar": true,
-  "scrollbarHandleColor": {
-    "r": 113,
-    "g": 111,
-    "b": 111,
-    "a": 189
-  },
-  "scrollbarBGColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
-  },
-  "scrollbarWidth": 20,
-  "margin4Scrollbar": true,
   "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
@@ -316,6 +372,8 @@
   "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie die Tour ...",
   "warnDialogOKWhenLeavingQuest": "Verlassen",
   "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
+  "offerPartnersInfo": false,
+  "showPartnersInfoAtStart": false,
   "offerFeedback": true,
   "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
@@ -370,5 +428,7 @@
     "g": 115,
     "b": 115,
     "a": 255
-  }
+  },
+  "webpageShouldEndOnLoadUrlPart": false,
+  "webpageEndOnLoadUrlPart": ""
 }
