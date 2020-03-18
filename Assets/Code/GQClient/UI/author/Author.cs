@@ -9,18 +9,12 @@ namespace Code.GQClient.UI.author
 
     public class Author : MonoBehaviour
     {
-        public void Awake()
-        {
-            Debug.Log("Author.Awake()");
-        }
-
         public static event EventHandler<EventArgs> SettingsChanged;
 
         public static void OnSettingsChanged()
         {
             if (SettingsChanged != null)
             {
-                Debug.Log("AuthorSettings Changed - Event Fired!".Green());
                 SettingsChanged(null, null);
             }
         }

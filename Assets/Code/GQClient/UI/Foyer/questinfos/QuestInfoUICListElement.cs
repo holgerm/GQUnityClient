@@ -8,13 +8,11 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.Foyer.questinfos
 {
-
     /// <summary>
     /// Represents one quest info object in a list within the foyer.
     /// </summary>
     public class QuestInfoUICListElement : QuestInfoUIC
     {
-
         #region Content and Structure
 
         protected static readonly string PREFAB = "QuestInfoListElement";
@@ -73,10 +71,12 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 {
                     return DeletionWarning.WarningNotOnServer;
                 }
+
                 if (data.IsPredeployed)
                 {
                     return DeletionWarning.InfoPredeployedSurvivesDelete;
                 }
+
                 return DeletionWarning.NoWarning;
             }
         }
@@ -117,21 +117,20 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 button.gameObject.SetActive(true);
                 button.interactable = true;
             }
+
             // in case we can start this quest, we also allow clicks on the quest name to start it:
             Button.ButtonClickedEvent namebuttonEvent = Name.GetComponent<Button>().onClick;
             if (StartButton.gameObject.activeInHierarchy)
             {
                 namebuttonEvent.RemoveAllListeners();
-                namebuttonEvent.AddListener(() =>
-                {
-                    data.Play();
-                });
+                namebuttonEvent.AddListener(() => { data.Play(); });
             }
             else
             {
                 namebuttonEvent.RemoveAllListeners();
             }
         }
+
         #endregion
 
 
@@ -207,17 +206,12 @@ namespace Code.GQClient.UI.Foyer.questinfos
             nameButton.onClick.RemoveAllListeners();
             if (data.ShowDownloadOption)
             {
-                nameButton.onClick.AddListener(() =>
-                {
-                    Download();
-                });
+                nameButton.onClick.AddListener(() => { Download(); });
             }
+
             if (data.IsOnDevice)
             {
-                nameButton.onClick.AddListener(() =>
-                {
-                    Play();
-                });
+                nameButton.onClick.AddListener(() => { Play(); });
             }
 
             // Update Buttons:
@@ -228,6 +222,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 DownloadButton.gameObject.SetActive(true);
                 DownloadButton.interactable = true;
             }
+
             // Show START button if needed:
             //if (ShowStartOption (data)) {
             //	StartButton.gameObject.SetActive (true);
@@ -239,6 +234,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 UpdateButton.gameObject.SetActive(true);
                 UpdateButton.interactable = true;
             }
+
             // Show DELETE button if needed:
             if (data.ShowDeleteOption)
             {
@@ -252,7 +248,8 @@ namespace Code.GQClient.UI.Foyer.questinfos
         private void setCategorySymbol(QuestInfo qInfo)
         {
             // set info button as configured:
-            if (ConfigurationManager.Current.mainCategorySet != null && ConfigurationManager.Current.mainCategorySet != "")
+            if (ConfigurationManager.Current.mainCategorySet != null &&
+                ConfigurationManager.Current.mainCategorySet != "")
             {
                 CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet();
                 if (mainCategorySet == null)
@@ -275,9 +272,9 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 if (determiningCategory != null)
                 {
                     // set symbol for this category:
-                    infoImage.sprite = determiningCategory.symbol != null ?
-                        Resources.Load<Sprite>(determiningCategory.symbol.path) :
-                        null;
+                    infoImage.sprite = determiningCategory.symbol != null
+                        ? Resources.Load<Sprite>(determiningCategory.symbol.path)
+                        : null;
                     if (infoImage.sprite != null)
                     {
                         infoImage.enabled = true;
@@ -286,7 +283,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
                     }
                 }
             }
-
         }
 
         #endregion
@@ -307,5 +303,4 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
         #endregion
     }
-
 }
