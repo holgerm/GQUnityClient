@@ -368,7 +368,7 @@ namespace GQClient.Model
                 return;
             }
 
-            string startView = ConfigurationManager.Current.questInfoViews[0];
+            var startView = ConfigurationManager.Current.questInfoViews[0];
             Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
             Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
             Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
@@ -379,7 +379,7 @@ namespace GQClient.Model
                 return;
 
             // Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
-            GameObject menuContent = Base.Instance.MenuTopLeftContent;
+            var menuContent = Base.Instance.MenuTopLeftContent;
             ViewToggleController.Create(menuContent);
         }
 
@@ -402,16 +402,16 @@ namespace GQClient.Model
 
             // init category filters:
             CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
-            List<CategorySet> catSets = ConfigurationManager.Current.CategorySets;
-            foreach (CategorySet catSet in catSets)
+            var catSets = ConfigurationManager.Current.CategorySets;
+            foreach (var catSet in catSets)
             {
                 CategoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter(catSet);
                 FilterAnd(CategoryFilters[catSet.name]);
             }
 
             // create UI for Category Filters:
-            GameObject menuContent = Base.Instance.MenuTopLeftContent;
-            foreach (CategorySet catSet in ConfigurationManager.Current.CategorySets)
+            var menuContent = Base.Instance.MenuTopLeftContent;
+            foreach (var catSet in ConfigurationManager.Current.CategorySets)
             {
                 CategoryTreeCtrl.Create(
                     root: menuContent, 
