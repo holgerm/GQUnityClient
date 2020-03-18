@@ -1,5 +1,6 @@
 ﻿// #define DEBUG_LOG
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,41 @@ namespace Code.GQClient.UI.Foyer.containers
         public Transform InfoList;
         public GameObject HiddenQuests;
 
+        private bool RefreshOnStart;
+
+        public void OnEnable()
+        {
+            // base.OnEnable();
+            
+            if (StartUpdateViewAlreadyDone)
+            {
+                // if we are already started earlier we refresh the list, since we might have switched from TopicTree
+                ListChanged();
+            }
+            else
+            {
+                // let Start do the refresh of the list. Needed in case we switched from TopicTree to List
+                RefreshOnStart = true;
+            }
+        }
+
+        public void OnDisable()
+        {
+            StartUpdateViewAlreadyDone = false;
+        }
+
+        private void Start()
+        {
+            base.Start();
+
+            if (RefreshOnStart && !StartUpdateViewAlreadyDone)
+            {
+                ListChanged();
+            }
+
+            StartUpdateViewAlreadyDone = true;
+        }
+
 
         #region React on Events
 
@@ -29,7 +65,7 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             if (QuestInfoControllers.ContainsKey(e.NewQuestInfo.Id))
                 return;
-            
+
             QuestInfoUIC qiCtrl;
             qiCtrl =
                 QuestInfoUICListElement.Create(
@@ -165,7 +201,7 @@ namespace Code.GQClient.UI.Foyer.containers
             QuestInfoControllers.Clear();
 
             //int steps = 0;
-            foreach (QuestInfo info in qim.GetFilteredQuestInfos())
+            foreach (QuestInfo info in Qim.GetFilteredQuestInfos())
             {
                 // create new list elements
                 var qiCtrl =

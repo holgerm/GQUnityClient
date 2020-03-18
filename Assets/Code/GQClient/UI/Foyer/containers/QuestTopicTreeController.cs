@@ -16,16 +16,16 @@ namespace Code.GQClient.UI.Foyer.containers
         public GameObject topicArea;
         public GameObject topicContentRoot;
         public GameObject questInfoArea;
-        
+
         public TMP_Text text;
-        
+
         private new void Start()
         {
             base.Start();
             Topic.OnCursorChanged += SetDirty;
             Topic.CursorHome();
         }
-        
+
         private static bool _dirtyTopicTree;
 
         internal static void SetDirty()
@@ -42,17 +42,16 @@ namespace Code.GQClient.UI.Foyer.containers
         }
 
 
-
         /// <summary>
         /// Update the Topic Tree View to reflect a change in the topic tree model.
         /// </summary>
-        private void UpdateView()
+        protected void UpdateView()
         {
-            upwardButton.enabled = 
+            upwardButton.enabled =
                 Topic.Cursor.Parent != Topic.Null;
             forwardButton.enabled = false;
             topicName.text = Topic.Cursor.Name;
-            
+
             if (Topic.Cursor.Children.Count > 0)
                 ShowTopicArea();
             else
@@ -61,10 +60,10 @@ namespace Code.GQClient.UI.Foyer.containers
             }
 
             questInfoArea.SetActive(Topic.Cursor.NumberOfOwnQuestInfos > 0);
-                
+
             _dirtyTopicTree = false;
         }
-        
+
         protected override void SorterChanged()
         {
             // TODO maybe we could sort for alphabet, numbers, date, grades etc.
@@ -72,20 +71,21 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected override void FilterChanged()
         {
-            // ignore filter changes
+            UpdateView();
         }
 
         protected override void ListChanged()
         {
             Topic.ClearAll();
-            
-            foreach (var info in qim.GetFilteredQuestInfos())
+
+            foreach (var info in Qim.GetFilteredQuestInfos())
             {
                 foreach (var topic in info.Topics)
                 {
                     Topic.Create(topic).AddQuestInfo(info);
                 }
             }
+
             var t = Topic.Cursor;
 
             SetDirty();
@@ -108,7 +108,7 @@ namespace Code.GQClient.UI.Foyer.containers
             {
                 TopicButtonCtrl.Create(topicContentRoot, topic);
             }
-            
+
             // show topic area:
             topicArea.SetActive(true);
         }
@@ -135,6 +135,18 @@ namespace Code.GQClient.UI.Foyer.containers
         public void OnUpwardSelected()
         {
             Topic.CursorMoveUp();
+        }
+
+        public void OnEnable()
+        {
+            // base.OnEnable();
+            TopicFilter.Instance.IsActive = true;
+        }
+
+        public void OnDisable()
+        {
+            TopicFilter.Instance.IsActive = false;
+            // base.OnDisable();
         }
     }
 }

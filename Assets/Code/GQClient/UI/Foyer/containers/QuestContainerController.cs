@@ -16,17 +16,31 @@ namespace Code.GQClient.UI.Foyer.containers
     /// </summary>
     public abstract class QuestContainerController : MonoBehaviour
     {
-        protected QuestInfoManager qim;
+        protected QuestInfoManager Qim => QuestInfoManager.Instance;
 
-        protected Dictionary<int, QuestInfoUIC> QuestInfoControllers;
+        private Dictionary<int, QuestInfoUIC> _questInfoControllers;
+        protected bool StartUpdateViewAlreadyDone;
+
+        protected Dictionary<int, QuestInfoUIC> QuestInfoControllers
+        {
+            get
+            {
+                if (_questInfoControllers == null)
+                {
+                    _questInfoControllers = new Dictionary<int, QuestInfoUIC>();
+                }
+
+                return _questInfoControllers;
+            }
+        }
 
         protected void Start()
         {
-            qim = QuestInfoManager.Instance;
-            QuestInfoControllers = new Dictionary<int, QuestInfoUIC>();
-            qim.OnDataChange += OnQuestInfoChanged;
-            qim.OnFilterChange += OnQuestInfoChanged;
+            //           qim = QuestInfoManager.Instance;
+            Qim.OnDataChange += OnQuestInfoChanged;
+            Qim.OnFilterChange += OnQuestInfoChanged;
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
+            StartUpdateViewAlreadyDone = true;
         }
 
         public virtual void OnQuestInfoChanged(object sender, QuestInfoChangedEvent e)
@@ -69,12 +83,29 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected abstract void AddedInfo(QuestInfoChangedEvent e);
 
+        // protected void OnEnable()
+        // {
+        //     Qim.OnDataChange += OnQuestInfoChanged;
+        //     Qim.OnFilterChange += OnQuestInfoChanged;
+        //     ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
+        // }
+        //
+        // protected void OnDisable()
+        // {
+        //     if (Qim != null)
+        //     {
+        //         Qim.OnDataChange -= OnQuestInfoChanged;
+        //         Qim.OnFilterChange -= OnQuestInfoChanged;
+        //         ShowDeleteOption.DeleteOptionVisibilityChanged -= UpdateElementViews;
+        //     }
+        // }
+
         void OnDestroy()
         {
-            if (qim != null)
+            if (Qim != null)
             {
-                qim.OnDataChange -= OnQuestInfoChanged;
-                qim.OnFilterChange -= OnQuestInfoChanged;
+                Qim.OnDataChange -= OnQuestInfoChanged;
+                Qim.OnFilterChange -= OnQuestInfoChanged;
                 ShowDeleteOption.DeleteOptionVisibilityChanged -= UpdateElementViews;
             }
         }
