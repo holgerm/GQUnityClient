@@ -3,11 +3,20 @@ using Code.GQClient.UI.Foyer;
 
 namespace GQClient.Model
 {
-    public class TopicFilter : QuestInfoFilter
+    public class TopicFilter : QuestInfoFilter.ActivatableFilter
     {
         private static TopicFilter _instance;
 
-        public static TopicFilter Instance => new TopicFilter();
+        public static TopicFilter Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new TopicFilter();
+
+                return _instance;
+            }
+        }
 
         private TopicFilter()
         {
@@ -16,6 +25,16 @@ namespace GQClient.Model
 
         public override bool Accept(QuestInfo qi)
         {
+            if (!IsActive)
+            {
+                return true;
+            }
+            
+            if (Topic.Cursor == Topic.Root)
+            {
+                return true;
+            }
+            
             // TODO Check wether qi fits to current cursor topic
             foreach (var topicString in qi.Topics)
             {
@@ -30,5 +49,10 @@ namespace GQClient.Model
         {
             return qi.Categories;
         }
+
+        public override string ToString()
+        {
+            return "TopicFilter";
+        } 
     }
 }
