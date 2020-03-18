@@ -212,8 +212,8 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 36
-  m_fontSizeMax: 52
+  m_fontSizeMin: 45
+  m_fontSizeMax: 65
   m_fontStyle: 1
   m_textAlignment: 513
   m_characterSpacing: 0

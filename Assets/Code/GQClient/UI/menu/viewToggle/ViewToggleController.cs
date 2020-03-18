@@ -17,20 +17,20 @@ namespace Code.GQClient.UI.menu.viewToggle
 		public static ViewToggleController Create (GameObject root)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create ("prefabs", "ViewToggle", root);
+			var go = PrefabController.Create ("prefabs", "ViewToggle", root);
 			go.name = "ViewToggle";
 
 			// set menu entry height:
 //			MenuLayoutConfig.SetEntryHeight (go);
 
 			// save tree controller & folder:
-			ViewToggleController viewCtrl = go.GetComponent<ViewToggleController> ();
+			var viewCtrl = go.GetComponent<ViewToggleController> ();
 
-			MultiToggleButton mtb = viewCtrl.GetComponent<MultiToggleButton> ();
+			var mtb = viewCtrl.GetComponent<MultiToggleButton> ();
 			mtb.shownObjects = new GameObject[ConfigurationManager.Current.questInfoViews.Length];
-			for (int i = 0; i < ConfigurationManager.Current.questInfoViews.Length; i++) {
-                string viewName = ConfigurationManager.Current.questInfoViews[i];
-				string mtbGoName = "ViewToggleTo" + viewName;
+			for (var i = 0; i < ConfigurationManager.Current.questInfoViews.Length; i++) {
+                var viewName = ConfigurationManager.Current.questInfoViews[i];
+				var mtbGoName = "ViewToggleTo" + viewName;
 				mtb.shownObjects [i] = PrefabController.Create ("prefabs", mtbGoName, viewCtrl.gameObject);
 				mtb.shownObjects [i].name = mtbGoName;
                 mtb.shownObjects[i].transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("icons/" + viewName.ToLower());
