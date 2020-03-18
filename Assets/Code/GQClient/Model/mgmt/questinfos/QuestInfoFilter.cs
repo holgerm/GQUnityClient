@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -73,7 +74,22 @@ namespace GQClient.Model
             }
         }
 
-        public class HiddenQuestsFilter : QuestInfoFilter
+        public abstract class ActivatableFilter : QuestInfoFilter
+        {
+            protected bool _isActive;
+
+            public bool IsActive
+            {
+                get => _isActive;
+                set
+                {
+                    _isActive = value;
+                    RaiseFilterChangeEvent();
+                }
+            }
+        }
+
+        public class HiddenQuestsFilter : ActivatableFilter
         {
 
             private static HiddenQuestsFilter _instance;
@@ -97,20 +113,6 @@ namespace GQClient.Model
                     {
                         IsActive = !ConfigurationManager.Current.ShowHiddenQuests;
                     };
-            }
-
-            private bool _isActive;
-            public bool IsActive
-            {
-                get
-                {
-                    return _isActive;
-                }
-                set
-                {
-                    _isActive = value;
-                    RaiseFilterChangeEvent();
-                }
             }
 
             public override bool Accept(QuestInfo qi)
