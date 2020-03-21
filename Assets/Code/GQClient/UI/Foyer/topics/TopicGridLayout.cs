@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
 using Code.GQClient.UI.layout;
 using Code.QM.Util;
 using UnityEngine;
@@ -20,8 +21,10 @@ public class TopicGridLayout : LayoutConfig
         var padding = _gridLayoutGroup.padding;
         var emptyWidth = padding.left + padding.right + _gridLayoutGroup.spacing.x;
         var cellWidth = (Device.width - emptyWidth) / 2f;
-        var cellHeight = cellWidth / 1.7f;
+        var cellHeight = cellWidth / ConfigurationManager.Current.topicButtonAspectRatio;
         _gridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
+        _gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+        _gridLayoutGroup.constraintCount = ConfigurationManager.Current.topicRowsNumber;
     }
 
 
