@@ -17,99 +17,114 @@ namespace Code.GQClient.UI.layout
 
         private void OnValidate()
         {
-            Reset();
+            Layout();
         }
 
         public void Start()
         {
-            Reset();
+            Layout();
         }
 
         public void Reset()
         {
-            Config config = ConfigurationManager.Current;
+            Layout();
+        }
+
+        protected Config Config => ConfigurationManager.Current;
+
+        private void Layout()
+        {
+            CommonLayout();
+            SpecialLayout();
+        }
+
+        private void CommonLayout()
+        {
             TextElement = GetComponent<TextMeshProUGUI>();
 #if UNITY_EDITOR
             UnityEditorInternal.InternalEditorUtility.SetIsInspectorExpanded(TextElement, false);
 #endif
 
-            TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Font");
+            var font = Resources.Load<TMP_FontAsset>("Font");
             if (font != null)
             {
                 TextElement.font = font;
             }
 
-            TextElement.color = config.mainFgColor;
+            TextElement.color = Config.mainFgColor;
+        }
 
+        protected virtual void SpecialLayout()
+        {
+            Debug.Log("TextElementCtrl.SpecialLayout()");
             switch (textUsageType)
             {
                 case TextUsageType.Title:
-                    TextElement.alignment = mapAlignment(config.textAlignment);
+                    TextElement.alignment = mapAlignment(Config.textAlignment);
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.85f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.95f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.85f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.95f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.lineSpacing = Config.lineSpacing;
                     break;
                 case TextUsageType.TitleCentered:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.85f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.95f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.85f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.95f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.lineSpacing = Config.lineSpacing;
                     break;
                 case TextUsageType.Paragraph:
-                    TextElement.alignment = mapAlignment(config.textAlignment);
+                    TextElement.alignment = mapAlignment(Config.textAlignment);
                     TextElement.enableAutoSizing = false;
-                    TextElement.fontSize = 0.75f * config.mainFontSize;
+                    TextElement.fontSize = 0.75f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.lineSpacing = Config.lineSpacing;
                     break;
-                 case TextUsageType.Caption:
+                case TextUsageType.Caption:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.35f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     break;
                 case TextUsageType.CopyRight:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.35f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     TextElement.color = Color.white;
                     break;
                 case TextUsageType.Option:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.5f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.lineSpacing = Config.lineSpacing;
                     TextElement.overflowMode = TextOverflowModes.Overflow;
                     TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.SettingsOption:
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.35f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.45f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.35f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.45f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.lineSpacing = Config.lineSpacing;
                     TextElement.overflowMode = TextOverflowModes.Overflow;
                     TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.MenuEntry:
-                    TextElement.color = config.menuFGColor;
+                    TextElement.color = Config.menuFGColor;
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.45f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.45f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = false;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
@@ -118,18 +133,17 @@ namespace Code.GQClient.UI.layout
                 case TextUsageType.Button:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.45f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.45f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.raycastTarget = false;
-                    TextElement.raycastTarget = false;
                     break;
                 case TextUsageType.FoyerListEntry:
-                    TextElement.color = config.listEntryFgColor;
+                    TextElement.color = Config.listEntryFgColor;
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = false;
-                    TextElement.fontSize = 0.7f * config.mainFontSize;
+                    TextElement.fontSize = 0.7f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
@@ -139,37 +153,26 @@ namespace Code.GQClient.UI.layout
                 case TextUsageType.DialogTitle:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.7f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.5f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.7f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     break;
                 case TextUsageType.DialogMessage:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.4f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.55f * config.mainFontSize;
+                    TextElement.fontSizeMin = 0.4f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.55f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
-                    break;
-                case TextUsageType.TopicButton:
-                    TextElement.color = config.paletteFGColor;
-                    TextElement.alignment = TextAlignmentOptions.Center;
-                    TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.5f * config.mainFontSize;
-                    TextElement.fontSizeMax = 0.65f * config.mainFontSize;
-                    TextElement.fontStyle = FontStyles.Bold;
-                    TextElement.enableWordWrapping = true;
-                    TextElement.lineSpacing = config.lineSpacing;
+                    TextElement.lineSpacing = Config.lineSpacing;
                     break;
                 default:
                     break;
             }
-
         }
 
-        private TextAlignmentOptions mapAlignment(AlignmentOption configAligment)
+        protected TextAlignmentOptions mapAlignment(AlignmentOption configAligment)
         {
             switch (configAligment)
             {
@@ -239,6 +242,5 @@ namespace Code.GQClient.UI.layout
         CopyRight = 9,
         SettingsOption = 10,
         TitleCentered = 11,
-        TopicButton = 12
     }
 }

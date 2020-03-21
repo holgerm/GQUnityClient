@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 3795326355927734211}
   - component: {fileID: 3795326355927734209}
   - component: {fileID: 3795326355927734208}
-  - component: {fileID: 3795326355927734214}
+  - component: {fileID: 1617833607892115684}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -179,7 +179,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3795326355927734209
 CanvasRenderer:
@@ -217,8 +217,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4293848814
+  m_fontColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -236,12 +236,12 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 32
+  m_fontSize: 64
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 32
-  m_fontSizeMax: 44
+  m_fontSizeMin: 64
+  m_fontSizeMax: 84
   m_fontStyle: 1
   m_textAlignment: 514
   m_characterSpacing: 0
@@ -300,7 +300,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3795326355927734214
+--- !u!114 &1617833607892115684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -309,8 +309,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3795326355927734210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b23dc83883f0464790acc939e0a620d, type: 3}
+  m_Script: {fileID: 11500000, guid: e2fb1cab9ab4c44119e99aca686fe023, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TextElement: {fileID: 3795326355927734208}
-  textUsageType: 12
+  textUsageType: 0
