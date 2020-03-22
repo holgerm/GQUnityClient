@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.UI.layout;
+using Code.GQClient.Util;
 using Code.QM.Util;
 using UnityEngine;
 using UnityEngine.UI;

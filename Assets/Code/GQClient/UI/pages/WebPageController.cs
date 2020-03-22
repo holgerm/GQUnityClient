@@ -42,7 +42,7 @@ namespace Code.GQClient.UI.pages
             myPage = (PageWebPage)page;
 
             // show the forward button text:
-            TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            var forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             if (myPage.ShouldEndOnLoadUrlPart)
             {
                 forwardButtonText.text = myPage.ForwardButtonTextBeforeFinished.Decode4TMP(false);

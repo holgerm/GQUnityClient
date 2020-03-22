@@ -56,7 +56,6 @@ namespace Code.GQClient.UI.layout
 
         protected virtual void SpecialLayout()
         {
-            Debug.Log("TextElementCtrl.SpecialLayout()");
             switch (textUsageType)
             {
                 case TextUsageType.Title:
@@ -125,6 +124,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.alignment = TextAlignmentOptions.Left;
                     TextElement.enableAutoSizing = true;
                     TextElement.fontSizeMin = 0.45f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.65f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = false;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
@@ -153,8 +153,8 @@ namespace Code.GQClient.UI.layout
                 case TextUsageType.DialogTitle:
                     TextElement.alignment = TextAlignmentOptions.Center;
                     TextElement.enableAutoSizing = true;
-                    TextElement.fontSizeMin = 0.5f * Config.mainFontSize;
-                    TextElement.fontSizeMax = 0.7f * Config.mainFontSize;
+                    TextElement.fontSizeMin = 0.4f * Config.mainFontSize;
+                    TextElement.fontSizeMax = 0.8f * Config.mainFontSize;
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     break;

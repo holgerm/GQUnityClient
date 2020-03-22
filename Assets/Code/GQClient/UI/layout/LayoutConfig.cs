@@ -130,7 +130,7 @@ namespace Code.GQClient.UI.layout
 			return result;
 		}
 
-		static public float ScreenHeightUnits {
+		public static float ScreenHeightUnits {
 			get {
 				return (
 				    ConfigurationManager.Current.headerHeightUnits +
@@ -140,17 +140,17 @@ namespace Code.GQClient.UI.layout
 			}
 		}
 
-		static public float ScreenWidthUnits {
+		public static float ScreenWidthUnits {
 			get {
-				float rawScreenWidthUnits = (Device.width * ScreenHeightUnits) / Device.height;
+				var rawScreenWidthUnits = (Device.width * ScreenHeightUnits) / Device.height;
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
 				return rawScreenWidthUnits;
 			}
 		}
 
-		static protected float CanvasScale {
+		private static float CanvasScale {
 			get {
-				foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects()) {
+				foreach (var go in SceneManager.GetActiveScene().GetRootGameObjects()) {
 					if (go.activeSelf && go.GetComponent<Canvas> () != null && go.name.EndsWith ("Canvas")) {
 						return go.transform.localScale.y;
 					}
@@ -163,32 +163,32 @@ namespace Code.GQClient.UI.layout
 			}
 		}
 
-		static public float Units2Pixels (float units)
+		public static float Units2Pixels (float units)
 		{
-			float pixels = (units * (Device.height / ScreenHeightUnits)) / CanvasScale;
+			var pixels = (units * (Device.height / ScreenHeightUnits)) / CanvasScale;
 			return pixels;
 		}
 
 		static protected float MMperINCH = 25.4f;
 
-		static public float Units2MM (float units)
+		public static float Units2MM (float units)
 		{
 			return (units * Device.height * MMperINCH) / (ScreenHeightUnits * Device.dpi);
 		}
 
-		static public float MM2Units (float mm)
+		public static float MM2Units (float mm)
 		{
 			return ScreenHeightUnits * mm * Device.dpi / (Device.height * MMperINCH);
 		}
 
-		static public void SetLayoutElementHeight (LayoutElement layElem, float height)
+		protected static void SetLayoutElementHeight (LayoutElement layElem, float height)
 		{
 			layElem.minHeight = height;	
 			layElem.preferredHeight = height;	
 			layElem.flexibleHeight = 0f;
 		}
 
-		static public void SetLayoutElementWidth (LayoutElement layElem, float width)
+		protected static void SetLayoutElementWidth (LayoutElement layElem, float width)
 		{
 			layElem.minWidth = width;	
 			layElem.preferredWidth = width;	

@@ -12,7 +12,7 @@ namespace Code.GQClient.Model.pages
         public string File { get; set; }
 		public string URL { get; set; }
         public bool ShouldEndOnLoadUrlPart { get; internal set; }
-        public string EndOnLoadUrlPart { get; internal set; }
+        public string AllowForwardOnlyOnLoadUrlPart { get; internal set; }
 		public string EndButtonText { get; set; }
 		public string ForwardButtonTextBeforeFinished { get; set; }
 		#endregion
@@ -29,7 +29,7 @@ namespace Code.GQClient.Model.pages
 
 			// TODO: read ShouldEndOnLoadUrlPart and EndOnLoadUrlPart
 			ShouldEndOnLoadUrlPart = ConfigurationManager.Current.webpageShouldEndOnLoadUrlPart; // TODO GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_FINISHURLCONTAINS, reader);
-			EndOnLoadUrlPart = ConfigurationManager.Current.webpageEndOnLoadUrlPart; // TODO GQML.GetOptionalBoolAttribute(GQML.PAGE_WEBPAGE_ENDONURLPART, reader, false);
+			AllowForwardOnlyOnLoadUrlPart = ConfigurationManager.Current.webpageEndOnLoadUrlPart; // TODO GQML.GetOptionalBoolAttribute(GQML.PAGE_WEBPAGE_ENDONURLPART, reader, false);
 
 		}
 		#endregion

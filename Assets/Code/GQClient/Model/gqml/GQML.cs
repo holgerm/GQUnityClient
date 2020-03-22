@@ -121,7 +121,7 @@ namespace Code.GQClient.Model.gqml
 		public const string PAGE_WEBPAGE_ENDBUTTONTEXT = "endbuttontext";
 		public const string PAGE_WEBPAGE_FORWARDBUTTONTEXTBEFOREFINISHED = "forwardbuttontextbeforefinished";
 		public const string PAGE_WEBPAGE_FINISHURLCONTAINS = "finishurlcontains";
-        public const string PAGE_WEBPAGE_ENDONURLPART = "endonurlpart";
+        public const string PAGE_WEBPAGE_ALLOWFORWARDONLYONURLPART = "allowForwardOnlyOnUrlPart";
 
 		// QR TAG SCANNER PAGE:
 		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";

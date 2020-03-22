@@ -7,7 +7,6 @@ namespace Code.GQClient.UI.layout
     {
         protected override void SpecialLayout()
         {
-            Debug.Log("TopicButtonLayout.SpecialLayout()");
             TextElement.color = Config.paletteFGColor;
             TextElement.alignment = TextAlignmentOptions.Center;
             TextElement.enableAutoSizing = false;
