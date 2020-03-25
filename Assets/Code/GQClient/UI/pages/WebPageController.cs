@@ -43,9 +43,9 @@ namespace Code.GQClient.UI.pages
 
             // show the forward button text:
             var forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            if (myPage.ShouldEndOnLoadUrlPart)
+            if (myPage.AllowLeaveOnUrlContains != "")
             {
-                forwardButtonText.text = myPage.ForwardButtonTextBeforeFinished.Decode4TMP(false);
+                forwardButtonText.text = myPage.EndButtonTextWhenClosed.Decode4TMP(false);
                 forwardButton.interactable = false;
                 backButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "";
                 backButton.interactable = false;

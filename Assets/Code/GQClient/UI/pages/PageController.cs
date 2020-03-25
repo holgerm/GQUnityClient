@@ -90,14 +90,14 @@ namespace Code.GQClient.UI.pages
 
             // Footer:
             forwardButton = FooterButtonPanel.transform.Find("ForwardButton").GetComponent<Button>();
-			Transform backButtonGO = FooterButtonPanel.transform.Find("BackButton");
-			backButton = backButtonGO.GetComponent<Button>();
-            backButtonGO.gameObject.SetActive(page.Quest.History.CanGoBackToPreviousPage);
+			var backButtonGo = FooterButtonPanel.transform.Find("BackButton");
+			backButton = backButtonGo.GetComponent<Button>();
+            backButtonGo.gameObject.SetActive(page.Quest.History.CanGoBackToPreviousPage);
 
             if (ConfigurationManager.Current.hideFooterIfPossible)
             {
-                Transform footer = FooterButtonPanel.transform.parent;
-                if (!page.HasEndEvents() && !backButtonGO.gameObject.activeInHierarchy)
+                var footer = FooterButtonPanel.transform.parent;
+                if (!page.HasEndEvents() && !backButtonGo.gameObject.activeInHierarchy)
                 {
                     footer.gameObject.SetActive(false);
                 }
@@ -109,15 +109,9 @@ namespace Code.GQClient.UI.pages
             Base.Instance.BlockInteractions(false);
         }
 
-        internal virtual bool OfferLeaveQuest
-        {
-            get
-            {
-                return ConfigurationManager.Current.OfferLeaveQuests;
-            }
-        }
+        internal virtual bool OfferLeaveQuest => ConfigurationManager.Current.OfferLeaveQuests;
 
-#endregion
+        #endregion
 
 
 #region Runtime API

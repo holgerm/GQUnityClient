@@ -714,12 +714,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor(StartSection = "Internal:")]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 emulationColor { get; set; }
-
-        [ShowInProductEditor(StartSection = "Temporary stuff:")]
-        public bool webpageShouldEndOnLoadUrlPart { get; set; }
-
-        [ShowInProductEditor] public string webpageEndOnLoadUrlPart { get; set; }
-
+        
         #endregion
 
 
@@ -876,10 +871,6 @@ namespace Code.GQClient.Conf
 
             // Internal:
             emulationColor = new Color(255f, 182f, 182f, 255f);
-
-            // Temporary:
-            webpageShouldEndOnLoadUrlPart = false;
-            webpageEndOnLoadUrlPart = "";
         }
 
         #endregion

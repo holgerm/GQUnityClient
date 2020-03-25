@@ -119,9 +119,12 @@ namespace Code.GQClient.Model.gqml
 		public const string PAGE_WEBPAGE_FILE = "file";
 		public const string PAGE_WEBPAGE_URL = "url";
 		public const string PAGE_WEBPAGE_ENDBUTTONTEXT = "endbuttontext";
-		public const string PAGE_WEBPAGE_FORWARDBUTTONTEXTBEFOREFINISHED = "forwardbuttontextbeforefinished";
-		public const string PAGE_WEBPAGE_FINISHURLCONTAINS = "finishurlcontains";
-        public const string PAGE_WEBPAGE_ALLOWFORWARDONLYONURLPART = "allowForwardOnlyOnUrlPart";
+		public const string PAGE_WEBPAGE_ENDBUTTONTEXT_CLOSED = "endbuttontextwhenclosed";
+		public const string PAGE_WEBPAGE_ALLOW_LEAVE_ON_URL_CONTAINS = "allowleaveonurlcontains";
+		public const string PAGE_WEBPAGE_ALLOW_LEAVE_ON_URL_DOESNOTCONTAIN = "allowleaveonurldoesnotcontain";
+		public const string PAGE_WEBPAGE_ALLOW_LEAVE_ON_HTML_CONTAINS = "allowleaveonhtmlcontains";
+		public const string PAGE_WEBPAGE_ALLOW_LEAVE_ON_HTML_DOESNOTCONTAIN = "allowleaveonhtmldoesnotcontain";
+		public const string PAGE_WEBPAGE_LEAVE_ON_ALLOW = "leaveOnAllow";
 
 		// QR TAG SCANNER PAGE:
 		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";
