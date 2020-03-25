@@ -23,13 +23,13 @@ namespace Code.GQClient.UI.pages.videoplayer
                     if (uniWebView == null)
                     {
                         uniWebView = containerWebPlayer.AddComponent<UniWebView>();
-
                     }
 
                     uniWebView.OnPageErrorReceived += (UniWebView webView, int errorCode, string errorMessage) =>
                     {
                         Log.SignalErrorToDeveloper("YOUTUBE PLAYER: OnPageErrorReceived errCode: " + errorCode
-                                  + "\n\terrMessage: " + errorMessage);
+                                                                                                   + "\n\terrMessage: " +
+                                                                                                   errorMessage);
                     };
                     uniWebView.OnShouldClose += (webView) =>
                     {
@@ -43,7 +43,8 @@ namespace Code.GQClient.UI.pages.videoplayer
 
                     containerWebPlayer.SetActive(true);
 
-                    myPage.PageCtrl.FooterButtonPanel = ((VideoPlayController)myPage.PageCtrl).webPlayerFooterButtonPanel;
+                    myPage.PageCtrl.FooterButtonPanel =
+                        ((VideoPlayController) myPage.PageCtrl).webPlayerFooterButtonPanel;
                     Transform backButtonGO = myPage.PageCtrl.FooterButtonPanel.transform.Find("BackButton");
                     backButtonGO.gameObject.SetActive(myPage.Quest.History.CanGoBackToPreviousPage);
 
@@ -70,7 +71,7 @@ namespace Code.GQClient.UI.pages.videoplayer
         }
 
         private static string YoutubeHTMLFormatString =
-           @"<html>
+            @"<html>
                 <head></head>
                 <body style=""margin:0\"">
                     <iframe width = ""100%"" height=""100%"" 
@@ -83,31 +84,22 @@ namespace Code.GQClient.UI.pages.videoplayer
         public static void Initialize(WebPageController pageCtrl, RectTransform webContainer, string url)
         {
             // show the content:
-            UniWebView webView = webContainer.GetComponent<UniWebView>();
+            var webView = webContainer.GetComponent<UniWebView>();
             if (webView == null)
             {
                 webView = webContainer.gameObject.AddComponent<UniWebView>();
             }
 
-#if DEBUG_LOG
-            UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
-
-            webView.OnPageStarted += (view, myurl) => {
-                Debug.Log("Loading started for url: " + myurl);
-            };
-#endif
-            if (pageCtrl.myPage.ShouldEndOnLoadUrlPart)
-                // enable forward button only when a certain url is loaded:
+            if (ShouldCheckToAllowLeavePage(pageCtrl))
             {
+                Debug.Log($"we should and will check");
                 webView.OnPageFinished += (view, statusCode, curUrl) =>
                 {
-                    checkURLToAllowForwardButton(pageCtrl, curUrl);
+                    if (!CheckUrlToAllowForwardButton(pageCtrl, curUrl))
+                        view.GetHTMLContent((html) => { CheckHtmlToAllowForwardButton(pageCtrl, html); });
                 };
 
-                webView.OnPageStarted += (view, curUrl) =>
-                {
-                    checkURLToAllowForwardButton(pageCtrl, curUrl);
-                };
+                webView.OnPageStarted += (view, curUrl) => { CheckUrlToAllowForwardButton(pageCtrl, curUrl); };
             }
 
             webView.OnPageErrorReceived += (view, error, message) =>
@@ -116,8 +108,8 @@ namespace Code.GQClient.UI.pages.videoplayer
                 Debug.Log("Error: " + message);
             };
 
-            float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
-            float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
+            var headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
+            var footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
             webView.Frame =
                 new Rect(
                     0, headerHeight,
@@ -128,15 +120,47 @@ namespace Code.GQClient.UI.pages.videoplayer
             webView.Load(url);
         }
 
-        private static void checkURLToAllowForwardButton(WebPageController pageCtrl, string myurl)
+        private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)
         {
-            if (myurl.Contains(pageCtrl.myPage.EndOnLoadUrlPart))
+            var shouldCheck = pageCtrl.myPage.AllowLeaveOnUrlContains != "";
+            shouldCheck |= pageCtrl.myPage.AllowLeaveOnUrlDoesNotContain != "";
+            shouldCheck |= pageCtrl.myPage.AllowLeaveOnHtmlContains != "";
+            shouldCheck |= pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain != "";
+            return shouldCheck;
+        }
+
+        private static bool CheckUrlToAllowForwardButton(WebPageController pageCtrl, string myUrl)
+        {
+            var allowLeave = myUrl.Contains(pageCtrl.myPage.AllowLeaveOnUrlContains) ||
+                             !myUrl.Contains(pageCtrl.myPage.AllowLeaveOnUrlDoesNotContain);
+            if (allowLeave)
             {
-                pageCtrl.ForwardButton.interactable = true;
-                TextMeshProUGUI forwardButtonText = pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-                forwardButtonText.text = pageCtrl.myPage.EndButtonText.Decode4TMP(false);
-                pageCtrl.BackButton.interactable = true; // might be set even if back button is not shown but does not matter
-                pageCtrl.BackButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "<";
+                AllowLeavePage(pageCtrl);
+            }
+
+            return allowLeave;
+        }
+
+        private static void AllowLeavePage(WebPageController pageCtrl)
+        {
+            pageCtrl.ForwardButton.interactable = true;
+            var forwardButtonText = pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            forwardButtonText.text = pageCtrl.myPage.EndButtonText.Decode4TMP(false);
+            pageCtrl.BackButton.interactable =
+                true; // might be set even if back button is not shown but does not matter
+            pageCtrl.BackButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "<";
+
+            if (pageCtrl.myPage.LeaveOnAllow)
+            {
+                pageCtrl.myPage.End(false);
+            }
+        }
+
+        private static void CheckHtmlToAllowForwardButton(WebPageController pageCtrl, string html)
+        {
+            if (html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlContains) || !html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain))
+            {
+                AllowLeavePage(pageCtrl);
             }
         }
 

@@ -21,6 +21,8 @@
     "TopicTree",
     "List"
   ],
+  "topicRowsNumber": 2,
+  "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": false,
@@ -138,8 +140,8 @@
       "a": 255
     },
     {
-      "r": 248,
-      "g": 67,
+      "r": 255,
+      "g": 198,
       "b": 0,
       "a": 255
     },
@@ -156,8 +158,8 @@
       "a": 255
     },
     {
-      "r": 255,
-      "g": 195,
+      "r": 248,
+      "g": 67,
       "b": 0,
       "a": 255
     },
@@ -379,7 +381,5 @@
     "g": 95,
     "b": 95,
     "a": 255
-  },
-  "webpageShouldEndOnLoadUrlPart": true,
-  "webpageEndOnLoadUrlPart": "https://www.umfrageonline.com/thank-you"
+  }
 }
