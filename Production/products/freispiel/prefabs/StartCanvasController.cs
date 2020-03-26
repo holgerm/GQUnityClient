@@ -17,7 +17,6 @@ namespace Code.GQClient.start
         // Start is called before the first frame update
         private IEnumerator Start()
         {
-            Debug.Log("Prefab Started");
             if (FadeInImage != null)
             {
                 FadeInImage.color = new Color(1f, 1f, 1f, 0f);
@@ -32,7 +31,6 @@ namespace Code.GQClient.start
                 }
             }
 
-            Debug.Log($"LOADING FOYER @ {Time.frameCount}");
             SceneManager.LoadScene("Foyer");
         }
     }
