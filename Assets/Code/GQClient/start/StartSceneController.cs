@@ -11,9 +11,17 @@ namespace Code.GQClient.start
     {
         private void Start()
         {
-            Debug.Log($"START @{Time.frameCount}");
-            var startCanvas = Instantiate(Resources.Load<GameObject>("prefabs/StartCanvas"));
-            startCanvas.SetActive(true);
+            var startCanvasPrefab = Resources.Load<GameObject>("prefabs/StartCanvas");
+            if (startCanvasPrefab == null)
+            {
+                // skip start canvas since it was not defined
+                SceneManager.LoadScene("Foyer");
+            }
+            else
+            {
+                var startCanvas = Instantiate(startCanvasPrefab);
+                startCanvas.SetActive(true);
+            }
         }
     }
 }
