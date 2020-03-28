@@ -85,7 +85,7 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor] public string[] questInfoViews { get; set; }
         
-        [ShowInProductEditor] public int topicRowsNumber { get; set; }
+        [ShowInProductEditor] public int TopicColumnsNumber { get; set; }
         
         [ShowInProductEditor] public float topicButtonAspectRatio { get; set; }
 
@@ -744,7 +744,7 @@ namespace Code.GQClient.Conf
                 QuestInfoView.TopicTree.ToString(),
                 QuestInfoView.Map.ToString()
             };
-            topicRowsNumber = 2;
+            TopicColumnsNumber = 2;
             topicButtonAspectRatio = 1.0f;
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
             cloudQuestsVisible = true;

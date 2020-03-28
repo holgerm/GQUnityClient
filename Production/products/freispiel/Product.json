@@ -21,7 +21,7 @@
     "TopicTree",
     "List"
   ],
-  "topicRowsNumber": 2,
+  "TopicColumnsNumber": 2,
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
