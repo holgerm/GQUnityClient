@@ -245,11 +245,6 @@ namespace GQClient.Model
             // the rest remains unchanged until content gets updated
 
             InvokeOnChanged();
- 
-            if (Id == 12902)
-            {
-                Debug.Log($"QI QuestInfoHasBeenUpdatedTo @END in: {this}");
-            }
         }
 
         private bool IsUpdateValid(QuestInfo newQuestInfo)

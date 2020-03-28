@@ -43,18 +43,12 @@ namespace GQClient.Model
 
         protected override void updateQuestInfoManager (QuestInfo[] newQuests)
         {
-	        var oldQIString = qim.QuestDict.ContainsKey(12902) ? qim.QuestDict[12902].ToString() : "12902 not found";
-	        var qiX = newQuests.FirstOrDefault(qi => qi.Id == 12902);
-	        var newQIString = qiX != null ? qiX.ToString() : "no questInfos";
-	        Debug.Log($"ImportLocalQuestInfos.updateQuestInfoManager() Test QI old: {oldQIString} \n new: {newQIString}");
-	        
 			foreach (var q in newQuests) {
                 if (q.Id <= 0 || qim.QuestDict.ContainsKey(q.Id))
 					continue;
 
 				qim.AddInfo (q);
 			}
-			Debug.Log($"ImportLocalQuestInfos.updateQuestInfoManager() END Test QI old: {oldQIString} \n new: {newQIString}");
    		}
 
 	}

@@ -170,13 +170,6 @@ namespace GQClient.Model
             }
             
             curInfo.QuestInfoHasBeenUpdatedTo(changedInfo);
-            
-            
-            if (changedInfo.Id == 12902)
-            {
-                Debug.Log($"QIM UpdateInfo BEFORE Container reaction qi: {changedInfo}");
-            }
-
 
             // React also as container to a change info event
             if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi passes the filter?
@@ -238,9 +231,6 @@ namespace GQClient.Model
         /// </summary>
         public void UpdateQuestInfos()
         {
-            var qiString = Instance.QuestDict.ContainsKey(12902) ? Instance.QuestDict[12902].ToString() : "[null]";
-            Debug.Log($"UpdateQuestInfos() Test QI: {qiString}");
-
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             var unused = Base.Instance.GetSimpleBehaviour(

@@ -195,11 +195,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
         public override void UpdateView()
         {
-            if (data.Id == 12902)
-            {
-                Debug.Log($"QI UpdateView(); this: {data}");
-            }
-
             // Update Info-Icon:
             // set info button as configured:
             setCategorySymbol(data);

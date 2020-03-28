@@ -26,10 +26,6 @@ namespace GQClient.Model
 					: JsonConvert.SerializeObject(questInfoList, Newtonsoft.Json.Formatting.Indented);
 				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJSONPath, questInfoJSON);
 
-				foreach (var qi in questInfoList.Where(qi => qi.Id == 12902))
-				{
-					Debug.Log($"ExportQIToJSON. Test QI: {qi}");
-				}
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export quest info json file: " + e.Message);
