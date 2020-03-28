@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Code.GQClient.Err;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -26,10 +28,10 @@ namespace GQClient.Model
 			// import from local quest json file:
 			if (File.Exists (QuestInfoManager.LocalQuestInfoJSONPath)) {
 				try {
-					InputJSON = File.ReadAllText (QuestInfoManager.LocalQuestInfoJSONPath);
+					InputJson = File.ReadAllText (QuestInfoManager.LocalQuestInfoJSONPath);
 				} catch (Exception e) {
 					Log.SignalErrorToDeveloper ("Error while trying to import local quest info json file: " + e.Message);
-					InputJSON = "[]";
+					InputJson = "[]";
 				}
 			}
 		}
@@ -39,13 +41,20 @@ namespace GQClient.Model
             // we read directly from local file cf. constructor.
         }
 
-        protected override void updateQuestInfoManager (QuestInfo[] newQuests) {
+        protected override void updateQuestInfoManager (QuestInfo[] newQuests)
+        {
+	        var oldQIString = qim.QuestDict.ContainsKey(12902) ? qim.QuestDict[12902].ToString() : "12902 not found";
+	        var qiX = newQuests.FirstOrDefault(qi => qi.Id == 12902);
+	        var newQIString = qiX != null ? qiX.ToString() : "no questInfos";
+	        Debug.Log($"ImportLocalQuestInfos.updateQuestInfoManager() Test QI old: {oldQIString} \n new: {newQIString}");
+	        
 			foreach (var q in newQuests) {
                 if (q.Id <= 0 || qim.QuestDict.ContainsKey(q.Id))
 					continue;
 
 				qim.AddInfo (q);
 			}
+			Debug.Log($"ImportLocalQuestInfos.updateQuestInfoManager() END Test QI old: {oldQIString} \n new: {newQIString}");
    		}
 
 	}

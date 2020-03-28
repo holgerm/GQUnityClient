@@ -4,6 +4,7 @@ using Code.GQClient.Err;
 using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -26,18 +27,28 @@ namespace GQClient.Model
         /// </summary>
         public ImportQuestInfos() : base()
         {
-            InputJSON = "[]";
+            InputJson = "[]";
             qim = QuestInfoManager.Instance;
         }
 
         protected QuestInfoManager qim;
-        protected string InputJSON { get; set; }
+
+        private string _inputJson;
+        protected string InputJson
+        {
+            get => _inputJson;
+            set
+            {
+                Debug.Log($"InputJSON set in type {GetType().Name} to: {value}");
+                _inputJson = value;
+            }
+        }
 
         protected override void ReadInput(object input = null)
         {
             if (input != null && input is string)
             {
-                InputJSON = input as string;
+                InputJson = input as string;
             }
             else
             {
@@ -51,7 +62,7 @@ namespace GQClient.Model
 
             try
             {
-                quests = JsonConvert.DeserializeObject<QuestInfo[]>(InputJSON,
+                quests = JsonConvert.DeserializeObject<QuestInfo[]>(InputJson,
                     new JsonSerializerSettings
                     {
                         Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
@@ -69,7 +80,7 @@ namespace GQClient.Model
                 Log.SignalErrorToDeveloper(
                     "Error in JSON while trying to update quest infos: {0}\nJSON:\n{1}",
                     e.Message,
-                    InputJSON
+                    InputJson
                 );
                 yield break;
             }

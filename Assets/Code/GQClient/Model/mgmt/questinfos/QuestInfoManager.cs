@@ -162,27 +162,34 @@ namespace GQClient.Model
 
         public void UpdateInfo(QuestInfo changedInfo)
         {
-            if (!QuestDict.TryGetValue(changedInfo.Id, out var oldInfo))
+            if (!QuestDict.TryGetValue(changedInfo.Id, out var curInfo))
             {
                 Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because ot was not found locally.",
                     changedInfo.Id);
                 return;
             }
+            
+            curInfo.QuestInfoHasBeenUpdatedTo(changedInfo);
+            
+            
+            if (changedInfo.Id == 12902)
+            {
+                Debug.Log($"QIM UpdateInfo BEFORE Container reaction qi: {changedInfo}");
+            }
 
-            oldInfo.QuestInfoHasBeenUpdatedTo(changedInfo);
 
             // React also as container to a change info event
-            if (Filter.Accept(oldInfo))
+            if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi passes the filter?
             {
                 // Run through filter and raise event if involved
 
                 onDataChange?.Invoke(
                     this,
                     new QuestInfoChangedEvent(
-                        message: $"Info for quest {oldInfo.Name} changed.",
+                        message: $"Info for quest {curInfo.Name} changed.",
                         type: ChangeType.ChangedInfo,
-                        newQuestInfo: changedInfo,
-                        oldQuestInfo: oldInfo
+                        newQuestInfo: curInfo,
+                        oldQuestInfo: curInfo
                     )
                 );
             }
@@ -231,9 +238,9 @@ namespace GQClient.Model
         /// </summary>
         public void UpdateQuestInfos()
         {
-#if DEBUG_LOG
-            Debug.Log("UpdateQuestInfos()");
-#endif
+            var qiString = Instance.QuestDict.ContainsKey(12902) ? Instance.QuestDict[12902].ToString() : "[null]";
+            Debug.Log($"UpdateQuestInfos() Test QI: {qiString}");
+
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             var unused = Base.Instance.GetSimpleBehaviour(
@@ -242,7 +249,7 @@ namespace GQClient.Model
                 string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
             );
 
-            Downloader downloader =
+            var downloader =
                 new Downloader(
                     url: ConfigurationManager.UrlPublicQuestsJSON,
                     timeout: ConfigurationManager.Current.timeoutMS,
@@ -269,10 +276,10 @@ namespace GQClient.Model
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
             );
 
-            AutoLoadAndUpdate autoLoader =
+            var autoLoader =
                 new AutoLoadAndUpdate();
 
-            TaskSequence t = 
+            var t = 
                 new TaskSequence(
                     importLocal, 
                     downloader, 

@@ -164,7 +164,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
         public static GameObject Create(GameObject root, QuestInfo qInfo, QuestListController containerController)
         {
             // Create the view object for this controller:
-            GameObject go = PrefabController.Create("prefabs", PREFAB, root);
+            var go = PrefabController.Create("prefabs", PREFAB, root);
             go.name = PREFAB + " (" + qInfo.Name + ")";
 
             // set entry height:
@@ -195,6 +195,11 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
         public override void UpdateView()
         {
+            if (data.Id == 12902)
+            {
+                Debug.Log($"QI UpdateView(); this: {data}");
+            }
+
             // Update Info-Icon:
             // set info button as configured:
             setCategorySymbol(data);
@@ -202,7 +207,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             // Update Name:
             Name.text = data.Name;
             // Set Name button for download or play or nothing:
-            Button nameButton = Name.gameObject.GetComponent<Button>();
+            var nameButton = Name.gameObject.GetComponent<Button>();
             nameButton.onClick.RemoveAllListeners();
             if (data.ShowDownloadOption)
             {
@@ -263,7 +268,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
                         break;
                 }
 
-                Image infoImage = InfoButton.transform.Find("Image").GetComponent<Image>();
+                var infoImage = InfoButton.transform.Find("Image").GetComponent<Image>();
                 infoImage.enabled = true;
                 infoImage.color = ConfigurationManager.Current.listEntryFgColor;
                 InfoButton.enabled = false;

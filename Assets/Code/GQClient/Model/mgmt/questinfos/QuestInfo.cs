@@ -13,6 +13,7 @@ using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -137,7 +138,7 @@ namespace GQClient.Model
 
         public string GetMetadata(string key)
         {
-            foreach (MetaDataInfo md in Metadata)
+            foreach (var md in Metadata)
             {
                 if (md.Key.Equals(key))
                     return md.Value;
@@ -237,13 +238,18 @@ namespace GQClient.Model
             {
                 return;
             }
-
+  
             // OK. Let's go:
             ServerTimeStamp = newQuestInfo.ServerTimeStamp;
             NewVersionOnServer = newQuestInfo;
             // the rest remains unchanged until content gets updated
 
             InvokeOnChanged();
+ 
+            if (Id == 12902)
+            {
+                Debug.Log($"QI QuestInfoHasBeenUpdatedTo @END in: {this}");
+            }
         }
 
         private bool IsUpdateValid(QuestInfo newQuestInfo)
@@ -513,16 +519,21 @@ namespace GQClient.Model
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendFormat("{0} (id: {1})\n", Name, Id);
-            sb.AppendFormat("\t last server update: {0}",
+            sb.AppendFormat("\t new version on server: {0}",
                 NewVersionOnServer == null ? "null" : NewVersionOnServer.TimeStamp.ToString());
-            sb.AppendFormat("\t type id: {0}", TypeID);
-            sb.AppendFormat("\t icon path: {0}", IconPath);
-            sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
-            sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
-            sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
+           // sb.AppendFormat("\t type id: {0}", TypeID);
+           // sb.AppendFormat("\t icon path: {0}", IconPath);
+          //  sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
+          //  sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
+          //  sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
+            sb.Append($"\t HasUpdate?: {HasUpdate}");
+            sb.Append($"\t IsOnDevice?: {IsOnDevice}");
+            sb.Append($"\t IsOnServer?: {IsOnServer}");
+            sb.Append($"\t ShowDownloadOption?: {ShowDownloadOption}");
+            sb.Append($"\t ShowUpdateOption?: {ShowUpdateOption}");
 
             return sb.ToString();
         }

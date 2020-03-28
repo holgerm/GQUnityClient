@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Code.GQClient.Conf;
+using UnityEngine;
 
 namespace GQClient.Model
 {
-
     /// <summary>
     /// Imports quest infos from JSON files. Either form the servers listing of all quest infos that are available, 
     /// or form the local json file which keeps track of the latest state of local and remote quest infos.
@@ -16,20 +17,23 @@ namespace GQClient.Model
     /// </summary>
     public class ImportServerQuestInfos : ImportQuestInfos
     {
-
         public ImportServerQuestInfos() : base()
         {
         }
 
         protected override void updateQuestInfoManager(QuestInfo[] newQuests)
         {
-
             // we make a separate list of ids of all old quest infos:
             var oldIDsToBeRemoved = new List<int>(qim.QuestDict.Keys);
 
             // we create new qi elements and keep those we can reuse. We remove those from our helper list.
             foreach (var newInfo in newQuests)
             {
+                if (newInfo.Id == 12902)
+                {
+                    Debug.Log($"ImportServerQI updateQuestInfoManager() newInfo: {newInfo}");
+                }
+
                 QuestInfo oldInfo = null;
                 if (qim.QuestDict.TryGetValue(newInfo.Id, out oldInfo))
                 {
@@ -38,11 +42,28 @@ namespace GQClient.Model
 
                     if (oldInfo.TimeStamp == null || oldInfo.TimeStamp < newInfo.ServerTimeStamp)
                     {
+                        if (newInfo.Id == 12902)
+                        {
+                            Debug.Log($"## 1");
+                        }
+
                         qim.UpdateInfo(newInfo);
+                    }
+                    else
+                    {
+                        if (newInfo.Id == 12902)
+                        {
+                            Debug.Log($"## 2");
+                        }
                     }
                 }
                 else
                 {
+                    if (newInfo.Id == 12902)
+                    {
+                        Debug.Log($"## 3");
+                    }
+
                     qim.AddInfo(newInfo);
                 }
             }
@@ -52,6 +73,12 @@ namespace GQClient.Model
             {
                 if (ConfigurationManager.Current.autoSynchQuestInfos)
                 {
+                    if (oldID == 12902)
+                    {
+                        Debug.Log($"ImportServerQI removing: {oldID}");
+                    }
+
+
                     // with autoSynch we automatically remove the local quest data:
                     qim.QuestDict[oldID].Delete();
 
@@ -63,18 +90,32 @@ namespace GQClient.Model
                     // when manually synching ...
                     if (qim.QuestDict[oldID].IsOnDevice)
                     {
+                        if (oldID == 12902)
+                        {
+                            Debug.Log($"ImportServerQI deletedFromServer (-> OnChange should be triggered): {oldID}");
+                        }
+
                         // if the quest exists local, we simply set the server-side update timestamp to null:
                         qim.QuestDict[oldID].DeletedFromServer();
                         // this will trigger an OnChanged event and update the according view of the list element
                     }
                     else
                     {
+                        if (oldID == 12902)
+                        {
+                            Debug.Log($"ImportServerQI is not on device and server: remove info: {oldID}");
+                        }
+
                         // if the quest has not been loaded yet, we remove the quest info:
+                        qim.QuestDict[oldID].Delete(); // introduced newly without exact knowledge (hm)
                         qim.RemoveInfo(oldID);
                     }
                 }
             }
-        }
 
+            var qiX = newQuests.FirstOrDefault(info => info.Id == 12902);
+            var newQiString = qiX != null ? qiX.ToString() : "no questInfos";
+            Debug.Log($"ImportServerQI @END: {newQiString}");
+        }
     }
 }

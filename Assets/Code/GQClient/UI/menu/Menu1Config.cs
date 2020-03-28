@@ -13,15 +13,15 @@ namespace Code.GQClient.UI.menu
 
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            Config cf = ConfigurationManager.Current;
+            var cf = ConfigurationManager.Current;
             updateQuestInfos_MenuEntry.SetActive(
                 cf.OfferManualUpdate4QuestInfos
             );
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             Author.SettingsChanged += Author_SettingsChanged;
         }
@@ -31,9 +31,9 @@ namespace Code.GQClient.UI.menu
             Author.SettingsChanged -= Author_SettingsChanged;
         }
 
-        void Author_SettingsChanged(object sender, System.EventArgs e)
+        private void Author_SettingsChanged(object sender, System.EventArgs e)
         {
-            Config cf = ConfigurationManager.Current;
+            var cf = ConfigurationManager.Current;
             updateQuestInfos_MenuEntry.SetActive(cf.OfferManualUpdate4QuestInfos);
         }
 

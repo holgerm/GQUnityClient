@@ -12,12 +12,12 @@ namespace Code.GQClient.Model.mgmt.quests
 
         protected override IEnumerator DoTheWork()
         {
-            List<QuestInfo> questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
+            var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
 
-            int loadCounter = 0;
-            int updateCounter = 0;
+            var loadCounter = 0;
+            var updateCounter = 0;
 
-            foreach (QuestInfo qi in questInfoList)
+            foreach (var qi in questInfoList)
             {
                 //if (qi.Name == "Neue Quest 2") {
                 //    Debug.Log("Found");

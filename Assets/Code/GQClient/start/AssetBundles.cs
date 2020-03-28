@@ -24,7 +24,7 @@ namespace Code.GQClient.start
         {
             if (!Bundles.ContainsKey(assetBundleName))
             {
-                AssetBundle newBundle = AssetBundle.LoadFromFile(
+                var newBundle = AssetBundle.LoadFromFile(
                         Path.Combine(Application.streamingAssetsPath, assetBundleName));
                 if (newBundle == null)
                 {
@@ -40,7 +40,7 @@ namespace Code.GQClient.start
                 }
             }
 
-            Object obj = Bundles[assetBundleName].LoadAsset(assetName);
+            var obj = Bundles[assetBundleName].LoadAsset(assetName);
             if (obj == null)
             {
                 Log.SignalErrorToDeveloper("Failed to load Asset '{0}' from AssetBundle '{1}'!", assetName, assetBundleName);
