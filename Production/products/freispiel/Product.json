@@ -19,7 +19,7 @@
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
     "TopicTree",
-    "List"
+    "Map"
   ],
   "TopicColumnsNumber": 2,
   "topicButtonAspectRatio": 1.0,
@@ -89,10 +89,10 @@
   "markerHeightMinMM": 0.0,
   "markerHeightMaxMM": 0.0,
   "markerColor": {
-    "r": 185,
-    "g": 0,
-    "b": 13,
-    "a": 0
+    "r": 0,
+    "g": 109,
+    "b": 185,
+    "a": 255
   },
   "markerSymbolFGColor": {
     "r": 0,
@@ -241,9 +241,9 @@
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 128,
+    "g": 229,
+    "b": 130,
     "a": 255
   },
   "footerButtonBgColor": {
