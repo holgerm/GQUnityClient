@@ -150,11 +150,12 @@ namespace Code.GQClient.UI.layout
 
 		private static float CanvasScale {
 			get {
-				foreach (var go in SceneManager.GetActiveScene().GetRootGameObjects()) {
+				foreach (var go in GameObject.FindGameObjectsWithTag("RootCanvas")) {
 					if (go.activeSelf && go.GetComponent<Canvas> () != null && go.name.EndsWith ("Canvas")) {
 						return go.transform.localScale.y;
 					}
 				}
+				
 				Log.SignalErrorToDeveloper (
 					"No root canvas found in scene {0} hence canvas scale factor is set to 1.0f", 
 					SceneManager.GetActiveScene ().name
