@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Text.RegularExpressions;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
@@ -6,8 +8,10 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
 using Code.QM.Util;
+using Paroxe.PdfRenderer;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Code.GQClient.UI.pages.videoplayer
 {
@@ -85,6 +89,20 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         public static void Initialize(WebPageController pageCtrl, RectTransform webContainer, string url)
         {
+            if (pdfUrlRegex.IsMatch(url))
+            {
+                InitializePdfView(pageCtrl, webContainer, url);
+            }
+            else
+            {
+                InitializeWebView(pageCtrl, webContainer, url);
+            }
+        }
+        
+        private static Regex pdfUrlRegex = new Regex(@"(?<url>.*.pdf)(#page=(?<page>\d+))?");
+
+        private static void InitializeWebView(WebPageController pageCtrl, RectTransform webContainer, string url)
+        {            
             // show the content:
             var webView = webContainer.GetComponent<UniWebView>();
             if (webView == null)
@@ -116,9 +134,28 @@ namespace Code.GQClient.UI.pages.videoplayer
                     0, headerHeight,
                     Device.width, Device.height - (headerHeight + footerHeight)
                 );
+
             webView.SetShowSpinnerWhileLoading(true);
             webView.Show(true);
             webView.Load(url);
+        }
+
+        private static void InitializePdfView(WebPageController pageCtrl, RectTransform pdfContainer, string url)
+        {
+            var match = pdfUrlRegex.Match(url);
+            string pdfUrl;
+            int pageNr;
+            if (match.Groups["url"].Success)
+                pdfUrl = match.Groups["url"].Value;
+            if (match.Groups["page"].Success)
+                pageNr = int.Parse(match.Groups["page"].Value);
+
+            var webView = pdfContainer.GetComponent<PDFRenderer>();
+            if (webView == null)
+            {
+                webView = pdfContainer.gameObject.AddComponent<PDFRenderer>();
+            }
+
         }
 
          private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)

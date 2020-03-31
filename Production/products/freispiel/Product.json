@@ -241,9 +241,9 @@
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
-    "r": 128,
-    "g": 229,
-    "b": 130,
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "footerButtonBgColor": {

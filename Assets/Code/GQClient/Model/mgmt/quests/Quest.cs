@@ -234,7 +234,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
             if (!MediaStore.ContainsKey(url))
             {
-                MediaInfo info = new MediaInfo(Id, url);
+                var info = new MediaInfo(Id, url);
                 MediaStore.Add(url, info);
             }
         }

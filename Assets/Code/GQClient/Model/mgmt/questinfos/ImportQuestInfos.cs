@@ -39,7 +39,6 @@ namespace GQClient.Model
             get => _inputJson;
             set
             {
-                Debug.Log($"InputJSON set in type {GetType().Name} to: {value}");
                 _inputJson = value;
             }
         }

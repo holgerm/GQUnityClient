@@ -1,6 +1,9 @@
-﻿using System.Xml;
+﻿using System.Text.RegularExpressions;
+using System.Xml;
 using Code.GQClient.Conf;
 using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
+using UnityEngine;
 
 namespace Code.GQClient.Model.pages
 {
@@ -27,12 +30,26 @@ namespace Code.GQClient.Model.pages
 		#endregion
 
 		#region XML Serialization
+		
+		public static readonly Regex PdfUrlRegex = new Regex(@"(?<url>.*.pdf)(#page=(?<page>\d+))?");
+		
 		protected override void ReadAttributes (XmlReader reader)
 		{
 			base.ReadAttributes (reader);
 
 			File = GQML.GetStringAttribute (GQML.PAGE_WEBPAGE_FILE, reader);
 			URL = GQML.GetStringAttribute (GQML.PAGE_WEBPAGE_URL, reader);
+			if (PdfUrlRegex.IsMatch(URL))
+			{
+				var match = PageWebPage.PdfUrlRegex.Match(URL);
+				string pdfUrl;
+				if (match.Groups["url"].Success)
+				{
+					pdfUrl = match.Groups["url"].Value;
+					Debug.Log($"storing into media: {pdfUrl}");
+					QuestManager.CurrentlyParsingQuest.AddMedia(pdfUrl, "WebPage." + GQML.PAGE_WEBPAGE_URL + " (pdf)");
+				}
+			}
 			EndButtonText = GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_ENDBUTTONTEXT, reader);
 			EndButtonTextWhenClosed  = GQML.GetStringAttribute(GQML.PAGE_WEBPAGE_ENDBUTTONTEXT_CLOSED, reader);
 

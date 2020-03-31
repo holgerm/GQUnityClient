@@ -99,7 +99,7 @@ namespace Code.GQClient.UI.pages.npctalk
         void ShowImage()
         {
             // allow for variables inside the image url:
-            string rtImageUrl = npcPage.ImageUrl.MakeReplacements();
+            var rtImageUrl = npcPage.ImageUrl.MakeReplacements();
 
             // show (or hide completely) image:
             if (rtImageUrl == "")
@@ -131,7 +131,7 @@ namespace Code.GQClient.UI.pages.npctalk
 
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                float imageAreaHeight = image == null ? 0f : fitInAndShowImage(d.Www.texture);
+                var imageAreaHeight = image == null ? 0f : fitInAndShowImage(d.Www.texture);
 
                 imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
                 contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
@@ -144,9 +144,9 @@ namespace Code.GQClient.UI.pages.npctalk
 
         float fitInAndShowImage(Texture2D texture)
         {
-            AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter>();
-            float imageRatio = (float) texture.width / (float) texture.height;
-            float imageAreaHeight =
+            var fitter = image.GetComponent<AspectRatioFitter>();
+            var imageRatio = (float) texture.width / (float) texture.height;
+            var imageAreaHeight =
                 ContentWidthUnits / imageRatio; // if image fits, so we use its height (adjusted to the area):
 
             if (imageRatio < ImageRatioMinimum)
@@ -183,7 +183,7 @@ namespace Code.GQClient.UI.pages.npctalk
                 GameObject.Destroy(dialogItem.gameObject);
             }
 
-            Image bgImg = contentPanel.GetComponent<Image>();
+            var bgImg = contentPanel.GetComponent<Image>();
             if (bgImg != null)
             {
                 bgImg.color = ConfigurationManager.Current.mainBgColor;
@@ -193,13 +193,13 @@ namespace Code.GQClient.UI.pages.npctalk
         void AddCurrentText()
         {
             // decode text for HyperText Component:
-            string currentText = npcPage.CurrentDialogItem.Text.Decode4TMP();
+            var currentText = npcPage.CurrentDialogItem.Text.Decode4TMP();
 
             // create dialog item GO from prefab:
             TextElementCtrl.Create(dialogItemContainer, currentText);
 
             // play audio if specified:
-            float duration = 0f;
+            var duration = 0f;
             if (npcPage.CurrentDialogItem.AudioURL != null && npcPage.CurrentDialogItem.AudioURL != "")
                 duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
 
@@ -217,7 +217,7 @@ namespace Code.GQClient.UI.pages.npctalk
         void UpdateForwardButton()
         {
             // update forward button text:
-            TextMeshProUGUI forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            var forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             forwardButtonText.text = npcPage.HasMoreDialogItems()
                 ? npcPage.NextDialogButtonText.Decode4TMP(false)
                 : npcPage.EndButtonText.Decode4TMP(false);
@@ -227,14 +227,14 @@ namespace Code.GQClient.UI.pages.npctalk
         {
             yield return new WaitForEndOfFrame();
 
-            float usedTime = 0f;
-            float startPosition = contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition;
+            var usedTime = 0f;
+            var startPosition = contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition;
             float newPos;
 
             do
             {
                 usedTime += Time.deltaTime;
-                float share = timespan <= usedTime ? 1f : usedTime / timespan;
+                var share = timespan <= usedTime ? 1f : usedTime / timespan;
                 newPos = Mathf.Lerp(startPosition, 0f, share);
                 contentPanel.GetComponent<ScrollRect>().verticalNormalizedPosition = newPos;
 
