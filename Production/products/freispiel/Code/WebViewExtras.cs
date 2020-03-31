@@ -1,4 +1,6 @@
-﻿using Code.GQClient.Err;
+﻿using System.Collections;
+using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.layout;
@@ -92,7 +94,6 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             if (ShouldCheckToAllowLeavePage(pageCtrl))
             {
-                Debug.Log($"we should and will check");
                 webView.OnPageFinished += (view, statusCode, curUrl) =>
                 {
                     if (!CheckUrlToAllowForwardButton(pageCtrl, curUrl))
@@ -120,7 +121,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             webView.Load(url);
         }
 
-        private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)
+         private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)
         {
             var shouldCheck = pageCtrl.myPage.AllowLeaveOnUrlContains != "";
             shouldCheck |= pageCtrl.myPage.AllowLeaveOnUrlDoesNotContain != "";
@@ -158,7 +159,8 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         private static void CheckHtmlToAllowForwardButton(WebPageController pageCtrl, string html)
         {
-            if (html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlContains) || !html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain))
+            if (html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlContains) ||
+                !html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain))
             {
                 AllowLeavePage(pageCtrl);
             }

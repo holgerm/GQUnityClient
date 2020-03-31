@@ -9657,7 +9657,7 @@ GameObject:
   - component: {fileID: 902144468}
   m_Layer: 5
   m_Name: ProgressCanvas
-  m_TagString: Untagged
+  m_TagString: RootCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

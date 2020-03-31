@@ -139,14 +139,12 @@ namespace Code.GQClient.UI.Foyer.containers
 
         public void OnEnable()
         {
-            // base.OnEnable();
             TopicFilter.Instance.IsActive = true;
         }
 
         public void OnDisable()
         {
             TopicFilter.Instance.IsActive = false;
-            // base.OnDisable();
         }
     }
 }

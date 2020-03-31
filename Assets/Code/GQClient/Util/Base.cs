@@ -77,7 +77,7 @@ namespace Code.GQClient.Util
             {
                 if (_instance == null)
                 {
-                    GameObject baseGO = GameObject.Find(BASE);
+                    var baseGO = GameObject.Find(BASE);
 
                     if (baseGO == null)
                     {

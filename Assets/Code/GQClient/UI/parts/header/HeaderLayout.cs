@@ -9,7 +9,7 @@ namespace Code.GQClient.UI.parts.header
     public class HeaderLayout : LayoutConfig
     {
         public GameObject Header;
-        public GameObject MiddleButton; 
+        public GameObject MiddleButton;
 
         public override void layout()
         {
@@ -25,7 +25,7 @@ namespace Code.GQClient.UI.parts.header
             }
 
             // set background color:
-            Image image = Header.GetComponent<Image>();
+            var image = Header.GetComponent<Image>();
             if (image != null)
             {
                 image.color = ConfigurationManager.Current.headerBgColor;
@@ -33,15 +33,15 @@ namespace Code.GQClient.UI.parts.header
 
             setMiddleButton();
 
-            LayoutElement layElem = Header.GetComponent<LayoutElement>();
+            var layElem = Header.GetComponent<LayoutElement>();
             if (layElem == null)
             {
                 Log.SignalErrorToDeveloper("LayoutElement for Header is null.");
                 return;
             }
 
-            float height = Units2Pixels(HeaderHeightUnits);
-             SetLayoutElementHeight(layElem, height);
+            var height = Units2Pixels(HeaderHeightUnits);
+            SetLayoutElementHeight(layElem, height);
         }
 
         protected virtual void setMiddleButton()
@@ -50,7 +50,7 @@ namespace Code.GQClient.UI.parts.header
                 return;
 
             // show top logo and load image:
-            Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+            var middleTopLogo = MiddleButton.transform.Find("TopLogo");
 
             if (middleTopLogo != null)
             {
@@ -63,6 +63,5 @@ namespace Code.GQClient.UI.parts.header
                 }
             }
         }
-
     }
 }
