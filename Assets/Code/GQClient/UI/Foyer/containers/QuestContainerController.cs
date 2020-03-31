@@ -102,13 +102,9 @@ namespace Code.GQClient.UI.Foyer.containers
 
         void OnDestroy()
         {
-            if (Qim != null)
-            {
-                Qim.OnDataChange -= OnQuestInfoChanged;
-                Qim.OnFilterChange -= OnQuestInfoChanged;
-                ShowDeleteOption.DeleteOptionVisibilityChanged -= UpdateElementViews;
-            }
-        }
+            QuestInfoManager.DoDestroy(this);
+            ShowDeleteOption.DeleteOptionVisibilityChanged -= UpdateElementViews;
+         }
 
         /// <summary>
         /// Assumes no element is new and no element has been removed,

@@ -7,12 +7,14 @@ using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.Foyer.containers;
 using Code.GQClient.UI.menu.categories;
 using Code.GQClient.UI.menu.viewToggle;
 using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
+using GQClient.Model;
 using UnityEngine;
 
 namespace GQClient.Model
@@ -418,6 +420,19 @@ namespace GQClient.Model
         }
 
         #endregion
+
+        /// <summary>
+        /// Remove listeners of QuestContainerController instance if possible:
+        /// </summary>
+        /// <param name="qcc"></param>
+        public static void DoDestroy(QuestContainerController qcc)
+        {
+            if (_instance != null)
+            {
+                Instance.OnDataChange -= qcc.OnQuestInfoChanged;
+                Instance.OnFilterChange -= qcc.OnQuestInfoChanged;
+            }
+        }
     }
 
     public class QuestInfoChangedEvent : EventArgs
