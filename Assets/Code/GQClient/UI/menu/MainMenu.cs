@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Code.GQClient.UI.menu
 {
-
     public class MainMenu : MonoBehaviour
     {
         // Start is called before the first frame update
         public void MainMenuButtonPressed()
         {
-            Base.Instance.partnersCanvas.gameObject.SetActive(false);
+            if (Base.Instance.partnersCanvas != null)
+                Base.Instance.partnersCanvas.gameObject.SetActive(false);
             Base.Instance.imprintCanvas.gameObject.SetActive(false);
             Base.Instance.privacyCanvas.gameObject.SetActive(false);
             Base.Instance.feedbackCanvas.gameObject.SetActive(false);

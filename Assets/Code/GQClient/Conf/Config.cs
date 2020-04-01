@@ -84,9 +84,9 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor] public string nameForQuestsPl { get; set; }
 
         [ShowInProductEditor] public string[] questInfoViews { get; set; }
-        
+
         [ShowInProductEditor] public int TopicColumnsNumber { get; set; }
-        
+
         [ShowInProductEditor] public float topicButtonAspectRatio { get; set; }
 
         public bool cloudQuestsVisible { get; set; }
@@ -647,19 +647,20 @@ namespace Code.GQClient.Conf
 
 
         [ShowInProductEditor(StartSection = "Offered Canvases by 2nd Menu:")]
-        public bool offerPartnersInfo { get; set; }
+        public bool defineAuthorBackDoor { get; set; }
 
-        [ShowInProductEditor] public bool showPartnersInfoAtStart { get; set; }
+        [ShowInProductEditor] public string acceptedAuthorEmail { get; set; }
+
+        [ShowInProductEditor] public string acceptedAuthorPassword { get; set; }
 
         [ShowInProductEditor] public bool offerFeedback { get; set; }
 
         [ShowInProductEditor] public bool offerAuthorLogin { get; set; }
 
-        [ShowInProductEditor] public bool defineAuthorBackDoor { get; set; }
+        [ShowInProductEditor] public bool offerPartnersInfo { get; set; }
 
-        [ShowInProductEditor] public string acceptedAuthorEmail { get; set; }
+        [ShowInProductEditor] public bool showPartnersInfoAtStart { get; set; }
 
-        [ShowInProductEditor] public string acceptedAuthorPassword { get; set; }
 
         [ShowInProductEditor(StartSection = "List Entries:")]
         public float listEntryHeightUnits { get; set; }
@@ -714,7 +715,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor(StartSection = "Internal:")]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 emulationColor { get; set; }
-        
+
         #endregion
 
 

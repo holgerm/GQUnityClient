@@ -780,7 +780,7 @@ namespace GQ.Editor.UI
 
         static protected bool entryDisabled(PropertyInfo propInfo)
         {
-            bool disabled = false;
+            var disabled = false;
             // the entry for the given property will be disabled, if one of the following is true
             disabled |= propInfo.Name.Equals("id");
             disabled |= propInfo.Name.Equals("categoryFiltersStartFolded") && ProductEditor.SelectedConfig.foldableCategoryFilters == false;
@@ -793,14 +793,25 @@ namespace GQ.Editor.UI
         /// </summary>
         static internal bool entryHidden(PropertyInfo propInfo)
         {
-            bool hidden = false;
+            var config = ProductEditor.SelectedConfig;
+            var hidden = false;
 
             // Unreadable properties:
             hidden |= !propInfo.CanRead;
+            
+            // Partner canvas:
+            if (propInfo.Name.Equals("offerPartnersInfo") || propInfo.Name.Equals("showPartnersInfoAtStart"))
+            {
+                if (config.offerPartnersInfo == false && Resources.Load("prefabs/PartnersCanvas") == null)
+                {
+                    // hide it and done.
+                    return true;
+                }
+            }
 
             // Map Providers:
             hidden |= (
-                ProductEditor.SelectedConfig.mapProvider == MapProvider.OpenStreetMap
+                config.mapProvider == MapProvider.OpenStreetMap
             ) && (
                 propInfo.Name.Equals("mapBaseUrl") ||
                 propInfo.Name.Equals("mapKey") ||
@@ -808,7 +819,7 @@ namespace GQ.Editor.UI
                 propInfo.Name.Equals("mapTileImageExtension")
             );
             hidden |= (
-                ProductEditor.SelectedConfig.mapProvider == MapProvider.MapBox
+                config.mapProvider == MapProvider.MapBox
             ) && (
                 propInfo.Name.Equals("mapBaseUrl") ||
                 propInfo.Name.Equals("mapTileImageExtension")
@@ -816,13 +827,13 @@ namespace GQ.Editor.UI
 
             // List Entry Dividing Modes:
             hidden |= (
-                ProductEditor.SelectedConfig.listEntryDividingMode == ListEntryDividingMode.SeparationLines
+                config.listEntryDividingMode == ListEntryDividingMode.SeparationLines
             ) && (
                 propInfo.Name.Equals("listEntrySecondBgColor") ||
                 propInfo.Name.Equals("listEntrySecondFgColor")
             );
             hidden |= (
-                ProductEditor.SelectedConfig.listEntryDividingMode == ListEntryDividingMode.AlternatingColors
+                config.listEntryDividingMode == ListEntryDividingMode.AlternatingColors
             ) && (
                 propInfo.Name.Equals("listLineColor") ||
                 propInfo.Name.Equals("listStartLineWidth") ||
@@ -832,7 +843,7 @@ namespace GQ.Editor.UI
 
             // Text for warning dialog when leaving quest:
             hidden |= (
-                !ProductEditor.SelectedConfig.warnWhenLeavingQuest
+                !config.warnWhenLeavingQuest
             ) && (
                 propInfo.Name.Equals("warnDialogTitleWhenLeavingQuest") ||
                 propInfo.Name.Equals("warnDialogMessageWhenLeavingQuest") ||
@@ -842,13 +853,13 @@ namespace GQ.Editor.UI
 
             // AuthorLogin BackDoor:
             hidden |= (
-                !ProductEditor.SelectedConfig.offerAuthorLogin
+                !config.offerAuthorLogin
             ) && (
                 propInfo.Name.Equals("defineAuthorBackDoor")
             );
             hidden |= (
-                !ProductEditor.SelectedConfig.defineAuthorBackDoor ||
-                !ProductEditor.SelectedConfig.offerAuthorLogin
+                !config.defineAuthorBackDoor ||
+                !config.offerAuthorLogin
             ) && (
                 propInfo.Name.Equals("acceptedAuthorEmail") ||
                 propInfo.Name.Equals("acceptedAuthorPassword")
@@ -858,8 +869,8 @@ namespace GQ.Editor.UI
             hidden |= (
                 propInfo.Name.Equals("autoUpdateFrequency")
             ) && (
-                !ProductEditor.SelectedConfig.autoSynchQuestInfos &&
-                ProductEditor.SelectedConfig.OfferManualUpdate4QuestInfos
+                !config.autoSynchQuestInfos &&
+                config.OfferManualUpdate4QuestInfos
             );
 
             // Undefined properties:

@@ -31,9 +31,10 @@ namespace Code.GQClient.Util
         public GameObject ProgressCanvas;
 
         public Transform canvasRootT;
-        
+
         private GameObject _partnersCanvas;
-        public GameObject partnersCanvas 
+
+        public GameObject partnersCanvas
         {
             get
             {
@@ -42,14 +43,14 @@ namespace Code.GQClient.Util
                     var obj = Resources.Load("prefabs/PartnersCanvas");
                     if (obj == null)
                         return null;
-                    
+
                     _partnersCanvas = (GameObject) Instantiate(obj, canvasRootT);
                 }
 
                 return _partnersCanvas;
             }
         }
-        
+
         public Canvas imprintCanvas;
         public Canvas feedbackCanvas;
         public Canvas privacyCanvas;
@@ -185,7 +186,8 @@ namespace Code.GQClient.Util
 
         private void Start()
         {
-            partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
+            if (Base.Instance.partnersCanvas != null)
+                partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
 
 #if DEBUG_LOG
             DisplaySizeInfo();

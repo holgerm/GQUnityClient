@@ -9,7 +9,7 @@ namespace Code.GQClient.UI.menu
         // Start is called before the first frame update
         public void InfoMenuButtonPressed()
         {
-            if (Base.Instance.partnersCanvas.gameObject.activeSelf)
+            if (Base.Instance.partnersCanvas != null && Base.Instance.partnersCanvas.gameObject.activeSelf)
             {
                 Base.Instance.partnersCanvas.gameObject.SetActive(false);
                 return;

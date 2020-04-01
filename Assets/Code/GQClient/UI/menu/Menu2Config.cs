@@ -17,7 +17,7 @@ namespace Code.GQClient.UI.menu
         // Use this for initialization
         private void Start()
         {
-            if (ConfigurationManager.Current.offerPartnersInfo)
+            if (ConfigurationManager.Current.offerPartnersInfo && Base.Instance.partnersCanvas != null)
             {
                 partnersInfoMenuEntry = ActivateMenuEntry("Unsere Partner", "icons/partners",
                     Base.Instance.partnersCanvas);
