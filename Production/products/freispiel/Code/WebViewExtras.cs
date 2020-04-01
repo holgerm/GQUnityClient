@@ -4,9 +4,11 @@ using System.Text.RegularExpressions;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
+using Code.GQClient.Util.http;
 using Code.QM.Util;
 using Paroxe.PdfRenderer;
 using TMPro;
@@ -89,7 +91,7 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         public static void Initialize(WebPageController pageCtrl, RectTransform webContainer, string url)
         {
-            if (pdfUrlRegex.IsMatch(url))
+            if (PageWebPage.PdfUrlRegex.IsMatch(url))
             {
                 InitializePdfView(pageCtrl, webContainer, url);
             }
@@ -98,11 +100,9 @@ namespace Code.GQClient.UI.pages.videoplayer
                 InitializeWebView(pageCtrl, webContainer, url);
             }
         }
-        
-        private static Regex pdfUrlRegex = new Regex(@"(?<url>.*.pdf)(#page=(?<page>\d+))?");
 
         private static void InitializeWebView(WebPageController pageCtrl, RectTransform webContainer, string url)
-        {            
+        {
             // show the content:
             var webView = webContainer.GetComponent<UniWebView>();
             if (webView == null)
@@ -142,23 +142,46 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         private static void InitializePdfView(WebPageController pageCtrl, RectTransform pdfContainer, string url)
         {
-            var match = pdfUrlRegex.Match(url);
-            string pdfUrl;
-            int pageNr;
-            if (match.Groups["url"].Success)
-                pdfUrl = match.Groups["url"].Value;
+            var match = PageWebPage.PdfUrlRegex.Match(url);
+            if (!match.Groups["url"].Success)
+                return;
+
+            var pdfUrl = match.Groups["url"].Value;
+            var pageNr = 1;
             if (match.Groups["page"].Success)
                 pageNr = int.Parse(match.Groups["page"].Value);
 
-            var webView = pdfContainer.GetComponent<PDFRenderer>();
-            if (webView == null)
+            var pdfViewer = pdfContainer.GetChild(0).GetComponent<PDFViewer>();
+
+            pageCtrl.myPage.Parent.MediaStore.TryGetValue(pdfUrl, out var mediaInfo);
+            if (mediaInfo != null)
             {
-                webView = pdfContainer.gameObject.AddComponent<PDFRenderer>();
+                // pdf locally loaded:
+                pdfViewer.FileSource = PDFViewer.FileSourceType.FilePath;
+                pdfViewer.FilePath = mediaInfo.LocalPath;
+            }
+            else
+            {
+                // pdf remotely to load via url:
+                pdfViewer.FileSource = PDFViewer.FileSourceType.Web;
+                pdfViewer.FileURL = url;
             }
 
+            pdfViewer.gameObject.SetActive(true);
+            Base.Instance.StartCoroutine(PdfGoToPage(pdfViewer, pageNr));
         }
 
-         private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)
+        private static IEnumerator PdfGoToPage(PDFViewer pdfViewer, int pageNr)
+        {
+            while (!pdfViewer.IsLoaded)
+            {
+                yield return null;
+            }
+
+            pdfViewer.GoToPage(pageNr - 1);
+        }
+
+        private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)
         {
             var shouldCheck = pageCtrl.myPage.AllowLeaveOnUrlContains != "";
             shouldCheck |= pageCtrl.myPage.AllowLeaveOnUrlDoesNotContain != "";
