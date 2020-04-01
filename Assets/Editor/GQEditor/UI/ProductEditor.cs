@@ -802,7 +802,7 @@ namespace GQ.Editor.UI
             // Partner canvas:
             if (propInfo.Name.Equals("offerPartnersInfo") || propInfo.Name.Equals("showPartnersInfoAtStart"))
             {
-                if (config.offerPartnersInfo == false && Resources.Load("prefabs/PartnersCanvas") == null)
+                if (config.offerPartnersInfo == false && Resources.Load("ImportedPackage/prefabs/PartnersCanvas") == null)
                 {
                     // hide it and done.
                     return true;

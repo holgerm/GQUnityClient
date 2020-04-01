@@ -33,19 +33,19 @@ namespace Code.GQClient.UI.layout
 		/// </summary>
 		public static void ResetAll ()
 		{
-			Object[] objects = Resources.FindObjectsOfTypeAll (typeof(LayoutConfig));
+			var objects = Resources.FindObjectsOfTypeAll (typeof(LayoutConfig));
 			foreach (var item in objects) {
 				((LayoutConfig)item).Reset ();
 			}
 		}
 
-		static private float _headerHeightUnits { get; set; }
+		private static float _headerHeightUnits { get; set; }
 
 		/// <summary>
 		/// Height of the header element in device-dependent units.
 		/// </summary>
 		/// <value>The height of the header.</value>
-		static public float HeaderHeightUnits {
+		public static float HeaderHeightUnits {
 			get {
 				calculateHeightAdaptations ();
 				return _headerHeightUnits;

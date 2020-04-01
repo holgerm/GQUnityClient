@@ -11,7 +11,7 @@ namespace Code.GQClient.start
     {
         private void Start()
         {
-            var startCanvasPrefab = Resources.Load<GameObject>("prefabs/StartCanvas");
+            var startCanvasPrefab = Resources.Load<GameObject>("ImportedPackage/prefabs/StartCanvas");
             if (startCanvasPrefab == null)
             {
                 // skip start canvas since it was not defined

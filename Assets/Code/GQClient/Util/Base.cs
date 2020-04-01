@@ -40,7 +40,7 @@ namespace Code.GQClient.Util
             {
                 if (_partnersCanvas == null)
                 {
-                    var obj = Resources.Load("prefabs/PartnersCanvas");
+                    var obj = Resources.Load("ImportedPackage/prefabs/PartnersCanvas");
                     if (obj == null)
                         return null;
 
@@ -162,10 +162,10 @@ namespace Code.GQClient.Util
         void Awake()
         {
             // hide all canvases at first, we show the needed ones in initViews()
-            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-            foreach (GameObject rootGo in rootGOs)
+            var rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            foreach (var rootGo in rootGOs)
             {
-                Canvas canv = rootGo.GetComponent<Canvas>();
+                var canv = rootGo.GetComponent<Canvas>();
                 if (canv != null)
                 {
                     if ("DialogCanvas".Equals(canv.name))
@@ -186,7 +186,7 @@ namespace Code.GQClient.Util
 
         private void Start()
         {
-            if (Base.Instance.partnersCanvas != null)
+            if (partnersCanvas != null)
                 partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
 
 #if DEBUG_LOG
