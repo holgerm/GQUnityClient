@@ -196,6 +196,12 @@
   },
   "mainFontSize": 80,
   "textAlignment": "Left",
+  "textLinkColor": {
+    "r": 44,
+    "g": 0,
+    "b": 139,
+    "a": 255
+  },
   "lineSpacing": 10.0,
   "showShadows": true,
   "topLogo": {
