@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.layout
             Layout();
         }
 
-        protected Config Config => ConfigurationManager.Current;
+        protected static Config Config => ConfigurationManager.Current;
 
         private void Layout()
         {
@@ -190,8 +190,9 @@ namespace Code.GQClient.UI.layout
             }
         }
 
-        public void Initialize(string itemText, bool supportHtmlLinks)
+        private void Initialize(string itemText, bool supportHtmlLinks)
         {
+            Debug.Log($"Init Text html-support: {supportHtmlLinks}");
             this.TextElement.text = itemText.Decode4TMP(supportHtmlLinks: supportHtmlLinks);
             this.TextElement.color = ConfigurationManager.Current.mainFgColor;
             this.TextElement.fontSize = ConfigurationManager.Current.mainFontSize;
@@ -199,14 +200,14 @@ namespace Code.GQClient.UI.layout
 
         public static TextElementCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true)
         {
-            GameObject go = (GameObject)Instantiate(
+            var go = (GameObject)Instantiate(
                 AssetBundles.Asset("prefabs", "TextChunk"),
                 rootTransform,
                 false
             );
             go.SetActive(true);
 
-            TextElementCtrl diCtrl = go.GetComponent<TextElementCtrl>();
+            var diCtrl = go.GetComponent<TextElementCtrl>();
             diCtrl.Initialize(text, supportHtmlLinks);
 
             return diCtrl;
@@ -214,12 +215,13 @@ namespace Code.GQClient.UI.layout
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            int linkIndex =
+            Debug.Log("OnPointerClick");
+            var linkIndex =
                 TMP_TextUtilities.FindIntersectingLink(TextElement, Input.mousePosition, null);
 
             if (linkIndex != -1)
             { // was a link clicked?
-                TMP_LinkInfo linkInfo = TextElement.textInfo.linkInfo[linkIndex];
+                var linkInfo = TextElement.textInfo.linkInfo[linkIndex];
 
                 // open the link id as a url, which is the metadata we added in the text field
                 Application.OpenURL(linkInfo.GetLinkID());

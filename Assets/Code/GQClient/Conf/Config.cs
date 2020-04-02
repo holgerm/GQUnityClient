@@ -473,6 +473,10 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public AlignmentOption textAlignment { get; set; }
+        
+        [ShowInProductEditor]
+        [JsonConverter(typeof(Color32Converter))]
+        public Color32 textLinkColor { get; set; }
 
         [ShowInProductEditor] public float lineSpacing { get; set; }
 
@@ -811,6 +815,7 @@ namespace Code.GQClient.Conf
             paletteFGColor = Color.white;
             mainFontSize = 60;
             textAlignment = AlignmentOption.Left;
+            textLinkColor = Color.blue;
             lineSpacing = 10f;
             showShadows = true;
             headerMiddleButtonPolicy = HeaderMiddleButtonPolicy.TopLogo;

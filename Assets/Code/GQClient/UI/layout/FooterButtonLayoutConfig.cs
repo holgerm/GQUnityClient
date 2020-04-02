@@ -23,7 +23,7 @@ namespace Code.GQClient.UI.layout
 
 			// set foreground color in Image:
 			try {
-				Image fgImage = transform.Find ("Image").GetComponent<Image> ();
+				var fgImage = transform.Find ("Image").GetComponent<Image> ();
 				if (fgImage != null) {
 					fgImage.color = ConfigurationManager.Current.footerButtonFgColor;
 				}
