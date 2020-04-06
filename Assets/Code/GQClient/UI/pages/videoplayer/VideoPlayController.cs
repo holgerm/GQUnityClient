@@ -14,7 +14,6 @@ namespace Code.GQClient.UI.pages.videoplayer
 {
     public class VideoPlayController : PageController
     {
-
         #region Inspector Fields
 
         public GameObject videoPlayerPanel;
@@ -25,12 +24,12 @@ namespace Code.GQClient.UI.pages.videoplayer
         public VideoPlayer videoPlayerNormal;
         public GameObject containerNormal;
         public GameObject videoControllerPanelNormal;
-        public GameObject videoControllerPanel360;
         internal GameObject videoControllerPanel;
         private Slider videoControllerSlider;
         public VideoPlayer videoPlayer360;
         public Camera camera360;
         public GameObject container360;
+        public Image arrow360;
         public GameObject containerWebPlayer;
         public RectTransform webPlayerContent;
         public GameObject webPlayerFooterButtonPanel;
@@ -52,7 +51,7 @@ namespace Code.GQClient.UI.pages.videoplayer
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
-            myPage = (PageVideoPlay)page;
+            myPage = (PageVideoPlay) page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";
 
@@ -72,10 +71,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     videoImage.enabled = true;
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(false);
-                    videoPlayer.started += (source) =>
-                    {
-                        videoControllerPanel.SetActive(myPage.Controllable);
-                    };
+                    videoPlayer.started += (source) => { videoControllerPanel.SetActive(myPage.Controllable); };
                     CoroutineStarter.Run(playVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
@@ -84,7 +80,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     videoControllerPanel = videoControllerPanelNormal;
                     videoControllerSlider = videoControllerPanel.GetComponentInChildren<Slider>();
                     videoControllerPanel.SetActive(false);
-                    // switch to 360 Cam:
+                    // switch to 360 Cam and show arrow hint:
                     cameraMain.enabled = false;
                     camera360.enabled = true;
                     // switch to sphere:
@@ -94,6 +90,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     container360.SetActive(true);
                     videoPlayer.started += (source) =>
                     {
+                        arrow360.enabled = true;
                         videoControllerPanel.SetActive(myPage.Controllable);
                     };
                     CoroutineStarter.Run(playVideo());
@@ -112,10 +109,7 @@ namespace Code.GQClient.UI.pages.videoplayer
         /// </summary>
         internal override bool OfferLeaveQuest
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
 
@@ -147,8 +141,9 @@ namespace Code.GQClient.UI.pages.videoplayer
                 }
                 else
                 {
-                    Log.WarnDeveloper("Video file was not loaded into media store, so we let the VideoPlayer load it ... " +
-                              myPage.VideoFile);
+                    Log.WarnDeveloper(
+                        "Video file was not loaded into media store, so we let the VideoPlayer load it ... " +
+                        myPage.VideoFile);
                     videoPlayer.url = myPage.VideoFile;
                 }
             }
@@ -234,8 +229,9 @@ namespace Code.GQClient.UI.pages.videoplayer
                     new360CamZAngle = 270f;
                     newControlsZAngle = 90f;
                 }
+
                 camTransform.eulerAngles =
-                  new Vector3(camTransform.eulerAngles.x, camTransform.eulerAngles.y, new360CamZAngle);
+                    new Vector3(camTransform.eulerAngles.x, camTransform.eulerAngles.y, new360CamZAngle);
                 // rotate "normal" video image to rotate controls:
                 videoImage.rectTransform.eulerAngles = new Vector3(0, 0, newControlsZAngle);
                 return;
@@ -270,10 +266,11 @@ namespace Code.GQClient.UI.pages.videoplayer
                     orient = DeviceOrientation.LandscapeRight;
                 }
             }
-            float videoRatio = (float)videoPlayer.texture.width / (float)videoPlayer.texture.height;
+
+            float videoRatio = (float) videoPlayer.texture.width / (float) videoPlayer.texture.height;
             float screenRatio =
-                (float)containerNormal.GetComponent<RectTransform>().rect.width /
-                (float)containerNormal.GetComponent<RectTransform>().rect.height;
+                (float) containerNormal.GetComponent<RectTransform>().rect.width /
+                (float) containerNormal.GetComponent<RectTransform>().rect.height;
 
             float xScale = 1.0f;
             float yScale = 1.0f;
@@ -294,6 +291,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                         xScale = videoRatio / screenRatio;
                         yScale = 1.0f;
                     }
+
                     videoImage.rectTransform.localScale = new Vector3(xScale, yScale, 1.0f);
                     break;
                 case DeviceOrientation.Unknown: // TEST
@@ -311,6 +309,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                         xScale = videoRatio;
                         yScale = screenRatio;
                     }
+
                     videoImage.rectTransform.localScale = new Vector3(xScale, yScale, 1.0f);
                     break;
                 default:
@@ -331,7 +330,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             if (!Input.GetMouseButton(0))
             {
                 // auto-proceed the movie slider only when no interaction:
-                videoControllerSlider.value = (float)videoPlayer.frame / videoPlayer.frameCount;
+                videoControllerSlider.value = (float) videoPlayer.frame / videoPlayer.frameCount;
             }
         }
 
@@ -351,7 +350,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                 return;
             }
 
-            videoPlayer.frame = (long)(videoPlayer.frameCount * newValue);
+            videoPlayer.frame = (long) (videoPlayer.frameCount * newValue);
         }
 
         public override void CleanUp()

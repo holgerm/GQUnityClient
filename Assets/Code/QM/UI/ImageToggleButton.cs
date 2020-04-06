@@ -26,7 +26,7 @@ namespace Code.QM.UI
         public UnityEvent SwitchedOn;
         public UnityEvent SwitchedOff;
 
-        void Start()
+        private void Start()
         {
             ToggleButton = gameObject.GetComponentInChildren<Button>();
 
@@ -43,6 +43,7 @@ namespace Code.QM.UI
             //ToggleButton.onClick.AddListener(Toggle); // BUGFIX: It had been called double: here and in the father object the catFolder.
             // TODO: we should refactor the whole CatFolder Prefab and its ingredients incl. this script class here.
             ToggleImage.sprite = stateIsOn ? OnSprite : OffSprite;
+            ToggleButton.onClick.AddListener(Toggle);
         }
 
         public void Toggle()
@@ -60,13 +61,13 @@ namespace Code.QM.UI
             }
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             ToggleImage.enabled = false;
             ToggleButton.enabled = false;
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             ToggleImage.enabled = true;
             ToggleButton.enabled = true;
