@@ -96,7 +96,7 @@ namespace Code.GQClient.UI.pages.npctalk
             }
         }
 
-        void ShowImage()
+        private void ShowImage()
         {
             // allow for variables inside the image url:
             var rtImageUrl = npcPage.ImageUrl.MakeReplacements();
@@ -142,7 +142,7 @@ namespace Code.GQClient.UI.pages.npctalk
             loader.Start();
         }
 
-        float fitInAndShowImage(Texture2D texture)
+        private float fitInAndShowImage(Texture2D texture)
         {
             var fitter = image.GetComponent<AspectRatioFitter>();
             var imageRatio = (float) texture.width / (float) texture.height;
@@ -176,7 +176,7 @@ namespace Code.GQClient.UI.pages.npctalk
             return imageAreaHeight;
         }
 
-        void ClearText()
+        private void ClearText()
         {
             foreach (Transform dialogItem in dialogItemContainer)
             {
@@ -190,7 +190,7 @@ namespace Code.GQClient.UI.pages.npctalk
             }
         }
 
-        void AddCurrentText()
+        private void AddCurrentText()
         {
             // decode text for HyperText Component:
             var currentText = npcPage.CurrentDialogItem.Text.Decode4TMP();
@@ -214,7 +214,7 @@ namespace Code.GQClient.UI.pages.npctalk
             }
         }
 
-        void UpdateForwardButton()
+        private void UpdateForwardButton()
         {
             // update forward button text:
             var forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();

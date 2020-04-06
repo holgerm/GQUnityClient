@@ -108,9 +108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 458.35544
+  m_MinHeight: 160
   m_PreferredWidth: -1
-  m_PreferredHeight: 458.35544
+  m_PreferredHeight: 160
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -397,7 +397,7 @@ PrefabInstance:
     - target: {fileID: 2073644145232996625, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
       propertyPath: m_text
-      value: Null Quest
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6509634774654377050, guid: f8f5ed896ae654552b23b403d0ac594a,
         type: 3}
