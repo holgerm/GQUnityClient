@@ -2,15 +2,16 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Code.QM.Util
+namespace Code.QM.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class FadeOutOnFirstUse : MonoBehaviour
+    public class FadeOutCanvas : MonoBehaviour
     {
         private static bool _done;
 
-        public float timeToShow = 2;
-        public float timeToFade = 1.3f;
+        public float timeBeforeFade = 2;
+        public float timeFading = 1.3f;
+        public bool onlyOnFirstUse = true;
         public CanvasGroup canvasGroup;
 
         public void Reset()
@@ -21,7 +22,7 @@ namespace Code.QM.Util
         // Start is called before the first frame update
         private IEnumerator Start()
         {
-            if (_done)
+            if (onlyOnFirstUse && _done)
             {
                 yield break;
             }
@@ -33,19 +34,19 @@ namespace Code.QM.Util
 
             var timeSinceStart = 0f;
 
-            while (timeSinceStart < timeToShow + timeToFade)
+            while (timeSinceStart < timeBeforeFade + timeFading)
             {
                 timeSinceStart += Time.deltaTime;
-                if (canvasGroup != null && timeSinceStart > timeToShow)
+                if (canvasGroup != null && timeSinceStart > timeBeforeFade)
                 {
                     canvasGroup.alpha =
-                        Mathf.Lerp(1f, 0f, (timeSinceStart - timeToShow) / timeToFade);
+                        Mathf.Lerp(1f, 0f, (timeSinceStart - timeBeforeFade) / timeFading);
                 }
 
                 yield return null;
             }
 
-            gameObject.SetActive(false); 
+            gameObject.SetActive(false);
             _done = true;
         }
 
