@@ -47,9 +47,14 @@ namespace Code.GQClient.UI.Foyer.containers
         /// </summary>
         protected void UpdateView()
         {
-            upwardButton.enabled =
+            upwardButton.targetGraphic.enabled = 
                 Topic.Cursor.Parent != Topic.Null;
-            forwardButton.enabled = false;
+            upwardButton.interactable =
+                Topic.Cursor.Parent != Topic.Null;
+            
+            forwardButton.targetGraphic.enabled = false;
+            forwardButton.interactable = false;
+            
             topicName.text = Topic.Cursor.Name;
 
             if (Topic.Cursor.Children.Count > 0)
