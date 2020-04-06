@@ -38,7 +38,7 @@ public class AutoScroll : MonoBehaviour
         {
             usedTime += Time.deltaTime;
             var share = scrollDuration <= usedTime ? 1f : usedTime / scrollDuration;
-            newPos = Mathf.Lerp(startPosition, 0f, share);
+            newPos = Mathf.SmoothStep(startPosition, 0f, share);
             GetComponent<ScrollRect>().verticalNormalizedPosition = newPos;
 
             yield return null;
