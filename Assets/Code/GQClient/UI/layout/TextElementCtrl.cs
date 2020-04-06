@@ -215,7 +215,6 @@ namespace Code.GQClient.UI.layout
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("OnPointerClick");
             var linkIndex =
                 TMP_TextUtilities.FindIntersectingLink(TextElement, Input.mousePosition, null);
 

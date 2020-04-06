@@ -152,6 +152,8 @@ namespace Code.GQClient.UI.pages.videoplayer
                 pageNr = int.Parse(match.Groups["page"].Value);
 
             var pdfViewer = pdfContainer.GetChild(0).GetComponent<PDFViewer>();
+            var cover = pdfContainer.GetChild(1).gameObject;
+            cover.SetActive(true); // cover the pdf until it is readily loaded etc.
 
             pageCtrl.myPage.Parent.MediaStore.TryGetValue(pdfUrl, out var mediaInfo);
             if (mediaInfo != null)
@@ -168,17 +170,23 @@ namespace Code.GQClient.UI.pages.videoplayer
             }
 
             pdfViewer.gameObject.SetActive(true);
-            Base.Instance.StartCoroutine(PdfGoToPage(pdfViewer, pageNr));
+            Base.Instance.StartCoroutine(PdfGoToPage(pdfViewer, pageNr, cover));
         }
 
-        private static IEnumerator PdfGoToPage(PDFViewer pdfViewer, int pageNr)
+        private static IEnumerator PdfGoToPage(PDFViewer pdfViewer, int pageNr, GameObject cover)
         {
             while (!pdfViewer.IsLoaded)
             {
+                Debug.Log("PDF Viewer still loading ...");
                 yield return null;
             }
 
             pdfViewer.GoToPage(pageNr - 1);
+
+            yield return new WaitForEndOfFrame();
+
+            // uncover the pdf after it has been set to the correct page:
+            cover.SetActive(false);
         }
 
         private static bool ShouldCheckToAllowLeavePage(WebPageController pageCtrl)
