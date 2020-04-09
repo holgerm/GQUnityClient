@@ -45,8 +45,8 @@ namespace Code.GQClient.Model.mgmt.quests
 				if (LocalDir == null || LocalFileName == null) {
 					Log.SignalErrorToAuthor("MediaInfo for url {0} invalid: LocalDir: {1}, LocalFileName: {2}",
 						Url,
-						(LocalDir == null) ? "null" : LocalDir,
-						(LocalFileName == null) ? "null" : LocalFileName);
+						LocalDir ?? "null",
+						LocalFileName ?? "null");
 					return null;
 				}
 				else {

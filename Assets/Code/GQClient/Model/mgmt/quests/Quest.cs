@@ -43,7 +43,7 @@ namespace Code.GQClient.Model.mgmt.quests
             get
             {
                 // TODO change the latter two checks to test a flag stored in game.xml base element as an attribute and move to QuestInfo
-                bool shown = ConfigurationManager.Current.ShowHiddenQuests || (Name != null && !Name.StartsWith("---"));
+                var shown = ConfigurationManager.Current.ShowHiddenQuests || (Name != null && !Name.StartsWith("---"));
                 return shown;
             }
         }
@@ -52,12 +52,11 @@ namespace Code.GQClient.Model.mgmt.quests
 
         #region State Pages
 
-        protected Dictionary<int, Page> pageDict = new Dictionary<int, Page>();
+        private Dictionary<int, Page> pageDict = new Dictionary<int, Page>();
 
         public Page GetPageWithID(int id)
         {
-            Page page;
-            if (pageDict.TryGetValue(id, out page))
+            if (pageDict.TryGetValue(id, out var page))
             {
                 return page;
             }
@@ -67,7 +66,7 @@ namespace Code.GQClient.Model.mgmt.quests
             }
         }
 
-        public Page StartPage
+        private Page StartPage
         {
             get;
             set;
@@ -201,7 +200,7 @@ namespace Code.GQClient.Model.mgmt.quests
         {
             _mediaStore = new Dictionary<string, MediaInfo>();
 
-            string mediaJSON = "";
+            var mediaJSON = "";
             try
             {
                 mediaJSON = File.ReadAllText(MediaJsonPath);
@@ -216,11 +215,11 @@ namespace Code.GQClient.Model.mgmt.quests
                 mediaJSON = @"[]"; // we use an empty list then
             }
 
-            List<LocalMediaInfo> localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
+            var localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
 
-            foreach (LocalMediaInfo localInfo in localInfos)
+            foreach (var localInfo in localInfos)
             {
-                MediaInfo info = new MediaInfo(localInfo);
+                var info = new MediaInfo(localInfo);
                 _mediaStore.Add(info.Url, info);
             }
         }
@@ -239,7 +238,7 @@ namespace Code.GQClient.Model.mgmt.quests
             }
         }
 
-        public string MediaJsonPath
+        private string MediaJsonPath
         {
             get
             {
@@ -254,7 +253,7 @@ namespace Code.GQClient.Model.mgmt.quests
         /// </summary>
         public void ImportLocalMediaInfo()
         {
-            string mediaJSON = "";
+            var mediaJSON = "";
             try
             {
                 mediaJSON = File.ReadAllText(MediaJsonPath);
@@ -269,11 +268,11 @@ namespace Code.GQClient.Model.mgmt.quests
                 mediaJSON = @"[]"; // we use an empty list then
             }
 
-            List<LocalMediaInfo> localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
+            var localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
 
-            List<string> occupiedFileNames = new List<string>();
+            var occupiedFileNames = new List<string>();
 
-            foreach (LocalMediaInfo localInfo in localInfos)
+            foreach (var localInfo in localInfos)
             {
                 MediaInfo info;
                 if (MediaStore.TryGetValue(localInfo.url, out info))
@@ -289,7 +288,7 @@ namespace Code.GQClient.Model.mgmt.quests
                 else
                 {
                     // this media file is not useful anymore, we delete it:
-                    string filePath = localInfo.LocalPath;
+                    var filePath = localInfo.LocalPath;
                     try
                     {
                         File.Delete(filePath);
@@ -309,14 +308,14 @@ namespace Code.GQClient.Model.mgmt.quests
 
             // Step 2b determine missing local filenames for new urls:
             // MediaStore now has all needed mediainfos including local data for this quest.
-            foreach (KeyValuePair<string, MediaInfo> kvpEntry in MediaStore)
+            foreach (var kvpEntry in MediaStore)
             {
-                if (kvpEntry.Value.LocalFileName == null || kvpEntry.Value.LocalFileName == "")
+                if (string.IsNullOrEmpty(kvpEntry.Value.LocalFileName))
                 {
-                    string fileName = Files.FileName(kvpEntry.Value.Url);
-                    string fileNameCandidate = fileName;
-                    int discriminationNr = 1;
-                    string discriminiationAppendix = "";
+                    var fileName = Files.FileName(kvpEntry.Value.Url);
+                    var fileNameCandidate = fileName;
+                    var discriminationNr = 1;
+                    var discriminiationAppendix = "";
                     while (occupiedFileNames.Contains(fileNameCandidate))
                     {
                         fileNameCandidate = fileName + discriminiationAppendix;

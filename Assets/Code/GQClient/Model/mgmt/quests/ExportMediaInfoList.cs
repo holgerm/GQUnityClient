@@ -21,8 +21,8 @@ namespace Code.GQClient.Model.mgmt.quests {
 		protected override IEnumerator DoTheWork() 
 		{
 			// step 4 persist the updated local media info:
-			List<LocalMediaInfo> localInfos = new List<LocalMediaInfo> ();
-			foreach (KeyValuePair<string,MediaInfo> kvpEntry in QuestManager.Instance.CurrentQuest.MediaStore) {
+			var localInfos = new List<LocalMediaInfo> ();
+			foreach (var kvpEntry in QuestManager.Instance.CurrentQuest.MediaStore) {
 				localInfos.Add (
 					new LocalMediaInfo (
 						kvpEntry.Value.Url,
@@ -34,12 +34,13 @@ namespace Code.GQClient.Model.mgmt.quests {
 			}
 
 			try {
-				string mediaJSON = 
+				var mediaJSON = 
 					(localInfos.Count == 0) 
 					? "[]"
 					: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
 
-				string dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJSONPath);
+				// write local media json for quest:
+				var dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJSONPath);
 				if (!Directory.Exists(dir4MediaJSON)) {
 					Directory.CreateDirectory(dir4MediaJSON);
 				}

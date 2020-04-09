@@ -25,10 +25,7 @@ namespace Code.GQClient.Model.mgmt.quests
                 }
                 return _instance;
             }
-            set
-            {
-                _instance = value;
-            }
+            set => _instance = value;
         }
 
         public static void Reset()
@@ -97,7 +94,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public static string GetQuestURI(int questID)
         {
-            string uri = string.Format("{0}/editor/{1}/clientxml",
+            var uri = string.Format("{0}/editor/{1}/clientxml",
                              ConfigurationManager.GQ_SERVER_BASE_URL,
                              questID
                          );
@@ -116,7 +113,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public static string GetRuntimeMediaPath(int questID)
         {
-            string path = Files.CombinePath(QuestManager.GetLocalPath4Quest(questID), "runtime");
+            var path = Files.CombinePath(QuestManager.GetLocalPath4Quest(questID), "runtime");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -145,39 +142,27 @@ namespace Code.GQClient.Model.mgmt.quests
                 return GetLocalPath4Quest(CurrentQuest.Id) + "/media.json";
             }
         }
+        
+        public string GlobalMediaJsonPath => $"{QuestInfoManager.LocalQuestsPath}/media.json";
 
         #endregion
 
 
         #region Parsing
-        private static Quest currentlyParsingQuest;
+        private static Quest _currentlyParsingQuest;
 
         public static Quest CurrentlyParsingQuest
         {
             get
             {
-                if (currentlyParsingQuest == null)
-                    currentlyParsingQuest = Quest.Null;
-                return currentlyParsingQuest;
+                if (_currentlyParsingQuest == null)
+                    _currentlyParsingQuest = Quest.Null;
+                return _currentlyParsingQuest;
             }
-            set
-            {
-                currentlyParsingQuest = value;
-            }
+            set => _currentlyParsingQuest = value;
         }
 
-        public bool PageReadyToStart
-        {
-            get
-            {
-                return _pageReadyToStart;
-            }
-            internal set
-            {
-                _pageReadyToStart = value;
-            }
-        }
-        private bool _pageReadyToStart;
+        public bool PageReadyToStart { get; internal set; }
 
         /// <summary>
         /// Reads the quest from its game.xml file and creates a complete model hierarchy in memory and 
@@ -199,7 +184,7 @@ namespace Code.GQClient.Model.mgmt.quests
                 Log.SignalErrorToDeveloper("Tried to deserialize quest from emty or null xml.");
                 return Quest.Null;
             }
-            using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
+            using (var reader = XmlReader.Create(new StringReader(xml)))
             {
                 return new Quest(reader);
             }

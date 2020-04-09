@@ -570,7 +570,7 @@ namespace GQClient.Model
             if (ActivitiesBlocking)
                 return;
 
-            Task download = DownloadTask();
+            var download = DownloadTask();
 
             // Set downloading state after download has ended:
             download.OnTaskEnded += (object sender, TaskEventArgs e) => { ActivitiesBlocking = false; };
@@ -592,78 +592,58 @@ namespace GQClient.Model
         private Task DownloadTask()
         {
             // Load quest data: game.xml
-            Downloader downloadGameXML =
+            var downloadGameXML =
                 new Downloader(
                     url: QuestManager.GetQuestURI(Id),
                     timeout: ConfigurationManager.Current.timeoutMS,
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
-                    targetPath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
+                    targetPath: $"{QuestManager.GetLocalPath4Quest(Id)}{QuestManager.QUEST_FILE_NAME}"
                 );
             var unused = Base.Instance.GetDownloadBehaviour(
                 downloadGameXML,
-                string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestSg)
+                $"Lade {ConfigurationManager.Current.nameForQuestSg}"
             );
 
             // analyze game.xml, gather all media info compare to local media info and detect missing media
-            PrepareMediaInfoList prepareMediaInfosToDownload =
+            var prepareMediaInfosToDownload =
                 new PrepareMediaInfoList();
             var unused1 = Base.Instance.GetSimpleBehaviour(
                 prepareMediaInfosToDownload,
-                string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+                $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
                 "Medien werden vorbereitet"
             );
-            //var unused1 = new SimpleDialogBehaviour(
-            //    prepareMediaInfosToDownload,
-            //    string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
-            //    "Medien werden vorbereitet"
-            //);
-
+ 
             // download all missing media info
-            MultiDownloader downloadMediaFiles =
+            var downloadMediaFiles =
                 new MultiDownloader(
                     maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
                     timeout: ConfigurationManager.Current.timeoutMS
                 );
             var unused2 = Base.Instance.GetSimpleBehaviour(
                 downloadMediaFiles,
-                string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+                $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
                 "Mediendateien werden geladen"
             );
-            //var unused2 = new SimpleDialogBehaviour(
-            //    downloadMediaFiles,
-            //    string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
-            //    "Mediendateien werden geladen"
-            //);
             downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => { TimeStamp = ServerTimeStamp; };
 
             // store current media info locally
-            ExportMediaInfoList exportLocalMediaInfo =
+            var exportLocalMediaInfo =
                 new ExportMediaInfoList();
             var unused3 = Base.Instance.GetSimpleBehaviour(
                 exportLocalMediaInfo,
-                string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
+                $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
                 "Medieninformationen werden lokal gespeichert"
             );
-            //var unused3 = new SimpleDialogBehaviour(
-            //    exportLocalMediaInfo,
-            //    string.Format("Synchronisiere {0}-Daten", ConfigurationManager.Current.nameForQuestSg),
-            //    "Medieninformationen werden lokal gespeichert"
-            //);
 
-            ExportQuestInfosToJSON exportQuestsInfoJSON =
+            var exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
             var unused4 = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
-                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-                string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
+                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
             );
-            //var unused4 = new SimpleDialogBehaviour(
-            //    exportQuestsInfoJSON,
-            //    string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-            //    string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
-            //);
-
-            TaskSequence t =
+ 
+            var t =
                 new TaskSequence(
                     downloadGameXML,
                     prepareMediaInfosToDownload,
@@ -696,7 +676,7 @@ namespace GQClient.Model
             if (NewVersionOnServer != null)
             {
                 //				QuestInfoManager.Instance.QuestDict.Add (data.Id, data.NewVersionOnServer); TODO
-                Task download = NewVersionOnServer.DownloadTask();
+                var download = NewVersionOnServer.DownloadTask();
                 download.OnTaskEnded += (object sender, TaskEventArgs e) => { ActivitiesBlocking = false; };
 
                 // Update the quest info list ...
@@ -724,7 +704,7 @@ namespace GQClient.Model
                 if (!ConfigurationManager.Current.autoSynchQuestInfos)
                 {
                     // in manual synch mode we warn the user to delete this quest, since he can not restore it again:
-                    CancelableFunctionDialog dialog =
+                    var dialog =
                         new CancelableFunctionDialog(
                             title: "Löschen?",
                             message: "Diese Quest können Sie nicht wieder herstellen, wenn Sie sie gelöscht haben.",
@@ -754,7 +734,7 @@ namespace GQClient.Model
                 InvokeOnChanged();
             }
 
-            ExportQuestInfosToJSON exportQuestsInfoJSON =
+            var exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
             var unused = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
@@ -810,7 +790,7 @@ namespace GQClient.Model
         private Task CreateLoadAndPlayTask()
         {
             // Quest has to be loaded first:
-            Task download = DownloadTask();
+            var download = DownloadTask();
             // Update the quest info list ...
             download.OnTaskCompleted +=
                 (object sender, TaskEventArgs e) =>
@@ -819,7 +799,7 @@ namespace GQClient.Model
 
                     new ExportQuestInfosToJSON().Start();
                 };
-            Task playTask = CreatePlayTask();
+            var playTask = CreatePlayTask();
             Task loadAndPlay = new TaskSequence(download, playTask);
             return loadAndPlay;
         }
@@ -831,7 +811,7 @@ namespace GQClient.Model
         private Task CreatePlayTask()
         {
             // Load quest data: game.xml
-            LocalFileLoader loadGameXML =
+            var loadGameXML =
                 new LocalFileLoader(
                     filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
                 );
@@ -840,9 +820,9 @@ namespace GQClient.Model
                 string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
             );
 
-            QuestStarter questStarter = new QuestStarter();
+            var questStarter = new QuestStarter();
 
-            TaskSequence t =
+            var t =
                 new TaskSequence(loadGameXML, questStarter);
 
             return t;
