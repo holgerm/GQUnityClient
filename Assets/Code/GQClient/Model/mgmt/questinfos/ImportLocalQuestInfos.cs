@@ -26,9 +26,9 @@ namespace GQClient.Model
 		public ImportLocalQuestInfos () : base ()
 		{ 
 			// import from local quest json file:
-			if (File.Exists (QuestInfoManager.LocalQuestInfoJSONPath)) {
+			if (File.Exists (QuestInfoManager.LocalQuestInfoJsonPath)) {
 				try {
-					InputJson = File.ReadAllText (QuestInfoManager.LocalQuestInfoJSONPath);
+					InputJson = File.ReadAllText (QuestInfoManager.LocalQuestInfoJsonPath);
 				} catch (Exception e) {
 					Log.SignalErrorToDeveloper ("Error while trying to import local quest info json file: " + e.Message);
 					InputJson = "[]";

@@ -1,5 +1,6 @@
 using Code.QM.Util;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
@@ -49,6 +50,7 @@ namespace Code.GQClient.Model.mgmt.quests
 			this.filename = filename;
 			this.size = size;
 			this.time = time;
+			Debug.Log($"LocalMediaInfo() filename: {filename}");
         }
 
         [JsonIgnore]

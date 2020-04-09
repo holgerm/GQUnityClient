@@ -97,16 +97,17 @@ namespace Code.GQClient.Util.http
         protected override IEnumerator DoTheWork()
         {
             // init SimpleBehaviour:
-            dialogBehaviour = (SimpleBehaviour)behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
+            dialogBehaviour = (SimpleBehaviour)behaviours[0]; 
+            // TODO dangerous. Replace by concrete DialogControllers we will write.
                                                                     // init totalSumOfWeights:
-            foreach (MediaInfo curInfo in listOfFilesNotStartedYet)
+            foreach (var curInfo in listOfFilesNotStartedYet)
             {
                 totalSumOfWeights += ((curInfo.RemoteSize == MediaInfo.UNKNOWN) ? DEFAULT_WEIGHT : curInfo.RemoteSize);
             }
 
             CurrentlyRunningDownloads = 0;
             stopwatch.Start();
-            Dictionary<Downloader, MediaInfo> filesCurrentlyDownloading = new Dictionary<Downloader, MediaInfo>();
+            var filesCurrentlyDownloading = new Dictionary<Downloader, MediaInfo>();
 
             while (listOfFilesNotStartedYet.Count > 0 || filesCurrentlyDownloading.Count > 0)
             {
@@ -129,9 +130,9 @@ namespace Code.GQClient.Util.http
                 if (listOfFilesNotStartedYet.Count > 0)
                 {
                     // now we can start the next file downloader:
-                    MediaInfo info = listOfFilesNotStartedYet[listOfFilesNotStartedYet.Count - 1];
+                    var info = listOfFilesNotStartedYet[listOfFilesNotStartedYet.Count - 1];
                     info.LocalFileName = QuestManager.MakeLocalFileNameFromUrl(info.Url);
-                    Downloader d =
+                    var d =
                         new Downloader(
                             url: info.Url,
                             timeout: 0L,
@@ -144,8 +145,7 @@ namespace Code.GQClient.Util.http
                     CurrentlyRunningDownloads++;
                     d.OnTimeout += (AbstractDownloader ad, DownloadEvent e) =>
                     {
-                        MediaInfo infoToRestart;
-                        if (filesCurrentlyDownloading.TryGetValue(d, out infoToRestart))
+                        if (filesCurrentlyDownloading.TryGetValue(d, out var infoToRestart))
                         {
                             listOfFilesNotStartedYet.Add(infoToRestart);
                             filesCurrentlyDownloading.Remove(d);
@@ -173,7 +173,7 @@ namespace Code.GQClient.Util.http
         public void ContributeToTotalProgress(object callbackSender, DownloadEvent args)
         {
             downloadedSumOfWeights += args.Progress;
-            float percent = Math.Min(100.0f, (downloadedSumOfWeights / totalSumOfWeights) * 100f);
+            var percent = Math.Min(100.0f, (downloadedSumOfWeights / totalSumOfWeights) * 100f);
             dialogBehaviour.OnProgress(percent);
         }
 

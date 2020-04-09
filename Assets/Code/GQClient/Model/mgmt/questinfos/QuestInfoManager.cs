@@ -40,13 +40,7 @@ namespace GQClient.Model
             }
         }
 
-        public static string LocalQuestInfoJSONPath
-        {
-            get
-            {
-                return LocalQuestsPath + "infos.json";
-            }
-        }
+        public static string LocalQuestInfoJsonPath => LocalQuestsPath + "infos.json";
 
         public Dictionary<int, QuestInfo> QuestDict
         {

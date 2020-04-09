@@ -238,7 +238,7 @@ namespace GQClient.Model
             {
                 return;
             }
-  
+
             // OK. Let's go:
             ServerTimeStamp = newQuestInfo.ServerTimeStamp;
             NewVersionOnServer = newQuestInfo;
@@ -429,10 +429,11 @@ namespace GQClient.Model
         }
 
         #endregion
-        
+
         #region Topics
-        
+
         [JsonIgnore] private List<string> _topics;
+
         public List<string> Topics
         {
             get
@@ -447,7 +448,6 @@ namespace GQClient.Model
             set => _topics = value;
         }
 
-        
         #endregion
 
         #region State & Events
@@ -519,11 +519,11 @@ namespace GQClient.Model
             sb.AppendFormat("{0} (id: {1})\n", Name, Id);
             sb.AppendFormat("\t new version on server: {0}",
                 NewVersionOnServer == null ? "null" : NewVersionOnServer.TimeStamp.ToString());
-           // sb.AppendFormat("\t type id: {0}", TypeID);
-           // sb.AppendFormat("\t icon path: {0}", IconPath);
-          //  sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
-          //  sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
-          //  sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
+            // sb.AppendFormat("\t type id: {0}", TypeID);
+            // sb.AppendFormat("\t icon path: {0}", IconPath);
+            //  sb.AppendFormat("\t featured image path: {0}", FeaturedImagePath);
+            //  sb.AppendFormat("\t with {0} hotspots.", Hotspots == null ? 0 : Hotspots.Length);
+            //  sb.AppendFormat("\t and {0} metadata entries.", Metadata == null ? 0 : Metadata.Length);
             sb.Append($"\t HasUpdate?: {HasUpdate}");
             sb.Append($"\t IsOnDevice?: {IsOnDevice}");
             sb.Append($"\t IsOnServer?: {IsOnServer}");
@@ -612,7 +612,7 @@ namespace GQClient.Model
                 $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
                 "Medien werden vorbereitet"
             );
- 
+
             // download all missing media info
             var downloadMediaFiles =
                 new MultiDownloader(
@@ -635,6 +635,14 @@ namespace GQClient.Model
                 "Medieninformationen werden lokal gespeichert"
             );
 
+            var exportGlobalMediaJson =
+                new ExportGlobalMediaJson();
+            var unused5 = Base.Instance.GetSimpleBehaviour(
+                exportGlobalMediaJson,
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
+                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
+            );
+
             var exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
             var unused4 = Base.Instance.GetSimpleBehaviour(
@@ -642,13 +650,13 @@ namespace GQClient.Model
                 $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
                 $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
             );
- 
             var t =
                 new TaskSequence(
                     downloadGameXML,
                     prepareMediaInfosToDownload,
                     downloadMediaFiles,
                     exportLocalMediaInfo,
+                    exportGlobalMediaJson,
                     exportQuestsInfoJSON);
 
             return t;

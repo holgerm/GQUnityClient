@@ -46,7 +46,6 @@ namespace Code.GQClient.Model.pages
 				if (match.Groups["url"].Success)
 				{
 					pdfUrl = match.Groups["url"].Value;
-					Debug.Log($"storing into media: {pdfUrl}");
 					QuestManager.CurrentlyParsingQuest.AddMedia(pdfUrl, "WebPage." + GQML.PAGE_WEBPAGE_URL + " (pdf)");
 				}
 			}

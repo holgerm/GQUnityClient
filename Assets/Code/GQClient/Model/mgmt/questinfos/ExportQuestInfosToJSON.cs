@@ -24,7 +24,7 @@ namespace GQClient.Model
 					(questInfoList.Count == 0) 
 					? "[]"
 					: JsonConvert.SerializeObject(questInfoList, Newtonsoft.Json.Formatting.Indented);
-				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJSONPath, questInfoJSON);
+				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJsonPath, questInfoJSON);
 
 			}
 			catch (Exception e) {

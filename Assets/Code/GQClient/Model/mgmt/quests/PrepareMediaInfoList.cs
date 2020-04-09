@@ -76,11 +76,13 @@ namespace Code.GQClient.Model.mgmt.quests
 
         protected override IEnumerator DoTheWork()
         {
-            dialogBehaviour = (SimpleBehaviour)behaviours[0]; // TODO dangerous. Replace by conrete DialogControllers we will write.
+            dialogBehaviour = (SimpleBehaviour)behaviours[0]; 
+            // TODO dangerous. Replace by concrete DialogControllers we will write.
+            
             OnProgress += dialogBehaviour.OnProgress;
 
             // step 1 deserialize game.xml:
-            Quest quest = QuestManager.Instance.DeserializeQuest(gameXML);
+            var quest = QuestManager.Instance.DeserializeQuest(gameXML);
             stepsTotal = 2 + quest.MediaStore.Count;
             StepsDone++;
             yield return null;
@@ -102,14 +104,14 @@ namespace Code.GQClient.Model.mgmt.quests
         /// </summary>
         public List<MediaInfo> GetListOfFilesNeedDownload(Quest quest)
         {
-            // 1. we create a list of files to be downloaded / updated (as Dictionary with all neeeded data for multi downloader:
-            List<MediaInfo> filesToDownload = new List<MediaInfo>();
+            // 1. we create a list of files to be downloaded / updated (as Dictionary with all needed data for multi downloader:
+            var filesToDownload = new List<MediaInfo>();
 
-            int infoNotReceived = 0;
-            float summedSize = 0f;
+            var infoNotReceived = 0;
+            var summedSize = 0f;
 
             MediaInfo info;
-            foreach (KeyValuePair<string, MediaInfo> kvpEntry in quest.MediaStore)
+            foreach (var kvpEntry in quest.MediaStore)
             {
 #if DEBUG_LOG
                 Debug.Log(("GetListOfFIlesNeedDownload: look at " + kvpEntry.Key).Yellow());

@@ -69,7 +69,7 @@ namespace Code.GQClient.Util.tasks
             {
                 t.OnTaskFailed += FailedCallback;
 
-                IEnumerator taskEnumerator = t.RunAsCoroutine(Input);
+                var taskEnumerator = t.RunAsCoroutine(Input);
                 while (taskEnumerator.MoveNext())
                 {
                     yield return taskEnumerator.Current;

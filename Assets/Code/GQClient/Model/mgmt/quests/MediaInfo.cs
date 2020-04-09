@@ -1,5 +1,6 @@
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
@@ -37,6 +38,7 @@ namespace Code.GQClient.Model.mgmt.quests
 			}
 			set {
 				localFileName = value;
+				Debug.Log($"MediaInfo localfile set to: {value}");
 			}
 		}
 
@@ -102,10 +104,10 @@ namespace Code.GQClient.Model.mgmt.quests
 			}
 		}
 
-		public MediaInfo (int questID, string url)
+		public MediaInfo(string baseDir, string url)
 		{
 			this.Url = url;
-			this.LocalDir = Files.CombinePath (QuestManager.GetLocalPath4Quest (questID), "files");
+			this.LocalDir = Files.CombinePath (baseDir, "files");
 			this.LocalFileName = null;
 			this.LocalTimestamp = 0L;
 			this.LocalSize = NOT_AVAILABLE;

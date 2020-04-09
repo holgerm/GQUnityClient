@@ -1,10 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Xml;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using GQClient.Model;
 using Code.GQClient.Model.pages;
+using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Model.mgmt.quests
@@ -38,6 +43,7 @@ namespace Code.GQClient.Model.mgmt.quests
         private QuestManager()
         {
             _currentQuest = Quest.Null;
+            InitMediaStore();
             PageReadyToStart = true;
         }
 
@@ -135,16 +141,6 @@ namespace Code.GQClient.Model.mgmt.quests
             return filename; // TODO
         }
 
-        public string CurrentMediaJSONPath
-        {
-            get
-            {
-                return GetLocalPath4Quest(CurrentQuest.Id) + "/media.json";
-            }
-        }
-        
-        public string GlobalMediaJsonPath => $"{QuestInfoManager.LocalQuestsPath}/media.json";
-
         #endregion
 
 
@@ -190,6 +186,79 @@ namespace Code.GQClient.Model.mgmt.quests
             }
         }
         #endregion
+        
+                
+        #region Media
+        
+        private Dictionary<string, MediaInfo> _mediaStore = null;
+
+        public Dictionary<string, MediaInfo> MediaStore
+        {
+            get
+            {
+                if (_mediaStore == null)
+                {
+                    _mediaStore = new Dictionary<string, MediaInfo>();
+                }
+                return _mediaStore;
+            }
+        }
+        
+        public List<MediaInfo> GetListOfGlobalMediaInfos()
+        {
+            return MediaStore.Values.ToList<MediaInfo>();
+        }
+
+
+        private void InitMediaStore()
+        {
+            Debug.Log("QIM: InitMediaStore()");
+            _mediaStore = new Dictionary<string, MediaInfo>();
+
+            var mediaJSON = "";
+            try
+            {
+                mediaJSON = File.ReadAllText(GlobalMediaJsonPath);
+            }
+            catch (FileNotFoundException)
+            {
+                mediaJSON = @"[]"; // we use an empty list then
+            }
+            catch (Exception e)
+            {
+                Log.SignalErrorToDeveloper($"Error reading global media.json: {e.Message}");
+                mediaJSON = @"[]"; // we use an empty list then
+            }
+
+            var localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
+
+            foreach (var localInfo in localInfos)
+            {
+                var info = new MediaInfo(localInfo);
+                _mediaStore.Add(info.Url, info);
+            }
+        }
+
+        public void AddMedia(string url, string contextDescription = "no context given")
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+
+            if (!MediaStore.ContainsKey(url))
+            {
+                var info = new MediaInfo(QuestInfoManager.LocalQuestsPath, url);
+                MediaStore.Add(url, info);
+            }
+        }
+
+        public string CurrentMediaJsonPath => $"{GetLocalPath4Quest(CurrentQuest.Id)}/media.json";
+
+        public string GlobalMediaJsonPath => $"{QuestInfoManager.LocalQuestsPath}/media.json";
+
+        #endregion
+
     }
 
 }

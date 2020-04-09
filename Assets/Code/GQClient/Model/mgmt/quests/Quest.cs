@@ -221,6 +221,7 @@ namespace Code.GQClient.Model.mgmt.quests
             {
                 var info = new MediaInfo(localInfo);
                 _mediaStore.Add(info.Url, info);
+                Debug.Log($"Quest.InitMediaStore(): localFileName: {info.LocalFileName}");
             }
         }
 
@@ -233,9 +234,12 @@ namespace Code.GQClient.Model.mgmt.quests
 
             if (!MediaStore.ContainsKey(url))
             {
-                var info = new MediaInfo(Id, url);
+                var info = new MediaInfo(QuestManager.GetLocalPath4Quest (Id), url);
                 MediaStore.Add(url, info);
+                Debug.Log($"Quest.AddMedia() filename: {info.LocalFileName}");
             }
+            
+            QuestManager.Instance.AddMedia(url, contextDescription);
         }
 
         private string MediaJsonPath
@@ -248,7 +252,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
 
         /// <summary>
-        /// Imports the local media infos fomr the game-media.json file and updates the existing media store. 
+        /// Imports the local media infos from the game-media.json file and updates the existing media store. 
         /// This is step 2 of 4 in media sync (download or update of a quest).
         /// </summary>
         public void ImportLocalMediaInfo()
@@ -274,8 +278,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
             foreach (var localInfo in localInfos)
             {
-                MediaInfo info;
-                if (MediaStore.TryGetValue(localInfo.url, out info))
+                if (MediaStore.TryGetValue(localInfo.url, out var info))
                 {
                     // add local information to media store:
                     info.LocalDir = localInfo.absDir;
@@ -284,6 +287,7 @@ namespace Code.GQClient.Model.mgmt.quests
                     info.LocalTimestamp = localInfo.time;
                     // remember filenames as occupied for later creation of new unique filenames
                     occupiedFileNames.Add(info.LocalFileName);
+                    Debug.Log($"Quest.ImportLocalMediaInfo() filename: {info.LocalFileName}");
                 }
                 else
                 {

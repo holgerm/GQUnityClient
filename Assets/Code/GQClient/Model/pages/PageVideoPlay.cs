@@ -1,4 +1,4 @@
-﻿#define DEBUG_LOG
+﻿// #define DEBUG_LOG
 
 using System.Xml;
 using Code.GQClient.Err;
@@ -38,9 +38,6 @@ namespace Code.GQClient.Model.pages
             {
                 if (VideoFile.HasVideoEnding())
                 {
-#if DEBUG_LOG
-                    Debug.Log("Vid-Player: VideoFile: " + VideoFile);
-#endif
                     QuestManager.CurrentlyParsingQuest.AddMedia(VideoFile, "VideoPlay." + GQML.PAGE_VIDEOPLAY_FILE);
                 }
                 else

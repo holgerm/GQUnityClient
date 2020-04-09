@@ -6,6 +6,7 @@ using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests {
 
@@ -31,6 +32,7 @@ namespace Code.GQClient.Model.mgmt.quests {
 						kvpEntry.Value.LocalSize,
 						kvpEntry.Value.LocalTimestamp)
 				);
+				Debug.Log($"ExportMediaInfoList: add local file: {kvpEntry.Value.LocalFileName}");
 			}
 
 			try {
@@ -40,11 +42,11 @@ namespace Code.GQClient.Model.mgmt.quests {
 					: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
 
 				// write local media json for quest:
-				var dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJSONPath);
+				var dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJsonPath);
 				if (!Directory.Exists(dir4MediaJSON)) {
 					Directory.CreateDirectory(dir4MediaJSON);
 				}
-				File.WriteAllText(QuestManager.Instance.CurrentMediaJSONPath, mediaJSON);
+				File.WriteAllText(QuestManager.Instance.CurrentMediaJsonPath, mediaJSON);
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export media info json file: " + e.Message);
