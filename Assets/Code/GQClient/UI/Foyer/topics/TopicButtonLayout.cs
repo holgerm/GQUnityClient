@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Code.QM.Util;
+using TMPro;
 using UnityEngine;
 
 namespace Code.GQClient.UI.layout
@@ -10,7 +11,7 @@ namespace Code.GQClient.UI.layout
             TextElement.color = Config.paletteFGColor;
             TextElement.alignment = TextAlignmentOptions.Center;
             TextElement.enableAutoSizing = false;
-            TextElement.fontSize = 0.75f * Config.mainFontSize;
+            TextElement.fontSize = Config.mainFontSize * (Device.DisplaySize <= Device.Size.Medium ? 0.75f : 0.5f);
             TextElement.fontStyle = FontStyles.Bold;
             TextElement.enableWordWrapping = true;
             TextElement.lineSpacing = Config.lineSpacing;

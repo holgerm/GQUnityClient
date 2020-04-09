@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEditor;
 using UnityEngine;
+// ReSharper disable InconsistentNaming
 
 #if UNITY_EDITOR
 
@@ -84,8 +85,6 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor] public string nameForQuestsPl { get; set; }
 
         [ShowInProductEditor] public string[] questInfoViews { get; set; }
-
-        [ShowInProductEditor] public int TopicColumnsNumber { get; set; }
 
         [ShowInProductEditor] public float topicButtonAspectRatio { get; set; }
 
@@ -749,7 +748,6 @@ namespace Code.GQClient.Conf
                 QuestInfoView.TopicTree.ToString(),
                 QuestInfoView.Map.ToString()
             };
-            TopicColumnsNumber = 2;
             topicButtonAspectRatio = 1.0f;
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
             cloudQuestsVisible = true;

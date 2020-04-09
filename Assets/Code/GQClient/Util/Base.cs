@@ -78,19 +78,19 @@ namespace Code.GQClient.Util
             {
                 if (_instance == null)
                 {
-                    var baseGO = GameObject.Find(BASE);
+                    var baseGo = GameObject.Find(BASE);
 
-                    if (baseGO == null)
+                    if (baseGo == null)
                     {
-                        baseGO = new GameObject(BASE);
+                        baseGo = new GameObject(BASE);
                         Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
                     }
 
-                    if (baseGO.GetComponent(typeof(Base)) == null)
-                        baseGO.AddComponent(typeof(Base));
+                    if (baseGo.GetComponent(typeof(Base)) == null)
+                        baseGo.AddComponent(typeof(Base));
 
                     // initialize the instance:
-                    _instance = (Base) baseGO.GetComponent(typeof(Base));
+                    _instance = (Base) baseGo.GetComponent(typeof(Base));
                     _instance.ProgressCanvas.SetActive(true);
                     _instance.ProgressCanvas.GetComponent<Canvas>().enabled = false;
                 }
@@ -106,12 +106,12 @@ namespace Code.GQClient.Util
 
         public const string FOYER_SCENE_NAME = "Foyer";
 
-        private bool listShown;
-        private bool mapShown;
-        private bool menuShown;
-        private bool imprintShown;
+        private bool _listShown;
+        private bool _mapShown;
+        private bool _menuShown;
+        private bool _imprintShown;
 
-        private Dictionary<string, bool> canvasStates;
+        private Dictionary<string, bool> _canvasStates;
 
         /// <summary>
         /// Called when we leave the foyer towards a page.
@@ -119,15 +119,15 @@ namespace Code.GQClient.Util
         public void HideFoyerCanvases()
         {
             // store current show state and hide:
-            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME)
+            var rootGOs = SceneManager.GetSceneByName(FOYER_SCENE_NAME)
                 .GetRootGameObjects();
-            foreach (GameObject rootGo in rootGOs)
+            foreach (var rootGo in rootGOs)
             {
-                Canvas canv = rootGo.GetComponent<Canvas>();
-                if (canv != null)
+                var canvas = rootGo.GetComponent<Canvas>();
+                if (canvas != null)
                 {
-                    canvasStates[canv.name] = canv.isActiveAndEnabled;
-                    canv.gameObject.SetActive(false);
+                    _canvasStates[canvas.name] = canvas.isActiveAndEnabled;
+                    canvas.gameObject.SetActive(false);
                 }
             }
         }
@@ -137,51 +137,43 @@ namespace Code.GQClient.Util
         /// </summary>
         public void ShowFoyerCanvases()
         {
-            // show again accordingg to stored state:
-            GameObject[] rootGOs = UnityEngine.SceneManagement.SceneManager.GetSceneByName(FOYER_SCENE_NAME)
+            // show again according to stored state:
+            var rootGOs = SceneManager.GetSceneByName(FOYER_SCENE_NAME)
                 .GetRootGameObjects();
-            foreach (GameObject rootGo in rootGOs)
+            foreach (var rootGo in rootGOs)
             {
-                Canvas canv = rootGo.GetComponent<Canvas>();
-                bool oldCanvState;
-                if (canv != null)
+                var canvas = rootGo.GetComponent<Canvas>();
+                if (canvas != null)
                 {
-                    if (canvasStates.TryGetValue(canv.name, out oldCanvState))
+                    if (_canvasStates.TryGetValue(canvas.name, out _))
                     {
-                        canv.gameObject.SetActive(canvasStates[canv.name]);
+                        canvas.gameObject.SetActive(_canvasStates[canvas.name]);
                     }
                 }
             }
         }
 
         #endregion
-
-
+        
+        
         #region LifeCycle
 
-        void Awake()
+        private void Awake()
         {
             // hide all canvases at first, we show the needed ones in initViews()
-            var rootGOs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            var rootGOs = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (var rootGo in rootGOs)
             {
-                var canv = rootGo.GetComponent<Canvas>();
-                if (canv != null)
+                var canvas = rootGo.GetComponent<Canvas>();
+                if (canvas != null)
                 {
-                    if ("DialogCanvas".Equals(canv.name))
-                    {
-                        canv.gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        canv.gameObject.SetActive(false);
-                    }
+                    canvas.gameObject.SetActive("DialogCanvas".Equals(canvas.name));
                 }
             }
 
             DontDestroyOnLoad(Instance);
             SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
-            canvasStates = new Dictionary<string, bool>();
+            _canvasStates = new Dictionary<string, bool>();
         }
 
         private void Start()
@@ -217,7 +209,7 @@ namespace Code.GQClient.Util
 #endif
         }
 
-        void Update()
+        private void Update()
         {
             //#if UNITY_EDITOR || UNITY_STANDALONE
             if (Author.LoggedIn)
@@ -225,8 +217,6 @@ namespace Code.GQClient.Util
                 Device.updateMockedLocation();
             }
             //#endif
-
-            // Debug.Log($"Frame {Time.frameCount}, Time: {Time.time}, Deltatime: {Time.deltaTime}".Yellow());
         }
 
         #endregion

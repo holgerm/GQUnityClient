@@ -51,6 +51,15 @@ namespace Code.QM.Util
             set => _width = value;
         }
 
+        public static Size DisplaySize => Screen.width / Screen.dpi < 4.13f ? Size.Small : Size.Large;
+
+        public enum Size
+        {
+            Small = 0,
+            Medium = 1,
+            Large = 2
+        }
+
         public static DeviceOrientation Orientation
         {
             get { return Input.deviceOrientation; }
@@ -93,6 +102,7 @@ namespace Code.QM.Util
 
                 return _location;
             }
+
             set { _location = value; }
         }
 

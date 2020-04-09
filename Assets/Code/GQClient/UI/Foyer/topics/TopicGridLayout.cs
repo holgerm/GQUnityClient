@@ -20,13 +20,16 @@ public class TopicGridLayout : LayoutConfig
         
         // set topic buttons size:
         var padding = _gridLayoutGroup.padding;
-        var emptyWidth = padding.left + padding.right + _gridLayoutGroup.spacing.x;
-        var cellWidth = (Device.width - emptyWidth) / 2f;
+        var emptyWidth = padding.left + padding.right + _gridLayoutGroup.spacing.x * (NumberOfColumns -1);
+        var cellWidth = (Device.width - emptyWidth) / NumberOfColumns;
         var cellHeight = cellWidth / ConfigurationManager.Current.topicButtonAspectRatio;
         _gridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
         _gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        _gridLayoutGroup.constraintCount = ConfigurationManager.Current.TopicColumnsNumber;
+        _gridLayoutGroup.constraintCount = NumberOfColumns;
     }
+
+    private static int NumberOfColumns => Device.DisplaySize >= Device.Size.Medium ? 3 : 2;
+    
 
 
 }
