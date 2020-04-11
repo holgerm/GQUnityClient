@@ -13,6 +13,7 @@ using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.GQClient.Util.input;
+using GQClient.Model;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -203,7 +204,7 @@ namespace Code.GQClient.Model.mgmt.quests
             var mediaJSON = "";
             try
             {
-                mediaJSON = File.ReadAllText(MediaJsonPath);
+                mediaJSON = File.ReadAllText(GetMediaJsonPath(Id));
             }
             catch (FileNotFoundException)
             {
@@ -221,7 +222,6 @@ namespace Code.GQClient.Model.mgmt.quests
             {
                 var info = new MediaInfo(localInfo);
                 _mediaStore.Add(info.Url, info);
-                Debug.Log($"Quest.InitMediaStore(): localFileName: {info.LocalFileName}");
             }
         }
 
@@ -234,104 +234,16 @@ namespace Code.GQClient.Model.mgmt.quests
 
             if (!MediaStore.ContainsKey(url))
             {
-                var info = new MediaInfo(QuestManager.GetLocalPath4Quest (Id), url);
+                var info = new MediaInfo(QuestInfoManager.LocalQuestsPath, url);
                 MediaStore.Add(url, info);
-                Debug.Log($"Quest.AddMedia() filename: {info.LocalFileName}");
             }
             
-            QuestManager.Instance.AddMedia(url, contextDescription);
+            // QuestManager.Instance.AddMedia(url, contextDescription);
         }
 
-        private string MediaJsonPath
-        {
-            get
-            {
-                return Files.CombinePath(QuestManager.GetLocalPath4Quest(Id), "media.json");
-            }
-        }
+        public static string GetMediaJsonPath(int questId) => 
+            Files.CombinePath(QuestManager.GetLocalPath4Quest(questId: questId), "media.json");
 
-
-        /// <summary>
-        /// Imports the local media infos from the game-media.json file and updates the existing media store. 
-        /// This is step 2 of 4 in media sync (download or update of a quest).
-        /// </summary>
-        public void ImportLocalMediaInfo()
-        {
-            var mediaJSON = "";
-            try
-            {
-                mediaJSON = File.ReadAllText(MediaJsonPath);
-            }
-            catch (FileNotFoundException)
-            {
-                mediaJSON = @"[]"; // we use an empty list then
-            }
-            catch (Exception e)
-            {
-                Log.SignalErrorToDeveloper("Error reading media.json for quest " + Id + ": " + e.Message);
-                mediaJSON = @"[]"; // we use an empty list then
-            }
-
-            var localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
-
-            var occupiedFileNames = new List<string>();
-
-            foreach (var localInfo in localInfos)
-            {
-                if (MediaStore.TryGetValue(localInfo.url, out var info))
-                {
-                    // add local information to media store:
-                    info.LocalDir = localInfo.absDir;
-                    info.LocalFileName = localInfo.filename;
-                    info.LocalSize = localInfo.size;
-                    info.LocalTimestamp = localInfo.time;
-                    // remember filenames as occupied for later creation of new unique filenames
-                    occupiedFileNames.Add(info.LocalFileName);
-                    Debug.Log($"Quest.ImportLocalMediaInfo() filename: {info.LocalFileName}");
-                }
-                else
-                {
-                    // this media file is not useful anymore, we delete it:
-                    var filePath = localInfo.LocalPath;
-                    try
-                    {
-                        File.Delete(filePath);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.SignalErrorToDeveloper(
-                            "Error while deleting media file " + filePath +
-                            " : " + e.Message);
-                    }
-                }
-            }
-
-#if DEBUG_LOG
-            Debug.Log("ImportLocalMediaInfo Part 1 done");
-#endif
-
-            // Step 2b determine missing local filenames for new urls:
-            // MediaStore now has all needed mediainfos including local data for this quest.
-            foreach (var kvpEntry in MediaStore)
-            {
-                if (string.IsNullOrEmpty(kvpEntry.Value.LocalFileName))
-                {
-                    var fileName = Files.FileName(kvpEntry.Value.Url);
-                    var fileNameCandidate = fileName;
-                    var discriminationNr = 1;
-                    var discriminiationAppendix = "";
-                    while (occupiedFileNames.Contains(fileNameCandidate))
-                    {
-                        fileNameCandidate = fileName + discriminiationAppendix;
-                        discriminiationAppendix = "-" + discriminationNr++;
-                    }
-                    kvpEntry.Value.LocalFileName = fileNameCandidate;
-                }
-            }
-#if DEBUG_LOG
-            Debug.Log("ImportLocalMediaInfo Part 2 done");
-#endif
-        }
         #endregion
 
         #region XML Reading
@@ -499,7 +411,7 @@ namespace Code.GQClient.Model.mgmt.quests
             Variables.Clear(clearAlsoUpperCaseVariables); // persistente variablen nicht löschen
             if (CurrentPage != null && CurrentPage.PageCtrl != null)
                 CurrentPage.PageCtrl.CleanUp();
-            Scene sceneToUnload = QuestManager.Instance.CurrentScene;
+            var sceneToUnload = QuestManager.Instance.CurrentScene;
             if (sceneToUnload.isLoaded)
                 SceneManager.UnloadSceneAsync(QuestManager.Instance.CurrentScene);
             QuestManager.Instance.CurrentQuest = Quest.Null;

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Code.GQClient.Err;
@@ -14,9 +15,6 @@ namespace Code.GQClient.Util.http
         public string Url { get; set; }
 
         public string TargetPath { get; set; }
-
-        WWW _www;
-
 
         #region Default Handler
         public static void defaultLogInformationHandler(AbstractDownloader d, DownloadEvent e)
@@ -126,7 +124,7 @@ namespace Code.GQClient.Util.http
             }
             Raise(DownloadEventType.Start, new DownloadEvent(message: msg));
 
-            float progress = 0f;
+            var progress = 0f;
             float progressNew;
 
             while (!Www.isDone)
@@ -137,7 +135,7 @@ namespace Code.GQClient.Util.http
                     // we have a PROGRESS:
                     idlewatch.Reset();
                     msg = string.Format("Lade Datei {0}, aktuell: {1:N2}%", Url, progress * 100);
-                    float prog = (Weight > 0f) ? (Weight * (progressNew - progress)) : progressNew;
+                    var prog = (Weight > 0f) ? (Weight * (progressNew - progress)) : progressNew;
                     Raise(
                         DownloadEventType.Progress,
                         new DownloadEvent(
@@ -189,7 +187,7 @@ namespace Code.GQClient.Util.http
             if (!string.IsNullOrEmpty(Www.error))
             {
                 UnityEngine.Debug.LogWarning("ERROR loading " + Www.url + ": " + Www.error);
-                string dialogMessage = Www.url.EndsWith("clientxml", StringComparison.CurrentCulture) ?
+                var dialogMessage = Www.url.EndsWith("clientxml", StringComparison.CurrentCulture) ?
                                           "Quest nicht gefunden." : Www.error;
                 Raise(DownloadEventType.Error, new DownloadEvent(message: dialogMessage));
                 RaiseTaskFailed();
@@ -199,7 +197,7 @@ namespace Code.GQClient.Util.http
                 Result = Www.text;
 
                 msg = string.Format("Lade Datei {0}, aktuell: {1:N2}%", Url, progress * 100);
-                float prog = (Weight > 0f) ? (Weight * (Www.progress - progress)) : Www.progress;
+                var prog = (Weight > 0f) ? (Weight * (Www.progress - progress)) : Www.progress;
                 Raise(
                     DownloadEventType.Progress,
                     new DownloadEvent(
@@ -224,7 +222,7 @@ namespace Code.GQClient.Util.http
                     // we have to store the loaded file:
                     try
                     {
-                        string targetDir = Directory.GetParent(TargetPath).FullName;
+                        var targetDir = Directory.GetParent(TargetPath).FullName;
                         if (!Directory.Exists(targetDir))
                             Directory.CreateDirectory(targetDir);
                         if (File.Exists(TargetPath))
@@ -242,6 +240,7 @@ namespace Code.GQClient.Util.http
                     }
                 }
 
+                ResponseHeaders = new Dictionary<string, string>(Www.responseHeaders);
                 msg = string.Format("Download für Datei {0} abgeschlossen",
                     Url);
                 Raise(DownloadEventType.Success, new DownloadEvent(message: msg));
@@ -253,6 +252,7 @@ namespace Code.GQClient.Util.http
         }
         #endregion
 
+        public Dictionary<string, string> ResponseHeaders { get; private set; }
     }
 
 }

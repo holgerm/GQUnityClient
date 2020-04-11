@@ -192,7 +192,6 @@ namespace Code.GQClient.UI.layout
 
         private void Initialize(string itemText, bool supportHtmlLinks)
         {
-            Debug.Log($"Init Text html-support: {supportHtmlLinks}");
             this.TextElement.text = itemText.Decode4TMP(supportHtmlLinks: supportHtmlLinks);
             this.TextElement.color = ConfigurationManager.Current.mainFgColor;
             this.TextElement.fontSize = ConfigurationManager.Current.mainFontSize;

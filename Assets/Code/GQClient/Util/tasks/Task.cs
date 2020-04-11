@@ -104,6 +104,8 @@ namespace Code.GQClient.Util.tasks
 
         private bool hasEnded = false;
 
+        private Dictionary<string, string> responseHeaders;
+
         public void RaiseTaskCompleted(object content = null)
         {
             if (hasEnded)

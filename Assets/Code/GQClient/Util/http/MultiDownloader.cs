@@ -7,13 +7,12 @@ using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI;
 using Code.GQClient.Util.tasks;
+using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
 {
-
     public class MultiDownloader : AbstractDownloader
     {
-
         /// <summary>
         /// Initializes a new Downloader object. 
         /// You can start the download as Coroutine either by calling StartCoroutine(download.startDownload) directly or
@@ -34,7 +33,7 @@ namespace Code.GQClient.Util.http
             {
                 listOfFilesNotStartedYet = files;
             }
-            Result = "";
+
             MaxParallelDownloads = maxParallelDownloads;
             Timeout = timeout;
             stopwatch = new Stopwatch();
@@ -42,9 +41,10 @@ namespace Code.GQClient.Util.http
 
         protected override void ReadInput(object input = null)
         {
-            if (input is List<MediaInfo>)
+            if (input is PrepareMediaInfoList.QuestWithMediaList questWithMediaList)
             {
-                listOfFilesNotStartedYet = input as List<MediaInfo>;
+                listOfFilesNotStartedYet = new List<MediaInfo>(questWithMediaList.MediaInfoList);
+                Result = questWithMediaList;
             }
             else
             {
@@ -55,8 +55,6 @@ namespace Code.GQClient.Util.http
             {
                 RaiseTaskCompleted();
             }
-
-
         }
 
         SimpleBehaviour dialogBehaviour;
@@ -71,20 +69,14 @@ namespace Code.GQClient.Util.http
 
         private bool LimitOfParallelDownloadsExceeded
         {
-            get
-            {
-                return (CurrentlyRunningDownloads >= MaxParallelDownloads);
-            }
+            get { return (CurrentlyRunningDownloads >= MaxParallelDownloads); }
         }
 
         #endregion
 
         private bool TimeIsUp
         {
-            get
-            {
-                return (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout);
-            }
+            get { return (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout); }
         }
 
         float downloadedSumOfWeights = 0f;
@@ -97,12 +89,13 @@ namespace Code.GQClient.Util.http
         protected override IEnumerator DoTheWork()
         {
             // init SimpleBehaviour:
-            dialogBehaviour = (SimpleBehaviour)behaviours[0]; 
+            dialogBehaviour = (SimpleBehaviour) behaviours[0];
             // TODO dangerous. Replace by concrete DialogControllers we will write.
-                                                                    // init totalSumOfWeights:
+
             foreach (var curInfo in listOfFilesNotStartedYet)
             {
-                totalSumOfWeights += ((curInfo.RemoteSize == MediaInfo.UNKNOWN) ? DEFAULT_WEIGHT : curInfo.RemoteSize);
+                totalSumOfWeights +=
+                    ((curInfo.RemoteSize == MediaInfo.UNKNOWN) ? DEFAULT_WEIGHT : curInfo.RemoteSize);
             }
 
             CurrentlyRunningDownloads = 0;
@@ -116,6 +109,7 @@ namespace Code.GQClient.Util.http
                 {
                     yield return null;
                 }
+
                 yield return null;
 
 
@@ -130,8 +124,17 @@ namespace Code.GQClient.Util.http
                 if (listOfFilesNotStartedYet.Count > 0)
                 {
                     // now we can start the next file downloader:
-                    var info = listOfFilesNotStartedYet[listOfFilesNotStartedYet.Count - 1];
-                    info.LocalFileName = QuestManager.MakeLocalFileNameFromUrl(info.Url);
+                    var infoToLoad = listOfFilesNotStartedYet[listOfFilesNotStartedYet.Count - 1];
+                    // TODO use only string list with urls in listOfFilesNotStartedYet.
+
+                    QuestManager.Instance.MediaStore.TryGetValue(infoToLoad.Url, out var info);
+                    if (info == null)
+                    {
+                        //  Log.SignalErrorToDeveloper($"MediaInfo was missing for url: {infoToLoad.Url} in MultiDownloader.");
+                        QuestManager.Instance.IncreaseMediaUsage(infoToLoad);
+                        info = infoToLoad;
+                    }
+
                     var d =
                         new Downloader(
                             url: info.Url,
@@ -151,18 +154,23 @@ namespace Code.GQClient.Util.http
                             filesCurrentlyDownloading.Remove(d);
                         }
                     };
-                    d.OnTaskEnded += (object sender, TaskEventArgs e) =>
-                    {
-                        CurrentlyRunningDownloads--;
-                    };
+                    d.OnTaskEnded += (object sender, TaskEventArgs e) => { CurrentlyRunningDownloads--; };
                     d.OnTaskCompleted += (object sender, TaskEventArgs e) =>
                     {
-                        info.LocalSize = info.RemoteSize;
-                        info.LocalTimestamp = info.RemoteTimestamp;
+                        if (d.ResponseHeaders != null)
+                        {
+                            d.ResponseHeaders.TryGetValue("Content-Length", out var contentLength);
+                            info.RemoteSize = contentLength == null ? MediaInfo.UNKNOWN : long.Parse(contentLength);
+                            d.ResponseHeaders.TryGetValue("Last-Modified", out var timestamp);
+                            info.RemoteTimestamp = PrepareMediaInfoList.ParseLastModifiedHeader(timestamp);
+                            info.LocalSize = info.RemoteSize;
+                            info.LocalTimestamp = info.RemoteTimestamp;
+                        }
+
                         filesCurrentlyDownloading.Remove(d);
                     };
                     d.OnProgress += ContributeToTotalProgress;
-                    listOfFilesNotStartedYet.Remove(info);
+                    listOfFilesNotStartedYet.Remove(infoToLoad);
                     d.Start();
                 }
             }
@@ -170,7 +178,7 @@ namespace Code.GQClient.Util.http
             RaiseTaskCompleted();
         }
 
-        public void ContributeToTotalProgress(object callbackSender, DownloadEvent args)
+        private void ContributeToTotalProgress(object callbackSender, DownloadEvent args)
         {
             downloadedSumOfWeights += args.Progress;
             var percent = Math.Min(100.0f, (downloadedSumOfWeights / totalSumOfWeights) * 100f);
@@ -178,7 +186,5 @@ namespace Code.GQClient.Util.http
         }
 
         public override object Result { get; set; }
-
     }
 }
-

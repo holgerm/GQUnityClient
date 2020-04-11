@@ -12,9 +12,9 @@ namespace Code.GQClient.Model.mgmt.quests
 	{
 		public string url;
 		/// <summary>
-		/// Only the relative opart of the absolute dir path is persisted, since on iOS the application data folder changes between different app versions.
+		/// Only the relative part of the absolute dir path is persisted, since on iOS the application data folder changes between different app versions.
 		/// </summary>
-		public string dir;
+		private string dir;
 
 		[JsonIgnore]
 		public string absDir {
@@ -50,7 +50,6 @@ namespace Code.GQClient.Model.mgmt.quests
 			this.filename = filename;
 			this.size = size;
 			this.time = time;
-			Debug.Log($"LocalMediaInfo() filename: {filename}");
         }
 
         [JsonIgnore]

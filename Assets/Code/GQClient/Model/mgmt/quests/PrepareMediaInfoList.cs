@@ -3,6 +3,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
@@ -10,36 +12,39 @@ using Code.GQClient.Model.gqml;
 using Code.GQClient.UI;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
+using GQClient.Model;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
-
     public class PrepareMediaInfoList : Task
     {
+        private List<MediaInfo> _filesCollectedForDownload;
 
-        public PrepareMediaInfoList() : base() { }
+        public PrepareMediaInfoList() : base()
+        {
+            _filesCollectedForDownload = new List<MediaInfo>();
+        }
 
-        private string gameXML { get; set; }
+        private string GameXml { get; set; }
 
         protected override void ReadInput(object input)
         {
-            if (input == null)
+            switch (input)
             {
-                RaiseTaskFailed();
-                return;
-            }
-
-            if (input is string)
-            {
-                gameXML = input as string;
-            }
-            else
-            {
-                Log.SignalErrorToDeveloper(
-                    "Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " +
-                    input.GetType().Name);
-                RaiseTaskFailed();
-                return;
+                case null:
+                    RaiseTaskFailed();
+                    return;
+                case string s:
+                    GameXml = s;
+                    break;
+                default:
+                    Log.SignalErrorToDeveloper(
+                        "Improper TaskEventArg received in SyncQuestData Task. Should be of type string but was " +
+                        input.GetType().Name);
+                    RaiseTaskFailed();
+                    return;
             }
         }
 
@@ -48,151 +53,184 @@ namespace Code.GQClient.Model.mgmt.quests
         public event PrepareMediaCallback OnTimeout;
 
         #region Progress
+
         public event PrepareMediaCallback OnProgress;
 
         private int _stepsDone;
+
         private int StepsDone
         {
-            get
-            {
-                return _stepsDone;
-            }
+            get { return _stepsDone; }
             set
             {
                 _stepsDone = value;
-                if (OnProgress != null)
-                {
 #if DEBUG_LOG
                     Debug.Log("StepDone set to " + value);
 #endif
-                    OnProgress((100f * StepsDone) / (float)stepsTotal);
-                }
+                OnProgress?.Invoke((100f * StepsDone) / (float) StepsTotal);
             }
         }
-        private int stepsTotal { get; set; }
+
+        private int StepsTotal { get; set; }
+
         #endregion
 
-        SimpleBehaviour dialogBehaviour;
+        private SimpleBehaviour _dialogBehaviour;
 
         protected override IEnumerator DoTheWork()
         {
-            dialogBehaviour = (SimpleBehaviour)behaviours[0]; 
+            _dialogBehaviour = (SimpleBehaviour) behaviours[0];
             // TODO dangerous. Replace by concrete DialogControllers we will write.
-            
-            OnProgress += dialogBehaviour.OnProgress;
+
+            OnProgress += _dialogBehaviour.OnProgress;
 
             // step 1 deserialize game.xml:
-            var quest = QuestManager.Instance.DeserializeQuest(gameXML);
-            stepsTotal = 2 + quest.MediaStore.Count;
+            var quest = QuestManager.DeserializeQuest(GameXml);
+            StepsTotal = 1 + quest.MediaStore.Count;
             StepsDone++;
             yield return null;
 
-            // step 2 import local media info:
-            quest.ImportLocalMediaInfo();
-            StepsDone++;
-            yield return null;
+            var storedLocalInfos = GetStoredLocalInfosFromJson(quest.Id);
 
-            // step 3 include remote media info:
-            Result = GetListOfFilesNeedDownload(quest);
+            foreach (var storedLocalInfo in storedLocalInfos)
+            {
+                if (quest.MediaStore.TryGetValue(storedLocalInfo.url, out var info))
+                {
+                    // kept: still used media, we can remove it from the current media store:
+                    quest.MediaStore.Remove(storedLocalInfo.url);
+                    collectWhenNewerOnServer(info);
+                }
+                else
+                {
+                    // removed: this quest uses the media no more, so we reduce its global usage by one:
+                    QuestManager.Instance.DecreaseMediaUsage(storedLocalInfo.url);
+                }
 
-            // TODO BAD HACK:
+                StepsDone++;
+            }
+
+            // new: now in the current media store only the new media is mentioned:
+            foreach (var newMediaInfo in quest.MediaStore.Values)
+            {
+                if (QuestManager.Instance.MediaStore.TryGetValue(newMediaInfo.Url, out var info))
+                {
+                    // new for this quest but already loaded on device:
+                    QuestManager.Instance.IncreaseMediaUsage(info);
+                    collectWhenNewerOnServer(info);
+                    StepsTotal++; // we did not know that before
+                    StepsDone++;
+                }
+                else
+                {
+                    _filesCollectedForDownload.Add(newMediaInfo);
+                }
+            }
+
+            Result = new QuestWithMediaList(quest, _filesCollectedForDownload);
             QuestManager.Instance.CurrentQuest = quest;
         }
 
-        /// <summary>
-        /// This is step 3 of 4 during quest media sync. Downloads or updates the media files needed for this quest.
-        /// </summary>
-        public List<MediaInfo> GetListOfFilesNeedDownload(Quest quest)
+        public static List<LocalMediaInfo> GetStoredLocalInfosFromJson(int questId)
         {
-            // 1. we create a list of files to be downloaded / updated (as Dictionary with all needed data for multi downloader:
-            var filesToDownload = new List<MediaInfo>();
-
-            var infoNotReceived = 0;
-            var summedSize = 0f;
-
-            MediaInfo info;
-            foreach (var kvpEntry in quest.MediaStore)
+            string mediaJson;
+            try
             {
-#if DEBUG_LOG
-                Debug.Log(("GetListOfFIlesNeedDownload: look at " + kvpEntry.Key).Yellow());
-#endif
-                info = kvpEntry.Value;
-
-                if (info.Url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA, StringComparison.Ordinal))
-                {
-                    // not an url but instead a local reference to media that is created at runtime within a quest.
-                    continue;
-                }
-
-                HttpWebRequest httpWReq = null;
-                try
-                {
-                    httpWReq =
-                        (HttpWebRequest)WebRequest.Create(info.Url);
-                    httpWReq.Timeout = (int)Math.Min(
-                        500,
-                        ConfigurationManager.Current.maxIdleTimeMS
-                    );
-                }
-                catch (UriFormatException)
-                {
-                    Log.SignalErrorToAuthor("Quest contains a wrong formatted URI: {0}.", info.Url);
-                    continue;
-                }
-
-
-                HttpWebResponse httpWResp;
-                try
-                {
-                    httpWReq.Method = "HEAD";
-                    httpWResp = (HttpWebResponse)httpWReq.GetResponse();
-                }
-                catch (WebException)
-                {
-                    Log.SignalErrorToDeveloper("Timeout while getting WebResponse for url {1}", HTTP.CONTENT_LENGTH, info.Url);
-                    info.RemoteSize = MediaInfo.UNKNOWN;
-                    info.RemoteTimestamp = MediaInfo.UNKNOWN;
-                    infoNotReceived++;
-                    // Since we do not know the timestamp of this file we load it:
-                    filesToDownload.Add(info);
-                    continue;
-                }
-                // got a response so we can use the data from server:
-                StepsDone++;
-                info.RemoteSize = httpWResp.ContentLength;
-                info.RemoteTimestamp = ParseLastModifiedHeader(httpWResp.GetResponseHeader("Last-Modified"));
-
-                summedSize += info.RemoteSize;
-                // if the remote file is newer we update: 
-                // or if media is not locally available we load it:
-                if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
-                {
-                    filesToDownload.Add(info);
-                }
-
-                httpWResp.Close();
+                mediaJson = File.ReadAllText(Quest.GetMediaJsonPath(questId));
+            }
+            catch (FileNotFoundException)
+            {
+                mediaJson = @"[]"; // we use an empty list then
+            }
+            catch (Exception e)
+            {
+                Log.SignalErrorToDeveloper("Error reading media.json for quest " + questId + ": " + e.Message);
+                mediaJson = @"[]"; // we use an empty list then
             }
 
-            return filesToDownload;
+            return JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJson);
         }
 
-        private long ParseLastModifiedHeader(string lastmodHeader)
+        private void collectWhenNewerOnServer(MediaInfo info)
+        {
+            if (info.Url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA, StringComparison.Ordinal)) return;
+
+            HttpWebRequest httpWReq;
+            try
+            {
+                httpWReq =
+                    (HttpWebRequest) WebRequest.Create(info.Url);
+                httpWReq.Timeout = (int) Math.Min(
+                    500,
+                    ConfigurationManager.Current.maxIdleTimeMS
+                );
+            }
+            catch (UriFormatException)
+            {
+                Log.SignalErrorToAuthor(
+                    "Quest contains a wrong formatted URI: {0}.", info.Url);
+                return;
+            }
+
+            HttpWebResponse httpWResp = null;
+            try
+            {
+                httpWReq.Method = "HEAD";
+                httpWResp = (HttpWebResponse) httpWReq.GetResponse();
+            }
+            catch (WebException)
+            {
+                Log.SignalErrorToDeveloper("Timeout while getting WebResponse for url {1}", HTTP.CONTENT_LENGTH,
+                    info.Url);
+                info.RemoteSize = MediaInfo.UNKNOWN;
+                info.RemoteTimestamp = MediaInfo.UNKNOWN;
+                // Since we do not know the timestamp of this file we load it:
+                _filesCollectedForDownload.Add(info);
+                httpWResp?.Close();
+                return;
+            }
+
+            // got a response so we can use the data from server:
+            info.RemoteSize = httpWResp.ContentLength;
+            info.RemoteTimestamp = ParseLastModifiedHeader(httpWResp.GetResponseHeader("Last-Modified"));
+            httpWResp.Close();
+
+            // if the remote file is newer we update: 
+            // or if media is not locally available we load it:
+            if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
+            {
+                _filesCollectedForDownload.Add(info);
+            }
+         }
+
+        public static long ParseLastModifiedHeader(string lastModHeader)
         {
             try
             {
-                return Convert.ToInt64(lastmodHeader);
+                return Convert.ToInt64(lastModHeader);
             }
             catch (FormatException)
             {
                 try
                 {
-                    DateTime dt = DateTime.Parse(lastmodHeader);
-                    return (long)(dt - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                    var dt = DateTime.Parse(lastModHeader);
+                    return (long) (dt - new DateTime(1970, 1, 1)).TotalMilliseconds;
                 }
                 catch (FormatException)
                 {
                     return MediaInfo.UNKNOWN;
                 }
+            }
+        }
+
+        public class QuestWithMediaList
+        {
+            public Quest Quest { get; private set; }
+            public List<MediaInfo> MediaInfoList { get; private set; }
+
+            public QuestWithMediaList(Quest q, List<MediaInfo> mediaInfos)
+            {
+                Quest = q;
+                MediaInfoList = mediaInfos;
             }
         }
     }

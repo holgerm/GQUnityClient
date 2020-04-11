@@ -1,5 +1,8 @@
+using System;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
+using GQClient.Model;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
@@ -8,40 +11,46 @@ namespace Code.GQClient.Model.mgmt.quests
     public class MediaInfo
 	{
 
-		string url;
+		[JsonIgnore] private string _url;
 
 		public string Url {
-			get {
-				return url;
-			}
+			get => _url;
 			private set {
-				url = value;
+				if (_url == null || _url != value)
+				{
+					_url = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
-		string localDir;
+		[JsonIgnore] private string _localDir;
 
 		public string LocalDir {
-			get {
-				return localDir;
-			}
+			get => _localDir;
 			set {
-				localDir = value;
+				if (_localDir == null || _localDir != value)
+				{
+					_localDir = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
-		string localFileName;
+		[JsonIgnore] private string _localFileName;
 
 		public string LocalFileName {
-			get {
-				return localFileName;
-			}
+			get => _localFileName;
 			set {
-				localFileName = value;
-				Debug.Log($"MediaInfo localfile set to: {value}");
+				if (_localFileName == null || _localFileName != value)
+				{
+					_localFileName = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
+		[JsonIgnore]
 		public string LocalPath {
 			get {
 				if (LocalDir == null || LocalFileName == null) {
@@ -57,58 +66,80 @@ namespace Code.GQClient.Model.mgmt.quests
 			}
 		}
 
-		long localTimestamp;
+		[JsonIgnore] private long _localTimestamp;
 
 		public long LocalTimestamp {
-			get {
-				return localTimestamp;
-			}
+			get => _localTimestamp;
 			set {
-				localTimestamp = value;
+				if (_localTimestamp != value)
+				{
+					_localTimestamp = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
-		long remoteTimestamp;
+		[JsonIgnore] private long _remoteTimestamp;
 
 		public long RemoteTimestamp {
-			get {
-				return remoteTimestamp;
-			}
+			get => _remoteTimestamp;
 			set {
-				remoteTimestamp = value;
+				if (_remoteTimestamp != value)
+				{
+					_remoteTimestamp = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
+		[JsonIgnore]
 		public const long NOT_AVAILABLE = -1L;
+		
+		[JsonIgnore]
 		public const long UNKNOWN = -2L;
 
-		long localSize;
+		[JsonIgnore] private long _localSize;
 
 		public long LocalSize {
-			get {
-				return localSize;
-			}
+			get => _localSize;
 			set {
-				localSize = value;
+				if (_localSize != value)
+				{
+					_localSize = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
-		long remoteSize;
+		[JsonIgnore] private long _remoteSize;
 
 		public long RemoteSize {
-			get {
-				return remoteSize;
-			}
+			get => _remoteSize;
 			set {
-				remoteSize = value;
+				if (_remoteSize != value)
+				{
+					_remoteSize = value;
+					QuestManager.Instance.MediaStoreIsDirty = true;
+				}
 			}
 		}
 
+		private int _usageCounter;
+		public int UsageCounter
+		{
+			get => _usageCounter;
+			set
+			{
+				_usageCounter = value;
+			}
+		}
+
+		[JsonConstructor]
 		public MediaInfo(string baseDir, string url)
 		{
 			this.Url = url;
 			this.LocalDir = Files.CombinePath (baseDir, "files");
-			this.LocalFileName = null;
+			this.LocalFileName = Files.FileName(url);
 			this.LocalTimestamp = 0L;
 			this.LocalSize = NOT_AVAILABLE;
 			this.RemoteTimestamp = 0L;
@@ -130,22 +161,24 @@ namespace Code.GQClient.Model.mgmt.quests
 		/// Version for runtime media files:
 		/// </summary>
 		/// <param name="questID">Quest I.</param>
-		/// <param name="url">URL.</param>
+		/// <param name="pseudoVariable">Given variable name in Editor</param>
 		/// <param name="dir">Dir.</param>
 		/// <param name="filename">Filename.</param>
 		public MediaInfo (int questID, string pseudoVariable, string dir, string filename) {
 			this.Url = pseudoVariable;
 			this.LocalDir = dir;
 			this.LocalFileName = filename;
-			this.localTimestamp = 0L; // TODO set to now in milliseconds
+			this._localTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 			this.RemoteTimestamp = 0L;
 			this.RemoteSize = NOT_AVAILABLE;
 		}
 
-		public bool IsLocallyAvailable {
-			get {
-				return !(LocalSize == NOT_AVAILABLE);
-			}
+		[JsonIgnore]
+		public bool IsLocallyAvailable => LocalSize != NOT_AVAILABLE;
+
+		public override string ToString()
+		{
+			return $"MediaInfo:\n\turl:{_url}\n\tpath:{LocalPath}";
 		}
 	}
 	

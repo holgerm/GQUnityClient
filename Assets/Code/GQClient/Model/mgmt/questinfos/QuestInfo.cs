@@ -594,7 +594,7 @@ namespace GQClient.Model
             // Load quest data: game.xml
             var downloadGameXML =
                 new Downloader(
-                    url: QuestManager.GetQuestURI(Id),
+                    url: QuestManager.GetQuestUri(Id),
                     timeout: ConfigurationManager.Current.timeoutMS,
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
                     targetPath: $"{QuestManager.GetLocalPath4Quest(Id)}{QuestManager.QUEST_FILE_NAME}"
@@ -729,6 +729,14 @@ namespace GQClient.Model
 
         private void doDelete()
         {
+            // reduce media usage counter for each media used in this quest:
+            var localMediaInfos = PrepareMediaInfoList.GetStoredLocalInfosFromJson(Id);
+            Debug.Log($"DoDELETE #: {localMediaInfos.Count}");
+            foreach (var mediaInfo in localMediaInfos)
+            {
+                QuestManager.Instance.DecreaseMediaUsage(mediaInfo.url);
+            }
+            
             Files.DeleteDirCompletely(QuestManager.GetLocalPath4Quest(Id));
             TimeStamp = null;
 
@@ -741,6 +749,14 @@ namespace GQClient.Model
             {
                 InvokeOnChanged();
             }
+            
+            var exportGlobalMediaJson =
+                new ExportGlobalMediaJson();
+            var unused5 = Base.Instance.GetSimpleBehaviour(
+                exportGlobalMediaJson,
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
+                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
+            );
 
             var exportQuestsInfoJSON =
                 new ExportQuestInfosToJSON();
@@ -750,7 +766,11 @@ namespace GQClient.Model
                 string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
             );
 
-            exportQuestsInfoJSON.Start();
+            var t =
+                new TaskSequence(
+                    exportGlobalMediaJson,
+                    exportQuestsInfoJSON);
+            t.Start();
         }
 
         /// <summary>
@@ -758,6 +778,7 @@ namespace GQClient.Model
         /// </summary>
         public void Play()
         {
+            Debug.Log("QuestInfo.Play()");
             if (ActivitiesBlocking)
                 return;
 
@@ -792,7 +813,11 @@ namespace GQClient.Model
             playTask.OnTaskEnded += (object sender, TaskEventArgs e) => { ActivitiesBlocking = false; };
 
             ActivitiesBlocking = true;
+            Debug.Log("QuestInfo.Play() before Start");
+
             playTask.Start();
+            Debug.Log("QuestInfo.Play() after start");
+
         }
 
         private Task CreateLoadAndPlayTask()
@@ -823,9 +848,9 @@ namespace GQClient.Model
                 new LocalFileLoader(
                     filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
                 );
-            DownloadBehaviour unused = Base.Instance.GetDownloadBehaviour(
+            var unused = Base.Instance.GetDownloadBehaviour(
                 loadGameXML,
-                string.Format("Lade {0}", ConfigurationManager.Current.nameForQuestsPl)
+                $"Lade {ConfigurationManager.Current.nameForQuestsPl}"
             );
 
             var questStarter = new QuestStarter();

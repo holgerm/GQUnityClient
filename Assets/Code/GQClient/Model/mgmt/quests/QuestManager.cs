@@ -9,15 +9,14 @@ using Code.GQClient.FileIO;
 using GQClient.Model;
 using Code.GQClient.Model.pages;
 using Newtonsoft.Json;
+using ProjNet.CoordinateSystems;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
-
     public class QuestManager
     {
-
         #region singleton
 
         public static QuestManager Instance
@@ -28,6 +27,7 @@ namespace Code.GQClient.Model.mgmt.quests
                 {
                     _instance = new QuestManager();
                 }
+
                 return _instance;
             }
             set => _instance = value;
@@ -38,12 +38,13 @@ namespace Code.GQClient.Model.mgmt.quests
             _instance = null;
         }
 
-        private static QuestManager _instance = null;
+        private static QuestManager _instance;
+
+        internal bool MediaStoreIsDirty { get; set; }
 
         private QuestManager()
         {
             _currentQuest = Quest.Null;
-            InitMediaStore();
             PageReadyToStart = true;
         }
 
@@ -52,19 +53,13 @@ namespace Code.GQClient.Model.mgmt.quests
 
         #region quest management functions
 
-        public string CurrentQuestName4User
-        {
-            get;
-            private set;
-        }
+        public string CurrentQuestName4User { get; private set; }
 
         private Quest _currentQuest = Quest.Null;
+
         public Quest CurrentQuest
         {
-            get
-            {
-                return _currentQuest;
-            }
+            get => _currentQuest;
             set
             {
                 _currentQuest = value;
@@ -76,19 +71,14 @@ namespace Code.GQClient.Model.mgmt.quests
         }
 
         private Page _currentPage;
-        public Page CurrentPage
-        {
-            get
-            {
-                return CurrentQuest.CurrentPage;
-            }
-        }
+
+        public Page CurrentPage => CurrentQuest.CurrentPage;
 
         public Scene CurrentScene
         {
             get
             {
-                Scene curScene = SceneManager.GetSceneByName(CurrentPage.PageSceneName);
+                var curScene = SceneManager.GetSceneByName(CurrentPage.PageSceneName);
                 return curScene;
             }
         }
@@ -98,12 +88,9 @@ namespace Code.GQClient.Model.mgmt.quests
 
         #region Quest Access
 
-        public static string GetQuestURI(int questID)
+        public static string GetQuestUri(int questId)
         {
-            var uri = string.Format("{0}/editor/{1}/clientxml",
-                             ConfigurationManager.GQ_SERVER_BASE_URL,
-                             questID
-                         );
+            var uri = $"{ConfigurationManager.GQ_SERVER_BASE_URL}/editor/{questId}/clientxml";
             return uri;
         }
 
@@ -111,40 +98,30 @@ namespace Code.GQClient.Model.mgmt.quests
         /// Gets the local quest dir path.
         /// </summary>
         /// <returns>The local quest dir path.</returns>
-        /// <param name="questID">Quest I.</param>
-        public static string GetLocalPath4Quest(int questID)
+        /// <param name="questId">Quest I.</param>
+        public static string GetLocalPath4Quest(int questId)
         {
-            return QuestInfoManager.LocalQuestsPath + questID + "/";
+            return QuestInfoManager.LocalQuestsPath + questId + "/";
         }
 
-        public static string GetRuntimeMediaPath(int questID)
+        public static string GetRuntimeMediaPath(int questId)
         {
-            var path = Files.CombinePath(QuestManager.GetLocalPath4Quest(questID), "runtime");
+            var path = Files.CombinePath(QuestManager.GetLocalPath4Quest(questId), "runtime");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
+
             return path;
         }
 
         public const string QUEST_FILE_NAME = "game.xml";
 
-        /// <summary>
-        /// Makes the local file name from the given URL, 
-        /// so that the file name is unique and reflects the filename within the url.
-        /// </summary>
-        /// <returns>The local file name from URL.</returns>
-        /// <param name="url">URL.</param>
-        public static string MakeLocalFileNameFromUrl(string url)
-        {
-            string filename = Files.FileName(url);
-            return filename; // TODO
-        }
-
         #endregion
 
 
         #region Parsing
+
         private static Quest _currentlyParsingQuest;
 
         public static Quest CurrentlyParsingQuest
@@ -168,28 +145,30 @@ namespace Code.GQClient.Model.mgmt.quests
         ///
         /// </summary>
         /// <param name="xml">Xml.</param>
-        public void SetCurrentQuestFromXML(string xml)
+        public void SetCurrentQuestFromXml(string xml)
         {
             CurrentQuest = DeserializeQuest(xml);
         }
 
-        public Quest DeserializeQuest(string xml)
+        public static Quest DeserializeQuest(string xml)
         {
             if (string.IsNullOrEmpty(xml))
             {
-                Log.SignalErrorToDeveloper("Tried to deserialize quest from emty or null xml.");
+                Log.SignalErrorToDeveloper("Tried to deserialize quest from empty or null xml.");
                 return Quest.Null;
             }
+
             using (var reader = XmlReader.Create(new StringReader(xml)))
             {
                 return new Quest(reader);
             }
         }
+
         #endregion
-        
-                
+
+
         #region Media
-        
+
         private Dictionary<string, MediaInfo> _mediaStore = null;
 
         public Dictionary<string, MediaInfo> MediaStore
@@ -198,12 +177,13 @@ namespace Code.GQClient.Model.mgmt.quests
             {
                 if (_mediaStore == null)
                 {
-                    _mediaStore = new Dictionary<string, MediaInfo>();
+                    InitMediaStore();
                 }
+
                 return _mediaStore;
             }
         }
-        
+
         public List<MediaInfo> GetListOfGlobalMediaInfos()
         {
             return MediaStore.Values.ToList<MediaInfo>();
@@ -212,7 +192,6 @@ namespace Code.GQClient.Model.mgmt.quests
 
         private void InitMediaStore()
         {
-            Debug.Log("QIM: InitMediaStore()");
             _mediaStore = new Dictionary<string, MediaInfo>();
 
             var mediaJSON = "";
@@ -230,35 +209,99 @@ namespace Code.GQClient.Model.mgmt.quests
                 mediaJSON = @"[]"; // we use an empty list then
             }
 
-            var localInfos = JsonConvert.DeserializeObject<List<LocalMediaInfo>>(mediaJSON);
+            var mediaInfos = JsonConvert.DeserializeObject<List<MediaInfo>>(mediaJSON);
 
-            foreach (var localInfo in localInfos)
+            foreach (var info in mediaInfos)
             {
-                var info = new MediaInfo(localInfo);
                 _mediaStore.Add(info.Url, info);
             }
+
+            MediaStoreIsDirty = false;
         }
 
-        public void AddMedia(string url, string contextDescription = "no context given")
+        public MediaInfo AddMedia(string url, string contextDescription = "no context given")
         {
             if (string.IsNullOrEmpty(url))
             {
-                return;
+                return null;
             }
 
-            if (!MediaStore.ContainsKey(url))
+            if (!MediaStore.TryGetValue(url, out var info))
             {
-                var info = new MediaInfo(QuestInfoManager.LocalQuestsPath, url);
-                MediaStore.Add(url, info);
+                AddNewMedia(new MediaInfo(QuestInfoManager.LocalQuestsPath, url));
+            }
+
+            return info;
+        }
+
+        public void DecreaseMediaUsage(string url)
+        {
+            if (MediaStore.TryGetValue(url, out var info))
+            {
+                info.UsageCounter--;
+                if (info.UsageCounter <= 0)
+                {
+                    try
+                    {
+                        File.Delete(info.LocalPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.SignalErrorToDeveloper($"Error while deleting media file {info.LocalPath} : {e.Message}");
+                    }
+
+                    MediaStore.Remove(url);
+                }
+
+                Instance.MediaStoreIsDirty = true;
             }
         }
 
-        public string CurrentMediaJsonPath => $"{GetLocalPath4Quest(CurrentQuest.Id)}/media.json";
+        public MediaInfo IncreaseMediaUsage(MediaInfo newUsedMediaInfo)
+        {
+            MediaStoreIsDirty = true;
 
-        public string GlobalMediaJsonPath => $"{QuestInfoManager.LocalQuestsPath}/media.json";
+            if (MediaStore.TryGetValue(newUsedMediaInfo.Url, out var info))
+            {
+                info.UsageCounter++;
+                return info;
+            }
+            else
+            {
+                AddNewMedia(newUsedMediaInfo);
+                return newUsedMediaInfo;
+            }
+        }
+
+        private void AddNewMedia(MediaInfo newInfo)
+        {
+            // TODO can be optimized from O(n) to O(log_n) by using a persisting hash set of filenames.
+            var occupiedFileNames = new HashSet<string>();
+            foreach (var info in Instance.MediaStore.Values)
+            {
+                occupiedFileNames.Add(info.LocalFileName);
+            }
+
+            var fileName = Files.FileName(newInfo.Url);
+            var fileNameCandidate = fileName;
+            var discriminationNr = 1;
+            var discriminiationAppendix = "";
+            while (occupiedFileNames.Contains(fileNameCandidate))
+            {
+                discriminiationAppendix = $"-{discriminationNr++}";
+                fileNameCandidate = $"{fileName}{discriminiationAppendix}";
+            }
+
+            newInfo.LocalFileName = fileNameCandidate;
+            newInfo.UsageCounter = 1;
+            MediaStore.Add(newInfo.Url, newInfo);
+        }
+
+        public static string MediaJsonPath4Quest(int questId) =>
+            Files.CombinePath(GetLocalPath4Quest(questId: questId), "media.json");
+
+        public static string GlobalMediaJsonPath => Files.CombinePath(QuestInfoManager.LocalQuestsPath, "media.json");
 
         #endregion
-
     }
-
 }

@@ -19,22 +19,25 @@ namespace GQClient.Model
 
         protected override IEnumerator DoTheWork()
         {
-            var mediaList = QuestManager.Instance.GetListOfGlobalMediaInfos();
+            if (QuestManager.Instance.MediaStoreIsDirty)
+            {
+                var mediaList = QuestManager.Instance.GetListOfGlobalMediaInfos();
 
-            try
-            {
-                var mediaJSON =
-                    (mediaList.Count == 0)
-                        ? "[]"
-                        : JsonConvert.SerializeObject(mediaList, Newtonsoft.Json.Formatting.Indented);
-                Files.WriteAllText(QuestManager.Instance.GlobalMediaJsonPath, mediaJSON);
-                Debug.Log($"Wrote File: {QuestManager.Instance.GlobalMediaJsonPath}");
-            }
-            catch (Exception e)
-            {
-                Log.SignalErrorToDeveloper("Error while trying to export quest info json file: " + e.Message);
-                RaiseTaskFailed();
-                yield break;
+                try
+                {
+                    var mediaJSON =
+                        (mediaList.Count == 0)
+                            ? "[]"
+                            : JsonConvert.SerializeObject(mediaList, Newtonsoft.Json.Formatting.Indented);
+                    Files.WriteAllText(QuestManager.GlobalMediaJsonPath, mediaJSON);
+                    QuestManager.Instance.MediaStoreIsDirty = false;
+                }
+                catch (Exception e)
+                {
+                    Log.SignalErrorToDeveloper("Error while trying to export quest info json file: " + e.Message);
+                    RaiseTaskFailed();
+                    yield break;
+                }
             }
 
             RaiseTaskCompleted();

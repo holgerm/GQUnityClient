@@ -155,7 +155,9 @@ namespace Code.GQClient.UI.pages.videoplayer
             var cover = pdfContainer.GetChild(1).gameObject;
             cover.SetActive(true); // cover the pdf until it is readily loaded etc.
 
-            pageCtrl.myPage.Parent.MediaStore.TryGetValue(pdfUrl, out var mediaInfo);
+            Debug.Log("WebViewExtras.InitializePDFView()");
+            QuestManager.Instance.MediaStore.TryGetValue(pdfUrl, out var mediaInfo);
+            Debug.Log($"WEbPage PDF: {mediaInfo}");
             if (mediaInfo != null)
             {
                 // pdf locally loaded:

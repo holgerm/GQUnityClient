@@ -18,35 +18,53 @@ namespace Code.GQClient.Model.mgmt.quests {
 
 		public ExportMediaInfoList() : base() { 
 		}
+
+		private Quest _quest;
 			
+		protected override void ReadInput(object input = null)
+		{
+			if (input is PrepareMediaInfoList.QuestWithMediaList questWithMediaList)
+			{
+					_quest = questWithMediaList.Quest;
+			}
+			else
+			{
+				Log.SignalErrorToDeveloper("ExportMediaInfoList task did not receive valid MediaInfo List from Input.");
+			}
+
+			if (_quest.MediaStore == null || _quest.MediaStore.Count == 0)
+			{
+				RaiseTaskCompleted();
+			}
+		}
+		
 		protected override IEnumerator DoTheWork() 
 		{
 			// step 4 persist the updated local media info:
 			var localInfos = new List<LocalMediaInfo> ();
-			foreach (var kvpEntry in QuestManager.Instance.CurrentQuest.MediaStore) {
+			foreach (var info in _quest.MediaStore.Values) {
 				localInfos.Add (
 					new LocalMediaInfo (
-						kvpEntry.Value.Url,
-						kvpEntry.Value.LocalDir,
-						kvpEntry.Value.LocalFileName,
-						kvpEntry.Value.LocalSize,
-						kvpEntry.Value.LocalTimestamp)
+						info.Url,
+						info.LocalDir,
+						info.LocalFileName,
+						info.LocalSize,
+						info.LocalTimestamp)
 				);
-				Debug.Log($"ExportMediaInfoList: add local file: {kvpEntry.Value.LocalFileName}");
 			}
 
 			try {
-				var mediaJSON = 
+				var mediaJson = 
 					(localInfos.Count == 0) 
 					? "[]"
 					: JsonConvert.SerializeObject(localInfos, Newtonsoft.Json.Formatting.Indented);
 
 				// write local media json for quest:
-				var dir4MediaJSON = Files.ParentDir(QuestManager.Instance.CurrentMediaJsonPath);
-				if (!Directory.Exists(dir4MediaJSON)) {
-					Directory.CreateDirectory(dir4MediaJSON);
+				var dir4MediaJson = Files.ParentDir(QuestManager.MediaJsonPath4Quest(_quest.Id));
+				if (!Directory.Exists(dir4MediaJson)) {
+					Directory.CreateDirectory(dir4MediaJson);
 				}
-				File.WriteAllText(QuestManager.Instance.CurrentMediaJsonPath, mediaJSON);
+				File.WriteAllText(QuestManager.MediaJsonPath4Quest(_quest.Id), mediaJson);
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export media info json file: " + e.Message);

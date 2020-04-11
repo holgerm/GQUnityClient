@@ -18,7 +18,7 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallThen/game.xml"));
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
@@ -33,7 +33,7 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionCallElse/game.xml"));
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
@@ -48,7 +48,7 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepThenThen/game.xml"));
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:
@@ -62,7 +62,7 @@ namespace GQTests.Model
 			xml = File.ReadAllText (Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "XML/Quests/IfActionDeepElseElse/game.xml"));
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			QuestManager.Instance.CurrentQuest.Start ();
 
 			// Assert:

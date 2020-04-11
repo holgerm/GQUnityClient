@@ -40,7 +40,7 @@ namespace Code.GQClient.Model.mgmt.quests
 		{
             // step 1 deserialize game.xml:
             long xmlLength = gameXML.Length;
-            QuestManager.Instance.SetCurrentQuestFromXML (gameXML);
+            QuestManager.Instance.SetCurrentQuestFromXml (gameXML);
             QuestManager.Instance.CurrentQuest.InitMediaStore();
             yield return null;
 

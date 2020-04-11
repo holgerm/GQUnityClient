@@ -33,7 +33,7 @@ namespace GQTests.Model
 			xml = parseXmlFromFile ("XML/Quests/MinimalQuest/game.xml");
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -48,7 +48,7 @@ namespace GQTests.Model
 			xml = parseXmlFromFile ("XML/Quests/QuestWith5NPCTalks/game.xml");
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Get pages:
@@ -83,7 +83,7 @@ namespace GQTests.Model
 			xml = parseXmlFromFile ("XML/Quests/OnlyThreeHotspots/game.xml");
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Get hotspots:

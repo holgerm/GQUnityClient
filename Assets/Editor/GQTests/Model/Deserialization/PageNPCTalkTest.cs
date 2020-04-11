@@ -145,7 +145,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -163,7 +163,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -191,7 +191,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -224,7 +224,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -262,7 +262,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -280,7 +280,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert before started:
@@ -316,7 +316,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
@@ -335,7 +335,7 @@ namespace GQTests.Model.Deserialization
 			XmlRoot = GQML.QUEST;
 
 			// Act:
-			qm.SetCurrentQuestFromXML (xml);
+			qm.SetCurrentQuestFromXml (xml);
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
