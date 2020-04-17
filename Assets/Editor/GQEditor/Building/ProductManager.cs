@@ -514,7 +514,7 @@ namespace GQ.Editor.Building
             }
 
             // gather scenes ans set them in EditorBuidlSettings:
-            List<string> scenes =
+            var scenes =
                  gatherScenesFromPackage(
                      new List<string>(),
                      Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
@@ -524,8 +524,8 @@ namespace GQ.Editor.Building
             scenes.AddRange(newProduct.Config.scenePaths);
 
             // detect if we have start scene:
-            bool startSceneIncluded = false;
-            for (int i = 0; i < scenes.Count && !startSceneIncluded; i++)
+            var startSceneIncluded = false;
+            for (var i = 0; i < scenes.Count && !startSceneIncluded; i++)
             {
                 if (scenes[i].EndsWith("StartScene.unity", StringComparison.Ordinal))
                 {
@@ -534,7 +534,7 @@ namespace GQ.Editor.Building
                     if (i > 0)
                         // make start scene the first scene in the list:
                     {
-                        string tmp = scenes[0];
+                        var tmp = scenes[0];
                         scenes.Insert(0, scenes[i]);
                         scenes.Insert(i, tmp);
 #if DEBUG_LOG
@@ -544,7 +544,7 @@ namespace GQ.Editor.Building
                 }
             }
 
-            List<EditorBuildSettingsScene> ebsScenes = new List<EditorBuildSettingsScene>();
+            var ebsScenes = new List<EditorBuildSettingsScene>();
 
             if (!startSceneIncluded)
             {
@@ -556,9 +556,9 @@ namespace GQ.Editor.Building
 #if DEBUG_LOG
             Debug.LogFormat("Further scenes adding:  #{0}", scenes.Count);
 #endif
-            foreach (string scenePath in scenes)
+            foreach (var scenePath in scenes)
             {
-                string curScenePath = scenePath.Substring("Assets/".Length);
+                var curScenePath = scenePath.Substring("Assets/".Length);
                 ebsScenes.Add(new EditorBuildSettingsScene(curScenePath, true));
 #if DEBUG_LOG
                 Debug.LogFormat("Scene added: {0}", curScenePath);
@@ -567,7 +567,7 @@ namespace GQ.Editor.Building
             EditorBuildSettings.scenes = ebsScenes.ToArray();
 
             PlayerSettings.productName = newProduct.Config.name;
-            string appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
+            var appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, appIdentifier);
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, appIdentifier);
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, appIdentifier);
@@ -590,7 +590,7 @@ namespace GQ.Editor.Building
             // update view in editor:
             LayoutConfig.ResetAll();
 
-            DateTime completedAt = DateTime.Now;
+            var completedAt = DateTime.Now;
             Debug.LogWarning("COMPLETED Preparing product " + newProduct.Id + " at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
         }
 

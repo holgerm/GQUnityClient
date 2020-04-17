@@ -1,7 +1,7 @@
 {
   "preserveAspectOfSplashFG": true,
   "id": "freispiel",
-  "idExtension": "",
+  "idExtension": "k",
   "name": "Frei Spiel",
   "portal": 561,
   "assetAddOns": [
@@ -21,7 +21,6 @@
     "TopicTree",
     "Map"
   ],
-  "TopicColumnsNumber": 2,
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,

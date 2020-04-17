@@ -155,9 +155,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             var cover = pdfContainer.GetChild(1).gameObject;
             cover.SetActive(true); // cover the pdf until it is readily loaded etc.
 
-            Debug.Log("WebViewExtras.InitializePDFView()");
             QuestManager.Instance.MediaStore.TryGetValue(pdfUrl, out var mediaInfo);
-            Debug.Log($"WEbPage PDF: {mediaInfo}");
             if (mediaInfo != null)
             {
                 // pdf locally loaded:
@@ -179,7 +177,6 @@ namespace Code.GQClient.UI.pages.videoplayer
         {
             while (!pdfViewer.IsLoaded)
             {
-                Debug.Log("PDF Viewer still loading ...");
                 yield return null;
             }
 
