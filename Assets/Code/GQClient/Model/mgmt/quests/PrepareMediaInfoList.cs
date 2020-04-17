@@ -91,14 +91,18 @@ namespace Code.GQClient.Model.mgmt.quests
             yield return null;
 
             var storedLocalInfos = GetStoredLocalInfosFromJson(quest.Id);
-
+            var newLocalInfos = new Dictionary<string, MediaInfo> (quest.MediaStore);
+            
             foreach (var storedLocalInfo in storedLocalInfos)
             {
                 if (quest.MediaStore.TryGetValue(storedLocalInfo.url, out var info))
                 {
                     // kept: still used media, we can remove it from the current media store:
-                    quest.MediaStore.Remove(storedLocalInfo.url);
-                    collectWhenNewerOnServer(info);
+                    newLocalInfos.Remove(storedLocalInfo.url);
+                    collectWhenNewerOnServer(
+                        QuestManager.Instance.MediaStore.TryGetValue(storedLocalInfo.url, out var globalInfo)
+                            ? globalInfo
+                            : info);
                 }
                 else
                 {
@@ -110,18 +114,19 @@ namespace Code.GQClient.Model.mgmt.quests
             }
 
             // new: now in the current media store only the new media is mentioned:
-            foreach (var newMediaInfo in quest.MediaStore.Values)
+            foreach (var newMediaInfo in newLocalInfos.Values)
             {
                 if (QuestManager.Instance.MediaStore.TryGetValue(newMediaInfo.Url, out var info))
                 {
                     // new for this quest but already loaded on device:
                     QuestManager.Instance.IncreaseMediaUsage(info);
-                    collectWhenNewerOnServer(info);
                     StepsTotal++; // we did not know that before
+                    collectWhenNewerOnServer(info);
                     StepsDone++;
                 }
                 else
                 {
+                    Debug.Log($"ADDED NEW media: {newMediaInfo.Url}");
                     _filesCollectedForDownload.Add(newMediaInfo);
                 }
             }
@@ -184,6 +189,9 @@ namespace Code.GQClient.Model.mgmt.quests
                 info.RemoteSize = MediaInfo.UNKNOWN;
                 info.RemoteTimestamp = MediaInfo.UNKNOWN;
                 // Since we do not know the timestamp of this file we load it:
+ 
+                Debug.Log($"ADDED media due to TIMEOUT: {info.Url}");
+
                 _filesCollectedForDownload.Add(info);
                 httpWResp?.Close();
                 return;
@@ -198,6 +206,7 @@ namespace Code.GQClient.Model.mgmt.quests
             // or if media is not locally available we load it:
             if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
             {
+                Debug.Log($"ADDED media due to UPDATE: {info.Url} Times: remote:{info.RemoteTimestamp} local:{info.LocalTimestamp}");
                 _filesCollectedForDownload.Add(info);
             }
          }

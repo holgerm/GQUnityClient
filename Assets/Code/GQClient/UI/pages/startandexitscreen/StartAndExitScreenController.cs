@@ -27,7 +27,7 @@ namespace Code.GQClient.UI.pages.startandexitscreen
         {
             myPage = (PageStartAndExitScreen)page;
 
-            showImage();
+            ShowImage();
             initForwardButton();
         }
 
@@ -68,13 +68,13 @@ namespace Code.GQClient.UI.pages.startandexitscreen
             }
         }
 
-        private void showImage()
+        private void ShowImage()
         {
             // show (or hide completely) image:
-            GameObject imagePanel = image.transform.parent.gameObject;
+            var imagePanel = image.transform.parent.gameObject;
 
             // allow for variables inside the image url:
-            string rtImageUrl = myPage.ImageUrl.MakeReplacements();
+            var rtImageUrl = myPage.ImageUrl.MakeReplacements();
 
             if (rtImageUrl == "")
             {
@@ -85,10 +85,10 @@ namespace Code.GQClient.UI.pages.startandexitscreen
             {
                 imagePanel.SetActive(true);
                 AbstractDownloader loader;
-                if (myPage.Parent.MediaStore.ContainsKey(rtImageUrl))
+                if (QuestManager.Instance.MediaStore.ContainsKey(rtImageUrl))
                 {
                     MediaInfo mediaInfo;
-                    myPage.Parent.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
+                    QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
                     loader = new LocalFileLoader(mediaInfo.LocalPath);
                 }
                 else
@@ -103,7 +103,7 @@ namespace Code.GQClient.UI.pages.startandexitscreen
                 }
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
-                    AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter>();
+                    var fitter = image.GetComponent<AspectRatioFitter>();
                     fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
                     image.texture = d.Www.texture;
                 };

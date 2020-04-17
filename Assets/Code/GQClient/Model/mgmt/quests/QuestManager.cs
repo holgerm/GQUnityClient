@@ -257,20 +257,17 @@ namespace Code.GQClient.Model.mgmt.quests
             }
         }
 
-        public MediaInfo IncreaseMediaUsage(MediaInfo newUsedMediaInfo)
+        public void IncreaseMediaUsage(MediaInfo newUsedMediaInfo)
         {
             MediaStoreIsDirty = true;
 
             if (MediaStore.TryGetValue(newUsedMediaInfo.Url, out var info))
             {
                 info.UsageCounter++;
-                return info;
+                return;
             }
-            else
-            {
-                AddNewMedia(newUsedMediaInfo);
-                return newUsedMediaInfo;
-            }
+
+            AddNewMedia(newUsedMediaInfo);
         }
 
         private void AddNewMedia(MediaInfo newInfo)

@@ -7,7 +7,6 @@ using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI;
 using Code.GQClient.Util.tasks;
-using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
 {
@@ -23,7 +22,7 @@ namespace Code.GQClient.Util.http
         /// onStart, onError, onTimeout, onSuccess, onProgress.
         /// </summary>
         /// <param name="maxParallelDownloads">Maximal number of parallel downloads.</param>
-        /// <param name="timeout">Timout in milliseconds (optional).</param>
+        /// <param name="timeout">Timeout in milliseconds (optional).</param>
         public MultiDownloader(
             int maxParallelDownloads = 15,
             long timeout = 0,

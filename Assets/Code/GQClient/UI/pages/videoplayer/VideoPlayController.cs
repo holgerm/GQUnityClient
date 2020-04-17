@@ -85,7 +85,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     camera360.enabled = true;
                     // switch to sphere:
                     containerNormal.SetActive(true);
-                    hideNormalVideo(true);
+                    HideNormalVideo(true);
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(true);
                     videoPlayer.started += (source) =>
@@ -113,7 +113,7 @@ namespace Code.GQClient.UI.pages.videoplayer
         }
 
 
-        private void hideNormalVideo(bool hide)
+        private void HideNormalVideo(bool hide)
         {
             containerNormal.transform.Find("Screen").GetComponent<Image>().enabled = !hide;
             videoImage.GetComponent<RawImage>().enabled = !hide;
@@ -133,10 +133,9 @@ namespace Code.GQClient.UI.pages.videoplayer
             }
             else
             {
-                if (myPage.Parent.MediaStore.ContainsKey(myPage.VideoFile))
+                if (QuestManager.Instance.MediaStore.ContainsKey(myPage.VideoFile))
                 {
-                    MediaInfo mediaInfo;
-                    myPage.Parent.MediaStore.TryGetValue(myPage.VideoFile, out mediaInfo);
+                    QuestManager.Instance.MediaStore.TryGetValue(myPage.VideoFile, out var mediaInfo);
                     videoPlayer.url = mediaInfo.LocalPath;
                 }
                 else
@@ -150,7 +149,7 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             videoPlayer.Prepare();
 
-            int secondsWaited = 0;
+            var secondsWaited = 0;
             while (!videoPlayer.isPrepared && secondsWaited < 6)
             {
                 yield return new WaitForSeconds(1);
@@ -363,7 +362,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             camera360.enabled = false;
             cameraMain.enabled = true;
 
-            hideNormalVideo(false);
+            HideNormalVideo(false);
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace Code.GQClient.UI.map
 {
     public class QuestMapController : MapController
     {
-        protected QuestManager qm;
+        private QuestManager _qm;
 
 
         #region Runtime API
@@ -19,7 +19,7 @@ namespace Code.GQClient.UI.map
         {
             base.Start();
 
-            qm = QuestManager.Instance;
+            _qm = QuestManager.Instance;
 
             UpdateView();
         }
@@ -71,8 +71,8 @@ namespace Code.GQClient.UI.map
         #region Markers
         protected override void populateMarkers()
         {
-            Quest q = qm.CurrentQuest;
-            foreach (Hotspot h in q.AllHotspots)
+            var q = _qm.CurrentQuest;
+            foreach (var h in q.AllHotspots)
             {
                 CreateMarker(h);
             }
@@ -82,13 +82,12 @@ namespace Code.GQClient.UI.map
         /// Called as update method on hotspot change events.
         /// </summary>
         /// <param name="hotspot">Hotspot.</param>
-        public void UpdateMarker(Hotspot hotspot)
+        private void UpdateMarker(Hotspot hotspot)
         {
             if (hotspot == null)
                 return;
 
-            Marker marker;
-            Markers.TryGetValue(hotspot.Id, out marker);
+            Markers.TryGetValue(hotspot.Id, out var marker);
             if (marker == null)
                 return;
 
@@ -110,31 +109,29 @@ namespace Code.GQClient.UI.map
             // Hotspot-specific markers:
             if (hotspot.MarkerImageUrl != HotspotMarker.SERVER_DEFAULT_MARKER_URL)
             {
-                loadHotspotMarker(hotspot, hotspot.MarkerImageUrl);
+                LoadHotspotMarker(hotspot, hotspot.MarkerImageUrl);
                 return;
             }
 
             // Quest-specific markers: they are defined as metadata:
-            if (qm.CurrentQuest.metadata.ContainsKey(HotspotMarker.QUEST_SPECIFIC_MARKER_MDKEY))
+            if (_qm.CurrentQuest.metadata.ContainsKey(HotspotMarker.QUEST_SPECIFIC_MARKER_MDKEY))
             {
-                string markerUrl;
-                qm.CurrentQuest.metadata.TryGetValue(HotspotMarker.QUEST_SPECIFIC_MARKER_MDKEY, out markerUrl);
-                loadHotspotMarker(hotspot, markerUrl);
+                _qm.CurrentQuest.metadata.TryGetValue(HotspotMarker.QUEST_SPECIFIC_MARKER_MDKEY, out var markerUrl);
+                LoadHotspotMarker(hotspot, markerUrl);
                 return;
             }
 
-            // App-specific hotspot marker (defaults to the default geoqeust marker):
-            Texture2D markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.hotspotMarker.path);
-            showLoadedMarker(hotspot, markerTexture);
+            // App-specific hotspot marker (defaults to the default geoquest marker):
+            var markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.hotspotMarker.path);
+            ShowLoadedMarker(hotspot, markerTexture);
         }
 
-        private void loadHotspotMarker(Hotspot hotspot, string markerUrl)
+        private static void LoadHotspotMarker(Hotspot hotspot, string markerUrl)
         {
             AbstractDownloader loader;
-            if (qm.CurrentQuest.MediaStore.ContainsKey(markerUrl))
+            if (QuestManager.Instance.MediaStore.ContainsKey(markerUrl))
             {
-                MediaInfo mediaInfo;
-                qm.CurrentQuest.MediaStore.TryGetValue(markerUrl, out mediaInfo);
+                QuestManager.Instance.MediaStore.TryGetValue(markerUrl, out var mediaInfo);
                 loader = new LocalFileLoader(mediaInfo.LocalPath);
             }
             else
@@ -147,23 +144,23 @@ namespace Code.GQClient.UI.map
             }
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                showLoadedMarker(hotspot, d.Www.texture);
+                ShowLoadedMarker(hotspot, d.Www.texture);
             };
             loader.Start();
         }
 
-        private void showLoadedMarker(Hotspot hotspot, Texture texture)
+        private static void ShowLoadedMarker(Hotspot hotspot, Texture texture)
         {
-            GameObject markerGO = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
+            var markerGo = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
-            HotspotMarker newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(
+            var newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(
                 hotspot.Id.ToString(), // if ever we intorduce hotspots names in game.xml use it here.
                 new double[2] { hotspot.Longitude, hotspot.Latitude },
-                markerGO
+                markerGo
             );
             newMarker.Hotspot = hotspot;
-            markerGO.name = "Markertile (hotspot #" + hotspot.Id + ")";
-            calculateMarkerDetails(texture, markerGO);
+            markerGo.name = "Marker tile (hotspot #" + hotspot.Id + ")";
+            calculateMarkerDetails(texture, markerGo);
 
             if (newMarker != null)
                 Markers[hotspot.Id] = newMarker;

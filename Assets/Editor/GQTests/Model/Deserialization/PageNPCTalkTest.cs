@@ -320,9 +320,9 @@ namespace GQTests.Model.Deserialization
 			Quest q = QuestManager.Instance.CurrentQuest;
 
 			// Assert:
-			Assert.AreEqual (1, q.MediaStore.Count);
+			Assert.AreEqual (1, QuestManager.Instance.MediaStore.Count);
 			Assert.IsTrue(
-				q.MediaStore.ContainsKey(
+				QuestManager.Instance.MediaStore.ContainsKey(
 					"http://qeevee.org:9091/uploadedassets/21/editor/10370/1_bibliothekneuaubing.jpg")
 			);
 		}
@@ -341,19 +341,19 @@ namespace GQTests.Model.Deserialization
 			// Assert:
 			Assert.AreEqual (4, q.MediaStore.Count);
 			Assert.IsTrue(
-				q.MediaStore.ContainsKey(
+				QuestManager.Instance.MediaStore.ContainsKey(
 					"http://qeevee.org:9091/uploadedassets/21/editor/9804/1_shadow.png")
 			);
 			Assert.IsTrue(
-				q.MediaStore.ContainsKey(
+				QuestManager.Instance.MediaStore.ContainsKey(
 					"http://qeevee.org:9091/uploadedassets/21/editor/9804/1_delete.png")
 			);
 			Assert.IsTrue(
-				q.MediaStore.ContainsKey(
+				QuestManager.Instance.MediaStore.ContainsKey(
 					"http://qeevee.org:9091/uploadedassets/21/editor/9804/1_download.png")
 			);
 			Assert.IsTrue(
-				q.MediaStore.ContainsKey(
+				QuestManager.Instance.MediaStore.ContainsKey(
 					"http://qeevee.org:9091/uploadedassets/21/editor/9804/1_info.png")
 			);
 		}

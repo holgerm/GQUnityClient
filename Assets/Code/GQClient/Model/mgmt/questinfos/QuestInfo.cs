@@ -731,7 +731,6 @@ namespace GQClient.Model
         {
             // reduce media usage counter for each media used in this quest:
             var localMediaInfos = PrepareMediaInfoList.GetStoredLocalInfosFromJson(Id);
-            Debug.Log($"DoDELETE #: {localMediaInfos.Count}");
             foreach (var mediaInfo in localMediaInfos)
             {
                 QuestManager.Instance.DecreaseMediaUsage(mediaInfo.url);

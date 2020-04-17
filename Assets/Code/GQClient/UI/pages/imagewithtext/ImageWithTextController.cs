@@ -23,20 +23,20 @@ namespace Code.GQClient.UI.pages.imagewithtext
 
 		#region Runtime API
 
-		protected PageImageWithText iwtPage;
+		private PageImageWithText _iwtPage;
 
 		public override void InitPage_TypeSpecific ()
 		{
-            iwtPage = (PageImageWithText)page;
+            _iwtPage = (PageImageWithText)page;
 
 			// show text:
-			text.text = TextHelper.Decode4TMP(iwtPage.Text);
+			text.text = _iwtPage.Text.Decode4TMP();
 
 			// show (or hide completely) image:
-			GameObject imagePanel = image.transform.parent.gameObject;
+			var imagePanel = image.transform.parent.gameObject;
 
             // allow for variables inside the image url:
-            string rtImageUrl = iwtPage.ImageUrl.MakeReplacements();
+            var rtImageUrl = _iwtPage.ImageUrl.MakeReplacements();
 
             if (rtImageUrl == "") {
 				imagePanel.SetActive (false);
@@ -44,9 +44,9 @@ namespace Code.GQClient.UI.pages.imagewithtext
 			} else {
 				imagePanel.SetActive (true);
 				AbstractDownloader loader;
-				if (iwtPage.Parent.MediaStore.ContainsKey (rtImageUrl)) {
+				if (QuestManager.Instance.MediaStore.ContainsKey (rtImageUrl)) {
 					MediaInfo mediaInfo;
-					iwtPage.Parent.MediaStore.TryGetValue (rtImageUrl, out mediaInfo);
+					QuestManager.Instance.MediaStore.TryGetValue (rtImageUrl, out mediaInfo);
 					loader = new LocalFileLoader (mediaInfo.LocalPath);
 				} else {
 					loader = 
@@ -58,7 +58,7 @@ namespace Code.GQClient.UI.pages.imagewithtext
 					// TODO store the image locally ...
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
-					AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter> ();
+					var fitter = image.GetComponent<AspectRatioFitter> ();
 					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
 					image.texture = d.Www.texture;
 				};

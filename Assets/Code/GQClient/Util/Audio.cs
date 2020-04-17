@@ -41,10 +41,9 @@ namespace Code.GQClient.Util
         /// <param name="stopOtherAudio">If set to <c>true</c> stop other audio.</param>
         public static float PlayFromMediaStore(string Url, bool loop = false, bool stopOtherAudio = true)
         {
-            MediaInfo audioInfo = null;
-            if (QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue(Url, out audioInfo))
+            if (QuestManager.Instance.MediaStore.TryGetValue(Url, out _))
             {
-                return Audio.PlayFromFile(Url, loop, stopOtherAudio);
+                return PlayFromFile(Url, loop, stopOtherAudio);
             }
             else
             {
@@ -63,8 +62,7 @@ namespace Code.GQClient.Util
         public static float PlayFromFile(string path, bool loop, bool stopOtherAudio)
         {
             // lookup the dictionary of currently prepared audiosources
-            AudioSource audioSource = null;
-            if (audioSources.TryGetValue(path, out audioSource))
+            if (audioSources.TryGetValue(path, out var audioSource))
             {
                 _internalStartPlaying(audioSource, loop, stopOtherAudio);
                 return audioSource.clip.length;
@@ -73,10 +71,9 @@ namespace Code.GQClient.Util
             {
                 // NEW:
                 AbstractDownloader loader;
-                if (QuestManager.Instance.CurrentQuest.MediaStore.ContainsKey(path))
+                if (QuestManager.Instance.MediaStore.ContainsKey(path))
                 {
-                    MediaInfo mediaInfo;
-                    QuestManager.Instance.CurrentQuest.MediaStore.TryGetValue(path, out mediaInfo);
+                    QuestManager.Instance.MediaStore.TryGetValue(path, out var mediaInfo);
                     loader = new LocalFileLoader(mediaInfo.LocalPath);
                 }
                 else
@@ -90,7 +87,7 @@ namespace Code.GQClient.Util
                 }
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
-                    GameObject go = new GameObject("AudioSource for " + path);
+                    var go = new GameObject("AudioSource for " + path);
                     go.transform.SetParent(Base.Instance.transform);
                     audioSource = go.AddComponent<AudioSource>();
                     audioSources[path] = audioSource;

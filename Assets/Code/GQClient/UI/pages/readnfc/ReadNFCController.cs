@@ -79,10 +79,9 @@ namespace Code.GQClient.UI.pages.readnfc
             }
 
             AbstractDownloader loader;
-            if (myPage.Parent.MediaStore.ContainsKey(myPage.ImageUrl))
+            if (QuestManager.Instance.MediaStore.ContainsKey(myPage.ImageUrl))
             {
-                MediaInfo mediaInfo;
-                myPage.Parent.MediaStore.TryGetValue(myPage.ImageUrl, out mediaInfo);
+                QuestManager.Instance.MediaStore.TryGetValue(myPage.ImageUrl, out var mediaInfo);
                 loader = new LocalFileLoader(mediaInfo.LocalPath);
             }
             else
@@ -110,9 +109,9 @@ namespace Code.GQClient.UI.pages.readnfc
 
         void fitInAndShowImage(Texture2D texture)
         {
-            AspectRatioFitter fitter = image.GetComponent<AspectRatioFitter>();
-            float imageRatio = (float)texture.width / (float)texture.height;
-            float imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
+            var fitter = image.GetComponent<AspectRatioFitter>();
+            var imageRatio = (float)texture.width / (float)texture.height;
+            var imageAreaHeight = ContentWidthUnits / imageRatio;  // if image fits, so we use its height (adjusted to the area):
 
             if (imageRatio < ImageRatioMinimum)
             {

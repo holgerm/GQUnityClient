@@ -50,9 +50,9 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 // - we do use questionBG:
                 QuestionBackgroundImage.enabled = true;
                 QuestionBackgroundImage.color = new Color(
-                    (float) ConfigurationManager.Current.contentBackgroundColor.r / 256f,
-                    (float) ConfigurationManager.Current.contentBackgroundColor.g / 256f,
-                    (float) ConfigurationManager.Current.contentBackgroundColor.b / 256f,
+                    ConfigurationManager.Current.contentBackgroundColor.r / 256f,
+                    ConfigurationManager.Current.contentBackgroundColor.g / 256f,
+                    ConfigurationManager.Current.contentBackgroundColor.b / 256f,
                     a: 200f / 256f // make question background semi transparent
                 );
 
@@ -60,10 +60,9 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 BackgroundImage.gameObject.SetActive(true);
 
                 AbstractDownloader loader;
-                if (myPage.Parent.MediaStore.ContainsKey(myPage.BackGroundImage))
+                if (QuestManager.Instance.MediaStore.ContainsKey(myPage.BackGroundImage))
                 {
-                    MediaInfo mediaInfo;
-                    myPage.Parent.MediaStore.TryGetValue(myPage.BackGroundImage, out mediaInfo);
+                    QuestManager.Instance.MediaStore.TryGetValue(myPage.BackGroundImage, out var mediaInfo);
                     loader = new LocalFileLoader(mediaInfo.LocalPath);
                 }
                 else
@@ -79,7 +78,7 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
 
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
-                    AspectRatioFitter fitter = BackgroundImage.gameObject.GetComponent<AspectRatioFitter>();
+                    var fitter = BackgroundImage.gameObject.GetComponent<AspectRatioFitter>();
                     fitter.aspectRatio = (float) d.Www.texture.width / (float) d.Www.texture.height;
                     BackgroundImage.texture = d.Www.texture;
                 };

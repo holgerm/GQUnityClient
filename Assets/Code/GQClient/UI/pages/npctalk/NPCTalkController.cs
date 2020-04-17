@@ -28,7 +28,7 @@ namespace Code.GQClient.UI.pages.npctalk
 
         #region Runtime API
 
-        protected PageNPCTalk npcPage;
+        private PageNPCTalk NpcPage;
 
         /// <summary>
         /// Is called during Start() of the base class, which is a MonoBehaviour.
@@ -37,11 +37,11 @@ namespace Code.GQClient.UI.pages.npctalk
         {
             try
             {
-                npcPage = (PageNPCTalk) page;
+                NpcPage = (PageNPCTalk) page;
             }
             catch (InvalidCastException)
             {
-                Debug.Log(("InvalidCastException: NPCTalk Page foun a page of type " + page.GetType()));
+                Debug.Log(("InvalidCastException: NPCTalk Page found a page of type " + page.GetType()));
             }
 
             // show the content:
@@ -53,16 +53,16 @@ namespace Code.GQClient.UI.pages.npctalk
 
         public override void OnForward()
         {
-            if (npcPage.HasMoreDialogItems())
+            if (NpcPage.HasMoreDialogItems())
             {
-                npcPage.Next();
+                NpcPage.Next();
                 // update the content:
                 AddCurrentText();
                 UpdateForwardButton();
             }
             else
             {
-                npcPage.End();
+                NpcPage.End();
             }
         }
 
@@ -85,13 +85,13 @@ namespace Code.GQClient.UI.pages.npctalk
         {
             get
             {
-                if (npcPage == null)
+                if (NpcPage == null)
                 {
                     return false;
                 }
                 else
                 {
-                    return string.IsNullOrEmpty(npcPage.ImageUrl);
+                    return string.IsNullOrEmpty(NpcPage.ImageUrl);
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace Code.GQClient.UI.pages.npctalk
         private void ShowImage()
         {
             // allow for variables inside the image url:
-            var rtImageUrl = npcPage.ImageUrl.MakeReplacements();
+            var rtImageUrl = NpcPage.ImageUrl.MakeReplacements();
 
             // show (or hide completely) image:
             if (rtImageUrl == "")
@@ -114,10 +114,10 @@ namespace Code.GQClient.UI.pages.npctalk
             }
 
             AbstractDownloader loader;
-            if (npcPage.Parent.MediaStore.ContainsKey(rtImageUrl))
+            if (QuestManager.Instance.MediaStore.ContainsKey(rtImageUrl))
             {
                 MediaInfo mediaInfo;
-                npcPage.Parent.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
+                QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
                 loader = new LocalFileLoader(mediaInfo.LocalPath);
             }
             else
@@ -131,21 +131,21 @@ namespace Code.GQClient.UI.pages.npctalk
 
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                var imageAreaHeight = image == null ? 0f : fitInAndShowImage(d.Www.texture);
+                var imageAreaHeight = image == null ? 0f : FitInAndShowImage(d.Www.texture);
 
                 imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
                 contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
 
-                // Dispose www including it s Texture and take some logs for preformace surveillance:
+                // Dispose www including it s Texture and take some logs for performance surveillance:
                 d.Www.Dispose();
             };
             loader.Start();
         }
 
-        private float fitInAndShowImage(Texture2D texture)
+        private float FitInAndShowImage(Texture texture)
         {
             var fitter = image.GetComponent<AspectRatioFitter>();
-            var imageRatio = (float) texture.width / (float) texture.height;
+            var imageRatio = texture.width / (float) texture.height;
             var imageAreaHeight =
                 ContentWidthUnits / imageRatio; // if image fits, so we use its height (adjusted to the area):
 
@@ -193,24 +193,24 @@ namespace Code.GQClient.UI.pages.npctalk
         private void AddCurrentText()
         {
             // decode text for HyperText Component:
-            var currentText = npcPage.CurrentDialogItem.Text.Decode4TMP();
+            var currentText = NpcPage.CurrentDialogItem.Text.Decode4TMP();
 
             // create dialog item GO from prefab:
             TextElementCtrl.Create(dialogItemContainer, currentText);
 
             // play audio if specified:
             var duration = 0f;
-            if (npcPage.CurrentDialogItem.AudioURL != null && npcPage.CurrentDialogItem.AudioURL != "")
-                duration = Audio.PlayFromMediaStore(npcPage.CurrentDialogItem.AudioURL);
+            if (!string.IsNullOrEmpty(NpcPage.CurrentDialogItem.AudioURL))
+                duration = Audio.PlayFromMediaStore(NpcPage.CurrentDialogItem.AudioURL);
 
             if (ConfigurationManager.Current.autoScrollNewText)
             {
                 if (Math.Abs(duration) < 0.01)
                     duration = currentText.Length / 14f;
-                // ca. 130 Worten à 6,5 Buchstaben pro Minute siehe https://de.wikipedia.org/wiki/Lesegeschwindigkeit
+                // ca. 130 words à 6,5 letters pro Minute cf. https://de.wikipedia.org/wiki/Lesegeschwindigkeit
 
                 // scroll to bottom:
-                Base.Instance.StartCoroutine(adjustScrollRect(duration));
+                Base.Instance.StartCoroutine(AdjustScrollRect(duration));
             }
         }
 
@@ -218,12 +218,12 @@ namespace Code.GQClient.UI.pages.npctalk
         {
             // update forward button text:
             var forwardButtonText = forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            forwardButtonText.text = npcPage.HasMoreDialogItems()
-                ? npcPage.NextDialogButtonText.Decode4TMP(false)
-                : npcPage.EndButtonText.Decode4TMP(false);
+            forwardButtonText.text = NpcPage.HasMoreDialogItems()
+                ? NpcPage.NextDialogButtonText.Decode4TMP(false)
+                : NpcPage.EndButtonText.Decode4TMP(false);
         }
 
-        private IEnumerator adjustScrollRect(float timespan)
+        private IEnumerator AdjustScrollRect(float timespan)
         {
             yield return new WaitForEndOfFrame();
 
