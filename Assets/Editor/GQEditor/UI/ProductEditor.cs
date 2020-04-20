@@ -94,8 +94,8 @@ namespace GQ.Editor.UI
         [MenuItem("Window/QuestMill Product Editor")]
         public static void Init()
         {
-            Assembly editorAsm = typeof(UnityEditor.Editor).Assembly;
-            Type inspectorWindowType = editorAsm.GetType("UnityEditor.InspectorWindow");
+            var editorAsm = typeof(UnityEditor.Editor).Assembly;
+            var inspectorWindowType = editorAsm.GetType("UnityEditor.InspectorWindow");
             ProductEditor editor;
             if (inspectorWindowType != null)
                 editor = EditorWindow.GetWindow<ProductEditor>("GQ Product", true, inspectorWindowType);
