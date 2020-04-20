@@ -40,12 +40,13 @@ namespace GQClient.Model
             }
         }
 
+        public static string QuestsRelativeBasePath => "quests";
+
         public static string LocalQuestInfoJsonPath => LocalQuestsPath + "infos.json";
 
         public Dictionary<int, QuestInfo> QuestDict
         {
             get;
-            set;
         }
 
         public List<QuestInfo> GetListOfQuestInfos()
@@ -185,24 +186,24 @@ namespace GQClient.Model
 
         }
 
-        public void RemoveInfo(int oldInfoID)
+        public void RemoveInfo(int oldInfoId)
         {
 #if DEBUG_LOG
             Debug.Log("RemoveInfo(" + oldInfoID + ")");
 #endif
 
             QuestInfo oldInfo = null;
-            if (!QuestDict.TryGetValue(oldInfoID, out oldInfo))
+            if (!QuestDict.TryGetValue(oldInfoId, out oldInfo))
             {
                 Log.SignalErrorToDeveloper(
                     "Trying to remove quest info with ID {0} but it deos not exist in QuestInfoManager.",
-                    oldInfoID
+                    oldInfoId
                 );
                 return;
             }
 
             oldInfo.Dispose();
-            QuestDict.Remove(oldInfoID);
+            QuestDict.Remove(oldInfoId);
             
             if (Filter.Accept(oldInfo))
             {
@@ -254,8 +255,8 @@ namespace GQClient.Model
                 string.Format("Neue {0} werden lokal gespeichert", ConfigurationManager.Current.nameForQuestsPl)
             );
 
-            ExportQuestInfosToJSON exporter =
-                new ExportQuestInfosToJSON();
+            ExportQuestInfosToJson exporter =
+                new ExportQuestInfosToJson();
             var unused4 = Base.Instance.GetSimpleBehaviour(
                 exporter,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
@@ -311,10 +312,7 @@ namespace GQClient.Model
                     )
                 );
             }
-            remove
-            {
-                onDataChange -= value;
-            }
+            remove => onDataChange -= value;
         }
 
         #endregion
@@ -322,7 +320,7 @@ namespace GQClient.Model
 
         #region singleton
 
-        private static QuestInfoManager _instance = null;
+        private static QuestInfoManager _instance;
 
         public static QuestInfoManager Instance
         {
@@ -341,7 +339,7 @@ namespace GQClient.Model
                 _instance = value;
             }
         }
-
+        
         public static void Reset()
         {
             _instance = null;

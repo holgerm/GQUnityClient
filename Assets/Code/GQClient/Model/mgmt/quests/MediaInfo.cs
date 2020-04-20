@@ -1,6 +1,7 @@
 using System;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
+using Code.QM.Util;
 using GQClient.Model;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -61,7 +62,10 @@ namespace Code.GQClient.Model.mgmt.quests
 					return null;
 				}
 				else {
-					return Files.CombinePath (LocalDir, LocalFileName);
+					return Files.CombinePath (
+						Device.GetPersistentDatapath(), 
+						LocalDir, 
+						LocalFileName);
 				}
 			}
 		}

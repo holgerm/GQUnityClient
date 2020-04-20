@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace GQClient.Model
 {
 
-    public class ExportQuestInfosToJSON : Task {
+    public class ExportQuestInfosToJson : Task {
 
-		public ExportQuestInfosToJSON() : base() { }
+		public ExportQuestInfosToJson() : base() { }
 
 		protected override IEnumerator DoTheWork() 
 		{
 			var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
 
 			try {
-				var questInfoJSON = 
+				var questInfoJson = 
 					(questInfoList.Count == 0) 
 					? "[]"
-					: JsonConvert.SerializeObject(questInfoList, Newtonsoft.Json.Formatting.Indented);
-				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJsonPath, questInfoJSON);
+					: JsonConvert.SerializeObject(questInfoList, Formatting.Indented);
+				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJsonPath, questInfoJson);
 
 			}
 			catch (Exception e) {
@@ -37,9 +34,7 @@ namespace GQClient.Model
 		}
 
 		public override object Result {
-			get {
-				return null;
-			}
+			get => null;
 			set { }
 		}
 	}

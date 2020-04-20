@@ -228,7 +228,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
             if (!MediaStore.TryGetValue(url, out var info))
             {
-                AddNewMedia(new MediaInfo(QuestInfoManager.LocalQuestsPath, url));
+                AddNewMedia(new MediaInfo(QuestInfoManager.QuestsRelativeBasePath, url));
             }
 
             return info;

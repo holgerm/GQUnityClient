@@ -581,7 +581,7 @@ namespace GQClient.Model
                 {
                     InvokeOnChanged();
 
-                    new ExportQuestInfosToJSON().Start();
+                    new ExportQuestInfosToJson().Start();
                 };
 
             // DO IT:
@@ -644,7 +644,7 @@ namespace GQClient.Model
             );
 
             var exportQuestsInfoJSON =
-                new ExportQuestInfosToJSON();
+                new ExportQuestInfosToJson();
             var unused4 = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
                 $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
@@ -693,7 +693,7 @@ namespace GQClient.Model
                     {
                         QuestContentHasBeenUpdated();
                         //QuestInfoManager.Instance.UpdateQuestInfoFromLocalQuest(NewVersionOnServer.Id);
-                        new ExportQuestInfosToJSON().Start();
+                        new ExportQuestInfosToJson().Start();
                     };
 
                 ActivitiesBlocking = true;
@@ -758,7 +758,7 @@ namespace GQClient.Model
             );
 
             var exportQuestsInfoJSON =
-                new ExportQuestInfosToJSON();
+                new ExportQuestInfosToJson();
             var unused = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
                 string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
@@ -777,7 +777,6 @@ namespace GQClient.Model
         /// </summary>
         public void Play()
         {
-            Debug.Log("QuestInfo.Play()");
             if (ActivitiesBlocking)
                 return;
 
@@ -812,11 +811,8 @@ namespace GQClient.Model
             playTask.OnTaskEnded += (object sender, TaskEventArgs e) => { ActivitiesBlocking = false; };
 
             ActivitiesBlocking = true;
-            Debug.Log("QuestInfo.Play() before Start");
 
             playTask.Start();
-            Debug.Log("QuestInfo.Play() after start");
-
         }
 
         private Task CreateLoadAndPlayTask()
@@ -829,7 +825,7 @@ namespace GQClient.Model
                 {
                     InvokeOnChanged();
 
-                    new ExportQuestInfosToJSON().Start();
+                    new ExportQuestInfosToJson().Start();
                 };
             var playTask = CreatePlayTask();
             Task loadAndPlay = new TaskSequence(download, playTask);

@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.layout;
@@ -114,19 +116,35 @@ namespace Code.GQClient.UI.pages.npctalk
             }
 
             AbstractDownloader loader;
-            if (QuestManager.Instance.MediaStore.ContainsKey(rtImageUrl))
+            if (rtImageUrl.StartsWith(GQML.PREFIX_RUNTIME_MEDIA))
             {
-                MediaInfo mediaInfo;
-                QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
-                loader = new LocalFileLoader(mediaInfo.LocalPath);
+                if (page.Parent.MediaStore.TryGetValue(rtImageUrl, out var rtMediaInfo))
+                {
+                    loader = new LocalFileLoader(rtMediaInfo.LocalPath);
+                }
+                else
+                {
+                    Log.SignalErrorToAuthor($"Runtime media {rtImageUrl} not found in quest {page.Parent.Id}");
+                    imagePanel.SetActive(false);
+                    layout.TopMargin.SetActive(true);
+                    return;
+                }
             }
             else
             {
-                loader = new Downloader(
-                    url: rtImageUrl,
-                    timeout: ConfigurationManager.Current.timeoutMS,
-                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
-                );
+                // not runtime media case, i.e. ordinary url case:
+                if (QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out var mediaInfo))
+                {
+                    loader = new LocalFileLoader(mediaInfo.LocalPath);
+                }
+                else
+                {
+                    loader = new Downloader(
+                        url: rtImageUrl,
+                        timeout: ConfigurationManager.Current.timeoutMS,
+                        maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                    );
+                }
             }
 
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>

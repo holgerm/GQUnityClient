@@ -174,7 +174,7 @@ namespace Code.GQClient.UI.pages.imagecapture
             Texture2D photo;
 
             // we add 360 degrees to avoid any negative values:
-            int rotatedClockwiseQuarters = 360 - cameraTexture.videoRotationAngle;
+            var rotatedClockwiseQuarters = 360 - cameraTexture.videoRotationAngle;
 
             switch (Input.deviceOrientation)
             {
@@ -187,6 +187,7 @@ namespace Code.GQClient.UI.pages.imagecapture
                 case DeviceOrientation.LandscapeRight:
                     rotatedClockwiseQuarters += 270;
                     break;
+                case DeviceOrientation.Unknown:
                 case DeviceOrientation.Portrait:
                 case DeviceOrientation.FaceUp:
                 case DeviceOrientation.FaceDown:
@@ -198,7 +199,7 @@ namespace Code.GQClient.UI.pages.imagecapture
             rotatedClockwiseQuarters %= 4; // reducing to 0, 1 ,2 or 3 quarters
 
             cameraTexture.Pause();
-            Color[] pixels = cameraTexture.GetPixels();
+            var pixels = cameraTexture.GetPixels();
             cameraTexture.Stop();
 
             switch (rotatedClockwiseQuarters)
@@ -231,11 +232,11 @@ namespace Code.GQClient.UI.pages.imagecapture
 
         void SaveTextureToCamera(Texture2D texture)
         {
-            DateTime now = DateTime.Now;
-            string filename = now.ToString("yyyy_MM_dd_HH_mm_ss_fff", CultureInfo.InvariantCulture) + ".jpg";
-            string filepath = Files.CombinePath(QuestManager.GetRuntimeMediaPath(myPage.Quest.Id), filename);
+            var now = DateTime.Now;
+            var filename = now.ToString("yyyy_MM_dd_HH_mm_ss_fff", CultureInfo.InvariantCulture) + ".jpg";
+            var filepath = Files.CombinePath(QuestManager.GetRuntimeMediaPath(myPage.Quest.Id), filename);
 
-            byte[] bytes = texture.EncodeToJPG();
+            var bytes = texture.EncodeToJPG();
 
             File.WriteAllBytes(filepath, bytes);
             Variables.SetVariableValue(myPage.File, new Value(filename));
@@ -251,7 +252,7 @@ namespace Code.GQClient.UI.pages.imagecapture
 
             // TODO save to mediainfos.json again
             
-            NativeGallery.Permission permission = NativeGallery.RequestPermission();
+            var permission = NativeGallery.RequestPermission();
             if (permission == NativeGallery.Permission.Denied)
             {
                 if (NativeGallery.CanOpenSettings())

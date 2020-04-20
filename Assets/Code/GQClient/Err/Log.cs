@@ -31,10 +31,10 @@ namespace Code.GQClient.Err
 			if (level < ReportLevel)
 				return;
 			
-			Problem problem = new Problem (message, level, recipient);
+			var problem = new Problem (message, level, recipient);
 			stack.Push (problem);
 
-			string logtext = 
+			var logtext = 
 				string.Format (
 					"{0}. {1} for {2} in quest {3} ({4})", 
 					stack.Count, 

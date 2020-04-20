@@ -28,7 +28,7 @@ namespace Code.GQClient.Model.expressions
                 return;
             }
 
-            Value value = GetValue(varName);
+            var value = GetValue(varName);
 
             if (value == Value.Null)
             {
@@ -151,7 +151,7 @@ namespace Code.GQClient.Model.expressions
 
         public static void SetInternalVariable(string varName, Value newValue)
         {
-            bool existedAlready = variables.ContainsKey(varName);
+            var existedAlready = variables.ContainsKey(varName);
             if (existedAlready)
             {
                 variables.Remove(varName);
@@ -242,15 +242,15 @@ namespace Code.GQClient.Model.expressions
 
         public static bool IsValidUserDefinedVariableName(string name)
         {
-            Regex regex = new Regex(REGEXP_START + VARNAME_USERDEFINED_REGEXP + REGEXP_END);
-            Match match = regex.Match(name);
+            var regex = new Regex(REGEXP_START + VARNAME_USERDEFINED_REGEXP + REGEXP_END);
+            var match = regex.Match(name);
             return match.Success;
         }
 
         public static bool IsValidVariableName(string name)
         {
-            Regex regex = new Regex(REGEXP_START + VARNAME_REGEXP + REGEXP_END);
-            Match match = regex.Match(name);
+            var regex = new Regex(REGEXP_START + VARNAME_REGEXP + REGEXP_END);
+            var match = regex.Match(name);
             return match.Success;
         }
 
@@ -261,8 +261,8 @@ namespace Code.GQClient.Model.expressions
         /// <param name="nameCandidate">Name candidate.</param>
         public static string LongestValidVariableNameFromStart(string nameCandidate)
         {
-            Regex regex = new Regex(REGEXP_START + VARNAME_REGEXP);
-            Match match = regex.Match(nameCandidate);
+            var regex = new Regex(REGEXP_START + VARNAME_REGEXP);
+            var match = regex.Match(nameCandidate);
             if (!match.Success)
                 throw new ArgumentException("\"" + nameCandidate + "\" does not start with a valid variable name.");
             return match.Value;

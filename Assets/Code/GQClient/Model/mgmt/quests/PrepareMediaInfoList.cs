@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
@@ -12,9 +11,7 @@ using Code.GQClient.Model.gqml;
 using Code.GQClient.UI;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
-using GQClient.Model;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
@@ -126,8 +123,8 @@ namespace Code.GQClient.Model.mgmt.quests
                 }
                 else
                 {
-                    Debug.Log($"ADDED NEW media: {newMediaInfo.Url}");
-                    _filesCollectedForDownload.Add(newMediaInfo);
+                    if (!newMediaInfo.Url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA))
+                        _filesCollectedForDownload.Add(newMediaInfo);
                 }
             }
 
@@ -190,8 +187,6 @@ namespace Code.GQClient.Model.mgmt.quests
                 info.RemoteTimestamp = MediaInfo.UNKNOWN;
                 // Since we do not know the timestamp of this file we load it:
  
-                Debug.Log($"ADDED media due to TIMEOUT: {info.Url}");
-
                 _filesCollectedForDownload.Add(info);
                 httpWResp?.Close();
                 return;
@@ -206,7 +201,6 @@ namespace Code.GQClient.Model.mgmt.quests
             // or if media is not locally available we load it:
             if (info.RemoteTimestamp > info.LocalTimestamp || !info.IsLocallyAvailable)
             {
-                Debug.Log($"ADDED media due to UPDATE: {info.Url} Times: remote:{info.RemoteTimestamp} local:{info.LocalTimestamp}");
                 _filesCollectedForDownload.Add(info);
             }
          }
