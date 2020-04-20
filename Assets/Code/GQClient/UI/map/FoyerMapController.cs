@@ -1,4 +1,5 @@
-﻿using Code.GQClient.Conf;
+﻿using System;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
 using Code.QM.Util;
@@ -15,7 +16,7 @@ namespace Code.GQClient.UI.map
 	{
 		#region Initialize
 
-		protected QuestInfoManager qim;
+		private QuestInfoManager _qim;
 
 		protected override void Start ()
 		{
@@ -23,16 +24,16 @@ namespace Code.GQClient.UI.map
 			base.Start ();
 
 			// at last we register for changes on quest infos with the quest info manager:
-			qim = QuestInfoManager.Instance;
-			qim.OnDataChange += OnMarkerChanged;
-			qim.OnFilterChange += OnMarkerChanged;
+			_qim = QuestInfoManager.Instance;
+			_qim.OnDataChange += OnMarkerChanged;
+			_qim.OnFilterChange += OnMarkerChanged;
 		}
 
 		#endregion
 
 		#region React on Events
 
-		public void OnMarkerChanged (object sender, QuestInfoChangedEvent e)
+		private void OnMarkerChanged (object sender, QuestInfoChangedEvent e)
 		{
 			Marker m;
 			switch (e.ChangeType) {
@@ -79,7 +80,11 @@ namespace Code.GQClient.UI.map
 			case ChangeType.FilterChanged:
 //				Debug.Log (string.Format("FMC.OnMarkerChanged: FilterChanged {0}", e.Message).Yellow());
 				UpdateView ();
-				break;							
+				break;
+			case ChangeType.SorterChanged:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
 			}
 		}
 
@@ -101,25 +106,29 @@ namespace Code.GQClient.UI.map
 				return;
 			}
 
-			GameObject markerGO = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
+			var markerGo = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
-			QuestMarker newMarker = map.CreateMarker<QuestMarker> (
+			var newMarker = map.CreateMarker<QuestMarker> (
 				                        info.Name, 
-				                        new double[2] { info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude }, 
-				                        markerGO
+				                        new[]
+				                        {
+					                        info.MarkerHotspot.Longitude, 
+					                        info.MarkerHotspot.Latitude
+				                        }, 
+				                        markerGo
 			                        );
 			if (newMarker == null)
 				return;
 			
 			newMarker.Data = info;
-			markerGO.name = "Markertile (" + info.Name + ")";
+			markerGo.name = "Marker tile (" + info.Name + ")";
 
-			calculateMarkerDetails (newMarker.Texture, markerGO);
+			calculateMarkerDetails (newMarker.Texture, markerGo);
 
 			Markers.Add (info.Id, newMarker);
 		}
 
-		public Texture MarkerSymbolTexture;
+		public Texture markerSymbolTexture;
 
 		protected override void locateAtStart ()
 		{
@@ -128,9 +137,9 @@ namespace Code.GQClient.UI.map
 				// calculate center of markers / quests:
 				double sumLong = 0f;
 				double sumLat = 0f;
-				int counter = 0;
-				foreach (QuestInfo qi in QuestInfoManager.Instance.GetListOfQuestInfos()) {
-					HotspotInfo hi = qi.MarkerHotspot;
+				var counter = 0;
+				foreach (var qi in QuestInfoManager.Instance.GetListOfQuestInfos()) {
+					var hi = qi.MarkerHotspot;
 					if (hi == HotspotInfo.NULL)
 						continue;
 
@@ -139,31 +148,31 @@ namespace Code.GQClient.UI.map
 					counter++;
 				}
 				if (counter == 0) {
-					locateAtFixedConfiguredPosition ();
+					LocateAtFixedConfiguredPosition ();
 				}
 				else {
-					map.CenterWGS84 = new double[2] {
+					map.CenterWGS84 = new[] {
 						sumLong / counter,
 						sumLat / counter
 					};
 				}
 				break;
 			case MapStartPositionType.FixedPosition:
-				locateAtFixedConfiguredPosition();
+				LocateAtFixedConfiguredPosition();
 				break;
 			case MapStartPositionType.PlayerPosition:
 				if (Device.location.isEnabledByUser &&
 					Device.location.status != LocationServiceStatus.Running) {
 					map.CenterOnLocation ();
 				} else {
-					locateAtFixedConfiguredPosition();
+					LocateAtFixedConfiguredPosition();
 				}
 				break;
 			}
 		}
 
-		private void locateAtFixedConfiguredPosition() {
-			map.CenterWGS84 = new double[2] {
+		private void LocateAtFixedConfiguredPosition() {
+			map.CenterWGS84 = new[] {
 				ConfigurationManager.Current.mapStartAtLongitude,
 				ConfigurationManager.Current.mapStartAtLatitude
 			};
