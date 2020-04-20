@@ -240,7 +240,7 @@
   },
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
-  "fitExceedingImagesIntoArea": false,
+  "fitExceedingImagesIntoArea": true,
   "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
