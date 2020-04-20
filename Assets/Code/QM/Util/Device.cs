@@ -51,7 +51,17 @@ namespace Code.QM.Util
             set => _width = value;
         }
 
-        public static Size DisplaySize => Screen.width / Screen.dpi < 4.13f ? Size.Small : Size.Large;
+        public static Size DisplaySize
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return Size.Small;
+#else
+                return Screen.width / Screen.dpi < 4.13f ? Size.Small : Size.Large;
+#endif
+            }
+        }
 
         public enum Size
         {
