@@ -18,51 +18,51 @@ namespace Code.GQClient.UI.pages.startandexitscreen
 		#endregion
 
 		#region Other Fields
-		protected PageStartAndExitScreen myPage;
+
+        private PageStartAndExitScreen _myPage;
 		#endregion
 
 
 		#region Runtime API
 		public override void InitPage_TypeSpecific ()
         {
-            myPage = (PageStartAndExitScreen)page;
+            _myPage = (PageStartAndExitScreen)page;
 
             ShowImage();
-            initForwardButton();
+            InitForwardButton();
         }
 
-        private void initForwardButton()
+        private void InitForwardButton()
         {
-            if (myPage.Duration == 0)
+            if (_myPage.Duration == 0)
             {
                 // interactive mode => show forwrd button:
                 FooterButtonPanel.transform.parent.gameObject.SetActive(true);
                 layout.ContentArea.GetComponent<Button>().enabled = true;
                 return;
-            } else
-            {
-                // timed mode => hide forward button, disable touch on whole screen and start timer:
-                FooterButtonPanel.transform.parent.gameObject.SetActive(false);
-                layout.ContentArea.GetComponent<Button>().enabled = false;
-                //forwardButton.gameObject.SetActive(false);
-                CoroutineStarter.Run(forwardAfterDurationWaited());
             }
+
+            // timed mode => hide forward button, disable touch on whole screen and start timer:
+            FooterButtonPanel.transform.parent.gameObject.SetActive(false);
+            layout.ContentArea.GetComponent<Button>().enabled = false;
+            //forwardButton.gameObject.SetActive(false);
+            CoroutineStarter.Run(ForwardAfterDurationWaited());
         }
 
-        private bool tapped = false;
+        private bool _tapped;
 
         public void Tap()
         {
-            myPage.Tap();
-            tapped = true;
+            _myPage.Tap();
+            _tapped = true;
         }
 
-        private IEnumerator forwardAfterDurationWaited()
+        private IEnumerator ForwardAfterDurationWaited()
         {
-            yield return new WaitForSeconds(myPage.Duration);
+            yield return new WaitForSeconds(_myPage.Duration);
 
             // in case we exited the page by tapping or the quest by leave-button in the meantime we have to skip performing onForward:
-            if (!tapped && QuestManager.Instance.CurrentQuest == page.Quest)
+            if (!_tapped && QuestManager.Instance.CurrentQuest == page.Quest)
             {
                 OnForward();
             }
@@ -74,41 +74,37 @@ namespace Code.GQClient.UI.pages.startandexitscreen
             var imagePanel = image.transform.parent.gameObject;
 
             // allow for variables inside the image url:
-            var rtImageUrl = myPage.ImageUrl.MakeReplacements();
+            var rtImageUrl = _myPage.ImageUrl.MakeReplacements();
 
             if (rtImageUrl == "")
             {
                 imagePanel.SetActive(false);
                 return;
             }
+
+            imagePanel.SetActive(true);
+            AbstractDownloader loader;
+            if (QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out var mediaInfo))
+            {
+                loader = new LocalFileLoader(mediaInfo.LocalPath);
+            }
             else
             {
-                imagePanel.SetActive(true);
-                AbstractDownloader loader;
-                if (QuestManager.Instance.MediaStore.ContainsKey(rtImageUrl))
-                {
-                    MediaInfo mediaInfo;
-                    QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out mediaInfo);
-                    loader = new LocalFileLoader(mediaInfo.LocalPath);
-                }
-                else
-                {
-                    loader =
-                        new Downloader(
+                loader =
+                    new Downloader(
                         url: rtImageUrl,
                         timeout: ConfigurationManager.Current.timeoutMS,
                         maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
                     );
-                    // TODO store the image locally ...
-                }
-                loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
-                {
-                    var fitter = image.GetComponent<AspectRatioFitter>();
-                    fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-                    image.texture = d.Www.texture;
-                };
-                loader.Start();
+                // TODO store the image locally ...
             }
+            loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
+            {
+                var fitter = image.GetComponent<AspectRatioFitter>();
+                fitter.aspectRatio = d.Www.texture.width / (float)d.Www.texture.height;
+                image.texture = d.Www.texture;
+            };
+            loader.Start();
         }
         
         public override void CleanUp() {
