@@ -1,1 +1,22 @@
 Hier findest du unser aktuelle <link="https://www.freilassing.de/impressum-und-datenschutz/"><color=#2C008BFF>Datenschutzerklärung</color></link>.
+
+Wir freuen uns über Dein Interesse an unserer App. Als Anbieter dieser App ist uns der sichere Umgang mit Deinen Daten besonders wichtig. Die Erhebung, Verarbeitung und Nutzung personenbezogener Daten geschieht ausschließlich unter Beachtung der geltenden datenschutzrechtlichen Bestimmungen und des Telemediengesetzes (TMG). Ohne Deine Zustimmung werden wir deine personenbezogenen Daten nicht auf anderem Wege nutzen, als er sich aus oder im Zusammenhang mit dieser Datenschutzerklärung ergibt. 
+
+Wir möchten Dir nachfolgend erläutern, welche Daten wir wann und zu welchem Zweck erheben, verarbeiten und nutzen.
+
+1.	Erhebung, Verarbeitung und Nutzung personenbezogener Daten
+Personenbezogene Daten sind Einzelangaben über persönliche und sachliche Verhältnisse einer bestimmten oder bestimmbaren Person also Daten die Rückschlüsse über eine Person zulassen.
+Mit der Installation dieser App erheben wir folgende Daten:
+a.	Registrierung und Nutzung
+Die Nutzung dieser App ist ohne Registrierung möglich.
+b.	Standortdaten
+Wir benötigen den Zugriff auf den Standort deines Gerätes. Deine GPS-Daten werden erhoben, auf dem Gerät verarbeitet aber nicht an den Anbieter übermittelt. Die GPS-Daten sind notwendig, damit der Nutzer über Inhalte in seiner näheren Umgebung informiert wird. Daten zu Deinem Standort werden nur für diese Bearbeitung Deiner Anfrage genutzt. Deine Standortdaten werden nach Beendigung Deiner Anfrage nicht gespeichert und nicht weitergegeben.
+c.	Den Zugriff auf Kamera und Mikrofon benutzt diese App ausschließlich im Rahmen interaktiver, kreativer Inhalte und nie, ohne dich deutlich darauf hinzuweisen und dein Einverständnis bzw. deine eigene Initiative anzufragen. Aufgenommene Medien (Fotos und Audioaufnahmen) werden von dieser App ausschliesslich auf diesem Gerät gespeichert und mit niemanden geteilt.
+d.	Aktives Kontaktieren
+Der Nutzer gestattet, dass der Betreiber die App aktiv kontaktiert, sofern diese online genutzt wird, um über Aktualisierungen der Datenschutzerklärung und neue oder geänderte Inhalte zu informieren.
+
+2. Datensicherheit
+Wir sichern unsere Systeme durch technische und organisatorische Maßnahmen gegen Verlust, Zerstörung, Zugriff, Veränderung oder Verbreitung Deiner Daten durch unbefugte Personen. Trotz regelmäßiger Kontrollen ist ein vollständiger Schutz gegen alle Gefahren jedoch nicht möglich.
+
+3. Bekanntmachung von Veränderungen
+Gesetzesänderungen oder Änderungen unserer unternehmensinternen Prozesse können eine Anpassung dieser Datenschutzerklärung erforderlich machen. Für den Fall einer solchen Änderung wird die App, sofern du online gehst, dich informieren.

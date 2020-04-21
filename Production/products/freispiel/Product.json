@@ -104,11 +104,49 @@
   "mapButtonHeightMinMM": 7.0,
   "mapButtonHeightMaxMM": 12.0,
   "foldableCategoryFilters": true,
-  "categoryFiltersStartFolded": true,
+  "categoryFiltersStartFolded": false,
   "categoryFoldersStartFolded": true,
-  "mainCategorySet": null,
-  "CategorySets": [],
-  "defaultCategory": null,
+  "mainCategorySet": "Kategorien",
+  "CategorySets": [
+    {
+      "name": "Kategorien",
+      "categories": [
+        {
+          "id": "verein",
+          "name": "Verein",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/society"
+          }
+        },
+        {
+          "id": "stadt",
+          "name": "Stadt Erkunden",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/city"
+          }
+        },
+        {
+          "id": "spielplatz",
+          "name": "Spielort",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/play"
+          }
+        },
+        {
+          "id": "info",
+          "name": "Info",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/info"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultCategory": "info",
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
   "taskUI": "ProgressAtBottom",
