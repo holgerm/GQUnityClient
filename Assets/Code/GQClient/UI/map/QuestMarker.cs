@@ -80,7 +80,7 @@ namespace Code.GQClient.UI.map
 							symbol = null;
 						}
 					} catch (KeyNotFoundException) {
-						Log.SignalErrorToAuthor ("Quest Category {0} not found. Using default symbol.", categoryId);
+						Log.SignalErrorToAuthor ($"Quest {Data.Id}: Category {categoryId} not found. Using default symbol.");
 					}
 
 					var outlineColors = markerOutline.GetPixels32 ();
@@ -142,6 +142,7 @@ namespace Code.GQClient.UI.map
 					// cache this marker texture:
 					TextureManager.Instance.Add (textureId, t);
 				}
+				
 				return t;
 			}
 		}

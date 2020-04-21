@@ -10,7 +10,6 @@ using Code.GQClient.Util;
 using Code.GQClient.Util.input;
 using Code.QM.Util;
 using Code.UnitySlippyMap.Helpers;
-using Code.UnitySlippyMap.Input;
 using Code.UnitySlippyMap.Layers;
 using Code.UnitySlippyMap.Map;
 using Code.UnitySlippyMap.Markers;
@@ -40,7 +39,7 @@ namespace Code.GQClient.UI.map
 			}
 		}
 
-		public static float MARKER_SCALE_FACTOR {
+		private static float MARKER_SCALE_FACTOR {
 			get {
 				// We empirically found this to be close to a correct scaling factor in order to resize the markers according to 
 				// UI elements like buttons etc.:
@@ -67,7 +66,7 @@ namespace Code.GQClient.UI.map
 			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
 		}
 
-		private static bool _ignoreInteraction = false;
+		private static bool _ignoreInteraction;
 
 		public static bool IgnoreInteraction {
 			get {
@@ -256,7 +255,7 @@ namespace Code.GQClient.UI.map
 			}
 
 			// hide and delete all list elements:
-			foreach (KeyValuePair<int, Marker> kvp in Markers) {
+			foreach (var kvp in Markers) {
 				// TODO CLARIFY WHY THIS CONTINUE IS NECESSARY:
 				if (kvp.Value == null)
 					continue;

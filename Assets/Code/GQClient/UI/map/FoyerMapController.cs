@@ -94,7 +94,7 @@ namespace Code.GQClient.UI.map
 
 		protected override void populateMarkers ()
 		{
-			foreach (QuestInfo info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
+			foreach (var info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				CreateMarker (info);
 			}

@@ -423,10 +423,7 @@ namespace GQClient.Model
 
         public const string WITHOUT_CATEGORY_ID = "withoutcategory";
 
-        public string CurrentCategoryId
-        {
-            get { return QuestInfoManager.Instance.Filter.CategoryToShow(this); }
-        }
+        public string CurrentCategoryId => QuestInfoManager.Instance.Filter.CategoryToShow(this);
 
         #endregion
 
