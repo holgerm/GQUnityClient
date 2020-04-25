@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using Newtonsoft.Json.Converters;
 using UnityEditor;
 using UnityEngine;
 // ReSharper disable InconsistentNaming
+// ReSharper disable MemberCanBePrivate.Global
 
 #if UNITY_EDITOR
 
@@ -18,6 +20,7 @@ namespace Code.GQClient.Conf
     /// Config class specifies textual parameters of a product. It is used both at runtime to initilize the app's branding details from and 
     /// at editor time to back the product editor view and store the parameters while we use the editor.
     /// </summary>
+    [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
     public class Config
     {
         #region Parse Helper
@@ -179,8 +182,14 @@ namespace Code.GQClient.Conf
         #region Synching
 
         [ShowInProductEditor(StartSection = "Synchronization:")]
-        public bool autoSynchQuestInfos { get; set; }
-
+        public bool autoSyncQuestInfos { get; set; }
+        
+        [ShowInProductEditor]
+        public bool autoLoadQuests { get; set; }
+        
+        [ShowInProductEditor]
+        public bool autoUpdateQuests { get; set; }
+        
         /// <summary>
         /// If set, quests called by StartQuest actions will update before being started if possible and load if needed.
         /// </summary>
@@ -681,8 +690,8 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(StringEnumConverter))]
         public ListEntryDividingMode listEntryDividingMode
         {
-            get { return _listEntryDividingMode; }
-            set { _listEntryDividingMode = value; }
+            get => _listEntryDividingMode;
+            set => _listEntryDividingMode = value;
         }
 
         [ShowInProductEditor]
@@ -725,7 +734,7 @@ namespace Code.GQClient.Conf
         #region Defaults
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Config"/> class and intializes it with generic default values.
+        /// Initializes a new instance of the <see cref="Config"/> class and initializes it with generic default values.
         /// 
         /// This constructor is used by the ProductManager (explicit) as well as the JSON.Net deserialize method (via reflection).
         /// </summary>
@@ -764,9 +773,11 @@ namespace Code.GQClient.Conf
             maxIdleTimeMS = 9000L;
             maxParallelDownloads = 15;
 
-            autoSynchQuestInfos = true;
+            autoSyncQuestInfos = true;
+            autoLoadQuests = false;
+            autoUpdateQuests = false;
             autoUpdateSubquests = false;
-            offerManualUpdate4QuestInfos = !autoSynchQuestInfos;
+            offerManualUpdate4QuestInfos = !autoSyncQuestInfos;
 
             acceptedPageTypes = new string[0];
             sceneMappings = new List<SceneMapping>();

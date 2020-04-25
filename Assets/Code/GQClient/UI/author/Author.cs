@@ -1,6 +1,5 @@
 ﻿using System;
 using Code.GQClient.Conf;
-using Code.GQClient.Err;
 using GQClient.Model;
 using UnityEngine;
 
@@ -11,24 +10,14 @@ namespace Code.GQClient.UI.author
     {
         public static event EventHandler<EventArgs> SettingsChanged;
 
-        public static void OnSettingsChanged()
+        private static void OnSettingsChanged()
         {
-            if (SettingsChanged != null)
-            {
-                SettingsChanged(null, null);
-            }
+            SettingsChanged?.Invoke(null, null);
         }
 
 
 
-        public static bool LoggedIn
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(LoggedInAs);
-            }
-
-        }
+        public static bool LoggedIn => !string.IsNullOrEmpty(LoggedInAs);
 
         public static string LoggedInAs
         {
@@ -63,9 +52,9 @@ namespace Code.GQClient.UI.author
                 OnSettingsChanged();
             }
         }
-        private static string _loggedInAs = null;
+        private static string _loggedInAs;
 
-        private static bool? _offerManualUpdate = null;
+        private static bool? _offerManualUpdate;
         public static bool OfferManualUpdate
         {
             get
@@ -93,12 +82,12 @@ namespace Code.GQClient.UI.author
                         _offerManualUpdate == true ? 1 : 0
                     );
                     PlayerPrefs.Save();
-                    Author.OnSettingsChanged();
+                    OnSettingsChanged();
                 }
             }
         }
 
-        private static bool? _showHiddenQuests = null;
+        private static bool? _showHiddenQuests;
         public static bool ShowHiddenQuests
         {
             get
@@ -128,13 +117,13 @@ namespace Code.GQClient.UI.author
                     PlayerPrefs.Save();
                     Author.OnSettingsChanged();
 
-                    // obeye: filter logic is reverse to Base instance flag logic here:
+                    // obey: filter logic is reverse to Base instance flag logic here:
                     QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = !value;
                 }
             }
         }
 
-        private static bool? _showOnlyLocalQuests = null;
+        private static bool? _showOnlyLocalQuests;
         public static bool ShowOnlyLocalQuests
         {
             get
@@ -162,13 +151,13 @@ namespace Code.GQClient.UI.author
                         _showOnlyLocalQuests == true ? 1 : 0
                     );
                     PlayerPrefs.Save();
-                    Author.OnSettingsChanged();
+                    OnSettingsChanged();
                     QuestInfoFilter.LocalQuestInfosFilter.Instance.IsActive = value;
                 }
             }
         }
 
-        private static bool? _showEmptyMenuEntries = null;
+        private static bool? _showEmptyMenuEntries;
         public static bool ShowEmptyMenuEntries
         {
             get
@@ -201,7 +190,7 @@ namespace Code.GQClient.UI.author
             }
         }
 
-        private static bool? _showDeleteOptionForLocalQuests = null;
+        private static bool? _showDeleteOptionForLocalQuests;
         public static bool ShowDeleteOptionForLocalQuests
         {
             get

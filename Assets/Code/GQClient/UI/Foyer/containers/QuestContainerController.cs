@@ -1,5 +1,6 @@
 ﻿// #define DEBUG_LOG
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GQClient.Model;
@@ -53,9 +54,6 @@ namespace Code.GQClient.UI.Foyer.containers
                 case ChangeType.AddedInfo:
                     AddedInfo(e);
                     break;
-                case ChangeType.ChangedInfo:
-                    ChangedInfo(e);
-                    break;
                 case ChangeType.RemovedInfo:
                     RemovedInfo(e);
                     break;
@@ -67,6 +65,12 @@ namespace Code.GQClient.UI.Foyer.containers
                     break;
                 case ChangeType.SorterChanged:
                     SorterChanged();
+                    break;
+                case ChangeType.ChangedInfo:
+                    ChangedInfo(e);
+                    break;
+                default:
+                    ChangedInfo(e);
                     break;
             }
         }
@@ -104,7 +108,7 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             QuestInfoManager.DoDestroy(this);
             ShowDeleteOption.DeleteOptionVisibilityChanged -= UpdateElementViews;
-         }
+        }
 
         /// <summary>
         /// Assumes no element is new and no element has been removed,

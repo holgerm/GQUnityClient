@@ -1,43 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Code.GQClient.Conf;
+using Code.GQClient.UI.author;
 using GQClient.Model;
 using Code.GQClient.Util.tasks;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
-
     public class AutoLoadAndUpdate : Task
     {
-
         protected override IEnumerator DoTheWork()
         {
             var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
 
-            var loadCounter = 0;
-            var updateCounter = 0;
-
-            foreach (var qi in questInfoList)
+            if (ConfigurationManager.Current.autoSyncQuestInfos)
             {
-                //if (qi.Name == "Neue Quest 2") {
-                //    Debug.Log("Found");
-                //}
-
-                if (qi.IsHidden() || ConfigurationManager.Current.autoSynchQuestInfos)
+                foreach (var qi in questInfoList.Where(qi => !qi.IsHidden()))
                 {
-                    if (qi.ShowDownloadOption)
+                    if (qi.LoadOptionPossibleInTheory && !qi.LoadModeAllowsManualLoad && !Author.LoggedIn)
                     {
-                        loadCounter++;
-                        //Debug.Log("#### AUTOLOAD quest: " + qi.Id);
-                        //qi.Download();
-                        yield break;
+                        //          Debug.Log($"#### AUTOLOAD quest: {qi.Id}:{qi.Name}");
+                        qi.Download();
+                        yield return null;
+                        continue;
                     }
-                    else if (qi.ShowUpdateOption)
+
+                    if (qi.UpdateOptionPossibleInTheory && !qi.LoadModeAllowsManualUpdate && !Author.LoggedIn)
                     {
-                        updateCounter++;
-                        //Debug.Log("#### AUTOUPDATE quest: " + qi.Id);
-                        //qi.Update();
-                        yield break;
+                        //           Debug.Log($"#### AUTOUPDATE quest: {qi.Id}:{qi.Name}");
+                        qi.Update();
+                        yield return null;
                     }
                 }
             }
@@ -45,5 +39,4 @@ namespace Code.GQClient.Model.mgmt.quests
             //Debug.Log("#### AUTO HAS loaded: " + loadCounter + " and updated: " + updateCounter);
         }
     }
-
 }

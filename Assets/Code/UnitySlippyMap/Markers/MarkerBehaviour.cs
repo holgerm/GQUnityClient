@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using Code.UnitySlippyMap.Helpers;
 using Code.UnitySlippyMap.Map;
 using UnityEngine;
@@ -68,9 +69,19 @@ namespace Code.UnitySlippyMap.Markers
 					value [0] += 360.0;
 
 				coordinatesWGS84 = value;
-                coordinatesEPSG900913 = Map.WGS84ToEPSG900913Transform.Transform(coordinatesWGS84); //GeoHelpers.WGS84ToMeters(coordinatesWGS84[0], coordinatesWGS84[1]);
-				
-                Reposition ();
+				try
+				{
+					coordinatesEPSG900913 =
+						Map.WGS84ToEPSG900913Transform
+							.Transform(
+								coordinatesWGS84); //GeoHelpers.WGS84ToMeters(coordinatesWGS84[0], coordinatesWGS84[1]);
+				}
+				catch (ArgumentException e)
+				{
+					Debug.Log($"{e.Message}\nCoord: [{coordinatesWGS84[0]}, {coordinatesWGS84[1]}]");
+				}
+
+				Reposition ();
 			}
 		}
 	

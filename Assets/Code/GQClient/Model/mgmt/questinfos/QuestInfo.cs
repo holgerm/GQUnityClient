@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
@@ -232,7 +233,7 @@ namespace GQClient.Model
             InvokeOnChanged();
         }
 
-        public void QuestInfoHasBeenUpdatedTo(QuestInfo newQuestInfo)
+        public void QuestInfoRecognizeServerUpdate(QuestInfo newQuestInfo)
         {
             if (!IsUpdateValid(newQuestInfo))
             {
@@ -242,6 +243,7 @@ namespace GQClient.Model
             // OK. Let's go:
             ServerTimeStamp = newQuestInfo.ServerTimeStamp;
             NewVersionOnServer = newQuestInfo;
+            Name = newQuestInfo.Name; // we update the name anyway
             // the rest remains unchanged until content gets updated
 
             InvokeOnChanged();
@@ -346,28 +348,20 @@ namespace GQClient.Model
         }
 
         [JsonIgnore]
-        public bool HasUpdate
-        {
-            get
-            {
-                return (
-                    // exists on both device and server:
-                    IsOnDevice && IsOnServer
-                               // server update is newer (bigger number):
-                               && ServerTimeStamp > TimeStamp
-                );
-            }
-        }
+        public bool HasUpdate =>
+        (
+            // exists on both device and server:
+            IsOnDevice && IsOnServer
+                       // server update is newer (bigger number):
+                       && ServerTimeStamp > TimeStamp
+        );
 
         /// <summary>
         /// Determines whether this quest is new. This feature will be used in the UI in future versions.
         /// </summary>
         /// <returns><c>true</c> if this instance is new; otherwise, <c>false</c>.</returns>
         [JsonIgnore]
-        public bool IsNew
-        {
-            get { return PlayedTimes == 0; }
-        }
+        public bool IsNew => PlayedTimes == 0;
 
         public bool IsHidden()
         {
@@ -376,28 +370,104 @@ namespace GQClient.Model
 
         public bool ShowDownloadOption
         {
-            get { return IsOnServer && !IsOnDevice; }
+            get
+            {
+                if (!LoadOptionPossibleInTheory)
+                    return false;
+
+                if (LoadModeAllowsManualLoad)
+                    return true;
+
+                return Author.LoggedIn;
+            }
         }
 
-        public bool ShowStartOption
-        {
-            get { return IsOnDevice; }
-        }
+        public bool ShowStartOption => IsOnDevice;
 
         public bool ShowUpdateOption
         {
-            get { return HasUpdate; }
+            get
+            {
+                if (!UpdateOptionPossibleInTheory)
+                    return false;
+
+                if (LoadModeAllowsManualUpdate)
+                    return true;
+
+                return Author.LoggedIn;
+            }
         }
 
         public bool ShowDeleteOption
         {
             get
             {
-                return
-                    IsOnDevice
-                    // either configurated to offer delete or logged in as author:
-                    && (Author.ShowDeleteOptionForLocalQuests);
+                if (!DeleteOptionPossibleInTheory)
+                {
+                    return false;
+                }
+
+                if (LoadModeAllowsManualDelete)
+                {
+                    return true;
+                }
+
+                return Author.ShowDeleteOptionForLocalQuests;
             }
+        }
+
+
+        public bool LoadOptionPossibleInTheory => IsOnServer && !IsOnDevice;
+        public bool UpdateOptionPossibleInTheory => HasUpdate;
+        public bool DeleteOptionPossibleInTheory => IsOnDevice;
+
+
+        public bool LoadModeAllowsManualLoad => QuestLoadMode <= LoadMode.AutoUpdate;
+        public bool LoadModeAllowsManualUpdate => QuestLoadMode == LoadMode.Manual;
+        public bool LoadModeAllowsManualDelete => QuestLoadMode <= LoadMode.AutoUpdate;
+
+        public LoadMode QuestLoadMode
+        {
+            get
+            {
+                var loadModeInfo = Array.Find(Metadata, mdInfo => mdInfo.Key == "loadMode");
+
+                if (loadModeInfo == null)
+                {
+                    return GetAutoUpdateFromConfig();
+                }
+
+                switch (loadModeInfo.Value.ToLower())
+                {
+                    case "manual":
+                        return LoadMode.Manual;
+                    case "autoupdate":
+                        return LoadMode.AutoUpdate;
+                    case "auto":
+                        return LoadMode.Auto;
+                    default:
+                        return GetAutoUpdateFromConfig();
+                }
+
+                LoadMode GetAutoUpdateFromConfig()
+                {
+                    if (ConfigurationManager.Current.autoLoadQuests)
+                    {
+                        return LoadMode.Auto;
+                    }
+
+                    return ConfigurationManager.Current.autoUpdateQuests
+                        ? LoadMode.AutoUpdate
+                        : LoadMode.Manual;
+                }
+            }
+        }
+
+        public enum LoadMode
+        {
+            Manual = 0,
+            AutoUpdate = 1,
+            Auto = 2
         }
 
         #endregion
@@ -418,7 +488,7 @@ namespace GQClient.Model
 
                 return _categories;
             }
-            set { _categories = value; }
+            set => _categories = value;
         }
 
         public const string WITHOUT_CATEGORY_ID = "withoutcategory";
@@ -541,17 +611,14 @@ namespace GQClient.Model
 
         protected void InvokeOnActivityBlockingChanged(bool newState)
         {
-            if (ActivitiesBlockingChanged != null)
-            {
-                ActivitiesBlockingChanged(newState);
-            }
+            ActivitiesBlockingChanged?.Invoke(newState);
         }
 
         private bool _activitiesBlocking;
 
         protected bool ActivitiesBlocking
         {
-            get { return _activitiesBlocking; }
+            get => _activitiesBlocking;
             set
             {
                 _activitiesBlocking = value;
@@ -564,8 +631,13 @@ namespace GQClient.Model
         /// </summary>
         public void Download()
         {
+            Debug.Log($"Download started for quest {Name}");
+
             if (ActivitiesBlocking)
+            {
+                Debug.Log($"Download quest {Name} stopped because activities are blocking");
                 return;
+            }
 
             var download = DownloadTask();
 
@@ -578,7 +650,9 @@ namespace GQClient.Model
                 {
                     InvokeOnChanged();
 
-                    new ExportQuestInfosToJson().Start();
+                   // new ExportQuestInfosToJson().Start();
+                    
+                    Debug.Log($"Download finished for quest {Name}");
                 };
 
             // DO IT:
@@ -589,7 +663,7 @@ namespace GQClient.Model
         private Task DownloadTask()
         {
             // Load quest data: game.xml
-            var downloadGameXML =
+            var downloadGameXml =
                 new Downloader(
                     url: QuestManager.GetQuestUri(Id),
                     timeout: ConfigurationManager.Current.timeoutMS,
@@ -597,7 +671,7 @@ namespace GQClient.Model
                     targetPath: $"{QuestManager.GetLocalPath4Quest(Id)}{QuestManager.QUEST_FILE_NAME}"
                 );
             var unused = Base.Instance.GetDownloadBehaviour(
-                downloadGameXML,
+                downloadGameXml,
                 $"Lade {ConfigurationManager.Current.nameForQuestSg}"
             );
 
@@ -649,7 +723,7 @@ namespace GQClient.Model
             );
             var t =
                 new TaskSequence(
-                    downloadGameXML,
+                    downloadGameXml,
                     prepareMediaInfosToDownload,
                     downloadMediaFiles,
                     exportLocalMediaInfo,
@@ -706,25 +780,25 @@ namespace GQClient.Model
             if (ServerTimeStamp == null)
             {
                 // this quest is not available on the server anymore ...
-                if (!ConfigurationManager.Current.autoSynchQuestInfos)
+                if (!ConfigurationManager.Current.autoSyncQuestInfos)
                 {
-                    // in manual synch mode we warn the user to delete this quest, since he can not restore it again:
+                    // in manual sync mode we warn the user to delete this quest, since he can not restore it again:
                     var dialog =
                         new CancelableFunctionDialog(
                             title: "Löschen?",
                             message: "Diese Quest können Sie nicht wieder herstellen, wenn Sie sie gelöscht haben.",
-                            cancelableFunction: doDelete
+                            cancelableFunction: DoDelete
                         );
                     dialog.Start();
                 }
             }
             else
             {
-                doDelete();
+                DoDelete();
             }
         }
 
-        private void doDelete()
+        private void DoDelete()
         {
             // reduce media usage counter for each media used in this quest:
             var localMediaInfos = PrepareMediaInfoList.GetStoredLocalInfosFromJson(Id);
@@ -732,7 +806,7 @@ namespace GQClient.Model
             {
                 QuestManager.Instance.DecreaseMediaUsage(mediaInfo.url);
             }
-            
+
             Files.DeleteDirCompletely(QuestManager.GetLocalPath4Quest(Id));
             TimeStamp = null;
 
@@ -745,7 +819,7 @@ namespace GQClient.Model
             {
                 InvokeOnChanged();
             }
-            
+
             var exportGlobalMediaJson =
                 new ExportGlobalMediaJson();
             var unused5 = Base.Instance.GetSimpleBehaviour(

@@ -97,7 +97,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             gameObject.SetActive(true);
         }
 
-        protected void HideAllButtons()
+        private void HideAllButtons()
         {
             DownloadButton.gameObject.SetActive(false);
             StartButton.gameObject.SetActive(false);
@@ -238,6 +238,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             // Show DELETE button if needed:
             if (data.ShowDeleteOption)
             {
+                Debug.Log($"Quest {data.Name} Delete activated");
                 DeleteButton.gameObject.SetActive(true);
                 DeleteButton.interactable = true;
             }
@@ -293,7 +294,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
         public virtual void Reset()
         {
             Name = EnsurePrefabVariableIsSet<TextMeshProUGUI>(Name, "Name", NAME_PATH);
-
+            Debug.Log("HERE !!!");
             DownloadButton = EnsurePrefabVariableIsSet<Button>(DownloadButton, "Download Button", "DownloadButton");
             StartButton = EnsurePrefabVariableIsSet<Button>(StartButton, "Start Button", "StartButton");
             DeleteButton = EnsurePrefabVariableIsSet<Button>(DeleteButton, "Delete Button", "DeleteButton");

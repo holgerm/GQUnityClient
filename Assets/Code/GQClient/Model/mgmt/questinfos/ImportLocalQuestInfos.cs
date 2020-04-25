@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Code.GQClient.Err;
@@ -41,7 +42,7 @@ namespace GQClient.Model
             // we read directly from local file cf. constructor.
         }
 
-        protected override void updateQuestInfoManager (QuestInfo[] newQuests)
+        protected override void updateQuestInfoManager (IEnumerable<QuestInfo> newQuests)
         {
 			foreach (var q in newQuests) {
                 if (q.Id <= 0 || qim.QuestDict.ContainsKey(q.Id))

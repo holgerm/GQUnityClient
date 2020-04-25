@@ -869,7 +869,7 @@ namespace GQ.Editor.UI
             hidden |= (
                 propInfo.Name.Equals("autoUpdateFrequency")
             ) && (
-                !config.autoSynchQuestInfos &&
+                !config.autoSyncQuestInfos &&
                 config.OfferManualUpdate4QuestInfos
             );
 

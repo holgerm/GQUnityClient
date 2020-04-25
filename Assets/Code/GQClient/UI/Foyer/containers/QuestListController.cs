@@ -80,13 +80,6 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             QuestInfoUIC qiCtrl;
 
-            //				if (e.OldQuestInfo == null || !QuestInfoControllers.TryGetValue (e.OldQuestInfo.Id, out qiCtrl)) {
-            //					Log.SignalErrorToDeveloper (
-            //						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
-            //						e.OldQuestInfo.Id
-            //					);
-            //					break;
-            //				}
             if (e.NewQuestInfo == null || !QuestInfoControllers.TryGetValue(e.NewQuestInfo.Id, out qiCtrl))
             {
                 Log.SignalErrorToDeveloper(
@@ -96,13 +89,6 @@ namespace Code.GQClient.UI.Foyer.containers
                 return;
             }
 
-            //				if (e.OldQuestInfo.Id != e.NewQuestInfo.Id) {
-            //					Log.SignalErrorToDeveloper (
-            //						"Quest Info Controller for quest id {0} got an update that changed the id to {1} which is not allowed and will be ignored.",
-            //						e.NewQuestInfo.Id, e.NewQuestInfo.Id
-            //					);
-            //					break;
-            //				}
             qiCtrl.UpdateData(e.NewQuestInfo);
             qiCtrl.Show();
             updateListSorting();

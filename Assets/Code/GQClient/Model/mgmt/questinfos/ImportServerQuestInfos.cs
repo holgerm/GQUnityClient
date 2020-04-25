@@ -21,7 +21,7 @@ namespace GQClient.Model
         {
         }
 
-        protected override void updateQuestInfoManager(QuestInfo[] newQuests)
+        protected override void updateQuestInfoManager(IEnumerable<QuestInfo> newQuests)
         {
             // we make a separate list of ids of all old quest infos:
             var oldIDsToBeRemoved = new List<int>(qim.QuestDict.Keys);
@@ -29,15 +29,14 @@ namespace GQClient.Model
             // we create new qi elements and keep those we can reuse. We remove those from our helper list.
             foreach (var newInfo in newQuests)
             {
-                QuestInfo oldInfo = null;
-                if (qim.QuestDict.TryGetValue(newInfo.Id, out oldInfo))
+                if (qim.QuestDict.TryGetValue(newInfo.Id, out var oldInfo))
                 {
                     // this new element was already there, hence we keep it (remove from the remove list) and update if newer:
                     oldIDsToBeRemoved.Remove(newInfo.Id);
 
                     if (oldInfo.TimeStamp == null || oldInfo.TimeStamp < newInfo.ServerTimeStamp)
                     {
-                         qim.UpdateInfo(newInfo);
+                        qim.UpdateInfo(newInfo);
                     }
                  }
                 else
@@ -47,30 +46,30 @@ namespace GQClient.Model
             }
 
             // now in the helper list only the old elements that are not mentioned in the new list anymore are left. Hence we delete them:
-            foreach (var oldID in oldIDsToBeRemoved)
+            foreach (var oldId in oldIDsToBeRemoved)
             {
-                if (ConfigurationManager.Current.autoSynchQuestInfos)
+                if (ConfigurationManager.Current.autoSyncQuestInfos)
                 {
-                    // with autoSynch we automatically remove the local quest data:
-                    qim.QuestDict[oldID].Delete();
+                    // with autoSync we automatically remove the local quest data:
+                    qim.QuestDict[oldId].Delete();
 
                     // and also delete the quest infos from the list ...
-                    qim.RemoveInfo(oldID);
+                    qim.RemoveInfo(oldId);
                 }
                 else
                 {
-                    // when manually synching ...
-                    if (qim.QuestDict[oldID].IsOnDevice)
+                    // when manually syncing ...
+                    if (qim.QuestDict[oldId].IsOnDevice)
                     {
                         // if the quest exists local, we simply set the server-side update timestamp to null:
-                        qim.QuestDict[oldID].DeletedFromServer();
+                        qim.QuestDict[oldId].DeletedFromServer();
                         // this will trigger an OnChanged event and update the according view of the list element
                     }
                     else
                     {
                          // if the quest has not been loaded yet, we remove the quest info:
-                        qim.QuestDict[oldID].Delete(); // introduced newly without exact knowledge (hm)
-                        qim.RemoveInfo(oldID);
+                        qim.QuestDict[oldId].Delete(); // introduced newly without exact knowledge (hm)
+                        qim.RemoveInfo(oldId);
                     }
                 }
             }

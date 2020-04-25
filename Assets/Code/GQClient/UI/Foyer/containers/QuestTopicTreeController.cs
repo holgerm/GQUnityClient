@@ -1,6 +1,4 @@
-using System.Text;
 using Code.GQClient.Conf;
-using Code.GQClient.Util;
 using GQClient.Model;
 using TMPro;
 using UnityEngine;
@@ -17,8 +15,6 @@ namespace Code.GQClient.UI.Foyer.containers
         public GameObject topicContentRoot;
         public GameObject questInfoArea;
 
-        public TMP_Text text;
-
         private new void Start()
         {
             base.Start();
@@ -28,7 +24,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
         private static bool _dirtyTopicTree;
 
-        internal static void SetDirty()
+        private static void SetDirty()
         {
             _dirtyTopicTree = true;
         }
@@ -45,7 +41,7 @@ namespace Code.GQClient.UI.Foyer.containers
         /// <summary>
         /// Update the Topic Tree View to reflect a change in the topic tree model.
         /// </summary>
-        protected void UpdateView()
+        private void UpdateView()
         {
             upwardButton.targetGraphic.enabled = 
                 Topic.Cursor.Parent != Topic.Null;
@@ -90,8 +86,6 @@ namespace Code.GQClient.UI.Foyer.containers
                     Topic.Create(topic).AddQuestInfo(info);
                 }
             }
-
-            var t = Topic.Cursor;
 
             SetDirty();
         }

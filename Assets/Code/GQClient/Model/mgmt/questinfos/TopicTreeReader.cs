@@ -22,7 +22,7 @@ namespace GQClient.Model
             }
             
             // read new server info metadata:
-            if (qi.NewVersionOnServer != null && qi.NewVersionOnServer.Metadata != null)
+            if (qi.NewVersionOnServer?.Metadata != null)
             {
                 foreach (var md in qi.NewVersionOnServer.Metadata)
                 {
@@ -33,12 +33,12 @@ namespace GQClient.Model
             return topics;
         }
 
-        private static void ReadMd(MetaDataInfo md, List<string> topics)
+        private static void ReadMd(MetaDataInfo md, ICollection<string> topics)
         {
             switch (md.Key)
             {
                 case "topic":
-                    string netVal = md.Value.StripQuotes();
+                    var netVal = md.Value.StripQuotes();
                     if (netVal != "" && !topics.Contains(netVal))
                         topics.Add(netVal);
                     break;

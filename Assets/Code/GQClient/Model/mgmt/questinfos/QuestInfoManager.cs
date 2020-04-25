@@ -161,15 +161,15 @@ namespace GQClient.Model
         {
             if (!QuestDict.TryGetValue(changedInfo.Id, out var curInfo))
             {
-                Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because ot was not found locally.",
+                Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because it was not found locally.",
                     changedInfo.Id);
                 return;
             }
             
-            curInfo.QuestInfoHasBeenUpdatedTo(changedInfo);
+            curInfo.QuestInfoRecognizeServerUpdate(changedInfo);
 
             // React also as container to a change info event
-            if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi passes the filter?
+            if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
             {
                 // Run through filter and raise event if involved
 
@@ -221,7 +221,7 @@ namespace GQClient.Model
         }
 
         /// <summary>
-        /// Updates the quest infos from the server and intergrates the gathered data into the local data. 
+        /// Updates the quest infos from the server and integrates the gathered data into the local data. 
         /// 
         /// Should be called in cases like the list is shown again (or first time), 
         /// the server connection is gained back, the last update is long ago or the user demands an update.
@@ -232,8 +232,8 @@ namespace GQClient.Model
                 new ImportLocalQuestInfos();
             var unused = Base.Instance.GetSimpleBehaviour(
                 importLocal,
-                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-                string.Format("Lese lokale {0}", ConfigurationManager.Current.nameForQuestSg)
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
+                $"Lese lokale {ConfigurationManager.Current.nameForQuestSg}"
             );
 
             var downloader =
@@ -244,23 +244,23 @@ namespace GQClient.Model
                 );
             var unused2 = Base.Instance.GetDownloadBehaviour(
                 downloader,
-                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl)
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}"
             );
 
             ImportQuestInfos importFromServer =
                 new ImportServerQuestInfos();
             var unused3 = Base.Instance.GetSimpleBehaviour(
                 importFromServer,
-                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-                string.Format("Neue {0} werden lokal gespeichert", ConfigurationManager.Current.nameForQuestsPl)
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
+                $"Neue {ConfigurationManager.Current.nameForQuestsPl} werden lokal gespeichert"
             );
 
-            ExportQuestInfosToJson exporter =
+            var exporter =
                 new ExportQuestInfosToJson();
             var unused4 = Base.Instance.GetSimpleBehaviour(
                 exporter,
-                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-                string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
+                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
             );
 
             var autoLoader =

@@ -16206,7 +16206,6 @@ MonoBehaviour:
   topicArea: {fileID: 173188248}
   topicContentRoot: {fileID: 312297319}
   questInfoArea: {fileID: 105674723}
-  text: {fileID: 633904656}
 --- !u!224 &1526863779 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224655249844479036, guid: f8f5ed896ae654552b23b403d0ac594a,
