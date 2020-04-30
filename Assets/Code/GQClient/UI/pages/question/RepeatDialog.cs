@@ -8,7 +8,7 @@ namespace Code.GQClient.UI.pages.question
         private Repeatable question { get; set; }
 
         public RepeatDialog(Repeatable question) : base(null)
-        // 'null' because we do NOT connect a Task, sice retry dialogs only rely on user interaction
+        // 'null' because we do NOT connect a Task, since retry dialogs only rely on user interaction
         {
             this.question = question;
         }

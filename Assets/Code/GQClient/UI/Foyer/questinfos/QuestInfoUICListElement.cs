@@ -119,7 +119,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             }
 
             // in case we can start this quest, we also allow clicks on the quest name to start it:
-            Button.ButtonClickedEvent namebuttonEvent = Name.GetComponent<Button>().onClick;
+            var namebuttonEvent = Name.GetComponent<Button>().onClick;
             if (StartButton.gameObject.activeInHierarchy)
             {
                 namebuttonEvent.RemoveAllListeners();

@@ -629,17 +629,17 @@ namespace GQClient.Model
         /// <summary>
         /// Downloads the quest represented by this info. Is called from the UI (Button e.g.).
         /// </summary>
-        public void Download()
+        public Task Download(CounterDialog dialog = null)
         {
             Debug.Log($"Download started for quest {Name}");
 
             if (ActivitiesBlocking)
             {
                 Debug.Log($"Download quest {Name} stopped because activities are blocking");
-                return;
+                return null;
             }
 
-            var download = DownloadTask();
+            var download = DownloadTask(dialog);
 
             // Set downloading state after download has ended:
             download.OnTaskEnded += (object sender, TaskEventArgs e) => { ActivitiesBlocking = false; };
@@ -650,17 +650,30 @@ namespace GQClient.Model
                 {
                     InvokeOnChanged();
 
-                   // new ExportQuestInfosToJson().Start();
-                    
+                    // new ExportQuestInfosToJson().Start();
+
                     Debug.Log($"Download finished for quest {Name}");
                 };
 
             // DO IT:
             ActivitiesBlocking = true;
             download.Start();
+            return download;
         }
 
-        private Task DownloadTask()
+        private static int _currentlyDownloading;
+
+        private static int CurrentlyDownloading
+        {
+            get => _currentlyDownloading;
+            set
+            {
+                _currentlyDownloading = value;
+                Debug.Log($"currently downloading {value}");
+            }
+        }
+
+        private Task DownloadTask(CounterDialog dialog = null)
         {
             // Load quest data: game.xml
             var downloadGameXml =
@@ -729,6 +742,17 @@ namespace GQClient.Model
                     exportLocalMediaInfo,
                     exportGlobalMediaJson,
                     exportQuestsInfoJSON);
+            if (dialog != null)
+            {
+                t.OnTaskStarted += (d, e) =>
+                {
+                    CurrentlyDownloading++;
+                };
+                t.OnTaskEnded += (d, e) =>
+                {
+                    CurrentlyDownloading--;
+                };
+            }
 
             return t;
         }
@@ -746,10 +770,10 @@ namespace GQClient.Model
         /// 2. The represented quest game.xml is downloaded and replaces the old version.
         /// 3. All contained media is checked for update (new, updated, gone), cf. TODO... It is already implemented, but where?
         /// </summary>
-        public void Update()
+        public Task Update()
         {
             if (ActivitiesBlocking)
-                return;
+                return null;
 
             // update the quest info:
             if (NewVersionOnServer != null)
@@ -769,7 +793,10 @@ namespace GQClient.Model
 
                 ActivitiesBlocking = true;
                 download.Start();
+                return download;
             }
+
+            return null;
         }
 
         /// <summary>

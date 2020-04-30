@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Code.GQClient.Util.tasks
 {
-
     /// <summary>
     /// 	
     /// The base class for background activities that can be accompanied by some foreground reflection, 
@@ -17,7 +16,6 @@ namespace Code.GQClient.Util.tasks
     /// </summary>
     public abstract class Task
     {
-
         public Task(bool runsAsCoroutine = false)
         {
             RunsAsCoroutine = runsAsCoroutine;
@@ -25,7 +23,7 @@ namespace Code.GQClient.Util.tasks
         }
 
 
-        #region Link to Behavious
+        #region Link to Behaviours
 
         protected List<AbstractBehaviour> behaviours;
 
@@ -50,7 +48,7 @@ namespace Code.GQClient.Util.tasks
         public void Start(object input = null, int step = 1)
         {
             Step = step;
-
+            OnTaskStarted?.Invoke(this, null);
             CoroutineStarter.Run(RunAsCoroutine(input));
         }
 
@@ -96,8 +94,10 @@ namespace Code.GQClient.Util.tasks
 
 
         #region Events
+
         public delegate void TaskCallback(object sender, TaskEventArgs e);
 
+        public event TaskCallback OnTaskStarted;
         public event TaskCallback OnTaskCompleted;
         public event TaskCallback OnTaskFailed;
         public event TaskCallback OnTaskEnded;
@@ -163,26 +163,28 @@ namespace Code.GQClient.Util.tasks
         {
             return;
         }
+
         #endregion
 
 
         #region Test Access
+
         public Delegate[] GetOnEndedInvocationList()
         {
-            return OnTaskEnded != null ? OnTaskEnded.GetInvocationList() : null;
+            return OnTaskEnded?.GetInvocationList();
         }
 
         public Delegate[] GetOnCompletedInvocationList()
         {
-            return OnTaskCompleted != null ? OnTaskCompleted.GetInvocationList() : null;
+            return OnTaskCompleted?.GetInvocationList();
         }
 
         public Delegate[] GetOnFailedInvocationList()
         {
-            return OnTaskFailed != null ? OnTaskFailed.GetInvocationList() : null;
+            return OnTaskFailed?.GetInvocationList();
         }
-        #endregion
 
+        #endregion
     }
 
 
@@ -207,8 +209,5 @@ namespace Code.GQClient.Util.tasks
         Succeded,
         Failed,
         RunningAsCoroutine
-    }
-
-    ;
-
+    };
 }

@@ -13,26 +13,26 @@ namespace Code.GQClient.UI.Progress
 		{
 			base.Start ();
 
-			Progress.Title.text = title;
+			base.Progress.Title.text = title;
 
 			// show the dialog:
-			Progress.Show();
+			base.Progress.Show();
 		}
 
 		public override void Stop ()
 		{
 			base.Stop ();
 
-			Progress.Hide();
+			base.Progress.Hide();
 		}
 
 		private string title;
 
-		public void OnProgress(float percent)
+		public void Progress(float percent)
 		{
-			if (Progress != null && Progress.ProgressSlider != null)
+			if (base.Progress != null && base.Progress.ProgressSlider != null)
 			{
-				Progress.ProgressSlider.value = percent / 100f;
+				base.Progress.ProgressSlider.value = percent / 100f;
 			}
 		}
 	}

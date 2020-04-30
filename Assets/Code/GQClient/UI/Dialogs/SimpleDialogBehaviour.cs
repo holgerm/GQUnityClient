@@ -16,21 +16,21 @@ namespace Code.GQClient.UI.Dialogs
     public class SimpleDialogBehaviour : DialogBehaviour, SimpleBehaviour
     {
 
-        private string title;
-        private string details;
+        private readonly string _title;
+        private readonly string _details;
 
         public SimpleDialogBehaviour(Task task, string title, string details) : base(task)
         {
-            this.title = title;
-            this.details = details;
+            this._title = title;
+            this._details = details;
         }
 
         public override void Start()
         {
             base.Start();
 
-            Dialog.Title.text = title;
-            Dialog.Details.text = details;
+            Dialog.Title.text = _title;
+            Dialog.Details.text = _details;
 
             // make completion close this dialog:
             Task.OnTaskEnded += CloseDialog;
@@ -39,11 +39,11 @@ namespace Code.GQClient.UI.Dialogs
             Dialog.Show();
         }
 
-        public void OnProgress(float percent)
+        public void Progress(float percent)
         {
             if (Dialog != null && Dialog.Details != null)
             {
-                Dialog.Details.text = details + String.Format(" ({0:#0.0}% erledigt)", percent);
+                Dialog.Details.text = _details + String.Format(" ({0:#0.0}% erledigt)", percent);
 #if DEBUG_LOG
                 Debug.Log(("SimpleDialog Text Update in frame: " + Time.frameCount + "\n" + Dialog.Details.text).Yellow());
 #endif

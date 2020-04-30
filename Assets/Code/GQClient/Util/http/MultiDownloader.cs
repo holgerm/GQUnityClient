@@ -181,7 +181,7 @@ namespace Code.GQClient.Util.http
         {
             downloadedSumOfWeights += args.Progress;
             var percent = Math.Min(100.0f, (downloadedSumOfWeights / totalSumOfWeights) * 100f);
-            dialogBehaviour.OnProgress(percent);
+            dialogBehaviour.Progress(percent);
         }
 
         public override object Result { get; set; }

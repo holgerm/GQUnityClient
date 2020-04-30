@@ -6,17 +6,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Code.GQClient.Err;
+using Code.GQClient.UI.Dialogs;
 using UnityEngine;
 
 namespace Code.GQClient.Util.http
 {
     public class Downloader : AbstractDownloader
     {
-        public string Url { get; set; }
+        public string Url { get; private set; }
 
-        public string TargetPath { get; set; }
+        public string TargetPath { get; private set; }
 
-        #region Default Handler
+        #region Default Handlers
+
         public static void defaultLogInformationHandler(AbstractDownloader d, DownloadEvent e)
         {
             Log.InformUser(e.Message);
@@ -25,11 +27,20 @@ namespace Code.GQClient.Util.http
         public static void defaultLogErrorHandler(AbstractDownloader d, DownloadEvent e)
         {
             Log.SignalErrorToUser(e.Message);
+            var message = e.Message;
+            if (message.StartsWith("Cannot resolve destination host")
+                || message.StartsWith("Idle-Timeout"))
+                message = "Bitte prüfe die Internetverbindung.";
+
+            var dialog = new MessageDialog(message, "Ok");
+            dialog.Start();
         }
+
         #endregion
 
 
         #region Delegation API for Tests
+
         static Downloader()
         {
             CoroutineRunner = DownloadAsCoroutine;
@@ -37,11 +48,7 @@ namespace Code.GQClient.Util.http
 
         public delegate IEnumerator DownloaderCoroutineMethod(Downloader d);
 
-        public static DownloaderCoroutineMethod CoroutineRunner
-        {
-            get;
-            set;
-        }
+        public static DownloaderCoroutineMethod CoroutineRunner { get; set; }
 
         protected override IEnumerator DoTheWork()
         {
@@ -52,20 +59,19 @@ namespace Code.GQClient.Util.http
         {
             return d.Download();
         }
+
         #endregion
 
 
         #region Public API
+
         /// <summary>
         /// The elapsed time the download is/was active in milliseconds.
         /// </summary>
         /// <value>The elapsed time.</value>
         public long elapsedTime
         {
-            get
-            {
-                return stopwatch.ElapsedMilliseconds;
-            }
+            get { return stopwatch.ElapsedMilliseconds; }
         }
 
         /// <summary>
@@ -117,11 +123,12 @@ namespace Code.GQClient.Util.http
             stopwatch.Start();
             idlewatch.Reset();
 
-            string msg = String.Format("Start to download url {0}", Url);
+            var msg = String.Format("Start to download url {0}", Url);
             if (Timeout > 0)
             {
                 msg += String.Format(", timout set to {0} ms, idle timeout set to {1} ms.", Timeout, MaxIdleTime);
             }
+
             Raise(DownloadEventType.Start, new DownloadEvent(message: msg));
 
             var progress = 0f;
@@ -164,6 +171,7 @@ namespace Code.GQClient.Util.http
                         idlewatch.Start();
                     }
                 }
+
                 if (Timeout > 0 && stopwatch.ElapsedMilliseconds >= Timeout)
                 {
                     // overall time beyond TIMEOUT:
@@ -175,10 +183,12 @@ namespace Code.GQClient.Util.http
                     Raise(DownloadEventType.Timeout, new DownloadEvent(elapsedTime: Timeout, message: msg));
                     yield break;
                 }
+
                 if (Www == null)
                     UnityEngine.Debug.Log("Www is null".Red()); // TODO what to do in this case?
                 yield return null;
             }
+
             progressNew = Www.progress;
 
             stopwatch.Stop();
@@ -187,8 +197,9 @@ namespace Code.GQClient.Util.http
             if (!string.IsNullOrEmpty(Www.error))
             {
                 UnityEngine.Debug.LogWarning("ERROR loading " + Www.url + ": " + Www.error);
-                var dialogMessage = Www.url.EndsWith("clientxml", StringComparison.CurrentCulture) ?
-                                          "Quest nicht gefunden." : Www.error;
+                var dialogMessage = Www.url.EndsWith("clientxml", StringComparison.CurrentCulture)
+                    ? "Quest nicht gefunden."
+                    : Www.error;
                 Raise(DownloadEventType.Error, new DownloadEvent(message: dialogMessage));
                 RaiseTaskFailed();
             }
@@ -232,7 +243,8 @@ namespace Code.GQClient.Util.http
                     }
                     catch (Exception e)
                     {
-                        Raise(DownloadEventType.Error, new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
+                        Raise(DownloadEventType.Error,
+                            new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
                         RaiseTaskFailed();
 
                         Www.Dispose();
@@ -250,10 +262,9 @@ namespace Code.GQClient.Util.http
             Www.Dispose();
             yield break;
         }
+
         #endregion
 
         public Dictionary<string, string> ResponseHeaders { get; private set; }
     }
-
 }
-

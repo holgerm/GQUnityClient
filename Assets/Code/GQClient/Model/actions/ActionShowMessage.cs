@@ -30,7 +30,7 @@ namespace Code.GQClient.Model.actions
 		#region Functions
 		public override void Execute ()
 		{
-			MessageDialog dialog = new MessageDialog (Message.MakeReplacements(), Buttontext);
+			var dialog = new MessageDialog (Message.MakeReplacements(), Buttontext);
 			dialog.Start ();
 		}
 		#endregion

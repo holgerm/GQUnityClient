@@ -10,16 +10,16 @@ namespace Code.GQClient.Util.tasks
 
         #region Building the Sequence
 
-        protected List<Task> tasks;
+        private List<Task> tasks;
 
-        private Task lastTask = null;
+        private Task _lastTask = null;
 
         public TaskSequence(params Task[] tasks) : base()
         {
             if (tasks != null && tasks.Length > 0)
             {
                 this.tasks = new List<Task>(tasks);
-                lastTask = this.tasks[this.tasks.Count - 1];
+                _lastTask = this.tasks[this.tasks.Count - 1];
             }
             else
             {
@@ -42,7 +42,7 @@ namespace Code.GQClient.Util.tasks
 
 
             tasks.Add(task);
-            lastTask = task;
+            _lastTask = task;
         }
 
         #endregion

@@ -48,7 +48,7 @@ namespace Code.GQClient.UI.Dialogs
 
         #region Singleton
 
-        private static DialogController instance = null;
+        private static DialogController _instance = null;
 
         /// <summary>
         /// Gets the instance. If the instance is used for the first time, 
@@ -59,13 +59,13 @@ namespace Code.GQClient.UI.Dialogs
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = Create(PREFAB_ASSETBUNDLE, PREFAB_NAME, GameObject.Find(DIALOG_CANVAS_PATH))
+                    _instance = Create(PREFAB_ASSETBUNDLE, PREFAB_NAME, GameObject.Find(DIALOG_CANVAS_PATH))
                         .GetComponent<DialogController>();
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
@@ -81,7 +81,7 @@ namespace Code.GQClient.UI.Dialogs
         /// <param name="yesButtonClicked">Yes button clicked.</param>
         public void SetYesButton(string description, ClickCallBack yesButtonClicked)
         {
-            TextMeshProUGUI buttonText = YesButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            var buttonText = YesButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             buttonText.text = description.Decode4TMP(false);
 
             Behaviour.OnYesButtonClicked += yesButtonClicked;
@@ -96,7 +96,7 @@ namespace Code.GQClient.UI.Dialogs
         /// <param name="noButtonClicked">No button clicked.</param>
         public void SetNoButton(string description, ClickCallBack noButtonClicked)
         {
-            TextMeshProUGUI buttonText = NoButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            var buttonText = NoButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             buttonText.text = description.Decode4TMP(false);
 
             Behaviour.OnNoButtonClicked += noButtonClicked;

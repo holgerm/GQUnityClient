@@ -79,7 +79,7 @@ namespace Code.GQClient.Model.mgmt.quests
             _dialogBehaviour = (SimpleBehaviour) behaviours[0];
             // TODO dangerous. Replace by concrete DialogControllers we will write.
 
-            OnProgress += _dialogBehaviour.OnProgress;
+            OnProgress += _dialogBehaviour.Progress;
 
             // step 1 deserialize game.xml:
             var quest = QuestManager.DeserializeQuest(GameXml);

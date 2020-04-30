@@ -5,7 +5,6 @@ using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
 using GQClient.Model;
 using Code.GQClient.Util.tasks;
-using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
@@ -13,27 +12,61 @@ namespace Code.GQClient.Model.mgmt.quests
     {
         protected override IEnumerator DoTheWork()
         {
+            if (Author.LoggedIn || !ConfigurationManager.Current.autoSyncQuestInfos)
+                yield break;
+
             var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
+            var downloadList = new List<QuestInfo>();
+            var updateList = new List<QuestInfo>();
 
-            if (ConfigurationManager.Current.autoSyncQuestInfos)
+            foreach (var qi in questInfoList.Where(qi => !qi.IsHidden()))
             {
-                foreach (var qi in questInfoList.Where(qi => !qi.IsHidden()))
+                if (qi.LoadOptionPossibleInTheory && !qi.LoadModeAllowsManualLoad)
                 {
-                    if (qi.LoadOptionPossibleInTheory && !qi.LoadModeAllowsManualLoad && !Author.LoggedIn)
-                    {
-                        //          Debug.Log($"#### AUTOLOAD quest: {qi.Id}:{qi.Name}");
-                        qi.Download();
-                        yield return null;
-                        continue;
-                    }
-
-                    if (qi.UpdateOptionPossibleInTheory && !qi.LoadModeAllowsManualUpdate && !Author.LoggedIn)
-                    {
-                        //           Debug.Log($"#### AUTOUPDATE quest: {qi.Id}:{qi.Name}");
-                        qi.Update();
-                        yield return null;
-                    }
+                    //          Debug.Log($"#### AUTOLOAD quest: {qi.Id}:{qi.Name}");
+                    downloadList.Add(qi);
+                    continue;
                 }
+
+                if (qi.UpdateOptionPossibleInTheory && !qi.LoadModeAllowsManualUpdate)
+                {
+                    //           Debug.Log($"#### AUTOUPDATE quest: {qi.Id}:{qi.Name}");
+                    updateList.Add(qi);
+                }
+            }
+
+            if (downloadList.Count + updateList.Count == 0)
+                yield break;
+
+            var counterDialog = 
+                new CounterDialog(
+                    "Es gibt Neuigkeiten! Wir aktualisieren deine App jetzt.", 
+                    "Bitte habe etwas Geduld, wir laden noch {0} Inhalte ...",
+                    downloadList.Count + updateList.Count);
+            counterDialog.Start();
+            
+            foreach (var questInfo in downloadList)
+            {
+                var downloader = questInfo.Download();
+                if (downloader == null)
+                    continue;
+
+                downloader.OnTaskEnded += (sender, args) =>
+                {
+                    counterDialog.Counter--;
+                };
+            }
+            
+            foreach (var questInfo in updateList)
+            {
+                var update = questInfo.Update();
+                if (update == null)
+                    continue;
+
+                update.OnTaskEnded += (sender, args) =>
+                {
+                    counterDialog.Counter--;
+                };
             }
 
             //Debug.Log("#### AUTO HAS loaded: " + loadCounter + " and updated: " + updateCounter);
