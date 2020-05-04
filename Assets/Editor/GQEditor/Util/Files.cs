@@ -2,7 +2,6 @@
 using UnityEngine;
 using System;
 using System.Text;
-using System.Text.RegularExpressions;
 using UnityEditor;
 
 namespace GQ.Editor.Util
@@ -76,9 +75,9 @@ namespace GQ.Editor.Util
                     return false;
                 else
                 {
-                    string newFolderName = Path.GetFileName(dirPath);
-                    string parentFolder = Path.GetDirectoryName(dirPath);
-                    string guid = AssetDatabase.CreateFolder(parentFolder, newFolderName);
+                    var newFolderName = Path.GetFileName(dirPath);
+                    var parentFolder = Path.GetDirectoryName(dirPath);
+                    var guid = AssetDatabase.CreateFolder(parentFolder, newFolderName);
                     return !String.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(guid));
                 }
             }

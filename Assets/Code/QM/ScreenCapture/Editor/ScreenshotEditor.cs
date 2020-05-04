@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using Code.GQClient.Conf;
+using GQ.Editor.Util;
 using UnityEditor;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 namespace QM.SC.Editor
 {
@@ -12,8 +15,7 @@ namespace QM.SC.Editor
         {
             var editorAsm = typeof(UnityEditor.Editor).Assembly;
             var inspectorWindowType = editorAsm.GetType("UnityEditor.InspectorWindow");
-            ScreenshotEditor editor;
-            editor = inspectorWindowType != null 
+            var editor = inspectorWindowType != null 
                 ? GetWindow<ScreenshotEditor>("Screenshot", true, inspectorWindowType) 
                 : GetWindow<ScreenshotEditor>(typeof(ScreenshotEditor));
             editor.Show();
@@ -24,10 +26,41 @@ namespace QM.SC.Editor
         {
             if(GUILayout.Button("Take Screenshot"))
             {
-                var filename = $"{ConfigurationManager.Current.id}_{DateTime.Now:yyyy'-'MM'-'DD'_'HH'-'mm'-'ss}.png";
-                ScreenCapture.CaptureScreenshot(
-                    $"{Application.dataPath}/../Screenshots/{filename}");
+                if (Camera.main != null)
+                {
+                    var camera = Camera.main;
+                    var dir =
+                        Files.CombinePath(
+                            $"{Application.dataPath}/../Production/products addon",
+                            ConfigurationManager.Current.id,
+                            "Screenshots",
+                            $"{camera.pixelWidth}_{camera.pixelHeight}"
+                        );
+                    UnityEngine.Debug.Log($"dpi: {Screen.dpi} width: {camera.pixelWidth} scale: {GetScale()}");
+                    Files.CreateDir(dir);
+                    var filename = 
+                        $"{ConfigurationManager.Current.id}_{DateTime.Now:yyyy'-'MM'-'dd'_'HH'-'mm'-'ss}.png";
+
+                    ScreenCapture.CaptureScreenshot(
+                        $"{dir}/{filename}");
+                }
             }
+        }
+
+        private float GetScale()
+        {
+            var assembly = typeof(UnityEditor.EditorWindow).Assembly;
+            var type = assembly.GetType("UnityEditor.GameView");
+            var v = UnityEditor.EditorWindow.GetWindow(type);
+ 
+            var defScaleField = type.GetField("m_defaultScale", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var defaultScale = (float) defScaleField.GetValue(v);
+ 
+            var areaField = type.GetField("m_ZoomArea", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var areaObj = areaField.GetValue(v);
+ 
+            var scaleField = areaObj.GetType().GetField("m_Scale", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            return defaultScale;
         }
     }
 }

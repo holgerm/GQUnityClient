@@ -222,9 +222,7 @@ namespace Code.GQClient.Model.mgmt.quests
         public MediaInfo AddMedia(string url, string contextDescription = "no context given")
         {
             if (string.IsNullOrEmpty(url))
-            {
                 return null;
-            }
 
             if (!MediaStore.TryGetValue(url, out var info))
             {
@@ -264,7 +262,18 @@ namespace Code.GQClient.Model.mgmt.quests
             if (MediaStore.TryGetValue(newUsedMediaInfo.Url, out var info))
             {
                 info.UsageCounter++;
+                
+                if (newUsedMediaInfo.Url.Contains("1_glass_ping-go445-1207030150"))
+                {
+                    Debug.Log($"FOUND: {newUsedMediaInfo.Url}");
+                }
+
                 return;
+            }
+            
+            if (newUsedMediaInfo.Url.Contains("1_glass_ping-go445-1207030150"))
+            {
+                Debug.Log($"among # {MediaStore.Count} NOT found: {newUsedMediaInfo.Url}");
             }
 
             AddNewMedia(newUsedMediaInfo);
@@ -280,17 +289,23 @@ namespace Code.GQClient.Model.mgmt.quests
             }
 
             var fileName = Files.FileName(newInfo.Url);
+            var fileTypeExtension = Files.Extension(fileName);
+            var fileNameWithoutExtension = Files.StripExtension(fileName);
             var fileNameCandidate = fileName;
             var discriminationNr = 1;
-            var discriminiationAppendix = "";
             while (occupiedFileNames.Contains(fileNameCandidate))
             {
-                discriminiationAppendix = $"-{discriminationNr++}";
-                fileNameCandidate = $"{fileName}{discriminiationAppendix}";
+                var discriminationAppendix = $"-{discriminationNr++}";
+                fileNameCandidate = $"{fileNameWithoutExtension}{discriminationAppendix}.{fileTypeExtension}";
             }
 
             newInfo.LocalFileName = fileNameCandidate;
             newInfo.UsageCounter = 1;
+            if (fileName.Contains("1_glass_ping-go445-1207030150"))
+            {
+                Debug.Log($"To # {MediaStore.Count} Adding media for 1_glass_ping-go445-1207030150 ... key: {newInfo.Url}");
+            }
+
             MediaStore.Add(newInfo.Url, newInfo);
         }
 

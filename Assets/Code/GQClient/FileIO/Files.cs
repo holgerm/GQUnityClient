@@ -8,38 +8,33 @@ using UnityEngine;
 
 namespace Code.GQClient.FileIO
 {
-
     public class Files
     {
-
         #region Extensions and Separators
 
         /// <summary>
         /// Unity uses for path separators on all platforms the forward slash even on Windows.
         /// </summary>
-        public const string PATH_ELEMENT_SEPARATOR = "/";
-        public static readonly char[] SEPARATORS = {
+        protected const string PATH_ELEMENT_SEPARATOR = "/";
+
+        protected static readonly char[] SEPARATORS =
+        {
             '/'
         };
 
+        private static readonly string SAME_DIR = ".";
 
-        /// <summary>
-        /// Allowed file extensions for image files (".img", ".jpg", ".psd").
-        /// </summary>
-        public static string[] ImageExtensions = {
-            ".png",
-            ".jpg",
-            ".psd"
-        };
+        private static readonly string PARENT_DIR = "..";
+
 
         public static string StripExtension(string filename)
         {
-            int lastDotIndex = filename.LastIndexOf('.');
+            var lastDotIndex = filename.LastIndexOf('.');
 
             if (filename.Equals(".") || filename.Equals("..") || lastDotIndex <= 0)
                 return filename;
 
-            string strippedFilename = filename.Substring(0, filename.LastIndexOf('.'));
+            var strippedFilename = filename.Substring(0, filename.LastIndexOf('.'));
 
             if (strippedFilename.Equals(""))
                 return filename;
@@ -47,9 +42,14 @@ namespace Code.GQClient.FileIO
                 return strippedFilename;
         }
 
+        /// <summary>
+        /// Gives you the filename extension without the leading dot, e.g. "txt", "png", "wav".
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static string Extension(string filename)
         {
-            int lastDotIndex = filename.LastIndexOf('.');
+            var lastDotIndex = filename.LastIndexOf('.');
 
             if (lastDotIndex <= 0)
                 return "";
@@ -59,7 +59,7 @@ namespace Code.GQClient.FileIO
 
         public static string ExtensionSeparator(string filename)
         {
-            int lastDotIndex = filename.LastIndexOf('.');
+            var lastDotIndex = filename.LastIndexOf('.');
 
             if (filename.Equals(".") || filename.Equals("..") || lastDotIndex <= 0)
                 return "";
@@ -72,19 +72,19 @@ namespace Code.GQClient.FileIO
         #region Paths
 
         /// <summary>
-        /// Combines the path segments given. The first argument can be an absolute path, the follwing are always treated as relative: leading "/" are ignored.
+        /// Combines the path segments given. The first argument can be an absolute path, the following are always treated as relative: leading "/" are ignored.
         /// </summary>
         /// <returns>The path.</returns>
         /// <param name="basePath">Base path.</param>
         /// <param name="relPathsToAppend">Rel paths to append.</param>
         public static string CombinePath(string basePath, params string[] relPathsToAppend)
         {
-            StringBuilder combinedPath = new StringBuilder();
+            var combinedPath = new StringBuilder();
             combinedPath.Append(basePath);
 
-            for (int i = 0; i < relPathsToAppend.Length; i++)
+            foreach (var t in relPathsToAppend)
             {
-                string curSegment = relPathsToAppend[i].Trim();
+                var curSegment = t.Trim();
 
                 if (curSegment.Equals(""))
                     continue;
@@ -96,7 +96,34 @@ namespace Code.GQClient.FileIO
                 combinedPath.Append(curSegment);
             }
 
-            return Regex.Replace(combinedPath.ToString(), "/+", PATH_ELEMENT_SEPARATOR);
+            var fullPath =
+                Regex.Replace(combinedPath.ToString(), "/+", PATH_ELEMENT_SEPARATOR);
+
+            // eliminate ".." parent dir short cuts in the path:
+            var segments = fullPath.Split(new string[] {PATH_ELEMENT_SEPARATOR}, StringSplitOptions.None);
+            var optimizedPath = new StringBuilder();
+            for (var i = 0; i < segments.Length; i++)
+            {
+                if (segments[i] == SAME_DIR)
+                    if (segments.Length > i + 1)
+                        i++;
+                    else
+                        continue;
+
+
+                if (segments.Length > i + 1 && segments[i + 1] == PARENT_DIR)
+                {
+                    i++;
+                }
+                else
+                {
+                    if (i > 0)
+                        optimizedPath.Append(PATH_ELEMENT_SEPARATOR);
+                    optimizedPath.Append(segments[i]);
+                }
+            }
+
+            return optimizedPath.ToString();
         }
 
         public static string LocalPath4WWW(string assetRelativePath)
@@ -164,7 +191,7 @@ namespace Code.GQClient.FileIO
 
             if (pathSegments[lastIndex].Equals("."))
             {
-                // get path segement before the dot:
+                // get path segment before the dot:
                 if (lastIndex > 0)
                     return pathSegments[lastIndex - 1];
                 else
@@ -193,7 +220,7 @@ namespace Code.GQClient.FileIO
         {
             // eliminate trailing slash:
             if (filePath.EndsWith("/", StringComparison.CurrentCulture) ||
-                    filePath.EndsWith("/.", StringComparison.CurrentCulture))
+                filePath.EndsWith("/.", StringComparison.CurrentCulture))
                 filePath = filePath.Substring(0, filePath.Length - 1);
 
             // eliminate multi slashes:
@@ -243,7 +270,6 @@ namespace Code.GQClient.FileIO
         // TODO Make Asset Agnostic! & Test
         public static bool IsEmptyDir(string dirPath)
         {
-
             if (!Directory.Exists(dirPath))
                 return false;
 
@@ -262,7 +288,7 @@ namespace Code.GQClient.FileIO
             string fileName = FileName(filePath);
 
             if (fileName.StartsWith(".", StringComparison.CurrentCulture) ||
-                    fileName.EndsWith(".meta", StringComparison.CurrentCulture))
+                fileName.EndsWith(".meta", StringComparison.CurrentCulture))
                 return false;
             else
                 return true;
@@ -275,7 +301,6 @@ namespace Code.GQClient.FileIO
         /// <param name="path">Path.</param>
         public static bool IsValidPath(string path)
         {
-
             return isValidFilePath(path) || isValidDirPath(path);
         }
 
@@ -292,6 +317,7 @@ namespace Code.GQClient.FileIO
             {
                 valid = false;
             }
+
             valid &= !ReferenceEquals(fi, null);
 
             return valid;
@@ -310,6 +336,7 @@ namespace Code.GQClient.FileIO
             {
                 valid = false;
             }
+
             valid &= !ReferenceEquals(di, null);
 
             return valid;
@@ -333,14 +360,15 @@ namespace Code.GQClient.FileIO
             string[] childDirPathSegments = childDirPath.Split(SEPARATORS, StringSplitOptions.RemoveEmptyEntries);
 
             bool isParent =
-                acceptSame ?
-                    childDirPathSegments.Length >= parentDirPathSegments.Length :
-                    childDirPathSegments.Length > parentDirPathSegments.Length;
+                acceptSame
+                    ? childDirPathSegments.Length >= parentDirPathSegments.Length
+                    : childDirPathSegments.Length > parentDirPathSegments.Length;
 
             for (int i = 0; i < parentDirPathSegments.Length; i++)
             {
                 isParent &= childDirPathSegments[i].Equals(parentDirPathSegments[i]);
             }
+
             return isParent;
         }
 
@@ -366,9 +394,11 @@ namespace Code.GQClient.FileIO
 
             dir.Delete();
         }
+
         #endregion
 
         #region Write
+
         /// <summary>
         /// Enforced version of File.WriteAllText
         /// </summary>
@@ -379,9 +409,10 @@ namespace Code.GQClient.FileIO
             {
                 Directory.CreateDirectory(dir);
             }
+
             File.WriteAllText(filePath, content);
         }
+
         #endregion
     }
-
 }

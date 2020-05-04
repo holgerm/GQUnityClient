@@ -86,7 +86,7 @@ namespace GQTests.Editor.Util {
 				"There should be 5 files in 'NonEmptyDir' but we found " + numberOfContainedFiles + " files at path: " + path);
 
 			// check that no further directories are present:
-			int numberOfContainedDirs = Directory.GetDirectories(nonEmptyDir).Length;
+			var numberOfContainedDirs = Directory.GetDirectories(nonEmptyDir).Length;
 			Assert.AreEqual(
 				1, 
 				numberOfContainedDirs, 
@@ -95,8 +95,8 @@ namespace GQTests.Editor.Util {
 
 		protected void expectOriginalDirContentInDir (string path) {
 			// check files
-			string[] files = Directory.GetFiles(path);
-			string lookedUpFile = Array.Find(files, x => Files.FileName(x).Equals("Image.png"));
+			var files = Directory.GetFiles(path);
+			var lookedUpFile = Array.Find(files, x => Files.FileName(x).Equals("Image.png"));
 			Assert.NotNull(lookedUpFile, "There should be a file named Image.png in " + path);
 			lookedUpFile = Array.Find(files, x => Files.FileName(x).Equals("JSONDocument.json"));
 			Assert.NotNull(lookedUpFile, "There should be a file named JSONDocument.json in " + path);

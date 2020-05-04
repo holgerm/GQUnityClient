@@ -631,8 +631,6 @@ namespace GQClient.Model
         /// </summary>
         public Task Download(CounterDialog dialog = null)
         {
-            Debug.Log($"Download started for quest {Name}");
-
             if (ActivitiesBlocking)
             {
                 Debug.Log($"Download quest {Name} stopped because activities are blocking");
@@ -649,10 +647,6 @@ namespace GQClient.Model
                 (object sender, TaskEventArgs e) =>
                 {
                     InvokeOnChanged();
-
-                    // new ExportQuestInfosToJson().Start();
-
-                    Debug.Log($"Download finished for quest {Name}");
                 };
 
             // DO IT:

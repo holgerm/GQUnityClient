@@ -20,13 +20,11 @@ using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
-
     /// <summary>
     /// The root object of a quests model at runtime. It represents all details of the quest at runtime.
     /// </summary>
     public class Quest : IComparable<Quest>
     {
-
         #region Attributes
 
         public string Name { get; set; }
@@ -67,27 +65,18 @@ namespace Code.GQClient.Model.mgmt.quests
             }
         }
 
-        private Page StartPage
-        {
-            get;
-            set;
-        }
+        private Page StartPage { get; set; }
 
         protected Page currentPage;
 
         public Page CurrentPage
         {
-            get
-            {
-                return currentPage;
-            }
-            internal set
-            {
-                currentPage = value;
-            }
+            get { return currentPage; }
+            internal set { currentPage = value; }
         }
 
         private QuestHistory _history = null;
+
         internal QuestHistory History
         {
             get
@@ -99,10 +88,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
                 return _history;
             }
-            private set
-            {
-                _history = value;
-            }
+            private set { _history = value; }
         }
 
         #endregion
@@ -146,6 +132,7 @@ namespace Code.GQClient.Model.mgmt.quests
                             h.Enter();
                         }
                     }
+
                     if (h.Status == Hotspot.StatusValue.INSIDE)
                     {
                         if (h.OutsideRadius(e.Location))
@@ -169,20 +156,21 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public Dictionary<int, Hotspot>.ValueCollection AllHotspots
         {
-            get
-            {
-                return _hotspotDict.Values;
-            }
+            get { return _hotspotDict.Values; }
         }
+
         #endregion
 
 
         #region Metadata
+
         public Dictionary<string, string> metadata = new Dictionary<string, string>();
+
         #endregion
 
 
         #region Media
+
         private Dictionary<string, MediaInfo> _mediaStore = null;
 
         public Dictionary<string, MediaInfo> MediaStore
@@ -193,6 +181,7 @@ namespace Code.GQClient.Model.mgmt.quests
                 {
                     _mediaStore = new Dictionary<string, MediaInfo>();
                 }
+
                 return _mediaStore;
             }
         }
@@ -228,25 +217,28 @@ namespace Code.GQClient.Model.mgmt.quests
         public void AddMedia(string url, string contextDescription = "no context given")
         {
             if (string.IsNullOrEmpty(url))
-            {
                 return;
-            }
+            // TODO: we should ignore this hotspot marker in the back-end:
+            if (ConfigurationManager.Current.id != "ebk" &&
+                url == "https://quest-mill.intertech.de/assets/img/erzbistummarker.png")
+                return;
 
             if (!MediaStore.ContainsKey(url))
             {
                 var info = new MediaInfo(QuestInfoManager.QuestsRelativeBasePath, url);
                 MediaStore.Add(url, info);
             }
-            
+
             // QuestManager.Instance.AddMedia(url, contextDescription);
         }
 
-        public static string GetMediaJsonPath(int questId) => 
+        public static string GetMediaJsonPath(int questId) =>
             Files.CombinePath(QuestManager.GetLocalPath4Quest(questId: questId), "media.json");
 
         #endregion
 
         #region XML Reading
+
         public Quest(System.Xml.XmlReader reader)
         {
             QuestManager.CurrentlyParsingQuest = this; // TODO use event system instead
@@ -275,7 +267,6 @@ namespace Code.GQClient.Model.mgmt.quests
 
             while (!GQML.IsReaderAtEnd(reader, GQML.QUEST))
             {
-
                 if (reader.NodeType != XmlNodeType.Element && !reader.Read())
                 {
                     return;
@@ -306,7 +297,8 @@ namespace Code.GQClient.Model.mgmt.quests
             Name = GQML.GetStringAttribute(GQML.QUEST_NAME, reader);
             XmlFormat = GQML.GetStringAttribute(GQML.QUEST_XMLFORMAT, reader);
             LastUpdate = GQML.GetLongAttribute(GQML.QUEST_LASTUPDATE, reader, 0L);
-            IndividualReturnDefinitions = GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader, defaultVal: false);
+            IndividualReturnDefinitions =
+                GQML.GetOptionalBoolAttribute(GQML.QUEST_INDIVIDUAL_RETURN_DEFINITIONS, reader, defaultVal: false);
         }
 
         private void ReadPage(XmlReader reader)
@@ -336,9 +328,10 @@ namespace Code.GQClient.Model.mgmt.quests
                     targetScenePath.Length - (targetScenePath.LastIndexOf("/") + 1 + ".unity".Length)
                 );
             }
+
             pageTypeName = string.Format("{0}.Page{1}", modelNamespace, pageTypeName);
             Type pageType = Type.GetType(pageTypeName);
-            
+
             if (pageType == null)
             {
                 Log.SignalErrorToDeveloper("No Implementation for Page Type {0}.", pageTypeName);
@@ -347,12 +340,14 @@ namespace Code.GQClient.Model.mgmt.quests
             }
 
             // get right constructor for page type:
-            ConstructorInfo constructorInfoObj = pageType.GetConstructor(new Type[] { typeof(XmlReader) });
+            ConstructorInfo constructorInfoObj = pageType.GetConstructor(new Type[] {typeof(XmlReader)});
             if (constructorInfoObj == null)
             {
-                Log.SignalErrorToDeveloper("Page {0} misses a Constructor for creating the model from XmlReader.", pageTypeName);
+                Log.SignalErrorToDeveloper("Page {0} misses a Constructor for creating the model from XmlReader.",
+                    pageTypeName);
             }
-            Page page = (Page)constructorInfoObj.Invoke(new object[] { reader });
+
+            Page page = (Page) constructorInfoObj.Invoke(new object[] {reader});
             page.Parent = this;
             if (StartPage == null && page.CanStart())
                 StartPage = page;
@@ -360,6 +355,7 @@ namespace Code.GQClient.Model.mgmt.quests
             {
                 pageDict.Remove(page.Id);
             }
+
             try
             {
                 pageDict.Add(page.Id, page);
@@ -376,6 +372,7 @@ namespace Code.GQClient.Model.mgmt.quests
             hotspot.Parent = this;
             AddHotspot(hotspot);
         }
+
         #endregion
 
 
@@ -431,7 +428,6 @@ namespace Code.GQClient.Model.mgmt.quests
         /// </summary>
         private class NullQuest : Quest
         {
-
             public NullQuest() : base()
             {
                 Name = "Null Quest";
@@ -449,12 +445,8 @@ namespace Code.GQClient.Model.mgmt.quests
 
             public override bool IsShown
             {
-                get
-                {
-                    return false;
-                }
+                get { return false; }
             }
-
         }
 
         #endregion
@@ -470,13 +462,8 @@ namespace Code.GQClient.Model.mgmt.quests
             }
             else
             {
-
                 return this.Name.ToUpper().CompareTo(q.Name.ToUpper());
             }
-
         }
-
     }
-
 }
-
