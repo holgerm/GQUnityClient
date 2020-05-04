@@ -15,7 +15,7 @@ namespace Code.GQClient.Model.pages
         public PageVideoPlay(XmlReader reader) : base(reader) { }
 
         public bool Controllable { get; set; }
-        public bool Stream { get; set; } = true;
+        public bool Stream { get; set; } = false;
         public string VideoFile { get; set; }
         public string VideoType { get; set; }
 

@@ -51,6 +51,7 @@ namespace Code.GQClient.UI.pages.videoplayer
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
+            Debug.Log($"InitPage_TypeSpecific() ...");
             myPage = (PageVideoPlay) page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";
@@ -61,6 +62,8 @@ namespace Code.GQClient.UI.pages.videoplayer
             switch (myPage.VideoType)
             {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL:
+                    Debug.Log($"Video Type NORMAL");
+
                     videoPlayer = videoPlayerNormal;
                     videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
                     videoControllerPanel = videoControllerPanelNormal;
@@ -72,6 +75,8 @@ namespace Code.GQClient.UI.pages.videoplayer
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(false);
                     videoPlayer.started += (source) => { videoControllerPanel.SetActive(myPage.Controllable); };
+                    
+                    Debug.Log($"BEFORE playVideo ist started as Coroutine ...");
                     CoroutineStarter.Run(playVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
@@ -121,7 +126,9 @@ namespace Code.GQClient.UI.pages.videoplayer
         }
 
         IEnumerator playVideo()
-        {
+        {           
+            Debug.Log($"playVideo()");
+        
             videoPlayer.playOnAwake = false;
             audioSource.playOnAwake = false;
             audioSource.Pause();
@@ -149,11 +156,11 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             videoPlayer.Prepare();
 
-            var secondsWaited = 0;
-            while (!videoPlayer.isPrepared && secondsWaited < 6)
+            var framesWaited = 0;
+            while (!videoPlayer.isPrepared)
             {
-                yield return new WaitForSeconds(1);
-                secondsWaited++;
+                yield return new WaitForEndOfFrame(); 
+                framesWaited++;
             }
 
             videoPlayer.loopPointReached += (VideoPlayer source) =>
@@ -169,7 +176,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             // set the rawimage texture:
             //videoImage.rectTransform.localScale = new Vector3(1f, videoPlayer.texture.height / videoPlayer.texture.width, 1f);
             videoImage.texture = videoPlayer.texture;
-
+            
             // If the device is faceUp or down at start, we use portrait:
             if (Device.Orientation == DeviceOrientation.FaceDown || Device.Orientation == DeviceOrientation.FaceUp)
             {
@@ -266,13 +273,13 @@ namespace Code.GQClient.UI.pages.videoplayer
                 }
             }
 
-            float videoRatio = (float) videoPlayer.texture.width / (float) videoPlayer.texture.height;
-            float screenRatio =
+            var videoRatio = (float) videoPlayer.texture.width / (float) videoPlayer.texture.height;
+            var screenRatio =
                 (float) containerNormal.GetComponent<RectTransform>().rect.width /
                 (float) containerNormal.GetComponent<RectTransform>().rect.height;
 
-            float xScale = 1.0f;
-            float yScale = 1.0f;
+            var xScale = 1.0f;
+            var yScale = 1.0f;
 
             switch (orient)
             {

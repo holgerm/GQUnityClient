@@ -324,11 +324,11 @@ namespace Code.UnitySlippyMap.Map
         {
             WWW www;
             TextureIsDownloading = true;
-            string ext = ".png";
+            var ext = ".png";
             bool shouldBeCached;
-            string tileDirPath =
+            var tileDirPath =
                 $"{Application.persistentDataPath}/tilecache/{zPos.ToString()}/{xPos.ToString()}";
-            string tileCachePath =
+            var tileCachePath =
                 $"{tileDirPath}/{yPos.ToString()}.png";
 
             var begin = DateTime.Now.Ticks;
@@ -348,8 +348,14 @@ namespace Code.UnitySlippyMap.Map
                 yield return null;
             }
 
-            if (String.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
+            if (string.IsNullOrEmpty(www.error) && www.text.Contains("404 Not Found") == false)
             {
+                if (MyMaterial == null)
+                {
+                    Debug.Log("MyMaterial is null");
+                    yield break;
+                }
+                    
                 Destroy(MyMaterial.mainTexture);
                 MyMaterial.mainTexture = www.texture;
 
