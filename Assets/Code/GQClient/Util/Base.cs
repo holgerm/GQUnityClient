@@ -1,11 +1,13 @@
 ﻿// #define DEBUG_LOG
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
+using Code.GQClient.Model;
 using Code.GQClient.UI;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.Dialogs;
@@ -174,6 +176,8 @@ namespace Code.GQClient.Util
             DontDestroyOnLoad(Instance);
             SceneManager.sceneLoaded += SceneAdapter.OnSceneLoaded;
             _canvasStates = new Dictionary<string, bool>();
+
+            var _ = BuildTimeText; // just update it
         }
 
         private void Start()
@@ -290,8 +294,28 @@ namespace Code.GQClient.Util
                 }
 
                 _buildTimeText = buildtimeTextAsset.text;
+                // just use the version number, e.g. "2.20.05.05 (05.05.2020 09:36:27)" ==> "2.20.05.05"
+                _buildTimeText = _buildTimeText.Substring(
+                    0,
+                    _buildTimeText.IndexOf(" (", StringComparison.Ordinal));
+
+                var oldBuildTime = PlayerPrefs.HasKey(Definitions.GQ_PLAYERPREF_BUILDTIME)
+                    ? PlayerPrefs.GetString(Definitions.GQ_PLAYERPREF_BUILDTIME)
+                    : "0.0.0.0";
+                if (String.Compare(oldBuildTime, _buildTimeText) < 0)
+                {
+                    AppHasBeenUpdated(oldBuildTime, _buildTimeText);
+                }
+
+                PlayerPrefs.SetString(Definitions.GQ_PLAYERPREF_BUILDTIME, _buildTimeText);
+                PlayerPrefs.Save();
                 return _buildTimeText;
             }
+        }
+
+        private void AppHasBeenUpdated(string oldBuildTime, string newBuildTime)
+        {
+            Debug.Log($"APP UPDATE from '{oldBuildTime}' to '{newBuildTime}'.");
         }
 
         #endregion

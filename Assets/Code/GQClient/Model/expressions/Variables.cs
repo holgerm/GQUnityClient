@@ -36,8 +36,8 @@ namespace Code.GQClient.Model.expressions
                 return;
             }
 
-            string storeKey = Variables.GQ_VAR_PREFIX + varName;
-            string storeValue = value.AsTypedString();
+            var storeKey = Variables.GQ_VAR_PREFIX + varName;
+            var storeValue = value.AsTypedString();
 
             PlayerPrefs.SetString(storeKey, storeValue);
             PlayerPrefs.Save();
@@ -46,7 +46,7 @@ namespace Code.GQClient.Model.expressions
 
         public static void LoadVariableFromStore(string varName)
         {
-            string prefKey = Variables.GQ_VAR_PREFIX + varName;
+            var prefKey = Variables.GQ_VAR_PREFIX + varName;
 
             if (!PlayerPrefs.HasKey(prefKey))
             {
