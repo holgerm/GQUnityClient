@@ -1,4 +1,5 @@
 ﻿using Code.GQClient.Err;
+using Code.GQClient.Util;
 using TMPro;
 using UnityEngine;
 
@@ -8,24 +9,19 @@ namespace Code.GQClient.UI.legal
     [RequireComponent (typeof(TextMeshProUGUI))]
 	public class ShowVersionText : MonoBehaviour
 	{
-
-        protected TextMeshProUGUI text;
+		private TextMeshProUGUI _text;
 
 		// Use this for initialization
-		void Start ()
+		private void Start ()
 		{
-            text = GetComponent<TextMeshProUGUI>();
+            _text = GetComponent<TextMeshProUGUI>();
 
-			if (text == null) {
+			if (_text == null) {
 				Log.SignalErrorToDeveloper ("Version Text: Text Component missing.");
 				return;
 			}
 
-			TextAsset imprintTA = Resources.Load<TextAsset> ("buildtime");
-			if (imprintTA != null) {
-				text.text = "Version Info: " + imprintTA.text;
-			}
-		
+			_text.text = "Version Info: " + Base.Instance.BuildTimeText;
 		}
 		
 	}

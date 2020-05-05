@@ -154,8 +154,8 @@ namespace Code.GQClient.Util
         }
 
         #endregion
-        
-        
+
+
         #region LifeCycle
 
         private void Awake()
@@ -216,6 +216,7 @@ namespace Code.GQClient.Util
             {
                 Device.updateMockedLocation();
             }
+
             //#endif
         }
 
@@ -269,6 +270,27 @@ namespace Code.GQClient.Util
                     Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.",
                         ConfigurationManager.Current.taskUI);
                     return new SimpleDialogBehaviour(task, title, details);
+            }
+        }
+
+        private string _buildTimeText;
+
+        public string BuildTimeText
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_buildTimeText))
+                    return _buildTimeText;
+
+                var buildtimeTextAsset = Resources.Load<TextAsset>("buildtime");
+                if (buildtimeTextAsset == null)
+                {
+                    Log.SignalErrorToDeveloper("Buildtime not found.");
+                    return "";
+                }
+
+                _buildTimeText = buildtimeTextAsset.text;
+                return _buildTimeText;
             }
         }
 
