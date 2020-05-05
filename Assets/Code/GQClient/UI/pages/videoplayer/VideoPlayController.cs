@@ -6,6 +6,7 @@ using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.QM.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -18,7 +19,7 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         public GameObject videoPlayerPanel;
         public Text infoText;
-        public Text forwardButtonText;
+        public TextMeshProUGUI forwardButtonText;
         public RawImage videoImage;
         public AudioSource audioSource;
         public VideoPlayer videoPlayerNormal;
