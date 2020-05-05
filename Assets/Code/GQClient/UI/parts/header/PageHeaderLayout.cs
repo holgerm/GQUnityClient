@@ -13,11 +13,28 @@ namespace Code.GQClient.UI.parts.header
 {
     public class PageHeaderLayout : HeaderLayout
     {
-        public PageController pageCtrl;
+        private PageController _pageController;
+
+        private PageController PageController
+        {
+            get
+            {
+                if (_pageController == null)
+                {
+                    _pageController = GameObject.Find("/PageController").GetComponent<PageController>();
+                    if (_pageController == null)
+                    {
+                        Log.SignalErrorToDeveloper("PageHeaderLayout: pageController not found at '/PageController'.");
+                    }
+                } 
+                return _pageController;
+            }
+            set => _pageController = value;
+        }
 
         protected override void Start()
         {
-            pageCtrl = GameObject.Find("/PageController").GetComponent<PageController>();
+            PageController = GameObject.Find("/PageController").GetComponent<PageController>();
             base.Start();
         }
 
@@ -34,18 +51,11 @@ namespace Code.GQClient.UI.parts.header
 
         protected override void setHeader()
         {
-            if (pageCtrl == null)
-            {
-                enableLeaveQuestButton(ConfigurationManager.Current.OfferLeaveQuests);
-            }
-            else
-            {
-                enableLeaveQuestButton(pageCtrl.OfferLeaveQuest);
-            }
-
+            enableLeaveQuestButton(ConfigurationManager.Current.OfferLeaveQuests);
+ 
             base.setHeader();
 
-            Canvas headerCanvas = Header.GetComponent<Canvas>();
+            var headerCanvas = Header.GetComponent<Canvas>();
             if (headerCanvas != null)
             {
                 headerCanvas.overrideSorting = true;
@@ -74,16 +84,16 @@ namespace Code.GQClient.UI.parts.header
             try
             {
                 // hide tite text:
-                Transform titleText = MiddleButton.transform.Find("TitleText");
+                var titleText = MiddleButton.transform.Find("TitleText");
                 titleText.gameObject.SetActive(false);
 
                 // show top logo and load image:
-                Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+                var middleTopLogo = MiddleButton.transform.Find("TopLogo");
                 middleTopLogo.gameObject.SetActive(true);
 
                 if (middleTopLogo != null)
                 {
-                    Image mtlImage = middleTopLogo.GetComponent<Image>();
+                    var mtlImage = middleTopLogo.GetComponent<Image>();
                     if (mtlImage != null)
                     {
                         mtlImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
@@ -99,13 +109,13 @@ namespace Code.GQClient.UI.parts.header
         protected void setTitle()
         {
             // hide top logo and load image:
-            Transform middleTopLogo = MiddleButton.transform.Find("TopLogo");
+            var middleTopLogo = MiddleButton.transform.Find("TopLogo");
             middleTopLogo.gameObject.SetActive(false);
 
             // show tite and set its text:
-            Transform titleText = MiddleButton.transform.Find("TitleText");
+            var titleText = MiddleButton.transform.Find("TitleText");
             titleText.gameObject.SetActive(true);
-            TextMeshProUGUI ttt = titleText.GetComponent<TextMeshProUGUI>();
+            var ttt = titleText.GetComponent<TextMeshProUGUI>();
 
             // ignore setting a title if we have no text element:
             if (ttt == null)
@@ -126,9 +136,9 @@ namespace Code.GQClient.UI.parts.header
         void enableLeaveQuestButton(bool enable)
         {
             // gather game objects and components:
-            Transform menuButtonT = Header.transform.Find("ButtonPanel/MenuButton");
-            Button menuButton = menuButtonT.GetComponent<Button>();
-            Image image = menuButtonT.transform.Find("Image").GetComponent<Image>();
+            var menuButtonT = Header.transform.Find("ButtonPanel/MenuButton");
+            var menuButton = menuButtonT.GetComponent<Button>();
+            var image = menuButtonT.transform.Find("Image").GetComponent<Image>();
 
             // put icon:
             image.sprite = Resources.Load<Sprite>("icons/endQuest");
@@ -144,7 +154,7 @@ namespace Code.GQClient.UI.parts.header
 
         void leaveQuest()
         {
-            Quest curQuest = QuestManager.Instance.CurrentQuest;
+            var curQuest = QuestManager.Instance.CurrentQuest;
             if (curQuest != null)
             {
                 if (ConfigurationManager.Current.warnWhenLeavingQuest)
