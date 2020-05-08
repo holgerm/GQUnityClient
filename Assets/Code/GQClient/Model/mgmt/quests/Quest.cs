@@ -216,7 +216,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public void AddMedia(string url, string contextDescription = "no context given")
         {
-            if (string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url) || url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA))
                 return;
             // TODO: we should ignore this hotspot marker in the back-end:
             if (ConfigurationManager.Current.id != "ebk" &&
