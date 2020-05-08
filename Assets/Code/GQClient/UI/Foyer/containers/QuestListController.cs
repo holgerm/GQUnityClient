@@ -131,10 +131,10 @@ namespace Code.GQClient.UI.Foyer.containers
 
         private IEnumerator sortViewAsCoroutine()
         {
-            List<QuestInfoUIC> qcList = new List<QuestInfoUIC>(QuestInfoControllers.Values);
+            var qcList = new List<QuestInfoUIC>(QuestInfoControllers.Values);
             qcList.Sort();
 
-            for (int i = 0; i < qcList.Count; i++)
+            for (var i = 0; i < qcList.Count; i++)
             {
                 qcList[i].transform.SetSiblingIndex(i);
 

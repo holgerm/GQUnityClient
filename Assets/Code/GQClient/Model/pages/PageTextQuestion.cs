@@ -108,7 +108,7 @@ namespace Code.GQClient.Model.pages
                             }
                             catch (FormatException)
                             {
-                                Log.SignalErrorToUser("Eingabe '{0}' kann nicht als Zahl erkannt werden.", input);
+                                Log.SignalErrorToUser($"Eingabe '{input}' kann nicht als Zahl erkannt werden.");
                                 return false;
                             }
                             catch (OverflowException)

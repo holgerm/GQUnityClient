@@ -148,22 +148,19 @@ namespace Code.GQClient.Model.pages
                             }
                             catch (FormatException)
                             {
-                                Log.SignalErrorToUser("Eingabe '{0}' kann nicht als Zahl erkannt werden.", input);
+                                Log.SignalErrorToUser($"Eingabe '{input}' kann nicht als Zahl erkannt werden.");
                                 return false;
                             }
                             catch (OverflowException)
                             {
-                                Log.SignalErrorToUser("Eingabe '{0}' zu groß oder zu klein um als Zahl benutzt zu werden.", input);
+                                Log.SignalErrorToUser($"Eingabe '{input}' zu groß oder zu klein um als Zahl benutzt zu werden.");
                                 return false;
                             }
                         }
                         catch (Exception)
                         {
                             Log.SignalErrorToAuthor(
-                                "In Quest {0} auf Seite {1} kann Antwort '{2}' nicht als Zahlenbereich erkannt werden.",
-                                Quest.Id,
-                                Id,
-                                a.Text);
+                                $"In Quest {Quest.Id} auf Seite {Id} kann Antwort '{a.Text}' nicht als Zahlenbereich erkannt werden.");
                             return false;
                         }
                     }

@@ -9,6 +9,7 @@ using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.author;
 using Code.GQClient.Util.input;
 using Code.QM.Util;
+using UnityEngine;
 
 namespace Code.GQClient.Model
 {
@@ -275,8 +276,10 @@ namespace Code.GQClient.Model
 
         public virtual void Tap()
         {
+            Debug.Log("Tapped");
             if (Author.LoggedIn)
             {
+                Debug.Log("Author Logged In");
                 EmuHotspotDialog.CreateAndShow(EnterTrigger, LeaveTrigger, TapTrigger);
             }
             else

@@ -32,7 +32,7 @@ namespace Code.GQClient.Model.pages
 
                 text = value;
                 // adapt to NPCTalk: set the text as dialog item:
-                DialogItem d = new DialogItem();
+                var d = new DialogItem();
                 d.Id = -1; // not applicable
                 d.IsBlocking = false;
                 d.AudioURL = null;

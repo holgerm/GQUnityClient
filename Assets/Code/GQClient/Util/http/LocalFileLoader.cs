@@ -52,14 +52,14 @@ namespace Code.GQClient.Util.http
 
 		protected override IEnumerator DoTheWork ()
 		{
-			string url = Files.AbsoluteLocalPath (filePath);
+			var url = Files.AbsoluteLocalPath (filePath);
 
 			Www = new WWW (url);
 
-			string msg = String.Format ("Start to load local file {0}", filePath);
+			var msg = String.Format ("Start to load local file {0}", filePath);
 			Raise (DownloadEventType.Start, new DownloadEvent (message: msg));
 
-			float progress = 0f;
+			var progress = 0f;
 			while (!Www.isDone) {
 				if (progress < Www.progress) {
 					progress = Www.progress;

@@ -345,7 +345,7 @@ namespace GQClient.Model
             _instance = null;
         }
 
-        public QuestInfoManager()
+        private QuestInfoManager()
         {
             // init quest info store:
             QuestDict = new Dictionary<int, QuestInfo>();

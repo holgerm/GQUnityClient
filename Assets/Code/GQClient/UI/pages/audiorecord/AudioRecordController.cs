@@ -84,7 +84,7 @@ namespace Code.GQClient.UI.pages.audiorecord
             {
                 //TODO Throw a warning message at the console if there isn't  
                 Debug.Log("NO MICROPHONE FOUND!");
-                Log.SignalErrorToUser("No microphone found. Can not record audio. Occurred on device of type {0}.", SystemInfo.deviceModel);
+                Log.SignalErrorToUser($"No microphone found. Can not record audio. Occurred on device of type {SystemInfo.deviceModel}.");
             }
             else
             {

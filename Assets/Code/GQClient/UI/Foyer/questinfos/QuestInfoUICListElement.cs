@@ -238,7 +238,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
             // Show DELETE button if needed:
             if (data.ShowDeleteOption)
             {
-                Debug.Log($"Quest {data.Name} Delete activated");
                 DeleteButton.gameObject.SetActive(true);
                 DeleteButton.interactable = true;
             }

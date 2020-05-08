@@ -29,8 +29,8 @@ namespace Code.GQClient.Emulate
 		public static void CreateAndShow (Trigger enterTrigger, Trigger leaveTrigger, Trigger tapTrigger)
 		{
 			// create:
-			GameObject emuDialogGO = Create (PREFAB_ASSETBUNDLE, PREFAB_NAME, Base.Instance.DialogCanvas);
-			EmuHotspotDialog emuDialog = emuDialogGO.GetComponent<EmuHotspotDialog> ();
+			var emuDialogGO = Create (PREFAB_ASSETBUNDLE, PREFAB_NAME, Base.Instance.DialogCanvas);
+			var emuDialog = emuDialogGO.GetComponent<EmuHotspotDialog> ();
 
 			// init:
 			emuDialog.enterTrigger = enterTrigger;
@@ -39,6 +39,7 @@ namespace Code.GQClient.Emulate
 
 			// show for interaction:
 			emuDialogGO.SetActive (true);
+			Debug.Log("EMU Dialog set active");
 		}
 
 		#endregion

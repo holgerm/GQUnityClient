@@ -255,31 +255,26 @@ namespace Code.GQClient.Model.mgmt.quests
             }
         }
 
-        public void IncreaseMediaUsage(MediaInfo newUsedMediaInfo)
+        /// <summary>
+        /// Either increases the counter for the existing entry or creates a new entry in the QM MediaStore.
+        /// </summary>
+        /// <param name="newUsedMediaInfo"></param>
+        /// <returns>null if the counter of an existing media info was increased,
+        /// or the file name for the newly created media info.</returns>
+        public string IncreaseMediaUsage(MediaInfo newUsedMediaInfo)
         {
             MediaStoreIsDirty = true;
 
             if (MediaStore.TryGetValue(newUsedMediaInfo.Url, out var info))
             {
                 info.UsageCounter++;
-                
-                if (newUsedMediaInfo.Url.Contains("1_glass_ping-go445-1207030150"))
-                {
-                    Debug.Log($"FOUND: {newUsedMediaInfo.Url}");
-                }
-
-                return;
-            }
-            
-            if (newUsedMediaInfo.Url.Contains("1_glass_ping-go445-1207030150"))
-            {
-                Debug.Log($"among # {MediaStore.Count} NOT found: {newUsedMediaInfo.Url}");
+                return null;
             }
 
-            AddNewMedia(newUsedMediaInfo);
+            return AddNewMedia(newUsedMediaInfo);
         }
 
-        private void AddNewMedia(MediaInfo newInfo)
+        private string AddNewMedia(MediaInfo newInfo)
         {
             // TODO can be optimized from O(n) to O(log_n) by using a persisting hash set of filenames.
             var occupiedFileNames = new HashSet<string>();
@@ -301,12 +296,9 @@ namespace Code.GQClient.Model.mgmt.quests
 
             newInfo.LocalFileName = fileNameCandidate;
             newInfo.UsageCounter = 1;
-            if (fileName.Contains("1_glass_ping-go445-1207030150"))
-            {
-                Debug.Log($"To # {MediaStore.Count} Adding media for 1_glass_ping-go445-1207030150 ... key: {newInfo.Url}");
-            }
 
             MediaStore.Add(newInfo.Url, newInfo);
+            return newInfo.LocalFileName;
         }
 
         public static string MediaJsonPath4Quest(int questId) =>

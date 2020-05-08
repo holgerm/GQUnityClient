@@ -52,7 +52,6 @@ namespace Code.GQClient.UI.pages.videoplayer
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
-            Debug.Log($"InitPage_TypeSpecific() ...");
             myPage = (PageVideoPlay) page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";
@@ -63,8 +62,6 @@ namespace Code.GQClient.UI.pages.videoplayer
             switch (myPage.VideoType)
             {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL:
-                    Debug.Log($"Video Type NORMAL");
-
                     videoPlayer = videoPlayerNormal;
                     videoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
                     videoControllerPanel = videoControllerPanelNormal;
@@ -77,8 +74,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     container360.SetActive(false);
                     videoPlayer.started += (source) => { videoControllerPanel.SetActive(myPage.Controllable); };
                     
-                    Debug.Log($"BEFORE playVideo ist started as Coroutine ...");
-                    CoroutineStarter.Run(playVideo());
+                    CoroutineStarter.Run(PlayVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
                     videoPlayer = videoPlayer360;
@@ -99,7 +95,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                         arrow360.enabled = true;
                         videoControllerPanel.SetActive(myPage.Controllable);
                     };
-                    CoroutineStarter.Run(playVideo());
+                    CoroutineStarter.Run(PlayVideo());
                     break;
                 default:
                     //containerNormal.SetActive(false);
@@ -126,10 +122,8 @@ namespace Code.GQClient.UI.pages.videoplayer
             videoPlayerNormal.enabled = !hide;
         }
 
-        IEnumerator playVideo()
+        private IEnumerator PlayVideo()
         {           
-            Debug.Log($"playVideo()");
-        
             videoPlayer.playOnAwake = false;
             audioSource.playOnAwake = false;
             audioSource.Pause();
@@ -157,11 +151,9 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             videoPlayer.Prepare();
 
-            var framesWaited = 0;
             while (!videoPlayer.isPrepared)
             {
-                yield return new WaitForEndOfFrame(); 
-                framesWaited++;
+                yield return new WaitForEndOfFrame();
             }
 
             videoPlayer.loopPointReached += (VideoPlayer source) =>
@@ -216,7 +208,7 @@ namespace Code.GQClient.UI.pages.videoplayer
         {
             orientation = curOrientation;
             rotateVideo(orientation);
-            scaleVideo(orientation);
+            ScaleVideo(orientation);
         }
 
         private void rotateVideo(DeviceOrientation orient)
@@ -264,7 +256,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             }
         }
 
-        void scaleVideo(DeviceOrientation orient)
+        private void ScaleVideo(DeviceOrientation orient)
         {
             if (myPage.VideoType == GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360)
             {

@@ -25,11 +25,11 @@ namespace GQClient.Model
 
                 try
                 {
-                    var mediaJSON =
+                    var mediaJson =
                         (mediaList.Count == 0)
                             ? "[]"
                             : JsonConvert.SerializeObject(mediaList, Newtonsoft.Json.Formatting.Indented);
-                    Files.WriteAllText(QuestManager.GlobalMediaJsonPath, mediaJSON);
+                    Files.WriteAllText(QuestManager.GlobalMediaJsonPath, mediaJson);
                     QuestManager.Instance.MediaStoreIsDirty = false;
                 }
                 catch (Exception e)
@@ -45,7 +45,7 @@ namespace GQClient.Model
 
         public override object Result
         {
-            get { return null; }
+            get => null;
             set { }
         }
     }

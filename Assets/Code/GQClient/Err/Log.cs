@@ -73,9 +73,14 @@ namespace Code.GQClient.Err
 
 		public static void InformUser (string formatString, params object[] values)
 		{
-			InformUser (String.Format (formatString, values));
+			InformUser (string.Format (formatString, values));
 		}
 
+		public static void InformDeveloper (string message)
+		{
+			File (message, Level.Info, Recipient.Developer);
+		}
+		
 
 		public static void SignalErrorToUser (string message)
 		{
