@@ -1,5 +1,5 @@
 ﻿using Code.GQClient.Err;
-using Code.GQClient.Util;
+using Code.GQClient.Migration;
 using TMPro;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ namespace Code.GQClient.UI.legal
 				return;
 			}
 
-			_text.text = "Version Info: " + Base.Instance.BuildTimeText;
+			_text.text = "Version Info: " + Migration.Migration.BuildTimeText;
 		}
 		
 	}

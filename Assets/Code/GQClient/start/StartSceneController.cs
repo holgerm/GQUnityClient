@@ -1,14 +1,18 @@
 ﻿// #define DEBUG_LOG
 
-using System.Collections;
+using Code.GQClient.Migration;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Code.GQClient.start
 {
     public class StartSceneController : MonoBehaviour
     {
+        private void Awake()
+        {
+            var _ = Migration.Migration.BuildTimeText; // just update it
+        }
+
         private void Start()
         {
             var startCanvasPrefab = Resources.Load<GameObject>("ImportedPackage/prefabs/StartCanvas");
