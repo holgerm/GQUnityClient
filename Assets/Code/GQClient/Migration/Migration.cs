@@ -15,7 +15,7 @@ namespace Code.GQClient.Migration
         
         public abstract string Details { get; }
 
-        private bool Applicable => string.CompareOrdinal(BuildTimeText, Version) < 0;
+        private bool Applicable => string.CompareOrdinal(OldAppVersion, Version) < 0;
 
         private static int LowerVersionsFirst(Migration x, Migration y)
         {
@@ -52,14 +52,14 @@ namespace Code.GQClient.Migration
             }
         }
 
-        private static string _buildTimeText;
+        private static string _currentAppVersion;
 
-        public static string BuildTimeText
+        public static string CurrentAppVersion
         {
             get
             {
-                if (!String.IsNullOrEmpty(_buildTimeText))
-                    return _buildTimeText;
+                if (!string.IsNullOrEmpty(_currentAppVersion))
+                    return _currentAppVersion;
 
                 var buildtimeTextAsset = Resources.Load<TextAsset>("buildtime");
                 if (buildtimeTextAsset == null)
@@ -68,23 +68,37 @@ namespace Code.GQClient.Migration
                     return "";
                 }
 
-                _buildTimeText = buildtimeTextAsset.text;
+                _currentAppVersion = buildtimeTextAsset.text;
                 // just use the version number, e.g. "2.20.05.05 (05.05.2020 09:36:27)" ==> "2.20.05.05"
-                _buildTimeText = _buildTimeText.Substring(
-                    0, _buildTimeText.IndexOf(" (", StringComparison.Ordinal));
+                _currentAppVersion = _currentAppVersion.Substring(
+                    0, _currentAppVersion.IndexOf(" (", StringComparison.Ordinal));
 
-                var oldBuildTime = PlayerPrefs.HasKey(Definitions.GQ_PLAYERPREF_BUILDTIME)
-                    ? PlayerPrefs.GetString(Definitions.GQ_PLAYERPREF_BUILDTIME)
-                    : "0.0.0.0";
-                if (string.CompareOrdinal(oldBuildTime, _buildTimeText) < 0)
+                if (string.CompareOrdinal(OldAppVersion, _currentAppVersion) < 0)
                 {
-                    Migration.ApplyMigrations();
+                    ApplyMigrations();
                 }
 
-                PlayerPrefs.SetString(Definitions.GQ_PLAYERPREF_BUILDTIME, _buildTimeText);
+                PlayerPrefs.SetString(Definitions.GQ_PLAYERPREF_BUILDTIME, _currentAppVersion);
                 PlayerPrefs.Save();
-                return _buildTimeText;
+                return _currentAppVersion;
             }
+        }
+
+        private static string _oldAppVersion;
+
+        private static string OldAppVersion
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_oldAppVersion))
+                {
+                    _oldAppVersion = PlayerPrefs.HasKey(Definitions.GQ_PLAYERPREF_BUILDTIME)
+                        ? PlayerPrefs.GetString(Definitions.GQ_PLAYERPREF_BUILDTIME)
+                        : "0.0.0.0";
+                }
+
+                return _oldAppVersion;
+         }
         }
     }
     

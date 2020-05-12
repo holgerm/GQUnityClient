@@ -21,7 +21,7 @@ namespace Code.GQClient.UI.legal
 				return;
 			}
 
-			_text.text = "Version Info: " + Migration.Migration.BuildTimeText;
+			_text.text = "Version Info: " + Migration.Migration.CurrentAppVersion;
 		}
 		
 	}

@@ -1,6 +1,5 @@
 ﻿// #define DEBUG_LOG
 
-using Code.GQClient.Migration;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +9,7 @@ namespace Code.GQClient.start
     {
         private void Awake()
         {
-            var _ = Migration.Migration.BuildTimeText; // just update it
+            var _ = Migration.Migration.CurrentAppVersion; // just update it
         }
 
         private void Start()

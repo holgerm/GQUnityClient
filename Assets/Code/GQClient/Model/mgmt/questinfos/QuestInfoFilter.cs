@@ -255,7 +255,7 @@ namespace GQClient.Model
             /// <param name="qi">Quest Info.</param>
             public override bool Accept(QuestInfo qi)
             {
-                foreach (string cat in acceptedCategories)
+                foreach (var cat in acceptedCategories)
                 {
                     if (qi.Categories.Contains(cat) ||
                         (
@@ -269,8 +269,8 @@ namespace GQClient.Model
 
             public override string ToString()
             {
-                StringBuilder sb = new StringBuilder("Category is in {");
-                for (int i = 0; i < acceptedCategories.Count; i++)
+                var sb = new StringBuilder("Category is in {");
+                for (var i = 0; i < acceptedCategories.Count; i++)
                 {
                     sb.Append(acceptedCategories[i]);
                     if (i + 1 < acceptedCategories.Count)
@@ -284,8 +284,8 @@ namespace GQClient.Model
 
             public override List<string> AcceptedCategories(QuestInfo qi)
             {
-                List<string> accCats = new List<string>();
-                foreach (string cat in acceptedCategories)
+                var accCats = new List<string>();
+                foreach (var cat in acceptedCategories)
                 {
                     if (qi.Categories.Contains(cat))
                         accCats.Add(cat);
@@ -318,9 +318,9 @@ namespace GQClient.Model
 
             public override bool Accept(QuestInfo qi)
             {
-                bool accepted = true;
+                var accepted = true;
 
-                foreach (QuestInfoFilter filter in subfilters)
+                foreach (var filter in subfilters)
                 {
                     accepted &= filter.Accept(qi);
                 }
@@ -330,9 +330,9 @@ namespace GQClient.Model
 
             public override string ToString()
             {
-                StringBuilder sb = new StringBuilder("And(");
+                var sb = new StringBuilder("And(");
 
-                foreach (QuestInfoFilter sel in subfilters)
+                foreach (var sel in subfilters)
                 {
                     sb.Append(sel.ToString() + ",");
                 }
@@ -348,15 +348,15 @@ namespace GQClient.Model
                 if (subfilters == null || subfilters.Count == 0)
                     return qi.Categories;
 
-                List<string> acceptedCategories = new List<string>();
+                var acceptedCategories = new List<string>();
 
                 if (!Accept(qi))
                     return acceptedCategories;
 
                 // the qi is accepted, so we also accept any categories to represent it:
-                for (int j = 0; j < subfilters.Count; j++)
+                for (var j = 0; j < subfilters.Count; j++)
                 {
-                    for (int i = 0; i < subfilters[j].AcceptedCategories(qi).Count; i++)
+                    for (var i = 0; i < subfilters[j].AcceptedCategories(qi).Count; i++)
                     {
                         if (!acceptedCategories.Contains(subfilters[j].AcceptedCategories(qi)[i]))
                         {
