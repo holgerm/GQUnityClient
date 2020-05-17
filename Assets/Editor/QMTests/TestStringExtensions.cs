@@ -1,28 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class StringExtensions
+    public class TestStringExtensions
     {
         // A Test behaves as an ordinary method
         [Test]
-        public void StringExtensionsSimplePasses()
+        public void SplitWithMaskedSeparator()
         {
-            // Use the Assert class to test conditions
-        }
+            var original = "";
+            Assert.That(original.SplitWithMaskedSeparator().Count == 0);
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator StringExtensionsWithEnumeratorPasses()
-        {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
+            original = ",";
+            Assert.That(original.SplitWithMaskedSeparator().Count == 0);
+            
+            original = ",,";
+            Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == ",");
+            
+            original = ",,,";
+            Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == ",");
+             
+            original = "a";
+            Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == "a");
+             
+            original = "abcabcabcabc";
+            Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == "abcabcabcabc");
+              
+            original = "eins,zwei,drei";
+            Assert.AreEqual(3, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == "eins");
+            Assert.That(original.SplitWithMaskedSeparator()[1] == "zwei");
+            Assert.That(original.SplitWithMaskedSeparator()[2] == "drei");
+                          
+            original = "eins,,zwei,,drei";
+            Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == "eins,zwei,drei");
+            
+            original = ",eins,,zwei,,drei,";
+            Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
+            Assert.That(original.SplitWithMaskedSeparator()[0] == "eins,zwei,drei");
         }
     }
 }

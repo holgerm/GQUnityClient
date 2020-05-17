@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Text.RegularExpressions;
-using Code.GQClient.Conf;
+﻿using System.Collections;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
-using Code.GQClient.Util.http;
 using Code.QM.Util;
 using Paroxe.PdfRenderer;
 using TMPro;
@@ -61,7 +57,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     uniWebView.Frame =
                         new Rect(
                             0, headerHeight,
-                            Device.width, Device.height - (headerHeight + footerHeight)
+                            Screen.width, Screen.height - (headerHeight + footerHeight)
                         );
 
                     //VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
@@ -69,7 +65,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     uniWebView.SetShowSpinnerWhileLoading(true);
                     uniWebView.Show(true);
 
-                    string videoHtml = string.Format(YoutubeHTMLFormatString, myPage.VideoFile);
+                    string videoHtml = string.Format(YOUTUBE_HTML_FORMAT_STRING, myPage.VideoFile);
                     uniWebView.LoadHTMLString(videoHtml, "https://www.youtube.com/");
                     break;
                 default:
@@ -78,8 +74,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             }
         }
 
-        private static string YoutubeHTMLFormatString =
-            @"<html>
+        private const string YOUTUBE_HTML_FORMAT_STRING = @"<html>
                 <head></head>
                 <body style=""margin:0\"">
                     <iframe width = ""100%"" height=""100%"" 
@@ -132,10 +127,11 @@ namespace Code.GQClient.UI.pages.videoplayer
             webView.Frame =
                 new Rect(
                     0, headerHeight,
-                    Device.width, Device.height - (headerHeight + footerHeight)
+                    Screen.width, Screen.height - (headerHeight + footerHeight)
                 );
 
             webView.SetShowSpinnerWhileLoading(true);
+            webView.SetZoomEnabled(true);
             webView.Show(true);
             webView.Load(url);
         }
@@ -192,8 +188,8 @@ namespace Code.GQClient.UI.pages.videoplayer
         {
             var shouldCheck = pageCtrl.myPage.AllowLeaveOnUrlContains != "";
             shouldCheck |= pageCtrl.myPage.AllowLeaveOnUrlDoesNotContain != "";
-            shouldCheck |= pageCtrl.myPage.AllowLeaveOnHtmlContains != "";
-            shouldCheck |= pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain != "";
+            shouldCheck |= pageCtrl.myPage.AllowLeaveOnHtmlContains.Count > 0;
+            shouldCheck |= pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain.Count > 0;
             return shouldCheck;
         }
 
@@ -226,8 +222,20 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         private static void CheckHtmlToAllowForwardButton(WebPageController pageCtrl, string html)
         {
-            if (html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlContains) ||
-                !html.Contains(pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain))
+            var success = false;
+
+            foreach (var searchString in pageCtrl.myPage.AllowLeaveOnHtmlContains)
+            {
+                success |= html.Contains(searchString);
+            }
+
+            foreach (var searchString in pageCtrl.myPage.AllowLeaveOnHtmlDoesNotContain)
+            {
+                success &= !html.Contains(searchString);
+            }
+
+
+            if (success)
             {
                 AllowLeavePage(pageCtrl);
             }
