@@ -48,6 +48,7 @@ namespace Code.GQClient.Migration
             migrations.Sort(Migration.LowerVersionsFirst);
             foreach (var migration in migrations)
             {
+                Log.InformDeveloper($"Migration {migration.GetType().FullName} will be applied.");
                 migration.Start();
             }
         }
