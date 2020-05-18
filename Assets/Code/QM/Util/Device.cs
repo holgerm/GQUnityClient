@@ -42,7 +42,6 @@ namespace Code.QM.Util
                         return _width;
                     }
 
-                    Debug.Log($"rt.localScale.x = {rt.localScale.x}");
                     _width = Convert.ToInt32(Screen.width / rt.localScale.x);
                     return _width;
                 }

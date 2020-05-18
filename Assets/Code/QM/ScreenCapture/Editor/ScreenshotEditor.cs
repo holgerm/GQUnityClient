@@ -36,7 +36,6 @@ namespace QM.SC.Editor
                             "Screenshots",
                             $"{camera.pixelWidth}_{camera.pixelHeight}"
                         );
-                    UnityEngine.Debug.Log($"dpi: {Screen.dpi} width: {camera.pixelWidth} scale: {GetScale()}");
                     Files.CreateDir(dir);
                     var filename = 
                         $"{ConfigurationManager.Current.id}_{DateTime.Now:yyyy'-'MM'-'dd'_'HH'-'mm'-'ss}.png";
