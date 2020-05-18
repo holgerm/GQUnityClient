@@ -19,7 +19,6 @@
     "Map",
     "List"
   ],
-  "TopicColumnsNumber": 2,
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": false,
   "showCloudQuestsImmediately": true,
@@ -44,7 +43,9 @@
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
-  "autoSynchQuestInfos": true,
+  "autoSyncQuestInfos": true,
+  "autoLoadQuests": false,
+  "autoUpdateQuests": true,
   "autoUpdateSubquests": true,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "MapBox",
@@ -391,6 +392,12 @@
   },
   "mainFontSize": 80,
   "textAlignment": "Left",
+  "textLinkColor": {
+    "r": 0,
+    "g": 0,
+    "b": 255,
+    "a": 255
+  },
   "lineSpacing": 10.0,
   "showShadows": true,
   "topLogo": {
