@@ -20,6 +20,8 @@ namespace Code.GQClient.Migration
             var globalFilesDirPath = Files.CombinePath(
                 QuestInfoManager.LocalQuestsPath,
                 "files");
+            if (!Directory.Exists(globalFilesDirPath))
+                Directory.CreateDirectory(globalFilesDirPath);
 
             var migratedQuests = 0;
 
