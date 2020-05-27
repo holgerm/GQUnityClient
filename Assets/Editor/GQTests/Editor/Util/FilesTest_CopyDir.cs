@@ -44,7 +44,7 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(isCopied, "CopyDir() should return true.");
-			Assert.That(Assets.ExistsAssetAtPath(targetAssetDirPath));
+			Assert.That(GQ.Editor.Util.Assets.ExistsAssetAtPath(targetAssetDirPath));
 			expectEmptyDirSturctureAtPath(targetAssetDirPath);
 		}
 
@@ -55,7 +55,7 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(isCopied, "CopyDir() should return true.");
-			Assert.That(Assets.ExistsAssetAtPath(targetAssetDirPath));
+			Assert.That(GQ.Editor.Util.Assets.ExistsAssetAtPath(targetAssetDirPath));
 			expectOriginalDirStructureAtPath(Files.CombinePath(targetAssetDirPath));
 		}
 
@@ -100,7 +100,7 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(isCopied, "CopyDir() should return true.");
-			Assert.That(Assets.ExistsAssetAtPath(targetAssetDirPath));
+			Assert.That(GQ.Editor.Util.Assets.ExistsAssetAtPath(targetAssetDirPath));
 			expectOriginalDirContentInDir(targetAssetDirPath);
 		}
 
@@ -174,12 +174,12 @@ namespace GQTests.Editor.Util {
 		[Test]
 		public void CopyDir_NonAsset_2_Asset_Empty () {
 			// Act:
-			bool isCopied = Files.CopyDir(originNonAssetDirEmptyPath, targetAssetDirPath);
+			var isCopied = Files.CopyDir(originNonAssetDirEmptyPath, targetAssetDirPath);
 
 			// Assert:
 			Assert.That(isCopied, "CopyDir() should return true.");
-			string expectedEmptyDirPath = Files.CombinePath(targetAssetDirPath, "EmptyDir");
-			Assert.That(Assets.ExistsAssetAtPath(expectedEmptyDirPath), "There should exist a dir at " + expectedEmptyDirPath);
+			var expectedEmptyDirPath = Files.CombinePath(targetAssetDirPath, "EmptyDir");
+			Assert.That(GQ.Editor.Util.Assets.ExistsAssetAtPath(expectedEmptyDirPath), "There should exist a dir at " + expectedEmptyDirPath);
 			Assert.That(Files.IsEmptyDir(expectedEmptyDirPath), "The dir at " + expectedEmptyDirPath + " should be empty.");
 		}
 
@@ -190,7 +190,9 @@ namespace GQTests.Editor.Util {
 
 			// Assert:
 			Assert.That(isCopied, "CopyDir() should return true.");
-			Assert.That(Assets.ExistsAssetAtPath(targetAssetDirPath), "There should exist a dir at " + targetAssetDirPath);
+			Assert.That(
+				GQ.Editor.Util.Assets.ExistsAssetAtPath(targetAssetDirPath), 
+				"There should exist a dir at " + targetAssetDirPath);
 			expectOriginalDirStructureAtPath(targetAssetDirPath);
 		}
 

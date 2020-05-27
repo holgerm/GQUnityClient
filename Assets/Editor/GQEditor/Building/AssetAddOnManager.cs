@@ -232,12 +232,12 @@ namespace GQ.Editor.Building
             {
                 // this dir does not exist yet, we create it, mark it and collect git ignores if we are not in an already ignored subdir:
                 Files.CreateDir(assetDir);
-                string dirMarkerFile = Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn);
+                var dirMarkerFile = Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn);
                 File.Create(dirMarkerFile);
                 if (gitCollectIgnores)
                 {
-                    gitignorePatterns.Add(Assets.RelativeAssetPath(assetDir) + "/");
-                    gitignorePatterns.Add(Assets.RelativeAssetPath(assetDir) + ".meta");
+                    gitignorePatterns.Add(GQ.Editor.Util.Assets.RelativeAssetPath(assetDir) + "/");
+                    gitignorePatterns.Add(GQ.Editor.Util.Assets.RelativeAssetPath(assetDir) + ".meta");
                     gitCollectIgnoresInSubdirs = false;
                 }
             }
@@ -249,15 +249,15 @@ namespace GQ.Editor.Building
                 ))
                 {
                     // this dir has been created by another aao so we add our marker file:
-                    string newAAOMarkerfile = Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn);
+                    var newAAOMarkerfile = Files.CombinePath(assetDir, AAO_MARKERFILE_PREFIX + assetAddOn);
                     File.Create(newAAOMarkerfile);
                     if (gitCollectIgnores)
-                        gitignorePatterns.Add(Assets.RelativeAssetPath(newAAOMarkerfile));
+                        gitignorePatterns.Add(GQ.Editor.Util.Assets.RelativeAssetPath(newAAOMarkerfile));
                 }
             }
             // copy all files from corresponding aao dir into this asset dir:
-            string aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
-            foreach (string file in Directory.GetFiles(aaoPath))
+            var aaoPath = Files.CombinePath(ASSET_ADD_ON_DIR_PATH, assetAddOn, relPath);
+            foreach (var file in Directory.GetFiles(aaoPath))
             {
                 if (file.EndsWith(".DS_Store", StringComparison.CurrentCulture))
                 {
@@ -288,13 +288,17 @@ namespace GQ.Editor.Building
                 if (gitCollectIgnores)
                 {
                     gitignorePatterns.Add(
-                    Files.CombinePath(Assets.RelativeAssetPath(assetDir), Files.FileName(file)));
+                    Files.CombinePath(
+                        GQ.Editor.Util.Assets.RelativeAssetPath(assetDir), 
+                        Files.FileName(file)));
                     gitignorePatterns.Add(
-                        Files.CombinePath(Assets.RelativeAssetPath(assetDir), Files.FileName(file) + ".meta"));
+                        Files.CombinePath(
+                            GQ.Editor.Util.Assets.RelativeAssetPath(assetDir), 
+                            Files.FileName(file) + ".meta"));
                 }
             }
             // recursively go into every dir in the AssetAddOn tree:
-            foreach (string dir in Directory.GetDirectories(aaoPath))
+            foreach (var dir in Directory.GetDirectories(aaoPath))
             {
                 loadAaoRecursively(assetAddOn, gitignorePatterns, gitCollectIgnoresInSubdirs, Files.CombinePath(relPath, Files.DirName(dir)));
             }

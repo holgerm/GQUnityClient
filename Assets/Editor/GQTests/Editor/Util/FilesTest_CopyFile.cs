@@ -68,7 +68,7 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (isCopied);
-			Assert.That (Assets.ExistsAssetAtPath (targetAssetFilePath));
+			Assert.That (GQ.Editor.Util.Assets.ExistsAssetAtPath (targetAssetFilePath));
 		}
 
 		/// <summary>
@@ -241,7 +241,7 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (isCopied);
-			Assert.That (Assets.ExistsAssetAtPath (targetAssetFilePath));
+			Assert.That (GQ.Editor.Util.Assets.ExistsAssetAtPath (targetAssetFilePath));
 		}
 
 		[Test]

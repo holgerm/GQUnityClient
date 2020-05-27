@@ -57,17 +57,17 @@ namespace GQTests.Editor.Util
 		public void CreateDir_Asset ()
 		{
 			// Arrange:
-			string pathToEmptyDir = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "NewDir");
-			if (Assets.ExistsAssetAtPath (pathToEmptyDir))
+			var pathToEmptyDir = Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "NewDir");
+			if (GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToEmptyDir))
 				Files.DeleteDir (pathToEmptyDir);
 
 			// Act:
-			bool isCreated = Files.CreateDir (pathToEmptyDir);
+			var isCreated = Files.CreateDir (pathToEmptyDir);
 
 			// Assert:
 			Assert.That (isCreated, "CreateDir should succeed on creating a new non existing asset dir.");
 			Assert.That (Directory.Exists (pathToEmptyDir), "CreateDir should have created a new asset dir.");
-			Assert.That (Assets.ExistsAssetAtPath (pathToEmptyDir), "New asset dir should be a valid asset.");
+			Assert.That (GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToEmptyDir), "New asset dir should be a valid asset.");
 
 			// Clean:
 			Files.DeleteDir (pathToEmptyDir);

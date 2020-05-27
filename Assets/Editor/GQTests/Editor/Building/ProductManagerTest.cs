@@ -34,7 +34,7 @@ namespace GQTests.Editor.Building {
 
 		[TearDown]
 		public void clean () {
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
+			GQ.Editor.Util.Assets.ClearAssetFolder(testPM.BuildExportPath);
 			ProductManager._dispose();
 		}
 
@@ -43,7 +43,7 @@ namespace GQTests.Editor.Building {
 			// Arrange:
 
 			// Act:
-			ProductManager pm = ProductManager.Instance;
+			var pm = ProductManager.Instance;
 
 			// Assert:
 			Assert.AreEqual(ProductManager.ProductsDirPath, ProductManager.ProductsDirPath);
@@ -226,7 +226,7 @@ namespace GQTests.Editor.Building {
 			testPM = ProductManager.TestInstance;
 
 			if ( Directory.Exists(testPM.BuildExportPath) )
-				Assets.ClearAssetFolder(testPM.BuildExportPath);
+				GQ.Editor.Util.Assets.ClearAssetFolder(testPM.BuildExportPath);
 			
 
 			// Act:
@@ -249,7 +249,7 @@ namespace GQTests.Editor.Building {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
 			testPM = ProductManager.TestInstance;
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
+			GQ.Editor.Util.Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
 			testPM.PrepareProductForBuild("productWithMarkers");
@@ -275,7 +275,7 @@ namespace GQTests.Editor.Building {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithSubdirsTest";
 			testPM = ProductManager.TestInstance;
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
+			GQ.Editor.Util.Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
 			testPM.PrepareProductForBuild("productWithIgnoredSubdirs");
@@ -310,7 +310,7 @@ namespace GQTests.Editor.Building {
 			// Arrange:
 			ProductManager.ProductsDirPath = PRODUCTS_TEST_DIR + "ProductsWithStreamingAssets";
 			testPM = ProductManager.TestInstance;
-			Assets.ClearAssetFolder(testPM.BuildExportPath);
+			GQ.Editor.Util.Assets.ClearAssetFolder(testPM.BuildExportPath);
 
 			// Act:
 			testPM.PrepareProductForBuild("productWithMapTilesAndPredeployedQuests");

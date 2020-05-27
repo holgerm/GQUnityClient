@@ -602,7 +602,7 @@ namespace GQ.Editor.Building
                 {
                     if (file.EndsWith(".unity", StringComparison.CurrentCulture))
                     {
-                        gatheredScenes.Add(Assets.RelativeAssetPath(file));
+                        gatheredScenes.Add(GQ.Editor.Util.Assets.RelativeAssetPath(file));
                     }
                 }
 
@@ -634,10 +634,10 @@ namespace GQ.Editor.Building
 
         internal void serializeConfig(Config config, string productDirPath)
         {
-            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
-            string configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
+            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            var configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
             File.WriteAllText(configFilePath, json);
-            if (Assets.IsAssetPath(configFilePath))
+            if (GQ.Editor.Util.Assets.IsAssetPath(configFilePath))
                 AssetDatabase.Refresh();
         }
 

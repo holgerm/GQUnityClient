@@ -2,7 +2,6 @@
 using UnityEditor;
 using NUnit.Framework;
 using System.IO;
-using System;
 using GQ.Editor.Util;
 
 namespace GQTests.Editor.Util
@@ -22,18 +21,18 @@ namespace GQTests.Editor.Util
 		{
 			if (!Files.ExistsDir (EMPTY_DIR))
 				Files.CreateDir (EMPTY_DIR);
-			Assets.ClearAssetFolder (EMPTY_DIR);
+			GQ.Editor.Util.Assets.ClearAssetFolder (EMPTY_DIR);
 
 			if (!Files.ExistsDir (TARGET_DIR))
 				Files.CreateDir (TARGET_DIR);
-			Assets.ClearAssetFolder (TARGET_DIR);
+			GQ.Editor.Util.Assets.ClearAssetFolder (TARGET_DIR);
 		}
 
 		[TearDown]
 		public void TearDown ()
 		{
-			Assets.ClearAssetFolder (EMPTY_DIR);
-			Assets.ClearAssetFolder (TARGET_DIR);
+			GQ.Editor.Util.Assets.ClearAssetFolder (EMPTY_DIR);
+			GQ.Editor.Util.Assets.ClearAssetFolder (TARGET_DIR);
 		}
 
 
@@ -46,8 +45,8 @@ namespace GQTests.Editor.Util
 			string absPath = Files.CombinePath (Application.dataPath, "MySubdir", "FurtherSubDir");
 
 			// Act & Assert:
-			Assert.AreEqual (absPath, Assets.AbsolutePath4Asset (relPath));
-			Assert.AreEqual (absPath, Assets.AbsolutePath4Asset (absPath), "AbsolutePath() should not change absolute paths.");
+			Assert.AreEqual (absPath, GQ.Editor.Util.Assets.AbsolutePath4Asset (relPath));
+			Assert.AreEqual (absPath, GQ.Editor.Util.Assets.AbsolutePath4Asset (absPath), "AbsolutePath() should not change absolute paths.");
 		}
 
 
@@ -62,15 +61,15 @@ namespace GQTests.Editor.Util
 			// Assert:
 			Assert.AreEqual (
 				relPath,
-				Assets.RelativeAssetPath (absPath),
+				GQ.Editor.Util.Assets.RelativeAssetPath (absPath),
 				"RelativeAssetPath() should strip the Application.datapath part from an absolute asset path."
 			);
 			Assert.AreEqual (
 				"Assets/path/to/an/asset", 
-				Assets.RelativeAssetPath (Files.CombinePath (Application.dataPath, "path/to/an/asset")));
+				GQ.Editor.Util.Assets.RelativeAssetPath (Files.CombinePath (Application.dataPath, "path/to/an/asset")));
 			Assert.AreEqual (
 				"Assets/path/to/an/asset",
-				Assets.RelativeAssetPath ("Assets/path/to/an/asset"),
+				GQ.Editor.Util.Assets.RelativeAssetPath ("Assets/path/to/an/asset"),
 				"RelativeAssetPath() should not change relative assets paths."
 			);
 		}
@@ -93,7 +92,7 @@ namespace GQTests.Editor.Util
 			// Assert:
 			Assert.That (new System.IO.DirectoryInfo (emptyDir), Is.Not.Empty);
 			Assert.That (Directory.Exists (newDir));
-			Assert.That (Assets.ExistsAssetAtPath (newDir));
+			Assert.That (GQ.Editor.Util.Assets.ExistsAssetAtPath (newDir));
 		}
 
 
@@ -109,11 +108,11 @@ namespace GQTests.Editor.Util
 
 			// Pre Assert:
 			Assert.That (!File.Exists (newAssetPath));
-			Assert.That (!Assets.ExistsAssetAtPath (newAssetPath));
+			Assert.That (!GQ.Editor.Util.Assets.ExistsAssetAtPath (newAssetPath));
 
 			// Act Create:
 			// TODO change to a real Method in Files
-			using (StreamWriter sw = File.CreateText (Assets.AbsolutePath4Asset (newAssetPath))) {
+			using (StreamWriter sw = File.CreateText (GQ.Editor.Util.Assets.AbsolutePath4Asset (newAssetPath))) {
 				sw.WriteLine ("Some text content.");
 				sw.Close ();
 			}
@@ -122,14 +121,14 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (File.Exists (newAssetPath));
-			Assert.That (Assets.ExistsAssetAtPath (newAssetPath));
+			Assert.That (GQ.Editor.Util.Assets.ExistsAssetAtPath (newAssetPath));
 
 			// Act Delete:
 			AssetDatabase.DeleteAsset (newAssetPath);
 
 			// Post Assert:
 			Assert.That (!File.Exists (newAssetPath));
-			Assert.That (!Assets.ExistsAssetAtPath (newAssetPath));
+			Assert.That (!GQ.Editor.Util.Assets.ExistsAssetAtPath (newAssetPath));
 		}
 
 		[Test]
@@ -145,13 +144,13 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (
-				Assets.ExistsAssetAtPath (relPathToExistingAssetsFile), 
+				GQ.Editor.Util.Assets.ExistsAssetAtPath (relPathToExistingAssetsFile), 
 				"Existing asset file should be validated by relative path.");
 			Assert.That (
-				Assets.ExistsAssetAtPath (relPathToExistingAssetsDir), 
+				GQ.Editor.Util.Assets.ExistsAssetAtPath (relPathToExistingAssetsDir), 
 				"Existing asset dir should be validated by relative path.");
 			Assert.That (
-				!Assets.ExistsAssetAtPath (relPathToNonExistingAssetsFile), 
+				!GQ.Editor.Util.Assets.ExistsAssetAtPath (relPathToNonExistingAssetsFile), 
 				"Non-Existing asset file should NOT be validated by relative path.");
 
 
@@ -165,13 +164,13 @@ namespace GQTests.Editor.Util
 			
 			// Assert:
 			Assert.That (
-				Assets.ExistsAssetAtPath (absPathToExistingAssetsFile), 
+				GQ.Editor.Util.Assets.ExistsAssetAtPath (absPathToExistingAssetsFile), 
 				"Existing asset file should be validated by absolute path.");
 			Assert.That (
-				Assets.ExistsAssetAtPath (absPathToExistingAssetsDir), 
+				GQ.Editor.Util.Assets.ExistsAssetAtPath (absPathToExistingAssetsDir), 
 				"Existing asset dir should be validated by absolute path.");
 			Assert.That (
-				!Assets.ExistsAssetAtPath (absPathToNonExistingAssetsFile), 
+				!GQ.Editor.Util.Assets.ExistsAssetAtPath (absPathToNonExistingAssetsFile), 
 				"Non-Existing asset file should NOT be validated by absolute path.");
 					
 			// Arrange NON asset paths:
@@ -184,13 +183,13 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (
-				!Assets.ExistsAssetAtPath (pathToExistingNonAssetsFile), 
+				!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToExistingNonAssetsFile), 
 				"Existing non asset file should not be validated by path.");
 			Assert.That (
-				!Assets.ExistsAssetAtPath (pathToExistingNonAssetsDir), 
+				!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToExistingNonAssetsDir), 
 				"Existing non asset dir should not be validated by path.");
 			Assert.That (
-				!Assets.ExistsAssetAtPath (pathToNonExistingNonAssetsFile), 
+				!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToNonExistingNonAssetsFile), 
 				"Non-Existing non asset file should NOT be validated by path.");
 		}
 
@@ -206,10 +205,10 @@ namespace GQTests.Editor.Util
 				Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "AssetsTest", "GivenAssets", "DoesNotExi.st");
 
 			// Assert:
-			Assert.That (Assets.IsAssetPath (relPathToExistingAssetsFile), "Relative path to an existing asset file should be recognized by IsAssetPath()");
-			Assert.That (Assets.IsAssetPath (relPathToExistingAssetsDir), "Relative path to an existing asset dir should be recognized by IsAssetPath()");
+			Assert.That (GQ.Editor.Util.Assets.IsAssetPath (relPathToExistingAssetsFile), "Relative path to an existing asset file should be recognized by IsAssetPath()");
+			Assert.That (GQ.Editor.Util.Assets.IsAssetPath (relPathToExistingAssetsDir), "Relative path to an existing asset dir should be recognized by IsAssetPath()");
 			Assert.That (
-				Assets.IsAssetPath (relPathToNonExistingAssetsFile), 
+				GQ.Editor.Util.Assets.IsAssetPath (relPathToNonExistingAssetsFile), 
 				"Relative path to a NON existing asset file should STILL be recognized by IsAssetPath(); " + relPathToNonExistingAssetsFile);
 
 			// Arrange absolute asset paths:
@@ -221,9 +220,9 @@ namespace GQTests.Editor.Util
 				Files.CombinePath (Application.dataPath, "Editor", "GQTestsData", "AssetsTest", "GivenAssets", "DoesNotExi.st");
 
 			// Assert:
-			Assert.That (Assets.IsAssetPath (absPathToExistingAssetsFile), "Absolute path to an existing asset file should be recognized by IsAssetPath()");
-			Assert.That (Assets.IsAssetPath (absPathToExistingAssetsDir), "Absolute path to an existing asset dir should be recognized by IsAssetPath()");
-			Assert.That (Assets.IsAssetPath (absPathToNonExistingAssetsFile), "Absolute path to a NON existing asset file should NOT be recognized by IsAssetPath()");
+			Assert.That (GQ.Editor.Util.Assets.IsAssetPath (absPathToExistingAssetsFile), "Absolute path to an existing asset file should be recognized by IsAssetPath()");
+			Assert.That (GQ.Editor.Util.Assets.IsAssetPath (absPathToExistingAssetsDir), "Absolute path to an existing asset dir should be recognized by IsAssetPath()");
+			Assert.That (GQ.Editor.Util.Assets.IsAssetPath (absPathToNonExistingAssetsFile), "Absolute path to a NON existing asset file should NOT be recognized by IsAssetPath()");
 
 			// Arrange NON-Asset paths:
 			string pathToExistingNonAssetsFile = 
@@ -235,9 +234,9 @@ namespace GQTests.Editor.Util
 			
 
 			// Assert:
-			Assert.That (!Assets.IsAssetPath (pathToExistingNonAssetsFile), "Path to an existing file outside of Assets should NOT be recognized by IsAssetPath()");
-			Assert.That (!Assets.IsAssetPath (pathToExistingNonAssetsDir), "Path to an existing dir outside of Assets should NOT be recognized by IsAssetPath()");
-			Assert.That (!Assets.IsAssetPath (pathToNonExistingNonAssetPath), "Path to an non-existing file / dir outside of Assets should NOT be recognized by IsAssetPath()");
+			Assert.That (!GQ.Editor.Util.Assets.IsAssetPath (pathToExistingNonAssetsFile), "Path to an existing file outside of Assets should NOT be recognized by IsAssetPath()");
+			Assert.That (!GQ.Editor.Util.Assets.IsAssetPath (pathToExistingNonAssetsDir), "Path to an existing dir outside of Assets should NOT be recognized by IsAssetPath()");
+			Assert.That (!GQ.Editor.Util.Assets.IsAssetPath (pathToNonExistingNonAssetPath), "Path to an non-existing file / dir outside of Assets should NOT be recognized by IsAssetPath()");
 		}
 
 		private void AssertThatAllGivenAssetsExistInDir (string dir)
@@ -248,10 +247,14 @@ namespace GQTests.Editor.Util
 				if (givenFile.Name.EndsWith (".meta"))
 					continue;
 
-				string targetFilePathRel = Files.CombinePath (dir, givenFile.Name);
-				string targetFilePathAbs = Assets.AbsolutePath4Asset (targetFilePathRel);
-				Assert.That (File.Exists (targetFilePathAbs), "File should have been copied to: " + targetFilePathAbs);
-				Assert.That (Assets.ExistsAssetAtPath (targetFilePathRel), "Asset should have been copied to: " + targetFilePathRel);
+				var targetFilePathRel = Files.CombinePath (dir, givenFile.Name);
+				var targetFilePathAbs = GQ.Editor.Util.Assets.AbsolutePath4Asset (targetFilePathRel);
+				Assert.That (
+					File.Exists (targetFilePathAbs), 
+					"File should have been copied to: " + targetFilePathAbs);
+				Assert.That (
+					GQ.Editor.Util.Assets.ExistsAssetAtPath (targetFilePathRel), 
+					"Asset should have been copied to: " + targetFilePathRel);
 			}
 		}
 
@@ -260,26 +263,31 @@ namespace GQTests.Editor.Util
 		public void ClearAssetsFolder ()
 		{
 			// Arrange: we place some iven assets into a new directory so that we can clear that directory and check that clearing works:
-			string newDir = Files.CombinePath (EMPTY_DIR, "newDir");
-			DirectoryInfo newDirInfo = new DirectoryInfo (newDir);
+			var newDir = Files.CombinePath (EMPTY_DIR, "newDir");
+			var newDirInfo = new DirectoryInfo (newDir);
 
-			Directory.CreateDirectory (Assets.AbsolutePath4Asset (newDir));
-			Assets.copyAssetsDir (GIVEN_ASSETS_DIR, newDir);
+			Directory.CreateDirectory (GQ.Editor.Util.Assets.AbsolutePath4Asset (newDir));
+			GQ.Editor.Util.Assets.copyAssetsDir (GIVEN_ASSETS_DIR, newDir);
 
 			// Act:
-			Assets.ClearAssetFolder (newDir);
+			GQ.Editor.Util.Assets.ClearAssetFolder (newDir);
 
 			// Assert:
 			Assert.That (newDirInfo, Is.Empty);
 
-			foreach (FileInfo givenFile in newDirInfo.GetFiles()) {
+			foreach (var givenFile in newDirInfo.GetFiles()) {
 				if (givenFile.Name.EndsWith (".meta"))
 					continue;
 
-				string targetFilePathRel = Files.CombinePath (newDir, givenFile.Name);
-				string targetFilePathAbs = Assets.AbsolutePath4Asset (targetFilePathRel);
-				Assert.That (!File.Exists (targetFilePathAbs), "File should have been deleted: " + targetFilePathAbs);
-				Assert.That (!Assets.ExistsAssetAtPath (targetFilePathRel), "Asset should have been deleted: " + targetFilePathRel);
+				var targetFilePathRel = Files.CombinePath (newDir, givenFile.Name);
+				var targetFilePathAbs = 
+					GQ.Editor.Util.Assets.AbsolutePath4Asset (targetFilePathRel);
+				Assert.That (
+					!File.Exists (targetFilePathAbs), 
+					"File should have been deleted: " + targetFilePathAbs);
+				Assert.That (
+					!GQ.Editor.Util.Assets.ExistsAssetAtPath (targetFilePathRel), 
+					"Asset should have been deleted: " + targetFilePathRel);
 			}
 		}
 

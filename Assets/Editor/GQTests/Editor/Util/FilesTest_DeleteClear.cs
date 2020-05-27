@@ -40,7 +40,7 @@ namespace GQTests.Editor.Util
 		{
 			// Arrange:
 			string nonExistingAssetPath = Files.CombinePath (GQAssert.PROJECT_PATH, "NonExisting", "Path");
-			Assert.IsFalse (Assets.ExistsAssetAtPath (nonExistingAssetPath));
+			Assert.IsFalse (GQ.Editor.Util.Assets.ExistsAssetAtPath (nonExistingAssetPath));
 
 			// Act:
 			bool cleared = Files.ClearDir (nonExistingAssetPath);
@@ -83,11 +83,11 @@ namespace GQTests.Editor.Util
 			// Arrange:
 			string pathToDirThatWillBeDeleted = 
 				Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "WillBeDeleted");
-			if (!Assets.ExistsAssetAtPath (pathToDirThatWillBeDeleted))
+			if (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToDirThatWillBeDeleted))
 				Files.CreateDir (pathToDirThatWillBeDeleted);
 			string pathToSubDirThatWillBeDeleted = 
 				Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "WillBeDeleted", "SubDirWillBeDeleted");
-			if (!Assets.ExistsAssetAtPath (pathToSubDirThatWillBeDeleted))
+			if (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToSubDirThatWillBeDeleted))
 				Files.CreateDir (pathToDirThatWillBeDeleted);
 			// TODO some files inside ...
 
@@ -96,8 +96,8 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (isDeleted);
-			Assert.That (!Assets.ExistsAssetAtPath (pathToSubDirThatWillBeDeleted));
-			Assert.That (!Assets.ExistsAssetAtPath (pathToDirThatWillBeDeleted));
+			Assert.That (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToSubDirThatWillBeDeleted));
+			Assert.That (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToDirThatWillBeDeleted));
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace GQTests.Editor.Util
 			// Arrange:
 			string pathToDirNonExisting = 
 				Files.CombinePath (GQAssert.TEST_DATA_BASE_DIR, "FilesTest", "NonExistingDir");
-			if (Assets.ExistsAssetAtPath (pathToDirNonExisting))
+			if (GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToDirNonExisting))
 				Files.DeleteDir (pathToDirNonExisting);
 
 			// Act:
@@ -114,7 +114,7 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (!isDeleted);
-			Assert.That (!Assets.ExistsAssetAtPath (pathToDirNonExisting));
+			Assert.That (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToDirNonExisting));
 		}
 
 		[Test]
@@ -123,11 +123,11 @@ namespace GQTests.Editor.Util
 			// Arrange:
 			string pathToDirThatWillBeDeleted = 
 				Files.CombinePath (GQAssert.PROJECT_PATH, "TestsData", "WillBeDeleted");
-			if (!Assets.ExistsAssetAtPath (pathToDirThatWillBeDeleted))
+			if (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToDirThatWillBeDeleted))
 				Files.CreateDir (pathToDirThatWillBeDeleted);
 			string pathToSubDirThatWillBeDeleted = 
 				Files.CombinePath (GQAssert.PROJECT_PATH, "TestsData", "WillBeDeleted", "SubDirWillBeDeleted");
-			if (!Assets.ExistsAssetAtPath (pathToSubDirThatWillBeDeleted))
+			if (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToSubDirThatWillBeDeleted))
 				Files.CreateDir (pathToDirThatWillBeDeleted);
 			// TODO some files inside ...
 
@@ -154,7 +154,7 @@ namespace GQTests.Editor.Util
 
 			// Assert:
 			Assert.That (!isDeleted);
-			Assert.That (!Assets.ExistsAssetAtPath (pathToDirNonExisting));
+			Assert.That (!GQ.Editor.Util.Assets.ExistsAssetAtPath (pathToDirNonExisting));
 		}
 
 		[Test]
