@@ -16,11 +16,11 @@ namespace Code.GQClient.UI.menu.categories
 		public static CategoryFolderCtrl Create (GameObject root, CategoryTreeCtrl.CategoryFolder catFolder, CategoryTreeCtrl catTree)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create ("prefabs", PREFAB, root);
+			var go = PrefabController.Create ("prefabs", PREFAB, root);
 			go.name = PREFAB + " (" + catFolder.Name + ")";
 
 			// save tree controller & folder:
-			CategoryFolderCtrl folderCtrl = go.GetComponent<CategoryFolderCtrl> ();
+			var folderCtrl = go.GetComponent<CategoryFolderCtrl> ();
 			folderCtrl.treeCtrl = catTree;
 			folderCtrl.folder = catFolder;
 
@@ -32,11 +32,11 @@ namespace Code.GQClient.UI.menu.categories
 			folderCtrl.UpdateView (catFolder);
 
 			// hook the show/hide children method onto the image toggle button of this folder:
-			ImageToggleButton itb = folderCtrl.folderImage.GetComponent<ImageToggleButton> ();
-			itb.ToggleButton.onClick.AddListener (itb.Toggle);
+			var itb = folderCtrl.folderImage.GetComponent<ImageToggleButton> ();
+			//itb.ToggleButton.onClick.AddListener (itb.Toggle);
 			itb.ToggleButton.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
 			// ... and onto the button of the whole entry:
-			Button folderBtn = folderCtrl.GetComponent<Button> ();
+			var folderBtn = folderCtrl.GetComponent<Button> ();
 			folderBtn.onClick.AddListener (itb.Toggle);
 			folderBtn.onClick.AddListener (folderCtrl.ToggleShowFolderContents);
 
@@ -79,7 +79,7 @@ namespace Code.GQClient.UI.menu.categories
 		public void ToggleShowFolderContents ()
 		{
 			// determine this folders show state:
-			bool stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
+			var stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
 
 			// set activity of all contained category entries according to folder show state:
 			CategoryTreeCtrl.CategoryFolder folderCtrl;

@@ -22,6 +22,7 @@ namespace Code.QM.UI
         public Sprite OffSprite;
 
         public bool stateIsOn = true;
+        public bool controlFromOutside = false;
 
         public UnityEvent SwitchedOn;
         public UnityEvent SwitchedOff;
@@ -40,10 +41,9 @@ namespace Code.QM.UI
                 return;
             }
 
-            //ToggleButton.onClick.AddListener(Toggle); // BUGFIX: It had been called double: here and in the father object the catFolder.
-            // TODO: we should refactor the whole CatFolder Prefab and its ingredients incl. this script class here.
             ToggleImage.sprite = stateIsOn ? OnSprite : OffSprite;
-            ToggleButton.onClick.AddListener(Toggle);
+            if (!controlFromOutside)
+                ToggleButton.onClick.AddListener(Toggle);
         }
 
         public void Toggle()
