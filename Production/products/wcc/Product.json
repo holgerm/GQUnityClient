@@ -119,6 +119,14 @@
           }
         },
         {
+          "id": "wcc.sound",
+          "name": "Sound & Ton",
+          "folderName": "Kultur",
+          "symbol": {
+            "path": "textures/readable/sound"
+          }
+        },
+        {
           "id": "wcc.nature",
           "name": "Natur",
           "folderName": "Kultur",
