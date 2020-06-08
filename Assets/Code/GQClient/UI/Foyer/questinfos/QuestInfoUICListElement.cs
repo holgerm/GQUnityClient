@@ -180,7 +180,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             ctrl.data.ActivitiesBlockingChanged += ctrl.OnActivitiesBlockingChanged;
             ctrl.listController = containerController;
             ctrl.data.OnChanged += ctrl.UpdateView;
-            ctrl.UpdateView();
+            ctrl.UpdateView(qInfo);
             return go;
         }
 
@@ -193,7 +193,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             NameButton.interactable = !isBlocking;
         }
 
-        public override void UpdateView()
+        public override void UpdateView(QuestInfo questInfo)
         {
             // Update Info-Icon:
             // set info button as configured:

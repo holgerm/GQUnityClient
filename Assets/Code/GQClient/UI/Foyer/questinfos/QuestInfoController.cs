@@ -11,7 +11,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
     /// </summary>
     public abstract class QuestInfoUIC : PrefabController, IComparable<QuestInfoUIC> {
 
-		protected QuestInfo data;
+		public QuestInfo data;
 		public TextMeshProUGUI Name;
 
 		/// <summary>
@@ -32,10 +32,10 @@ namespace Code.GQClient.UI.Foyer.questinfos
             // some values will be kept (until we really do the quest update, this here is only the quest-info update!):
             data = newInfo;
  
-            UpdateView ();
+            UpdateView (newInfo);
 		}
 
-		abstract public void UpdateView ();
+		abstract public void UpdateView (QuestInfo questInfo);
 
 		public override void Destroy ()
 		{

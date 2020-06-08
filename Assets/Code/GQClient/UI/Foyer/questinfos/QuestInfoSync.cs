@@ -12,7 +12,8 @@ namespace Code.GQClient.UI.Foyer.questinfos
             }
             else
             {
-                QuestInfoManager.Instance.UpdateQuestInfos();
+                if (ConfigurationManager.Current.autoSyncQuestInfos)
+                    QuestInfoManager.Instance.UpdateQuestInfos();
             }
         }
     }

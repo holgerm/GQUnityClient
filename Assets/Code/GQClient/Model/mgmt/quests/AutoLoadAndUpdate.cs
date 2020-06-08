@@ -5,16 +5,15 @@ using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
 using GQClient.Model;
 using Code.GQClient.Util.tasks;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
     public class AutoLoadAndUpdate : Task
     {
+         
         protected override IEnumerator DoTheWork()
         {
-            if (Author.LoggedIn || !ConfigurationManager.Current.autoSyncQuestInfos)
-                yield break;
-
             var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
             var downloadList = new List<QuestInfo>();
             var updateList = new List<QuestInfo>();
@@ -23,14 +22,12 @@ namespace Code.GQClient.Model.mgmt.quests
             {
                 if (qi.LoadOptionPossibleInTheory && !qi.LoadModeAllowsManualLoad)
                 {
-                    //          Debug.Log($"#### AUTOLOAD quest: {qi.Id}:{qi.Name}");
                     downloadList.Add(qi);
                     continue;
                 }
 
                 if (qi.UpdateOptionPossibleInTheory && !qi.LoadModeAllowsManualUpdate)
                 {
-                    //           Debug.Log($"#### AUTOUPDATE quest: {qi.Id}:{qi.Name}");
                     updateList.Add(qi);
                 }
             }

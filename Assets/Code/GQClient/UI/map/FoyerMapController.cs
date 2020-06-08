@@ -38,19 +38,9 @@ namespace Code.GQClient.UI.map
 			Marker m;
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
-//				Debug.Log (string.Format("FMC.OnMarkerChanged: AddedInfo {0} #{1}", e.Message, QuestInfoManager.Instance.QuestDict.Count).Yellow());
-//				qiCtrl = 
-//					QuestMapMarkerController.Create (
-//					root: InfoList.gameObject,
-//					qInfo: e.NewQuestInfo,
-//					containerController: this
-//				).GetComponent<QuestMapMarkerController> ();
-//				QuestInfoControllers.Add (e.NewQuestInfo.Id, qiCtrl);
-//				qiCtrl.Show ();
 				UpdateView ();
 				break;
 			case ChangeType.ChangedInfo:
-//				Debug.Log (string.Format("FMC.OnMarkerChanged: ChangedInfo {0} #{1}", e.Message, QuestInfoManager.Instance.QuestDict.Count).Yellow());
 				if (!Markers.TryGetValue (e.OldQuestInfo.Id, out m)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Change event occurred.",
@@ -58,11 +48,10 @@ namespace Code.GQClient.UI.map
 					);
 					break;
 				}
-				m.UpdateView ();
+				m.UpdateMarker();
 				m.Show ();
 				break;
 			case ChangeType.RemovedInfo:
-//				Debug.Log (string.Format("FMC.OnMarkerChanged: RemovedInfo {0}", e.Message).Yellow());
 				if (!Markers.TryGetValue (e.OldQuestInfo.Id, out m)) {
 					Log.SignalErrorToDeveloper (
 						"Quest Info Controller for quest id {0} not found when a Remove event occurred.",
@@ -71,14 +60,13 @@ namespace Code.GQClient.UI.map
 					break;
 				}
 				m.Hide ();
+				e.OldQuestInfo.OnChanged -= m.UpdateView;
 				Markers.Remove (e.OldQuestInfo.Id);
 				break;							
 			case ChangeType.ListChanged:
-//				Debug.Log (string.Format("FMC.OnMarkerChanged: ListChanged {0} #{1}", e.Message, QuestInfoManager.Instance.QuestDict.Count).Yellow());
 				UpdateView ();
 				break;							
 			case ChangeType.FilterChanged:
-//				Debug.Log (string.Format("FMC.OnMarkerChanged: FilterChanged {0}", e.Message).Yellow());
 				UpdateView ();
 				break;
 			case ChangeType.SorterChanged:
@@ -126,6 +114,7 @@ namespace Code.GQClient.UI.map
 			calculateMarkerDetails (newMarker.Texture, markerGo);
 
 			Markers.Add (info.Id, newMarker);
+			info.OnChanged += newMarker.UpdateView;
 		}
 
 		public Texture markerSymbolTexture;

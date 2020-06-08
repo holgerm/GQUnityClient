@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GQClient.Model;
+using UnityEngine;
 
 namespace Code.QM.Util {
 
@@ -7,6 +8,8 @@ namespace Code.QM.Util {
 	public delegate LocationService Void2LocationService();
 
     public delegate void VoidToVoid();
+
+    public delegate void QuestInfoToVoid(QuestInfo questInfo);
 
     public delegate void BoolToVoid(bool boolParam);
 

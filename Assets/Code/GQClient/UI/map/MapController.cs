@@ -13,6 +13,7 @@ using Code.UnitySlippyMap.Helpers;
 using Code.UnitySlippyMap.Layers;
 using Code.UnitySlippyMap.Map;
 using Code.UnitySlippyMap.Markers;
+using GQClient.Model;
 using UnityEngine;
 
 namespace Code.GQClient.UI.map
@@ -261,6 +262,8 @@ namespace Code.GQClient.UI.map
 					continue;
 				
 				kvp.Value.Hide ();
+				// remove marker update as listener to questInfo Changed Events:
+				QuestInfoManager.Instance.GetQuestInfo(kvp.Key).OnChanged -= kvp.Value.UpdateView;
 				map.RemoveMarker (kvp.Value);
 			}
 

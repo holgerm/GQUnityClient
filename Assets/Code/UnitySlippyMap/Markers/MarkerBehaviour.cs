@@ -123,8 +123,11 @@ namespace Code.UnitySlippyMap.Markers
 		/// </summary>
 		protected void Update ()
 		{
-			if (this.gameObject.transform.localScale.x != Map.HalfMapScale)
-				this.gameObject.transform.localScale = new Vector3 (Map.HalfMapScale, Map.HalfMapScale, Map.HalfMapScale);
+			if (gameObject == null)
+				return;
+			
+			if (Math.Abs(gameObject.transform.localScale.x - Map.HalfMapScale) > float.Epsilon)
+				gameObject.transform.localScale = new Vector3 (Map.HalfMapScale, Map.HalfMapScale, Map.HalfMapScale);
 
 			Reposition ();
 		}
@@ -139,21 +142,22 @@ namespace Code.UnitySlippyMap.Markers
 		/// </summary>
 		private void Reposition ()
 		{
-			double[] offsetEPSG900913 = new double[2] {
+			var offsetEpsg900913 = new double[2] {
 				coordinatesEPSG900913 [0] - Map.CenterEPSG900913 [0],
 				coordinatesEPSG900913 [1] - Map.CenterEPSG900913 [1]
 			};
 		
-			double offset = offsetEPSG900913 [0];
+			var offset = offsetEpsg900913 [0];
 			if (offset < 0.0)
 				offset = -offset;
 			if (offset > GeoHelpers.HalfEarthCircumference)
-				offsetEPSG900913 [0] += GeoHelpers.EarthCircumference;
-					
-			this.gameObject.transform.position = new Vector3 (
-			offsetEPSG900913 [0] == 0.0 ? 0.0f : (float)offsetEPSG900913 [0] * Map.ScaleMultiplier,
-			this.gameObject.transform.position.y,
-			offsetEPSG900913 [1] == 0.0 ? 0.0f : (float)offsetEPSG900913 [1] * Map.ScaleMultiplier);
+				offsetEpsg900913 [0] += GeoHelpers.EarthCircumference;
+
+			var go = gameObject;
+			go.transform.position = new Vector3 (
+			Math.Abs(offsetEpsg900913 [0]) < float.Epsilon ? 0.0f : (float)offsetEpsg900913 [0] * Map.ScaleMultiplier,
+			go.transform.position.y,
+			Math.Abs(offsetEpsg900913 [1]) < float.Epsilon ? 0.0f : (float)offsetEpsg900913 [1] * Map.ScaleMultiplier);
 		}
 	
 	#endregion

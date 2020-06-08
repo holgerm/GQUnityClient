@@ -519,13 +519,13 @@ namespace GQClient.Model
 
         #region State & Events
 
-        public event VoidToVoid OnChanged;
+        public event QuestInfoToVoid OnChanged;
 
         protected void InvokeOnChanged()
         {
             if (OnChanged != null)
             {
-                OnChanged();
+                OnChanged(this);
             }
         }
 
@@ -644,10 +644,7 @@ namespace GQClient.Model
 
             // chain exporting local qi json again after dowload has successfully completed:
             download.OnTaskCompleted +=
-                (object sender, TaskEventArgs e) =>
-                {
-                    InvokeOnChanged();
-                };
+                (object sender, TaskEventArgs e) => { InvokeOnChanged(); };
 
             // DO IT:
             ActivitiesBlocking = true;
@@ -738,14 +735,8 @@ namespace GQClient.Model
                     exportQuestsInfoJSON);
             if (dialog != null)
             {
-                t.OnTaskStarted += (d, e) =>
-                {
-                    CurrentlyDownloading++;
-                };
-                t.OnTaskEnded += (d, e) =>
-                {
-                    CurrentlyDownloading--;
-                };
+                t.OnTaskStarted += (d, e) => { CurrentlyDownloading++; };
+                t.OnTaskEnded += (d, e) => { CurrentlyDownloading--; };
             }
 
             return t;
@@ -965,6 +956,11 @@ namespace GQClient.Model
         public double Longitude { get; set; }
 
         public static HotspotInfo NULL = new HotspotInfo(0f, 0f);
+
+        public override string ToString()
+        {
+            return $"Hotspot(lan: {Latitude}, long: {Longitude})";
+        }
     }
 
 
