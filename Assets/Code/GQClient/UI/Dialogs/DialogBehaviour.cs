@@ -1,17 +1,29 @@
 ﻿using System;
+using System.Collections;
 using Code.GQClient.Event;
+using Code.GQClient.Util;
 using Code.GQClient.Util.tasks;
+using UnityEngine;
 
 namespace Code.GQClient.UI.Dialogs
 {
 
 	public abstract class DialogBehaviour : UIBehaviour
 	{
+		private float showAtLeastSeconds;
+
+		public bool keepShowing
+		{
+			get;
+			private set;
+		}
+
+		private bool hideWhenShownLongEnough = false;
 
 		/// <summary>
 		/// Mutually connects this Behaviour with a Dialog Controller and initliazes the behaviour.
 		/// </summary>
-		public DialogBehaviour (Task task = null) : base (task)
+		protected DialogBehaviour (Task task = null, float showAtLeastSeconds = 0) : base (task)
 		{
 			Dialog = DialogController.Instance;
 			Dialog.Behaviour = this;
@@ -24,7 +36,23 @@ namespace Code.GQClient.UI.Dialogs
 
 			Dialog.NoButton.onClick.RemoveAllListeners ();
 			Dialog.NoButton.onClick.AddListener (RaiseNoButtonClicked);
+
+			this.showAtLeastSeconds = showAtLeastSeconds;
+			
+			Debug.Log("Dialog started");
 		}
+
+		private IEnumerator AllowHideAfterSeconds(float hidesAfterSeconds)
+		{
+			yield return new WaitForSeconds(hidesAfterSeconds);
+			keepShowing = false;
+			if (hideWhenShownLongEnough)
+			{
+				Stop ();
+				Dialog.Destroy ();
+			}
+		}
+
 
 		// Basic setting for all modes, buttons have no events and are hidden. Modes must set them afterwards appropriately.
 		protected void HideAndClearButtons ()
@@ -50,6 +78,12 @@ namespace Code.GQClient.UI.Dialogs
 		public override void Start ()
 		{
 			base.Start ();
+
+			if (showAtLeastSeconds > float.Epsilon)
+			{
+				keepShowing = true;
+				CoroutineStarter.Run(AllowHideAfterSeconds(showAtLeastSeconds));
+			}
 		}
 
 		/// <summary>
@@ -62,7 +96,7 @@ namespace Code.GQClient.UI.Dialogs
 			Dialog.YesButton.onClick.RemoveAllListeners ();
 			Dialog.NoButton.onClick.RemoveAllListeners ();
 
-            Dialog.Hide();
+			Dialog.Hide();
 		}
 
 		/// <summary>
@@ -91,8 +125,15 @@ namespace Code.GQClient.UI.Dialogs
 		/// TODO move to Dialog class and change event args to some more generic type
 		protected void CloseDialog (object callbackSender, EventArgs args)
 		{
-			Stop ();
-			Dialog.Destroy ();
+			if (keepShowing)
+			{
+				hideWhenShownLongEnough = true;
+			}
+			else
+			{
+				Stop ();
+    			Dialog.Destroy ();
+			}
 		}
 
 	}

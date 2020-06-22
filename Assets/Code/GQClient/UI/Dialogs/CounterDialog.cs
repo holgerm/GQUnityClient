@@ -22,7 +22,7 @@ public class CounterDialog : DialogBehaviour
         }
     }
 
-    public CounterDialog (string title, string message, int initialCounter) : base (null) 
+    public CounterDialog (string title, string message, int initialCounter, float showAtLeastSeconds = 0f) : base (null, showAtLeastSeconds: showAtLeastSeconds) 
     // 'null' because we do NOT connect a Task, since message dialogs only rely on user interaction
     {
         this.Title = title;

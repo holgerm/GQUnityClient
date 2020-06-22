@@ -31,7 +31,7 @@ namespace Code.GQClient.Model.mgmt.quests
                     updateList.Add(qi);
                 }
             }
-
+            
             if (downloadList.Count + updateList.Count == 0)
                 yield break;
 
@@ -39,7 +39,8 @@ namespace Code.GQClient.Model.mgmt.quests
                 new CounterDialog(
                     "Es gibt Neuigkeiten! Wir aktualisieren deine App jetzt.", 
                     "Bitte habe etwas Geduld, wir laden noch {0} Inhalte ...",
-                    downloadList.Count + updateList.Count);
+                    downloadList.Count + updateList.Count,
+                    3.5f);
             counterDialog.Start();
             
             foreach (var questInfo in downloadList)
