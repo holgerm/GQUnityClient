@@ -209,7 +209,7 @@
         {
           "id": "wcc.tour.beethoven",
           "name": "Beethoventour",
-          "folderName": "Touren",
+          "folderName": "Themen",
           "symbol": {
             "path": "textures/readable/beethoventour"
           }
@@ -217,7 +217,7 @@
         {
           "id": "wcc.bonnhoeren",
           "name": "BonnHoeren",
-          "folderName": "Touren",
+          "folderName": "Themen",
           "symbol": {
             "path": "textures/readable/bonnhoeren"
           }
