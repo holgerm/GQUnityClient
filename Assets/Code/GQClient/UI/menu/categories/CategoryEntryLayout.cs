@@ -15,6 +15,8 @@ namespace Code.GQClient.UI.menu.categories
 			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Name", fgColor: ConfigurationManager.Current.menuFGColor);
 			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Number", fgColor: ConfigurationManager.Current.menuFGColor);
 			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Symbol", fgColor: ConfigurationManager.Current.menuFGColor);
+			var catEntryCtrl = gameObject.GetComponent<CategoryEntryCtrl>();
+			if (catEntryCtrl != null) catEntryCtrl.UpdateView4State();
 		}
 
 	}

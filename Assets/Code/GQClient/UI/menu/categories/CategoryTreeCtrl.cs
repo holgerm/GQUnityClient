@@ -200,11 +200,13 @@ namespace Code.GQClient.UI.menu.categories
 		public void SetSelection4AllItems ()
 		{
 			if (CategoryFilter == null)
+			{
 				return;
-			
+			}
+
 			generalSelectionState = !generalSelectionState;
 			CategoryFilter.NotificationPaused = true;
-			foreach (CategoryEntry entry in categoryEntries.Values) {
+			foreach (var entry in categoryEntries.Values) {
 				entry.ctrl.SetSelectedState (generalSelectionState);
 			}
 			CategoryFilter.NotificationPaused = false;

@@ -10,15 +10,15 @@ namespace Code.GQClient.UI.menu.categories
 
 		#region static stuff
 
-		protected static readonly string PREFAB = "CategoryEntry";
+		protected const string PREFAB = "CategoryEntry";
 
 		public static CategoryEntryCtrl Create (GameObject root, CategoryTreeCtrl.CategoryEntry catEntry, CategoryTreeCtrl catTree)
 		{
 			// Create the view object for this controller:
-			GameObject go = PrefabController.Create ("prefabs", PREFAB, root);
+			var go = PrefabController.Create ("prefabs", PREFAB, root);
 			go.name = PREFAB + " (" + catEntry.category.name + ")";
 
-			CategoryEntryCtrl entryCtrl = go.GetComponent<CategoryEntryCtrl> ();
+			var entryCtrl = go.GetComponent<CategoryEntryCtrl> ();
 			entryCtrl.categoryEntry = catEntry;
 			entryCtrl.UpdateView ();
 
@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.menu.categories
 
 			// add this category to the filter since it is on at start:
 			entryCtrl.SetSelectedState (true);
-
+			
 			return entryCtrl;
 		}
 
@@ -49,16 +49,16 @@ namespace Code.GQClient.UI.menu.categories
 		public void UpdateView ()
 		{
 			// eventually remove leading product id:
-			string productIDStartOfCat = ConfigurationManager.Current.id + ".";
-			string catId = categoryEntry.category.id;
-			if (catId.StartsWith (productIDStartOfCat)) {
-				catId = catId.Substring (productIDStartOfCat.Length);
+			var productIdStartOfCat = ConfigurationManager.Current.id + ".";
+			var catId = categoryEntry.category.id;
+			if (catId.StartsWith (productIdStartOfCat)) {
+				catId = catId.Substring (productIdStartOfCat.Length);
 			}
 				
 			// set the name of this category entry:
 			categoryName.text = categoryEntry.category.name;
 
-			// set the number of elements represented by this ctaegory:
+			// set the number of elements represented by this category:
 			categoryCount.text = ""; // categoryEntry.NumberOfQuests().ToString(); TODO make Config?
 			gameObject.SetActive (showMenuItem ());	
 
@@ -73,7 +73,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		protected override bool showMenuItem ()
 		{
-			bool entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
+			var entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
    
             if (ConfigurationManager.Current.ShowEmptyMenuEntries)
 				return (entryVisible);
@@ -81,36 +81,48 @@ namespace Code.GQClient.UI.menu.categories
 				return (categoryEntry.NumberOfQuests () > 0 && entryVisible);
 		}
 
-		bool selectedForFilter;
+		public bool _selectedForFilter;
 
 		public void SetSelectedState (bool newState)
 		{
-			selectedForFilter = newState;
+			_selectedForFilter = newState;
 
 			// Make the UI reflect selection status & change category filter in quest info manager:
-			if (selectedForFilter) {
-				categoryName.color = new Color (categoryName.color.r, categoryName.color.g, categoryName.color.b, 1f);
-				categoryCount.color = new Color (categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, 1f);
-				categorySymbol.color = new Color (categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, 1f);
-				treeCtrl.CategoryFilter.AddCategory (categoryEntry.category.id);
-			} else {
-				categoryName.color = new Color (categoryName.color.r, categoryName.color.g, categoryName.color.b, ConfigurationManager.Current.disabledAlpha);
-				categoryCount.color = new Color (categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, ConfigurationManager.Current.disabledAlpha);
-				categorySymbol.color = new Color (categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, ConfigurationManager.Current.disabledAlpha);
-				treeCtrl.CategoryFilter.RemoveCategory (categoryEntry.category.id);
+			UpdateView4State();
+		}
+
+		public void UpdateView4State()
+		{
+			if (_selectedForFilter)
+			{
+				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b, 1f);
+				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, 1f);
+				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, 1f);
+				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category.id);
+			}
+			else
+			{
+				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b,
+					ConfigurationManager.Current.disabledAlpha);
+				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b,
+					ConfigurationManager.Current.disabledAlpha);
+				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b,
+					ConfigurationManager.Current.disabledAlpha);
+				treeCtrl.CategoryFilter.RemoveCategory(categoryEntry.category.id);
 			}
 		}
 
 		public void ToggleSelectedState ()
 		{
-			SetSelectedState (!selectedForFilter);
+			SetSelectedState (!_selectedForFilter);
 		}
 
-		public void show (bool show)
+		public void Show (bool show)
 		{
 			gameObject.SetActive (show);
 		}
 
+		private bool shownInUpdate = false;
 
 		#endregion
 

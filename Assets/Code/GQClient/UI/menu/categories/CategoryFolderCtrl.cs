@@ -61,7 +61,7 @@ namespace Code.GQClient.UI.menu.categories
 			gameObject.SetActive (showMenuItem ());
 			
 			// enable the folder image toggle button:
-			ImageToggleButton tb = folderImage.GetComponent<ImageToggleButton> ();
+			var tb = folderImage.GetComponent<ImageToggleButton> ();
 			if (tb != null) {
 				tb.enabled = true;
 			}
@@ -76,15 +76,14 @@ namespace Code.GQClient.UI.menu.categories
 		/// <summary>
 		/// This method will only be called from UnityEvent of folder's image toggle button onClick.
 		/// </summary>
-		public void ToggleShowFolderContents ()
+		private void ToggleShowFolderContents ()
 		{
 			// determine this folders show state:
 			var stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
 
 			// set activity of all contained category entries according to folder show state:
-			CategoryTreeCtrl.CategoryFolder folderCtrl;
-			if (treeCtrl.categoryFolders.TryGetValue (folder.Name, out folderCtrl)) {
-				foreach (CategoryTreeCtrl.CategoryEntry cat in folderCtrl.Entries) {
+			if (treeCtrl.categoryFolders.TryGetValue (folder.Name, out var folderCtrl)) {
+				foreach (var cat in folderCtrl.Entries) {
 					cat.ctrl.Unfolded = stateIsShow;
 					cat.ctrl.UpdateView ();
 				}
@@ -117,8 +116,8 @@ namespace Code.GQClient.UI.menu.categories
 		{
 			ShowState = show;
 			gameObject.SetActive (show && showMenuItem ());
-			foreach (CategoryTreeCtrl.CategoryEntry ec in folder.Entries) {
-				ec.ctrl.show (show && (ec.ctrl.Unfolded || folder.Name == ""));
+			foreach (var ec in folder.Entries) {
+				ec.ctrl.Show (show && (ec.ctrl.Unfolded || folder.Name == ""));
 			}
 		}
 

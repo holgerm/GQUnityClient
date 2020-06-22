@@ -19,12 +19,8 @@ namespace Code.GQClient.UI.menu.categories
 		/// </summary>
 		/// <value><c>true</c> if unfolded; otherwise, <c>false</c>.</value>
 		public virtual bool Unfolded { 
-			get {
-				return unfolded;
-			}
-			set {
-				unfolded = value;
-			}
+			get => unfolded;
+			set => unfolded = value;
 		}
 
 		abstract protected bool showMenuItem ();
