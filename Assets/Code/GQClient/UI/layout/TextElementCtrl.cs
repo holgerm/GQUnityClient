@@ -38,7 +38,7 @@ namespace Code.GQClient.UI.layout
             SpecialLayout();
         }
 
-        private void CommonLayout()
+        protected virtual void CommonLayout()
         {
             TextElement = GetComponent<TextMeshProUGUI>();
 #if UNITY_EDITOR

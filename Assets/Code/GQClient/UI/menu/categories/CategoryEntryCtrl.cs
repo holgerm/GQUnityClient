@@ -89,6 +89,15 @@ namespace Code.GQClient.UI.menu.categories
 
 			// Make the UI reflect selection status & change category filter in quest info manager:
 			UpdateView4State();
+
+			if (_selectedForFilter)
+			{
+				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category.id);
+			}
+			else
+			{
+				treeCtrl.CategoryFilter.RemoveCategory(categoryEntry.category.id);
+			}
 		}
 
 		public void UpdateView4State()
@@ -98,7 +107,6 @@ namespace Code.GQClient.UI.menu.categories
 				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b, 1f);
 				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, 1f);
 				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b, 1f);
-				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category.id);
 			}
 			else
 			{
@@ -108,7 +116,6 @@ namespace Code.GQClient.UI.menu.categories
 					ConfigurationManager.Current.disabledAlpha);
 				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b,
 					ConfigurationManager.Current.disabledAlpha);
-				treeCtrl.CategoryFilter.RemoveCategory(categoryEntry.category.id);
 			}
 		}
 
