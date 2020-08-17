@@ -136,6 +136,11 @@ namespace Code.GQClient.UI.Foyer.containers
 
             for (var i = 0; i < qcList.Count; i++)
             {
+                if (qcList[i] == null)
+                {
+                    yield break;
+                }
+                
                 qcList[i].transform.SetSiblingIndex(i);
 
                 if (i % 5 == 0)
