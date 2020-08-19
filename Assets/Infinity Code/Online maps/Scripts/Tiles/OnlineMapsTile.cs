@@ -504,7 +504,7 @@ public abstract class OnlineMapsTile
         if (OnTileError != null) OnTileError(this);
         if (tryAgainAfterSec >= 0)
         {
-            if (map != null && map.source != OnlineMapsSource.Resources)
+            if (map != null && map.source != OnlineMapsSource.Resources && map.source != OnlineMapsSource.StreamingAssets)
             {
                 remainDownloadsAttempts--;
                 if (remainDownloadsAttempts > 0) map.StartCoroutine(TryDownloadAgain());

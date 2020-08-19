@@ -598,7 +598,7 @@ public class OnlineMapsBuffer
             if (map.countParentLevels > 0)
             {
                 List<OnlineMapsTile> newParentTiles = newBaseTiles;
-                for (int z = renderState.zoom - 1; z > Mathf.Max(renderState.zoom - map.countParentLevels, OnlineMaps.MINZOOM); z--) newParentTiles = CreateParents(newParentTiles, z);
+                for (int z = renderState.zoom - 1; z >= Mathf.Max(renderState.zoom - map.countParentLevels, OnlineMaps.MINZOOM); z--) newParentTiles = CreateParents(newParentTiles, z);
             }
 
             if (map.control.resultIsTexture) for (int i = 0; i < newBaseTiles.Count; i++) SetBufferTile(newBaseTiles[i]);

@@ -21,7 +21,7 @@ public class OnlineMapsOSMAPIQuery: OnlineMapsTextWebService
     private OnlineMapsOSMAPIQuery(string data)
     {
         _status = OnlineMapsQueryStatus.downloading;
-        string url = "http://overpass.kumi.systems/api/interpreter?data=" + OnlineMapsWWW.EscapeURL(data);
+        string url = "https://overpass.kumi.systems/api/interpreter?data=" + OnlineMapsWWW.EscapeURL(data);
         www = new OnlineMapsWWW(url);
         www.OnComplete += OnRequestComplete;
     }

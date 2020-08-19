@@ -257,6 +257,8 @@ public class OnlineMapsRasterTile : OnlineMapsTile
 
     protected override void LoadTileFromWWW(OnlineMapsWWW www)
     {
+        if (map == null) return;
+
         if (map.control.resultIsTexture)
         {
             DownloadComplete();

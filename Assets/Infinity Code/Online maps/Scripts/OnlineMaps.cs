@@ -27,7 +27,7 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     /// <summary>
     /// The current version of Online Maps
     /// </summary>
-    public const string version = "3.7.2.1";
+    public const string version = "3.7.3.1";
 
     /// <summary>
     /// The minimum zoom level

@@ -310,6 +310,7 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
         int c = points.Count - 1;
         bool extraPointAdded = false;
+        bool elevationActive = OnlineMapsElevationManagerBase.useElevation;
 
         for (int i = 0; i < points.Count; i++)
         {
@@ -347,9 +348,15 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
                 float s1z = pz + offZ;
                 float s2x = px - offX;
                 float s2z = pz - offZ;
-                
-                float s1y = OnlineMapsElevationManagerBase.GetElevation(s1x, s1z, bestElevationYScale, tlx, tly, brx, bry);
-                float s2y = OnlineMapsElevationManagerBase.GetElevation(s2x, s2z, bestElevationYScale, tlx, tly, brx, bry);
+
+                float s1y = 0;
+                float s2y = 0; 
+
+                if (elevationActive)
+                {
+                    s1y = OnlineMapsElevationManagerBase.GetElevation(s1x, s1z, bestElevationYScale, tlx, tly, brx, bry);
+                    s2y = OnlineMapsElevationManagerBase.GetElevation(s2x, s2z, bestElevationYScale, tlx, tly, brx, bry);
+                }
 
                 s1 = new Vector3(s1x, s1y, s1z);
                 s2 = new Vector3(s2x, s2y, s2z);
@@ -416,8 +423,17 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
                         is2z = o2z / m2 * w2 + pz;
                     }
 
-                    s1 = new Vector3(is1x, OnlineMapsElevationManagerBase.GetElevation(is1x, is1z, bestElevationYScale, tlx, tly, brx, bry), is1z);
-                    s2 = new Vector3(is2x, OnlineMapsElevationManagerBase.GetElevation(is2x, is2z, bestElevationYScale, tlx, tly, brx, bry), is2z);
+                    float s1y = 0;
+                    float s2y = 0;
+
+                    if (elevationActive)
+                    {
+                        s1y = OnlineMapsElevationManagerBase.GetElevation(is1x, is1z, bestElevationYScale, tlx, tly, brx, bry);
+                        s2y = OnlineMapsElevationManagerBase.GetElevation(is2x, is2z, bestElevationYScale, tlx, tly, brx, bry);
+                    }
+
+                    s1 = new Vector3(is1x, s1y, is1z);
+                    s2 = new Vector3(is2x, s2y, is2z);
                 }
                 else
                 {
@@ -426,8 +442,17 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
                     float po2x = p32x;
                     float po2z = p32z;
 
-                    s1 = new Vector3(po1x, OnlineMapsElevationManagerBase.GetElevation(po1x, po1z, bestElevationYScale, tlx, tly, brx, bry), po1z);
-                    s2 = new Vector3(po2x, OnlineMapsElevationManagerBase.GetElevation(po2x, po2z, bestElevationYScale, tlx, tly, brx, bry), po2z);
+                    float s1y = 0;
+                    float s2y = 0;
+
+                    if (elevationActive)
+                    {
+                        s1y = OnlineMapsElevationManagerBase.GetElevation(po1x, po1z, bestElevationYScale, tlx, tly, brx, bry);
+                        s2y = OnlineMapsElevationManagerBase.GetElevation(po2x, po2z, bestElevationYScale, tlx, tly, brx, bry);
+                    }
+
+                    s1 = new Vector3(po1x, s1y, po1z);
+                    s2 = new Vector3(po2x, s2y, po2z);
                 }
             }
 
@@ -948,10 +973,11 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
     {
         double sx, sy;
 
-        int zoom = manager.map.zoom;
-        float zoomCoof = manager.map.zoomCoof;
+        OnlineMaps map = manager.map;
+        int zoom = map.zoom;
+        float zoomCoof = map.zoomCoof;
 
-        OnlineMapsProjection projection = manager.map.projection;
+        OnlineMapsProjection projection = map.projection;
         projection.CoordinatesToTile(tlx, tly, zoom, out sx, out sy);
 
         int max = 1 << zoom;
@@ -961,9 +987,9 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
         else localPoints.Clear();
 
         double ppx = 0;
-        Vector2 sizeInScene = (manager.map.control as OnlineMapsControlBaseDynamicMesh).sizeInScene;
-        double scaleX = OnlineMapsUtils.tileSize * sizeInScene.x / manager.map.buffer.renderState.width / zoomCoof;
-        double scaleY = OnlineMapsUtils.tileSize * sizeInScene.y / manager.map.buffer.renderState.height / zoomCoof;
+        Vector2 sizeInScene = (map.control as OnlineMapsControlBaseDynamicMesh).sizeInScene;
+        double scaleX = OnlineMapsUtils.tileSize * sizeInScene.x / map.buffer.renderState.width / zoomCoof;
+        double scaleY = OnlineMapsUtils.tileSize * sizeInScene.y / map.buffer.renderState.height / zoomCoof;
 
         double prx = 0, pry = 0;
 
@@ -974,6 +1000,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
         double px = 0, py = 0;
 
         IEnumerator enumerator = points.GetEnumerator();
+        int mapTileWidth = map.width / OnlineMapsUtils.tileSize / 2;
+
         while (enumerator.MoveNext())
         {
             i++;
@@ -1032,7 +1060,7 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
             if (i == 0)
             {
-                double ox = px - manager.map.width / OnlineMapsUtils.tileSize / 2;
+                double ox = px - mapTileWidth;
                 if (ox < -halfMax) px += max;
                 else if (ox > halfMax) px -= max;
             }
@@ -1072,7 +1100,7 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
             if (i == 0)
             {
-                double ox = px - manager.map.width / OnlineMapsUtils.tileSize / 2;
+                double ox = px - mapTileWidth;
                 if (ox < -halfMax) px += max;
                 else if (ox > halfMax) px -= max;
             }
@@ -1136,7 +1164,7 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
         List<Vector2> activePoints = new List<Vector2>(localPoints.Count);
 
         int maxX = 1 << manager.map.zoom;
-        float maxSize = maxX * OnlineMapsUtils.tileSize * control.sizeInScene.x / manager.map.width;
+        float maxSize = maxX * OnlineMapsUtils.tileSize * control.sizeInScene.x / manager.map.width / manager.map.zoomCoof;
         float halfSize = maxSize / 2;
 
         float lastPointX = 0;
@@ -1162,6 +1190,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
         Vector2[] intersections = new Vector2[4];
         bool needExtraPoint = false;
         float extraX = 0, extraY = 0;
+
+        bool isEntireWorld = manager.map.buffer.renderState.width == maxX * OnlineMapsUtils.tileSize;
 
         for (int i = 0; i < localPoints.Count; i++)
         {
@@ -1246,6 +1276,20 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
                 {
                     needExtraPoint = OnlineMapsUtils.LineIntersection(lastPointX - maxSize, lastPointY, px - maxSize, py, 0, 0, 0, sizeY, out extraX, out extraY);
                 }
+                else if (isEntireWorld)
+                {
+                    if (px < 0)
+                    {
+                        DrawActivePoints(control, ref activePoints, ref vertices, ref normals, ref triangles, ref uv, width);
+                        px += maxSize;
+
+                    }
+                    else if (px > sizeX)
+                    {
+                        DrawActivePoints(control, ref activePoints, ref vertices, ref normals, ref triangles, ref uv, width);
+                        px -= maxSize;
+                    }
+                }
             }
 
             if (!checkMapBoundaries || px >= 0 && py >= 0 && px <= sizeX && py <= sizeY) activePoints.Add(new Vector2(px, py));
@@ -1267,8 +1311,6 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
         }
         if (activePoints.Count > 0) DrawActivePoints(control, ref activePoints, ref vertices, ref normals, ref triangles, ref uv, width);
     }
-
-    
 
     protected bool InitMesh(OnlineMapsTileSetControl control, Color borderColor, Color backgroundColor = default(Color), Texture borderTexture = null, Texture backgroundTexture = null)
     {

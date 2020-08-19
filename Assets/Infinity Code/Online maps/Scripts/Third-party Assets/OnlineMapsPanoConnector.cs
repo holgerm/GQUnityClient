@@ -126,11 +126,15 @@ public class OnlineMapsPanoConnector : MonoBehaviour
     private GameObject closeButtonInstance;
 
 #if UPANO
+    /// <summary>
+    /// Metadata for the panorama displayed
+    /// </summary>
+    public GoogleStreetViewMeta meta;
+
     private SphericalPanoRenderer panoRenderer;
     private GoogleStreetViewRequest currentRequest;
     private double lng, lat;
     private int zoom;
-    public GoogleStreetViewMeta meta;
 
     private bool CheckOverlayColor(double clng, double clat)
     {

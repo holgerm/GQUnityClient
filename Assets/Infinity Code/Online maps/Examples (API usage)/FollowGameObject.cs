@@ -92,7 +92,7 @@ namespace InfinityCode.OnlineMapsExamples
             ty += offset.z;
 
             // Set position of the map center
-            map.SetTilePosition(tx, ty);
+            if (Mathf.Abs(offset.x) > float.Epsilon || Mathf.Abs(offset.z) > float.Epsilon) map.SetTilePosition(tx, ty);
 
             // Update map GameObject position
             map.transform.position = lastPosition - control.center;
