@@ -14,18 +14,18 @@ public class StartScene : MonoBehaviour
 
     private static IEnumerator LoadScene(string sceneName)
     {
-        if (SceneManager.GetSceneByName(sceneName).IsValid())
-        {
+        // if (SceneManager.GetSceneByName(sceneName).IsValid())
+        // {
             var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             while (!asyncLoad.isDone)
             {
                 yield return null;
             }
-        }
-        else
-        {
-            Log.SignalErrorToAuthor($"Scene '{sceneName}' not found. Couldn't load it.");
-        }
+        // }
+        // else
+        // {
+        //     Log.SignalErrorToAuthor($"Scene '{sceneName}' not found. Couldn't load it.");
+        // }
         yield break;
     }
 
