@@ -18,7 +18,6 @@ namespace Code.GQClient.UI.Foyer.header
             RightImage.color = ConfigurationManager.Current.headerButtonFgColor;
         }
 
-        // Start is called before the first frame update
         public void SetInteractable(bool interactable)
         {
             LeftButton.interactable = interactable;
