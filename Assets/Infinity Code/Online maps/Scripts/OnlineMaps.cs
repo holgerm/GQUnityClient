@@ -27,7 +27,7 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     /// <summary>
     /// The current version of Online Maps
     /// </summary>
-    public const string version = "3.7.3.1";
+    public const string version = "3.7.4.1";
 
     /// <summary>
     /// The minimum zoom level
@@ -124,14 +124,14 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
 
     private static OnlineMaps _instance;
 
-#endregion
+    #endregion
 
-#region Public Fields
+    #region Public Fields
 
     /// <summary>
-    /// Allows drawing of map.\n
+    /// Allows drawing of map.<br/>
     /// <strong>
-    /// Important: The interaction with the map, add or remove markers and drawing elements, automatically allowed to redraw the map.\n
+    /// Important: The interaction with the map, add or remove markers and drawing elements, automatically allowed to redraw the map.<br/>
     /// Use lockRedraw, to prohibit the redrawing of the map.
     /// </strong>
     /// </summary>
@@ -144,21 +144,21 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     public int countParentLevels = 5;
 
     /// <summary>
-    /// URL of custom provider.\n
-    /// Support tokens:\n
-    /// {x} - tile x\n
-    /// {y} - tile y\n
-    /// {zoom} - zoom level\n
+    /// URL of custom provider.<br/>
+    /// Support tokens:<br/>
+    /// {x} - tile x<br/>
+    /// {y} - tile y<br/>
+    /// {zoom} - zoom level<br/>
     /// {quad} - uniquely identifies a single tile at a particular level of detail.
     /// </summary>
     public string customProviderURL = "http://localhost/{zoom}/{y}/{x}";
 
     /// <summary>
-    /// URL of custom traffic provider.\n
-    /// Support tokens:\n
-    /// {x} - tile x\n
-    /// {y} - tile y\n
-    /// {zoom} - zoom level\n
+    /// URL of custom traffic provider.<br/>
+    /// Support tokens:<br/>
+    /// {x} - tile x<br/>
+    /// {y} - tile y<br/>
+    /// {zoom} - zoom level<br/>
     /// {quad} - uniquely identifies a single tile at a particular level of detail.
     /// </summary>
     public string customTrafficProviderURL = "http://localhost/{zoom}/{y}/{x}";
@@ -194,11 +194,8 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     public string language = "en";
 
     /// <summary>
-    /// Prohibits drawing of maps.\n
-    /// <strong>
-    /// Important: Do not forget to disable this restriction. \n
-    /// Otherwise, the map will never be redrawn.
-    /// </strong>
+    /// Prohibits drawing of maps.<br/>
+    /// <strong> Important: Do not forget to disable this restriction. Otherwise, the map will never be redrawn.</strong>
     /// </summary>
     public bool lockRedraw = false;
 
@@ -218,9 +215,14 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     public string mapType;
 
     /// <summary>
-    /// URL of the proxy server used for Webplayer platform.
+    /// Server for requests to the Open Street Map Overpass API.
     /// </summary>
-    public string proxyURL = "http://service.infinity-code.com/redirect.php?";
+    public OnlineMapsOSMOverpassServer osmServer = OnlineMapsOSMOverpassServer.main;
+
+    /// <summary>
+    /// URL of the proxy server used for WebGL platform.
+    /// </summary>
+    public string proxyURL = "https://service.infinity-code.com/redirect.php?";
 
     /// <summary>
     /// A flag that indicates whether to redraw the map at startup.
@@ -233,14 +235,12 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     public bool renderInThread = true;
 
     /// <summary>
-    /// Template path in Resources, from where the tiles will be loaded.\n
-    /// This field supports tokens.
+    /// Template path in Resources, from where the tiles will be loaded. This field supports tokens.
     /// </summary>
     public string resourcesPath = "OnlineMapsTiles/{zoom}/{x}/{y}";
 
     /// <summary>
-    /// Template path in Streaming Assets, from where the tiles will be loaded.\n
-    /// This field supports tokens.
+    /// Template path in Streaming Assets, from where the tiles will be loaded. This field supports tokens.
     /// </summary>
     public string streamingAssetsPath = "OnlineMapsTiles/{zoom}/{x}/{y}.png";
 
@@ -1188,6 +1188,8 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
         _traffic = traffic;
         _trafficProviderID = trafficProviderID;
         izoom = (int) _zoom;
+
+        OnlineMapsOSMAPIQuery.InitOSMServer(osmServer);
 
         UpdateCorners();
     }

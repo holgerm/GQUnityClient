@@ -10,8 +10,8 @@ using UnityEngine.Android;
 #endif
 
 /// <summary>
-/// Controls map using GPS.\n
-/// Online Maps Location Service is a wrapper for Unity Location Service.\n
+/// Controls map using GPS.<br/>
+/// Online Maps Location Service is a wrapper for Unity Location Service.<br/>
 /// http://docs.unity3d.com/ScriptReference/LocationService.html
 /// </summary>
 [Serializable]
@@ -62,11 +62,12 @@ public class OnlineMapsLocationService : OnlineMapsLocationServiceGenericBase<On
     /// Starts location service updates. Last location coordinates could be.
     /// </summary>
     /// <param name="desiredAccuracyInMeters">
-    /// Desired service accuracy in meters. \n
-    /// Using higher value like 500 usually does not require to turn GPS chip on and thus saves battery power. \n
-    /// Values like 5-10 could be used for getting best accuracy. Default value is 10 meters.</param>
+    /// Desired service accuracy in meters. <br/>
+    /// Using higher value like 500 usually does not require to turn GPS chip on and thus saves battery power.<br/>
+    /// Values like 5-10 could be used for getting best accuracy. Default value is 10 meters.
+    /// </param>
     /// <param name="updateDistanceInMeters">
-    /// The minimum distance (measured in meters) a device must move laterally before Input.location property is updated. \n
+    /// The minimum distance (measured in meters) a device must move laterally before Input.location property is updated. <br/>
     /// Higher values like 500 imply less overhead.
     /// </param>
     public void StartLocationService(float? desiredAccuracyInMeters = null, float? updateDistanceInMeters = null)

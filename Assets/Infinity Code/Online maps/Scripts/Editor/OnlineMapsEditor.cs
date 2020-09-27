@@ -87,6 +87,7 @@ public class OnlineMapsEditor : Editor
     private GUIContent[] cTrafficProviders;
     private int trafficProviderIndex;
     private SerializedProperty pCustomTrafficProviderURL;
+    private SerializedProperty pOSMServer;
 
     public static GUIStyle warningStyle
     {
@@ -165,6 +166,7 @@ public class OnlineMapsEditor : Editor
 #endif
         pNotInteractUnderGUI = serializedObject.FindProperty("notInteractUnderGUI");
         pStopPlayingWhenScriptsCompile = serializedObject.FindProperty("stopPlayingWhenScriptsCompile");
+        pOSMServer = serializedObject.FindProperty("osmServer");
 
         cWidth = new GUIContent("Width (pixels)");
         cHeight = new GUIContent("Height (pixels)");
@@ -851,6 +853,9 @@ public class OnlineMapsEditor : Editor
 
         OnlineMapsEditorUtils.PropertyField(pNotInteractUnderGUI, "Should Online Maps ignore clicks if an IMGUI or uGUI element is under the cursor?");
         OnlineMapsEditorUtils.PropertyField(pStopPlayingWhenScriptsCompile, "Should Online Maps stop playing when recompiling scripts?");
+        EditorGUI.BeginChangeCheck();
+        OnlineMapsEditorUtils.PropertyField(pOSMServer, new GUIContent("Overpass Server"));
+        if (EditorGUI.EndChangeCheck() && EditorApplication.isPlaying) OnlineMapsOSMAPIQuery.InitOSMServer((OnlineMapsOSMOverpassServer)pOSMServer.enumValueIndex);
 
         EditorGUIUtility.labelWidth = oldWidth;
 

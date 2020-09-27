@@ -6,9 +6,8 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 /// <summary>
-/// 3D marker class.\n
-/// <strong>Can be used only when the source display - Texture or Tileset.</strong>\n
-/// To create a new 3D marker use OnlineMapsControlBase3D.AddMarker3D.
+/// 3D marker class.<br/>
+/// <strong>Can be used only when the source display - Texture or Tileset.</strong>
 /// </summary>
 [Serializable]
 public class OnlineMapsMarker3D : OnlineMapsMarkerBase
@@ -26,7 +25,7 @@ public class OnlineMapsMarker3D : OnlineMapsMarkerBase
     public OnlineMapsAltitudeType altitudeType = OnlineMapsAltitudeType.absolute;
 
     /// <summary>
-    /// Need to check the map boundaries? \n
+    /// Need to check the map boundaries?<br/>
     /// It allows you to make 3D markers, which are active outside the map.
     /// </summary>
     public bool checkMapBoundaries = true;

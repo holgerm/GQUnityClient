@@ -13,8 +13,8 @@ using UnityEngine.Networking;
 #endif
 
 /// <summary>
-/// The wrapper class for WWW.\n
-/// It allows you to control requests.\n
+/// The wrapper class for WWW.<br/>
+/// It allows you to control requests.<br/>
 /// To create is recommended to use OnlineMapsUtils.GetWWW.
 /// </summary>
 public class OnlineMapsWWW: CustomYieldInstruction, IDisposable
@@ -553,7 +553,7 @@ public class OnlineMapsWWW: CustomYieldInstruction, IDisposable
     public enum RequestType
     {
         /// <summary>
-        /// The request will be processed independently.\n
+        /// The request will be processed independently.<br/>
         /// Use OnlineMapsUtils.OnGetWWW to process of request.
         /// </summary>
         direct,

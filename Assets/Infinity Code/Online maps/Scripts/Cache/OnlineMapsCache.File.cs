@@ -53,6 +53,7 @@ public partial class OnlineMapsCache
 
     private FileCacheAtlas fileCacheAtlas;
     private IEnumerator saveFileCacheAtlasCoroutine;
+    private Texture2D tempTexture;
 
     /// <summary>
     /// The current size of the file cache (mb). 
@@ -199,7 +200,13 @@ public partial class OnlineMapsCache
 
     private void LoadTile(OnlineMapsTile tile, byte[] bytes)
     {
-        Texture2D texture = new Texture2D(256, 256, TextureFormat.ARGB32, map.control.mipmapForTiles);
+        Texture2D texture = null;
+        if (!map.control.resultIsTexture || tempTexture == null)
+        {
+            texture = tempTexture = new Texture2D(0, 0, TextureFormat.ARGB32, map.control.mipmapForTiles);
+        }
+        else texture = tempTexture;
+            
         texture.LoadImage(bytes);
         texture.wrapMode = TextureWrapMode.Clamp;
 
@@ -207,7 +214,6 @@ public partial class OnlineMapsCache
         {
             (tile as OnlineMapsRasterTile).ApplyTexture(texture);
             map.buffer.ApplyTile(tile);
-            OnlineMapsUtils.Destroy(texture);
         }
         else
         {

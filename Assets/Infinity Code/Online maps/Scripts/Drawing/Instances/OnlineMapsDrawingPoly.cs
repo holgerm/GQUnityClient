@@ -22,7 +22,7 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
     private float _borderWidth = 1;
 
     /// <summary>
-    /// Background color of the polygon.\n
+    /// Background color of the polygon.<br/>
     /// Note: Not supported in tileset.
     /// </summary>
     public Color backgroundColor
@@ -67,8 +67,8 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
     }
 
     /// <summary>
-    /// IEnumerable of points of the polygon. Geographic coordinates.\n
-    /// The values can be of type: Vector2, float, double.\n
+    /// IEnumerable of points of the polygon. Geographic coordinates.<br/>
+    /// The values can be of type: Vector2, float, double.<br/>
     /// If values float or double, the value should go in pairs(longitude, latitude).
     /// </summary>
     public IEnumerable points
@@ -120,8 +120,8 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
     /// Creates a new polygon.
     /// </summary>
     /// <param name="points">
-    /// IEnumerable of points of the polygon. Geographic coordinates.\n
-    /// The values can be of type: Vector2, float, double.\n
+    /// IEnumerable of points of the polygon. Geographic coordinates.<br/>
+    /// The values can be of type: Vector2, float, double.<br/>
     /// If values float or double, the value should go in pairs(longitude, latitude).
     /// </param>
     public OnlineMapsDrawingPoly(IEnumerable points):this()
@@ -134,8 +134,8 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
     /// Creates a new polygon.
     /// </summary>
     /// <param name="points">
-    /// IEnumerable of points of the polygon. Geographic coordinates.\n
-    /// The values can be of type: Vector2, float, double.\n
+    /// IEnumerable of points of the polygon. Geographic coordinates.<br/>
+    /// The values can be of type: Vector2, float, double.<br/>
     /// If values float or double, the value should go in pairs(longitude, latitude).
     /// </param>
     /// <param name="borderColor">Border color of the polygon.</param>
@@ -149,8 +149,8 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
     /// Creates a new polygon.
     /// </summary>
     /// <param name="points">
-    /// IEnumerable of points of the polygon. Geographic coordinates.\n
-    /// The values can be of type: Vector2, float, double.\n
+    /// IEnumerable of points of the polygon. Geographic coordinates.<br/>
+    /// The values can be of type: Vector2, float, double.<br/>
     /// If values float or double, the value should go in pairs(longitude, latitude).
     /// </param>
     /// <param name="borderColor">Border color of the polygon.</param>
@@ -165,14 +165,14 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
     /// Creates a new polygon.
     /// </summary>
     /// <param name="points">
-    /// IEnumerable of points of the polygon. Geographic coordinates.\n
-    /// The values can be of type: Vector2, float, double.\n
+    /// IEnumerable of points of the polygon. Geographic coordinates.<br/>
+    /// The values can be of type: Vector2, float, double.<br/>
     /// If values float or double, the value should go in pairs(longitude, latitude).
     /// </param>
     /// <param name="borderColor">Border color of the polygon.</param>
     /// <param name="borderWidth">Border width of the polygon.</param>
     /// <param name="backgroundColor">
-    /// Background color of the polygon.\n
+    /// Background color of the polygon.<br/>
     /// Note: Not supported in tileset.
     /// </param>
     public OnlineMapsDrawingPoly(IEnumerable points, Color borderColor, float borderWidth, Color backgroundColor)

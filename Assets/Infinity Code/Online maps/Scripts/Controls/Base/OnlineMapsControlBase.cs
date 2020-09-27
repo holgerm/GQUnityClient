@@ -122,7 +122,7 @@ public abstract class OnlineMapsControlBase : MonoBehaviour, IOnlineMapsSavableC
     public Action OnUpdateBefore;
 
     /// <summary>
-    /// Event validating that current zoom event is allowed.\n
+    /// Event validating that current zoom event is allowed.<br/>
     /// True - zoom is allowed, false - forbidden.
     /// </summary>
     public Func<OnlineMapsZoomEvent, float, bool> OnValidateZoom;
@@ -132,7 +132,7 @@ public abstract class OnlineMapsControlBase : MonoBehaviour, IOnlineMapsSavableC
     #region Public Fields
 
     /// <summary>
-    /// Texture, which will draw the map. \n
+    /// Texture, which will draw the map.<br/>
     /// To change the texture use OnlineMapsControlBase.SetTexture.
     /// </summary>
     [HideInInspector]
@@ -609,7 +609,7 @@ public abstract class OnlineMapsControlBase : MonoBehaviour, IOnlineMapsSavableC
         GameObject go = hits[0].gameObject;
         if (go == gameObject) return false;
 
-        return go.GetComponent<OnlineMapsMarkerInstanceBase>() == null;
+        return go.GetComponent<OnlineMapsMarkerInstanceBase>() == null && go.GetComponent<OnlineMapsBuildingBase>() == null;
     }
 
     protected virtual void LoadSettings(OnlineMapsJSONObject json)

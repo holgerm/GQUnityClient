@@ -53,8 +53,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
     public Action<OnlineMapsDrawingElement> OnRelease;
 
     /// <summary>
-    /// Need to check the map boundaries? \n
-    /// It allows you to make drawing element, which are active outside the map.\n
+    /// Need to check the map boundaries? <br/>
+    /// It allows you to make drawing element, which are active outside the map.<br/>
     /// </summary>
     public bool checkMapBoundaries = true;
 
@@ -1356,7 +1356,7 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
     }
 
     /// <summary>
-    /// It marks the elements changed.\n
+    /// It marks the elements changed.<br/>
     /// It is used for the Drawing API as an overlay.
     /// </summary>
     public static void MarkChanged()

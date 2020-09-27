@@ -285,12 +285,22 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
 
         if (tilesetMesh == null)
         {
-            meshFilter = gameObject.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            meshFilter = gameObject.GetComponent<MeshFilter>();
+            if (meshFilter == null) meshFilter = gameObject.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            if (meshRenderer == null) meshRenderer = gameObject.AddComponent<MeshRenderer>();
             meshRenderer.hideFlags = HideFlags.HideInInspector;
 
-            if (colliderType == OnlineMapsColliderType.fullMesh || colliderType == OnlineMapsColliderType.simpleMesh) meshCollider = gameObject.AddComponent<MeshCollider>();
-            else if (colliderType == OnlineMapsColliderType.box || colliderType == OnlineMapsColliderType.flatBox) boxCollider = gameObject.AddComponent<BoxCollider>();
+            if (colliderType == OnlineMapsColliderType.fullMesh || colliderType == OnlineMapsColliderType.simpleMesh)
+            {
+                meshCollider = gameObject.GetComponent<MeshCollider>();
+                if (meshCollider == null) meshCollider = gameObject.AddComponent<MeshCollider>();
+            }
+            else if (colliderType == OnlineMapsColliderType.box || colliderType == OnlineMapsColliderType.flatBox)
+            {
+                boxCollider = gameObject.GetComponent<BoxCollider>();
+                if (boxCollider == null) boxCollider = gameObject.AddComponent<BoxCollider>();
+            }
 
             tilesetMesh = new Mesh {name = "Tileset"};
         }
@@ -1001,9 +1011,33 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
             }
             if (hasOverlayBack)
             {
-                material.SetTexture("_OverlayBackTex", currentTile.overlayBackTexture);
-                material.SetTextureOffset("_OverlayBackTex", material.mainTextureOffset);
-                material.SetTextureScale("_OverlayBackTex", material.mainTextureScale);
+                Vector2 overlayTextureOffset = material.mainTextureOffset;
+                Vector2 overlayTextureScale = material.mainTextureScale;
+                Texture2D overlayTexture = (currentTile as OnlineMapsRasterTile).overlayBackTexture;
+                if (overlayTexture == null)
+                {
+                    OnlineMapsRasterTile t = currentTile.parent as OnlineMapsRasterTile;
+
+                    while (t != null)
+                    {
+                        if (t.overlayBackTexture != null)
+                        {
+                            int s = 1 << (zoom - t.zoom);
+                            float scale2 = 1f / s;
+                            overlayTextureOffset.x = bx % s * scale2;
+                            overlayTextureOffset.y = (s - by % s - 1) * scale2;
+                            overlayTextureScale = new Vector2(scale2, scale2);
+
+                            overlayTexture = t.overlayBackTexture;
+                            break;
+                        }
+                        t = t.parent as OnlineMapsRasterTile;
+                    }
+                }
+
+                material.SetTexture("_OverlayBackTex", overlayTexture);
+                material.SetTextureOffset("_OverlayBackTex", overlayTextureOffset);
+                material.SetTextureScale("_OverlayBackTex", overlayTextureScale);
             }
             if (hasOverlayBackAlpha) material.SetFloat("_OverlayBackAlpha", currentTile.overlayBackAlpha);
             if (hasOverlayFront)
@@ -1031,9 +1065,33 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
                     }
                 }
 
-                material.SetTexture("_OverlayFrontTex", currentTile.overlayFrontTexture);
-                material.SetTextureOffset("_OverlayFrontTex", material.mainTextureOffset);
-                material.SetTextureScale("_OverlayFrontTex", material.mainTextureScale);
+                Vector2 overlayTextureOffset = material.mainTextureOffset;
+                Vector2 overlayTextureScale = material.mainTextureScale;
+                Texture2D overlayTexture = (currentTile as OnlineMapsRasterTile).overlayFrontTexture;
+                if (overlayTexture == null)
+                {
+                    OnlineMapsRasterTile t = currentTile.parent as OnlineMapsRasterTile;
+
+                    while (t != null)
+                    {
+                        if (t.overlayFrontTexture != null)
+                        {
+                            int s = 1 << (zoom - t.zoom);
+                            float scale2 = 1f / s;
+                            overlayTextureOffset.x = bx % s * scale2;
+                            overlayTextureOffset.y = (s - by % s - 1) * scale2;
+                            overlayTextureScale = new Vector2(scale2, scale2);
+
+                            overlayTexture = t.overlayFrontTexture;
+                            break;
+                        }
+                        t = t.parent as OnlineMapsRasterTile;
+                    }
+                }
+
+                material.SetTexture("_OverlayFrontTex", overlayTexture);
+                material.SetTextureOffset("_OverlayFrontTex", overlayTextureOffset);
+                material.SetTextureScale("_OverlayFrontTex", overlayTextureScale);
             }
             if (hasOverlayFrontAlpha) material.SetFloat("_OverlayFrontAlpha", currentTile.overlayFrontAlpha);
             if (OnDrawTile != null) OnDrawTile(currentTile, material);

@@ -151,10 +151,10 @@ public class OnlineMapsProvider
     }
 
     /// <summary>
-    /// Gets an instance of a map type by ID.\n
-    /// ID - providerID or providerID(dot)typeID.\n
-    /// If the typeID is not specified returns the first map type of provider.
-    /// If the provider ID is not found, returns the first map type of the first provider.
+    /// Gets an instance of a map type by ID.<br/>
+    /// ID - providerID or providerID(dot)typeID.<br/>
+    /// If the typeID is not specified returns the first map type of provider.<br/>
+    /// If the provider ID is not found, returns the first map type of the first provider.<br/>
     /// Example: nokia or google.satellite
     /// </summary>
     /// <param name="mapTypeID">ID of map type</param>

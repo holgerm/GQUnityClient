@@ -6,8 +6,8 @@ using System.Text;
 using UnityEngine;
 
 /// <summary>
-/// This class is used to search for a route by coordinates using Open Route Service.\n
-/// You can create a new instance using OnlineMapsOpenRouteService.Find.\n
+/// This class is used to search for a route by coordinates using Open Route Service.<br/>
+/// You can create a new instance using OnlineMapsOpenRouteService.Find.<br/>
 /// http://wiki.openstreetmap.org/wiki/OpenRouteService
 /// </summary>
 public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
