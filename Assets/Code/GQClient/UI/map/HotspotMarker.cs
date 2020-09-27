@@ -9,7 +9,7 @@ namespace Code.GQClient.UI.map
         public const string SERVER_DEFAULT_MARKER_URL = "https://quest-mill.intertech.de/assets/img/erzbistummarker.png";
         public const string QUEST_SPECIFIC_MARKER_MDKEY = "gq.questspecific.marker";
 
-        public Texture DefaultTexture;
+        public Texture2D DefaultTexture;
 
 		public void Awake ()
 		{
@@ -18,19 +18,24 @@ namespace Code.GQClient.UI.map
 
 		public Hotspot Hotspot { get; set; }
 
-		public override Texture Texture {
+		public override Texture2D Texture {
 			get {
 				return DefaultTexture;
 			}
 		}
 
-		public override void OnTouch ()
+		public override void OnTouchOMM ()
 		{
             if (Hotspot.Active)
             {
                 Hotspot.Tap();
             }
 		}
+		public override void OnTouchOMM(OnlineMapsMarkerBase marker)
+		{
+			OnTouchOMM();
+		}
+
 
 	}
 }

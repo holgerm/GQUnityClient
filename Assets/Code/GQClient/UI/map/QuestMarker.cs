@@ -18,14 +18,20 @@ namespace Code.GQClient.UI.map
 	{
 
 		public QuestInfo Data { get; set; }
+		
 
-		public override void OnTouch ()
+		public override void OnTouchOMM ()
 		{
 #if DEBUG_LOG
             Debug.Break();
 #endif
 
             Data.Play();
+		}
+
+		public override void OnTouchOMM(OnlineMapsMarkerBase marker)
+		{
+			OnTouchOMM();
 		}
 
 		protected void Play ()
@@ -55,7 +61,7 @@ namespace Code.GQClient.UI.map
 			t.Start ();
 		}
 
-		public override Texture Texture {
+		public override Texture2D Texture {
 			get {
 				var categoryId = Data.CurrentCategoryId;
 				var textureId = "marker." + categoryId;

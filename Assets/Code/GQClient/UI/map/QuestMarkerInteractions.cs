@@ -67,13 +67,16 @@ namespace Code.GQClient.UI.map
 							// MOBILE PLATFORMS:
 							if (Input.touchCount == 1 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch (0).fingerId) 
 								&& !EventSystem.current.IsPointerOverGameObject()) {
-								hit.collider.GetComponentInParent<Marker> ().OnTouch ();
+								hit.collider.GetComponentInParent<Marker> ().OnTouchOMM ();
 							}
 						}
 						else {
 							// NON_MOBILE PLATFORMS:
 							if (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject ()) {
-								hit.collider.GetComponentInParent<Marker> ().OnTouch ();
+								Collider coll = hit.collider;
+								Marker mark = coll.GetComponentInParent<Marker> ();
+								if (mark != null)
+									mark.OnTouchOMM ();
 							}
 						}
 					}				

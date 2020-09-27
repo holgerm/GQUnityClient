@@ -114,9 +114,12 @@ namespace Code.GQClient.UI.map
 			calculateMarkerDetails (newMarker.Texture, markerGo);
 
 			Markers.Add (info.Id, newMarker);
+			var ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
+			ommarker.OnClick += newMarker.OnTouchOMM;
+			
 			info.OnChanged += newMarker.UpdateView;
 		}
-
+		
 		public Texture markerSymbolTexture;
 
 		protected override void locateAtStart ()

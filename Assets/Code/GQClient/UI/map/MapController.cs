@@ -24,6 +24,8 @@ namespace Code.GQClient.UI.map
 		private List<LayerBehaviour> layers;
 		public MapBehaviour map;
 
+		public OnlineMapsMarkerManager markerManager;
+		
 		private static Dictionary<int, Marker> markers;
 
 		/// <summary>

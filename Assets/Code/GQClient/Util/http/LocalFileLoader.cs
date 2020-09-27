@@ -52,7 +52,6 @@ namespace Code.GQClient.Util.http
 
 		protected override IEnumerator DoTheWork ()
 		{
-			Debug.Log($"LocalFIleLoader loading from: {filePath}");
 			var url = Files.AbsoluteLocalPath (filePath);
 			
 

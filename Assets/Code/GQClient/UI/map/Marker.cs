@@ -48,7 +48,7 @@ namespace Code.GQClient.UI.map
 				gameObject.SetActive (show);
 		}
 
-		public abstract Texture Texture { get; }
+		public abstract Texture2D Texture { get; }
 
 		/// <summary>
 		/// Deletes the prefab from the hierarchy.
@@ -70,7 +70,10 @@ namespace Code.GQClient.UI.map
 		}
 
 		#region Interaction
-		public abstract void OnTouch ();
+		public abstract void OnTouchOMM ();
+
+		public abstract void OnTouchOMM(OnlineMapsMarkerBase onlineMapsMarker);
+
 		#endregion
 
 
