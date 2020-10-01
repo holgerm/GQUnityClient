@@ -4,17 +4,19 @@ Wir möchten Ihnen nachfolgend erläutern, welche Daten wir wann und zu welchem 
 
 1.	Erhebung, Verarbeitung und Nutzung personenbezogener Daten
 Personenbezogene Daten sind Einzelangaben über persönliche und sachliche Verhältnisse einer bestimmten oder bestimmbaren Person also Daten die Rückschlüsse über eine Person zulassen.
-Mit der Installation von Tap-Erlebnis erheben wir folgende Daten:
+Mit der Installation von "App ins Dorf!" erheben wir folgende Daten:
 a.	Registrierung und Nutzung
 Die Nutzung dieser App ist ohne Registrierung möglich.
 b.	Standortdaten
 Wir benötigen den Zugriff auf den Standort Ihres Gerätes. Ihre GPS-Daten werden erhoben, gespeichert und an den Anbieter übermittelt. Die GPS-Daten sind notwendig, damit der Nutzer über Inhalte in seiner näheren Umgebung informiert wird. Daten zu Ihrem Standort werden nur für diese Bearbeitung Ihrer Anfrage genutzt. Ihre Standortdaten werden nach Beendigung Ihrer Anfrage nicht gespeichert und nicht weitergegeben.
 c.	Aktives Kontaktieren
 Der Nutzer gestattet, dass der Betreiber die App aktiv kontaktiert, sofern diese online genutzt wird, um über Aktualisierungen der Datenschutzerklärung zu informieren.
+d.	Statistische Daten
+Der Nutzer gestattet, dass die App an den Betreiber statistische Daten anonym übermittelt, die ausschließlich zu internen Auswertungen hinsichtlich qualitativer Verbesserungen des Angebots genutzt werden.
 
 2. Datensicherheit
 Wir sichern unsere Systeme durch technische und organisatorische Maßnahmen gegen Verlust, Zerstörung, Zugriff, Veränderung oder Verbreitung Ihrer Daten durch unbefugte Personen. Trotz regelmäßiger Kontrollen ist ein vollständiger Schutz gegen alle Gefahren jedoch nicht möglich.
-GeoQuest verwendet an manchen Stellen zur Verschlüsselung den Industriestandard SSL (Secure Sockets Layer). Dadurch wird die Vertraulichkeit Ihrer persönlichen Angaben über das Internet gewährleistet.
+„App ins Dorf“ verwendet an manchen Stellen zur Verschlüsselung den Industriestandard SSL (Secure Sockets Layer). Dadurch wird die Vertraulichkeit Ihrer persönlichen Angaben über das Internet gewährleistet.
 
 3. Bekanntmachung von Veränderungen
 Gesetzesänderungen oder Änderungen unserer unternehmensinternen Prozesse können eine Anpassung dieser Datenschutzerklärung erforderlich machen. Für den Fall einer solchen Änderung wird die App, sofern Sie online gehen, Sie informieren.

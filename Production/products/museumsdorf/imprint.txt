@@ -1,40 +1,37 @@
-<b>Titel</b>
-GeoQuest
+﻿<b>Titel</b>
+App ins Dorf!
 
 <b>Beschreibung</b>
-Anbieterkennzeichnung der QuestMill GmbH
-Clostermannstr. 1
-51065 Köln 
+Stiftung Museumsdorf Cloppenburg - Niedersächsisches Freilichtmuseum
+Bether Str. 6
+49661 Cloppenburg
 
 <b>Einrichtung / Institution</b>
-QuestMill GmbH
+Museumsdorf Cloppenburg - Niedersächsisches Freilichtmuseum
 
 <b>Rechtsform</b>
-Gesellschaft mit beschränkter Haftung (GmbH)
+Stiftung öffentlichen Rechts
 
 <b>Vertreten durch</b>
-Holger Mügge
+Dr. Julia Schulte to Bühne
 
 <b>Straße</b>
-Clostermannstr. 1
+Bether Str. 6
 
 <b>Ort</b>
-51065 Köln
+49661 Cloppenburg
 
 <b>Telefon</b>
-0049 (0)221 922 4343
+0049 (0)4471 9484 0
 
 <b>Land</b>
 Deutschland
 
 <b>Domain</b>
-quest-mill.com
-
-<b>Umsatzsteuer-Identifikations-Nr.</b>
-DE298593210
+museumsdorf.de
 
 <b>Inhaltlich verantwortlich (v.i.S.d.P.)</b>
-Holger Mügge
+Lukas Aufgebauer
 
 <b>Technisch verantwortlich</b>
 QuestMill GmbH
