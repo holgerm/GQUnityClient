@@ -1140,7 +1140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1244,9 +1244,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2290.9092
+  m_MinHeight: 483.33334
   m_PreferredWidth: -1
-  m_PreferredHeight: 2290.9092
+  m_PreferredHeight: 483.33334
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1352,9 +1352,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 229.09091
+  m_MinHeight: 48.333332
   m_PreferredWidth: -1
-  m_PreferredHeight: 229.09091
+  m_PreferredHeight: 48.333332
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
