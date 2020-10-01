@@ -30,6 +30,8 @@ namespace Code.GQClient.Model.pages
 
         public string EndButtonTextWhenClosed { get; set; }
         public string ForwardButtonTextBeforeFinished { get; set; }
+        
+        public bool FullscreenLandscape { get; internal set; }
 
         #endregion
 
@@ -78,6 +80,8 @@ namespace Code.GQClient.Model.pages
                 Debug.Log($"AllowLeaveOnHtmlDoesNotContain: {s}");
             }
             LeaveOnAllow = GQML.GetOptionalBoolAttribute(GQML.PAGE_WEBPAGE_LEAVE_ON_ALLOW, reader);
+
+            FullscreenLandscape = GQML.GetRequiredBoolAttribute(GQML.PAGE_WEBPAGE_FULLSCREEN_LANDSCAPE, reader);
         }
 
         #endregion

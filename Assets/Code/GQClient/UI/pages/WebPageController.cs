@@ -28,7 +28,7 @@ namespace Code.GQClient.UI.pages
         {
             get
             {
-                return true;
+                return myPage.FullscreenLandscape == false;
             }
         }
 
@@ -54,6 +54,12 @@ namespace Code.GQClient.UI.pages
                 forwardButtonText.text = myPage.EndButtonText.Decode4TMP(false);
                 forwardButton.interactable = true;
             }
+
+            if (myPage.FullscreenLandscape)
+            {
+                Screen.orientation = ScreenOrientation.Landscape;
+                HeaderButtonPanel.gameObject.SetActive(false);
+            }
             
             // show the content:
             HeaderButtonPanel.SetInteractable(false); // disable top buttons
@@ -65,7 +71,9 @@ namespace Code.GQClient.UI.pages
         /// </summary>
         public override void OnForward()
         {
+            HeaderButtonPanel.gameObject.SetActive(true);
             HeaderButtonPanel.SetInteractable(true);
+            Screen.orientation = ScreenOrientation.Portrait;
             base.OnForward();
         }
 

@@ -125,6 +125,7 @@ namespace Code.GQClient.Model.gqml
 		public const string PAGE_WEBPAGE_ALLOW_LEAVE_ON_HTML_CONTAINS = "allowleaveonhtmlcontains";
 		public const string PAGE_WEBPAGE_ALLOW_LEAVE_ON_HTML_DOESNOTCONTAIN = "allowleaveonhtmldoesnotcontain";
 		public const string PAGE_WEBPAGE_LEAVE_ON_ALLOW = "leaveOnAllow";
+		public const string PAGE_WEBPAGE_FULLSCREEN_LANDSCAPE= "fullscreensLandscape";
 
 		// QR TAG SCANNER PAGE:
 		public const string PAGE_TYPE_QRTAGSCANNER = "TagScanner";
