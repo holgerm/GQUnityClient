@@ -71,16 +71,17 @@ namespace Code.GQClient.Migration
 
                 _currentAppVersion = buildtimeTextAsset.text;
                 // just use the version number, e.g. "2.20.05.05 (05.05.2020 09:36:27)" ==> "2.20.05.05"
-                _currentAppVersion = _currentAppVersion.Substring(
+                var curAppVersionWithoutTime = _currentAppVersion.Substring(
                     0, _currentAppVersion.IndexOf(" (", StringComparison.Ordinal));
 
-                if (string.CompareOrdinal(OldAppVersion, _currentAppVersion) < 0)
+                if (string.CompareOrdinal(OldAppVersion, curAppVersionWithoutTime) < 0)
                 {
                     ApplyMigrations();
                 }
 
-                PlayerPrefs.SetString(Definitions.GQ_PLAYERPREF_BUILDTIME, _currentAppVersion);
+                PlayerPrefs.SetString(Definitions.GQ_PLAYERPREF_BUILDTIME, curAppVersionWithoutTime);
                 PlayerPrefs.Save();
+                
                 return _currentAppVersion;
             }
         }
