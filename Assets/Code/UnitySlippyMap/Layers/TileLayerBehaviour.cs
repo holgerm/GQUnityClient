@@ -517,6 +517,7 @@ namespace Code.UnitySlippyMap.Layers
             }
         }
 
+        /*
         public void Update()
         {
             for (int i = 0; i < 5; i++)
@@ -529,6 +530,7 @@ namespace Code.UnitySlippyMap.Layers
                 PrepareAndRequestTile(DequeueTileForPreparation());
             }
         }
+        */
 
         #endregion
     }
