@@ -18,8 +18,8 @@
   "nameForQuestSg": "Tour",
   "nameForQuestsPl": "Touren",
   "questInfoViews": [
-    "List",
-    "Map"
+    "Map",
+    "List"
   ],
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
