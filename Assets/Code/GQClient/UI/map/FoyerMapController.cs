@@ -3,7 +3,6 @@ using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
 using Code.QM.Util;
-using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
 namespace Code.GQClient.UI.map
@@ -48,7 +47,8 @@ namespace Code.GQClient.UI.map
 					);
 					break;
 				}
-				m.UpdateMarker();
+				Debug.Log("TODO IMPLEMENTATION MISSING");
+				// m.UpdateMarker();
 				m.Show ();
 				break;
 			case ChangeType.RemovedInfo:
@@ -93,31 +93,32 @@ namespace Code.GQClient.UI.map
 			if (info.MarkerHotspot.Equals (HotspotInfo.NULL)) {
 				return;
 			}
-
-			var markerGo = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
-
-			var newMarker = map.CreateMarker<QuestMarker> (
-				                        info.Name, 
-				                        new[]
-				                        {
-					                        info.MarkerHotspot.Longitude, 
-					                        info.MarkerHotspot.Latitude
-				                        }, 
-				                        markerGo
-			                        );
-			if (newMarker == null)
-				return;
 			
-			newMarker.Data = info;
-			markerGo.name = "Marker tile (" + info.Name + ")";
+			// var markerGo = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
-			calculateMarkerDetails (newMarker.Texture, markerGo);
+			// var newMarker = map.CreateMarker<QuestMarker> (
+			// 	                        info.Name, 
+			// 	                        new[]
+			// 	                        {
+			// 		                        info.MarkerHotspot.Longitude, 
+			// 		                        info.MarkerHotspot.Latitude
+			// 	                        }, 
+			// 	                        markerGo
+			//                         );
+			var newMarker = new QuestMarker(info);
+			// if (newMarker == null)
+			// 	return;
+			//
+			// newMarker.Data = info;
+			// markerGo.name = "Marker tile (" + info.Name + ")";
+			//
+			// calculateMarkerDetails (newMarker.Texture, markerGo);
 
-			Markers.Add (info.Id, newMarker);
+			// Markers.Add (info.Id, newMarker);
 			var ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
 			ommarker.OnClick += newMarker.OnTouchOMM;
 			
-			info.OnChanged += newMarker.UpdateView;
+			// info.OnChanged += newMarker.UpdateView;
 		}
 		
 		public Texture markerSymbolTexture;
@@ -143,10 +144,11 @@ namespace Code.GQClient.UI.map
 					LocateAtFixedConfiguredPosition ();
 				}
 				else {
-					map.CenterWGS84 = new[] {
-						sumLong / counter,
-						sumLat / counter
-					};
+					Debug.Log("TODO IMPLEMENTATION MISSING");
+					// map.CenterWGS84 = new[] {
+					// 	sumLong / counter,
+					// 	sumLat / counter
+					// };
 				}
 				break;
 			case MapStartPositionType.FixedPosition:
@@ -155,7 +157,8 @@ namespace Code.GQClient.UI.map
 			case MapStartPositionType.PlayerPosition:
 				if (Device.location.isEnabledByUser &&
 					Device.location.status != LocationServiceStatus.Running) {
-					map.CenterOnLocation ();
+					Debug.Log("TODO IMPLEMENTATION MISSING");
+					// map.CenterOnLocation ();
 				} else {
 					LocateAtFixedConfiguredPosition();
 				}
@@ -164,10 +167,11 @@ namespace Code.GQClient.UI.map
 		}
 
 		private void LocateAtFixedConfiguredPosition() {
-			map.CenterWGS84 = new[] {
-				ConfigurationManager.Current.mapStartAtLongitude,
-				ConfigurationManager.Current.mapStartAtLatitude
-			};
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// map.CenterWGS84 = new[] {
+			// 	ConfigurationManager.Current.mapStartAtLongitude,
+			// 	ConfigurationManager.Current.mapStartAtLatitude
+			// };
 		}
 
 
