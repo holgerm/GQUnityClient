@@ -173,6 +173,7 @@ MonoBehaviour:
   needRedraw: 1
   notInteractUnderGUI: 1
   mapType: mapbox classic.map
+  osmServer: 0
   proxyURL: http://service.infinity-code.com/redirect.php?
   redrawOnPlay: 1
   renderInThread: 0
