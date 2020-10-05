@@ -9,8 +9,6 @@ using Code.GQClient.FileIO;
 using GQClient.Model;
 using Code.GQClient.Model.pages;
 using Newtonsoft.Json;
-using ProjNet.CoordinateSystems;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Model.mgmt.quests

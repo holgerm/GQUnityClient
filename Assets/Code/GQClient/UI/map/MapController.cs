@@ -7,12 +7,7 @@ using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
-using Code.GQClient.Util.input;
 using Code.QM.Util;
-using Code.UnitySlippyMap.Helpers;
-using Code.UnitySlippyMap.Layers;
-using Code.UnitySlippyMap.Map;
-using Code.UnitySlippyMap.Markers;
 using GQClient.Model;
 using UnityEngine;
 
@@ -21,9 +16,6 @@ namespace Code.GQClient.UI.map
 
     public abstract class MapController : MonoBehaviour
 	{
-		private List<LayerBehaviour> layers;
-		public MapBehaviour map;
-
 		public OnlineMapsMarkerManager markerManager;
 		
 		private static Dictionary<int, Marker> markers;
@@ -51,23 +43,23 @@ namespace Code.GQClient.UI.map
 		}
 
 
-		static protected void calculateMarkerDetails (Texture texture, GameObject markerGO)
-		{
-			// Get the category name for the given info regarding the current filter selection ...
-			Renderer markerRenderer = markerGO.GetComponent<Renderer> ();
-			markerRenderer.material.renderQueue = 4001;
-			markerRenderer.material.mainTexture = texture;
-			// scale the marker so that it fits inside the surrouding tile holder which is a square:
-			float markerWidth = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.width / (float)texture.height));
-			float markerHeight = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.height / (float)texture.width));
-			markerGO.transform.localScale = 
-				new Vector3 (markerWidth, 1.0f, markerHeight) * (FoyerMapScreenLayout.MarkerHeightUnits * MARKER_SCALE_FACTOR) / 
-				ConfigurationManager.Current.mapScale;
-			markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
-			markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
-			BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
-			markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
-		}
+		// static protected void calculateMarkerDetails (Texture texture, GameObject markerGO)
+		// {
+		// 	// Get the category name for the given info regarding the current filter selection ...
+		// 	Renderer markerRenderer = markerGO.GetComponent<Renderer> ();
+		// 	markerRenderer.material.renderQueue = 4001;
+		// 	markerRenderer.material.mainTexture = texture;
+		// 	// scale the marker so that it fits inside the surrouding tile holder which is a square:
+		// 	float markerWidth = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.width / (float)texture.height));
+		// 	float markerHeight = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.height / (float)texture.width));
+		// 	markerGO.transform.localScale = 
+		// 		new Vector3 (markerWidth, 1.0f, markerHeight) * (FoyerMapScreenLayout.MarkerHeightUnits * MARKER_SCALE_FACTOR) / 
+		// 		ConfigurationManager.Current.mapScale;
+		// 	markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
+		// 	markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
+		// 	BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
+		// 	markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
+		// }
 
 		private static bool _ignoreInteraction;
 
@@ -123,7 +115,8 @@ namespace Code.GQClient.UI.map
 		public void Center ()
 		{
 			// center the map so it is centered to the current users position: TODO
-			map.CenterOnLocation ();
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			//map.CenterOnLocation ();
 
 			// let the center button show the centering button icon now
 
@@ -135,116 +128,53 @@ namespace Code.GQClient.UI.map
 			Center ();
 		}
 
-
-		public void ZoomInButtonPressed ()
-		{
-			map.CurrentZoom = Math.Min (map.CurrentZoom + ConfigurationManager.Current.mapDeltaZoom, map.MaxZoom);
-			map.Zoom (0f);
-		}
-
-		public void ZoomOutButtonPressed ()
-		{
-            map.CurrentZoom = Math.Max (map.CurrentZoom - ConfigurationManager.Current.mapDeltaZoom, map.MinZoom);
-            map.Zoom (0f);
-		}
-
 		internal void UpdateZoomButtons ()
 		{
 			// If further zooming IN is not possible disable ZoomInButton: 
-			zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
 
 			// If further zooming OUT is not possible disable ZoomOutButton: 
-			zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
 		}
-
-		private LayerBehaviour MapLayer {
-			get {
-				LayerBehaviour mapLayer;
-
-				switch (ConfigurationManager.Current.mapProvider) {
-				case MapProvider.OpenStreetMap:
-					mapLayer = OsmMapLayer;
-					break;
-				case MapProvider.MapBox:
-					mapLayer = MapBoxLayer;
-					break;
-				default:
-					Log.SignalErrorToDeveloper (
-						"Unknown map provider defined in configuration: {0}. We use OpenStreetMap instead.", 
-						ConfigurationManager.Current.mapProvider
-					);
-					mapLayer = OsmMapLayer;
-					break;
-				}
-
-				return mapLayer;
-			}
-		}
-
-		private OSMTileLayer _osmMapLayer;
-
-		private LayerBehaviour OsmMapLayer {
-			get {
-				if (_osmMapLayer == null) {
-					_osmMapLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
-					_osmMapLayer.BaseURL = ConfigurationManager.Current.mapBaseUrl + "/";
-				}
-				return _osmMapLayer;
-			}
-		}
-
-		private OSMTileLayer _mapBoxLayer;
-
-		private LayerBehaviour MapBoxLayer {
-			get {
-				if (_mapBoxLayer == null) {
-					_mapBoxLayer = map.CreateLayer<OSMTileLayer> (ConfigurationManager.Current.mapProvider.ToString ());
-					_mapBoxLayer.BaseURL = "https://api.tiles.mapbox.com/v4/" + ConfigurationManager.Current.mapID + "/";
-					_mapBoxLayer.TileImageExtension = "@2x.png?access_token=" + ConfigurationManager.Current.mapKey;
-				}
-				return _mapBoxLayer;
-			}
-		}
-
+		
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
 
 		protected virtual void Start ()
 		{
-#if DEBUG_LOG
-			WATCH w = new WATCH("zoom", true);
-#endif
-			// create the map singleton
-			map = MapBehaviour.Instance;
-			map.CurrentCamera = Camera.main;
-			map.CurrentZoom = 15.0f; // TODO remove in case we are within a quest
-			map.mapCtrl = this;
-
-			Frame ();
-			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;
-			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();
-			zoomOutButton = MapButtonPanel.transform.Find ("ZoomOutButton").GetComponent<OverlayButtonLayoutConfig> ();
-
-			LocationSensor.Instance.OnLocationUpdate += map.UpdatePosition;
-#if DEBUG_LOG
-            Debug.Log("#### Location Update Listener added");
-#endif
-            map.InputsEnabled = true;
-
-			locateAtStart ();
-
-			layers = new List<LayerBehaviour> ();
-			layers.Add (MapLayer);
-
-			// create the location marker
-			GameObject go = TileBehaviour.CreateTileTemplate ().gameObject;
-			go.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
-			go.GetComponent<Renderer> ().material.renderQueue = 4002;
-			go.transform.localScale /= (ConfigurationManager.Current.mapScale * 4f) ; 
-
-			GameObject markerGO = Instantiate (go) as GameObject;
-			map.SetLocationMarker<LocationMarkerBehaviour> (markerGO);
-			DestroyImmediate (go);
+// 			// create the map singleton
+// 			map = MapBehaviour.Instance;
+// 			map.CurrentCamera = Camera.main;
+// 			map.CurrentZoom = 15.0f; // TODO remove in case we are within a quest
+// 			map.mapCtrl = this;
+//
+// 			Frame ();
+// 			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;
+// 			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();
+// 			zoomOutButton = MapButtonPanel.transform.Find ("ZoomOutButton").GetComponent<OverlayButtonLayoutConfig> ();
+//
+// 			LocationSensor.Instance.OnLocationUpdate += map.UpdatePosition;
+// #if DEBUG_LOG
+//             Debug.Log("#### Location Update Listener added");
+// #endif
+//             map.InputsEnabled = true;
+//
+// 			locateAtStart ();
+//
+// 			layers = new List<LayerBehaviour> ();
+// 			layers.Add (MapLayer);
+//
+// 			// create the location marker
+// 			GameObject go = TileBehaviour.CreateTileTemplate ().gameObject;
+// 			go.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
+// 			go.GetComponent<Renderer> ().material.renderQueue = 4002;
+// 			go.transform.localScale /= (ConfigurationManager.Current.mapScale * 4f) ; 
+//
+// 			GameObject markerGO = Instantiate (go) as GameObject;
+// 			map.SetLocationMarker<LocationMarkerBehaviour> (markerGO);
+// 			DestroyImmediate (go);
 		}
 
 		protected abstract void locateAtStart ();
@@ -266,17 +196,15 @@ namespace Code.GQClient.UI.map
 				kvp.Value.Hide ();
 				// remove marker update as listener to questInfo Changed Events:
 				QuestInfoManager.Instance.GetQuestInfo(kvp.Key).OnChanged -= kvp.Value.UpdateView;
-				map.RemoveMarker (kvp.Value);
+				
+				Debug.Log("TODO IMPLEMENTATION MISSING");
+
+				//map.RemoveMarker (kvp.Value);
 			}
 
 			Markers.Clear ();
 
 			populateMarkers ();
-		}
-
-        void OnApplicationQuit ()
-		{
-			map = null;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Code.GQClient.Util;
-using Code.UnitySlippyMap.Markers;
 using GQClient.Model;
 using UnityEngine;
 
@@ -10,19 +9,20 @@ namespace Code.GQClient.UI.map
 	/// <summary>
 	/// Abstract super calss for all kinds of map markers, e.g. quest info markers, hotspot markers.
 	/// </summary>
-	public abstract class Marker : MarkerBehaviour {
+	public abstract class Marker {
 		
 		protected const string MARKER_ALPHA_BG_PATH = "defaults/readable/defaultMarkerBG";
 		public const string DEFAULT_MARKER_PATH = "defaults/readable/defaultMarker";
 
 		public virtual void UpdateView(QuestInfo questInfo)
 		{
-			CoordinatesWGS84 = new double[]
-			{
-				questInfo.Hotspots[0].Longitude,
-				questInfo.Hotspots[0].Latitude
-			};
-			Update();
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// CoordinatesWGS84 = new double[]
+			// {
+			// 	questInfo.Hotspots[0].Longitude,
+			// 	questInfo.Hotspots[0].Latitude
+			// };
+			// Update();
 		}
 
 		/// <summary>
@@ -44,8 +44,9 @@ namespace Code.GQClient.UI.map
 		private IEnumerator showAsCoroutine (bool show)
 		{
 			yield return new WaitForEndOfFrame ();
-			if (this != null && gameObject != null)
-				gameObject.SetActive (show);
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// if (this != null && gameObject != null)
+			// 	gameObject.SetActive (show);
 		}
 
 		public abstract Texture2D Texture { get; }
@@ -62,11 +63,12 @@ namespace Code.GQClient.UI.map
 		{
 			yield return new WaitForEndOfFrame ();
 			yield return new WaitForEndOfFrame ();
+			Debug.Log("TODO IMPLEMENTATION MISSING");
 
-			if (this != null && gameObject != null) {
-				gameObject.SetActive (false);
-				Destroy (gameObject);
-			}
+			// if (this != null && gameObject != null) {
+			// 	gameObject.SetActive (false);
+			// 	Destroy (gameObject);
+			// }
 		}
 
 		#region Interaction

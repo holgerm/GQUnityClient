@@ -43,7 +43,7 @@ namespace Code.GQClient.UI.media {
 				return true;
 			}
 		}
-
+		
 		#endregion
 
 

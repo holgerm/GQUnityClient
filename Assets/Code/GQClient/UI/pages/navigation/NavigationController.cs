@@ -42,7 +42,8 @@ namespace Code.GQClient.UI.pages.navigation
             enableOptions();
 
             // initial Zoom:
-            mapCtrl.map.CurrentZoom = navPage.initialZoomLevel;
+            Debug.Log("TODO IMPLEMENTATION MISSING");
+            // mapCtrl.map.CurrentZoom = navPage.initialZoomLevel;
 		}
 
 		void enableOptions ()
@@ -57,7 +58,8 @@ namespace Code.GQClient.UI.pages.navigation
 		/// Removes the map location update listener before the navigation page controlled by this controller is left.
 		/// </summary>
 		public override void CleanUp() {
-			LocationSensor.Instance.OnLocationUpdate -= mapCtrl.map.UpdatePosition;
+			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// LocationSensor.Instance.OnLocationUpdate -= mapCtrl.map.UpdatePosition;
 		}
 		#endregion
 

@@ -17,6 +17,11 @@ namespace Code.GQClient.UI.map
     public class QuestMarker : Marker
 	{
 
+		public QuestMarker(QuestInfo info)
+		{
+			Data = info;
+		}
+
 		public QuestInfo Data { get; set; }
 		
 

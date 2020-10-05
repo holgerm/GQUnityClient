@@ -3,7 +3,6 @@ using Code.GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.input;
-using Code.UnitySlippyMap.Map;
 using UnityEngine;
 
 namespace Code.GQClient.UI.map
@@ -29,7 +28,8 @@ namespace Code.GQClient.UI.map
         /// </summary>
         public void CleanUp()
         {
-            LocationSensor.Instance.OnLocationUpdate -= map.UpdatePosition;
+            Debug.Log("TODO IMPLEMENTATION MISSING");
+            // LocationSensor.Instance.OnLocationUpdate -= map.UpdatePosition;
         }
 
         #endregion
@@ -52,16 +52,20 @@ namespace Code.GQClient.UI.map
                 sumLat += h.Latitude;
                 counter++;
             }
+
             if (counter == 0)
             {
-                map.CenterOnLocation();
+                Debug.Log("TODO IMPLEMENTATION MISSING");
+                // map.CenterOnLocation();
             }
             else
             {
-                map.CenterWGS84 = new double[2] {
-                    sumLong / counter,
-                    sumLat / counter
-                };
+                Debug.Log("TODO IMPLEMENTATION MISSING");
+                // map.CenterWGS84 = new double[2]
+                // {
+                //     sumLong / counter,
+                //     sumLat / counter
+                // };
             }
         }
 
@@ -69,6 +73,7 @@ namespace Code.GQClient.UI.map
 
 
         #region Markers
+
         protected override void populateMarkers()
         {
             var q = _qm.CurrentQuest;
@@ -92,7 +97,9 @@ namespace Code.GQClient.UI.map
                 return;
 
             //marker.gameObject.SetActive(false);
-            map.RemoveMarker(marker);
+            Debug.Log("TODO IMPLEMENTATION MISSING");
+            // map.RemoveMarker(marker);
+
             // do unregister for hotspot change events
             hotspot.HotspotChanged -= UpdateMarker;
             CreateMarker(hotspot);
@@ -123,7 +130,9 @@ namespace Code.GQClient.UI.map
 
             // App-specific hotspot marker (defaults to the default geoquest marker):
             var markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.hotspotMarker.path);
-            ShowLoadedMarker(hotspot, markerTexture);
+
+            Debug.Log("TODO IMPLEMENTATION MISSING");
+            // ShowLoadedMarker(hotspot, markerTexture);
         }
 
         private static void LoadHotspotMarker(Hotspot hotspot, string markerUrl)
@@ -142,6 +151,7 @@ namespace Code.GQClient.UI.map
                     maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
                 );
             }
+
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
                 ShowLoadedMarker(hotspot, d.Www.texture);
@@ -151,21 +161,22 @@ namespace Code.GQClient.UI.map
 
         private static void ShowLoadedMarker(Hotspot hotspot, Texture texture)
         {
-            var markerGo = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
+            Debug.Log("TODO IMPLEMENTATION MISSING");
+            // var markerGo = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
-            var newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(
-                hotspot.Id.ToString(), // if ever we intorduce hotspots names in game.xml use it here.
-                new double[2] { hotspot.Longitude, hotspot.Latitude },
-                markerGo
-            );
-            newMarker.Hotspot = hotspot;
-            markerGo.name = "Marker tile (hotspot #" + hotspot.Id + ")";
-            calculateMarkerDetails(texture, markerGo);
-
-            if (newMarker != null)
-                Markers[hotspot.Id] = newMarker;
+            // var newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(
+            //     hotspot.Id.ToString(), // if ever we intorduce hotspots names in game.xml use it here.
+            //     new double[2] {hotspot.Longitude, hotspot.Latitude},
+            //     markerGo
+            // );
+            // newMarker.Hotspot = hotspot;
+            // markerGo.name = "Marker tile (hotspot #" + hotspot.Id + ")";
+            // calculateMarkerDetails(texture, markerGo);
+            //
+            // if (newMarker != null)
+            //     Markers[hotspot.Id] = newMarker;
         }
-        #endregion
 
+        #endregion
     }
 }
