@@ -815,6 +815,7 @@ namespace GQ.Editor.UI
             ) && (
                 propInfo.Name.Equals("mapBaseUrl") ||
                 propInfo.Name.Equals("mapKey") ||
+                propInfo.Name.Equals("mapUser") ||
                 propInfo.Name.Equals("mapID") ||
                 propInfo.Name.Equals("mapTileImageExtension")
             );

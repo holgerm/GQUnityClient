@@ -1151,9 +1151,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1627.1187
+  m_MinHeight: 491.52542
   m_PreferredWidth: -1
-  m_PreferredHeight: 1627.1187
+  m_PreferredHeight: 491.52542
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1632,9 +1632,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 162.71187
+  m_MinHeight: 49.152542
   m_PreferredWidth: -1
-  m_PreferredHeight: 162.71187
+  m_PreferredHeight: 49.152542
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

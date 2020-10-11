@@ -8,6 +8,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using Code.GQClient.Err;
 using UnityEngine;
 
 #if ALLOW_FILECACHE

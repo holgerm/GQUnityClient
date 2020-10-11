@@ -75,6 +75,7 @@ public class OnlineMapsTileManager
 
     public OnlineMapsTileManager(OnlineMaps map)
     {
+        Debug.Log($"OMTileManager(): map: {map} @ go: {map.gameObject.name} id: {map.gameObject.GetInstanceID()}");
         _map = map;
         unusedTiles = new List<OnlineMapsTile>();
         _tiles = new List<OnlineMapsTile>();
@@ -94,6 +95,8 @@ public class OnlineMapsTileManager
 
     public void Dispose()
     {
+        Debug.Log($"OMTileManager.Dispose()");
+
         foreach (OnlineMapsTile tile in tiles) tile.Dispose();
 
         _map = null;

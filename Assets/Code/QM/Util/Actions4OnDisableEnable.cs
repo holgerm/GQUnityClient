@@ -1,18 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class Actions4OnDisableEnable : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public event Action OnDisabled;
+    public event Action OnEnabled;
+   
+    void OnDisable()
     {
-        
+        OnDisabled?.Invoke();
+        Debug.Log("Actions4OnDisableEnable:OnDisable() ---");
+    }
+    
+    void OnEnable()
+    {
+        OnEnabled?.Invoke();
+        Debug.Log("Actions4OnDisableEnable:OnEnable() +++");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

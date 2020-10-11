@@ -1,18 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
 
 public class MapScaleAdaption : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public OnlineMapsCameraOrbit cameraOrbit;
+    public OnlineMapsMarkerManager markerManager;
+
+    public OnlineMaps map;
+    public TextMeshProUGUI scaleText;
+    
+    public float scaleDiff = 0.05f;
+    
+    public void ScaleUp()
     {
+        float mscale = markerManager.defaultScale;
+        cameraOrbit.distance /= (1f + scaleDiff);
+        foreach (var marker in markerManager.items)
+        {
+            marker.scale  /= (1f + scaleDiff);
+            mscale = marker.scale;
+        }
+
+        scaleText.text = $"Map scale: {cameraOrbit.distance} : {mscale}";
+        map.Redraw();
+    }
+    
+    public void ScaleDown()
+    {
+        float mscale = markerManager.defaultScale;
+        cameraOrbit.distance *= (1f + scaleDiff);
+        foreach (var marker in markerManager.items)
+        {
+            marker.scale  *= (1f + scaleDiff);
+            mscale = marker.scale;
+        }
         
+        scaleText.text = $"Map scale: {cameraOrbit.distance} : {mscale}";
+        map.Redraw();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ZoomIn()
     {
-        
+        map.floatZoom *= 1.03f;
+        map.Redraw();
+    }
+
+    public void ZoomOut()
+    {
+        map.floatZoom /= 1.03f;
+        map.Redraw();
     }
 }

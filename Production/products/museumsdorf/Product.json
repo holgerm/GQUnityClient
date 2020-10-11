@@ -18,8 +18,8 @@
   "nameForQuestSg": "Tour",
   "nameForQuestsPl": "Touren",
   "questInfoViews": [
-    "Map",
-    "List"
+    "List",
+    "Map"
   ],
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
@@ -68,14 +68,15 @@
   "mapProvider": "MapBox",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
+  "mapUser": null,
   "mapID": "mapbox.streets",
   "mapTileImageExtension": ".png",
   "useMapOffline": false,
   "mapMinimalZoom": 13.0,
   "mapDeltaZoom": 0.5,
   "mapScale": 1.0,
-  "mapStartPositionType": "CenterOfMarkers",
-  "mapStartAtLocation": false,
+  "mapStartPositionType": "FixedPosition",
+  "mapStartAtLocation": true,
   "mapStartAtLongitude": 8.054064,
   "mapStartAtLatitude": 52.850121,
   "hotspotMarker": {

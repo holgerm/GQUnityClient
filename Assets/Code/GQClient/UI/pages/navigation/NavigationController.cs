@@ -42,8 +42,8 @@ namespace Code.GQClient.UI.pages.navigation
             enableOptions();
 
             // initial Zoom:
-            Debug.Log("TODO IMPLEMENTATION MISSING");
-            // mapCtrl.map.CurrentZoom = navPage.initialZoomLevel;
+            Debug.Log($"NavCtrl: setting zoomlevel to {navPage.initialZoomLevel}");
+            mapCtrl.map.zoom = navPage.initialZoomLevel;
 		}
 
 		void enableOptions ()

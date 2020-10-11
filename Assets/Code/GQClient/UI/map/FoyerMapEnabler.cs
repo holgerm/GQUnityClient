@@ -2,16 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This component MUST be placed BELOW the OnlineMaps Component within the game object!
+/// </summary>
+[RequireComponent(typeof(OnlineMaps))]
 public class FoyerMapEnabler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private OnlineMaps _map;
+    public OnlineMaps map
     {
-        
-    }
+        get
+        {
+            if (_map == null)
+            {
+                _map = GetComponent<OnlineMaps>();
+            }
 
-    // Update is called once per frame
-    void Update()
+            return _map;
+        }
+    }
+    
+    void OnEnable()
     {
         
     }

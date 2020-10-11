@@ -227,6 +227,8 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor] public string mapKey { get; set; }
 
+        [ShowInProductEditor] public string mapUser { get; set; }
+
         [ShowInProductEditor] public string mapID { get; set; }
 
         [ShowInProductEditor] public string mapTileImageExtension { get; set; }

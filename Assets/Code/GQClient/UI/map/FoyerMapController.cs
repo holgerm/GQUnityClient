@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -26,6 +27,9 @@ namespace Code.GQClient.UI.map
 			_qim = QuestInfoManager.Instance;
 			_qim.OnDataChange += OnMarkerChanged;
 			_qim.OnFilterChange += OnMarkerChanged;
+			
+			// TODO FIXME We reset the camera distance but I do not knwo why we have to:
+			OnlineMapsCameraOrbit camOrb = map.GetComponent<OnlineMapsCameraOrbit>();
 		}
 
 		#endregion
@@ -86,6 +90,11 @@ namespace Code.GQClient.UI.map
 				// create new list elements
 				CreateMarker (info);
 			}
+
+			OnlineMapsLocationService loc = map.GetComponent<OnlineMapsLocationService>();
+			string debugMsg = $"######### LOCATION: enabled: {loc.enabled}";
+			debugMsg += ($"\n\t isActiveAndEnabled: {loc.isActiveAndEnabled}");
+			Debug.Log(debugMsg);
 		}
 
 		private void CreateMarker (QuestInfo info)
@@ -94,31 +103,13 @@ namespace Code.GQClient.UI.map
 				return;
 			}
 			
-			// var markerGo = TileBehaviour.CreateTileTemplate (TileBehaviour.AnchorPoint.BottomCenter).gameObject;
+			QuestMarker newMarker = new QuestMarker(info);
 
-			// var newMarker = map.CreateMarker<QuestMarker> (
-			// 	                        info.Name, 
-			// 	                        new[]
-			// 	                        {
-			// 		                        info.MarkerHotspot.Longitude, 
-			// 		                        info.MarkerHotspot.Latitude
-			// 	                        }, 
-			// 	                        markerGo
-			//                         );
-			var newMarker = new QuestMarker(info);
-			// if (newMarker == null)
-			// 	return;
-			//
-			// newMarker.Data = info;
-			// markerGo.name = "Marker tile (" + info.Name + ")";
-			//
-			// calculateMarkerDetails (newMarker.Texture, markerGo);
-
-			// Markers.Add (info.Id, newMarker);
-			var ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
+			Markers.Add (info.Id, newMarker);
+			OnlineMapsMarker ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
 			ommarker.OnClick += newMarker.OnTouchOMM;
 			
-			// info.OnChanged += newMarker.UpdateView;
+			// TODO: info.OnChanged += newMarker.UpdateView;
 		}
 		
 		public Texture markerSymbolTexture;
@@ -140,41 +131,33 @@ namespace Code.GQClient.UI.map
 					sumLat += hi.Latitude;
 					counter++;
 				}
-				if (counter == 0) {
-					LocateAtFixedConfiguredPosition ();
+				if (counter == 0)
+				{
+					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
+						ConfigurationManager.Current.mapStartAtLatitude);
 				}
 				else {
-					Debug.Log("TODO IMPLEMENTATION MISSING");
-					// map.CenterWGS84 = new[] {
-					// 	sumLong / counter,
-					// 	sumLat / counter
-					// };
+					map.SetPosition(sumLong / counter,
+						sumLat / counter);
 				}
 				break;
 			case MapStartPositionType.FixedPosition:
-				LocateAtFixedConfiguredPosition();
+				map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
+					ConfigurationManager.Current.mapStartAtLatitude);
 				break;
 			case MapStartPositionType.PlayerPosition:
 				if (Device.location.isEnabledByUser &&
 					Device.location.status != LocationServiceStatus.Running) {
 					Debug.Log("TODO IMPLEMENTATION MISSING");
 					// map.CenterOnLocation ();
-				} else {
-					LocateAtFixedConfiguredPosition();
+				} else
+				{
+					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
+						ConfigurationManager.Current.mapStartAtLatitude);
 				}
 				break;
 			}
 		}
-
-		private void LocateAtFixedConfiguredPosition() {
-			Debug.Log("TODO IMPLEMENTATION MISSING");
-			// map.CenterWGS84 = new[] {
-			// 	ConfigurationManager.Current.mapStartAtLongitude,
-			// 	ConfigurationManager.Current.mapStartAtLatitude
-			// };
-		}
-
-
 
 		#endregion
 	}

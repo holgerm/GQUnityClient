@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 #if !UNITY_WEBGL
 using System.Threading;
 #endif
@@ -599,6 +599,7 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
 
     public void Awake()
     {
+        Debug.Log($"OM.Awake() @ {gameObject.name} id: {gameObject.GetInstanceID()} scene: {SceneManager.GetActiveScene().name}");
         _instance = this;
         tileManager = new OnlineMapsTileManager(this);
 
@@ -1136,6 +1137,8 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
 
     private void OnDisable ()
     {
+        Debug.Log("OM.Disable()");
+        
         OnlineMapsThreadManager.Dispose();
 
         if (_buffer != null)

@@ -1,9 +1,7 @@
 ﻿// #define DEBUG_LOG
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
@@ -17,6 +15,7 @@ namespace Code.GQClient.UI.map
     public abstract class MapController : MonoBehaviour
 	{
 		public OnlineMapsMarkerManager markerManager;
+		public OnlineMaps map;
 		
 		private static Dictionary<int, Marker> markers;
 
@@ -116,7 +115,8 @@ namespace Code.GQClient.UI.map
 		{
 			// center the map so it is centered to the current users position: TODO
 			Debug.Log("TODO IMPLEMENTATION MISSING");
-			//map.CenterOnLocation ();
+			OnlineMapsLocationService locService = map.GetComponent<OnlineMapsLocationService>();
+			map.SetPosition(locService.position.x, locService.position.y);
 
 			// let the center button show the centering button icon now
 
@@ -128,23 +128,24 @@ namespace Code.GQClient.UI.map
 			Center ();
 		}
 
-		internal void UpdateZoomButtons ()
-		{
-			// If further zooming IN is not possible disable ZoomInButton: 
-			Debug.Log("TODO IMPLEMENTATION MISSING");
-			// zoomInButton.Enabled = (map.MaxZoom > map.CurrentZoom);
-
-			// If further zooming OUT is not possible disable ZoomOutButton: 
-			Debug.Log("TODO IMPLEMENTATION MISSING");
-			// zoomOutButton.Enabled = (map.MinZoom < map.CurrentZoom);
-		}
-		
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
 
-		protected virtual void Start ()
+		void Awake()
 		{
-// 			// create the map singleton
+			if (MapActions4OnDisableEnable == null)
+			{
+				Log.SignalErrorToDeveloper("MapController not Connected to Map En-/Disabler.");
+				return;
+			}
+			
+			MapActions4OnDisableEnable.OnEnabled += EnableMapCallBack;
+			MapActions4OnDisableEnable.OnDisabled += DisableMapCallBack;
+		}
+
+		protected virtual void Start ()
+		{ 
+			// 			// create the map singleton
 // 			map = MapBehaviour.Instance;
 // 			map.CurrentCamera = Camera.main;
 // 			map.CurrentZoom = 15.0f; // TODO remove in case we are within a quest
@@ -181,9 +182,25 @@ namespace Code.GQClient.UI.map
 
 		protected abstract void populateMarkers ();
 
+		public Actions4OnDisableEnable MapActions4OnDisableEnable;
+		protected bool mapIsEnabled;
+		protected static bool alreadyLocatedAtStart = false;
+
+		public void EnableMapCallBack()
+		{
+			mapIsEnabled = true;
+			UpdateView();
+		}
+
+		public void DisableMapCallBack()
+		{
+			mapIsEnabled = false;
+		}
+		
+
 		public void UpdateView ()
 		{
-			if (this == null) {
+			if (this == null || !mapIsEnabled) {
 				return;
 			}
 
@@ -196,15 +213,18 @@ namespace Code.GQClient.UI.map
 				kvp.Value.Hide ();
 				// remove marker update as listener to questInfo Changed Events:
 				QuestInfoManager.Instance.GetQuestInfo(kvp.Key).OnChanged -= kvp.Value.UpdateView;
-				
-				Debug.Log("TODO IMPLEMENTATION MISSING");
-
-				//map.RemoveMarker (kvp.Value);
 			}
 
+			markerManager.RemoveAll();
 			Markers.Clear ();
 
 			populateMarkers ();
+
+			if (!alreadyLocatedAtStart)
+			{
+				alreadyLocatedAtStart = true;
+				locateAtStart();
+			}
 		}
 	}
 }
