@@ -276,7 +276,6 @@ namespace Code.GQClient.Model
 
         public virtual void Tap()
         {
-            Debug.Log("Tapped");
             if (Author.LoggedIn)
             {
                 Debug.Log("Author Logged In");
@@ -287,6 +286,12 @@ namespace Code.GQClient.Model
                 TapTrigger.Initiate();
             }
         }
+        
+        public void OnTouchOMM(OnlineMapsMarkerBase marker)
+        {
+            Tap();
+        }
+
         #endregion
 
 

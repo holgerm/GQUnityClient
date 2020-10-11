@@ -1,4 +1,5 @@
 ﻿using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Util.http;
@@ -8,17 +9,13 @@ namespace Code.GQClient.UI.map
 {
     public class QuestMapController : MapController
     {
-        private QuestManager _qm;
+        private QuestManager _qm => QuestManager.Instance;
 
 
         #region Runtime API
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
-
-            _qm = QuestManager.Instance;
-
             UpdateView();
         }
 
@@ -132,6 +129,8 @@ namespace Code.GQClient.UI.map
 
             Debug.Log("TODO IMPLEMENTATION MISSING");
             // ShowLoadedMarker(hotspot, markerTexture);
+            OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, markerTexture);
+            ommarker.OnClick += hotspot.OnTouchOMM;
         }
 
         private static void LoadHotspotMarker(Hotspot hotspot, string markerUrl)

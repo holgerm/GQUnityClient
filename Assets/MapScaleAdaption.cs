@@ -39,15 +39,4 @@ public class MapScaleAdaption : MonoBehaviour
         map.Redraw();
     }
 
-    public void ZoomIn()
-    {
-        map.floatZoom *= 1.03f;
-        map.Redraw();
-    }
-
-    public void ZoomOut()
-    {
-        map.floatZoom /= 1.03f;
-        map.Redraw();
-    }
 }

@@ -90,6 +90,8 @@ namespace Code.GQClient.UI.map
 		public Texture FrameTexture;
 		public Texture	LocationTexture;
 
+		#region Center
+
 		public enum Centering
 		{
 			Centered,
@@ -128,8 +130,30 @@ namespace Code.GQClient.UI.map
 			Center ();
 		}
 
+		#endregion
+
+
+		#region Zoom
+
 		OverlayButtonLayoutConfig zoomInButton;
 		OverlayButtonLayoutConfig zoomOutButton;
+		
+		public float zoomDeltaFactor = 1.03f;
+		
+		public void ZoomIn()
+		{
+			map.floatZoom *= zoomDeltaFactor;
+			map.Redraw();
+		}
+
+		public void ZoomOut()
+		{
+			map.floatZoom /= zoomDeltaFactor;
+			map.Redraw();
+		}
+
+		#endregion
+
 
 		void Awake()
 		{
@@ -141,41 +165,6 @@ namespace Code.GQClient.UI.map
 			
 			MapActions4OnDisableEnable.OnEnabled += EnableMapCallBack;
 			MapActions4OnDisableEnable.OnDisabled += DisableMapCallBack;
-		}
-
-		protected virtual void Start ()
-		{ 
-			// 			// create the map singleton
-// 			map = MapBehaviour.Instance;
-// 			map.CurrentCamera = Camera.main;
-// 			map.CurrentZoom = 15.0f; // TODO remove in case we are within a quest
-// 			map.mapCtrl = this;
-//
-// 			Frame ();
-// 			GameObject zibGo = MapButtonPanel.transform.Find ("ZoomInButton").gameObject;
-// 			zoomInButton = zibGo.GetComponent<OverlayButtonLayoutConfig> ();
-// 			zoomOutButton = MapButtonPanel.transform.Find ("ZoomOutButton").GetComponent<OverlayButtonLayoutConfig> ();
-//
-// 			LocationSensor.Instance.OnLocationUpdate += map.UpdatePosition;
-// #if DEBUG_LOG
-//             Debug.Log("#### Location Update Listener added");
-// #endif
-//             map.InputsEnabled = true;
-//
-// 			locateAtStart ();
-//
-// 			layers = new List<LayerBehaviour> ();
-// 			layers.Add (MapLayer);
-//
-// 			// create the location marker
-// 			GameObject go = TileBehaviour.CreateTileTemplate ().gameObject;
-// 			go.GetComponent<Renderer> ().material.mainTexture = LocationTexture;
-// 			go.GetComponent<Renderer> ().material.renderQueue = 4002;
-// 			go.transform.localScale /= (ConfigurationManager.Current.mapScale * 4f) ; 
-//
-// 			GameObject markerGO = Instantiate (go) as GameObject;
-// 			map.SetLocationMarker<LocationMarkerBehaviour> (markerGO);
-// 			DestroyImmediate (go);
 		}
 
 		protected abstract void locateAtStart ();

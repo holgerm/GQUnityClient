@@ -18,18 +18,12 @@ namespace Code.GQClient.UI.map
 
 		private QuestInfoManager _qim;
 
-		protected override void Start ()
+		protected void Start ()
 		{
-			// set up the inherited Map features:
-			base.Start ();
-
 			// at last we register for changes on quest infos with the quest info manager:
 			_qim = QuestInfoManager.Instance;
 			_qim.OnDataChange += OnMarkerChanged;
 			_qim.OnFilterChange += OnMarkerChanged;
-			
-			// TODO FIXME We reset the camera distance but I do not knwo why we have to:
-			OnlineMapsCameraOrbit camOrb = map.GetComponent<OnlineMapsCameraOrbit>();
 		}
 
 		#endregion
