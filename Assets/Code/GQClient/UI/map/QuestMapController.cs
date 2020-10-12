@@ -2,6 +2,7 @@
 using Code.GQClient.Err;
 using Code.GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.layout;
 using Code.GQClient.Util.http;
 using UnityEngine;
 
@@ -72,6 +73,7 @@ namespace Code.GQClient.UI.map
 
         protected override void populateMarkers()
         {
+            Debug.Log($"QuestMap.populate #{_qm.CurrentQuest.AllHotspots.Count}".Green());
             var q = _qm.CurrentQuest;
             foreach (var h in q.AllHotspots)
             {
@@ -127,13 +129,10 @@ namespace Code.GQClient.UI.map
             // App-specific hotspot marker (defaults to the default geoquest marker):
             var markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.hotspotMarker.path);
 
-            Debug.Log("TODO IMPLEMENTATION MISSING");
-            // ShowLoadedMarker(hotspot, markerTexture);
-            OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, markerTexture);
-            ommarker.OnClick += hotspot.OnTouchOMM;
+            ShowLoadedMarker(hotspot, markerTexture);
         }
 
-        private static void LoadHotspotMarker(Hotspot hotspot, string markerUrl)
+        private void LoadHotspotMarker(Hotspot hotspot, string markerUrl)
         {
             AbstractDownloader loader;
             if (QuestManager.Instance.MediaStore.ContainsKey(markerUrl))
@@ -157,9 +156,13 @@ namespace Code.GQClient.UI.map
             loader.Start();
         }
 
-        private static void ShowLoadedMarker(Hotspot hotspot, Texture texture)
+        private void ShowLoadedMarker(Hotspot hotspot, Texture2D texture)
         {
-            Debug.Log("TODO IMPLEMENTATION MISSING");
+            OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, texture);
+            ommarker.OnClick += hotspot.OnTouchOMM;
+            ommarker.scale = LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) /
+                             texture.height;
+
             // var markerGo = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 
             // var newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(

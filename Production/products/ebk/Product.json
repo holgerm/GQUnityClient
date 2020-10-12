@@ -21,6 +21,7 @@
     "List",
     "Map"
   ],
+  "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": true,
@@ -60,12 +61,15 @@
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
-  "autoSynchQuestInfos": false,
+  "autoSyncQuestInfos": true,
+  "autoLoadQuests": false,
+  "autoUpdateQuests": false,
   "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapProvider": "OpenStreetMap",
   "mapBaseUrl": "https://a.tile.openstreetmap.org",
   "mapKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
+  "mapUser": null,
   "mapID": "mapbox.streets",
   "mapTileImageExtension": ".png",
   "useMapOffline": true,
@@ -82,7 +86,7 @@
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 55.0,
+  "markerHeightUnits": 50.0,
   "markerHeightMinMM": 10.0,
   "markerHeightMaxMM": 20.0,
   "markerColor": {
@@ -232,8 +236,83 @@
     "b": 147,
     "a": 255
   },
+  "colorPaletteSize": 4,
+  "colorPalette": [
+    {
+      "r": 0,
+      "g": 0,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 235,
+      "b": 4,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 224,
+      "g": 210,
+      "b": 147,
+      "a": 255
+    },
+    {
+      "r": 224,
+      "g": 210,
+      "b": 147,
+      "a": 255
+    },
+    {
+      "r": 224,
+      "g": 210,
+      "b": 147,
+      "a": 255
+    },
+    {
+      "r": 224,
+      "g": 210,
+      "b": 147,
+      "a": 255
+    },
+    {
+      "r": 224,
+      "g": 210,
+      "b": 147,
+      "a": 255
+    },
+    {
+      "r": 224,
+      "g": 210,
+      "b": 147,
+      "a": 255
+    }
+  ],
+  "paletteFGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "mainFontSize": 90,
   "textAlignment": "Left",
+  "textLinkColor": {
+    "r": 0,
+    "g": 0,
+    "b": 255,
+    "a": 255
+  },
   "lineSpacing": 10.0,
   "showShadows": false,
   "topLogo": {
@@ -363,13 +442,13 @@
   "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
   "warnDialogOKWhenLeavingQuest": "Verlassen",
   "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
-  "offerPartnersInfo": false,
-  "showPartnersInfoAtStart": false,
-  "offerFeedback": true,
-  "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "offerPartnersInfo": false,
+  "showPartnersInfoAtStart": false,
   "listEntryHeightUnits": 74.0,
   "listEntryHeightMinMM": 10.0,
   "listEntryHeightMaxMM": 0.0,
@@ -419,7 +498,5 @@
     "g": 80,
     "b": 80,
     "a": 255
-  },
-  "webpageShouldEndOnLoadUrlPart": false,
-  "webpageEndOnLoadUrlPart": ""
+  }
 }

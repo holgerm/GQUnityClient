@@ -2,6 +2,7 @@
 /*   https://infinity-code.com   */
 
 using System;
+using Code.GQClient.Err;
 using UnityEngine;
 using UnityEngine.Serialization;
 #if !UNITY_WEBGL
@@ -414,6 +415,12 @@ public class OnlineMapsMarker : OnlineMapsMarkerBase
     {
         _lastRotation = _rotation;
         _lastScale = _scale;
+
+        if (map == null)
+        {
+            Debug.Log($"HERE map NUll and OnlineMaps.instance is null: {OnlineMaps.instance == null}".Red());
+            return;
+        }
 
         if (!map.control.resultIsTexture || (Math.Abs(_rotation) < float.Epsilon && Math.Abs(scale - 1) < float.Epsilon))
         {

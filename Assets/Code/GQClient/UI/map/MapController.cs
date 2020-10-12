@@ -1,13 +1,16 @@
 ﻿// #define DEBUG_LOG
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Code.GQClient.Err;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
 using Code.QM.Util;
 using GQClient.Model;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.UI.map
 {
@@ -18,7 +21,7 @@ namespace Code.GQClient.UI.map
 		public OnlineMaps map;
 		
 		private static Dictionary<int, Marker> markers;
-
+		
 		/// <summary>
 		/// Marker dictionary is static to support the singleton MapBehaviour from slippy maps well. 
 		/// When maps change all markers must be removed from the MapBehaviour as well as from this dictionary.
@@ -115,13 +118,11 @@ namespace Code.GQClient.UI.map
 
 		public void Center ()
 		{
-			// center the map so it is centered to the current users position: TODO
-			Debug.Log("TODO IMPLEMENTATION MISSING");
+			// center the map so it is centered to the current users position:
 			OnlineMapsLocationService locService = map.GetComponent<OnlineMapsLocationService>();
 			map.SetPosition(locService.position.x, locService.position.y);
 
 			// let the center button show the centering button icon now
-
 			CenteringState = Centering.Centered;
 		}
 
@@ -154,42 +155,23 @@ namespace Code.GQClient.UI.map
 
 		#endregion
 
-
-		void Awake()
+		private void OnEnable()
 		{
-			if (MapActions4OnDisableEnable == null)
-			{
-				Log.SignalErrorToDeveloper("MapController not Connected to Map En-/Disabler.");
-				return;
-			}
-			
-			MapActions4OnDisableEnable.OnEnabled += EnableMapCallBack;
-			MapActions4OnDisableEnable.OnDisabled += DisableMapCallBack;
+			map = Base.Instance.Map;
+			markerManager = map.GetComponent<OnlineMapsMarkerManager>();
+			Debug.Log($"{GetType().Name}: OnEnable() Map set. Loc marker.enabled: {OnlineMapsLocationServiceBase.marker.enabled}");
+			UpdateView();
 		}
-
+		
 		protected abstract void locateAtStart ();
 
 		protected abstract void populateMarkers ();
 
-		public Actions4OnDisableEnable MapActions4OnDisableEnable;
-		protected bool mapIsEnabled;
 		protected static bool alreadyLocatedAtStart = false;
-
-		public void EnableMapCallBack()
-		{
-			mapIsEnabled = true;
-			UpdateView();
-		}
-
-		public void DisableMapCallBack()
-		{
-			mapIsEnabled = false;
-		}
 		
-
 		public void UpdateView ()
 		{
-			if (this == null || !mapIsEnabled) {
+			if (this == null) {
 				return;
 			}
 

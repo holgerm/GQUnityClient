@@ -25,7 +25,7 @@ namespace Code.GQClient.Util
         public GameObject ListCanvas;
         public GameObject TopicTreeCanvas;
         public GameObject MapCanvas;
-        public GameObject MapHolder;
+        public OnlineMaps Map;
         public GameObject MenuCanvas;
         public GameObject DialogCanvas;
         public GameObject ProgressCanvas;
@@ -167,6 +167,11 @@ namespace Code.GQClient.Util
                 var canvas = rootGo.GetComponent<Canvas>();
                 if (canvas != null)
                 {
+                    if (canvas.name.Equals("Map"))
+                    {
+                        Debug.Log($"Map DEACTIVATE canvas");
+                    }
+
                     canvas.gameObject.SetActive("DialogCanvas".Equals(canvas.name));
                 }
             }

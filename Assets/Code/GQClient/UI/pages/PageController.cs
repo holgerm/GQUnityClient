@@ -39,6 +39,7 @@ namespace Code.GQClient.UI.pages
 
 			qm = QuestManager.Instance;
 			if (qm.CurrentQuest == null || Page.IsNull(qm.CurrentPage)) {
+				Debug.Log("Switching to Foyer ...".Green());
 				SceneManager.LoadScene (FOYER_SCENE);
 				resumingToFoyer = true;
 				return;

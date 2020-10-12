@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.map
 		/// </summary>
 		public void Show ()
 		{
-			Base.Instance.StartCoroutine (showAsCoroutine (true));
+			// Base.Instance.StartCoroutine (showAsCoroutine (true));
 		}
 
 		/// <summary>
@@ -38,13 +38,13 @@ namespace Code.GQClient.UI.map
 		/// </summary>
 		public void Hide ()
 		{
-			Base.Instance.StartCoroutine (showAsCoroutine (false));
+			// Base.Instance.StartCoroutine (showAsCoroutine (false));
 		}
 
 		private IEnumerator showAsCoroutine (bool show)
 		{
 			yield return new WaitForEndOfFrame ();
-			Debug.Log("TODO IMPLEMENTATION MISSING");
+			Debug.Log($"MISSING: Marker {Texture.name} try to show {show}.");
 			// if (this != null && gameObject != null)
 			// 	gameObject.SetActive (show);
 		}

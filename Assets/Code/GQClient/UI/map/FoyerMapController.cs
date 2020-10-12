@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -80,15 +79,11 @@ namespace Code.GQClient.UI.map
 
 		protected override void populateMarkers ()
 		{
+			Debug.Log("FoyerMapCtrl.PoulateMarkers()".Green());
 			foreach (var info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				CreateMarker (info);
 			}
-
-			OnlineMapsLocationService loc = map.GetComponent<OnlineMapsLocationService>();
-			string debugMsg = $"######### LOCATION: enabled: {loc.enabled}";
-			debugMsg += ($"\n\t isActiveAndEnabled: {loc.isActiveAndEnabled}");
-			Debug.Log(debugMsg);
 		}
 
 		private void CreateMarker (QuestInfo info)
@@ -142,8 +137,8 @@ namespace Code.GQClient.UI.map
 			case MapStartPositionType.PlayerPosition:
 				if (Device.location.isEnabledByUser &&
 					Device.location.status != LocationServiceStatus.Running) {
-					Debug.Log("TODO IMPLEMENTATION MISSING");
-					// map.CenterOnLocation ();
+					OnlineMapsLocationService locServ = map.GetComponent<OnlineMapsLocationService>();
+					map.SetPosition(locServ.position.x, locServ.position.y);
 				} else
 				{
 					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,

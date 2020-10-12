@@ -47,7 +47,7 @@ namespace Code.GQClient.UI.menu.viewToggle
 			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
 			Base.Instance.TopicTreeCanvas.SetActive (viewer.name == "ViewToggleToTopicTree");
 			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
-			Base.Instance.MapHolder.SetActive (viewer.name == "ViewToggleToMap");
+//			Base.Instance.Map.gameObject.SetActive (viewer.name == "ViewToggleToMap");
 
 			Base.Instance.MenuCanvas.SetActive (false);
 		}

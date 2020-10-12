@@ -75,7 +75,6 @@ public class OnlineMapsTileManager
 
     public OnlineMapsTileManager(OnlineMaps map)
     {
-        Debug.Log($"OMTileManager(): map: {map} @ go: {map.gameObject.name} id: {map.gameObject.GetInstanceID()}");
         _map = map;
         unusedTiles = new List<OnlineMapsTile>();
         _tiles = new List<OnlineMapsTile>();
