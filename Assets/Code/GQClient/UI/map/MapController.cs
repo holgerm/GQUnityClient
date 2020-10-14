@@ -3,7 +3,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
@@ -159,15 +161,44 @@ namespace Code.GQClient.UI.map
 		{
 			map = Base.Instance.Map;
 			markerManager = map.GetComponent<OnlineMapsMarkerManager>();
-			Debug.Log($"{GetType().Name}: OnEnable() Map set. Loc marker.enabled: {OnlineMapsLocationServiceBase.marker.enabled}");
 			UpdateView();
 		}
-		
-		protected abstract void locateAtStart ();
+
+		protected void locateAtStart()
+		{
+			Debug.Log($"locateAtStart: mapStartPositionType = {ConfigurationManager.Current.mapStartPositionType}  pos is before: ({map.position.x}, {map.position.y})");
+			switch (ConfigurationManager.Current.mapStartPositionType) {
+				case MapStartPositionType.CenterOfMarkers:
+					// calculate center of markers / quests:
+					SetLocationToMiddleOfHotspots();
+					break;
+				case MapStartPositionType.FixedPosition:
+					Debug.Log($"locateAtStart: map.SetPosition({ConfigurationManager.Current.mapStartAtLongitude}, {ConfigurationManager.Current.mapStartAtLatitude}) #Fixed Config Pos");
+					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
+						ConfigurationManager.Current.mapStartAtLatitude);
+					break;
+				case MapStartPositionType.PlayerPosition:
+					if (Device.location.isEnabledByUser &&
+					    Device.location.status != LocationServiceStatus.Running) {
+						OnlineMapsLocationService locServ = map.GetComponent<OnlineMapsLocationService>();
+						Debug.Log($"locateAtStart: map.SetPosition({locServ.position.x}, {locServ.position.y}) #PlayerPos");
+						map.SetPosition(locServ.position.x, locServ.position.y);
+					} else
+					{
+						Debug.Log($"locateAtStart: map.SetPosition({ConfigurationManager.Current.mapStartAtLongitude}, {ConfigurationManager.Current.mapStartAtLatitude}) #Config instead of PLayerPos");
+						map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
+							ConfigurationManager.Current.mapStartAtLatitude);
+					}
+					break;
+			}
+
+		}
+
+		protected abstract void SetLocationToMiddleOfHotspots();
 
 		protected abstract void populateMarkers ();
 
-		protected static bool alreadyLocatedAtStart = false;
+		private static bool _alreadyLocatedAtStart = false;
 		
 		public void UpdateView ()
 		{
@@ -186,14 +217,23 @@ namespace Code.GQClient.UI.map
 				QuestInfoManager.Instance.GetQuestInfo(kvp.Key).OnChanged -= kvp.Value.UpdateView;
 			}
 
-			markerManager.RemoveAll();
+			foreach (var marker in markerManager.items.ToList())
+			{
+				if (marker == OnlineMapsLocationServiceBase.marker)
+				{
+					// Debug.Log($"KEEP LOCATION MARKER: {marker.position}");
+					continue;
+				}
+				markerManager.Remove(marker);
+			}
 			Markers.Clear ();
 
 			populateMarkers ();
 
-			if (!alreadyLocatedAtStart)
+			if (!_alreadyLocatedAtStart)
 			{
-				alreadyLocatedAtStart = true;
+				_alreadyLocatedAtStart = true;
+
 				locateAtStart();
 			}
 		}

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace InfinityCode.OnlineMapsExamples
+namespace Code.GQClient.UI.map
 {
     public class LocationMarkerOnTop : MonoBehaviour
     {

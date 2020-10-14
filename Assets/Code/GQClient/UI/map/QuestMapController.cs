@@ -34,7 +34,7 @@ namespace Code.GQClient.UI.map
 
         #region Map
 
-        protected override void locateAtStart()
+        protected override void SetLocationToMiddleOfHotspots()
         {
             // calculate center of hotspots:
             double sumLong = 0f;
@@ -158,10 +158,12 @@ namespace Code.GQClient.UI.map
 
         private void ShowLoadedMarker(Hotspot hotspot, Texture2D texture)
         {
+            Debug.Log("#### PROBLEM 1");
             OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, texture);
             ommarker.OnClick += hotspot.OnTouchOMM;
             ommarker.scale = LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) /
                              texture.height;
+            Debug.Log("#### PROBLEM 2");
 
             // var markerGo = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
 

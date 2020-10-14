@@ -79,7 +79,6 @@ namespace Code.GQClient.UI.map
 
 		protected override void populateMarkers ()
 		{
-			Debug.Log("FoyerMapCtrl.PoulateMarkers()".Green());
 			foreach (var info in QuestInfoManager.Instance.GetFilteredQuestInfos()) {
 				// create new list elements
 				CreateMarker (info);
@@ -103,48 +102,34 @@ namespace Code.GQClient.UI.map
 		
 		public Texture markerSymbolTexture;
 
-		protected override void locateAtStart ()
+		protected override void SetLocationToMiddleOfHotspots()
 		{
-			switch (ConfigurationManager.Current.mapStartPositionType) {
-			case MapStartPositionType.CenterOfMarkers:
-				// calculate center of markers / quests:
-				double sumLong = 0f;
-				double sumLat = 0f;
-				var counter = 0;
-				foreach (var qi in QuestInfoManager.Instance.GetListOfQuestInfos()) {
-					var hi = qi.MarkerHotspot;
-					if (hi == HotspotInfo.NULL)
-						continue;
+			double sumLong = 0f;
+			double sumLat = 0f;
+			var counter = 0;
+			foreach (var qi in QuestInfoManager.Instance.GetListOfQuestInfos())
+			{
+				var hi = qi.MarkerHotspot;
+				if (hi == HotspotInfo.NULL)
+					continue;
 
-					sumLong += hi.Longitude;
-					sumLat += hi.Latitude;
-					counter++;
-				}
-				if (counter == 0)
-				{
-					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
-						ConfigurationManager.Current.mapStartAtLatitude);
-				}
-				else {
-					map.SetPosition(sumLong / counter,
-						sumLat / counter);
-				}
-				break;
-			case MapStartPositionType.FixedPosition:
+				sumLong += hi.Longitude;
+				sumLat += hi.Latitude;
+				counter++;
+			}
+
+			if (counter == 0)
+			{
+				Debug.Log(
+					$"locateAtStart: map.SetPosition({ConfigurationManager.Current.mapStartAtLongitude}, {ConfigurationManager.Current.mapStartAtLatitude}) #Conifg Pos instead of POIs Center no POis");
 				map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
 					ConfigurationManager.Current.mapStartAtLatitude);
-				break;
-			case MapStartPositionType.PlayerPosition:
-				if (Device.location.isEnabledByUser &&
-					Device.location.status != LocationServiceStatus.Running) {
-					OnlineMapsLocationService locServ = map.GetComponent<OnlineMapsLocationService>();
-					map.SetPosition(locServ.position.x, locServ.position.y);
-				} else
-				{
-					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
-						ConfigurationManager.Current.mapStartAtLatitude);
-				}
-				break;
+			}
+			else
+			{
+				Debug.Log($"locateAtStart: map.SetPosition({sumLong / counter}, {sumLat / counter}) #Center of POIs");
+				map.SetPosition(sumLong / counter,
+					sumLat / counter);
 			}
 		}
 
