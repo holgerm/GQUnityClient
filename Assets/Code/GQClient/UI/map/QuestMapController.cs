@@ -73,7 +73,6 @@ namespace Code.GQClient.UI.map
 
         protected override void populateMarkers()
         {
-            Debug.Log($"QuestMap.populate #{_qm.CurrentQuest.AllHotspots.Count}".Green());
             var q = _qm.CurrentQuest;
             foreach (var h in q.AllHotspots)
             {
@@ -158,26 +157,10 @@ namespace Code.GQClient.UI.map
 
         private void ShowLoadedMarker(Hotspot hotspot, Texture2D texture)
         {
-            Debug.Log("#### PROBLEM 1");
             OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, texture);
             ommarker.OnClick += hotspot.OnTouchOMM;
-            ommarker.scale = LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) /
+            ommarker.scale = (LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) * 0.5f) /
                              texture.height;
-            Debug.Log("#### PROBLEM 2");
-
-            // var markerGo = TileBehaviour.CreateTileTemplate(TileBehaviour.AnchorPoint.BottomCenter).gameObject;
-
-            // var newMarker = MapBehaviour.Instance.CreateMarker<HotspotMarker>(
-            //     hotspot.Id.ToString(), // if ever we intorduce hotspots names in game.xml use it here.
-            //     new double[2] {hotspot.Longitude, hotspot.Latitude},
-            //     markerGo
-            // );
-            // newMarker.Hotspot = hotspot;
-            // markerGo.name = "Marker tile (hotspot #" + hotspot.Id + ")";
-            // calculateMarkerDetails(texture, markerGo);
-            //
-            // if (newMarker != null)
-            //     Markers[hotspot.Id] = newMarker;
         }
 
         #endregion

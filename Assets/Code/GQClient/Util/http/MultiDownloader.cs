@@ -129,8 +129,6 @@ namespace Code.GQClient.Util.http
                     QuestManager.Instance.MediaStore.TryGetValue(infoToLoad.Url, out var info);
                     if (info == null)
                     {
-                        //  Log.SignalErrorToDeveloper($"MediaInfo was missing for url: {infoToLoad.Url} in MultiDownloader.");
-                        UnityEngine.Debug.Log($"We are Downloading media for quest {((PrepareMediaInfoList.QuestWithMediaList) Result).Quest.Name}");
                         QuestManager.Instance.IncreaseMediaUsage(infoToLoad);
                         info = infoToLoad;
                     }

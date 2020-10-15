@@ -600,7 +600,6 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
 
     public void Awake()
     {
-        Debug.Log("OnlineMaps set instance".Green());
         _instance = this;
         tileManager = new OnlineMapsTileManager(this);
 
@@ -1138,8 +1137,6 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
 
     private void OnDisable ()
     {
-        Debug.Log($"OM.Disable() this map: {GetInstanceID()}, _instance: {_instance.GetInstanceID()}".Yellow());
-        
         OnlineMapsThreadManager.Dispose();
 
         if (_buffer != null)

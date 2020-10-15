@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
+using Code.GQClient.UI.layout;
 using GQClient.Model;
 using Code.QM.Util;
 using UnityEngine;
@@ -96,7 +97,9 @@ namespace Code.GQClient.UI.map
 			Markers.Add (info.Id, newMarker);
 			OnlineMapsMarker ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
 			ommarker.OnClick += newMarker.OnTouchOMM;
-			
+			ommarker.scale = (LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) * 0.5f) /
+			                 newMarker.Texture.height;
+
 			// TODO: info.OnChanged += newMarker.UpdateView;
 		}
 		
