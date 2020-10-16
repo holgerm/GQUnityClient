@@ -10,6 +10,19 @@ public class MapScaleAdaption : MonoBehaviour
     public TextMeshProUGUI scaleText;
     
     public float scaleDiff = 0.05f;
+    public float scaleDisplay = 0.625f;
+
+    private Camera mainCam;
+    public void Start()
+    {
+        mainCam = Camera.main;
+        float height = scaleDisplay * Screen.height;
+        // float width =  scaleDisplay * Screen.width;
+        mainCam.orthographicSize = height / 2f;
+        Debug.Log($"DPI: {Screen.dpi}");
+        // OnlineMapsTileSetControl tileset = map.GetComponent<OnlineMapsTileSetControl>();
+        // tileset.sizeInScene = new Vector2(width, height);
+    }
     
     public void ScaleUp()
     {
