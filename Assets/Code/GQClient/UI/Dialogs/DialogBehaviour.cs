@@ -38,8 +38,6 @@ namespace Code.GQClient.UI.Dialogs
 			Dialog.NoButton.onClick.AddListener (RaiseNoButtonClicked);
 
 			this.showAtLeastSeconds = showAtLeastSeconds;
-			
-			Debug.Log("Dialog started");
 		}
 
 		private IEnumerator AllowHideAfterSeconds(float hidesAfterSeconds)

@@ -39,7 +39,7 @@ namespace GQClient.Model
                 return Device.GetPersistentDatapath() + "/quests/";
             }
         }
-
+        
         public static string QuestsRelativeBasePath => "quests";
 
         public static string LocalQuestInfoJsonPath => LocalQuestsPath + "infos.json";

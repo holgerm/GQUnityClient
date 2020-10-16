@@ -356,7 +356,7 @@ public static class NativeGallery
 
 			string path = GetTemporarySavePath( filename );
 #if UNITY_EDITOR
-			Debug.Log( "SaveToGallery called successfully in the Editor" );
+			// Debug.Log( "SaveToGallery called successfully in the Editor" );
 #else
 			File.WriteAllBytes( path, mediaBytes );
 #endif

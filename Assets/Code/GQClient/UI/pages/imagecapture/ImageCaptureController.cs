@@ -12,6 +12,7 @@ using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
+using GQClient.Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -104,7 +105,7 @@ namespace Code.GQClient.UI.pages.imagecapture
             Debug.Log("ImageCapture: ## 3");
 #endif
 
-            Debug.Log(cameraTexture == null ? "Cam Texture is null" : "Cam texture is ok");
+            if (cameraTexture == null) Debug.Log("Cam Texture is null");
 
             cameraTexture.Play();
 
@@ -242,17 +243,18 @@ namespace Code.GQClient.UI.pages.imagecapture
             Variables.SetVariableValue(myPage.File, new Value(filename));
 
             // save media info for local file under the pseudo variable (e.g. @_imagecapture):
+            string relDir = Files.CombinePath(QuestInfoManager.QuestsRelativeBasePath, myPage.Quest.Id.ToString(), "runtime");
             myPage.Quest.MediaStore[GQML.PREFIX_RUNTIME_MEDIA + myPage.File] =
                 new MediaInfo(
                     myPage.Quest.Id,
                     GQML.PREFIX_RUNTIME_MEDIA + myPage.File,
-                    QuestManager.GetRuntimeMediaPath(myPage.Quest.Id),
+                    relDir, 
                     filename
                 );
-
+ 
             // TODO save to mediainfos.json again
             
-            var permission = NativeGallery.RequestPermission();
+            NativeGallery.Permission permission = NativeGallery.RequestPermission();
             if (permission == NativeGallery.Permission.Denied)
             {
                 if (NativeGallery.CanOpenSettings())

@@ -94,8 +94,6 @@ public class OnlineMapsTileManager
 
     public void Dispose()
     {
-        Debug.Log($"OMTileManager.Dispose()");
-
         foreach (OnlineMapsTile tile in tiles) tile.Dispose();
 
         _map = null;
