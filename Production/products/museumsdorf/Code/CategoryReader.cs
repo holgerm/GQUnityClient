@@ -17,12 +17,12 @@ namespace GQClient.Model
             {
                 switch (md.Key)
                 {
-                    case "category":
                     case "category1":
                         netVal = md.Value.StripQuotes();
                         if (netVal != "")
                             categories.Insert(0, netVal);
                         break;
+                    case "category":
                     case "category2":
                     case "category3":
                     case "category4":
