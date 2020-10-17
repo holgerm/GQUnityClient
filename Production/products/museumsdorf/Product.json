@@ -43,7 +43,7 @@
   ],
   "sceneMappings": [],
   "scenePaths": [
-    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/StartScene.unity",
+    "Assets/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
@@ -104,57 +104,44 @@
   "mapButtonHeightUnits": 65.0,
   "mapButtonHeightMinMM": 0.0,
   "mapButtonHeightMaxMM": 0.0,
-  "foldableCategoryFilters": true,
+  "foldableCategoryFilters": false,
   "categoryFiltersStartFolded": false,
-  "categoryFoldersStartFolded": true,
-  "mainCategorySet": "Medienart",
+  "categoryFoldersStartFolded": false,
+  "mainCategorySet": "Kategorie",
   "CategorySets": [
     {
-      "name": "Medienart",
+      "name": "Kategorie",
       "categories": [
-        {
-          "id": "museumsdorf.audio",
-          "name": "Audio Tour",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/audio"
-          }
-        },
-        {
-          "id": "museumsdorf.spiel",
-          "name": "Spiel",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/spiel"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Sortierung",
-      "categories": [
-        {
-          "id": "museumsdorf.freizeit",
-          "name": "Freizeit",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/bildung"
-          }
-        },
-        {
-          "id": "museumsdorf.fremdsprache",
-          "name": "Languages",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/freizeit"
-          }
-        },
         {
           "id": "museumsdorf.schule",
           "name": "Schule",
           "folderName": "",
           "symbol": {
-            "path": "textures/readable/freizeit"
+            "path": "textures/readable/schule"
+          }
+        },
+        {
+          "id": "museumsdorf.familie",
+          "name": "Familie",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/familie"
+          }
+        },
+        {
+          "id": "museumsdorf.rundgang",
+          "name": "Rundgang",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/rundgang"
+          }
+        },
+        {
+          "id": "museumsdorf.fremdsprache",
+          "name": "Fremdsprache",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/fremdsprache"
           }
         }
       ]
@@ -337,7 +324,7 @@
     "b": 255,
     "a": 255
   },
-  "showEmptyMenuEntries": false,
+  "showEmptyMenuEntries": true,
   "menuEntryHeightUnits": 45.0,
   "menuEntryHeightMinMM": 5.0,
   "menuEntryHeightMaxMM": 0.0,
