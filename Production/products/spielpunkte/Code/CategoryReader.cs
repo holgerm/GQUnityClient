@@ -11,18 +11,18 @@ namespace GQClient.Model
         public static List<string> ReadCategoriesFromMetadata(MetaDataInfo[] metadata)
         {
 
-            List<string> categories = new List<string>();
+            var categories = new List<string>();
             string netVal;
-            foreach (MetaDataInfo md in metadata)
+            foreach (var md in metadata)
             {
                 switch (md.Key)
                 {
-                    case "category":
                     case "category1":
                         netVal = md.Value.StripQuotes();
                         if (netVal != "")
                             categories.Insert(0, netVal);
                         break;
+                    case "category":
                     case "category2":
                     case "category3":
                     case "category4":
