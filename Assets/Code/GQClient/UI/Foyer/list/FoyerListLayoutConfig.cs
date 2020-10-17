@@ -38,7 +38,7 @@ namespace Code.GQClient.UI.layout
             {
                 case ListEntryDividingMode.SeparationLines:
                     // set lines on top, between and bottom of the list:
-                    vlg.padding.top = ConfigurationManager.Current.listStartLineWidth;
+                    vlg.padding.top = 0;
                     vlg.spacing = ConfigurationManager.Current.dividingLineWidth;
                     vlg.padding.bottom = ConfigurationManager.Current.listEndLineWidth;
                     // set list divining lines color:
