@@ -46,8 +46,9 @@ namespace Code.GQClient.Model.actions
                 Hotspot hotspot = Quest.GetHotspotWithID(HotspotId);
                 if (hotspot == null)
                     return;
-                hotspot.Active = (Activity == GQML.ACTIVE);
-                hotspot.Visible = (Visbility == GQML.VISIBLE);
+                hotspot.SetActivityAndVisibilityAtOnce(
+                    Activity == GQML.ACTIVE, 
+                    Visbility == GQML.VISIBLE);
             }
         }
 		#endregion

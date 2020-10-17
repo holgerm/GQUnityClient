@@ -16,7 +16,7 @@ namespace Code.GQClient.UI.map
 
         protected void Start()
         {
-            UpdateView();
+//            UpdateView();
         }
 
         #endregion
@@ -66,8 +66,16 @@ namespace Code.GQClient.UI.map
             var q = _qm.CurrentQuest;
             foreach (var h in q.AllHotspots)
             {
+                // ReSharper disable once DelegateSubtraction
+                h.HotspotChanged -= UpdateMarkerView;
                 CreateMarker(h);
+                h.HotspotChanged += UpdateMarkerView;
             }
+        }
+
+        public void UpdateMarkerView(Hotspot h)
+        {
+            UpdateView(); // not efficient, we should only update h, but currently we can not find the marker for h
         }
 
         /// <summary>

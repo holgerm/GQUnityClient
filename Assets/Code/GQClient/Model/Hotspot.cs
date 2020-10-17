@@ -84,7 +84,7 @@ namespace Code.GQClient.Model
             set
             {
                 _active = value;
-                InvokeHotspotChanged(this);
+                HotspotChanged?.Invoke(this);
             }
         }
 
@@ -100,8 +100,15 @@ namespace Code.GQClient.Model
             set
             {
                 _visible = value;
-                InvokeHotspotChanged(this);
+                HotspotChanged?.Invoke(this);
             }
+        }
+
+        public void SetActivityAndVisibilityAtOnce(bool active, bool visible)
+        {
+            _active = active;
+            _visible = visible;
+            HotspotChanged?.Invoke(this); 
         }
 
         public StatusValue Status { get; set; }
@@ -295,17 +302,7 @@ namespace Code.GQClient.Model
         #endregion
 
 
-        #region Events
-        public delegate void HotspotChangeCallBack(Hotspot h);
-
-        public event HotspotChangeCallBack HotspotChanged;
-
-        protected void InvokeHotspotChanged(Hotspot h)
-        {
-            if (HotspotChanged != null)
-                HotspotChanged(h);
-        }
-        #endregion
+        public Action<Hotspot> HotspotChanged;
 
     }
 
