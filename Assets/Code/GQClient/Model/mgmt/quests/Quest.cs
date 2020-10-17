@@ -393,7 +393,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
             CurrentPage = Page.Null;
 
-            Base.Instance.HideFoyerCanvases();
+            StartPage.OnPageSceneLoaded += Base.Instance.HideFoyerCanvases;
             StartPage.Start();
         }
 

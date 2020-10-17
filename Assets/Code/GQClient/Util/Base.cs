@@ -118,6 +118,12 @@ namespace Code.GQClient.Util
         /// </summary>
         public void HideFoyerCanvases()
         {
+            StartCoroutine(HideFoyerCanvasesInCoroutine());
+        }
+        
+        private IEnumerator HideFoyerCanvasesInCoroutine()
+        {
+            yield return new WaitForEndOfFrame();
             // store current show state and hide:
             var rootGOs = SceneManager.GetSceneByName(FOYER_SCENE_NAME)
                 .GetRootGameObjects();
@@ -131,6 +137,7 @@ namespace Code.GQClient.Util
                 }
             }
         }
+
 
         /// <summary>
         /// Called when we return to the foyer from a page.

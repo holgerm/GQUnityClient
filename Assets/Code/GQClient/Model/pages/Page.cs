@@ -12,6 +12,7 @@ using Code.GQClient.UI.pages;
 using Code.GQClient.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Action = System.Action;
 
 namespace Code.GQClient.Model.pages
 {
@@ -226,12 +227,14 @@ namespace Code.GQClient.Model.pages
             }
         }
 
+        public Action OnPageSceneLoaded;
+
         // called when a scene has been loaded:
         void InitOnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-#if DEBUG_LOG
-            Debug.Log(("Scene Loaded: " + scene.name).Yellow());
-#endif
+            OnPageSceneLoaded?.Invoke();
+            OnPageSceneLoaded = null;
+            
             SceneManager.SetActiveScene(scene);
             foreach (Scene sceneToUnload in scenesToUnload)
             {

@@ -1,5 +1,4 @@
 ﻿using Code.GQClient.Conf;
-using Code.GQClient.Err;
 using Code.GQClient.Model;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.layout;
@@ -18,15 +17,6 @@ namespace Code.GQClient.UI.map
         protected void Start()
         {
             UpdateView();
-        }
-
-        /// <summary>
-        /// Cleans up, e.g. unregisters itself as listener of map position updates.
-        /// </summary>
-        public void CleanUp()
-        {
-            Debug.Log("TODO IMPLEMENTATION MISSING");
-            // LocationSensor.Instance.OnLocationUpdate -= map.UpdatePosition;
         }
 
         #endregion

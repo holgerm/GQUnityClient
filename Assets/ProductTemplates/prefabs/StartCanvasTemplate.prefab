@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 5054408306012655073}
   - component: {fileID: 985163470789832411}
   m_Layer: 5
-  m_Name: StartCanvas
+  m_Name: StartCanvasTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,13 +184,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5054408306012655074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98e5364b8a524407696a998c50235e29, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e1c7ad53a14444ada95b06b71b928a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fadeInImage: {fileID: 5054408305771292989}
-  waitTimeBeforeFadeIn: 3
-  fadeInTime: 3
-  waitTimeAfterFadeIn: 1
+  waitTimeBeforeFadeIn: 0
+  fadeInTime: 0
+  waitTimeAfterFadeIn: 0
 --- !u!1 &5054408306273950797
 GameObject:
   m_ObjectHideFlags: 0

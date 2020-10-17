@@ -1,10 +1,8 @@
 ﻿// #define DEBUG_LOG
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.UI.layout;
@@ -12,7 +10,6 @@ using Code.GQClient.Util;
 using Code.QM.Util;
 using GQClient.Model;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.UI.map
 {
@@ -159,6 +156,7 @@ namespace Code.GQClient.UI.map
 
 		private void OnEnable()
 		{
+			Debug.Log("Map enabled".Yellow());
 			map = Base.Instance.Map;
 			markerManager = map.GetComponent<OnlineMapsMarkerManager>();
 			UpdateView();
