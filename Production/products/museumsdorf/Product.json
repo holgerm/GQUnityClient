@@ -70,15 +70,10 @@
   "mapKey": "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw",
   "mapUser": null,
   "mapID": "mapbox.streets",
-  "mapTileImageExtension": ".png",
-  "useMapOffline": false,
-  "mapMinimalZoom": 13.0,
-  "mapDeltaZoom": 0.5,
-  "mapScale": 1.0,
   "mapStartPositionType": "FixedPosition",
-  "mapStartAtLocation": true,
   "mapStartAtLongitude": 8.054064,
   "mapStartAtLatitude": 52.850121,
+  "mapStartZoom": 16.15,
   "hotspotMarker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -387,7 +382,6 @@
     "b": 221,
     "a": 255
   },
-  "listStartLineWidth": 7,
   "dividingLineWidth": 5,
   "listEndLineWidth": 7,
   "listEntryFgColor": {
