@@ -231,25 +231,15 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor] public string mapID { get; set; }
 
-        [ShowInProductEditor] public string mapTileImageExtension { get; set; }
-
-        public bool useMapOffline { get; set; }
-
-        [ShowInProductEditor] public float mapMinimalZoom { get; set; }
-
-        [ShowInProductEditor] public float mapDeltaZoom { get; set; }
-
-        [ShowInProductEditor] public float mapScale { get; set; }
-
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public MapStartPositionType mapStartPositionType { get; set; }
 
-        [ShowInProductEditor] public bool mapStartAtLocation { get; set; }
-
         [ShowInProductEditor] public double mapStartAtLongitude { get; set; }
 
         [ShowInProductEditor] public double mapStartAtLatitude { get; set; }
+        
+        [ShowInProductEditor] public float mapStartZoom { get; set; }
 
         [ShowInProductEditor]
         public ImagePath hotspotMarker
@@ -700,8 +690,6 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(Color32Converter))]
         public Color32 listLineColor { get; set; }
 
-        [ShowInProductEditor] public int listStartLineWidth { get; set; }
-
         [ShowInProductEditor] public int dividingLineWidth { get; set; }
 
         [ShowInProductEditor] public int listEndLineWidth { get; set; }
@@ -799,14 +787,7 @@ namespace Code.GQClient.Conf
             mapBaseUrl = "https://b.tile.openstreetmap.org";
             mapKey = "";
             mapID = "";
-            mapTileImageExtension = ".png";
-            //			mapKey = "pk.eyJ1IjoiaG9sZ2VybXVlZ2dlIiwiYSI6Im1MLW9rN2MifQ.6KebeI6zZ3QNe18n2AQyaw";
-            //			mapID = "mapbox.streets";
-            //			mapTileImageExtension = "@2x.png?access_token=" + mapKey;
-            useMapOffline = false;
-            mapMinimalZoom = 7.0f;
-            mapDeltaZoom = 0.5f;
-            mapScale = 1.0f;
+            mapStartZoom = 14.0f;
             markerHeightUnits = 55f;
             markerSymbolFGColor = Color.black;
             mapButtonHeightUnits = 55f;
@@ -859,7 +840,6 @@ namespace Code.GQClient.Conf
             listEntryBgColor = mainFgColor;
 
             listLineColor = mainFgColor;
-            listStartLineWidth = 5;
             dividingLineWidth = 5;
             listEndLineWidth = 5;
 

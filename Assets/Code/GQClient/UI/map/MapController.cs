@@ -43,25 +43,6 @@ namespace Code.GQClient.UI.map
 			}
 		}
 
-
-		// static protected void calculateMarkerDetails (Texture texture, GameObject markerGO)
-		// {
-		// 	// Get the category name for the given info regarding the current filter selection ...
-		// 	Renderer markerRenderer = markerGO.GetComponent<Renderer> ();
-		// 	markerRenderer.material.renderQueue = 4001;
-		// 	markerRenderer.material.mainTexture = texture;
-		// 	// scale the marker so that it fits inside the surrouding tile holder which is a square:
-		// 	float markerWidth = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.width / (float)texture.height));
-		// 	float markerHeight = LayoutConfig.Units2Pixels (Math.Min (1.0f, (float)texture.height / (float)texture.width));
-		// 	markerGO.transform.localScale = 
-		// 		new Vector3 (markerWidth, 1.0f, markerHeight) * (FoyerMapScreenLayout.MarkerHeightUnits * MARKER_SCALE_FACTOR) / 
-		// 		ConfigurationManager.Current.mapScale;
-		// 	markerGO.AddComponent<CameraFacingBillboard> ().Axis = Vector3.up;
-		// 	markerGO.layer = QuestMarkerInteractions.MARKER_LAYER;
-		// 	BoxCollider markerBox = markerGO.GetComponent<BoxCollider> ();
-		// 	markerBox.center = new Vector3 (0.0f, 0.0f, 0.5f);
-		// }
-
 		private static bool _ignoreInteraction;
 
 		public static bool IgnoreInteraction {
@@ -156,7 +137,6 @@ namespace Code.GQClient.UI.map
 
 		private void OnEnable()
 		{
-			Debug.Log("Map enabled".Yellow());
 			map = Base.Instance.Map;
 			markerManager = map.GetComponent<OnlineMapsMarkerManager>();
 			UpdateView();
@@ -164,28 +144,24 @@ namespace Code.GQClient.UI.map
 
 		protected void locateAtStart()
 		{
-			Debug.Log($"locateAtStart: mapStartPositionType = {ConfigurationManager.Current.mapStartPositionType}  pos is before: ({map.position.x}, {map.position.y})");
 			switch (ConfigurationManager.Current.mapStartPositionType) {
 				case MapStartPositionType.CenterOfMarkers:
 					// calculate center of markers / quests:
 					SetLocationToMiddleOfHotspots();
 					break;
 				case MapStartPositionType.FixedPosition:
-					Debug.Log($"locateAtStart: map.SetPosition({ConfigurationManager.Current.mapStartAtLongitude}, {ConfigurationManager.Current.mapStartAtLatitude}) #Fixed Config Pos");
-					map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
-						ConfigurationManager.Current.mapStartAtLatitude);
+					map.SetPositionAndZoom(ConfigurationManager.Current.mapStartAtLongitude,
+						ConfigurationManager.Current.mapStartAtLatitude, ConfigurationManager.Current.mapStartZoom);
 					break;
 				case MapStartPositionType.PlayerPosition:
 					if (Device.location.isEnabledByUser &&
 					    Device.location.status != LocationServiceStatus.Running) {
 						OnlineMapsLocationService locServ = map.GetComponent<OnlineMapsLocationService>();
-						Debug.Log($"locateAtStart: map.SetPosition({locServ.position.x}, {locServ.position.y}) #PlayerPos");
-						map.SetPosition(locServ.position.x, locServ.position.y);
+						map.SetPositionAndZoom(locServ.position.x, locServ.position.y, ConfigurationManager.Current.mapStartZoom);
 					} else
 					{
-						Debug.Log($"locateAtStart: map.SetPosition({ConfigurationManager.Current.mapStartAtLongitude}, {ConfigurationManager.Current.mapStartAtLatitude}) #Config instead of PLayerPos");
-						map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
-							ConfigurationManager.Current.mapStartAtLatitude);
+						map.SetPositionAndZoom(ConfigurationManager.Current.mapStartAtLongitude,
+							ConfigurationManager.Current.mapStartAtLatitude, ConfigurationManager.Current.mapStartZoom);
 					}
 					break;
 			}
@@ -200,6 +176,7 @@ namespace Code.GQClient.UI.map
 		
 		public void UpdateView ()
 		{
+			Debug.Log("UpdateView() begun".Yellow());
 			if (this == null) {
 				return;
 			}
@@ -234,6 +211,8 @@ namespace Code.GQClient.UI.map
 
 				locateAtStart();
 			}
+			Debug.Log("UpdateView() finished".Green());
+
 		}
 	}
 }
