@@ -15,6 +15,7 @@ using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
 using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Editor.Building
 {
@@ -513,7 +514,7 @@ namespace GQ.Editor.Building
                     STREAMING_ASSET_PATH);
             }
 
-            // gather scenes ans set them in EditorBuidlSettings:
+            // gather scenes and set them in EditorBuidlSettings:
             var scenes =
                  gatherScenesFromPackage(
                      new List<string>(),
@@ -565,6 +566,18 @@ namespace GQ.Editor.Building
 #endif
             }
             EditorBuildSettings.scenes = ebsScenes.ToArray();
+            
+            // configure OnlineMaps component from stored json file:
+            string path = Files.CombinePath(productDirPath, ProductSpec.ONLINEMAPS_CONFIG);
+            OnlineMaps mapComponent = GameObject.Find("Map").GetComponent<OnlineMaps>();
+            if (File.Exists(path) && mapComponent != null)
+            {
+                if (mapComponent != null)
+                {
+                    string json = File.ReadAllText(path);
+                    EditorJsonUtility.FromJsonOverwrite(json, mapComponent);
+                }
+            }
 
             PlayerSettings.productName = newProduct.Config.name;
             var appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
@@ -580,9 +593,6 @@ namespace GQ.Editor.Building
             ProductEditor.BuildIsDirty = false;
             CurrentProduct = newProduct; // remember the new product for the editor time access point.
             ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
-
-            //if (ebsScenes.Count > 0) 
-            //    EditorSceneManager.OpenScene(ebsScenes[0].path);
 
             ProductEditor.IsCurrentlyPreparingProduct = false;
             GQAssetChangePostprocessor.writeBuildDate();

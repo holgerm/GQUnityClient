@@ -90,6 +90,8 @@ namespace GQ.Editor.Building {
 
 		internal const string GQ_BUNDLE_ID_PREFIX = "com.questmill.geoquest";
 
+		internal const string ONLINEMAPS_CONFIG = "OnlineMapsConfig.json";
+
 		/// <summary>
 		/// Gets the path to the config file Product.json.
 		/// </summary>

@@ -16,6 +16,7 @@ using Code.GQClient.Util;
 using Code.QM.Util;
 using GQ.Editor.Util;
 using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace GQ.Editor.UI
 {
@@ -262,16 +263,32 @@ namespace GQ.Editor.UI
                 createProductButtonGUIContent = new GUIContent("Create");
             }
 
+            // bool foyerIsNOTActiveScene = SceneManager.GetActiveScene().name != "Foyer";
+            // if (foyerIsNOTActiveScene)
+            // {
+            //     // adding tooltip to explain why these elements are disabled:
+            //     string explanation = "Activate Foyer Scene first.";
+            //     prepareBuildButtonGUIContent = new GUIContent("Prepare Build", explanation);
+            // }
+            // else
+            // {
+            //     prepareBuildButtonGUIContent = new GUIContent("Prepare Build");
+            // }
+
             using (new EditorGUI.DisabledGroupScope(false)) // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
             {
                 // Prepare Build Button:
-                EditorGUILayout.BeginHorizontal();
-                {
-                    if (GUILayout.Button(prepareBuildButtonGUIContent))
+ //               using (new EditorGUI.DisabledGroupScope(foyerIsNOTActiveScene))
+   //             {
+                    EditorGUILayout.BeginHorizontal();
                     {
-                        Pm.PrepareProductForBuild(selectedProductName);
+                        if (GUILayout.Button(prepareBuildButtonGUIContent))
+                        {
+                            Pm.PrepareProductForBuild(selectedProductName);
+                        }
                     }
-                }
+ //               }
+
                 EditorGUILayout.EndHorizontal();
 
                 // Product Selection Popup:
@@ -298,7 +315,7 @@ namespace GQ.Editor.UI
                         newProductID,
                         GUILayout.Height(EditorGUIUtility.singleLineHeight));
                     bool createButtonshouldBeDisabled = newProductID.Equals("") || Pm.AllProductIds.Contains(newProductID);
-                    using (new EditorGUI.DisabledGroupScope((createButtonshouldBeDisabled)))
+                    using (new EditorGUI.DisabledGroupScope(createButtonshouldBeDisabled))
                     {
                         if (GUILayout.Button(createProductButtonGUIContent))
                         {
@@ -340,7 +357,17 @@ namespace GQ.Editor.UI
                 Files.CopyFile(file, productDir, overwrite: true);
             }
 
+            SaveMapConfigAsJSON();
+
             Pm.ConfigFilesHaveChanges = false;
+        }
+
+        private void SaveMapConfigAsJSON()
+        {
+            OnlineMaps map = GameObject.Find("Map").GetComponent<OnlineMaps>();
+            string json = EditorJsonUtility.ToJson(map, true);
+            string path = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName, ProductSpec.ONLINEMAPS_CONFIG);
+            File.WriteAllText(path, json);
         }
 
         internal static Config updateFromCurrentConfig()

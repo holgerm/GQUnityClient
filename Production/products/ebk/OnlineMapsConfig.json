@@ -1,0 +1,56 @@
+{
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "",
+        "allowRedraw": true,
+        "countParentLevels": 5,
+        "customProviderURL": "",
+        "customTrafficProviderURL": "http://localhost/{zoom}/{y}/{x}",
+        "defaultTileTexture": {
+            "instanceID": 0
+        },
+        "dispatchEvents": true,
+        "emptyColor": {
+            "r": 0.5,
+            "g": 0.5,
+            "b": 0.5,
+            "a": 1.0
+        },
+        "height": 1024,
+        "labels": false,
+        "language": "en",
+        "lockRedraw": false,
+        "needRedraw": false,
+        "notInteractUnderGUI": true,
+        "mapType": "mapbox.map",
+        "osmServer": 0,
+        "proxyURL": "http://service.infinity-code.com/redirect.php?",
+        "redrawOnPlay": true,
+        "renderInThread": false,
+        "resourcesPath": "OnlineMapsTiles/{zoom}/{x}/{y}",
+        "streamingAssetsPath": "OnlineMapsTiles/{zoom}/{x}/{y}.png",
+        "showMarkerTooltip": 0,
+        "source": 0,
+        "stopPlayingWhenScriptsCompile": true,
+        "texture": {
+            "instanceID": 0
+        },
+        "tooltipBackgroundTexture": {
+            "fileID": 2800000,
+            "guid": "a8d1734e646100c4e83635fecf978e15",
+            "type": 3
+        },
+        "traffic": false,
+        "trafficProviderID": "googlemaps",
+        "useCurrentZoomTiles": false,
+        "useProxy": true,
+        "useSoftwareJPEGDecoder": false,
+        "width": 1024,
+        "_activeTypeSettings": "07User ID1715gqebk06Map ID228225ckg7m3hh45p2u19qhpvzv2yyg12Access Token299296pk.eyJ1IjoiZ3FlYmsiLCJhIjoiNTk0MGQ5NjJmYjExOWNlMjliMmNjY2ViNzNhOGNhOTcifQ.Ed43IqPgvLsBTSFXxK5csQ",
+        "_zoom": 13.0,
+        "latitude": 50.73534167045611,
+        "longitude": 7.106280727173058
+    }
+}
