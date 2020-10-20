@@ -103,15 +103,7 @@ namespace Code.QM.Util
         public void Show(string pointName)
         {
             stopwatch.Stop();
-            UnityEngine.Debug.Log(
-                string.Format("WATCH {0} at {1} took {2} ms (<color=Red>{3}</color> delta in frame# {4})",
-                    Name,
-                    pointName,
-                    stopwatch.ElapsedMilliseconds,
-                    stopwatch.ElapsedMilliseconds - lastTimeStamp,
-                    Time.frameCount
-                )
-            );
+            Debug.Log($"WATCH {Name} at {pointName} took {stopwatch.ElapsedMilliseconds} ms (<color=Red>{stopwatch.ElapsedMilliseconds - lastTimeStamp}</color> delta in frame# {Time.frameCount}");
             lastTimeStamp = stopwatch.ElapsedMilliseconds;
             stopwatch.Start();
         }
