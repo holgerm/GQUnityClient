@@ -1,4 +1,5 @@
 ﻿using Code.GQClient.Util.tasks;
+using UnityEngine;
 
 namespace Code.GQClient.UI.Progress
 {
@@ -23,6 +24,7 @@ namespace Code.GQClient.UI.Progress
 		{
 			base.Stop ();
 
+			Debug.Log($"Behaviour: {title}");
 			base.Progress.Hide();
 		}
 

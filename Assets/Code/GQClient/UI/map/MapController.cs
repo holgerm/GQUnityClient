@@ -176,7 +176,6 @@ namespace Code.GQClient.UI.map
 		
 		public void UpdateView ()
 		{
-			Debug.Log("UpdateView() begun".Yellow());
 			if (this == null) {
 				return;
 			}
@@ -211,8 +210,6 @@ namespace Code.GQClient.UI.map
 
 				locateAtStart();
 			}
-			Debug.Log("UpdateView() finished".Green());
-
 		}
 	}
 }

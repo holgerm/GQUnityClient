@@ -66,7 +66,9 @@ namespace Code.GQClient.Util.tasks
 
             ReadInput(input);
 
-            return DoTheWork();
+            IEnumerator results = DoTheWork();
+            OnTaskEnded?.Invoke(this, null);
+            return results;
         }
 
         /// <summary>

@@ -364,7 +364,11 @@ namespace GQ.Editor.UI
 
         private void SaveMapConfigAsJSON()
         {
-            OnlineMaps map = GameObject.Find("Map").GetComponent<OnlineMaps>();
+            GameObject mapGo = GameObject.Find("Map");
+            if (mapGo == null) return;
+            OnlineMaps map = mapGo.GetComponent<OnlineMaps>();
+            if (map == null) return;
+            
             string json = EditorJsonUtility.ToJson(map, true);
             string path = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName, ProductSpec.ONLINEMAPS_CONFIG);
             File.WriteAllText(path, json);

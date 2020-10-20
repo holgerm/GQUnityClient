@@ -226,7 +226,7 @@ namespace GQClient.Model
         /// Should be called in cases like the list is shown again (or first time), 
         /// the server connection is gained back, the last update is long ago or the user demands an update.
         /// </summary>
-        public void UpdateQuestInfos()
+        public static void UpdateQuestInfos()
         {
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
@@ -274,13 +274,25 @@ namespace GQClient.Model
                     exporter, 
                     autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
+
+            float startTime = Time.realtimeSinceStartup;
+            t.OnTaskStarted += (sender, args) =>
+            {
+                Debug.Log($"t started took {Time.realtimeSinceStartup - startTime} seconds".Yellow());
+            };
+            t.OnTaskEnded += (sender, args) =>
+            {
+                Debug.Log($"t ended took {Time.realtimeSinceStartup - startTime} seconds".Yellow());
+            };
+
+            WATCH._Start("Start");
             t.Start();
         }
 
         /// <summary>
         /// Updates quest infos based on the local infos only. No server connection needed.
         /// </summary>
-        public void UpdateLocalQuestInfosOnly()
+        public static void UpdateLocalQuestInfosOnly()
         {
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();

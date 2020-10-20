@@ -39,7 +39,7 @@ namespace Code.GQClient.UI.menu
 
         public void UpdateQuestInfos()
         {
-            QuestInfoManager.Instance.UpdateQuestInfos();
+            QuestInfoManager.UpdateQuestInfos();
             Base.Instance.MenuCanvas.SetActive(false);
         }
 

@@ -38,7 +38,7 @@ namespace GQTests.Management {
 		/// </summary>
 		[Test]
 		public void EmptyServerEmptyQuestManager () {
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			ASSERT_QM_ShowsNoQuests ();
 		}
 
@@ -49,7 +49,7 @@ namespace GQTests.Management {
 		[Test]
 		public void PublishNewQuestInfoOnServer () {
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			ASSERT_ShowOptions_Download ();
 		}
 
@@ -60,7 +60,7 @@ namespace GQTests.Management {
 		[Test]
 		public void DownloadQuest() {
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			// before download app offers us to download the quest:
 			ASSERT_ShowOptions_Download ();
 			MOCK_DownloadQuest();
@@ -76,11 +76,11 @@ namespace GQTests.Management {
 		public void ChangeInfoOfUnloadedQuestByCategory() {
 			// PREPARATION: published quest:
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 
 			// TEST:
 			MOCK_ChangeCategoryOfQuestInfo ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			ASSERT_ShowOptions_Download ();
 			ASSERT_ShowsNewCategory ();
 		}
@@ -93,11 +93,11 @@ namespace GQTests.Management {
 		public void ChangeInfoOfUnloadedQuestByName() {
 			// PREPARATION: published quest:
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 
 			// TEST:
 			MOCK_ChangeNameOfQuestInfo ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			ASSERT_ShowOptions_Download ();
 			ASSERT_ShowsNewName ();
 		}
@@ -110,12 +110,12 @@ namespace GQTests.Management {
 		public void ChangeInfoOfLoadedQuestByCategory() {
 			// PREPARATION: published downloaded quest:
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			MOCK_DownloadQuest();
 
 			// TEST:
 			MOCK_ChangeCategoryOfQuestInfo ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			ASSERT_ShowOptions_Play_Delete_Update ();
 			ASSERT_ShowsOldCategory ();
 		}
@@ -128,10 +128,10 @@ namespace GQTests.Management {
 		public void UpdateChangedQuestByCategory() {
 			// PREPARATION: publish and download quest and change it on server:
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			MOCK_DownloadQuest();
 			MOCK_ChangeCategoryOfQuestInfo ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 
 			MOCK_UpdateQuest ();
 
@@ -147,12 +147,12 @@ namespace GQTests.Management {
 		public void ChangeInfoOfLoadedQuestByName() {
 			// PREPARATION: published downloaded quest:
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			MOCK_DownloadQuest();
 
 			// TEST:
 			MOCK_ChangeNameOfQuestInfo ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 			ASSERT_ShowOptions_Play_Delete_Update ();
 			ASSERT_ShowsOldName ();
 		}
@@ -161,7 +161,7 @@ namespace GQTests.Management {
 		public void ChangeGameXmlOnly() {
 			// PREPARATION: publish quest and download it:
 			MOCK_Server_PublishQuest ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 
             // Now only the download option should be shown:
             ASSERT_ShowOptions_Download();
@@ -170,7 +170,7 @@ namespace GQTests.Management {
 
 			// ACT: publish new version of game.xml where only content changed but metadata and media stay the same:
 			MOCK_Server_ChangeQuestXML ();
-			QM.UpdateQuestInfos();
+			QuestInfoManager.UpdateQuestInfos();
 
 			// TEST:
 			ASSERT_ShowOptions_Play_Delete_Update ();
