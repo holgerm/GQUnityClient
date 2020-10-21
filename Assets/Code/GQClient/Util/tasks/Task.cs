@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.Err;
 using Code.GQClient.UI;
 using UnityEngine;
 
@@ -48,7 +49,6 @@ namespace Code.GQClient.Util.tasks
         public void Start(object input = null, int step = 1)
         {
             Step = step;
-            OnTaskStarted?.Invoke(this, null);
             CoroutineStarter.Run(RunAsCoroutine(input));
         }
 
@@ -60,6 +60,7 @@ namespace Code.GQClient.Util.tasks
         /// </summary>
         public virtual IEnumerator RunAsCoroutine(object input = null)
         {
+            OnTaskStarted?.Invoke(this, null);
             behaviours.ForEach(
                 (AbstractBehaviour behaviour) => behaviour.Start()
             );

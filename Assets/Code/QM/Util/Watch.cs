@@ -103,7 +103,7 @@ namespace Code.QM.Util
         public void Show(string pointName)
         {
             stopwatch.Stop();
-            Debug.Log($"WATCH {Name} at {pointName} took {stopwatch.ElapsedMilliseconds} ms (<color=Red>{stopwatch.ElapsedMilliseconds - lastTimeStamp}</color> delta in frame# {Time.frameCount}");
+            Debug.Log($"WATCH {Name} at {pointName} took {stopwatch.ElapsedMilliseconds} ms (<color=Red>{stopwatch.ElapsedMilliseconds - lastTimeStamp}</color>) delta in frame# {Time.frameCount}");
             lastTimeStamp = stopwatch.ElapsedMilliseconds;
             stopwatch.Start();
         }

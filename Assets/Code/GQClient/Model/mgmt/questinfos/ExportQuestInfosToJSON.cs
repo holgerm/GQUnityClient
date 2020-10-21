@@ -13,7 +13,7 @@ namespace GQClient.Model
 
 		public ExportQuestInfosToJson() : base() { }
 
-		protected override IEnumerator DoTheWork() 
+		protected override IEnumerator DoTheWork()
 		{
 			var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
 
@@ -23,7 +23,6 @@ namespace GQClient.Model
 					? "[]"
 					: JsonConvert.SerializeObject(questInfoList, Formatting.Indented);
 				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJsonPath, questInfoJson);
-
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export quest info json file: " + e.Message);

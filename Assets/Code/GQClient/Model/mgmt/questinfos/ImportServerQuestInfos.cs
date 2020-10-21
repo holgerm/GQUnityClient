@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.QM.Util;
 using UnityEngine;
 
 namespace GQClient.Model
@@ -36,12 +38,12 @@ namespace GQClient.Model
 
                     if (oldInfo.TimeStamp == null || oldInfo.TimeStamp < newInfo.ServerTimeStamp)
                     {
-                        qim.UpdateInfo(newInfo);
+                        qim.UpdateInfo(newInfo, false);
                     }
                  }
                 else
                 {
-                    qim.AddInfo(newInfo);
+                    qim.AddInfo(newInfo, false);
                 }
             }
 
@@ -54,7 +56,7 @@ namespace GQClient.Model
                     qim.QuestDict[oldId].Delete();
 
                     // and also delete the quest infos from the list ...
-                    qim.RemoveInfo(oldId);
+                    qim.RemoveInfo(oldId, false);
                 }
                 else
                 {
@@ -69,10 +71,12 @@ namespace GQClient.Model
                     {
                          // if the quest has not been loaded yet, we remove the quest info:
                         qim.QuestDict[oldId].Delete(); // introduced newly without exact knowledge (hm)
-                        qim.RemoveInfo(oldId);
+                        qim.RemoveInfo(oldId, false);
                     }
                 }
             }
+            
+            qim.RaiseOnDataChange("QuestInfoManager updated");
         }
     }
 }

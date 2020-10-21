@@ -23,8 +23,6 @@ namespace Code.GQClient.UI.Progress
 		public override void Stop ()
 		{
 			base.Stop ();
-
-			Debug.Log($"Behaviour: {title}");
 			base.Progress.Hide();
 		}
 

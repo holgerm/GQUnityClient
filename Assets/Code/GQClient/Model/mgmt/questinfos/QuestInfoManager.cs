@@ -139,25 +139,27 @@ namespace GQClient.Model
 
 
         #region Quest Info Changes
-        public void AddInfo(QuestInfo newInfo)
+
+        public void AddInfo(QuestInfo newInfo, bool raiseEvents = true)
         {
             QuestDict.Add(newInfo.Id, newInfo);
 
             if (Filter.Accept(newInfo))
             {
-                // Run through filter and raise event if involved:
-                onDataChange?.Invoke(
-                    this,
-                    new QuestInfoChangedEvent(
-                        $"Info for quest {newInfo.Name} added.",
-                        type: ChangeType.AddedInfo,
-                        newQuestInfo: newInfo
-                    )
+                QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
+                    $"Info for quest {newInfo.Name} added.",
+                    type: ChangeType.AddedInfo,
+                    newQuestInfo: newInfo
                 );
+                // Run through filter and raise event if involved:
+                if (raiseEvents)
+                {
+                    onDataChange?.Invoke(this, ev);
+                }
             }
         }
 
-        public void UpdateInfo(QuestInfo changedInfo)
+        public void UpdateInfo(QuestInfo changedInfo, bool raiseEvents = true)
         {
             if (!QuestDict.TryGetValue(changedInfo.Id, out var curInfo))
             {
@@ -169,10 +171,9 @@ namespace GQClient.Model
             curInfo.QuestInfoRecognizeServerUpdate(changedInfo);
 
             // React also as container to a change info event
-            if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
+            if (raiseEvents && Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
             {
                 // Run through filter and raise event if involved
-
                 onDataChange?.Invoke(
                     this,
                     new QuestInfoChangedEvent(
@@ -186,7 +187,7 @@ namespace GQClient.Model
 
         }
 
-        public void RemoveInfo(int oldInfoId)
+        public void RemoveInfo(int oldInfoId, bool raiseEvents = true)
         {
 #if DEBUG_LOG
             Debug.Log("RemoveInfo(" + oldInfoID + ")");
@@ -205,7 +206,7 @@ namespace GQClient.Model
             oldInfo.Dispose();
             QuestDict.Remove(oldInfoId);
             
-            if (Filter.Accept(oldInfo))
+            if (raiseEvents && Filter.Accept(oldInfo))
             {
                 // Run through filter and raise event if involved
 
@@ -274,18 +275,6 @@ namespace GQClient.Model
                     exporter, 
                     autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
-
-            float startTime = Time.realtimeSinceStartup;
-            t.OnTaskStarted += (sender, args) =>
-            {
-                Debug.Log($"t started took {Time.realtimeSinceStartup - startTime} seconds".Yellow());
-            };
-            t.OnTaskEnded += (sender, args) =>
-            {
-                Debug.Log($"t ended took {Time.realtimeSinceStartup - startTime} seconds".Yellow());
-            };
-
-            WATCH._Start("Start");
             t.Start();
         }
 
@@ -308,7 +297,7 @@ namespace GQClient.Model
         public delegate void ChangeCallback(object sender, QuestInfoChangedEvent e);
 
         private event ChangeCallback onDataChange;
-
+        
         public event ChangeCallback OnDataChange
         {
             add
@@ -325,6 +314,17 @@ namespace GQClient.Model
                 );
             }
             remove => onDataChange -= value;
+        }
+
+        public void RaiseOnDataChange(string message = null)
+        {
+            if (message == null)
+            {
+                message = "Quest infos changed.";
+            }
+            onDataChange?.Invoke(
+                this, 
+                new QuestInfoChangedEvent(message, type: ChangeType.ListChanged));
         }
 
         #endregion
@@ -375,7 +375,6 @@ namespace GQClient.Model
             Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
             Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
             Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
-//            Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
 
             // check whether we have alternative views to offer:
             if (ConfigurationManager.Current.questInfoViews.Length <= 1)
