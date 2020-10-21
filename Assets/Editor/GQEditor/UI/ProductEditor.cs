@@ -840,23 +840,6 @@ namespace GQ.Editor.UI
                 }
             }
 
-            // Map Providers:
-            hidden |= (
-                config.mapProvider == MapProvider.OpenStreetMap
-            ) && (
-                propInfo.Name.Equals("mapBaseUrl") ||
-                propInfo.Name.Equals("mapKey") ||
-                propInfo.Name.Equals("mapUser") ||
-                propInfo.Name.Equals("mapID") ||
-                propInfo.Name.Equals("mapTileImageExtension")
-            );
-            hidden |= (
-                config.mapProvider == MapProvider.MapBox
-            ) && (
-                propInfo.Name.Equals("mapBaseUrl") ||
-                propInfo.Name.Equals("mapTileImageExtension")
-            );
-
             // List Entry Dividing Modes:
             hidden |= (
                 config.listEntryDividingMode == ListEntryDividingMode.SeparationLines
@@ -1661,49 +1644,6 @@ namespace GQ.Editor.UI
                     configIsDirty = true;
                     curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements, null);
                 }
-            }
-
-            return configIsDirty;
-        }
-    }
-
-
-    public class ProductEditorPart4MapProvider : ProductEditorPart
-    {
-        int? _selected;
-        int selected
-        {
-            get
-            {
-                if (_selected == null)
-                {
-                    _selected = (int?)ProductEditor.SelectedConfig.mapProvider;
-                }
-                return (int)_selected;
-            }
-            set
-            {
-                _selected = value;
-            }
-        }
-
-        string[] mapProviderNames = Enum.GetNames(typeof(MapProvider));
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
-        {
-            configIsDirty = false;
-
-            int oldMapProvider = selected;
-            selected =
-                EditorGUILayout.Popup(
-                "Map Provider",
-                selected,
-                mapProviderNames
-            );
-            if (oldMapProvider != selected)
-            {
-                configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapProvider)selected, null);
             }
 
             return configIsDirty;

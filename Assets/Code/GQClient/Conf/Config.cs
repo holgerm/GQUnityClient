@@ -221,18 +221,6 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor(StartSection = "Map & Markers:")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public MapProvider mapProvider { get; set; }
-
-        [ShowInProductEditor] public string mapBaseUrl { get; set; }
-
-        [ShowInProductEditor] public string mapKey { get; set; }
-
-        [ShowInProductEditor] public string mapUser { get; set; }
-
-        [ShowInProductEditor] public string mapID { get; set; }
-
-        [ShowInProductEditor]
-        [JsonConverter(typeof(StringEnumConverter))]
         public MapStartPositionType mapStartPositionType { get; set; }
 
         [ShowInProductEditor] public double mapStartAtLongitude { get; set; }
@@ -783,10 +771,6 @@ namespace Code.GQClient.Conf
             stopAudioWhenLeavingPage = true;
 
             // Map:
-            mapProvider = MapProvider.OpenStreetMap;
-            mapBaseUrl = "https://b.tile.openstreetmap.org";
-            mapKey = "";
-            mapID = "";
             mapStartZoom = 14.0f;
             markerHeightUnits = 55f;
             markerSymbolFGColor = Color.black;
