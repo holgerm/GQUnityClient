@@ -66,6 +66,10 @@ namespace Code.GQClient.Conf
         [JsonConverter(typeof(StringEnumConverter))]
         public AndroidSdkVersions androidMinSDKVersion { get; set; }
 #endif
+        
+        [ShowInProductEditor] 
+        [JsonConverter(typeof(StringEnumConverter))]
+        public iOSTargetDevice iOsDeviceTypes { get; set; }
 
         [ShowInProductEditor] public int autoStartQuestID { get; set; }
 
@@ -73,22 +77,22 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor] public bool keepAutoStarting { get; set; }
 
-        [ShowInProductEditor]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public DownloadStrategy downloadStrategy { get; set; }
-
         [ShowInProductEditor] public long timeoutMS { get; set; }
 
         [ShowInProductEditor] public long maxIdleTimeMS { get; set; }
 
         [ShowInProductEditor] public int maxParallelDownloads { get; set; }
 
+        [ShowInProductEditor]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DownloadStrategy downloadStrategy { get; set; }
+
         [ShowInProductEditor] public string nameForQuestSg { get; set; }
 
         [ShowInProductEditor] public string nameForQuestsPl { get; set; }
 
         [ShowInProductEditor] public string[] questInfoViews { get; set; }
-
+        
         [ShowInProductEditor] public float topicButtonAspectRatio { get; set; }
 
         public bool cloudQuestsVisible { get; set; }
@@ -735,6 +739,7 @@ namespace Code.GQClient.Conf
                 QuestInfoView.TopicTree.ToString(),
                 QuestInfoView.Map.ToString()
             };
+            iOsDeviceTypes = iOSTargetDevice.iPhoneAndiPad;
             topicButtonAspectRatio = 1.0f;
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
             cloudQuestsVisible = true;

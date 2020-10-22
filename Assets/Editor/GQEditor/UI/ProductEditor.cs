@@ -1097,7 +1097,7 @@ namespace GQ.Editor.UI
         }
         string[] downloadStrategyNames = Enum.GetNames(typeof(DownloadStrategy));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        protected override bool doCreateGui(PropertyInfo curPropInfo)
         {
             configIsDirty = false;
 
@@ -1119,6 +1119,50 @@ namespace GQ.Editor.UI
         }
     }
 
+    public class ProductEditorPart4iOSTargetDevice : ProductEditorPart
+    {
+        int? _selected;
+        int selected
+        {
+            get
+            {
+                if (_selected == null)
+                {
+                    _selected = (int?)ProductEditor.SelectedConfig.iOsDeviceTypes;
+                }
+                return (int)_selected;
+            }
+            set
+            {
+                _selected = value;
+            }
+        }
+
+        readonly string[] iOsDeviceTypeNames = Enum.GetNames(typeof(iOSTargetDevice));
+
+        protected override bool doCreateGui(PropertyInfo curPropInfo)
+        {
+            configIsDirty = false;
+
+            // TODO implement all three strategies
+            int oldDownloadStrategy = selected;
+            selected =
+                EditorGUILayout.Popup(
+                    "Supported iOS Device Types",
+                    selected,
+                    iOsDeviceTypeNames
+                );
+            if (oldDownloadStrategy != selected)
+            {
+                configIsDirty = true;
+                curPropInfo.SetValue(ProductEditor.SelectedConfig, (iOSTargetDevice)selected, null);
+                Debug.Log($"IOS Device Types changed to {((iOSTargetDevice)selected).ToString()}");
+                PlayerSettings.iOS.targetDevice = (iOSTargetDevice) selected;
+            }
+
+            return configIsDirty;
+        }
+    }
 
     public class ProductEditorPart4ImagePath : ProductEditorPart
     {
