@@ -15,6 +15,7 @@ using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
 using Code.QM.Util;
 using GQ.Editor.Util;
+using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
@@ -566,19 +567,6 @@ namespace GQ.Editor.UI
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    if (GUILayout.Button("Build +"))
-                    {
-                        if (EditorUtility.DisplayDialog(
-                                "Really increase Build Version Number?",
-                                "It will then be " + (buildVersionNumber + 1),
-                                "Yes, increase!",
-                                "Cancel"))
-                        {
-                            buildVersionNumber++;
-                            EditorPrefs.SetInt("buildVersionNumber", buildVersionNumber);
-                            updateVersionText();
-                        }
-                    }
                     if (GUILayout.Button("Main +"))
                     {
                         if (EditorUtility.DisplayDialog(
@@ -592,37 +580,38 @@ namespace GQ.Editor.UI
                             updateVersionText();
                         }
                     }
-                }
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                {
-                    if (buildVersionNumber > 0 && GUILayout.Button("Build -"))
-                    {
-                        if (EditorUtility.DisplayDialog(
-                                "Really decrease Build Version Number?",
-                                "It will then be " + (buildVersionNumber - 1),
-                                "Yes, decrease!",
-                                "Cancel"))
-                        {
-                            buildVersionNumber--;
-                            EditorPrefs.SetInt("buildVersionNumber", buildVersionNumber);
-                            updateVersionText();
-                        }
-                    }
                     if (GUILayout.Button("Main -"))
                     {
                         if (EditorUtility.DisplayDialog(
-                                "Really decrease Main Version Number?",
-                                "It will then be " + (mainVersionNumber - 1),
-                                "Yes, decrease!",
-                                "Cancel"))
+                            "Really decrease Main Version Number?",
+                            "It will then be " + (mainVersionNumber - 1),
+                            "Yes, decrease!",
+                            "Cancel"))
                         {
                             mainVersionNumber--;
                             EditorPrefs.SetInt("mainVersionNumber", mainVersionNumber);
                             updateVersionText();
                         }
                     }
+                }
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Reset Build Nr"))
+                    {
+                        if (EditorUtility.DisplayDialog(
+                            "Really reset Build Version Number?",
+                            "It will then be 1",
+                            "Yes, reset!",
+                            "Cancel"))
+                        {
+                            buildVersionNumber = 1;
+                            EditorPrefs.SetInt("buildVersionNumber", buildVersionNumber);
+                            updateVersionText();
+                        }
+                    }
+                    GUILayout.Label($"Build Nr: {buildVersionNumber}", EditorStyles.label); 
                 }
                 EditorGUILayout.EndHorizontal();
             }
@@ -672,6 +661,19 @@ namespace GQ.Editor.UI
             PlayerSettings.iOS.buildNumber = buildVersionNumber.ToString();
 
             allowVersionChanges = false;
+        }
+
+
+        [PostProcessBuild(10)]
+        private static void IncreaseBuildNrAfterBuild(BuildTarget target, string pathToBuiltProject)
+        {
+            if (Instance == null)
+            {
+                Debug.LogError("ProductEditor Window was not available during build. Build Nr has not been increased!");
+            }
+            Instance.buildVersionNumber++;
+            EditorPrefs.SetInt("buildVersionNumber", Instance.buildVersionNumber);
+            Instance.updateVersionText();
         }
 
 
