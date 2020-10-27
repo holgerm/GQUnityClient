@@ -363,13 +363,25 @@ namespace Code.GQClient.Model.expressions
 
             if (this.ValType == Type.Text)
             {
-                if (other.ValType != Type.Text)
+                switch (other.ValType)
                 {
-                    Log.WarnAuthor("You cannot compare Text with " + other.ValType.ToString());
-                    return false;
+                    case Type.Float:
+                    case Type.Integer: 
+                    case Type.Text:
+                        return this.internalValue.Equals(other.internalValue);
+                    case Type.Bool:
+                    case Type.NULL:
+                        Log.WarnAuthor(
+                            $"You cannot compare {internalValue} (Text) with {other.internalValue} ({other.ValType.ToString()})");
+                        return false;
+                    case Type.VarExpression:
+                        Value otherValue = Variables.GetValue(other.internalValue);
+                        return IsEqual(otherValue);
+                    default:
+                        Log.WarnAuthor(
+                            $"You cannot compare {internalValue} (Text) with {other.internalValue} ({other.ValType.ToString()} of unknown type)");
+                        return false;
                 }
-                else
-                    return this.internalValue.Equals(other.internalValue);
             }
 
             if (this.ValType == Type.Integer)
