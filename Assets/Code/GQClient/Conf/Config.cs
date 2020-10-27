@@ -5,8 +5,8 @@ using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using UnityEditor;
 using UnityEngine;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -64,12 +64,14 @@ namespace Code.GQClient.Conf
 #if UNITY_EDITOR
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        public AndroidSdkVersions androidMinSDKVersion { get; set; }
+        public UnityEditor.AndroidSdkVersions androidMinSDKVersion { get; set; }
+
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        public iOSTargetDevice iOsDeviceTypes { get; set; }
+        public UnityEditor.iOSTargetDevice iOsDeviceTypes { get; set; }
 #endif
+
         [ShowInProductEditor] public int autoStartQuestID { get; set; }
 
         [ShowInProductEditor] public bool autostartIsPredeployed { get; set; }
@@ -91,7 +93,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor] public string nameForQuestsPl { get; set; }
 
         [ShowInProductEditor] public string[] questInfoViews { get; set; }
-        
+
         [ShowInProductEditor] public float topicButtonAspectRatio { get; set; }
 
         public bool cloudQuestsVisible { get; set; }
@@ -186,13 +188,11 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor(StartSection = "Synchronization:")]
         public bool autoSyncQuestInfos { get; set; }
-        
-        [ShowInProductEditor]
-        public bool autoLoadQuests { get; set; }
-        
-        [ShowInProductEditor]
-        public bool autoUpdateQuests { get; set; }
-        
+
+        [ShowInProductEditor] public bool autoLoadQuests { get; set; }
+
+        [ShowInProductEditor] public bool autoUpdateQuests { get; set; }
+
         /// <summary>
         /// If set, quests called by StartQuest actions will update before being started if possible and load if needed.
         /// </summary>
@@ -229,7 +229,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor] public double mapStartAtLongitude { get; set; }
 
         [ShowInProductEditor] public double mapStartAtLatitude { get; set; }
-        
+
         [ShowInProductEditor] public float mapStartZoom { get; set; }
 
         [ShowInProductEditor]
@@ -464,7 +464,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
         public AlignmentOption textAlignment { get; set; }
-        
+
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 textLinkColor { get; set; }
@@ -738,7 +738,9 @@ namespace Code.GQClient.Conf
                 QuestInfoView.TopicTree.ToString(),
                 QuestInfoView.Map.ToString()
             };
-            iOsDeviceTypes = iOSTargetDevice.iPhoneAndiPad;
+#if UNITY_EDITOR
+            iOsDeviceTypes = UnityEditor.iOSTargetDevice.iPhoneAndiPad;
+#endif
             topicButtonAspectRatio = 1.0f;
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
             cloudQuestsVisible = true;
