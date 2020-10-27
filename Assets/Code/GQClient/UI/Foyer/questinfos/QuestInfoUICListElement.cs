@@ -186,11 +186,16 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
         private void OnActivitiesBlockingChanged(bool isBlocking)
         {
-            DownloadButton.interactable = !isBlocking;
-            DeleteButton.interactable = !isBlocking;
-            StartButton.interactable = !isBlocking;
-            UpdateButton.interactable = !isBlocking;
-            NameButton.interactable = !isBlocking;
+            if (DownloadButton != null)
+                DownloadButton.interactable = !isBlocking;
+            if (DeleteButton != null)
+                DeleteButton.interactable = !isBlocking;
+            if (StartButton != null)
+                StartButton.interactable = !isBlocking;
+            if (UpdateButton != null)
+                UpdateButton.interactable = !isBlocking;
+            if (NameButton != null)
+                NameButton.interactable = !isBlocking;
         }
 
         public override void UpdateView(QuestInfo questInfo)
