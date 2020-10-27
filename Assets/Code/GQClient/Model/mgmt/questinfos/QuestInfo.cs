@@ -150,6 +150,9 @@ namespace GQClient.Model
 
         [JsonProperty] private long? _lastUpdateOnDevice = null;
 
+        /// <summary>
+        /// Local timestamp.
+        /// </summary>
         public long? TimeStamp
         {
             get { return _lastUpdateOnDevice; }
@@ -213,6 +216,7 @@ namespace GQClient.Model
 
         public void QuestContentHasBeenUpdated()
         {
+            Debug.Log($"START OF  QuestContentHasBeenUpdated(): {LoadOptionPossibleInTheory}");
             if (!IsUpdateValid(NewVersionOnServer))
             {
                 return;
@@ -223,14 +227,17 @@ namespace GQClient.Model
             FeaturedImagePath = NewVersionOnServer.FeaturedImagePath;
             TypeID = NewVersionOnServer.TypeID;
             IconPath = NewVersionOnServer.IconPath;
-            TimeStamp = NewVersionOnServer.TimeStamp;
+            ServerTimeStamp = NewVersionOnServer.ServerTimeStamp;
+            TimeStamp = ServerTimeStamp;
             Hotspots = NewVersionOnServer.Hotspots;
             Metadata = NewVersionOnServer.Metadata;
             // unchanged: TimestampOfPredeployedVersion
             // unchanged: PlayedTimes
             NewVersionOnServer = null;
+            Debug.Log($"BEFORE InvokeOnChanged: {LoadOptionPossibleInTheory}");
 
             InvokeOnChanged();
+            Debug.Log($"AFTER InvokeOnChanged: {LoadOptionPossibleInTheory}");
         }
 
         public void QuestInfoRecognizeServerUpdate(QuestInfo newQuestInfo)
@@ -759,7 +766,7 @@ namespace GQClient.Model
         {
             if (ActivitiesBlocking)
                 return null;
-
+            
             // update the quest info:
             if (NewVersionOnServer != null)
             {
