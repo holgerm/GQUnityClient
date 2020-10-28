@@ -216,7 +216,6 @@ namespace GQClient.Model
 
         public void QuestContentHasBeenUpdated()
         {
-            Debug.Log($"START OF  QuestContentHasBeenUpdated(): {LoadOptionPossibleInTheory}");
             if (!IsUpdateValid(NewVersionOnServer))
             {
                 return;
@@ -234,10 +233,8 @@ namespace GQClient.Model
             // unchanged: TimestampOfPredeployedVersion
             // unchanged: PlayedTimes
             NewVersionOnServer = null;
-            Debug.Log($"BEFORE InvokeOnChanged: {LoadOptionPossibleInTheory}");
 
             InvokeOnChanged();
-            Debug.Log($"AFTER InvokeOnChanged: {LoadOptionPossibleInTheory}");
         }
 
         public void QuestInfoRecognizeServerUpdate(QuestInfo newQuestInfo)
