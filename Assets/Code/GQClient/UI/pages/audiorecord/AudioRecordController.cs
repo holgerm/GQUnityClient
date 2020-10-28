@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Code.GQClient.Err;
+using Code.GQClient.FileIO;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using TMPro;
@@ -191,19 +192,25 @@ namespace Code.GQClient.UI.pages.audiorecord
             UpdateView();
 
         }
-        
+
+        readonly SaveWav saver = new SaveWav();
+
         public void PressRecord()
         {
             if (IsRecording)
             {
+                // pressed Record again while playíng ends the recoding and saves the file:
                 Microphone.End(microphoneName);
                 audioSource.Play();
                 // TODO save audio to file!
+                string path = Files.CombinePath(Application.persistentDataPath, myPage.FileName);
+                Debug.Log("TODO save audio to file: " + path);
+                saver.Save(path, saver.TrimSilence(audioSource.clip, 0.01f));
                 IsRecording = false;
             }
             else
             {
-                // Length is fixed to 60 seconds. This should be sepcified by author in quest.
+                // Length is fixed to 60 seconds. This should be specified by author in quest.
                 Debug.Log("Recording started with microphone: " + microphoneName + 
                     " ac.length: " + (audioSource.clip == null ? "null" : audioSource.clip.length.ToString()) + 
                     " samples: " + (audioSource.clip == null ? "null" : audioSource.clip.samples.ToString()));
@@ -234,18 +241,18 @@ namespace Code.GQClient.UI.pages.audiorecord
             {
                 length += Time.deltaTime;
             }
-            if (IsRecording)
-            {
-                Debug.Log("Recording ...");
-                if (!Microphone.IsRecording(microphoneName))
-                {
-                    Debug.Log("RECORDING HAS ENDED.".Yellow());
-                }
-                else
-                {
-                    Debug.Log("@ pos: " + Microphone.GetPosition(microphoneName));
-                }
-            }
+            // if (IsRecording)
+            // {
+            //     Debug.Log("Recording ...");
+            //     if (!Microphone.IsRecording(microphoneName))
+            //     {
+            //         Debug.Log("RECORDING HAS ENDED.".Yellow());
+            //     }
+            //     else
+            //     {
+            //         Debug.Log("@ pos: " + Microphone.GetPosition(microphoneName));
+            //     }
+            // }
             if (IsPlaying)
             {
                 playlength += Time.deltaTime;
