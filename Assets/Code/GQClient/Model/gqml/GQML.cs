@@ -180,6 +180,11 @@ namespace Code.GQClient.Model.gqml
 		public const string ACTION_STARTMISSION_ALLOWRETURN = "allowReturn";
 		public const string ACTION_STARTQUEST_QUEST = "quest";
         public const string ACTION_WRITETONFC_CONTENT = "content";
+        public const string ACTION_UPLOADFILE_FILEREF = "fileref";
+        public const string ACTION_UPLOADFILE_NAMEPREFIX = "nameprefix";
+        public const string ACTION_UPLOADFILE_METHOD = "method";
+        public const string ACTION_UPLOADFILE_URL = "url";
+        public const string ACTION_UPLOADFILE_AUTH = "auth";
 
         // IF ACTION:
         public const string IF = "if";
