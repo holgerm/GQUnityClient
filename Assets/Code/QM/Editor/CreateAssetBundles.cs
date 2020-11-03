@@ -8,7 +8,7 @@ namespace QM.EditUtils
     public class CreateAssetBundles : IActiveBuildTargetChanged
     {
         [MenuItem("Assets/Build AssetBundles")]
-        static void BuildAllAssetBundles()
+        public static void BuildAllAssetBundles()
         {
             BuildPipeline.BuildAssetBundles(
                 Path.Combine(Application.streamingAssetsPath),

@@ -14,6 +14,7 @@ using GQ.Editor.Util;
 using GQTests;
 using GQ.Editor.UI;
 using Newtonsoft.Json;
+using QM.EditUtils;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
@@ -593,6 +594,8 @@ namespace GQ.Editor.Building
             ProductEditor.BuildIsDirty = false;
             CurrentProduct = newProduct; // remember the new product for the editor time access point.
             ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
+            
+            CreateAssetBundles.BuildAllAssetBundles();
 
             ProductEditor.IsCurrentlyPreparingProduct = false;
             GQAssetChangePostprocessor.writeBuildDate();
