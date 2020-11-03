@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
@@ -234,6 +235,11 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public static string GetMediaJsonPath(int questId) =>
             Files.CombinePath(QuestManager.GetLocalPath4Quest(questId: questId), "media.json");
+
+        public static string GetRuntimeMediaFileName(string extension)
+        {
+            return DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff", CultureInfo.InvariantCulture) + extension;
+        }
 
         #endregion
 

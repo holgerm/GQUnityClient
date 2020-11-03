@@ -91,8 +91,11 @@ namespace Code.GQClient.Util
 
                     // initialize the instance:
                     _instance = (Base) baseGo.GetComponent(typeof(Base));
-                    _instance.ProgressCanvas.SetActive(true);
-                    _instance.ProgressCanvas.GetComponent<Canvas>().enabled = false;
+                    if (_instance.ProgressCanvas != null)
+                    {
+                        _instance.ProgressCanvas.SetActive(true);
+                        _instance.ProgressCanvas.GetComponent<Canvas>().enabled = false;
+                    }
                 }
 
                 return _instance;

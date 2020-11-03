@@ -233,8 +233,7 @@ namespace Code.GQClient.UI.pages.imagecapture
 
         void SaveTextureToCamera(Texture2D texture)
         {
-            var now = DateTime.Now;
-            var filename = now.ToString("yyyy_MM_dd_HH_mm_ss_fff", CultureInfo.InvariantCulture) + ".jpg";
+            var filename = Quest.GetRuntimeMediaFileName(".jpg");
             var filepath = Files.CombinePath(QuestManager.GetRuntimeMediaPath(myPage.Quest.Id), filename);
 
             var bytes = texture.EncodeToJPG();

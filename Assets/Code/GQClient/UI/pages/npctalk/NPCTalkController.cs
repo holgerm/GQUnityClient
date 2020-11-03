@@ -124,7 +124,7 @@ namespace Code.GQClient.UI.pages.npctalk
                 }
                 else
                 {
-                    Log.SignalErrorToAuthor($"Runtime media {rtImageUrl} not found in quest {page.Parent.Id}");
+                    Log.SignalErrorToAuthor($"Runtime media {rtImageUrl} not found.");
                     imagePanel.SetActive(false);
                     layout.TopMargin.SetActive(true);
                     return;
