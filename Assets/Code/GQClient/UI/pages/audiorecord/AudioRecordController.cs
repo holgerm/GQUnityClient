@@ -2,8 +2,12 @@
 using System.Collections;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
+using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.gqml;
+using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
+using GQClient.Model;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +16,6 @@ namespace Code.GQClient.UI.pages.audiorecord
 {
     public class AudioRecordController : PageController
     {
-
         #region Inspector Fields
 
         public GameObject contentPanel;
@@ -24,6 +27,7 @@ namespace Code.GQClient.UI.pages.audiorecord
 
 
         #region Runtime API
+
         protected PageAudioRecord myPage;
 
         private int minFreq;
@@ -34,7 +38,7 @@ namespace Code.GQClient.UI.pages.audiorecord
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
-            myPage = (PageAudioRecord)page;
+            myPage = (PageAudioRecord) page;
 
             // show the content:
             infoText.text = myPage.PromptText.Decode4TMP(true);
@@ -58,10 +62,7 @@ namespace Code.GQClient.UI.pages.audiorecord
         /// </summary>
         public override bool ShowsTopMargin
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         protected string microphoneName;
@@ -80,6 +81,7 @@ namespace Code.GQClient.UI.pages.audiorecord
                 Debug.Log("Permission received. Thank you!");
             }
 
+#if !UNITY_WEBGL // https://forum.unity.com/threads/webgl-and-microphone.308197/
             //Check if there is at least one microphone connected  
             if (Microphone.devices.Length <= 0)
             {
@@ -99,14 +101,15 @@ namespace Code.GQClient.UI.pages.audiorecord
                     //...meaning 44100 Hz can be used as the recording sampling rate  
                     maxFreq = 44100;
                 }
-
             }
+#endif
         }
 
         #endregion
 
 
         #region Runtime Status
+
         public Button RecordButton;
         public Button PlayButton;
         public Button DeleteButton;
@@ -125,10 +128,7 @@ namespace Code.GQClient.UI.pages.audiorecord
 
         public bool IsRecording
         {
-            get
-            {
-                return StopRecordingImage.activeSelf;
-            }
+            get { return StopRecordingImage.activeSelf; }
             private set
             {
                 if (value)
@@ -143,16 +143,14 @@ namespace Code.GQClient.UI.pages.audiorecord
                     StopRecordingImage.SetActive(false);
                     RecordButton.targetGraphic = StartRecordingImage.GetComponent<Image>();
                 }
+
                 UpdateView();
             }
         }
 
         public bool IsPlaying
         {
-            get
-            {
-                return StopPlayingImage.activeSelf;
-            }
+            get { return StopPlayingImage.activeSelf; }
             private set
             {
                 if (value)
@@ -167,15 +165,12 @@ namespace Code.GQClient.UI.pages.audiorecord
                     StopPlayingImage.SetActive(false);
                     PlayButton.targetGraphic = StartPlayingImage.GetComponent<Image>();
                 }
+
                 UpdateView();
             }
         }
 
-        public bool HasRecorded
-        {
-            get;
-            private set;
-        }
+        public bool HasRecorded { get; private set; }
 
         public void PressPlay()
         {
@@ -189,40 +184,61 @@ namespace Code.GQClient.UI.pages.audiorecord
                 audioSource.Play();
                 IsPlaying = true;
             }
-            UpdateView();
 
+            UpdateView();
         }
 
         readonly SaveWav saver = new SaveWav();
 
         public void PressRecord()
         {
+#if !UNITY_WEBGL // https://forum.unity.com/threads/webgl-and-microphone.308197/
             if (IsRecording)
             {
                 // pressed Record again while playíng ends the recoding and saves the file:
                 Microphone.End(microphoneName);
+                myPage.PageCtrl.FooterButtonPanel.SetActive(true);
                 audioSource.Play();
                 // TODO save audio to file!
-                string path = Files.CombinePath(Application.persistentDataPath, myPage.FileName);
+                string filename = Quest.GetRuntimeMediaFileName(".wav");
+                string path = Files.CombinePath(QuestManager.GetRuntimeMediaPath(myPage.Quest.Id), filename);
+                Variables.SetVariableValue(myPage.FileName, new Value(filename));
+
                 Debug.Log("TODO save audio to file: " + path);
-                saver.Save(path, saver.TrimSilence(audioSource.clip, 0.01f));
+                saver.Save(path, saver.TrimSilence(audioSource.clip, 0.012f));
+
+                // save media info for local file under the pseudo variable (e.g. @_imagecapture):
+                string relDir = Files.CombinePath(QuestInfoManager.QuestsRelativeBasePath, myPage.Quest.Id.ToString(), "runtime");
+                myPage.Quest.MediaStore[GQML.PREFIX_RUNTIME_MEDIA + myPage.FileName] =
+                    new MediaInfo(
+                        myPage.Quest.Id,
+                        GQML.PREFIX_RUNTIME_MEDIA + myPage.FileName,
+                        relDir, 
+                        filename
+                    );
+ 
+                // TODO save to mediainfos.json again
+                
                 IsRecording = false;
             }
             else
             {
-                // Length is fixed to 60 seconds. This should be specified by author in quest.
-                Debug.Log("Recording started with microphone: " + microphoneName + 
-                    " ac.length: " + (audioSource.clip == null ? "null" : audioSource.clip.length.ToString()) + 
-                    " samples: " + (audioSource.clip == null ? "null" : audioSource.clip.samples.ToString()));
                 int freq = Math.Min(maxFreq, 44100);
                 Debug.Log("MaxFreq: " + freq);
-                audioSource.clip = Microphone.Start(microphoneName, true, 10, freq);
+                myPage.PageCtrl.FooterButtonPanel.SetActive(false);
+                audioSource.clip = 
+                    Microphone.Start(
+                        microphoneName, 
+                        true, 
+                        myPage.MaxRecordTime, 
+                        freq);
                 IsRecording = true;
                 HasRecorded = true;
             }
+#endif
             UpdateView();
         }
-
+        
         public void PressDelete()
         {
             // TODO: remove audio file.
@@ -237,22 +253,12 @@ namespace Code.GQClient.UI.pages.audiorecord
 
         void Update()
         {
+#if !UNITY_WEBGL // https://forum.unity.com/threads/webgl-and-microphone.308197/
             if (Microphone.IsRecording(microphoneName))
             {
                 length += Time.deltaTime;
             }
-            // if (IsRecording)
-            // {
-            //     Debug.Log("Recording ...");
-            //     if (!Microphone.IsRecording(microphoneName))
-            //     {
-            //         Debug.Log("RECORDING HAS ENDED.".Yellow());
-            //     }
-            //     else
-            //     {
-            //         Debug.Log("@ pos: " + Microphone.GetPosition(microphoneName));
-            //     }
-            // }
+#endif
             if (IsPlaying)
             {
                 playlength += Time.deltaTime;
@@ -263,8 +269,7 @@ namespace Code.GQClient.UI.pages.audiorecord
                 }
             }
         }
+
         #endregion
-
-
     }
 }

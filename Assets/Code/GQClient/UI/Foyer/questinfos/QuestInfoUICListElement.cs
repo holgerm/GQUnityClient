@@ -200,12 +200,19 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
         public override void UpdateView(QuestInfo questInfo)
         {
+            if (!Name)
+            {
+                return;
+                // TODO deeper error needs to be fixed. Happens at first start of the app, when we first touch a list element to download it.
+            }
+
             // Update Info-Icon:
             // set info button as configured:
             setCategorySymbol(data);
 
             // Update Name:
             Name.text = data.Name;
+
             // Set Name button for download or play or nothing:
             var nameButton = Name.gameObject.GetComponent<Button>();
             nameButton.onClick.RemoveAllListeners();
@@ -268,7 +275,11 @@ namespace Code.GQClient.UI.Foyer.questinfos
                         break;
                 }
 
-                var infoImage = InfoButton.transform.Find("Image").GetComponent<Image>();
+                if (InfoButton == null || InfoButton.transform == null) return;
+                Transform t = InfoButton.transform.Find("Image");
+                if (t == null) return;
+
+                var infoImage = t.GetComponent<Image>();
                 infoImage.enabled = true;
                 infoImage.color = ConfigurationManager.Current.listEntryFgColor;
                 InfoButton.enabled = false;
