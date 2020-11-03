@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layout: {fileID: 128488593}
   FooterButtonPanel: {fileID: 1268377844}
-  HeaderButtonPanel: {fileID: 0}
+  HeaderButtonPanel: {fileID: 476065169}
   contentPanel: {fileID: 215277135}
   infoText: {fileID: 1625870280}
   forwardButtonText: {fileID: 1268377843}
@@ -608,6 +608,11 @@ PrefabInstance:
       propertyPath: pageCtrl
       value: 
       objectReference: {fileID: 128488591}
+    - target: {fileID: 223441196540025630, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 224091360331316562, guid: 061e4f3f0c0104238a98c0f0f73491b0,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -914,6 +919,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 07d0a66b961c647e689c46eb4f9ba478,
         type: 3}
+    - target: {fileID: 4592855768390574196, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -7420780702453661160, guid: 6d72024c68c52478eabd3faf05257d42,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 061e4f3f0c0104238a98c0f0f73491b0, type: 3}
 --- !u!224 &476065168 stripped
@@ -922,6 +933,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 476065167}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &476065169 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2969878740753780540, guid: 061e4f3f0c0104238a98c0f0f73491b0,
+    type: 3}
+  m_PrefabInstance: {fileID: 476065167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3154a39916a543f6acade9689623d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &485913647
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +1017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1111,7 +1134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1227,7 +1250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1935,9 +1958,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1627.1187
+  m_MinHeight: 1800
   m_PreferredWidth: -1
-  m_PreferredHeight: 1627.1187
+  m_PreferredHeight: 1800
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2118,32 +2141,32 @@ PrefabInstance:
     - target: {fileID: 224577715371926490, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224577715371926490, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224577715371926490, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 540
       objectReference: {fileID: 0}
     - target: {fileID: 224577715371926490, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 224577715371926490, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 224577715371926490, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 224608031728188330, guid: c83eb0e0a0f5d498692781a6540226b9,
         type: 3}
@@ -2482,8 +2505,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 520, y: -65.085}
-  m_SizeDelta: {x: 1030, y: 110.17}
+  m_AnchoredPosition: {x: 520, y: -87.045}
+  m_SizeDelta: {x: 1030, y: 154.09}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1625870278
 MonoBehaviour:
@@ -2529,15 +2552,15 @@ MonoBehaviour:
   m_text: This text will be replaced by actual information for the shown page.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6d72024c68c52478eabd3faf05257d42, type: 2}
-  m_sharedMaterial: {fileID: -6685364396187757935, guid: 6d72024c68c52478eabd3faf05257d42,
+  m_sharedMaterial: {fileID: -7420780702453661160, guid: 6d72024c68c52478eabd3faf05257d42,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287770926
-  m_fontColor: {r: 0.18039216, g: 0.19215687, b: 0.57254905, a: 1}
+    rgba: 4279834906
+  m_fontColor: {r: 0.101960786, g: 0.09803922, b: 0.09803922, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2554,8 +2577,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 40
@@ -2723,9 +2746,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 162.71187
+  m_MinHeight: 180
   m_PreferredWidth: -1
-  m_PreferredHeight: 162.71187
+  m_PreferredHeight: 180
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1
@@ -3051,7 +3074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
