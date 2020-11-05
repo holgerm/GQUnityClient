@@ -123,14 +123,11 @@ namespace Code.GQClient.UI.map
 
 			if (counter == 0)
 			{
-				Debug.Log(
-					$"locateAtStart: map.SetPosition({ConfigurationManager.Current.mapStartAtLongitude}, {ConfigurationManager.Current.mapStartAtLatitude}) #Conifg Pos instead of POIs Center no POis");
 				map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
 					ConfigurationManager.Current.mapStartAtLatitude);
 			}
 			else
 			{
-				Debug.Log($"locateAtStart: map.SetPosition({sumLong / counter}, {sumLat / counter}) #Center of POIs");
 				map.SetPosition(sumLong / counter,
 					sumLat / counter);
 			}
