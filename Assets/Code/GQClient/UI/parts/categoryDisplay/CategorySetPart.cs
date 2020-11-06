@@ -46,7 +46,7 @@ namespace Code.GQClient.UI.parts.categoryDisplay
 
 			Category cat;
 
-			if (ConfigurationManager.Current.categoryDict.TryGetValue (catName, out cat)) {
+			if (ConfigurationManager.CurrentRT.categoryDict.TryGetValue (catName, out cat)) {
 				if (cat.symbol != null)
 					catImage.sprite = Resources.Load<Sprite> (cat.symbol.path);
 				else {

@@ -148,6 +148,29 @@ namespace GQ.Editor.Building
             }
         }
 
+        private bool _rtConfigFilesHaveChanges;
+
+        /// <summary>
+        /// True if current configuration has changes that are not persistantly stored in the product specifications. 
+        /// Any change of files within the ConfigAssets/Resources folder will set this flag to true. 
+        /// Pressing the persist button in the GQ Product Editor will set it to false.
+        /// </summary>
+        public bool RTConfigFilesHaveChanges
+        {
+            get
+            {
+                return _rtConfigFilesHaveChanges;
+            }
+            set
+            {
+                if (_rtConfigFilesHaveChanges != value)
+                {
+                    _rtConfigFilesHaveChanges = value;
+                    EditorPrefs.SetBool("rtConfigDirty", _rtConfigFilesHaveChanges);
+                }
+            }
+        }
+
         #endregion
 
 
@@ -640,17 +663,29 @@ namespace GQ.Editor.Building
             // set product specific default values:
             config.id = productID;
             config.name = "QuestMill App " + productID;
+            
+            RTConfig rtConfig = new RTConfig();
 
             // serialize into new product folder:
-            serializeConfig(config, Files.CombinePath(ProductsDirPath, productID));
+            serializeConfigs(config, rtConfig, Files.CombinePath(ProductsDirPath, productID));
         }
 
-        internal void serializeConfig(Config config, string productDirPath)
+        internal void serializeConfigs(Config config, RTConfig rtConfig, string productDirPath)
         {
+            // app static config:
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
-            var configFilePath = Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
-            File.WriteAllText(configFilePath, json);
-            if (GQ.Editor.Util.Assets.IsAssetPath(configFilePath))
+            var filePath = 
+                Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
+            File.WriteAllText(filePath, json);
+            if (GQ.Editor.Util.Assets.IsAssetPath(filePath))
+                AssetDatabase.Refresh();
+            
+            // runtime config:
+            json = JsonConvert.SerializeObject(rtConfig, Formatting.Indented);
+            filePath = 
+                Files.CombinePath(productDirPath, ConfigurationManager.RT_CONFIG_FILE);
+            File.WriteAllText(filePath, json);
+            if (GQ.Editor.Util.Assets.IsAssetPath(filePath))
                 AssetDatabase.Refresh();
         }
 

@@ -18,16 +18,17 @@ using GQ.Editor.Util;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+using Object = System.Object;
 
 namespace GQ.Editor.UI
 {
     public class ProductEditor : EditorWindow
     {
-
         public static GUIStyle TextareaGUIStyle { get; private set; }
 
         private Texture warnIcon;
         Vector2 scrollPos;
+        Vector2 scrollPosRT;
 
         private static string _currentBuildName = null;
 
@@ -40,12 +41,10 @@ namespace GQ.Editor.UI
                     Config curConfig = updateFromCurrentConfig();
                     _currentBuildName = curConfig == null ? "[null]" : curConfig.id;
                 }
+
                 return _currentBuildName;
             }
-            set
-            {
-                _currentBuildName = value;
-            }
+            set { _currentBuildName = value; }
         }
 
         internal const string WARN_ICON_PATH = "Assets/Editor/GQEditor/images/warn.png";
@@ -54,42 +53,24 @@ namespace GQ.Editor.UI
 
         public static bool BuildIsDirty
         {
-            get
-            {
-                return _buildIsDirty;
-            }
-            set
-            {
-                _buildIsDirty = value;
-            }
+            get { return _buildIsDirty; }
+            set { _buildIsDirty = value; }
         }
 
         private static ProductEditor _instance = null;
 
         public static ProductEditor Instance
         {
-            get
-            {
-                return _instance;
-            }
-            private set
-            {
-                _instance = value;
-            }
+            get { return _instance; }
+            private set { _instance = value; }
         }
 
         private static bool _isCurrentlyPreparingProduct = false;
 
         public static bool IsCurrentlyPreparingProduct
         {
-            get
-            {
-                return _isCurrentlyPreparingProduct;
-            }
-            set
-            {
-                _isCurrentlyPreparingProduct = value;
-            }
+            get { return _isCurrentlyPreparingProduct; }
+            set { _isCurrentlyPreparingProduct = value; }
         }
 
 
@@ -123,10 +104,7 @@ namespace GQ.Editor.UI
                     _pm = ProductManager.Instance;
                 return _pm;
             }
-            set
-            {
-                _pm = value;
-            }
+            set { _pm = value; }
         }
 
         #region Initialization
@@ -136,17 +114,24 @@ namespace GQ.Editor.UI
             Instance = this;
 
             readStateFromEditorPrefs();
-            warnIcon = (Texture)AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
+            warnIcon = (Texture) AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
         }
 
         void readStateFromEditorPrefs()
         {
-            selectedProductIndex = EditorPrefs.HasKey("selectedProductIndex") ? EditorPrefs.GetInt("selectedProductIndex") : 0;
+            selectedProductIndex = EditorPrefs.HasKey("selectedProductIndex")
+                ? EditorPrefs.GetInt("selectedProductIndex")
+                : 0;
             Pm.ConfigFilesHaveChanges = EditorPrefs.HasKey("configDirty") ? EditorPrefs.GetBool("configDirty") : false;
             mainVersionNumber = EditorPrefs.HasKey("mainVersionNumber") ? EditorPrefs.GetInt("mainVersionNumber") : 0;
-            yearVersionNumber = EditorPrefs.HasKey("yearVersionNumber") ? EditorPrefs.GetInt("yearVersionNumber") : DateTime.Now.Year;
-            monthVersionNumber = EditorPrefs.HasKey("monthVersionNumber") ? EditorPrefs.GetInt("monthVersionNumber") : DateTime.Now.Month;
-            buildVersionNumber = EditorPrefs.HasKey("buildVersionNumber") ? EditorPrefs.GetInt("buildVersionNumber") : 1;
+            yearVersionNumber = EditorPrefs.HasKey("yearVersionNumber")
+                ? EditorPrefs.GetInt("yearVersionNumber")
+                : DateTime.Now.Year;
+            monthVersionNumber = EditorPrefs.HasKey("monthVersionNumber")
+                ? EditorPrefs.GetInt("monthVersionNumber")
+                : DateTime.Now.Month;
+            buildVersionNumber =
+                EditorPrefs.HasKey("buildVersionNumber") ? EditorPrefs.GetInt("buildVersionNumber") : 1;
             updateVersionText();
         }
 
@@ -179,6 +164,8 @@ namespace GQ.Editor.UI
 
             gui4ProductDetails();
 
+            gui4RTProductDetails();
+
             gui4ProductEditPart();
 
             EditorGUILayout.Space();
@@ -188,7 +175,6 @@ namespace GQ.Editor.UI
             EditorGUILayout.Space();
 
             GUILayout.FlexibleSpace();
-
         }
 
         private string newProductID = "";
@@ -219,6 +205,7 @@ namespace GQ.Editor.UI
                         EditorGUILayout.PrefixLabel(new GUIContent("Current Build:"));
                     }
                 }
+
                 GUILayout.Label(shownBuildName);
 
                 if (GUILayout.Button("Reload"))
@@ -245,7 +232,10 @@ namespace GQ.Editor.UI
                 selectedProductIndex = 0;
             string selectedProductName = Pm.AllProductIds.ElementAt(selectedProductIndex);
 
-            GUIContent prepareBuildButtonGUIContent, availableProductsPopupGUIContent, newProductLabelGUIContent, createProductButtonGUIContent;
+            GUIContent prepareBuildButtonGUIContent,
+                availableProductsPopupGUIContent,
+                newProductLabelGUIContent,
+                createProductButtonGUIContent;
 
             if (configIsDirty)
             {
@@ -276,19 +266,20 @@ namespace GQ.Editor.UI
             //     prepareBuildButtonGUIContent = new GUIContent("Prepare Build");
             // }
 
-            using (new EditorGUI.DisabledGroupScope(false)) // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
+            using (new EditorGUI.DisabledGroupScope(false)
+            ) // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
             {
                 // Prepare Build Button:
- //               using (new EditorGUI.DisabledGroupScope(foyerIsNOTActiveScene))
-   //             {
-                    EditorGUILayout.BeginHorizontal();
+                //               using (new EditorGUI.DisabledGroupScope(foyerIsNOTActiveScene))
+                //             {
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button(prepareBuildButtonGUIContent))
                     {
-                        if (GUILayout.Button(prepareBuildButtonGUIContent))
-                        {
-                            Pm.PrepareProductForBuild(selectedProductName);
-                        }
+                        Pm.PrepareProductForBuild(selectedProductName);
                     }
- //               }
+                }
+                //               }
 
                 EditorGUILayout.EndHorizontal();
 
@@ -315,7 +306,8 @@ namespace GQ.Editor.UI
                     newProductID = EditorGUILayout.TextField(
                         newProductID,
                         GUILayout.Height(EditorGUIUtility.singleLineHeight));
-                    bool createButtonshouldBeDisabled = newProductID.Equals("") || Pm.AllProductIds.Contains(newProductID);
+                    bool createButtonshouldBeDisabled =
+                        newProductID.Equals("") || Pm.AllProductIds.Contains(newProductID);
                     using (new EditorGUI.DisabledGroupScope(createButtonshouldBeDisabled))
                     {
                         if (GUILayout.Button(createProductButtonGUIContent))
@@ -325,7 +317,6 @@ namespace GQ.Editor.UI
                     }
                 }
                 EditorGUILayout.EndHorizontal();
-
             } // Disabled Scope for dirty Config ends, i.e. you must first save or revert the current product's details.
         }
 
@@ -340,7 +331,8 @@ namespace GQ.Editor.UI
                 {
                     // do not copy the ImportedPackage dir to the product, but export it as unity package:
                     string productPackageFile =
-                       Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName, CurrentBuildName + ".unitypackage");
+                        Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName,
+                            CurrentBuildName + ".unitypackage");
                     AssetDatabase.ExportPackage(
                         importedPackageDir,
                         productPackageFile,
@@ -369,9 +361,10 @@ namespace GQ.Editor.UI
             if (mapGo == null) return;
             OnlineMaps map = mapGo.GetComponent<OnlineMaps>();
             if (map == null) return;
-            
+
             string json = EditorJsonUtility.ToJson(map, true);
-            string path = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName, ProductSpec.ONLINEMAPS_CONFIG);
+            string path = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName,
+                ProductSpec.ONLINEMAPS_CONFIG);
             File.WriteAllText(path, json);
         }
 
@@ -379,7 +372,8 @@ namespace GQ.Editor.UI
         {
             try
             {
-                string configFile = Files.CombinePath(ProductManager.Instance.BuildExportPath, ConfigurationManager.CONFIG_FILE);
+                string configFile = Files.CombinePath(ProductManager.Instance.BuildExportPath,
+                    ConfigurationManager.CONFIG_FILE);
                 if (!File.Exists(configFile))
                     return null;
                 string configText = File.ReadAllText(configFile);
@@ -403,10 +397,12 @@ namespace GQ.Editor.UI
             {
                 sceneSettings[i] = new EditorBuildSettingsScene(config.scenePaths[i], true);
             }
+
             EditorBuildSettings.scenes = sceneSettings;
         }
 
         static public Config SelectedConfig { get; private set; }
+        static public RTConfig SelectedRTConfig { get; private set; }
 
         static public float WidthForValues { get; private set; }
 
@@ -430,7 +426,9 @@ namespace GQ.Editor.UI
                     // StartScene Layout:
                     gui4StartScene();
 
-                    PropertyInfo[] propertyInfos = typeof(Config).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    PropertyInfo[] propertyInfos =
+                        typeof(Config).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
+                                                     BindingFlags.Instance);
 
                     // get max widths for names and values:
                     float allNamesMax = 0f, allValuesMax = 0f;
@@ -455,7 +453,9 @@ namespace GQ.Editor.UI
 
                     // calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
                     // add left, middle and right borders as given:
-                    float borders = new GUIStyle(GUI.skin.textField).margin.left + new GUIStyle(GUI.skin.textField).margin.horizontal + new GUIStyle(GUI.skin.textField).margin.right;
+                    float borders = new GUIStyle(GUI.skin.textField).margin.left +
+                                    new GUIStyle(GUI.skin.textField).margin.horizontal +
+                                    new GUIStyle(GUI.skin.textField).margin.right;
                     // calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
                     WidthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
                     WidthForValues = position.width - (borders + WidthForNames);
@@ -467,7 +467,73 @@ namespace GQ.Editor.UI
                     {
                         if (ProductEditorPart.entryHidden(curPropInfo))
                             continue;
-                        configIsDirty |= ProductEditorPart.CreateGui(curPropInfo);
+                        configIsDirty |= ProductEditorPart.CreateGui(curPropInfo, SelectedConfig);
+                    }
+                } // End Scope Disabled Group 
+            } // End Scope ScrollView 
+        }
+
+
+        void gui4RTProductDetails()
+        {
+            GUILayout.Label("RT Product Details", EditorStyles.boldLabel);
+            ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+            SelectedRTConfig = p.RTConfig;
+
+            // Begin ScrollView:
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosRT))
+            {
+                scrollPosRT = scrollView.scrollPosition;
+
+                using (new EditorGUI.DisabledGroupScope((!allowChanges)))
+                {
+                    // ScrollView begins (optionally disabled):
+
+                    // StartScene Layout:
+                    gui4StartScene();
+
+                    PropertyInfo[] propertyInfos =
+                        typeof(RTConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
+                                                       BindingFlags.Instance);
+
+                    // get max widths for names and values:
+                    float allNamesMax = 0f, allValuesMax = 0f;
+
+                    foreach (PropertyInfo curPropInfo in propertyInfos)
+                    {
+                        if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
+                            continue;
+
+                        string propName = curPropInfo.Name + ":";
+                        string value = Objects.ToString(curPropInfo.GetValue(SelectedRTConfig, null));
+
+                        float nameMin, nameMax;
+                        float valueMin, valueMax;
+                        GUIStyle guiStyle = new GUIStyle();
+
+                        guiStyle.CalcMinMaxWidth(new GUIContent(propName + ":"), out nameMin, out nameMax);
+                        allNamesMax = Math.Max(allNamesMax, nameMax);
+                        guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
+                        allValuesMax = Math.Max(allValuesMax, valueMax);
+                    }
+
+                    // calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
+                    // add left, middle and right borders as given:
+                    float borders = new GUIStyle(GUI.skin.textField).margin.left +
+                                    new GUIStyle(GUI.skin.textField).margin.horizontal +
+                                    new GUIStyle(GUI.skin.textField).margin.right;
+                    // calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
+                    WidthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
+                    WidthForValues = position.width - (borders + WidthForNames);
+
+                    EditorGUIUtility.labelWidth = WidthForNames;
+
+                    // show all properties as textfields or textareas in fitting width:
+                    foreach (PropertyInfo curPropInfo in propertyInfos)
+                    {
+                        if (ProductEditorPart.entryHidden(curPropInfo))
+                            continue;
+                        configIsDirty |= ProductEditorPart.CreateGui(curPropInfo, SelectedRTConfig);
                     }
                 } // End Scope Disabled Group 
             } // End Scope ScrollView 
@@ -482,13 +548,13 @@ namespace GQ.Editor.UI
             // Create New Product row:
             EditorGUILayout.BeginHorizontal();
             {
-
                 bool oldAllowChanges = allowChanges;
                 allowChanges = EditorGUILayout.Toggle("Allow Editing ...", allowChanges);
                 if (!oldAllowChanges && allowChanges)
                 {
                     // siwtching allowChanges ON:
                 }
+
                 if (oldAllowChanges && !allowChanges)
                 {
                     // siwtching allowChanges OFF:
@@ -498,10 +564,11 @@ namespace GQ.Editor.UI
                 {
                     if (GUILayout.Button("Save"))
                     {
-                        Pm.serializeConfig(SelectedConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
+                        Pm.serializeConfigs(SelectedConfig, SelectedRTConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
                         configIsDirty = false;
                         LayoutConfig.ResetAll(); // TODO check and implement update all layout components in editor
                     }
+
                     if (GUILayout.Button("Revert"))
                     {
                         ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
@@ -511,7 +578,6 @@ namespace GQ.Editor.UI
                     }
                 }
                 EditorGUI.EndDisabledGroup();
-
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -534,7 +600,6 @@ namespace GQ.Editor.UI
             showDetailsStartScene = EditorGUILayout.Foldout(showDetailsStartScene, "Details:");
             if (showDetailsStartScene)
             {
-
             }
         }
 
@@ -548,18 +613,17 @@ namespace GQ.Editor.UI
             // Create New Product row:
             EditorGUILayout.BeginHorizontal();
             {
-
                 bool oldAllowVersionChanges = allowVersionChanges;
                 allowVersionChanges = EditorGUILayout.Toggle("Allow Editing ...", allowVersionChanges);
                 if (!oldAllowVersionChanges && allowVersionChanges)
                 {
                     // siwtching allowChanges ON:
                 }
+
                 if (oldAllowVersionChanges && !allowVersionChanges)
                 {
                     // siwtching allowChanges OFF:
                 }
-
             }
             EditorGUILayout.EndHorizontal();
 
@@ -570,16 +634,17 @@ namespace GQ.Editor.UI
                     if (GUILayout.Button("Main +"))
                     {
                         if (EditorUtility.DisplayDialog(
-                                "Really increase Main Version Number?",
-                                "It will then be " + (mainVersionNumber + 1),
-                                "Yes, increase!",
-                                "Cancel"))
+                            "Really increase Main Version Number?",
+                            "It will then be " + (mainVersionNumber + 1),
+                            "Yes, increase!",
+                            "Cancel"))
                         {
                             mainVersionNumber++;
                             EditorPrefs.SetInt("mainVersionNumber", mainVersionNumber);
                             updateVersionText();
                         }
                     }
+
                     if (GUILayout.Button("Main -"))
                     {
                         if (EditorUtility.DisplayDialog(
@@ -611,11 +676,11 @@ namespace GQ.Editor.UI
                             updateVersionText();
                         }
                     }
-                    GUILayout.Label($"Build Nr: {buildVersionNumber}", EditorStyles.label); 
+
+                    GUILayout.Label($"Build Nr: {buildVersionNumber}", EditorStyles.label);
                 }
                 EditorGUILayout.EndHorizontal();
             }
-
         }
 
         #endregion
@@ -644,12 +709,12 @@ namespace GQ.Editor.UI
             // bundle version code for Android:
             int bundleVersionCode;
             string bundleVersionCodeString = String.Format(
-                                                 "{0}{1:D3}{2:D2}{3:D2}",
-                                                 mainVersionNumber,
-                                                 yearVersionNumber - 2000,
-                                                 monthVersionNumber,
-                                                 buildVersionNumber
-                                             );
+                "{0}{1:D3}{2:D2}{3:D2}",
+                mainVersionNumber,
+                yearVersionNumber - 2000,
+                monthVersionNumber,
+                buildVersionNumber
+            );
             if (Int32.TryParse(bundleVersionCodeString, out bundleVersionCode))
                 PlayerSettings.Android.bundleVersionCode = bundleVersionCode;
             else
@@ -671,11 +736,11 @@ namespace GQ.Editor.UI
             {
                 Debug.LogError("ProductEditor Window was not available during build. Build Nr has not been increased!");
             }
+
             Instance.buildVersionNumber++;
             EditorPrefs.SetInt("buildVersionNumber", Instance.buildVersionNumber);
             Instance.updateVersionText();
         }
-
 
 
         void selectProduct(int index)
@@ -702,7 +767,8 @@ namespace GQ.Editor.UI
 
     abstract public class ProductEditorPart
     {
-        private static Dictionary<Type, ProductEditorPart> cachedEditorParts = new Dictionary<Type, ProductEditorPart>();
+        private static Dictionary<Type, ProductEditorPart>
+            cachedEditorParts = new Dictionary<Type, ProductEditorPart>();
 
         public static Dictionary<string, int> popupSelections = new Dictionary<string, int>();
 
@@ -733,7 +799,7 @@ namespace GQ.Editor.UI
         /// </summary>
         /// <returns>the dirty state of this property.</returns>
         /// <param name="curPropInfo">Current property info.</param>
-        static public bool CreateGui(PropertyInfo curPropInfo)
+        static public bool CreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             Type propertyType = curPropInfo.PropertyType;
             ProductEditorPart accordingEditorPart;
@@ -753,24 +819,28 @@ namespace GQ.Editor.UI
                 {
                     classNameBuilder.Append(propertyType.Name);
                 }
+
                 Type[] argTypes = propertyType.GetGenericArguments();
                 for (int i = 0; i < argTypes.Length; i++)
                 {
                     classNameBuilder.Append((i == 0) ? "Of" : "And");
                     classNameBuilder.Append(argTypes[i].Name);
                 }
+
                 className = classNameBuilder.Replace("[]", "Array").ToString();
 
                 // create a new instance of the according product editor part class:
                 try
                 {
-                    accordingEditorPart = typeof(ProductEditorPart).Assembly.CreateInstance(className) as ProductEditorPart;
+                    accordingEditorPart =
+                        typeof(ProductEditorPart).Assembly.CreateInstance(className) as ProductEditorPart;
                     if (accordingEditorPart != null)
                         cachedEditorParts.Add(propertyType, accordingEditorPart);
                 }
                 catch (Exception e)
                 {
-                    Log.SignalErrorToDeveloper("Unhandled property Type: {0} ({1})\t{2}", curPropInfo.PropertyType.Name, className, e.Message);
+                    Log.SignalErrorToDeveloper("Unhandled property Type: {0} ({1})\t{2}", curPropInfo.PropertyType.Name,
+                        className, e.Message);
                     return false;
                 }
             }
@@ -786,7 +856,7 @@ namespace GQ.Editor.UI
             else if (Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
             {
                 var attributes = curPropInfo.GetCustomAttributes(typeof(ShowInProductEditor), false);
-                ShowInProductEditor attr = (ShowInProductEditor)attributes[0];
+                ShowInProductEditor attr = (ShowInProductEditor) attributes[0];
                 if (attr.StartSection != null && attr.StartSection != "")
                 {
                     GUILayout.Label(attr.StartSection, EditorStyles.boldLabel);
@@ -805,18 +875,19 @@ namespace GQ.Editor.UI
                 // Show only name without hover:
                 NamePrefixGUIContent = new GUIContent(name + ":");
 
-            accordingEditorPart.doCreateGui(curPropInfo);
+            accordingEditorPart.doCreateGui(curPropInfo, propertyObject);
             return configIsDirty;
         }
 
-        abstract protected bool doCreateGui(PropertyInfo curPropInfo);
+        abstract protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject);
 
         static protected bool entryDisabled(PropertyInfo propInfo)
         {
             var disabled = false;
             // the entry for the given property will be disabled, if one of the following is true
             disabled |= propInfo.Name.Equals("id");
-            disabled |= propInfo.Name.Equals("categoryFiltersStartFolded") && ProductEditor.SelectedConfig.foldableCategoryFilters == false;
+            disabled |= propInfo.Name.Equals("categoryFiltersStartFolded") &&
+                        ProductEditor.SelectedRTConfig.foldableCategoryFilters == false;
 
             return disabled;
         }
@@ -831,11 +902,12 @@ namespace GQ.Editor.UI
 
             // Unreadable properties:
             hidden |= !propInfo.CanRead;
-            
+
             // Partner canvas:
             if (propInfo.Name.Equals("offerPartnersInfo") || propInfo.Name.Equals("showPartnersInfoAtStart"))
             {
-                if (config.offerPartnersInfo == false && Resources.Load("ImportedPackage/prefabs/PartnersCanvas") == null)
+                if (config.offerPartnersInfo == false &&
+                    Resources.Load("ImportedPackage/prefabs/PartnersCanvas") == null)
                 {
                     // hide it and done.
                     return true;
@@ -895,13 +967,11 @@ namespace GQ.Editor.UI
 
             return hidden;
         }
-
     }
 
     public class ProductEditorPart4Boolean : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -911,17 +981,17 @@ namespace GQ.Editor.UI
                 EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.PrefixLabel(NamePrefixGUIContent);
-                    bool oldBoolVal = (bool)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+                    bool oldBoolVal = (bool) curPropInfo.GetValue(propertyObject, null);
                     bool newBoolVal = EditorGUILayout.Toggle(oldBoolVal);
                     if (newBoolVal != oldBoolVal)
                     {
                         configIsDirty = true;
-                        curPropInfo.SetValue(ProductEditor.SelectedConfig, newBoolVal, null);
+                        curPropInfo.SetValue(propertyObject, newBoolVal, null);
 
                         if (curPropInfo.Name == "foldableCategoryFilters" && newBoolVal == false)
                         {
                             // if categories are not foldable they must start unfolded:
-                            ProductEditor.SelectedConfig.categoryFiltersStartFolded = false;
+                            ProductEditor.SelectedRTConfig.categoryFiltersStartFolded = false;
                         }
                     }
                 }
@@ -935,12 +1005,11 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Color32 : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
-            Color32 oldColorVal = (Color32)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            Color32 oldColorVal = (Color32) curPropInfo.GetValue(propertyObject, null);
             Color32 newColorVal = oldColorVal;
 
             // show Color field if value fits in one line:
@@ -948,7 +1017,7 @@ namespace GQ.Editor.UI
             if (!newColorVal.Equals(oldColorVal))
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, newColorVal, null);
+                curPropInfo.SetValue(propertyObject, newColorVal, null);
             }
 
             return configIsDirty;
@@ -958,15 +1027,14 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Color32Array : ProductEditorPart
     {
-
-        protected override bool doCreateGui(PropertyInfo curPropInfo)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
             if (ProductEditor.SelectedConfig.colorPaletteSize > 10)
                 ProductEditor.SelectedConfig.colorPaletteSize = 10;
-            
-            var oldColorValues = (Color32[])curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+
+            var oldColorValues = (Color32[]) curPropInfo.GetValue(propertyObject, null);
             var newColorValues = new Color32[10];
             for (var i = 0; i < 10; i++)
             {
@@ -977,12 +1045,13 @@ namespace GQ.Editor.UI
             // show Color fields:
             for (var i = 0; i < ProductEditor.SelectedConfig.colorPaletteSize; i++)
             {
-                  newColorValues[i] = EditorGUILayout.ColorField(NamePrefixGUIContent, oldColorValues[i]);
+                newColorValues[i] = EditorGUILayout.ColorField(NamePrefixGUIContent, oldColorValues[i]);
             }
+
             if (!newColorValues.Equals(oldColorValues))
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, newColorValues, null);
+                curPropInfo.SetValue(propertyObject, newColorValues, null);
             }
 
             return configIsDirty;
@@ -993,38 +1062,38 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4AlignmentOption : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.textAlignment;
+                    _selected = (int?) ProductEditor.SelectedConfig.textAlignment;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         string[] values = Enum.GetNames(typeof(AlignmentOption));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
             int previouslySelected = selected;
             selected =
                 EditorGUILayout.Popup(
-                curPropInfo.Name,
-                selected,
-                values
-            );
+                    curPropInfo.Name,
+                    selected,
+                    values
+                );
             if (previouslySelected != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (AlignmentOption)selected, null);
+                curPropInfo.SetValue(propertyObject, (AlignmentOption) selected, null);
             }
 
             if (configIsDirty)
@@ -1037,24 +1106,24 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4HeaderMiddleButtonPolicy : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.headerMiddleButtonPolicy;
+                    _selected = (int?) ProductEditor.SelectedConfig.headerMiddleButtonPolicy;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         string[] values = Enum.GetNames(typeof(HeaderMiddleButtonPolicy));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1062,14 +1131,14 @@ namespace GQ.Editor.UI
             int previouslySelected = selected;
             selected =
                 EditorGUILayout.Popup(
-                "Header Middle Button Policy",
-                selected,
-                values
-            );
+                    "Header Middle Button Policy",
+                    selected,
+                    values
+                );
             if (previouslySelected != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (HeaderMiddleButtonPolicy)selected, null);
+                curPropInfo.SetValue(propertyObject, (HeaderMiddleButtonPolicy) selected, null);
             }
 
             if (configIsDirty)
@@ -1082,24 +1151,24 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4DownloadStrategy : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.downloadStrategy;
+                    _selected = (int?) ProductEditor.SelectedConfig.downloadStrategy;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         string[] downloadStrategyNames = Enum.GetNames(typeof(DownloadStrategy));
 
-        protected override bool doCreateGui(PropertyInfo curPropInfo)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1107,14 +1176,14 @@ namespace GQ.Editor.UI
             int oldDownloadStrategy = selected;
             selected =
                 EditorGUILayout.Popup(
-                "Download Strategy",
-                selected,
-                downloadStrategyNames
-            );
+                    "Download Strategy",
+                    selected,
+                    downloadStrategyNames
+                );
             if (oldDownloadStrategy != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (DownloadStrategy)selected, null);
+                curPropInfo.SetValue(propertyObject, (DownloadStrategy) selected, null);
             }
 
             return configIsDirty;
@@ -1124,25 +1193,24 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4iOSTargetDevice : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.iOsDeviceTypes;
+                    _selected = (int?) ProductEditor.SelectedConfig.iOsDeviceTypes;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
 
         readonly string[] iOsDeviceTypeNames = Enum.GetNames(typeof(iOSTargetDevice));
 
-        protected override bool doCreateGui(PropertyInfo curPropInfo)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1157,8 +1225,7 @@ namespace GQ.Editor.UI
             if (oldDownloadStrategy != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (iOSTargetDevice)selected, null);
-                Debug.Log($"IOS Device Types changed to {((iOSTargetDevice)selected).ToString()}");
+                curPropInfo.SetValue(propertyObject, (iOSTargetDevice) selected, null);
                 PlayerSettings.iOS.targetDevice = (iOSTargetDevice) selected;
             }
 
@@ -1168,7 +1235,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4ImagePath : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1176,7 +1243,7 @@ namespace GQ.Editor.UI
             using (new EditorGUI.DisabledGroupScope(entryDisabled(curPropInfo)))
             {
                 // get currently stored image path from config:
-                ImagePath oldVal = (ImagePath)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+                ImagePath oldVal = (ImagePath) curPropInfo.GetValue(propertyObject, null);
                 Sprite oldSprite = null;
                 if (oldVal != null)
                     oldSprite = Resources.Load<Sprite>(oldVal.path);
@@ -1185,7 +1252,7 @@ namespace GQ.Editor.UI
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel(myNamePrefixGUIContent);
                 Sprite newSprite =
-                    (Sprite)EditorGUILayout.ObjectField(oldSprite, typeof(Sprite), false);
+                    (Sprite) EditorGUILayout.ObjectField(oldSprite, typeof(Sprite), false);
                 string path = AssetDatabase.GetAssetPath(newSprite);
                 ImagePath newVal = new ImagePath(Files.GetResourcesRelativePath(path));
                 EditorGUILayout.EndHorizontal();
@@ -1195,7 +1262,7 @@ namespace GQ.Editor.UI
                 if (!newValString.Equals(oldValString))
                 {
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, newVal, null);
+                    curPropInfo.SetValue(propertyObject, newVal, null);
                 }
             }
 
@@ -1206,8 +1273,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Int32 : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1217,16 +1283,18 @@ namespace GQ.Editor.UI
                 // id of products may not be altered.
                 if (curPropInfo.Name.Equals("id"))
                 {
-                    myNamePrefixGUIContent = new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
+                    myNamePrefixGUIContent = 
+                        new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
                 }
-                int oldIntVal = (int)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+
+                int oldIntVal = (int) curPropInfo.GetValue(propertyObject, null);
 
                 // show text field if value fits in one line:
                 int newIntVal = EditorGUILayout.IntField(myNamePrefixGUIContent, oldIntVal);
                 if (newIntVal != oldIntVal)
                 {
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, newIntVal, null);
+                    curPropInfo.SetValue(propertyObject, newIntVal, null);
                 }
             }
 
@@ -1240,22 +1308,21 @@ namespace GQ.Editor.UI
     /// </summary>
     public class ProductEditorPart4Int64 : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
 
             using (new EditorGUI.DisabledGroupScope(entryDisabled(curPropInfo)))
             {
-                long oldIntVal = (long)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+                long oldIntVal = (long) curPropInfo.GetValue(propertyObject, null);
 
                 // show text field if value fits in one line:
                 long newIntVal = EditorGUILayout.LongField(myNamePrefixGUIContent, oldIntVal);
                 if (newIntVal != oldIntVal)
                 {
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, newIntVal, null);
+                    curPropInfo.SetValue(propertyObject, newIntVal, null);
                 }
             }
 
@@ -1266,15 +1333,14 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Byte : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
 
             using (new EditorGUI.DisabledGroupScope(entryDisabled(curPropInfo)))
             {
-                byte oldVal = (byte)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+                byte oldVal = (byte) curPropInfo.GetValue(propertyObject, null);
 
                 // show text field if value fits in one line:
                 int intVal = EditorGUILayout.IntField(myNamePrefixGUIContent, oldVal);
@@ -1284,12 +1350,12 @@ namespace GQ.Editor.UI
                 else if (intVal > 255)
                     newVal = 255;
                 else
-                    newVal = (byte)intVal;
+                    newVal = (byte) intVal;
 
                 if (newVal != oldVal)
                 {
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, newVal, null);
+                    curPropInfo.SetValue(propertyObject, newVal, null);
                 }
             }
 
@@ -1302,14 +1368,19 @@ namespace GQ.Editor.UI
     {
         bool showList = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
-            List<CategorySet> allElements = (List<CategorySet>)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            List<CategorySet> allElements =
+                (List<CategorySet>) curPropInfo.GetValue(propertyObject, null);
             if (allElements == null)
                 allElements = new List<CategorySet>();
             bool valsChanged = false;
 
-            showList = EditorGUILayout.Foldout(showList, string.Format("Category Sets: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+            showList = EditorGUILayout.Foldout(
+                showList, 
+                string.Format("Category Sets: ({0})", allElements.Count),
+                STYLE_FOLDOUT_Bold);
+            
             if (showList)
             {
                 configIsDirty = false;
@@ -1327,6 +1398,7 @@ namespace GQ.Editor.UI
                     allElements.Insert(0, catSet);
                     valsChanged = true;
                 }
+
                 EditorGUILayout.EndHorizontal();
 
                 for (int i = 0; i < allElements.Count; i++)
@@ -1349,17 +1421,19 @@ namespace GQ.Editor.UI
                     if (GUILayout.Button("-"))
                     {
                         if (EditorUtility.DisplayDialog(
-                                string.Format("Really delete category set {0}?", (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString()),
-                                string.Format(
-                                    "This can not be undone"
-                                ),
-                                "Yes, delete it!",
-                                "No, keep it"))
+                            string.Format("Really delete category set {0}?",
+                                (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString()),
+                            string.Format(
+                                "This can not be undone"
+                            ),
+                            "Yes, delete it!",
+                            "No, keep it"))
                         {
                             allElements.RemoveAll(item => item.name == oldElem.name);
                             valsChanged = true;
                         }
                     }
+
                     EditorGUILayout.EndHorizontal(); // end row for name and "-".
 
                     if (elemChanged)
@@ -1371,11 +1445,12 @@ namespace GQ.Editor.UI
                     }
                 }
             }
+
             if (valsChanged)
             {
                 // Update Config property for category sets:
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements, null);
+                curPropInfo.SetValue(propertyObject, allElements, null);
             }
 
             return configIsDirty;
@@ -1387,15 +1462,16 @@ namespace GQ.Editor.UI
     {
         bool showList = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
-            List<Category> allElements = (List<Category>)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            List<Category> allElements = (List<Category>) curPropInfo.GetValue(propertyObject, null);
             if (allElements == null)
                 allElements = new List<Category>();
             bool valsChanged = false;
             bool folderNameChanged = false;
 
-            showList = EditorGUILayout.Foldout(showList, string.Format("Categories: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+            showList = EditorGUILayout.Foldout(showList, string.Format("Categories: ({0})", allElements.Count),
+                STYLE_FOLDOUT_Bold);
             if (showList)
             {
                 configIsDirty = false;
@@ -1412,11 +1488,13 @@ namespace GQ.Editor.UI
                     allElements.Insert(0, cat);
                     valsChanged = true;
                 }
+
                 if (GUILayout.Button("Sort"))
                 {
                     allElements = getSortedAccordingToFolders(allElements);
                     valsChanged = true;
                 }
+
                 EditorGUILayout.EndHorizontal();
 
                 for (int i = 0; i < allElements.Count; i++)
@@ -1459,6 +1537,7 @@ namespace GQ.Editor.UI
                                 break;
                             }
                         }
+
                         if (!newIdIsUnique)
                         {
                             // reset if not unique:
@@ -1496,13 +1575,14 @@ namespace GQ.Editor.UI
                     if (oldSymbolPath != null)
                         oldSymbolSprite = Resources.Load<Sprite>(oldSymbolPath.path);
                     Sprite newSymbolSprite =
-                        (Sprite)EditorGUILayout.ObjectField(oldSymbolSprite, typeof(Sprite), false);
+                        (Sprite) EditorGUILayout.ObjectField(oldSymbolSprite, typeof(Sprite), false);
                     if (newSymbolSprite != oldSymbolSprite)
                     {
                         string path = AssetDatabase.GetAssetPath(newSymbolSprite);
                         newSymbolPath = new ImagePath(Files.GetResourcesRelativePath(path));
                         elemChanged |= !newSymbolPath.Equals(oldSymbolPath);
                     }
+
                     if (elemChanged)
                     {
                         valsChanged = true;
@@ -1516,24 +1596,28 @@ namespace GQ.Editor.UI
                     if (GUILayout.Button("-"))
                     {
                         if (EditorUtility.DisplayDialog(
-                                string.Format("Really delete category {0}?", (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString()),
-                                string.Format(
-                                    "This can not be undone"
-                                ),
-                                "Yes, delete it!",
-                                "No, keep it"))
+                            string.Format("Really delete category {0}?",
+                                (oldElem.name != null && oldElem.name != "") ? oldElem.name : i.ToString()),
+                            string.Format(
+                                "This can not be undone"
+                            ),
+                            "Yes, delete it!",
+                            "No, keep it"))
                         {
                             allElements.Remove(allElements[i]);
                             valsChanged = true;
                         }
                     }
-                    EditorGUILayout.EndHorizontal(); // end horizontal line of symbol and delete button for current category.
+
+                    EditorGUILayout
+                        .EndHorizontal(); // end horizontal line of symbol and delete button for current category.
                 }
+
                 if (valsChanged)
                 {
                     // Update Config property for scene extensions:
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements, null);
+                    curPropInfo.SetValue(propertyObject, allElements, null);
                 }
             }
 
@@ -1556,6 +1640,7 @@ namespace GQ.Editor.UI
                     catPositionsForFolders.Add(allCats[i].folderName, positionList);
                     orderOfFolders.Add(allCats[i].folderName);
                 }
+
                 positionList.Add(i);
             }
 
@@ -1566,8 +1651,11 @@ namespace GQ.Editor.UI
                 List<int> oldIndicesForThisFolder;
                 if (!catPositionsForFolders.TryGetValue(orderOfFolders[i], out oldIndicesForThisFolder))
                 {
-                    Log.SignalErrorToDeveloper("Sorting Categories for Folders broken: Folder {0} not in catPositionsForFolders list! Fix it!", orderOfFolders[i]);
+                    Log.SignalErrorToDeveloper(
+                        "Sorting Categories for Folders broken: Folder {0} not in catPositionsForFolders list! Fix it!",
+                        orderOfFolders[i]);
                 }
+
                 foreach (int oldIndex in oldIndicesForThisFolder)
                 {
                     sortedList.Insert(newIndex++, allCats[oldIndex]);
@@ -1583,15 +1671,17 @@ namespace GQ.Editor.UI
     {
         bool showList = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
-            List<SceneExtension> allElements = (List<SceneExtension>)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            List<SceneExtension> allElements =
+                (List<SceneExtension>) curPropInfo.GetValue(propertyObject, null);
             if (allElements == null)
                 allElements = new List<SceneExtension>();
             bool valsChanged = false;
             string sceneName;
 
-            showList = EditorGUILayout.Foldout(showList, string.Format("Scene Extensions: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+            showList = EditorGUILayout.Foldout(showList, string.Format("Scene Extensions: ({0})", allElements.Count),
+                STYLE_FOLDOUT_Bold);
             if (showList)
             {
                 configIsDirty = false;
@@ -1611,6 +1701,7 @@ namespace GQ.Editor.UI
                     allElements.Add(sce);
                     valsChanged = true;
                 }
+
                 EditorGUILayout.EndHorizontal();
 
                 for (int i = 0; i < allElements.Count; i++)
@@ -1629,20 +1720,24 @@ namespace GQ.Editor.UI
                         if (sceneName.EndsWith(".unity"))
                             sceneName = sceneName.Substring(0, sceneName.Length - ".unity".Length);
                         // prefab:
-                        EditorGUILayout.PrefixLabel(new GUIContent("  -> " + sceneName, "The prefab extends this scene."));
+                        EditorGUILayout.PrefixLabel(new GUIContent("  -> " + sceneName,
+                            "The prefab extends this scene."));
                         GameObject oldPrefabGO = Resources.Load<GameObject>(oldSceneExt.prefab);
                         GameObject newPrefabGO =
-                            (GameObject)EditorGUILayout.ObjectField(oldPrefabGO, typeof(GameObject), false);
+                            (GameObject) EditorGUILayout.ObjectField(oldPrefabGO, typeof(GameObject), false);
                         if (newPrefabGO != oldPrefabGO && PrefabUtility.GetPrefabType(newPrefabGO) == PrefabType.Prefab)
                         {
                             // if user selects another prefab we store it:
-                            newSceneExt.prefab = Files.GetResourcesRelativePath(AssetDatabase.GetAssetPath(newPrefabGO));
+                            newSceneExt.prefab =
+                                Files.GetResourcesRelativePath(AssetDatabase.GetAssetPath(newPrefabGO));
                             sceneExtChanged = true;
                         }
+
                         EditorGUILayout.EndHorizontal();
                         // root:
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.PrefixLabel(new GUIContent("\t\tat", "The root gameobject where the prefab is injected."));
+                        EditorGUILayout.PrefixLabel(new GUIContent("\t\tat",
+                            "The root gameobject where the prefab is injected."));
                         if (sceneExtensionDisabled)
                         {
                             EditorGUILayout.TextField(Files.FileName(oldSceneExt.root));
@@ -1651,7 +1746,7 @@ namespace GQ.Editor.UI
                         {
                             GameObject oldRootGO = GameObject.Find(oldSceneExt.root);
                             GameObject newRootGO =
-                                (GameObject)EditorGUILayout.ObjectField(oldRootGO, typeof(GameObject), true);
+                                (GameObject) EditorGUILayout.ObjectField(oldRootGO, typeof(GameObject), true);
                             if (newRootGO != oldRootGO && newRootGO.scene == EditorSceneManager.GetActiveScene())
                             {
                                 newSceneExt.root = newRootGO.transform.GetPath();
@@ -1666,29 +1761,33 @@ namespace GQ.Editor.UI
                             valsChanged = true;
                         }
                     } // end disabled group for current scene extension
+
                     if (GUILayout.Button("-"))
                     {
                         if (EditorUtility.DisplayDialog(
-                                string.Format("Really delete extension for scene {0}?", sceneName),
-                                string.Format(
-                                    "It adds {0} to {1}.",
-                                    Files.FileName(oldSceneExt.prefab),
-                                    Files.FileName(oldSceneExt.root)
-                                ),
-                                "Yes, delete it!",
-                                "No, keep it"))
+                            string.Format("Really delete extension for scene {0}?", sceneName),
+                            string.Format(
+                                "It adds {0} to {1}.",
+                                Files.FileName(oldSceneExt.prefab),
+                                Files.FileName(oldSceneExt.root)
+                            ),
+                            "Yes, delete it!",
+                            "No, keep it"))
                         {
                             allElements.Remove(oldSceneExt);
                             valsChanged = true;
                         }
                     }
-                    EditorGUILayout.EndHorizontal(); // end horizontal line of prefab and delete button for current scene extension.
+
+                    EditorGUILayout
+                        .EndHorizontal(); // end horizontal line of prefab and delete button for current scene extension.
                 }
+
                 if (valsChanged)
                 {
                     // Update Config property for scene extensions:
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements, null);
+                    curPropInfo.SetValue(propertyObject, allElements, null);
                 }
             }
 
@@ -1700,25 +1799,26 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4AndroidSdkVersions : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = valueIndexByNumber[(int)ProductEditor.SelectedConfig.androidMinSDKVersion];
+                    _selected = valueIndexByNumber[(int) ProductEditor.SelectedConfig.androidMinSDKVersion];
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         static readonly string[] names = Enum.GetNames(typeof(AndroidSdkVersions));
         static readonly Array vals = Enum.GetValues(typeof(AndroidSdkVersions));
 
         private static Dictionary<int, int> _valueIndexByNumber;
+
         public static Dictionary<int, int> valueIndexByNumber
         {
             get
@@ -1728,14 +1828,16 @@ namespace GQ.Editor.UI
                     _valueIndexByNumber = new Dictionary<int, int>();
                     for (int i = 0; i < names.Length; i++)
                     {
-                        _valueIndexByNumber.Add((int)vals.GetValue(i), i);
+                        _valueIndexByNumber.Add((int) vals.GetValue(i), i);
                     }
                 }
+
                 return _valueIndexByNumber;
             }
         }
 
         private static Dictionary<int, string> _valueNameByIndex;
+
         public static Dictionary<int, string> valueNameByIndex
         {
             get
@@ -1748,16 +1850,17 @@ namespace GQ.Editor.UI
                         _valueNameByIndex.Add(i, names[i]);
                     }
                 }
+
                 return _valueNameByIndex;
             }
         }
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             int old = selected;
             int curIndex;
-            valueIndexByNumber.TryGetValue((int)ProductEditor.SelectedConfig.androidMinSDKVersion, out curIndex);
+            valueIndexByNumber.TryGetValue((int) ProductEditor.SelectedConfig.androidMinSDKVersion, out curIndex);
             selected =
                 EditorGUILayout.Popup(
                     "Android Min SDK Version",
@@ -1768,8 +1871,8 @@ namespace GQ.Editor.UI
             {
                 configIsDirty = true;
                 PlayerSettings.Android.minSdkVersion =
-                    (AndroidSdkVersions)Enum.Parse(typeof(AndroidSdkVersions), valueNameByIndex[selected]);
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, PlayerSettings.Android.minSdkVersion, null);
+                    (AndroidSdkVersions) Enum.Parse(typeof(AndroidSdkVersions), valueNameByIndex[selected]);
+                curPropInfo.SetValue(propertyObject, PlayerSettings.Android.minSdkVersion, null);
             }
 
             return configIsDirty;
@@ -1780,24 +1883,24 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4ListEntryDividingMode : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.listEntryDividingMode;
+                    _selected = (int?) ProductEditor.SelectedConfig.listEntryDividingMode;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         string[] names = Enum.GetNames(typeof(ListEntryDividingMode));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1805,16 +1908,16 @@ namespace GQ.Editor.UI
             selected =
                 EditorGUILayout.Popup(
                     "List Entry Dividing Mode:",
-                selected,
-                names
-            );
+                    selected,
+                    names
+                );
             if (oldSelection != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (ListEntryDividingMode)selected, null);
+                curPropInfo.SetValue(propertyObject, (ListEntryDividingMode) selected, null);
             }
 
-            ListEntryDividingMode mode = (ListEntryDividingMode)selected;
+            ListEntryDividingMode mode = (ListEntryDividingMode) selected;
             //Debug.Log("Sel: " + selection + "     mode: " + mode.ToString());
             return configIsDirty;
         }
@@ -1823,24 +1926,24 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4MapStartPositionType : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.mapStartPositionType;
+                    _selected = (int?) ProductEditor.SelectedConfig.mapStartPositionType;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         string[] mapStartPositionTypeNames = Enum.GetNames(typeof(MapStartPositionType));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1854,7 +1957,7 @@ namespace GQ.Editor.UI
             if (oldMapSTartPositionType != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (MapStartPositionType)selected, null);
+                curPropInfo.SetValue(propertyObject, (MapStartPositionType) selected, null);
             }
 
             return configIsDirty;
@@ -1865,24 +1968,24 @@ namespace GQ.Editor.UI
     public class ProductEditorPart4TaskUIMode : ProductEditorPart
     {
         int? _selected;
+
         int selected
         {
             get
             {
                 if (_selected == null)
                 {
-                    _selected = (int?)ProductEditor.SelectedConfig.taskUI;
+                    _selected = (int?) ProductEditor.SelectedConfig.taskUI;
                 }
-                return (int)_selected;
+
+                return (int) _selected;
             }
-            set
-            {
-                _selected = value;
-            }
+            set { _selected = value; }
         }
+
         string[] taskUIModeNames = Enum.GetNames(typeof(TaskUIMode));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1896,7 +1999,7 @@ namespace GQ.Editor.UI
             if (oldTaskUI != selected)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, (TaskUIMode)selected, null);
+                curPropInfo.SetValue(propertyObject, (TaskUIMode) selected, null);
             }
 
             return configIsDirty;
@@ -1906,12 +2009,11 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Single : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
-            float oldFloatVal = (float)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            float oldFloatVal = (float) curPropInfo.GetValue(propertyObject, null);
             float newFloatVal = oldFloatVal;
 
             // show text field if value fits in one line:
@@ -1919,7 +2021,7 @@ namespace GQ.Editor.UI
             if (newFloatVal != oldFloatVal)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, newFloatVal, null);
+                curPropInfo.SetValue(propertyObject, newFloatVal, null);
             }
 
             return configIsDirty;
@@ -1929,12 +2031,11 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Double : ProductEditorPart
     {
-
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
-            double oldDoubleVal = (double)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+            double oldDoubleVal = (double) curPropInfo.GetValue(propertyObject, null);
             double newDoubleVal = oldDoubleVal;
 
             // show text field if value fits in one line:
@@ -1942,7 +2043,7 @@ namespace GQ.Editor.UI
             if (newDoubleVal != oldDoubleVal)
             {
                 configIsDirty = true;
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, newDoubleVal, null);
+                curPropInfo.SetValue(propertyObject, newDoubleVal, null);
             }
 
             return configIsDirty;
@@ -1952,7 +2053,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4String : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1964,8 +2065,9 @@ namespace GQ.Editor.UI
                 {
                     myNamePrefixGUIContent = new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
                 }
+
                 // show textfield or if value too long show textarea:
-                string oldStringVal = (string)curPropInfo.GetValue(ProductEditor.SelectedConfig, null);
+                string oldStringVal = (string) curPropInfo.GetValue(propertyObject, null);
                 oldStringVal = Objects.ToString(oldStringVal);
                 string newStringVal;
                 GUIStyle guiStyle = new GUIStyle();
@@ -1987,10 +2089,11 @@ namespace GQ.Editor.UI
                     newStringVal = EditorGUILayout.TextField(myNamePrefixGUIContent, oldStringVal);
                     newStringVal = Objects.ToString(newStringVal);
                 }
+
                 if (!newStringVal.Equals(oldStringVal))
                 {
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, newStringVal, null);
+                    curPropInfo.SetValue(propertyObject, newStringVal, null);
                 }
             }
 
@@ -2002,7 +2105,7 @@ namespace GQ.Editor.UI
     {
         bool showDetails = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             switch (curPropInfo.Name)
             {
@@ -2010,13 +2113,13 @@ namespace GQ.Editor.UI
                     configIsDirty = doGui4ScenePaths(curPropInfo);
                     break;
                 case "acceptedPageTypes":
-                    configIsDirty = doGui4AcceptedPageTypes(curPropInfo);
+                    configIsDirty = doGui4AcceptedPageTypes(curPropInfo, propertyObject);
                     break;
                 case "questInfoViews":
-                    configIsDirty = doGui4QuestInfoViews(curPropInfo);
+                    configIsDirty = doGui4QuestInfoViews(curPropInfo, propertyObject);
                     break;
                 case "assetAddOns":
-                    configIsDirty = doGui4AssetAddOns(curPropInfo);
+                    configIsDirty = doGui4AssetAddOns(curPropInfo, propertyObject);
                     break;
                 default:
                     Log.SignalErrorToDeveloper("Unhandled property Type: {0}", curPropInfo.PropertyType.Name);
@@ -2047,7 +2150,8 @@ namespace GQ.Editor.UI
                 );
                 if (GUILayout.Button("Import from Editor Settings"))
                 {
-                    EditorWindow editorBuildSettingsWindow = EditorWindow.GetWindow(Type.GetType("UnityEditor.BuildPlayerWindow,UnityEditor"));
+                    EditorWindow editorBuildSettingsWindow =
+                        EditorWindow.GetWindow(Type.GetType("UnityEditor.BuildPlayerWindow,UnityEditor"));
                     editorBuildSettingsWindow.Show();
 
                     List<string> scenePathsFromSettings = new List<string>();
@@ -2058,9 +2162,11 @@ namespace GQ.Editor.UI
                             scenePathsFromSettings.Add(EditorBuildSettings.scenes[i].path);
                         }
                     }
+
                     ProductEditor.SelectedConfig.scenePaths = scenePathsFromSettings.ToArray();
                     configIsDirty = true;
                 }
+
                 EditorGUILayout.EndHorizontal();
 
                 using (new EditorGUI.DisabledGroupScope(true))
@@ -2078,12 +2184,13 @@ namespace GQ.Editor.UI
                     }
                 }
             }
+
             return configIsDirty;
         }
 
         int acceptedPageTypeSelection = 0;
 
-        private bool doGui4AcceptedPageTypes(PropertyInfo curPropInfo)
+        private bool doGui4AcceptedPageTypes(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -2091,6 +2198,7 @@ namespace GQ.Editor.UI
             {
                 ProductEditor.SelectedConfig.acceptedPageTypes = new string[0];
             }
+
             List<string> allElements = new List<string>(ProductEditor.SelectedConfig.acceptedPageTypes);
 
             List<string> pageTypesToAdd = new List<string>();
@@ -2116,17 +2224,18 @@ namespace GQ.Editor.UI
                     EditorGUILayout.BeginHorizontal();
 
                     acceptedPageTypeSelection =
-                    EditorGUILayout.Popup(
-                        "Add Page Type:",
+                        EditorGUILayout.Popup(
+                            "Add Page Type:",
                             acceptedPageTypeSelection,
-                        pageTypesToAdd.ToArray()
-                    );
+                            pageTypesToAdd.ToArray()
+                        );
 
                     if (GUILayout.Button("+"))
                     {
                         allElements.Add(pageTypesToAdd[acceptedPageTypeSelection]);
                         configIsDirty = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
 
@@ -2147,26 +2256,30 @@ namespace GQ.Editor.UI
                             configIsDirty = true;
                         }
                     }
+
                     if (GUILayout.Button("-"))
                     {
                         if (EditorUtility.DisplayDialog(
-                                string.Format("Really Delete Accepted Page Type {0}?", ProductEditor.SelectedConfig.acceptedPageTypes[i]),
-                                "Sure?.",
-                                "Yes, delete it!",
-                                "No, keep it"))
+                            string.Format("Really Delete Accepted Page Type {0}?",
+                                ProductEditor.SelectedConfig.acceptedPageTypes[i]),
+                            "Sure?.",
+                            "Yes, delete it!",
+                            "No, keep it"))
                         {
                             allElements.Remove(ProductEditor.SelectedConfig.acceptedPageTypes[i]);
                             configIsDirty = true;
                         }
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
 
             if (configIsDirty)
             {
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements.ToArray(), null);
+                curPropInfo.SetValue(propertyObject, allElements.ToArray(), null);
             }
+
             return configIsDirty;
         }
 
@@ -2174,7 +2287,7 @@ namespace GQ.Editor.UI
         int assetAddOnSelection = 0;
         bool showDetails_AssetAddOns = false;
 
-        private bool doGui4AssetAddOns(PropertyInfo curPropInfo)
+        private bool doGui4AssetAddOns(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -2183,6 +2296,7 @@ namespace GQ.Editor.UI
                 int numberOfAssetAddOns = Enum.GetNames(typeof(AssetAddOn)).Length;
                 ProductEditor.SelectedConfig.assetAddOns = new string[numberOfAssetAddOns];
             }
+
             List<string> allElements = new List<string>(ProductEditor.SelectedConfig.assetAddOns);
 
             List<string> assetAddOnsToAdd = new List<string>();
@@ -2213,16 +2327,17 @@ namespace GQ.Editor.UI
                         assetAddOnSelection = assetAddOnsToAdd.Count - 1;
                     assetAddOnSelection =
                         EditorGUILayout.Popup(
-                        "Add AssetAddOn:",
+                            "Add AssetAddOn:",
                             assetAddOnSelection,
-                        assetAddOnsToAdd.ToArray()
-                    );
+                            assetAddOnsToAdd.ToArray()
+                        );
 
                     if (GUILayout.Button("+"))
                     {
                         allElements.Add(assetAddOnsToAdd[assetAddOnSelection]);
                         configIsDirty = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
 
@@ -2243,33 +2358,38 @@ namespace GQ.Editor.UI
                             configIsDirty = true;
                         }
                     }
+
                     if (GUILayout.Button("-"))
                     {
                         allElements.Remove(ProductEditor.SelectedConfig.assetAddOns[i]);
                         configIsDirty = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
 
             if (configIsDirty)
             {
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements.ToArray(), null);
+                curPropInfo.SetValue(propertyObject, allElements.ToArray(), null);
             }
+
             return configIsDirty;
         }
         // AssetAddOn ENDS
 
         int questInfoViewSelection = 0;
 
-        private bool doGui4QuestInfoViews(PropertyInfo curPropInfo)
+        private bool doGui4QuestInfoViews(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
             if (ProductEditor.SelectedConfig.questInfoViews == null)
             {
-                ProductEditor.SelectedConfig.questInfoViews = new string[2] { QuestInfoView.Map.ToString(), QuestInfoView.List.ToString() };
+                ProductEditor.SelectedConfig.questInfoViews = new string[2]
+                    {QuestInfoView.Map.ToString(), QuestInfoView.List.ToString()};
             }
+
             List<string> allElements = new List<string>(ProductEditor.SelectedConfig.questInfoViews);
 
             List<string> viewsToAdd = new List<string>();
@@ -2283,7 +2403,8 @@ namespace GQ.Editor.UI
 
             showDetails = EditorGUILayout.Foldout(
                 showDetails,
-                string.Format("Questinfo View & Select Options: ({0})", ProductEditor.SelectedConfig.questInfoViews.Length),
+                string.Format("Questinfo View & Select Options: ({0})",
+                    ProductEditor.SelectedConfig.questInfoViews.Length),
                 STYLE_FOLDOUT_Bold
             );
 
@@ -2300,16 +2421,17 @@ namespace GQ.Editor.UI
                         questInfoViewSelection = viewsToAdd.Count - 1;
                     questInfoViewSelection =
                         EditorGUILayout.Popup(
-                        "Add Questinfo Viewing Option:",
+                            "Add Questinfo Viewing Option:",
                             questInfoViewSelection,
-                        viewsToAdd.ToArray()
-                    );
+                            viewsToAdd.ToArray()
+                        );
 
                     if (GUILayout.Button("+"))
                     {
                         allElements.Add(viewsToAdd[questInfoViewSelection]);
                         configIsDirty = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
 
@@ -2330,6 +2452,7 @@ namespace GQ.Editor.UI
                             configIsDirty = true;
                         }
                     }
+
                     if (GUILayout.Button("-"))
                     {
                         //						bool delete = EditorUtility.DisplayDialog (
@@ -2342,23 +2465,25 @@ namespace GQ.Editor.UI
                         configIsDirty = true;
                         //						}
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
 
             if (configIsDirty)
             {
-                curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements.ToArray(), null);
+                curPropInfo.SetValue(propertyObject, allElements.ToArray(), null);
             }
+
             return configIsDirty;
         }
-
     }
 
 
     public class ProductEditorPart4ListOfSceneMapping : ProductEditorPart
     {
         public const string ProjectScenesRootPath = "Assets/Scenes/Pages/";
+
         public static readonly string ProductScenesRootPath =
             Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage/Scenes/Pages/");
 
@@ -2368,7 +2493,7 @@ namespace GQ.Editor.UI
         int selectedPageTypeToAdd = 0;
         int selectedSceneToAdd = 0;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo)
+        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -2388,6 +2513,7 @@ namespace GQ.Editor.UI
                         break; // do not add this page type since it is already mapped
                     }
                 }
+
                 if (!alreadyMapped)
                     availablePageTypesToMap.Add(pageType);
             }
@@ -2401,6 +2527,7 @@ namespace GQ.Editor.UI
                     scenePath.Substring(0, scenePath.Length - ".unity".Length)
                 );
             }
+
             // product specific page scenes:
             if (Directory.Exists(ProductScenesRootPath))
                 foreach (string scenePath in Directory.GetFiles(ProductScenesRootPath, "*.unity"))
@@ -2410,11 +2537,13 @@ namespace GQ.Editor.UI
                     );
                 }
 
-            showDetails = EditorGUILayout.Foldout(showDetails, string.Format("Scene Mappings: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
+            showDetails = EditorGUILayout.Foldout(showDetails,
+                string.Format("Scene Mappings: ({0})", allElements.Count), STYLE_FOLDOUT_Bold);
             if (showDetails)
             {
                 configIsDirty = false;
-                using (new EditorGUI.DisabledGroupScope(entryDisabled(curPropInfo) || availablePageTypesToMap.Count == 0))
+                using (new EditorGUI.DisabledGroupScope(
+                    entryDisabled(curPropInfo) || availablePageTypesToMap.Count == 0))
                 {
                     // Two line header with Add Button:
                     EditorGUILayout.BeginHorizontal();
@@ -2425,9 +2554,9 @@ namespace GQ.Editor.UI
                     );
                     selectedPageTypeToAdd =
                         EditorGUILayout.Popup(
-                        selectedPageTypeToAdd,
-                        availablePageTypesToMap.ToArray()
-                    );
+                            selectedPageTypeToAdd,
+                            availablePageTypesToMap.ToArray()
+                        );
                     EditorGUILayout.EndHorizontal();
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel(
@@ -2437,9 +2566,9 @@ namespace GQ.Editor.UI
                     );
                     selectedSceneToAdd =
                         EditorGUILayout.Popup(
-                        selectedSceneToAdd,
-                        pageScenes.Select(s => s.Substring(
-                           s.LastIndexOf("/") + 1)).ToArray());
+                            selectedSceneToAdd,
+                            pageScenes.Select(s => s.Substring(
+                                s.LastIndexOf("/") + 1)).ToArray());
                     if (GUILayout.Button("+"))
                     {
                         allElements.Add(
@@ -2450,6 +2579,7 @@ namespace GQ.Editor.UI
                         );
                         valsChanged = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
 
@@ -2470,11 +2600,13 @@ namespace GQ.Editor.UI
                             )
                         );
                     }
+
                     if (GUILayout.Button("-"))
                     {
                         allElements.RemoveAt(i);
                         valsChanged = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
 
@@ -2482,8 +2614,9 @@ namespace GQ.Editor.UI
                 {
                     // Update Config property for scene extensions:
                     configIsDirty = true;
-                    curPropInfo.SetValue(ProductEditor.SelectedConfig, allElements, null);
-                    List<EditorBuildSettingsScene> editorBuildScenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
+                    curPropInfo.SetValue(propertyObject, allElements, null);
+                    List<EditorBuildSettingsScene> editorBuildScenes =
+                        new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
                     foreach (SceneMapping sm in allElements)
                     {
                         bool sceneInBuild = false;
@@ -2496,12 +2629,14 @@ namespace GQ.Editor.UI
                                 break;
                             }
                         }
+
                         if (sceneInBuild == false)
                         {
                             // we need to add the target of this scene mapping to the build settings:
                             editorBuildScenes.Add(new EditorBuildSettingsScene(sm.scenePath, true));
                         }
                     }
+
                     EditorBuildSettings.scenes = editorBuildScenes.ToArray();
 
 #if DEBUG_LOG
@@ -2516,6 +2651,4 @@ namespace GQ.Editor.UI
             return configIsDirty;
         }
     }
-
 }
-

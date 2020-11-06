@@ -222,6 +222,8 @@ namespace Code.GQClient.Util
                 dialog.Start();
             }
 #endif
+            
+            Debug.Log($"Runtime Config test: {ConfigurationManager.CurrentRT.test}");
         }
 
         private void Update()

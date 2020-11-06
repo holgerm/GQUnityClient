@@ -3,247 +3,330 @@ using UnityEngine;
 
 namespace Code.GQClient.Conf
 {
+    /// <summary>
+    /// The Configuration manager is the runtime access point to information about the build configuration, 
+    /// e.g. build time, version, contained markers and logos, links to server resources etc. 
+    /// I.e. everything the app needs for the specific product it is branded to.
+    /// 
+    /// This class will completely replace the currently still used class Configuration 
+    /// and additionally offer any information which is currently entered manually in the Unity Inspector View.
+    /// </summary>
+    public class ConfigurationManager
+    {
+        #region Initialize
 
-	/// <summary>
-	/// The Configuration manager is the runtime access point to information about the build configuration, 
-	/// e.g. build time, version, contained markers and logos, links to server resources etc. 
-	/// I.e. everything the app needs for the specific product it is branded to.
-	/// 
-	/// This class will completely replace the currently still used class Configuration 
-	/// and additionally offer any information which is currently entered manually in the Unity Inspector View.
-	/// </summary>
-	public class ConfigurationManager 
-	{
+        void Awake()
+        {
+            deserializeConfig();
+        }
 
-		#region Initialize
+        private static string _version = null;
 
-		void Awake ()
-		{
-			deserializeConfig ();
-		}
+        public static string Version
+        {
+            get
+            {
+                if (_version == null)
+                {
+                    // get the string part before the first dot:
+                    _version = Buildtime.Substring(0, Buildtime.IndexOf('.'));
+                }
 
-		private static string _version = null;
+                return _version;
+            }
+        }
 
-		public static string Version {
-			get {
-				if (_version == null) {
-					// get the string part before the first dot:
-					_version = Buildtime.Substring (0, Buildtime.IndexOf ('.'));
-				}
-				return _version;
-			}
-		}
+        #endregion
 
-		#endregion
+        #region Paths and general Resources
 
-		#region Paths and general Resources
+        public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
+        public const string CONFIG_FILE = "Product.json";
+        public const string RT_CONFIG_FILE = "RTProduct.json";
+        public const string BUILD_TIME_FILE_NAME = "buildtime";
+        public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
+        public const string TOPLOGO_FILE_NAME = "TopLogo";
+        public const string TOPLOGO_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + TOPLOGO_FILE_NAME;
 
-		public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
-		public const string CONFIG_FILE = "Product.json";
-		public const string BUILD_TIME_FILE_NAME = "buildtime";
-		public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
-		public const string TOPLOGO_FILE_NAME = "TopLogo";
-		public const string TOPLOGO_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + TOPLOGO_FILE_NAME;
+        public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
 
-		public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
+        public static string UrlPublicQuestsJSON
+        {
+            get
+            {
+                return
+                    String.Format(
+                        "{0}/json/{1}/publicgamesinfo",
+                        GQ_SERVER_BASE_URL,
+                        Current.portal
+                    );
+            }
+        }
 
-		public static string UrlPublicQuestsJSON {
-			get {
-				return 
-					String.Format (
-					"{0}/json/{1}/publicgamesinfo", 
-					GQ_SERVER_BASE_URL,
-					Current.portal
-				);
-			}
-		}
+        #endregion
 
-		#endregion
+        #region RETRIEVING THE CURRENT PRODUCT
 
-		#region RETRIEVING THE CURRENT PRODUCT
+        private static Config _current = null;
+        private static RTConfig _currentRT = null;
 
-		private static Config _current = null;
+        public static Config Current
+        {
+            get
+            {
+                if (_current == null)
+                {
+                    deserializeConfig();
+                }
 
-		public static Config Current {
-			get {
-				if (_current == null) {
-					deserializeConfig ();
-				}
-			
-				return _current;
-			}
-			set {
-				_current = value;
-			}
-		}
+                return _current;
+            }
+            set { _current = value; }
+        }
 
-		public static void Reset ()
-		{
-			_current = null;
-		}
+        public static RTConfig CurrentRT
+        {
+            get
+            {
+                if (_currentRT == null)
+                {
+                    deserializeConfig();
+                }
 
-		private static Sprite _topLogo;
+                return _currentRT;
+            }
+            set { _currentRT = value; }
+        }
 
-		public static Sprite TopLogo {
-			get {
-				_topLogo = Resources.Load <Sprite> (TOPLOGO_FILE_NAME);
-				return _topLogo;
-			}
-			set {
-				_topLogo = value;
-			}
-		}
+        public static void Reset()
+        {
+            _current = null;
+            _currentRT = null;
+        }
 
-		private static Sprite _defaultMarker;
+        private static Sprite _topLogo;
 
-		public static Sprite DefaultMarker {
-			get {
-				return _defaultMarker;
-			}
-			set {
-				_defaultMarker = value;
-			}
-		}
+        public static Sprite TopLogo
+        {
+            get
+            {
+                _topLogo = Resources.Load<Sprite>(TOPLOGO_FILE_NAME);
+                return _topLogo;
+            }
+            set { _topLogo = value; }
+        }
 
-		private static string _buildtime = null;
+        private static Sprite _defaultMarker;
 
-		public static string Buildtime {
-			get {
-				if (_buildtime == null) {
-					try {
-						TextAsset buildTimeAsset = Resources.Load (BUILD_TIME_FILE_NAME) as TextAsset;
+        public static Sprite DefaultMarker
+        {
+            get { return _defaultMarker; }
+            set { _defaultMarker = value; }
+        }
 
-						if (buildTimeAsset == null) {
-							throw new ArgumentException ("Buildtime File does not represent a loadable asset. Cf. " + BUILD_TIME_FILE_NAME);
-						}
-						_buildtime = buildTimeAsset.text;
-					} catch (Exception exc) {
-						Debug.LogWarning ("Could not read build time file at " + BUILD_TIME_FILE_PATH + " " + exc.Message);
-						_buildtime = "unknown";
-					}
-				}
-				return _buildtime;
-			}
-			set {
-				_buildtime = value;
-			}
-		}
+        private static string _buildtime = null;
 
-		private static string _imprint = null;
+        public static string Buildtime
+        {
+            get
+            {
+                if (_buildtime == null)
+                {
+                    try
+                    {
+                        TextAsset buildTimeAsset = Resources.Load(BUILD_TIME_FILE_NAME) as TextAsset;
 
-		public static string Imprint {
-			get {
-				if (_imprint == null) {
-					TextAsset ta = Resources.Load ("imprint") as TextAsset;
-					if (ta == null)
-						_imprint = "";
-					else
-						_imprint = ta.text;
-				}
-				return _imprint;
-				
-			}
-			set {
-				_imprint = value;
-			}
-		}
+                        if (buildTimeAsset == null)
+                        {
+                            throw new ArgumentException("Buildtime File does not represent a loadable asset. Cf. " +
+                                                        BUILD_TIME_FILE_NAME);
+                        }
 
+                        _buildtime = buildTimeAsset.text;
+                    }
+                    catch (Exception exc)
+                    {
+                        Debug.LogWarning(
+                            "Could not read build time file at " + BUILD_TIME_FILE_PATH + " " + exc.Message);
+                        _buildtime = "unknown";
+                    }
+                }
 
-		private static string _terms = null;
+                return _buildtime;
+            }
+            set { _buildtime = value; }
+        }
 
-		public static string Terms {
-			get {
-				if (_terms == null) {
-					TextAsset ta = Resources.Load ("terms") as TextAsset;
-					if (ta == null)
-						_terms = "";
-					else
-						_terms = ta.text;
-				}
-				return _terms;
+        private static string _imprint = null;
 
-			}
-			set {
-				_terms = value;
-			}
-		}
+        public static string Imprint
+        {
+            get
+            {
+                if (_imprint == null)
+                {
+                    TextAsset ta = Resources.Load("imprint") as TextAsset;
+                    if (ta == null)
+                        _imprint = "";
+                    else
+                        _imprint = ta.text;
+                }
 
-
-		private static string _privacyStatement = null;
-
-		public static string PrivacyStatement {
-			get {
-				if (_privacyStatement == null) {
-					TextAsset ta = Resources.Load ("privacy") as TextAsset;
-					if (ta == null)
-						_privacyStatement = "";
-					else
-						_privacyStatement = ta.text;
-				}
-				return _privacyStatement;
-
-			}
-			set {
-				_privacyStatement = value;
-			}
-		}
-
-		private static string retrieveProductJSONFromAppConfig ()
-		{
-			TextAsset configAsset = Resources.Load ("Product") as TextAsset;
-
-			if (configAsset == null) {
-				throw new ArgumentException ("Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
-			}
-
-			return configAsset.text;
-		}
-
-		public delegate string RetrieveProductJSONTextDelegate ();
-
-		private static RetrieveProductJSONTextDelegate _retrieveProductJSONText;
-
-		public static RetrieveProductJSONTextDelegate RetrieveProductJSONText {
-			get {
-				if (_retrieveProductJSONText == null) {
-					_retrieveProductJSONText = retrieveProductJSONFromAppConfig;
-				}
-				return _retrieveProductJSONText;
-			}
-			set {
-				Current = null;
-				_retrieveProductJSONText = value;
-			}
-		}
+                return _imprint;
+            }
+            set { _imprint = value; }
+        }
 
 
-		/// <summary>
-		/// Deserialize the Product.json file to the current config object that is used throughout the client.
-		/// </summary>
-		public static void deserializeConfig ()
-		{
+        private static string _terms = null;
 
-			string json = RetrieveProductJSONText ();
+        public static string Terms
+        {
+            get
+            {
+                if (_terms == null)
+                {
+                    TextAsset ta = Resources.Load("terms") as TextAsset;
+                    if (ta == null)
+                        _terms = "";
+                    else
+                        _terms = ta.text;
+                }
 
-			try {
-                _current = Config._doDeserializeConfig (json);
-			} catch (Exception e) {
-				Debug.LogWarning ("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
-			}
-
-		}
-
-		#endregion
-
-	}
+                return _terms;
+            }
+            set { _terms = value; }
+        }
 
 
-	public enum QuestVisualizationMethod
-	{
-		list,
-		map
-	}
+        private static string _privacyStatement = null;
 
+        public static string PrivacyStatement
+        {
+            get
+            {
+                if (_privacyStatement == null)
+                {
+                    TextAsset ta = Resources.Load("privacy") as TextAsset;
+                    if (ta == null)
+                        _privacyStatement = "";
+                    else
+                        _privacyStatement = ta.text;
+                }
+
+                return _privacyStatement;
+            }
+            set { _privacyStatement = value; }
+        }
+
+        private static string retrieveProductJSONFromAppConfig()
+        {
+            TextAsset configAsset = Resources.Load("Product") as TextAsset;
+
+            if (configAsset == null)
+            {
+                throw new ArgumentException(
+                    "Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
+            }
+
+            return configAsset.text;
+        }
+
+        public delegate string RetrieveProductJSONTextDelegate();
+
+        private static RetrieveProductJSONTextDelegate _retrieveProductJSONText;
+
+        public static RetrieveProductJSONTextDelegate RetrieveProductJSONText
+        {
+            get
+            {
+                if (_retrieveProductJSONText == null)
+                {
+                    _retrieveProductJSONText = retrieveProductJSONFromAppConfig;
+                }
+
+                return _retrieveProductJSONText;
+            }
+            set
+            {
+                Current = null;
+                _retrieveProductJSONText = value;
+            }
+        }
+
+        private static string retrieveProductJSONFromAppConfigRT()
+        {
+            TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
+
+            if (configAsset == null)
+            {
+                throw new ArgumentException(
+                    "Something went wrong with the initial RTConfig JSON File. Check it. It should be at " +
+                    RUNTIME_PRODUCT_DIR);
+            }
+
+            return configAsset.text;
+        }
+
+        public delegate string RetrieveRTProductJSONTextDelegate();
+
+        private static RetrieveRTProductJSONTextDelegate _retrieveRTProductJSONText;
+
+        public static RetrieveRTProductJSONTextDelegate RetrieveRTProductJSONText
+        {
+            get
+            {
+                if (_retrieveRTProductJSONText == null)
+                {
+                    _retrieveRTProductJSONText = retrieveProductJSONFromAppConfigRT;
+                }
+
+                return _retrieveRTProductJSONText;
+            }
+            set
+            {
+                CurrentRT = null;
+                _retrieveRTProductJSONText = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Deserialize the Product.json a dn ProductRT.json files to the current config objects
+        /// that are used throughout the client.
+        /// </summary>
+        public static void deserializeConfig()
+        {
+            string json = RetrieveProductJSONText();
+
+            try
+            {
+                _current = Config._doDeserializeConfig(json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
+            }
+
+            json = RetrieveRTProductJSONText();
+
+            try
+            {
+                _currentRT = RTConfig._doDeserialize(json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Product Configuration: Exception thrown when parsing ProductRT.json: " + e.Message);
+            }
+        }
+
+        #endregion
+    }
+
+
+    public enum QuestVisualizationMethod
+    {
+        list,
+        map
+    }
 }
-
-

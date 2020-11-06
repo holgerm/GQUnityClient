@@ -330,56 +330,6 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor] public float mapButtonHeightMaxMM { get; set; }
 
-
-        [ShowInProductEditor(StartSection = "Categories & Filters:")]
-        public bool foldableCategoryFilters { get; set; }
-
-        [ShowInProductEditor] public bool categoryFiltersStartFolded { get; set; }
-
-        [ShowInProductEditor] public bool categoryFoldersStartFolded { get; set; }
-
-        /// <summary>
-        /// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
-        /// </summary>
-        /// <value>The main category set.</value>
-        [ShowInProductEditor]
-        public string mainCategorySet { get; set; }
-
-        public CategorySet GetMainCategorySet()
-        {
-            return CategorySets.Find(cat => cat.name == mainCategorySet);
-        }
-
-        [ShowInProductEditor]
-        public List<CategorySet> CategorySets
-        {
-            get
-            {
-                if (_categorySets == null)
-                {
-                    _categorySets = new List<CategorySet>();
-                }
-
-                categoryDict = new Dictionary<string, Category>();
-                foreach (CategorySet cs in _categorySets)
-                {
-                    foreach (Category c in cs.categories)
-                    {
-                        categoryDict[c.id] = c;
-                    }
-                }
-
-                return _categorySets;
-            }
-            set { _categorySets = value; }
-        }
-
-        [ShowInProductEditor] public string defaultCategory { get; set; }
-
-        [JsonIgnore] private List<CategorySet> _categorySets;
-
-        [JsonIgnore] public Dictionary<string, Category> categoryDict;
-
         [JsonIgnore] private float _disabledAlpha = 0.5f;
 
         [ShowInProductEditor]
@@ -835,10 +785,6 @@ namespace Code.GQClient.Conf
 
             // Menu:
             showEmptyMenuEntries = false;
-            categoryDict = new Dictionary<string, Category>();
-            foldableCategoryFilters = true;
-            categoryFiltersStartFolded = true;
-            categoryFoldersStartFolded = true;
             menuEntryHeightUnits = 35f;
             menuEntryWidthUnits = 400f;
             menuInhibitsInteraction = false;

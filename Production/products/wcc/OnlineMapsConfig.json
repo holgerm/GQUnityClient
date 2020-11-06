@@ -18,7 +18,7 @@
             "b": 0.5,
             "a": 1.0
         },
-        "height": 1024,
+        "height": 2048,
         "labels": false,
         "language": "en",
         "lockRedraw": false,
@@ -47,10 +47,10 @@
         "useCurrentZoomTiles": false,
         "useProxy": true,
         "useSoftwareJPEGDecoder": false,
-        "width": 1024,
+        "width": 1280,
         "_activeTypeSettings": "07User ID1715gqwcc06Map ID228225ckfwey6ve7t1219rroh8029m412Access Token265262pk.eyJ1IjoiZ3F3Y2MiLCJhIjoiTFhiakh3WSJ9.lDYp_76i3_uE5cSd1BQmuA",
-        "_zoom": 13.0,
-        "latitude": 50.73534167045611,
-        "longitude": 7.106280727173058
+        "_zoom": 14.0,
+        "latitude": 50.73381,
+        "longitude": 7.100114
     }
 }

@@ -32,7 +32,7 @@ namespace Code.GQClient.UI.menu.categories
 			qim.OnDataChange += OnQuestInfoChanged;
 
 			// fold the categories of this set (up to now they are unfolded):
-			if (ConfigurationManager.Current.categoryFiltersStartFolded) {
+			if (ConfigurationManager.CurrentRT.categoryFiltersStartFolded) {
 				ToggleMenuView ();
 			}
 		}
@@ -62,7 +62,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		public void ToggleMenuView ()
 		{
-			bool foldable = ConfigurationManager.Current.foldableCategoryFilters;
+			bool foldable = ConfigurationManager.CurrentRT.foldableCategoryFilters;
 			if (!foldable || transform.childCount < 3)
 				// if we can't fold or do not have entries (the header is always there) we skip this:
 				return;

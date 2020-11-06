@@ -14,7 +14,8 @@ namespace GQ.Editor.Building {
 	/// The ProductSpec class represents a product specifiation of our app at edit time (not runtime!). 
 	/// 
 	/// Each ProductSpec instance refers to image files and resources directly 
-	/// and to all textual parameters via a Config object. Product instances are used by the ProductManager and can be edited in the ProductEditor view.
+	/// and to all textual parameters via a Config object. Product instances are used by the ProductManager
+	/// and can be edited in the ProductEditor view.
 	/// 
 	/// A product is backed on file by diverse graphic files and a configuration file (Product.json). 
 	/// These files reside in one folder (the product folder) which can have an arbitrary name. 
@@ -114,6 +115,18 @@ namespace GQ.Editor.Building {
 		}
 
 
+		public string RTConfigPath => Files.CombinePath(Dir, ConfigurationManager.RT_CONFIG_FILE);
+
+		private RTConfig _rtConfig;
+
+		public RTConfig RTConfig {
+			get {
+				return _rtConfig;
+			}
+			set {
+				_rtConfig = value;
+			}
+		}
 		#endregion
 
 
@@ -148,6 +161,15 @@ namespace GQ.Editor.Building {
                 Config = Config._doDeserializeConfig(configJSON);
 			} catch ( Exception exc ) {
 				throw new ArgumentException("Invalid product definition. Config file could not be read.", exc);
+			}
+			
+			// init and check RTConfig:
+			try {
+				string RTConfigJSON = File.ReadAllText(RTConfigPath);
+				RTConfig = RTConfig._doDeserialize(RTConfigJSON);
+			} catch ( Exception exc ) {
+				throw new ArgumentException(
+					"Invalid product definition. Runtime Config file could not be read.", exc);
 			}
 		}
 

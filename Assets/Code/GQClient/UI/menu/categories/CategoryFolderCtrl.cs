@@ -28,7 +28,7 @@ namespace Code.GQClient.UI.menu.categories
 			catFolder.ctrl = folderCtrl;
 
 			// initialize the UI Entry for this folder:
-			folderCtrl.ShowState = ConfigurationManager.Current.categoryFiltersStartFolded;
+			folderCtrl.ShowState = ConfigurationManager.CurrentRT.categoryFiltersStartFolded;
 			folderCtrl.UpdateView (catFolder);
 
 			// hook the show/hide children method onto the image toggle button of this folder:
