@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -110,6 +111,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		public void UpdateView ()
 		{
+			Debug.Log("Updating CatTreeView".Yellow());
 			if (this == null || CategoryFilter == null) {
 				return;
 			}
@@ -122,10 +124,13 @@ namespace Code.GQClient.UI.menu.categories
 
 			// reactivate filter change events after pause:
 			CategoryFilter.NotificationPaused = false;
+			Debug.Log("Updating CatTreeView DONE".Yellow());
 		}
 
 		private void recreateModelTree ()
 		{
+			int cats = null == categoryFolders ? -1 : categoryFolders.Count;
+			Debug.Log($"START CATFolders: {cats}");
 			// model: create skeleton of folders and entries:
 			categoryEntries = new Dictionary<string, CategoryEntry> ();
 			categoryFolders = new Dictionary<string, CategoryFolder> ();
@@ -156,16 +161,20 @@ namespace Code.GQClient.UI.menu.categories
 					catEntry.AddQuestID (info.Id);
 				}
 			}
+			cats = null == categoryFolders ? -1 : categoryFolders.Count;
+			Debug.Log($"END CATFolders: {cats}");
 		}
 
 		private void recreateUI ()
 		{
+			Debug.Log($"REMOVING CHILDCOUNT: {transform.childCount}");
 			// delete all category entry UI elements:
-			for (int i = 1; i < transform.childCount; i++) {
-				Transform child = transform.GetChild (i);
-				if (child.GetComponent<CategoryEntryCtrl> () != null) {
+			foreach (Transform child in transform.Cast<Transform>().ToArray()) {
+				// Transform child = transform.GetChild (i);
+				if (null != child.GetComponent<CategoryEntryCtrl> () || null != child.GetComponent<CategoryFolderCtrl> ()) {
 					// if child is an category entry we delete it:
-					Destroy (child);
+					Debug.Log($"REMOVING {child.name}");
+					DestroyImmediate(child.gameObject);
 				}
 			}
 
