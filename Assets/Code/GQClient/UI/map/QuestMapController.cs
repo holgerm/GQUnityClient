@@ -124,7 +124,7 @@ namespace Code.GQClient.UI.map
             }
 
             // App-specific hotspot marker (defaults to the default geoquest marker):
-            var markerTexture = Resources.Load<Texture2D>(ConfigurationManager.Current.hotspotMarker.path);
+            var markerTexture = ConfigurationManager.Current.hotspotMarker.GetTexture2D();
 
             ShowLoadedMarker(hotspot, markerTexture);
         }

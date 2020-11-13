@@ -64,7 +64,7 @@ namespace Code.GQClient.UI.menu.categories
 
 			// set symbol for this category:
 			categorySymbol.sprite = categoryEntry.category.symbol != null ?
-				Resources.Load<Sprite> (categoryEntry.category.symbol.path) :
+				categoryEntry.category.symbol.GetSprite() :
 				null;
 			if (categorySymbol.sprite == null) {
 				categorySymbol.GetComponent<Image> ().enabled = false;

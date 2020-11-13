@@ -289,7 +289,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 {
                     // set symbol for this category:
                     infoImage.sprite = determiningCategory.symbol != null
-                        ? Resources.Load<Sprite>(determiningCategory.symbol.path)
+                        ? determiningCategory.symbol.GetSprite()
                         : null;
                     if (infoImage.sprite != null)
                     {

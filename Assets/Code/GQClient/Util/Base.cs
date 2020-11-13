@@ -170,6 +170,8 @@ namespace Code.GQClient.Util
 
         private void Awake()
         {
+            ConfigurationManager.Initialize();
+            
             // hide all canvases at first, we show the needed ones in initViews()
             var rootGOs = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (var rootGo in rootGOs)
@@ -223,7 +225,6 @@ namespace Code.GQClient.Util
             }
 #endif
             
-            Debug.Log($"Runtime Config test: {ConfigurationManager.CurrentRT.test}");
         }
 
         private void Update()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Code.GQClient.Err;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
 using Newtonsoft.Json;
@@ -27,9 +28,23 @@ namespace Code.GQClient.Conf
 
         public static bool __JSON_Currently_Parsing = false;
 
-        public static RTConfig _doDeserialize(string configText)
+        /// <summary>
+        /// Used during deserialization of json file. Shows whether the json text used in-app resources (true) or
+        /// application persistent files (false). Used to put that information e.g. into ImagePath objects.
+        /// </summary>
+        public static LoadsFrom CurrentLoadingMode;
+
+        public enum LoadsFrom
+        {
+            Resource,
+            LocalFile,
+            RemoteFile
+        }
+
+        public static RTConfig _doDeserialize(string configText, LoadsFrom loadMode)
         {
             __JSON_Currently_Parsing = true;
+            CurrentLoadingMode = loadMode;
             RTConfig config = JsonConvert.DeserializeObject<RTConfig>(configText);
             __JSON_Currently_Parsing = false;
             return config;

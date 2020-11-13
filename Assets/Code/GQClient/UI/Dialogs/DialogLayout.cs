@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.Dialogs
 				contentImage.color = ConfigurationManager.Current.contentBackgroundColor;
 			}
 
-            TopLogoImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
+            TopLogoImage.sprite = ConfigurationManager.Current.topLogo.GetSprite();
 		}
 	}
 }

@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using Code.GQClient.Err;
+using Code.GQClient.Util.http;
 using UnityEngine;
 
 namespace Code.GQClient.Conf
@@ -15,9 +18,33 @@ namespace Code.GQClient.Conf
     {
         #region Initialize
 
-        void Awake()
+        /// <summary>
+        /// Flag used to optimize frquent access to configured media files, e.g. symbol icons.
+        /// If false, we omit checking for update infos.
+        /// </summary>
+        public static bool RTProductUpdated = false;
+
+        public static void Initialize()
         {
+            // Product.json:
             deserializeConfig();
+
+            // RTProduct.json:
+            string rtProductUrl = Path.Combine(GQ_SERVER_PORTALS_URL, _current.id, RT_CONFIG_DIR, RT_CONFIG_FILE);
+            string rtProductFile = Path.Combine(Application.persistentDataPath, RT_CONFIG_DIR, RT_CONFIG_FILE);
+
+            Downloader d = new Downloader(
+                rtProductUrl,
+                timeout: 0,
+                rtProductFile,
+                verbose: false);
+            // TODO manage behaviour and error Dialogs 
+            d.OnTaskEnded += (sender, args) =>
+            {
+                // do not wait for loading updated media files lazily, but trigger it now:
+                RTConfig _ = CurrentRT;
+            };
+            d.Start();
         }
 
         private static string _version = null;
@@ -42,13 +69,16 @@ namespace Code.GQClient.Conf
 
         public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
         public const string CONFIG_FILE = "Product.json";
-        public const string RT_CONFIG_FILE = "RTProduct.json";
         public const string BUILD_TIME_FILE_NAME = "buildtime";
         public const string BUILD_TIME_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
         public const string TOPLOGO_FILE_NAME = "TopLogo";
         public const string TOPLOGO_FILE_PATH = RUNTIME_PRODUCT_DIR + "/" + TOPLOGO_FILE_NAME;
 
         public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
+
+        public const string RT_CONFIG_DIR = "config";
+        public const string RT_CONFIG_FILE = "RTProduct.json";
+        public const string GQ_SERVER_PORTALS_URL = "https://quest-mill-web.intertech.de/portals";
 
         public static string UrlPublicQuestsJSON
         {
@@ -90,7 +120,31 @@ namespace Code.GQClient.Conf
             {
                 if (_currentRT == null)
                 {
-                    deserializeConfig();
+                    string rtProductFile = Path.Combine(Application.persistentDataPath, RT_CONFIG_DIR, RT_CONFIG_FILE);
+
+                    if (File.Exists(rtProductFile))
+                    {
+                        _currentRT = RTConfig._doDeserialize(
+                            File.ReadAllText(rtProductFile),
+                            RTConfig.LoadsFrom.LocalFile);
+                        RTProductUpdated = true;
+                    }
+                    else
+                    {
+                        TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
+
+                        if (configAsset == null)
+                        {
+                            throw new ArgumentException(
+                                "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
+                                RUNTIME_PRODUCT_DIR);
+                        }
+
+                        _currentRT = RTConfig._doDeserialize(
+                            configAsset.text,
+                            RTConfig.LoadsFrom.Resource);
+                        RTProductUpdated = false;
+                    }
                 }
 
                 return _currentRT;
@@ -254,43 +308,6 @@ namespace Code.GQClient.Conf
             }
         }
 
-        private static string retrieveProductJSONFromAppConfigRT()
-        {
-            TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
-
-            if (configAsset == null)
-            {
-                throw new ArgumentException(
-                    "Something went wrong with the initial RTConfig JSON File. Check it. It should be at " +
-                    RUNTIME_PRODUCT_DIR);
-            }
-
-            return configAsset.text;
-        }
-
-        public delegate string RetrieveRTProductJSONTextDelegate();
-
-        private static RetrieveRTProductJSONTextDelegate _retrieveRTProductJSONText;
-
-        public static RetrieveRTProductJSONTextDelegate RetrieveRTProductJSONText
-        {
-            get
-            {
-                if (_retrieveRTProductJSONText == null)
-                {
-                    _retrieveRTProductJSONText = retrieveProductJSONFromAppConfigRT;
-                }
-
-                return _retrieveRTProductJSONText;
-            }
-            set
-            {
-                CurrentRT = null;
-                _retrieveRTProductJSONText = value;
-            }
-        }
-
-
         /// <summary>
         /// Deserialize the Product.json a dn ProductRT.json files to the current config objects
         /// that are used throughout the client.
@@ -306,17 +323,6 @@ namespace Code.GQClient.Conf
             catch (Exception e)
             {
                 Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
-            }
-
-            json = RetrieveRTProductJSONText();
-
-            try
-            {
-                _currentRT = RTConfig._doDeserialize(json);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning("Product Configuration: Exception thrown when parsing ProductRT.json: " + e.Message);
             }
         }
 

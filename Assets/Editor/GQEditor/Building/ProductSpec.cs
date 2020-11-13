@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQ.Editor.UI;
@@ -157,19 +158,33 @@ namespace GQ.Editor.Building {
 		internal void initConfig () {
 			// init and check Config:
 			try {
+				if (!File.Exists(ConfigPath))
+				{
+					Log.SignalErrorToDeveloper("Invalid product definition. Product.json file missing.");
+					throw new ArgumentException("Invalid product definition. Product.json file missing.");
+				}
+
 				string configJSON = File.ReadAllText(ConfigPath);
                 Config = Config._doDeserializeConfig(configJSON);
 			} catch ( Exception exc ) {
-				throw new ArgumentException("Invalid product definition. Config file could not be read.", exc);
+				throw new ArgumentException("Invalid product definition. Product.json file could not be read.", exc);
 			}
 			
 			// init and check RTConfig:
-			try {
-				string RTConfigJSON = File.ReadAllText(RTConfigPath);
-				RTConfig = RTConfig._doDeserialize(RTConfigJSON);
+			try
+			{
+				if (!File.Exists(RTConfigPath))
+				{
+					Log.SignalErrorToDeveloper("Invalid product definition. RTProduct.json file missing.");
+					throw new ArgumentException("Invalid product definition. RTProduct.json file missing.");
+				}
+
+				string json = File.ReadAllText(RTConfigPath);
+				RTConfig = 
+					RTConfig._doDeserialize(json, RTConfig.LoadsFrom.LocalFile);
 			} catch ( Exception exc ) {
 				throw new ArgumentException(
-					"Invalid product definition. Runtime Config file could not be read.", exc);
+					"Invalid product definition. RTProduct.json file could not be read.", exc);
 			}
 		}
 

@@ -31,7 +31,7 @@ namespace Code.GQClient.UI.parts.header
                 image.color = ConfigurationManager.Current.headerBgColor;
             }
 
-            setMiddleButton();
+            // setMiddleButton();
 
             var layElem = Header.GetComponent<LayoutElement>();
             if (layElem == null)
@@ -59,7 +59,7 @@ namespace Code.GQClient.UI.parts.header
                 if (mtlImage != null)
                 {
                     Config cf = ConfigurationManager.Current;
-                    mtlImage.sprite = Resources.Load<Sprite>(cf.topLogo.path);
+                    mtlImage.sprite = cf.topLogo.GetSprite();
                 }
             }
         }

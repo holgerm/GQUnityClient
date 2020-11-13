@@ -476,7 +476,7 @@ namespace GQ.Editor.Util
         /// </summary>
         /// <returns>A relative path that can be used for Unity's Resources.Load().</returns>
         /// <param name="assetPath">Asset path.</param>
-        public static string GetResourcesRelativePath(string assetPath)
+        public static string GetResourcesRelativePath(string assetPath, bool omitExtension = true)
         {
             string[] segments = assetPath.Split(SEPARATORS);
             bool resourceFolderFound = false;
@@ -495,13 +495,18 @@ namespace GQ.Editor.Util
                 return null;
 
             string result = resourceRelPath.ToString();
-            // strip any endings separated by dot ".":
-            string filename = FileName(result);
-            if (filename.LastIndexOf(".") >= 0)
+
+            if (omitExtension)
             {
-                int eraseCharsFromEnd = filename.Length - filename.LastIndexOf(".");
-                result = result.Substring(0, result.Length - eraseCharsFromEnd);
+                // strip any endings separated by dot ".":
+                string filename = FileName(result);
+                if (filename.LastIndexOf(".") >= 0)
+                {
+                    int eraseCharsFromEnd = filename.Length - filename.LastIndexOf(".");
+                    result = result.Substring(0, result.Length - eraseCharsFromEnd);
+                }
             }
+
             return result;
         }
 

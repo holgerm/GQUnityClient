@@ -22,13 +22,13 @@ namespace GQ.Editor.Building
 {
     public class ProductManager
     {
-
         #region Names, Paths and Storage
 
         /// <summary>
         /// In this directory all defined products are stored. This data is NOT included in the app build.
         /// </summary>
-        private static string PRODUCTS_DIR_PATH_DEFAULT = Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
+        private static string PRODUCTS_DIR_PATH_DEFAULT =
+            Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
 
         /// <summary>
         /// This is the template for new products which is copied when we create a new product. It should contain a complete product definition.
@@ -44,10 +44,7 @@ namespace GQ.Editor.Building
         /// <value>The products dir path.</value>
         public static string ProductsDirPath
         {
-            get
-            {
-                return _productsDirPath;
-            }
+            get { return _productsDirPath; }
             set
             {
                 _productsDirPath = value;
@@ -57,24 +54,15 @@ namespace GQ.Editor.Building
 
         public static string PRODUCT_ADDON_PATH
         {
-            get
-            {
-                return GQAssert.PROJECT_PATH + "/" + "Production/products addon/";
-            }
+            get { return GQAssert.PROJECT_PATH + "/" + "Production/products addon/"; }
         }
 
         private string _buildExportPath = ConfigurationManager.RUNTIME_PRODUCT_DIR;
 
         public string BuildExportPath
         {
-            get
-            {
-                return _buildExportPath;
-            }
-            set
-            {
-                _buildExportPath = value;
-            }
+            get { return _buildExportPath; }
+            set { _buildExportPath = value; }
         }
 
 
@@ -82,22 +70,13 @@ namespace GQ.Editor.Building
 
         public string ANDROID_MANIFEST_DIR
         {
-            get
-            {
-                return _ANDROID_MANIFEST_DIR;
-            }
-            private set
-            {
-                _ANDROID_MANIFEST_DIR = value;
-            }
+            get { return _ANDROID_MANIFEST_DIR; }
+            private set { _ANDROID_MANIFEST_DIR = value; }
         }
 
         public string ANDROID_MANIFEST_FILE
         {
-            get
-            {
-                return Files.CombinePath(ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST);
-            }
+            get { return Files.CombinePath(ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST); }
         }
 
 
@@ -105,14 +84,8 @@ namespace GQ.Editor.Building
 
         public string STREAMING_ASSET_PATH
         {
-            get
-            {
-                return _STREAMING_ASSET_PATH;
-            }
-            private set
-            {
-                _STREAMING_ASSET_PATH = value;
-            }
+            get { return _STREAMING_ASSET_PATH; }
+            private set { _STREAMING_ASSET_PATH = value; }
         }
 
         public const string DEFAULT_START_SCENE = "DefaultAssets/DefaultStartScene.unity";
@@ -134,10 +107,7 @@ namespace GQ.Editor.Building
         /// </summary>
         public bool ConfigFilesHaveChanges
         {
-            get
-            {
-                return _configFilesHaveChanges;
-            }
+            get { return _configFilesHaveChanges; }
             set
             {
                 if (_configFilesHaveChanges != value)
@@ -157,10 +127,7 @@ namespace GQ.Editor.Building
         /// </summary>
         public bool RTConfigFilesHaveChanges
         {
-            get
-            {
-                return _rtConfigFilesHaveChanges;
-            }
+            get { return _rtConfigFilesHaveChanges; }
             set
             {
                 if (_rtConfigFilesHaveChanges != value)
@@ -180,18 +147,12 @@ namespace GQ.Editor.Building
 
         public ICollection<ProductSpec> AllProducts
         {
-            get
-            {
-                return Instance._productDict.Values;
-            }
+            get { return Instance._productDict.Values; }
         }
 
         public ICollection<string> AllProductIds
         {
-            get
-            {
-                return Instance._productDict.Keys;
-            }
+            get { return Instance._productDict.Keys; }
         }
 
         public ProductSpec GetProduct(string productID)
@@ -206,9 +167,7 @@ namespace GQ.Editor.Building
 
         public void SetProductConfig(string id, Config config)
         {
-            //			if (_productDict.ContainsKey(id)) {
-            //				_productDict.Remove (id);
-            //			}
+            Debug.Log($"Setting _productDict[{id}] to {config.name}");
             _productDict[id].Config = config;
         }
 
@@ -227,6 +186,7 @@ namespace GQ.Editor.Building
                 {
                     _instance = new ProductManager();
                 }
+
                 return _instance;
             }
         }
@@ -247,7 +207,8 @@ namespace GQ.Editor.Building
                     if (!Directory.Exists(_testInstance.BuildExportPath))
                         Directory.CreateDirectory(_testInstance.BuildExportPath);
 
-                    string androidPluginDirPath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android");
+                    string androidPluginDirPath =
+                        Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "Plugins", "Android");
                     _testInstance.ANDROID_MANIFEST_DIR =
                         Files.CombinePath(androidPluginDirPath);
                     if (!Directory.Exists(androidPluginDirPath))
@@ -258,6 +219,7 @@ namespace GQ.Editor.Building
                     if (!Directory.Exists(_testInstance.STREAMING_ASSET_PATH))
                         Directory.CreateDirectory(_testInstance.STREAMING_ASSET_PATH);
                 }
+
                 return _testInstance;
             }
         }
@@ -277,7 +239,8 @@ namespace GQ.Editor.Building
 
             _productDict = new Dictionary<string, ProductSpec>();
 
-            IEnumerable<string> productDirCandidates = Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
+            IEnumerable<string> productDirCandidates =
+                Directory.GetDirectories(ProductsDirPath).Select(d => new DirectoryInfo(d).FullName);
 
             foreach (var productCandidatePath in productDirCandidates)
             {
@@ -310,7 +273,8 @@ namespace GQ.Editor.Building
             }
             catch (ArgumentException exc)
             {
-                Errors.Add("Product Manager found invalid product directory: " + productCandidatePath + "\n" + exc.Message + "\n\n");
+                Errors.Add("Product Manager found invalid product directory: " + productCandidatePath + "\n" +
+                           exc.Message + "\n\n");
                 return null;
             }
         }
@@ -360,8 +324,7 @@ namespace GQ.Editor.Building
                 sw.Close();
             }
 
-
-
+            Debug.Log($"ProductManager.CreateNewProduct(): Instance._productDict.Add({newProduct.Id}, {newProduct.Id})");
             Instance._productDict.Add(newProduct.Id, newProduct);
             return newProduct;
         }
@@ -374,24 +337,15 @@ namespace GQ.Editor.Building
         /// <value>The errors.</value>
         public IList<string> Errors
         {
-            get
-            {
-                return _errors;
-            }
+            get { return _errors; }
         }
 
         private ProductSpec _currentProduct;
 
         public ProductSpec CurrentProduct
         {
-            get
-            {
-                return _currentProduct;
-            }
-            internal set
-            {
-                _currentProduct = value;
-            }
+            get { return _currentProduct; }
+            internal set { _currentProduct = value; }
         }
 
         /// <summary>
@@ -409,7 +363,6 @@ namespace GQ.Editor.Building
         /// <param name="productID">Product I.</param>
         public void PrepareProductForBuild(string productID)
         {
-
             ProductEditor.IsCurrentlyPreparingProduct = true;
 
             string productDirPath = Files.CombinePath(ProductsDirPath, productID);
@@ -426,7 +379,8 @@ namespace GQ.Editor.Building
 
             if (!newProduct.IsValid())
             {
-                throw new ArgumentException("Invalid product: " + newProduct.Id + "\n" + newProduct.AllErrorsAsString());
+                throw new ArgumentException("Invalid product: " + newProduct.Id + "\n" +
+                                            newProduct.AllErrorsAsString());
             }
 
             // load Foyer scene (which exists for all products):
@@ -477,11 +431,7 @@ namespace GQ.Editor.Building
             }
         }
 
-        public bool IsImportingPackage
-        {
-            set;
-            get;
-        }
+        public bool IsImportingPackage { set; get; }
 
         private void prepareProductTheRestAfterPackageIsImported(ProductSpec newProduct, string productDirPath)
         {
@@ -490,7 +440,8 @@ namespace GQ.Editor.Building
 
             foreach (FileInfo file in productDirInfo.GetFiles())
             {
-                if (file.Name.StartsWith(".", StringComparison.CurrentCulture) || file.Name.EndsWith(".meta", StringComparison.CurrentCulture))
+                if (file.Name.StartsWith(".", StringComparison.CurrentCulture) ||
+                    file.Name.EndsWith(".meta", StringComparison.CurrentCulture))
                     // ignore hidden files and unity meta files:
                     continue;
 
@@ -540,10 +491,10 @@ namespace GQ.Editor.Building
 
             // gather scenes and set them in EditorBuidlSettings:
             var scenes =
-                 gatherScenesFromPackage(
-                     new List<string>(),
-                     Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
-                 );
+                gatherScenesFromPackage(
+                    new List<string>(),
+                    Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
+                );
 
             // add all config scenes:
             scenes.AddRange(newProduct.Config.scenePaths);
@@ -555,7 +506,7 @@ namespace GQ.Editor.Building
                 if (scenes[i].EndsWith("StartScene.unity", StringComparison.Ordinal))
                 {
                     startSceneIncluded = true;
-                    
+
                     if (i > 0)
                         // make start scene the first scene in the list:
                     {
@@ -563,7 +514,8 @@ namespace GQ.Editor.Building
                         scenes.Insert(0, scenes[i]);
                         scenes.Insert(i, tmp);
 #if DEBUG_LOG
-                        Debug.LogFormat("Start Scene found at index {0}: {1} - replaced it as first scene.", i, DEFAULT_START_SCENE);
+                        Debug.LogFormat("Start Scene found at index {0}: {1} - replaced it as first scene.", i,
+                            DEFAULT_START_SCENE);
 #endif
                     }
                 }
@@ -589,8 +541,9 @@ namespace GQ.Editor.Building
                 Debug.LogFormat("Scene added: {0}", curScenePath);
 #endif
             }
+
             EditorBuildSettings.scenes = ebsScenes.ToArray();
-            
+
             // configure OnlineMaps component from stored json file:
             string path = Files.CombinePath(productDirPath, ProductSpec.ONLINEMAPS_CONFIG);
             OnlineMaps mapComponent = GameObject.Find("Map").GetComponent<OnlineMaps>();
@@ -604,7 +557,8 @@ namespace GQ.Editor.Building
             }
 
             PlayerSettings.productName = newProduct.Config.name;
-            var appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id + newProduct.Config.idExtension;
+            var appIdentifier = ProductSpec.GQ_BUNDLE_ID_PREFIX + "." + newProduct.Config.id +
+                                newProduct.Config.idExtension;
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, appIdentifier);
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.iOS, appIdentifier);
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Standalone, appIdentifier);
@@ -617,7 +571,7 @@ namespace GQ.Editor.Building
             ProductEditor.BuildIsDirty = false;
             CurrentProduct = newProduct; // remember the new product for the editor time access point.
             ConfigurationManager.Reset(); // tell the runtime access point that the product has changed.
-            
+
             CreateAssetBundles.BuildAllAssetBundles();
 
             ProductEditor.IsCurrentlyPreparingProduct = false;
@@ -627,7 +581,8 @@ namespace GQ.Editor.Building
             LayoutConfig.ResetAll();
 
             var completedAt = DateTime.Now;
-            Debug.LogWarning("COMPLETED Preparing product " + newProduct.Id + " at " + completedAt.Hour + ":" + completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
+            Debug.LogWarning("COMPLETED Preparing product " + newProduct.Id + " at " + completedAt.Hour + ":" +
+                             completedAt.Minute + ":" + completedAt.Second + "." + completedAt.Millisecond);
         }
 
         List<string> gatherScenesFromPackage(List<string> gatheredScenes, string dir)
@@ -663,7 +618,7 @@ namespace GQ.Editor.Building
             // set product specific default values:
             config.id = productID;
             config.name = "QuestMill App " + productID;
-            
+
             RTConfig rtConfig = new RTConfig();
 
             // serialize into new product folder:
@@ -674,15 +629,16 @@ namespace GQ.Editor.Building
         {
             // app static config:
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
-            var filePath = 
+            var filePath =
                 Files.CombinePath(productDirPath, ConfigurationManager.CONFIG_FILE);
             File.WriteAllText(filePath, json);
             if (GQ.Editor.Util.Assets.IsAssetPath(filePath))
                 AssetDatabase.Refresh();
-            
+
             // runtime config:
             json = JsonConvert.SerializeObject(rtConfig, Formatting.Indented);
-            filePath = 
+            Debug.Log($"SERIALIZED: {json}".Yellow());
+            filePath =
                 Files.CombinePath(productDirPath, ConfigurationManager.RT_CONFIG_FILE);
             File.WriteAllText(filePath, json);
             if (GQ.Editor.Util.Assets.IsAssetPath(filePath))
@@ -713,5 +669,4 @@ namespace GQ.Editor.Building
 
         #endregion
     }
-
 }

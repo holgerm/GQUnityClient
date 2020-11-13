@@ -29,6 +29,9 @@ namespace Code.GQClient.FileIO
 
         public static string StripExtension(string filename)
         {
+            if (null == filename) 
+                return null;
+            
             var lastDotIndex = filename.LastIndexOf('.');
 
             if (filename.Equals(".") || filename.Equals("..") || lastDotIndex <= 0)

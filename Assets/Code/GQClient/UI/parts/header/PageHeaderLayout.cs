@@ -96,7 +96,7 @@ namespace Code.GQClient.UI.parts.header
                     var mtlImage = middleTopLogo.GetComponent<Image>();
                     if (mtlImage != null)
                     {
-                        mtlImage.sprite = Resources.Load<Sprite>(ConfigurationManager.Current.topLogo.path);
+                        mtlImage.sprite = ConfigurationManager.Current.topLogo.GetSprite();
                     }
                 }
             }

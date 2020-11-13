@@ -48,7 +48,7 @@ namespace Code.GQClient.UI.parts.categoryDisplay
 
 			if (ConfigurationManager.CurrentRT.categoryDict.TryGetValue (catName, out cat)) {
 				if (cat.symbol != null)
-					catImage.sprite = Resources.Load<Sprite> (cat.symbol.path);
+					catImage.sprite = cat.symbol.GetSprite();
 				else {
 					catImage.sprite = null;
 					catImage.color = new Color (255f, 255f, 255f, 0f); // transparent

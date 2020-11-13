@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
 using Newtonsoft.Json;
@@ -246,7 +247,7 @@ namespace Code.GQClient.Conf
             }
             set
             {
-                if (value == null || value.path == null || value.path.Equals(""))
+                if (null == value || value.IsInvalid())
                 {
                     _hotspotMarker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
                 }
@@ -273,7 +274,7 @@ namespace Code.GQClient.Conf
             }
             set
             {
-                if (value == null || value.path == null || value.path.Equals(""))
+                if (null == value || value.IsInvalid())
                 {
                     _marker = new ImagePath(Marker.DEFAULT_MARKER_PATH);
                 }
@@ -1021,92 +1022,6 @@ namespace Code.GQClient.Conf
         /// The path to the prefab. It is relative to the folder Assets/ConfigAssets/Resources folder.
         /// </summary>
         public string prefab;
-    }
-
-    public class ImagePath
-    {
-        public readonly string path;
-
-        public ImagePath(string path)
-        {
-            this.path = path;
-        }
-
-        public override string ToString()
-        {
-            return "ImagePath: " + path;
-        }
-
-        public override bool Equals(System.Object obj)
-        {
-            // Other null?
-            if (obj == null)
-                return path == null || path.Equals("");
-
-            // Compare run-time types.
-            if (GetType() != obj.GetType())
-                return false;
-
-            return path == ((ImagePath) obj).path;
-        }
-
-        public override int GetHashCode()
-        {
-            return path.GetHashCode();
-        }
-    }
-
-    public class Category
-    {
-        public string id;
-
-        /// <summary>
-        /// The display name.
-        /// </summary>
-        public string name;
-
-        public string folderName;
-
-        public ImagePath symbol;
-
-        public Category()
-        {
-            this.id = "";
-            name = "";
-            folderName = "";
-            symbol = null;
-        }
-
-        [JsonConstructor]
-        public Category(string id, string name, string folderName, string symbolPath)
-        {
-            this.id = id;
-            this.name = name;
-            this.folderName = folderName ?? "";
-            this.symbol = new ImagePath(symbolPath);
-        }
-    }
-
-    public class CategorySet
-    {
-        public string name;
-
-        public List<Category> categories;
-
-        [JsonConstructor]
-        public CategorySet(string name, List<Category> categories)
-        {
-            this.name = name;
-            if (categories == null)
-                categories = new List<Category>();
-            this.categories = categories;
-        }
-
-        public CategorySet()
-        {
-            name = "";
-            categories = new List<Category>();
-        }
     }
 
     public class ShowInProductEditor : Attribute

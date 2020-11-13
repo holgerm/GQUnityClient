@@ -228,6 +228,17 @@ namespace GQ.Editor.UI
             }
             EditorGUILayout.EndHorizontal();
 
+            if (Pm.AllProductIds.Count == 0)
+            {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PrefixLabel(new GUIContent("No Product found:", warnIcon));
+                if (GUILayout.Button("Refresh from Product Directory"))
+                {
+                    Pm.InitProductDictionary();
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+
             if (selectedProductIndex < 0 || selectedProductIndex >= Pm.AllProductIds.Count)
                 selectedProductIndex = 0;
             string selectedProductName = Pm.AllProductIds.ElementAt(selectedProductIndex);
@@ -254,20 +265,8 @@ namespace GQ.Editor.UI
                 createProductButtonGUIContent = new GUIContent("Create");
             }
 
-            // bool foyerIsNOTActiveScene = SceneManager.GetActiveScene().name != "Foyer";
-            // if (foyerIsNOTActiveScene)
-            // {
-            //     // adding tooltip to explain why these elements are disabled:
-            //     string explanation = "Activate Foyer Scene first.";
-            //     prepareBuildButtonGUIContent = new GUIContent("Prepare Build", explanation);
-            // }
-            // else
-            // {
-            //     prepareBuildButtonGUIContent = new GUIContent("Prepare Build");
-            // }
-
-            using (new EditorGUI.DisabledGroupScope(false)
-            ) // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
+            using (new EditorGUI.DisabledGroupScope(false)) 
+                // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
             {
                 // Prepare Build Button:
                 //               using (new EditorGUI.DisabledGroupScope(foyerIsNOTActiveScene))
@@ -1246,7 +1245,7 @@ namespace GQ.Editor.UI
                 ImagePath oldVal = (ImagePath) curPropInfo.GetValue(propertyObject, null);
                 Sprite oldSprite = null;
                 if (oldVal != null)
-                    oldSprite = Resources.Load<Sprite>(oldVal.path);
+                    oldSprite = oldVal.GetSprite();
 
                 // show textarea if value does not fit within one line:
                 EditorGUILayout.BeginHorizontal();
@@ -1257,9 +1256,7 @@ namespace GQ.Editor.UI
                 ImagePath newVal = new ImagePath(Files.GetResourcesRelativePath(path));
                 EditorGUILayout.EndHorizontal();
 
-                string newValString = (newVal == null ? "" : (newVal.path == null ? "" : newVal.path));
-                string oldValString = (oldVal == null ? "" : (oldVal.path == null ? "" : oldVal.path));
-                if (!newValString.Equals(oldValString))
+                if (!newVal.Equals(oldVal))
                 {
                     configIsDirty = true;
                     curPropInfo.SetValue(propertyObject, newVal, null);
@@ -1569,17 +1566,17 @@ namespace GQ.Editor.UI
                         STYLE_LABEL_RightAdjusted
                     );
                     // get currently stored image path from config:
-                    ImagePath oldSymbolPath = oldElem.symbol;
-                    ImagePath newSymbolPath = oldSymbolPath;
+                    RTImagePath oldSymbolPath = oldElem.symbol;
+                    RTImagePath newSymbolPath = oldSymbolPath;
                     Sprite oldSymbolSprite = null;
                     if (oldSymbolPath != null)
-                        oldSymbolSprite = Resources.Load<Sprite>(oldSymbolPath.path);
+                        oldSymbolSprite = oldSymbolPath.GetSprite();
                     Sprite newSymbolSprite =
                         (Sprite) EditorGUILayout.ObjectField(oldSymbolSprite, typeof(Sprite), false);
                     if (newSymbolSprite != oldSymbolSprite)
                     {
                         string path = AssetDatabase.GetAssetPath(newSymbolSprite);
-                        newSymbolPath = new ImagePath(Files.GetResourcesRelativePath(path));
+                        newSymbolPath = new RTImagePath(Files.GetResourcesRelativePath(path, false));
                         elemChanged |= !newSymbolPath.Equals(oldSymbolPath);
                     }
 

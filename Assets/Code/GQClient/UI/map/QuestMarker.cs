@@ -74,15 +74,15 @@ namespace Code.GQClient.UI.map
 
 				if (t == null) {
 					// load basic marker texture and white alpha background template:
-					var markerOutline = Resources.Load<Texture2D> (ConfigurationManager.Current.marker.path);
+					var markerOutline = ConfigurationManager.Current.marker.GetTexture2D();
 					t = new Texture2D (markerOutline.width, markerOutline.height);
 
 					Texture2D symbol = null;
 					try {
 						var cat = ConfigurationManager.CurrentRT.categoryDict [categoryId];
-						symbol = Resources.Load<Texture2D> (cat.symbol.path);
+						symbol = cat.symbol.GetTexture2D();
 						if (symbol == null) {
-							Log.SignalErrorToDeveloper ("Symbol Texture not found for category {0}. Using default symbol.", categoryId);
+							Log.SignalErrorToDeveloper ($"Symbol Texture not found for category {cat.symbol}. Using default symbol. (cats: {ConfigurationManager.CurrentRT.categoryDict.Count})");
 						} else if (symbol.width > t.width) {
 							Log.SignalErrorToDeveloper ("Symbol Texture too wide. Must not be wider than marker outline. Using default symbol.");
 							symbol = null;
