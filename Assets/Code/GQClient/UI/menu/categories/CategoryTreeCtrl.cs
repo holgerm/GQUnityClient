@@ -21,16 +21,13 @@ namespace Code.GQClient.UI.menu.categories
 
 		private QuestInfoManager qim;
 
-		public QuestInfoFilter.CategoryFilter CategoryFilter;
-		List<Category> categories;
-
-
 		// Use this for initialization
 		void Start ()
 		{
 			qim = QuestInfoManager.Instance;
 //			CategoryFilter = qim.CategoryFilter; // TODO use CatSet instead
 			qim.OnDataChange += OnQuestInfoChanged;
+			ConfigurationManager.OnRTConfigChanged += UpdateView;
 
 			// fold the categories of this set (up to now they are unfolded):
 			if (ConfigurationManager.CurrentRT.categoryFiltersStartFolded) {
@@ -39,6 +36,7 @@ namespace Code.GQClient.UI.menu.categories
 		}
 
 		protected static readonly string PREFAB = "CategoryTree";
+		internal CategoryTree model;
 
 		public static CategoryTreeCtrl Create (GameObject root, QuestInfoFilter.CategoryFilter catFilter, List<Category> categories)
 		{
@@ -48,9 +46,9 @@ namespace Code.GQClient.UI.menu.categories
 
 			// save tree controller & folder:
 			CategoryTreeCtrl treeCtrl = go.GetComponent<CategoryTreeCtrl> ();
-			treeCtrl.categories = categories;
-			treeCtrl.CategoryFilter = catFilter;
-    			treeCtrl.Title.text = catFilter.Name;
+			
+			treeCtrl.model = new CategoryTree(categories, catFilter);
+   			treeCtrl.Title.text = catFilter.Name;
 			treeCtrl.gameObject.SetActive (true);
 
 			return treeCtrl;
@@ -86,7 +84,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		#region React on Events
 
-		public void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e)
+		private void OnQuestInfoChanged (object sender, QuestInfoChangedEvent e)
 		{
 			switch (e.ChangeType) {
 			case ChangeType.AddedInfo:
@@ -112,74 +110,34 @@ namespace Code.GQClient.UI.menu.categories
 		public void UpdateView ()
 		{
 			Debug.Log("Updating CatTreeView".Yellow());
-			if (this == null || CategoryFilter == null) {
+			if (this == null || model.CategoryFilter == null) {
 				return;
 			}
 
 			// pause filter change events:
-			CategoryFilter.NotificationPaused = true;
+			model.CategoryFilter.NotificationPaused = true;
 
-			recreateModelTree ();
+			model.RecreateModelTree ();
 			recreateUI ();
 
 			// reactivate filter change events after pause:
-			CategoryFilter.NotificationPaused = false;
+			model.CategoryFilter.NotificationPaused = false;
 			Debug.Log("Updating CatTreeView DONE".Yellow());
-		}
-
-		private void recreateModelTree ()
-		{
-			int cats = null == categoryFolders ? -1 : categoryFolders.Count;
-			Debug.Log($"START CATFolders: {cats}");
-			// model: create skeleton of folders and entries:
-			categoryEntries = new Dictionary<string, CategoryEntry> ();
-			categoryFolders = new Dictionary<string, CategoryFolder> ();
-			foreach (Category c in categories) {
-				// create and add the new category entry:
-				CategoryEntry catEntry = new CategoryEntry (c);
-				categoryEntries.Add (c.id, catEntry);
-				// Put the new entry in adequate folder and create the folder before if needed
-				CategoryFolder catFolder;
-				if (!categoryFolders.TryGetValue (c.folderName, out catFolder)) {
-					catFolder = new CategoryFolder (c.folderName);
-					categoryFolders.Add (c.folderName, catFolder);
-				}
-				catFolder.AddCategoryEntry (catEntry);
-			}
-				
-			// model: populate entries with quest infos:
-			foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos()) {
-				foreach (string catId in info.Categories) {
-					string cat = catId.StripQuotes ();
-					CategoryEntry catEntry;
-					if (!categoryEntries.TryGetValue (cat, out catEntry)) {
-						// if a quest has an unknown category we skip that:
-						Log.SignalErrorToAuthor ($"Quest {info.Name} {info.Id} has unknown category '{cat}'.");
-						continue;
-					}
-					// we take note of the category of the current quest in our tree model:
-					catEntry.AddQuestID (info.Id);
-				}
-			}
-			cats = null == categoryFolders ? -1 : categoryFolders.Count;
-			Debug.Log($"END CATFolders: {cats}");
 		}
 
 		private void recreateUI ()
 		{
-			Debug.Log($"REMOVING CHILDCOUNT: {transform.childCount}");
 			// delete all category entry UI elements:
 			foreach (Transform child in transform.Cast<Transform>().ToArray()) {
 				// Transform child = transform.GetChild (i);
 				if (null != child.GetComponent<CategoryEntryCtrl> () || null != child.GetComponent<CategoryFolderCtrl> ()) {
 					// if child is an category entry we delete it:
-					Debug.Log($"REMOVING {child.name}");
 					DestroyImmediate(child.gameObject);
 				}
 			}
 
 			// create all category tree UI entries:
-			foreach (CategoryFolder folder in categoryFolders.Values) {
+			foreach (CategoryFolder folder in model.GetFolders()) {
 //				if (folder.Name != "") {
 				CategoryFolderCtrl uiFolder = 
 					CategoryFolderCtrl.Create (
@@ -208,118 +166,22 @@ namespace Code.GQClient.UI.menu.categories
 
 		public void SetSelection4AllItems ()
 		{
-			if (CategoryFilter == null)
+			if (model.CategoryFilter == null)
 			{
 				return;
 			}
 
 			generalSelectionState = !generalSelectionState;
-			CategoryFilter.NotificationPaused = true;
-			foreach (var entry in categoryEntries.Values) {
+			model.CategoryFilter.NotificationPaused = true;
+			foreach (var entry in model.GetEntries()) {
 				entry.ctrl.SetSelectedState (generalSelectionState);
 			}
-			CategoryFilter.NotificationPaused = false;
+			model.CategoryFilter.NotificationPaused = false;
 
 			if (generalSelectionState) {
 				OnOff.color = new Color (OnOff.color.r, OnOff.color.g, OnOff.color.b, 1f);
 			} else {
 				OnOff.color = new Color (OnOff.color.r, OnOff.color.g, OnOff.color.b, ConfigurationManager.Current.disabledAlpha);
-			}
-		}
-
-		#endregion
-
-
-		#region Internal Model of Tree
-
-		public Dictionary<string, CategoryFolder> categoryFolders;
-
-		public class CategoryFolder
-		{
-			public string Name;
-
-			/// Will be set by the ui controller, when it is created from prefab, c.f. the Create() function in the CategoryEntryCtrl class.
-			public CategoryFolderCtrl ctrl;
-
-			public List<CategoryEntry> Entries;
-
-			public CategoryFolder (string name)
-			{
-				Name = name;
-				Entries = new List<CategoryEntry> ();
-				ctrl = null;
-			}
-
-			public void AddCategoryEntry (CategoryEntry entry)
-			{
-				Entries.Add (entry);
-			}
-
-			public void RemoveCategoryEntry (CategoryEntry entry)
-			{
-				Entries.Remove (entry);
-			}
-
-			/// <summary>
-			/// Returns the number of quests currently represented by this category.
-			/// </summary>
-			/// <returns>The of quests.</returns>
-			public int NumberOfQuests ()
-			{
-				int nr = 0;
-				foreach (CategoryEntry catEntry in Entries) {
-					nr += catEntry.NumberOfQuests ();
-				}
-				return nr;
-			}
-		}
-
-		protected Dictionary<string, CategoryEntry> categoryEntries;
-
-		public class CategoryEntry
-		{
-			public Category category;
-			List<int> questIds;
-
-			/// Will be set by the ui controller, when it is created from prefab, c.f. the Create() function in the CategoryEntryCtrl class.
-			public CategoryEntryCtrl ctrl;
-
-			public CategoryEntry (Category category)
-			{
-				this.category = category;
-				this.questIds = new List<int> ();
-				this.ctrl = null;
-			}
-
-			/// <summary>
-			/// Adds a quest to be represented by this category entry (without duplicates).
-			/// </summary>
-			/// <param name="questID">Quest I.</param>
-			public void AddQuestID (int questID)
-			{
-				if (!questIds.Contains (questID)) {
-					questIds.Add (questID);
-				}
-			}
-
-			/// <summary>
-			/// Removes a quest as being respresented by this catgeory:
-			/// </summary>
-			/// <param name="questID">Quest I.</param>
-			public void RemoveQuestID (int questID)
-			{
-				if (questIds.Contains (questID)) {
-					questIds.Remove (questID);
-				}
-			}
-
-			/// <summary>
-			/// Returns the number of quests currently represented by this category.
-			/// </summary>
-			/// <returns>The of quests.</returns>
-			public int NumberOfQuests ()
-			{
-				return questIds.Count;
 			}
 		}
 

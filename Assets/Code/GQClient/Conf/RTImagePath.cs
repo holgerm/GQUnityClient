@@ -111,14 +111,11 @@ namespace Code.GQClient.Conf
 
         public override Texture2D GetTexture2D()
         {
-            Debug.Log($"GetTexture2D(): RTProductUpdated: {ConfigurationManager.RTProductUpdated}, FilePath: {FilePath}");
-
             if (string.IsNullOrEmpty(FilePath))
                 return null;
 
             if (!ConfigurationManager.RTProductUpdated)
             {
-                Debug.Log($"GetTexture2D(): ResourcePath: {ResourcePath}");
                 return Resources.Load<Texture2D>(ResourcePath);
             }
 

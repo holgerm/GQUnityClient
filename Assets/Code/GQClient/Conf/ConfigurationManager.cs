@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Code.GQClient.Err;
 using Code.GQClient.Util.http;
+using GQClient.Model;
 using UnityEngine;
 
 namespace Code.GQClient.Conf
@@ -39,11 +40,18 @@ namespace Code.GQClient.Conf
                 rtProductFile,
                 verbose: false);
             // TODO manage behaviour and error Dialogs 
-            d.OnTaskEnded += (sender, args) =>
+            d.OnSuccess += (dl, e) =>
             {
-                // do not wait for loading updated media files lazily, but trigger it now:
+                RTProductUpdated = true;
+                CurrentRT = null;
                 RTConfig _ = CurrentRT;
+                QuestInfoManager.Instance.RaiseOnDataChange();
             };
+            // d.OnTaskEnded += (sender, args) =>
+            // {
+            //     // do not wait for loading updated media files lazily, but trigger it now:
+            //     Debug.Log("RTConfig Updated.".Yellow());
+            // };
             d.Start();
         }
 
@@ -145,12 +153,17 @@ namespace Code.GQClient.Conf
                             RTConfig.LoadsFrom.Resource);
                         RTProductUpdated = false;
                     }
+                    Debug.Log($"currentRT: cats#: {_currentRT.CategorySets[0].categories.Count}");
+                    QuestInfoManager.Instance.RaiseOnDataChange();
+                    OnRTConfigChanged?.Invoke();
                 }
 
                 return _currentRT;
             }
             set { _currentRT = value; }
         }
+
+        public static event Action OnRTConfigChanged;
 
         public static void Reset()
         {

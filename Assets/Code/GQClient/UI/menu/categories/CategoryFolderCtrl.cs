@@ -13,7 +13,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		protected static readonly string PREFAB = "CategoryFolder";
 
-		public static CategoryFolderCtrl Create (GameObject root, CategoryTreeCtrl.CategoryFolder catFolder, CategoryTreeCtrl catTree)
+		public static CategoryFolderCtrl Create (GameObject root, CategoryFolder catFolder, CategoryTreeCtrl catTree)
 		{
 			// Create the view object for this controller:
 			var go = PrefabController.Create ("prefabs", PREFAB, root);
@@ -50,12 +50,12 @@ namespace Code.GQClient.UI.menu.categories
 
 		public Image folderImage;
 
-		CategoryTreeCtrl.CategoryFolder folder;
+		CategoryFolder folder;
 
 		/// <summary>
 		/// Updates the view of a category UI folder.
 		/// </summary>
-		protected void UpdateView (CategoryTreeCtrl.CategoryFolder folder)
+		protected void UpdateView (CategoryFolder folder)
 		{
 			// show the folder, according to the current rules:
 			gameObject.SetActive (showMenuItem ());
@@ -82,7 +82,7 @@ namespace Code.GQClient.UI.menu.categories
 			var stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
 
 			// set activity of all contained category entries according to folder show state:
-			if (treeCtrl.categoryFolders.TryGetValue (folder.Name, out var folderCtrl)) {
+			if (treeCtrl.model.categoryFolders.TryGetValue (folder.Name, out var folderCtrl)) {
 				foreach (var cat in folderCtrl.Entries) {
 					cat.ctrl.Unfolded = stateIsShow;
 					cat.ctrl.UpdateView ();

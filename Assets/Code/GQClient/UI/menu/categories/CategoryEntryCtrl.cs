@@ -12,7 +12,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		protected const string PREFAB = "CategoryEntry";
 
-		public static CategoryEntryCtrl Create (GameObject root, CategoryTreeCtrl.CategoryEntry catEntry, CategoryTreeCtrl catTree)
+		public static CategoryEntryCtrl Create (GameObject root, CategoryEntry catEntry, CategoryTreeCtrl catTree)
 		{
 			// Create the view object for this controller:
 			var go = PrefabController.Create ("prefabs", PREFAB, root);
@@ -39,7 +39,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		#region instance stuff
 
-		protected CategoryTreeCtrl.CategoryEntry categoryEntry;
+		protected CategoryEntry categoryEntry;
 
 		public Image categorySymbol;
 
@@ -92,11 +92,11 @@ namespace Code.GQClient.UI.menu.categories
 
 			if (_selectedForFilter)
 			{
-				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category.id);
+				treeCtrl.model.CategoryFilter.AddCategory(categoryEntry.category.id);
 			}
 			else
 			{
-				treeCtrl.CategoryFilter.RemoveCategory(categoryEntry.category.id);
+				treeCtrl.model.CategoryFilter.RemoveCategory(categoryEntry.category.id);
 			}
 		}
 
