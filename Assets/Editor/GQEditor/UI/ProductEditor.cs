@@ -164,7 +164,7 @@ namespace GQ.Editor.UI
 
             gui4ProductDetails();
 
-            gui4RTProductDetails();
+            // gui4RTProductDetails();
 
             gui4ProductEditPart();
 
@@ -401,7 +401,7 @@ namespace GQ.Editor.UI
         }
 
         static public Config SelectedConfig { get; private set; }
-        static public RTConfig SelectedRTConfig { get; private set; }
+        // static public RTConfig SelectedRTConfig { get; private set; }
 
         static public float WidthForValues { get; private set; }
 
@@ -473,70 +473,70 @@ namespace GQ.Editor.UI
         }
 
 
-        void gui4RTProductDetails()
-        {
-            GUILayout.Label("RT Product Details", EditorStyles.boldLabel);
-            ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
-            SelectedRTConfig = p.RTConfig;
-
-            // Begin ScrollView:
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosRT))
-            {
-                scrollPosRT = scrollView.scrollPosition;
-
-                using (new EditorGUI.DisabledGroupScope((!allowChanges)))
-                {
-                    // ScrollView begins (optionally disabled):
-
-                    // StartScene Layout:
-                    gui4StartScene();
-
-                    PropertyInfo[] propertyInfos =
-                        typeof(RTConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
-                                                       BindingFlags.Instance);
-
-                    // get max widths for names and values:
-                    float allNamesMax = 0f, allValuesMax = 0f;
-
-                    foreach (PropertyInfo curPropInfo in propertyInfos)
-                    {
-                        if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
-                            continue;
-
-                        string propName = curPropInfo.Name + ":";
-                        string value = Objects.ToString(curPropInfo.GetValue(SelectedRTConfig, null));
-
-                        float nameMin, nameMax;
-                        float valueMin, valueMax;
-                        GUIStyle guiStyle = new GUIStyle();
-
-                        guiStyle.CalcMinMaxWidth(new GUIContent(propName + ":"), out nameMin, out nameMax);
-                        allNamesMax = Math.Max(allNamesMax, nameMax);
-                        guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
-                        allValuesMax = Math.Max(allValuesMax, valueMax);
-                    }
-
-                    // calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
-                    // add left, middle and right borders as given:
-                    float borders = new GUIStyle(GUI.skin.textField).margin.left +
-                                    new GUIStyle(GUI.skin.textField).margin.horizontal +
-                                    new GUIStyle(GUI.skin.textField).margin.right;
-                    // calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
-                    WidthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
-                    WidthForValues = position.width - (borders + WidthForNames);
-
-                    EditorGUIUtility.labelWidth = WidthForNames;
-
-                    // show all properties as textfields or textareas in fitting width:
-                    foreach (PropertyInfo curPropInfo in propertyInfos)
-                    {
-                        if (ProductEditorPart.entryHidden(curPropInfo))
-                            continue;
-                        configIsDirty |= ProductEditorPart.CreateGui(curPropInfo, SelectedRTConfig);
-                    }
-                } // End Scope Disabled Group 
-            } // End Scope ScrollView 
-        }
+        // void gui4RTProductDetails()
+        // {
+        //     GUILayout.Label("RT Product Details", EditorStyles.boldLabel);
+        //     ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+        //     // SelectedRTConfig = p.RTConfig;
+        //
+        //     // Begin ScrollView:
+        //     using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosRT))
+        //     {
+        //         scrollPosRT = scrollView.scrollPosition;
+        //
+        //         using (new EditorGUI.DisabledGroupScope((!allowChanges)))
+        //         {
+        //             // ScrollView begins (optionally disabled):
+        //
+        //             // StartScene Layout:
+        //             gui4StartScene();
+        //
+        //             PropertyInfo[] propertyInfos =
+        //                 typeof(RTConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
+        //                                                BindingFlags.Instance);
+        //
+        //             // get max widths for names and values:
+        //             float allNamesMax = 0f, allValuesMax = 0f;
+        //
+        //             foreach (PropertyInfo curPropInfo in propertyInfos)
+        //             {
+        //                 if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
+        //                     continue;
+        //
+        //                 string propName = curPropInfo.Name + ":";
+        //                 string value = Objects.ToString(curPropInfo.GetValue(SelectedRTConfig, null));
+        //
+        //                 float nameMin, nameMax;
+        //                 float valueMin, valueMax;
+        //                 GUIStyle guiStyle = new GUIStyle();
+        //
+        //                 guiStyle.CalcMinMaxWidth(new GUIContent(propName + ":"), out nameMin, out nameMax);
+        //                 allNamesMax = Math.Max(allNamesMax, nameMax);
+        //                 guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
+        //                 allValuesMax = Math.Max(allValuesMax, valueMax);
+        //             }
+        //
+        //             // calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
+        //             // add left, middle and right borders as given:
+        //             float borders = new GUIStyle(GUI.skin.textField).margin.left +
+        //                             new GUIStyle(GUI.skin.textField).margin.horizontal +
+        //                             new GUIStyle(GUI.skin.textField).margin.right;
+        //             // calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
+        //             WidthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
+        //             WidthForValues = position.width - (borders + WidthForNames);
+        //
+        //             EditorGUIUtility.labelWidth = WidthForNames;
+        //
+        //             // show all properties as textfields or textareas in fitting width:
+        //             foreach (PropertyInfo curPropInfo in propertyInfos)
+        //             {
+        //                 if (ProductEditorPart.entryHidden(curPropInfo))
+        //                     continue;
+        //                 configIsDirty |= ProductEditorPart.CreateGui(curPropInfo, SelectedRTConfig);
+        //             }
+        //         } // End Scope Disabled Group 
+        //     } // End Scope ScrollView 
+        // }
 
         private bool allowChanges = false;
 
@@ -563,7 +563,7 @@ namespace GQ.Editor.UI
                 {
                     if (GUILayout.Button("Save"))
                     {
-                        Pm.serializeConfigs(SelectedConfig, SelectedRTConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
+                        Pm.serializeConfigs(SelectedConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
                         configIsDirty = false;
                         LayoutConfig.ResetAll(); // TODO check and implement update all layout components in editor
                     }
@@ -886,7 +886,7 @@ namespace GQ.Editor.UI
             // the entry for the given property will be disabled, if one of the following is true
             disabled |= propInfo.Name.Equals("id");
             disabled |= propInfo.Name.Equals("categoryFiltersStartFolded") &&
-                        ProductEditor.SelectedRTConfig.foldableCategoryFilters == false;
+                        ProductEditor.SelectedConfig.foldableCategoryFilters == false;
 
             return disabled;
         }
@@ -990,7 +990,7 @@ namespace GQ.Editor.UI
                         if (curPropInfo.Name == "foldableCategoryFilters" && newBoolVal == false)
                         {
                             // if categories are not foldable they must start unfolded:
-                            ProductEditor.SelectedRTConfig.categoryFiltersStartFolded = false;
+                            ProductEditor.SelectedConfig.categoryFiltersStartFolded = false;
                         }
                     }
                 }

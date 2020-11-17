@@ -263,7 +263,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             if (ConfigurationManager.CurrentRT.mainCategorySet != null &&
                 ConfigurationManager.CurrentRT.mainCategorySet != "")
             {
-                CategorySet mainCategorySet = ConfigurationManager.CurrentRT.GetMainCategorySet();
+                CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet();
                 if (mainCategorySet == null)
                     return;
 

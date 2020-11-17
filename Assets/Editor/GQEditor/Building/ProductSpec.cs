@@ -118,14 +118,16 @@ namespace GQ.Editor.Building {
 
 		public string RTConfigPath => Files.CombinePath(Dir, ConfigurationManager.RT_CONFIG_FILE);
 
+/*
 		private RTConfig _rtConfig;
+*/
 
 		public RTConfig RTConfig {
 			get {
-				return _rtConfig;
+				return _config.rt;
 			}
 			set {
-				_rtConfig = value;
+				_config.rt = value;
 			}
 		}
 		#endregion

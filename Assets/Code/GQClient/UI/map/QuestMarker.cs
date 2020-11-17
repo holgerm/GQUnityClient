@@ -79,7 +79,7 @@ namespace Code.GQClient.UI.map
 
 					Texture2D symbol = null;
 					try {
-						var cat = ConfigurationManager.CurrentRT.categoryDict [categoryId];
+						var cat = ConfigurationManager.Current.GetCategory(categoryId);
 						symbol = cat.symbol.GetTexture2D();
 						if (symbol == null) {
 							Log.SignalErrorToDeveloper ($"Symbol Texture not found for category {cat.symbol}. Using default symbol. (cats: {ConfigurationManager.CurrentRT.categoryDict.Count})");

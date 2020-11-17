@@ -622,10 +622,10 @@ namespace GQ.Editor.Building
             RTConfig rtConfig = new RTConfig();
 
             // serialize into new product folder:
-            serializeConfigs(config, rtConfig, Files.CombinePath(ProductsDirPath, productID));
+            serializeConfigs(config, Files.CombinePath(ProductsDirPath, productID));
         }
 
-        internal void serializeConfigs(Config config, RTConfig rtConfig, string productDirPath)
+        internal void serializeConfigs(Config config, string productDirPath)
         {
             // app static config:
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
@@ -636,7 +636,7 @@ namespace GQ.Editor.Building
                 AssetDatabase.Refresh();
 
             // runtime config:
-            json = JsonConvert.SerializeObject(rtConfig, Formatting.Indented);
+            json = JsonConvert.SerializeObject(config.rt, Formatting.Indented);
             Debug.Log($"SERIALIZED: {json}".Yellow());
             filePath =
                 Files.CombinePath(productDirPath, ConfigurationManager.RT_CONFIG_FILE);

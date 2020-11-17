@@ -805,33 +805,73 @@ namespace Code.GQClient.Conf
 
             // Internal:
             emulationColor = new Color(255f, 182f, 182f, 255f);
-            
-            
+
+
             // Forward RTConfig:
             rt = new RTConfig();
         }
 
         #endregion
-        
-        
+
+
         #region Forwards to RTConfig
 
-        [JsonIgnore] 
-        private RTConfig rt;
+        [JsonIgnore] public RTConfig rt;
+
+        [ShowInProductEditor(StartSection = "Categories & Filters:"), JsonIgnore]
+        public bool foldableCategoryFilters
+        {
+            get => rt.foldableCategoryFilters;
+            set => rt.foldableCategoryFilters = value;
+        }
+
+        [ShowInProductEditor, JsonIgnore]
+        public bool categoryFiltersStartFolded
+        {
+            get => rt.categoryFiltersStartFolded;
+            set => rt.categoryFiltersStartFolded = value;
+        }
+
+        [ShowInProductEditor, JsonIgnore]
+        public bool categoryFoldersStartFolded
+        {
+            get => rt.categoryFoldersStartFolded;
+            set => rt.categoryFoldersStartFolded = value;
+        }
+
+        /// <summary>
+        /// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
+        /// </summary>
+        /// <value>The main category set.</value>
+        [ShowInProductEditor, JsonIgnore]
+        public string mainCategorySet
+        {
+            get => rt.mainCategorySet;
+            set => rt.mainCategorySet = value;
+        }
+
+        public CategorySet GetMainCategorySet()
+        {
+            return CategorySets.Find(cat => cat.name == mainCategorySet);
+        }
+
+        [ShowInProductEditor]
+        public List<CategorySet> CategorySets
+        {
+            get => rt.CategorySets;
+            set => rt.CategorySets = value;
+        }
+
+        public Category GetCategory(string catId)
+        {
+            return rt.categoryDict[catId];
+        }
 
         [ShowInProductEditor, JsonIgnore]
         public string defaultCategory
         {
-            get
-            {
-                Debug.Log("defaultCategory.Get");
-                return rt.defaultCategory;
-            }
-            set
-            {
-                Debug.Log("defaultCategory.Set");
-                rt.defaultCategory = value;
-            }
+            get => rt.defaultCategory;
+            set => rt.defaultCategory = value;
         }
 
         #endregion

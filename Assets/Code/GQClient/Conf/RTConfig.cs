@@ -55,28 +55,18 @@ namespace Code.GQClient.Conf
         //////////////////////////////////////////
         // THE ACTUAL PRODUCT RUNTIME CONFIG DATA:
         
-        [ShowInProductEditor] public int test { get; set; }
-
-        [ShowInProductEditor(StartSection = "Categories & Filters:")]
         public bool foldableCategoryFilters { get; set; }
 
-        [ShowInProductEditor] public bool categoryFiltersStartFolded { get; set; }
+        public bool categoryFiltersStartFolded { get; set; }
 
-        [ShowInProductEditor] public bool categoryFoldersStartFolded { get; set; }
+        public bool categoryFoldersStartFolded { get; set; }
 
         /// <summary>
         /// Used as characterization of the quest infos, e.g. to determine the shown symbols in the foyer list.
         /// </summary>
         /// <value>The main category set.</value>
-        [ShowInProductEditor]
         public string mainCategorySet { get; set; }
 
-        public CategorySet GetMainCategorySet()
-        {
-            return CategorySets.Find(cat => cat.name == mainCategorySet);
-        }
-
-        [ShowInProductEditor]
         public List<CategorySet> CategorySets
         {
             get
@@ -100,11 +90,11 @@ namespace Code.GQClient.Conf
             set { _categorySets = value; }
         }
 
-        [ShowInProductEditor] public string defaultCategory { get; set; }
+        public string defaultCategory { get; set; }
 
         [JsonIgnore] private List<CategorySet> _categorySets;
 
-        [JsonIgnore] public Dictionary<string, Category> categoryDict;
+        [JsonIgnore] internal Dictionary<string, Category> categoryDict;
 
 
         /// <summary>
