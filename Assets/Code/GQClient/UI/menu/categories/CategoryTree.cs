@@ -41,7 +41,6 @@ namespace Code.GQClient.UI.menu.categories
 
         internal void RecreateModelTree()
         {
-            int cats = null == categoryFolders ? -1 : categoryFolders.Count;
             // model: create skeleton of folders and entries:
             categoryEntries = new Dictionary<string, CategoryEntry>();
             categoryFolders = new Dictionary<string, CategoryFolder>();
@@ -79,9 +78,6 @@ namespace Code.GQClient.UI.menu.categories
                     catEntry.AddQuestID(info.Id);
                 }
             }
-
-            cats = null == categoryFolders ? -1 : categoryFolders.Count;
-            Debug.Log($"END CATFolders: {cats}");
         }
     }
 }

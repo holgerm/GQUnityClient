@@ -14,7 +14,6 @@ namespace Code.GQClient.Conf
         [JsonConstructor]
         public CategorySet(string name, List<Category> categories)
         {
-            Debug.Log($"CategorySet {name} #cats: {categories.Count}");
             this.name = name;
             if (categories == null)
                 categories = new List<Category>();
@@ -23,7 +22,6 @@ namespace Code.GQClient.Conf
 
         public CategorySet()
         {
-            Debug.Log($"CategorySet()".Red());
             name = "";
             categories = new List<Category>();
         }

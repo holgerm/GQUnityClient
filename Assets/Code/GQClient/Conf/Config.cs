@@ -805,6 +805,33 @@ namespace Code.GQClient.Conf
 
             // Internal:
             emulationColor = new Color(255f, 182f, 182f, 255f);
+            
+            
+            // Forward RTConfig:
+            rt = new RTConfig();
+        }
+
+        #endregion
+        
+        
+        #region Forwards to RTConfig
+
+        [JsonIgnore] 
+        private RTConfig rt;
+
+        [ShowInProductEditor, JsonIgnore]
+        public string defaultCategory
+        {
+            get
+            {
+                Debug.Log("defaultCategory.Get");
+                return rt.defaultCategory;
+            }
+            set
+            {
+                Debug.Log("defaultCategory.Set");
+                rt.defaultCategory = value;
+            }
         }
 
         #endregion

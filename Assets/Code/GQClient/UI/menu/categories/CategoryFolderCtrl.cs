@@ -82,7 +82,7 @@ namespace Code.GQClient.UI.menu.categories
 			var stateIsShow = folderImage.GetComponent<ImageToggleButton> ().stateIsOn;
 
 			// set activity of all contained category entries according to folder show state:
-			if (treeCtrl.model.categoryFolders.TryGetValue (folder.Name, out var folderCtrl)) {
+			if (treeCtrl.categoryFolders.TryGetValue (folder.Name, out var folderCtrl)) {
 				foreach (var cat in folderCtrl.Entries) {
 					cat.ctrl.Unfolded = stateIsShow;
 					cat.ctrl.UpdateView ();

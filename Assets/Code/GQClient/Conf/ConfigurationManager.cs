@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Code.GQClient.Err;
+using Code.GQClient.UI.author;
 using Code.GQClient.Util.http;
 using GQClient.Model;
 using UnityEngine;
@@ -84,9 +85,11 @@ namespace Code.GQClient.Conf
 
         public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
 
-        public const string RT_CONFIG_DIR = "config";
         public const string RT_CONFIG_FILE = "RTProduct.json";
         public const string GQ_SERVER_PORTALS_URL = "https://quest-mill-web.intertech.de/portals";
+
+        public static string RT_CONFIG_DIR => Author.LoggedIn ? "config-author" : "config";
+
 
         public static string UrlPublicQuestsJSON
         {
@@ -153,7 +156,7 @@ namespace Code.GQClient.Conf
                             RTConfig.LoadsFrom.Resource);
                         RTProductUpdated = false;
                     }
-                    Debug.Log($"currentRT: cats#: {_currentRT.CategorySets[0].categories.Count}");
+
                     QuestInfoManager.Instance.RaiseOnDataChange();
                     OnRTConfigChanged?.Invoke();
                 }
