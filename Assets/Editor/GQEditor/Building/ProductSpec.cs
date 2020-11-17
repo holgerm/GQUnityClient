@@ -175,7 +175,7 @@ namespace GQ.Editor.Building {
 			{
 				if (!File.Exists(RTConfigPath))
 				{
-					Log.SignalErrorToDeveloper("Invalid product definition. RTProduct.json file missing.");
+					Log.SignalErrorToDeveloper($"Invalid product definition. RTProduct.json file missing in folder {_dir}.");
 					throw new ArgumentException("Invalid product definition. RTProduct.json file missing.");
 				}
 
