@@ -1,0 +1,239 @@
+{
+    "CategorySets": [
+        {
+            "categories": [
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.architecture",
+                    "name": "Architektur",
+                    "symbol": {
+                        "path": "textures/readable/architecture"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.museum",
+                    "name": "Museum",
+                    "symbol": {
+                        "path": "textures/readable/museum"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.art",
+                    "name": "Kunst",
+                    "symbol": {
+                        "path": "textures/readable/art"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.sound",
+                    "name": "Sound & Ton",
+                    "symbol": {
+                        "path": "textures/readable/sound"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.nature",
+                    "name": "Natur",
+                    "symbol": {
+                        "path": "textures/readable/nature"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.history",
+                    "name": "Historisch",
+                    "symbol": {
+                        "path": "textures/readable/historic"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.sports",
+                    "name": "Leibesübungen",
+                    "symbol": {
+                        "path": "textures/readable/sports"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.beethovenshoppen",
+                    "name": "Beethoven Shoppen",
+                    "symbol": {
+                        "path": "update:1605258255:textures/readable/beethoven.png"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.antiquariate",
+                    "name": "Leselust",
+                    "symbol": {
+                        "path": "textures/readable/antiquariat"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.gallery",
+                    "name": "Galerie / Atelier",
+                    "symbol": {
+                        "path": "textures/readable/gallery"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.designshop",
+                    "name": "Designer Shop",
+                    "symbol": {
+                        "path": "textures/readable/designshop"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.cinema",
+                    "name": "Kino",
+                    "symbol": {
+                        "path": "textures/readable/cinema"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.concerthall",
+                    "name": "Schall & Klang",
+                    "symbol": {
+                        "path": "textures/readable/concerthall"
+                    }
+                },
+                {
+                    "folderName": "KulturShoppen",
+                    "id": "wcc.theatre",
+                    "name": "Theater",
+                    "symbol": {
+                        "path": "textures/readable/theatre"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
+                    "id": "wcc.special",
+                    "name": "Besonderes",
+                    "symbol": {
+                        "path": "textures/readable/special"
+                    }
+                },
+                {
+                    "folderName": "Themen",
+                    "id": "wcc.tour.beethoven",
+                    "name": "Beethoventour",
+                    "symbol": {
+                        "path": "textures/readable/beethoventour"
+                    }
+                },
+                {
+                    "folderName": "Themen",
+                    "id": "wcc.bonnhoeren",
+                    "name": "BonnHoeren",
+                    "symbol": {
+                        "path": "textures/readable/bonnhoeren"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.bar",
+                    "name": "Bar",
+                    "symbol": {
+                        "path": "textures/readable/bar"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.beergarden",
+                    "name": "Biergarten",
+                    "symbol": {
+                        "path": "textures/readable/beergarden"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.cafe",
+                    "name": "Café",
+                    "symbol": {
+                        "path": "textures/readable/cafe"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.iceparlour",
+                    "name": "Eisdiele",
+                    "symbol": {
+                        "path": "textures/readable/iceparlour"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.pub",
+                    "name": "Kneipe",
+                    "symbol": {
+                        "path": "textures/readable/pub"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.restaurant",
+                    "name": "Restaurant",
+                    "symbol": {
+                        "path": "textures/readable/restaurant"
+                    }
+                },
+                {
+                    "folderName": "Gastronomie",
+                    "id": "wcc.hotel",
+                    "name": "Hotel",
+                    "symbol": {
+                        "path": "textures/readable/hotel"
+                    }
+                },
+                {
+                    "folderName": "Hilfe & Information",
+                    "id": "wcc.tourist",
+                    "name": "Tourist Info",
+                    "symbol": {
+                        "path": "textures/readable/touristinfo"
+                    }
+                },
+                {
+                    "folderName": "Hilfe & Information",
+                    "id": "wcc.wc",
+                    "name": "WC",
+                    "symbol": {
+                        "path": "textures/readable/wc"
+                    }
+                },
+                {
+                    "folderName": "Hilfe & Information",
+                    "id": "wcc.bike",
+                    "name": "Fahrradvermietung",
+                    "symbol": {
+                        "path": "textures/readable/bike"
+                    }
+                },
+                {
+                    "folderName": "Aktuelle Events",
+                    "id": "wcc.nachtdermuseen",
+                    "name": "Nacht der Museen",
+                    "symbol": {
+                        "path": "textures/readable/bike"
+                    }
+                }
+            ],
+            "name": "Kategorien"
+        }
+    ],
+    "categoryFiltersStartFolded": false,
+    "categoryFoldersStartFolded": true,
+    "defaultCategory": null,
+    "foldableCategoryFilters": false,
+    "mainCategorySet": "Kategorien",
+    "test": 1
+}
