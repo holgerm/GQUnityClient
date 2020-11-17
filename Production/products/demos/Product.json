@@ -8,19 +8,21 @@
     "UniWebView"
   ],
   "androidMinSDKVersion": "AndroidApiLevelAuto",
+  "iOsDeviceTypes": "iPhoneAndiPad",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": false,
-  "downloadStrategy": "UPFRONT",
   "timeoutMS": 60000,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
+  "downloadStrategy": "UPFRONT",
   "nameForQuestSg": "Quest",
   "nameForQuestsPl": "Quests",
   "questInfoViews": [
     "List",
     "Map"
   ],
+  "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": false,
@@ -62,21 +64,15 @@
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
-  "autoSynchQuestInfos": true,
+  "autoSyncQuestInfos": true,
+  "autoLoadQuests": false,
+  "autoUpdateQuests": false,
   "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
-  "mapProvider": "OpenStreetMap",
-  "mapBaseUrl": "http://a.tile.openstreetmap.org",
-  "mapKey": "",
-  "mapID": "",
-  "mapTileImageExtension": ".png",
-  "useMapOffline": false,
-  "mapMinimalZoom": 7.0,
-  "mapDeltaZoom": 0.5,
   "mapStartPositionType": "CenterOfMarkers",
-  "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
+  "mapStartZoom": 14.0,
   "hotspotMarker": {
     "path": "textures/readable/marker"
   },
@@ -102,14 +98,9 @@
   "mapButtonHeightUnits": 55.0,
   "mapButtonHeightMinMM": 7.0,
   "mapButtonHeightMaxMM": 12.0,
-  "foldableCategoryFilters": true,
-  "categoryFiltersStartFolded": true,
-  "categoryFoldersStartFolded": true,
-  "mainCategorySet": null,
-  "CategorySets": [],
-  "defaultCategory": null,
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
+  "taskUI": "ProgressAtBottom",
   "mainFgColor": {
     "r": 31,
     "g": 31,
@@ -122,8 +113,83 @@
     "b": 255,
     "a": 255
   },
+  "colorPaletteSize": 4,
+  "colorPalette": [
+    {
+      "r": 0,
+      "g": 0,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 235,
+      "b": 4,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    }
+  ],
+  "paletteFGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "mainFontSize": 60,
   "textAlignment": "Left",
+  "textLinkColor": {
+    "r": 0,
+    "g": 0,
+    "b": 255,
+    "a": 255
+  },
   "lineSpacing": 10.0,
   "showShadows": true,
   "topLogo": {
@@ -253,11 +319,13 @@
   "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
   "warnDialogOKWhenLeavingQuest": "Verlassen",
   "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
-  "offerFeedback": true,
-  "offerAuthorLogin": true,
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "offerPartnersInfo": false,
+  "showPartnersInfoAtStart": false,
   "listEntryHeightUnits": 45.0,
   "listEntryHeightMinMM": 6.5,
   "listEntryHeightMaxMM": 30.0,
@@ -269,7 +337,6 @@
     "b": 0,
     "a": 255
   },
-  "listStartLineWidth": 5,
   "dividingLineWidth": 5,
   "listEndLineWidth": 5,
   "listEntryFgColor": {
@@ -307,7 +374,5 @@
     "g": 78,
     "b": 78,
     "a": 255
-  },
-  "webpageShouldEndOnLoadUrlPart": true,
-  "webpageEndOnLoadUrlPart": "https://www.umfrageonline.com/thank-you"
+  }
 }
