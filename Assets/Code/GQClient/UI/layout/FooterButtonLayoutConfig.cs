@@ -23,7 +23,7 @@ namespace Code.GQClient.UI.layout
 
 			// set foreground color in Image:
 			try {
-				var fgImage = transform.Find ("Image").GetComponent<Image> ();
+				var fgImage = transform.Find ("Image")?.GetComponent<Image> ();
 				if (fgImage != null) {
 					fgImage.color = ConfigurationManager.Current.footerButtonFgColor;
 				}
@@ -32,7 +32,7 @@ namespace Code.GQClient.UI.layout
 
 			// set foreground color as font color in Text:
 			try {
-				Text fgText = transform.Find ("Text").GetComponent<Text> ();
+				Text fgText = transform.Find ("Text")?.GetComponent<Text> ();
 				if (fgText != null) {
 					fgText.color = ConfigurationManager.Current.footerButtonFgColor;
 				}
