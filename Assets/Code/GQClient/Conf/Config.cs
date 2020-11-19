@@ -844,8 +844,6 @@ namespace Code.GQClient.Conf
                     if (File.Exists(rtProductFile))
                     {
                         string json = File.ReadAllText(rtProductFile);
-                        Debug.Log($"_RT SET #1: RT.json for Prod {ConfigurationManager.Current.id}: {json}");
-
                         _rt = RTConfig._doDeserialize(
                             json,
                             RTConfig.LoadsFrom.LocalFile);
@@ -861,9 +859,7 @@ namespace Code.GQClient.Conf
                                 "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
                                 ConfigurationManager.RUNTIME_PRODUCT_DIR);
                         }
-
-                        Debug.Log($"_RT SET #2 RT.json for Prod {ConfigurationManager.Current.id}: {configAsset.text}");
-
+                        
                         _rt = RTConfig._doDeserialize(
                             configAsset.text,
                             RTConfig.LoadsFrom.Resource);
@@ -878,9 +874,6 @@ namespace Code.GQClient.Conf
             }
             set
             {
-                if (null != value)
-                    Debug.Log($"_RT SET --> defCat: {value.defaultCategory}".Green());
-
                 _rt = value;
             }
         }

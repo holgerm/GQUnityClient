@@ -80,6 +80,7 @@ namespace Code.GQClient.UI.parts.header
 
         protected void setTopLogo()
         {
+            Debug.Log("Set TopLogo");
             // set MiddleTopLogo:
             try
             {
@@ -108,6 +109,7 @@ namespace Code.GQClient.UI.parts.header
 
         protected void setTitle()
         {
+            Debug.Log("Set TopTitle");
             // hide top logo and load image:
             var middleTopLogo = MiddleButton.transform.Find("TopLogo");
             middleTopLogo.gameObject.SetActive(false);

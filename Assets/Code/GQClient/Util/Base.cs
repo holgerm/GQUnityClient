@@ -179,11 +179,6 @@ namespace Code.GQClient.Util
                 var canvas = rootGo.GetComponent<Canvas>();
                 if (canvas != null)
                 {
-                    if (canvas.name.Equals("Map"))
-                    {
-                        Debug.Log($"Map DEACTIVATE canvas");
-                    }
-
                     canvas.gameObject.SetActive("DialogCanvas".Equals(canvas.name));
                 }
             }

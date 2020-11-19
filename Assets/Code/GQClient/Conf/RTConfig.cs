@@ -96,7 +96,6 @@ namespace Code.GQClient.Conf
 
         public Category GetCategory(string catId)
         {
-            Debug.Log($"Cat 4 id {catId} is {categoryDict[catId]}".Green());
             return categoryDict[catId];
         }
 

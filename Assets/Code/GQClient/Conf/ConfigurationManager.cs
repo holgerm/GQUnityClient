@@ -338,9 +338,7 @@ namespace Code.GQClient.Conf
 
             try
             {
-                Debug.Log($"_RT SET deserializeConfig: \n{json}");
                 _current = Config._doDeserializeConfig(json);
-                Debug.Log("_RT SET DONE");
             }
             catch (Exception e)
             {
@@ -356,9 +354,7 @@ namespace Code.GQClient.Conf
 
             try
             {
-                Debug.Log($"_RT SET deserializeConfigRT: \n{json}");
                 CurrentRT = Config._doDeserializeConfigRT(json);
-                Debug.Log("_RT SET DONE");
             }
             catch (Exception e)
             {
