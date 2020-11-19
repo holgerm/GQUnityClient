@@ -9,260 +9,261 @@ using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQ.Editor.UI;
 
-namespace GQ.Editor.Building {
+namespace GQ.Editor.Building
+{
+    /// <summary>
+    /// The ProductSpec class represents a product specifiation of our app at edit time (not runtime!). 
+    /// 
+    /// Each ProductSpec instance refers to image files and resources directly 
+    /// and to all textual parameters via a Config object. Product instances are used by the ProductManager
+    /// and can be edited in the ProductEditor view.
+    /// 
+    /// A product is backed on file by diverse graphic files and a configuration file (Product.json). 
+    /// These files reside in one folder (the product folder) which can have an arbitrary name. 
+    /// 
+    /// You create a ProductSpec instance by calling the Constructor with the product folder path as argument.
+    /// 
+    /// The ProductSpec is NOT the Build Setting, instead you use a ProductSpec to create the current build setting.
+    /// </summary>
+    public class ProductSpec
+    {
+        #region Product Configuration Properties
 
-	/// <summary>
-	/// The ProductSpec class represents a product specifiation of our app at edit time (not runtime!). 
-	/// 
-	/// Each ProductSpec instance refers to image files and resources directly 
-	/// and to all textual parameters via a Config object. Product instances are used by the ProductManager
-	/// and can be edited in the ProductEditor view.
-	/// 
-	/// A product is backed on file by diverse graphic files and a configuration file (Product.json). 
-	/// These files reside in one folder (the product folder) which can have an arbitrary name. 
-	/// 
-	/// You create a ProductSpec instance by calling the Constructor with the product folder path as argument.
-	/// 
-	/// The ProductSpec is NOT the Build Setting, instead you use a ProductSpec to create the current build setting.
-	/// </summary>
-	public class ProductSpec {
+        public string Id
+        {
+            get { return Config.id; }
+            private set
+            {
+                Config.id = value; // TODO
+            }
+        }
 
-		#region Product Configuration Properties
+        private string _dir;
 
-		public string Id {
-			get {
-				return Config.id;
-			}
-			private set {
-				Config.id = value; // TODO
-			}
-		}
+        /// <summary>
+        /// Directory path for this product.
+        /// </summary>
+        /// <value>The dir.</value>
+        public string Dir
+        {
+            get { return (_dir); }
+        }
 
-		private string _dir;
+        internal const string APP_ICON = "AppIcon.png";
 
-		/// <summary>
-		/// Directory path for this product.
-		/// </summary>
-		/// <value>The dir.</value>
-		public string Dir {
-			get {
-				return (_dir);
-			}
-		}
+        public string AppIconPath
+        {
+            get { return Files.CombinePath(Dir, APP_ICON); }
+        }
 
-		internal const string APP_ICON = "AppIcon.png";
+        internal const string SPLASH_SCREEN = "SplashScreen.jpg";
 
-		public string AppIconPath {
-			get {
-				return Files.CombinePath(Dir, APP_ICON);
-			}
-		}
+        public string SplashScreenPath
+        {
+            get { return Files.CombinePath(Dir, SPLASH_SCREEN); }
+        }
 
-		internal const string SPLASH_SCREEN = "SplashScreen.jpg";
+        internal const string TOP_LOGO = "TopLogo.jpg";
 
-		public string SplashScreenPath {
-			get {
-				return Files.CombinePath(Dir, SPLASH_SCREEN);
-			}
-		}
+        public string TopLogoPath
+        {
+            get { return Files.CombinePath(Dir, TOP_LOGO); }
+        }
 
-		internal const string TOP_LOGO = "TopLogo.jpg";
+        internal const string ANDROID_MANIFEST = "AndroidManifest.xml";
 
-		public string TopLogoPath {
-			get {
-				return Files.CombinePath(Dir, TOP_LOGO);
-			}	
-		}
+        public string AndroidManifestPath
+        {
+            get { return Files.CombinePath(Dir, ANDROID_MANIFEST); }
+        }
 
-		internal const string ANDROID_MANIFEST = "AndroidManifest.xml";
+        internal const string STREAMING_ASSETS = "StreamingAssets";
 
-		public string AndroidManifestPath {
-			get {
-				return Files.CombinePath(Dir, ANDROID_MANIFEST);
-			}
-		}
+        public string StreamingAssetPath
+        {
+            get { return Files.CombinePath(Dir, STREAMING_ASSETS); }
+        }
 
-		internal const string STREAMING_ASSETS = "StreamingAssets";
+        internal const string GQ_BUNDLE_ID_PREFIX = "com.questmill.geoquest";
 
-		public string StreamingAssetPath {
-			get {
-				return Files.CombinePath(Dir, STREAMING_ASSETS);
-			}
-		}
+        internal const string ONLINEMAPS_CONFIG = "OnlineMapsConfig.json";
 
-		internal const string GQ_BUNDLE_ID_PREFIX = "com.questmill.geoquest";
+        /// <summary>
+        /// Gets the path to the config file Product.json.
+        /// </summary>
+        /// <value>The config path.</value>
+        public string ConfigPath
+        {
+            get { return Files.CombinePath(Dir, ConfigurationManager.CONFIG_FILE); }
+        }
 
-		internal const string ONLINEMAPS_CONFIG = "OnlineMapsConfig.json";
+        private Config _config;
 
-		/// <summary>
-		/// Gets the path to the config file Product.json.
-		/// </summary>
-		/// <value>The config path.</value>
-		public string ConfigPath {
-			get {
-				return Files.CombinePath(Dir, ConfigurationManager.CONFIG_FILE);
-			}	
-		}
-
-		private Config _config;
-
-		public Config Config {
-			get {
-				return _config;
-			}
-			set {
-				_config = value;
-			}
-		}
+        public Config Config
+        {
+            get { return _config; }
+            set { _config = value; }
+        }
 
 
-		public string RTConfigPath => Files.CombinePath(Dir, ConfigurationManager.RT_CONFIG_FILE);
+        public string RTConfigPath => Files.CombinePath(Dir, ConfigurationManager.RT_CONFIG_FILE);
 
 /*
 		private RTConfig _rtConfig;
 */
 
-		public RTConfig RTConfig {
-			get {
-				return _config.rt;
-			}
-			set {
-				_config.rt = value;
-			}
-		}
-		#endregion
+        #endregion
 
 
-		#region Creating Product Intances
+        #region Creating Product Intances
 
-		/// <summary>
-		/// Initializes a new Product instance by the given directory. 
-		/// It expects that all product files are contained in the directory. 
-		/// Among referring to image files etc. it also deserializes a Config object internally to read the Product.json specification of all textual parameters.
-		/// 
-		/// Throws ArgumentException when the folder does not contain all necessary stuff correctly, i.e. branding files and a matching config file.
-		/// </summary>
-		/// <param name="id">Identifier.</param>
-		/// <param name="dir">Dir.</param>
-		public ProductSpec (string dirPath) {
-			// Check path:
-			if ( !Directory.Exists(dirPath) )
-				throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
+        /// <summary>
+        /// Initializes a new Product instance by the given directory. 
+        /// It expects that all product files are contained in the directory. 
+        /// Among referring to image files etc. it also deserializes a Config object internally to read the Product.json specification of all textual parameters.
+        /// 
+        /// Throws ArgumentException when the folder does not contain all necessary stuff correctly, i.e. branding files and a matching config file.
+        /// </summary>
+        /// <param name="id">Identifier.</param>
+        /// <param name="dir">Dir.</param>
+        public ProductSpec(string dirPath)
+        {
+            // Check path:
+            if (!Directory.Exists(dirPath))
+                throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
 
-			// Init Dir:
-			if ( dirPath.EndsWith("/") )
-				dirPath = dirPath.Substring(0, dirPath.Length - 1);
-			_dir = dirPath;
+            // Init Dir:
+            if (dirPath.EndsWith("/"))
+                dirPath = dirPath.Substring(0, dirPath.Length - 1);
+            _dir = dirPath;
 
-			initConfig();
-		}
+            initConfig();
+        }
 
-		internal void initConfig () {
-			// init and check Config:
-			try {
-				if (!File.Exists(ConfigPath))
-				{
-					Log.SignalErrorToDeveloper("Invalid product definition. Product.json file missing.");
-					throw new ArgumentException("Invalid product definition. Product.json file missing.");
-				}
+        internal void initConfig()
+        {
+            // init and check Config:
+            try
+            {
+                if (!File.Exists(ConfigPath))
+                {
+                    Log.SignalErrorToDeveloper("Invalid product definition. Product.json file missing.");
+                    throw new ArgumentException("Invalid product definition. Product.json file missing.");
+                }
 
-				string configJSON = File.ReadAllText(ConfigPath);
+                string configJSON = File.ReadAllText(ConfigPath);
                 Config = Config._doDeserializeConfig(configJSON);
-			} catch ( Exception exc ) {
-				throw new ArgumentException("Invalid product definition. Product.json file could not be read.", exc);
-			}
-			
-			// init and check RTConfig:
-			try
-			{
-				if (!File.Exists(RTConfigPath))
-				{
-					Log.SignalErrorToDeveloper($"Invalid product definition. RTProduct.json file missing in folder {_dir}.");
-					throw new ArgumentException("Invalid product definition. RTProduct.json file missing.");
-				}
+            }
+            catch (Exception exc)
+            {
+                throw new ArgumentException("Invalid product definition. Product.json file could not be read.", exc);
+            }
 
-				string json = File.ReadAllText(RTConfigPath);
-				RTConfig = 
-					RTConfig._doDeserialize(json, RTConfig.LoadsFrom.LocalFile);
-			} catch ( Exception exc ) {
-				throw new ArgumentException(
-					"Invalid product definition. RTProduct.json file could not be read.", exc);
-			}
-		}
+            // init and check RTConfig:
+            try
+            {
+                if (!File.Exists(RTConfigPath))
+                {
+                    Log.SignalErrorToDeveloper(
+                        $"Invalid product definition. RTProduct.json file missing in folder {_dir}.");
+                    throw new ArgumentException("Invalid product definition. RTProduct.json file missing.");
+                }
 
-		static internal bool IsValidProductName (string name) {
-			// TODO do we need to restrict the product names somehow?
-			return true;
-		}
+                string json = File.ReadAllText(RTConfigPath);
+                Debug.Log($"Reading RTProducts form {RTConfigPath}");
+                Config.rt =
+                    RTConfig._doDeserialize(json, RTConfig.LoadsFrom.LocalFile);
+            }
+            catch (Exception exc)
+            {
+                throw new ArgumentException(
+                    "Invalid product definition. RTProduct.json file could not be read.", exc);
+            }
+        }
 
-		#endregion
+        static internal bool IsValidProductName(string name)
+        {
+            // TODO do we need to restrict the product names somehow?
+            return true;
+        }
 
-		public override string ToString () {
-			return String.Format("product {0}", Id);
-		}
+        #endregion
 
-		#region Validity and Errors
+        public override string ToString()
+        {
+            return String.Format("product {0}", Id);
+        }
 
-		protected List<GQError> _errors = new List<GQError>();
+        #region Validity and Errors
 
-		public List<GQError> Errors {
-			get {
-				return _errors;
-			}
-		}
+        protected List<GQError> _errors = new List<GQError>();
 
-		protected void StoreError (string message) {
-			Errors.Add(new GQError(message));
-		}
+        public List<GQError> Errors
+        {
+            get { return _errors; }
+        }
 
-		public string AllErrorsAsString () {
-			StringBuilder errorString = new StringBuilder();
-			foreach ( var error in Errors ) {
-				errorString.AppendLine(error.ToString());
-			}
+        protected void StoreError(string message)
+        {
+            Errors.Add(new GQError(message));
+        }
 
-			return errorString.ToString();
-		}
+        public string AllErrorsAsString()
+        {
+            StringBuilder errorString = new StringBuilder();
+            foreach (var error in Errors)
+            {
+                errorString.AppendLine(error.ToString());
+            }
 
-		/// <summary>
-		/// Validates this product.
-		/// </summary>
-		/// <returns><c>true</c>, if product was validated, <c>false</c> otherwise.</returns>
-		public bool IsValid () {
-			bool isValid = true;
-			bool productJSONFound = false;
-			bool appIconFound = false;
+            return errorString.ToString();
+        }
+
+        /// <summary>
+        /// Validates this product.
+        /// </summary>
+        /// <returns><c>true</c>, if product was validated, <c>false</c> otherwise.</returns>
+        public bool IsValid()
+        {
+            bool isValid = true;
+            bool productJSONFound = false;
+            bool appIconFound = false;
             bool appIconBGFound = false;
             bool appIconFGFound = false;
             bool splashScreenBGFound = false;
             bool splashScreenFGFound = false;
             bool topLogoFound = false;
-			bool androidManifestFound = false;
+            bool androidManifestFound = false;
 
-			// Directory must exist:
-			DirectoryInfo productDir = new DirectoryInfo(Dir);
-			isValid &= productDir.Exists;
+            // Directory must exist:
+            DirectoryInfo productDir = new DirectoryInfo(Dir);
+            isValid &= productDir.Exists;
 
-			// Checking some basic files:
-			FileInfo[] files = productDir.GetFiles();
-			foreach ( FileInfo file in files ) {
-				// Product.json
-				if ( "Product.json".Equals(file.Name) ) {
-					productJSONFound = true;
-					// TODO do more detailed checks here (e.g. marker images)
-					continue;
-				}
+            // Checking some basic files:
+            FileInfo[] files = productDir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                // Product.json
+                if ("Product.json".Equals(file.Name))
+                {
+                    productJSONFound = true;
+                    // TODO do more detailed checks here (e.g. marker images)
+                    continue;
+                }
 
-				// AppIcon:
-				if ( "AppIcon.png".Equals(file.Name) ) {
-					appIconFound = true;
-					continue;
-				}
+                // AppIcon:
+                if ("AppIcon.png".Equals(file.Name))
+                {
+                    appIconFound = true;
+                    continue;
+                }
+
                 if ("AppIconFG.png".Equals(file.Name))
                 {
                     appIconFGFound = true;
                     continue;
                 }
+
                 if ("AppIconBG.png".Equals(file.Name) || "AppIconBG.jpg".Equals(file.Name))
                 {
                     appIconBGFound = true;
@@ -270,10 +271,12 @@ namespace GQ.Editor.Building {
                 }
 
                 // SplashScreen:
-                if ("SplashScreenBG.png".Equals(file.Name) || "SplashScreenBG.jpg".Equals(file.Name)) {
-					splashScreenBGFound = true;
-					continue;
-				}
+                if ("SplashScreenBG.png".Equals(file.Name) || "SplashScreenBG.jpg".Equals(file.Name))
+                {
+                    splashScreenBGFound = true;
+                    continue;
+                }
+
                 if ("SplashScreenFG.png".Equals(file.Name))
                 {
                     splashScreenFGFound = true;
@@ -281,37 +284,46 @@ namespace GQ.Editor.Building {
                 }
 
                 // TopLogo.jpg
-                if ( "TopLogo.png".Equals(file.Name)) {
-					topLogoFound = true;
-					continue;
-				}
+                if ("TopLogo.png".Equals(file.Name))
+                {
+                    topLogoFound = true;
+                    continue;
+                }
 
-				// AndroidManifest.xml
-				if ( "AndroidManifest.xml".Equals(file.Name) ) {
-					androidManifestFound = true;
-					string foundID = ProductManager.Extract_ID_FromXML_Watermark(file.FullName);
-					if ( foundID == null ) {
-						StoreError("Android Manifest misses a product watermark.");
-					}
-					else {
-						if ( !Id.Equals(foundID) )
-							StoreError("Android Manifest watermark (" + foundID + ") does not correspond to this product (" + Id + ").");
-						continue;
-					}
-				}
-			} // end foreach file
+                // AndroidManifest.xml
+                if ("AndroidManifest.xml".Equals(file.Name))
+                {
+                    androidManifestFound = true;
+                    string foundID = ProductManager.Extract_ID_FromXML_Watermark(file.FullName);
+                    if (foundID == null)
+                    {
+                        StoreError("Android Manifest misses a product watermark.");
+                    }
+                    else
+                    {
+                        if (!Id.Equals(foundID))
+                            StoreError("Android Manifest watermark (" + foundID +
+                                       ") does not correspond to this product (" + Id + ").");
+                        continue;
+                    }
+                }
+            } // end foreach file
 
-			if ( !productJSONFound ) {
-				StoreError("No Product.json file found.");
-			}
+            if (!productJSONFound)
+            {
+                StoreError("No Product.json file found.");
+            }
 
-			if ( !appIconFound ) {
-				StoreError("No AppIcon.png file found.");
-			}
+            if (!appIconFound)
+            {
+                StoreError("No AppIcon.png file found.");
+            }
+
             if (!appIconBGFound)
             {
                 StoreError("No AppIconBG.png file found.");
             }
+
             if (!appIconFGFound)
             {
                 StoreError("No AppIconFG.png file found.");
@@ -321,25 +333,27 @@ namespace GQ.Editor.Building {
             {
                 StoreError("No SplashScreenBG.png file found.");
             }
+
             if (!splashScreenFGFound)
             {
                 StoreError("No SplashScreenFG.png file found.");
             }
 
-            if ( !topLogoFound ) {
-				StoreError("No TopLogo.png file found.");
-			}
+            if (!topLogoFound)
+            {
+                StoreError("No TopLogo.png file found.");
+            }
 
-			if ( !androidManifestFound ) {
-				StoreError("No AndroidManifest.xml file found.");
-			}
+            if (!androidManifestFound)
+            {
+                StoreError("No AndroidManifest.xml file found.");
+            }
 
-			isValid &= Errors.Count == 0;
+            isValid &= Errors.Count == 0;
 
-			return isValid;
-		}
+            return isValid;
+        }
 
-		#endregion
-
-	}
+        #endregion
+    }
 }

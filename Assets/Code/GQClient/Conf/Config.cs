@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Code.GQClient.Err;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
+using GQClient.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
@@ -32,6 +34,14 @@ namespace Code.GQClient.Conf
         {
             Config.__JSON_Currently_Parsing = true;
             Config config = JsonConvert.DeserializeObject<Config>(configText);
+            Config.__JSON_Currently_Parsing = false;
+            return config;
+        }
+
+        public static RTConfig _doDeserializeConfigRT(string configRTText)
+        {
+            Config.__JSON_Currently_Parsing = true;
+            RTConfig config = JsonConvert.DeserializeObject<RTConfig>(configRTText);
             Config.__JSON_Currently_Parsing = false;
             return config;
         }
@@ -816,7 +826,64 @@ namespace Code.GQClient.Conf
 
         #region Forwards to RTConfig
 
-        [JsonIgnore] public RTConfig rt;
+        [JsonIgnore] private RTConfig _rt = null;
+
+        [JsonIgnore]
+        public RTConfig rt
+        {
+            get
+            {
+                if (null == _rt)
+                {
+                    string rtProductFile =
+                        Path.Combine(
+                            Application.persistentDataPath,
+                            ConfigurationManager.RT_CONFIG_DIR,
+                            ConfigurationManager.RT_CONFIG_FILE);
+
+                    if (File.Exists(rtProductFile))
+                    {
+                        string json = File.ReadAllText(rtProductFile);
+                        Debug.Log($"_RT SET #1: RT.json for Prod {ConfigurationManager.Current.id}: {json}");
+
+                        _rt = RTConfig._doDeserialize(
+                            json,
+                            RTConfig.LoadsFrom.LocalFile);
+                        ConfigurationManager.RTProductUpdated = true;
+                    }
+                    else
+                    {
+                        TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
+
+                        if (configAsset == null)
+                        {
+                            throw new ArgumentException(
+                                "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
+                                ConfigurationManager.RUNTIME_PRODUCT_DIR);
+                        }
+
+                        Debug.Log($"_RT SET #2 RT.json for Prod {ConfigurationManager.Current.id}: {configAsset.text}");
+
+                        _rt = RTConfig._doDeserialize(
+                            configAsset.text,
+                            RTConfig.LoadsFrom.Resource);
+                        ConfigurationManager.RTProductUpdated = false;
+                    }
+
+                    QuestInfoManager.Instance.RaiseOnDataChange();
+                    ConfigurationManager.RTConfigChanged();
+                }
+
+                return _rt;
+            }
+            set
+            {
+                if (null != value)
+                    Debug.Log($"_RT SET --> defCat: {value.defaultCategory}".Green());
+
+                _rt = value;
+            }
+        }
 
         [ShowInProductEditor(StartSection = "Categories & Filters:"), JsonIgnore]
         public bool foldableCategoryFilters
@@ -864,13 +931,16 @@ namespace Code.GQClient.Conf
 
         public Category GetCategory(string catId)
         {
-            return rt.categoryDict[catId];
+            return rt.GetCategory(catId);
         }
 
         [ShowInProductEditor, JsonIgnore]
         public string defaultCategory
         {
-            get => rt.defaultCategory;
+            get
+            {
+                 return rt.defaultCategory;
+            }
             set => rt.defaultCategory = value;
         }
 

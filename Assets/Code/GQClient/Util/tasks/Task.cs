@@ -147,10 +147,7 @@ namespace Code.GQClient.Util.tasks
             else
             {
                 hasEnded = true;
-                Debug.Log("Task " + GetType().Name + " has ended.");
             }
-
-            Debug.Log("Task FAILED step: " + Step + " type: " + GetType().Name);
 
             BeforeFailed();
 

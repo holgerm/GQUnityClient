@@ -54,7 +54,7 @@ namespace Code.GQClient.Conf
 
         //////////////////////////////////////////
         // THE ACTUAL PRODUCT RUNTIME CONFIG DATA:
-        
+
         public bool foldableCategoryFilters { get; set; }
 
         public bool categoryFiltersStartFolded { get; set; }
@@ -94,6 +94,12 @@ namespace Code.GQClient.Conf
 
         [JsonIgnore] private List<CategorySet> _categorySets;
 
+        public Category GetCategory(string catId)
+        {
+            Debug.Log($"Cat 4 id {catId} is {categoryDict[catId]}".Green());
+            return categoryDict[catId];
+        }
+
         [JsonIgnore] internal Dictionary<string, Category> categoryDict;
 
 
@@ -110,7 +116,5 @@ namespace Code.GQClient.Conf
             categoryFiltersStartFolded = true;
             categoryFoldersStartFolded = true;
         }
-
     }
-
 }

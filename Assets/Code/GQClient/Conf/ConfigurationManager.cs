@@ -30,6 +30,7 @@ namespace Code.GQClient.Conf
         {
             // Product.json:
             deserializeConfig();
+            deserializeConfigRT();
 
             // RTProduct.json:
             string rtProductUrl = Path.Combine(GQ_SERVER_PORTALS_URL, _current.id, RT_CONFIG_DIR, RT_CONFIG_FILE);
@@ -109,7 +110,6 @@ namespace Code.GQClient.Conf
         #region RETRIEVING THE CURRENT PRODUCT
 
         private static Config _current = null;
-        private static RTConfig _currentRT = null;
 
         public static Config Current
         {
@@ -127,51 +127,20 @@ namespace Code.GQClient.Conf
 
         public static RTConfig CurrentRT
         {
-            get
-            {
-                if (_currentRT == null)
-                {
-                    string rtProductFile = Path.Combine(Application.persistentDataPath, RT_CONFIG_DIR, RT_CONFIG_FILE);
-
-                    if (File.Exists(rtProductFile))
-                    {
-                        _currentRT = RTConfig._doDeserialize(
-                            File.ReadAllText(rtProductFile),
-                            RTConfig.LoadsFrom.LocalFile);
-                        RTProductUpdated = true;
-                    }
-                    else
-                    {
-                        TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
-
-                        if (configAsset == null)
-                        {
-                            throw new ArgumentException(
-                                "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
-                                RUNTIME_PRODUCT_DIR);
-                        }
-
-                        _currentRT = RTConfig._doDeserialize(
-                            configAsset.text,
-                            RTConfig.LoadsFrom.Resource);
-                        RTProductUpdated = false;
-                    }
-
-                    QuestInfoManager.Instance.RaiseOnDataChange();
-                    OnRTConfigChanged?.Invoke();
-                }
-
-                return _currentRT;
-            }
-            set { _currentRT = value; }
+            get => Current.rt;
+            set => Current.rt = value;
         }
 
         public static event Action OnRTConfigChanged;
 
+        internal static void RTConfigChanged()
+        {
+            OnRTConfigChanged?.Invoke();
+        }
+
         public static void Reset()
         {
             _current = null;
-            _currentRT = null;
         }
 
         private static Sprite _topLogo;
@@ -180,10 +149,11 @@ namespace Code.GQClient.Conf
         {
             get
             {
-                _topLogo = Resources.Load<Sprite>(TOPLOGO_FILE_NAME);
+                if (!_topLogo)
+                    _topLogo = Resources.Load<Sprite>(TOPLOGO_FILE_NAME);
                 return _topLogo;
             }
-            set { _topLogo = value; }
+            set => _topLogo = value;
         }
 
         private static Sprite _defaultMarker;
@@ -302,9 +272,23 @@ namespace Code.GQClient.Conf
             return configAsset.text;
         }
 
+        private static string retrieveProductRTJSONFromAppConfig()
+        {
+            TextAsset configRTAsset = Resources.Load("RTProduct") as TextAsset;
+
+            if (configRTAsset == null)
+            {
+                throw new ArgumentException(
+                    "Something went wrong with the RTProduct.json File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
+            }
+
+            return configRTAsset.text;
+        }
+
         public delegate string RetrieveProductJSONTextDelegate();
 
         private static RetrieveProductJSONTextDelegate _retrieveProductJSONText;
+        private static RetrieveProductJSONTextDelegate _retrieveProductRTJSONText;
 
         public static RetrieveProductJSONTextDelegate RetrieveProductJSONText
         {
@@ -324,21 +308,61 @@ namespace Code.GQClient.Conf
             }
         }
 
+        public static RetrieveProductJSONTextDelegate RetrieveProductRTJSONText
+        {
+            get
+            {
+                if (_retrieveProductRTJSONText == null)
+                {
+                    _retrieveProductRTJSONText = retrieveProductRTJSONFromAppConfig;
+                }
+
+                return _retrieveProductRTJSONText;
+            }
+            set
+            {
+                Current = null;
+                _retrieveProductRTJSONText = value;
+            }
+        }
+
         /// <summary>
         /// Deserialize the Product.json a dn ProductRT.json files to the current config objects
         /// that are used throughout the client.
         /// </summary>
         public static void deserializeConfig()
         {
+            _current = null; // reset config and rtconfig
+            
             string json = RetrieveProductJSONText();
 
             try
             {
+                Debug.Log($"_RT SET deserializeConfig: \n{json}");
                 _current = Config._doDeserializeConfig(json);
+                Debug.Log("_RT SET DONE");
             }
             catch (Exception e)
             {
                 Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
+            }
+        }
+
+        public static void deserializeConfigRT()
+        {
+            CurrentRT = null; // reset config and rtconfig
+            
+            string json = RetrieveProductRTJSONText();
+
+            try
+            {
+                Debug.Log($"_RT SET deserializeConfigRT: \n{json}");
+                CurrentRT = Config._doDeserializeConfigRT(json);
+                Debug.Log("_RT SET DONE");
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Product Configuration: Exception thrown when parsing RTProduct.json: " + e.Message);
             }
         }
 

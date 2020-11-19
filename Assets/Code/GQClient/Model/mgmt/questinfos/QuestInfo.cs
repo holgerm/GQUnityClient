@@ -487,12 +487,11 @@ namespace GQClient.Model
             {
                 if (_categories == null)
                 {
-                    Categories = CategoryReader.ReadCategoriesFromMetadata(Metadata);
+                    _categories = CategoryReader.ReadCategoriesFromMetadata(Metadata);
                 }
 
                 return _categories;
             }
-            set => _categories = value;
         }
 
         public const string WITHOUT_CATEGORY_ID = "withoutcategory";
