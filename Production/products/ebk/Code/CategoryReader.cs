@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Util;
+using UnityEngine;
 
 namespace GQClient.Model
 {
-
     public class CategoryReader
     {
-
         public static List<string> ReadCategoriesFromMetadata(MetaDataInfo[] metadata)
         {
-
             var categories = new List<string>();
-            string netVal;
+            string netVal = null;
             foreach (var md in metadata)
             {
                 switch (md.Key)
@@ -32,12 +31,20 @@ namespace GQClient.Model
                         break;
                 }
             }
-            if (categories.Count == 0 && ConfigurationManager.CurrentRT.defaultCategory != null)
+
+            Debug.Log($"categories.Count: {categories.Count}, defCat null?: {null == ConfigurationManager.Current.defaultCategory}".Yellow());
+            if (categories.Count == 0 && !string.IsNullOrEmpty(ConfigurationManager.Current.defaultCategory))
             {
-                categories.Add(ConfigurationManager.CurrentRT.defaultCategory);
+                Debug.Log($"DEFAULT CAT USED".Green());
+                categories.Add(ConfigurationManager.Current.defaultCategory);
             }
+            else
+            {
+                Debug.Log($"NOT USED other cats# {categories.Count}".Red());
+
+            }
+
             return categories;
         }
     }
-
 }

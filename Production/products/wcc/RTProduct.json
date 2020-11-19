@@ -1,6 +1,6 @@
 {
-  "foldableCategoryFilters": false,
-  "categoryFiltersStartFolded": false,
+  "foldableCategoryFilters": true,
+  "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": "Kategorien",
   "CategorySets": [
