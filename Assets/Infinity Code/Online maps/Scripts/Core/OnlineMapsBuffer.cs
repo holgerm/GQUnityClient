@@ -297,7 +297,7 @@ public class OnlineMapsBuffer
         map.projection.TileToCoordinates(tlx, tly, renderState.zoom, out tlx, out tly);
         map.projection.TileToCoordinates(brx, bry, renderState.zoom, out brx, out bry);
 
-        int max = (1 << renderState.zoom) * OnlineMapsUtils.tileSize;
+        long max = (1L << renderState.zoom) * OnlineMapsUtils.tileSize;
         if (max == renderState.width && Math.Abs(coof) < float.Epsilon)
         {
             double lng = renderState.longitude + 180;
@@ -410,7 +410,7 @@ public class OnlineMapsBuffer
             const int hs = s / 2;
             int sx = tile.x % 2 * hs;
             int sy = tile.y % 2 * hs;
-            if (SetBufferTileFromParent(tile, px, py, s / 2, sx, sy)) return new Rect(px, py, OnlineMapsUtils.tileSize, OnlineMapsUtils.tileSize);
+            if (SetBufferTileFromParent(tile, px, py, s / 2, sx, sy)) return new Rect(px, py, s, s);
         }
 
         OnlineMapsRasterTile rTile = tile as OnlineMapsRasterTile;

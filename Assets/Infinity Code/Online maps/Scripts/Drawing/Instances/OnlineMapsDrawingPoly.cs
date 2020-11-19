@@ -243,10 +243,10 @@ public class OnlineMapsDrawingPoly : OnlineMapsDrawingElement
 
             if (s1 == 1 && s2 == 1)
             {
-                if (OnlineMapsElevationManagerBase.useElevation)
+                if (hasElevation)
                 {
-                    nv1.y = OnlineMapsElevationManagerBase.GetElevation(nv1.x, nv1.z, bestElevationYScale, tlx, tly, brx, bry);
-                    nv2.y = OnlineMapsElevationManagerBase.GetElevation(nv2.x, nv2.z, bestElevationYScale, tlx, tly, brx, bry);
+                    nv1.y = elevationManager.GetElevationValue(nv1.x, nv1.z, bestElevationYScale, tlx, tly, brx, bry);
+                    nv2.y = elevationManager.GetElevationValue(nv2.x, nv2.z, bestElevationYScale, tlx, tly, brx, bry);
                 }
                 
                 vertices[0] = vertices[vertices.Count - 3] = nv1;

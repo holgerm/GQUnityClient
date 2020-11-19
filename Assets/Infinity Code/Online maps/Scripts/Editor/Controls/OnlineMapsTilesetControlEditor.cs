@@ -18,6 +18,7 @@ public class OnlineMapsTilesetControlEditor : OnlineMapsControlBaseDynamicMeshEd
     private SerializedProperty pColliderType;
     private SerializedProperty pMipmapForTiles;
     private SerializedProperty pSizeInScene;
+    private SerializedProperty pCompressTextures;
 
     protected override void CacheSerializedFields()
     {
@@ -32,6 +33,7 @@ public class OnlineMapsTilesetControlEditor : OnlineMapsControlBaseDynamicMeshEd
         pColliderType = serializedObject.FindProperty("colliderType");
         pMipmapForTiles = serializedObject.FindProperty("_mipmapForTiles");
         pSizeInScene = serializedObject.FindProperty("sizeInScene");
+        pCompressTextures = serializedObject.FindProperty("compressTextures");
     }
 
     private void CheckCameraDistance()
@@ -183,6 +185,7 @@ public class OnlineMapsTilesetControlEditor : OnlineMapsControlBaseDynamicMeshEd
             if (pDrawingShader.objectReferenceValue == null) pDrawingShader.objectReferenceValue = Shader.Find("Infinity Code/Online Maps/Tileset DrawingElement");
         };
         mats.Create(pMipmapForTiles);
+        mats.Create(pCompressTextures);
     }
 
     protected override void OnEnableLate()

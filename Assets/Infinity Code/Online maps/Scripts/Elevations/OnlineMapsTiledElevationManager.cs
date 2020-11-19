@@ -48,7 +48,7 @@ public abstract class OnlineMapsTiledElevationManager<T> : OnlineMapsElevationMa
         get { return true; }
     }
 
-    protected override float GetElevationValue(double x, double z, float yScale, double tlx, double tly, double brx, double bry)
+    public override float GetElevationValue(double x, double z, float yScale, double tlx, double tly, double brx, double bry)
     {
         float v = GetUnscaledElevationValue(x, z, tlx, tly, brx, bry);
 
@@ -56,7 +56,7 @@ public abstract class OnlineMapsTiledElevationManager<T> : OnlineMapsElevationMa
         return v * yScale * scale;
     }
 
-    protected override float GetUnscaledElevationValue(double x, double z, double tlx, double tly, double brx, double bry)
+    public override float GetUnscaledElevationValue(double x, double z, double tlx, double tly, double brx, double bry)
     {
         if (tiles == null)
         {
@@ -68,18 +68,21 @@ public abstract class OnlineMapsTiledElevationManager<T> : OnlineMapsElevationMa
 
         double ttlx, ttly, tbrx, tbry;
 
-        map.projection.CoordinatesToTile(tlx, tly, map.zoom, out ttlx, out ttly);
-        map.projection.CoordinatesToTile(brx, bry, map.zoom, out tbrx, out tbry);
+        OnlineMaps m = map;
+        OnlineMapsProjection projection = m.projection;
 
-        if (tbrx < ttlx) tbrx += 1 << map.zoom;
+        projection.CoordinatesToTile(tlx, tly, m.zoom, out ttlx, out ttly);
+        projection.CoordinatesToTile(brx, bry, m.zoom, out tbrx, out tbry);
+
+        if (tbrx < ttlx) tbrx += 1 << m.zoom;
 
         double cx = (tbrx - ttlx) * x + ttlx;
         double cz = (tbry - ttly) * z + ttly;
 
-        int zoom = map.zoom - zoomOffset;
+        int zoom = m.zoom - zoomOffset;
         double tx, ty;
-        map.projection.TileToCoordinates(cx, cz, map.zoom, out cx, out cz);
-        map.projection.CoordinatesToTile(cx, cz, zoom, out tx, out ty);
+        projection.TileToCoordinates(cx, cz, m.zoom, out cx, out cz);
+        projection.CoordinatesToTile(cx, cz, zoom, out tx, out ty);
         int ix = (int)tx;
         int iy = (int)ty;
 
@@ -95,7 +98,7 @@ public abstract class OnlineMapsTiledElevationManager<T> : OnlineMapsElevationMa
             while (!hasTile && nz < OnlineMaps.MAXZOOM)
             {
                 nz++;
-                map.projection.CoordinatesToTile(cx, cz, nz, out tx, out ty);
+                projection.CoordinatesToTile(cx, cz, nz, out tx, out ty);
                 ix = (int)tx;
                 iy = (int)ty;
                 key = OnlineMapsTileManager.GetTileKey(nz, ix, iy);
@@ -111,7 +114,7 @@ public abstract class OnlineMapsTiledElevationManager<T> : OnlineMapsElevationMa
             while (!hasTile && nz > 1)
             {
                 nz--;
-                map.projection.CoordinatesToTile(cx, cz, nz, out tx, out ty);
+                projection.CoordinatesToTile(cx, cz, nz, out tx, out ty);
                 ix = (int)tx;
                 iy = (int)ty;
                 key = OnlineMapsTileManager.GetTileKey(nz, ix, iy);
@@ -122,7 +125,7 @@ public abstract class OnlineMapsTiledElevationManager<T> : OnlineMapsElevationMa
 
         if (!hasTile) return 0;
 
-        map.projection.CoordinatesToTile(cx, cz, tile.zoom, out tx, out ty);
+        projection.CoordinatesToTile(cx, cz, tile.zoom, out tx, out ty);
         return tile.GetElevation(tx, ty);
     }
 

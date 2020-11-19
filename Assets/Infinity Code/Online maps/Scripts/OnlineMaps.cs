@@ -6,9 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Code.GQClient.Err;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 #if !UNITY_WEBGL
 using System.Threading;
 #endif
@@ -28,7 +27,7 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     /// <summary>
     /// The current version of Online Maps
     /// </summary>
-    public const string version = "3.7.4.1";
+    public const string version = "3.7.6.1";
 
     /// <summary>
     /// The minimum zoom level
@@ -38,7 +37,9 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     /// <summary>
     /// The maximum zoom level
     /// </summary>
-#if ONLINEMAPS_MAXZOOM_22
+#if ONLINEMAPS_MAXZOOM_23
+    public const int MAXZOOM = 23;
+#elif ONLINEMAPS_MAXZOOM_22
     public const int MAXZOOM = 22;
 #elif ONLINEMAPS_MAXZOOM_21
     public const int MAXZOOM = 21;
@@ -748,7 +749,7 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
     public float CheckMapSize(float z)
     {
         int iz = Mathf.FloorToInt(z);
-        int max = (1 << iz) * OnlineMapsUtils.tileSize;
+        long max = (1L << iz) * OnlineMapsUtils.tileSize;
         if (max < width || max < height) return CheckMapSize(iz + 1);
 
         return z;
@@ -1446,7 +1447,7 @@ public class OnlineMaps : MonoBehaviour, ISerializationCallbackReceiver, IOnline
         UpdateTopLeftPosition();
         UpdateBottonRightPosition();
 
-        int max = (1 << izoom) * OnlineMapsUtils.tileSize;
+        long max = (1L << izoom) * OnlineMapsUtils.tileSize;
         if (max == width && Mathf.Abs(zoomScale) < float.Epsilon)
         {
             double lng = longitude + 180;

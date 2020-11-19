@@ -22,6 +22,26 @@ public class OnlineMapsMarker3DManager : OnlineMapsMarkerManagerBase<OnlineMapsM
     /// </summary>
     public GameObject defaultPrefab;
 
+    private Transform _container;
+
+    public Transform container
+    {
+        get
+        {
+            if (_container == null)
+            {
+                GameObject go = new GameObject("3D Markers");
+                _container = go.transform;
+                _container.parent = map.transform;
+                _container.localPosition = Vector3.zero;
+                _container.localRotation = Quaternion.identity;
+                _container.localScale = Vector3.one;
+            }
+
+            return _container;
+        }
+    }
+
     /// <summary>
     /// Create a new 3D marker
     /// </summary>
@@ -35,7 +55,7 @@ public class OnlineMapsMarker3DManager : OnlineMapsMarkerManagerBase<OnlineMapsM
         marker.prefab = prefab;
         marker.manager = this;
         marker.scale = defaultScale;
-        marker.Init(map.transform);
+        marker.Init(container);
         Redraw();
         return marker;
     }

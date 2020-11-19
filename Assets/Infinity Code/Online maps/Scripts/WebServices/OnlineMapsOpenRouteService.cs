@@ -28,6 +28,7 @@ public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
     /// </summary>
     /// <param name="p">Parameters of request</param>
     /// <returns>Instance of the query</returns>
+    [Obsolete("Use OnlineMapsOpenRouteServiceDirections.Find instead")]
     public static OnlineMapsOpenRouteService Directions(DirectionParams p)
     {
         return new OnlineMapsOpenRouteService(new StringBuilder(endpoint).Append("directions?"), p);
@@ -38,6 +39,7 @@ public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
     /// </summary>
     /// <param name="p">Parameters of the request</param>
     /// <returns>Instance of the query</returns>
+    [Obsolete("Use OnlineMapsOpenRouteServiceGeocode.Search instead")]
     public static OnlineMapsOpenRouteService Geocoding(GeocodingParams p)
     {
         return new OnlineMapsOpenRouteService(new StringBuilder(endpoint).Append("geocoding?"), p);
@@ -48,6 +50,7 @@ public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
     /// </summary>
     /// <param name="response">Response string</param>
     /// <returns>Result object</returns>
+    [Obsolete("Use OnlineMapsOpenRouteServiceDirections.GetResults instead")]
     public static OnlineMapsOpenRouteServiceDirectionResult GetDirectionResults(string response)
     {
         return OnlineMapsJSON.Deserialize<OnlineMapsOpenRouteServiceDirectionResult>(response);
@@ -58,6 +61,7 @@ public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
     /// </summary>
     /// <param name="response">Response string</param>
     /// <returns>Result object</returns>
+    [Obsolete("Use OnlineMapsOpenRouteServiceGeocode.GetResults instead")]
     public static OnlineMapsOpenRouteServiceGeocodingResult GetGeocodingResults(string response)
     {
         return OnlineMapsJSON.Deserialize<OnlineMapsOpenRouteServiceGeocodingResult>(response);
@@ -90,6 +94,7 @@ public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
     /// <summary>
     /// Parameters of the directions request
     /// </summary>
+    [Obsolete]
     public class DirectionParams: Params
     {
         private OnlineMapsVector2d[] coordinates;
@@ -260,6 +265,7 @@ public class OnlineMapsOpenRouteService: OnlineMapsTextWebService
     /// <summary>
     /// Parameters of the geocoding request
     /// </summary>
+    [Obsolete]
     public class GeocodingParams : Params
     {
         /// <summary>

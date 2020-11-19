@@ -36,6 +36,11 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
     public OnlineMapsColliderType colliderType = OnlineMapsColliderType.fullMesh;
 
     /// <summary>
+    /// Compress texture to reduce memory usage.
+    /// </summary>
+    public bool compressTextures = true;
+
+    /// <summary>
     /// Plane by using which the map is dragged. Exists only during drag.
     /// </summary>
     public Plane? dragPlane;
@@ -203,9 +208,10 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
 
         double tlx, tly, brx, bry;
         map.GetCorners(out tlx, out tly, out brx, out bry);
+
         float elevationScale = OnlineMapsElevationManagerBase.GetBestElevationYScale(tlx, tly, brx, bry);
         float elevation = 0;
-        if (OnlineMapsElevationManagerBase.useElevation) elevation = OnlineMapsElevationManagerBase.GetElevation(cpx, cpy, elevationScale, tlx, tly, brx, bry);
+        if (hasElevation) elevation = elevationManager.GetElevationValue(cpx, cpy, elevationScale, tlx, tly, brx, bry);
         Vector3 worldPos = transform.position + transform.rotation * new Vector3((float)(cpx * transform.lossyScale.x), elevation * transform.lossyScale.y, (float)(cpy * transform.lossyScale.z));
 
         Camera cam = activeCamera != null? activeCamera: Camera.main;
@@ -316,7 +322,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         int subMeshVX = 1;
         int subMeshVZ = 1;
 
-        if (elevationManager != null)
+        if (hasElevation)
         {
             if (w1 < elevationResolution) subMeshVX = elevationResolution % w1 == 0 ? elevationResolution / w1 : elevationResolution / w1 + 1;
             if (h1 < elevationResolution) subMeshVZ = elevationResolution % h1 == 0 ? elevationResolution / h1 : elevationResolution / h1 + 1;
@@ -460,7 +466,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         Mesh simpleMesh = new Mesh();
         simpleMesh.MarkDynamic();
 
-        int res = OnlineMapsElevationManagerBase.useElevation ? 6 : 1;
+        int res = hasElevation ? 6 : 1;
         int r2 = res + 1;
         Vector3[] vertices = new Vector3[r2 * r2];
         int[] triangles = new int[res * res * 6];
@@ -507,30 +513,6 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         InitMapMesh();
     }
 
-    protected override void OnMapBasePress()
-    {
-        base.OnMapBasePress();
-
-        if (isMapDrag)
-        {
-            if (OnlineMapsElevationManagerBase.isActive && OnlineMapsElevationManagerBase.instance.zoomRange.InRange(map.zoom) && dragPlane == null)
-            {
-                RaycastHit hit;
-                if (cl.Raycast(activeCamera.ScreenPointToRay(GetInputPosition()), out hit, OnlineMapsUtils.maxRaycastDistance))
-                {
-                    dragPlane = new Plane(Vector3.up, new Vector3(0, hit.point.y, 0));
-                }
-            }
-        }
-    }
-
-    protected override void OnMapBaseRelease()
-    {
-        base.OnMapBaseRelease();
-
-        dragPlane = null;
-    }
-
     protected override void OnDestroyLate()
     {
         base.OnDestroyLate();
@@ -548,6 +530,30 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         vertices = null;
     }
 
+    protected override void OnMapBasePress()
+    {
+        base.OnMapBasePress();
+
+        if (isMapDrag)
+        {
+            if (hasElevation && elevationManager.zoomRange.InRange(map.zoom) && dragPlane == null)
+            {
+                RaycastHit hit;
+                if (cl.Raycast(activeCamera.ScreenPointToRay(GetInputPosition()), out hit, OnlineMapsUtils.maxRaycastDistance))
+                {
+                    dragPlane = new Plane(Vector3.up, new Vector3(0, hit.point.y, 0));
+                }
+            }
+        }
+    }
+
+    protected override void OnMapBaseRelease()
+    {
+        base.OnMapBaseRelease();
+
+        dragPlane = null;
+    }
+
     protected override void ReinitMapMesh()
     {
         int width = map.width;
@@ -559,7 +565,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         int subMeshVX = 1;
         int subMeshVZ = 1;
 
-        if (OnlineMapsElevationManagerBase.isActive)
+        if (hasElevation)
         {
             if (w1 < elevationResolution) subMeshVX = elevationResolution % w1 == 0 ? elevationResolution / w1 : elevationResolution / w1 + 1;
             if (h1 < elevationResolution) subMeshVZ = elevationResolution % h1 == 0 ? elevationResolution / h1 : elevationResolution / h1 + 1;
@@ -721,7 +727,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         int subMeshVX = 1;
         int subMeshVZ = 1;
 
-        if (OnlineMapsElevationManagerBase.isActive)
+        if (hasElevation)
         {
             if (w1 < elevationResolution) subMeshVX = elevationResolution % w1 == 0 ? elevationResolution / w1 : elevationResolution / w1 + 1;
             if (h1 < elevationResolution) subMeshVZ = elevationResolution % h1 == 0 ? elevationResolution / h1 : elevationResolution / h1 + 1;
@@ -736,7 +742,6 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         map.buffer.GetCorners(out tlx, out tly, out brx, out bry);
         double px = map.buffer.renderState.longitude;
         double py = map.buffer.renderState.latitude;
-        //map.GetPosition(out px, out py);
 
         double tlpx, tlpy;
 
@@ -798,11 +803,11 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
 
         tilesetMesh.RecalculateBounds();
 
-        if (OnlineMapsElevationManagerBase.isActive || firstUpdate)
+        if (hasElevation || firstUpdate)
         {
             if (meshCollider != null)
             {
-                if (firstUpdate || elevationManager.zoomRange.InRange(zoom))
+                if (firstUpdate || hasElevation && elevationManager.zoomRange.InRange(zoom))
                 {
                     colliderWithElevation = true;
                     if (colliderType == OnlineMapsColliderType.fullMesh)
@@ -888,7 +893,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
             }
         }
 
-        bool needGetElevation = OnlineMapsElevationManagerBase.useElevation;
+        bool needGetElevation = hasElevation;
 
         float fy = 0;
         double spx = startPosX - x * subMeshSizeX;
@@ -928,7 +933,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
                     px = -tilesizeX;
                 }
 
-                if (needGetElevation) fy = OnlineMapsElevationManagerBase.GetElevation(px, pz, yScale, tlx, tly, brx, bry);
+                if (needGetElevation) fy = elevationManager.GetElevationValue(px, pz, yScale, tlx, tly, brx, bry);
 
                 float fx = (float) px;
                 float fz = (float) pz;
@@ -1120,7 +1125,9 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
 
     private void UpdateSimpleMeshCollider(float yScale, double tlx, double tly, double brx, double bry)
     {
-        int res = OnlineMapsElevationManagerBase.useElevation ? 6 : 1;
+        bool elevationActive = hasElevation;
+
+        int res = elevationActive ? 6 : 1;
         int r2 = res + 1;
 
         Vector3[] vertices = new Vector3[r2 * r2];
@@ -1130,8 +1137,6 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
         int[] triangles = new int[res * res * 6];
         int ti = 0;
 
-        bool elevationActive = OnlineMapsElevationManagerBase.useElevation;
-
         for (int y = 0; y < r2; y++)
         {
             for (int x = 0; x < r2; x++)
@@ -1140,7 +1145,7 @@ public class OnlineMapsTileSetControl : OnlineMapsControlBaseDynamicMesh
                 float pz = sy * y;
 
                 float py = 0;
-                if (elevationActive) py = OnlineMapsElevationManagerBase.GetElevation(px, pz, yScale, tlx, tly, brx, bry);
+                if (elevationActive) py = elevationManager.GetElevationValue(px, pz, yScale, tlx, tly, brx, bry);
 
                 vertices[y * r2 + x] = new Vector3(sx * x, py, sy * y);
 

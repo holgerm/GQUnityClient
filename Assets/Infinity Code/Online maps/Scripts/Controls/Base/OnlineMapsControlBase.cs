@@ -469,6 +469,8 @@ public abstract class OnlineMapsControlBase : MonoBehaviour, IOnlineMapsSavableC
     /// <param name="py">Relative position Y</param>
     public virtual void GetPosition(double lng, double lat, out double px, out double py)
     {
+        const short tileSize = OnlineMapsUtils.tileSize;
+
         double dx, dy, dtx, dty;
         OnlineMapsBuffer.StateProps lastState = map.buffer.lastState;
         map.projection.CoordinatesToTile(lng, lat, lastState.zoom, out dx, out dy);
@@ -477,9 +479,9 @@ public abstract class OnlineMapsControlBase : MonoBehaviour, IOnlineMapsSavableC
         dy -= dty;
         int maxX = 1 << (lastState.zoom - 1);
         if (dx < -maxX) dx += maxX << 1;
-        if (dx < 0 && map.width == (1 << lastState.zoom) * OnlineMapsUtils.tileSize) dx += map.width / OnlineMapsUtils.tileSize;
-        px = dx * OnlineMapsUtils.tileSize / lastState.zoomCoof;
-        py = dy * OnlineMapsUtils.tileSize / lastState.zoomCoof;
+        if (dx < 0 && map.width == (1L << lastState.zoom) * tileSize) dx += map.width / tileSize;
+        px = dx * tileSize / lastState.zoomCoof;
+        py = dy * tileSize / lastState.zoomCoof;
     }
 
     /// <summary>

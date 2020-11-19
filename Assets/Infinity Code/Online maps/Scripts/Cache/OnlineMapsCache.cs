@@ -8,7 +8,6 @@
 using System;
 using System.Collections;
 using System.Text;
-using Code.GQClient.Err;
 using UnityEngine;
 
 #if ALLOW_FILECACHE
@@ -84,8 +83,8 @@ public partial class OnlineMapsCache:MonoBehaviour, IOnlineMapsSavableComponent
 
     private void OnDestroy()
     {
+        OnlineMaps.OnPreloadTiles -= OnPreloadTiles;
         OnlineMapsTileManager.OnLoadFromCache -= OnStartDownloadTileM;
-        OnlineMapsTileManager.OnPreloadTiles -= OnPreloadTiles;
         OnlineMapsTile.OnTileDownloaded -= OnTileDownloaded;
         map = null;
     }
@@ -110,7 +109,7 @@ public partial class OnlineMapsCache:MonoBehaviour, IOnlineMapsSavableComponent
         _instance = this;
     }
 
-    private void OnPreloadTiles()
+    private void OnPreloadTiles(OnlineMaps map)
     {
         lock (OnlineMapsTile.lockTiles)
         {
@@ -171,7 +170,7 @@ public partial class OnlineMapsCache:MonoBehaviour, IOnlineMapsSavableComponent
         if (map == null) map = FindObjectOfType<OnlineMaps>();
 
         OnlineMapsTileManager.OnLoadFromCache += OnStartDownloadTileM;
-        OnlineMapsTileManager.OnPreloadTiles += OnPreloadTiles;
+        OnlineMaps.OnPreloadTiles += OnPreloadTiles;
         OnlineMapsTile.OnTileDownloaded += OnTileDownloaded;
     }
 

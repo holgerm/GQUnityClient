@@ -203,6 +203,8 @@ public class OnlineMapsRasterTile : OnlineMapsTile
             trafficTexture = null;
         }
 
+        mapType = null;
+        _trafficProvider = null;
         _colors = null;
         labelData = null;
         labelColors = null;
@@ -281,6 +283,8 @@ public class OnlineMapsRasterTile : OnlineMapsTile
             if (status != OnlineMapsTileStatus.error && status != OnlineMapsTileStatus.disposed)
             {
                 texture = tileTexture;
+                OnlineMapsTileSetControl tsControl = map.control as OnlineMapsTileSetControl;
+                if (tsControl != null && tsControl.compressTextures) texture.Compress(true);
                 status = OnlineMapsTileStatus.loaded;
             }
         }

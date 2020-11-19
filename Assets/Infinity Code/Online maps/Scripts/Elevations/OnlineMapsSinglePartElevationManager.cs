@@ -41,7 +41,7 @@ public abstract class OnlineMapsSinglePartElevationManager<T> : OnlineMapsElevat
         get { return elevationData != null; }
     }
 
-    protected override float GetElevationValue(double x, double z, float yScale, double tlx, double tly, double brx, double bry)
+    public override float GetElevationValue(double x, double z, float yScale, double tlx, double tly, double brx, double bry)
     {
         if (elevationData == null) return 0;
 
@@ -50,7 +50,7 @@ public abstract class OnlineMapsSinglePartElevationManager<T> : OnlineMapsElevat
         return v * yScale * scale;
     }
 
-    protected override float GetUnscaledElevationValue(double x, double z, double tlx, double tly, double brx, double bry)
+    public override float GetUnscaledElevationValue(double x, double z, double tlx, double tly, double brx, double bry)
     {
         if (elevationData == null) return 0;
         if (elevationDataWidth == 0 || elevationDataHeight == 0) return 0;

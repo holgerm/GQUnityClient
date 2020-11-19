@@ -83,6 +83,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
     private int _renderQueueOffset;
     private IOnlineMapsInteractiveElementManager _manager;
     private static List<Vector2> localPoints;
+    private OnlineMapsElevationManagerBase _elevationManager;
+    private bool elevationManagerInited = false;
 
     public object this[string key]
     {
@@ -129,6 +131,27 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
     protected virtual string defaultName
     {
         get { return "Drawing Element"; }
+    }
+
+    protected OnlineMapsElevationManagerBase elevationManager
+    {
+        get
+        {
+            if (!elevationManagerInited)
+            {
+                elevationManagerInited = true;
+
+                OnlineMapsControlBaseDynamicMesh control = manager.map.control as OnlineMapsControlBaseDynamicMesh;
+                if (control != null) _elevationManager = control.elevationManager;
+            }
+
+            return _elevationManager;
+        }
+    }
+
+    protected bool hasElevation
+    {
+        get { return elevationManager != null && elevationManager.enabled; }
     }
 
     public GameObject instance
@@ -310,7 +333,7 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
         int c = points.Count - 1;
         bool extraPointAdded = false;
-        bool elevationActive = OnlineMapsElevationManagerBase.useElevation;
+        bool elevationActive = hasElevation;
 
         for (int i = 0; i < points.Count; i++)
         {
@@ -354,8 +377,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
                 if (elevationActive)
                 {
-                    s1y = OnlineMapsElevationManagerBase.GetElevation(s1x, s1z, bestElevationYScale, tlx, tly, brx, bry);
-                    s2y = OnlineMapsElevationManagerBase.GetElevation(s2x, s2z, bestElevationYScale, tlx, tly, brx, bry);
+                    s1y = elevationManager.GetElevationValue(s1x, s1z, bestElevationYScale, tlx, tly, brx, bry);
+                    s2y = elevationManager.GetElevationValue(s2x, s2z, bestElevationYScale, tlx, tly, brx, bry);
                 }
 
                 s1 = new Vector3(s1x, s1y, s1z);
@@ -428,8 +451,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
                     if (elevationActive)
                     {
-                        s1y = OnlineMapsElevationManagerBase.GetElevation(is1x, is1z, bestElevationYScale, tlx, tly, brx, bry);
-                        s2y = OnlineMapsElevationManagerBase.GetElevation(is2x, is2z, bestElevationYScale, tlx, tly, brx, bry);
+                        s1y = elevationManager.GetElevationValue(is1x, is1z, bestElevationYScale, tlx, tly, brx, bry);
+                        s2y = elevationManager.GetElevationValue(is2x, is2z, bestElevationYScale, tlx, tly, brx, bry);
                     }
 
                     s1 = new Vector3(is1x, s1y, is1z);
@@ -447,8 +470,8 @@ public abstract class OnlineMapsDrawingElement: IOnlineMapsInteractiveElement
 
                     if (elevationActive)
                     {
-                        s1y = OnlineMapsElevationManagerBase.GetElevation(po1x, po1z, bestElevationYScale, tlx, tly, brx, bry);
-                        s2y = OnlineMapsElevationManagerBase.GetElevation(po2x, po2z, bestElevationYScale, tlx, tly, brx, bry);
+                        s1y = elevationManager.GetElevationValue(po1x, po1z, bestElevationYScale, tlx, tly, brx, bry);
+                        s2y = elevationManager.GetElevationValue(po2x, po2z, bestElevationYScale, tlx, tly, brx, bry);
                     }
 
                     s1 = new Vector3(po1x, s1y, po1z);

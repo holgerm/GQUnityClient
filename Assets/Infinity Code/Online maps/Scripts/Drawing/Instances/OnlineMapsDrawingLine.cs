@@ -80,7 +80,7 @@ public class OnlineMapsDrawingLine : OnlineMapsDrawingElement
 
     protected override bool splitToPieces
     {
-        get { return followRelief && OnlineMapsElevationManagerBase.isActive; }
+        get { return followRelief && hasElevation; }
     }
 
     /// <summary>

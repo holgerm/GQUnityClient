@@ -407,7 +407,7 @@ public abstract class OnlineMapsLocationServiceBase : MonoBehaviour, IOnlineMaps
 #if UNITY_EDITOR || !UNITY_WEBGL
             OnlineMapsWWW findByIPRequest = new OnlineMapsWWW("https://ipinfo.io/json");
 #else
-            OnlineMapsWWW findByIPRequest = new OnlineMapsWWW("http://service.infinity-code.com/getlocation.php");
+            OnlineMapsWWW findByIPRequest = new OnlineMapsWWW("https://service.infinity-code.com/getlocation.php");
 #endif
             findByIPRequest.OnComplete += OnFindLocationComplete;
         }

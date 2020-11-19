@@ -218,6 +218,10 @@ public partial class OnlineMapsCache
         else
         {
             tile.texture = texture;
+
+            OnlineMapsTileSetControl tsControl = tile.map.control as OnlineMapsTileSetControl;
+            if (tsControl != null && tsControl.compressTextures) texture.Compress(true);
+
             tile.status = OnlineMapsTileStatus.loaded;
         }
 
@@ -247,7 +251,7 @@ public partial class OnlineMapsCache
         if (useFileCache && TryLoadFromFileCache(tile))
         {
             tile.MarkLoaded();
-            map.Redraw();
+            tile.map.Redraw();
             return true;
         }
 #endif
