@@ -59,9 +59,9 @@
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 70.0,
-  "markerHeightMinMM": 10.0,
-  "markerHeightMaxMM": 0.0,
+  "markerHeightUnits": 55.0,
+  "markerHeightMinMM": 8.0,
+  "markerHeightMaxMM": 15.0,
   "markerColor": {
     "r": 181,
     "g": 143,
