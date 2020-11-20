@@ -31,7 +31,7 @@ namespace Code.GQClient.Conf
             // Product.json:
             deserializeConfig();
             deserializeConfigRT();
-
+            
             // RTProduct.json:
             string rtProductUrl = Path.Combine(GQ_SERVER_PORTALS_URL, _current.id, RT_CONFIG_DIR, RT_CONFIG_FILE);
             string rtProductFile = Path.Combine(Application.persistentDataPath, RT_CONFIG_DIR, RT_CONFIG_FILE);

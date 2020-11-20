@@ -170,7 +170,6 @@ namespace GQ.Editor.Building
                 }
 
                 string json = File.ReadAllText(RTConfigPath);
-                Debug.Log($"Reading RTProducts form {RTConfigPath}");
                 Config.rt =
                     RTConfig._doDeserialize(json, RTConfig.LoadsFrom.LocalFile);
             }

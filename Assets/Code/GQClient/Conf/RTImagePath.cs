@@ -26,7 +26,7 @@ namespace Code.GQClient.Conf
 
             if (CheckPathForUpdateInfo(path, out int length, out int updateTimestamp))
             {
-                FilePath = path.Substring(startIndex:length);
+                FilePath = path.Substring(startIndex: length);
                 ResourcePath = Files.StripExtension(FilePath);
 
                 if (NeedsUpdateTo(updateTimestamp))
@@ -42,7 +42,7 @@ namespace Code.GQClient.Conf
                             Application.persistentDataPath,
                             ConfigurationManager.RT_CONFIG_DIR,
                             FilePath);
-                    
+
                     Downloader d = new Downloader(
                         serverFileUrl,
                         timeout: 0,
@@ -112,18 +112,21 @@ namespace Code.GQClient.Conf
         public override Texture2D GetTexture2D()
         {
             if (string.IsNullOrEmpty(FilePath))
+            {
                 return null;
+            }
 
             if (!ConfigurationManager.RTProductUpdated)
             {
-                return Resources.Load<Texture2D>(ResourcePath);
+                Texture2D t = Resources.Load<Texture2D>(ResourcePath);
+                return t;
             }
 
             if (CheckPathForUpdateInfo(path, out int length, out int updateTimestamp))
             {
                 string filePath =
                     Path.Combine(Application.persistentDataPath, ConfigurationManager.RT_CONFIG_DIR, FilePath);
-                
+
                 if (File.Exists(filePath))
                 {
                     byte[] bytes = File.ReadAllBytes(filePath);
@@ -133,12 +136,14 @@ namespace Code.GQClient.Conf
                 }
                 else
                 {
-                    return Resources.Load<Texture2D>(ResourcePath);
+                    Texture2D texture = Resources.Load<Texture2D>(ResourcePath);
+                    return texture;
                 }
             }
             else
             {
-                return Resources.Load<Texture2D>(ResourcePath);
+                Texture2D texture = Resources.Load<Texture2D>(ResourcePath);
+                return texture;
             }
         }
 
@@ -154,11 +159,11 @@ namespace Code.GQClient.Conf
 
             if (!match.Success)
                 return false;
-            
+
             length = match.Length;
-            
+
             if (match.Groups.Count < 2) return false;
-            
+
             serverTimestamp = int.Parse(match.Groups[1].Value);
             return true;
         }
@@ -171,7 +176,7 @@ namespace Code.GQClient.Conf
                     FilePath);
 
             if (!File.Exists(filePath)) return true;
-            
+
             DateTime dt = File.GetLastWriteTimeUtc(filePath);
             return dt.Subtract(new DateTime(1970, 1, 1)).TotalSeconds < updateTimestamp;
         }

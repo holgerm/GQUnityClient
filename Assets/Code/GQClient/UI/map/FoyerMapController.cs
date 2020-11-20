@@ -97,7 +97,7 @@ namespace Code.GQClient.UI.map
 			Markers.Add (info.Id, newMarker);
 			OnlineMapsMarker ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
 			ommarker.OnClick += newMarker.OnTouchOMM;
-			ommarker.scale = (LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) * 0.5f) /
+			ommarker.scale = LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) /
 			                 newMarker.Texture.height;
 
 			// TODO: info.OnChanged += newMarker.UpdateView;

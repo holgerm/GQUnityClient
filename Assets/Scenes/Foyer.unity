@@ -1276,6 +1276,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   markerManager: {fileID: 1681132189}
   map: {fileID: 1681132181}
+  maxZoomLevel: 18.9
+  minZoomLevel: 0
   MapButtonPanel: {fileID: 1068315289}
   CenterTexture: {fileID: 0}
   FrameTexture: {fileID: 0}
@@ -11405,7 +11407,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -17480,7 +17482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e647aef79998b6740a728a33d59d61ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map: {fileID: 0}
+  map: {fileID: 1681132181}
   duration: 0.3
 --- !u!114 &1681132184
 MonoBehaviour:
@@ -17610,6 +17612,7 @@ MonoBehaviour:
   zoomMode: 0
   zoomSensitivity: 1
   activeCamera: {fileID: 175513581}
+  elevationManager: {fileID: 0}
   marker2DMode: 0
   marker2DSize: 100
   marker3DManager: {fileID: 0}
@@ -17621,6 +17624,7 @@ MonoBehaviour:
   markerShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   sizeInScene: {x: 1024, y: 1024}
   colliderType: 1
+  compressTextures: 1
   drawingsGameObject: {fileID: 0}
   drawingMode: 0
   drawingShader: {fileID: 4800000, guid: 07fd051d8972c7a4bac96bfa8038d08b, type: 3}
@@ -17640,7 +17644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _items: []
-  defaultScale: 0.2
+  defaultScale: 0.5
   defaultTexture: {fileID: 2800000, guid: c067ee36e010c4664bc1a73c87c1ca80, type: 3}
   defaultAlign: 7
   allowAddMarkerByM: 1

@@ -46,6 +46,7 @@ namespace Code.GQClient.Conf
             __JSON_Currently_Parsing = true;
             CurrentLoadingMode = loadMode;
             RTConfig config = JsonConvert.DeserializeObject<RTConfig>(configText);
+            config.RefreshCategoryDictionary();
             __JSON_Currently_Parsing = false;
             return config;
         }
@@ -74,6 +75,7 @@ namespace Code.GQClient.Conf
                 if (_categorySets == null)
                 {
                     _categorySets = new List<CategorySet>();
+                    return _categorySets;
                 }
 
                 categoryDict = new Dictionary<string, Category>();
@@ -88,6 +90,18 @@ namespace Code.GQClient.Conf
                 return _categorySets;
             }
             set { _categorySets = value; }
+        }
+
+        internal void RefreshCategoryDictionary()
+        {
+            categoryDict = new Dictionary<string, Category>();
+            foreach (CategorySet cs in _categorySets)
+            {
+                foreach (Category c in cs.categories)
+                {
+                    categoryDict[c.id] = c;
+                }
+            }
         }
 
         public string defaultCategory { get; set; }

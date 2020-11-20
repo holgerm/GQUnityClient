@@ -20,6 +20,9 @@ namespace Code.GQClient.UI.map
 
         private static Dictionary<int, Marker> markers;
 
+        public float maxZoomLevel = 20f;
+        public float minZoomLevel = 0f;
+
         /// <summary>
         /// Marker dictionary is static to support the singleton MapBehaviour from slippy maps well. 
         /// When maps change all markers must be removed from the MapBehaviour as well as from this dictionary.
