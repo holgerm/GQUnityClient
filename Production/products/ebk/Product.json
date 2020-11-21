@@ -19,8 +19,8 @@
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
-    "Map",
-    "List"
+    "List",
+    "Map"
   ],
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
