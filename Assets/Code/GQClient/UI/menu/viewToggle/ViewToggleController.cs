@@ -44,11 +44,10 @@ namespace Code.GQClient.UI.menu.viewToggle
 
 		public void OnChangeQuestInfosViewer (GameObject viewer)
 		{
-			Debug.Log("ViewToggle changes activity of canvases etc.");
-			Base.Instance.ListCanvas.SetActive (viewer.name == "ViewToggleToList");
-			Base.Instance.TopicTreeCanvas.SetActive (viewer.name == "ViewToggleToTopicTree");
-			Base.Instance.Map.gameObject.SetActive (viewer.name == "ViewToggleToMap");
-			Base.Instance.MapCanvas.SetActive (viewer.name == "ViewToggleToMap");
+			Base.Instance.ListCanvas.SetActive ("ViewToggleToList" == viewer.name);
+			Base.Instance.TopicTreeCanvas.SetActive ("ViewToggleToTopicTree" == viewer.name);
+			Base.Instance.Map.gameObject.SetActive ("ViewToggleToMap" == viewer.name);
+			Base.Instance.MapCanvas.SetActive ("ViewToggleToMap" == viewer.name);
 
 			Base.Instance.MenuCanvas.SetActive (false);
 		}
