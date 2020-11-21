@@ -192,34 +192,6 @@ namespace Code.GQClient.Util
         {
             if (partnersCanvas != null)
                 partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
-
-#if DEBUG_LOG
-            DisplaySizeInfo();
-
-            void DisplaySizeInfo()
-            {
-                float w = Device.width / Device.dpi;
-                float h = Device.height / Device.dpi;
-                double d = Math.Sqrt(w * w + h * h);
-
-                Resolution[] resolutions = Screen.resolutions;
-                string resText = $"{resolutions.Length} resolutions: ";
-                int i = 0;
-
-                // Print the resolutions
-                foreach (var res in resolutions)
-                {
-                    resText += $"res {++i} w: {res.width} h: {res.height}";
-                }
-
-                MessageDialog dialog =
-                    new MessageDialog(
-                        $"diagonale: {d} zoll, dpi: {Device.dpi}, width: {Device.width}, height: {Device.height} \n {resText}",
-                        "Ok");
-                dialog.Start();
-            }
-#endif
-            
         }
 
         private void Update()

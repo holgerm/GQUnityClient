@@ -32,16 +32,9 @@ namespace GQClient.Model
                 }
             }
 
-            Debug.Log($"categories.Count: {categories.Count}, defCat null?: {null == ConfigurationManager.Current.defaultCategory}".Yellow());
             if (categories.Count == 0 && !string.IsNullOrEmpty(ConfigurationManager.Current.defaultCategory))
             {
-                Debug.Log($"DEFAULT CAT USED".Green());
                 categories.Add(ConfigurationManager.Current.defaultCategory);
-            }
-            else
-            {
-                Debug.Log($"NOT USED other cats# {categories.Count}".Red());
-
             }
 
             return categories;

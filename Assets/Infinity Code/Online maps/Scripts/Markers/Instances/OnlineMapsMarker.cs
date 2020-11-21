@@ -415,6 +415,8 @@ public class OnlineMapsMarker : OnlineMapsMarkerBase
         _lastRotation = _rotation;
         _lastScale = _scale;
 
+        Debug.Log($"map null?: {null == map}");
+        Debug.Log($"map.control null?: {null == map.control}");
         if (!map.control.resultIsTexture || (Math.Abs(_rotation) < float.Epsilon && Math.Abs(scale - 1) < float.Epsilon))
         {
             _width = _textureWidth;
