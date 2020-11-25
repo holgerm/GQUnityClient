@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
@@ -33,8 +32,8 @@ namespace Code.GQClient.UI.pages.videoplayer
                     uniWebView.OnPageErrorReceived += (UniWebView webView, int errorCode, string errorMessage) =>
                     {
                         Log.SignalErrorToDeveloper("YOUTUBE PLAYER: OnPageErrorReceived errCode: " + errorCode
-                            + "\n\terrMessage: " +
-                            errorMessage);
+                                                                                                   + "\n\terrMessage: " +
+                                                                                                   errorMessage);
                     };
                     uniWebView.OnShouldClose += (webView) =>
                     {
@@ -122,27 +121,15 @@ namespace Code.GQClient.UI.pages.videoplayer
                 // TODO show error message also to user.
                 Debug.Log("Error: " + message);
             };
-            
+
             var headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
             var footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
-            
-            void SetFrameSize()
-            {
-                webView.Frame =
-                    pageCtrl.myPage.FullscreenLandscape
-                        ? new Rect(
-                            0, 0,
-                            Screen.width, Screen.height)
-                        : new Rect(
-                            0, headerHeight,
-                            Screen.width, Screen.height - (headerHeight + footerHeight));
-                Debug.Log(
-                    $"Webview Frame width: {webView.Frame.width} , height: {webView.Frame.height}");
-            }
+            webView.Frame =
+                new Rect(
+                    0, headerHeight,
+                    Screen.width, Screen.height - (headerHeight + footerHeight)
+                );
 
-            SetFrameSize();
-            webView.OnOrientationChanged += (view, orientation) => { SetFrameSize(); };
-            
             webView.SetShowSpinnerWhileLoading(true);
             webView.SetZoomEnabled(true);
             webView.Show(true);
