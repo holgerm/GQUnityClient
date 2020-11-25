@@ -2,22 +2,22 @@
   "preserveAspectOfSplashFG": true,
   "id": "demos",
   "idExtension": "",
-  "name": "GeoQuest Showcase",
+  "name": "GeoQuest ShowCase",
   "portal": 341,
   "assetAddOns": [
     "UniWebView"
   ],
-  "androidMinSDKVersion": "AndroidApiLevelAuto",
+  "androidMinSDKVersion": "AndroidApiLevel21",
   "iOsDeviceTypes": "iPhoneAndiPad",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
-  "keepAutoStarting": false,
-  "timeoutMS": 60000,
+  "keepAutoStarting": true,
+  "timeoutMS": 0,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
   "downloadStrategy": "UPFRONT",
-  "nameForQuestSg": "Quest",
-  "nameForQuestsPl": "Quests",
+  "nameForQuestSg": "Spiel",
+  "nameForQuestsPl": "Spiele",
   "questInfoViews": [
     "List",
     "Map"
@@ -25,29 +25,28 @@
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
-  "downloadAllCloudQuestOnStart": false,
+  "downloadAllCloudQuestOnStart": true,
   "localQuestsDeletable": true,
   "showHiddenQuests": false,
   "showOnlyLocalQuests": false,
   "acceptedPageTypes": [
     "StartAndExitScreen",
     "NPCTalk",
-    "ImageWithText",
-    "Menu",
     "MultipleChoiceQuestion",
+    "Navigation",
+    "ImageWithText",
     "TextQuestion",
+    "Menu",
+    "VideoPlay",
     "AudioRecord",
     "ImageCapture",
-    "VideoPlay",
-    "WebPage",
-    "Navigation",
-    "TagScanner",
+    "MetaData",
     "ReadNFC",
-    "Custom",
-    "MetaData"
+    "WebPage"
   ],
   "sceneMappings": [],
   "scenePaths": [
+    "Assets/Scenes/StartScene.unity",
     "Assets/Scenes/Foyer.unity",
     "Assets/Scenes/Pages/NPCTalk.unity",
     "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
@@ -69,48 +68,48 @@
   "autoUpdateQuests": false,
   "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
-  "mapStartPositionType": "CenterOfMarkers",
-  "mapStartAtLongitude": 0.0,
-  "mapStartAtLatitude": 0.0,
+  "mapStartPositionType": "PlayerPosition",
+  "mapStartAtLongitude": 6.958215,
+  "mapStartAtLatitude": 50.941487,
   "mapStartZoom": 14.0,
   "hotspotMarker": {
-    "path": "textures/readable/marker"
+    "path": "textures/readable/erzbistummarker"
   },
   "marker": {
     "path": "defaults/readable/defaultMarker"
   },
-  "markerHeightUnits": 75.0,
-  "markerHeightMinMM": 0.0,
-  "markerHeightMaxMM": 0.0,
+  "markerHeightUnits": 68.0,
+  "markerHeightMinMM": 10.0,
+  "markerHeightMaxMM": 20.0,
   "markerColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
-  },
-  "markerSymbolFGColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 85,
+    "g": 96,
+    "b": 87,
     "a": 255
   },
-  "markerBGAlpha": 168,
-  "mapButtonHeightUnits": 55.0,
-  "mapButtonHeightMinMM": 7.0,
-  "mapButtonHeightMaxMM": 12.0,
+  "markerSymbolFGColor": {
+    "r": 36,
+    "g": 41,
+    "b": 37,
+    "a": 255
+  },
+  "markerBGAlpha": 150,
+  "mapButtonHeightUnits": 52.0,
+  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightMaxMM": 0.0,
   "disabledAlpha": 0.5,
   "hideFooterIfPossible": false,
   "taskUI": "ProgressAtBottom",
   "mainFgColor": {
-    "r": 31,
-    "g": 31,
-    "b": 31,
+    "r": 36,
+    "g": 41,
+    "b": 37,
     "a": 255
   },
   "mainBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 233,
+    "g": 233,
+    "b": 233,
     "a": 255
   },
   "colorPaletteSize": 4,
@@ -140,39 +139,39 @@
       "a": 255
     },
     {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 224,
+      "g": 210,
+      "b": 147,
       "a": 255
     },
     {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 224,
+      "g": 210,
+      "b": 147,
       "a": 255
     },
     {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 224,
+      "g": 210,
+      "b": 147,
       "a": 255
     },
     {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 224,
+      "g": 210,
+      "b": 147,
       "a": 255
     },
     {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 224,
+      "g": 210,
+      "b": 147,
       "a": 255
     },
     {
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 224,
+      "g": 210,
+      "b": 147,
       "a": 255
     }
   ],
@@ -182,7 +181,7 @@
     "b": 255,
     "a": 255
   },
-  "mainFontSize": 60,
+  "mainFontSize": 90,
   "textAlignment": "Left",
   "textLinkColor": {
     "r": 0,
@@ -191,30 +190,30 @@
     "a": 255
   },
   "lineSpacing": 10.0,
-  "showShadows": true,
+  "showShadows": false,
   "topLogo": {
     "path": "TopLogo"
   },
   "headerMiddleButtonPolicy": "TopLogo",
   "headerBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 234,
+    "g": 234,
+    "b": 234,
     "a": 255
   },
   "headerButtonBgColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 0
-  },
-  "headerButtonFgColor": {
-    "r": 31,
-    "g": 31,
-    "b": 31,
+    "r": 234,
+    "g": 234,
+    "b": 234,
     "a": 255
   },
-  "headerHeightUnits": 55.0,
+  "headerButtonFgColor": {
+    "r": 36,
+    "g": 41,
+    "b": 37,
+    "a": 255
+  },
+  "headerHeightUnits": 60.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
   "contentHeightUnits": 750.0,
@@ -222,34 +221,34 @@
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
   "contentBackgroundColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
+    "r": 234,
+    "g": 234,
+    "b": 234,
     "a": 255
   },
   "imageAreaHeightMinUnits": 150.0,
-  "imageAreaHeightMaxUnits": 400.0,
+  "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
   "autoScrollNewText": true,
-  "footerHeightUnits": 60.0,
+  "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
-    "r": 95,
-    "g": 194,
-    "b": 120,
+    "r": 228,
+    "g": 248,
+    "b": 234,
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 95,
-    "g": 194,
-    "b": 120,
+    "r": 234,
+    "g": 234,
+    "b": 234,
     "a": 255
   },
   "footerButtonFgColor": {
-    "r": 31,
-    "g": 31,
-    "b": 31,
+    "r": 0,
+    "g": 43,
+    "b": 120,
     "a": 255
   },
   "borderWidthUnits": 0.0,
@@ -257,46 +256,46 @@
   "overlayButtonSizeMinMM": 6.0,
   "overlayButtonSizeMaxMM": 16.0,
   "overlayButtonBgColor": {
-    "r": 59,
-    "g": 121,
-    "b": 75,
+    "r": 234,
+    "g": 234,
+    "b": 234,
     "a": 255
   },
   "overlayButtonFgColor": {
-    "r": 31,
-    "g": 31,
-    "b": 31,
+    "r": 36,
+    "g": 42,
+    "b": 37,
     "a": 255
   },
   "overlayButtonFgDisabledColor": {
-    "r": 165,
-    "g": 165,
-    "b": 165,
+    "r": 255,
+    "g": 255,
+    "b": 255,
     "a": 255
   },
   "showEmptyMenuEntries": true,
-  "menuEntryHeightUnits": 35.0,
+  "menuEntryHeightUnits": 48.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
   "menuEntryWidthUnits": 400.0,
   "menuEntryWidthMinMM": 0.0,
   "menuEntryWidthMaxMM": 0.0,
   "menuFrameColor": {
-    "r": 127,
-    "g": 127,
-    "b": 127,
+    "r": 36,
+    "g": 41,
+    "b": 37,
     "a": 255
   },
   "menuBGColor": {
-    "r": 95,
-    "g": 194,
-    "b": 120,
+    "r": 224,
+    "g": 224,
+    "b": 224,
     "a": 255
   },
   "menuFGColor": {
-    "r": 31,
-    "g": 31,
-    "b": 31,
+    "r": 36,
+    "g": 41,
+    "b": 37,
     "a": 255
   },
   "categoryFolderBGColor": {
@@ -311,7 +310,7 @@
     "b": 255,
     "a": 255
   },
-  "menuInhibitsInteraction": false,
+  "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
   "warnWhenLeavingQuest": true,
@@ -326,54 +325,124 @@
   "offerAuthorLogin": true,
   "offerPartnersInfo": false,
   "showPartnersInfoAtStart": false,
-  "listEntryHeightUnits": 45.0,
-  "listEntryHeightMinMM": 6.5,
-  "listEntryHeightMaxMM": 30.0,
+  "listEntryHeightUnits": 74.0,
+  "listEntryHeightMinMM": 10.0,
+  "listEntryHeightMaxMM": 0.0,
   "listEntryUseTwoLines": true,
-  "listEntryDividingMode": "SeparationLines",
+  "listEntryDividingMode": "AlternatingColors",
   "listLineColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
+    "r": 36,
+    "g": 41,
+    "b": 37,
     "a": 255
   },
-  "dividingLineWidth": 5,
-  "listEndLineWidth": 5,
+  "dividingLineWidth": 3,
+  "listEndLineWidth": 6,
   "listEntryFgColor": {
-    "r": 31,
-    "g": 31,
-    "b": 31,
+    "r": 36,
+    "g": 41,
+    "b": 37,
     "a": 255
   },
   "listEntryBgColor": {
-    "r": 143,
-    "g": 226,
-    "b": 164,
+    "r": 195,
+    "g": 195,
+    "b": 195,
     "a": 255
   },
   "listEntrySecondFgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 36,
+    "g": 42,
+    "b": 37,
+    "a": 255
   },
   "listEntrySecondBgColor": {
-    "r": 0,
-    "g": 0,
-    "b": 0,
-    "a": 0
+    "r": 234,
+    "g": 234,
+    "b": 234,
+    "a": 255
   },
   "listBgColor": {
-    "r": 59,
-    "g": 121,
-    "b": 75,
+    "r": 224,
+    "g": 224,
+    "b": 224,
     "a": 255
   },
   "emulationColor": {
-    "r": 255,
-    "g": 78,
-    "b": 78,
+    "r": 247,
+    "g": 80,
+    "b": 80,
     "a": 255
   },
-  "CategorySets": []
+  "CategorySets": [
+    {
+      "name": "Filter",
+      "categories": [
+        {
+          "id": "demos.basic",
+          "name": "Grundlagen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/basic"
+          }
+        },
+        {
+          "id": "demos.media",
+          "name": "Medien",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/media"
+          }
+        },
+        {
+          "id": "demos.interactive",
+          "name": "Interaktiv",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/interactive"
+          }
+        },
+        {
+          "id": "demos.location",
+          "name": "Ortsbasiert",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/location"
+          }
+        },
+        {
+          "id": "demos.tips",
+          "name": "Tipps & Tricks",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/tips"
+          }
+        },
+        {
+          "id": "demos.variables",
+          "name": "Punkte & Variablen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/variables"
+          }
+        },
+        {
+          "id": "demos.tags",
+          "name": "QR Codes und NFC Chips",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/tagscanner"
+          }
+        },
+        {
+          "id": "demos.special",
+          "name": "Spezielles",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/special"
+          }
+        }
+      ]
+    }
+  ]
 }

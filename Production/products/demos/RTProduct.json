@@ -1,8 +1,78 @@
 {
-  "foldableCategoryFilters": true,
-  "categoryFiltersStartFolded": true,
-  "categoryFoldersStartFolded": true,
+  "foldableCategoryFilters": false,
+  "categoryFiltersStartFolded": false,
+  "categoryFoldersStartFolded": false,
   "mainCategorySet": null,
-  "CategorySets": [],
-  "defaultCategory": "test2"
+  "CategorySets": [
+    {
+      "name": "Filter",
+      "categories": [
+        {
+          "id": "demos.basic",
+          "name": "Grundlagen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/basic"
+          }
+        },
+        {
+          "id": "demos.media",
+          "name": "Medien",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/media"
+          }
+        },
+        {
+          "id": "demos.interactive",
+          "name": "Interaktiv",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/interactive"
+          }
+        },
+        {
+          "id": "demos.location",
+          "name": "Ortsbasiert",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/location"
+          }
+        },
+        {
+          "id": "demos.tips",
+          "name": "Tipps & Tricks",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/tips"
+          }
+        },
+        {
+          "id": "demos.variables",
+          "name": "Punkte & Variablen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/variables"
+          }
+        },
+        {
+          "id": "demos.tags",
+          "name": "QR Codes und NFC Chips",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/tagscanner"
+          }
+        },
+        {
+          "id": "demos.special",
+          "name": "Spezielles",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/special"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultCategory": "demos.basic"
 }

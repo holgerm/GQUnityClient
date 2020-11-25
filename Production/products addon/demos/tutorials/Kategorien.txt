@@ -1,0 +1,14 @@
+Kategorien in der GeoQuest Showcase App:
+
+Metadaten "Key":		catgeory
+
+Metadaten "Values":
+
+Grundlagen: 			demos.basic
+Medien:					demos.media
+Interaktiv:				demos.interactive
+Ortsbasiert:			demos.location
+Tipps & Tricks:			demos.tips
+Punkte & Variablen:		demos.variables
+QR Codes und NFC Chips:	demos.tags
+Spezielles:				demos.special
