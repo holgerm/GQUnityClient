@@ -172,11 +172,15 @@ namespace Code.GQClient.UI.map
         private void OnEnable()
         {
             map = Base.Instance.Map;
+            Base.Instance.Map.gameObject.SetActive(true);
+            Base.Instance.MapCanvas.gameObject.SetActive(true);
+
             markerManager = map.GetComponent<OnlineMapsMarkerManager>();
             locService.OnLocationInited += () =>
             {
                 IsInitialized = true;
             };
+            
             UpdateView();
         }
 

@@ -56,7 +56,9 @@ namespace GQClient.Model
 
         public IEnumerable<QuestInfo> GetFilteredQuestInfos()
         {
-            return QuestDict.Values.Where(x => Filter.Accept(x)).ToList();
+            var filteredList = QuestDict.Values.Where(x => Filter.Accept(x)).ToList();
+//            Debug.Log($"QIM.GetFilteredQuestInfos() all#: {QuestDict.Count} --|--> filtered#: {filteredList.Count}");
+            return filteredList;
         }
 
         public bool ContainsQuestInfo(int id)
@@ -374,8 +376,8 @@ namespace GQClient.Model
             var startView = ConfigurationManager.Current.questInfoViews[0];
             Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
             Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
-            Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
             Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
+            Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
 
             // check whether we have alternative views to offer:
             if (ConfigurationManager.Current.questInfoViews.Length <= 1)
