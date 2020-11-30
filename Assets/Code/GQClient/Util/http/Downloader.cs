@@ -197,9 +197,8 @@ namespace Code.GQClient.Util.http
 
             if (!string.IsNullOrEmpty(Www.error))
             {
-                UnityEngine.Debug.LogWarning("ERROR loading " + Www.url + ": " + Www.error);
                 var dialogMessage = Www.url.EndsWith("clientxml", StringComparison.CurrentCulture)
-                    ? "Quest nicht gefunden."
+                    ? "Bitte prüfe die Internetverbindung."
                     : Www.error;
                 Raise(DownloadEventType.Error, new DownloadEvent(message: dialogMessage));
                 RaiseTaskFailed();
