@@ -48,7 +48,7 @@ namespace Code.GQClient.Err
 				UnityEngine.Debug.Log (logtext);
 				break;
 			case Level.Warning:
-				UnityEngine.Debug.LogWarning (logtext);
+				UnityEngine.Debug.LogWarning ("WARNING: " + logtext);
 				break;
 			case Level.Error:
 			case Level.FatalError:
