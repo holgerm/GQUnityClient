@@ -103,35 +103,39 @@ namespace Code.GQClient.UI.map
             CenteringState = Centering.Framed;
         }
 
-        private OnlineMapsLocationService _locService = null; 
-        private OnlineMapsLocationService locService {
+        private OnlineMapsLocationService _locService = null;
+
+        private OnlineMapsLocationService locService
+        {
             get
             {
                 if (_locService == null)
                 {
                     _locService = map.GetComponent<OnlineMapsLocationService>();
                 }
+
                 return _locService;
             }
         }
 
         private bool _isInitialized = false;
+
         private bool IsInitialized
         {
             get => _isInitialized || !Vector2.zero.Equals(locService.position);
             set => _isInitialized = value;
         }
-        
+
         public void Center()
         {
             if (Vector2.zero.Equals(locService.position))
             {
-                var dialog = 
+                var dialog =
                     new MessageDialog("Die Lokalisierung funktioniert nicht - ist das GPS inaktiv?", "Ok");
                 dialog.Start();
                 return;
             }
-            
+
             // center the map so it is centered to the current users position:
             if (IsInitialized)
                 map.SetPosition(locService.position.x, locService.position.y);
@@ -176,11 +180,8 @@ namespace Code.GQClient.UI.map
             Base.Instance.MapCanvas.gameObject.SetActive(true);
 
             markerManager = map.GetComponent<OnlineMapsMarkerManager>();
-            locService.OnLocationInited += () =>
-            {
-                IsInitialized = true;
-            };
-            
+            locService.OnLocationInited += () => { IsInitialized = true; };
+
             UpdateView();
         }
 
@@ -195,27 +196,28 @@ namespace Code.GQClient.UI.map
                 case MapStartPositionType.FixedPosition:
                     map.SetPositionAndZoom(
                         ConfigurationManager.Current.mapStartAtLongitude,
-                        ConfigurationManager.Current.mapStartAtLatitude, 
+                        ConfigurationManager.Current.mapStartAtLatitude,
                         ConfigurationManager.Current.mapStartZoom);
                     break;
                 case MapStartPositionType.PlayerPosition:
                     if (null == locService || !IsInitialized || Vector2.zero.Equals(locService.position))
                     {
-                        var dialog = 
+                        var dialog =
                             new MessageDialog("Die Lokalisierung funktioniert nicht - ist das GPS inaktiv?", "Ok");
                         dialog.Start();
                         map.SetPositionAndZoom(
-                            ConfigurationManager.Current.mapStartAtLongitude, 
+                            ConfigurationManager.Current.mapStartAtLongitude,
                             ConfigurationManager.Current.mapStartAtLatitude,
                             ConfigurationManager.Current.mapStartZoom);
                     }
                     else
                     {
-                         map.SetPositionAndZoom(
+                        map.SetPositionAndZoom(
                             locService.position.x,
-                            locService.position.y, 
+                            locService.position.y,
                             ConfigurationManager.Current.mapStartZoom);
                     }
+
                     break;
             }
         }
@@ -242,7 +244,9 @@ namespace Code.GQClient.UI.map
 
                 kvp.Value.Hide();
                 // remove marker update as listener to questInfo Changed Events:
-                QuestInfoManager.Instance.GetQuestInfo(kvp.Key).OnChanged -= kvp.Value.UpdateView;
+                QuestInfo qi = QuestInfoManager.Instance.GetQuestInfo(kvp.Key);
+                if (null != qi)
+                    qi.OnChanged -= kvp.Value.UpdateView;
             }
 
             foreach (var marker in markerManager.items.ToList())
