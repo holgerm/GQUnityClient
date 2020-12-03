@@ -218,14 +218,6 @@
                         "path": "textures/readable/bike"
                     }
                 },
-                {
-                    "folderName": "Aktuelle Events",
-                    "id": "wcc.nachtdermuseen",
-                    "name": "Nacht der Museen",
-                    "symbol": {
-                        "path": "textures/readable/bike"
-                    }
-                }
             ],
             "name": "Kategorien"
         }
