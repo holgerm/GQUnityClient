@@ -218,6 +218,14 @@
                         "path": "textures/readable/bike"
                     }
                 },
+                {
+                    "folderName": "Aktuelle Events",
+                    "id": "wcc.nix",
+                    "name": "zur Zeit keine",
+                    "symbol": {
+                        "path": "update:1607081614:textures/readable/corona.png"
+                    }
+                }
             ],
             "name": "Kategorien"
         }
