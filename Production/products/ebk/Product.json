@@ -58,7 +58,6 @@
     "Assets/Scenes/Pages/AudioRecord.unity",
     "Assets/Scenes/Pages/ImageCapture.unity",
     "Assets/Scenes/Pages/TagScanner.unity",
-    "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
