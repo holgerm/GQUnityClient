@@ -58,7 +58,6 @@ namespace Code.GQClient.UI.layout
                         questInfoList.GetComponent<Image>().enabled = false;
                     break;
             }
-
         }
 
 

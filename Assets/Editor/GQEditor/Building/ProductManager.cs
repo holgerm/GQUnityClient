@@ -256,7 +256,7 @@ namespace GQ.Editor.Building
         }
 
         /// <summary>
-        /// Loads the product spec from the given driectory. Any errors are stored in Errors.
+        /// Loads the product spec from the given directory. Any errors are stored in Errors.
         /// </summary>
         /// <returns>The product spec or null if an error occurred.</returns>
         /// <param name="productCandidatePath">Product candidate path.</param>

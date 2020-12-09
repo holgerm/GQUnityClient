@@ -19,8 +19,8 @@
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
-    "List",
-    "Map"
+    "Map",
+    "List"
   ],
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": true,
@@ -41,7 +41,6 @@
     "AudioRecord",
     "ImageCapture",
     "MetaData",
-    "ReadNFC",
     "WebPage"
   ],
   "sceneMappings": [],
@@ -59,7 +58,6 @@
     "Assets/Scenes/Pages/AudioRecord.unity",
     "Assets/Scenes/Pages/ImageCapture.unity",
     "Assets/Scenes/Pages/TagScanner.unity",
-    "Assets/Scenes/Pages/ReadNFC.unity"
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
@@ -112,9 +110,9 @@
     "b": 233,
     "a": 255
   },
-  "colorPaletteSize": 4,
+  "colorPaletteSize": 0,
   "colorPalette": [
-    {
+     {
       "r": 0,
       "g": 0,
       "b": 255,
@@ -174,7 +172,7 @@
       "b": 147,
       "a": 255
     }
-  ],
+ ],
   "paletteFGColor": {
     "r": 255,
     "g": 255,
@@ -273,7 +271,7 @@
     "b": 255,
     "a": 255
   },
-  "showEmptyMenuEntries": true,
+  "showEmptyMenuEntries": false,
   "menuEntryHeightUnits": 48.0,
   "menuEntryHeightMinMM": 0.0,
   "menuEntryHeightMaxMM": 0.0,
@@ -374,75 +372,4 @@
     "b": 80,
     "a": 255
   },
-  "CategorySets": [
-    {
-      "name": "Filter",
-      "categories": [
-        {
-          "id": "demos.basic",
-          "name": "Grundlagen",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/basic"
-          }
-        },
-        {
-          "id": "demos.media",
-          "name": "Medien",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/media"
-          }
-        },
-        {
-          "id": "demos.interactive",
-          "name": "Interaktiv",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/interactive"
-          }
-        },
-        {
-          "id": "demos.location",
-          "name": "Ortsbasiert",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/location"
-          }
-        },
-        {
-          "id": "demos.tips",
-          "name": "Tipps & Tricks",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/tips"
-          }
-        },
-        {
-          "id": "demos.variables",
-          "name": "Punkte & Variablen",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/variables"
-          }
-        },
-        {
-          "id": "demos.tags",
-          "name": "QR Codes und NFC Chips",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/tagscanner"
-          }
-        },
-        {
-          "id": "demos.special",
-          "name": "Spezielles",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/special"
-          }
-        }
-      ]
-    }
-  ]
 }

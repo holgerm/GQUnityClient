@@ -57,7 +57,7 @@
     "Assets/Scenes/Pages/WebPage.unity",
     "Assets/Scenes/Pages/AudioRecord.unity",
     "Assets/Scenes/Pages/ImageCapture.unity",
-    "Assets/Scenes/Pages/TagScanner.unity",
+    "Assets/Scenes/Pages/TagScanner.unity"
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
@@ -110,7 +110,7 @@
     "b": 147,
     "a": 255
   },
-  "colorPaletteSize": 4,
+  "colorPaletteSize": 0,
   "colorPalette": [
     {
       "r": 0,
