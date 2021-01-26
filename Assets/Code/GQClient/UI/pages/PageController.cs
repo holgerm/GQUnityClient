@@ -68,9 +68,6 @@ namespace Code.GQClient.UI.pages
         /// </summary>
         public void InitPage ()
 		{
-#if DEBUG_LOG
-            Debug.Log("InitPage() on " + GetType());
-#endif
             page = qm.CurrentPage;
             if (page == null) {
 				if (!resumingToFoyer)

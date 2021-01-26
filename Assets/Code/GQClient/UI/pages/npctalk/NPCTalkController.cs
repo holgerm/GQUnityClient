@@ -64,7 +64,7 @@ namespace Code.GQClient.UI.pages.npctalk
             }
             else
             {
-                NpcPage.End();
+                base.OnForward();
             }
         }
 

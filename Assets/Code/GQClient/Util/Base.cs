@@ -9,10 +9,12 @@ using Code.GQClient.Err;
 using Code.GQClient.UI;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.Dialogs;
+using Code.GQClient.UI.map;
 using Code.GQClient.UI.Progress;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
+using GQClient.Model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -141,7 +143,6 @@ namespace Code.GQClient.Util
             }
         }
 
-
         /// <summary>
         /// Called when we return to the foyer from a page.
         /// </summary>
@@ -159,6 +160,15 @@ namespace Code.GQClient.Util
                     {
                         canvas.gameObject.SetActive(_canvasStates[canvas.name]);
                     }
+                }
+            }
+
+            if (MapCanvas.activeInHierarchy)
+            {
+                FoyerMapController fmapCtrl = MapCanvas.GetComponent<FoyerMapController>();
+                if (fmapCtrl != null)
+                {
+                    fmapCtrl.UpdateView();
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿// #define DEBUG_LOG
+// #define DEBUG_LOG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -177,7 +177,6 @@ namespace Code.GQClient.UI.map
         {
             map = Base.Instance.Map;
             Base.Instance.Map.gameObject.SetActive(true);
-            Base.Instance.MapCanvas.gameObject.SetActive(true);
 
             markerManager = map.GetComponent<OnlineMapsMarkerManager>();
             locService.OnLocationInited += () => { IsInitialized = true; };
@@ -234,11 +233,10 @@ namespace Code.GQClient.UI.map
             {
                 return;
             }
-
+            
             // hide and delete all list elements:
             foreach (var kvp in Markers)
             {
-                // TODO CLARIFY WHY THIS CONTINUE IS NECESSARY:
                 if (kvp.Value == null)
                     continue;
 
@@ -246,7 +244,9 @@ namespace Code.GQClient.UI.map
                 // remove marker update as listener to questInfo Changed Events:
                 QuestInfo qi = QuestInfoManager.Instance.GetQuestInfo(kvp.Key);
                 if (null != qi)
+                {
                     qi.OnChanged -= kvp.Value.UpdateView;
+                }
             }
 
             foreach (var marker in markerManager.items.ToList())
