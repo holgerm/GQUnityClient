@@ -1,0 +1,486 @@
+{
+  "preserveAspectOfSplashFG": true,
+  "id": "museumsdorf",
+  "idExtension": "",
+  "name": "Museumsdorf App CLP",
+  "portal": 461,
+  "assetAddOns": [
+    "UniWebView"
+  ],
+  "androidMinSDKVersion": "AndroidApiLevelAuto",
+  "iOsDeviceTypes": "iPhoneAndiPad",
+  "autoStartQuestID": 0,
+  "autostartIsPredeployed": false,
+  "keepAutoStarting": true,
+  "timeoutMS": 0,
+  "maxIdleTimeMS": 9000,
+  "maxParallelDownloads": 15,
+  "downloadStrategy": "UPFRONT",
+  "nameForQuestSg": "Tour",
+  "nameForQuestsPl": "Touren",
+  "questInfoViews": [
+    "List",
+    "Map"
+  ],
+  "topicButtonAspectRatio": 1.0,
+  "cloudQuestsVisible": true,
+  "showCloudQuestsImmediately": false,
+  "downloadAllCloudQuestOnStart": false,
+  "localQuestsDeletable": true,
+  "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
+  "acceptedPageTypes": [
+    "StartAndExitScreen",
+    "NPCTalk",
+    "MultipleChoiceQuestion",
+    "Navigation",
+    "ImageWithText",
+    "TextQuestion",
+    "Menu",
+    "VideoPlay",
+    "AudioRecord",
+    "ImageCapture",
+    "MetaData",
+    "WebPage"
+  ],
+  "sceneMappings": [],
+  "scenePaths": [
+    "Assets/Scenes/StartScene.unity",
+    "Assets/Scenes/Foyer.unity",
+    "Assets/Scenes/Pages/NPCTalk.unity",
+    "Assets/Scenes/Pages/MultipleChoiceQuestion.unity",
+    "Assets/Scenes/Pages/TextQuestion.unity",
+    "Assets/Scenes/Pages/StartAndExitScreen.unity",
+    "Assets/Scenes/Pages/Menu.unity",
+    "Assets/Scenes/Pages/Navigation.unity",
+    "Assets/Scenes/Pages/VideoPlay.unity",
+    "Assets/Scenes/Pages/WebPage.unity",
+    "Assets/Scenes/Pages/AudioRecord.unity",
+    "Assets/Scenes/Pages/ImageCapture.unity",
+    "Assets/Scenes/Pages/TagScanner.unity"
+  ],
+  "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": true,
+  "autoSyncQuestInfos": true,
+  "autoLoadQuests": false,
+  "autoUpdateQuests": false,
+  "autoUpdateSubquests": false,
+  "offerManualUpdate4QuestInfos": false,
+  "mapStartPositionType": "FixedPosition",
+  "mapStartAtLongitude": 8.054064,
+  "mapStartAtLatitude": 52.850121,
+  "mapStartZoom": 16.15,
+  "hotspotMarker": {
+    "path": "textures/readable/erzbistummarker"
+  },
+  "marker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerHeightUnits": 65.0,
+  "markerHeightMinMM": 0.0,
+  "markerHeightMaxMM": 0.0,
+  "markerColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "markerBGAlpha": 168,
+  "mapButtonHeightUnits": 65.0,
+  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightMaxMM": 0.0,
+  "disabledAlpha": 0.5,
+  "hideFooterIfPossible": false,
+  "taskUI": "ProgressAtBottom",
+  "mainFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "mainBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "colorPaletteSize": 4,
+  "colorPalette": [
+    {
+      "r": 0,
+      "g": 0,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 235,
+      "b": 4,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    }
+  ],
+  "paletteFGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "mainFontSize": 100,
+  "textAlignment": "Left",
+  "textLinkColor": {
+    "r": 0,
+    "g": 0,
+    "b": 255,
+    "a": 255
+  },
+  "lineSpacing": 10.0,
+  "showShadows": false,
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "headerMiddleButtonPolicy": "TopLogo",
+  "headerBgColor": {
+    "r": 221,
+    "g": 221,
+    "b": 221,
+    "a": 255
+  },
+  "headerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "headerButtonFgColor": {
+    "r": 51,
+    "g": 51,
+    "b": 51,
+    "a": 255
+  },
+  "headerHeightUnits": 65.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
+  "contentHeightUnits": 750.0,
+  "contentTopMarginUnits": 20.0,
+  "contentDividerUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "imageAreaHeightMinUnits": 150.0,
+  "imageAreaHeightMaxUnits": 350.0,
+  "fitExceedingImagesIntoArea": false,
+  "autoScrollNewText": true,
+  "footerHeightUnits": 75.0,
+  "footerHeightMinMM": 0.0,
+  "footerHeightMaxMM": 0.0,
+  "footerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "footerButtonBgColor": {
+    "r": 208,
+    "g": 188,
+    "b": 89,
+    "a": 255
+  },
+  "footerButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 6.0,
+  "overlayButtonSizeMaxMM": 16.0,
+  "overlayButtonBgColor": {
+    "r": 92,
+    "g": 146,
+    "b": 158,
+    "a": 141
+  },
+  "overlayButtonFgColor": {
+    "r": 51,
+    "g": 51,
+    "b": 51,
+    "a": 255
+  },
+  "overlayButtonFgDisabledColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "showEmptyMenuEntries": true,
+  "menuEntryHeightUnits": 45.0,
+  "menuEntryHeightMinMM": 5.0,
+  "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 350.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
+  "menuFrameColor": {
+    "r": 127,
+    "g": 127,
+    "b": 127,
+    "a": 255
+  },
+  "menuBGColor": {
+    "r": 223,
+    "g": 223,
+    "b": 223,
+    "a": 255
+  },
+  "menuFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "categoryFolderBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "menuInhibitsInteraction": true,
+  "menu2ShownInQuests": true,
+  "offerLeaveQuestOnEachPage": true,
+  "warnWhenLeavingQuest": true,
+  "warnDialogTitleWhenLeavingQuest": "Aktuelles Tour verlassen?",
+  "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie die Tour ...",
+  "warnDialogOKWhenLeavingQuest": "Verlassen",
+  "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
+  "defineAuthorBackDoor": true,
+  "acceptedAuthorEmail": "author@email.com",
+  "acceptedAuthorPassword": "secret",
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "offerPartnersInfo": false,
+  "showPartnersInfoAtStart": false,
+  "listEntryHeightUnits": 74.0,
+  "listEntryHeightMinMM": 10.0,
+  "listEntryHeightMaxMM": 0.0,
+  "listEntryUseTwoLines": true,
+  "listEntryDividingMode": "SeparationLines",
+  "listLineColor": {
+    "r": 221,
+    "g": 221,
+    "b": 221,
+    "a": 255
+  },
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 7,
+  "listEntryFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listEntryBgColor": {
+    "r": 92,
+    "g": 146,
+    "b": 158,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listEntrySecondBgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 0
+  },
+  "listBgColor": {
+    "r": 117,
+    "g": 117,
+    "b": 117,
+    "a": 77
+  },
+  "emulationColor": {
+    "r": 252,
+    "g": 115,
+    "b": 115,
+    "a": 255
+  },
+  "CategorySets": [
+    {
+      "name": "Kategorie",
+      "categories": [
+        {
+          "id": "ebk.bibel",
+          "name": "Bibel",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/bibel"
+          }
+        },
+        {
+          "id": "ebk.feste",
+          "name": "Christliche Feste",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/feste"
+          }
+        },
+        {
+          "id": "ebk.glauben",
+          "name": "Glauben",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/glauben"
+          }
+        },
+        {
+          "id": "ebk.krippe",
+          "name": "Krippenweg",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/krippe"
+          }
+        },
+        {
+          "id": "ebk.kultur",
+          "name": "Kunst & Kultur",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/kultur"
+          }
+        },
+        {
+          "id": "ebk.natur",
+          "name": "Natur",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/natur"
+          }
+        },
+        {
+          "id": "ebk.quiz",
+          "name": "Quiz",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/quiz"
+          }
+        },
+        {
+          "id": "ebk.familie",
+          "name": "Kinder & Familie",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/familie"
+          }
+        },
+        {
+          "id": "ebk.mitkarte",
+          "name": "Orientierung",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/mitkarte"
+          }
+        },
+        {
+          "id": "ebk.zufuss",
+          "name": "Zu Fuss",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/zufuss"
+          }
+        },
+        {
+          "id": "ebk.mitdemrad",
+          "name": "Mit dem Rad",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/mitdemrad"
+          }
+        },
+        {
+          "id": "ebk.imsitzen",
+          "name": "Im Sitzen",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/imsitzen"
+          }
+        },
+        {
+          "id": "ebk.default",
+          "name": "Sonstiges",
+          "folderName": "",
+          "symbol": {
+            "path": "textures/readable/sonstiges"
+          }
+        }
+      ]
+    }
+  ]
+}
