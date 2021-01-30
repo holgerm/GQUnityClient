@@ -229,7 +229,19 @@ namespace GQ.Editor.UI
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(new GUIContent($"{Pm.AllProductIds.Count} Products found:", warnIcon));
+            switch (Pm.AllProductIds.Count)
+            {
+                case 0:
+                    EditorGUILayout.PrefixLabel(new GUIContent("No Product found:", warnIcon));
+                    break;
+                case 1:
+                    EditorGUILayout.PrefixLabel(new GUIContent("One Product found:"));
+                    break;
+                default:
+                    EditorGUILayout.PrefixLabel(new GUIContent($"{Pm.AllProductIds.Count} Products found:"));
+                    break;
+            }
+
             if (GUILayout.Button("Refresh from Product Directory"))
             {
                 Pm.InitProductDictionary();
@@ -245,7 +257,6 @@ namespace GQ.Editor.UI
                 availableProductsPopupGUIContent,
                 newProductLabelGUIContent,
                 createProductButtonGUIContent;
-
             if (configIsDirty)
             {
                 // adding tooltip to explain why these elements are disabled:
@@ -255,6 +266,7 @@ namespace GQ.Editor.UI
                 newProductLabelGUIContent = new GUIContent("New product (id):", explanation);
                 createProductButtonGUIContent = new GUIContent("Create", explanation);
             }
+
             else
             {
                 prepareBuildButtonGUIContent = new GUIContent("Prepare Build");
@@ -276,15 +288,18 @@ namespace GQ.Editor.UI
                         Pm.PrepareProductForBuild(selectedProductName);
                     }
                 }
-                //               }
 
+                //               }
                 EditorGUILayout.EndHorizontal();
 
                 // Product Selection Popup:
                 string[] productIds = Pm.AllProductIds.ToArray<string>();
+
                 // SORRY: This is to fulfill the not-so-flexible overloading scheme of Popup() here:
                 List<GUIContent> guiContentListOfProducts = new List<GUIContent>();
-                for (int i = 0; i < productIds.Length; i++)
+                for (int i = 0;
+                    i < productIds.Length;
+                    i++)
                 {
                     guiContentListOfProducts.Add(new GUIContent(productIds[i]));
                 }
@@ -294,6 +309,7 @@ namespace GQ.Editor.UI
                     selectedProductIndex,
                     guiContentListOfProducts.ToArray()
                 );
+
                 selectProduct(newIndex);
 
                 // Create New Product row:
@@ -320,8 +336,8 @@ namespace GQ.Editor.UI
         private void persistProduct()
         {
             string productDir = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName);
-            string importedPackageDir = Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage");
 
+            string importedPackageDir = Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage");
             foreach (string dir in Directory.GetDirectories(ConfigurationManager.RUNTIME_PRODUCT_DIR))
             {
                 if (dir.Equals(importedPackageDir))
@@ -348,7 +364,6 @@ namespace GQ.Editor.UI
             }
 
             SaveMapConfigAsJSON();
-
             Pm.ConfigFilesHaveChanges = false;
         }
 
@@ -356,12 +371,14 @@ namespace GQ.Editor.UI
         {
             GameObject mapGo = GameObject.Find("Map");
             if (mapGo == null) return;
+
             OnlineMaps map = mapGo.GetComponent<OnlineMaps>();
             if (map == null) return;
-
             string json = EditorJsonUtility.ToJson(map, true);
+
             string path = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName,
                 ProductSpec.ONLINEMAPS_CONFIG);
+
             File.WriteAllText(path, json);
         }
 
@@ -390,7 +407,9 @@ namespace GQ.Editor.UI
         static private void updateEditorBuildSceneSettings(Config config)
         {
             EditorBuildSettingsScene[] sceneSettings = new EditorBuildSettingsScene[config.scenePaths.Length];
-            for (int i = 0; i < config.scenePaths.Length; i++)
+            for (int i = 0;
+                i < config.scenePaths.Length;
+                i++)
             {
                 sceneSettings[i] = new EditorBuildSettingsScene(config.scenePaths[i], true);
             }
@@ -399,7 +418,7 @@ namespace GQ.Editor.UI
         }
 
         static public Config SelectedConfig { get; private set; }
-        // static public RTConfig SelectedRTConfig { get; private set; }
+// static public RTConfig SelectedRTConfig { get; private set; }
 
         static public float WidthForValues { get; private set; }
 
@@ -411,7 +430,7 @@ namespace GQ.Editor.UI
             ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
             SelectedConfig = p.Config;
 
-            // Begin ScrollView:
+// Begin ScrollView:
             using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
                 scrollPos = scrollView.scrollPosition;
@@ -471,70 +490,70 @@ namespace GQ.Editor.UI
         }
 
 
-        // void gui4RTProductDetails()
-        // {
-        //     GUILayout.Label("RT Product Details", EditorStyles.boldLabel);
-        //     ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
-        //     // SelectedRTConfig = p.RTConfig;
-        //
-        //     // Begin ScrollView:
-        //     using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosRT))
-        //     {
-        //         scrollPosRT = scrollView.scrollPosition;
-        //
-        //         using (new EditorGUI.DisabledGroupScope((!allowChanges)))
-        //         {
-        //             // ScrollView begins (optionally disabled):
-        //
-        //             // StartScene Layout:
-        //             gui4StartScene();
-        //
-        //             PropertyInfo[] propertyInfos =
-        //                 typeof(RTConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
-        //                                                BindingFlags.Instance);
-        //
-        //             // get max widths for names and values:
-        //             float allNamesMax = 0f, allValuesMax = 0f;
-        //
-        //             foreach (PropertyInfo curPropInfo in propertyInfos)
-        //             {
-        //                 if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
-        //                     continue;
-        //
-        //                 string propName = curPropInfo.Name + ":";
-        //                 string value = Objects.ToString(curPropInfo.GetValue(SelectedRTConfig, null));
-        //
-        //                 float nameMin, nameMax;
-        //                 float valueMin, valueMax;
-        //                 GUIStyle guiStyle = new GUIStyle();
-        //
-        //                 guiStyle.CalcMinMaxWidth(new GUIContent(propName + ":"), out nameMin, out nameMax);
-        //                 allNamesMax = Math.Max(allNamesMax, nameMax);
-        //                 guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
-        //                 allValuesMax = Math.Max(allValuesMax, valueMax);
-        //             }
-        //
-        //             // calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
-        //             // add left, middle and right borders as given:
-        //             float borders = new GUIStyle(GUI.skin.textField).margin.left +
-        //                             new GUIStyle(GUI.skin.textField).margin.horizontal +
-        //                             new GUIStyle(GUI.skin.textField).margin.right;
-        //             // calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
-        //             WidthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
-        //             WidthForValues = position.width - (borders + WidthForNames);
-        //
-        //             EditorGUIUtility.labelWidth = WidthForNames;
-        //
-        //             // show all properties as textfields or textareas in fitting width:
-        //             foreach (PropertyInfo curPropInfo in propertyInfos)
-        //             {
-        //                 if (ProductEditorPart.entryHidden(curPropInfo))
-        //                     continue;
-        //                 configIsDirty |= ProductEditorPart.CreateGui(curPropInfo, SelectedRTConfig);
-        //             }
-        //         } // End Scope Disabled Group 
-        //     } // End Scope ScrollView 
-        // }
+// void gui4RTProductDetails()
+// {
+//     GUILayout.Label("RT Product Details", EditorStyles.boldLabel);
+//     ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+//     // SelectedRTConfig = p.RTConfig;
+//
+//     // Begin ScrollView:
+//     using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosRT))
+//     {
+//         scrollPosRT = scrollView.scrollPosition;
+//
+//         using (new EditorGUI.DisabledGroupScope((!allowChanges)))
+//         {
+//             // ScrollView begins (optionally disabled):
+//
+//             // StartScene Layout:
+//             gui4StartScene();
+//
+//             PropertyInfo[] propertyInfos =
+//                 typeof(RTConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
+//                                                BindingFlags.Instance);
+//
+//             // get max widths for names and values:
+//             float allNamesMax = 0f, allValuesMax = 0f;
+//
+//             foreach (PropertyInfo curPropInfo in propertyInfos)
+//             {
+//                 if (!Attribute.IsDefined(curPropInfo, typeof(ShowInProductEditor)))
+//                     continue;
+//
+//                 string propName = curPropInfo.Name + ":";
+//                 string value = Objects.ToString(curPropInfo.GetValue(SelectedRTConfig, null));
+//
+//                 float nameMin, nameMax;
+//                 float valueMin, valueMax;
+//                 GUIStyle guiStyle = new GUIStyle();
+//
+//                 guiStyle.CalcMinMaxWidth(new GUIContent(propName + ":"), out nameMin, out nameMax);
+//                 allNamesMax = Math.Max(allNamesMax, nameMax);
+//                 guiStyle.CalcMinMaxWidth(new GUIContent(value), out valueMin, out valueMax);
+//                 allValuesMax = Math.Max(allValuesMax, valueMax);
+//             }
+//
+//             // calculate widths for names and values finally: we allow no more than 40% of the editor width for names.
+//             // add left, middle and right borders as given:
+//             float borders = new GUIStyle(GUI.skin.textField).margin.left +
+//                             new GUIStyle(GUI.skin.textField).margin.horizontal +
+//                             new GUIStyle(GUI.skin.textField).margin.right;
+//             // calculate widths for names and vlaues finally: we allow no more than 40% of the editor width for names, but do not take more than we need.
+//             WidthForNames = Math.Min((position.width - borders) * 0.4f, allNamesMax);
+//             WidthForValues = position.width - (borders + WidthForNames);
+//
+//             EditorGUIUtility.labelWidth = WidthForNames;
+//
+//             // show all properties as textfields or textareas in fitting width:
+//             foreach (PropertyInfo curPropInfo in propertyInfos)
+//             {
+//                 if (ProductEditorPart.entryHidden(curPropInfo))
+//                     continue;
+//                 configIsDirty |= ProductEditorPart.CreateGui(curPropInfo, SelectedRTConfig);
+//             }
+//         } // End Scope Disabled Group 
+//     } // End Scope ScrollView 
+// }
 
         private bool allowChanges = false;
 
@@ -542,7 +561,7 @@ namespace GQ.Editor.UI
         {
             GUILayout.Label("Editing Options", EditorStyles.boldLabel);
 
-            // Create New Product row:
+// Create New Product row:
             EditorGUILayout.BeginHorizontal();
             {
                 bool oldAllowChanges = allowChanges;
@@ -593,7 +612,6 @@ namespace GQ.Editor.UI
                 }
             }
             EditorGUILayout.EndHorizontal();
-
             showDetailsStartScene = EditorGUILayout.Foldout(showDetailsStartScene, "Details:");
             if (showDetailsStartScene)
             {
@@ -607,7 +625,7 @@ namespace GQ.Editor.UI
             GUILayout.Label("Versioning Options", EditorStyles.boldLabel);
             EditorGUILayout.LabelField("Current Version", version);
 
-            // Create New Product row:
+// Create New Product row:
             EditorGUILayout.BeginHorizontal();
             {
                 bool oldAllowVersionChanges = allowVersionChanges;
@@ -623,7 +641,6 @@ namespace GQ.Editor.UI
                 }
             }
             EditorGUILayout.EndHorizontal();
-
             if (allowVersionChanges)
             {
                 EditorGUILayout.BeginHorizontal();
@@ -686,7 +703,7 @@ namespace GQ.Editor.UI
 
         private void updateVersionText()
         {
-            // internal version number:
+// internal version number:
             version = String.Format(
                 "{0}.{1}.{2:D2}.{3:D2}",
                 mainVersionNumber,
@@ -695,7 +712,7 @@ namespace GQ.Editor.UI
                 buildVersionNumber
             );
 
-            // bundle version for iOS and Android:
+// bundle version for iOS and Android:
             PlayerSettings.bundleVersion = String.Format(
                 "{0}.{1}.{2:D2}",
                 mainVersionNumber,
@@ -703,8 +720,9 @@ namespace GQ.Editor.UI
                 monthVersionNumber
             );
 
-            // bundle version code for Android:
+// bundle version code for Android:
             int bundleVersionCode;
+
             string bundleVersionCodeString = String.Format(
                 "{0}{1:D3}{2:D2}{3:D2}",
                 mainVersionNumber,
@@ -719,9 +737,8 @@ namespace GQ.Editor.UI
                 Debug.LogError("Bundle Version Code not valid as Int32: " + bundleVersionCodeString);
             }
 
-            // build for iOS:
+// build for iOS:
             PlayerSettings.iOS.buildNumber = buildVersionNumber.ToString();
-
             allowVersionChanges = false;
         }
 
@@ -757,7 +774,7 @@ namespace GQ.Editor.UI
                 Debug.LogWarning(e.Message);
             }
 
-            // TODO create a Product object and store it. So we can access errors and manipulate details.
+// TODO create a Product object and store it. So we can access errors and manipulate details.
         }
     }
 
@@ -1874,7 +1891,7 @@ namespace GQ.Editor.UI
         }
     }
 
-    // TODO can't we make these classes generic?
+// TODO can't we make these classes generic?
     public class ProductEditorPart4ListEntryDividingMode : ProductEditorPart
     {
         int? _selected;
