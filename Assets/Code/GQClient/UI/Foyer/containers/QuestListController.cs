@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -144,7 +145,7 @@ namespace Code.GQClient.UI.Foyer.containers
                 qcList[i].transform.SetSiblingIndex(i);
 
                 if (i % 5 == 0)
-                    yield return null;
+                    yield return new WaitForEndOfFrame();
             }
 
             updateElementOrderLayout(); // TODO word sehr oft aufgerufen!!!

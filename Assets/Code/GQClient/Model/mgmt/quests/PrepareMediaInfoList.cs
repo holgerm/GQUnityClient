@@ -12,6 +12,7 @@ using Code.GQClient.UI;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
@@ -85,7 +86,7 @@ namespace Code.GQClient.Model.mgmt.quests
             var quest = QuestManager.DeserializeQuest(GameXml);
             StepsTotal = 1 + quest.MediaStore.Count;
             StepsDone++;
-            yield return null;
+            yield return new WaitForEndOfFrame();
 
             var storedLocalInfos = GetStoredLocalInfosFromJson(quest.Id);
             var newLocalInfos = new Dictionary<string, MediaInfo> (quest.MediaStore);

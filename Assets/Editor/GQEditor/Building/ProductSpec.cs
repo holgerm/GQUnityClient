@@ -156,6 +156,7 @@ namespace GQ.Editor.Building
             }
             catch (Exception exc)
             {
+                Log.SignalErrorToDeveloper($"Invalid product definition. Reading Product.json: {exc.Message}");
                 throw new ArgumentException("Invalid product definition. Product.json file could not be read.", exc);
             }
 
@@ -175,6 +176,7 @@ namespace GQ.Editor.Building
             }
             catch (Exception exc)
             {
+                Log.SignalErrorToDeveloper($"Invalid product definition. Reading RTProduct.json: {exc.Message}");
                 throw new ArgumentException(
                     "Invalid product definition. RTProduct.json file could not be read.", exc);
             }

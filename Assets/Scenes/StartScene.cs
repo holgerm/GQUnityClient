@@ -19,7 +19,7 @@ public class StartScene : MonoBehaviour
             var asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             while (!asyncLoad.isDone)
             {
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         // }
         // else

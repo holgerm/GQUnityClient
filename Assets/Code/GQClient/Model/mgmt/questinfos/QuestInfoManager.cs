@@ -373,12 +373,6 @@ namespace GQClient.Model
                 return;
             }
 
-            var startView = ConfigurationManager.Current.questInfoViews[0];
-            Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
-            Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
-            Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
-            Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
-
             // check whether we have alternative views to offer:
             if (ConfigurationManager.Current.questInfoViews.Length <= 1)
                 return;
@@ -386,6 +380,12 @@ namespace GQClient.Model
             // Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
             var menuContent = Base.Instance.MenuTopLeftContent;
             ViewToggleController.Create(menuContent);
+            
+            var startView = ConfigurationManager.Current.questInfoViews[0];
+            Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
+            Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
+            Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
+            Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
         }
 
         /// <summary>

@@ -228,16 +228,14 @@ namespace GQ.Editor.UI
             }
             EditorGUILayout.EndHorizontal();
 
-            if (Pm.AllProductIds.Count == 0)
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel(new GUIContent($"{Pm.AllProductIds.Count} Products found:", warnIcon));
+            if (GUILayout.Button("Refresh from Product Directory"))
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel(new GUIContent("No Product found:", warnIcon));
-                if (GUILayout.Button("Refresh from Product Directory"))
-                {
-                    Pm.InitProductDictionary();
-                }
-                EditorGUILayout.EndHorizontal();
+                Pm.InitProductDictionary();
             }
+
+            EditorGUILayout.EndHorizontal();
 
             if (selectedProductIndex < 0 || selectedProductIndex >= Pm.AllProductIds.Count)
                 selectedProductIndex = 0;
@@ -265,7 +263,7 @@ namespace GQ.Editor.UI
                 createProductButtonGUIContent = new GUIContent("Create");
             }
 
-            using (new EditorGUI.DisabledGroupScope(false)) 
+            using (new EditorGUI.DisabledGroupScope(false))
                 // was: configIsDirty)) State of flag was sometimes buggy and hid prepare build button ...
             {
                 // Prepare Build Button:
@@ -1280,7 +1278,7 @@ namespace GQ.Editor.UI
                 // id of products may not be altered.
                 if (curPropInfo.Name.Equals("id"))
                 {
-                    myNamePrefixGUIContent = 
+                    myNamePrefixGUIContent =
                         new GUIContent(curPropInfo.Name, "You may not alter the id of a product.");
                 }
 
@@ -1374,10 +1372,10 @@ namespace GQ.Editor.UI
             bool valsChanged = false;
 
             showList = EditorGUILayout.Foldout(
-                showList, 
+                showList,
                 string.Format("Category Sets: ({0})", allElements.Count),
                 STYLE_FOLDOUT_Bold);
-            
+
             if (showList)
             {
                 configIsDirty = false;

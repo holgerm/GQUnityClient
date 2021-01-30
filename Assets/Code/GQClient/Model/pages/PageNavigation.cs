@@ -1,6 +1,7 @@
 ﻿using System.Xml;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Util.input;
+using UnityEngine;
 
 namespace Code.GQClient.Model.pages
 {
@@ -62,10 +63,9 @@ namespace Code.GQClient.Model.pages
 
         #region Runtime API
         private int testCount = 0;
+        
         public override void Start(bool canReturnToPrevious = false) {
             base.Start(canReturnToPrevious);
-            //Debug.Log("HOTSPOTS ENABLED: " + ++testCount);
-            //LocationSensor.Instance.OnLocationUpdate += Quest.UpdateHotspotMarkers;
         }
 
         public override void CleanUp()

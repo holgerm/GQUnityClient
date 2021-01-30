@@ -124,7 +124,7 @@ namespace Code.GQClient.UI.Foyer.containers
             foreach (KeyValuePair<int, QuestInfoUIC> kvp in QuestInfoControllers)
             {
                 kvp.Value.UpdateView(kvp.Value.data);
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
     }

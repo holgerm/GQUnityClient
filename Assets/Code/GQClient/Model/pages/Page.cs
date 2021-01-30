@@ -307,12 +307,6 @@ namespace Code.GQClient.Model.pages
 
         public virtual void Start(bool canReturnToPrevious = false)
         {
-#if DEBUG_LOG
-            Debug.LogFormat("Page start: {0} ({1})".Red(),
-                Id,
-                PageType);
-#endif
-
             if (!CanStart())
                 return;
 
@@ -363,7 +357,6 @@ namespace Code.GQClient.Model.pages
                 Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);
             }
-
         }
 
         public virtual void End(Boolean leaveQuestIfEmpty = true)
@@ -386,11 +379,6 @@ namespace Code.GQClient.Model.pages
                 EndTrigger.Initiate();
             }
             Resources.UnloadUnusedAssets();
-#if DEBUG_LOG
-            Debug.LogFormat("Page ended: {0} ({1})",
-                Id,
-                PageType);
-#endif
         }
 
         public void SaveResultInVariable()

@@ -28,7 +28,7 @@ namespace Code.GQClient.start
                 {
                     var newColor = new Color(1, 1, 1, Mathf.Lerp(0.0f, 1.0f, t));
                     fadeInImage.color = newColor;
-                    yield return null;
+                    yield return new WaitForEndOfFrame();
                 }
             }
 
