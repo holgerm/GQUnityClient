@@ -12,7 +12,7 @@
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
-  "timeoutMS": 0,
+  "timeoutMS": 30000,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
   "downloadStrategy": "UPFRONT",
