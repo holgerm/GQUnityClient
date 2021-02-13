@@ -121,11 +121,16 @@ namespace Code.GQClient.Util.tasks
             BeforeCompleted();
 
             StopBehaviours();
-
+            
             if (OnTaskCompleted != null)
+            {
                 OnTaskCompleted(this, new TaskEventArgs(step: Step, content: content));
+            }
+
             if (OnTaskEnded != null)
+            {
                 OnTaskEnded(this, new TaskEventArgs(step: Step, content: content));
+            }
         }
 
         public void StopBehaviours()
@@ -143,7 +148,9 @@ namespace Code.GQClient.Util.tasks
         public virtual void RaiseTaskFailed(object content = null)
         {
             if (hasEnded)
+            {
                 return;
+            }
             else
             {
                 hasEnded = true;
@@ -154,9 +161,14 @@ namespace Code.GQClient.Util.tasks
             StopBehaviours();
 
             if (OnTaskFailed != null)
+            {
                 OnTaskFailed(this, new TaskEventArgs(step: Step, content: content));
+            }
+
             if (OnTaskEnded != null)
+            {
                 OnTaskEnded(this, new TaskEventArgs(step: Step, content: content));
+            }
         }
 
         protected virtual void BeforeFailed()

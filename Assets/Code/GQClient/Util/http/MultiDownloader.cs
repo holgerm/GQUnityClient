@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI;
 using Code.GQClient.Util.tasks;
+using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
 {
@@ -152,7 +154,11 @@ namespace Code.GQClient.Util.http
                             filesCurrentlyDownloading.Remove(d);
                         }
                     };
-                    d.OnTaskEnded += (object sender, TaskEventArgs e) => { CurrentlyRunningDownloads--; };
+                    d.OnTaskEnded += (object sender, TaskEventArgs e) =>
+                    {
+                        filesCurrentlyDownloading.Remove(d);
+                        CurrentlyRunningDownloads--;
+                    };
                     d.OnTaskCompleted += (object sender, TaskEventArgs e) =>
                     {
                         if (d.ResponseHeaders != null)

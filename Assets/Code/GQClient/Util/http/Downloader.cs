@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Code.GQClient.Err;
+using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.Dialogs;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -117,17 +118,33 @@ namespace Code.GQClient.Util.http
             }
         }
 
+        protected bool uriIsWellFormed(string uri)
+        {
+            Uri uriResult;
+            bool result = Uri.TryCreate(uri, UriKind.Absolute, out uriResult) 
+                          && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps || uriResult.Scheme == Uri.UriSchemeFile);
+            return result;
+        }
+
         protected IEnumerator Download()
         {
+            if (!uriIsWellFormed(this.Url))
+            {
+                Raise (DownloadEventType.Error, new DownloadEvent (message: $"Can not download from malformed URI: {this.Url}"));
+                Log.SignalErrorToAuthor($"Malformed url {this.Url} in quest '{QuestManager.Instance.CurrentQuest.Name}' (id: {QuestManager.Instance.CurrentQuest.Id})");
+                RaiseTaskFailed ();
+                yield break;
+            }
+
             Www = new WWW(Url);
             stopwatch.Reset();
             stopwatch.Start();
             idlewatch.Reset();
 
-            var msg = String.Format("Start to download url {0}", Url);
+            var msg = $"Start to download url {Url}";
             if (Timeout > 0)
             {
-                msg += String.Format(", timout set to {0} ms, idle timeout set to {1} ms.", Timeout, MaxIdleTime);
+                msg += $", timeout set to {Timeout} ms, idle timeout set to {MaxIdleTime} ms.";
             }
 
             Raise(DownloadEventType.Start, new DownloadEvent(message: msg));

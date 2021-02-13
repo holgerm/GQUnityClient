@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Code.GQClient.Err;
 using Code.GQClient.Util.tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
 {
@@ -49,10 +52,13 @@ namespace Code.GQClient.Util.http
 				callback (this, e);
 		}
 
+		private static int downloads = 0;
+
 		public virtual void Raise (DownloadEventType eventType, DownloadEvent e = DownloadEvent.EMPTY)
 		{
 			switch (eventType) {
 			case DownloadEventType.Start:
+				// Debug.Log($"Download #{downloads++} STARTED: {e.Message}");
 				Raise (OnStart, e);
 				break;
 			case DownloadEventType.Progress:
@@ -65,6 +71,7 @@ namespace Code.GQClient.Util.http
 				Raise (OnTimeout, e);
 				break;
 			case DownloadEventType.Success:
+				// Debug.Log($"Download #{downloads--} SUCCEEDED: {e.Message}");
 				Raise (OnSuccess, e);
 				break;
 			default:

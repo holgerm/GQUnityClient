@@ -637,7 +637,6 @@ namespace GQ.Editor.Building
 
             // runtime config:
             json = JsonConvert.SerializeObject(config.rt, Formatting.Indented);
-            Debug.Log($"SERIALIZED: {json}".Yellow());
             filePath =
                 Files.CombinePath(productDirPath, ConfigurationManager.RT_CONFIG_FILE);
             File.WriteAllText(filePath, json);
