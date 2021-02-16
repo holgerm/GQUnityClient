@@ -732,7 +732,7 @@ namespace Code.GQClient.Conf
             warnWhenLeavingQuest = true;
             warnDialogTitleWhenLeavingQuest = "Aktuelles Quest verlassen?";
             warnDialogMessageWhenLeavingQuest =
-                "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...";
+                "Sie müssten es dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...";
             warnDialogOKWhenLeavingQuest = "Verlassen";
             warnDialogCancelWhenLeavingQuest = "Fortsetzen";
             stopAudioWhenLeavingPage = true;
