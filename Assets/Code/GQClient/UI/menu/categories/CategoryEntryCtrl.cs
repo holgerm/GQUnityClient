@@ -92,11 +92,11 @@ namespace Code.GQClient.UI.menu.categories
 
 			if (_selectedForFilter)
 			{
-				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category.id);
+				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category);
 			}
 			else
 			{
-				treeCtrl.CategoryFilter.RemoveCategory(categoryEntry.category.id);
+				treeCtrl.CategoryFilter.RemoveCategory(categoryEntry.category);
 			}
 		}
 

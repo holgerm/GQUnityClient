@@ -194,7 +194,7 @@ namespace GQClient.Model
                 NotificationPaused = true;
                 foreach (Category c in catSet.categories)
                 {
-                    AddCategory(c.id);
+                    AddCategory(c);
                 }
                 NotificationPaused = false;
                 Name = catSet.name;
@@ -204,42 +204,42 @@ namespace GQClient.Model
             /// Initializes a new instance of the <see cref="QuestInfoFilter"/> class.
             /// </summary>
             /// <param name="firstCategory">First category to be accepted by this filter.</param>
-            /// <param name="categories">Further categories to be accepted. In fact you can simply sepcify any number of acceptable categories in one row.</param>
-            public CategoryFilter(string firstCategory, params string[] categories)
+            /// <param name="categories">Further categories to be accepted. In fact you can simply specify any number of acceptable categories in one row.</param>
+            public CategoryFilter(Category firstCategory, params Category[] categories)
             {
                 NotificationPaused = true;
                 AddCategory(firstCategory);
-                foreach (string c in categories)
+                foreach (Category c in categories)
                     AddCategory(c);
                 NotificationPaused = false;
             }
 
-            public void AddCategories(params string[] categories)
+            public void AddCategories(params Category[] categories)
             {
-                foreach (string category in categories)
+                foreach (Category category in categories)
                 {
-                    if (!acceptedCategories.Contains(category))
+                    if (!acceptedCategories.Contains(category.id))
                     {
-                        acceptedCategories.Add(category);
+                        acceptedCategories.Add(category.id);
                     }
                 }
                 RaiseFilterChangeEvent();
             }
 
-            public void AddCategory(string category)
+            public void AddCategory(Category category)
             {
-                if (!acceptedCategories.Contains(category))
+                if (!acceptedCategories.Contains(category.id))
                 {
-                    acceptedCategories.Add(category);
+                    acceptedCategories.Add(category.id);
                     RaiseFilterChangeEvent();
                 }
             }
 
-            public void RemoveCategory(string category)
+            public void RemoveCategory(Category category)
             {
-                if (acceptedCategories.Contains(category))
+                if (acceptedCategories.Contains(category.id))
                 {
-                    acceptedCategories.Remove(category);
+                    acceptedCategories.Remove(category.id);
                     RaiseFilterChangeEvent();
                 }
             }

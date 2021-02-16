@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using Code.GQClient.Conf;
 using GQClient.Model;
 using Newtonsoft.Json;
 
@@ -111,8 +112,10 @@ namespace GQTests.Model {
 		}
 
 		[Test]
-		public void CategoryFilter() {
-			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter ("A");
+		public void CategoryFilter()
+		{
+			Category CatA = new Category("A", "name A", "some folder", "symbol/path");
+			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter (CatA);
 
 			Assert.IsTrue (filter_A.Accept (qi_ABC));
 			Assert.IsFalse (filter_A.Accept (qi_CDE));
@@ -127,7 +130,8 @@ namespace GQTests.Model {
 			Assert.AreEqual (QuestInfo.WITHOUT_CATEGORY_ID, filter_A.CategoryToShow (qi_DEF));
 		
 		
-			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter ("C");
+			Category CatC = new Category("C", "name C", "some folder", "symbol/path");
+			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter (CatC);
 
 			Assert.IsTrue (filter_C.Accept (qi_ABC));
 			Assert.IsTrue (filter_C.Accept (qi_CDE));
@@ -141,8 +145,9 @@ namespace GQTests.Model {
 			Assert.AreEqual ("C", filter_C.CategoryToShow (qi_CDE));
 			Assert.AreEqual (QuestInfo.WITHOUT_CATEGORY_ID, filter_C.CategoryToShow (qi_DEF));
 
-
-			QuestInfoFilter filter_CDE = new QuestInfoFilter.CategoryFilter ("C", "D", "E");
+			Category CatD = new Category("D", "name D", "some folder", "symbol/path");
+			Category CatE = new Category("E", "name E", "some folder", "symbol/path");
+			QuestInfoFilter filter_CDE = new QuestInfoFilter.CategoryFilter (CatC, CatD, CatE);
 
 			Assert.IsTrue (filter_CDE.Accept (qi_ABC));
 			Assert.IsTrue (filter_CDE.Accept (qi_CDE));
@@ -159,8 +164,10 @@ namespace GQTests.Model {
 
 		[Test]
 		public void AndFilter() {
-			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter ("A");
-			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter ("C");
+			Category CatA = new Category("A", "name A", "some folder", "symbol/path");
+			Category CatC = new Category("C", "name C", "some folder", "symbol/path");
+			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter (CatA);
+			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter (CatC);
 			QuestInfoFilter andFilter = new QuestInfoFilter.And (filter_A, filter_C);
 
 			Assert.IsTrue (andFilter.Accept (qi_ABC));
@@ -178,9 +185,12 @@ namespace GQTests.Model {
 
 		[Test]
 		public void OrFilter() {
-			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter ("A");
-			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter ("C");
-			QuestInfoFilter filter_E = new QuestInfoFilter.CategoryFilter ("E");
+			Category CatA = new Category("A", "name A", "some folder", "symbol/path");
+			Category CatC = new Category("C", "name C", "some folder", "symbol/path");
+			Category CatE = new Category("E", "name E", "some folder", "symbol/path");
+			QuestInfoFilter filter_A = new QuestInfoFilter.CategoryFilter (CatA);
+			QuestInfoFilter filter_C = new QuestInfoFilter.CategoryFilter (CatC);
+			QuestInfoFilter filter_E = new QuestInfoFilter.CategoryFilter (CatE);
 			QuestInfoFilter orFilterAC = new QuestInfoFilter.Or (filter_A, filter_C);
 
 			Assert.IsTrue (orFilterAC.Accept (qi_ABC));
