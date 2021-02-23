@@ -8,7 +8,7 @@
     "UniWebView"
   ],
   "androidMinSDKVersion": "AndroidApiLevelAuto",
-  "iOsDeviceTypes": "iPadOnly",
+  "iOsDeviceTypes": "iPhoneOnly",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
@@ -238,9 +238,9 @@
     "a": 255
   },
   "footerButtonBgColor": {
-    "r": 208,
-    "g": 188,
-    "b": 89,
+    "r": 111,
+    "g": 149,
+    "b": 156,
     "a": 255
   },
   "footerButtonFgColor": {
@@ -411,7 +411,7 @@
         {
           "id": "museumsdorf.deutsch",
           "name": "Deutsch",
-          "folderName": "Sprachen / Languages",
+          "folderName": "*Sprachen / Languages",
           "symbol": {
             "path": "textures/readable/deutsch"
           }
@@ -419,7 +419,7 @@
         {
           "id": "museumsdorf.english",
           "name": "English",
-          "folderName": "Sprachen / Languages",
+          "folderName": "*Sprachen / Languages",
           "symbol": {
             "path": "textures/readable/english"
           }
@@ -427,7 +427,7 @@
         {
           "id": "museumsdorf.nederlands",
           "name": "Nederlands",
-          "folderName": "Sprachen / Languages",
+          "folderName": "*Sprachen / Languages",
           "symbol": {
             "path": "textures/readable/nederlands"
           }
@@ -435,7 +435,7 @@
         {
           "id": "museumsdorf.francais",
           "name": "Français",
-          "folderName": "Sprachen / Languages",
+          "folderName": "*Sprachen / Languages",
           "symbol": {
             "path": "textures/readable/francais"
           }

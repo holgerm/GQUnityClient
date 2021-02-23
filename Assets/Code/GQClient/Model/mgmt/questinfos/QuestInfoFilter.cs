@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
@@ -7,10 +8,8 @@ using UnityEngine;
 
 namespace GQClient.Model
 {
-
     public abstract partial class QuestInfoFilter
     {
-
         public delegate void OnFilterChanged();
 
         public event OnFilterChanged filterChange;
@@ -33,10 +32,7 @@ namespace GQClient.Model
 
         public bool NotificationPaused
         {
-            get
-            {
-                return _notificationPaused;
-            }
+            get { return _notificationPaused; }
             set
             {
                 _notificationPaused = value;
@@ -58,7 +54,6 @@ namespace GQClient.Model
 
         public class All : QuestInfoFilter
         {
-
             public override bool Accept(QuestInfo qi)
             {
                 return true;
@@ -92,8 +87,8 @@ namespace GQClient.Model
 
         public class HiddenQuestsFilter : ActivatableFilter
         {
-
             private static HiddenQuestsFilter _instance;
+
             public static HiddenQuestsFilter Instance
             {
                 get
@@ -102,6 +97,7 @@ namespace GQClient.Model
                     {
                         _instance = new HiddenQuestsFilter();
                     }
+
                     return _instance;
                 }
             }
@@ -139,6 +135,7 @@ namespace GQClient.Model
         public class LocalQuestInfosFilter : QuestInfoFilter
         {
             private static LocalQuestInfosFilter _instance;
+
             public static LocalQuestInfosFilter Instance
             {
                 get
@@ -147,6 +144,7 @@ namespace GQClient.Model
                     {
                         _instance = new LocalQuestInfosFilter();
                     }
+
                     return _instance;
                 }
             }
@@ -157,12 +155,10 @@ namespace GQClient.Model
             }
 
             private bool _isActive;
+
             public bool IsActive
             {
-                get
-                {
-                    return _isActive;
-                }
+                get { return _isActive; }
                 set
                 {
                     _isActive = value;
@@ -184,18 +180,61 @@ namespace GQClient.Model
 
         public class CategoryFilter : QuestInfoFilter
         {
-
             public string Name;
 
-            private List<string> acceptedCategories = new List<string>();
+            private Dictionary<string, List<string>> _catIds;
+
+            /// <summary>
+            /// We use a conjunctive normal form of category ids stored in this dictionary. All "normal" categories are
+            /// kept in the category list named "standard", which is the standard disjunction. For each folder whose name begins with an asterisk (*)
+            /// we store the contained category ids as a separate list i.e. another disjunction.
+            /// </summary>
+            private Dictionary<string, List<string>> catIds
+            {
+                get
+                {
+                    if (_catIds == null)
+                    {
+                        _catIds = new Dictionary<string, List<string>>();
+                        _catIds["standard"] = new List<string>();
+                    }
+
+                    return _catIds;
+                }
+            }
+
+            protected Dictionary<string, List<string>> staticFullCatIdList;
 
             public CategoryFilter(CategorySet catSet)
             {
                 NotificationPaused = true;
+
+                staticFullCatIdList = new Dictionary<string, List<string>>();
+                catIds["standard"] = new List<string>();
+                staticFullCatIdList["standard"] = new List<string>();
                 foreach (Category c in catSet.categories)
                 {
+                    if (c.folderName.StartsWith("*"))
+                    {
+                        if (!catIds.ContainsKey(c.folderName))
+                        {
+                            catIds[c.folderName] = new List<string>();
+                        }
+
+                        if (!staticFullCatIdList.ContainsKey(c.folderName))
+                        {
+                            staticFullCatIdList[c.folderName] = new List<string>();
+                        }
+                        staticFullCatIdList[c.folderName].Add(c.id);
+                    }
+                    else
+                    {
+                        staticFullCatIdList["standard"].Add(c.id);
+                    }
+
                     AddCategory(c);
                 }
+
                 NotificationPaused = false;
                 Name = catSet.name;
             }
@@ -214,49 +253,96 @@ namespace GQClient.Model
                 NotificationPaused = false;
             }
 
-            public void AddCategories(params Category[] categories)
-            {
-                foreach (Category category in categories)
-                {
-                    if (!acceptedCategories.Contains(category.id))
-                    {
-                        acceptedCategories.Add(category.id);
-                    }
-                }
-                RaiseFilterChangeEvent();
-            }
-
             public void AddCategory(Category category)
             {
-                if (!acceptedCategories.Contains(category.id))
+                string catDisjunctionName = "standard";
+                if (category.folderName.StartsWith("*"))
                 {
-                    acceptedCategories.Add(category.id);
+                    catDisjunctionName = category.folderName;
+                }
+
+                if (!catIds[catDisjunctionName].Contains(category.id))
+                {
+                    catIds[catDisjunctionName].Add(category.id);
                     RaiseFilterChangeEvent();
                 }
             }
 
             public void RemoveCategory(Category category)
             {
-                if (acceptedCategories.Contains(category.id))
+                string catDisjunctionName = "standard";
+                if (category.folderName.StartsWith("*"))
                 {
-                    acceptedCategories.Remove(category.id);
+                    catDisjunctionName = category.folderName;
+                }
+
+                if (catIds[catDisjunctionName].Contains(category.id))
+                {
+                    catIds[catDisjunctionName].Remove(category.id);
                     RaiseFilterChangeEvent();
                 }
             }
 
             public void ClearCategories()
             {
-                acceptedCategories = new List<string>();
+                _catIds = null;
                 RaiseFilterChangeEvent();
             }
 
             /// <summary>
-            /// Accepts the given quest info when at least one of the quests categories is mentioned as accepted category of this filter.
+            /// Accepts the given quest info when at least one of the quests categories is mentioned as accepted category for each
+            /// disjunction of categories. We have conjunctive normal form of categories here.
             /// </summary>
             /// <param name="qi">Quest Info.</param>
             public override bool Accept(QuestInfo qi)
             {
-                foreach (var cat in acceptedCategories)
+                // This is the conjunction:
+                foreach (var disjunctionName in catIds.Keys)
+                {
+                    var catList = catIds[disjunctionName];
+                    // skip empty disjunctions inside the conjunction,
+                    // i.e. if not any one category of this disjunction is active, any quest info is accepted.
+                    if (catList.Count == 0)
+                        continue;
+
+                    if (!acceptedInCatDisjunction(qi, disjunctionName))
+                        return false;
+                }
+
+                return true;
+            }
+
+            /// <summary>
+            /// Checks acceptance of given QuestInfo for one disjunction of categories given by the catList. 
+            /// </summary>
+            /// <param name="qi"></param>
+            /// <param name="catList"></param>
+            /// <returns></returns>
+            private bool acceptedInCatDisjunction(QuestInfo qi, string disjunctionName)
+            {
+                List<string> catList = catIds[disjunctionName];
+                List<string> fullCatList = staticFullCatIdList[disjunctionName];
+                
+                // skip if the quest info does not contain any of the categories of this disjunction,
+                // i.e. it is unspecific regarding this group of categories:
+                bool qiDoesNotContainAnyCatOfThisGroup = true;
+                foreach (var cat in fullCatList)
+                {
+                    if (qi.Categories.Contains(cat))
+                    {
+                        qiDoesNotContainAnyCatOfThisGroup = false;
+                        break;
+                    }
+                }
+
+                if (qiDoesNotContainAnyCatOfThisGroup)
+                {
+                    return true;
+                // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and though should be shown.
+                }
+                
+                
+                foreach (var cat in catList)
                 {
                     if (qi.Categories.Contains(cat) ||
                         (
@@ -265,32 +351,48 @@ namespace GQClient.Model
                     )
                         return true;
                 }
+
                 return false;
             }
 
             public override string ToString()
             {
-                var sb = new StringBuilder("Category is in {");
-                for (var i = 0; i < acceptedCategories.Count; i++)
+                var sb = new StringBuilder("Category is in { ");
+
+                var catLists = catIds.Values.ToList();
+                
+                for (int i = 0; i < catLists.Count; i++)
                 {
-                    sb.Append(acceptedCategories[i]);
-                    if (i + 1 < acceptedCategories.Count)
+                    sb.Append(" { ");
+                    for (var j = 0; j < catLists[i].Count; j++)
                     {
-                        sb.Append(", ");
+                        sb.Append(catLists[i][j]);
+                        if (j + 1 < catLists[i].Count)
+                        {
+                            sb.Append(" or ");
+                        }
                     }
+                    sb.Append(" } ");
+                    if (i + 1 < catIds.Values.Count)
+                    {
+                        sb.Append(" and ");
+                    }
+
                 }
-                sb.Append("}");
+
+                sb.Append(" }.");
                 return sb.ToString();
             }
 
             public override List<string> AcceptedCategories(QuestInfo qi)
             {
                 var accCats = new List<string>();
-                foreach (var cat in acceptedCategories)
+                foreach (var cat in catIds["standard"])
                 {
                     if (qi.Categories.Contains(cat))
                         accCats.Add(cat);
                 }
+
                 return accCats;
             }
         }
@@ -304,7 +406,6 @@ namespace GQClient.Model
 
         public class And : Multi
         {
-
             public And(params QuestInfoFilter[] filters)
             {
                 foreach (QuestInfoFilter filter in filters)
@@ -337,6 +438,7 @@ namespace GQClient.Model
                 {
                     sb.Append(sel.ToString() + ",");
                 }
+
                 sb.Remove(sb.Length - 1, 1); // remove the last comma
                 sb.Append(")");
 
@@ -365,13 +467,13 @@ namespace GQClient.Model
                         }
                     }
                 }
+
                 return acceptedCategories;
             }
         }
 
         public class Or : Multi
         {
-
             public Or(params QuestInfoFilter[] filters)
             {
                 subfilters.AddRange(filters);
@@ -421,6 +523,7 @@ namespace GQClient.Model
                         }
                     }
                 }
+
                 return acceptedCategories;
             }
         }

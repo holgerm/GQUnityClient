@@ -135,7 +135,7 @@ namespace Code.GQClient.UI.menu.categories
 
         private void recreateUI()
         {
-            // 1. Remove UI elements in Catgeory Tree:
+            // 1. Remove UI elements in Category Tree:
             foreach (Transform child in transform.Cast<Transform>().ToArray())
             {
                 // Transform child = transform.GetChild (i);
