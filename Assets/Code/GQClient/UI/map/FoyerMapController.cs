@@ -23,6 +23,7 @@ namespace Code.GQClient.UI.map
 			_qim = QuestInfoManager.Instance;
 			_qim.OnDataChange += OnMarkerChanged;
 			_qim.OnFilterChange += OnMarkerChanged;
+			RTConfig.CategoriesChanged += UpdateView;
 		}
 
 		#endregion

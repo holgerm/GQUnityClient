@@ -8,6 +8,7 @@ using Code.GQClient.Err;
 using Newtonsoft.Json;
 using GQ.Editor.Util;
 using GQ.Editor.UI;
+using UnityEditor;
 
 namespace GQ.Editor.Building
 {
@@ -101,7 +102,18 @@ namespace GQ.Editor.Building
 
         public Config Config
         {
-            get { return _config; }
+            get
+            {
+                if (_config == null)
+                {
+                    if (EditorApplication.isPlaying)
+                        InitConfig();
+                    else
+                        _config = ConfigurationManager.Current;
+                }
+
+                return _config;
+            }
             set { _config = value; }
         }
 
@@ -137,10 +149,10 @@ namespace GQ.Editor.Building
                 dirPath = dirPath.Substring(0, dirPath.Length - 1);
             _dir = dirPath;
 
-            initConfig();
+            InitConfig();
         }
 
-        internal void initConfig()
+        internal void InitConfig()
         {
             // init and check Config:
             try
@@ -152,7 +164,7 @@ namespace GQ.Editor.Building
                 }
 
                 string configJSON = File.ReadAllText(ConfigPath);
-                Config = Config._doDeserializeConfig(configJSON);
+                _config = Config._doDeserializeConfig(configJSON);
             }
             catch (Exception exc)
             {
@@ -169,10 +181,6 @@ namespace GQ.Editor.Building
                         $"Invalid product definition. RTProduct.json file missing in folder {_dir}.");
                     throw new ArgumentException("Invalid product definition. RTProduct.json file missing.");
                 }
-
-                string json = File.ReadAllText(RTConfigPath);
-                Config.rt =
-                    RTConfig._doDeserialize(json, RTConfig.LoadsFrom.LocalFile);
             }
             catch (Exception exc)
             {

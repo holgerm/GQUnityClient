@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using Code.GQClient.Util.http;
 using Newtonsoft.Json;
@@ -76,6 +75,11 @@ namespace Code.GQClient.Conf
                 return false;
 
             return path == ((RTImagePath) obj).path;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override string ToString()

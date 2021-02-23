@@ -34,10 +34,13 @@ namespace Code.GQClient.Conf
         {
             Config.__JSON_Currently_Parsing = true;
             Config config = JsonConvert.DeserializeObject<Config>(configText);
+            config.rt.RefreshCategoryDictionary();
+            
             Config.__JSON_Currently_Parsing = false;
             return config;
         }
 
+        // Unused:
         public static RTConfig _doDeserializeConfigRT(string configRTText)
         {
             Config.__JSON_Currently_Parsing = true;
@@ -835,39 +838,7 @@ namespace Code.GQClient.Conf
             {
                 if (null == _rt)
                 {
-                    string rtProductFile =
-                        Path.Combine(
-                            Application.persistentDataPath,
-                            ConfigurationManager.RT_CONFIG_DIR,
-                            ConfigurationManager.RT_CONFIG_FILE);
-
-                    if (File.Exists(rtProductFile))
-                    {
-                        string json = File.ReadAllText(rtProductFile);
-                        _rt = RTConfig._doDeserialize(
-                            json,
-                            RTConfig.LoadsFrom.LocalFile);
-                        ConfigurationManager.RTProductUpdated = true;
-                    }
-                    else
-                    {
-                        TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
-
-                        if (configAsset == null)
-                        {
-                            throw new ArgumentException(
-                                "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
-                                ConfigurationManager.RUNTIME_PRODUCT_DIR);
-                        }
-                        
-                        _rt = RTConfig._doDeserialize(
-                            configAsset.text,
-                            RTConfig.LoadsFrom.Resource);
-                        ConfigurationManager.RTProductUpdated = false;
-                    }
-
-                    QuestInfoManager.Instance.RaiseOnDataChange();
-                    ConfigurationManager.RTConfigChanged();
+                    resetRTConfig();
                 }
 
                 return _rt;
@@ -876,6 +847,43 @@ namespace Code.GQClient.Conf
             {
                 _rt = value;
             }
+        }
+
+        internal void resetRTConfig()
+        {
+            string rtProductFile =
+                Path.Combine(
+                    Application.persistentDataPath,
+                    ConfigurationManager.RT_CONFIG_DIR,
+                    ConfigurationManager.RT_CONFIG_FILE);
+
+            if (File.Exists(rtProductFile))
+            {
+                string json = File.ReadAllText(rtProductFile);
+                _rt = RTConfig._doDeserialize(
+                    json,
+                    RTConfig.LoadsFrom.LocalFile);
+                ConfigurationManager.RTProductUpdated = true;
+            }
+            else
+            {
+                TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
+
+                if (configAsset == null)
+                {
+                    throw new ArgumentException(
+                        "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
+                        ConfigurationManager.RUNTIME_PRODUCT_DIR);
+                }
+
+                _rt = RTConfig._doDeserialize(
+                    configAsset.text,
+                    RTConfig.LoadsFrom.Resource);
+                ConfigurationManager.RTProductUpdated = false;
+            }
+
+            QuestInfoManager.Instance.RaiseOnDataChange();
+            ConfigurationManager.RTConfigChanged();
         }
 
         [ShowInProductEditor(StartSection = "Categories & Filters:"), JsonIgnore]

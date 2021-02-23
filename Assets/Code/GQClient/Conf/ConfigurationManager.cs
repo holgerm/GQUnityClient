@@ -28,11 +28,7 @@ namespace Code.GQClient.Conf
 
         public static void Initialize()
         {
-            // Product.json:
-            deserializeConfig();
-            deserializeConfigRT();
-            
-            // RTProduct.json:
+           // RTProduct.json:
             string rtProductUrl = Path.Combine(GQ_SERVER_PORTALS_URL, _current.id, RT_CONFIG_DIR, RT_CONFIG_FILE);
             string rtProductFile = Path.Combine(Application.persistentDataPath, RT_CONFIG_DIR, RT_CONFIG_FILE);
 
@@ -45,8 +41,7 @@ namespace Code.GQClient.Conf
             d.OnSuccess += (dl, e) =>
             {
                 RTProductUpdated = true;
-                CurrentRT = null;
-                RTConfig _ = CurrentRT;
+                Current.resetRTConfig();
                 QuestInfoManager.Instance.RaiseOnDataChange();
             };
             // d.OnTaskEnded += (sender, args) =>
@@ -274,15 +269,30 @@ namespace Code.GQClient.Conf
 
         private static string retrieveProductRTJSONFromAppConfig()
         {
-            TextAsset configRTAsset = Resources.Load("RTProduct") as TextAsset;
+            string rtProductFile =
+                Path.Combine(
+                    Application.persistentDataPath,
+                    ConfigurationManager.RT_CONFIG_DIR,
+                    ConfigurationManager.RT_CONFIG_FILE);
 
-            if (configRTAsset == null)
+            if (File.Exists(rtProductFile))
             {
-                throw new ArgumentException(
-                    "Something went wrong with the RTProduct.json File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
+                return File.ReadAllText(rtProductFile);
             }
+            else
+            {
+                //////////// alt:
+                TextAsset configRTAsset = Resources.Load("RTProduct") as TextAsset;
 
-            return configRTAsset.text;
+                if (configRTAsset == null)
+                {
+                    throw new ArgumentException(
+                        "Something went wrong with the RTProduct.json File. Check it. It should be at " +
+                        RUNTIME_PRODUCT_DIR);
+                }
+
+                return configRTAsset.text;
+            }
         }
 
         public delegate string RetrieveProductJSONTextDelegate();
@@ -344,22 +354,8 @@ namespace Code.GQClient.Conf
             {
                 Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
             }
-        }
 
-        public static void deserializeConfigRT()
-        {
-            CurrentRT = null; // reset config and rtconfig
-            
-            string json = RetrieveProductRTJSONText();
-
-            try
-            {
-                CurrentRT = Config._doDeserializeConfigRT(json);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning("Product Configuration: Exception thrown when parsing RTProduct.json: " + e.Message);
-            }
+            var _ = _current.rt;
         }
 
         #endregion

@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Code.GQClient.Err;
-using Code.GQClient.UI.author;
-using Code.GQClient.UI.map;
+using Code.QM.Util;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 // ReSharper disable InconsistentNaming
@@ -45,10 +43,10 @@ namespace Code.GQClient.Conf
         {
             __JSON_Currently_Parsing = true;
             CurrentLoadingMode = loadMode;
-            RTConfig config = JsonConvert.DeserializeObject<RTConfig>(configText);
-            config.RefreshCategoryDictionary();
+            RTConfig rtConfig = JsonConvert.DeserializeObject<RTConfig>(configText);
+            rtConfig.RefreshCategoryDictionary();
             __JSON_Currently_Parsing = false;
-            return config;
+            return rtConfig;
         }
 
         #endregion
@@ -78,42 +76,56 @@ namespace Code.GQClient.Conf
                     return _categorySets;
                 }
 
-                categoryDict = new Dictionary<string, Category>();
-                foreach (CategorySet cs in _categorySets)
-                {
-                    foreach (Category c in cs.categories)
-                    {
-                        categoryDict[c.id] = c;
-                    }
-                }
-
                 return _categorySets;
             }
-            set { _categorySets = value; }
+            set
+            {
+                _categorySets = value;
+            }
         }
 
         internal void RefreshCategoryDictionary()
         {
-            categoryDict = new Dictionary<string, Category>();
+            _categoryDict = new Dictionary<string, Category>();
             foreach (CategorySet cs in _categorySets)
             {
                 foreach (Category c in cs.categories)
                 {
-                    categoryDict[c.id] = c;
+                    _categoryDict[c.id] = c;
                 }
             }
+
+            CategoriesChanged?.Invoke();
         }
 
         public string defaultCategory { get; set; }
 
         [JsonIgnore] private List<CategorySet> _categorySets;
 
+        public static event VoidToVoid CategoriesChanged;
+
+
         public Category GetCategory(string catId)
         {
             return categoryDict[catId];
         }
 
-        [JsonIgnore] internal Dictionary<string, Category> categoryDict;
+        [JsonIgnore] internal Dictionary<string, Category> _categoryDict;
+
+
+        [JsonIgnore]
+        internal Dictionary<string, Category> categoryDict
+        {
+            get
+            {
+                if (_categoryDict == null)
+                {
+                    RefreshCategoryDictionary();
+                }
+
+                return _categoryDict;
+            }
+        }
 
 
         /// <summary>
@@ -123,8 +135,6 @@ namespace Code.GQClient.Conf
         /// </summary>
         public RTConfig()
         {
-            // set default values:
-            categoryDict = new Dictionary<string, Category>();
             foldableCategoryFilters = true;
             categoryFiltersStartFolded = true;
             categoryFoldersStartFolded = true;

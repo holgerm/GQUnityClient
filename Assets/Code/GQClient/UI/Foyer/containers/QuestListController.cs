@@ -2,7 +2,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -27,7 +26,7 @@ namespace Code.GQClient.UI.Foyer.containers
         public void OnEnable()
         {
             // base.OnEnable();
-            
+
             if (StartUpdateViewAlreadyDone)
             {
                 // if we are already started earlier we refresh the list, since we might have switched from TopicTree
@@ -38,6 +37,8 @@ namespace Code.GQClient.UI.Foyer.containers
                 // let Start do the refresh of the list. Needed in case we switched from TopicTree to List
                 RefreshOnStart = true;
             }
+
+            RTConfig.CategoriesChanged += ListChanged;
         }
 
         public void OnDisable()
@@ -141,7 +142,7 @@ namespace Code.GQClient.UI.Foyer.containers
                 {
                     yield break;
                 }
-                
+
                 qcList[i].transform.SetSiblingIndex(i);
 
                 if (i % 5 == 0)

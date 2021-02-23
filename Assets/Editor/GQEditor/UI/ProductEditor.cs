@@ -32,7 +32,7 @@ namespace GQ.Editor.UI
 
         private static string _currentBuildName = null;
 
-        public static string CurrentBuildName
+        private static string CurrentBuildName
         {
             get
             {
@@ -44,7 +44,7 @@ namespace GQ.Editor.UI
 
                 return _currentBuildName;
             }
-            set { _currentBuildName = value; }
+            set => _currentBuildName = value;
         }
 
         internal const string WARN_ICON_PATH = "Assets/Editor/GQEditor/images/warn.png";
@@ -111,6 +111,10 @@ namespace GQ.Editor.UI
 
         public void OnEnable()
         {
+            // ignore enable when we start the app:
+            if (!EditorApplication.isPlaying)
+                return;
+            
             Instance = this;
 
             readStateFromEditorPrefs();
@@ -152,6 +156,9 @@ namespace GQ.Editor.UI
         /// </summary>
         void OnGUI()
         {
+            if (Application.isPlaying)
+                return;
+            
             // adjust textarea style:
             TextareaGUIStyle = GUI.skin.textField;
             TextareaGUIStyle.wordWrap = true;
@@ -588,7 +595,7 @@ namespace GQ.Editor.UI
                     if (GUILayout.Button("Revert"))
                     {
                         ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
-                        p.initConfig();
+                        p.InitConfig();
                         GUIUtility.keyboardControl = 0;
                         GUIUtility.hotControl = 0;
                     }
