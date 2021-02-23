@@ -82,6 +82,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.fontSize = 0.75f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = Config.lineSpacing;
+                    TextElement.characterSpacing = -3f;
                     break;
                 case TextUsageType.Caption:
                     TextElement.alignment = TextAlignmentOptions.Center;
@@ -89,6 +90,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.fontSizeMin = 0.35f * Config.mainFontSize;
                     TextElement.fontSizeMax = 0.45f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
+                    TextElement.characterSpacing = -3f;
                     break;
                 case TextUsageType.CopyRight:
                     TextElement.alignment = TextAlignmentOptions.Left;
@@ -97,6 +99,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.fontSizeMax = 0.45f * Config.mainFontSize;
                     TextElement.enableWordWrapping = true;
                     TextElement.color = Color.white;
+                    TextElement.characterSpacing = -3f;
                     break;
                 case TextUsageType.Option:
                     TextElement.alignment = TextAlignmentOptions.Left;
@@ -108,6 +111,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.lineSpacing = Config.lineSpacing;
                     TextElement.overflowMode = TextOverflowModes.Overflow;
                     TextElement.raycastTarget = false;
+                    TextElement.characterSpacing = -3f;
                     break;
                 case TextUsageType.SettingsOption:
                     TextElement.alignment = TextAlignmentOptions.Left;
@@ -118,6 +122,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.lineSpacing = Config.lineSpacing;
                     TextElement.overflowMode = TextOverflowModes.Overflow;
                     TextElement.raycastTarget = false;
+                    TextElement.characterSpacing = -3f;
                     break;
                 case TextUsageType.MenuEntry:
                     TextElement.color = Config.menuFGColor;
@@ -129,6 +134,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.enableWordWrapping = false;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
                     TextElement.raycastTarget = false;
+                    TextElement.characterSpacing = -4f;
                     break;
                 case TextUsageType.Button:
                     TextElement.alignment = TextAlignmentOptions.Center;
@@ -138,6 +144,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.raycastTarget = false;
+                    TextElement.characterSpacing = -4f;
                     break;
                 case TextUsageType.FoyerListEntry:
                     TextElement.color = Config.listEntryFgColor;
@@ -149,6 +156,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
                     TextElement.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
                     TextElement.raycastTarget = true;
+                    TextElement.characterSpacing = -4f;
                     break;
                 case TextUsageType.DialogTitle:
                     TextElement.alignment = TextAlignmentOptions.Center;
@@ -166,6 +174,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.lineSpacing = Config.lineSpacing;
+                    TextElement.characterSpacing = -4f;
                     break;
                 default:
                     break;
