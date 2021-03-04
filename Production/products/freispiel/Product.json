@@ -373,44 +373,5 @@
     "g": 95,
     "b": 95,
     "a": 255
-  },
-  "CategorySets": [
-    {
-      "name": "Kategorien",
-      "categories": [
-        {
-          "id": "verein",
-          "name": "Verein",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/society"
-          }
-        },
-        {
-          "id": "stadt",
-          "name": "Stadt Erkunden",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/city"
-          }
-        },
-        {
-          "id": "spielplatz",
-          "name": "Spielort",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/play"
-          }
-        },
-        {
-          "id": "info",
-          "name": "Info",
-          "folderName": "",
-          "symbol": {
-            "path": "textures/readable/info"
-          }
-        }
-      ]
-    }
-  ]
+  }
 }
