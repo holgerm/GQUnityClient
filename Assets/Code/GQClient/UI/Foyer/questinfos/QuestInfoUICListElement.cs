@@ -260,8 +260,8 @@ namespace Code.GQClient.UI.Foyer.questinfos
         private void setCategorySymbol(QuestInfo qInfo)
         {
             // set info button as configured:
-            if (ConfigurationManager.CurrentRT.mainCategorySet != null &&
-                ConfigurationManager.CurrentRT.mainCategorySet != "")
+            if (ConfigurationManager.Current.rt.mainCategorySet != null &&
+                ConfigurationManager.Current.rt.mainCategorySet != "")
             {
                 CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet();
                 if (mainCategorySet == null)

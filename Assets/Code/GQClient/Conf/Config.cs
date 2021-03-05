@@ -5,6 +5,7 @@ using System.IO;
 using Code.GQClient.Err;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
+using Code.QM.Util;
 using GQClient.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -35,7 +36,7 @@ namespace Code.GQClient.Conf
             Config.__JSON_Currently_Parsing = true;
             Config config = JsonConvert.DeserializeObject<Config>(configText);
             config.rt.RefreshCategoryDictionary();
-            
+
             Config.__JSON_Currently_Parsing = false;
             return config;
         }
@@ -843,10 +844,7 @@ namespace Code.GQClient.Conf
 
                 return _rt;
             }
-            set
-            {
-                _rt = value;
-            }
+            set { _rt = value; }
         }
 
         internal void resetRTConfig()
@@ -882,7 +880,10 @@ namespace Code.GQClient.Conf
                 ConfigurationManager.RTProductUpdated = false;
             }
 
-            QuestInfoManager.Instance.RaiseOnDataChange();
+            QuestInfoManager.Instance.DataChange.Invoke(
+                new QuestInfoChangedEvent(
+                    "Runtime Product reset.", type:
+                    ChangeType.ListChanged));
             ConfigurationManager.RTConfigChanged();
         }
 
@@ -938,10 +939,7 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor, JsonIgnore]
         public string defaultCategory
         {
-            get
-            {
-                 return rt.defaultCategory;
-            }
+            get { return rt.defaultCategory; }
             set => rt.defaultCategory = value;
         }
 

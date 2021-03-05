@@ -86,12 +86,12 @@ namespace Code.GQClient.UI.map
                     Texture2D symbol = null;
                     try
                     {
-                        var cat = ConfigurationManager.CurrentRT.GetCategory(categoryId);
+                        var cat = ConfigurationManager.Current.rt.GetCategory(categoryId);
                         symbol = cat.symbol.GetTexture2D();
                         if (symbol == null)
                         {
                             Log.SignalErrorToDeveloper(
-                                $"Symbol Texture not found for category {cat.symbol}. Using default symbol. (cats: {ConfigurationManager.CurrentRT.categoryDict.Count})");
+                                $"Symbol Texture not found for category {cat.symbol}. Using default symbol. (cats: {ConfigurationManager.Current.rt.categoryDict.Count})");
                         }
                         else if (symbol.width > t.width)
                         {
@@ -110,14 +110,14 @@ namespace Code.GQClient.UI.map
                     {
                         usedDefaultTexture = true;
                         StringBuilder msg = new StringBuilder();
-                        foreach (var key in ConfigurationManager.CurrentRT.categoryDict.Keys)
+                        foreach (var key in ConfigurationManager.Current.rt.categoryDict.Keys)
                         {
                             msg.Append(key + "; ");
                         }
 
 
                         Log.SignalErrorToAuthor(
-                            $"Quest {Data.Id}: Category {categoryId} not found. Using default symbol. Texture: t.height: {t.height}; cats# {ConfigurationManager.CurrentRT.categoryDict.Keys.Count} : {msg.ToString()}");
+                            $"Quest {Data.Id}: Category {categoryId} not found. Using default symbol. Texture: t.height: {t.height}; cats# {ConfigurationManager.Current.rt.categoryDict.Keys.Count} : {msg.ToString()}");
                     }
 
                     var outlineColors = markerOutline.GetPixels32();

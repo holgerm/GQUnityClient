@@ -21,8 +21,8 @@ namespace Code.GQClient.UI.map
 		{
 			// at last we register for changes on quest infos with the quest info manager:
 			_qim = QuestInfoManager.Instance;
-			_qim.OnDataChange += OnMarkerChanged;
-			_qim.OnFilterChange += OnMarkerChanged;
+			_qim.DataChange.AddListener(OnMarkerChanged);
+			//_qim.OnFilterChange += OnMarkerChanged;
 			RTConfig.CategoriesChanged += UpdateView;
 		}
 
@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.map
 
 		#region React on Events
 
-		private void OnMarkerChanged (object sender, QuestInfoChangedEvent e)
+		private void OnMarkerChanged (QuestInfoChangedEvent e)
 		{
 			Marker m;
 			switch (e.ChangeType) {

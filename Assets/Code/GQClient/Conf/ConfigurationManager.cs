@@ -42,7 +42,11 @@ namespace Code.GQClient.Conf
             {
                 RTProductUpdated = true;
                 Current.resetRTConfig();
-                QuestInfoManager.Instance.RaiseOnDataChange();
+                QuestInfoManager.Instance.DataChange.Invoke(
+                    new QuestInfoChangedEvent(
+                        "Runtime Product JSON file read.", type: 
+                        ChangeType.ListChanged)
+                    );
             };
             // d.OnTaskEnded += (sender, args) =>
             // {
@@ -118,12 +122,6 @@ namespace Code.GQClient.Conf
                 return _current;
             }
             set { _current = value; }
-        }
-
-        public static RTConfig CurrentRT
-        {
-            get => Current.rt;
-            set => Current.rt = value;
         }
 
         public static event Action OnRTConfigChanged;

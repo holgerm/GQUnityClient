@@ -19,13 +19,11 @@ using UnityEngine;
 
 namespace GQClient.Model
 {
-
     /// <summary>
     /// Manages the meta data for all quests available: locally on the device as well as remotely on the server.
     /// </summary>
     public class QuestInfoManager
     {
-
         #region store & access data
 
         public static string LocalQuestsPath
@@ -36,18 +34,16 @@ namespace GQClient.Model
                 {
                     Directory.CreateDirectory(Device.GetPersistentDatapath() + "/quests/");
                 }
+
                 return Device.GetPersistentDatapath() + "/quests/";
             }
         }
-        
+
         public static string QuestsRelativeBasePath => "quests";
 
         public static string LocalQuestInfoJsonPath => LocalQuestsPath + "infos.json";
 
-        public Dictionary<int, QuestInfo> QuestDict
-        {
-            get;
-        }
+        public Dictionary<int, QuestInfo> QuestDict { get; }
 
         public List<QuestInfo> GetListOfQuestInfos()
         {
@@ -66,18 +62,11 @@ namespace GQClient.Model
             return QuestDict.ContainsKey(id);
         }
 
-        public int Count
-        {
-            get
-            {
-                return QuestDict.Count;
-            }
-        }
+        public int Count => QuestDict.Count;
 
         public QuestInfo GetQuestInfo(int id)
         {
-            QuestInfo questInfo;
-            return (QuestDict.TryGetValue(id, out questInfo) ? questInfo : null);
+            return (QuestDict.TryGetValue(id, out QuestInfo questInfo) ? questInfo : null);
         }
 
         #endregion
@@ -89,11 +78,8 @@ namespace GQClient.Model
 
         public QuestInfoFilter Filter
         {
-            get
-            {
-                return _filter;
-            }
-            protected set
+            get => _filter;
+            private set
             {
                 if (_filter != value)
                 {
@@ -108,33 +94,29 @@ namespace GQClient.Model
 
         public QuestInfoFilter.CategoryFilter CategoryFilter;
 
-        public Dictionary<string, QuestInfoFilter.CategoryFilter> CategoryFilters;
+        private Dictionary<string, QuestInfoFilter.CategoryFilter> _categoryFilters;
 
         /// <summary>
         /// Adds the given andFilter in conjunction to the current filter(s).
         /// </summary>
         /// <param name="andFilter">And filter.</param>
-        public void FilterAnd(QuestInfoFilter andFilter)
+        private void FilterAnd(QuestInfoFilter andFilter)
         {
             Filter = new QuestInfoFilter.And(Filter, andFilter);
         }
 
-        public event ChangeCallback OnFilterChange;
+        public readonly Observable<QuestInfoChangedEvent> FilterChange = new Observable<QuestInfoChangedEvent>();
 
-        public void FilterChanged()
+        private void FilterChanged()
         {
-            if (OnFilterChange != null)
-            {
-                OnFilterChange(
-                    this,
-                    new QuestInfoChangedEvent(
-                        "Filter changed ...",
-                        ChangeType.FilterChanged,
-                        newQuestInfo: null,
-                        oldQuestInfo: null
-                    )
-                );
-            }
+            FilterChange.Invoke(
+                new QuestInfoChangedEvent(
+                    "Filter changed ...",
+                    ChangeType.FilterChanged,
+                    newQuestInfo: null,
+                    oldQuestInfo: null
+                )
+            );
         }
 
         #endregion
@@ -145,7 +127,6 @@ namespace GQClient.Model
         public void AddInfo(QuestInfo newInfo, bool raiseEvents = true)
         {
             QuestDict.Add(newInfo.Id, newInfo);
-
             if (Filter.Accept(newInfo))
             {
                 QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
@@ -156,7 +137,7 @@ namespace GQClient.Model
                 // Run through filter and raise event if involved:
                 if (raiseEvents)
                 {
-                    onDataChange?.Invoke(this, ev);
+                    DataChange.Invoke(ev);
                 }
             }
         }
@@ -169,15 +150,15 @@ namespace GQClient.Model
                     changedInfo.Id);
                 return;
             }
-            
+
             curInfo.QuestInfoRecognizeServerUpdate(changedInfo);
 
             // React also as container to a change info event
-            if (raiseEvents && Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
+            if (raiseEvents && Filter.Accept(curInfo)
+            ) // TODO should we also do it, if the new qi does not pass the filter?
             {
                 // Run through filter and raise event if involved
-                onDataChange?.Invoke(
-                    this,
+                DataChange.Invoke(
                     new QuestInfoChangedEvent(
                         message: $"Info for quest {curInfo.Name} changed.",
                         type: ChangeType.ChangedInfo,
@@ -186,7 +167,6 @@ namespace GQClient.Model
                     )
                 );
             }
-
         }
 
         public void RemoveInfo(int oldInfoId, bool raiseEvents = true)
@@ -195,11 +175,10 @@ namespace GQClient.Model
             Debug.Log("RemoveInfo(" + oldInfoID + ")");
 #endif
 
-            QuestInfo oldInfo = null;
-            if (!QuestDict.TryGetValue(oldInfoId, out oldInfo))
+            if (!QuestDict.TryGetValue(oldInfoId, out QuestInfo oldInfo))
             {
                 Log.SignalErrorToDeveloper(
-                    "Trying to remove quest info with ID {0} but it deos not exist in QuestInfoManager.",
+                    "Trying to remove quest info with ID {0} but it does not exist in QuestInfoManager.",
                     oldInfoId
                 );
                 return;
@@ -207,13 +186,12 @@ namespace GQClient.Model
 
             oldInfo.Dispose();
             QuestDict.Remove(oldInfoId);
-            
+
             if (raiseEvents && Filter.Accept(oldInfo))
             {
                 // Run through filter and raise event if involved
 
-                onDataChange?.Invoke(
-                    this,
+                DataChange.Invoke(
                     new QuestInfoChangedEvent(
                         $"Info for quest {oldInfo.Name} removed.",
                         type: ChangeType.RemovedInfo,
@@ -269,12 +247,12 @@ namespace GQClient.Model
             var autoLoader =
                 new AutoLoadAndUpdate();
 
-            var t = 
+            var t =
                 new TaskSequence(
-                    importLocal, 
-                    downloader, 
-                    importFromServer, 
-                    exporter, 
+                    importLocal,
+                    downloader,
+                    importFromServer,
+                    exporter,
                     autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
             t.Start();
@@ -296,38 +274,8 @@ namespace GQClient.Model
         /// </summary>
         public static event Task.TaskCallback OnQuestInfosUpdateSucceeded;
 
-        public delegate void ChangeCallback(object sender, QuestInfoChangedEvent e);
-
-        private event ChangeCallback onDataChange;
-        
-        public event ChangeCallback OnDataChange
-        {
-            add
-            {
-                onDataChange += value;
-                value(
-                    this,
-                    new QuestInfoChangedEvent(
-                        "Initializing listener ...",
-                        ChangeType.ListChanged,
-                        newQuestInfo: null,
-                        oldQuestInfo: null
-                    )
-                );
-            }
-            remove => onDataChange -= value;
-        }
-
-        public void RaiseOnDataChange(string message = null)
-        {
-            if (message == null)
-            {
-                message = "Quest infos changed.";
-            }
-            onDataChange?.Invoke(
-                this, 
-                new QuestInfoChangedEvent(message, type: ChangeType.ListChanged));
-        }
+        public readonly Observable<QuestInfoChangedEvent> DataChange =
+            new Observable<QuestInfoChangedEvent>();
 
         #endregion
 
@@ -344,16 +292,13 @@ namespace GQClient.Model
                 {
                     _instance = new QuestInfoManager();
                     _instance.initViews();
-                    _instance.initFilters();
+                    _instance.InitFilters();
                 }
+
                 return _instance;
             }
-            set
-            {
-                _instance = value;
-            }
         }
-        
+
         public static void Reset()
         {
             _instance = null;
@@ -367,7 +312,8 @@ namespace GQClient.Model
 
         void initViews()
         {
-            if (ConfigurationManager.Current.questInfoViews == null || ConfigurationManager.Current.questInfoViews.Length == 0)
+            if (ConfigurationManager.Current.questInfoViews == null ||
+                ConfigurationManager.Current.questInfoViews.Length == 0)
             {
                 Log.SignalErrorToDeveloper("No quest info views defined for this app. Fix that!");
                 return;
@@ -377,10 +323,10 @@ namespace GQClient.Model
             if (ConfigurationManager.Current.questInfoViews.Length <= 1)
                 return;
 
-            // Create the multitoggle View for the view alternatives currently not displayed, i.e. 2 to n:
-            var menuContent = Base.Instance.MenuTopLeftContent;
+            // Create the multi-toggle View for the view alternatives currently not displayed, i.e. 2 to n:
+            GameObject menuContent = Base.Instance.MenuTopLeftContent;
             ViewToggleController.Create(menuContent);
-            
+
             var startView = ConfigurationManager.Current.questInfoViews[0];
             Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
             Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
@@ -391,7 +337,7 @@ namespace GQClient.Model
         /// <summary>
         /// Initializes the quest info filters, e.g. called at start when the QuestInfoManager is initialized.
         /// </summary>
-		void initFilters()
+        private void InitFilters()
         {
             // init filters
             Filter = new QuestInfoFilter.All();
@@ -401,26 +347,26 @@ namespace GQClient.Model
 
             // init local quests filter:
             FilterAnd(QuestInfoFilter.LocalQuestInfosFilter.Instance);
-            
+
             // init TopicFilter:
             FilterAnd(TopicFilter.Instance);
 
             // init category filters:
-            CategoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
-            var catSets = ConfigurationManager.CurrentRT.CategorySets;
+            _categoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
+            var catSets = ConfigurationManager.Current.rt.CategorySets;
             foreach (var catSet in catSets)
             {
-                CategoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter(catSet);
-                FilterAnd(CategoryFilters[catSet.name]);
+                _categoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter(catSet);
+                FilterAnd(_categoryFilters[catSet.name]);
             }
 
             // create UI for Category Filters:
             var menuContent = Base.Instance.MenuTopLeftContent;
-            foreach (var catSet in ConfigurationManager.CurrentRT.CategorySets)
+            foreach (var catSet in ConfigurationManager.Current.rt.CategorySets)
             {
                 CategoryTreeCtrl.Create(
-                    root: menuContent, 
-                    catFilter: CategoryFilters[catSet.name], 
+                    root: menuContent,
+                    catFilter: _categoryFilters[catSet.name],
                     categories: catSet.categories);
             }
         }
@@ -435,21 +381,21 @@ namespace GQClient.Model
         {
             if (_instance != null)
             {
-                Instance.OnDataChange -= qcc.OnQuestInfoChanged;
-                Instance.OnFilterChange -= qcc.OnQuestInfoChanged;
+                Instance.DataChange.RemoveListener(qcc.OnQuestInfoChanged);
+                Instance.FilterChange.RemoveListener(qcc.OnQuestInfoChanged);
             }
         }
     }
 
     public class QuestInfoChangedEvent : EventArgs
     {
-        public string Message { get; protected set; }
+        private string Message { get; }
 
-        public ChangeType ChangeType { get; protected set; }
+        public ChangeType ChangeType { get; }
 
-        public QuestInfo NewQuestInfo { get; protected set; }
+        public QuestInfo NewQuestInfo { get; }
 
-        public QuestInfo OldQuestInfo { get; protected set; }
+        public QuestInfo OldQuestInfo { get; }
 
         public QuestInfoChangedEvent(
             string message = "",
@@ -480,6 +426,4 @@ namespace GQClient.Model
         FilterChanged,
         SorterChanged
     }
-
-
 }

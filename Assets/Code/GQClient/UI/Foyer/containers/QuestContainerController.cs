@@ -38,13 +38,13 @@ namespace Code.GQClient.UI.Foyer.containers
         protected void Start()
         {
             //           qim = QuestInfoManager.Instance;
-            Qim.OnDataChange += OnQuestInfoChanged;
-            Qim.OnFilterChange += OnQuestInfoChanged;
+            Qim.DataChange.AddListener(OnQuestInfoChanged);
+            Qim.FilterChange.AddListener(OnQuestInfoChanged);
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
             StartUpdateViewAlreadyDone = true;
         }
 
-        public virtual void OnQuestInfoChanged(object sender, QuestInfoChangedEvent e)
+        public virtual void OnQuestInfoChanged(QuestInfoChangedEvent e)
         {
 #if DEBUG_LOG
             Debug.Log("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString());

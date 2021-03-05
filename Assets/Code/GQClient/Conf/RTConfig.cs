@@ -95,7 +95,7 @@ namespace Code.GQClient.Conf
                 }
             }
 
-            CategoriesChanged?.Invoke();
+            // CategoriesChanged?.Invoke();
         }
 
         public string defaultCategory { get; set; }

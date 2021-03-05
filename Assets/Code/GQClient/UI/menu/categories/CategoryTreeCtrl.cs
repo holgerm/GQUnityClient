@@ -27,11 +27,11 @@ namespace Code.GQClient.UI.menu.categories
         {
             qim = QuestInfoManager.Instance;
 //			CategoryFilter = qim.CategoryFilter; // TODO use CatSet instead
-            qim.OnDataChange += OnQuestInfoChanged;
+            qim.DataChange.AddListener(OnQuestInfoChanged);
             ConfigurationManager.OnRTConfigChanged += UpdateView;
 
             // fold the categories of this set (up to now they are unfolded):
-            if (ConfigurationManager.CurrentRT.categoryFiltersStartFolded)
+            if (ConfigurationManager.Current.rt.categoryFiltersStartFolded)
             {
                 ToggleMenuView();
             }
@@ -65,7 +65,7 @@ namespace Code.GQClient.UI.menu.categories
 
         public void ToggleMenuView()
         {
-            bool foldable = ConfigurationManager.CurrentRT.foldableCategoryFilters;
+            bool foldable = ConfigurationManager.Current.rt.foldableCategoryFilters;
             if (!foldable || transform.childCount < 3)
                 // if we can't fold or do not have entries (the header is always there) we skip this:
                 return;
@@ -90,7 +90,7 @@ namespace Code.GQClient.UI.menu.categories
 
         #region React on Events
 
-        private void OnQuestInfoChanged(object sender, QuestInfoChangedEvent e)
+        private void OnQuestInfoChanged(QuestInfoChangedEvent e)
         {
             switch (e.ChangeType)
             {
@@ -150,7 +150,7 @@ namespace Code.GQClient.UI.menu.categories
             categoryEntries = new Dictionary<string, CategoryEntry>();
             categoryFolders = new Dictionary<string, CategoryFolder>();
             CategorySet catSet =
-                ConfigurationManager.CurrentRT.CategorySets.Find(cs => cs.name == catSetName);
+                ConfigurationManager.Current.rt.CategorySets.Find(cs => cs.name == catSetName);
 
             // 3. Regenerate data: create skeleton of folders and entries:
             foreach (Category c in catSet.categories)

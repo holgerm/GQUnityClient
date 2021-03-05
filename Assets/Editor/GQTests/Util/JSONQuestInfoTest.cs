@@ -25,7 +25,7 @@ namespace GQTests.Util
             qim = QuestInfoManager.Instance;
 
             testListener = new TestChangeListener();
-            qim.OnDataChange += testListener.OnChange;
+            qim.DataChange.AddListener(testListener.OnChange);
 
             importTask = new ImportServerQuestInfos();
         }
@@ -68,7 +68,7 @@ namespace GQTests.Util
         public int infoChanged = 0;
         public int listChanged = 0;
 
-        public void OnChange(object sender, QuestInfoChangedEvent e)
+        public void OnChange(QuestInfoChangedEvent e)
         {
             switch (e.ChangeType)
             {
