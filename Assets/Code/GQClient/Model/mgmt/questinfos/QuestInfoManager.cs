@@ -14,7 +14,6 @@ using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
-using GQClient.Model;
 using UnityEngine;
 
 namespace GQClient.Model
@@ -274,6 +273,9 @@ namespace GQClient.Model
         /// </summary>
         public static event Task.TaskCallback OnQuestInfosUpdateSucceeded;
 
+        /// <summary>
+        /// Triggers when categories are read from RTConfig.json files, be it originally app distributed, locally persisted or server-based. 
+        /// </summary>
         public readonly Observable<QuestInfoChangedEvent> DataChange =
             new Observable<QuestInfoChangedEvent>();
 
@@ -308,6 +310,11 @@ namespace GQClient.Model
         {
             // init quest info store:
             QuestDict = new Dictionary<int, QuestInfo>();
+            DataChange.AddListener(data =>
+            {
+                if (ChangeType.ListChanged == data.ChangeType)
+                    InitFilters();
+            });
         }
 
         void initViews()
@@ -337,8 +344,9 @@ namespace GQClient.Model
         /// <summary>
         /// Initializes the quest info filters, e.g. called at start when the QuestInfoManager is initialized.
         /// </summary>
-        private void InitFilters()
+        public void InitFilters()
         {
+            Debug.Log($"QUestInfoManager.InitFilters(): #catSets: {ConfigurationManager.Current.rt.CategorySets.Count}".Red());
             // init filters
             Filter = new QuestInfoFilter.All();
 
@@ -361,11 +369,11 @@ namespace GQClient.Model
             }
 
             // create UI for Category Filters:
-            var menuContent = Base.Instance.MenuTopLeftContent;
             foreach (var catSet in ConfigurationManager.Current.rt.CategorySets)
             {
-                CategoryTreeCtrl.Create(
-                    root: menuContent,
+                Debug.Log($"Calling CategoryTreeCtrl.Create({Base.Instance.MenuTopLeftContent.name})");
+                CategoryTreeCtrl ctrl = CategoryTreeCtrl.Create(
+                    root: Base.Instance.MenuTopLeftContent,
                     catFilter: _categoryFilters[catSet.name],
                     categories: catSet.categories);
             }

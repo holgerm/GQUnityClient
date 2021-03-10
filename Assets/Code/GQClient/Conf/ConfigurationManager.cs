@@ -41,6 +41,7 @@ namespace Code.GQClient.Conf
             d.OnSuccess += (dl, e) =>
             {
                 RTProductUpdated = true;
+                Debug.Log("RTCOnfig has been loaded from server".Green());
                 Current.resetRTConfig();
                 QuestInfoManager.Instance.DataChange.Invoke(
                     new QuestInfoChangedEvent(

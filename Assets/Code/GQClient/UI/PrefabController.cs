@@ -26,7 +26,7 @@ namespace Code.GQClient.UI
                 if (root == null)
                     Log.SignalErrorToDeveloper("No root game object found for prefab {0}", prefab.name);
             }
-
+            
             var go = (GameObject)Instantiate(
                                 prefab,
                                 root.transform,

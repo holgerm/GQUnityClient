@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
@@ -22,9 +23,15 @@ namespace Code.GQClient.UI.menu.categories
 
         private string catSetName;
 
+        private void Awake()
+        {
+            Debug.Log("CategoryTreeCtrl.Awake()".Yellow());
+        }
+
         // Use this for initialization
         void Start()
         {
+            Debug.Log("CategoryTreeCtrl.Start()".Yellow());
             qim = QuestInfoManager.Instance;
 //			CategoryFilter = qim.CategoryFilter; // TODO use CatSet instead
             qim.DataChange.AddListener(OnQuestInfoChanged);
@@ -43,9 +50,19 @@ namespace Code.GQClient.UI.menu.categories
         public static CategoryTreeCtrl Create(GameObject root, QuestInfoFilter.CategoryFilter catFilter,
             List<Category> categories)
         {
+            string catTreeGoName = PREFAB + " (" + catFilter.Name + ")";
+            
+            // delete game object if already existing:
+            Transform oldExisting = root.transform.Find(catTreeGoName);
+            if (oldExisting != null && oldExisting.gameObject.activeSelf)
+            {
+                oldExisting.gameObject.SetActive(false);
+                DestroyImmediate(oldExisting.gameObject);
+            }
+
             // Create the view object for this controller:
             GameObject go = PrefabController.Create("prefabs", PREFAB, root);
-            go.name = PREFAB + " (" + catFilter.Name + ")";
+            go.name = catTreeGoName;
 
             // save tree controller & folder:
             CategoryTreeCtrl treeCtrl = go.GetComponent<CategoryTreeCtrl>();
@@ -54,6 +71,8 @@ namespace Code.GQClient.UI.menu.categories
             treeCtrl.Title.text = catFilter.Name;
             treeCtrl.gameObject.SetActive(true);
             treeCtrl.catSetName = catFilter.Name;
+
+            treeCtrl.recreateUI();
 
             return treeCtrl;
         }
@@ -92,6 +111,8 @@ namespace Code.GQClient.UI.menu.categories
 
         private void OnQuestInfoChanged(QuestInfoChangedEvent e)
         {
+            Debug.Log($"HERE WE WERE! CategoryTreeCtrl.OnQuestInfoChanged({e.ChangeType})".Red());
+
             switch (e.ChangeType)
             {
                 case ChangeType.AddedInfo:
@@ -116,6 +137,7 @@ namespace Code.GQClient.UI.menu.categories
 
         public void UpdateView()
         {
+            Debug.Log("HERE WE WERE! CategoryTreeCtrl.UpdateView()".Red());
             if (this == null || CategoryFilter == null)
             {
                 return;

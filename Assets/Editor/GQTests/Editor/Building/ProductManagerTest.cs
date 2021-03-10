@@ -62,7 +62,7 @@ namespace GQTests.Editor.Building {
 			// Assert:
 			Assert.IsNotNull(pm);
 			Assert.AreEqual(PRODUCTS_TEST_DIR, ProductManager.ProductsDirPath);
-			Assert.AreEqual(0, pm.AllProducts.Count);
+			Assert.AreEqual(0, ProductManager.AllProducts.Count);
 		}
 
 		[Test]
@@ -79,12 +79,12 @@ namespace GQTests.Editor.Building {
 			string testProductID = "testProduct";
 
 			// Act:
-			prodPM.createNewProduct(testProductID);
+			prodPM.CreateNewProduct(testProductID);
 
 			///////////////////////////////////
 			// Assert:
-			Assert.AreEqual(1, prodPM.AllProducts.Count);
-			ProductSpec product = prodPM.GetProduct(testProductID);
+			Assert.AreEqual(1, ProductManager.AllProducts.Count);
+			ProductSpec product = ProductManager.GetProduct(testProductID);
 			Assert.AreEqual(testProductID, product.Id);
 			Assert.That(Directory.Exists(product.Dir), "Product dir should be ok for product " + product);
 
@@ -116,7 +116,7 @@ namespace GQTests.Editor.Building {
 			ProductManager pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.AreEqual(0, pm.AllProducts.Count, "Product List should be empty.");
+			Assert.AreEqual(0, ProductManager.AllProducts.Count, "Product List should be empty.");
 		}
 
 		[Test]
@@ -126,7 +126,7 @@ namespace GQTests.Editor.Building {
 			ProductManager pm = ProductManager.Instance;
 
 			// Assert:
-			Assert.AreEqual(4, pm.AllProducts.Count, "Product List should contain the 4 valid products.");
+			Assert.AreEqual(4, ProductManager.AllProducts.Count, "Product List should contain the 4 valid products.");
 			Assert.That(pm.AllProductIds.Contains("product1"), "product1 missing");
 			Assert.That(pm.AllProductIds.Contains("product2"), "product2 missing");
 			Assert.That(pm.AllProductIds.Contains("product3"), "product3 missing");
@@ -197,19 +197,19 @@ namespace GQTests.Editor.Building {
 			} 
 
 			if ( !productJSONFound ) {
-				Assert.Fail("No Product.json file found. (in build of product " + pm.GetProduct(productName).Id + ")");
+				Assert.Fail("No Product.json file found. (in build of product " + ProductManager.GetProduct(productName).Id + ")");
 			}
 
 			if ( !appIconFound ) {
-				Assert.Fail("No AppIcon.png file found. (in build of product " + pm.GetProduct(productName).Id + ")");
+				Assert.Fail("No AppIcon.png file found. (in build of product " + ProductManager.GetProduct(productName).Id + ")");
 			}
 
 			if ( !splashScreenFound ) {
-				Assert.Fail("No SplashScreen.jpg file found. (in build of product " + pm.GetProduct(productName).Id + ")");
+				Assert.Fail("No SplashScreen.jpg file found. (in build of product " + ProductManager.GetProduct(productName).Id + ")");
 			}
 
 			if ( !topLogoFound ) {
-				Assert.Fail("No TopLogo.jpg file found. (in build of product " + pm.GetProduct(productName).Id + ")");
+				Assert.Fail("No TopLogo.jpg file found. (in build of product " + ProductManager.GetProduct(productName).Id + ")");
 			}
 
 

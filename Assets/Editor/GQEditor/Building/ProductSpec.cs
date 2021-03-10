@@ -140,6 +140,7 @@ namespace GQ.Editor.Building
         /// <param name="dir">Dir.</param>
         public ProductSpec(string dirPath)
         {
+            Debug.Log("ProductSpec #1");
             // Check path:
             if (!Directory.Exists(dirPath))
                 throw new ArgumentException("Invalid path: Product directory not found: " + dirPath);
@@ -154,6 +155,8 @@ namespace GQ.Editor.Building
 
         internal void InitConfig()
         {
+            Debug.Log("ProductSpec #2");
+
             // init and check Config:
             try
             {
@@ -164,14 +167,16 @@ namespace GQ.Editor.Building
                 }
 
                 string configJSON = File.ReadAllText(ConfigPath);
+                Debug.Log($"ProductSpec #3 read from {ConfigPath}");
                 _config = Config._doDeserializeConfig(configJSON);
+                Debug.Log($"ProductSpec #4 deserialized");
             }
             catch (Exception exc)
             {
                 Log.SignalErrorToDeveloper($"Invalid product definition. Reading Product.json: {exc.Message}");
                 throw new ArgumentException("Invalid product definition. Product.json file could not be read.", exc);
             }
-
+            
             // init and check RTConfig:
             try
             {
@@ -188,6 +193,9 @@ namespace GQ.Editor.Building
                 throw new ArgumentException(
                     "Invalid product definition. RTProduct.json file could not be read.", exc);
             }
+            
+            Debug.Log("ProductSpec #End of InitConfig");
+
         }
 
         static internal bool IsValidProductName(string name)

@@ -36,13 +36,6 @@ namespace Code.GQClient.UI.menu
             var cf = ConfigurationManager.Current;
             updateQuestInfos_MenuEntry.SetActive(cf.OfferManualUpdate4QuestInfos);
         }
-
-        public void UpdateQuestInfos()
-        {
-            QuestInfoManager.UpdateQuestInfos();
-            Base.Instance.MenuCanvas.SetActive(false);
-        }
-
     }
 
 }

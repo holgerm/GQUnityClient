@@ -1,4 +1,5 @@
-﻿using Code.GQClient.Conf;
+﻿using System;
+using Code.GQClient.Conf;
 using GQClient.Model;
 using Code.GQClient.UI.Foyer.containers;
 using Code.GQClient.UI.layout;
@@ -255,7 +256,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             }
 
             // TODO call the lists sorter ...
-        }
+         }
 
         private void setCategorySymbol(QuestInfo qInfo)
         {
@@ -309,7 +310,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
         public virtual void Reset()
         {
             Name = EnsurePrefabVariableIsSet<TextMeshProUGUI>(Name, "Name", NAME_PATH);
-            Debug.Log("HERE !!!");
             DownloadButton = EnsurePrefabVariableIsSet<Button>(DownloadButton, "Download Button", "DownloadButton");
             StartButton = EnsurePrefabVariableIsSet<Button>(StartButton, "Start Button", "StartButton");
             DeleteButton = EnsurePrefabVariableIsSet<Button>(DeleteButton, "Delete Button", "DeleteButton");

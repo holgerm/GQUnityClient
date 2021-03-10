@@ -202,6 +202,7 @@ namespace Code.GQClient.UI.Foyer.containers
                         containerController: this
                     ).GetComponent<QuestInfoUICListElement>();
                 QuestInfoControllers[info.Id] = qiCtrl;
+                
                 qiCtrl.Show();
 
                 //if (steps % 3 == 0)

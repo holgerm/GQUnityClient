@@ -17,8 +17,8 @@
   "nameForQuestSg": "Ort",
   "nameForQuestsPl": "Orte",
   "questInfoViews": [
-    "Map",
-    "List"
+    "List",
+    "Map"
   ],
   "topicButtonAspectRatio": 1.0,
   "cloudQuestsVisible": false,
@@ -354,6 +354,5 @@
     "g": 95,
     "b": 167,
     "a": 255
-  },
-  "CategorySets": []
+  }
 }

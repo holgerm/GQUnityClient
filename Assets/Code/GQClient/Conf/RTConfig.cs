@@ -78,15 +78,14 @@ namespace Code.GQClient.Conf
 
                 return _categorySets;
             }
-            set
-            {
-                _categorySets = value;
-            }
+            set { _categorySets = value; }
         }
 
         internal void RefreshCategoryDictionary()
         {
+            if (null == _categorySets) return;
             _categoryDict = new Dictionary<string, Category>();
+
             foreach (CategorySet cs in _categorySets)
             {
                 foreach (Category c in cs.categories)

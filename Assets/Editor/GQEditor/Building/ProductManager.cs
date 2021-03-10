@@ -27,7 +27,7 @@ namespace GQ.Editor.Building
         /// <summary>
         /// In this directory all defined products are stored. This data is NOT included in the app build.
         /// </summary>
-        private static string PRODUCTS_DIR_PATH_DEFAULT =
+        private static readonly string PRODUCTS_DIR_PATH_DEFAULT =
             Files.CombinePath(GQAssert.PROJECT_PATH, "Production/products/");
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace GQ.Editor.Building
         /// </summary>
         public const string TEMPLATE_PRODUCT_PATH = "Assets/Editor/productsTemplate/templateProduct";
 
-        static private string _productsDirPath = PRODUCTS_DIR_PATH_DEFAULT;
+        private static string _productsDirPath = PRODUCTS_DIR_PATH_DEFAULT;
 
         /// <summary>
         /// Setting the product dir creates a completely fresh instance for this singleton and reinitializes all products. 
@@ -52,35 +52,21 @@ namespace GQ.Editor.Building
             }
         }
 
-        public static string PRODUCT_ADDON_PATH
-        {
-            get { return GQAssert.PROJECT_PATH + "/" + "Production/products addon/"; }
-        }
-
-        private string _buildExportPath = ConfigurationManager.RUNTIME_PRODUCT_DIR;
-
-        public string BuildExportPath
-        {
-            get { return _buildExportPath; }
-            set { _buildExportPath = value; }
-        }
+        public string BuildExportPath { get; private set; } = ConfigurationManager.RUNTIME_PRODUCT_DIR;
 
 
         public string _ANDROID_MANIFEST_DIR = "Assets/Plugins/Android";
 
         public string ANDROID_MANIFEST_DIR
         {
-            get { return _ANDROID_MANIFEST_DIR; }
-            private set { _ANDROID_MANIFEST_DIR = value; }
+            get => _ANDROID_MANIFEST_DIR;
+            private set => _ANDROID_MANIFEST_DIR = value;
         }
 
-        public string ANDROID_MANIFEST_FILE
-        {
-            get { return Files.CombinePath(ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST); }
-        }
+        public string ANDROID_MANIFEST_FILE => Files.CombinePath(ANDROID_MANIFEST_DIR, ProductSpec.ANDROID_MANIFEST);
 
 
-        public string _STREAMING_ASSET_PATH = "Assets/StreamingAssets/prod";
+        private string _STREAMING_ASSET_PATH = "Assets/StreamingAssets/prod";
 
         public string STREAMING_ASSET_PATH
         {
@@ -88,11 +74,8 @@ namespace GQ.Editor.Building
             private set { _STREAMING_ASSET_PATH = value; }
         }
 
-        public const string DEFAULT_START_SCENE = "DefaultAssets/DefaultStartScene.unity";
+        private const string DEFAULT_START_SCENE = "DefaultAssets/DefaultStartScene.unity";
         public const string FOYER_SCENE = "Assets/Scenes/Foyer.unity";
-        public const string LOADING_CANVAS_NAME = "LoadingCanvas";
-        public const string LOADING_CANVAS_PREFAB = "loadingCanvas/LoadingCanvas";
-        public const string LOADING_CANVAS_CONTAINER_TAG = "LoadingCanvasContainer";
 
         #endregion
 
@@ -143,23 +126,15 @@ namespace GQ.Editor.Building
 
         #region Access to Products
 
-        internal Dictionary<string, ProductSpec> _productDict;
+        private Dictionary<string, ProductSpec> _productDict;
 
-        public ICollection<ProductSpec> AllProducts
+        public static ICollection<ProductSpec> AllProducts => Instance._productDict.Values;
+
+        public ICollection<string> AllProductIds => Instance._productDict.Keys;
+
+        public static ProductSpec GetProduct(string productID)
         {
-            get { return Instance._productDict.Values; }
-        }
-
-        public ICollection<string> AllProductIds
-        {
-            get { return Instance._productDict.Keys; }
-        }
-
-        public ProductSpec GetProduct(string productID)
-        {
-            ProductSpec found = null;
-
-            if (Instance._productDict.TryGetValue(productID, out found))
+            if (Instance._productDict.TryGetValue(productID, out ProductSpec found))
                 return found;
             else
                 return null;
@@ -176,7 +151,7 @@ namespace GQ.Editor.Building
 
         #region Singleton
 
-        static private ProductManager _instance;
+        private static ProductManager _instance;
 
         public static ProductManager Instance
         {
@@ -192,7 +167,7 @@ namespace GQ.Editor.Building
         }
 
         // TODO move test instance stuff into a testable subclass?
-        static private ProductManager _testInstance;
+        private static ProductManager _testInstance;
 
         public static ProductManager TestInstance
         {
@@ -202,7 +177,7 @@ namespace GQ.Editor.Building
                 {
                     _testInstance = new ProductManager();
 
-                    _testInstance._buildExportPath =
+                    _testInstance.BuildExportPath =
                         Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Output", "ConfigAssets", "Resources");
                     if (!Directory.Exists(_testInstance.BuildExportPath))
                         Directory.CreateDirectory(_testInstance.BuildExportPath);
@@ -226,7 +201,7 @@ namespace GQ.Editor.Building
 
         private ProductManager()
         {
-            _errors = new List<string>();
+            Errors = new List<string>();
             InitProductDictionary();
             IsImportingPackage = false;
         }
@@ -245,6 +220,7 @@ namespace GQ.Editor.Building
             foreach (var productCandidatePath in productDirCandidates)
             {
                 LoadProductSpec(productCandidatePath);
+                Debug.Log($"now we have in _productDict: {_productDict.Count} prods.");
             }
 
             if (oldSelectedProductID != null)
@@ -260,12 +236,12 @@ namespace GQ.Editor.Building
         /// </summary>
         /// <returns>The product spec or null if an error occurred.</returns>
         /// <param name="productCandidatePath">Product candidate path.</param>
-        internal ProductSpec LoadProductSpec(string productCandidatePath)
+        private ProductSpec LoadProductSpec(string productCandidatePath)
         {
-            ProductSpec product;
+            Debug.Log($"try LoadProductSpec({productCandidatePath}");
             try
             {
-                product = new ProductSpec(productCandidatePath);
+                ProductSpec product = new ProductSpec(productCandidatePath);
                 if (_productDict.ContainsKey(product.Id))
                     _productDict.Remove(product.Id);
                 _productDict.Add(product.Id, product);
@@ -294,14 +270,14 @@ namespace GQ.Editor.Building
 
         #region Interaction API
 
-        public ProductSpec createNewProduct(string newProductID)
+        public ProductSpec CreateNewProduct(string newProductID)
         {
             if (!ProductSpec.IsValidProductName(newProductID))
             {
                 throw new ArgumentException("Invalid product id: " + newProductID);
             }
 
-            string newProductDirPath = Files.CombinePath(ProductsDirPath, newProductID);
+            var newProductDirPath = Files.CombinePath(ProductsDirPath, newProductID);
 
             if (Directory.Exists(newProductDirPath))
             {
@@ -329,23 +305,18 @@ namespace GQ.Editor.Building
             return newProduct;
         }
 
-        private IList<string> _errors;
-
         /// <summary>
         /// A list of current errors that could be used to show the users (developers) in the Product Editor View which product definitions are invalid. TODO
         /// </summary>
         /// <value>The errors.</value>
-        public IList<string> Errors
-        {
-            get { return _errors; }
-        }
+        public IList<string> Errors { get; }
 
         private ProductSpec _currentProduct;
 
         public ProductSpec CurrentProduct
         {
-            get { return _currentProduct; }
-            internal set { _currentProduct = value; }
+            get => _currentProduct;
+            private set => _currentProduct = value;
         }
 
         /// <summary>
@@ -365,7 +336,7 @@ namespace GQ.Editor.Building
         {
             ProductEditor.IsCurrentlyPreparingProduct = true;
 
-            string productDirPath = Files.CombinePath(ProductsDirPath, productID);
+            var productDirPath = Files.CombinePath(ProductsDirPath, productID);
 
             if (!Directory.Exists(productDirPath))
             {

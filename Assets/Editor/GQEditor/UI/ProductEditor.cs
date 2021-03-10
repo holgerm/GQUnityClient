@@ -258,6 +258,10 @@ namespace GQ.Editor.UI
 
             if (selectedProductIndex < 0 || selectedProductIndex >= Pm.AllProductIds.Count)
                 selectedProductIndex = 0;
+            if (Pm.AllProductIds.Count == 0)
+            {
+                Pm.InitProductDictionary();
+            }
             string selectedProductName = Pm.AllProductIds.ElementAt(selectedProductIndex);
 
             GUIContent prepareBuildButtonGUIContent,
@@ -332,7 +336,7 @@ namespace GQ.Editor.UI
                     {
                         if (GUILayout.Button(createProductButtonGUIContent))
                         {
-                            Pm.createNewProduct(newProductID);
+                            Pm.CreateNewProduct(newProductID);
                         }
                     }
                 }
@@ -434,7 +438,7 @@ namespace GQ.Editor.UI
         void gui4ProductDetails()
         {
             GUILayout.Label("Product Details", EditorStyles.boldLabel);
-            ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+            ProductSpec p = ProductManager.AllProducts.ElementAt(selectedProductIndex);
             SelectedConfig = p.Config;
 
 // Begin ScrollView:
@@ -594,7 +598,7 @@ namespace GQ.Editor.UI
 
                     if (GUILayout.Button("Revert"))
                     {
-                        ProductSpec p = Pm.AllProducts.ElementAt(selectedProductIndex);
+                        ProductSpec p = ProductManager.AllProducts.ElementAt(selectedProductIndex);
                         p.InitConfig();
                         GUIUtility.keyboardControl = 0;
                         GUIUtility.hotControl = 0;

@@ -28,6 +28,14 @@
                 },
                 {
                     "folderName": "Kultur",
+                    "id": "wcc.virtual",
+                    "name": "Kultur Virtuell",
+                    "symbol": {
+                        "path": "update:1615224790:textures/readable/virtual.png"
+                    }
+                },
+                {
+                    "folderName": "Kultur",
                     "id": "wcc.sound",
                     "name": "Sound & Ton",
                     "symbol": {
@@ -63,7 +71,7 @@
                     "id": "wcc.beethovenshoppen",
                     "name": "Beethoven Shoppen",
                     "symbol": {
-                        "path": "update:1605258255:textures/readable/beethoven.png"
+                        "path": "update:1605258256:textures/readable/beethoven.png"
                     }
                 },
                 {
@@ -242,6 +250,5 @@
     "categoryFoldersStartFolded": true,
     "defaultCategory": null,
     "foldableCategoryFilters": false,
-    "mainCategorySet": "Kategorien",
-    "test": 1
+    "mainCategorySet": "Kategorien"
 }
