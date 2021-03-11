@@ -35,7 +35,6 @@ namespace Code.GQClient.Conf
         {
             Config.__JSON_Currently_Parsing = true;
             Config config = JsonConvert.DeserializeObject<Config>(configText);
-            Debug.Log($"Config #4 Deserialized Config");
             config.rt.RefreshCategoryDictionary();
             Config.__JSON_Currently_Parsing = false;
             return config;
@@ -922,9 +921,29 @@ namespace Code.GQClient.Conf
             set => rt.mainCategorySet = value;
         }
 
+        /// <summary>
+        /// Returns the main category set if correctly specified by mainCategorySet,
+        /// or the first defined category set
+        /// or null if no category set defined at all.
+        /// </summary>
+        /// <returns></returns>
         public CategorySet GetMainCategorySet()
         {
-            return CategorySets.Find(cat => cat.name == mainCategorySet);
+            if (null == CategorySets || CategorySets.Count == 0)
+                return null;
+            
+            if (string.IsNullOrEmpty(mainCategorySet))
+            {
+                return CategorySets[0];
+            }
+
+            CategorySet foundCatSet = CategorySets.Find(catSet => catSet.name == mainCategorySet);
+            if (null == foundCatSet)
+            {
+                return CategorySets[0];
+            }
+
+            return foundCatSet;
         }
 
         [ShowInProductEditor]

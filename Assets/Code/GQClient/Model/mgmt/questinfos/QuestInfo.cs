@@ -494,7 +494,7 @@ namespace GQClient.Model
             }
         }
 
-        public const string WITHOUT_CATEGORY_ID = "withoutcategory";
+        public const string WITHOUT_CATEGORY_ID = "default";
 
         public string CurrentCategoryId => QuestInfoManager.Instance.Filter.CategoryToShow(this);
 

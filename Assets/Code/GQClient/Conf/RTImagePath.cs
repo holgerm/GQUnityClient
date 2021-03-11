@@ -13,6 +13,8 @@ namespace Code.GQClient.Conf
         private readonly string FilePath;
         private readonly string ResourcePath;
 
+        public const string DEFAULT_CAT_IMAGE_PATH = "textures/readable/default";
+
         [JsonConstructor]
         public RTImagePath(string path) : base(path)
         {

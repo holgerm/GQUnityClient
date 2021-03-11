@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Code.GQClient.Conf;
 using GQClient.Model;
 using Code.GQClient.UI.Foyer.containers;
@@ -256,50 +257,40 @@ namespace Code.GQClient.UI.Foyer.questinfos
             }
 
             // TODO call the lists sorter ...
-         }
+        }
 
         private void setCategorySymbol(QuestInfo qInfo)
         {
-            // set info button as configured:
-            if (ConfigurationManager.Current.rt.mainCategorySet != null &&
-                ConfigurationManager.Current.rt.mainCategorySet != "")
+            if (InfoButton == null || InfoButton.transform == null) return;
+
+            Transform t = InfoButton.transform.Find("Image");
+            if (t == null) return;
+
+            Image infoImage = t.GetComponent<Image>();
+            infoImage.enabled = true;
+            infoImage.color = ConfigurationManager.Current.listEntryFgColor;
+            InfoButton.enabled = true;
+            InfoButton.gameObject.SetActive(true);
+
+            var categoryId = qInfo.CurrentCategoryId;
+            if (QuestInfo.WITHOUT_CATEGORY_ID == categoryId)
             {
-                CategorySet mainCategorySet = ConfigurationManager.Current.GetMainCategorySet();
-                if (mainCategorySet == null)
-                    return;
-
-                Category determiningCategory = null;
-                foreach (string myCatId in qInfo.Categories)
-                {
-                    determiningCategory = mainCategorySet.categories.Find(mainCat => mainCat.id == myCatId);
-                    if (determiningCategory != null)
-                        break;
-                }
-
-                if (InfoButton == null || InfoButton.transform == null) return;
-                Transform t = InfoButton.transform.Find("Image");
-                if (t == null) return;
-
-                var infoImage = t.GetComponent<Image>();
-                infoImage.enabled = true;
-                infoImage.color = ConfigurationManager.Current.listEntryFgColor;
-                InfoButton.enabled = false;
-                InfoButton.gameObject.SetActive(true); // show info icon
-
-                if (determiningCategory != null)
-                {
-                    // set symbol for this category:
-                    infoImage.sprite = determiningCategory.symbol != null
-                        ? determiningCategory.symbol.GetSprite()
-                        : null;
-                    if (infoImage.sprite != null)
-                    {
-                        infoImage.enabled = true;
-                        InfoButton.enabled = true;
-                        InfoButton.gameObject.SetActive(true);
-                    }
-                }
+                // we do not have a valid category, hence we use the default icon:
+                infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
+                return;
             }
+
+            Category cat = ConfigurationManager.Current.GetCategory(categoryId);
+
+            if (null == cat.symbol)
+            {
+                // we do not have a sprite, hence we use the default icon:
+                infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
+                return;
+            }
+
+            // category found for given quest info:
+            infoImage.sprite = cat.symbol.GetSprite();
         }
 
         #endregion
