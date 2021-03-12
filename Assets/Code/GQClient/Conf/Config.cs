@@ -861,8 +861,6 @@ namespace Code.GQClient.Conf
                     json,
                     RTConfig.LoadsFrom.LocalFile);
                 ConfigurationManager.RTProductUpdated = true;
-                
-                Debug.Log("RTCOnfig read form local persisted file".Green());
             }
             else
             {
@@ -879,7 +877,6 @@ namespace Code.GQClient.Conf
                     configAsset.text,
                     RTConfig.LoadsFrom.Resource);
                 ConfigurationManager.RTProductUpdated = false;
-                Debug.Log("RTCOnfig read from App Assets".Green());
             }
             
             QuestInfoManager.Instance.DataChange.Invoke(

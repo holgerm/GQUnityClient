@@ -346,7 +346,6 @@ namespace GQClient.Model
         /// </summary>
         public void InitFilters()
         {
-            Debug.Log($"QUestInfoManager.InitFilters(): #catSets: {ConfigurationManager.Current.rt.CategorySets.Count}".Red());
             // init filters
             Filter = new QuestInfoFilter.All();
 
@@ -371,7 +370,6 @@ namespace GQClient.Model
             // create UI for Category Filters:
             foreach (var catSet in ConfigurationManager.Current.rt.CategorySets)
             {
-                Debug.Log($"Calling CategoryTreeCtrl.Create({Base.Instance.MenuTopLeftContent.name})");
                 CategoryTreeCtrl ctrl = CategoryTreeCtrl.Create(
                     root: Base.Instance.MenuTopLeftContent,
                     catFilter: _categoryFilters[catSet.name],

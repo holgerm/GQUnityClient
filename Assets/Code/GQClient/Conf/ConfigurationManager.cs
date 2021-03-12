@@ -21,7 +21,7 @@ namespace Code.GQClient.Conf
         #region Initialize
 
         /// <summary>
-        /// Flag used to optimize frquent access to configured media files, e.g. symbol icons.
+        /// Flag used to optimize frequent access to configured media files, e.g. symbol icons.
         /// If false, we omit checking for update infos.
         /// </summary>
         public static bool RTProductUpdated = false;
@@ -41,7 +41,6 @@ namespace Code.GQClient.Conf
             d.OnSuccess += (dl, e) =>
             {
                 RTProductUpdated = true;
-                Debug.Log("RTCOnfig has been loaded from server".Green());
                 Current.resetRTConfig();
                 QuestInfoManager.Instance.DataChange.Invoke(
                     new QuestInfoChangedEvent(

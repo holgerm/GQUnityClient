@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using Code.GQClient.Util.http;
 using Newtonsoft.Json;
@@ -45,9 +46,9 @@ namespace Code.GQClient.Conf
                             FilePath);
 
                     Downloader d = new Downloader(
-                        serverFileUrl,
+                        url: serverFileUrl,
                         timeout: 0,
-                        localFilePath);
+                        targetPath: localFilePath);
                     d.OnTaskCompleted += (sender, args) =>
                     {
                         // we save the update time mentioned in the RTProduct.json as file modified time:
@@ -94,22 +95,35 @@ namespace Code.GQClient.Conf
             if (string.IsNullOrEmpty(path))
                 return null;
 
+            Sprite sprite = null;
+
             if (!ConfigurationManager.RTProductUpdated)
             {
-                return Resources.Load<Sprite>(ResourcePath);
+                sprite = Resources.Load<Sprite>(ResourcePath);
+                if (null == sprite)
+                {
+                    sprite = Resources.Load<Sprite>(DEFAULT_CAT_IMAGE_PATH);
+                }
+
+                return sprite;
             }
             else
             {
                 Texture2D texture = GetTexture2D();
                 if (null == texture)
-                    throw new ArgumentException($"File at path {FilePath} not found.");
+                {
+                    sprite = Resources.Load<Sprite>(DEFAULT_CAT_IMAGE_PATH);
+                }
+                else
+                {
+                    sprite =
+                        Sprite.Create(
+                            texture,
+                            new Rect(0, 0, texture.width, texture.height),
+                            new Vector2(0.5f, 0.5f)
+                        );
+                }
 
-                Sprite sprite =
-                    Sprite.Create(
-                        texture,
-                        new Rect(0, 0, texture.width, texture.height),
-                        new Vector2(0.5f, 0.5f)
-                    );
                 return sprite;
             }
         }
@@ -154,14 +168,14 @@ namespace Code.GQClient.Conf
         }
 
 
-        private static Regex updatedPath = new Regex(@"^update:(\d+):");
+        private static readonly Regex UpdatedPath = new Regex(@"^update:(\d+):");
 
         private bool CheckPathForUpdateInfo(string path, out int length, out int serverTimestamp)
         {
             length = 0;
             serverTimestamp = -1;
 
-            Match match = updatedPath.Match(path);
+            Match match = UpdatedPath.Match(path);
 
             if (!match.Success)
                 return false;

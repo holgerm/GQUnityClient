@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Code.GQClient.Err;
 using Code.QM.Util;
 using Newtonsoft.Json;
@@ -106,6 +107,11 @@ namespace Code.GQClient.Conf
 
         public Category GetCategory(string catId)
         {
+            if (!categoryDict.ContainsKey(catId))
+            {
+                return null;
+            }
+
             return categoryDict[catId];
         }
 

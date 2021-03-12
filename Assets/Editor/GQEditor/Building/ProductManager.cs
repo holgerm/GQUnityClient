@@ -220,7 +220,6 @@ namespace GQ.Editor.Building
             foreach (var productCandidatePath in productDirCandidates)
             {
                 LoadProductSpec(productCandidatePath);
-                Debug.Log($"now we have in _productDict: {_productDict.Count} prods.");
             }
 
             if (oldSelectedProductID != null)
@@ -238,7 +237,6 @@ namespace GQ.Editor.Building
         /// <param name="productCandidatePath">Product candidate path.</param>
         private ProductSpec LoadProductSpec(string productCandidatePath)
         {
-            Debug.Log($"try LoadProductSpec({productCandidatePath}");
             try
             {
                 ProductSpec product = new ProductSpec(productCandidatePath);

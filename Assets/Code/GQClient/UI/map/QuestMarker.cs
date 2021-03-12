@@ -87,23 +87,32 @@ namespace Code.GQClient.UI.map
                     try
                     {
                         var cat = ConfigurationManager.Current.rt.GetCategory(categoryId);
-                        symbol = cat.symbol.GetTexture2D();
-                        if (symbol == null)
+                        // ReSharper disable once MergeSequentialChecks
+                        if (null == cat || null == cat.symbol)
                         {
                             Log.SignalErrorToDeveloper(
-                                $"Symbol Texture not found for category {cat.symbol}. Using default symbol. (cats: {ConfigurationManager.Current.rt.categoryDict.Count})");
+                                $"Category symbol texture not found for quest {Data.Id} named {Data.Name}. Using default symbol.");
                         }
-                        else if (symbol.width > t.width)
+                        else
                         {
-                            Log.SignalErrorToDeveloper(
-                                "Symbol Texture too wide. Must not be wider than marker outline. Using default symbol.");
-                            symbol = null;
-                        }
-                        else if (symbol.height > t.width)
-                        {
-                            Log.SignalErrorToDeveloper(
-                                "Symbol Texture too high. Must not be higher than marker outline width. Using default symbol.");
-                            symbol = null;
+                            symbol = cat.symbol.GetTexture2D();
+                            if (symbol == null)
+                            {
+                                Log.SignalErrorToDeveloper(
+                                    $"Symbol Texture not found for category {cat.symbol}. Using default symbol.");
+                            }
+                            else if (symbol.width > t.width)
+                            {
+                                Log.SignalErrorToDeveloper(
+                                    "Symbol Texture too wide. Must not be wider than marker outline. Using default symbol.");
+                                symbol = null;
+                            }
+                            else if (symbol.height > t.width)
+                            {
+                                Log.SignalErrorToDeveloper(
+                                    "Symbol Texture too high. Must not be higher than marker outline width. Using default symbol.");
+                                symbol = null;
+                            }
                         }
                     }
                     catch (KeyNotFoundException)
@@ -127,8 +136,10 @@ namespace Code.GQClient.UI.map
 
                     if (symbol == null)
                     {
-                        symbol = new Texture2D(1, 1);
-                        symbol.SetPixels32(new[] {new Color32(0, 0, 0, 0)});
+                        // use default symbol:
+                        symbol = Resources.Load<Texture2D>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
+                        // symbol = new Texture2D(1, 1);
+                        // symbol.SetPixels32(new[] {new Color32(0, 0, 0, 0)});
                     }
 
                     var symbolColors = symbol.GetPixels32();
