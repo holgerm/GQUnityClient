@@ -23,15 +23,9 @@ namespace Code.GQClient.UI.menu.categories
 
         private string catSetName;
 
-        private void Awake()
-        {
-            Debug.Log("CategoryTreeCtrl.Awake()".Yellow());
-        }
-
         // Use this for initialization
         void Start()
         {
-            Debug.Log("CategoryTreeCtrl.Start()".Yellow());
             qim = QuestInfoManager.Instance;
 //			CategoryFilter = qim.CategoryFilter; // TODO use CatSet instead
             qim.DataChange.AddListener(OnQuestInfoChanged);

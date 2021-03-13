@@ -17,12 +17,12 @@ namespace Code.GQClient.Util.http
 
 		public static void defaultLogInformationHandler (AbstractDownloader d, DownloadEvent e)
 		{
-			Log.InformUser (e.Message + " frame#: " + Time.frameCount);
+			Log.InformUser ($"{e.Message} frame#: {Time.frameCount}");
 		}
 
 		public static void defaultLogErrorHandler (AbstractDownloader d, DownloadEvent e)
 		{
-			Log.SignalErrorToUser (e.Message);
+			Log.SignalErrorToUser ($"{e.Message} frame#: {Time.frameCount}");
 		}
 
 		#endregion

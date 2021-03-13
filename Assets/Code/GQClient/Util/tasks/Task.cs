@@ -17,7 +17,7 @@ namespace Code.GQClient.Util.tasks
     /// </summary>
     public abstract class Task
     {
-        public Task(bool runsAsCoroutine = false)
+        protected Task(bool runsAsCoroutine = false)
         {
             RunsAsCoroutine = runsAsCoroutine;
             behaviours = new List<AbstractBehaviour>();
@@ -68,7 +68,7 @@ namespace Code.GQClient.Util.tasks
             ReadInput(input);
 
             IEnumerator results = DoTheWork();
-            OnTaskEnded?.Invoke(this, null);
+            //OnTaskEnded?.Invoke(this, null);
             return results;
         }
 

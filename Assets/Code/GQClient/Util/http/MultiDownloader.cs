@@ -52,10 +52,10 @@ namespace Code.GQClient.Util.http
                 Log.SignalErrorToDeveloper("MultiDownloader task did not receive valid MediaInfo List from Input.");
             }
 
-            if (listOfFilesNotStartedYet == null || listOfFilesNotStartedYet.Count == 0)
-            {
-                RaiseTaskCompleted();
-            }
+            // if (listOfFilesNotStartedYet == null || listOfFilesNotStartedYet.Count == 0)
+            // {
+            //     RaiseTaskCompleted();
+            // }
         }
 
         SimpleBehaviour dialogBehaviour;
@@ -103,7 +103,8 @@ namespace Code.GQClient.Util.http
             stopwatch.Start();
             var filesCurrentlyDownloading = new Dictionary<Downloader, MediaInfo>();
 
-            while (listOfFilesNotStartedYet.Count > 0 || filesCurrentlyDownloading.Count > 0)
+            while ((null != listOfFilesNotStartedYet && listOfFilesNotStartedYet.Count > 0) ||
+                   filesCurrentlyDownloading.Count > 0)
             {
                 // wait until a place for download is free:
                 while (LimitOfParallelDownloadsExceeded && !TimeIsUp)
@@ -146,6 +147,7 @@ namespace Code.GQClient.Util.http
                         );
                     filesCurrentlyDownloading.Add(d, info);
                     CurrentlyRunningDownloads++;
+                    d.OnProgress += ContributeToTotalProgress;
                     d.OnTimeout += (AbstractDownloader ad, DownloadEvent e) =>
                     {
                         if (filesCurrentlyDownloading.TryGetValue(d, out var infoToRestart))
@@ -153,11 +155,6 @@ namespace Code.GQClient.Util.http
                             listOfFilesNotStartedYet.Add(infoToRestart);
                             filesCurrentlyDownloading.Remove(d);
                         }
-                    };
-                    d.OnTaskEnded += (object sender, TaskEventArgs e) =>
-                    {
-                        filesCurrentlyDownloading.Remove(d);
-                        CurrentlyRunningDownloads--;
                     };
                     d.OnTaskCompleted += (object sender, TaskEventArgs e) =>
                     {
@@ -170,10 +167,13 @@ namespace Code.GQClient.Util.http
                             info.LocalSize = info.RemoteSize;
                             info.LocalTimestamp = info.RemoteTimestamp;
                         }
-
-                        filesCurrentlyDownloading.Remove(d);
+//                        filesCurrentlyDownloading.Remove(d);
                     };
-                    d.OnProgress += ContributeToTotalProgress;
+                    d.OnTaskEnded += (object sender, TaskEventArgs e) =>
+                    {
+                        filesCurrentlyDownloading.Remove(d);
+                        CurrentlyRunningDownloads--;
+                    };
                     listOfFilesNotStartedYet.Remove(infoToLoad);
                     d.Start();
                 }

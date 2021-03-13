@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
@@ -702,7 +704,11 @@ namespace GQClient.Model
                 $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
                 "Mediendateien werden geladen"
             );
-            downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => { TimeStamp = ServerTimeStamp; };
+            downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
+            {
+                TimeStamp = ServerTimeStamp;
+                Debug.Log($"MultiDownloader for media files completed in frame# {Time.frameCount}");
+            };
 
             // store current media info locally
             var exportLocalMediaInfo =
@@ -899,23 +905,55 @@ namespace GQClient.Model
             ActivitiesBlocking = true;
 
             playTask.Start();
+            Debug.Log($"PlayTask started - f# {Time.frameCount}");
+
+            
         }
 
         private Task CreateLoadAndPlayTask()
         {
+            Debug.Log($"CreateLoadAndPlayTask called - f# {Time.frameCount}");
+
             // Quest has to be loaded first:
             var download = DownloadTask();
             // Update the quest info list ...
             download.OnTaskCompleted +=
                 (object sender, TaskEventArgs e) =>
                 {
-                    InvokeOnChanged();
+                    if (id == 13130)
+                    {
+                        bool stored = (QuestManager.Instance.MediaStore.TryGetValue(
+                            "https://quest-mill.intertech.de/uploadedassets/281/editor/13130/1_k1600_roemerlager_osttor.jpg",
+                            out MediaInfo mediaInfo));
+                        string path = Application.persistentDataPath + "/quests/files/1_k1600_roemerlager_osttor.jpg";
+                        bool exists = File.Exists(path);
+                        Debug.Log(
+                            $"CreateLoadAndPlayTask completed - media info stored: {stored} - file at path ({path}) exists: {exists} - f# {Time.frameCount}".Green());
+                        CoroutineStarter.Run(testForOsttorBild());
+                    }
 
-                    new ExportQuestInfosToJson().Start();
+
+                    Task export = new ExportQuestInfosToJson();
+                    export.OnTaskCompleted += (o, args) =>
+                    {
+                        InvokeOnChanged();
+                    }; 
+                    export.Start();
                 };
             var playTask = CreatePlayTask();
             Task loadAndPlay = new TaskSequence(download, playTask);
             return loadAndPlay;
+        }
+
+        private IEnumerator testForOsttorBild()
+        {
+            string path = Application.persistentDataPath + "/quests/files/1_k1600_roemerlager_osttor.jpg";
+            for (int i = 0; i < 20; i++)
+            {
+                Debug.Log(
+                    $"testForOsttorBild # 1  file at path ({path}) exists: {File.Exists(path)} - f# {Time.frameCount}".Green());
+                yield return null;
+            }
         }
 
         /// <summary>
