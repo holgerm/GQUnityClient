@@ -66,6 +66,8 @@ namespace Code.GQClient.Conf
         /// </summary>
         /// <value>The main category set.</value>
         public string mainCategorySet { get; set; }
+        
+        public bool showAllIfNoCatSelectedInFilter { get; set; } 
 
         public List<CategorySet> CategorySets
         {
@@ -143,6 +145,7 @@ namespace Code.GQClient.Conf
             foldableCategoryFilters = true;
             categoryFiltersStartFolded = true;
             categoryFoldersStartFolded = true;
+            showAllIfNoCatSelectedInFilter = false;
         }
     }
 }

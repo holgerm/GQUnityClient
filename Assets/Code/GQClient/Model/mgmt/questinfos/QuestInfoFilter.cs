@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
+// ReSharper disable All
 
 namespace GQClient.Model
 {
@@ -320,26 +321,31 @@ namespace GQClient.Model
             {
                 List<string> catList = catIds[disjunctionName];
                 List<string> fullCatList = staticFullCatIdList[disjunctionName];
-                
-                // skip if the quest info does not contain any of the categories of this disjunction,
-                // i.e. it is unspecific regarding this group of categories:
-                bool qiDoesNotContainAnyCatOfThisGroup = true;
-                foreach (var cat in fullCatList)
+
+                if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter)
                 {
-                    if (qi.Categories.Contains(cat))
+
+                    // skip if the quest info does not contain any of the categories of this disjunction,
+                    // i.e. it is unspecific regarding this group of categories:
+                    bool qiDoesNotContainAnyCatOfThisGroup = true;
+                    foreach (string cat in fullCatList)
                     {
-                        qiDoesNotContainAnyCatOfThisGroup = false;
-                        break;
+                        if (qi.Categories.Contains(cat))
+                        {
+                            qiDoesNotContainAnyCatOfThisGroup = false;
+                            break;
+                        }
+                    }
+
+                    if (qiDoesNotContainAnyCatOfThisGroup)
+                    {
+                        return true;
+                        // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and
+                        // though should be shown.
                     }
                 }
 
-                if (qiDoesNotContainAnyCatOfThisGroup)
-                {
-                    return true;
-                // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and though should be shown.
-                }
-                
-                
+
                 foreach (var cat in catList)
                 {
                     if (qi.Categories.Contains(cat) ||

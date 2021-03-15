@@ -918,6 +918,13 @@ namespace Code.GQClient.Conf
             set => rt.mainCategorySet = value;
         }
 
+        [ShowInProductEditor, JsonIgnore]
+        public bool showAllIfNoCatSelectedInFilter
+        {
+            get => rt.showAllIfNoCatSelectedInFilter;
+            set => rt.showAllIfNoCatSelectedInFilter = value;
+        }       
+
         /// <summary>
         /// Returns the main category set if correctly specified by mainCategorySet,
         /// or the first defined category set

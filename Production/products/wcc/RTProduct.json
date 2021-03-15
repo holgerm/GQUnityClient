@@ -3,6 +3,7 @@
   "categoryFiltersStartFolded": true,
   "categoryFoldersStartFolded": true,
   "mainCategorySet": null,
+  "showAllIfNoCatSelectedInFilter": false,
   "CategorySets": [],
   "defaultCategory": null
 }
