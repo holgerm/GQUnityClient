@@ -22,6 +22,8 @@ namespace Code.GQClient.UI.map
 			// at last we register for changes on quest infos with the quest info manager:
 			_qim = QuestInfoManager.Instance;
 			_qim.DataChange.AddListener(OnMarkerChanged);
+			_qim.FilterChange.AddListener(OnFilterChanged);
+
 			//_qim.OnFilterChange += OnMarkerChanged;
 			RTConfig.CategoriesChanged += UpdateView;
 		}
@@ -72,6 +74,11 @@ namespace Code.GQClient.UI.map
 			default:
 				throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		public void OnFilterChanged()
+		{
+			UpdateView();
 		}
 
 		#endregion

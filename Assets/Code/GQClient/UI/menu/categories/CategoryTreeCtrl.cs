@@ -105,8 +105,6 @@ namespace Code.GQClient.UI.menu.categories
 
         private void OnQuestInfoChanged(QuestInfoChangedEvent e)
         {
-            Debug.Log($"HERE WE WERE! CategoryTreeCtrl.OnQuestInfoChanged({e.ChangeType})".Red());
-
             switch (e.ChangeType)
             {
                 case ChangeType.AddedInfo:
@@ -131,7 +129,6 @@ namespace Code.GQClient.UI.menu.categories
 
         public void UpdateView()
         {
-            Debug.Log("HERE WE WERE! CategoryTreeCtrl.UpdateView()".Red());
             if (this == null || CategoryFilter == null)
             {
                 return;

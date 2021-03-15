@@ -29,7 +29,7 @@ namespace Code.GQClient.Conf
         public static void Initialize()
         {
            // RTProduct.json:
-            string rtProductUrl = Path.Combine(GQ_SERVER_PORTALS_URL, _current.id, RT_CONFIG_DIR, RT_CONFIG_FILE);
+            string rtProductUrl = Path.Combine(GQ_SERVER_PORTALS_URL, Current.id, RT_CONFIG_DIR, RT_CONFIG_FILE);
             string rtProductFile = Path.Combine(Application.persistentDataPath, RT_CONFIG_DIR, RT_CONFIG_FILE);
 
             Downloader d = new Downloader(

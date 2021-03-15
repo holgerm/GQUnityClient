@@ -89,6 +89,7 @@ namespace Code.GQClient.Util.http
         /// <returns>The download.</returns>
         protected override IEnumerator DoTheWork()
         {
+            Debug.Log("################### MultiDownloader.DoThWork() started.");
             // init SimpleBehaviour:
             dialogBehaviour = (SimpleBehaviour) behaviours[0];
             // TODO dangerous. Replace by concrete DialogControllers we will write.
@@ -167,7 +168,6 @@ namespace Code.GQClient.Util.http
                             info.LocalSize = info.RemoteSize;
                             info.LocalTimestamp = info.RemoteTimestamp;
                         }
-//                        filesCurrentlyDownloading.Remove(d);
                     };
                     d.OnTaskEnded += (object sender, TaskEventArgs e) =>
                     {

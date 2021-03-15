@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
-using Code.GQClient.Err;
 using Code.GQClient.UI.author;
-using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -12,20 +10,20 @@ namespace GQClient.Model
     {
         public delegate void OnFilterChanged();
 
-        public event OnFilterChanged filterChange;
+        public event OnFilterChanged FilterChange;
 
         protected void RaiseFilterChangeEvent()
         {
             if (NotificationPaused)
                 return;
 
-            if (filterChange != null)
+            if (FilterChange != null)
             {
-                filterChange();
+                FilterChange();
             }
 
-            if (parentFilter != null)
-                parentFilter.RaiseFilterChangeEvent();
+            if (ParentFilter != null)
+                ParentFilter.RaiseFilterChangeEvent();
         }
 
         bool _notificationPaused = false;
@@ -40,7 +38,7 @@ namespace GQClient.Model
             }
         }
 
-        protected QuestInfoFilter parentFilter { get; set; }
+        protected QuestInfoFilter ParentFilter { get; set; }
 
         abstract public bool Accept(QuestInfo qi);
 
@@ -413,7 +411,7 @@ namespace GQClient.Model
                     if (!subfilters.Contains(filter))
                     {
                         subfilters.Add(filter);
-                        filter.parentFilter = this;
+                        filter.ParentFilter = this;
                     }
                 }
             }

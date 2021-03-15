@@ -70,7 +70,7 @@ namespace Code.GQClient.UI.Foyer.containers
             // TODO maybe we could sort for alphabet, numbers, date, grades etc.
         }
 
-        protected override void FilterChanged()
+        public override void FilterChanged()
         {
             UpdateView();
         }

@@ -638,7 +638,6 @@ namespace GQClient.Model
         {
             if (ActivitiesBlocking)
             {
-                Debug.Log($"Download quest {Name} stopped because activities are blocking");
                 return null;
             }
 
@@ -665,7 +664,6 @@ namespace GQClient.Model
             set
             {
                 _currentlyDownloading = value;
-                Debug.Log($"currently downloading {value}");
             }
         }
 
@@ -707,7 +705,6 @@ namespace GQClient.Model
             downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
             {
                 TimeStamp = ServerTimeStamp;
-                Debug.Log($"MultiDownloader for media files completed in frame# {Time.frameCount}");
             };
 
             // store current media info locally
@@ -905,15 +902,10 @@ namespace GQClient.Model
             ActivitiesBlocking = true;
 
             playTask.Start();
-            Debug.Log($"PlayTask started - f# {Time.frameCount}");
-
-            
         }
 
         private Task CreateLoadAndPlayTask()
         {
-            Debug.Log($"CreateLoadAndPlayTask called - f# {Time.frameCount}");
-
             // Quest has to be loaded first:
             var download = DownloadTask();
             // Update the quest info list ...
@@ -927,9 +919,6 @@ namespace GQClient.Model
                             out MediaInfo mediaInfo));
                         string path = Application.persistentDataPath + "/quests/files/1_k1600_roemerlager_osttor.jpg";
                         bool exists = File.Exists(path);
-                        Debug.Log(
-                            $"CreateLoadAndPlayTask completed - media info stored: {stored} - file at path ({path}) exists: {exists} - f# {Time.frameCount}".Green());
-                        CoroutineStarter.Run(testForOsttorBild());
                     }
 
 
@@ -943,17 +932,6 @@ namespace GQClient.Model
             var playTask = CreatePlayTask();
             Task loadAndPlay = new TaskSequence(download, playTask);
             return loadAndPlay;
-        }
-
-        private IEnumerator testForOsttorBild()
-        {
-            string path = Application.persistentDataPath + "/quests/files/1_k1600_roemerlager_osttor.jpg";
-            for (int i = 0; i < 20; i++)
-            {
-                Debug.Log(
-                    $"testForOsttorBild # 1  file at path ({path}) exists: {File.Exists(path)} - f# {Time.frameCount}".Green());
-                yield return null;
-            }
         }
 
         /// <summary>

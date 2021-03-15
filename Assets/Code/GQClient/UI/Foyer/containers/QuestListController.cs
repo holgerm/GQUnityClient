@@ -113,7 +113,7 @@ namespace Code.GQClient.UI.Foyer.containers
             updateElementOrderLayout();
         }
 
-        protected override void FilterChanged()
+        public override void FilterChanged()
         {
             RegenerateAllAfterFilterChanged();
         }

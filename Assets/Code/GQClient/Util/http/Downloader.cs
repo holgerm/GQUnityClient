@@ -128,7 +128,7 @@ namespace Code.GQClient.Util.http
 
         protected IEnumerator Download()
         {
-            if (!uriIsWellFormed(this.Url))
+            if (!uriIsWellFormed(Url))
             {
                 Raise (DownloadEventType.Error, new DownloadEvent (message: $"Can not download from malformed URI: {this.Url}"));
                 Log.SignalErrorToAuthor($"Malformed url {this.Url} in quest '{QuestManager.Instance.CurrentQuest.Name}' (id: {QuestManager.Instance.CurrentQuest.Id})");

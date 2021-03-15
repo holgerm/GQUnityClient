@@ -52,7 +52,6 @@ namespace GQClient.Model
         public IEnumerable<QuestInfo> GetFilteredQuestInfos()
         {
             var filteredList = QuestDict.Values.Where(x => Filter.Accept(x)).ToList();
-//            Debug.Log($"QIM.GetFilteredQuestInfos() all#: {QuestDict.Count} --|--> filtered#: {filteredList.Count}");
             return filteredList;
         }
 
@@ -84,7 +83,7 @@ namespace GQClient.Model
                 {
                     _filter = value;
                     // we register with later changes of the filter:
-                    _filter.filterChange += FilterChanged;
+                    _filter.FilterChange += FilterChanged;
                     // we use the new filter instantly:
                     FilterChanged();
                 }
@@ -104,18 +103,11 @@ namespace GQClient.Model
             Filter = new QuestInfoFilter.And(Filter, andFilter);
         }
 
-        public readonly Observable<QuestInfoChangedEvent> FilterChange = new Observable<QuestInfoChangedEvent>();
+        public readonly Observable FilterChange = new Observable();
 
         private void FilterChanged()
         {
-            FilterChange.Invoke(
-                new QuestInfoChangedEvent(
-                    "Filter changed ...",
-                    ChangeType.FilterChanged,
-                    newQuestInfo: null,
-                    oldQuestInfo: null
-                )
-            );
+            FilterChange.Invoke();
         }
 
         #endregion
@@ -170,10 +162,6 @@ namespace GQClient.Model
 
         public void RemoveInfo(int oldInfoId, bool raiseEvents = true)
         {
-#if DEBUG_LOG
-            Debug.Log("RemoveInfo(" + oldInfoID + ")");
-#endif
-
             if (!QuestDict.TryGetValue(oldInfoId, out QuestInfo oldInfo))
             {
                 Log.SignalErrorToDeveloper(
@@ -346,6 +334,8 @@ namespace GQClient.Model
         /// </summary>
         public void InitFilters()
         {
+            FilterChange.DisableNotification();
+            
             // init filters
             Filter = new QuestInfoFilter.All();
 
@@ -366,6 +356,8 @@ namespace GQClient.Model
                 _categoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter(catSet);
                 FilterAnd(_categoryFilters[catSet.name]);
             }
+            
+            FilterChange.EnableNotification();
 
             // create UI for Category Filters:
             foreach (var catSet in ConfigurationManager.Current.rt.CategorySets)
@@ -388,7 +380,7 @@ namespace GQClient.Model
             if (_instance != null)
             {
                 Instance.DataChange.RemoveListener(qcc.OnQuestInfoChanged);
-                Instance.FilterChange.RemoveListener(qcc.OnQuestInfoChanged);
+                Instance.FilterChange.RemoveListener(qcc.FilterChanged);
             }
         }
     }

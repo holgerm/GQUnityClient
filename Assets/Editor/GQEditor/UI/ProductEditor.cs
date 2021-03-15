@@ -61,7 +61,16 @@ namespace GQ.Editor.UI
 
         public static ProductEditor Instance
         {
-            get { return _instance; }
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = CreateInstance<ProductEditor>();
+                    _instance.readStateFromEditorPrefs();
+                    _instance.warnIcon = (Texture) AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
+                }
+                return _instance;
+            }
             private set { _instance = value; }
         }
 

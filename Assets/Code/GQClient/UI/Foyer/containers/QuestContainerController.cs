@@ -1,7 +1,4 @@
-﻿// #define DEBUG_LOG
-
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using GQClient.Model;
 using Code.GQClient.UI.author;
@@ -39,16 +36,13 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             //           qim = QuestInfoManager.Instance;
             Qim.DataChange.AddListener(OnQuestInfoChanged);
-            Qim.FilterChange.AddListener(OnQuestInfoChanged);
+            Qim.FilterChange.AddListener(FilterChanged);
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
             StartUpdateViewAlreadyDone = true;
         }
 
         public virtual void OnQuestInfoChanged(QuestInfoChangedEvent e)
         {
-#if DEBUG_LOG
-            Debug.Log("QuestListController.OnQuestInfoChanged e.type: " + e.ChangeType.ToString());
-#endif
             switch (e.ChangeType)
             {
                 case ChangeType.AddedInfo:
@@ -77,7 +71,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected abstract void SorterChanged();
 
-        protected abstract void FilterChanged();
+        public abstract void FilterChanged();
 
         protected abstract void ListChanged();
 
