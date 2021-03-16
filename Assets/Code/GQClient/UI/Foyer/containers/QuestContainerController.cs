@@ -34,11 +34,13 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected void Start()
         {
-            //           qim = QuestInfoManager.Instance;
             Qim.DataChange.AddListener(OnQuestInfoChanged);
             Qim.FilterChange.AddListener(FilterChanged);
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
             StartUpdateViewAlreadyDone = true;
+            
+            // After registering we need to update our views now:
+            ListChanged();
         }
 
         public virtual void OnQuestInfoChanged(QuestInfoChangedEvent e)

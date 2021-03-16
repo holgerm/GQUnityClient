@@ -282,7 +282,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
             Category cat = ConfigurationManager.Current.GetCategory(categoryId);
 
-            if (null == cat.symbol)
+            if (null == cat?.symbol)
             {
                 // we do not have a sprite, hence we use the default icon:
                 infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
