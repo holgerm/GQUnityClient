@@ -38,7 +38,7 @@ namespace GQClient.Model
 
                     if (oldInfo.TimeStamp == null || oldInfo.TimeStamp < newInfo.ServerTimeStamp)
                     {
-                        qim.UpdateInfo(newInfo, false);
+                        qim.UpdateInfo(newInfo, true); // Todo was : raiseEvents: false
                     }
                  }
                 else

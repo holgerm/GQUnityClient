@@ -923,7 +923,16 @@ namespace Code.GQClient.Conf
         {
             get => rt.showAllIfNoCatSelectedInFilter;
             set => rt.showAllIfNoCatSelectedInFilter = value;
-        }       
+        }   
+        
+        
+        [ShowInProductEditor, JsonIgnore]
+        public bool showIfNoCatDefined
+        {
+            get => rt.showIfNoCatDefined;
+            set => rt.showIfNoCatDefined = value;
+        }   
+
 
         /// <summary>
         /// Returns the main category set if correctly specified by mainCategorySet,

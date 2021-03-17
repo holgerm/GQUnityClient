@@ -42,17 +42,7 @@ namespace Code.GQClient.Conf
             {
                 RTProductUpdated = true;
                 Current.resetRTConfig();
-                QuestInfoManager.Instance.DataChange.Invoke(
-                    new QuestInfoChangedEvent(
-                        "Runtime Product JSON file read.", type: 
-                        ChangeType.ListChanged)
-                    );
             };
-            // d.OnTaskEnded += (sender, args) =>
-            // {
-            //     // do not wait for loading updated media files lazily, but trigger it now:
-            //     Debug.Log("RTConfig Updated.".Yellow());
-            // };
             d.Start();
         }
 

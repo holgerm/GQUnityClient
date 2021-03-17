@@ -1,6 +1,4 @@
-﻿//#define DEBUG_LOG
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -135,7 +133,7 @@ namespace GQClient.Model
 
         public void UpdateInfo(QuestInfo changedInfo, bool raiseEvents = true)
         {
-            if (!QuestDict.TryGetValue(changedInfo.Id, out var curInfo))
+            if (!QuestDict.TryGetValue(changedInfo.Id, out QuestInfo curInfo))
             {
                 Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because it was not found locally.",
                     changedInfo.Id);

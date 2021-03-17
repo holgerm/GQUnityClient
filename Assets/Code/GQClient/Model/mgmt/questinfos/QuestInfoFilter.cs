@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.UI.author;
+using UnityEngine;
+
 // ReSharper disable All
 
 namespace GQClient.Model
@@ -224,6 +227,7 @@ namespace GQClient.Model
                         {
                             staticFullCatIdList[c.folderName] = new List<string>();
                         }
+
                         staticFullCatIdList[c.folderName].Add(c.id);
                     }
                     else
@@ -289,8 +293,12 @@ namespace GQClient.Model
             }
 
             /// <summary>
-            /// Accepts the given quest info when at least one of the quests categories is mentioned as accepted category for each
-            /// disjunction of categories. We have conjunctive normal form of categories here.
+            /// Accepts the given quest info when at least one of the quests categories is mentioned as
+            /// accepted category for each
+            /// disjunction of categories.
+            ///
+            /// We have conjunctive normal form of categories here, i.e. we have a conjunction of
+            /// disjunctions. Here we proceed the conjunction, i.e. the outer loop.
             /// </summary>
             /// <param name="qi">Quest Info.</param>
             public override bool Accept(QuestInfo qi)
@@ -301,11 +309,15 @@ namespace GQClient.Model
                     var catList = catIds[disjunctionName];
                     // skip empty disjunctions inside the conjunction,
                     // i.e. if not any one category of this disjunction is active, any quest info is accepted.
-                    if (catList.Count == 0)
+                    if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter && catList.Count == 0)
+                    {
                         continue;
+                    }
 
                     if (!acceptedInCatDisjunction(qi, disjunctionName))
+                    {
                         return false;
+                    }
                 }
 
                 return true;
@@ -322,28 +334,28 @@ namespace GQClient.Model
                 List<string> catList = catIds[disjunctionName];
                 List<string> fullCatList = staticFullCatIdList[disjunctionName];
 
-                if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter)
+                // if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter)
+                // {
+
+                // skip if the quest info does not contain any of the categories of this disjunction,
+                // i.e. it is unspecific regarding this group of categories:
+                bool qiDoesNotContainAnyCatOfThisGroup = true;
+                foreach (string cat in fullCatList)
                 {
-
-                    // skip if the quest info does not contain any of the categories of this disjunction,
-                    // i.e. it is unspecific regarding this group of categories:
-                    bool qiDoesNotContainAnyCatOfThisGroup = true;
-                    foreach (string cat in fullCatList)
+                    if (qi.Categories.Contains(cat))
                     {
-                        if (qi.Categories.Contains(cat))
-                        {
-                            qiDoesNotContainAnyCatOfThisGroup = false;
-                            break;
-                        }
-                    }
-
-                    if (qiDoesNotContainAnyCatOfThisGroup)
-                    {
-                        return true;
-                        // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and
-                        // though should be shown.
+                        qiDoesNotContainAnyCatOfThisGroup = false;
+                        break;
                     }
                 }
+
+                if (qiDoesNotContainAnyCatOfThisGroup)
+                {
+                   return ConfigurationManager.Current.showIfNoCatDefined;
+                    // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and
+                    // though should be shown if specified so in option 'showIfNoCatDefined'.
+                }
+                // }
 
 
                 foreach (var cat in catList)
@@ -353,7 +365,9 @@ namespace GQClient.Model
                             qi.NewVersionOnServer != null && qi.NewVersionOnServer.Categories.Contains(cat)
                         )
                     )
+                    {
                         return true;
+                    }
                 }
 
                 return false;
@@ -364,7 +378,7 @@ namespace GQClient.Model
                 var sb = new StringBuilder("Category is in { ");
 
                 var catLists = catIds.Values.ToList();
-                
+
                 for (int i = 0; i < catLists.Count; i++)
                 {
                     sb.Append(" { ");
@@ -376,12 +390,12 @@ namespace GQClient.Model
                             sb.Append(" or ");
                         }
                     }
+
                     sb.Append(" } ");
                     if (i + 1 < catIds.Values.Count)
                     {
                         sb.Append(" and ");
                     }
-
                 }
 
                 sb.Append(" }.");
@@ -452,7 +466,8 @@ namespace GQClient.Model
             public override List<string> AcceptedCategories(QuestInfo qi)
             {
                 // if we have no filters we return all categories:
-                if (subfilters == null || subfilters.Count == 0)
+                if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter &&
+                    (subfilters == null || subfilters.Count == 0))
                     return qi.Categories;
 
                 var acceptedCategories = new List<string>();
