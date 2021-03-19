@@ -458,7 +458,7 @@ namespace GQ.Editor.Building
                     STREAMING_ASSET_PATH);
             }
 
-            // gather scenes and set them in EditorBuidlSettings:
+            // gather scenes and set them in EditorBuildSettings:
             var scenes =
                 gatherScenesFromPackage(
                     new List<string>(),
