@@ -1,6 +1,5 @@
-﻿using System;
-using System.Net;
-using Code.GQClient.Conf;
+﻿using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using GQClient.Model;
 using Code.GQClient.UI.Foyer.containers;
 using Code.GQClient.UI.layout;
@@ -276,6 +275,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             if (QuestInfo.WITHOUT_CATEGORY_ID == categoryId)
             {
                 // we do not have a valid category, hence we use the default icon:
+                Debug.Log($"## 2: Used Defaultsymbol UIC List setCatSymbol no Category on {qInfo.Name}".Red());
                 infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
                 return;
             }
@@ -285,6 +285,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             if (null == cat?.symbol)
             {
                 // we do not have a sprite, hence we use the default icon:
+                Debug.Log($"## 3: Used Defaultsymbol UIC List setCatSymbol cat or its symbol is null on cat id {categoryId} - folder name: {cat?.folderName}".Red());
                 infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
                 return;
             }

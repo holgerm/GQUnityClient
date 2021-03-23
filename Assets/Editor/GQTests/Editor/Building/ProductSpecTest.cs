@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using GQ.Editor.Building;
 using System.IO;
-using UnityEngine;
 using System;
 using GQ.Editor.Util;
 

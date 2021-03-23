@@ -2,7 +2,6 @@
 using Code.GQClient.Err;
 using GQClient.Model;
 using TMPro;
-using UnityEngine;
 
 namespace Code.GQClient.UI.Foyer.questinfos
 {

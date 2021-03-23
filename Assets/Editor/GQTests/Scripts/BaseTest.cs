@@ -1,10 +1,6 @@
 ﻿using Code.GQClient.Util;
 using UnityEngine;
-using UnityEditor;
 using NUnit.Framework;
-using UnityEditor.SceneManagement;
-using GQ.Editor.Building;
-using UnityEngine.SceneManagement;
 
 namespace GQTests.Scripts
 {

@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UnityEngine.TestTools;
 using NUnit.Framework;
-using System.Collections;
 using Code.GQClient.Conf;
 using Newtonsoft.Json;
-using GQ.Editor.UI;
 
 namespace GQTests.Editor.JSON
 {

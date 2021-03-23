@@ -5,7 +5,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 #if !UNITY_WEBGL
-using System.Threading;
 
 #endif
 

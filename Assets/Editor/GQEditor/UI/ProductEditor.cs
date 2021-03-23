@@ -17,7 +17,6 @@ using Code.QM.Util;
 using GQ.Editor.Util;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
 using Object = System.Object;
 
 namespace GQ.Editor.UI
@@ -581,7 +580,7 @@ namespace GQ.Editor.UI
         {
             GUILayout.Label("Editing Options", EditorStyles.boldLabel);
 
-// Create New Product row:
+            // Create New Product row:
             EditorGUILayout.BeginHorizontal();
             {
                 bool oldAllowChanges = allowChanges;

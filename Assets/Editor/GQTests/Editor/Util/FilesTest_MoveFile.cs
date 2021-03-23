@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
-using NUnit.Framework;
-using System.IO;
+﻿using NUnit.Framework;
 using GQ.Editor.Util;
 
 namespace GQTests.Editor.Util

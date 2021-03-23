@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Code.GQClient.Util;
 using Code.QM.Util;
 using GQClient.Model;
-using UnityEditor;
 
 namespace Code.GQClient.UI.Foyer
 {

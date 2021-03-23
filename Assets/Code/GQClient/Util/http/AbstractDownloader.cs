@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Code.GQClient.Err;
 using Code.GQClient.Util.tasks;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
 {

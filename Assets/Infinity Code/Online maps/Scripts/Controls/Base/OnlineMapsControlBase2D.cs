@@ -2,7 +2,6 @@
 /*   https://infinity-code.com   */
 
 using System;
-using UnityEngine;
 
 /// <summary>
 /// Class implements the basic functionality control of the 2D map.

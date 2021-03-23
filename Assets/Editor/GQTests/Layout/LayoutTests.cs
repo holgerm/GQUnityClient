@@ -1,12 +1,6 @@
-﻿using UnityEngine;
-using UnityEditor;
-using UnityEngine.TestTools;
-using NUnit.Framework;
-using System.Collections;
-using System;
+﻿using NUnit.Framework;
 using Code.GQClient.Conf;
 using Code.GQClient.UI.layout;
-using GQTests;
 
 namespace GQTests.Layout
 {

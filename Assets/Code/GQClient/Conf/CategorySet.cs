@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Code.GQClient.Err;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Code.GQClient.Conf
 {

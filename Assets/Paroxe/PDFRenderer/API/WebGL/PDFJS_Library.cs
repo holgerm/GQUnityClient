@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System.Runtime.InteropServices;
 using System;
 using System.Collections;
-using Paroxe.PdfRenderer;
 
 namespace Paroxe.PdfRenderer.WebGL
 {

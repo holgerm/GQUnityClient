@@ -3,7 +3,6 @@ using UnityEditor;
 using NUnit.Framework;
 using System.IO;
 using GQ.Editor.UI;
-using System.Collections.Generic;
 
 namespace GQTests.Editor.UI {
 

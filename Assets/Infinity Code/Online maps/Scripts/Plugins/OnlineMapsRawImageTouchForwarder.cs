@@ -3,7 +3,6 @@
 
 /* Special thanks to Brian Chasalow for his help in developing this script. */
 
-using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;

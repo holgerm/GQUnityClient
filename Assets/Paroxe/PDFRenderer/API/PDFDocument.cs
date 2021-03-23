@@ -9,7 +9,6 @@ using File = System.IO.File;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
-using Paroxe.PdfRenderer.Internal;
 
 namespace Paroxe.PdfRenderer
 {

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using Code.GQClient.Conf;
+﻿using Code.GQClient.Conf;
 using UnityEditor;
 
 namespace GQEditor.UI {

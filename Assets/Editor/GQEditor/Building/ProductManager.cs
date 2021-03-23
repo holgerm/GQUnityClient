@@ -16,7 +16,6 @@ using GQ.Editor.UI;
 using Newtonsoft.Json;
 using QM.EditUtils;
 using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
 
 namespace GQ.Editor.Building
 {

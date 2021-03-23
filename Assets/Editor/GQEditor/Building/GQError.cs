@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-namespace GQ.Editor.Building {
+﻿namespace GQ.Editor.Building {
 
 	public class GQError {
 

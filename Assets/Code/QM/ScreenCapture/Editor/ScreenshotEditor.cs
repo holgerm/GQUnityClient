@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using Code.GQClient.Conf;
 using GQ.Editor.Util;
 using UnityEditor;
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 
 namespace QM.SC.Editor
 {

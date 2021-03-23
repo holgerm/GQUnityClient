@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Code.GQClient.Err;
 using Code.QM.Util;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -47,6 +44,7 @@ namespace Code.GQClient.Conf
             RTConfig rtConfig = JsonConvert.DeserializeObject<RTConfig>(configText);
             rtConfig.RefreshCategoryDictionary();
             __JSON_Currently_Parsing = false;
+            Debug.Log($"RTConfig._doDeserialize() CatSets # {rtConfig.CategorySets.Count}");
             return rtConfig;
         }
 
@@ -105,17 +103,24 @@ namespace Code.GQClient.Conf
 
         internal void RefreshCategoryDictionary()
         {
-            if (null == _categorySets) return;
-            _categoryDict = new Dictionary<string, Category>();
-
-            foreach (CategorySet cs in _categorySets)
+            // Debug.Log("RCD: #1".Yellow());
+            // if (null == _categorySets)
+            // {
+            //     Debug.Log("RCD: #2 return since _catSets is null".Yellow());
+            //     return;
+            // }
+            // _categoryDict = new Dictionary<string, Category>();
+            
+            Debug.Log($"RefreshCategoryDictionary(): CatSets#: {CategorySets.Count}");
+            foreach (CategorySet cs in CategorySets)
             {
                 foreach (Category c in cs.categories)
                 {
-                    _categoryDict[c.id] = c;
+                    categoryDict[c.id] = c;
                 }
             }
 
+            Debug.Log($"RefreshCategoryDictionary(): End: CatDict#: {categoryDict}");
             // CategoriesChanged?.Invoke();
         }
 
@@ -128,7 +133,7 @@ namespace Code.GQClient.Conf
 
         public Category GetCategory(string catId)
         {
-            if (!categoryDict.ContainsKey(catId))
+            if (null == categoryDict || !categoryDict.ContainsKey(catId))
             {
                 return null;
             }
@@ -146,6 +151,7 @@ namespace Code.GQClient.Conf
             {
                 if (_categoryDict == null)
                 {
+                    _categoryDict = new Dictionary<string, Category>();
                     RefreshCategoryDictionary();
                 }
 

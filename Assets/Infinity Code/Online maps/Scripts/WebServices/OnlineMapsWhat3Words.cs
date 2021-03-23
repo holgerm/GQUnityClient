@@ -3,7 +3,6 @@
 
 using System;
 using System.Text;
-using UnityEngine;
 
 /// <summary>
 /// The what3words API gives you programmatic access to convert a 3 word address to coordinates (forward geocoding), to convert coordinates to a 3 word address (reverse geocoding), to obtain suggestions based on a full or partial 3 word address (AutoSuggest and StandardBlend), to obtain a geographically bounded section of the 3m x 3m what3words grid and to determine the languages that the API currently supports. 

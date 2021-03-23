@@ -1,7 +1,6 @@
 ﻿//#define DEBUG_LOG
 
 using System.Text;
-using UnityEngine;
 
 namespace QM.NFC
 {

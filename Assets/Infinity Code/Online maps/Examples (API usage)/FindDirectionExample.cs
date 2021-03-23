@@ -1,7 +1,6 @@
 ﻿/*         INFINITY CODE         */
 /*   https://infinity-code.com   */
 
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace InfinityCode.OnlineMapsExamples

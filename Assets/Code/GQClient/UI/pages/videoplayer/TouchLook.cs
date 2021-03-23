@@ -1,5 +1,4 @@
-﻿using Code.QM.Util;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace Code.GQClient.UI.pages.videoplayer

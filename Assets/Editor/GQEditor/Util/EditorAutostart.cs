@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Code.GQClient.Conf;
+﻿using Code.GQClient.Conf;
 using Code.GQClient.UI.layout;
-using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;

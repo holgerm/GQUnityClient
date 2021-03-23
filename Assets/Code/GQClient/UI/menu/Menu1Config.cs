@@ -1,7 +1,5 @@
 ﻿using Code.GQClient.Conf;
-using GQClient.Model;
 using Code.GQClient.UI.author;
-using Code.GQClient.Util;
 using UnityEngine;
 
 namespace Code.GQClient.UI.menu

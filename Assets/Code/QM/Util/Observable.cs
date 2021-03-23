@@ -1,5 +1,3 @@
-using System;
-
 namespace Code.QM.Util
 {
     public delegate void Listener<in TD>(TD data);

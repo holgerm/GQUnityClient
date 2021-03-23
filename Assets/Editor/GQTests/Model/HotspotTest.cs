@@ -1,9 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using GQ.Editor.Util;
-using GQTests;
-using System;
 using System.IO;
 using Code.GQClient.Model;
 using Code.GQClient.Model.expressions;

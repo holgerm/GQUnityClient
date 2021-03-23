@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;

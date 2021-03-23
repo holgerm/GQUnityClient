@@ -4,7 +4,6 @@
 #if EASYTOUCH
 using HedgehogTeam.EasyTouch;
 #endif
-using System;
 using UnityEngine;
 
 [AddComponentMenu("Infinity Code/Online Maps/Plugins/EasyTouch Connector")]

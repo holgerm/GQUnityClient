@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
-using UnityEditor.Callbacks;
 using UnityEditor.Build.Reporting;
 
 #if UNITY_IOS

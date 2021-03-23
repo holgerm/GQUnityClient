@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Paroxe.PdfRenderer.Internal;
 using UnityEngine;
-using System.Threading;
-using System.Collections;
 using Paroxe.PdfRenderer.WebGL;
 
 namespace Paroxe.PdfRenderer

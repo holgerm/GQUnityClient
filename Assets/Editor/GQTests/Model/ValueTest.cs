@@ -1,6 +1,4 @@
 ﻿using Code.GQClient.Model.expressions;
-using UnityEngine;
-using UnityEditor;
 using NUnit.Framework;
 
 namespace GQTests.Model

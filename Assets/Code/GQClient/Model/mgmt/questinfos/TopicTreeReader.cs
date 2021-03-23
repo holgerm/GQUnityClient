@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Code.GQClient.Conf;
 using Code.GQClient.Util;
 
 namespace GQClient.Model

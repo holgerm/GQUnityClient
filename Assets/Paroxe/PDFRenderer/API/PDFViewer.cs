@@ -8,7 +8,6 @@ using File = System.IO.File;
 using System.IO;
 #endif
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Paroxe.PdfRenderer.Internal;
 using Paroxe.PdfRenderer.Internal.Viewer;
 using UnityEngine;

@@ -9,7 +9,6 @@ using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.Dialogs;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
 {

@@ -1,5 +1,4 @@
 ﻿using Code.GQClient.Err;
-using Code.GQClient.Migration;
 using TMPro;
 using UnityEngine;
 

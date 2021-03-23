@@ -2,8 +2,6 @@
 using Code.GQClient.Model.actions;
 using Code.GQClient.Model.expressions;
 using Code.GQClient.Util;
-using UnityEngine;
-using UnityEditor;
 using NUnit.Framework;
 
 namespace GQTests.Model

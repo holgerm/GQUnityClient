@@ -1,7 +1,6 @@
 ﻿using Code.GQClient.Conf;
 using Code.GQClient.UI;
 using Code.GQClient.UI.Foyer;
-using Code.GQClient.UI.menu.categories;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

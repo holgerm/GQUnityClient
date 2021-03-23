@@ -1,6 +1,5 @@
 ﻿// #define DEBUG_LOG
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,7 +14,6 @@ using Code.GQClient.UI.Progress;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
-using GQClient.Model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

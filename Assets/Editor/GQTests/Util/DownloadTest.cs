@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using UnityEngine.TestTools;
 using NUnit.Framework;
-using System.Collections;
 using Code.GQClient.Util.http;
-using GQTests;
 using GQ.Editor.Util;
 
 namespace GQTests.Util

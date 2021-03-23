@@ -4,7 +4,6 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.imagewithtext

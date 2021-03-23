@@ -2,7 +2,6 @@ using System;
 using Code.GQClient.UI.Foyer;
 using GQClient.Model;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace GQTests.UI
 {

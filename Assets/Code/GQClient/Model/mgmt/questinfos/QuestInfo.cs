@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using Code.GQClient.Model.mgmt.quests;
-using Code.GQClient.UI;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.Dialogs;
 using Code.GQClient.Util;

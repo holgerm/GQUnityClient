@@ -1,5 +1,4 @@
-﻿using Paroxe.PdfRenderer.WebGL;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Paroxe.PdfRenderer.Internal.Viewer

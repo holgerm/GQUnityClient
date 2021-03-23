@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
-using Code.GQClient.Err;
 using Code.GQClient.UI.author;
-using UnityEngine;
 
 // ReSharper disable All
 

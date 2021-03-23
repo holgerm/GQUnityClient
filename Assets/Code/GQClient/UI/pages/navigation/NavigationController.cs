@@ -1,10 +1,8 @@
 ﻿// #define DEBUG_LOG
 
 using System;
-using Code.GQClient.Conf;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.map;
-using Code.GQClient.Util;
 using Code.GQClient.Util.input;
 using UnityEngine;
 

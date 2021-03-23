@@ -1,9 +1,7 @@
 using System;
 using System.IO;
-using Code.GQClient.Err;
 using Code.GQClient.UI.author;
 using Code.GQClient.Util.http;
-using GQClient.Model;
 using UnityEngine;
 
 namespace Code.GQClient.Conf
@@ -340,9 +338,10 @@ namespace Code.GQClient.Conf
             }
             catch (Exception e)
             {
-                Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message);
+                Debug.LogWarning("Product Configuration: Exception thrown when parsing Product.json: " + e.Message + "\njson:\n" + json);
             }
 
+            Debug.Log($"Config.deserializeConfig() _current is null? : {null == _current}");
             var _ = _current.rt;
         }
 

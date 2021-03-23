@@ -1,10 +1,8 @@
 ﻿/*         INFINITY CODE         */
 /*   https://infinity-code.com   */
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 #if UPANO
 using InfinityCode.uPano;

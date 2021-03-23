@@ -1,5 +1,4 @@
 ﻿using Code.GQClient.Util.tasks;
-using UnityEngine;
 
 namespace Code.GQClient.UI.Progress
 {

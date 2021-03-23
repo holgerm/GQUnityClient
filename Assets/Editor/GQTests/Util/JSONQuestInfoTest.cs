@@ -1,11 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using GQClient.Model;
 using Code.GQClient.Util.tasks;
 using GQ.Editor.Util;
-using GQTests.Management;
 using NUnit.Framework;
 
 namespace GQTests.Util
