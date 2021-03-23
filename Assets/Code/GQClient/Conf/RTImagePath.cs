@@ -102,6 +102,7 @@ namespace Code.GQClient.Conf
                 sprite = Resources.Load<Sprite>(ResourcePath);
                 if (null == sprite)
                 {
+                    Debug.Log("## 4: Used Defaultsymbol RTImagePath.GetSprite sprite is null".Red());
                     sprite = Resources.Load<Sprite>(DEFAULT_CAT_IMAGE_PATH);
                 }
 
@@ -112,6 +113,7 @@ namespace Code.GQClient.Conf
                 Texture2D texture = GetTexture2D();
                 if (null == texture)
                 {
+                    Debug.Log("## 5: Used Defaultsymbol RTImagePath.GetSprite texture is null".Red());
                     sprite = Resources.Load<Sprite>(DEFAULT_CAT_IMAGE_PATH);
                 }
                 else

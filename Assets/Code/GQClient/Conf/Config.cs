@@ -5,7 +5,6 @@ using System.IO;
 using Code.GQClient.Err;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
-using Code.QM.Util;
 using GQClient.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -33,18 +32,13 @@ namespace Code.GQClient.Conf
 
         public static Config _doDeserializeConfig(string configText)
         {
+            Debug.Log("TEST Start".Green());
             Config.__JSON_Currently_Parsing = true;
             Config config = JsonConvert.DeserializeObject<Config>(configText);
-            config.rt.RefreshCategoryDictionary();
-            Config.__JSON_Currently_Parsing = false;
-            return config;
-        }
+            Debug.Log($"TEST config == null? {null == config}".Yellow());
+            Debug.Log($"TEST config.rt == null? {null == config.rt}".Yellow());
 
-        // Unused:
-        public static RTConfig _doDeserializeConfigRT(string configRTText)
-        {
-            Config.__JSON_Currently_Parsing = true;
-            RTConfig config = JsonConvert.DeserializeObject<RTConfig>(configRTText);
+            config.rt.RefreshCategoryDictionary();
             Config.__JSON_Currently_Parsing = false;
             return config;
         }
@@ -821,7 +815,7 @@ namespace Code.GQClient.Conf
 
 
             // Forward RTConfig:
-            rt = new RTConfig();
+//            rt = new RTConfig();
         }
 
         #endregion
@@ -831,11 +825,19 @@ namespace Code.GQClient.Conf
 
         [JsonIgnore] private RTConfig _rt = null;
 
+        [JsonIgnore] private bool ___firstCallRT = false; 
+        
         [JsonIgnore]
         public RTConfig rt
         {
             get
             {
+                if (!___firstCallRT)
+                {
+                    Debug.Log($"first call to rt when _rt is null? {null == _rt}");
+                    ___firstCallRT = true;
+                }
+
                 if (null == _rt)
                 {
                     resetRTConfig();
@@ -843,11 +845,17 @@ namespace Code.GQClient.Conf
 
                 return _rt;
             }
-            set { _rt = value; }
+            set
+            {
+                Debug.Log("_rt set.");
+                ___firstCallRT = true;
+                _rt = value;
+            }
         }
 
         internal void resetRTConfig()
         {
+            Debug.Log("Config.resetRTConfig() entered".Green());
             string rtProductFile =
                 Path.Combine(
                     Application.persistentDataPath,
@@ -959,7 +967,7 @@ namespace Code.GQClient.Conf
             return foundCatSet;
         }
 
-        [ShowInProductEditor]
+        [ShowInProductEditor, JsonIgnore]
         public List<CategorySet> CategorySets
         {
             get => rt.CategorySets;

@@ -262,7 +262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc7a5781e166e423a878febc5620de98, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d29996a1d9e1c4427bbee2118264323a, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e1aba4df3406d44c99ec92d16603152d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d6f79c0cd1ce040929302e4512f89133, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -906,8 +906,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Title of this Quest
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9c99d7fd3b89249b481d6af5ae842862, type: 2}
-  m_sharedMaterial: {fileID: -6685364396187757935, guid: 9c99d7fd3b89249b481d6af5ae842862,
+  m_fontAsset: {fileID: 11400000, guid: 42facd8aa123b4666bf4180d0276630e, type: 2}
+  m_sharedMaterial: {fileID: -6685364396187757935, guid: 42facd8aa123b4666bf4180d0276630e,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -936,8 +936,8 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 32
-  m_fontSizeMax: 64
+  m_fontSizeMin: 40
+  m_fontSizeMax: 80
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
