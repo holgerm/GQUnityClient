@@ -3,6 +3,8 @@
   "categoryFiltersStartFolded": false,
   "categoryFoldersStartFolded": false,
   "mainCategorySet": "Kategorie",
+  "showAllIfNoCatSelectedInFilter": true,
+  "showIfNoCatDefined": true,
   "CategorySets": [
     {
       "name": "Kategorie",
@@ -74,5 +76,5 @@
       ]
     }
   ],
-  "defaultCategory": ""
+  "defaultCategory": null
 }
