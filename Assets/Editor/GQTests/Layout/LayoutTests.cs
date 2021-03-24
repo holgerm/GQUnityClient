@@ -10,7 +10,7 @@ namespace GQTests.Layout
 		[Test]
 		public void Units2MM() {
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -31,7 +31,7 @@ namespace GQTests.Layout
 		[Test]
 		public void MM2Units() {
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",

@@ -42,9 +42,9 @@ namespace GQClient.Model
 
         protected QuestInfoFilter ParentFilter { get; set; }
 
-        abstract public bool Accept(QuestInfo qi);
+        public abstract bool Accept(QuestInfo qi);
 
-        abstract public List<string> AcceptedCategories(QuestInfo qi);
+        public abstract List<string> AcceptedCategories(QuestInfo qi);
 
         public string CategoryToShow(QuestInfo qi)
         {
@@ -104,11 +104,11 @@ namespace GQClient.Model
 
             private HiddenQuestsFilter()
             {
-                IsActive = !ConfigurationManager.Current.ShowHiddenQuests;
+                IsActive = !Config.Current.ShowHiddenQuests;
                 Author.SettingsChanged +=
                     (object sender, System.EventArgs e) =>
                     {
-                        IsActive = !ConfigurationManager.Current.ShowHiddenQuests;
+                        IsActive = !Config.Current.ShowHiddenQuests;
                     };
             }
 
@@ -307,7 +307,7 @@ namespace GQClient.Model
                     var catList = catIds[disjunctionName];
                     // skip empty disjunctions inside the conjunction,
                     // i.e. if not any one category of this disjunction is active, any quest info is accepted.
-                    if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter && catList.Count == 0)
+                    if (Config.Current.showAllIfNoCatSelectedInFilter && catList.Count == 0)
                     {
                         continue;
                     }
@@ -349,7 +349,7 @@ namespace GQClient.Model
 
                 if (qiDoesNotContainAnyCatOfThisGroup)
                 {
-                   return ConfigurationManager.Current.showIfNoCatDefined;
+                   return Config.Current.showIfNoCatDefined;
                     // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and
                     // though should be shown if specified so in option 'showIfNoCatDefined'.
                 }
@@ -464,7 +464,7 @@ namespace GQClient.Model
             public override List<string> AcceptedCategories(QuestInfo qi)
             {
                 // if we have no filters we return all categories:
-                if (ConfigurationManager.Current.showAllIfNoCatSelectedInFilter &&
+                if (Config.Current.showAllIfNoCatSelectedInFilter &&
                     (subfilters == null || subfilters.Count == 0))
                     return qi.Categories;
 

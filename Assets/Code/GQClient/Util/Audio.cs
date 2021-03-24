@@ -80,8 +80,8 @@ namespace Code.GQClient.Util
                 {
                     loader = new Downloader(
                         url: path,
-                        timeout: ConfigurationManager.Current.timeoutMS,
-                        maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                        timeout: Config.Current.timeoutMS,
+                        maxIdleTime: Config.Current.maxIdleTimeMS
                     );
                     // TODO store the image locally ...
                 }
@@ -147,7 +147,7 @@ namespace Code.GQClient.Util
             audioSource.Play();
         }
 
-        static public void StopAllAudio()
+        public static void StopAllAudio()
         {
             foreach (AudioSource audioSrc in audioSources.Values)
             {

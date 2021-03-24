@@ -23,7 +23,7 @@ namespace Code.GQClient.UI.menu.categories
 			set => unfolded = value;
 		}
 
-		abstract protected bool showMenuItem ();
+		protected abstract bool showMenuItem ();
 
 	}
 }

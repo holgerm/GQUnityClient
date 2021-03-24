@@ -93,8 +93,8 @@ namespace Code.GQClient.UI.pages.startandexitscreen
                 loader =
                     new Downloader(
                         url: rtImageUrl,
-                        timeout: ConfigurationManager.Current.timeoutMS,
-                        maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                        timeout: Config.Current.timeoutMS,
+                        maxIdleTime: Config.Current.maxIdleTimeMS
                     );
                 // TODO store the image locally ...
             }

@@ -164,7 +164,7 @@ namespace Code.GQClient.Model.mgmt.quests
                     (HttpWebRequest) WebRequest.Create(info.Url);
                 httpWReq.Timeout = (int) Math.Min(
                     500,
-                    ConfigurationManager.Current.maxIdleTimeMS
+                    Config.Current.maxIdleTimeMS
                 );
             }
             catch (UriFormatException)

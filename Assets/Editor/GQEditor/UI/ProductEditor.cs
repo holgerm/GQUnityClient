@@ -1,5 +1,3 @@
-// #define DEBUG_LOG
-
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -15,6 +13,7 @@ using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
 using Code.QM.Util;
 using GQ.Editor.Util;
+using Newtonsoft.Json;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using Object = System.Object;
@@ -68,6 +67,7 @@ namespace GQ.Editor.UI
                     _instance.readStateFromEditorPrefs();
                     _instance.warnIcon = (Texture) AssetDatabase.LoadAssetAtPath(WARN_ICON_PATH, typeof(Texture));
                 }
+
                 return _instance;
             }
             private set { _instance = value; }
@@ -122,7 +122,7 @@ namespace GQ.Editor.UI
             // ignore enable when we start the app:
             if (!EditorApplication.isPlaying)
                 return;
-            
+
             Instance = this;
 
             readStateFromEditorPrefs();
@@ -166,7 +166,7 @@ namespace GQ.Editor.UI
         {
             if (Application.isPlaying)
                 return;
-            
+
             // adjust textarea style:
             TextareaGUIStyle = GUI.skin.textField;
             TextareaGUIStyle.wordWrap = true;
@@ -270,6 +270,7 @@ namespace GQ.Editor.UI
             {
                 Pm.InitProductDictionary();
             }
+
             string selectedProductName = Pm.AllProductIds.ElementAt(selectedProductIndex);
 
             GUIContent prepareBuildButtonGUIContent,
@@ -356,8 +357,8 @@ namespace GQ.Editor.UI
         {
             string productDir = Files.CombinePath(ProductManager.ProductsDirPath, CurrentBuildName);
 
-            string importedPackageDir = Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage");
-            foreach (string dir in Directory.GetDirectories(ConfigurationManager.RUNTIME_PRODUCT_DIR))
+            string importedPackageDir = Files.CombinePath(Config.RUNTIME_PRODUCT_DIR, "ImportedPackage");
+            foreach (string dir in Directory.GetDirectories(Config.RUNTIME_PRODUCT_DIR))
             {
                 if (dir.Equals(importedPackageDir))
                 {
@@ -377,7 +378,7 @@ namespace GQ.Editor.UI
                 }
             }
 
-            foreach (string file in Directory.GetFiles(ConfigurationManager.RUNTIME_PRODUCT_DIR))
+            foreach (string file in Directory.GetFiles(Config.RUNTIME_PRODUCT_DIR))
             {
                 Files.CopyFile(file, productDir, overwrite: true);
             }
@@ -410,7 +411,7 @@ namespace GQ.Editor.UI
                 if (!File.Exists(configFile))
                     return null;
                 string configText = File.ReadAllText(configFile);
-                Config buildConfig = Config._doDeserializeConfig(configText);
+                Config buildConfig = JsonConvert.DeserializeObject<Config>(configText);
                 updateEditorBuildSceneSettings(buildConfig);
                 return buildConfig;
             }
@@ -423,7 +424,7 @@ namespace GQ.Editor.UI
 
         bool configIsDirty = false;
 
-        static private void updateEditorBuildSceneSettings(Config config)
+        private static void updateEditorBuildSceneSettings(Config config)
         {
             EditorBuildSettingsScene[] sceneSettings = new EditorBuildSettingsScene[config.scenePaths.Length];
             for (int i = 0;
@@ -436,12 +437,11 @@ namespace GQ.Editor.UI
             EditorBuildSettings.scenes = sceneSettings;
         }
 
-        static public Config SelectedConfig { get; private set; }
-// static public RTConfig SelectedRTConfig { get; private set; }
+        public static Config SelectedConfig { get; private set; }
 
-        static public float WidthForValues { get; private set; }
+        public static float WidthForValues { get; private set; }
 
-        static public float WidthForNames { get; private set; }
+        public static float WidthForNames { get; private set; }
 
         void gui4ProductDetails()
         {
@@ -449,7 +449,7 @@ namespace GQ.Editor.UI
             ProductSpec p = ProductManager.AllProducts.ElementAt(selectedProductIndex);
             SelectedConfig = p.Config;
 
-// Begin ScrollView:
+            // Begin ScrollView:
             using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPos))
             {
                 scrollPos = scrollView.scrollPosition;
@@ -462,8 +462,10 @@ namespace GQ.Editor.UI
                     gui4StartScene();
 
                     PropertyInfo[] propertyInfos =
-                        typeof(Config).GetProperties(BindingFlags.Public | BindingFlags.NonPublic |
-                                                     BindingFlags.Instance);
+                        typeof(Config).GetProperties(
+                            BindingFlags.Public |
+                            BindingFlags.NonPublic |
+                            BindingFlags.Instance);
 
                     // get max widths for names and values:
                     float allNamesMax = 0f, allValuesMax = 0f;
@@ -474,7 +476,8 @@ namespace GQ.Editor.UI
                             continue;
 
                         string propName = curPropInfo.Name + ":";
-                        string value = Objects.ToString(curPropInfo.GetValue(SelectedConfig, null));
+                        string value =
+                            Objects.ToString(curPropInfo.GetValue(SelectedConfig, null));
 
                         float nameMin, nameMax;
                         float valueMin, valueMax;
@@ -599,7 +602,7 @@ namespace GQ.Editor.UI
                 {
                     if (GUILayout.Button("Save"))
                     {
-                        Pm.serializeConfigs(SelectedConfig, ConfigurationManager.RUNTIME_PRODUCT_DIR);
+                        Pm.serializeConfigs(SelectedConfig, Config.RUNTIME_PRODUCT_DIR);
                         configIsDirty = false;
                         LayoutConfig.ResetAll(); // TODO check and implement update all layout components in editor
                     }
@@ -798,7 +801,7 @@ namespace GQ.Editor.UI
     }
 
 
-    abstract public class ProductEditorPart
+    public abstract class ProductEditorPart
     {
         private static Dictionary<Type, ProductEditorPart>
             cachedEditorParts = new Dictionary<Type, ProductEditorPart>();
@@ -807,7 +810,7 @@ namespace GQ.Editor.UI
 
         protected static bool configIsDirty;
 
-        static public GUIContent NamePrefixGUIContent { get; private set; }
+        public static GUIContent NamePrefixGUIContent { get; private set; }
 
         protected static GUIStyle STYLE_LABEL_RightAdjusted;
         protected static GUIStyle STYLE_LABEL_Bold;
@@ -832,7 +835,7 @@ namespace GQ.Editor.UI
         /// </summary>
         /// <returns>the dirty state of this property.</returns>
         /// <param name="curPropInfo">Current property info.</param>
-        static public bool CreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        public static bool CreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             Type propertyType = curPropInfo.PropertyType;
             ProductEditorPart accordingEditorPart;
@@ -912,9 +915,9 @@ namespace GQ.Editor.UI
             return configIsDirty;
         }
 
-        abstract protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject);
+        protected abstract bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject);
 
-        static protected bool entryDisabled(PropertyInfo propInfo)
+        protected static bool entryDisabled(PropertyInfo propInfo)
         {
             var disabled = false;
             // the entry for the given property will be disabled, if one of the following is true
@@ -928,7 +931,7 @@ namespace GQ.Editor.UI
         /// <summary>
         /// Says wether the given entry should be hidden:
         /// </summary>
-        static internal bool entryHidden(PropertyInfo propInfo)
+        internal static bool entryHidden(PropertyInfo propInfo)
         {
             var config = ProductEditor.SelectedConfig;
             var hidden = false;
@@ -1004,7 +1007,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Boolean : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1038,7 +1041,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Color32 : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1112,7 +1115,7 @@ namespace GQ.Editor.UI
 
         string[] values = Enum.GetNames(typeof(AlignmentOption));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1156,7 +1159,7 @@ namespace GQ.Editor.UI
 
         string[] values = Enum.GetNames(typeof(HeaderMiddleButtonPolicy));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1268,7 +1271,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4ImagePath : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1304,7 +1307,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Int32 : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1339,7 +1342,7 @@ namespace GQ.Editor.UI
     /// </summary>
     public class ProductEditorPart4Int64 : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1364,7 +1367,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Byte : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -1399,7 +1402,7 @@ namespace GQ.Editor.UI
     {
         bool showList = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             List<CategorySet> allElements =
                 (List<CategorySet>) curPropInfo.GetValue(propertyObject, null);
@@ -1493,7 +1496,7 @@ namespace GQ.Editor.UI
     {
         bool showList = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             List<Category> allElements = (List<Category>) curPropInfo.GetValue(propertyObject, null);
             if (allElements == null)
@@ -1702,7 +1705,7 @@ namespace GQ.Editor.UI
     {
         bool showList = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             List<SceneExtension> allElements =
                 (List<SceneExtension>) curPropInfo.GetValue(propertyObject, null);
@@ -1886,7 +1889,7 @@ namespace GQ.Editor.UI
             }
         }
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             int old = selected;
@@ -1931,7 +1934,7 @@ namespace GQ.Editor.UI
 
         string[] names = Enum.GetNames(typeof(ListEntryDividingMode));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -1949,7 +1952,6 @@ namespace GQ.Editor.UI
             }
 
             ListEntryDividingMode mode = (ListEntryDividingMode) selected;
-            //Debug.Log("Sel: " + selection + "     mode: " + mode.ToString());
             return configIsDirty;
         }
     }
@@ -1974,7 +1976,7 @@ namespace GQ.Editor.UI
 
         string[] mapStartPositionTypeNames = Enum.GetNames(typeof(MapStartPositionType));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -2016,7 +2018,7 @@ namespace GQ.Editor.UI
 
         string[] taskUIModeNames = Enum.GetNames(typeof(TaskUIMode));
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -2040,7 +2042,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Single : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -2062,7 +2064,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4Double : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
 
@@ -2084,7 +2086,7 @@ namespace GQ.Editor.UI
 
     public class ProductEditorPart4String : ProductEditorPart
     {
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -2136,7 +2138,7 @@ namespace GQ.Editor.UI
     {
         bool showDetails = false;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             switch (curPropInfo.Name)
             {
@@ -2516,7 +2518,7 @@ namespace GQ.Editor.UI
         public const string ProjectScenesRootPath = "Assets/Scenes/Pages/";
 
         public static readonly string ProductScenesRootPath =
-            Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage/Scenes/Pages/");
+            Files.CombinePath(Config.RUNTIME_PRODUCT_DIR, "ImportedPackage/Scenes/Pages/");
 
 
         bool showDetails = false;
@@ -2524,7 +2526,7 @@ namespace GQ.Editor.UI
         int selectedPageTypeToAdd = 0;
         int selectedSceneToAdd = 0;
 
-        override protected bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
+        protected override bool doCreateGui(PropertyInfo curPropInfo, Object propertyObject)
         {
             configIsDirty = false;
             GUIContent myNamePrefixGUIContent = NamePrefixGUIContent;
@@ -2669,13 +2671,6 @@ namespace GQ.Editor.UI
                     }
 
                     EditorBuildSettings.scenes = editorBuildScenes.ToArray();
-
-#if DEBUG_LOG
-                    foreach (EditorBuildSettingsScene sc in EditorBuildSettings.scenes)
-                    {
-                        Debug.Log(("After Create GUI in Editor: EditorBuildSettings.scenes contains: " + sc.path).Red());
-                    }
-#endif
                 }
             }
 

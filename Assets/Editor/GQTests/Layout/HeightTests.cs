@@ -13,7 +13,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -46,7 +46,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -71,7 +71,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -103,7 +103,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -128,7 +128,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -163,7 +163,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -192,7 +192,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",
@@ -222,7 +222,7 @@ namespace GQTests.Layout
 		{
 
 			// prepare product json:
-			ConfigurationManager.RetrieveProductJSONText = () => {
+			Config.RetrieveProductJSONText = () => {
 				return 
 					@"{
 							""id"": ""test"",

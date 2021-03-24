@@ -38,7 +38,7 @@ namespace Code.GQClient.UI.pages.menu
 			ChoiceCtrl choiceCtrl = go.GetComponent<ChoiceCtrl> ();
 			choiceCtrl.page = myPage;
 			choiceCtrl.choice = choice;
-			choiceCtrl.choiceText.color = ConfigurationManager.Current.mainFgColor;
+			choiceCtrl.choiceText.color = Config.Current.mainFgColor;
 			choiceCtrl.choiceText.text = choice.Text.Decode4TMP(false);
 			choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
 

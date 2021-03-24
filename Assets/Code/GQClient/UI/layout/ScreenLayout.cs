@@ -22,7 +22,7 @@ namespace Code.GQClient.UI.layout
 
         public override void layout()
         {
-            if (ConfigurationManager.Current == null)
+            if (Config.Current == null)
                 return;
 
             setMainBackground();
@@ -40,7 +40,7 @@ namespace Code.GQClient.UI.layout
             if (image == null)
                 return;
 
-            image.color = ConfigurationManager.Current.contentBackgroundColor;
+            image.color = Config.Current.contentBackgroundColor;
         }
 
         /// <summary>
@@ -82,17 +82,17 @@ namespace Code.GQClient.UI.layout
             Image image = TopMargin.GetComponent<Image>();
             if (image != null)
             {
-                image.color = ConfigurationManager.Current.contentBackgroundColor;
+                image.color = Config.Current.contentBackgroundColor;
             }
 
             LayoutElement layElem = TopMargin.GetComponent<LayoutElement>();
             if (layElem == null)
                 return;
-            layElem.preferredHeight = ConfigurationManager.Current.contentTopMarginUnits;
+            layElem.preferredHeight = Config.Current.contentTopMarginUnits;
             layElem.flexibleHeight = 0;
             if (pageCtrl != null)
             {
-                TopMargin.SetActive(pageCtrl.ShowsTopMargin && ConfigurationManager.Current.contentTopMarginUnits > 0.001f);
+                TopMargin.SetActive(pageCtrl.ShowsTopMargin && Config.Current.contentTopMarginUnits > 0.001f);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Code.GQClient.UI.layout
             Image image = BottomMargin.GetComponent<Image>();
             if (image != null)
             {
-                image.color = ConfigurationManager.Current.contentBackgroundColor;
+                image.color = Config.Current.contentBackgroundColor;
             }
 
             LayoutElement layElem = BottomMargin.GetComponent<LayoutElement>();
@@ -124,7 +124,7 @@ namespace Code.GQClient.UI.layout
             Image image = Divider.GetComponent<Image>();
             if (image != null)
             {
-                image.color = ConfigurationManager.Current.contentBackgroundColor;
+                image.color = Config.Current.contentBackgroundColor;
             }
 
             LayoutElement layElem = Divider.GetComponent<LayoutElement>();
@@ -146,7 +146,7 @@ namespace Code.GQClient.UI.layout
             Image image = Footer.GetComponent<Image>();
             if (image != null)
             {
-                image.color = ConfigurationManager.Current.footerBgColor;
+                image.color = Config.Current.footerBgColor;
             }
 
             LayoutElement layElem = Footer.GetComponent<LayoutElement>();
@@ -167,7 +167,7 @@ namespace Code.GQClient.UI.layout
 
         protected static void SetEntryLayout(float heightUnits, GameObject menuEntry, ListEntryKind listEntryKind, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
         {
-            Color fgCol = (Color)((fgColor == null) ? ConfigurationManager.Current.mainFgColor : fgColor);
+            Color fgCol = (Color)((fgColor == null) ? Config.Current.mainFgColor : fgColor);
 
             // set layout height:
             Transform transf = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find(gameObjectPath));

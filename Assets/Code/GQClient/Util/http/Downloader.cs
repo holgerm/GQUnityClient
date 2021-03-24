@@ -56,7 +56,7 @@ namespace Code.GQClient.Util.http
             return CoroutineRunner(this);
         }
 
-        static public IEnumerator DownloadAsCoroutine(Downloader d)
+        public static IEnumerator DownloadAsCoroutine(Downloader d)
         {
             return d.Download();
         }

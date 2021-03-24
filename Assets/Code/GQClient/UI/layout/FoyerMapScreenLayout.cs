@@ -34,25 +34,25 @@ namespace Code.GQClient.UI.layout
 			}
 		}
 
-		static public float MapButtonHeightUnits {
+		public static float MapButtonHeightUnits {
 			get {
 				float result = 
 					calculateRestrictedHeight (
-						ConfigurationManager.Current.mapButtonHeightUnits,
-						ConfigurationManager.Current.mapButtonHeightMinMM,
-						ConfigurationManager.Current.mapButtonHeightMaxMM
+						Config.Current.mapButtonHeightUnits,
+						Config.Current.mapButtonHeightMinMM,
+						Config.Current.mapButtonHeightMaxMM
 					);
 				return result;
 			}
 		}
 
-		static public float MarkerHeightUnits {
+		public static float MarkerHeightUnits {
 			get {
 				float result = 
 					calculateRestrictedHeight (
-						ConfigurationManager.Current.markerHeightUnits,
-						ConfigurationManager.Current.markerHeightMinMM,
-						ConfigurationManager.Current.markerHeightMaxMM
+						Config.Current.markerHeightUnits,
+						Config.Current.markerHeightMinMM,
+						Config.Current.markerHeightMaxMM
 					);
 				return result;
 			}

@@ -18,7 +18,7 @@ namespace GQTests.Management {
 			Mock.Use = true;
 			MOCK_Server_Empty();
 
-			ConfigurationManager.Current.portal = 0;
+			Config.Current.portal = 0;
 
 			QuestInfoManager.Reset();
 			QM = QuestInfoManager.Instance;

@@ -18,7 +18,7 @@
 			Text = text;
 		}
 
-		override public string ToString () {
+		public override string ToString () {
 			return Text;
 		}
 

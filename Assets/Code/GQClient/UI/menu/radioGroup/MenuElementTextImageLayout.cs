@@ -12,8 +12,8 @@ namespace Code.GQClient.UI.menu.radioGroup
 			base.layout ();
 
 			// set heights of text and image:
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Text", fgColor: ConfigurationManager.Current.menuFGColor);
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Image", fgColor: ConfigurationManager.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Text", fgColor: Config.Current.menuFGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Image", fgColor: Config.Current.menuFGColor);
 		}
 
 	}

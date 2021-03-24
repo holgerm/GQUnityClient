@@ -11,7 +11,7 @@ namespace GQ.Editor.Util
     {
         #region Special Files and Directories
 
-        static private string _PROJECT_PATH = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
+        private static string _PROJECT_PATH = Application.dataPath.Substring(0, Application.dataPath.Length - "/Assets".Length);
 
         public static string PROJECT_PATH
         {

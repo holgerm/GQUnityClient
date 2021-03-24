@@ -81,7 +81,7 @@ namespace Code.GQClient.UI.pages
 
             page.PageCtrl = this;
 
-            if (ConfigurationManager.Current.stopAudioWhenLeavingPage)
+            if (Config.Current.stopAudioWhenLeavingPage)
             {
                 Audio.StopAllAudio();
             }
@@ -92,7 +92,7 @@ namespace Code.GQClient.UI.pages
 			backButton = backButtonGo.GetComponent<Button>();
             backButtonGo.gameObject.SetActive(page.Quest.History.CanGoBackToPreviousPage);
 
-            if (ConfigurationManager.Current.hideFooterIfPossible)
+            if (Config.Current.hideFooterIfPossible)
             {
                 var footer = FooterButtonPanel.transform.parent;
                 if (!page.HasEndEvents() && !backButtonGo.gameObject.activeInHierarchy)
@@ -107,7 +107,7 @@ namespace Code.GQClient.UI.pages
             Base.Instance.BlockInteractions(false);
         }
 
-        internal virtual bool OfferLeaveQuest => ConfigurationManager.Current.OfferLeaveQuests;
+        internal virtual bool OfferLeaveQuest => Config.Current.OfferLeaveQuests;
 
         #endregion
 
@@ -152,42 +152,42 @@ namespace Code.GQClient.UI.pages
 		/// <summary>
 		/// Margin between content and footer in device-dependent units.
 		/// </summary>
-		static public float ContentBottomMarginUnits {
+		public static float ContentBottomMarginUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.contentBottomMarginUnits;
+				return Config.Current.contentBottomMarginUnits;
 			}
 		}
 
-		static public float ContentDividerUnits {
+		public static float ContentDividerUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.contentDividerUnits;
+				return Config.Current.contentDividerUnits;
 			}
 		}
 
-		static public float BorderWidthUnits {
+		public static float BorderWidthUnits {
 			get {
 				// TODO adjust to device diplay format, raw config data should be ideal for 16:9.
-				return ConfigurationManager.Current.borderWidthUnits;
+				return Config.Current.borderWidthUnits;
 			}
 		}
 
-		static public float ContentWidthUnits {
+		public static float ContentWidthUnits {
 			get {
 				return LayoutConfig.ScreenWidthUnits - (2 * BorderWidthUnits);
 			}
 		}
 
-        static public float ImageRatioMinimum {
+        public static float ImageRatioMinimum {
 			get {
-				return ContentWidthUnits / ConfigurationManager.Current.imageAreaHeightMaxUnits;
+				return ContentWidthUnits / Config.Current.imageAreaHeightMaxUnits;
 			}
 		}
 
-        static public float ImageRatioMaximum {
+        public static float ImageRatioMaximum {
 			get {
-				return ContentWidthUnits / ConfigurationManager.Current.imageAreaHeightMinUnits;
+				return ContentWidthUnits / Config.Current.imageAreaHeightMinUnits;
 
 			}
 		}
@@ -196,7 +196,7 @@ namespace Code.GQClient.UI.pages
 		{
 			float units = LayoutConfig.ContentHeightUnits -
 			              (
-                              ConfigurationManager.Current.contentTopMarginUnits +
+                              Config.Current.contentTopMarginUnits +
 			                  imageAreaHeight +
 			                  ContentDividerUnits +
 			                  ContentBottomMarginUnits

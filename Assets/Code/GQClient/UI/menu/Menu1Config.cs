@@ -13,7 +13,7 @@ namespace Code.GQClient.UI.menu
         // Use this for initialization
         private void Start()
         {
-            var cf = ConfigurationManager.Current;
+            var cf = Config.Current;
             updateQuestInfos_MenuEntry.SetActive(
                 cf.OfferManualUpdate4QuestInfos
             );
@@ -31,7 +31,7 @@ namespace Code.GQClient.UI.menu
 
         private void Author_SettingsChanged(object sender, System.EventArgs e)
         {
-            var cf = ConfigurationManager.Current;
+            var cf = Config.Current;
             updateQuestInfos_MenuEntry.SetActive(cf.OfferManualUpdate4QuestInfos);
         }
     }

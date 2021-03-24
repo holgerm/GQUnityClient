@@ -96,10 +96,10 @@ namespace Code.GQClient.UI.author
         bool tryToLogin(string email, string password)
         {
             // TODO ask server for permissions ...
-            if (ConfigurationManager.Current.defineAuthorBackDoor)
+            if (Config.Current.defineAuthorBackDoor)
             {
-                if (email == ConfigurationManager.Current.acceptedAuthorEmail &&
-                    password == ConfigurationManager.Current.acceptedAuthorPassword)
+                if (email == Config.Current.acceptedAuthorEmail &&
+                    password == Config.Current.acceptedAuthorPassword)
                 {
                     Author.LoggedInAs = email;
                     //QuestInfoFilter.HiddenQuestsFilter.Instance.IsActive = true;

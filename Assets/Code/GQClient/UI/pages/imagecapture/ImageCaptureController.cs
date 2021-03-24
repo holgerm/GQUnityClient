@@ -261,7 +261,7 @@ namespace Code.GQClient.UI.pages.imagecapture
                 }
             }
 
-            permission = NativeGallery.SaveImageToGallery(texture, ConfigurationManager.Current.name, filename);
+            permission = NativeGallery.SaveImageToGallery(texture, Config.Current.name, filename);
             Destroy(texture); // avoid memory leaks
         }
 

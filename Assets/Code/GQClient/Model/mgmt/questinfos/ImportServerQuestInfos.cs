@@ -46,7 +46,7 @@ namespace GQClient.Model
             // now in the helper list only the old elements that are not mentioned in the new list anymore are left. Hence we delete them:
             foreach (var oldId in oldIDsToBeRemoved)
             {
-                if (ConfigurationManager.Current.autoSyncQuestInfos)
+                if (Config.Current.autoSyncQuestInfos)
                 {
                     // with autoSync we automatically remove the local quest data:
                     qim.QuestDict[oldId].Delete();

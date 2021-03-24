@@ -31,7 +31,7 @@ namespace GQ.Editor.Building
 
 			foreach (string str in importedAssets) {
                 if (ProductManager.Instance.IsImportingPackage &&
-                    str.StartsWith(ConfigurationManager.RUNTIME_PRODUCT_DIR + "/" + "ImportedPackage", StringComparison.CurrentCulture))
+                    str.StartsWith(Config.RUNTIME_PRODUCT_DIR + "/" + "ImportedPackage", StringComparison.CurrentCulture))
                 {
                     // ignore "changes" due to importing the package file:
                     DateTime time = DateTime.Now;
@@ -110,7 +110,7 @@ namespace GQ.Editor.Building
 		/// Writes the current build date into a tiny file in the ConfigAssets. 
 		/// It will be read by the application on start and used as additional version number.
 		/// </summary>
-		static internal void writeBuildDate ()
+		internal static void writeBuildDate ()
 		{
 			try {
 				CultureInfo culture = new CultureInfo ("de-DE"); 

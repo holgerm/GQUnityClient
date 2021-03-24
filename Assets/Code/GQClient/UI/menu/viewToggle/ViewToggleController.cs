@@ -27,9 +27,9 @@ namespace Code.GQClient.UI.menu.viewToggle
 			var viewCtrl = go.GetComponent<ViewToggleController> ();
 
 			var mtb = viewCtrl.GetComponent<MultiToggleButton> ();
-			mtb.shownObjects = new GameObject[ConfigurationManager.Current.questInfoViews.Length];
-			for (var i = 0; i < ConfigurationManager.Current.questInfoViews.Length; i++) {
-                var viewName = ConfigurationManager.Current.questInfoViews[i];
+			mtb.shownObjects = new GameObject[Config.Current.questInfoViews.Length];
+			for (var i = 0; i < Config.Current.questInfoViews.Length; i++) {
+                var viewName = Config.Current.questInfoViews[i];
 				var mtbGoName = "ViewToggleTo" + viewName;
 				mtb.shownObjects [i] = PrefabController.Create ("prefabs", mtbGoName, viewCtrl.gameObject);
 				mtb.shownObjects [i].name = mtbGoName;

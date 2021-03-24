@@ -18,7 +18,7 @@ public class TopicGridLayout : LayoutConfig
         var padding = _gridLayoutGroup.padding;
         var emptyWidth = padding.left + padding.right + _gridLayoutGroup.spacing.x * (NumberOfColumns -1);
         var cellWidth = (Device.width - emptyWidth) / NumberOfColumns;
-        var cellHeight = cellWidth / ConfigurationManager.Current.topicButtonAspectRatio;
+        var cellHeight = cellWidth / Config.Current.topicButtonAspectRatio;
         _gridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
         _gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         _gridLayoutGroup.constraintCount = NumberOfColumns;

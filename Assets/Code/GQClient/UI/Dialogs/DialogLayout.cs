@@ -17,7 +17,7 @@ namespace Code.GQClient.UI.Dialogs
 			// set frame color (implemented as background of the enveloping dialog panel):
 			Image image = GetComponent<Image> ();
 			if (image != null) {
-				image.color = ConfigurationManager.Current.mainFgColor;
+				image.color = Config.Current.mainFgColor;
 			}
 
 			// set content background color:
@@ -27,10 +27,10 @@ namespace Code.GQClient.UI.Dialogs
 
 			Image contentImage = contentPanelT.GetComponent<Image> ();
 			if (contentImage != null) {
-				contentImage.color = ConfigurationManager.Current.contentBackgroundColor;
+				contentImage.color = Config.Current.contentBackgroundColor;
 			}
 
-            TopLogoImage.sprite = ConfigurationManager.Current.topLogo.GetSprite();
+            TopLogoImage.sprite = Config.Current.topLogo.GetSprite();
 		}
 	}
 }

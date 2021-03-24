@@ -20,7 +20,7 @@ public class TopicButtonCtrl : PrefabController
         topicCtrl._topic = topic;
         topicCtrl.text.text = topic.Name;
         var topicImage = go.GetComponent<Image>();
-        topicImage.color = ConfigurationManager.Current.NextPaletteColor;
+        topicImage.color = Config.Current.NextPaletteColor;
         
         topicCtrl.gameObject.SetActive(true);
 

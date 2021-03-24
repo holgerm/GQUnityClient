@@ -14,13 +14,13 @@ namespace Code.GQClient.UI.Foyer.questinfos
             float startTime = Time.realtimeSinceStartup;
             if (AlreadySynched) return;
             
-            if (ConfigurationManager.Current.OfferManualUpdate4QuestInfos)
+            if (Config.Current.OfferManualUpdate4QuestInfos)
             {
                 QuestInfoManager.UpdateLocalQuestInfosOnly();
             }
             else
             {
-                if (ConfigurationManager.Current.autoSyncQuestInfos)
+                if (Config.Current.autoSyncQuestInfos)
                 {
                     QuestInfoManager.UpdateQuestInfos();
                 }

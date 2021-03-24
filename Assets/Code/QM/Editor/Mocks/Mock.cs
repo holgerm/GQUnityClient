@@ -63,7 +63,7 @@ namespace QM.Mocks {
 		/// <summary>
 		/// The mock download method put as delegate into the abstract downloader when mocking is used.
 		/// </summary>
-		static public IEnumerator MockDownloadAsCoroutine (Downloader d)
+		public static IEnumerator MockDownloadAsCoroutine (Downloader d)
 		{
 			Uri uri = new Uri (d.Url);
 			string path = MapUri2Path (uri);

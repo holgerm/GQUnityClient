@@ -140,8 +140,8 @@ namespace Code.GQClient.UI.pages.npctalk
                 {
                     loader = new Downloader(
                         url: rtImageUrl,
-                        timeout: ConfigurationManager.Current.timeoutMS,
-                        maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                        timeout: Config.Current.timeoutMS,
+                        maxIdleTime: Config.Current.maxIdleTimeMS
                     );
                 }
             }
@@ -169,13 +169,13 @@ namespace Code.GQClient.UI.pages.npctalk
             if (imageRatio < ImageRatioMinimum)
             {
                 // image too high to fit:
-                imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMaxUnits;
+                imageAreaHeight = Config.Current.imageAreaHeightMaxUnits;
             }
 
             if (ImageRatioMaximum < imageRatio)
             {
                 // image too wide to fit:
-                imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
+                imageAreaHeight = Config.Current.imageAreaHeightMinUnits;
             }
 
             //imagePanel.GetComponent<LayoutElement> ().flexibleHeight = LayoutConfig.Units2Pixels (imageAreaHeight);
@@ -183,7 +183,7 @@ namespace Code.GQClient.UI.pages.npctalk
 
             fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
             fitter.aspectMode =
-                ConfigurationManager.Current.fitExceedingImagesIntoArea
+                Config.Current.fitExceedingImagesIntoArea
                     ? AspectRatioFitter.AspectMode.FitInParent
                     : AspectRatioFitter.AspectMode.EnvelopeParent;
 
@@ -203,7 +203,7 @@ namespace Code.GQClient.UI.pages.npctalk
             var bgImg = contentPanel.GetComponent<Image>();
             if (bgImg != null)
             {
-                bgImg.color = ConfigurationManager.Current.mainBgColor;
+                bgImg.color = Config.Current.mainBgColor;
             }
         }
 
@@ -220,7 +220,7 @@ namespace Code.GQClient.UI.pages.npctalk
             if (!string.IsNullOrEmpty(NpcPage.CurrentDialogItem.AudioURL))
                 duration = Audio.PlayFromMediaStore(NpcPage.CurrentDialogItem.AudioURL);
 
-            if (ConfigurationManager.Current.autoScrollNewText)
+            if (Config.Current.autoScrollNewText)
             {
                 if (Math.Abs(duration) < 0.01)
                     duration = currentText.Length / 14f;

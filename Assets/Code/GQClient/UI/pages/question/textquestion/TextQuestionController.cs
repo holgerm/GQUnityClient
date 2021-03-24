@@ -43,11 +43,11 @@ namespace Code.GQClient.UI.pages.question.textquestion
             tqPage = (PageTextQuestion)page;
 
             // show the question:
-            questionText.color = ConfigurationManager.Current.mainFgColor;
-            questionText.fontSize = ConfigurationManager.Current.mainFontSize;
+            questionText.color = Config.Current.mainFgColor;
+            questionText.fontSize = Config.Current.mainFontSize;
             questionText.text = tqPage.Question.Decode4TMP();
             promptPlaceholder.text = tqPage.Prompt.Decode4TMP(false);
-            promptPlaceholder.fontSize = ConfigurationManager.Current.mainFontSize;
+            promptPlaceholder.fontSize = Config.Current.mainFontSize;
             shownAnswer.text = "";
             inputField.text = "";
             inputField.Select();

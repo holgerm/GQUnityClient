@@ -11,7 +11,7 @@ namespace Code.GQClient.UI.layout
 
 		public override void layout ()
 		{
-			gameObject.SetActive (ConfigurationManager.Current.showShadows && (showOnlyWhenActive == null || showOnlyWhenActive.activeInHierarchy));
+			gameObject.SetActive (Config.Current.showShadows && (showOnlyWhenActive == null || showOnlyWhenActive.activeInHierarchy));
 		}
 	}
 }

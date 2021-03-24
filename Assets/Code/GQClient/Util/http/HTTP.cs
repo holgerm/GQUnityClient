@@ -16,14 +16,14 @@ namespace Code.GQClient.Util.http {
 			return RequestHeaderGetter (url);
 		}
 
-		static public Dictionary<string, string> internalGetRequestHeaders (string url) {
+		public static Dictionary<string, string> internalGetRequestHeaders (string url) {
 			
 			Dictionary<string, string> headers = new Dictionary<string, string>();
 
 			WebRequest webRequest = null;
 			try {
 				webRequest = HttpWebRequest.Create(url);
-				webRequest.Timeout = (int) ConfigurationManager.Current.maxIdleTimeMS;
+				webRequest.Timeout = (int) Config.Current.maxIdleTimeMS;
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("HTTP.GetRequestHeaders could not create WebRequest. " + e.Message);

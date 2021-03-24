@@ -17,7 +17,7 @@ namespace Code.GQClient.UI.layout
 
         private void OnValidate()
         {
-            Layout();
+            // Layout();
         }
 
         public void Start()
@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.layout
             Layout();
         }
 
-        protected static Config Config => ConfigurationManager.Current;
+        protected static Config Config => Config.Current;
 
         private void Layout()
         {
@@ -154,7 +154,7 @@ namespace Code.GQClient.UI.layout
                     TextElement.fontStyle = FontStyles.Bold;
                     TextElement.enableWordWrapping = true;
                     TextElement.overflowMode = TextOverflowModes.Ellipsis;
-                    TextElement.maxVisibleLines = ConfigurationManager.Current.listEntryUseTwoLines ? 2 : 1;
+                    TextElement.maxVisibleLines = Config.Current.listEntryUseTwoLines ? 2 : 1;
                     TextElement.raycastTarget = true;
                     TextElement.characterSpacing = -4f;
                     break;
@@ -202,8 +202,8 @@ namespace Code.GQClient.UI.layout
         private void Initialize(string itemText, bool supportHtmlLinks)
         {
             this.TextElement.text = itemText.Decode4TMP(supportHtmlLinks: supportHtmlLinks);
-            this.TextElement.color = ConfigurationManager.Current.mainFgColor;
-            this.TextElement.fontSize = ConfigurationManager.Current.mainFontSize;
+            this.TextElement.color = Config.Current.mainFgColor;
+            this.TextElement.fontSize = Config.Current.mainFontSize;
         }
 
         public static TextElementCtrl Create(Transform rootTransform, string text, bool supportHtmlLinks = true)

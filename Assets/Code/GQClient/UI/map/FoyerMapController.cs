@@ -25,7 +25,7 @@ namespace Code.GQClient.UI.map
 			_qim.FilterChange.AddListener(OnFilterChanged);
 
 			//_qim.OnFilterChange += OnMarkerChanged;
-			RTConfig.CategoriesChanged += UpdateView;
+			RTConfig.RTConfigChanged.AddListener(UpdateView);
 		}
 
 		#endregion
@@ -104,7 +104,7 @@ namespace Code.GQClient.UI.map
 			Markers.Add (info.Id, newMarker);
 			OnlineMapsMarker ommarker = markerManager.Create(info.MarkerHotspot.Longitude, info.MarkerHotspot.Latitude, newMarker.Texture);
 			ommarker.OnClick += newMarker.OnTouchOMM;
-			ommarker.scale = LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) /
+			ommarker.scale = LayoutConfig.Units2Pixels(Config.Current.markerHeightUnits) /
 			                 newMarker.Texture.height;
 
 			// TODO: info.OnChanged += newMarker.UpdateView;
@@ -130,8 +130,8 @@ namespace Code.GQClient.UI.map
 
 			if (counter == 0)
 			{
-				map.SetPosition(ConfigurationManager.Current.mapStartAtLongitude,
-					ConfigurationManager.Current.mapStartAtLatitude);
+				map.SetPosition(Config.Current.mapStartAtLongitude,
+					Config.Current.mapStartAtLatitude);
 			}
 			else
 			{

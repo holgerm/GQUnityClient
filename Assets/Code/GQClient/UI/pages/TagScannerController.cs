@@ -37,8 +37,8 @@ namespace Code.GQClient.UI.pages
             myPage = (PageTagScanner)page;
 
             // show the content:
-            shownText.color = ConfigurationManager.Current.mainFgColor;
-            shownText.fontSize = ConfigurationManager.Current.mainFontSize;
+            shownText.color = Config.Current.mainFgColor;
+            shownText.fontSize = Config.Current.mainFontSize;
             shownText.text = myPage.Prompt.Decode4TMP();
             forwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "Ok";
 

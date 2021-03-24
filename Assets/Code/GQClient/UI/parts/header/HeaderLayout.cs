@@ -28,7 +28,7 @@ namespace Code.GQClient.UI.parts.header
             var image = Header.GetComponent<Image>();
             if (image != null)
             {
-                image.color = ConfigurationManager.Current.headerBgColor;
+                image.color = Config.Current.headerBgColor;
             }
 
             // setMiddleButton();
@@ -58,7 +58,7 @@ namespace Code.GQClient.UI.parts.header
                 Image mtlImage = middleTopLogo.GetComponent<Image>();
                 if (mtlImage != null)
                 {
-                    Config cf = ConfigurationManager.Current;
+                    Config cf = Config.Current;
                     mtlImage.sprite = cf.topLogo.GetSprite();
                 }
             }

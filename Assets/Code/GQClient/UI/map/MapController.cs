@@ -184,7 +184,7 @@ namespace Code.GQClient.UI.map
 
         protected void locateAtStart()
         {
-            switch (ConfigurationManager.Current.mapStartPositionType)
+            switch (Config.Current.mapStartPositionType)
             {
                 case MapStartPositionType.CenterOfMarkers:
                     // calculate center of markers / quests:
@@ -192,9 +192,9 @@ namespace Code.GQClient.UI.map
                     break;
                 case MapStartPositionType.FixedPosition:
                     map.SetPositionAndZoom(
-                        ConfigurationManager.Current.mapStartAtLongitude,
-                        ConfigurationManager.Current.mapStartAtLatitude,
-                        ConfigurationManager.Current.mapStartZoom);
+                        Config.Current.mapStartAtLongitude,
+                        Config.Current.mapStartAtLatitude,
+                        Config.Current.mapStartZoom);
                     break;
                 case MapStartPositionType.PlayerPosition:
                     if (null == locService || !IsInitialized || Vector2.zero.Equals(locService.position))
@@ -203,16 +203,16 @@ namespace Code.GQClient.UI.map
                             new MessageDialog("Die Lokalisierung funktioniert nicht - ist das GPS inaktiv?", "Ok");
                         dialog.Start();
                         map.SetPositionAndZoom(
-                            ConfigurationManager.Current.mapStartAtLongitude,
-                            ConfigurationManager.Current.mapStartAtLatitude,
-                            ConfigurationManager.Current.mapStartZoom);
+                            Config.Current.mapStartAtLongitude,
+                            Config.Current.mapStartAtLatitude,
+                            Config.Current.mapStartZoom);
                     }
                     else
                     {
                         map.SetPositionAndZoom(
                             locService.position.x,
                             locService.position.y,
-                            ConfigurationManager.Current.mapStartZoom);
+                            Config.Current.mapStartZoom);
                     }
 
                     break;

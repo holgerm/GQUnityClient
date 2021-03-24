@@ -16,9 +16,9 @@ namespace GQTests.Editor.JSON
             Color32 c1 = new Color32(2, 3, 4, 5);
             configOrigin.headerBgColor = c1;
 
-            string json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
+            string configText = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
 
-            Config configRead = Config._doDeserializeConfig(json);
+            Config configRead = JsonConvert.DeserializeObject<Config>(configText);
 
             Color32 r1 = configRead.headerBgColor;
 
@@ -54,7 +54,7 @@ namespace GQTests.Editor.JSON
             configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevelAuto;
             string json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
 
-            Config configRead = Config._doDeserializeConfig(json);
+            Config configRead = JsonConvert.DeserializeObject<Config>(json);
             Assert.AreEqual(
                 AndroidSdkVersions.AndroidApiLevelAuto,
                 configRead.androidMinSDKVersion
@@ -63,7 +63,7 @@ namespace GQTests.Editor.JSON
             configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel19;
             json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
 
-            configRead = Config._doDeserializeConfig(json);
+            configRead = JsonConvert.DeserializeObject<Config>(json);
             Assert.AreEqual(
                 AndroidSdkVersions.AndroidApiLevel19,
                 configRead.androidMinSDKVersion
@@ -71,7 +71,7 @@ namespace GQTests.Editor.JSON
             configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel26;
             json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
 
-            configRead = Config._doDeserializeConfig(json);
+            configRead = JsonConvert.DeserializeObject<Config>(json);
             Assert.AreEqual(
                 AndroidSdkVersions.AndroidApiLevel26,
                 configRead.androidMinSDKVersion

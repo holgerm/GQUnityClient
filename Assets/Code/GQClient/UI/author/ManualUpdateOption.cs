@@ -12,7 +12,7 @@ namespace Code.GQClient.UI.author
 
         public void Start()
         {
-            toggle.isOn = ConfigurationManager.Current.OfferManualUpdate4QuestInfos;
+            toggle.isOn = Config.Current.OfferManualUpdate4QuestInfos;
         }
 
         public void OnValueChange(bool newValue)

@@ -11,7 +11,7 @@ namespace Code.GQClient.UI.menu
 		/// </summary>
 		public override void layout ()
 		{
-			MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: ConfigurationManager.Current.menuBGColor);
+			MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: Config.Current.menuBGColor);
 		}
 
 	}

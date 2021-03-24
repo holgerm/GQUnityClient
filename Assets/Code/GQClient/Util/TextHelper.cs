@@ -103,7 +103,7 @@ namespace Code.GQClient.Util
                         hrefFound = true;
                         enhancedAnchor.Append(matchedAttr.Groups["val"]);
                         enhancedAnchor.Append(
-                            $"><color=#{ColorUtility.ToHtmlStringRGBA(ConfigurationManager.Current.textLinkColor)}>");
+                            $"><color=#{ColorUtility.ToHtmlStringRGBA(Config.Current.textLinkColor)}>");
                     }
                 }
 

@@ -18,9 +18,9 @@ namespace Code.GQClient.UI.parts.fulscreenImage
             RectTransform buttonRT = GetComponent<RectTransform>();
             float size = LayoutConfig.Units2Pixels(
                 LayoutConfig.calculateRestrictedHeight(
-                    ConfigurationManager.Current.overlayButtonSizeUnits,
-                    ConfigurationManager.Current.overlayButtonSizeMinMM,
-                    ConfigurationManager.Current.overlayButtonSizeMaxMM
+                    Config.Current.overlayButtonSizeUnits,
+                    Config.Current.overlayButtonSizeMinMM,
+                    Config.Current.overlayButtonSizeMaxMM
                 )
             );
             buttonRT.sizeDelta = new Vector2(size, size);

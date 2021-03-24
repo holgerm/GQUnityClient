@@ -15,7 +15,7 @@ namespace Code.GQClient.UI.layout
             if (image == null)
                 return;
 
-            image.color = ConfigurationManager.Current.contentBackgroundColor;
+            image.color = Config.Current.contentBackgroundColor;
         }
     }
 }

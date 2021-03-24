@@ -64,20 +64,20 @@ namespace Code.GQClient.UI.layout
 
         #region Static Layout Helpers
 
-        static public void SetQuestInfoEntryLayout(GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        public static void SetQuestInfoEntryLayout(GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
         {
             ScreenLayout.SetQuestInfoEntryLayout(ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
         }
 
-        static public float ListEntryHeightUnits
+        public static float ListEntryHeightUnits
         {
             get
             {
                 return
                     calculateRestrictedHeight(
-                    ConfigurationManager.Current.listEntryHeightUnits,
-                    ConfigurationManager.Current.listEntryHeightMinMM,
-                    ConfigurationManager.Current.listEntryHeightMaxMM
+                    Config.Current.listEntryHeightUnits,
+                    Config.Current.listEntryHeightMinMM,
+                    Config.Current.listEntryHeightMaxMM
                 );
             }
         }

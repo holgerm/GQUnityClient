@@ -14,8 +14,8 @@ namespace Code.GQClient.UI.Foyer.header
 
         public void Awake()
         {
-            LeftImage.color = ConfigurationManager.Current.headerButtonFgColor;
-            RightImage.color = ConfigurationManager.Current.headerButtonFgColor;
+            LeftImage.color = Config.Current.headerButtonFgColor;
+            RightImage.color = Config.Current.headerButtonFgColor;
         }
 
         public void SetInteractable(bool interactable)
@@ -24,13 +24,13 @@ namespace Code.GQClient.UI.Foyer.header
             Image i = LeftButton.transform.Find("Image").GetComponent<Image>();
             i = LeftImage;
             Color c = i.color;
-            i.color = new Color(c.r, c.g, c.b, interactable ? 1f : ConfigurationManager.Current.disabledAlpha);
+            i.color = new Color(c.r, c.g, c.b, interactable ? 1f : Config.Current.disabledAlpha);
 
             RightButton.interactable = interactable;
             i = RightButton.transform.Find("Image").GetComponent<Image>();
             i = RightImage;
             c = i.color;
-            i.color = new Color(c.r, c.g, c.b, interactable ? 1f : ConfigurationManager.Current.disabledAlpha);
+            i.color = new Color(c.r, c.g, c.b, interactable ? 1f : Config.Current.disabledAlpha);
         }
     }
 }

@@ -140,7 +140,7 @@ namespace Code.GQClient.Util.http
                         new Downloader(
                             url: info.Url,
                             timeout: 0L,
-                            maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
+                            maxIdleTime: Config.Current.maxIdleTimeMS,
                             targetPath: info.LocalPath,
                             verbose: false,
                             weight: ((info.RemoteSize == MediaInfo.UNKNOWN) ? DEFAULT_WEIGHT : info.RemoteSize)

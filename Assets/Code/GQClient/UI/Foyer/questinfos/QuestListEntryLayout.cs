@@ -16,13 +16,13 @@ namespace Code.GQClient.UI.Foyer.questinfos
             //}
 
             // set heights and colors of text and image:
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, fgColor: ConfigurationManager.Current.listEntryBgColor);
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "InfoButton", sizeScaleFactor: 0.65f, fgColor: ConfigurationManager.Current.listEntryFgColor);
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "Name", fgColor: ConfigurationManager.Current.listEntryFgColor);
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "DownloadButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "StartButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "DeleteButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
-            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "UpdateButton", fgColor: ConfigurationManager.Current.listEntryFgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, fgColor: Config.Current.listEntryBgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "InfoButton", sizeScaleFactor: 0.65f, fgColor: Config.Current.listEntryFgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "Name", fgColor: Config.Current.listEntryFgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "DownloadButton", fgColor: Config.Current.listEntryFgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "StartButton", fgColor: Config.Current.listEntryFgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "DeleteButton", fgColor: Config.Current.listEntryFgColor);
+            FoyerListLayoutConfig.SetQuestInfoEntryLayout(gameObject, "UpdateButton", fgColor: Config.Current.listEntryFgColor);
         }
 
     }

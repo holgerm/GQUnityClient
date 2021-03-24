@@ -12,7 +12,7 @@ namespace Code.GQClient.UI.author
 
         public void Start()
         {
-            toggle.isOn = ConfigurationManager.Current.ShowHiddenQuests;
+            toggle.isOn = Config.Current.ShowHiddenQuests;
         }
 
         public void OnValueChange(bool newValue)

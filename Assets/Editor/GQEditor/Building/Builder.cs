@@ -171,7 +171,7 @@ namespace GQ.Editor.Building
             PlayerSettings.applicationIdentifier = GetBundleIdentifier();
 
             savedSettingsProductName = PlayerSettings.productName;
-            PlayerSettings.productName = ConfigurationManager.Current.name;
+            PlayerSettings.productName = Config.Current.name;
 
             savedSettingsIcons4Android = PlayerSettings.GetIconsForTargetGroup(BuildTargetGroup.Android);
             savedSettingsIcons4iOS = PlayerSettings.GetIconsForTargetGroup(BuildTargetGroup.iOS);
@@ -209,7 +209,7 @@ namespace GQ.Editor.Building
 
         static string GetBundleIdentifier()
         {
-            return "com.questmill.geoquest." + ConfigurationManager.Current.id;
+            return "com.questmill.geoquest." + Config.Current.id;
         }
 
         static Texture2D[] GetAppIcons(BuildTarget target)
@@ -286,14 +286,14 @@ namespace GQ.Editor.Building
             );
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-            buildPlayerOptions.scenes = new string[ConfigurationManager.Current.scenePaths.Length];
-            ConfigurationManager.Current.scenePaths.CopyTo(buildPlayerOptions.scenes, 0);
+            buildPlayerOptions.scenes = new string[Config.Current.scenePaths.Length];
+            Config.Current.scenePaths.CopyTo(buildPlayerOptions.scenes, 0);
             buildPlayerOptions.locationPathName =
                 Path.Combine(
                     "Production/builds/",
-                    ConfigurationManager.Current.id,
+                    Config.Current.id,
                     BuildFolderNames[target],
-                    "gq_" + ConfigurationManager.Current.id + BuildNamePostfix[target]);
+                    "gq_" + Config.Current.id + BuildNamePostfix[target]);
             buildPlayerOptions.target = target;
             buildPlayerOptions.options = BuildOptions.None;
 

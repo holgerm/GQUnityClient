@@ -51,7 +51,7 @@ namespace Code.GQClient.UI.parts.header
 
         protected override void setHeader()
         {
-            enableLeaveQuestButton(ConfigurationManager.Current.OfferLeaveQuests);
+            enableLeaveQuestButton(Config.Current.OfferLeaveQuests);
  
             base.setHeader();
 
@@ -67,7 +67,7 @@ namespace Code.GQClient.UI.parts.header
 
         protected override void setMiddleButton()
         {
-            switch (ConfigurationManager.Current.headerMiddleButtonPolicy)
+            switch (Config.Current.headerMiddleButtonPolicy)
             {
                 case HeaderMiddleButtonPolicy.TopLogo:
                     setTopLogo();
@@ -97,7 +97,7 @@ namespace Code.GQClient.UI.parts.header
                     var mtlImage = middleTopLogo.GetComponent<Image>();
                     if (mtlImage != null)
                     {
-                        mtlImage.sprite = ConfigurationManager.Current.topLogo.GetSprite();
+                        mtlImage.sprite = Config.Current.topLogo.GetSprite();
                     }
                 }
             }
@@ -127,7 +127,7 @@ namespace Code.GQClient.UI.parts.header
                 ? QuestManager.Instance.CurrentQuest.Name
                 : QuestManager.Instance.CurrentQuestName4User;
 
-            ttt.color = ConfigurationManager.Current.mainFgColor;
+            ttt.color = Config.Current.mainFgColor;
         }
 
         void Author_SettingsChanged(object sender, System.EventArgs e)
@@ -159,14 +159,14 @@ namespace Code.GQClient.UI.parts.header
             var curQuest = QuestManager.Instance.CurrentQuest;
             if (curQuest != null)
             {
-                if (ConfigurationManager.Current.warnWhenLeavingQuest)
+                if (Config.Current.warnWhenLeavingQuest)
                 {
                     CancelableFunctionDialog.Show(
-                        ConfigurationManager.Current.warnDialogTitleWhenLeavingQuest,
-                        ConfigurationManager.Current.warnDialogMessageWhenLeavingQuest,
+                        Config.Current.warnDialogTitleWhenLeavingQuest,
+                        Config.Current.warnDialogMessageWhenLeavingQuest,
                         curQuest.End,
-                        ConfigurationManager.Current.warnDialogOKWhenLeavingQuest,
-                        ConfigurationManager.Current.warnDialogCancelWhenLeavingQuest);
+                        Config.Current.warnDialogOKWhenLeavingQuest,
+                        Config.Current.warnDialogCancelWhenLeavingQuest);
                 }
                  else
                 {

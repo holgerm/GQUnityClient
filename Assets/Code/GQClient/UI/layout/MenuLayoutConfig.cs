@@ -22,7 +22,7 @@ namespace Code.GQClient.UI.layout
 
 			// set menu background color:
 			if (MenuBackgroundImage != null) {
-				MenuBackgroundImage.color = ConfigurationManager.Current.menuFrameColor;
+				MenuBackgroundImage.color = Config.Current.menuFrameColor;
 			}
 
 			// set menu width:
@@ -36,7 +36,7 @@ namespace Code.GQClient.UI.layout
 				if (menuScrollT != null) {
 					Image im = menuScrollT.GetComponent<Image> ();
 					if (im != null) {
-						im.raycastTarget = ConfigurationManager.Current.menuInhibitsInteraction;
+						im.raycastTarget = Config.Current.menuInhibitsInteraction;
 					}
 				}
 			}
@@ -54,29 +54,29 @@ namespace Code.GQClient.UI.layout
 			}
 		}
 
-		static public float MenuEntryHeightUnits {
+		public static float MenuEntryHeightUnits {
 			get {
 				return 
 					calculateRestrictedHeight (
-					ConfigurationManager.Current.menuEntryHeightUnits,
-					ConfigurationManager.Current.menuEntryHeightMinMM,
-					ConfigurationManager.Current.menuEntryHeightMaxMM
+					Config.Current.menuEntryHeightUnits,
+					Config.Current.menuEntryHeightMinMM,
+					Config.Current.menuEntryHeightMaxMM
 				);
 			}
 		}
 
-		static public float MenuEntryWidthUnits {
+		public static float MenuEntryWidthUnits {
 			get {
 				return 
 					calculateRestrictedHeight (
-					ConfigurationManager.Current.menuEntryWidthUnits,
-					ConfigurationManager.Current.menuEntryWidthMinMM,
-					ConfigurationManager.Current.menuEntryWidthMaxMM
+					Config.Current.menuEntryWidthUnits,
+					Config.Current.menuEntryWidthMinMM,
+					Config.Current.menuEntryWidthMaxMM
 				);
 			}
 		}
 
-		static public void SetMenuEntryLayout (GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+		public static void SetMenuEntryLayout (GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
 		{
 			ScreenLayout.SetMenuEntryLayout (MenuEntryHeightUnits, menuEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
 		}

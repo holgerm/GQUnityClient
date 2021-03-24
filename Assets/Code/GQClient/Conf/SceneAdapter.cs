@@ -20,7 +20,7 @@ namespace Code.GQClient.Conf
 		{
 			RemoveAllSceneExtensions (scene);
 
-			foreach (SceneExtension extension in ConfigurationManager.Current.sceneExtensions) {
+			foreach (SceneExtension extension in Config.Current.sceneExtensions) {
 				if (extension.scene.ToLower() != scene.path.ToLower())
 					// skip extension on other scenes:
 					continue;

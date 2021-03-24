@@ -16,7 +16,7 @@ namespace Code.GQClient.UI.layout
 
         public override void layout()
         {
-            if (ConfigurationManager.Current == null) 
+            if (Config.Current == null) 
                 return;
 
             base.layout();
@@ -29,23 +29,23 @@ namespace Code.GQClient.UI.layout
             }
             else
             {
-                listBackgroundImage.color = ConfigurationManager.Current.listBgColor;
+                listBackgroundImage.color = Config.Current.listBgColor;
             }
 
             // set spacing, i.e. separation lines width between list elements:
             VerticalLayoutGroup vlg = questInfoList.gameObject.GetComponent<VerticalLayoutGroup>();
-            switch (ConfigurationManager.Current.listEntryDividingMode)
+            switch (Config.Current.listEntryDividingMode)
             {
                 case ListEntryDividingMode.SeparationLines:
                     // set lines on top, between and bottom of the list:
                     vlg.padding.top = 0;
-                    vlg.spacing = ConfigurationManager.Current.dividingLineWidth;
-                    vlg.padding.bottom = ConfigurationManager.Current.listEndLineWidth;
+                    vlg.spacing = Config.Current.dividingLineWidth;
+                    vlg.padding.bottom = Config.Current.listEndLineWidth;
                     // set list divining lines color:
                     if (im != null)
                     {
                         im.enabled = true;
-                        im.color = ConfigurationManager.Current.listLineColor;
+                        im.color = Config.Current.listLineColor;
                     }
                     questInfoList.GetComponent<Image>().enabled = true;
                     break;
@@ -63,20 +63,20 @@ namespace Code.GQClient.UI.layout
 
         #region Static Layout Helpers
 
-        static public void SetQuestInfoEntryLayout(GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        public static void SetQuestInfoEntryLayout(GameObject listEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
         {
             ScreenLayout.SetQuestInfoEntryLayout(ListEntryHeightUnits, listEntry, gameObjectPath, sizeScaleFactor: sizeScaleFactor, fgColor: fgColor);
         }
 
-        static public float ListEntryHeightUnits
+        public static float ListEntryHeightUnits
         {
             get
             {
                 return
                     calculateRestrictedHeight(
-                    ConfigurationManager.Current.listEntryHeightUnits,
-                    ConfigurationManager.Current.listEntryHeightMinMM,
-                    ConfigurationManager.Current.listEntryHeightMaxMM
+                    Config.Current.listEntryHeightUnits,
+                    Config.Current.listEntryHeightMinMM,
+                    Config.Current.listEntryHeightMaxMM
                 );
             }
         }

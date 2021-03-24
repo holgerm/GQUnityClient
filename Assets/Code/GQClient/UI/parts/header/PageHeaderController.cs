@@ -13,7 +13,7 @@ namespace Code.GQClient.UI.parts.header
         void Start()
         {
             // show right button image and activate function if configured:
-            RefreshActivation(ConfigurationManager.Current.menu2ShownInQuests);
+            RefreshActivation(Config.Current.menu2ShownInQuests);
         }
 
         void RefreshActivation(bool newState) {

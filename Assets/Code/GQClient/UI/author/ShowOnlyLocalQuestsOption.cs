@@ -11,7 +11,7 @@ namespace Code.GQClient.UI.author
 
         public void Start()
         {
-            toggle.isOn = ConfigurationManager.Current.ShowOnlyLocalQuests;
+            toggle.isOn = Config.Current.ShowOnlyLocalQuests;
         }
 
         public void OnValueChange(bool newValue)

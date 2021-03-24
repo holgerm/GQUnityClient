@@ -197,7 +197,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             header.SetActive(show);
             footer.SetActive(show);
             if (show)
-                background.color = ConfigurationManager.Current.contentBackgroundColor;
+                background.color = Config.Current.contentBackgroundColor;
             else
                 background.color = Color.black;
         }

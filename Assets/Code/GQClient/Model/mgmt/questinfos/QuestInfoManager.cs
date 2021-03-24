@@ -198,35 +198,35 @@ namespace GQClient.Model
                 new ImportLocalQuestInfos();
             var unused = Base.Instance.GetSimpleBehaviour(
                 importLocal,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
-                $"Lese lokale {ConfigurationManager.Current.nameForQuestSg}"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}",
+                $"Lese lokale {Config.Current.nameForQuestSg}"
             );
 
             var downloader =
                 new Downloader(
                     url: ConfigurationManager.UrlPublicQuestsJSON,
-                    timeout: ConfigurationManager.Current.timeoutMS,
-                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                    timeout: Config.Current.timeoutMS,
+                    maxIdleTime: Config.Current.maxIdleTimeMS
                 );
             var unused2 = Base.Instance.GetDownloadBehaviour(
                 downloader,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}"
             );
 
             ImportQuestInfos importFromServer =
                 new ImportServerQuestInfos();
             var unused3 = Base.Instance.GetSimpleBehaviour(
                 importFromServer,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
-                $"Neue {ConfigurationManager.Current.nameForQuestsPl} werden lokal gespeichert"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}",
+                $"Neue {Config.Current.nameForQuestsPl} werden lokal gespeichert"
             );
 
             var exporter =
                 new ExportQuestInfosToJson();
             var unused4 = Base.Instance.GetSimpleBehaviour(
                 exporter,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
-                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}",
+                $"{Config.Current.nameForQuestSg}-Daten werden gespeichert"
             );
 
             var autoLoader =
@@ -305,22 +305,22 @@ namespace GQClient.Model
 
         void initViews()
         {
-            if (ConfigurationManager.Current.questInfoViews == null ||
-                ConfigurationManager.Current.questInfoViews.Length == 0)
+            if (Config.Current.questInfoViews == null ||
+                Config.Current.questInfoViews.Length == 0)
             {
                 Log.SignalErrorToDeveloper("No quest info views defined for this app. Fix that!");
                 return;
             }
 
             // check whether we have alternative views to offer:
-            if (ConfigurationManager.Current.questInfoViews.Length <= 1)
+            if (Config.Current.questInfoViews.Length <= 1)
                 return;
 
             // Create the multi-toggle View for the view alternatives currently not displayed, i.e. 2 to n:
             GameObject menuContent = Base.Instance.MenuTopLeftContent;
             ViewToggleController.Create(menuContent);
 
-            var startView = ConfigurationManager.Current.questInfoViews[0];
+            var startView = Config.Current.questInfoViews[0];
             Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
             Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
             Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
@@ -348,7 +348,7 @@ namespace GQClient.Model
 
             // init category filters:
             _categoryFilters = new Dictionary<string, QuestInfoFilter.CategoryFilter>();
-            var catSets = ConfigurationManager.Current.rt.CategorySets;
+            var catSets = Config.Current.CategorySets;
             foreach (var catSet in catSets)
             {
                 _categoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter(catSet);
@@ -358,7 +358,7 @@ namespace GQClient.Model
             FilterChange.EnableNotification();
 
             // create UI for Category Filters:
-            foreach (var catSet in ConfigurationManager.Current.rt.CategorySets)
+            foreach (var catSet in Config.Current.CategorySets)
             {
                 CategoryTreeCtrl ctrl = CategoryTreeCtrl.Create(
                     root: Base.Instance.MenuTopLeftContent,

@@ -51,7 +51,7 @@ namespace GQ.Editor.Building
             }
         }
 
-        public string BuildExportPath { get; private set; } = ConfigurationManager.RUNTIME_PRODUCT_DIR;
+        public string BuildExportPath { get; private set; } = Config.RUNTIME_PRODUCT_DIR;
 
 
         public string _ANDROID_MANIFEST_DIR = "Assets/Plugins/Android";
@@ -343,7 +343,7 @@ namespace GQ.Editor.Building
             ProductSpec newProduct = new ProductSpec(productDirPath);
 
             // Un-/Load required AssetAddOns (plugins etc.):
-            AssetAddOnManager.switchAssetAddOns(ConfigurationManager.Current, newProduct.Config);
+            AssetAddOnManager.switchAssetAddOns(Config.Current, newProduct.Config);
 
             if (!newProduct.IsValid())
             {
@@ -461,7 +461,7 @@ namespace GQ.Editor.Building
             var scenes =
                 gatherScenesFromPackage(
                     new List<string>(),
-                    Files.CombinePath(ConfigurationManager.RUNTIME_PRODUCT_DIR, "ImportedPackage")
+                    Files.CombinePath(Config.RUNTIME_PRODUCT_DIR, "ImportedPackage")
                 );
 
             // add all config scenes:
@@ -604,9 +604,9 @@ namespace GQ.Editor.Building
                 AssetDatabase.Refresh();
 
             // runtime config:
-            json = JsonConvert.SerializeObject(config.rt, Formatting.Indented);
+            json = JsonConvert.SerializeObject(RTConfig.Current, Formatting.Indented);
             filePath =
-                Files.CombinePath(productDirPath, ConfigurationManager.RT_CONFIG_FILE);
+                Files.CombinePath(productDirPath, RTConfig.RT_CONFIG_FILE);
             File.WriteAllText(filePath, json);
             if (GQ.Editor.Util.Assets.IsAssetPath(filePath))
                 AssetDatabase.Refresh();

@@ -28,16 +28,16 @@ namespace Code.GQClient.UI.menu.categories
             qim = QuestInfoManager.Instance;
 //			CategoryFilter = qim.CategoryFilter; // TODO use CatSet instead
             qim.DataChange.AddListener(OnQuestInfoChanged);
-            ConfigurationManager.OnRTConfigChanged += UpdateView;
+            RTConfig.RTConfigChanged.AddListener(UpdateView);
 
             // fold the categories of this set (up to now they are unfolded):
-            if (ConfigurationManager.Current.rt.categoryFiltersStartFolded)
+            if (Config.Current.categoryFiltersStartFolded)
             {
                 ToggleMenuView();
             }
         }
 
-        protected static readonly string PREFAB = "CategoryTree";
+        private const string PREFAB = "CategoryTree";
         internal QuestInfoFilter.CategoryFilter CategoryFilter;
 
         public static CategoryTreeCtrl Create(GameObject root, QuestInfoFilter.CategoryFilter catFilter,
@@ -77,7 +77,7 @@ namespace Code.GQClient.UI.menu.categories
 
         public void ToggleMenuView()
         {
-            bool foldable = ConfigurationManager.Current.rt.foldableCategoryFilters;
+            bool foldable = Config.Current.foldableCategoryFilters;
             if (!foldable || transform.childCount < 3)
                 // if we can't fold or do not have entries (the header is always there) we skip this:
                 return;
@@ -162,7 +162,7 @@ namespace Code.GQClient.UI.menu.categories
             categoryEntries = new Dictionary<string, CategoryEntry>();
             categoryFolders = new Dictionary<string, CategoryFolder>();
             CategorySet catSet =
-                ConfigurationManager.Current.rt.CategorySets.Find(cs => cs.name == catSetName);
+                Config.Current.CategorySets.Find(cs => cs.name == catSetName);
 
             // 3. Regenerate data: create skeleton of folders and entries:
             foreach (Category c in catSet.categories)
@@ -254,7 +254,7 @@ namespace Code.GQClient.UI.menu.categories
             else
             {
                 OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b,
-                    ConfigurationManager.Current.disabledAlpha);
+                    Config.Current.disabledAlpha);
             }
         }
 

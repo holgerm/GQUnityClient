@@ -454,12 +454,12 @@ namespace GQClient.Model
 
                 LoadMode GetAutoUpdateFromConfig()
                 {
-                    if (ConfigurationManager.Current.autoLoadQuests)
+                    if (Config.Current.autoLoadQuests)
                     {
                         return LoadMode.Auto;
                     }
 
-                    return ConfigurationManager.Current.autoUpdateQuests
+                    return Config.Current.autoUpdateQuests
                         ? LoadMode.AutoUpdate
                         : LoadMode.Manual;
                 }
@@ -551,11 +551,11 @@ namespace GQClient.Model
 
         public delegate int CompareMethod(QuestInfo one, QuestInfo other);
 
-        static public bool SortAscending = true;
+        public static bool SortAscending = true;
 
         private static CompareMethod _compare;
 
-        static public CompareMethod Compare
+        public static CompareMethod Compare
         {
             get
             {
@@ -569,9 +569,9 @@ namespace GQClient.Model
             set { _compare = value; }
         }
 
-        static public CompareMethod DEFAULT_COMPARE = ByName;
+        public static CompareMethod DEFAULT_COMPARE = ByName;
 
-        static public CompareMethod ByName
+        public static CompareMethod ByName
         {
             get { return (QuestInfo one, QuestInfo other) => { return one.Name.CompareTo(other.Name); }; }
         }
@@ -670,13 +670,13 @@ namespace GQClient.Model
             var downloadGameXml =
                 new Downloader(
                     url: QuestManager.GetQuestUri(Id),
-                    timeout: ConfigurationManager.Current.timeoutMS,
-                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS,
+                    timeout: Config.Current.timeoutMS,
+                    maxIdleTime: Config.Current.maxIdleTimeMS,
                     targetPath: $"{QuestManager.GetLocalPath4Quest(Id)}{QuestManager.QUEST_FILE_NAME}"
                 );
             var unused = Base.Instance.GetDownloadBehaviour(
                 downloadGameXml,
-                $"Lade {ConfigurationManager.Current.nameForQuestSg}"
+                $"Lade {Config.Current.nameForQuestSg}"
             );
 
             // analyze game.xml, gather all media info compare to local media info and detect missing media
@@ -684,19 +684,19 @@ namespace GQClient.Model
                 new PrepareMediaInfoList();
             var unused1 = Base.Instance.GetSimpleBehaviour(
                 prepareMediaInfosToDownload,
-                $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
+                $"Synchronisiere {Config.Current.nameForQuestSg}-Daten",
                 "Medien werden vorbereitet"
             );
 
             // download all missing media info
             var downloadMediaFiles =
                 new MultiDownloader(
-                    maxParallelDownloads: ConfigurationManager.Current.maxParallelDownloads,
-                    timeout: ConfigurationManager.Current.timeoutMS
+                    maxParallelDownloads: Config.Current.maxParallelDownloads,
+                    timeout: Config.Current.timeoutMS
                 );
             var unused2 = Base.Instance.GetSimpleBehaviour(
                 downloadMediaFiles,
-                $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
+                $"Synchronisiere {Config.Current.nameForQuestSg}-Daten",
                 "Mediendateien werden geladen"
             );
             downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
@@ -709,7 +709,7 @@ namespace GQClient.Model
                 new ExportMediaInfoList();
             var unused3 = Base.Instance.GetSimpleBehaviour(
                 exportLocalMediaInfo,
-                $"Synchronisiere {ConfigurationManager.Current.nameForQuestSg}-Daten",
+                $"Synchronisiere {Config.Current.nameForQuestSg}-Daten",
                 "Medieninformationen werden lokal gespeichert"
             );
 
@@ -717,16 +717,16 @@ namespace GQClient.Model
                 new ExportGlobalMediaJson();
             var unused5 = Base.Instance.GetSimpleBehaviour(
                 exportGlobalMediaJson,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
-                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}",
+                $"{Config.Current.nameForQuestSg}-Daten werden gespeichert"
             );
 
             var exportQuestsInfoJSON =
                 new ExportQuestInfosToJson();
             var unused4 = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
-                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}",
+                $"{Config.Current.nameForQuestSg}-Daten werden gespeichert"
             );
             var t =
                 new TaskSequence(
@@ -795,7 +795,7 @@ namespace GQClient.Model
             if (ServerTimeStamp == null)
             {
                 // this quest is not available on the server anymore ...
-                if (!ConfigurationManager.Current.autoSyncQuestInfos)
+                if (!Config.Current.autoSyncQuestInfos)
                 {
                     // in manual sync mode we warn the user to delete this quest, since he can not restore it again:
                     var dialog =
@@ -839,16 +839,16 @@ namespace GQClient.Model
                 new ExportGlobalMediaJson();
             var unused5 = Base.Instance.GetSimpleBehaviour(
                 exportGlobalMediaJson,
-                $"Aktualisiere {ConfigurationManager.Current.nameForQuestsPl}",
-                $"{ConfigurationManager.Current.nameForQuestSg}-Daten werden gespeichert"
+                $"Aktualisiere {Config.Current.nameForQuestsPl}",
+                $"{Config.Current.nameForQuestSg}-Daten werden gespeichert"
             );
 
             var exportQuestsInfoJSON =
                 new ExportQuestInfosToJson();
             var unused = Base.Instance.GetSimpleBehaviour(
                 exportQuestsInfoJSON,
-                string.Format("Aktualisiere {0}", ConfigurationManager.Current.nameForQuestsPl),
-                string.Format("{0}-Daten werden gespeichert", ConfigurationManager.Current.nameForQuestSg)
+                string.Format("Aktualisiere {0}", Config.Current.nameForQuestsPl),
+                string.Format("{0}-Daten werden gespeichert", Config.Current.nameForQuestSg)
             );
 
             var t =
@@ -886,7 +886,7 @@ namespace GQClient.Model
             // ------------------------------
             // from here on holds IsOnDevice:
 
-            if (IsOnDevice && HasUpdate && ConfigurationManager.Current.autoUpdateSubquests)
+            if (IsOnDevice && HasUpdate && Config.Current.autoUpdateSubquests)
             {
                 playTask = CreateLoadAndPlayTask();
             }
@@ -944,7 +944,7 @@ namespace GQClient.Model
                 );
             var unused = Base.Instance.GetDownloadBehaviour(
                 loadGameXML,
-                $"Lade {ConfigurationManager.Current.nameForQuestsPl}"
+                $"Lade {Config.Current.nameForQuestsPl}"
             );
 
             var questStarter = new QuestStarter();

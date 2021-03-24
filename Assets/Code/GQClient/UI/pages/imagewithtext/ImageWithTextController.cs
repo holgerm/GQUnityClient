@@ -51,8 +51,8 @@ namespace Code.GQClient.UI.pages.imagewithtext
 					loader = 
 						new Downloader (
 						url: rtImageUrl, 
-						timeout: ConfigurationManager.Current.timeoutMS,
-						maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+						timeout: Config.Current.timeoutMS,
+						maxIdleTime: Config.Current.maxIdleTimeMS
 					);
 					// TODO store the image locally ...
 				}

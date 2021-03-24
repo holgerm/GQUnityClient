@@ -125,7 +125,7 @@ namespace Code.QM.Util
         const float LOCATION_MOCK_STEP_MAX = 1.0f;
         static float locationMockStep = 0.0001f;
 
-        static public void updateMockedLocation()
+        public static void updateMockedLocation()
         {
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
             {

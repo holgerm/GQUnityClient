@@ -1,5 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using Code.GQClient.Err;
+using Code.GQClient.UI.author;
+using Code.GQClient.Util.http;
 using Code.QM.Util;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -22,31 +27,90 @@ namespace Code.GQClient.Conf
     {
         #region Parse Helper
 
-        public static bool __JSON_Currently_Parsing = false;
+        private static readonly string rtProductFile = Path.Combine(
+            Application.persistentDataPath,
+            RT_CONFIG_DIR,
+            RT_CONFIG_FILE);
+
+        private static RTConfig _current;
+
+        public static RTConfig Current
+        {
+            get => _current;
+            set
+            {
+                _current = value;
+                RTConfigChanged.Invoke();
+            }
+        }
 
         /// <summary>
-        /// Used during deserialization of json file. Shows whether the json text used in-app resources (true) or
-        /// application persistent files (false). Used to put that information e.g. into ImagePath objects.
+        /// Loads RTConfig from local version of RTProduct.json. This is done synchronously. 
         /// </summary>
-        public static LoadsFrom CurrentLoadingMode;
-
-        public enum LoadsFrom
+        public static void Load()
         {
-            Resource,
-            LocalFile,
-            RemoteFile
+            if (File.Exists(rtProductFile))
+            {
+                string json = File.ReadAllText(rtProductFile);
+                Current = doDeserialize(json);
+            }
+            else
+            {
+                // no persistent file RTProduct.json found, hence we read from assets:
+                TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
+
+                if (configAsset == null)
+                {
+                    Log.SignalErrorToDeveloper("Asset RTProduct.json missing. App can not work properly.");
+                    Current = new RTConfig(); // this is just a default null-object.
+                }
+                else
+                {
+                    Current = doDeserialize(configAsset.text);
+                }
+            }
         }
 
-        public static RTConfig _doDeserialize(string configText, LoadsFrom loadMode)
+        /// <summary>
+        /// Loads RTConfig from server version of RTProduct.json. This is done asynchronously
+        /// and will call update events when successfully finished. 
+        /// </summary>
+        public static void LoadFromServer()
         {
-            __JSON_Currently_Parsing = true;
-            CurrentLoadingMode = loadMode;
+            string rtProductUrl = Path.Combine(
+                GQ_SERVER_PORTALS_URL,
+                Config.Current.id,
+                RT_CONFIG_DIR,
+                RT_CONFIG_FILE);
+
+            Downloader d = new Downloader(
+                rtProductUrl,
+                timeout: 0,
+                rtProductFile,
+                verbose: false);
+            d.OnSuccess += (dl, e) =>
+            {
+                Current = doDeserialize(dl.Www.text);
+            };
+            d.Start();
+        }
+
+        private static RTConfig doDeserialize(string configText)
+        {
             RTConfig rtConfig = JsonConvert.DeserializeObject<RTConfig>(configText);
-            rtConfig.RefreshCategoryDictionary();
-            __JSON_Currently_Parsing = false;
-            Debug.Log($"RTConfig._doDeserialize() CatSets # {rtConfig.CategorySets.Count}");
+
+            foreach (CategorySet cs in rtConfig.CategorySets)
+            {
+                foreach (Category c in cs.categories)
+                {
+                    rtConfig.categoryDict[c.id] = c;
+                }
+            }
+
             return rtConfig;
         }
+
+        public static readonly Observable RTConfigChanged = new Observable();
 
         #endregion
 
@@ -64,7 +128,7 @@ namespace Code.GQClient.Conf
         /// </summary>
         /// <value>The main category set.</value>
         public string mainCategorySet { get; set; }
-        
+
         /// <summary>
         /// Shows quests also in the case that at least one category class has no user selections.
         /// We interpret the complete deselection of a category class as "does not matter", so we show all.
@@ -72,7 +136,7 @@ namespace Code.GQClient.Conf
         /// For apps with only one class of categories this will probably be most often "false", while
         /// for apps with multiple category classes, "true" will probably be the best value.
         /// </summary>
-        public bool showAllIfNoCatSelectedInFilter { get; set; } 
+        public bool showAllIfNoCatSelectedInFilter { get; set; }
 
         /// <summary>
         /// If a quest has no category stated or at least no correctly spelled category, this option decides
@@ -84,7 +148,7 @@ namespace Code.GQClient.Conf
         /// In the future we will support error free editors that insist of a valid category definition
         /// before a quest can be published. Hence this option is only needed fot the time being. 
         /// </summary>
-        public bool showIfNoCatDefined { get; set; } 
+        public bool showIfNoCatDefined { get; set; }
 
         public List<CategorySet> CategorySets
         {
@@ -110,7 +174,7 @@ namespace Code.GQClient.Conf
             //     return;
             // }
             // _categoryDict = new Dictionary<string, Category>();
-            
+
             Debug.Log($"RefreshCategoryDictionary(): CatSets#: {CategorySets.Count}");
             foreach (CategorySet cs in CategorySets)
             {
@@ -127,9 +191,6 @@ namespace Code.GQClient.Conf
         public string defaultCategory { get; set; }
 
         [JsonIgnore] private List<CategorySet> _categorySets;
-
-        public static event VoidToVoid CategoriesChanged;
-
 
         public Category GetCategory(string catId)
         {
@@ -152,7 +213,6 @@ namespace Code.GQClient.Conf
                 if (_categoryDict == null)
                 {
                     _categoryDict = new Dictionary<string, Category>();
-                    RefreshCategoryDictionary();
                 }
 
                 return _categoryDict;
@@ -173,5 +233,9 @@ namespace Code.GQClient.Conf
             showAllIfNoCatSelectedInFilter = false;
             showIfNoCatDefined = false;
         }
+
+        public const string GQ_SERVER_PORTALS_URL = "https://quest-mill-web.intertech.de/portals";
+        public static string RT_CONFIG_DIR => /* Author.LoggedIn ? "config-author" : */ "config";
+        public const string RT_CONFIG_FILE = "RTProduct.json";
     }
 }

@@ -56,7 +56,7 @@ namespace Code.GQClient.UI.map
                 );
             _ = Base.Instance.GetDownloadBehaviour(
                 loadGameXml,
-                $"Loading {ConfigurationManager.Current.nameForQuestSg}"
+                $"Loading {Config.Current.nameForQuestSg}"
             );
 
             var questStarter = new QuestStarter();
@@ -80,13 +80,13 @@ namespace Code.GQClient.UI.map
                 if (t == null)
                 {
                     // load basic marker texture and white alpha background template:
-                    var markerOutline = ConfigurationManager.Current.marker.GetTexture2D();
+                    var markerOutline = Config.Current.marker.GetTexture2D();
                     t = new Texture2D(markerOutline.width, markerOutline.height);
 
                     Texture2D symbol = null;
                     try
                     {
-                        var cat = ConfigurationManager.Current.rt.GetCategory(categoryId);
+                        var cat = Config.Current.GetCategory(categoryId);
                         // ReSharper disable once MergeSequentialChecks
                         if (null == cat || null == cat.symbol)
                         {
@@ -119,14 +119,16 @@ namespace Code.GQClient.UI.map
                     {
                         usedDefaultTexture = true;
                         StringBuilder msg = new StringBuilder();
-                        foreach (var key in ConfigurationManager.Current.rt.categoryDict.Keys)
+                        foreach (var key in RTConfig.Current.categoryDict.Keys)
                         {
                             msg.Append(key + "; ");
                         }
 
 
                         Log.SignalErrorToAuthor(
-                            $"Quest {Data.Id}: Category {categoryId} not found. Using default symbol. Texture: t.height: {t.height}; cats# {ConfigurationManager.Current.rt.categoryDict.Keys.Count} : {msg.ToString()}");
+                            $"Quest {Data.Id}: Category " +
+                            $"{categoryId} not found. Using default symbol. " +
+                            $"Texture: t.height: {t.height}; cats# {RTConfig.Current.categoryDict.Keys.Count} : {msg}");
                     }
 
                     var outlineColors = markerOutline.GetPixels32();
@@ -160,9 +162,9 @@ namespace Code.GQClient.UI.map
                                     if (symbolColors[j].a > 0)
                                     {
                                         // replace white base color with fg color:
-                                        symbolColors[j].r = ConfigurationManager.Current.markerSymbolFGColor.r;
-                                        symbolColors[j].g = ConfigurationManager.Current.markerSymbolFGColor.g;
-                                        symbolColors[j].b = ConfigurationManager.Current.markerSymbolFGColor.b;
+                                        symbolColors[j].r = Config.Current.markerSymbolFGColor.r;
+                                        symbolColors[j].g = Config.Current.markerSymbolFGColor.g;
+                                        symbolColors[j].b = Config.Current.markerSymbolFGColor.b;
 
                                         // we take symbol pixels if we find them above the opaque white circle:
                                         alphaColors[i] = symbolColors[j];
@@ -170,7 +172,7 @@ namespace Code.GQClient.UI.map
                                     else
                                     {
                                         // we take the marker background alpha as specified for this product:
-                                        alphaColors[i].a = ConfigurationManager.Current.markerBGAlpha;
+                                        alphaColors[i].a = Config.Current.markerBGAlpha;
                                     }
                                 }
 
@@ -179,13 +181,13 @@ namespace Code.GQClient.UI.map
                             else if (alphaColors[i].a == 255)
                             {
                                 // outside of the symbol but inside the white circle, we also use only the specified transparency:
-                                alphaColors[i].a = ConfigurationManager.Current.markerBGAlpha;
+                                alphaColors[i].a = Config.Current.markerBGAlpha;
                             }
 
                             // colorize marker outline (keeping alpha channel):
-                            outlineColors[i].r = ConfigurationManager.Current.markerColor.r;
-                            outlineColors[i].g = ConfigurationManager.Current.markerColor.g;
-                            outlineColors[i].b = ConfigurationManager.Current.markerColor.b;
+                            outlineColors[i].r = Config.Current.markerColor.r;
+                            outlineColors[i].g = Config.Current.markerColor.g;
+                            outlineColors[i].b = Config.Current.markerColor.b;
 
                             // blend outline above alpha circle (already eventually including symbol):
                             outlineColors[i] = TextureManager.Blend(outlineColors[i], alphaColors[i]);

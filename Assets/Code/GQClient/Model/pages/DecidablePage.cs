@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Code.GQClient.Model.pages
 {
-    abstract public class DecidablePage : Page
+    public abstract class DecidablePage : Page
     {
 
         #region XML Serialization

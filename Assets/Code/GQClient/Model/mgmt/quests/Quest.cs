@@ -43,7 +43,7 @@ namespace Code.GQClient.Model.mgmt.quests
             get
             {
                 // TODO change the latter two checks to test a flag stored in game.xml base element as an attribute and move to QuestInfo
-                var shown = ConfigurationManager.Current.ShowHiddenQuests || (Name != null && !Name.StartsWith("---"));
+                var shown = Config.Current.ShowHiddenQuests || (Name != null && !Name.StartsWith("---"));
                 return shown;
             }
         }
@@ -220,7 +220,7 @@ namespace Code.GQClient.Model.mgmt.quests
             if (string.IsNullOrEmpty(url) || url.StartsWith(GQML.PREFIX_RUNTIME_MEDIA))
                 return;
             // TODO: we should ignore this hotspot marker in the back-end:
-            if (ConfigurationManager.Current.id != "ebk" &&
+            if (Config.Current.id != "ebk" &&
                 url == "https://quest-mill.intertech.de/assets/img/erzbistummarker.png")
                 return;
 
@@ -326,7 +326,7 @@ namespace Code.GQClient.Model.mgmt.quests
             string targetScenePath = null;
 
             // page2scene mapping comes here:
-            Dictionary<string, string> sceneMappings = ConfigurationManager.Current.GetSceneMappingsDict();
+            Dictionary<string, string> sceneMappings = Config.Current.GetSceneMappingsDict();
             if (sceneMappings.TryGetValue(pageTypeName, out targetScenePath))
             {
                 pageTypeName = targetScenePath.Substring(

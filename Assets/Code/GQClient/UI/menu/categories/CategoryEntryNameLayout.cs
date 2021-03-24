@@ -9,7 +9,7 @@ namespace Code.GQClient.UI.layout
     public class CategoryEntryNameLayout : MonoBehaviour
     {
         public TextMeshProUGUI TextElement;
-        private static Config Config => ConfigurationManager.Current;
+        private static Config Config => Config.Current;
 
         private void OnValidate()
         {

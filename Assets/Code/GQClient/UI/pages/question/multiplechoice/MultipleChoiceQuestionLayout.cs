@@ -32,7 +32,7 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
             {
                 // NO Background Image given => 
                 // - we use standard bg color:
-                image.color = ConfigurationManager.Current.contentBackgroundColor;
+                image.color = Config.Current.contentBackgroundColor;
                 image.enabled = true;
 
                 // - and hide Background Image:
@@ -50,9 +50,9 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 // - we do use questionBG:
                 QuestionBackgroundImage.enabled = true;
                 QuestionBackgroundImage.color = new Color(
-                    ConfigurationManager.Current.contentBackgroundColor.r / 256f,
-                    ConfigurationManager.Current.contentBackgroundColor.g / 256f,
-                    ConfigurationManager.Current.contentBackgroundColor.b / 256f,
+                    Config.Current.contentBackgroundColor.r / 256f,
+                    Config.Current.contentBackgroundColor.g / 256f,
+                    Config.Current.contentBackgroundColor.b / 256f,
                     a: 200f / 256f // make question background semi transparent
                 );
 
@@ -70,8 +70,8 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                     loader =
                         new Downloader(
                             url: myPage.BackGroundImage,
-                            timeout: ConfigurationManager.Current.timeoutMS,
-                            maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                            timeout: Config.Current.timeoutMS,
+                            maxIdleTime: Config.Current.maxIdleTimeMS
                         );
                     // TODO store the image locally ...
                 }

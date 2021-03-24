@@ -34,7 +34,7 @@ namespace Code.GQClient.UI.parts.imageWithRights
 #endif
 
 
-            if (ConfigurationManager.Current.fitExceedingImagesIntoArea) {
+            if (Config.Current.fitExceedingImagesIntoArea) {
 				copyrightText4FittingImage.gameObject.SetActive (true);
 				copyrightText4EnvelopingImage.gameObject.SetActive (false);
 
@@ -55,7 +55,7 @@ namespace Code.GQClient.UI.parts.imageWithRights
             }
 
 
-			switch (ConfigurationManager.Current.id) {
+			switch (Config.Current.id) {
 			case "wcc":
 				start_wcc ();
 				break;

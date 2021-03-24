@@ -30,13 +30,13 @@ namespace QM.SC.Editor
                     var dir =
                         Files.CombinePath(
                             $"{Application.dataPath}/../Production/products addon",
-                            ConfigurationManager.Current.id,
+                            Config.Current.id,
                             "Screenshots",
                             $"{camera.pixelWidth}_{camera.pixelHeight}"
                         );
                     Files.CreateDir(dir);
                     var filename = 
-                        $"{ConfigurationManager.Current.id}_{DateTime.Now:yyyy'-'MM'-'dd'_'HH'-'mm'-'ss}.png";
+                        $"{Config.Current.id}_{DateTime.Now:yyyy'-'MM'-'dd'_'HH'-'mm'-'ss}.png";
 
                     ScreenCapture.CaptureScreenshot(
                         $"{dir}/{filename}");

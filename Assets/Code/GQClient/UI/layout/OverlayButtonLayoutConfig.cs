@@ -42,14 +42,14 @@ namespace Code.GQClient.UI.layout
 			// set background color:
 			Image bgImage = GetComponent<Image> ();
 			if (bgImage != null) {
-				bgImage.color = ConfigurationManager.Current.overlayButtonBgColor;
+				bgImage.color = Config.Current.overlayButtonBgColor;
 			}
 
 			// set foreground color in Image:
 			try {
 				Image fgImage = transform.Find ("Image").GetComponent<Image> ();
 				if (fgImage != null) {
-					fgImage.color = Enabled ? ConfigurationManager.Current.overlayButtonFgColor : ConfigurationManager.Current.overlayButtonFgDisabledColor;
+					fgImage.color = Enabled ? Config.Current.overlayButtonFgColor : Config.Current.overlayButtonFgDisabledColor;
 				}
 			} catch (Exception) {
 			}	
@@ -58,7 +58,7 @@ namespace Code.GQClient.UI.layout
 			try {
 				Text fgText = transform.Find ("Text").GetComponent<Text> ();
 				if (fgText != null) {
-					fgText.color = Enabled ? ConfigurationManager.Current.overlayButtonFgColor : ConfigurationManager.Current.overlayButtonFgDisabledColor;
+					fgText.color = Enabled ? Config.Current.overlayButtonFgColor : Config.Current.overlayButtonFgDisabledColor;
 				}
 			} catch (Exception) {
 			}

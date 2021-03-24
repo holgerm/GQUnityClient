@@ -36,7 +36,7 @@ namespace Code.GQClient.UI.Foyer.containers
                 RefreshOnStart = true;
             }
 
-            RTConfig.CategoriesChanged += ListChanged;
+            RTConfig.RTConfigChanged.AddListener(ListChanged);
         }
 
         public void OnDisable()
@@ -267,18 +267,18 @@ namespace Code.GQClient.UI.Foyer.containers
 
         private void updateElementOrderLayout()
         {
-            if (ConfigurationManager.Current.listEntryDividingMode != ListEntryDividingMode.AlternatingColors)
+            if (Config.Current.listEntryDividingMode != ListEntryDividingMode.AlternatingColors)
                 return;
 
             for (int i = 0; i < InfoList.childCount; i++)
             {
                 QuestInfoUIC qic = InfoList.GetChild(i).GetComponent<QuestInfoUIC>();
                 Color bgCol = i % 2 == 0
-                    ? ConfigurationManager.Current.listEntryBgColor
-                    : ConfigurationManager.Current.listEntrySecondBgColor;
+                    ? Config.Current.listEntryBgColor
+                    : Config.Current.listEntrySecondBgColor;
                 Color fgCol = i % 2 == 0
-                    ? ConfigurationManager.Current.listEntryFgColor
-                    : ConfigurationManager.Current.listEntrySecondFgColor;
+                    ? Config.Current.listEntryFgColor
+                    : Config.Current.listEntrySecondFgColor;
 
 
                 qic.gameObject.GetComponent<Image>().color = bgCol;

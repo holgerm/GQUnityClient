@@ -25,14 +25,14 @@ namespace Code.GQClient.UI.layout
 			// set background color:
 			Image bgImage = GetComponent<Image> ();
 			if (bgImage != null) {
-				bgImage.color = ConfigurationManager.Current.headerButtonBgColor;
+				bgImage.color = Config.Current.headerButtonBgColor;
 			}
 
 			// set foreground color in Image:
 			try {
 				Image fgImage = transform.Find ("Image").GetComponent<Image> ();
 				if (fgImage != null) {
-					fgImage.color = ConfigurationManager.Current.headerButtonFgColor;
+					fgImage.color = Config.Current.headerButtonFgColor;
 				}
 			} catch (Exception) {
 			}	
@@ -41,7 +41,7 @@ namespace Code.GQClient.UI.layout
 			try {
 				Text fgText = transform.Find ("Text").GetComponent<Text> ();
 				if (fgText != null) {
-					fgText.color = ConfigurationManager.Current.headerButtonFgColor;
+					fgText.color = Config.Current.headerButtonFgColor;
 				}
 			} catch (Exception) {
 			}	

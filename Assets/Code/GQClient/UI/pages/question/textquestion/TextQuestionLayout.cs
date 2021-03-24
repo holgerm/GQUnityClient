@@ -33,7 +33,7 @@ namespace Code.GQClient.UI.pages.question.textquestion
             {
                 // NO Background Image given => 
                 // - we use standard bg color:
-                pageBG.color = ConfigurationManager.Current.contentBackgroundColor;
+                pageBG.color = Config.Current.contentBackgroundColor;
                 pageBG.enabled = true;
                 // - and hide Background Image:
                 BackgroundImage.gameObject.SetActive(false);
@@ -49,9 +49,9 @@ namespace Code.GQClient.UI.pages.question.textquestion
                 // - we do use questionBG:
                 QuestionBackgroundImage.enabled = true;
                 QuestionBackgroundImage.color = new Color(
-                    (float) ConfigurationManager.Current.contentBackgroundColor.r / 256f,
-                    (float)ConfigurationManager.Current.contentBackgroundColor.g / 256f,
-                    (float)ConfigurationManager.Current.contentBackgroundColor.b / 256f,
+                    (float) Config.Current.contentBackgroundColor.r / 256f,
+                    (float)Config.Current.contentBackgroundColor.g / 256f,
+                    (float)Config.Current.contentBackgroundColor.b / 256f,
                     a: 200f / 256f // make question background semi transparent
                 );
 
@@ -69,8 +69,8 @@ namespace Code.GQClient.UI.pages.question.textquestion
                     loader =
                         new Downloader(
                         url: myPage.BackGroundImage,
-                        timeout: ConfigurationManager.Current.timeoutMS,
-                        maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                        timeout: Config.Current.timeoutMS,
+                        maxIdleTime: Config.Current.maxIdleTimeMS
                     );
                     // TODO store the image locally ...
                 }

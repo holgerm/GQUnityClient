@@ -17,14 +17,14 @@ namespace Code.GQClient.UI.menu
         // Use this for initialization
         private void Start()
         {
-            if (ConfigurationManager.Current.offerPartnersInfo && Base.Instance.partnersCanvas != null)
+            if (Config.Current.offerPartnersInfo && Base.Instance.partnersCanvas != null)
             {
                 partnersInfoMenuEntry = ActivateMenuEntry("Unsere Partner", "icons/partners",
                     Base.Instance.partnersCanvas);
             }
 
-            feedbackMenuEntry.SetActive(ConfigurationManager.Current.offerFeedback);
-            authorLoginMenuEntry.SetActive(ConfigurationManager.Current.offerAuthorLogin);
+            feedbackMenuEntry.SetActive(Config.Current.offerFeedback);
+            authorLoginMenuEntry.SetActive(Config.Current.offerAuthorLogin);
         }
 
         private GameObject ActivateMenuEntry(string elementName, string elementIconPath,

@@ -28,7 +28,7 @@ namespace Code.GQClient.UI.menu.categories
 			catFolder.ctrl = folderCtrl;
 
 			// initialize the UI Entry for this folder:
-			folderCtrl.ShowState = ConfigurationManager.Current.rt.categoryFiltersStartFolded;
+			folderCtrl.ShowState = Config.Current.categoryFiltersStartFolded;
 			folderCtrl.UpdateView (catFolder);
 
 			// hook the show/hide children method onto the image toggle button of this folder:
@@ -90,9 +90,9 @@ namespace Code.GQClient.UI.menu.categories
 			}
 		}
 
-		override protected bool showMenuItem ()
+		protected override bool showMenuItem ()
 		{
-			if (ConfigurationManager.Current.ShowEmptyMenuEntries)
+			if (Config.Current.ShowEmptyMenuEntries)
             {
                 return (folder.Name != "");
             }

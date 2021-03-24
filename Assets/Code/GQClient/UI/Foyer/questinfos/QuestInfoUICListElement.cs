@@ -267,7 +267,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
             Image infoImage = t.GetComponent<Image>();
             infoImage.enabled = true;
-            infoImage.color = ConfigurationManager.Current.listEntryFgColor;
+            infoImage.color = Config.Current.listEntryFgColor;
             InfoButton.enabled = true;
             InfoButton.gameObject.SetActive(true);
 
@@ -280,7 +280,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 return;
             }
 
-            Category cat = ConfigurationManager.Current.GetCategory(categoryId);
+            Category cat = Config.Current.GetCategory(categoryId);
 
             if (null == cat?.symbol)
             {

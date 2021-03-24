@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using Code.GQClient.Util.http;
+using Code.QM.Util;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -16,33 +17,27 @@ namespace Code.GQClient.Conf
 
         public const string DEFAULT_CAT_IMAGE_PATH = "textures/readable/default";
 
+        public readonly Observable RTImageChanged = new Observable();
+
         [JsonConstructor]
         public RTImagePath(string path) : base(path)
         {
-            if (RTConfig.CurrentLoadingMode == RTConfig.LoadsFrom.Resource)
-            {
-                ResourcePath = path;
-                FilePath = path;
-                return;
-            }
-
             if (CheckPathForUpdateInfo(path, out int length, out int updateTimestamp))
             {
                 FilePath = path.Substring(startIndex: length);
-                ResourcePath = Files.StripExtension(FilePath);
 
                 if (NeedsUpdateTo(updateTimestamp))
                 {
                     string serverFileUrl =
                         Path.Combine(
-                            ConfigurationManager.GQ_SERVER_PORTALS_URL,
-                            ConfigurationManager.Current.id,
-                            ConfigurationManager.RT_CONFIG_DIR,
+                            RTConfig.GQ_SERVER_PORTALS_URL,
+                            Config.Current.id,
+                            RTConfig.RT_CONFIG_DIR,
                             FilePath);
                     string localFilePath =
                         Path.Combine(
                             Application.persistentDataPath,
-                            ConfigurationManager.RT_CONFIG_DIR,
+                            RTConfig.RT_CONFIG_DIR,
                             FilePath);
 
                     Downloader d = new Downloader(
@@ -56,6 +51,7 @@ namespace Code.GQClient.Conf
                             new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
                         dt = dt.AddSeconds(updateTimestamp);
                         File.SetLastWriteTime(localFilePath, dt);
+                        RTImageChanged.Invoke();
                     };
                     d.Start();
                 }
@@ -63,8 +59,9 @@ namespace Code.GQClient.Conf
             else
             {
                 FilePath = path;
-                ResourcePath = Files.StripExtension(FilePath);
             }
+
+            ResourcePath = Files.StripExtension(FilePath);
         }
 
         public override bool Equals(System.Object obj)
@@ -138,16 +135,10 @@ namespace Code.GQClient.Conf
                 return null;
             }
 
-            if (!ConfigurationManager.RTProductUpdated)
-            {
-                Texture2D t = Resources.Load<Texture2D>(ResourcePath);
-                return t;
-            }
-
             if (CheckPathForUpdateInfo(path, out int length, out int updateTimestamp))
             {
                 string filePath =
-                    Path.Combine(Application.persistentDataPath, ConfigurationManager.RT_CONFIG_DIR, FilePath);
+                    Path.Combine(Application.persistentDataPath, RTConfig.RT_CONFIG_DIR, FilePath);
 
                 if (File.Exists(filePath))
                 {
@@ -156,17 +147,12 @@ namespace Code.GQClient.Conf
                     texture.LoadImage(bytes);
                     return texture;
                 }
-                else
-                {
-                    Texture2D texture = Resources.Load<Texture2D>(ResourcePath);
-                    return texture;
-                }
+
+                return Resources.Load<Texture2D>(ResourcePath);
             }
-            else
-            {
-                Texture2D texture = Resources.Load<Texture2D>(ResourcePath);
-                return texture;
-            }
+
+
+            return Resources.Load<Texture2D>(ResourcePath);
         }
 
 

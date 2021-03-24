@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Code.GQClient.Err;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.map;
-using GQClient.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using UnityEditor;
 using UnityEngine;
 
 // ReSharper disable InconsistentNaming
@@ -28,20 +27,97 @@ namespace Code.GQClient.Conf
     {
         #region Parse Helper
 
-        public static bool __JSON_Currently_Parsing = false;
-
-        public static Config _doDeserializeConfig(string configText)
+        public static void Load()
         {
-            Debug.Log("TEST Start".Green());
-            Config.__JSON_Currently_Parsing = true;
-            Config config = JsonConvert.DeserializeObject<Config>(configText);
-            Debug.Log($"TEST config == null? {null == config}".Yellow());
-            Debug.Log($"TEST config.rt == null? {null == config.rt}".Yellow());
-
-            config.rt.RefreshCategoryDictionary();
-            Config.__JSON_Currently_Parsing = false;
-            return config;
+            string configText = RetrieveProductJSONText();
+            Current = JsonConvert.DeserializeObject<Config>(configText);
+            RTConfig.Load();
         }
+
+        public delegate string RetrieveProductJSONTextDelegate();
+
+        private static RetrieveProductJSONTextDelegate _retrieveProductJSONText;
+        private static RetrieveProductJSONTextDelegate _retrieveProductRTJSONText;
+
+        public static RetrieveProductJSONTextDelegate RetrieveProductJSONText
+        {
+            get
+            {
+                if (_retrieveProductJSONText == null)
+                {
+                    _retrieveProductJSONText = RetrieveProductJsonFromAppConfig;
+                }
+
+                return _retrieveProductJSONText;
+            }
+            set
+            {
+                Current = null;
+                _retrieveProductJSONText = value;
+            }
+        }
+
+        public static RetrieveProductJSONTextDelegate RetrieveProductRTJSONText
+        {
+            get
+            {
+                if (_retrieveProductRTJSONText == null)
+                {
+                    _retrieveProductRTJSONText = RetrieveProductRtJsonFromAppConfig;
+                }
+
+                return _retrieveProductRTJSONText;
+            }
+            set
+            {
+                Current = null;
+                _retrieveProductRTJSONText = value;
+            }
+        }
+
+        private static string RetrieveProductJsonFromAppConfig()
+        {
+            TextAsset configAsset = Resources.Load("Product") as TextAsset;
+
+            if (configAsset == null)
+            {
+                throw new ArgumentException(
+                    "Something went wrong with the Config JSON File. Check it. It should be at " + RUNTIME_PRODUCT_DIR);
+            }
+
+            return configAsset.text;
+        }
+
+        private static string RetrieveProductRtJsonFromAppConfig()
+        {
+            string rtProductFile =
+                Path.Combine(
+                    Application.persistentDataPath,
+                    RTConfig.RT_CONFIG_DIR,
+                    RTConfig.RT_CONFIG_FILE);
+
+            if (File.Exists(rtProductFile))
+            {
+                return File.ReadAllText(rtProductFile);
+            }
+            else
+            {
+                //////////// alt:
+                TextAsset configRTAsset = Resources.Load("RTProduct") as TextAsset;
+
+                if (configRTAsset == null)
+                {
+                    throw new ArgumentException(
+                        "Something went wrong with the RTProduct.json File. Check it. It should be at " +
+                        RUNTIME_PRODUCT_DIR);
+                }
+
+                return configRTAsset.text;
+            }
+        }
+
+
+        public static bool __JSON_Currently_Parsing = false;
 
         #endregion
 
@@ -72,12 +148,12 @@ namespace Code.GQClient.Conf
 #if UNITY_EDITOR
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        public UnityEditor.AndroidSdkVersions androidMinSDKVersion { get; set; }
+        public AndroidSdkVersions androidMinSDKVersion { get; set; }
 
 
         [ShowInProductEditor]
         [JsonConverter(typeof(StringEnumConverter))]
-        public UnityEditor.iOSTargetDevice iOsDeviceTypes { get; set; }
+        public iOSTargetDevice iOsDeviceTypes { get; set; }
 #endif
 
         [ShowInProductEditor] public int autoStartQuestID { get; set; }
@@ -697,7 +773,7 @@ namespace Code.GQClient.Conf
                 QuestInfoView.Map.ToString()
             };
 #if UNITY_EDITOR
-            iOsDeviceTypes = UnityEditor.iOSTargetDevice.iPhoneAndiPad;
+            iOsDeviceTypes = iOSTargetDevice.iPhoneAndiPad;
 #endif
             topicButtonAspectRatio = 1.0f;
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
@@ -823,75 +899,17 @@ namespace Code.GQClient.Conf
 
         #region Forwards to RTConfig
 
-        [JsonIgnore] private RTConfig _rt = null;
-
-        [JsonIgnore] private bool ___firstCallRT = false; 
+        [JsonIgnore] private RTConfig _rt;
         
         [JsonIgnore]
         public RTConfig rt
         {
             get
             {
-                if (!___firstCallRT)
-                {
-                    Debug.Log($"first call to rt when _rt is null? {null == _rt}");
-                    ___firstCallRT = true;
-                }
-
-                if (null == _rt)
-                {
-                    resetRTConfig();
-                }
-
+                if (_rt == null) return RTConfig.Current;
                 return _rt;
             }
-            set
-            {
-                Debug.Log("_rt set.");
-                ___firstCallRT = true;
-                _rt = value;
-            }
-        }
-
-        internal void resetRTConfig()
-        {
-            Debug.Log("Config.resetRTConfig() entered".Green());
-            string rtProductFile =
-                Path.Combine(
-                    Application.persistentDataPath,
-                    ConfigurationManager.RT_CONFIG_DIR,
-                    ConfigurationManager.RT_CONFIG_FILE);
-
-            if (File.Exists(rtProductFile))
-            {
-                string json = File.ReadAllText(rtProductFile);
-                _rt = RTConfig._doDeserialize(
-                    json,
-                    RTConfig.LoadsFrom.LocalFile);
-                ConfigurationManager.RTProductUpdated = true;
-            }
-            else
-            {
-                TextAsset configAsset = Resources.Load("RTProduct") as TextAsset;
-
-                if (configAsset == null)
-                {
-                    throw new ArgumentException(
-                        "Something went wrong with the RTProduct JSON File. Check it. It should be at " +
-                        ConfigurationManager.RUNTIME_PRODUCT_DIR);
-                }
-
-                _rt = RTConfig._doDeserialize(
-                    configAsset.text,
-                    RTConfig.LoadsFrom.Resource);
-                ConfigurationManager.RTProductUpdated = false;
-            }
-            
-            QuestInfoManager.Instance.DataChange.Invoke(
-                new QuestInfoChangedEvent(
-                    "Runtime Product reset.", type:
-                    ChangeType.ListChanged));
-            ConfigurationManager.RTConfigChanged();
+            set => _rt = value;
         }
 
         [ShowInProductEditor(StartSection = "Categories & Filters:"), JsonIgnore]
@@ -931,15 +949,15 @@ namespace Code.GQClient.Conf
         {
             get => rt.showAllIfNoCatSelectedInFilter;
             set => rt.showAllIfNoCatSelectedInFilter = value;
-        }   
-        
-        
+        }
+
+
         [ShowInProductEditor, JsonIgnore]
         public bool showIfNoCatDefined
         {
             get => rt.showIfNoCatDefined;
             set => rt.showIfNoCatDefined = value;
-        }   
+        }
 
 
         /// <summary>
@@ -952,7 +970,7 @@ namespace Code.GQClient.Conf
         {
             if (null == CategorySets || CategorySets.Count == 0)
                 return null;
-            
+
             if (string.IsNullOrEmpty(mainCategorySet))
             {
                 return CategorySets[0];
@@ -980,13 +998,12 @@ namespace Code.GQClient.Conf
         }
 
         [ShowInProductEditor, JsonIgnore]
-        public string defaultCategory
-        {
-            get { return rt.defaultCategory; }
-            set => rt.defaultCategory = value;
-        }
+        public string defaultCategory => rt.defaultCategory;
 
         #endregion
+        
+        public static Config Current;
+        public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
     }
 
     public enum AlignmentOption

@@ -49,7 +49,7 @@ namespace Code.GQClient.UI.menu.categories
 		public void UpdateView ()
 		{
 			// eventually remove leading product id:
-			var productIdStartOfCat = ConfigurationManager.Current.id + ".";
+			var productIdStartOfCat = Config.Current.id + ".";
 			var catId = categoryEntry.category.id;
 			if (catId.StartsWith (productIdStartOfCat)) {
 				catId = catId.Substring (productIdStartOfCat.Length);
@@ -75,7 +75,7 @@ namespace Code.GQClient.UI.menu.categories
 		{
 			var entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
    
-            if (ConfigurationManager.Current.ShowEmptyMenuEntries)
+            if (Config.Current.ShowEmptyMenuEntries)
 				return (entryVisible);
 			else
 				return (categoryEntry.NumberOfQuests () > 0 && entryVisible);
@@ -111,11 +111,11 @@ namespace Code.GQClient.UI.menu.categories
 			else
 			{
 				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b,
-					ConfigurationManager.Current.disabledAlpha);
+					Config.Current.disabledAlpha);
 				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b,
-					ConfigurationManager.Current.disabledAlpha);
+					Config.Current.disabledAlpha);
 				categorySymbol.color = new Color(categorySymbol.color.r, categorySymbol.color.g, categorySymbol.color.b,
-					ConfigurationManager.Current.disabledAlpha);
+					Config.Current.disabledAlpha);
 			}
 		}
 

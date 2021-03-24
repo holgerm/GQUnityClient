@@ -100,7 +100,7 @@ namespace Code.GQClient.UI.author
                     }
                     else
                     {
-                        _showHiddenQuests = ConfigurationManager.Current.localQuestsDeletable;
+                        _showHiddenQuests = Config.Current.localQuestsDeletable;
                     }
                 }
                 return (bool)_showHiddenQuests && LoggedIn;
@@ -136,7 +136,7 @@ namespace Code.GQClient.UI.author
                     }
                     else
                     {
-                        _showOnlyLocalQuests = ConfigurationManager.Current.showOnlyLocalQuests;
+                        _showOnlyLocalQuests = Config.Current.showOnlyLocalQuests;
                     }
                 }
                 return (bool)_showOnlyLocalQuests; // this flag does not need author to be logged in.
@@ -203,7 +203,7 @@ namespace Code.GQClient.UI.author
                     }
                     else
                     {
-                        _showDeleteOptionForLocalQuests = ConfigurationManager.Current.localQuestsDeletable;
+                        _showDeleteOptionForLocalQuests = Config.Current.localQuestsDeletable;
                     }
                 }
                 return (bool)_showDeleteOptionForLocalQuests; // this flag does not need author to be logged in.

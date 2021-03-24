@@ -88,8 +88,8 @@ namespace Code.GQClient.UI.pages.readnfc
             {
                 loader = new Downloader(
                     url: myPage.ImageUrl,
-                    timeout: ConfigurationManager.Current.timeoutMS,
-                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                    timeout: Config.Current.timeoutMS,
+                    maxIdleTime: Config.Current.maxIdleTimeMS
                 );
             }
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
@@ -116,12 +116,12 @@ namespace Code.GQClient.UI.pages.readnfc
             if (imageRatio < ImageRatioMinimum)
             {
                 // image too high to fit:
-                imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMaxUnits;
+                imageAreaHeight = Config.Current.imageAreaHeightMaxUnits;
             }
             if (ImageRatioMaximum < imageRatio)
             {
                 // image too wide to fit:
-                imageAreaHeight = ConfigurationManager.Current.imageAreaHeightMinUnits;
+                imageAreaHeight = Config.Current.imageAreaHeightMinUnits;
             }
 
             imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
@@ -129,7 +129,7 @@ namespace Code.GQClient.UI.pages.readnfc
 
             fitter.aspectRatio = imageRatio; // i.e. the adjusted image area aspect ratio
             fitter.aspectMode =
-                ConfigurationManager.Current.fitExceedingImagesIntoArea
+                Config.Current.fitExceedingImagesIntoArea
                 ? AspectRatioFitter.AspectMode.FitInParent
                 : AspectRatioFitter.AspectMode.EnvelopeParent;
 

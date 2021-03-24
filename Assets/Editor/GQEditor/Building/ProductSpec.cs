@@ -5,7 +5,9 @@ using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQ.Editor.Util;
+using Newtonsoft.Json;
 using UnityEditor;
+using UnityEngine;
 
 namespace GQ.Editor.Building
 {
@@ -44,7 +46,8 @@ namespace GQ.Editor.Building
         /// <value>The dir.</value>
         public string Dir
         {
-            get { return (_dir); }
+            get => _dir;
+            private set => _dir = value;
         }
 
         internal const string APP_ICON = "AppIcon.png";
@@ -92,7 +95,10 @@ namespace GQ.Editor.Building
         /// <value>The config path.</value>
         public string ConfigPath
         {
-            get { return Files.CombinePath(Dir, ConfigurationManager.CONFIG_FILE); }
+            get
+            {
+                return Files.CombinePath(Dir, ConfigurationManager.CONFIG_FILE);
+            }
         }
 
         private Config _config;
@@ -104,18 +110,22 @@ namespace GQ.Editor.Building
                 if (_config == null)
                 {
                     if (EditorApplication.isPlaying)
+                        // Play Mode
                         InitConfig();
                     else
-                        _config = ConfigurationManager.Current;
+                        // Edit Mode (app not running in editor right now)
+                        _config = Config.Current;
                 }
 
                 return _config;
             }
-            set { _config = value; }
+            set => _config = value;
         }
 
+        public RTConfig RTConfig;
 
-        public string RTConfigPath => Files.CombinePath(Dir, ConfigurationManager.RT_CONFIG_FILE);
+        private string RTConfigPath => 
+            Code.GQClient.FileIO.Files.CombinePath(Dir, RTConfig.RT_CONFIG_FILE);
 
 /*
 		private RTConfig _rtConfig;
@@ -161,14 +171,16 @@ namespace GQ.Editor.Building
                 }
 
                 string configJSON = File.ReadAllText(ConfigPath);
-                _config = Config._doDeserializeConfig(configJSON);
+                Config = JsonConvert.DeserializeObject<Config>(configJSON);
+                string rtConfigJson = File.ReadAllText(RTConfigPath);
+                Config.rt = JsonConvert.DeserializeObject<RTConfig>(rtConfigJson);
             }
             catch (Exception exc)
             {
                 Log.SignalErrorToDeveloper($"Invalid product definition. Reading Product.json: {exc.Message}");
                 throw new ArgumentException("Invalid product definition. Product.json file could not be read.", exc);
             }
-            
+
             // init and check RTConfig:
             try
             {
@@ -187,7 +199,7 @@ namespace GQ.Editor.Building
             }
         }
 
-        static internal bool IsValidProductName(string name)
+        internal static bool IsValidProductName(string name)
         {
             // TODO do we need to restrict the product names somehow?
             return true;

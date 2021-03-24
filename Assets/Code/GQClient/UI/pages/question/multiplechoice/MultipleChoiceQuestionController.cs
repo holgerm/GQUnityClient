@@ -42,8 +42,8 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
 
             // show the question:
             questionText.text = mcqPage.Question.Decode4TMP();
-            questionText.color = ConfigurationManager.Current.mainFgColor;
-            questionText.fontSize = ConfigurationManager.Current.mainFontSize;
+            questionText.color = Config.Current.mainFgColor;
+            questionText.fontSize = Config.Current.mainFontSize;
 
             // shuffle anwers:
             if (mcqPage.Shuffle)

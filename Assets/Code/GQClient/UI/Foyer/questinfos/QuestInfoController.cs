@@ -34,7 +34,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
             UpdateView (newInfo);
 		}
 
-		abstract public void UpdateView (QuestInfo questInfo);
+		public abstract void UpdateView (QuestInfo questInfo);
 
 		public override void Destroy ()
 		{

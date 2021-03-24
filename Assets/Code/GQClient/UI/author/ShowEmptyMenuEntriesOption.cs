@@ -12,7 +12,7 @@ namespace Code.GQClient.UI.author
 
         public void Start()
         {
-            toggle.isOn = ConfigurationManager.Current.ShowEmptyMenuEntries;
+            toggle.isOn = Config.Current.ShowEmptyMenuEntries;
         }
 
         public void OnValueChange(bool newValue)

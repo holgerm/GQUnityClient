@@ -200,7 +200,7 @@ namespace Code.GQClient.Util
         private void Start()
         {
             if (partnersCanvas != null)
-                partnersCanvas.gameObject.SetActive(ConfigurationManager.Current.showPartnersInfoAtStart);
+                partnersCanvas.gameObject.SetActive(Config.Current.showPartnersInfoAtStart);
         }
 
         private void Update()
@@ -239,7 +239,7 @@ namespace Code.GQClient.Util
 
         public DownloadBehaviour GetDownloadBehaviour(AbstractDownloader downloader, string title)
         {
-            switch (ConfigurationManager.Current.taskUI)
+            switch (Config.Current.taskUI)
             {
                 case TaskUIMode.Dialog:
                     return new DownloadDialogBehaviour(downloader, title);
@@ -247,14 +247,14 @@ namespace Code.GQClient.Util
                     return new DownloadProgressBehaviour(downloader, title);
                 default:
                     Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.",
-                        ConfigurationManager.Current.taskUI);
+                        Config.Current.taskUI);
                     return new DownloadDialogBehaviour(downloader, title);
             }
         }
 
         public SimpleBehaviour GetSimpleBehaviour(Task task, string title, string details)
         {
-            switch (ConfigurationManager.Current.taskUI)
+            switch (Config.Current.taskUI)
             {
                 case TaskUIMode.Dialog:
                     return new SimpleDialogBehaviour(task, title, details);
@@ -262,7 +262,7 @@ namespace Code.GQClient.Util
                     return new SimpleProgressBehaviour(task, title, details);
                 default:
                     Log.SignalErrorToDeveloper("Downloader TaskUI mode {0} is unknown, using default dialog instead.",
-                        ConfigurationManager.Current.taskUI);
+                        Config.Current.taskUI);
                     return new SimpleDialogBehaviour(task, title, details);
             }
         }

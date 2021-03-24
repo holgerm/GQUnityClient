@@ -124,7 +124,7 @@ namespace Code.GQClient.UI.map
             }
 
             // App-specific hotspot marker (defaults to the default geoquest marker):
-            var markerTexture = ConfigurationManager.Current.hotspotMarker.GetTexture2D();
+            var markerTexture = Config.Current.hotspotMarker.GetTexture2D();
 
             ShowLoadedMarker(hotspot, markerTexture);
         }
@@ -141,8 +141,8 @@ namespace Code.GQClient.UI.map
             {
                 loader = new Downloader(
                     url: markerUrl,
-                    timeout: ConfigurationManager.Current.timeoutMS,
-                    maxIdleTime: ConfigurationManager.Current.maxIdleTimeMS
+                    timeout: Config.Current.timeoutMS,
+                    maxIdleTime: Config.Current.maxIdleTimeMS
                 );
             }
 
@@ -157,7 +157,7 @@ namespace Code.GQClient.UI.map
         {
             OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, texture);
             ommarker.OnClick += hotspot.OnTouchOMM;
-            ommarker.scale = (LayoutConfig.Units2Pixels(ConfigurationManager.Current.markerHeightUnits) * 0.5f) /
+            ommarker.scale = (LayoutConfig.Units2Pixels(Config.Current.markerHeightUnits) * 0.5f) /
                              texture.height;
         }
 

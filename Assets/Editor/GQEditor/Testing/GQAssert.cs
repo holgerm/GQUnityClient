@@ -10,19 +10,19 @@ namespace GQTests
 
 		// TODO move these paths to Files class:
 
-		static public string TEST_DATA_BASE_DIR {
+		public static string TEST_DATA_BASE_DIR {
 			get {
 				return _TEST_DATA_BASE_DIR;
 			}
 		}
-		static private string _TEST_DATA_BASE_DIR = "Assets/Editor/GQTestsData/";
+		private static string _TEST_DATA_BASE_DIR = "Assets/Editor/GQTestsData/";
 
-		static public string TEST_DATA_SERVER_DIR = Files.CombinePath (TEST_DATA_BASE_DIR, "Server");
+		public static string TEST_DATA_SERVER_DIR = Files.CombinePath (TEST_DATA_BASE_DIR, "Server");
 
-		static public string TEST_DATA_TEMP_DIR = "Temp";
+		public static string TEST_DATA_TEMP_DIR = "Temp";
 
 
-		static private string _PROJECT_PATH = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
+		private static string _PROJECT_PATH = Application.dataPath.Substring (0, Application.dataPath.Length - "/Assets".Length);
 
 		public static string PROJECT_PATH {
 			get {

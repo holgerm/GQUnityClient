@@ -52,53 +52,53 @@ namespace Code.GQClient.UI.layout
 			}
 		}
 
-		static private float heightReductionInHeaderAndFooter { get; set; }
+		private static float heightReductionInHeaderAndFooter { get; set; }
 
-		static private void calculateHeightAdaptations ()
+		private static void calculateHeightAdaptations ()
 		{
 			heightReductionInHeaderAndFooter = 0f;
 
 			// calculate footer adaptation (reduction):
 			_footerHeightUnits = 
 				calculateRestrictedHeight (
-				ConfigurationManager.Current.footerHeightUnits, 
-				ConfigurationManager.Current.footerHeightMinMM, 
-				ConfigurationManager.Current.footerHeightMaxMM
+				Config.Current.footerHeightUnits, 
+				Config.Current.footerHeightMinMM, 
+				Config.Current.footerHeightMaxMM
 			);
-			heightReductionInHeaderAndFooter += ConfigurationManager.Current.footerHeightUnits - _footerHeightUnits;
+			heightReductionInHeaderAndFooter += Config.Current.footerHeightUnits - _footerHeightUnits;
 
 			// calculate header adaptation (reduction):
 			_headerHeightUnits = calculateRestrictedHeight (
-				ConfigurationManager.Current.headerHeightUnits, 
-				ConfigurationManager.Current.headerHeightMinMM, 
-				ConfigurationManager.Current.headerHeightMaxMM
+				Config.Current.headerHeightUnits, 
+				Config.Current.headerHeightMinMM, 
+				Config.Current.headerHeightMaxMM
 			);
-			heightReductionInHeaderAndFooter += ConfigurationManager.Current.headerHeightUnits - _headerHeightUnits;
+			heightReductionInHeaderAndFooter += Config.Current.headerHeightUnits - _headerHeightUnits;
 
 			// adapt content height units based on footer and header adaptations:
-			_contentHeightUnits = ConfigurationManager.Current.contentHeightUnits + heightReductionInHeaderAndFooter;
+			_contentHeightUnits = Config.Current.contentHeightUnits + heightReductionInHeaderAndFooter;
 		}
 
-		static private float _footerHeightUnits { get; set; }
+		private static float _footerHeightUnits { get; set; }
 
 		/// <summary>
 		/// Height of the footer element in device-dependent units.
 		/// </summary>
 		/// <value>The height of the footer.</value>
-		static public float FooterHeightUnits {
+		public static float FooterHeightUnits {
 			get {
 				calculateHeightAdaptations ();
 				return _footerHeightUnits;
 			}
 		}
 
-		static private float _contentHeightUnits { get; set; }
+		private static float _contentHeightUnits { get; set; }
 
 		/// <summary>
 		/// Height of the whole content are in device-dependent units.
 		/// </summary>
 		/// <value>The height of the header.</value>
-		static public float ContentHeightUnits {
+		public static float ContentHeightUnits {
 			get {
 				calculateHeightAdaptations ();
 				return _contentHeightUnits;
@@ -133,9 +133,9 @@ namespace Code.GQClient.UI.layout
 		public static float ScreenHeightUnits {
 			get {
 				return (
-				    ConfigurationManager.Current.headerHeightUnits +
-				    ConfigurationManager.Current.contentHeightUnits +
-				    ConfigurationManager.Current.footerHeightUnits
+				    Config.Current.headerHeightUnits +
+				    Config.Current.contentHeightUnits +
+				    Config.Current.footerHeightUnits
 				);
 			}
 		}
@@ -170,7 +170,7 @@ namespace Code.GQClient.UI.layout
 			return pixels;
 		}
 
-		static protected float MMperINCH = 25.4f;
+		protected static float MMperINCH = 25.4f;
 
 		public static float Units2MM (float units)
 		{
