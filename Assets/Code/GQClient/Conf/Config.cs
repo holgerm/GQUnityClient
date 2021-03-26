@@ -1001,8 +1001,23 @@ namespace Code.GQClient.Conf
         public string defaultCategory => rt.defaultCategory;
 
         #endregion
+       
+        private static Config _current;
+
+        public static Config Current
+        {
+            get
+            {
+                if (null == _current)
+                {
+                    Load();
+                }
+
+                return _current;
+            }
+            set => _current = value;
+        }
         
-        public static Config Current;
         public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
     }
 

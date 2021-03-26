@@ -19,18 +19,12 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
         /// <summary>
         /// Shows top margin:
         /// </summary>
-        public override bool ShowsTopMargin
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool ShowsTopMargin => true;
 
         public PageMultipleChoiceQuestion mcqPage
         {
             get;
-            protected set;
+            private set;
         }
 
         /// <summary>

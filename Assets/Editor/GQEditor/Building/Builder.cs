@@ -6,7 +6,7 @@ using System.IO;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using UnityEditor.Build.Reporting;
-
+using UnityEditor.Callbacks;
 #if UNITY_IOS
 using UnityEditor.iOS.Xcode;
 #endif
@@ -236,7 +236,7 @@ namespace GQ.Editor.Building
 
 #if UNITY_IOS
 
-        [PostProcessBuildAttribute(1)]
+        [PostProcessBuild(1)]
         public static void AmendUsageRightsInfosToPList_IOS_Only(BuildTarget target, string pathToBuiltProject)
         {
             Debug.Log("Build done. Target was " + target.ToString() + "; build path is: " + pathToBuiltProject);

@@ -46,7 +46,7 @@ namespace Code.GQClient.UI.pages.npctalk
             }
 
             // show the content:
-            ShowImage();
+            ShowImage(NpcPage.ImageUrl, imagePanel, layout.TopMargin);
             ClearText();
             AddCurrentText();
             UpdateForwardButton();
@@ -97,66 +97,15 @@ namespace Code.GQClient.UI.pages.npctalk
             }
         }
 
-        private void ShowImage()
+        protected override void ImageDownloadCallback(AbstractDownloader d, DownloadEvent e)
         {
-            // allow for variables inside the image url:
-            var rtImageUrl = NpcPage.ImageUrl.MakeReplacements();
+            var imageAreaHeight = image == null ? 0f : FitInAndShowImage(d.Www.texture);
 
-            // show (or hide completely) image:
-            if (rtImageUrl == "")
-            {
-                imagePanel.SetActive(false);
-                layout.TopMargin.SetActive(true);
-                return;
-            }
-            else
-            {
-                layout.TopMargin.SetActive(false);
-            }
+            imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
+            contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
 
-            AbstractDownloader loader;
-            if (rtImageUrl.StartsWith(GQML.PREFIX_RUNTIME_MEDIA))
-            {
-                if (page.Parent.MediaStore.TryGetValue(rtImageUrl, out var rtMediaInfo))
-                {
-                    loader = new LocalFileLoader(rtMediaInfo.LocalPath);
-                }
-                else
-                {
-                    Log.SignalErrorToAuthor($"Runtime media {rtImageUrl} not found.");
-                    imagePanel.SetActive(false);
-                    layout.TopMargin.SetActive(true);
-                    return;
-                }
-            }
-            else
-            {
-                // not runtime media case, i.e. ordinary url case:
-                if (QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out var mediaInfo))
-                {
-                    loader = new LocalFileLoader(mediaInfo.LocalPath);
-                }
-                else
-                {
-                    loader = new Downloader(
-                        url: rtImageUrl,
-                        timeout: Config.Current.timeoutMS,
-                        maxIdleTime: Config.Current.maxIdleTimeMS
-                    );
-                }
-            }
-
-            loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
-            {
-                var imageAreaHeight = image == null ? 0f : FitInAndShowImage(d.Www.texture);
-
-                imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
-                contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
-
-                // Dispose www including it s Texture and take some logs for performance surveillance:
-                d.Www.Dispose();
-            };
-            loader.Start();
+            // Dispose www including it s Texture and take some logs for performance surveillance:
+            d.Www.Dispose();
         }
 
         private float FitInAndShowImage(Texture texture)

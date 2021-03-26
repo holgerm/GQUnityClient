@@ -55,6 +55,8 @@ namespace Code.GQClient.UI.Foyer.containers
 
             StartUpdateViewAlreadyDone = true;
         }
+        
+        
 
 
         #region React on Events

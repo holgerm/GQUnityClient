@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
@@ -28,7 +30,7 @@ namespace Code.GQClient.UI.pages.startandexitscreen
         {
             _myPage = (PageStartAndExitScreen)page;
 
-            ShowImage();
+            ShowImage(_myPage.ImageUrl, image.transform.parent.gameObject, layout.TopMargin);
             InitForwardButton();
         }
 
@@ -67,46 +69,17 @@ namespace Code.GQClient.UI.pages.startandexitscreen
                 OnForward();
             }
         }
-
-        private void ShowImage()
-        {
-            // show (or hide completely) image:
-            var imagePanel = image.transform.parent.gameObject;
-
-            // allow for variables inside the image url:
-            var rtImageUrl = _myPage.ImageUrl.MakeReplacements();
-
-            if (rtImageUrl == "")
-            {
-                imagePanel.SetActive(false);
-                return;
-            }
-
-            imagePanel.SetActive(true);
-            AbstractDownloader loader;
-            if (QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out var mediaInfo))
-            {
-                loader = new LocalFileLoader(mediaInfo.LocalPath);
-            }
-            else
-            {
-                loader =
-                    new Downloader(
-                        url: rtImageUrl,
-                        timeout: Config.Current.timeoutMS,
-                        maxIdleTime: Config.Current.maxIdleTimeMS
-                    );
-                // TODO store the image locally ...
-            }
-            loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
-            {
-                var fitter = image.GetComponent<AspectRatioFitter>();
-                fitter.aspectRatio = d.Www.texture.width / (float)d.Www.texture.height;
-                image.texture = d.Www.texture;
-            };
-            loader.Start();
-        }
         
+        protected override void ImageDownloadCallback(AbstractDownloader d, DownloadEvent e)
+        {
+            var fitter = image.GetComponent<AspectRatioFitter>();
+            fitter.aspectRatio = d.Www.texture.width / (float) d.Www.texture.height;
+            image.texture = d.Www.texture;
+
+            // Dispose www including it s Texture and take some logs for performance surveillance:
+            d.Www.Dispose();
+        }
+
         public override void CleanUp() {
             Destroy(image.texture);
         }

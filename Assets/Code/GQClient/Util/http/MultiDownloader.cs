@@ -88,7 +88,6 @@ namespace Code.GQClient.Util.http
         /// <returns>The download.</returns>
         protected override IEnumerator DoTheWork()
         {
-            Debug.Log("################### MultiDownloader.DoThWork() started.");
             // init SimpleBehaviour:
             dialogBehaviour = (SimpleBehaviour) behaviours[0];
             // TODO dangerous. Replace by concrete DialogControllers we will write.

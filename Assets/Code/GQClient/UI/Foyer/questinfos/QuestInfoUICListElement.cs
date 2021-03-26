@@ -1,4 +1,5 @@
-﻿using Code.GQClient.Conf;
+﻿using System.Runtime.CompilerServices;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
 using Code.GQClient.UI.Foyer.containers;
