@@ -157,7 +157,7 @@ namespace Code.GQClient.UI.map
         {
             OnlineMapsMarker ommarker = markerManager.Create(hotspot.Longitude, hotspot.Latitude, texture);
             ommarker.OnClick += hotspot.OnTouchOMM;
-            ommarker.scale = (LayoutConfig.Units2Pixels(Config.Current.markerHeightUnits) * 0.5f) /
+            ommarker.scale = LayoutConfig.Units2Pixels(Config.Current.markerHeightUnits) /
                              texture.height;
         }
 
