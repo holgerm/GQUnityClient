@@ -44,7 +44,7 @@ namespace Code.GQClient.UI.menu.categories
             List<Category> categories)
         {
             string catTreeGoName = PREFAB + " (" + catFilter.Name + ")";
-            
+
             // delete game object if already existing:
             Transform oldExisting = root.transform.Find(catTreeGoName);
             if (oldExisting != null && oldExisting.gameObject.activeSelf)
@@ -182,8 +182,10 @@ namespace Code.GQClient.UI.menu.categories
                 catFolder.AddCategoryEntry(catEntry);
             }
 
+            List<QuestInfo> questInfos = QuestInfoManager.Instance.GetListOfQuestInfos();
+
             // model: populate entries with quest infos:
-            foreach (QuestInfo info in QuestInfoManager.Instance.GetListOfQuestInfos())
+            foreach (QuestInfo info in questInfos)
             {
                 foreach (string catId in info.Categories)
                 {
@@ -204,7 +206,6 @@ namespace Code.GQClient.UI.menu.categories
             // create all category tree UI entries:
             foreach (CategoryFolder folder in categoryFolders.Values)
             {
-//				if (folder.Name != "") {
                 CategoryFolderCtrl uiFolder =
                     CategoryFolderCtrl.Create(
                         root: this.gameObject,
@@ -213,7 +214,6 @@ namespace Code.GQClient.UI.menu.categories
                     );
                 uiFolder.transform.SetParent(this.transform);
                 uiFolder.transform.SetAsLastSibling();
-//				}
 
                 foreach (CategoryEntry entry in folder.Entries)
                 {
@@ -229,7 +229,7 @@ namespace Code.GQClient.UI.menu.categories
             }
         }
 
-        bool generalSelectionState = true;
+        bool _generalSelectionState = true;
 
         public void SetSelection4AllItems()
         {
@@ -238,16 +238,16 @@ namespace Code.GQClient.UI.menu.categories
                 return;
             }
 
-            generalSelectionState = !generalSelectionState;
+            _generalSelectionState = !_generalSelectionState;
             CategoryFilter.NotificationPaused = true;
             foreach (var entry in categoryEntries.Values)
             {
-                entry.ctrl.SetSelectedState(generalSelectionState);
+                entry.ctrl.SetSelectedState(_generalSelectionState);
             }
 
             CategoryFilter.NotificationPaused = false;
 
-            if (generalSelectionState)
+            if (_generalSelectionState)
             {
                 OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b, 1f);
             }

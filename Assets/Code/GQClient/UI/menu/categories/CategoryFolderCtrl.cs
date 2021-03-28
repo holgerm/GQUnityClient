@@ -67,7 +67,9 @@ namespace Code.GQClient.UI.menu.categories
 			}
 
 			// set the name of this category entry:
-			categoryName.text = folder.Name;
+			categoryName.text = folder.Name.StartsWith("*") ? 
+				folder.Name.Substring(1) :
+				folder.Name;
 
 			// calculate and set the number of quests represented by all categories within this folder:
 			categoryCount.text = ""; // folder.NumberOfQuests().ToString(); TODO make Config?

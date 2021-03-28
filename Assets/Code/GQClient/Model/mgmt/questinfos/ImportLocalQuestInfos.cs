@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Code.GQClient.Err;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -48,6 +49,9 @@ namespace GQClient.Model
 
 				qim.AddInfo (q);
 			}
+			qim.DataChange.Invoke(new QuestInfoChangedEvent(
+				"QuestInfoManager updated",
+				ChangeType.ListChanged));
    		}
 
 	}

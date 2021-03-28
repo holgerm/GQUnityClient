@@ -74,11 +74,13 @@ namespace Code.GQClient.UI.menu.categories
 		protected override bool showMenuItem ()
 		{
 			var entryVisible = Unfolded || categoryEntry.category.folderName.Equals ("");
-   
-            if (Config.Current.ShowEmptyMenuEntries)
+
+			if (Config.Current.ShowEmptyMenuEntries)
+			{
 				return (entryVisible);
-			else
-				return (categoryEntry.NumberOfQuests () > 0 && entryVisible);
+			}
+
+			return (categoryEntry.NumberOfQuests() > 0 && entryVisible);
 		}
 
 		public bool _selectedForFilter;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -72,6 +73,7 @@ namespace GQClient.Model
                 }
             }
             
+            Debug.Log("### 6");
             qim.DataChange.Invoke(
                 new QuestInfoChangedEvent(
                     "QuestInfoManager updated",

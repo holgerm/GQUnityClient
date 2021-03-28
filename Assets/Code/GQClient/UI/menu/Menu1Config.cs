@@ -1,5 +1,7 @@
 ﻿using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
+using Code.GQClient.Util;
+using GQClient.Model;
 using UnityEngine;
 
 namespace Code.GQClient.UI.menu
@@ -34,6 +36,14 @@ namespace Code.GQClient.UI.menu
             var cf = Config.Current;
             updateQuestInfos_MenuEntry.SetActive(cf.OfferManualUpdate4QuestInfos);
         }
+        
+        
+        public void UpdateQuestInfos()
+        {
+            QuestInfoManager.UpdateQuestInfos();
+            Base.Instance.MenuCanvas.SetActive(false);
+        }
+
     }
 
 }

@@ -3,6 +3,7 @@ using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Util;
 using GQClient.Model;
+using UnityEngine;
 
 namespace Code.GQClient.UI.menu.categories
 {
