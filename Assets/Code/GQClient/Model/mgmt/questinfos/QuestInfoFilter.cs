@@ -19,10 +19,7 @@ namespace GQClient.Model
             if (NotificationPaused)
                 return;
 
-            if (FilterChange != null)
-            {
-                FilterChange();
-            }
+            FilterChange?.Invoke();
 
             if (ParentFilter != null)
                 ParentFilter.RaiseFilterChangeEvent();
@@ -265,7 +262,8 @@ namespace GQClient.Model
                 if (!catIds[catDisjunctionName].Contains(category.id))
                 {
                     catIds[catDisjunctionName].Add(category.id);
-                    RaiseFilterChangeEvent();
+                    //RaiseFilterChangeEvent();
+                    QuestInfoManager.Instance.FilterChange.Invoke();
                 }
             }
 
@@ -280,14 +278,17 @@ namespace GQClient.Model
                 if (catIds[catDisjunctionName].Contains(category.id))
                 {
                     catIds[catDisjunctionName].Remove(category.id);
-                    RaiseFilterChangeEvent();
+                    //RaiseFilterChangeEvent();
+                    QuestInfoManager.Instance.FilterChange.Invoke();
+
                 }
             }
 
             public void ClearCategories()
             {
                 _catIds = null;
-                RaiseFilterChangeEvent();
+                //RaiseFilterChangeEvent();
+                QuestInfoManager.Instance.FilterChange.Invoke();
             }
 
             /// <summary>

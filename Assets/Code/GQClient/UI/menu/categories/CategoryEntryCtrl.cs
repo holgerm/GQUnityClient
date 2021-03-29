@@ -83,16 +83,16 @@ namespace Code.GQClient.UI.menu.categories
 			return (categoryEntry.NumberOfQuests() > 0 && entryVisible);
 		}
 
-		public bool _selectedForFilter;
+		public bool selectedForFilter;
 
 		public void SetSelectedState (bool newState)
 		{
-			_selectedForFilter = newState;
+			selectedForFilter = newState;
 
 			// Make the UI reflect selection status & change category filter in quest info manager:
 			UpdateView4State();
 
-			if (_selectedForFilter)
+			if (selectedForFilter)
 			{
 				treeCtrl.CategoryFilter.AddCategory(categoryEntry.category);
 			}
@@ -104,7 +104,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		public void UpdateView4State()
 		{
-			if (_selectedForFilter)
+			if (selectedForFilter)
 			{
 				categoryName.color = new Color(categoryName.color.r, categoryName.color.g, categoryName.color.b, 1f);
 				categoryCount.color = new Color(categoryCount.color.r, categoryCount.color.g, categoryCount.color.b, 1f);
@@ -123,7 +123,7 @@ namespace Code.GQClient.UI.menu.categories
 
 		public void ToggleSelectedState ()
 		{
-			SetSelectedState (!_selectedForFilter);
+			SetSelectedState (!selectedForFilter);
 		}
 
 		public void Show (bool show)

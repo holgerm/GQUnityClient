@@ -43,7 +43,7 @@ namespace Code.GQClient.UI.Foyer.containers
             
             // After registering we need to update our views now:
             ListChanged();
-            FilterChanged();
+            //FilterChanged();
         }
 
         public virtual void OnQuestInfoChanged(QuestInfoChangedEvent e)

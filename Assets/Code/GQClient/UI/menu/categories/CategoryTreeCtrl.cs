@@ -239,14 +239,13 @@ namespace Code.GQClient.UI.menu.categories
             }
 
             _generalSelectionState = !_generalSelectionState;
-            CategoryFilter.NotificationPaused = true;
+            QuestInfoManager.Instance.FilterChange.DisableNotification();
             foreach (var entry in categoryEntries.Values)
             {
                 entry.ctrl.SetSelectedState(_generalSelectionState);
             }
-
-            CategoryFilter.NotificationPaused = false;
-
+            QuestInfoManager.Instance.FilterChange.EnableNotification(true);
+            
             if (_generalSelectionState)
             {
                 OnOff.color = new Color(OnOff.color.r, OnOff.color.g, OnOff.color.b, 1f);

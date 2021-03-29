@@ -115,6 +115,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
         public override void FilterChanged()
         {
+            Debug.Log("QuestListController.FilterChanged()");
             RegenerateAllAfterFilterChanged();
         }
 

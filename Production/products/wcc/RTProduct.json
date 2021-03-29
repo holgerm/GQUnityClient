@@ -1,10 +1,286 @@
 {
-  "foldableCategoryFilters": true,
-  "categoryFiltersStartFolded": true,
+  "foldableCategoryFilters": false,
+  "categoryFiltersStartFolded": false,
   "categoryFoldersStartFolded": true,
-  "mainCategorySet": null,
+  "mainCategorySet": "Kategorien",
   "showAllIfNoCatSelectedInFilter": false,
   "showIfNoCatDefined": false,
-  "CategorySets": [],
+  "CategorySets": [
+    {
+      "name": "Kategorien",
+      "categories": [
+        {
+          "id": "wcc.architecture",
+          "name": "Architektur",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/architecture"
+          }
+        },
+        {
+          "id": "wcc.museum",
+          "name": "Museum",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/museum"
+          }
+        },
+        {
+          "id": "wcc.art",
+          "name": "Kunst",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/art"
+          }
+        },
+        {
+          "id": "wcc.virtual",
+          "name": "Kultur Virtuell",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "update:1615224790:textures/readable/virtual.png"
+          }
+        },
+        {
+          "id": "wcc.sound",
+          "name": "Sound & Ton",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/sound"
+          }
+        },
+        {
+          "id": "wcc.nature",
+          "name": "Natur",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/nature"
+          }
+        },
+        {
+          "id": "wcc.history",
+          "name": "Historisch",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/historic"
+          }
+        },
+        {
+          "id": "wcc.sports",
+          "name": "Leibesübungen",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/sports"
+          }
+        },
+        {
+          "id": "wcc.beethovenshoppen",
+          "name": "Beethoven Shoppen",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "update:1605258256:textures/readable/beethoven.png"
+          }
+        },
+        {
+          "id": "wcc.antiquariate",
+          "name": "Leselust",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/antiquariat"
+          }
+        },
+        {
+          "id": "wcc.gallery",
+          "name": "Galerie / Atelier",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/gallery"
+          }
+        },
+        {
+          "id": "wcc.designshop",
+          "name": "Designer Shop",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/designshop"
+          }
+        },
+        {
+          "id": "wcc.cinema",
+          "name": "Kino",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/cinema"
+          }
+        },
+        {
+          "id": "wcc.concerthall",
+          "name": "Schall & Klang",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/concerthall"
+          }
+        },
+        {
+          "id": "wcc.theatre",
+          "name": "Theater",
+          "folderName": "KulturShoppen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/theatre"
+          }
+        },
+        {
+          "id": "wcc.special",
+          "name": "Besonderes",
+          "folderName": "Kultur",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/special"
+          }
+        },
+        {
+          "id": "wcc.tour.beethoven",
+          "name": "Beethoventour",
+          "folderName": "Themen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/beethoventour"
+          }
+        },
+        {
+          "id": "wcc.bonnhoeren",
+          "name": "BonnHoeren",
+          "folderName": "Themen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/bonnhoeren"
+          }
+        },
+        {
+          "id": "wcc.bar",
+          "name": "Bar",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/bar"
+          }
+        },
+        {
+          "id": "wcc.beergarden",
+          "name": "Biergarten",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/beergarden"
+          }
+        },
+        {
+          "id": "wcc.cafe",
+          "name": "Café",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/cafe"
+          }
+        },
+        {
+          "id": "wcc.iceparlour",
+          "name": "Eisdiele",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/iceparlour"
+          }
+        },
+        {
+          "id": "wcc.pub",
+          "name": "Kneipe",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/pub"
+          }
+        },
+        {
+          "id": "wcc.restaurant",
+          "name": "Restaurant",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/restaurant"
+          }
+        },
+        {
+          "id": "wcc.hotel",
+          "name": "Hotel",
+          "folderName": "Gastronomie",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/hotel"
+          }
+        },
+        {
+          "id": "wcc.tourist",
+          "name": "Tourist Info",
+          "folderName": "Hilfe & Information",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/touristinfo"
+          }
+        },
+        {
+          "id": "wcc.wc",
+          "name": "WC",
+          "folderName": "Hilfe & Information",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/wc"
+          }
+        },
+        {
+          "id": "wcc.bike",
+          "name": "Fahrradvermietung",
+          "folderName": "Hilfe & Information",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "textures/readable/bike"
+          }
+        },
+        {
+          "id": "wcc.nix",
+          "name": "zur Zeit keine",
+          "folderName": "Aktuelle Events",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "update:1607081614:textures/readable/corona.png"
+          }
+        },
+        {
+          "id": "wcc.organ",
+          "name": "Orgel - Instrument 2021",
+          "folderName": "Themen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "update:1612990002:textures/readable/organ.png"
+          }
+        }
+      ]
+    }
+  ],
   "defaultCategory": null
 }

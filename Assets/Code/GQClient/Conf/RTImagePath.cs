@@ -25,8 +25,8 @@ namespace Code.GQClient.Conf
             if (CheckPathForUpdateInfo(path, out int length, out int updateTimestamp))
             {
                 FilePath = path.Substring(startIndex: length);
-
-                if (NeedsUpdateTo(updateTimestamp))
+                
+                if (Application.isPlaying && NeedsUpdateTo(updateTimestamp))
                 {
                     string serverFileUrl =
                         Path.Combine(
