@@ -174,9 +174,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
 
             QuestInfoUICListElement ctrl = go.GetComponent<QuestInfoUICListElement>();
 
-            // set info button as configured:
-            ctrl.setCategorySymbol(qInfo); // TODO ist das doppelt gemacht?
-
             // set data and event management:
             ctrl.data = qInfo;
             ctrl.data.ActivitiesBlockingChanged += ctrl.OnActivitiesBlockingChanged;
@@ -276,7 +273,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
             if (QuestInfo.WITHOUT_CATEGORY_ID == categoryId)
             {
                 // we do not have a valid category, hence we use the default icon:
-                Debug.Log($"## 2: Used Defaultsymbol UIC List setCatSymbol no Category on {qInfo.Name}".Red());
                 infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
                 return;
             }
@@ -286,7 +282,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
             if (null == cat?.symbol)
             {
                 // we do not have a sprite, hence we use the default icon:
-                Debug.Log($"## 3: Used Defaultsymbol UIC List setCatSymbol cat or its symbol is null on cat id {categoryId} - folder name: {cat?.folderName}".Red());
                 infoImage.sprite = Resources.Load<Sprite>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
                 return;
             }

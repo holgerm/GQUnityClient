@@ -33,9 +33,9 @@ namespace GQClient.Model
                         break;
                 }
             }
-            if (categories.Count == 0 && ConfigurationManager.Current.rt.defaultCategory != null)
+            if (categories.Count == 0 && Config.Current.rt.defaultCategory != null)
             {
-                categories.Add(ConfigurationManager.Current.rt.defaultCategory);
+                categories.Add(Config.Current.rt.defaultCategory);
             }
             return categories;
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Code.GQClient.Err;
 using GQClient.Model;
 using Code.GQClient.UI.author;
 using Code.GQClient.UI.Foyer.questinfos;
@@ -36,11 +37,13 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             Qim.DataChange.AddListener(OnQuestInfoChanged);
             Qim.FilterChange.AddListener(FilterChanged);
+            
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
             StartUpdateViewAlreadyDone = true;
             
             // After registering we need to update our views now:
             ListChanged();
+            FilterChanged();
         }
 
         public virtual void OnQuestInfoChanged(QuestInfoChangedEvent e)

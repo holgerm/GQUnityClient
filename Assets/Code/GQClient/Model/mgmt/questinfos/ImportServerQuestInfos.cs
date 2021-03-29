@@ -73,7 +73,6 @@ namespace GQClient.Model
                 }
             }
             
-            Debug.Log("### 6");
             qim.DataChange.Invoke(
                 new QuestInfoChangedEvent(
                     "QuestInfoManager updated",

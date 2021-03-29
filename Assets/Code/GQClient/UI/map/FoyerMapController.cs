@@ -47,7 +47,6 @@ namespace Code.GQClient.UI.map
 					);
 					break;
 				}
-				Debug.Log("TODO IMPLEMENTATION MISSING");
 				// m.UpdateMarker();
 				m.Show ();
 				break;

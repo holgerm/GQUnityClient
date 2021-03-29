@@ -332,8 +332,6 @@ namespace GQClient.Model
         /// </summary>
         public void InitFilters()
         {
-            Debug.Log("### 2");
-
             FilterChange.DisableNotification();
             
             // init filters
