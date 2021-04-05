@@ -20,6 +20,23 @@ namespace Code.GQClient.UI.layout
             // Layout();
         }
 
+        // public void Update()
+        // {
+        //     Debug.Log($"TextElementCtrl: {FullGOName()} Text font size: {TextElement.fontSize} in frame # {Time.frameCount}");
+        // }
+        //
+        // private string FullGOName()
+        // {
+        //     GameObject go = gameObject;
+        //     string goName = go.name;
+        //     while (go.transform.parent != null) {
+        //
+        //         go = go.transform.parent.gameObject;
+        //         goName = go.name + "/" + goName;
+        //     }
+        //     return goName;
+        // }
+
         public void Start()
         {
             Layout();

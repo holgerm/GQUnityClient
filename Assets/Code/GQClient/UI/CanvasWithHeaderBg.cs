@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+using Code.GQClient.Conf;
+using Code.GQClient.UI.layout;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CanvasWIthHeaderBG : MonoBehaviour
+[RequireComponent(typeof(Image))]
+public class CanvasWithHeaderBg : LayoutConfig
 {
-    // Start is called before the first frame update
-    void Start()
+    private Image _image;
+    public void Awake()
     {
-        
+        _image = GetComponent<Image>();
+    }
+    // Start is called before the first frame update
+    public override void layout()
+    {
+        if (_image) _image.color = Config.Current.headerBgColor;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+ }

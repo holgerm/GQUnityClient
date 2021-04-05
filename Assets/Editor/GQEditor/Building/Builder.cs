@@ -239,10 +239,8 @@ namespace GQ.Editor.Building
         [PostProcessBuild(1)]
         public static void AmendUsageRightsInfosToPList_IOS_Only(BuildTarget target, string pathToBuiltProject)
         {
-            Debug.Log("Build done. Target was " + target.ToString() + "; build path is: " + pathToBuiltProject);
             if (target != BuildTarget.iOS)
             {
-                Debug.Log("Non iOS Build.");
                 // we only do this for iOS builds:
                 return;
             }

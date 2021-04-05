@@ -7,13 +7,19 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.layout
 {
-
     /// <summary>
     /// Makes the layout for all screens, i.e. all pages plus all foyer views and all additional full screen views (imprint, author login etc.).
     /// </summary>
     public class ScreenLayout : LayoutConfig
     {
-        public PageController pageCtrl; // TODO move into own subclass PageController and inherit all page controllers from that class.
+        public PageController
+            pageCtrl; // TODO move into own subclass PageController and inherit all page controllers from that class.
+
+        public Image canvasBGImage;
+        public RectTransform screenRT;
+        public bool safeArea = true;
+        public bool simulateSafeArea;
+        const float SIMULATED_NOTCH_HEIGHT = 96.0f;
         public GameObject TopMargin;
         public GameObject ContentArea;
         public GameObject Divider;
@@ -25,6 +31,7 @@ namespace Code.GQClient.UI.layout
             if (Config.Current == null)
                 return;
 
+            setScreenHeight4SafeArea();
             setMainBackground();
 
             setContent();
@@ -33,6 +40,36 @@ namespace Code.GQClient.UI.layout
             setBottomMargin();
             setFooter();
         }
+
+        private void setScreenHeight4SafeArea()
+        {
+            if (!screenRT)
+                return;
+
+            Vector2 anchorMin = Screen.safeArea.position;
+            Vector2 anchorMax = Screen.safeArea.position + Screen.safeArea.size;
+
+            if (simulateSafeArea)
+            {
+                anchorMin = new Vector2(0.0f, 0.0f);
+                anchorMax = new Vector2(828.0f, Screen.height - SIMULATED_NOTCH_HEIGHT);
+            }
+
+            anchorMin.x /= Screen.width;
+            anchorMin.y /= Screen.height;
+            anchorMax.x /= Screen.width;
+            anchorMax.y /= Screen.height;
+
+            screenRT.anchorMin = anchorMin;
+            screenRT.anchorMax = anchorMax;
+
+            if (canvasBGImage)
+            {
+                canvasBGImage.color = Config.Current.headerBgColor;
+            }            
+            
+        }
+
 
         protected virtual void setMainBackground()
         {
@@ -61,16 +98,24 @@ namespace Code.GQClient.UI.layout
                 return;
             }
 
+            float height;
             if (Footer == null || !Footer.gameObject.activeSelf)
             {
-                float extendedHeight = Units2Pixels(ContentHeightUnits + FooterHeightUnits);
-                SetLayoutElementHeight(layElem, extendedHeight);
+                height = Units2Pixels(ContentHeightUnits + FooterHeightUnits);
             }
             else
             {
-                float height = Units2Pixels(ContentHeightUnits);
-                SetLayoutElementHeight(layElem, height);
+                height = Units2Pixels(ContentHeightUnits);
             }
+
+            if (safeArea)
+            {
+                height -= simulateSafeArea
+                    ? Units2Pixels(SIMULATED_NOTCH_HEIGHT)
+                    : Units2Pixels(Screen.height - (Screen.safeArea.position + Screen.safeArea.size).y);
+            }
+
+            SetLayoutElementHeight(layElem, height);
         }
 
         protected virtual void setTopMargin()
@@ -165,12 +210,14 @@ namespace Code.GQClient.UI.layout
             Menu
         }
 
-        protected static void SetEntryLayout(float heightUnits, GameObject menuEntry, ListEntryKind listEntryKind, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        protected static void SetEntryLayout(float heightUnits, GameObject menuEntry, ListEntryKind listEntryKind,
+            string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
         {
-            Color fgCol = (Color)((fgColor == null) ? Config.Current.mainFgColor : fgColor);
+            Color fgCol = (Color) ((fgColor == null) ? Config.Current.mainFgColor : fgColor);
 
             // set layout height:
-            Transform transf = (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find(gameObjectPath));
+            Transform transf =
+                (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find(gameObjectPath));
             if (transf != null)
             {
                 LayoutElement layElem = transf.GetComponent<LayoutElement>();
@@ -208,21 +255,23 @@ namespace Code.GQClient.UI.layout
             }
             else
             {
-                Log.SignalErrorToDeveloper("In gameobject {0} path {1} did not lead to another gameobject.", menuEntry.gameObject, gameObjectPath);
+                Log.SignalErrorToDeveloper("In gameobject {0} path {1} did not lead to another gameobject.",
+                    menuEntry.gameObject, gameObjectPath);
             }
         }
 
-        protected static void SetMenuEntryLayout(float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        protected static void SetMenuEntryLayout(float heightUnits, GameObject menuEntry, string gameObjectPath = null,
+            float sizeScaleFactor = 1f, Color? fgColor = null)
         {
             SetEntryLayout(heightUnits, menuEntry, ListEntryKind.Menu, gameObjectPath, sizeScaleFactor, fgColor);
         }
 
-        protected static void SetQuestInfoEntryLayout(float heightUnits, GameObject menuEntry, string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
+        protected static void SetQuestInfoEntryLayout(float heightUnits, GameObject menuEntry,
+            string gameObjectPath = null, float sizeScaleFactor = 1f, Color? fgColor = null)
         {
             SetEntryLayout(heightUnits, menuEntry, ListEntryKind.QuestInfo, gameObjectPath, sizeScaleFactor, fgColor);
         }
 
         #endregion
     }
-
 }

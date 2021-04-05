@@ -677,6 +677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 28613082}
   - component: {fileID: 28613085}
+  - component: {fileID: 28613088}
   - component: {fileID: 28613084}
   - component: {fileID: 28613083}
   - component: {fileID: 28613086}
@@ -807,6 +808,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 990637104}
   Divider: {fileID: 0}
@@ -814,6 +818,19 @@ MonoBehaviour:
   Footer: {fileID: 309781105}
   questInfoList: {fileID: 523054183}
   listBackgroundImage: {fileID: 1460940679}
+--- !u!114 &28613088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28613081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3acab47a572e46258f15ab361952182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulate: 0
 --- !u!1 &35331504
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,9 +884,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1265,6 +1282,8 @@ GameObject:
   - component: {fileID: 83702169}
   - component: {fileID: 83702168}
   - component: {fileID: 83702166}
+  - component: {fileID: 83702173}
+  - component: {fileID: 83702172}
   m_Layer: 5
   m_Name: MapCanvas
   m_TagString: Untagged
@@ -1375,6 +1394,44 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &83702172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83702165}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &83702173
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83702165}
+  m_CullTransparentMesh: 1
 --- !u!1 &85044324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,9 +1486,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -1742,6 +1799,7 @@ GameObject:
   - component: {fileID: 95263546}
   - component: {fileID: 95263550}
   - component: {fileID: 95263549}
+  - component: {fileID: 95263551}
   m_Layer: 5
   m_Name: MapScreen
   m_TagString: Untagged
@@ -1867,12 +1925,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 465658545}
   Divider: {fileID: 0}
   BottomMargin: {fileID: 0}
   Footer: {fileID: 0}
   MapButtonPanel: {fileID: 1068315289}
+--- !u!114 &95263551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95263544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3acab47a572e46258f15ab361952182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulate: 0
 --- !u!1 &105674723
 GameObject:
   m_ObjectHideFlags: 0
@@ -3657,9 +3731,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 182.02248
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 182.02248
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -3897,7 +3971,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 181.33333, y: 181.33333}
+  m_CellSize: {x: 300, y: 300}
   m_Spacing: {x: 50, y: 50}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -4289,9 +4363,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -5468,9 +5542,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7273,9 +7347,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -7488,6 +7562,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 848552101}
   Divider: {fileID: 0}
@@ -7988,6 +8065,7 @@ GameObject:
   - component: {fileID: 733955230}
   - component: {fileID: 733955234}
   - component: {fileID: 733955233}
+  - component: {fileID: 733955235}
   m_Layer: 5
   m_Name: MenuScreen
   m_TagString: Untagged
@@ -8113,6 +8191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 1337534262}
   Divider: {fileID: 0}
@@ -8120,6 +8201,19 @@ MonoBehaviour:
   Footer: {fileID: 0}
   MenuBackgroundImage: {fileID: 688381785}
   WidthScale: 1
+--- !u!114 &733955235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733955228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3acab47a572e46258f15ab361952182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulate: 0
 --- !u!1 &749231821
 GameObject:
   m_ObjectHideFlags: 0
@@ -8177,9 +8271,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -9342,9 +9436,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -10008,6 +10102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 649794265}
   Divider: {fileID: 0}
@@ -10164,10 +10261,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 157.7528
-  m_MinHeight: 157.7528
-  m_PreferredWidth: 157.7528
-  m_PreferredHeight: 157.7528
+  m_MinWidth: 170.70836
+  m_MinHeight: 170.70836
+  m_PreferredWidth: 170.70836
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -10815,9 +10912,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -11344,9 +11441,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 849.43823
+  m_MinWidth: 919.19885
   m_MinHeight: -1
-  m_PreferredWidth: 849.43823
+  m_PreferredWidth: 919.19885
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -11773,9 +11870,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -12740,6 +12837,7 @@ GameObject:
   - component: {fileID: 1195161519}
   - component: {fileID: 1195161518}
   - component: {fileID: 1195161517}
+  - component: {fileID: 1195161522}
   m_Layer: 5
   m_Name: MenuScreen
   m_TagString: Untagged
@@ -12801,6 +12899,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 1832714414}
   Divider: {fileID: 0}
@@ -12872,6 +12973,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195161515}
   m_CullTransparentMesh: 0
+--- !u!114 &1195161522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195161515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3acab47a572e46258f15ab361952182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simulate: 0
 --- !u!1 &1204484157
 GameObject:
   m_ObjectHideFlags: 0
@@ -13354,10 +13468,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 157.7528
-  m_MinHeight: 157.7528
-  m_PreferredWidth: 157.7528
-  m_PreferredHeight: 157.7528
+  m_MinWidth: 170.70836
+  m_MinHeight: 170.70836
+  m_PreferredWidth: 170.70836
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -13761,9 +13875,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -14060,9 +14174,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -14250,9 +14364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -14548,9 +14662,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -14857,9 +14971,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -15534,9 +15648,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 722.02246
+  m_MinWidth: 781.31903
   m_MinHeight: -1
-  m_PreferredWidth: 722.02246
+  m_PreferredWidth: 781.31903
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1000
@@ -15722,9 +15836,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -16030,6 +16144,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 2092715024}
   Divider: {fileID: 0}
@@ -18132,6 +18249,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 85044324}
   Divider: {fileID: 0}
@@ -18683,6 +18803,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCtrl: {fileID: 0}
+  screenRT: {fileID: 0}
+  safeArea: 1
+  simulateSafeArea: 0
   TopMargin: {fileID: 0}
   ContentArea: {fileID: 1080540304}
   Divider: {fileID: 0}
@@ -19389,9 +19512,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -19868,10 +19991,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 157.7528
-  m_MinHeight: 157.7528
-  m_PreferredWidth: 157.7528
-  m_PreferredHeight: 157.7528
+  m_MinWidth: 170.70836
+  m_MinHeight: 170.70836
+  m_PreferredWidth: 170.70836
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -20761,9 +20884,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 157.7528
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 157.7528
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -21181,9 +21304,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 182.02248
+  m_MinHeight: 170.70836
   m_PreferredWidth: -1
-  m_PreferredHeight: 182.02248
+  m_PreferredHeight: 170.70836
   m_FlexibleWidth: -1
   m_FlexibleHeight: 223.66525
   m_LayoutPriority: 1
@@ -21753,6 +21876,9 @@ GameObject:
   - component: {fileID: 2057175147}
   - component: {fileID: 2057175146}
   - component: {fileID: 2057175145}
+  - component: {fileID: 2057175151}
+  - component: {fileID: 2057175150}
+  - component: {fileID: 2057175149}
   m_Layer: 5
   m_Name: ListCanvas
   m_TagString: RootCanvas
@@ -21841,6 +21967,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2057175149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057175144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f365898848f452c9c96df13df8ad90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2057175150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057175144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2057175151
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057175144}
+  m_CullTransparentMesh: 1
 --- !u!1 &2057875727
 GameObject:
   m_ObjectHideFlags: 0
@@ -22634,9 +22810,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 2002.2472
+  m_MinHeight: 2166.683
   m_PreferredWidth: -1
-  m_PreferredHeight: 2002.2472
+  m_PreferredHeight: 2166.683
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
