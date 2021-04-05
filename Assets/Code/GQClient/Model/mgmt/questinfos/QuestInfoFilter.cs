@@ -12,30 +12,30 @@ namespace GQClient.Model
     {
         public delegate void OnFilterChanged();
 
-        public event OnFilterChanged FilterChange;
+//        public event OnFilterChanged FilterChange;
 
-        protected void RaiseFilterChangeEvent()
-        {
-            if (NotificationPaused)
-                return;
+        // protected void RaiseFilterChangeEvent()
+        // {
+        //     if (NotificationPaused)
+        //         return;
+        //
+        //     FilterChange?.Invoke();
+        //
+        //     if (ParentFilter != null)
+        //         ParentFilter.RaiseFilterChangeEvent();
+        // }
 
-            FilterChange?.Invoke();
-
-            if (ParentFilter != null)
-                ParentFilter.RaiseFilterChangeEvent();
-        }
-
-        bool _notificationPaused = false;
-
-        public bool NotificationPaused
-        {
-            get { return _notificationPaused; }
-            set
-            {
-                _notificationPaused = value;
-                RaiseFilterChangeEvent();
-            }
-        }
+        // bool _notificationPaused = false;
+        //
+        // public bool NotificationPaused
+        // {
+        //     get { return _notificationPaused; }
+        //     set
+        //     {
+        //         _notificationPaused = value;
+        //         RaiseFilterChangeEvent();
+        //     }
+        // }
 
         protected QuestInfoFilter ParentFilter { get; set; }
 
@@ -77,7 +77,8 @@ namespace GQClient.Model
                 set
                 {
                     _isActive = value;
-                    RaiseFilterChangeEvent();
+                    //RaiseFilterChangeEvent();
+                    QuestInfoManager.Instance.FilterChange.Invoke();
                 }
             }
         }
@@ -159,7 +160,8 @@ namespace GQClient.Model
                 set
                 {
                     _isActive = value;
-                    RaiseFilterChangeEvent();
+                    //RaiseFilterChangeEvent();
+                    QuestInfoManager.Instance.FilterChange.Invoke();
                 }
             }
 
@@ -204,7 +206,7 @@ namespace GQClient.Model
 
             public CategoryFilter(CategorySet catSet)
             {
-                NotificationPaused = true;
+                //NotificationPaused = true;
 
                 staticFullCatIdList = new Dictionary<string, List<string>>();
                 catIds["standard"] = new List<string>();
@@ -233,7 +235,7 @@ namespace GQClient.Model
                     AddCategory(c);
                 }
 
-                NotificationPaused = false;
+                //NotificationPaused = false;
                 Name = catSet.name;
             }
 
@@ -244,11 +246,13 @@ namespace GQClient.Model
             /// <param name="categories">Further categories to be accepted. In fact you can simply specify any number of acceptable categories in one row.</param>
             public CategoryFilter(Category firstCategory, params Category[] categories)
             {
-                NotificationPaused = true;
+                //NotificationPaused = true;
+                QuestInfoManager.Instance.FilterChange.DisableNotification();
                 AddCategory(firstCategory);
                 foreach (Category c in categories)
                     AddCategory(c);
-                NotificationPaused = false;
+                QuestInfoManager.Instance.FilterChange.EnableNotification(false);
+                //NotificationPaused = false;
             }
 
             public void AddCategory(Category category)

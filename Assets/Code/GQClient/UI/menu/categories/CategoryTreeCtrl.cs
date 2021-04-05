@@ -134,12 +134,15 @@ namespace Code.GQClient.UI.menu.categories
             }
 
             // pause filter change events:
-            CategoryFilter.NotificationPaused = true;
+            //CategoryFilter.NotificationPaused = true;
+            QuestInfoManager.Instance.FilterChange.DisableNotification();
 
             recreateUI();
 
             // reactivate filter change events after pause:
-            CategoryFilter.NotificationPaused = false;
+            //CategoryFilter.NotificationPaused = false;
+            QuestInfoManager.Instance.FilterChange.EnableNotification(true);
+
         }
 
         Dictionary<string, CategoryEntry> categoryEntries = new Dictionary<string, CategoryEntry>();

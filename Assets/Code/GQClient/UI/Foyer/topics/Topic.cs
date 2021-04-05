@@ -211,7 +211,8 @@ namespace Code.GQClient.UI.Foyer
             Name = name;
             Parent = parent;
             if (Parent == Cursor)
-                OnCursorChanged?.Invoke();
+                QuestInfoManager.Instance.FilterChange.Invoke();
+                //OnCursorChanged?.Invoke();
         }
 
         /// <summary>
@@ -288,12 +289,13 @@ namespace Code.GQClient.UI.Foyer
                 if (Cursor != value)
                 {
                     _cursor = value;
-                    OnCursorChanged?.Invoke();
+                    QuestInfoManager.Instance.FilterChange.Invoke();
+                    //OnCursorChanged?.Invoke();
                 }
             }
         }
 
-        public static event VoidToVoid OnCursorChanged;
+        //public static event VoidToVoid OnCursorChanged;
 
         public static bool CursorMoveDown(string childName)
         {

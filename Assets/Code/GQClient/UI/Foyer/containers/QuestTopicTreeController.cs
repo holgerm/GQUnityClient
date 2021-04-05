@@ -18,7 +18,7 @@ namespace Code.GQClient.UI.Foyer.containers
         private new void Start()
         {
             base.Start();
-            Topic.OnCursorChanged += SetDirty;
+            QuestInfoManager.Instance.FilterChange.AddListener(SetDirty);
             Topic.CursorHome();
         }
 

@@ -20,7 +20,7 @@ namespace GQClient.Model
 
         private TopicFilter()
         {
-            Topic.OnCursorChanged += RaiseFilterChangeEvent;
+            //Topic.OnCursorChanged += RaiseFilterChangeEvent;
         }
 
         public override bool Accept(QuestInfo qi)

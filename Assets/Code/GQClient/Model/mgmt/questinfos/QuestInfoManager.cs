@@ -80,10 +80,7 @@ namespace GQClient.Model
                 if (_filter != value)
                 {
                     _filter = value;
-                    // we register with later changes of the filter:
-                    _filter.FilterChange += FilterChanged;
-                    // we use the new filter instantly:
-                    FilterChanged();
+                    FilterChange.Invoke();
                 }
             }
         }
@@ -102,11 +99,6 @@ namespace GQClient.Model
         }
 
         public readonly Observable FilterChange = new Observable();
-
-        private void FilterChanged()
-        {
-            FilterChange.Invoke();
-        }
 
         #endregion
 
@@ -332,7 +324,7 @@ namespace GQClient.Model
         /// </summary>
         public void InitFilters()
         {
-            FilterChange.DisableNotification();
+            Instance.FilterChange.DisableNotification();
             
             // init filters
             Filter = new QuestInfoFilter.All();
@@ -355,7 +347,7 @@ namespace GQClient.Model
                 FilterAnd(_categoryFilters[catSet.name]);
             }
             
-            FilterChange.EnableNotification();
+            Instance.FilterChange.EnableNotification(false);
 
             // create UI for Category Filters:
             foreach (var catSet in Config.Current.CategorySets)
