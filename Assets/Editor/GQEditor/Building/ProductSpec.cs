@@ -248,8 +248,6 @@ namespace GQ.Editor.Building
             bool appIconFound = false;
             bool appIconBGFound = false;
             bool appIconFGFound = false;
-            bool splashScreenBGFound = false;
-            bool splashScreenFGFound = false;
             bool topLogoFound = false;
             bool androidManifestFound = false;
 
@@ -285,19 +283,6 @@ namespace GQ.Editor.Building
                 if ("AppIconBG.png".Equals(file.Name) || "AppIconBG.jpg".Equals(file.Name))
                 {
                     appIconBGFound = true;
-                    continue;
-                }
-
-                // SplashScreen:
-                if ("SplashScreenBG.png".Equals(file.Name) || "SplashScreenBG.jpg".Equals(file.Name))
-                {
-                    splashScreenBGFound = true;
-                    continue;
-                }
-
-                if ("SplashScreenFG.png".Equals(file.Name))
-                {
-                    splashScreenFGFound = true;
                     continue;
                 }
 
@@ -345,16 +330,6 @@ namespace GQ.Editor.Building
             if (!appIconFGFound)
             {
                 StoreError("No AppIconFG.png file found.");
-            }
-
-            if (!splashScreenBGFound)
-            {
-                StoreError("No SplashScreenBG.png file found.");
-            }
-
-            if (!splashScreenFGFound)
-            {
-                StoreError("No SplashScreenFG.png file found.");
             }
 
             if (!topLogoFound)
