@@ -269,15 +269,6 @@
             "RTImageChanged": {},
             "path": "update:1607081614:textures/readable/corona.png"
           }
-        },
-        {
-          "id": "wcc.organ",
-          "name": "Orgel - Instrument 2021",
-          "folderName": "Themen",
-          "symbol": {
-            "RTImageChanged": {},
-            "path": "update:1612990002:textures/readable/organ.png"
-          }
         }
       ]
     }
