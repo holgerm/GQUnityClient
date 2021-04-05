@@ -2,7 +2,7 @@
   "preserveAspectOfSplashFG": true,
   "id": "museumsdorf",
   "idExtension": "",
-  "name": "Museumsdorf App CLP",
+  "name": "Museumsdorf Cloppenburg",
   "portal": 461,
   "assetAddOns": [
     "UniWebView"
@@ -214,7 +214,7 @@
   "headerHeightUnits": 65.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
-  "contentHeightUnits": 750.0,
+  "contentHeightUnits": 760.0,
   "contentTopMarginUnits": 20.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
@@ -228,7 +228,7 @@
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
   "autoScrollNewText": true,
-  "footerHeightUnits": 75.0,
+  "footerHeightUnits": 65.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
   "footerBgColor": {
