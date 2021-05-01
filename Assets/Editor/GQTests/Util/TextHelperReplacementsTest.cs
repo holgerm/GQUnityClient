@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace GQTests.Util
 {
-	public class TextReplacementTest
+	public class TextHelperReplacementsTest
 	{
 
 		[Test]
@@ -19,7 +19,7 @@ namespace GQTests.Util
 			string original = "This<br>text<br>has<br>five<br>lines.";
 
 			// Act:
-			string transformed = TextHelper.MakeReplacements (original);
+			string transformed = original.MakeReplacements ();
 
 			// Assert:
 			Assert.AreEqual ("This\ntext\nhas\nfive\nlines.", transformed);

@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Code.GQClient.Conf;
@@ -12,12 +14,19 @@ namespace Code.GQClient.Util
 {
     public static class TextHelper
     {
-        public const string regexPattern4Varnames = @"@[a-zA-Z.]+[a-zA-Z.0-9\-_]*@";
+        private const string REGEXP_VARNAMES = @"@[a-zA-Z.]+[a-zA-Z.0-9\-_]*@";
 
-        public const string regexPattern4HTMLAnchors =
+        private const string REGEXP_LINKS_HTML =
             @"<a +(?:(?:[a-zA-Z]+) *= *(?:""[^""]*?""|'[^']*?'))*.*?>(?'content'.*?)<\/a>";
 
-        public const string regexPattern4HTMLAttributes = @"(?'name'[a-zA-Z]+) *= *(?'val'""[^""]*?""|'[^']*?')";
+        private const string REGEXP_HTML_LINK_ATTRIBUTES =
+            @"(?'name'[a-zA-Z]+) *= *(?'val'""[^""]*?""|'[^']*?')";
+
+        private const string REGEXP_LINKS_MARKDOWN =
+            @"\[(?'content'([^\]]+))\]\((?'link'[^)]+)\)";
+
+        private const string REGEXP_LINKS_DIRECT =
+            @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
 
 
         public static string MakeReplacements(this string rawText)
@@ -28,7 +37,7 @@ namespace Code.GQClient.Util
             }
 
             var replaceVarNamesMethod = new MatchEvaluator(replaceVariableNames);
-            var result = Regex.Replace(rawText, regexPattern4Varnames, replaceVarNamesMethod);
+            var result = Regex.Replace(rawText, REGEXP_VARNAMES, replaceVarNamesMethod);
 
             result = result.Replace("<br>", "\n");
             return result;
@@ -42,17 +51,6 @@ namespace Code.GQClient.Util
             Debug.LogFormat("Replaced var {0} against value {1}", varName, value);
 #endif
             return value;
-        }
-
-        public static string FirstLetterToUpper(string str)
-        {
-            if (str == null)
-                return null;
-
-            if (str.Length > 1)
-                return char.ToUpper(str[0]) + str.Substring(1);
-
-            return str.ToUpper();
         }
 
         private static string HTMLDecode(string rawText)
@@ -78,21 +76,52 @@ namespace Code.GQClient.Util
             var result = HTMLDecode(rawText);
             result = MakeReplacements(result);
             if (supportHtmlLinks)
-                result = EnhanceHTMLAnchors4TMPText(result);
+                result = TransformLinks4TMP(result);
 
             return result;
         }
 
-        private static string EnhanceHTMLAnchors4TMPText(string htmlText)
+        /// <summary>
+        /// Transforms raw html text into a TMP-formatted version
+        /// </summary>
+        /// <param name="htmlText"></param>
+        /// <returns></returns>
+        public static string TransformLinks4TMP(this string htmlText)
         {
-            var replacements = new Dictionary<string, string>();
-            var matchedAnchors = Regex.Matches(htmlText, regexPattern4HTMLAnchors);
-            foreach (Match matchedAnchor in matchedAnchors)
+            string inputText = htmlText;
+            MatchCollection htmlLinkMatches = Regex.Matches(htmlText, REGEXP_LINKS_HTML);
+            MatchCollection markdownLinkMatches = Regex.Matches(htmlText, REGEXP_LINKS_MARKDOWN);
+            MatchCollection directLinkMatches = Regex.Matches(htmlText, REGEXP_LINKS_DIRECT);
+
+            var replacements = new SortedDictionary<Match, string>(new MatchReplacementComparer());
+            collectHtmlLinkReplacements(htmlLinkMatches, replacements);
+            collectMarkdownLinkReplacements(markdownLinkMatches, replacements);
+            collectDirectLinkReplacements(directLinkMatches, replacements);
+
+            // execute all link replacements:
+            var enumerator = replacements.GetEnumerator();
+            int replacementLengthCorrection = 0;
+            while (enumerator.MoveNext())
             {
-                if (!matchedAnchor.Success || replacements.ContainsKey(matchedAnchor.Value))
+                int index = enumerator.Current.Key.Index + replacementLengthCorrection;
+                htmlText = htmlText.Remove(index, enumerator.Current.Key.Length);
+                htmlText = htmlText.Insert(index, enumerator.Current.Value);
+                replacementLengthCorrection += (enumerator.Current.Value.Length - enumerator.Current.Key.Length);
+            }
+
+            return htmlText;
+        }
+
+        private static void collectHtmlLinkReplacements(MatchCollection htmlLinkMatches,
+            IDictionary<Match, string> replacements)
+        {
+            foreach (Match matchedAnchor in htmlLinkMatches)
+            {
+ 
+                if (!matchedAnchor.Success || replacements.ContainsKey(matchedAnchor))
                     continue;
 
-                var matchedAttributes = Regex.Matches(matchedAnchor.Value, regexPattern4HTMLAttributes);
+                var matchedAttributes = Regex.Matches(matchedAnchor.Value, REGEXP_HTML_LINK_ATTRIBUTES);
                 var enhancedAnchor = new StringBuilder("<link=");
                 var hrefFound = false;
                 foreach (Match matchedAttr in matchedAttributes)
@@ -101,7 +130,10 @@ namespace Code.GQClient.Util
                     if (matchedAttr.Groups["name"].ToString().Equals("href"))
                     {
                         hrefFound = true;
-                        enhancedAnchor.Append(matchedAttr.Groups["val"]);
+                        string attribString = matchedAttr.Groups["val"].ToString();
+                        // encode space by %20 within URL arguments, e.g. subject=space%20is%20encoded
+                        attribString = attribString.Replace(" ", "%20");
+                        enhancedAnchor.Append(attribString);
                         enhancedAnchor.Append(
                             $"><color=#{ColorUtility.ToHtmlStringRGBA(Config.Current.textLinkColor)}>");
                     }
@@ -115,20 +147,77 @@ namespace Code.GQClient.Util
 
                 enhancedAnchor.Append(matchedAnchor.Groups["content"]);
                 enhancedAnchor.Append("</color></link>");
-                
+
                 // store the anchor replacement (old, new):
-                replacements.Add(matchedAnchor.Value, enhancedAnchor.ToString());
+                replacements.Add(matchedAnchor, enhancedAnchor.ToString());
             }
-
-            // execute all anchor replacements:
-            var enumerator = replacements.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                htmlText = htmlText.Replace(enumerator.Current.Key, enumerator.Current.Value);
-            }
-
-            return htmlText;
         }
+
+        private static void collectMarkdownLinkReplacements(MatchCollection markdownLinkMatches,
+            IDictionary<Match, string> replacements)
+        {
+            foreach (Match matchedAnchor in markdownLinkMatches)
+            {
+                if (!matchedAnchor.Success || replacements.ContainsKey(matchedAnchor))
+                    continue;
+
+                var enhancedAnchor = new StringBuilder(@"<link=""");
+                string linkText = matchedAnchor.Groups["link"].Value;
+                // encode space by %20 within URL arguments, e.g. subject=space%20is%20encoded
+                linkText = linkText.Replace(" ", "%20");
+                enhancedAnchor.Append(
+                    linkText + @"""");
+                enhancedAnchor.Append(
+                    $"><color=#{ColorUtility.ToHtmlStringRGBA(Config.Current.textLinkColor)}>");
+
+                enhancedAnchor.Append(matchedAnchor.Groups["content"]);
+                enhancedAnchor.Append("</color></link>");
+
+                // store the anchor replacement (old, new):
+                replacements.Add(matchedAnchor, enhancedAnchor.ToString());
+            }
+        }
+
+        private static void collectDirectLinkReplacements(MatchCollection markdownLinkMatches,
+            IDictionary<Match, string> replacements)
+        {
+            foreach (Match matchedAnchor in markdownLinkMatches)
+            {
+                bool ShouldBeReplaced()
+                {
+                    foreach (Match replacement in replacements.Keys)
+                    {
+                        // check whether matchedAnchor overlaps with the current replacement:
+                        if (matchedAnchor.Index < replacement.Index + replacement.Length &&
+                            matchedAnchor.Length + matchedAnchor.Index > replacement.Index)
+                        {
+                            return false;
+                        }
+                    }
+                    // no overlapping found, hence we replace this match:
+                    return true;
+                }
+
+                if (!matchedAnchor.Success || !ShouldBeReplaced())
+                    continue;
+
+                var enhancedAnchor = new StringBuilder(@"<link=""");
+                string linkText = matchedAnchor.Value;
+                // encode space by %20 within URL arguments, e.g. subject=space%20is%20encoded
+                linkText = linkText.Replace(" ", "%20");
+                enhancedAnchor.Append(
+                    linkText + @"""");
+                enhancedAnchor.Append(
+                    $"><color=#{ColorUtility.ToHtmlStringRGBA(Config.Current.textLinkColor)}>");
+
+                enhancedAnchor.Append(linkText);
+                enhancedAnchor.Append("</color></link>");
+
+                // store the anchor replacement (old, new):
+                replacements.Add(matchedAnchor, enhancedAnchor.ToString());
+            }
+        }
+
 
         public static string StripQuotes(this string original)
         {
@@ -144,6 +233,17 @@ namespace Code.GQClient.Util
             }
 
             return result;
+        }
+
+        public static string FirstLetterToUpper(this string str)
+        {
+            if (str == null)
+                return null;
+
+            if (str.Length > 1)
+                return char.ToUpper(str[0]) + str.Substring(1);
+
+            return str.ToUpper();
         }
 
         public static string Capitalize(this string original)
@@ -172,6 +272,14 @@ namespace Code.GQClient.Util
             }
 
             return $"<link=\"{linkString}\"><color=blue>{linkString}</color></link>";
+        }
+    }
+
+    class MatchReplacementComparer : IComparer<Match>
+    {
+        public int Compare(Match x, Match y)
+        {
+            return x.Index - y.Index;
         }
     }
 }

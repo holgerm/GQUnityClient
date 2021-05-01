@@ -36,7 +36,7 @@ namespace Code.GQClient.Model.actions
                 if (GQML.IsReaderAtStart(reader, GQML.ACTION))
                 {
                     string actionName = reader.GetAttribute(GQML.ACTION_TYPE);
-                    actionName = TextHelper.FirstLetterToUpper(actionName);
+                    actionName = actionName.FirstLetterToUpper();
                     if (actionName == null)
                     {
                         Log.SignalErrorToDeveloper("Action without type attribute found.");

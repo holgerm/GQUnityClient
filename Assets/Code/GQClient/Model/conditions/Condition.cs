@@ -75,7 +75,7 @@ namespace Code.GQClient.Model.conditions
 			string ruleTypeFullName = this.GetType ().FullName;
 			int lastDotIndex = ruleTypeFullName.LastIndexOf (".");
 			string modelNamespace = ruleTypeFullName.Substring (0, lastDotIndex);
-			string conditionTypeName = TextHelper.FirstLetterToUpper (reader.LocalName);
+			string conditionTypeName = reader.LocalName.FirstLetterToUpper ();
 			Type conditionType = 
 				Type.GetType (
 					string.Format ("{0}.Condition{1}", modelNamespace, conditionTypeName));
