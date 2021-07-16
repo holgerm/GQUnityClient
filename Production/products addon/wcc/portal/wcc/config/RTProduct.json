@@ -241,6 +241,14 @@
                     "symbol": {
                         "path": "update:1618512544:textures/readable/organ.png"
                     }
+                },
+                {
+                    "folderName": "Themen",
+                    "id": "wcc.ghosts",
+                    "name": "Bonner Gespenster",
+                    "symbol": {
+                        "path": "update:1625922938:textures/readable/ghost.png"
+                    }
                 }
             ],
             "name": "Kategorien"
