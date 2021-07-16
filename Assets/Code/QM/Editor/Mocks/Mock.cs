@@ -87,7 +87,7 @@ namespace QM.Mocks {
 		}
 
 		public static void DeclareGQServerResponseByFile (string serverPath, string mockPath) {
-			DeclareServerResponseByFile(ConfigurationManager.GQ_SERVER_BASE_URL + "/" + serverPath, mockPath);
+			DeclareServerResponseByFile(ConfigurationManager.GetGQServerBaseURL() + "/" + serverPath, mockPath);
 		}
 
 		static int tmpFileCounter;
@@ -147,7 +147,7 @@ namespace QM.Mocks {
 		}
 
 		public static void DeclareGQRequestResponse(string serverPath, string headerName, string headerValue) {
-			DeclareRequestResponse (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + serverPath, headerName, headerValue);
+			DeclareRequestResponse (ConfigurationManager.GetGQServerBaseURL() + "/" + serverPath, headerName, headerValue);
 		}
 		#endregion
 	}

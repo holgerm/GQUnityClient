@@ -58,7 +58,7 @@ namespace QM.Tests
 			Mock.Use = true;
 			Mock.DeclareGQServerResponseByString ("test", "Originalwert");
 
-			Downloader d = new Downloader (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + "test");
+			Downloader d = new Downloader (ConfigurationManager.GetGQServerBaseURL() + "/" + "test");
 			d.Start ();
 			Assert.AreEqual ("Originalwert", Convert.ToString(d.Result));
 
@@ -75,11 +75,11 @@ namespace QM.Tests
 			Mock.DeclareGQServerResponseByString ("target1", "Wert 1");
 			Mock.DeclareGQServerResponseByString ("target2", "Wert 2");
 
-			Downloader d = new Downloader (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + "target1");
+			Downloader d = new Downloader (ConfigurationManager.GetGQServerBaseURL() + "/" + "target1");
 			d.Start ();
 			Assert.AreEqual ("Wert 1", Convert.ToString(d.Result));
 
-			d = new Downloader (ConfigurationManager.GQ_SERVER_BASE_URL + "/" + "target2");
+			d = new Downloader (ConfigurationManager.GetGQServerBaseURL() + "/" + "target2");
 			d.Start ();
 			Assert.AreEqual ("Wert 2", Convert.ToString(d.Result));}
 	}

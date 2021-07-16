@@ -210,7 +210,7 @@ namespace Code.GQClient.UI.Foyer
         {
             Name = name;
             Parent = parent;
-            if (Parent == Cursor)
+            if (Cursor != null && Parent == Cursor)
                 QuestInfoManager.Instance.FilterChange.Invoke();
                 //OnCursorChanged?.Invoke();
         }

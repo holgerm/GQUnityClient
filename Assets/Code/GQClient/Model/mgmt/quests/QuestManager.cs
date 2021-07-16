@@ -88,7 +88,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public static string GetQuestUri(int questId)
         {
-            var uri = $"{ConfigurationManager.GQ_SERVER_BASE_URL}/editor/{questId}/clientxml";
+            var uri = $"{ConfigurationManager.GetGQServerBaseURL()}/editor/{questId}/clientxml";
             return uri;
         }
 

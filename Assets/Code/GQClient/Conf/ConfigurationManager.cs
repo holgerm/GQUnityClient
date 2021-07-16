@@ -2,7 +2,10 @@ using System;
 using System.IO;
 using Code.GQClient.UI.author;
 using Code.GQClient.Util.http;
+using GQ.Editor.UI;
+using UnityEditor;
 using UnityEngine;
+
 
 namespace Code.GQClient.Conf
 {
@@ -34,7 +37,7 @@ namespace Code.GQClient.Conf
         {
             Config.Load();
             RTConfig.LoadFromServer();
-       }
+        }
 
         private static string _version = null;
 
@@ -60,11 +63,37 @@ namespace Code.GQClient.Conf
         private const string BUILD_TIME_FILE_NAME = "buildtime";
         public const string BUILD_TIME_FILE_PATH = Config.RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
 
-        public const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
+        public static string GetGQServerBaseURL()
+        {
+#if !UNITY_EDITOR
+            return GQ_SERVER_BASE_URL;
+#else
+            if (GQDeveloperEditor.Instance.localPortalUsed)
+                return "http://localhost:9000";
+            else 
+                return "https://quest-mill.intertech.de";
+#endif
+        }
+
+        private static string GetPortalID()
+        {
+#if !UNITY_EDITOR
+            return Config.Current.portal.ToString();
+#else
+            if (GQDeveloperEditor.Instance.localPortalUsed)
+            {
+                return GQDeveloperEditor.Instance.LocalPortalId();
+            }
+            else
+            {
+                return Config.Current.portal.ToString();
+            }
+#endif
+        }
 
 
         public static string UrlPublicQuestsJSON =>
-            $"{GQ_SERVER_BASE_URL}/json/{Config.Current.portal}/publicgamesinfo";
+            $"{GetGQServerBaseURL()}/json/{GetPortalID()}/publicgamesinfo";
 
         #endregion
 
