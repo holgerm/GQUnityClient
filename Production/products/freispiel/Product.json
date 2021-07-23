@@ -42,7 +42,8 @@
     "TagScanner",
     "ReadNFC",
     "MetaData",
-    "Menu"
+    "Menu",
+    "ImageWithText"
   ],
   "sceneMappings": [],
   "scenePaths": [
@@ -59,7 +60,8 @@
     "Assets/Scenes/Pages/TagScanner.unity",
     "Assets/Scenes/Pages/TextQuestion.unity",
     "Assets/Scenes/Pages/VideoPlay.unity",
-    "Assets/Scenes/Pages/WebPage.unity"
+    "Assets/Scenes/Pages/WebPage.unity",
+    "Assets/Scenes/Pages/InteractiveSphericalImage.unity"
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
