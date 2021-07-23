@@ -118,6 +118,16 @@ namespace Code.GQClient.Model.gqml
         public const string PAGE_VIDEOPLAY_VIDEOTYPE_NORMAL = "Normal";
         public const string PAGE_VIDEOPLAY_VIDEOTYPE_360 = "360 Grad";
         public const string PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE = "YouTube";
+        
+        // INTERACTIVE SPHERICAL IMAGE PAGE:
+        public const string PAGE_TYPE_INTERACTIVESPHERICALIMAGE = "InteractiveSphericalImage";
+        public const string PAGE_INTERACTIVESPHERICALIMAGE_IMAGE = "image";
+        public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION = "interaction";
+        public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_ALTITUDE = "altitude";
+        public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_AZIMUTH = "azimuth";
+        public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_ICON = "icon";
+
+
 
         // WEBPAGE PAGE:
         public const string PAGE_TYPE_WEBPAGE = "WebPage";

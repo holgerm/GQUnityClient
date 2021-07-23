@@ -8,7 +8,9 @@ using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using GQClient.Model;
 using Code.GQClient.Model.pages;
+using Code.GQClient.Util.http;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Model.mgmt.quests
@@ -304,6 +306,31 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public static string GlobalMediaJsonPath => Files.CombinePath(QuestInfoManager.LocalQuestsPath, "media.json");
 
+        public void LoadImageToTexture(string imagePath, Action<Texture> callbackOnSuccess)
+        {
+            AbstractDownloader loader;
+            if (Instance.MediaStore.ContainsKey(imagePath))
+            {
+                Instance.MediaStore.TryGetValue(imagePath, out var mediaInfo);
+                loader = new LocalFileLoader(mediaInfo?.LocalPath);
+            }
+            else
+            {
+                loader =
+                    new Downloader(
+                        url: imagePath,
+                        timeout: Config.Current.timeoutMS,
+                        maxIdleTime: Config.Current.maxIdleTimeMS
+                    );
+                // TODO store the image locally ...
+            }
+
+            loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
+            {
+                callbackOnSuccess(d.Www.texture);
+            };
+            loader.Start();
+        }
         #endregion
     }
 }

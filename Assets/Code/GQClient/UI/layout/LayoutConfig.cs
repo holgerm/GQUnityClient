@@ -155,11 +155,15 @@ namespace Code.GQClient.UI.layout
 						return go.transform.localScale.y;
 					}
 				}
-				
-				Log.SignalErrorToDeveloper (
-					"No root canvas found in scene {0} hence canvas scale factor is set to 1.0f", 
-					SceneManager.GetActiveScene ().name
-				);
+
+				string sceneName = SceneManager.GetActiveScene().name;
+				if ("Foyer" != sceneName)
+				{
+					Log.SignalErrorToDeveloper(
+						$"No root canvas found in scene {SceneManager.GetActiveScene().name} hence canvas scale factor is set to 1.0f"
+					);
+				}
+
 				return 1f;
 			}
 		}
