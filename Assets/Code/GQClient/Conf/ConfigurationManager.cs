@@ -68,7 +68,7 @@ namespace Code.GQClient.Conf
 #if !UNITY_EDITOR
             return GQ_SERVER_BASE_URL;
 #else
-            if (GQDeveloperEditor.Instance.localPortalUsed)
+            if (GQDeveloperEditor.LocalPortalUsed())
                 return "http://localhost:9000";
             else 
                 return "https://quest-mill.intertech.de";
@@ -80,9 +80,9 @@ namespace Code.GQClient.Conf
 #if !UNITY_EDITOR
             return Config.Current.portal.ToString();
 #else
-            if (GQDeveloperEditor.Instance.localPortalUsed)
+            if (GQDeveloperEditor.LocalPortalUsed())
             {
-                return GQDeveloperEditor.Instance.LocalPortalId();
+                return GQDeveloperEditor.LocalPortalId();
             }
             else
             {

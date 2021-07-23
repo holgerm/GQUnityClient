@@ -21,32 +21,65 @@ namespace GQ.Editor.UI
             else
                 editor = EditorWindow.GetWindow<GQDeveloperEditor>(typeof(GQDeveloperEditor));
             editor.Show();
-            Instance = editor;
         }
 
-        private static GQDeveloperEditor _instance = null;
+        private static bool _localPortalUsed;
 
-        public static GQDeveloperEditor Instance
+        public static bool LocalPortalUsed()
         {
-            get { return _instance; }
-            private set { _instance = value; }
+            if (!readFromPrefs)
+            {
+                ReadFromPrefs();
+            }
+
+            return _localPortalUsed;
         }
 
-        public void OnEnable()
+        private static string _portalIDString;
+        private static bool readFromPrefs = false;
+
+        private static void ReadFromPrefs()
         {
-            Instance = this;
+            if (EditorPrefs.HasKey("localPortalUsed"))
+            {
+                _localPortalUsed = EditorPrefs.GetBool("localPortalUsed");
+                Debug.Log($"Read from editorprefs: localPortalUsed <-- {_localPortalUsed}");
+            }
+            else
+            {
+                _localPortalUsed = false;
+                Debug.Log($"localPortalUsed initialized to {_localPortalUsed}");
+            }
+
+            if (EditorPrefs.HasKey("portalIDString"))
+            {
+                _portalIDString = EditorPrefs.GetString("portalIDString");
+                Debug.Log($"Read from editorprefs: portalIDString <-- {_portalIDString}");
+            }
+            else
+            {
+                _portalIDString = "0";
+                Debug.Log($"portalIDString initialized to {_portalIDString}");
+            }
+
+            readFromPrefs = true;
         }
 
-        public bool localPortalUsed = false;
-        private string portalIDString = "0";
-
-        public string LocalPortalId()
+        public static string LocalPortalId()
         {
-            return portalIDString;
+            if (!readFromPrefs)
+            {
+                ReadFromPrefs();
+            }
+
+            return _portalIDString;
         }
 
         void OnGUI()
         {
+            if (!readFromPrefs)
+                ReadFromPrefs();
+            
             GUILayout.Label("Player Prefs", EditorStyles.boldLabel);
             EditorGUILayout.BeginHorizontal();
             {
@@ -65,11 +98,24 @@ namespace GQ.Editor.UI
             GUILayout.Label("Local Portal", EditorStyles.boldLabel);
             EditorGUILayout.BeginHorizontal();
             {
-                localPortalUsed = GUILayout.Toggle(localPortalUsed, "On");
+                bool localPortalUsedNew = GUILayout.Toggle(_localPortalUsed, "On");
+                if (localPortalUsedNew != _localPortalUsed)
+                {
+                    _localPortalUsed = localPortalUsedNew;
+                    EditorPrefs.SetBool("localPortalUsed", _localPortalUsed);
+                    Debug.Log($"SetBool: localPortalUsed to {_localPortalUsed}");
+                }
 
-                EditorGUI.BeginDisabledGroup(!localPortalUsed);
-                portalIDString = GUILayout.TextField(portalIDString);
-                portalIDString = int.Parse(portalIDString).ToString();
+                EditorGUI.BeginDisabledGroup(!_localPortalUsed);
+                string portalIDStringNew = GUILayout.TextField(_portalIDString);
+                if (portalIDStringNew != _portalIDString)
+                {
+                    _portalIDString = portalIDStringNew;
+                    _portalIDString = _portalIDString == null ? "0" : int.Parse(_portalIDString).ToString();
+                    EditorPrefs.SetString("portalIDString", _portalIDString);
+                    Debug.Log($"SetBool: portalIDString to {_portalIDString}");
+                }
+
                 EditorGUI.EndDisabledGroup();
             }
             EditorGUILayout.EndHorizontal();

@@ -43,8 +43,8 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
             }
             else
             {
-                // A Backgroudn Image is given =>
-                // - we disabe normal bg image:
+                // A Background Image is given =>
+                // - we disable normal bg image:
                 image.enabled = false;
 
                 // - we do use questionBG:
