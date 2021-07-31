@@ -196,7 +196,7 @@ namespace GQClient.Model
 
             var downloader =
                 new Downloader(
-                    url: ConfigurationManager.UrlPublicQuestsJSON,
+                    url: ConfigurationManager.UrlPublicQuestsJson,
                     timeout: Config.Current.timeoutMS,
                     maxIdleTime: Config.Current.maxIdleTimeMS
                 );

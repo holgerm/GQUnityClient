@@ -126,6 +126,7 @@ namespace Code.GQClient.Model.gqml
         public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_ALTITUDE = "altitude";
         public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_AZIMUTH = "azimuth";
         public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_ICON = "icon";
+        public const string PAGE_INTERACTIVESPHERICALIMAGE_INTERACTION_CONTENT = "content";
 
 
 
@@ -169,6 +170,7 @@ namespace Code.GQClient.Model.gqml
         public const string ON_SUCCESS = "onSuccess";
         public const string ON_FAIL = "onFail";
         public const string ON_READ = "onRead";
+        public const string ON_FOCUS = "onFocus";
         public const string ON_END = "onEnd";
         public const string ON_ENTER = "onEnter";
         public const string ON_LEAVE = "onLeave";

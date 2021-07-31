@@ -1,10 +1,9 @@
 using System;
-using System.IO;
-using Code.GQClient.UI.author;
-using Code.GQClient.Util.http;
-using GQ.Editor.UI;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using GQ.Editor.UI;
+
+#endif
 
 
 namespace Code.GQClient.Conf
@@ -59,6 +58,7 @@ namespace Code.GQClient.Conf
 
         #region Paths and general Resources
 
+        private const string GQ_SERVER_BASE_URL = "https://quest-mill.intertech.de";
         public const string CONFIG_FILE = "Product.json";
         private const string BUILD_TIME_FILE_NAME = "buildtime";
         public const string BUILD_TIME_FILE_PATH = Config.RUNTIME_PRODUCT_DIR + "/" + BUILD_TIME_FILE_NAME + ".txt";
@@ -70,8 +70,8 @@ namespace Code.GQClient.Conf
 #else
             if (GQDeveloperEditor.LocalPortalUsed())
                 return "http://localhost:9000";
-            else 
-                return "https://quest-mill.intertech.de";
+            else
+                return GQ_SERVER_BASE_URL;
 #endif
         }
 
@@ -92,7 +92,7 @@ namespace Code.GQClient.Conf
         }
 
 
-        public static string UrlPublicQuestsJSON =>
+        public static string UrlPublicQuestsJson =>
             $"{GetGQServerBaseURL()}/json/{GetPortalID()}/publicgamesinfo";
 
         #endregion

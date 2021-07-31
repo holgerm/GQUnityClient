@@ -45,16 +45,14 @@ namespace Code.GQClient.Err
 				);
 			switch (level) {
 			case Level.Info:
-				UnityEngine.Debug.Log (logtext);
+				Debug.Log (logtext);
 				break;
 			case Level.Warning:
-				UnityEngine.Debug.LogWarning ("WARNING: " + logtext);
+				Debug.LogWarning ("WARNING: " + logtext);
 				break;
 			case Level.Error:
 			case Level.FatalError:
-				UnityEngine.Debug.LogWarning ("ERROR: " + logtext);
-				break;
-			default:
+				Debug.LogWarning ("ERROR: " + logtext);
 				break;
 			}
 		}

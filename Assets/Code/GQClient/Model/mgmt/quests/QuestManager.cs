@@ -306,7 +306,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
         public static string GlobalMediaJsonPath => Files.CombinePath(QuestInfoManager.LocalQuestsPath, "media.json");
 
-        public void LoadImageToTexture(string imagePath, Action<Texture> callbackOnSuccess)
+        public void LoadImageToTexture(string imagePath, Action<Texture2D> callbackOnSuccess)
         {
             AbstractDownloader loader;
             if (Instance.MediaStore.ContainsKey(imagePath))

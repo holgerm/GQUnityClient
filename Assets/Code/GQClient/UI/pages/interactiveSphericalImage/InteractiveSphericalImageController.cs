@@ -1,14 +1,11 @@
 ﻿using Code.GQClient.Conf;
-using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.pages.videoplayer;
-using Code.GQClient.Util;
 using Code.QM.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 namespace Code.GQClient.UI.pages.interactiveSphericalImage
 {
@@ -38,6 +35,8 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
         #region Runtime API
 
         protected PageInteractiveSphericalImage myPage;
+        
+        protected ScreenOrientation orientationBefore;
 
         /// <summary>
         /// Is called during Start() of the base class, which is a MonoBehaviour.
@@ -52,7 +51,6 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             videoControllerPanel.SetActive(false);
             // switch to 360 Cam and show arrow hint:
             cameraMain.enabled = false;
-            Debug.Log($"Going to load 360 image from: {myPage.SphericalImage}");
             QuestManager.Instance.LoadImageToTexture(
                 myPage.SphericalImage,
                 texture =>
@@ -62,7 +60,12 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             canvas.SetActive(false);
             camera360.enabled = true;
             container360.SetActive(true);
+            
+            // switch to Landscape:
+            orientationBefore = Screen.orientation;
+            Screen.orientation = ScreenOrientation.Landscape;
 
+            // controller for user interaction to camera rotation:
             MouseLook mouselook = camera360.GetComponent<MouseLook>();
             TouchLook touchlook = camera360.GetComponent<TouchLook>();
 #if UNITY_EDITOR
@@ -72,6 +75,12 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             if (mouselook) mouselook.enabled = false;
             if (touchlook) touchlook.enabled = true;
 #endif
+
+            // setting interactive sprites into the sphere:
+            foreach (var interaction in myPage.Interactions)
+            {
+                InteractionCtrl.Create(container360, interaction);
+            }
         }
 
         /// <summary>
@@ -228,6 +237,9 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             canvas.SetActive(true);
             camera360.enabled = false;
             cameraMain.enabled = true;
+            
+            // Back to orientation as ist was before we started this page:
+            Screen.orientation = orientationBefore;
         }
 
         #endregion

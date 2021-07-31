@@ -1,5 +1,6 @@
 using System;
 using Code.GQClient.Util;
+using Code.QM.Util;
 using UnityEngine;
 
 namespace Code.QM.Util
@@ -70,10 +71,7 @@ namespace Code.QM.Util
             Large = 2
         }
 
-        public static DeviceOrientation Orientation
-        {
-            get { return Input.deviceOrientation; }
-        }
+        public static DeviceOrientation Orientation => Input.deviceOrientation;
 
         #endregion
 

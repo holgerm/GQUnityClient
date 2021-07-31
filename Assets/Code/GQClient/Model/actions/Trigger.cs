@@ -100,7 +100,8 @@ namespace Code.GQClient.Model.actions
                     GQML.ON_SUCCESS, GQML.ON_FAIL,
                     GQML.ON_END,
                     GQML.ON_ENTER, GQML.ON_LEAVE, GQML.ON_TAP,
-                    GQML.ON_READ
+                    GQML.ON_READ,
+                    GQML.ON_FOCUS
                 });
 
 
