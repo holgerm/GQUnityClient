@@ -67,6 +67,7 @@ namespace Code.GQClient.Model.pages
         #region XML Serialization
 
         protected Trigger OnFocusTrigger = Trigger.Null;
+        protected Trigger OnDeFocusTrigger = Trigger.Null;
         protected Trigger OnTapTrigger = Trigger.Null;
 
         public Interaction(XmlReader reader, Page parentPage)
@@ -100,6 +101,10 @@ namespace Code.GQClient.Model.pages
                             OnFocusTrigger = new Trigger(reader);
                             OnFocusTrigger.Parent = this;
                             break;
+                        case GQML.ON_DEFOCUS:
+                            OnDeFocusTrigger = new Trigger(reader);
+                            OnDeFocusTrigger.Parent = this;
+                            break;
                         case GQML.ON_TAP:
                             OnTapTrigger = new Trigger(reader);
                             OnTapTrigger.Parent = this;
@@ -131,6 +136,22 @@ namespace Code.GQClient.Model.pages
             if (OnTapTrigger != Trigger.Null)
             {
                 OnTapTrigger.Initiate();
+            }
+        }
+
+        public void Focussed()
+        {
+            if (OnFocusTrigger != Trigger.Null)
+            {
+                OnFocusTrigger.Initiate();
+            }
+        }
+
+        public void DeFocussed()
+        {
+            if (OnDeFocusTrigger != Trigger.Null)
+            {
+                OnDeFocusTrigger.Initiate();
             }
         }
 

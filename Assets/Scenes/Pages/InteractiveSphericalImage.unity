@@ -165,6 +165,8 @@ MonoBehaviour:
   audioSource: {fileID: 128488593}
   videoControllerPanelNormal: {fileID: 385412454}
   camera360: {fileID: 1720581778}
+  touchLook360: {fileID: 1720581780}
+  mouseLook360: {fileID: 1720581779}
   container360: {fileID: 1960432035}
   arrow360: {fileID: 1773957676}
   header: {fileID: 1718371824}
@@ -1537,9 +1539,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1066.6666
+  m_MinHeight: 1001.6667
   m_PreferredWidth: -1
-  m_PreferredHeight: 1066.6666
+  m_PreferredHeight: 1001.6667
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3150,6 +3152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1720581776}
   - component: {fileID: 1720581778}
+  - component: {fileID: 1720581781}
   - component: {fileID: 1720581777}
   - component: {fileID: 1720581780}
   - component: {fileID: 1720581779}
@@ -3239,7 +3242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axes: 0
   sensitivityX: 3
-  sensitivityY: 3
+  sensitivityY: 2
   minimumX: -360
   maximumX: 360
   minimumY: -60
@@ -3257,8 +3260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b14f9ff21c38400fb603b6d06a805d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 5
-  sensitivityY: 5
+  sensitivityX: 3
+  sensitivityY: 2
   upperLimit: 310
   lowerLimit: 40
   swiped:
@@ -3274,11 +3277,24 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   invertX: 0
   invertY: 0
   videoPlayController: {fileID: 0}
+--- !u!114 &1720581781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720581775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a86f5940b0eb14dd787673c81fcc1d9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1720581778}
 --- !u!1 &1773957674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3407,9 +3423,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 106.666664
+  m_MinHeight: 100.166664
   m_PreferredWidth: -1
-  m_PreferredHeight: 106.666664
+  m_PreferredHeight: 100.166664
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1

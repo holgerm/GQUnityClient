@@ -325,22 +325,15 @@ namespace Code.GQClient.Model.pages
                 Quest.CurrentPage.CleanUp();
             }
             Quest.CurrentPage = this;
-            //QuestManager.Instance.CurrentPage = this;
             State = GQML.STATE_RUNNING;
 
             Resources.UnloadUnusedAssets();
-#if DEBUG_LOG
-            Debug.Log("Resources.UnloadUnusedAssets() called".Red());
-#endif
 
             // ensure that the adequate scene is loaded:
             Scene scene = SceneManager.GetActiveScene();
 
             if (!scene.name.Equals(PageSceneName))
             {
-#if DEBUG_LOG
-                Debug.Log("PAGE.Start(): ## DIFFERENT Type page: " + Id);
-#endif
                 SceneManager.sceneLoaded += InitOnSceneLoaded;
                 SceneManager.LoadSceneAsync(PageSceneName, LoadSceneMode.Additive);
                 if (scene.name != Base.FOYER_SCENE_NAME)
@@ -350,9 +343,6 @@ namespace Code.GQClient.Model.pages
             }
             else
             {
-#if DEBUG_LOG
-                Debug.Log("PAGE.Start(): ## SAME Type page: " + Id);
-#endif
                 QuestManager.Instance.PageReadyToStart = true; // in case of reuse we do not need to block & wait 
                 Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);
@@ -365,13 +355,6 @@ namespace Code.GQClient.Model.pages
 
             if (EndTrigger == Trigger.Null && leaveQuestIfEmpty)
             {
-#if DEBUG_LOG
-                Debug.Log(
-                string.Format(
-                    "Quest {0} ({1}, page {2} has no actions onEnd defined, hence we end the quest here.",
-                    Quest.Name, Quest.Id,
-                    Id));
-#endif
                 Quest.End();
             }
             else

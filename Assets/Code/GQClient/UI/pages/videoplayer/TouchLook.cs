@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Code.QM.Util;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Code.GQClient.UI.pages.videoplayer
@@ -24,6 +25,12 @@ namespace Code.GQClient.UI.pages.videoplayer
         private bool canSwipeCamera;
 
         public VideoPlayController videoPlayController;
+
+        public void ResetRotation(Quaternion rotQ)
+        {
+            canSwipeCamera = false;
+            transform.rotation = rotQ;
+        }
 
         // Update is called once per frame
         private void Update()
@@ -56,13 +63,14 @@ namespace Code.GQClient.UI.pages.videoplayer
                         rotationZ = invertX ? rotationZ : rotationZ * -1;
                         var rotationX = delta.y * sensitivityY * Time.deltaTime;
                         rotationX = invertY ? rotationX : rotationX * -1;
- 
-                        transform.localEulerAngles += new Vector3(-rotationZ, -rotationX, 0);
+
+                        transform.localEulerAngles += new Vector3(-rotationX, -rotationZ, 0);
+
                         if (Mathf.Abs(rotationZ) > 0.1f)
                         {
                             swiped.Invoke();
                         }
-                        
+
                         if (transform.localEulerAngles.x > 180f && rotationZ > 0f &&
                             transform.localEulerAngles.x < upperLimit)
                         {
@@ -71,7 +79,8 @@ namespace Code.GQClient.UI.pages.videoplayer
                                 transform.localEulerAngles.z);
                         }
 
-                        if (transform.localEulerAngles.x < 180f && rotationZ < 0f && transform.localEulerAngles.x > lowerLimit)
+                        if (transform.localEulerAngles.x < 180f && rotationZ < 0f &&
+                            transform.localEulerAngles.x > lowerLimit)
                         {
                             // lower limit reached:
                             transform.localEulerAngles = new Vector3(lowerLimit, transform.localEulerAngles.y,

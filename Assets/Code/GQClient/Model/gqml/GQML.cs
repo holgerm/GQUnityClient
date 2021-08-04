@@ -171,6 +171,7 @@ namespace Code.GQClient.Model.gqml
         public const string ON_FAIL = "onFail";
         public const string ON_READ = "onRead";
         public const string ON_FOCUS = "onFocus";
+        public const string ON_DEFOCUS = "onDeFocus";
         public const string ON_END = "onEnd";
         public const string ON_ENTER = "onEnter";
         public const string ON_LEAVE = "onLeave";

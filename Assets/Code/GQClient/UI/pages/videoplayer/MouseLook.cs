@@ -2,7 +2,6 @@
 
 namespace Code.GQClient.UI.pages.videoplayer
 {
-    
     // Script by IJM: http://answers.unity3d.com/questions/29741/mouse-look-script.html
     // Changed to fit standard C# conventions
 
@@ -22,8 +21,13 @@ namespace Code.GQClient.UI.pages.videoplayer
     [AddComponentMenu("Camera-Control/Mouse Look")]
     public class MouseLook : MonoBehaviour
     {
+        public enum RotationAxes
+        {
+            MouseXAndY = 0,
+            MouseX = 1,
+            MouseY = 2
+        };
 
-        public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 };
         public RotationAxes axes = RotationAxes.MouseXAndY;
         public float sensitivityX = 15F;
         public float sensitivityY = 15F;
@@ -38,14 +42,24 @@ namespace Code.GQClient.UI.pages.videoplayer
         float rotationY = 0F;
 
         public Quaternion originalRotation;
+        
+        public void ResetRotation(Quaternion rotQ)
+        {
+            Input.ResetInputAxes();
+            transform.rotation = rotQ;
+            rotationX = 0f;
+            rotationY = 0f;
+        }
 
         void Update()
         {
             if (axes == RotationAxes.MouseXAndY)
             {
                 // Read the mouse input axis
-                rotationX += Input.GetAxis("Mouse X") * sensitivityX;
-                rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+                float xAxisValue = Input.GetAxis("Mouse X");
+                float yAxisValue = Input.GetAxis("Mouse Y");
+                rotationX += xAxisValue * sensitivityX;
+                rotationY += yAxisValue * sensitivityY;
 
                 rotationX = ClampAngle(rotationX, minimumX, maximumX);
                 rotationY = ClampAngle(rotationY, minimumY, maximumY);
@@ -82,7 +96,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             originalRotation = transform.localRotation;
         }
 
-        public static float ClampAngle(float angle, float min, float max)
+        private static float ClampAngle(float angle, float min, float max)
         {
             if (angle < -360F)
                 angle += 360F;

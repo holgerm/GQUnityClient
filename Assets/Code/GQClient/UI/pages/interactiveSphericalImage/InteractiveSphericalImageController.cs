@@ -21,6 +21,8 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
         public GameObject videoControllerPanelNormal;
         internal GameObject videoControllerPanel;
         public Camera camera360;
+        public TouchLook touchLook360;
+        public MouseLook mouseLook360;
         public GameObject container360;
         public Image arrow360;
         protected Camera cameraMain;
@@ -35,7 +37,7 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
         #region Runtime API
 
         protected PageInteractiveSphericalImage myPage;
-        
+
         protected ScreenOrientation orientationBefore;
 
         /// <summary>
@@ -60,10 +62,15 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             canvas.SetActive(false);
             camera360.enabled = true;
             container360.SetActive(true);
-            
-            // switch to Landscape:
+
+            // switch to Autorotation:
             orientationBefore = Screen.orientation;
-            Screen.orientation = ScreenOrientation.Landscape;
+            Screen.orientation = ScreenOrientation.AutoRotation;
+
+            // rotate image to make the horizontal middle in north position and starting position:
+            // the image starts otherwise at the 1/4 horizontal position, hence we rotate by 90 degrees
+            touchLook360.ResetRotation(Quaternion.Euler(0f, 90f, 0f));
+            mouseLook360.ResetRotation(Quaternion.Euler(0f, 90f, 0f));
 
             // controller for user interaction to camera rotation:
             MouseLook mouselook = camera360.GetComponent<MouseLook>();
@@ -77,9 +84,18 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
 #endif
 
             // setting interactive sprites into the sphere:
+            // first: remove any existing (e.g. from previous scene of same kind)
+            for (int i = 0; i < container360.transform.childCount; i++)
+            {
+                Transform oldInteractionT = container360.transform.GetChild(i);
+                if (oldInteractionT.GetComponent<InteractionCtrl>())
+                    Destroy(oldInteractionT.gameObject);
+            }
+
+            // second create new gameobjects:
             foreach (var interaction in myPage.Interactions)
             {
-                InteractionCtrl.Create(container360, interaction);
+                InteractionCtrl.Create(container360, interaction, camera360);
             }
         }
 
@@ -221,23 +237,26 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             }
         }
 
-        public void Update()
-        {
-            if (Device.Orientation != orientation)
-            {
-                SizeImageToFitInside(Device.Orientation);
-            }
-        }
+        // public void Update()
+        // {
+        //     if (Device.Orientation != orientation)
+        //     {
+        //         SizeImageToFitInside(Device.Orientation);
+        //     }
+        // }
 
         public override void CleanUp()
         {
             base.CleanUp();
 
             // switch back to main camera:
-            canvas.SetActive(true);
-            camera360.enabled = false;
-            cameraMain.enabled = true;
-            
+            if (canvas)
+                canvas.SetActive(true);
+            if (camera360)
+                camera360.enabled = false;
+            if (cameraMain)
+                cameraMain.enabled = true;
+
             // Back to orientation as ist was before we started this page:
             Screen.orientation = orientationBefore;
         }
