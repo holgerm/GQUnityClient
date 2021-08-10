@@ -218,9 +218,7 @@ namespace Code.GQClient.UI.layout
 
         private void Initialize(string itemText, bool supportHtmlLinks)
         {
-            Debug.Log($"Original: \n{itemText}");
             TextElement.text = itemText.Trim().Decode4TMP(supportHtmlLinks: supportHtmlLinks);
-            Debug.Log($"Transformed: \n{TextElement.text}");
             TextElement.color = Config.Current.mainFgColor;
             TextElement.fontSize = Config.Current.mainFontSize;
         }
