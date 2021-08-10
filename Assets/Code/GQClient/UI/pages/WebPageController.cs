@@ -16,9 +16,6 @@ namespace Code.GQClient.UI.pages
         public RectTransform webContainer;
         #endregion
 
-        internal Button ForwardButton => forwardButton;
-        internal Button BackButton => backButton;
-
 
         #region Runtime API
         /// <summary>

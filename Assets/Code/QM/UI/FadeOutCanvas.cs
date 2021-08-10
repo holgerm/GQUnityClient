@@ -25,6 +25,8 @@ namespace Code.QM.UI
             {
                 yield break;
             }
+            
+            _done = true;
 
             if (canvasGroup == null)
             {
@@ -46,7 +48,6 @@ namespace Code.QM.UI
             }
 
             gameObject.SetActive(false);
-            _done = true;
         }
 
         public void OnDisable()

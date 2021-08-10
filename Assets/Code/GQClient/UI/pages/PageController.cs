@@ -198,6 +198,9 @@ namespace Code.GQClient.UI.pages
             get { return ContentWidthUnits / Config.Current.imageAreaHeightMinUnits; }
         }
 
+        internal Button ForwardButton => forwardButton;
+        internal Button BackButton => backButton;
+
         protected float CalculateMainAreaHeight(float imageAreaHeight)
         {
             float units = LayoutConfig.ContentHeightUnits -

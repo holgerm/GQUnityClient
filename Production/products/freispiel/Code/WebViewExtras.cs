@@ -10,6 +10,7 @@ using Code.QM.Util;
 using Paroxe.PdfRenderer;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Code.GQClient.UI.pages.videoplayer
@@ -18,16 +19,16 @@ namespace Code.GQClient.UI.pages.videoplayer
     {
         public static UniWebView uniWebView;
 
-        public static void Initialize(PageVideoPlay myPage, GameObject containerWebPlayer)
+        public static void Initialize(VideoPlayController vpCtrl)
         {
-            switch (myPage.VideoType)
+            switch (vpCtrl.MyPage.VideoType)
             {
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_YOUTUBE:
                     // USE HTML WEBVIEW FOR VIDEO:                    
-                    uniWebView = containerWebPlayer.GetComponent<UniWebView>();
+                    uniWebView = vpCtrl.containerWebPlayer.GetComponent<UniWebView>();
                     if (uniWebView == null)
                     {
-                        uniWebView = containerWebPlayer.AddComponent<UniWebView>();
+                        uniWebView = vpCtrl.containerWebPlayer.AddComponent<UniWebView>();
                     }
 
                     uniWebView.OnPageErrorReceived += (UniWebView webView, int errorCode, string errorMessage) =>
@@ -40,18 +41,18 @@ namespace Code.GQClient.UI.pages.videoplayer
                     {
                         Debug.Log("YOUTUBE PLAYER: OnShouldClose.");
                         //webView = null;
-                        containerWebPlayer.SetActive(false);
+                        vpCtrl.containerWebPlayer.SetActive(false);
                         return true;
                     };
-
+                    
                     UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
 
-                    containerWebPlayer.SetActive(true);
+                    vpCtrl.containerWebPlayer.SetActive(true);
 
-                    myPage.PageCtrl.FooterButtonPanel =
-                        ((VideoPlayController) myPage.PageCtrl).webPlayerFooterButtonPanel;
-                    Transform backButtonGO = myPage.PageCtrl.FooterButtonPanel.transform.Find("BackButton");
-                    backButtonGO.gameObject.SetActive(myPage.Quest.History.CanGoBackToPreviousPage);
+                    vpCtrl.FooterButtonPanel =
+                        vpCtrl.webPlayerFooterButtonPanel;
+                    Transform backButtonGO = vpCtrl.FooterButtonPanel.transform.Find("BackButton");
+                    backButtonGO.gameObject.SetActive(vpCtrl.MyPage.Quest.History.CanGoBackToPreviousPage);
 
                     float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
                     float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
@@ -60,17 +61,20 @@ namespace Code.GQClient.UI.pages.videoplayer
                             0, headerHeight,
                             Screen.width, Screen.height - (headerHeight + footerHeight)
                         );
+                    Debug.Log($"WATCH UNIWEBVIEW frame: {uniWebView.Frame} screen: h: {Screen.height}, w: {Screen.width}");
 
+                    AllowLeavePage(vpCtrl);
+                    
                     //VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
                     //uniWebView.ReferenceRectTransform = vpCtrl.webPlayerContent;
                     uniWebView.SetShowSpinnerWhileLoading(true);
                     uniWebView.Show(true);
 
-                    string videoHtml = string.Format(YOUTUBE_HTML_FORMAT_STRING, myPage.VideoFile);
+                    string videoHtml = string.Format(YOUTUBE_HTML_FORMAT_STRING, vpCtrl.MyPage.VideoFile);
                     uniWebView.LoadHTMLString(videoHtml, "https://www.youtube.com/");
                     break;
                 default:
-                    Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", myPage.VideoType, myPage.Id);
+                    Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", vpCtrl.MyPage.VideoType, vpCtrl.MyPage.Id);
                     break;
             }
         }
@@ -231,6 +235,20 @@ namespace Code.GQClient.UI.pages.videoplayer
             {
                 pageCtrl.myPage.End(false);
             }
+        }
+
+        private static void AllowLeavePage(VideoPlayController pageCtrl)
+        {
+            Debug.Log($"ALLOW_LEAVE_PAGE ForwardButton: {pageCtrl.ForwardButton != null} text: {pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text}");
+            Debug.Log($"ALLOW_LEAVE_PAGE ForwardButton: Active In Hierarcy {pageCtrl.ForwardButton.gameObject.activeInHierarchy}");
+            pageCtrl.ForwardButton.interactable = true;
+            pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = ">>>";
+            pageCtrl.BackButton.interactable =
+                true; // might be set even if back button is not shown but does not matter
+            pageCtrl.BackButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "<<<";
+            
+            // DEBUG:
+            pageCtrl.ForwardButton.onClick.AddListener(() => Debug.Log("WATCH: CLICKED FORWARD BUTTON"));
         }
 
         private static void CheckHtmlToAllowForwardButton(WebPageController pageCtrl, string html)
