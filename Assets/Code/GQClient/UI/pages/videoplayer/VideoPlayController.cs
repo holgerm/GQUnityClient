@@ -44,6 +44,7 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         #region Runtime API
 
+        public PageVideoPlay MyPage => myPage;
         protected PageVideoPlay myPage;
         protected VideoPlayer videoPlayer;
 
@@ -73,7 +74,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(false);
                     videoPlayer.started += (source) => { videoControllerPanel.SetActive(myPage.Controllable); };
-                    
+
                     CoroutineStarter.Run(PlayVideo());
                     break;
                 case GQML.PAGE_VIDEOPLAY_VIDEOTYPE_360:
@@ -90,20 +91,39 @@ namespace Code.GQClient.UI.pages.videoplayer
                     HideNormalVideo(true);
                     containerWebPlayer.SetActive(false);
                     container360.SetActive(true);
-                    videoPlayer.started += (source) =>
+                    
+                    videoPlayer.prepareCompleted += (source) =>
                     {
                         arrow360.enabled = true;
                         videoControllerPanel.SetActive(myPage.Controllable);
+                        StartCoroutine(HideArrow360Delayed());
                     };
+
+                    // controller for user interaction to camera rotation:
+                    MouseLook mouselook = camera360.GetComponent<MouseLook>();
+                    TouchLook touchlook = camera360.GetComponent<TouchLook>();
+#if UNITY_EDITOR
+                    if (mouselook) mouselook.enabled = true;
+                    if (touchlook) touchlook.enabled = false;
+#else
+            if (mouselook) mouselook.enabled = false;
+            if (touchlook) touchlook.enabled = true;
+#endif
+
                     CoroutineStarter.Run(PlayVideo());
                     break;
                 default:
-                    //containerNormal.SetActive(false);
                     videoImage.enabled = false;
                     container360.SetActive(false);
-                    WebViewExtras.Initialize(myPage, containerWebPlayer);
+                    WebViewExtras.Initialize(this);
                     break;
             }
+        }
+
+        private IEnumerator HideArrow360Delayed()
+        {
+            yield return new WaitForSeconds(5f);
+            arrow360.enabled = false;
         }
 
         /// <summary>
@@ -117,13 +137,14 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         private void HideNormalVideo(bool hide)
         {
+            containerNormal.GetComponent<Image>().enabled = !hide;
             containerNormal.transform.Find("Screen").GetComponent<Image>().enabled = !hide;
             videoImage.GetComponent<RawImage>().enabled = !hide;
             videoPlayerNormal.enabled = !hide;
         }
 
         private IEnumerator PlayVideo()
-        {           
+        {
             videoPlayer.playOnAwake = false;
             audioSource.playOnAwake = false;
             audioSource.Pause();
@@ -169,7 +190,7 @@ namespace Code.GQClient.UI.pages.videoplayer
             // set the rawimage texture:
             //videoImage.rectTransform.localScale = new Vector3(1f, videoPlayer.texture.height / videoPlayer.texture.width, 1f);
             videoImage.texture = videoPlayer.texture;
-            
+
             // If the device is faceUp or down at start, we use portrait:
             if (Device.Orientation == DeviceOrientation.FaceDown || Device.Orientation == DeviceOrientation.FaceUp)
             {
@@ -190,6 +211,21 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             // start Playing:
             videoPlayer.Play();
+        }
+
+        public void PausePlayer()
+        {
+            videoPlayer.Pause();
+            Debug.Log("VIDEOPlayer paused");
+        }
+
+        public void RestartPlayer()
+        {
+            if (videoPlayer.isPaused)
+            {
+                videoPlayer.Play();
+                Debug.Log("VIDEOPlayer restarted");
+            }
         }
 
         private void showPageControls(bool show)
@@ -363,6 +399,12 @@ namespace Code.GQClient.UI.pages.videoplayer
             cameraMain.enabled = true;
 
             HideNormalVideo(false);
+        }
+
+        public void DoOnForward()
+        {
+            Debug.Log("VPCtrl.DoOnForward()");
+            OnForward();
         }
 
         #endregion

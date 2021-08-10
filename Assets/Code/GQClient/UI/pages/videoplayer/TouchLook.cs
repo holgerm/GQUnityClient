@@ -24,6 +24,8 @@ namespace Code.GQClient.UI.pages.videoplayer
         private bool canBecomeSingleTouch;
         private bool canSwipeCamera;
 
+        public bool UseWithAutorotation = true;
+
         public VideoPlayController videoPlayController;
 
         public void ResetRotation(Quaternion rotQ)
@@ -64,7 +66,10 @@ namespace Code.GQClient.UI.pages.videoplayer
                         var rotationX = delta.y * sensitivityY * Time.deltaTime;
                         rotationX = invertY ? rotationX : rotationX * -1;
 
-                        transform.localEulerAngles += new Vector3(-rotationX, -rotationZ, 0);
+                        if (UseWithAutorotation)
+                            transform.localEulerAngles += new Vector3(-rotationX, -rotationZ, 0);
+                        else
+                            transform.localEulerAngles += new Vector3(-rotationZ, -rotationX, 0);
 
                         if (Mathf.Abs(rotationZ) > 0.1f)
                         {
