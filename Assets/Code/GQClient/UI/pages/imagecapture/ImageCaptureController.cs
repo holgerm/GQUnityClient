@@ -252,7 +252,7 @@ namespace Code.GQClient.UI.pages.imagecapture
  
             // TODO save to mediainfos.json again
             
-            NativeGallery.Permission permission = NativeGallery.RequestPermission(NativeGallery.PermissionType.Write);
+            NativeGallery.Permission permission = NativeGallery.RequestPermission(false);
             if (permission == NativeGallery.Permission.Denied)
             {
                 if (NativeGallery.CanOpenSettings())
