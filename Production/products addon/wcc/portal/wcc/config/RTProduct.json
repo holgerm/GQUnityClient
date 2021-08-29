@@ -249,6 +249,14 @@
                     "symbol": {
                         "path": "update:1625922938:textures/readable/ghost.png"
                     }
+                },
+                {
+                    "folderName": "Themen",
+                    "id": "wcc.beethovenschaufenster",
+                    "name": "Beethoven Schaufenster",
+                    "symbol": {
+                        "path": "update:1630161516:textures/readable/beethovenstorewindow.png"
+                    }
                 }
             ],
             "name": "Kategorien"
