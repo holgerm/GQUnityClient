@@ -43,7 +43,9 @@ namespace Code.QM.UI
 
             ToggleImage.sprite = stateIsOn ? OnSprite : OffSprite;
             if (!controlFromOutside)
+            {
                 ToggleButton.onClick.AddListener(Toggle);
+            }
         }
 
         public void Toggle()

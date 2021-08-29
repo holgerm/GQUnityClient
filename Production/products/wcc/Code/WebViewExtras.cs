@@ -7,12 +7,12 @@ namespace Code.GQClient.UI.pages.videoplayer
 {
     public static class WebViewExtras
     {
-        public static void Initialize(PageVideoPlay myPage, GameObject containerWebPlayer)
+        public static void Initialize(VideoPlayController vpCtrl)
         {
-            switch (myPage.VideoType)
+            switch (vpCtrl.MyPage.VideoType)
             {
                 default:
-                    Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", myPage.VideoType, myPage.Id);
+                    Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", vpCtrl.MyPage.VideoType, vpCtrl.MyPage.Id);
                     break;
             }
         }

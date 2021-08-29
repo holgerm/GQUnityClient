@@ -44,7 +44,6 @@ namespace Code.GQClient.Util
                     var obj = Resources.Load("ImportedPackage/prefabs/PartnersCanvas");
                     if (obj == null)
                         return null;
-
                     _partnersCanvas = (GameObject) Instantiate(obj, canvasRootT);
                 }
 
