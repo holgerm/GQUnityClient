@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR || UNITY_IOS
+﻿#if !UNITY_EDITOR && UNITY_IOS
 using UnityEngine;
 
 namespace NativeGalleryNamespace
@@ -16,27 +16,30 @@ namespace NativeGalleryNamespace
 				DontDestroyOnLoad( instance.gameObject );
 			}
 			else if( instance.callback != null )
-				instance.callback( false, null );
+				instance.callback( null );
 
 			instance.callback = callback;
 		}
-
+		
 		public void OnMediaSaveCompleted( string message )
 		{
-			NativeGallery.MediaSaveCallback _callback = callback;
-			callback = null;
-
-			if( _callback != null )
-				_callback( true, null );
+			if( callback != null )
+			{
+				callback( null );
+				callback = null;
+			}
 		}
 
 		public void OnMediaSaveFailed( string error )
 		{
-			NativeGallery.MediaSaveCallback _callback = callback;
-			callback = null;
+			if( string.IsNullOrEmpty( error ) )
+				error = "Unknown error";
 
-			if( _callback != null )
-				_callback( false, null );
+			if( callback != null )
+			{
+				callback( error );
+				callback = null;
+			}
 		}
 	}
 }
