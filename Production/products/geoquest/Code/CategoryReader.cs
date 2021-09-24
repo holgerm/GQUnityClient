@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Util;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -32,9 +33,9 @@ namespace GQClient.Model
                         break;
                 }
             }
-            if (categories.Count == 0 && ConfigurationManager.Current.defaultCategory != null)
+            if (categories.Count == 0 && Config.Current.rt.defaultCategory != null)
             {
-                categories.Add(ConfigurationManager.Current.defaultCategory);
+                categories.Add(Config.Current.rt.defaultCategory);
             }
             return categories;
         }

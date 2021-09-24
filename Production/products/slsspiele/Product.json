@@ -1,0 +1,263 @@
+{
+  "id": "slsspiele",
+  "idExtension": "",
+  "name": "SLS Spiele",
+  "portal": 421,
+  "assetAddOns": [
+    "UniWebView"
+  ],
+  "androidMinSDKVersion": "AndroidApiLevel21",
+  "autoStartQuestID": 0,
+  "autostartIsPredeployed": false,
+  "keepAutoStarting": true,
+  "downloadStrategy": "UPFRONT",
+  "timeoutMS": 60000,
+  "maxIdleTimeMS": 9000,
+  "maxParallelDownloads": 15,
+  "nameForQuestSg": "Spiel",
+  "nameForQuestsPl": "Spiele",
+  "questInfoViews": [
+    "List"
+  ],
+  "cloudQuestsVisible": true,
+  "showCloudQuestsImmediately": false,
+  "downloadAllCloudQuestOnStart": true,
+  "localQuestsDeletable": true,
+  "showHiddenQuests": false,
+  "showOnlyLocalQuests": false,
+  "acceptedPageTypes": [
+    "MetaData"
+  ],
+  "sceneMappings": [
+    {
+      "pageTypeName": "MetaData",
+      "scenePath": "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity"
+    }
+  ],
+  "scenePaths": [
+    "Assets/Scenes/Foyer.unity",
+    "Assets/ConfigAssets/Resources/ImportedPackage/Scenes/SLS_Spielbeschreibung.unity"
+  ],
+  "sceneExtensions": [],
+  "stopAudioWhenLeavingPage": true,
+  "autoSynchQuestInfos": true,
+  "autoUpdateSubquests": false,
+  "offerManualUpdate4QuestInfos": false,
+  "mapProvider": "OpenStreetMap",
+  "mapBaseUrl": "https://a.tile.openstreetmap.org",
+  "mapKey": "",
+  "mapID": "",
+  "mapTileImageExtension": ".png",
+  "useMapOffline": false,
+  "mapMinimalZoom": 7.0,
+  "mapDeltaZoom": 0.5,
+  "mapStartPositionType": "CenterOfMarkers",
+  "mapStartAtLocation": false,
+  "mapStartAtLongitude": 0.0,
+  "mapStartAtLatitude": 0.0,
+  "hotspotMarker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "marker": {
+    "path": "defaults/readable/defaultMarker"
+  },
+  "markerHeightUnits": 55.0,
+  "markerHeightMinMM": 10.0,
+  "markerHeightMaxMM": 0.0,
+  "markerColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "markerSymbolFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "markerBGAlpha": 168,
+  "mapButtonHeightUnits": 55.0,
+  "mapButtonHeightMinMM": 0.0,
+  "mapButtonHeightMaxMM": 0.0,
+  "disabledAlpha": 0.5,
+  "mainFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "mainBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "mainFontSize": 60,
+  "maxFontSize": 100,
+  "showShadows": false,
+  "topLogo": {
+    "path": "TopLogo"
+  },
+  "headerMiddleButtonPolicy": "TopLogo",
+  "headerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "headerHeightUnits": 75.0,
+  "headerHeightMinMM": 0.0,
+  "headerHeightMaxMM": 0.0,
+  "contentHeightUnits": 750.0,
+  "contentTopMarginUnits": 0.0,
+  "contentDividerUnits": 0.0,
+  "contentBottomMarginUnits": 0.0,
+  "imageAreaHeightMinUnits": 150.0,
+  "imageAreaHeightMaxUnits": 350.0,
+  "fitExceedingImagesIntoArea": false,
+  "footerHeightUnits": 75.0,
+  "footerHeightMinMM": 0.0,
+  "footerHeightMaxMM": 0.0,
+  "footerBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "footerButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "footerButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "borderWidthUnits": 0.0,
+  "overlayButtonSizeUnits": 50.0,
+  "overlayButtonSizeMinMM": 0.0,
+  "overlayButtonSizeMaxMM": 0.0,
+  "overlayButtonBgColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 0
+  },
+  "overlayButtonFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "overlayButtonFgDisabledColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "showEmptyMenuEntries": true,
+  "menuEntryHeightUnits": 45.0,
+  "menuEntryHeightMinMM": 5.0,
+  "menuEntryHeightMaxMM": 0.0,
+  "menuEntryWidthUnits": 380.0,
+  "menuEntryWidthMinMM": 0.0,
+  "menuEntryWidthMaxMM": 0.0,
+  "menuFrameColor": {
+    "r": 127,
+    "g": 127,
+    "b": 127,
+    "a": 255
+  },
+  "menuBGColor": {
+    "r": 238,
+    "g": 238,
+    "b": 238,
+    "a": 255
+  },
+  "menuFGColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "menuInhibitsInteraction": true,
+  "menu2ShownInQuests": true,
+  "offerLeaveQuestOnEachPage": true,
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "defineAuthorBackDoor": true,
+  "acceptedAuthorEmail": "author@email.com",
+  "acceptedAuthorPassword": "secret",
+  "listEntryHeightUnits": 85.0,
+  "listEntryHeightMinMM": 0.0,
+  "listEntryHeightMaxMM": 0.0,
+  "listEntryUseTwoLines": true,
+  "listEntryDividingMode": "AlternatingColors",
+  "listLineColor": {
+    "r": 64,
+    "g": 86,
+    "b": 233,
+    "a": 255
+  },
+  "listStartLineWidth": 5,
+  "dividingLineWidth": 5,
+  "listEndLineWidth": 5,
+  "listEntryFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listEntryBgColor": {
+    "r": 149,
+    "g": 201,
+    "b": 248,
+    "a": 255
+  },
+  "listEntrySecondFgColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0,
+    "a": 255
+  },
+  "listEntrySecondBgColor": {
+    "r": 249,
+    "g": 240,
+    "b": 0,
+    "a": 255
+  },
+  "listBgColor": {
+    "r": 216,
+    "g": 215,
+    "b": 215,
+    "a": 255
+  },
+  "emulationColor": {
+    "r": 250,
+    "g": 105,
+    "b": 105,
+    "a": 255
+  }
+}
