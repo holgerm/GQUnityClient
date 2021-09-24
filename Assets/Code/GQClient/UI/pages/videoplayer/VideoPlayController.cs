@@ -115,6 +115,7 @@ namespace Code.GQClient.UI.pages.videoplayer
                 default:
                     videoImage.enabled = false;
                     container360.SetActive(false);
+                    containerNormal.SetActive(false);
                     WebViewExtras.Initialize(this);
                     break;
             }
@@ -394,7 +395,7 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             WebViewExtras.CleanUp(containerWebPlayer);
 
-            // switch back to main camera:
+            // switch back to main camera
             camera360.enabled = false;
             cameraMain.enabled = true;
 

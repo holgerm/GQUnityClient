@@ -47,9 +47,6 @@ namespace Code.GQClient.Util
         {
             var varName = match.Value.Substring(1, match.Value.Length - 2);
             var value = Variables.GetValue(varName).AsString();
-#if DEBUG_LOG
-            Debug.LogFormat("Replaced var {0} against value {1}", varName, value);
-#endif
             return value;
         }
 

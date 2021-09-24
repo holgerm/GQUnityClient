@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Serialization;
 using Code.GQClient.Err;
 using Code.GQClient.Model.actions;
 using Code.GQClient.Model.expressions;
@@ -102,8 +103,12 @@ namespace Code.GQClient.Model.pages
         /// you should first process the additional content or alternatives and at the end 
         /// call this implementation with base.ReadContent() as fallback.
         /// </summary>
-        protected virtual void ReadContent(XmlReader reader)
+        protected virtual void ReadContent(XmlReader reader, XmlRootAttribute xmlRootAttr)
         {
+            ReadContent(reader);
+        }
+        
+        protected virtual void ReadContent(XmlReader reader) {
             switch (reader.LocalName)
             {
                 case GQML.ON_START:

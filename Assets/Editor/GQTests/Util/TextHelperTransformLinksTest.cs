@@ -1,4 +1,5 @@
-﻿using Code.GQClient.Util;
+﻿using Code.GQClient.Model.expressions;
+using Code.GQClient.Util;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -329,12 +330,25 @@ namespace GQTests.Util
                   Vinzentiusstr. 58<br>
                   83395 Freilassing<br>
                   <br>
-                  Telefon: <link=""tel:+491724893793""><color=#2C008BFF>0172 / 489 37 93</color></link><br>
-                  Email: <link=""mailto:bereitschaft@brk-freilassing.bayern@gmx.de""><color=#2C008BFF>bereitschaft@brk-freilassing.bayern</color></link><br>
-                  Webseite: <link=""https://www.brk-freilassing.bayern""><color=#2C008BFF>www.brk-freilassing.bayern</color></link>";
+                  Telefon: <link=""tel:+491724893793""><color=#0000FFFF>0172 / 489 37 93</color></link><br>
+                  Email: <link=""mailto:bereitschaft@brk-freilassing.bayern@gmx.de""><color=#0000FFFF>bereitschaft@brk-freilassing.bayern</color></link><br>
+                  Webseite: <link=""https://www.brk-freilassing.bayern""><color=#0000FFFF>www.brk-freilassing.bayern</color></link>";
             string result = original.TransformLinks4TMP();
             Debug.Log($"{original} --> {result}");
             Assert.AreEqual(expected, result);
+        }
+
+        #endregion
+
+        #region Variable Replacements
+
+        [Test]
+        public void ReplaceDeclaredVariables()
+        {
+            Variables.Clear();
+            Variables.SetVariableValue("a", new Value("103"));
+            
+            
         }
 
         #endregion

@@ -1539,9 +1539,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 1001.6667
+  m_MinHeight: 1502.5
   m_PreferredWidth: -1
-  m_PreferredHeight: 1001.6667
+  m_PreferredHeight: 1502.5
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -3281,6 +3281,7 @@ MonoBehaviour:
         m_CallState: 2
   invertX: 0
   invertY: 0
+  UseWithAutorotation: 1
   videoPlayController: {fileID: 0}
 --- !u!114 &1720581781
 MonoBehaviour:
@@ -3423,9 +3424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 100.166664
+  m_MinHeight: 150.25
   m_PreferredWidth: -1
-  m_PreferredHeight: 100.166664
+  m_PreferredHeight: 150.25
   m_FlexibleWidth: -1
   m_FlexibleHeight: 75
   m_LayoutPriority: 1
@@ -3525,6 +3526,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

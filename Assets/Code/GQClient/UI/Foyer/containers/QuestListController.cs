@@ -149,7 +149,7 @@ namespace Code.GQClient.UI.Foyer.containers
                     yield return new WaitForEndOfFrame();
             }
 
-            updateElementOrderLayout(); // TODO word sehr oft aufgerufen!!!
+            updateElementOrderLayout(); // TODO wird sehr oft aufgerufen!!!
         }
 
         /// <summary>

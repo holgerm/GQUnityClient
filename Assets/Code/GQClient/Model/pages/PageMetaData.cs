@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Xml.Serialization;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 
@@ -6,7 +7,11 @@ namespace Code.GQClient.Model.pages
 {
     public class PageMetaData : Page
 	{
-        public PageMetaData(XmlReader reader) : base(reader) { }
+        /// <summary>
+        /// Needed by reflection e.g. in some apps.
+        /// </summary>
+        /// <param name="reader"></param>
+		public PageMetaData(XmlReader reader) : base(reader) { }
         
         #region Runtime API
         public override bool CanStart ()
@@ -17,7 +22,7 @@ namespace Code.GQClient.Model.pages
 
 
 		#region XML Serialization
-		protected override void ReadContent (XmlReader reader)
+		protected override void ReadContent (XmlReader reader, XmlRootAttribute xmlRootAttr)
 		{
 			switch (reader.LocalName) {
 			case GQML.PAGE_METADATA_STRINGMETA:

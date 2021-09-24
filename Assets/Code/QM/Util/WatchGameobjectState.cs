@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Code.QM.Util;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class WatchGameobjectState : MonoBehaviour
@@ -49,6 +50,16 @@ public class WatchGameobjectState : MonoBehaviour
         Debug.Log(sb.ToString());
     }
 
+    void OnDisable()
+    {
+        StringBuilder sb = new StringBuilder($"WATCH {transform.GetPath()} in frame {Time.frameCount}:");
+
+        sb.Append(
+                $"\n  DISABLED. activeInHierarchy: {gameObject.activeInHierarchy}");
+        
+        Debug.Log(sb.ToString());
+    }
+
     private static StringBuilder _sb;
 
     // Update is called once per frame
@@ -77,5 +88,17 @@ public class WatchGameobjectState : MonoBehaviour
 
         if (output) 
             Debug.Log($"WATCH {transform.GetPath()} in frame {Time.frameCount}: {_sb?.ToString()}");
+        
+        
+        // Check if the left mouse button was clicked
+        if (Input.GetMouseButtonDown(0) || Input.touches.Length > 0)
+        {
+            // Check if the mouse was clicked over a UI element
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                Debug.Log("WATCH Clicked on the UI");
+            }
+        }
+
     }
 }
