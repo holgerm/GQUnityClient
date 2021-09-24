@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,8 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_LightingSettings: {fileID: 4890085278179872738, guid: d501ce457b5e5487b85f4ed9a7256271,
+    type: 2}
 --- !u!196 &5
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +119,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -173,6 +176,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -249,6 +253,7 @@ MonoBehaviour:
   zoomMode: 0
   zoomSensitivity: 1
   activeCamera: {fileID: 0}
+  elevationManager: {fileID: 0}
   marker2DMode: 0
   marker2DSize: 100
   marker3DManager: {fileID: 0}
@@ -260,6 +265,7 @@ MonoBehaviour:
   markerShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   sizeInScene: {x: 1024, y: 1024}
   colliderType: 1
+  compressTextures: 1
   drawingsGameObject: {fileID: 0}
   drawingMode: 0
   drawingShader: {fileID: 4800000, guid: 07fd051d8972c7a4bac96bfa8038d08b, type: 3}
@@ -467,6 +473,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &523458431
 Canvas:
   m_ObjectHideFlags: 0
@@ -584,6 +591,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &1020832634
@@ -811,6 +819,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -894,34 +903,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
@@ -936,6 +917,34 @@ PrefabInstance:
     - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.28683883
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204429326185734, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c43ad0c1272147948a13ffb0fad130de, type: 3}
