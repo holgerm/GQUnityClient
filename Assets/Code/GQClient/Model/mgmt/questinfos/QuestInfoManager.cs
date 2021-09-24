@@ -304,6 +304,12 @@ namespace GQClient.Model
                 return;
             }
 
+            var startView = Config.Current.questInfoViews[0];
+            Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
+            Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
+            Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
+            Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
+
             // check whether we have alternative views to offer:
             if (Config.Current.questInfoViews.Length <= 1)
                 return;
@@ -311,12 +317,6 @@ namespace GQClient.Model
             // Create the multi-toggle View for the view alternatives currently not displayed, i.e. 2 to n:
             GameObject menuContent = Base.Instance.MenuTopLeftContent;
             ViewToggleController.Create(menuContent);
-
-            var startView = Config.Current.questInfoViews[0];
-            Base.Instance.ListCanvas.gameObject.SetActive(startView == QuestInfoView.List.ToString());
-            Base.Instance.TopicTreeCanvas.gameObject.SetActive(startView == QuestInfoView.TopicTree.ToString());
-            Base.Instance.Map.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
-            Base.Instance.MapCanvas.gameObject.SetActive(startView == QuestInfoView.Map.ToString());
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace GQClient.Model
         public void InitFilters()
         {
             Instance.FilterChange.DisableNotification();
-            
+
             // init filters
             Filter = new QuestInfoFilter.All();
 
@@ -346,7 +346,7 @@ namespace GQClient.Model
                 _categoryFilters[catSet.name] = new QuestInfoFilter.CategoryFilter(catSet);
                 FilterAnd(_categoryFilters[catSet.name]);
             }
-            
+
             Instance.FilterChange.EnableNotification(false);
 
             // create UI for Category Filters:
