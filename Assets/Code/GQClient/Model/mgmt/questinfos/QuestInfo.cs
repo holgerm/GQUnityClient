@@ -410,12 +410,15 @@ namespace GQClient.Model
                     return false;
                 }
 
-                if (LoadModeAllowsManualDelete)
-                {
-                    return true;
-                }
-
-                return Author.ShowDeleteOptionForLocalQuests;
+                // if (LoadModeAllowsManualDelete)
+                // {
+                //     return true;
+                // }
+                //
+                if (Author.LoggedIn)
+                    return LoadModeAllowsManualDelete && Author.ShowDeleteOptionForLocalQuests;
+                else
+                    return LoadModeAllowsManualDelete;
             }
         }
 
@@ -658,10 +661,7 @@ namespace GQClient.Model
         private static int CurrentlyDownloading
         {
             get => _currentlyDownloading;
-            set
-            {
-                _currentlyDownloading = value;
-            }
+            set { _currentlyDownloading = value; }
         }
 
         private Task DownloadTask(CounterDialog dialog = null)
@@ -699,10 +699,7 @@ namespace GQClient.Model
                 $"Synchronisiere {Config.Current.nameForQuestSg}-Daten",
                 "Mediendateien werden geladen"
             );
-            downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) =>
-            {
-                TimeStamp = ServerTimeStamp;
-            };
+            downloadMediaFiles.OnTaskCompleted += (object sender, TaskEventArgs e) => { TimeStamp = ServerTimeStamp; };
 
             // store current media info locally
             var exportLocalMediaInfo =
@@ -762,7 +759,7 @@ namespace GQClient.Model
         {
             if (ActivitiesBlocking)
                 return null;
-            
+
             // update the quest info:
             if (NewVersionOnServer != null)
             {
@@ -920,10 +917,7 @@ namespace GQClient.Model
 
 
                     Task export = new ExportQuestInfosToJson();
-                    export.OnTaskCompleted += (o, args) =>
-                    {
-                        InvokeOnChanged();
-                    }; 
+                    export.OnTaskCompleted += (o, args) => { InvokeOnChanged(); };
                     export.Start();
                 };
             var playTask = CreatePlayTask();
