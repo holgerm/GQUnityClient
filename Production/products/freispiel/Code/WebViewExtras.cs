@@ -44,42 +44,52 @@ namespace Code.GQClient.UI.pages.videoplayer
                         vpCtrl.containerWebPlayer.SetActive(false);
                         return true;
                     };
-                    
+
                     UniWebViewLogger.Instance.LogLevel = UniWebViewLogger.Level.Verbose;
 
                     vpCtrl.containerWebPlayer.SetActive(true);
 
                     vpCtrl.FooterButtonPanel =
                         vpCtrl.webPlayerFooterButtonPanel;
+                    vpCtrl.ForwardButton =
+                        vpCtrl.FooterButtonPanel.transform.Find("ForwardButton").GetComponent<Button>();
                     Transform backButtonGO = vpCtrl.FooterButtonPanel.transform.Find("BackButton");
                     backButtonGO.gameObject.SetActive(vpCtrl.MyPage.Quest.History.CanGoBackToPreviousPage);
 
                     float headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
                     float footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
+                    float calculatedHeight = Screen.height - (headerHeight + footerHeight);
                     uniWebView.Frame =
                         new Rect(
                             0, headerHeight,
-                            Screen.width, Screen.height - (headerHeight + footerHeight)
+                            Screen.width, calculatedHeight
                         );
-                    Debug.Log($"WATCH UNIWEBVIEW frame: {uniWebView.Frame} screen: h: {Screen.height}, w: {Screen.width}");
-
+                    // Debug.Log(
+                    //     $"WATCH UNIWEBVIEW frame calcHeight: {calculatedHeight} - headerHeight: {headerHeight}");
+                    //
                     AllowLeavePage(vpCtrl);
-                    
-                    //VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
-                    //uniWebView.ReferenceRectTransform = vpCtrl.webPlayerContent;
+                    //
+                    // //VideoPlayController vpCtrl = (VideoPlayController)myPage.PageCtrl;
+                    // uniWebView.ReferenceRectTransform = vpCtrl.webPlayerContent;
                     uniWebView.SetShowSpinnerWhileLoading(true);
-                    uniWebView.Show(true);
 
                     string videoHtml = string.Format(YOUTUBE_HTML_FORMAT_STRING, vpCtrl.MyPage.VideoFile);
                     uniWebView.LoadHTMLString(videoHtml, "https://www.youtube.com/");
+
+                    // vpCtrl.webPlayerForwardButton.interactable = true;
+
+                    uniWebView.Show(true, UniWebViewTransitionEdge.Top, 0.4f);
+                    
                     break;
                 default:
-                    Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", vpCtrl.MyPage.VideoType, vpCtrl.MyPage.Id);
+                    Log.SignalErrorToAuthor("Unknown video type {0} used on page {1}", vpCtrl.MyPage.VideoType,
+                        vpCtrl.MyPage.Id);
                     break;
             }
         }
 
-        private const string YOUTUBE_HTML_FORMAT_STRING = @"<html>
+        private const string YOUTUBE_HTML_FORMAT_STRING =
+            @"<html>
                 <head></head>
                 <body style=""margin:0\"">
                     <iframe width = ""100%"" height=""100%"" 
@@ -126,10 +136,10 @@ namespace Code.GQClient.UI.pages.videoplayer
                 // TODO show error message also to user.
                 Debug.Log("Error: " + message);
             };
-            
+
             var headerHeight = LayoutConfig.Units2Pixels(LayoutConfig.HeaderHeightUnits);
             var footerHeight = LayoutConfig.Units2Pixels(LayoutConfig.FooterHeightUnits);
-            
+
             void SetFrameSize()
             {
                 webView.Frame =
@@ -146,7 +156,7 @@ namespace Code.GQClient.UI.pages.videoplayer
 
             SetFrameSize();
             webView.OnOrientationChanged += (view, orientation) => { SetFrameSize(); };
-            
+
             webView.SetShowSpinnerWhileLoading(true);
             webView.SetZoomEnabled(true);
             webView.Show(true);
@@ -239,16 +249,9 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         private static void AllowLeavePage(VideoPlayController pageCtrl)
         {
-            Debug.Log($"ALLOW_LEAVE_PAGE ForwardButton: {pageCtrl.ForwardButton != null} text: {pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text}");
-            Debug.Log($"ALLOW_LEAVE_PAGE ForwardButton: Active In Hierarcy {pageCtrl.ForwardButton.gameObject.activeInHierarchy}");
             pageCtrl.ForwardButton.interactable = true;
-            pageCtrl.ForwardButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = ">>>";
             pageCtrl.BackButton.interactable =
                 true; // might be set even if back button is not shown but does not matter
-            pageCtrl.BackButton.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "<<<";
-            
-            // DEBUG:
-            pageCtrl.ForwardButton.onClick.AddListener(() => Debug.Log("WATCH: CLICKED FORWARD BUTTON"));
         }
 
         private static void CheckHtmlToAllowForwardButton(WebPageController pageCtrl, string html)
