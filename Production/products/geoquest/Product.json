@@ -99,12 +99,6 @@
   "mapButtonHeightUnits": 55.0,
   "mapButtonHeightMinMM": 7.0,
   "mapButtonHeightMaxMM": 12.0,
-  "foldableCategoryFilters": true,
-  "categoryFiltersStartFolded": true,
-  "categoryFoldersStartFolded": true,
-  "mainCategorySet": null,
-  "CategorySets": [],
-  "defaultCategory": null,
   "disabledAlpha": 0.5,
   "mainFgColor": {
     "r": 31,
