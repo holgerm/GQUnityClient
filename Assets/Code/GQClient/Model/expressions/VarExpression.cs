@@ -118,6 +118,8 @@ namespace Code.GQClient.Model.expressions
 
                     switch (qv.ValType)
                     {
+                        case Value.Type.Text:
+                            // we try to use the text as number. E.g. if entered in text question it might simply be a number
                         case Value.Type.Float:
                         case Value.Type.Integer:
                             if (needsstartvalue)
