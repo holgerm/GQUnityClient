@@ -1,7 +1,9 @@
 ﻿// #define DEBUG_LOG
 
+using Code.GQClient.Err;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Code.GQClient.start
 {
