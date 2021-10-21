@@ -14,15 +14,12 @@ namespace GQClient.Model
 	/// In order to import the server info, you need to use a downloader task before and 
 	/// simply call the constructor of this class with 'true'). 
 	/// 
-	/// To load the local json file use 'false' as paraneter of the constructor. 
-	/// In this case no download task is needed and if exitent its result will be ignored.
+	/// To load the local json file use 'false' as parameter of the constructor. 
+	/// In this case no download task is needed and if existent its result will be ignored.
 	/// </summary>
 	public class ImportLocalQuestInfos : ImportQuestInfos
 	{
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GQ.Client.Model.ImportQuestInfosFromJSON"/> class.
-		/// </summary>
 		public ImportLocalQuestInfos () : base ()
 		{ 
 			// import from local quest json file:
