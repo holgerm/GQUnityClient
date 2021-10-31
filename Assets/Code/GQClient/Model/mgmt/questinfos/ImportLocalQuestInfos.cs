@@ -49,6 +49,8 @@ namespace GQClient.Model
 			qim.DataChange.Invoke(new QuestInfoChangedEvent(
 				"QuestInfoManager updated",
 				ChangeType.ListChanged));
+			
+			RaiseTaskCompleted();
    		}
 
 	}

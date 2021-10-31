@@ -57,7 +57,7 @@ namespace Code.QM.Util
         {
             stopwatch.Stop();
             UnityEngine.Debug.Log(
-                string.Format("WATCH {0} stopped after {1} ms ({2} delta in frame# {3})",
+                string.Format("WATCH {0} stopped after {1} ms (<color=Red>{2}</color> delta in frame# {3})",
                     Name,
                     stopwatch.ElapsedMilliseconds,
                     stopwatch.ElapsedMilliseconds - lastTimeStamp,

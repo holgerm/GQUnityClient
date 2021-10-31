@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Code.GQClient.Err;
+using Code.QM.Util;
 
 namespace Code.GQClient.Util.tasks
 {
@@ -13,7 +14,7 @@ namespace Code.GQClient.Util.tasks
         private List<Task> tasks;
 
         private Task _lastTask = null;
-
+        
         public TaskSequence(params Task[] tasks) : base()
         {
             if (tasks != null && tasks.Length > 0)

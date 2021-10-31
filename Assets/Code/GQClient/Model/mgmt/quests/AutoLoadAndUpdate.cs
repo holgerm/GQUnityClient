@@ -8,7 +8,6 @@ namespace Code.GQClient.Model.mgmt.quests
 {
     public class AutoLoadAndUpdate : Task
     {
-         
         protected override IEnumerator DoTheWork()
         {
             var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
@@ -28,43 +27,41 @@ namespace Code.GQClient.Model.mgmt.quests
                     updateList.Add(qi);
                 }
             }
-            
-            if (downloadList.Count + updateList.Count == 0)
-                yield break;
 
-            var counterDialog = 
+            if (downloadList.Count + updateList.Count == 0)
+            {
+                RaiseTaskCompleted();
+                yield break;
+            }
+
+            var counterDialog =
                 new CounterDialog(
-                    "Es gibt Neuigkeiten! Wir aktualisieren deine App jetzt.", 
+                    "Es gibt Neuigkeiten! Wir aktualisieren deine App jetzt.",
                     "Bitte habe etwas Geduld, wir laden noch {0} Inhalte ...",
                     downloadList.Count + updateList.Count,
                     3.5f);
             counterDialog.Start();
-            
+
             foreach (var questInfo in downloadList)
             {
                 var downloader = questInfo.Download();
                 if (downloader == null)
                     continue;
 
-                downloader.OnTaskEnded += (sender, args) =>
-                {
-                    counterDialog.Counter--;
-                };
+                downloader.OnTaskEnded += (sender, args) => { counterDialog.Counter--; };
             }
-            
+
             foreach (var questInfo in updateList)
             {
                 var update = questInfo.Update();
                 if (update == null)
                     continue;
 
-                update.OnTaskEnded += (sender, args) =>
-                {
-                    counterDialog.Counter--;
-                };
+                update.OnTaskEnded += (sender, args) => { counterDialog.Counter--; };
             }
 
             //Debug.Log("#### AUTO HAS loaded: " + loadCounter + " and updated: " + updateCounter);
+            RaiseTaskCompleted();
         }
     }
 }

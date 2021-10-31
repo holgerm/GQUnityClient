@@ -43,23 +43,19 @@ namespace GQ.Editor.UI
             if (EditorPrefs.HasKey("localPortalUsed"))
             {
                 _localPortalUsed = EditorPrefs.GetBool("localPortalUsed");
-                Debug.Log($"Read from editorprefs: localPortalUsed <-- {_localPortalUsed}");
             }
             else
             {
                 _localPortalUsed = false;
-                Debug.Log($"localPortalUsed initialized to {_localPortalUsed}");
             }
 
             if (EditorPrefs.HasKey("portalIDString"))
             {
                 _portalIDString = EditorPrefs.GetString("portalIDString");
-                Debug.Log($"Read from editorprefs: portalIDString <-- {_portalIDString}");
             }
             else
             {
                 _portalIDString = "0";
-                Debug.Log($"portalIDString initialized to {_portalIDString}");
             }
 
             readFromPrefs = true;

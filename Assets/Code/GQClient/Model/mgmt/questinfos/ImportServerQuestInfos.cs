@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
+using Code.QM.Util;
 using UnityEngine;
 
 namespace GQClient.Model
 {
     /// <summary>
-    /// Imports quest infos from JSON files. Either form the servers listing of all quest infos that are available, 
-    /// or form the local json file which keeps track of the latest state of local and remote quest infos.
+    /// Imports quest infos from JSON files. Either from the servers listing of all quest infos that are available, 
+    /// or from the local json file which keeps track of the latest state of local and remote quest infos.
     /// 
     /// In order to import the server info, you need to use a downloader task before and 
     /// simply call the constructor of this class with 'true'). 
     /// 
-    /// To load the local json file use 'false' as paraneter of the constructor. 
-    /// In this case no download task is needed and if exitent its result will be ignored.
+    /// To load the local json file use 'false' as parameter of the constructor. 
+    /// In this case no download task is needed and if existent its result will be ignored.
     /// </summary>
     public class ImportServerQuestInfos : ImportQuestInfos
     {
@@ -33,17 +34,17 @@ namespace GQClient.Model
                     // this new element was already there, hence we keep it (remove from the remove list) and update if newer:
                     oldIDsToBeRemoved.Remove(newInfo.Id);
 
-                    if (oldInfo.TimeStamp == null || oldInfo.TimeStamp < newInfo.ServerTimeStamp)
+                    if (oldInfo.ServerTimeStamp == null || oldInfo.ServerTimeStamp < newInfo.ServerTimeStamp)
                     {
-                        qim.UpdateInfo(newInfo, true); // Todo was : raiseEvents: false
+                        qim.UpdateInfo(newInfo);
                     }
-                 }
+                }
                 else
                 {
-                    qim.AddInfo(newInfo, false);
+                    qim.AddInfo(newInfo);
                 }
             }
-
+            
             // now in the helper list only the old elements that are not mentioned in the new list anymore are left. Hence we delete them:
             foreach (var oldId in oldIDsToBeRemoved)
             {
@@ -53,7 +54,7 @@ namespace GQClient.Model
                     qim.QuestDict[oldId].Delete();
 
                     // and also delete the quest infos from the list ...
-                    qim.RemoveInfo(oldId, false);
+                    qim.RemoveInfo(oldId);
                 }
                 else
                 {
@@ -68,7 +69,7 @@ namespace GQClient.Model
                     {
                          // if the quest has not been loaded yet, we remove the quest info:
                         qim.QuestDict[oldId].Delete(); // introduced newly without exact knowledge (hm)
-                        qim.RemoveInfo(oldId, false);
+                        qim.RemoveInfo(oldId);
                     }
                 }
             }
@@ -77,6 +78,8 @@ namespace GQClient.Model
                 new QuestInfoChangedEvent(
                     "QuestInfoManager updated",
                     ChangeType.ListChanged));
+            
+            RaiseTaskCompleted();
         }
     }
 }

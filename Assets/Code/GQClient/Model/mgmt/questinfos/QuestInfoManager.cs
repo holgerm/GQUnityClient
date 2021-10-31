@@ -105,25 +105,20 @@ namespace GQClient.Model
 
         #region Quest Info Changes
 
-        public void AddInfo(QuestInfo newInfo, bool raiseEvents = true)
+        public void AddInfo(QuestInfo newInfo)
         {
             QuestDict.Add(newInfo.Id, newInfo);
-            if (Filter.Accept(newInfo))
-            {
-                QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
-                    $"Info for quest {newInfo.Name} added.",
-                    type: ChangeType.AddedInfo,
-                    newQuestInfo: newInfo
-                );
-                // Run through filter and raise event if involved:
-                if (raiseEvents)
-                {
-                    DataChange.Invoke(ev);
-                }
-            }
+
+            QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
+                $"Info for quest {newInfo.Name} added.",
+                type: ChangeType.AddedInfo,
+                newQuestInfo: newInfo
+            );
+
+            DataChange.Invoke(ev);
         }
 
-        public void UpdateInfo(QuestInfo changedInfo, bool raiseEvents = true)
+        public void UpdateInfo(QuestInfo changedInfo)
         {
             if (!QuestDict.TryGetValue(changedInfo.Id, out QuestInfo curInfo))
             {
@@ -135,8 +130,7 @@ namespace GQClient.Model
             curInfo.QuestInfoRecognizeServerUpdate(changedInfo);
 
             // React also as container to a change info event
-            if (raiseEvents && Filter.Accept(curInfo)
-            ) // TODO should we also do it, if the new qi does not pass the filter?
+            if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
             {
                 // Run through filter and raise event if involved
                 DataChange.Invoke(
@@ -150,7 +144,7 @@ namespace GQClient.Model
             }
         }
 
-        public void RemoveInfo(int oldInfoId, bool raiseEvents = true)
+        public void RemoveInfo(int oldInfoId)
         {
             if (!QuestDict.TryGetValue(oldInfoId, out QuestInfo oldInfo))
             {
@@ -164,18 +158,13 @@ namespace GQClient.Model
             oldInfo.Dispose();
             QuestDict.Remove(oldInfoId);
 
-            if (raiseEvents && Filter.Accept(oldInfo))
-            {
-                // Run through filter and raise event if involved
-
-                DataChange.Invoke(
-                    new QuestInfoChangedEvent(
-                        $"Info for quest {oldInfo.Name} removed.",
-                        type: ChangeType.RemovedInfo,
-                        oldQuestInfo: oldInfo
-                    )
-                );
-            }
+            DataChange.Invoke(
+                new QuestInfoChangedEvent(
+                    $"Info for quest {oldInfo.Name} removed.",
+                    type: ChangeType.RemovedInfo,
+                    oldQuestInfo: oldInfo
+                )
+            );
         }
 
         /// <summary>
@@ -186,13 +175,20 @@ namespace GQClient.Model
         /// </summary>
         public static void UpdateQuestInfos()
         {
+            WATCH w_complete = new WATCH("complete update");
+            w_complete.Start(); 
+            
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             var unused = Base.Instance.GetSimpleBehaviour(
                 importLocal,
                 $"Aktualisiere {Config.Current.nameForQuestsPl}",
-                $"Lese lokale {Config.Current.nameForQuestSg}"
+                $"Lese lokale {Config.Current.nameForQuestsPl}"
             );
+
+            WATCH w_local_import = new WATCH("local import");
+            importLocal.OnTaskStarted += (sender, args) => { w_local_import.Start(); };
+            importLocal.OnTaskEnded += (sender, args) => { w_local_import.StopAndShow(); };
 
             var downloader =
                 new Downloader(
@@ -205,6 +201,10 @@ namespace GQClient.Model
                 $"Aktualisiere {Config.Current.nameForQuestsPl}"
             );
 
+            WATCH w_download = new WATCH("download");
+            downloader.OnTaskStarted += (sender, args) => { w_download.Start(); };
+            downloader.OnTaskEnded += (sender, args) => { w_download.StopAndShow(); };
+
             ImportQuestInfos importFromServer =
                 new ImportServerQuestInfos();
             var unused3 = Base.Instance.GetSimpleBehaviour(
@@ -212,6 +212,10 @@ namespace GQClient.Model
                 $"Aktualisiere {Config.Current.nameForQuestsPl}",
                 $"Neue {Config.Current.nameForQuestsPl} werden lokal gespeichert"
             );
+
+            WATCH w_server_import = new WATCH("server import");
+            importFromServer.OnTaskStarted += (sender, args) => { w_server_import.Start(); };
+            importFromServer.OnTaskEnded += (sender, args) => { w_server_import.StopAndShow(); };
 
             var exporter =
                 new ExportQuestInfosToJson();
@@ -221,9 +225,17 @@ namespace GQClient.Model
                 $"{Config.Current.nameForQuestSg}-Daten werden gespeichert"
             );
 
+            WATCH w_export = new WATCH("export");
+            exporter.OnTaskStarted += (sender, args) => { w_export.Start(); };
+            exporter.OnTaskEnded += (sender, args) => { w_export.StopAndShow(); };
+
             var autoLoader =
                 new AutoLoadAndUpdate();
 
+            WATCH w_autoload = new WATCH("autoload");
+            autoLoader.OnTaskStarted += (sender, args) => { w_autoload.Start(); };
+            autoLoader.OnTaskEnded += (sender, args) => { w_autoload.StopAndShow(); };
+            
             var t =
                 new TaskSequence(
                     importLocal,
@@ -232,6 +244,7 @@ namespace GQClient.Model
                     exporter,
                     autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
+            t.OnTaskEnded += (sender, args) => { w_complete.StopAndShow(); };
             t.Start();
         }
 

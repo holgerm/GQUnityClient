@@ -37,10 +37,10 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             Qim.DataChange.AddListener(OnQuestInfoChanged);
             Qim.FilterChange.AddListener(FilterChanged);
-            
+
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
             StartUpdateViewAlreadyDone = true;
-            
+
             // After registering we need to update our views now:
             ListChanged();
             //FilterChanged();
@@ -51,10 +51,12 @@ namespace Code.GQClient.UI.Foyer.containers
             switch (e.ChangeType)
             {
                 case ChangeType.AddedInfo:
-                    AddedInfo(e);
+                    if (Qim.Filter.Accept(e.NewQuestInfo))
+                        AddedInfo(e);
                     break;
                 case ChangeType.RemovedInfo:
-                    RemovedInfo(e);
+                    if (Qim.Filter.Accept(e.OldQuestInfo))
+                        RemovedInfo(e);
                     break;
                 case ChangeType.ListChanged:
                     ListChanged();
@@ -66,7 +68,8 @@ namespace Code.GQClient.UI.Foyer.containers
                     SorterChanged();
                     break;
                 case ChangeType.ChangedInfo:
-                    ChangedInfo(e);
+                    if (Qim.Filter.Accept(e.OldQuestInfo))
+                        ChangedInfo(e);
                     break;
                 default:
                     ChangedInfo(e);
