@@ -175,9 +175,6 @@ namespace GQClient.Model
         /// </summary>
         public static void UpdateQuestInfos()
         {
-            WATCH w_complete = new WATCH("complete update");
-            w_complete.Start(); 
-            
             ImportQuestInfos importLocal =
                 new ImportLocalQuestInfos();
             var unused = Base.Instance.GetSimpleBehaviour(
@@ -185,10 +182,6 @@ namespace GQClient.Model
                 $"Aktualisiere {Config.Current.nameForQuestsPl}",
                 $"Lese lokale {Config.Current.nameForQuestsPl}"
             );
-
-            WATCH w_local_import = new WATCH("local import");
-            importLocal.OnTaskStarted += (sender, args) => { w_local_import.Start(); };
-            importLocal.OnTaskEnded += (sender, args) => { w_local_import.StopAndShow(); };
 
             var downloader =
                 new Downloader(
@@ -201,10 +194,6 @@ namespace GQClient.Model
                 $"Aktualisiere {Config.Current.nameForQuestsPl}"
             );
 
-            WATCH w_download = new WATCH("download");
-            downloader.OnTaskStarted += (sender, args) => { w_download.Start(); };
-            downloader.OnTaskEnded += (sender, args) => { w_download.StopAndShow(); };
-
             ImportQuestInfos importFromServer =
                 new ImportServerQuestInfos();
             var unused3 = Base.Instance.GetSimpleBehaviour(
@@ -212,10 +201,6 @@ namespace GQClient.Model
                 $"Aktualisiere {Config.Current.nameForQuestsPl}",
                 $"Neue {Config.Current.nameForQuestsPl} werden lokal gespeichert"
             );
-
-            WATCH w_server_import = new WATCH("server import");
-            importFromServer.OnTaskStarted += (sender, args) => { w_server_import.Start(); };
-            importFromServer.OnTaskEnded += (sender, args) => { w_server_import.StopAndShow(); };
 
             var exporter =
                 new ExportQuestInfosToJson();
@@ -225,16 +210,8 @@ namespace GQClient.Model
                 $"{Config.Current.nameForQuestSg}-Daten werden gespeichert"
             );
 
-            WATCH w_export = new WATCH("export");
-            exporter.OnTaskStarted += (sender, args) => { w_export.Start(); };
-            exporter.OnTaskEnded += (sender, args) => { w_export.StopAndShow(); };
-
             var autoLoader =
                 new AutoLoadAndUpdate();
-
-            WATCH w_autoload = new WATCH("autoload");
-            autoLoader.OnTaskStarted += (sender, args) => { w_autoload.Start(); };
-            autoLoader.OnTaskEnded += (sender, args) => { w_autoload.StopAndShow(); };
             
             var t =
                 new TaskSequence(
@@ -244,7 +221,6 @@ namespace GQClient.Model
                     exporter,
                     autoLoader);
             t.OnTaskCompleted += OnQuestInfosUpdateSucceeded;
-            t.OnTaskEnded += (sender, args) => { w_complete.StopAndShow(); };
             t.Start();
         }
 
