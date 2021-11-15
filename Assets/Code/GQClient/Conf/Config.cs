@@ -30,7 +30,7 @@ namespace Code.GQClient.Conf
         public static void Load()
         {
             StringEnumConverter testConverter = new StringEnumConverter();
-            // This is just to prevent stripping the otherwise only implicitly used parmeterless constructor.
+            // This is just to prevent stripping the otherwise only implicitly used parameterless constructor.
             
             string configText = RetrieveProductJSONText();
             Current = JsonConvert.DeserializeObject<Config>(configText);
