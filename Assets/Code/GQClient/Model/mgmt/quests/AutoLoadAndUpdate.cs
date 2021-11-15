@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.GQClient.UI.author;
 using GQClient.Model;
 using Code.GQClient.Util.tasks;
+using Unity.Profiling.LowLevel.Unsafe;
+using UnityEngine;
 
 namespace Code.GQClient.Model.mgmt.quests
 {
@@ -10,19 +13,28 @@ namespace Code.GQClient.Model.mgmt.quests
     {
         protected override IEnumerator DoTheWork()
         {
+            Debug.Log($"Autoupdate started.");
+
             var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
             var downloadList = new List<QuestInfo>();
             var updateList = new List<QuestInfo>();
 
-            foreach (var qi in questInfoList.Where(qi => !qi.IsHidden()))
+            foreach (var qi in questInfoList)
             {
-                if (qi.LoadOptionPossibleInTheory && !qi.LoadModeAllowsManualLoad)
+                if (!qi.IsHidden() && qi.LoadOptionPossibleInTheory && !qi.LoadModeAllowsManualLoad)
                 {
                     downloadList.Add(qi);
                     continue;
                 }
 
-                if (qi.UpdateOptionPossibleInTheory && !qi.LoadModeAllowsManualUpdate)
+
+                if (qi.UpdateOptionPossibleInTheory &&
+                    (
+                        !qi.LoadModeAllowsManualUpdate || (
+                            qi.IsHidden() && !Author.ShowHiddenQuests
+                        )
+                    )
+                )
                 {
                     updateList.Add(qi);
                 }
