@@ -54,7 +54,7 @@ namespace Code.GQClient.UI.pages
 
             if (myPage.FullscreenLandscape)
             {
-                Screen.orientation = ScreenOrientation.Landscape;
+                Screen.orientation = ScreenOrientation.LandscapeLeft;
                 HeaderButtonPanel.gameObject.SetActive(false);
             }
             

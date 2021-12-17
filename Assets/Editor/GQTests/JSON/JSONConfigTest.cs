@@ -38,9 +38,9 @@ namespace GQTests.Editor.JSON
             string json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
             Assert.That(json.Contains(@"""androidMinSDKVersion"": ""AndroidApiLevelAuto"","));
 
-            configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel19;
+            configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel22;
             json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
-            Assert.That(json.Contains(@"""androidMinSDKVersion"": ""AndroidApiLevel19"","));
+            Assert.That(json.Contains(@"""androidMinSDKVersion"": ""AndroidApiLevel22"","));
 
             configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel26;
             json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
@@ -60,12 +60,12 @@ namespace GQTests.Editor.JSON
                 configRead.androidMinSDKVersion
             );
 
-            configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel19;
+            configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel22;
             json = JsonConvert.SerializeObject(configOrigin, Formatting.Indented);
 
             configRead = JsonConvert.DeserializeObject<Config>(json);
             Assert.AreEqual(
-                AndroidSdkVersions.AndroidApiLevel19,
+                AndroidSdkVersions.AndroidApiLevel22,
                 configRead.androidMinSDKVersion
             );
             configOrigin.androidMinSDKVersion = AndroidSdkVersions.AndroidApiLevel26;

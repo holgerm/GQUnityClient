@@ -1,4 +1,5 @@
-﻿using Code.GQClient.Conf;
+﻿using System;
+using Code.GQClient.Conf;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.pages.videoplayer;
@@ -45,7 +46,7 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
-            myPage = (PageInteractiveSphericalImage) page;
+            myPage = (PageInteractiveSphericalImage)page;
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";
 
@@ -95,7 +96,8 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
             // second create new gameobjects:
             foreach (var interaction in myPage.Interactions)
             {
-                InteractionCtrl.Create(container360, interaction, camera360);
+                if (!String.IsNullOrEmpty(interaction.Icon))
+                    InteractionCtrl.Create(container360, interaction, camera360);
             }
         }
 
@@ -186,7 +188,7 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
 
             Texture imageTexture = container360.GetComponent<Material>().mainTexture;
             var videoRatio =
-                (float) imageTexture.width / (float) imageTexture.height;
+                (float)imageTexture.width / (float)imageTexture.height;
             var screenRatio = 1f;
             /*
                 (float) containerNormal.GetComponent<RectTransform>().rect.width /
