@@ -244,18 +244,10 @@
                 },
                 {
                     "folderName": "Themen",
-                    "id": "wcc.ghosts",
-                    "name": "Bonner Gespenster",
+                    "id": "wcc.cribs",
+                    "name": "Krippen in Bonn",
                     "symbol": {
-                        "path": "update:1625922938:textures/readable/ghost.png"
-                    }
-                },
-                {
-                    "folderName": "Themen",
-                    "id": "wcc.beethovenschaufenster",
-                    "name": "Beethoven Schaufenster",
-                    "symbol": {
-                        "path": "update:1630161516:textures/readable/beethovenstorewindow.png"
+                        "path": "update:1638354897:textures/readable/crib.png"
                     }
                 }
             ],
