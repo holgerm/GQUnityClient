@@ -158,10 +158,9 @@ namespace Code.GQClient.UI.pages.npctalk
 
         private void AddCurrentText()
         {
-            // decode text for HyperText Component:
             var currentText = NpcPage.CurrentDialogItem.Text;
 
-            // create dialog item GO from prefab:
+            // create dialog item GO from prefab (also decodes text for HyperText Component):
             TextElementCtrl.Create(dialogItemContainer, currentText);
 
             // play audio if specified:

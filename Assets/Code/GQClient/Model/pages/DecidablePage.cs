@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Code.GQClient.Err;
 using Code.GQClient.Model.actions;
@@ -11,9 +12,11 @@ namespace Code.GQClient.Model.pages
 {
     public abstract class DecidablePage : Page
     {
-
         #region XML Serialization
-        public DecidablePage(XmlReader reader) : base(reader) { }
+
+        public DecidablePage(XmlReader reader) : base(reader)
+        {
+        }
 
         protected override void ReadContent(XmlReader reader)
         {
@@ -100,6 +103,7 @@ namespace Code.GQClient.Model.pages
             {
                 EndTrigger.Initiate();
             }
+
             Resources.UnloadUnusedAssets();
         }
 
@@ -110,19 +114,20 @@ namespace Code.GQClient.Model.pages
             if (input == null)
                 return false;
 
-            foreach (ExpectedCode a in ExpectedCodes)
+            foreach (var text in ExpectedCodes)
             {
+                var expected = (ExpectedCode)text;
                 // TODO: Extract this into a reusable method that will be called from here and from TextQuestionPage as well.
-                string aText = a.Text.Trim().MakeReplacements();
+                string expectedText = expected.Text.Trim().MakeReplacements();
 
                 // Text comparison:
-                if (aText == input.Trim().MakeReplacements())
+                if (expectedText == input.Trim().MakeReplacements())
                     return true;
 
                 // Number Ranges:
-                if (aText.StartsWith("[[") && aText.EndsWith("]]"))
+                if (expectedText.StartsWith("[[") && expectedText.EndsWith("]]"))
                 {
-                    string[] rangeBounds = aText.Substring(2, aText.Length - 4).Split('-');
+                    string[] rangeBounds = expectedText.Substring(2, expectedText.Length - 4).Split('-');
                     if (rangeBounds.Length == 2)
                     {
                         try
@@ -153,27 +158,45 @@ namespace Code.GQClient.Model.pages
                             }
                             catch (OverflowException)
                             {
-                                Log.SignalErrorToUser($"Eingabe '{input}' zu groß oder zu klein um als Zahl benutzt zu werden.");
+                                Log.SignalErrorToUser(
+                                    $"Eingabe '{input}' zu groß oder zu klein um als Zahl benutzt zu werden.");
                                 return false;
                             }
                         }
                         catch (Exception)
                         {
                             Log.SignalErrorToAuthor(
-                                $"In Quest {Quest.Id} auf Seite {Id} kann Antwort '{a.Text}' nicht als Zahlenbereich erkannt werden.");
+                                $"In Quest {Quest.Id} auf Seite {Id} kann Antwort '{expectedText}' nicht als Zahlenbereich erkannt werden.");
                             return false;
                         }
                     }
                 }
 
-                // TODO RegExp
-            }
+                // Regular Expressions:
+                if (expectedText.StartsWith(@"/") && (expectedText.EndsWith(@"/") || expectedText.EndsWith(@"/i")))
+                {
+                    Regex rx;
+                    if (expectedText.EndsWith(@"/i"))
+                    {
+                        expectedText = expectedText.Substring(1, expectedText.Length - 3);
+                        rx = new Regex(expectedText, RegexOptions.IgnoreCase);
+                    }
+                    else
+                    {
+                        expectedText = expectedText.Substring(1, expectedText.Length - 2);
+                        rx = new Regex(expectedText);
+                    }
 
+                    bool matched = rx.IsMatch(input.Trim());
+
+                    // Debug.Log($"REGEX: {expectedText} matched against input {input} and did it match? {matched}");
+                    return matched;
+                }
+            }
 
             return false;
         }
 
         #endregion
-
     }
 }

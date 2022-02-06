@@ -248,7 +248,8 @@ namespace Code.GQClient.UI.layout
                 var linkInfo = TextElement.textInfo.linkInfo[linkIndex];
 
                 // open the link id as a url, which is the metadata we added in the text field
-                Application.OpenURL(linkInfo.GetLinkID());
+                string linkUrl = linkInfo.GetLinkID();
+                Application.OpenURL(linkUrl);
             }
         }
 
