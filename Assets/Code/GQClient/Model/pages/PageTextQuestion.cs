@@ -71,69 +71,9 @@ namespace Code.GQClient.Model.pages
 
         public override bool AnswerCorrect(string input)
         {
-            foreach (TQAnswer a in Answers)
-            {
-                string aText = a.Text.Trim().MakeReplacements();
+            List<string> expectedTexts = Answers.ConvertAll(answer => answer.Text.Trim().MakeReplacements());
 
-                // Text comparison:
-                if (aText == input.Trim())
-                    return true;
-
-                // Number Ranges:
-                if (aText.StartsWith("[[") && aText.EndsWith("]]"))
-                {
-                    string[] rangeBounds = aText.Substring(2, aText.Length - 4).Split('-');
-                    if (rangeBounds.Length == 2)
-                    {
-                        try
-                        {
-                            double lowerBound = Convert.ToDouble(rangeBounds[0]);
-                            double upperBound = Convert.ToDouble(rangeBounds[1]);
-
-                            if (upperBound < lowerBound)
-                            {
-                                double swapTmp = upperBound;
-                                upperBound = lowerBound;
-                                lowerBound = swapTmp;
-                            }
-
-                            // bounds are ok:
-                            double number;
-                            try
-                            {
-                                number = Convert.ToDouble(input.Trim());
-
-                                // now we test wether input is in range:
-                                return (lowerBound <= number && number <= upperBound);
-                            }
-                            catch (FormatException)
-                            {
-                                Log.SignalErrorToUser($"Eingabe '{input}' kann nicht als Zahl erkannt werden.");
-                                return false;
-                            }
-                            catch (OverflowException)
-                            {
-                                Log.SignalErrorToUser("Eingabe '{0}' zu groß oder zu klein um als Zahl benutzt zu werden.", input);
-                                return false;
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            Log.SignalErrorToAuthor(
-                                "In Quest {0} auf Seite {1} kann Antwort '{2}' nicht als Zahlenbereich erkannt werden.",
-                                Quest.Id,
-                                Id,
-                                a.Text);
-                            return false;
-                        }
-                    }
-                }
-
-                // TODO RegExp
-            }
-
-
-            return false;
+            return AcceptInputText(input, expectedTexts);
         }
         #endregion
 

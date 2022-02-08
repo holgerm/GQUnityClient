@@ -111,23 +111,32 @@ namespace Code.GQClient.Model.pages
 
         public virtual bool AnswerCorrect(string input)
         {
+            List<string> expectedTexts = ExpectedCodes.ConvertAll(code => code.Text);
+
+            return AcceptInputText(input, expectedTexts);
+        }
+
+        protected virtual bool AcceptInputText(string input, List<string> expectedTexts)
+        {
             if (input == null)
                 return false;
 
-            foreach (var text in ExpectedCodes)
+            input = input.Trim();
+
+            // 1. Direct text comparison:
+            foreach (string expected in expectedTexts)
             {
-                var expected = (ExpectedCode)text;
-                // TODO: Extract this into a reusable method that will be called from here and from TextQuestionPage as well.
-                string expectedText = expected.Text.Trim().MakeReplacements();
-
-                // Text comparison:
-                if (expectedText == input.Trim().MakeReplacements())
+                if (expected == input.MakeReplacements())
                     return true;
+            }
 
-                // Number Ranges:
-                if (expectedText.StartsWith("[[") && expectedText.EndsWith("]]"))
+            // 2. Numeric ranges &  3. regular expressions:
+            foreach (string expected in expectedTexts)
+            {
+                // 2. Numeric ranges
+                if (expected.StartsWith("[[") && expected.EndsWith("]]"))
                 {
-                    string[] rangeBounds = expectedText.Substring(2, expectedText.Length - 4).Split('-');
+                    string[] rangeBounds = expected.Substring(2, expected.Length - 4).Split('-');
                     if (rangeBounds.Length == 2)
                     {
                         try
@@ -137,16 +146,14 @@ namespace Code.GQClient.Model.pages
 
                             if (upperBound < lowerBound)
                             {
-                                double swapTmp = upperBound;
-                                upperBound = lowerBound;
-                                lowerBound = swapTmp;
+                                (upperBound, lowerBound) = (lowerBound, upperBound);
                             }
 
                             // bounds are ok:
                             double number;
                             try
                             {
-                                number = Convert.ToDouble(input.Trim());
+                                number = Convert.ToDouble(input);
 
                                 // now we test wether input is in range:
                                 return (lowerBound <= number && number <= upperBound);
@@ -166,30 +173,30 @@ namespace Code.GQClient.Model.pages
                         catch (Exception)
                         {
                             Log.SignalErrorToAuthor(
-                                $"In Quest {Quest.Id} auf Seite {Id} kann Antwort '{expectedText}' nicht als Zahlenbereich erkannt werden.");
+                                $"In Quest {Quest.Id} auf Seite {Id} kann Antwort '{expected}' nicht als Zahlenbereich erkannt werden.");
                             return false;
                         }
                     }
                 }
 
-                // Regular Expressions:
-                if (expectedText.StartsWith(@"/") && (expectedText.EndsWith(@"/") || expectedText.EndsWith(@"/i")))
+                // 3. Regular Expressions:
+                if (expected.StartsWith(@"/") && (expected.EndsWith(@"/") || expected.EndsWith(@"/i")))
                 {
                     Regex rx;
-                    if (expectedText.EndsWith(@"/i"))
+                    if (expected.EndsWith(@"/i"))
                     {
-                        expectedText = expectedText.Substring(1, expectedText.Length - 3);
-                        rx = new Regex(expectedText, RegexOptions.IgnoreCase);
+                        string expectedRegex = expected.Substring(1, expected.Length - 3);
+                        rx = new Regex(expectedRegex, RegexOptions.IgnoreCase);
                     }
                     else
                     {
-                        expectedText = expectedText.Substring(1, expectedText.Length - 2);
-                        rx = new Regex(expectedText);
+                        string expectedRegex = expected.Substring(1, expected.Length - 2);
+                        rx = new Regex(expectedRegex);
                     }
 
-                    bool matched = rx.IsMatch(input.Trim());
+                    bool matched = rx.IsMatch(input);
 
-                    // Debug.Log($"REGEX: {expectedText} matched against input {input} and did it match? {matched}");
+                    // Debug.Log($"REGEX: {expected} matched against input {input} and did it match? {matched}");
                     return matched;
                 }
             }

@@ -146,7 +146,7 @@ namespace Code.GQClient.UI.pages
         {
             if (scannedTextShouldBeChecked)
             {
-                checkResult();
+                CheckResult();
                 scannedTextShouldBeChecked = false;
             }
 
@@ -158,7 +158,7 @@ namespace Code.GQClient.UI.pages
         }
 
 
-        private void checkResult()
+        private void CheckResult()
         {
             if (myPage.ShowTagContent)
             {
@@ -173,18 +173,18 @@ namespace Code.GQClient.UI.pages
 
             if (myPage.AnswerCorrect(qrContent))
             {
-                finishScanning();
+                FinishScanning();
                 myPage.Succeed(alsoEnd: false);
             }
             else
             {
-                finishScanning();
+                FinishScanning();
                 myPage.Fail(alsoEnd: false);
                 // TODO implement specification of maximal number of trials, before we leave the page failing ...
             }
         }
 
-        private void finishScanning()
+        private void FinishScanning()
         {
             if (qrThread != null)
             {
@@ -217,7 +217,7 @@ namespace Code.GQClient.UI.pages
         public override void CleanUp()
         {
             base.CleanUp();
-            finishScanning();
+            FinishScanning();
         }
         #endregion
     }

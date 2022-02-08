@@ -7,7 +7,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Model.expressions;
+using Code.GQClient.Model.mgmt.quests;
 using UnityEngine;
 
 namespace Code.GQClient.Util
@@ -114,7 +116,6 @@ namespace Code.GQClient.Util
         {
             foreach (Match matchedAnchor in htmlLinkMatches)
             {
- 
                 if (!matchedAnchor.Success || replacements.ContainsKey(matchedAnchor))
                     continue;
 
@@ -191,6 +192,7 @@ namespace Code.GQClient.Util
                             return false;
                         }
                     }
+
                     // no overlapping found, hence we replace this match:
                     return true;
                 }
