@@ -31,7 +31,7 @@ namespace Code.GQClient.Conf
         {
             StringEnumConverter testConverter = new StringEnumConverter();
             // This is just to prevent stripping the otherwise only implicitly used parameterless constructor.
-            
+
             string configText = RetrieveProductJSONText();
             Current = JsonConvert.DeserializeObject<Config>(configText);
             RTConfig.Load();
@@ -678,6 +678,32 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor] public string warnDialogCancelWhenLeavingQuest { get; set; }
 
 
+        [ShowInProductEditor] public bool warnWhenLeavingApp { get; set; }
+
+        [ShowInProductEditor] public string warnDialogTitleWhenLeavingApp { get; set; }
+
+        public string warnDialogMessageWhenLeavingApp
+        {
+            get
+            {
+#if UNITY_ANDROID
+                return warnDialogMessageWhenLeavingApp_Android;
+#endif
+#if UNITY_IOS
+                return warnDialogMessageWhenLeavingApp_iOS;
+#endif
+            }
+        }
+
+        [ShowInProductEditor] internal string warnDialogMessageWhenLeavingApp_iOS { get; set; }
+
+        [ShowInProductEditor] internal string warnDialogMessageWhenLeavingApp_Android { get; set; }
+
+        [ShowInProductEditor] public string warnDialogOKWhenLeavingApp { get; set; }
+
+        [ShowInProductEditor] public string warnDialogCancelWhenLeavingApp { get; set; }
+
+
         [ShowInProductEditor(StartSection = "Offered Canvases by 2nd Menu:")]
         public bool defineAuthorBackDoor { get; set; }
 
@@ -805,12 +831,25 @@ namespace Code.GQClient.Conf
             scenePaths = new string[0];
             sceneExtensions = new List<SceneExtension>();
             offerLeaveQuestOnEachPage = true;
+
+            // Leaving Quest:
             warnWhenLeavingQuest = true;
             warnDialogTitleWhenLeavingQuest = "Aktuelles Quest verlassen?";
             warnDialogMessageWhenLeavingQuest =
                 "Sie müssten es dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...";
             warnDialogOKWhenLeavingQuest = "Verlassen";
             warnDialogCancelWhenLeavingQuest = "Fortsetzen";
+
+            // Leaving App:
+            warnWhenLeavingApp = true;
+            warnDialogTitleWhenLeavingApp = "App verlassen?";
+            warnDialogMessageWhenLeavingApp_iOS =
+                "Ganz oben links klicken um zurückzukommen.";
+            warnDialogMessageWhenLeavingApp_Android =
+                "Zurück geht's mit dem Back-Button.";
+            warnDialogOKWhenLeavingApp = "Verlassen";
+            warnDialogCancelWhenLeavingApp = "In App bleiben";
+
             stopAudioWhenLeavingPage = true;
 
             // Map:
@@ -830,7 +869,7 @@ namespace Code.GQClient.Conf
             mainBgColor = Color.white;
             mainFgColor = Color.black;
             colorPaletteSize = 4;
-            colorPalette = new Color32[] {Color.blue, Color.green, Color.yellow, Color.red};
+            colorPalette = new Color32[] { Color.blue, Color.green, Color.yellow, Color.red };
             paletteFGColor = Color.white;
             mainFontSize = 60;
             textAlignment = AlignmentOption.Left;
@@ -903,7 +942,7 @@ namespace Code.GQClient.Conf
         #region Forwards to RTConfig
 
         [JsonIgnore] private RTConfig _rt;
-        
+
         [JsonIgnore]
         public RTConfig rt
         {
@@ -1000,11 +1039,10 @@ namespace Code.GQClient.Conf
             return rt.GetCategory(catId);
         }
 
-        [ShowInProductEditor, JsonIgnore]
-        public string defaultCategory => rt.defaultCategory;
+        [ShowInProductEditor, JsonIgnore] public string defaultCategory => rt.defaultCategory;
 
         #endregion
-       
+
         private static Config _current;
 
         public static Config Current
@@ -1020,7 +1058,7 @@ namespace Code.GQClient.Conf
             }
             set => _current = value;
         }
-        
+
         public const string RUNTIME_PRODUCT_DIR = "Assets/ConfigAssets/Resources";
     }
 
@@ -1114,13 +1152,13 @@ namespace Code.GQClient.Conf
             JsonSerializer serializer)
         {
             reader.Read();
-            var r = (byte) reader.ReadAsInt32();
+            var r = (byte)reader.ReadAsInt32();
             reader.Read();
-            var g = (byte) reader.ReadAsInt32();
+            var g = (byte)reader.ReadAsInt32();
             reader.Read();
-            var b = (byte) reader.ReadAsInt32();
+            var b = (byte)reader.ReadAsInt32();
             reader.Read();
-            var a = (byte) reader.ReadAsInt32();
+            var a = (byte)reader.ReadAsInt32();
             reader.Read();
 
             var c = new Color32(r, g, b, a);
@@ -1129,7 +1167,7 @@ namespace Code.GQClient.Conf
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var c = (Color32) value;
+            var c = (Color32)value;
             writer.WriteStartObject();
             writer.WritePropertyName("r");
             writer.WriteValue(c.r);
@@ -1158,13 +1196,13 @@ namespace Code.GQClient.Conf
             for (var i = 0; i < 10; i++)
             {
                 reader.Read();
-                var r = (byte) reader.ReadAsInt32();
+                var r = (byte)reader.ReadAsInt32();
                 reader.Read();
-                var g = (byte) reader.ReadAsInt32();
+                var g = (byte)reader.ReadAsInt32();
                 reader.Read();
-                var b = (byte) reader.ReadAsInt32();
+                var b = (byte)reader.ReadAsInt32();
                 reader.Read();
-                var a = (byte) reader.ReadAsInt32();
+                var a = (byte)reader.ReadAsInt32();
                 reader.Read();
                 reader.Read();
                 colors[i] = new Color32(r, g, b, a);
@@ -1175,7 +1213,7 @@ namespace Code.GQClient.Conf
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var colors = (Color32[]) value;
+            var colors = (Color32[])value;
             writer.WriteStartArray();
 
             foreach (var c in colors)

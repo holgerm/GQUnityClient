@@ -1,5 +1,7 @@
-﻿using Code.GQClient.Conf;
+﻿using System;
+using Code.GQClient.Conf;
 using Code.GQClient.start;
+using Code.GQClient.UI.Dialogs;
 using Code.GQClient.Util;
 using TMPro;
 using UnityEngine;
@@ -249,7 +251,27 @@ namespace Code.GQClient.UI.layout
 
                 // open the link id as a url, which is the metadata we added in the text field
                 string linkUrl = linkInfo.GetLinkID();
-                Application.OpenURL(linkUrl);
+                // Application.OpenURL(linkUrl);
+                
+                if (Config.Current.warnWhenLeavingQuest)
+                {
+                    void Act()
+                    {
+                        Application.OpenURL(linkUrl);
+                    }
+
+                    CancelableFunctionDialog.Show(
+                        Config.Current.warnDialogTitleWhenLeavingApp,
+                        Config.Current.warnDialogMessageWhenLeavingApp,
+                        Act,
+                        Config.Current.warnDialogOKWhenLeavingQuest,
+                        Config.Current.warnDialogCancelWhenLeavingQuest);
+                }
+                else
+                {
+                    Application.OpenURL(linkUrl);
+                }
+
             }
         }
 

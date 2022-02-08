@@ -6,7 +6,7 @@
 		private string buttontext { get; set; }
 
 		public MessageDialog (string message, string buttontext = "Ok") : base (null) 
-		// 'null' because we do NOT connect a Task, sice message dialogs only rely on user interaction
+		// 'null' because we do NOT connect a Task, since message dialogs only rely on user interaction
 		{
 			this.message = message;
 			this.buttontext = buttontext;
