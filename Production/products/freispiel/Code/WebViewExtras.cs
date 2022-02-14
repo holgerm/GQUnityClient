@@ -101,6 +101,9 @@ namespace Code.GQClient.UI.pages.videoplayer
 
         public static void Initialize(WebPageController pageCtrl, RectTransform webContainer, string url)
         {
+            // replace potential variables by their values:
+            url = url.MakeReplacements();
+
             if (PageWebPage.PdfUrlRegex.IsMatch(url))
             {
                 InitializePdfView(pageCtrl, webContainer, url);

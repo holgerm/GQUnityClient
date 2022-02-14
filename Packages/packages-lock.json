@@ -30,7 +30,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.7",
+      "version": "3.0.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -39,7 +39,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.14",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -138,11 +138,11 @@
       }
     },
     "com.unity.xr.arcore": {
-      "version": "4.2.1",
+      "version": "4.2.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.xr.arsubsystems": "4.2.1",
+        "com.unity.xr.arsubsystems": "4.2.2",
         "com.unity.xr.management": "4.0.1",
         "com.unity.modules.androidjni": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0"
@@ -150,7 +150,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arsubsystems": {
-      "version": "4.2.1",
+      "version": "4.2.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
