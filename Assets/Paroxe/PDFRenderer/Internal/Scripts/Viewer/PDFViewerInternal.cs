@@ -2,123 +2,121 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#pragma warning disable 649
+
 namespace Paroxe.PdfRenderer.Internal.Viewer
 {
     public class PDFViewerInternal : UIBehaviour
     {
+	    [SerializeField]
+	    private PDFViewer m_PDFViewer;
         [SerializeField]
-        public RectTransform m_DownloadDialog;
+        private RectTransform m_DownloadDialog;
         [SerializeField]
-        public Text m_DownloadSourceLabel;
+        private Text m_DownloadSourceLabel;
         [SerializeField]
-        public bool m_DrawDefaultInspector = false;
+        private RectTransform m_HorizontalScrollBar;
         [SerializeField]
-        public RectTransform m_HorizontalScrollBar;
+        private Image m_InvalidPasswordImage;
         [SerializeField]
-        public Image m_InvalidPasswordImage;
+        private PDFViewerLeftPanel m_LeftPanel;
         [SerializeField]
-        public PDFViewerLeftPanel m_LeftPanel = null;
+        private CanvasGroup m_Overlay;
         [SerializeField]
-        public CanvasGroup m_Overlay;
+        private RectTransform m_PageContainer;
         [SerializeField]
-        public RectTransform m_PageContainer;
+        private Text m_PageCountLabel;
         [SerializeField]
-        public Text m_PageCountLabel;
+        private Button m_PageDownButton;
         [SerializeField]
-        public Button m_PageDownButton;
+        private InputField m_PageInputField;
         [SerializeField]
-        public InputField m_PageInputField;
+        private RawImage m_PageSample;
         [SerializeField]
-        public RawImage m_PageSample;
+        private Button m_PageUpButton;
         [SerializeField]
-        public Button m_PageUpButton;
+        private Text m_PageZoomLabel;
         [SerializeField]
-        public Text m_PageZoomLabel;
+        private RectTransform m_PasswordDialog;
         [SerializeField]
-        public RectTransform m_PasswordDialog;
+        private InputField m_PasswordInputField;
         [SerializeField]
-        public InputField m_PasswordInputField;
+        private Text m_ProgressLabel;
         [SerializeField]
-        public Text m_ProgressLabel;
+        private RectTransform m_ProgressRect;
         [SerializeField]
-        public RectTransform m_ProgressRect;
+        private RectTransform m_ScrollCorner;
         [SerializeField]
-        public RectTransform m_ScrollCorner;
+        private ScrollRect m_ScrollRect;
         [SerializeField]
-        public ScrollRect m_ScrollRect;
+        private RectTransform m_TopPanel;
         [SerializeField]
-        public RectTransform m_TopPanel;
+        private RectTransform m_VerticalScrollBar;
         [SerializeField]
-        public RectTransform m_VerticalScrollBar;
+        private RectTransform m_Viewport;
         [SerializeField]
-        public RectTransform m_Viewport;
-        [SerializeField]
-        public RectTransform m_SearchPanel;
+        private RectTransform m_SearchPanel;
 
-        public PDFViewer m_PDFViewer = null;
+        public RectTransform DownloadDialog { get { return m_DownloadDialog; } }
+        public Text DownloadSourceLabel { get { return m_DownloadSourceLabel; } }
+        public RectTransform HorizontalScrollBar { get { return m_HorizontalScrollBar; } }
+        public Image InvalidPasswordImage { get { return m_InvalidPasswordImage; } }
+        public PDFViewerLeftPanel LeftPanel { get { return m_LeftPanel; } }
+        public CanvasGroup Overlay { get { return m_Overlay; } }
+        public RectTransform PageContainer { get { return m_PageContainer; } }
+        public Text PageCountLabel { get { return m_PageCountLabel; } }
+        public RawImage PageSample { get { return m_PageSample; } }
+        public Text PageZoomLabel { get { return m_PageZoomLabel; } }
+        public RectTransform PasswordDialog { get { return m_PasswordDialog; } }
+        public Text ProgressLabel { get { return m_ProgressLabel; } }
+        public RectTransform ProgressRect { get { return m_ProgressRect; } }
+        public RectTransform ScrollCorner { get { return m_ScrollCorner; } }
+        public ScrollRect ScrollRect { get { return m_ScrollRect; } }
+        public RectTransform TopPanel { get { return m_TopPanel; } }
+        public RectTransform VerticalScrollBar { get { return m_VerticalScrollBar; } }
+        public RectTransform Viewport { get { return m_Viewport; } }
+        public RectTransform SearchPanel { get { return m_SearchPanel; } }
+        public InputField PasswordInputField { get { return m_PasswordInputField; } }
+        public InputField PageInputField { get { return m_PageInputField; } }
 
         public void OnDownloadCancelButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.OnDownloadCancelButtonClicked();
-            }
+	        m_PDFViewer.CancelDownload();
         }
 
         public void OnNextPageButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.GoToNextPage();
-            }
+	        m_PDFViewer.GoToNextPage();
         }
 
         public void OnPageIndexEditEnd()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.OnPageEditEnd();
-            }
+	        m_PDFViewer.OnPageEditEnd();
         }
 
         public void OnPasswordDialogCancelButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.OnPasswordDialogCancelButtonClicked();
-            }
+	        m_PDFViewer.OnPasswordDialogCancelButtonClicked();
         }
 
         public void OnPasswordDialogOkButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.OnPasswordDialogOkButtonClicked();
-            }
+	        m_PDFViewer.OnPasswordDialogOkButtonClicked();
         }
 
         public void OnPreviousPageButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.GoToPreviousPage();
-            }
+	        m_PDFViewer.GoToPreviousPage();
         }
 
         public void OnZoomInButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.ZoomIn();
-            }
+	        m_PDFViewer.ZoomIn();
         }
 
         public void OnZoomOutButtonClicked()
         {
-            if (m_PDFViewer != null)
-            {
-                m_PDFViewer.ZoomOut();
-            }
+	        m_PDFViewer.ZoomOut();
         }
     }
 }

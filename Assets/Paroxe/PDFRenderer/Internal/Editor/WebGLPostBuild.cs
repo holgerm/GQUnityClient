@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEditor.Callbacks;
 using UnityEditor;
 using System.IO;
@@ -7,11 +8,21 @@ namespace Paroxe.PdfRenderer.Internal
 {
     public class WebGLPostBuild : ScriptableObject
     {
-        private const string PdfJsPath = @"Plugins\WebGL\pdf.bytes";
-        private const string PdfWorkerJsPath = @"Plugins\WebGL\pdf.worker.bytes";
+        private static string[] FilesToCopy = {
+            @"Plugins/WebGL/pdf.js.bytes",
+            @"Plugins/WebGL/pdf.js.map.bytes",
+            @"Plugins/WebGL/pdf.worker.js.bytes",
+            @"Plugins/WebGL/pdf.worker.js.map.bytes"
+        };
+
+        private static string[] FoldersToCopy =
+        {
+            @"Plugins/WebGL/cmaps"
+        };
+
 
         [PostProcessBuild]
-        public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
+        public static void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
         {
             if (target == BuildTarget.WebGL)
             {
@@ -23,11 +34,39 @@ namespace Paroxe.PdfRenderer.Internal
 
                 DirectoryInfo directoryInfo = new DirectoryInfo(scriptPath);
 
-                string pdfJsFullPath = Path.Combine(directoryInfo.Parent.Parent.Parent.FullName, PdfJsPath);
-                string pdfWorkerJsFullPath = Path.Combine(directoryInfo.Parent.Parent.Parent.FullName, PdfWorkerJsPath);
+                string baseFolder = directoryInfo.Parent.Parent.Parent.FullName;
 
-                File.Copy(pdfJsFullPath, Path.Combine(pathToBuiltProject, "pdf.js"), true);
-                File.Copy(pdfWorkerJsFullPath, Path.Combine(pathToBuiltProject, "pdf.worker.js"), true);
+                foreach (string sourceFile in FilesToCopy)
+                {
+                    string sourceFileFullPath = Path.Combine(baseFolder, sourceFile);
+
+                    // Remove ".bytes" from filename
+                    string destFileName = new FileInfo(sourceFileFullPath).Name;
+                    destFileName = destFileName.Substring(0, destFileName.Length - 6);
+
+                    File.Copy(sourceFileFullPath, Path.Combine(pathToBuiltProject, destFileName), true);
+                }
+
+                foreach (string sourceFolder in FoldersToCopy)
+                {
+                    string sourceFolderFullPath = Path.Combine(baseFolder, sourceFolder);
+
+                    DirectoryInfo sourceDirectory = new DirectoryInfo(sourceFolderFullPath);
+
+                    string targetFolder = sourceFolder.Replace(@"Plugins/WebGL/", string.Empty);
+                    targetFolder = Path.Combine(pathToBuiltProject, targetFolder);
+
+                    if (!Directory.Exists(targetFolder))
+                        Directory.CreateDirectory(targetFolder);
+
+                    foreach (FileInfo file in sourceDirectory.GetFiles())
+                    {
+                        if (file.Extension.EndsWith("meta", StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        File.Copy(file.FullName, Path.Combine(targetFolder, file.Name), true);
+                    }
+                }
             }
         }
     }

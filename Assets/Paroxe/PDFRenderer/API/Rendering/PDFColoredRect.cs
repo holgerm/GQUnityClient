@@ -3,9 +3,7 @@
 namespace Paroxe.PdfRenderer
 {
     /// <summary>
-    /// Represent a colored rect within a page. This class is used mainly
-    /// for search results highlightment. Will maybe used for text selection in
-    /// the future.
+    /// Represent a colored rect within a page. This class is used mainly for search results highlighting.
     /// </summary>
     public struct PDFColoredRect
     {

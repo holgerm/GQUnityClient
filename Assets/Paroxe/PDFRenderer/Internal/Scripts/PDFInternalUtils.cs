@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using UnityEngine;
 
 namespace Paroxe.PdfRenderer.Internal
 {
     public static class PDFInternalUtils
     {
-        public static float CalculateRectTransformIntersectArea(RectTransform a, RectTransform b)
+	    public static float CalculateRectTransformIntersectArea(RectTransform a, RectTransform b)
         {
             Vector3[] worldCorners = new Vector3[4];
 

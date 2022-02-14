@@ -46,8 +46,6 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
         private SerializedProperty m_ParagraphZoomFactor = null;
         private SerializedProperty m_ParagraphZoomingEnable = null;
         private SerializedProperty m_ParagraphDetectionThreshold = null;
-        private SerializedProperty m_PageTileTexture = null;
-        private SerializedProperty m_PageColor = null;
         private SerializedProperty m_MaxZoomFactorTextureQuality = null;
         private SerializedProperty m_RenderSettings = null;
         private SerializedProperty m_RenderAnnotations = null;
@@ -348,7 +346,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
                             EditorGUILayout.BeginHorizontal();
                             EditorGUILayout.PrefixLabel("Supplier Function");
 
-                            var choiceIndex = EditorGUILayout.Popup(selectedIndex, supplierTitles);
+                            int choiceIndex = EditorGUILayout.Popup(selectedIndex, supplierTitles);
 
                             if (choiceIndex == 0)
                             {
@@ -520,7 +518,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
                 }
 
 
-                if (viewer.m_Internal.m_LeftPanel != null)
+                if (viewer.m_Internal.LeftPanel != null)
                 {
                     controlRect = EditorGUILayout.GetControlRect(true);
                     guiLabel = new GUIContent("Show Bookmarks Viewer");
@@ -570,7 +568,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
 
                 if (oldColor != newColor)
                 {
-                    Undo.RecordObject(viewer.m_Internal.m_Viewport.GetComponent<Image>(), "PDFViewerBackground");
+                    Undo.RecordObject(viewer.m_Internal.Viewport.GetComponent<Image>(), "PDFViewerBackground");
 
                     viewer.BackgroundColor = newColor;
                 }
@@ -599,7 +597,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
         {
             PDFViewer viewer = (PDFViewer)target;
 
-            if (viewer.m_Internal.m_SearchPanel != null)
+            if (viewer.m_Internal.SearchPanel != null)
             {
                 GUILayout.BeginVertical("Box");
 
@@ -630,9 +628,6 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
                     EditorGUILayout.PropertyField(m_ParagraphDetectionThreshold, new GUIContent("    Detection Threshold (px)"), GUILayout.ExpandWidth(false));
                 }
 
-                EditorGUILayout.PropertyField(m_PageTileTexture);
-                EditorGUILayout.PropertyField(m_PageColor);
-
                 GUILayout.Space(4.0f);
             }
 
@@ -645,7 +640,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
 
             GUILayout.BeginVertical("Box");
 
-            if (EnterGroup("Rendering Settings", "Paroxe.PdfRenderer.PDFViewer.ShowRenderSettings"))
+            if (EnterGroup("Render Settings", "Paroxe.PdfRenderer.PDFViewer.ShowRenderSettings"))
             {
                 Rect controlRect = EditorGUILayout.GetControlRect(true);
                 GUIContent guiLabel = new GUIContent("Maximum Quality");

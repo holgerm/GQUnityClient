@@ -41,7 +41,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             // ...
         }
 
-        public void HandleUnsuportedAction(IPDFDevice device)
+        public void HandleUnsupportedAction(IPDFDevice device)
         {
             // ...
         }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Paroxe.PdfRenderer.WebGL;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +8,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
 {
     public class PDFPageRange : IEquatable<PDFPageRange>
     {
-        public int m_From = -1;
+	    public int m_From = -1;
         public int m_To = -1;
 
         public bool IsValid
@@ -100,12 +102,12 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             for (int i = 0; i < pagesToUnLoad.Length; ++i)
             {
 #if UNITY_WEBGL
-                pageTextureHolderList[pagesToUnLoad[i]].m_Visible = false;
+                pageTextureHolderList[pagesToUnLoad[i]].Visible = false;
 
-                if (pageTextureHolderList[pagesToUnLoad[i]].m_RenderingPromise != null)
+                if (pageTextureHolderList[pagesToUnLoad[i]].RenderingPromise != null)
                 {
-                    PDFJS_Library.Instance.TryTerminateRenderingWorker(pageTextureHolderList[pagesToUnLoad[i]].m_RenderingPromise.PromiseHandle);
-                    pageTextureHolderList[pagesToUnLoad[i]].m_RenderingPromise = null;
+                    PDFJS_Library.Instance.TryTerminateRenderingWorker(pageTextureHolderList[pagesToUnLoad[i]].RenderingPromise.PromiseHandle);
+                    pageTextureHolderList[pagesToUnLoad[i]].RenderingPromise = null;
                 }
 
                 Texture2D tex = pageTextureHolderList[pagesToUnLoad[i]].Texture;
@@ -127,9 +129,9 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             for (int i = 0; i < pagesToLoad.Length; ++i)
             {
 #if UNITY_WEBGL
-                pageTextureHolderList[pagesToLoad[i]].m_Visible = true;
+                pageTextureHolderList[pagesToLoad[i]].Visible = true;
 
-                if (pageTextureHolderList[pagesToLoad[i]].m_RenderingStarted)
+                if (pageTextureHolderList[pagesToLoad[i]].RenderingStarted)
                     continue;
 #endif
 
@@ -152,23 +154,33 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
                 {
                     recyclableTextures.Remove(tex);
 
-                    pageTextureHolderList[pagesToLoad[i]].m_RenderingStarted = true;
+                    pageTextureHolderList[pagesToLoad[i]].RenderingStarted = true;
                     PDFJS_Library.Instance.StartCoroutine(UpdatePageWithExistingTexture(pdfDocument, pagesToLoad[i], tex, pageTextureHolderList));
                 }
                 else
                 {
 
-                    pageTextureHolderList[pagesToLoad[i]].m_RenderingStarted = true;
+                    pageTextureHolderList[pagesToLoad[i]].RenderingStarted = true;
                     PDFJS_Library.Instance.StartCoroutine(UpdatePageWithNewTexture(pdfDocument, pagesToLoad[i], pageTextureHolderList, w, h));
                 }
 #else
                 if (tex != null)
                 {
                     recyclableTextures.Remove(tex);
-                    pdfDocument.Renderer.RenderPageToExistingTexture(pdfDocument.GetPage(pagesToLoad[i]), tex, rectsProvider, renderSettings);
+
+                    using (PDFPage page = pdfDocument.GetPage(pagesToLoad[i]))
+                    {
+	                    pdfDocument.Renderer.RenderPageToExistingTexture(page, tex, rectsProvider, renderSettings);
+                    }
                 }
                 else
-                    tex = pdfDocument.Renderer.RenderPageToTexture(pdfDocument.GetPage(pagesToLoad[i]), w, h, rectsProvider, renderSettings);
+                {
+	                using (PDFPage page = pdfDocument.GetPage(pagesToLoad[i]))
+	                {
+		                tex = pdfDocument.Renderer.RenderPageToTexture(page, w, h, rectsProvider, renderSettings);
+                    }
+                }
+                   
 
                 pageTextureHolderList[pagesToLoad[i]].Texture = tex;
 #endif
@@ -194,13 +206,13 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             {
                 PDFJS_Promise<Texture2D> renderPromise = PDFRenderer.RenderPageToExistingTextureAsync(pagePromise.Result, existingTexture);
 
-                pageTextureHolderList[pageIndex].m_RenderingPromise = renderPromise;
+                pageTextureHolderList[pageIndex].RenderingPromise = renderPromise;
 
                 while (!renderPromise.HasFinished)
                     yield return null;
 
-                pageTextureHolderList[pageIndex].m_RenderingPromise = null;
-                pageTextureHolderList[pageIndex].m_RenderingStarted = false;
+                pageTextureHolderList[pageIndex].RenderingPromise = null;
+                pageTextureHolderList[pageIndex].RenderingStarted = false;
 
                 if (renderPromise.HasSucceeded)
                 {
@@ -211,7 +223,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
                         pageTextureHolderList[pageIndex].Texture = null;
                     }
 
-                    if (pageTextureHolderList[pageIndex].m_Visible)
+                    if (pageTextureHolderList[pageIndex].Visible)
                         pageTextureHolderList[pageIndex].Texture = renderPromise.Result;
                     else
                     {
@@ -223,8 +235,8 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             }
             else
             {
-                pageTextureHolderList[pageIndex].m_RenderingPromise = null;
-                pageTextureHolderList[pageIndex].m_RenderingStarted = false;
+                pageTextureHolderList[pageIndex].RenderingPromise = null;
+                pageTextureHolderList[pageIndex].RenderingStarted = false;
             }
         }
 
@@ -239,13 +251,13 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             {
                 PDFJS_Promise<Texture2D> renderPromise = PDFRenderer.RenderPageToTextureAsync(pagePromise.Result, width, height);
 
-                pageTextureHolderList[pageIndex].m_RenderingPromise = renderPromise;
+                pageTextureHolderList[pageIndex].RenderingPromise = renderPromise;
 
                 while (!renderPromise.HasFinished)
                     yield return null;
 
-                pageTextureHolderList[pageIndex].m_RenderingPromise = null;
-                pageTextureHolderList[pageIndex].m_RenderingStarted = false;
+                pageTextureHolderList[pageIndex].RenderingPromise = null;
+                pageTextureHolderList[pageIndex].RenderingStarted = false;
 
                 if (renderPromise.HasSucceeded)
                 {
@@ -255,7 +267,7 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
                         pageTextureHolderList[pageIndex].Texture = null;
                     }
 
-                    if (pageTextureHolderList[pageIndex].m_Visible)
+                    if (pageTextureHolderList[pageIndex].Visible)
                         pageTextureHolderList[pageIndex].Texture = renderPromise.Result;
                     else
                     {
@@ -266,8 +278,8 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
             }
             else
             {
-                pageTextureHolderList[pageIndex].m_RenderingPromise = null;
-                pageTextureHolderList[pageIndex].m_RenderingStarted = false;
+                pageTextureHolderList[pageIndex].RenderingPromise = null;
+                pageTextureHolderList[pageIndex].RenderingStarted = false;
             }
         }
 #endif
@@ -284,19 +296,17 @@ namespace Paroxe.PdfRenderer.Internal.Viewer
 
         public bool Equals(PDFPageRange other)
         {
-            if (other == null || GetType() != other.GetType())
-            {
-                return false;
-            }
+            if (other == null)
+	            return false;
 
-            var objectToCompareWith = (PDFPageRange)other;
+            PDFPageRange objectToCompareWith = other;
 
-            return (objectToCompareWith.m_From == m_From && objectToCompareWith.m_To == m_To);
+            return objectToCompareWith.m_From == m_From && objectToCompareWith.m_To == m_To;
         }
 
         public override int GetHashCode()
         {
-            var calculation = m_From + m_To;
+            int calculation = m_From + m_To;
             return calculation.GetHashCode();
         }
     }
