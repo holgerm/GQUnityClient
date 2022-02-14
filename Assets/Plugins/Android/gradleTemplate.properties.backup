@@ -4,4 +4,3 @@ unityStreamingAssets=.unity3d**STREAMING_ASSETS**
 **ADDITIONAL_PROPERTIES**
 
 
-android.enableR8=true
