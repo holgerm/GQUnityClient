@@ -136,7 +136,8 @@
                     "name": "Beethoventour",
                     "symbol": {
                         "path": "textures/readable/beethoventour"
-                    }
+                    },
+                    "catInfo": 14129
                 },
                 {
                     "folderName": "Themen",
@@ -144,7 +145,8 @@
                     "name": "BonnHoeren",
                     "symbol": {
                         "path": "textures/readable/bonnhoeren"
-                    }
+                    },
+                    "catInfo": 14139
                 },
                 {
                     "folderName": "Gastronomie",

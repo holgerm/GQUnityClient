@@ -218,6 +218,7 @@ namespace Code.GQClient.UI.layout
             // set layout height:
             Transform transf =
                 (gameObjectPath == null ? menuEntry.transform : menuEntry.transform.Find(gameObjectPath));
+
             if (transf != null)
             {
                 LayoutElement layElem = transf.GetComponent<LayoutElement>();
@@ -225,9 +226,9 @@ namespace Code.GQClient.UI.layout
                 {
                     layElem.minHeight = Units2Pixels(heightUnits) * sizeScaleFactor;
                     layElem.preferredHeight = layElem.minHeight;
-                    float height = Math.Min(100f, layElem.minHeight);
-                    layElem.minWidth = height;
-                    layElem.preferredWidth = height;
+                    float width = Math.Min(75f, layElem.minHeight);
+                    layElem.minWidth = width;
+                    layElem.preferredWidth = width;
                 }
 
                 Image image = transf.GetComponent<Image>();

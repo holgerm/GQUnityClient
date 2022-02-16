@@ -291,6 +291,9 @@
     "b": 38,
     "a": 255
   },
+  "catInfoIcon": {
+    "path": "icons/infoQuest"
+  },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
@@ -299,6 +302,11 @@
   "warnDialogMessageWhenLeavingQuest": "Sie müssten sie dann evtl. wieder ganz von vorne beginnen. Wollen Sie den Ort ...",
   "warnDialogOKWhenLeavingQuest": "Verlassen",
   "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
+  "warnWhenLeavingApp": true,
+  "warnDialogTitleWhenLeavingApp": "App verlassen?",
+  "warnDialogMessageWhenLeavingApp": "Ganz oben links klicken um zurückzukommen.",
+  "warnDialogOKWhenLeavingApp": "Verlassen",
+  "warnDialogCancelWhenLeavingApp": "In App bleiben",
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",

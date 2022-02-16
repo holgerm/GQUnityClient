@@ -653,6 +653,9 @@ namespace Code.GQClient.Conf
         [ShowInProductEditor]
         [JsonConverter(typeof(Color32Converter))]
         public Color32 categoryEntryBGColor { get; set; }
+        
+        [ShowInProductEditor] public ImagePath catInfoIcon { get; set; }
+
 
         [ShowInProductEditor] public bool menuInhibitsInteraction { get; set; }
 

@@ -16,7 +16,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/architecture"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.museum",
@@ -25,7 +26,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/museum"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.art",
@@ -34,7 +36,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/art"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.virtual",
@@ -43,7 +46,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "update:1615224790:textures/readable/virtual.png"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.sound",
@@ -52,7 +56,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/sound"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.nature",
@@ -61,7 +66,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/nature"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.history",
@@ -70,7 +76,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/historic"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.sports",
@@ -79,7 +86,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/sports"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.beethovenshoppen",
@@ -88,7 +96,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "update:1605258256:textures/readable/beethoven.png"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.antiquariate",
@@ -97,7 +106,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/antiquariat"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.gallery",
@@ -106,7 +116,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/gallery"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.designshop",
@@ -115,7 +126,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/designshop"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.cinema",
@@ -124,7 +136,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/cinema"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.concerthall",
@@ -133,7 +146,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/concerthall"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.theatre",
@@ -142,7 +156,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/theatre"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.special",
@@ -151,7 +166,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/special"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.tour.beethoven",
@@ -160,7 +176,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/beethoventour"
-          }
+          },
+          "questInfo": 101
         },
         {
           "id": "wcc.bonnhoeren",
@@ -169,7 +186,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/bonnhoeren"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.bar",
@@ -178,7 +196,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/bar"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.beergarden",
@@ -187,7 +206,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/beergarden"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.cafe",
@@ -196,7 +216,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/cafe"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.iceparlour",
@@ -205,7 +226,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/iceparlour"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.pub",
@@ -214,7 +236,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/pub"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.restaurant",
@@ -223,7 +246,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/restaurant"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.hotel",
@@ -232,7 +256,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/hotel"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.tourist",
@@ -241,7 +266,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/touristinfo"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.wc",
@@ -250,7 +276,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/wc"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.bike",
@@ -259,7 +286,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/bike"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.nix",
@@ -268,7 +296,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "update:1607081614:textures/readable/corona.png"
-          }
+          },
+          "questInfo": 0
         },
         {
           "id": "wcc.organ",
@@ -277,7 +306,18 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "update:1618512544:textures/readable/organ.png"
-          }
+          },
+          "questInfo": 0
+        },
+        {
+          "id": "wcc.cribs",
+          "name": "Krippen in Bonn",
+          "folderName": "Themen",
+          "symbol": {
+            "RTImageChanged": {},
+            "path": "update:1638354897:textures/readable/crib.png"
+          },
+          "questInfo": 0
         }
       ]
     }

@@ -51,6 +51,7 @@ namespace Code.GQClient.Conf
         {
             if (File.Exists(rtProductFile))
             {
+                Debug.Log($"Reading RTConfig.json from local files");
                 string json = File.ReadAllText(rtProductFile);
                 Current = doDeserialize(json);
             }
@@ -66,6 +67,8 @@ namespace Code.GQClient.Conf
                 }
                 else
                 {
+                    Debug.Log($"Read RTConfig.json from app assets");
+
                     Current = doDeserialize(configAsset.text);
                 }
             }
@@ -90,6 +93,8 @@ namespace Code.GQClient.Conf
                 verbose: false);
             d.OnSuccess += (dl, e) =>
             {
+                Debug.Log($"Reading RTConfig.json from server");
+
                 Current = doDeserialize(dl.Www.text);
             };
             d.Start();
