@@ -16,7 +16,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/society"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "stadt",
@@ -25,7 +26,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/city"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "spielplatz",
@@ -34,7 +36,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/play"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "info",
@@ -43,7 +46,8 @@
           "symbol": {
             "RTImageChanged": {},
             "path": "textures/readable/info"
-          }
+          },
+          "catInfo": 0
         }
       ]
     }
