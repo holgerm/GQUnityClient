@@ -292,7 +292,7 @@
     "a": 255
   },
   "catInfoIcon": {
-    "path": "icons/infoQuest"
+    "path": "defaults/readable/iWithArrowRight"
   },
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
@@ -304,7 +304,7 @@
   "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
   "warnWhenLeavingApp": true,
   "warnDialogTitleWhenLeavingApp": "App verlassen?",
-  "warnDialogMessageWhenLeavingApp": "Ganz oben links klicken um zurückzukommen.",
+  "warnDialogMessageWhenLeavingApp": "Zurück geht's mit dem Back-Button.",
   "warnDialogOKWhenLeavingApp": "Verlassen",
   "warnDialogCancelWhenLeavingApp": "In App bleiben",
   "defineAuthorBackDoor": true,

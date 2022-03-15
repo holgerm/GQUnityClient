@@ -17,7 +17,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/architecture"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.museum",
@@ -27,7 +27,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/museum"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.art",
@@ -37,7 +37,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/art"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.virtual",
@@ -47,7 +47,7 @@
             "RTImageChanged": {},
             "path": "update:1615224790:textures/readable/virtual.png"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.sound",
@@ -57,7 +57,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/sound"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.nature",
@@ -67,7 +67,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/nature"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.history",
@@ -77,7 +77,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/historic"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.sports",
@@ -87,7 +87,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/sports"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.beethovenshoppen",
@@ -97,7 +97,7 @@
             "RTImageChanged": {},
             "path": "update:1605258256:textures/readable/beethoven.png"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.antiquariate",
@@ -107,7 +107,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/antiquariat"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.gallery",
@@ -117,7 +117,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/gallery"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.designshop",
@@ -127,7 +127,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/designshop"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.cinema",
@@ -137,7 +137,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/cinema"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.concerthall",
@@ -147,7 +147,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/concerthall"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.theatre",
@@ -157,7 +157,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/theatre"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.special",
@@ -167,7 +167,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/special"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.tour.beethoven",
@@ -177,7 +177,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/beethoventour"
           },
-          "questInfo": 101
+          "catInfo": 14129
         },
         {
           "id": "wcc.bonnhoeren",
@@ -187,7 +187,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/bonnhoeren"
           },
-          "questInfo": 0
+          "catInfo": 14139
         },
         {
           "id": "wcc.bar",
@@ -197,7 +197,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/bar"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.beergarden",
@@ -207,7 +207,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/beergarden"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.cafe",
@@ -217,7 +217,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/cafe"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.iceparlour",
@@ -227,7 +227,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/iceparlour"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.pub",
@@ -237,7 +237,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/pub"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.restaurant",
@@ -247,7 +247,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/restaurant"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.hotel",
@@ -257,7 +257,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/hotel"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.tourist",
@@ -267,7 +267,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/touristinfo"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.wc",
@@ -277,7 +277,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/wc"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.bike",
@@ -287,7 +287,7 @@
             "RTImageChanged": {},
             "path": "textures/readable/bike"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.nix",
@@ -297,7 +297,7 @@
             "RTImageChanged": {},
             "path": "update:1607081614:textures/readable/corona.png"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.organ",
@@ -307,7 +307,7 @@
             "RTImageChanged": {},
             "path": "update:1618512544:textures/readable/organ.png"
           },
-          "questInfo": 0
+          "catInfo": 0
         },
         {
           "id": "wcc.cribs",
@@ -317,7 +317,7 @@
             "RTImageChanged": {},
             "path": "update:1638354897:textures/readable/crib.png"
           },
-          "questInfo": 0
+          "catInfo": 0
         }
       ]
     }
