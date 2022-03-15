@@ -73,7 +73,6 @@ namespace Code.GQClient.UI.menu.categories
             }
 
             // set the info quest icon:
-            Debug.Log($"cat {categoryEntry.category.name} has info id: {categoryEntry.category.catInfo}");
             if (categoryEntry.category.catInfo == 0)
             {
                 catInfoIcon.gameObject.SetActive(false);

@@ -33,6 +33,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000172, y: 1.0000172, z: 1.0000172}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2334038213825424729}
   m_Father: {fileID: 0}
@@ -109,9 +110,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 150.25
+  m_MinHeight: 160.00002
   m_PreferredWidth: -1
-  m_PreferredHeight: 150.25
+  m_PreferredHeight: 160.00002
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
