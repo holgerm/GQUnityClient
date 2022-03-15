@@ -226,6 +226,8 @@ namespace Code.GQClient.UI.pages
         protected void ShowImage(string imageUrl, GameObject panel, GameObject topMargin)
         {
             string rtImageUrl = imageUrl.MakeReplacements();
+            
+            Debug.Log($"Page Ctrl: replaced {imageUrl} to {rtImageUrl}");
 
             if (rtImageUrl == "")
             {

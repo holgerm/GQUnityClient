@@ -1,7 +1,9 @@
 ﻿using Code.GQClient.Conf;
 using Code.GQClient.Err;
+using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
+using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,27 +61,44 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 // - we load Texture and set to Background Image:
                 BackgroundImage.gameObject.SetActive(true);
 
+                string bgImageUrl = myPage.BackGroundImage.MakeReplacements();
+
                 AbstractDownloader loader;
-                if (QuestManager.Instance.MediaStore.ContainsKey(myPage.BackGroundImage))
+                if (bgImageUrl.StartsWith(GQML.PREFIX_RUNTIME_MEDIA))
                 {
-                    QuestManager.Instance.MediaStore.TryGetValue(myPage.BackGroundImage, out var mediaInfo);
-                    loader = new LocalFileLoader(mediaInfo.LocalPath);
+                    if (myPage.Parent.MediaStore.TryGetValue(bgImageUrl, out var rtMediaInfo))
+                    {
+                        loader = new LocalFileLoader(rtMediaInfo.LocalPath);
+                    }
+                    else
+                    {
+                        Log.SignalErrorToAuthor($"Runtime media {bgImageUrl} not found.");
+                        return;
+                    }
                 }
                 else
                 {
-                    loader =
-                        new Downloader(
-                            url: myPage.BackGroundImage,
-                            timeout: Config.Current.timeoutMS,
-                            maxIdleTime: Config.Current.maxIdleTimeMS
-                        );
-                    // TODO store the image locally ...
+                    if (QuestManager.Instance.MediaStore.ContainsKey(bgImageUrl))
+                    {
+                        QuestManager.Instance.MediaStore.TryGetValue(bgImageUrl, out var mediaInfo);
+                        loader = new LocalFileLoader(mediaInfo.LocalPath);
+                    }
+                    else
+                    {
+                        loader =
+                            new Downloader(
+                                url: bgImageUrl,
+                                timeout: Config.Current.timeoutMS,
+                                maxIdleTime: Config.Current.maxIdleTimeMS
+                            );
+                        // TODO store the image locally ...
+                    }
                 }
 
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
                     var fitter = BackgroundImage.gameObject.GetComponent<AspectRatioFitter>();
-                    fitter.aspectRatio = (float) d.Www.texture.width / (float) d.Www.texture.height;
+                    fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
                     BackgroundImage.texture = d.Www.texture;
                 };
                 loader.Start();
