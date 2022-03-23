@@ -7,6 +7,7 @@ using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI;
 using Code.GQClient.Util.tasks;
+using UnityEngine.Networking;
 using Debug = UnityEngine.Debug;
 
 namespace Code.GQClient.Util.http
@@ -27,7 +28,7 @@ namespace Code.GQClient.Util.http
         public MultiDownloader(
             int maxParallelDownloads = 15,
             long timeout = 0,
-            List<MediaInfo> files = null) : base(true)
+            List<MediaInfo> files = null) : base(new DownloadHandlerBuffer(), true)
         {
             if (files != null)
             {
@@ -138,6 +139,7 @@ namespace Code.GQClient.Util.http
                     var d =
                         new Downloader(
                             url: info.Url,
+                            new DownloadHandlerFile(info.LocalPath),
                             timeout: 0L,
                             maxIdleTime: Config.Current.maxIdleTimeMS,
                             targetPath: info.LocalPath,
@@ -173,6 +175,7 @@ namespace Code.GQClient.Util.http
                         CurrentlyRunningDownloads--;
                     };
                     listOfFilesNotStartedYet.Remove(infoToLoad);
+                    Debug.Log($"Multidownloader added File-Download for {info.Url} to {info.LocalPath}");
                     d.Start();
                 }
             }

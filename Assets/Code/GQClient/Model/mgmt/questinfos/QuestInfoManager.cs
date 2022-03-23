@@ -13,6 +13,7 @@ using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using Code.QM.Util;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace GQClient.Model
 {
@@ -186,6 +187,7 @@ namespace GQClient.Model
             var downloader =
                 new Downloader(
                     url: ConfigurationManager.UrlPublicQuestsJson,
+                    new DownloadHandlerBuffer(),
                     timeout: Config.Current.timeoutMS,
                     maxIdleTime: Config.Current.maxIdleTimeMS
                 );

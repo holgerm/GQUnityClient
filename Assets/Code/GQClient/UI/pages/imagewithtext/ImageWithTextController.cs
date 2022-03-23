@@ -4,6 +4,7 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using TMPro;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.imagewithtext
@@ -43,14 +44,17 @@ namespace Code.GQClient.UI.pages.imagewithtext
 			} else {
 				imagePanel.SetActive (true);
 				AbstractDownloader loader;
+				DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
+
 				if (QuestManager.Instance.MediaStore.ContainsKey (rtImageUrl)) {
 					MediaInfo mediaInfo;
 					QuestManager.Instance.MediaStore.TryGetValue (rtImageUrl, out mediaInfo);
-					loader = new LocalFileLoader (mediaInfo.LocalPath);
+					loader = new LocalFileLoader (mediaInfo.LocalPath, downloadHandlerTexture);
 				} else {
 					loader = 
 						new Downloader (
 						url: rtImageUrl, 
+						downloadHandlerTexture,
 						timeout: Config.Current.timeoutMS,
 						maxIdleTime: Config.Current.maxIdleTimeMS
 					);
@@ -58,8 +62,8 @@ namespace Code.GQClient.UI.pages.imagewithtext
 				}
 				loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) => {
 					var fitter = image.GetComponent<AspectRatioFitter> ();
-					fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-					image.texture = d.Www.texture;
+					fitter.aspectRatio = (float)downloadHandlerTexture.texture.width / (float)downloadHandlerTexture.texture.height;
+					image.texture = downloadHandlerTexture.texture;
 				};
 				loader.Start ();
 			}

@@ -1,6 +1,8 @@
 ﻿//#define DEBUG_LOG
 
+using System;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Model.expressions;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
@@ -10,6 +12,7 @@ using Code.GQClient.Util.http;
 using QM.NFC;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.readnfc
@@ -82,22 +85,35 @@ namespace Code.GQClient.UI.pages.readnfc
             if (QuestManager.Instance.MediaStore.ContainsKey(myPage.ImageUrl))
             {
                 QuestManager.Instance.MediaStore.TryGetValue(myPage.ImageUrl, out var mediaInfo);
-                loader = new LocalFileLoader(mediaInfo.LocalPath);
+                loader = new LocalFileLoader(mediaInfo.LocalPath, new DownloadHandlerTexture());
             }
             else
             {
                 loader = new Downloader(
                     url: myPage.ImageUrl,
+                    new DownloadHandlerTexture(),
                     timeout: Config.Current.timeoutMS,
                     maxIdleTime: Config.Current.maxIdleTimeMS
                 );
             }
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                fitInAndShowImage(d.Www.texture);
+                DownloadHandlerTexture dhTexture = null;
+                try
+                {
+                    dhTexture = (DownloadHandlerTexture)d.DownloadHandler;
+                }
+                catch (InvalidCastException)
+                {
+                    Log.SignalErrorToDeveloper(
+                        "ReadNFCController tried to load bgImage without TextureDownloadHandler");
+                    return;
+                }
+
+                fitInAndShowImage(dhTexture.texture);
 
                 // Dispose www including it s Texture and take some logs for preformace surveillance:
-                d.Www.Dispose();
+                d.WebRequest.Dispose();
             };
             loader.Start();
         }

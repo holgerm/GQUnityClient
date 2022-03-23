@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Code.GQClient.Util.http;
 using GQ.Editor.Util;
+using UnityEngine.Networking;
 
 namespace GQTests.Util
 {
@@ -39,7 +40,7 @@ namespace GQTests.Util
 
             Assert.IsTrue(Files.ExistsFile(filePath), "File should exist at " + filePath);
 
-            var downloader = new Downloader(Files.LocalPath4WWW(filePath));
+            var downloader = new Downloader(Files.LocalPath4WWW(filePath), new DownloadHandlerBuffer());
             downloader.OnStart += (d, e) => { started = true; };
             downloader.OnSuccess += (d, e) => { succeeded = true; };
             downloader.OnError += (d, e) => { Assert.Fail("Download Error: " + e.Message); };
@@ -59,7 +60,7 @@ namespace GQTests.Util
         [Test]
         public void DownloaderUsesCoroutine()
         {
-            var d = new Downloader("some.url", 60000);
+            var d = new Downloader("some.url", new DownloadHandlerBuffer(), 60000);
 
             Assert.IsTrue(d.RunsAsCoroutine);
         }
@@ -78,7 +79,8 @@ namespace GQTests.Util
             var filePath = Files.CombinePath(GQAssert.TEST_DATA_BASE_DIR, "Util/Downloader/hello.txt");
 
             var fileLoader = new LocalFileLoader(
-                filePath: filePath
+                filePath: filePath,
+                new DownloadHandlerBuffer()
             );
 
             fileLoader.Start();

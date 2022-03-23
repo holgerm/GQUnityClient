@@ -1,18 +1,18 @@
-﻿using Code.GQClient.Conf;
+﻿using System;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.Util.http;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.question.textquestion
 {
-
     [RequireComponent(typeof(TextQuestionController))]
     public class TextQuestionLayout : PageLayout
     {
-
         public RawImage BackgroundImage;
         public Image QuestionBackgroundImage;
 
@@ -49,7 +49,7 @@ namespace Code.GQClient.UI.pages.question.textquestion
                 // - we do use questionBG:
                 QuestionBackgroundImage.enabled = true;
                 QuestionBackgroundImage.color = new Color(
-                    (float) Config.Current.contentBackgroundColor.r / 256f,
+                    (float)Config.Current.contentBackgroundColor.r / 256f,
                     (float)Config.Current.contentBackgroundColor.g / 256f,
                     (float)Config.Current.contentBackgroundColor.b / 256f,
                     a: 200f / 256f // make question background semi transparent
@@ -62,23 +62,37 @@ namespace Code.GQClient.UI.pages.question.textquestion
                 if (QuestManager.Instance.MediaStore.ContainsKey(myPage.BackGroundImage))
                 {
                     QuestManager.Instance.MediaStore.TryGetValue(myPage.BackGroundImage, out var mediaInfo);
-                    loader = new LocalFileLoader(mediaInfo.LocalPath);
+                    loader = new LocalFileLoader(mediaInfo.LocalPath, new DownloadHandlerTexture());
                 }
                 else
                 {
                     loader =
                         new Downloader(
-                        url: myPage.BackGroundImage,
-                        timeout: Config.Current.timeoutMS,
-                        maxIdleTime: Config.Current.maxIdleTimeMS
-                    );
+                            url: myPage.BackGroundImage,
+                            new DownloadHandlerTexture(),
+                            timeout: Config.Current.timeoutMS,
+                            maxIdleTime: Config.Current.maxIdleTimeMS
+                        );
                     // TODO store the image locally ...
                 }
+
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
+                    DownloadHandlerTexture dhTexture = null;
+                    try
+                    {
+                        dhTexture = (DownloadHandlerTexture)d.DownloadHandler;
+                    }
+                    catch (InvalidCastException)
+                    {
+                        Log.SignalErrorToDeveloper(
+                            "TextQuestionLayout tried to load bgImage without TextureDownloadHandler");
+                        return;
+                    }
+                    
                     var fitter = BackgroundImage.gameObject.GetComponent<AspectRatioFitter>();
-                    fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-                    BackgroundImage.texture = d.Www.texture;
+                    fitter.aspectRatio = (float)dhTexture.texture.width / (float)dhTexture.texture.height;
+                    BackgroundImage.texture = dhTexture.texture;
                 };
                 loader.Start();
             }

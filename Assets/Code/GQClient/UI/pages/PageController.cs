@@ -11,6 +11,7 @@ using Code.GQClient.UI.layout;
 using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -243,7 +244,7 @@ namespace Code.GQClient.UI.pages
             {
                 if (page.Parent.MediaStore.TryGetValue(rtImageUrl, out var rtMediaInfo))
                 {
-                    loader = new LocalFileLoader(rtMediaInfo.LocalPath);
+                    loader = new LocalFileLoader(rtMediaInfo.LocalPath, new DownloadHandlerTexture());
                 }
                 else
                 {
@@ -258,12 +259,13 @@ namespace Code.GQClient.UI.pages
                 // not runtime media case, i.e. ordinary url case:
                 if (QuestManager.Instance.MediaStore.TryGetValue(rtImageUrl, out var mediaInfo))
                 {
-                    loader = new LocalFileLoader(mediaInfo.LocalPath);
+                    loader = new LocalFileLoader(mediaInfo.LocalPath, new DownloadHandlerTexture());
                 }
                 else
                 {
                     loader = new Downloader(
                         url: rtImageUrl,
+                        new DownloadHandlerTexture(),
                         timeout: Config.Current.timeoutMS,
                         maxIdleTime: Config.Current.maxIdleTimeMS
                     );

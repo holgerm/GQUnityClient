@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
@@ -7,6 +8,7 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.startandexitscreen
@@ -72,12 +74,24 @@ namespace Code.GQClient.UI.pages.startandexitscreen
         
         protected override void ImageDownloadCallback(AbstractDownloader d, DownloadEvent e)
         {
+            DownloadHandlerTexture dhTexture = null;
+            try
+            {
+                dhTexture = (DownloadHandlerTexture)d.DownloadHandler;
+            }
+            catch (InvalidCastException)
+            {
+                Log.SignalErrorToDeveloper(
+                    "StartAndExitScreen tried to load bgImage without TextureDownloadHandler");
+                return;
+            }
+
             var fitter = image.GetComponent<AspectRatioFitter>();
-            fitter.aspectRatio = d.Www.texture.width / (float) d.Www.texture.height;
-            image.texture = d.Www.texture;
+            fitter.aspectRatio = dhTexture.texture.width / (float) dhTexture.texture.height;
+            image.texture = dhTexture.texture;
 
             // Dispose www including it s Texture and take some logs for performance surveillance:
-            d.Www.Dispose();
+            d.WebRequest.Dispose();
         }
 
         public override void CleanUp() {

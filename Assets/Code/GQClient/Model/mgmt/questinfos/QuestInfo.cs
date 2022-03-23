@@ -14,6 +14,7 @@ using Code.GQClient.Util.tasks;
 using Code.QM.Util;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace GQClient.Model
 {
@@ -670,6 +671,7 @@ namespace GQClient.Model
             var downloadGameXml =
                 new Downloader(
                     url: QuestManager.GetQuestUri(Id),
+                    new DownloadHandlerFile($"{QuestManager.GetLocalPath4Quest(Id)}{QuestManager.QUEST_FILE_NAME}"),
                     timeout: Config.Current.timeoutMS,
                     maxIdleTime: Config.Current.maxIdleTimeMS,
                     targetPath: $"{QuestManager.GetLocalPath4Quest(Id)}{QuestManager.QUEST_FILE_NAME}"
@@ -926,7 +928,7 @@ namespace GQClient.Model
         }
 
         /// <summary>
-        /// Creates a task that just plays the locally existing quest, checks have to applied beforehand:
+        /// Creates a task that just plays the locally existing quest, checks have to be applied beforehand:
         /// </summary>
         /// <returns>The play.</returns>
         private Task CreatePlayTask()
@@ -934,7 +936,8 @@ namespace GQClient.Model
             // Load quest data: game.xml
             var loadGameXML =
                 new LocalFileLoader(
-                    filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME
+                    filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME, 
+                    new DownloadHandlerBuffer()
                 );
             var unused = Base.Instance.GetDownloadBehaviour(
                 loadGameXML,

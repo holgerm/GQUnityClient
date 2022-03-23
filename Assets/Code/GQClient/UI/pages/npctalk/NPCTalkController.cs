@@ -12,6 +12,7 @@ using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.npctalk
@@ -99,13 +100,24 @@ namespace Code.GQClient.UI.pages.npctalk
 
         protected override void ImageDownloadCallback(AbstractDownloader d, DownloadEvent e)
         {
-            var imageAreaHeight = image == null ? 0f : FitInAndShowImage(d.Www.texture);
+            DownloadHandlerTexture dhTexture = null;
+            
+            try
+            {
+                dhTexture = (DownloadHandlerTexture) d.DownloadHandler;
+            }
+            catch (InvalidCastException) {
+                d.WebRequest.Dispose();
+                return;
+            }
+            
+            var imageAreaHeight = image == null ? 0f : FitInAndShowImage(dhTexture.texture);
 
             imagePanel.GetComponent<LayoutElement>().flexibleHeight = LayoutConfig.Units2Pixels(imageAreaHeight);
             contentPanel.GetComponent<LayoutElement>().flexibleHeight = CalculateMainAreaHeight(imageAreaHeight);
 
             // Dispose www including it s Texture and take some logs for performance surveillance:
-            d.Www.Dispose();
+            d.WebRequest.Dispose();
         }
 
         private float FitInAndShowImage(Texture texture)

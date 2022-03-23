@@ -11,6 +11,7 @@ using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using Code.GQClient.Util.tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Code.GQClient.UI.map
 {
@@ -52,7 +53,8 @@ namespace Code.GQClient.UI.map
             // Load quest data: game.xml
             var loadGameXml =
                 new LocalFileLoader(
-                    filePath: QuestManager.GetLocalPath4Quest(Data.Id) + QuestManager.QUEST_FILE_NAME
+                    filePath: QuestManager.GetLocalPath4Quest(Data.Id) + QuestManager.QUEST_FILE_NAME, 
+                    new DownloadHandlerBuffer()
                 );
             _ = Base.Instance.GetDownloadBehaviour(
                 loadGameXml,

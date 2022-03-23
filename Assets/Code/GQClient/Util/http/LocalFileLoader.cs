@@ -3,6 +3,7 @@ using System.Collections;
 using Code.GQClient.Err;
 using Code.GQClient.FileIO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Code.GQClient.Util.http
 {
@@ -26,7 +27,7 @@ namespace Code.GQClient.Util.http
 		}
 
 		#endregion
-
+		
 
 		#region Public Interface
 
@@ -40,7 +41,7 @@ namespace Code.GQClient.Util.http
 		/// <param name="timeout">Timout in milliseconds (optional).</param>
 		/// <param name="timeout">Target path where the downloaded file will be stored (optional).</param>
 		public LocalFileLoader (
-			string filePath) : base (true)
+			string filePath, DownloadHandler downloadHandler) : base (downloadHandler, true)
 		{
 			Result = "";
 			this.filePath = filePath;
@@ -55,31 +56,33 @@ namespace Code.GQClient.Util.http
 			var url = Files.AbsoluteLocalPath (filePath);
 			
 
-			Www = new WWW (url);
+			WebRequest = UnityWebRequest.Get(url);
+			WebRequest.downloadHandler = DownloadHandler;
 
-			var msg = String.Format ("Start to load local file {0}", filePath);
+			string msg = $"Start to load local file {filePath}";
 			Raise (DownloadEventType.Start, new DownloadEvent (message: msg));
+			WebRequest.SendWebRequest();
 
-			var progress = 0f;
-			while (!Www.isDone) {
-				if (progress < Www.progress) {
-					progress = Www.progress;
+			float progress = 0f;
+			while (WebRequest is { isDone: false }) {
+				if (progress < WebRequest.downloadProgress) {
+					progress = WebRequest.downloadProgress;
 					msg = string.Format ("Loading local file: URL {0}, got {1:N2}%", filePath, progress * 100);
 					Raise (DownloadEventType.Progress, new DownloadEvent (progress: progress, message: msg));
 				}
-				if (Www == null)
-					UnityEngine.Debug.Log ("Www is null"); // TODO what to do in this case?
+				if (WebRequest == null)
+					UnityEngine.Debug.Log ("WebRequest is null"); // TODO what to do in this case?
 				yield return null;
 			} 
 				
-			if (Www.error != null && Www.error != "") {
-				Raise (DownloadEventType.Error, new DownloadEvent (message: Www.error + " file: " + filePath));
+			if (WebRequest != null && WebRequest.error != null && WebRequest.error != "") {
+				Raise (DownloadEventType.Error, new DownloadEvent (message: WebRequest.error + " file: " + filePath));
 				RaiseTaskFailed ();
 			} else {
-				Result = Www.text;
+				Result = WebRequest.downloadHandler.text;
 
 				msg = string.Format ("Loading local file: URL {0}, got {1:N2}%", filePath, progress * 100);
-				Raise (DownloadEventType.Progress, new DownloadEvent (progress: Www.progress, message: msg));
+				Raise (DownloadEventType.Progress, new DownloadEvent (progress: WebRequest.downloadProgress, message: msg));
 
 				msg = string.Format ("Loading local file completed. (URL: {0})", 
 					filePath);
@@ -87,7 +90,7 @@ namespace Code.GQClient.Util.http
 				RaiseTaskCompleted (Result);
 			}
 
-			Www.Dispose ();
+			WebRequest.Dispose ();
 			yield break;
 		}
 

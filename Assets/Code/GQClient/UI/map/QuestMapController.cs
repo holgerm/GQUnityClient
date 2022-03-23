@@ -4,6 +4,7 @@ using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.layout;
 using Code.GQClient.Util.http;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Code.GQClient.UI.map
 {
@@ -132,15 +133,18 @@ namespace Code.GQClient.UI.map
         private void LoadHotspotMarker(Hotspot hotspot, string markerUrl)
         {
             AbstractDownloader loader;
+            DownloadHandlerTexture downloadHandlerTexture = new DownloadHandlerTexture();
+
             if (QuestManager.Instance.MediaStore.ContainsKey(markerUrl))
             {
                 QuestManager.Instance.MediaStore.TryGetValue(markerUrl, out var mediaInfo);
-                loader = new LocalFileLoader(mediaInfo.LocalPath);
+                loader = new LocalFileLoader(mediaInfo.LocalPath, downloadHandlerTexture);
             }
             else
             {
                 loader = new Downloader(
                     url: markerUrl,
+                    downloadHandlerTexture,
                     timeout: Config.Current.timeoutMS,
                     maxIdleTime: Config.Current.maxIdleTimeMS
                 );
@@ -148,7 +152,7 @@ namespace Code.GQClient.UI.map
 
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                ShowLoadedMarker(hotspot, d.Www.texture);
+                ShowLoadedMarker(hotspot, downloadHandlerTexture.texture);
             };
             loader.Start();
         }

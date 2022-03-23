@@ -11,6 +11,7 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.Util.http;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 namespace Code.GQClient.Model.mgmt.quests
@@ -309,16 +310,18 @@ namespace Code.GQClient.Model.mgmt.quests
         public void LoadImageToTexture(string imagePath, Action<Texture2D> callbackOnSuccess)
         {
             AbstractDownloader loader;
+            DownloadHandlerTexture downloadHandler = new DownloadHandlerTexture();
             if (Instance.MediaStore.ContainsKey(imagePath))
             {
-                Instance.MediaStore.TryGetValue(imagePath, out var mediaInfo);
-                loader = new LocalFileLoader(mediaInfo?.LocalPath);
+                Instance.MediaStore.TryGetValue(imagePath, out MediaInfo mediaInfo);
+                loader = new LocalFileLoader(mediaInfo?.LocalPath, downloadHandler);
             }
             else
             {
                 loader =
                     new Downloader(
                         url: imagePath,
+                        new DownloadHandlerTexture(),
                         timeout: Config.Current.timeoutMS,
                         maxIdleTime: Config.Current.maxIdleTimeMS
                     );
@@ -327,7 +330,7 @@ namespace Code.GQClient.Model.mgmt.quests
 
             loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
             {
-                callbackOnSuccess(d.Www.texture);
+                callbackOnSuccess(downloadHandler.texture);
             };
             loader.Start();
         }

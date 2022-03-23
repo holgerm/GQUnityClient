@@ -1,4 +1,5 @@
-﻿using Code.GQClient.Conf;
+﻿using System;
+using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.gqml;
 using Code.GQClient.Model.mgmt.quests;
@@ -6,6 +7,7 @@ using Code.GQClient.Model.pages;
 using Code.GQClient.Util;
 using Code.GQClient.Util.http;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Code.GQClient.UI.pages.question.multiplechoice
@@ -68,7 +70,7 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                 {
                     if (myPage.Parent.MediaStore.TryGetValue(bgImageUrl, out var rtMediaInfo))
                     {
-                        loader = new LocalFileLoader(rtMediaInfo.LocalPath);
+                        loader = new LocalFileLoader(rtMediaInfo.LocalPath, new DownloadHandlerTexture());
                     }
                     else
                     {
@@ -81,13 +83,14 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
                     if (QuestManager.Instance.MediaStore.ContainsKey(bgImageUrl))
                     {
                         QuestManager.Instance.MediaStore.TryGetValue(bgImageUrl, out var mediaInfo);
-                        loader = new LocalFileLoader(mediaInfo.LocalPath);
+                        loader = new LocalFileLoader(mediaInfo.LocalPath, new DownloadHandlerTexture());
                     }
                     else
                     {
                         loader =
                             new Downloader(
                                 url: bgImageUrl,
+                                new DownloadHandlerTexture(),
                                 timeout: Config.Current.timeoutMS,
                                 maxIdleTime: Config.Current.maxIdleTimeMS
                             );
@@ -97,9 +100,20 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
 
                 loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
                 {
+                    DownloadHandlerTexture dhTexture = null;
+                    try
+                    {
+                        dhTexture = (DownloadHandlerTexture)d.DownloadHandler;
+                    }
+                    catch (InvalidCastException ice)
+                    {
+                        Log.SignalErrorToDeveloper("Loading bgImage for MultipleChoicePage is missing a TextureDownloadHandler");
+                        return;
+                    }
+                    
                     var fitter = BackgroundImage.gameObject.GetComponent<AspectRatioFitter>();
-                    fitter.aspectRatio = (float)d.Www.texture.width / (float)d.Www.texture.height;
-                    BackgroundImage.texture = d.Www.texture;
+                    fitter.aspectRatio = (float)dhTexture.texture.width / (float)dhTexture.texture.height;
+                    BackgroundImage.texture = dhTexture.texture;
                 };
                 loader.Start();
             }

@@ -2,17 +2,22 @@
 using Code.GQClient.Err;
 using Code.GQClient.Util.tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Code.GQClient.Util.http
 {
 	public abstract class AbstractDownloader : Task
 	{
 
-		public AbstractDownloader (bool runsAsCoroutine = true) : base (true)
+		public AbstractDownloader (DownloadHandler downloadHandler, bool runsAsCoroutine = true) : base (true)
 		{
+			DownloadHandler = downloadHandler;
 		}
 
-		public WWW Www { get; set; }
+		public UnityWebRequest WebRequest { get; set; }
+
+		public DownloadHandler DownloadHandler { get; }
+
 
 		public long Timeout { get; set; }
 		public long MaxIdleTime { get; set; }

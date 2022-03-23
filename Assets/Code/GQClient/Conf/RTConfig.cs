@@ -8,6 +8,7 @@ using Code.GQClient.Util.http;
 using Code.QM.Util;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
@@ -88,6 +89,7 @@ namespace Code.GQClient.Conf
 
             Downloader d = new Downloader(
                 rtProductUrl,
+                new DownloadHandlerBuffer(),
                 timeout: 0,
                 rtProductFile,
                 verbose: false);
@@ -95,7 +97,7 @@ namespace Code.GQClient.Conf
             {
                 Debug.Log($"Reading RTConfig.json from server");
 
-                Current = doDeserialize(dl.Www.text);
+                Current = doDeserialize(dl.WebRequest.downloadHandler.text);
             };
             d.Start();
         }

@@ -7,6 +7,7 @@ using Code.GQClient.Util.http;
 using Code.QM.Util;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Code.GQClient.Conf
 {
@@ -42,6 +43,7 @@ namespace Code.GQClient.Conf
 
                     Downloader d = new Downloader(
                         url: serverFileUrl,
+                        new DownloadHandlerTexture(),
                         timeout: 0,
                         targetPath: localFilePath);
                     d.OnTaskCompleted += (sender, args) =>
