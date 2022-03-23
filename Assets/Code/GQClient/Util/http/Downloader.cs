@@ -9,6 +9,7 @@ using System.Text;
 using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.UI.Dialogs;
+using QM.Util;
 using UnityEngine.Networking;
 using Debug = UnityEngine.Debug;
 
@@ -119,8 +120,6 @@ namespace Code.GQClient.Util.http
 #endif
                 OnError += defaultLogErrorHandler;
                 OnTimeout += defaultLogErrorHandler;
-                
-                Debug.Log($"Downloader created, type: {DownloadHandler.GetType().Name}, info: {DownloadHandler.ToString()}");
             }
         }
 
@@ -147,6 +146,7 @@ namespace Code.GQClient.Util.http
 
             UnityWebRequest webRequest = UnityWebRequest.Get(Url);
             webRequest.downloadHandler = DownloadHandler;
+            webRequest.certificateHandler = GQCertificateHandler.GetCertificateHandler();
 
             stopwatch.Reset();
             stopwatch.Start();
@@ -160,6 +160,9 @@ namespace Code.GQClient.Util.http
 
             Raise(DownloadEventType.Start, new DownloadEvent(message: msg));
             webRequest.SendWebRequest();
+            
+            Debug.Log($"Used certificateHandler: {webRequest.certificateHandler}");
+
 
             var progress = 0f;
             float progressNew;
@@ -219,7 +222,6 @@ namespace Code.GQClient.Util.http
                 yield return null;
             }
 
-            Debug.Log($"Downlooder done with url: {webRequest.url} isDone? {DownloadHandler.isDone} error: '{DownloadHandler.error}' type: {DownloadHandler.GetType().Name}");
             progressNew = webRequest.downloadProgress;
 
             stopwatch.Stop();
@@ -267,37 +269,11 @@ namespace Code.GQClient.Util.http
                     )
                 );
 
-                // if (TargetPath != null) // TODO obsolete due to DownloadHandlerFile ... ? check it!
-                // {
-                //     // we have to store the loaded file:
-                //     try
-                //     {
-                //         var targetDir = Directory.GetParent(TargetPath).FullName;
-                //         if (!Directory.Exists(targetDir))
-                //             Directory.CreateDirectory(targetDir);
-                //         if (File.Exists(TargetPath))
-                //             File.Delete(TargetPath);
-                //
-                //         File.WriteAllBytes(TargetPath, webRequest.downloadHandler.data);
-                //     }
-                //     catch (Exception e)
-                //     {
-                //         Raise(DownloadEventType.Error,
-                //             new DownloadEvent(message: "Could not save downloaded file: " + e.Message));
-                //         RaiseTaskFailed();
-                //
-                //         webRequest.Dispose();
-                //         yield break;
-                //     }
-                // }
-
                 ResponseHeaders = new Dictionary<string, string>(webRequest.GetResponseHeaders());
                 msg = string.Format("Download für Datei {0} abgeschlossen",
                     Url);
                 Raise(DownloadEventType.Success, new DownloadEvent(message: msg));
                 RaiseTaskCompleted(Result);
-                
-                Debug.Log($"Downloader DONE: handler says: {DownloadHandler.isDone}, has error?: {DownloadHandler.error}");
             }
 
             webRequest.Dispose();
