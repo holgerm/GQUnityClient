@@ -44,5 +44,37 @@ namespace Tests
             Assert.AreEqual(1, original.SplitWithMaskedSeparator().Count);
             Assert.That(original.SplitWithMaskedSeparator()[0] == "eins,zwei,drei");
         }
+
+        [Test]
+        public void TestDisplayString()
+        {
+            string original = "unused";
+            Assert.That(original.DisplayString() == original);
+            Assert.That(original.DisplayValueString() == original);
+
+            original = "  unused but with whites at start and end   ";
+            Assert.That(original.DisplayString() == original);
+            Assert.That(original.DisplayValueString() == original);
+
+            original = "{{Display->Value}}";
+            Assert.AreEqual("Display", original.DisplayString());
+            Assert.AreEqual("Value", original.DisplayValueString());
+
+            original = "{{ Display -> Value }}";
+            Assert.AreEqual(" Display ", original.DisplayString());
+            Assert.AreEqual(" Value ", original.DisplayValueString());
+            
+            original = "{{ Display => Value }}";
+            Assert.That(original.DisplayString() == original, "Should return the original string");
+            Assert.That(original.DisplayValueString() == original, "Should return the original string");
+            
+            original = "{{Display->Value}} ";
+            Assert.That(original.DisplayString() == original, "Should return the original string, because of the trailing whitespace");
+            Assert.That(original.DisplayValueString() == original, "Should return the original string, because of the trailing whitespace");
+            
+            original = " {{Display->Value}}";
+            Assert.That(original.DisplayString() == original, "Should return the original string, because of the leading whitespace");
+            Assert.That(original.DisplayValueString() == original, "Should return the original string, because of the leading whitespace");
+        }
     }
 }

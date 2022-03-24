@@ -37,7 +37,10 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
 			AnswerCtrl answerCtrl = go.GetComponent<AnswerCtrl> ();
 			answerCtrl.page = mcqPage;
 			answerCtrl.answer = answer;
-			answerCtrl.answerText.text = answer.Text.Decode4TMP(false);
+
+			// TODO SPECIAL Interpretation for Key-Value-Pairs (Key->Display, Value->Result)
+			// TODO maybe we should move that into the Answer model as separate Display and Value fields also in editor.
+			answerCtrl.answerText.text = answer.Text.HTMLDecode().DisplayString().Decode4TMP(false);
 			answerCtrl.answerButton.onClick.AddListener (answerCtrl.Select);
 
 			return answerCtrl;
@@ -45,7 +48,9 @@ namespace Code.GQClient.UI.pages.question.multiplechoice
 
 		public void Select ()
 		{
-			page.Result = answer.Text.MakeReplacements();
+			// TODO SPECIAL Interpretation for Key-Value-Pairs (Key->Display, Value->Result)
+			// TODO maybe we should move that into the Answer model as separate Display and Value fields also in editor.
+			page.Result = answer.Text.HTMLDecode().DisplayValueString().MakeReplacements();
 			if (answer.Correct) {
 				page.Succeed (alsoEnd: true);
 			} else {

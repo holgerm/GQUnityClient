@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 public static class StringExtensions
 {
@@ -70,4 +71,28 @@ public static class StringExtensions
 
         return result;
     }
+
+
+    private static readonly Regex DisplayValueRegex = new Regex("^{{(.+)->(.+)}}$", RegexOptions.Compiled);
+    
+    public static string DisplayString(this string original)
+    {
+        Match match = DisplayValueRegex.Match(original);
+
+        if (!match.Success)
+            return original;
+
+        return match.Groups[1].Value; 
+    }
+    
+    public static string DisplayValueString(this string original)
+    {
+        Match match = DisplayValueRegex.Match(original);
+
+        if (!match.Success)
+            return original;
+
+        return match.Groups[2].Value; 
+    }
+
 }

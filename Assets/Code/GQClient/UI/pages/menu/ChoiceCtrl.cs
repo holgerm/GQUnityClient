@@ -39,7 +39,9 @@ namespace Code.GQClient.UI.pages.menu
 			choiceCtrl.page = myPage;
 			choiceCtrl.choice = choice;
 			choiceCtrl.choiceText.color = Config.Current.mainFgColor;
-			choiceCtrl.choiceText.text = choice.Text.Decode4TMP(false);
+			// TODO SPECIAL Interpretation for Key-Value-Pairs (Key->Display, Value->Result)
+			// TODO maybe we should move that into the Answer model as separate Display and Value fields also in editor.
+			choiceCtrl.choiceText.text = choice.Text.HTMLDecode().DisplayString().Decode4TMP(false);
 			choiceCtrl.choiceButton.onClick.AddListener (choiceCtrl.Select);
 
 			return choiceCtrl;
@@ -47,7 +49,9 @@ namespace Code.GQClient.UI.pages.menu
 
 		public void Select ()
 		{
-			page.Result = choice.Text.MakeReplacements();
+			// TODO SPECIAL Interpretation for Key-Value-Pairs (Key->Display, Value->Result)
+			// TODO maybe we should move that into the Answer model as separate Display and Value fields also in editor.
+			page.Result = choice.Text.HTMLDecode().DisplayValueString().MakeReplacements();
 			page.End ();
 		}
 

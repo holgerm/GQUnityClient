@@ -52,7 +52,7 @@ namespace Code.GQClient.Util
             return value;
         }
 
-        private static string HTMLDecode(string rawText)
+        public static string HTMLDecode(this string rawText)
         {
             if (string.IsNullOrEmpty(rawText))
                 return rawText;
@@ -65,17 +65,17 @@ namespace Code.GQClient.Util
         }
 
         /// <summary>
-        /// Decodes HTML encodings (such as &lt;), replaces special tags (like <br>) and replaces Variable names with their current values.
+        /// Decodes HTML encodings (such as '&lt;'), replaces special tags (like &lt;br&gt;) and replaces Variable names with their current values.
         /// </summary>
         /// <returns>The hyper text.</returns>
         /// <param name="rawText">Raw text.</param>
         /// <param name="supportHtmlLinks">Support clickable links within the text, defaults to true.</param>
         public static string Decode4TMP(this string rawText, bool supportHtmlLinks = true)
         {
-            var result = HTMLDecode(rawText);
-            result = MakeReplacements(result);
+            var result = rawText.HTMLDecode();
+            result = result.MakeReplacements();
             if (supportHtmlLinks)
-                result = TransformLinks4TMP(result);
+                result = result.TransformLinks4TMP();
 
             return result;
         }
