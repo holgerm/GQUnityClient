@@ -106,8 +106,13 @@ namespace GQClient.Model
 
         #region Quest Info Changes
 
-        public void AddInfo(QuestInfo newInfo)
+        private void AddInfo(QuestInfo newInfo)
         {
+            string debugMsg = newInfo.Topics.Count > 0
+                ? $"QIM.AddInfo(): {newInfo.Name} topic: {newInfo.Topics[0]}"
+                : $"QIM.AddInfo(): {newInfo.Name} no topic.";
+            Debug.Log(debugMsg);
+            
             QuestDict.Add(newInfo.Id, newInfo);
 
             QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
@@ -119,8 +124,95 @@ namespace GQClient.Model
             DataChange.Invoke(ev);
         }
 
+        public void AddLocalInfos(IEnumerable<QuestInfo> quests)
+        {
+            // filter for valid new quests:
+            IEnumerable<QuestInfo> newQuests =
+                from q in quests
+                where q.Id > 0 && !QuestDict.ContainsKey(q.Id)
+                select q;
+
+            foreach (QuestInfo qi in newQuests)
+            {
+                string debugMsg = qi.Topics.Count > 0
+                    ? $"QIM.AddInfo(): {qi.Name} topic: {qi.Topics[0]}"
+                    : $"QIM.AddInfo(): {qi.Name} no topic.";
+                Debug.Log(debugMsg);
+              
+                QuestDict.Add(qi.Id, qi);
+            }
+            
+            QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
+                $"Info for multiple quests in list added.",
+                type: ChangeType.ListChanged
+            );
+
+            DataChange.Invoke(ev);
+        }
+
+        public void AddInfosFromServer(IEnumerable<QuestInfo> quests)
+        {
+                        // we make a separate list of ids of all old quest infos:
+            var oldIDsToBeRemoved = new List<int>(QuestDict.Keys);
+
+            // we create new qi elements and keep those we can reuse. We remove those from our helper list.
+            foreach (var newInfo in quests)
+            {
+                if (QuestDict.TryGetValue(newInfo.Id, out var oldInfo))
+                {
+                    // this new element was already there, hence we keep it (remove from the remove list) and update if newer:
+                    oldIDsToBeRemoved.Remove(newInfo.Id);
+
+                    if (oldInfo.ServerTimeStamp == null || oldInfo.ServerTimeStamp < newInfo.ServerTimeStamp)
+                    {
+                        UpdateInfo(newInfo);
+                    }
+                }
+                else
+                {
+                    AddInfo(newInfo);
+                }
+            }
+            
+            // now in the helper list only the old elements that are not mentioned in the new list anymore are left. Hence we delete them:
+            foreach (var oldId in oldIDsToBeRemoved)
+            {
+                if (Config.Current.autoSyncQuestInfos)
+                {
+                    // with autoSync we automatically remove the local quest data:
+                    QuestDict[oldId].Delete();
+
+                    // and also delete the quest infos from the list ...
+                    RemoveInfo(oldId);
+                }
+                else
+                {
+                    // when manually syncing ...
+                    if (QuestDict[oldId].IsOnDevice)
+                    {
+                        // if the quest exists local, we simply set the server-side update timestamp to null:
+                        QuestDict[oldId].DeletedFromServer();
+                        // this will trigger an OnChanged event and update the according view of the list element
+                    }
+                    else
+                    {
+                         // if the quest has not been loaded yet, we remove the quest info:
+                        QuestDict[oldId].Delete(); // introduced newly without exact knowledge (hm)
+                        RemoveInfo(oldId);
+                    }
+                }
+            }
+            
+            DataChange.Invoke(
+                new QuestInfoChangedEvent(
+                    "QuestInfoManager updated",
+                    ChangeType.ListChanged));
+        }
+
         public void UpdateInfo(QuestInfo changedInfo)
         {
+            Debug.Log($"QuestInfoManager.UpdateInfo({changedInfo.Name})");
+            
             if (!QuestDict.TryGetValue(changedInfo.Id, out QuestInfo curInfo))
             {
                 Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because it was not found locally.",
