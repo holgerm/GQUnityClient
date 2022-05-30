@@ -106,7 +106,6 @@ namespace Code.GQClient.UI.pages
                 }
             }
 
-            page.TriggerOnStart();
 
             InitPage_TypeSpecific();
             Base.Instance.BlockInteractions(false);

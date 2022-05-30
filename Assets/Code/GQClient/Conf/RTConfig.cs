@@ -68,8 +68,6 @@ namespace Code.GQClient.Conf
                 }
                 else
                 {
-                    Debug.Log($"Read RTConfig.json from app assets");
-
                     Current = doDeserialize(configAsset.text);
                 }
             }

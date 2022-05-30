@@ -9,6 +9,7 @@ namespace Code.GQClient.start
 {
     public class StartSceneController : MonoBehaviour
     {
+        public string canvasControllerName = "StartCanvas";
         private void Awake()
         {
             var _ = Migration.Migration.CurrentAppVersion; // just update it
@@ -16,7 +17,7 @@ namespace Code.GQClient.start
 
         private void Start()
         {
-            var startCanvasPrefab = Resources.Load<GameObject>("ImportedPackage/prefabs/StartCanvas");
+            var startCanvasPrefab = Resources.Load<GameObject>($"ImportedPackage/prefabs/{canvasControllerName}");
             if (startCanvasPrefab == null)
             {
                 // skip start canvas since it was not defined

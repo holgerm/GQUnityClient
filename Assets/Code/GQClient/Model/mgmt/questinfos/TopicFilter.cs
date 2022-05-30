@@ -18,6 +18,11 @@ namespace GQClient.Model
             }
         }
 
+        internal static void Disable()
+        {
+            _instance = null;
+        }
+
         private TopicFilter()
         {
             //Topic.OnCursorChanged += RaiseFilterChangeEvent;

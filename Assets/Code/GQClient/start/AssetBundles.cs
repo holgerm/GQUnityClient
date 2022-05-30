@@ -20,15 +20,15 @@ namespace Code.GQClient.start
         static Dictionary<string, AssetBundle> Bundles = new Dictionary<string, AssetBundle>();
 
         internal static Object Asset(string assetBundleName, string assetName)
-        // TODO create for iOS and Android at once
+            // TODO create for iOS and Android at once
         {
             if (!Bundles.ContainsKey(assetBundleName))
             {
-                var newBundle = AssetBundle.LoadFromFile(
-                        Path.Combine(Application.streamingAssetsPath, assetBundleName));
+                string path = Path.Combine(Application.streamingAssetsPath, assetBundleName);
+                var newBundle = AssetBundle.LoadFromFile(path);
                 if (newBundle == null)
                 {
-                    Log.SignalErrorToDeveloper($"Failed to load AssetBundle '{assetBundleName}'!");
+                    Log.SignalErrorToDeveloper($"Failed to load AssetBundle '{assetBundleName}' from path {path}!");
                     return null;
                 }
                 else
@@ -43,7 +43,8 @@ namespace Code.GQClient.start
             var obj = Bundles[assetBundleName].LoadAsset(assetName);
             if (obj == null)
             {
-                Log.SignalErrorToDeveloper("Failed to load Asset '{0}' from AssetBundle '{1}'!", assetName, assetBundleName);
+                Log.SignalErrorToDeveloper("Failed to load Asset '{0}' from AssetBundle '{1}'!", assetName,
+                    assetBundleName);
                 return null;
             }
 

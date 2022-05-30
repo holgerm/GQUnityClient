@@ -13,6 +13,5 @@ namespace Code.GQClient.UI.menu
 		{
 			MenuLayoutConfig.SetMenuEntryLayout (gameObject, fgColor: Config.Current.menuBGColor);
 		}
-
 	}
 }

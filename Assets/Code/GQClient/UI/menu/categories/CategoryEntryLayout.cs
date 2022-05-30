@@ -19,6 +19,5 @@ namespace Code.GQClient.UI.menu.categories
 			var catEntryCtrl = gameObject.GetComponent<CategoryEntryCtrl>();
 			if (catEntryCtrl != null) catEntryCtrl.UpdateView4State();
 		}
-
 	}
 }

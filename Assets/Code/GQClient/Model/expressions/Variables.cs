@@ -85,7 +85,8 @@ namespace Code.GQClient.Model.expressions
 
         public static bool IsDefined(string varName)
         {
-            return GetValue(varName) != Value.Null;
+            return variables.ContainsKey(varName);
+            // return GetValue(varName) != Value.Null;
         }
 
         /// <summary>

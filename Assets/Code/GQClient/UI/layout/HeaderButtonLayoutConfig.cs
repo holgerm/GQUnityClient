@@ -12,9 +12,7 @@ namespace Code.GQClient.UI.layout
 	[RequireComponent (typeof(Image)), RequireComponent (typeof(LayoutElement))]
 	public class HeaderButtonLayoutConfig : LayoutConfig
 	{
-        // TODO: This empty Start method seems necessary to allow for adapting layout when
-        // e.g. a webview is shown and this button should be disabled and greyed out.
-        // I do not know why!!??
+ 
         public void Start()
         {
             //Debug.Log("HeaderButtonLayoutConfig.Start() on " + name);

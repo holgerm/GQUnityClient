@@ -14,7 +14,11 @@ namespace Code.GQClient.UI.layout
 		public static string HEADER = "Header";
 		public static string FOOTER = "Footer";
 
+		/// <summary>
+		/// Actually does the layout, i.e. loads graphics and connects them to the Images etc.
+		/// </summary>
 		public abstract void layout ();
+
 
         protected virtual void Start()
 		{

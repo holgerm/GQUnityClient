@@ -30,7 +30,7 @@ namespace Code.GQClient.Util.http
 
         public static void defaultLogErrorHandler(AbstractDownloader d, DownloadEvent e)
         {
-            Debug.Log($"Downloader error: {e.Message} while downloading {d.WebRequest.url}");
+            Debug.Log($"Downloader error: {e.Message} while downloading {d.WebRequest?.url}");
             Log.SignalErrorToUser(e.Message);
             var message = e.Message;
             if (message.StartsWith("Cannot resolve destination host")
@@ -161,9 +161,6 @@ namespace Code.GQClient.Util.http
             Raise(DownloadEventType.Start, new DownloadEvent(message: msg));
             webRequest.SendWebRequest();
             
-            Debug.Log($"Used certificateHandler: {webRequest.certificateHandler}");
-
-
             var progress = 0f;
             float progressNew;
 

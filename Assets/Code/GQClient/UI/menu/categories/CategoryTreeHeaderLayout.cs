@@ -15,6 +15,5 @@ namespace Code.GQClient.UI.menu.categories
 			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Button/Hint", sizeScaleFactor: 0.6f, fgColor: Config.Current.menuFGColor);
 			MenuLayoutConfig.SetMenuEntryLayout (gameObject, "Button/OnOff", fgColor: Config.Current.menuFGColor);
 		}
-
 	}
 }

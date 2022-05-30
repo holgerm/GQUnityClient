@@ -183,6 +183,10 @@ namespace Code.GQClient.Conf
 
         [ShowInProductEditor] public float topicButtonAspectRatio { get; set; }
 
+        [ShowInProductEditor] public int topicColumnsOnSmallDevices { get; set; }
+
+        [ShowInProductEditor] public int topicColumnsOnLargeDevices { get; set; }
+
         public bool cloudQuestsVisible { get; set; }
 
         public bool showCloudQuestsImmediately { get; set; }
@@ -808,6 +812,8 @@ namespace Code.GQClient.Conf
             iOsDeviceTypes = iOSTargetDevice.iPhoneAndiPad;
 #endif
             topicButtonAspectRatio = 1.0f;
+            topicColumnsOnSmallDevices = 2;
+            topicColumnsOnLargeDevices = 3;
             mapStartPositionType = MapStartPositionType.CenterOfMarkers;
             cloudQuestsVisible = true;
             showCloudQuestsImmediately = false;

@@ -16,5 +16,4 @@ public class CanvasWithHeaderBg : LayoutConfig
     {
         if (_image) _image.color = Config.Current.headerBgColor;
     }
-
- }
+}

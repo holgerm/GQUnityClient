@@ -19,12 +19,17 @@ namespace Code.GQClient.start
         public Image FadeIn;
 
 
+        private void Awake()
+        {
+            var _ = Migration.Migration.CurrentAppVersion; // just update it
+        }
+
         // Start is called before the first frame update
         private IEnumerator Start()
         {
             loadImage(BG, "BG/ImageBG", "SplashScreenBG");
-            loadImage(FG, "FG/ImageFG", "SplashScreenFG");
-            loadImage(FadeIn, "FG/FadeInBG", "SplashScreenFadeIn");
+            loadImage(FG, "BG/ImageFG", "SplashScreenFG");
+            loadImage(FadeIn, "BG/FadeInBG", "SplashScreenFadeIn");
 
             if (FadeIn)
             {
@@ -61,6 +66,7 @@ namespace Code.GQClient.start
                 if (!image.sprite)
                 {
                     image.sprite = Resources.Load<Sprite>(resourceName);
+                    image.preserveAspect = true;
                 }
             }
         }
