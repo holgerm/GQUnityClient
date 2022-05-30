@@ -91,7 +91,7 @@ namespace GQClient.Model
             updateQuestInfoManager(quests);
         }
 
-        protected abstract void updateQuestInfoManager(IEnumerable<QuestInfo> newQuests);
+        protected abstract void updateQuestInfoManager(IEnumerable<QuestInfo> quests);
 
         public override object Result
         {

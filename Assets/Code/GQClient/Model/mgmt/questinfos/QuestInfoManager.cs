@@ -134,11 +134,6 @@ namespace GQClient.Model
 
             foreach (QuestInfo qi in newQuests)
             {
-                string debugMsg = qi.Topics.Count > 0
-                    ? $"QIM.AddInfo(): {qi.Name} topic: {qi.Topics[0]}"
-                    : $"QIM.AddInfo(): {qi.Name} no topic.";
-                Debug.Log(debugMsg);
-              
                 QuestDict.Add(qi.Id, qi);
             }
             
@@ -209,7 +204,7 @@ namespace GQClient.Model
                     ChangeType.ListChanged));
         }
 
-        public void UpdateInfo(QuestInfo changedInfo)
+        private void UpdateInfo(QuestInfo changedInfo)
         {
             Debug.Log($"QuestInfoManager.UpdateInfo({changedInfo.Name})");
             
@@ -222,19 +217,19 @@ namespace GQClient.Model
 
             curInfo.QuestInfoRecognizeServerUpdate(changedInfo);
 
-            // React also as container to a change info event
-            if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
-            {
-                // Run through filter and raise event if involved
-                DataChange.Invoke(
-                    new QuestInfoChangedEvent(
-                        message: $"Info for quest {curInfo.Name} changed.",
-                        type: ChangeType.ChangedInfo,
-                        newQuestInfo: curInfo,
-                        oldQuestInfo: curInfo
-                    )
-                );
-            }
+            // // React also as container to a change info event
+            // if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
+            // {
+            //     // Run through filter and raise event if involved
+            //     DataChange.Invoke(
+            //         new QuestInfoChangedEvent(
+            //             message: $"Info for quest {curInfo.Name} changed.",
+            //             type: ChangeType.ChangedInfo,
+            //             newQuestInfo: curInfo,
+            //             oldQuestInfo: curInfo
+            //         )
+            //     );
+            // }
         }
 
         public void RemoveInfo(int oldInfoId)

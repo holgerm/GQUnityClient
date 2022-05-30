@@ -19,6 +19,7 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             base.Start();
             QuestInfoManager.Instance.FilterChange.AddListener(SetDirty);
+            QuestInfoManager.Instance.DataChange.AddListener(OnQuestInfoChanged);
             Topic.CursorHome();
         }
 
@@ -43,14 +44,15 @@ namespace Code.GQClient.UI.Foyer.containers
         /// </summary>
         private void UpdateView()
         {
-            upwardButton.targetGraphic.enabled = 
-                Topic.Cursor.Parent != Topic.Null;
-            upwardButton.interactable =
-                Topic.Cursor.Parent != Topic.Null;
-            
+            Debug.Log($"QuestTopicTreeController.UpdateView() Cursor: {Topic.Cursor.Name}");
+
+            bool enableBackButton = Topic.Cursor.Parent != Topic.Null;
+            upwardButton.targetGraphic.enabled = enableBackButton;
+            upwardButton.interactable = enableBackButton;
+
             forwardButton.targetGraphic.enabled = false;
             forwardButton.interactable = false;
-            
+
             topicName.text = Topic.Cursor.Name;
 
             if (Topic.Cursor.Children.Count > 0)
@@ -67,16 +69,20 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected override void SorterChanged()
         {
+            Debug.Log("QuestTopicTreeController.SorterChanged()");
             // TODO maybe we could sort for alphabet, numbers, date, grades etc.
         }
 
         public override void FilterChanged()
         {
+            Debug.Log("QuestTopicTreeController.FilterChanged()");
             UpdateView();
         }
 
         protected override void ListChanged()
         {
+            Debug.Log("QuestTopicTreeController.ListChanged()");
+
             Topic.ClearAll();
 
             foreach (var info in Qim.GetFilteredQuestInfos())
@@ -90,10 +96,16 @@ namespace Code.GQClient.UI.Foyer.containers
             SetDirty();
         }
 
+        /// <summary>
+        /// Regenerates the UI for the Topic Subtree starting at the current Cursor position.
+        /// </summary>
         private void ShowTopicArea()
         {
             // clean topic area:
             var rootT = topicContentRoot.transform;
+            
+            Debug.Log($"QuestTopicTreeController.ShowTopicArea() on UI: {rootT.name}(#{rootT.childCount}) curTopic: {Topic.Cursor.Name}");
+            
             for (var i = 0; i < rootT.childCount; i++)
             {
                 var childGo = rootT.GetChild(i).gameObject;
@@ -114,18 +126,22 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected override void RemovedInfo(QuestInfoChangedEvent e)
         {
-            Topic.RemoveQuestInfo(e.OldQuestInfo, true);
+            Topic.RemoveQuestFromAllTopics(e.OldQuestInfo, true);
+            SetDirty();
         }
 
         protected override void ChangedInfo(QuestInfoChangedEvent e)
         {
-            Topic.RemoveQuestInfo(e.OldQuestInfo, true);
+            Debug.Log($"QuestTopicTreeController.ChangedInfo(): {e.OldQuestInfo.Name}");
+            Topic.RemoveQuestFromAllTopics(e.OldQuestInfo, true);
             Topic.InsertQuestInfo(e.NewQuestInfo);
+            SetDirty();
         }
 
         protected override void AddedInfo(QuestInfoChangedEvent e)
         {
             Topic.InsertQuestInfo(e.NewQuestInfo);
+            SetDirty();
         }
 
         /// <summary>
@@ -143,7 +159,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
         public void OnDisable()
         {
-            TopicFilter.Instance.IsActive = false;
+            TopicFilter.Disable();
         }
     }
 }

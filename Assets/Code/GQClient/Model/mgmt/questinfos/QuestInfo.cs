@@ -222,35 +222,63 @@ namespace GQClient.Model
             }
 
             // OK. Let's go:
-            Name = NewVersionOnServer.Name;
-            FeaturedImagePath = NewVersionOnServer.FeaturedImagePath;
-            TypeID = NewVersionOnServer.TypeID;
-            IconPath = NewVersionOnServer.IconPath;
-            ServerTimeStamp = NewVersionOnServer.ServerTimeStamp;
-            TimeStamp = ServerTimeStamp;
-            Hotspots = NewVersionOnServer.Hotspots;
-            Metadata = NewVersionOnServer.Metadata;
-            // unchanged: TimestampOfPredeployedVersion
-            // unchanged: PlayedTimes
+            updateMetadataFromNewVersion(NewVersionOnServer);
+
             NewVersionOnServer = null;
+            TimeStamp = ServerTimeStamp;
 
             InvokeOnChanged();
         }
 
         public void QuestInfoRecognizeServerUpdate(QuestInfo newQuestInfo)
         {
+            Debug.Log($"QuestInfo.QuestInfoRecognizeServerUpdate for {newQuestInfo.Name}");
             if (!IsUpdateValid(newQuestInfo))
             {
+                Debug.Log($"QuestInfo.QuestInfoRecognizeServerUpdate for {newQuestInfo.Name} INVALID");
                 return;
             }
 
-            // OK. Let's go:
-            ServerTimeStamp = newQuestInfo.ServerTimeStamp;
-            NewVersionOnServer = newQuestInfo;
-            Name = newQuestInfo.Name; // we update the name anyway
-            // the rest remains unchanged until content gets updated
+            QuestInfo oldQuestInfo = new QuestInfo(this);
 
+            if (TimeStamp is null or 0L)
+            {
+                // If not loaded yet: we update the metadata, name etc.:
+                updateMetadataFromNewVersion(newQuestInfo);
+            }
+            else
+            {
+                // mark as info-updated:
+                ServerTimeStamp = newQuestInfo.ServerTimeStamp;
+                NewVersionOnServer = newQuestInfo;
+            }
+
+            // local change just for listeners on this quest info
             InvokeOnChanged();
+            
+            // global change for all listeners to quest info manager, such as quest container controllers:
+            QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
+                $"Info for quest {oldQuestInfo.Name} updated.",
+                type: ChangeType.ChangedInfo,
+                oldQuestInfo: oldQuestInfo,
+                newQuestInfo: this
+            );
+            QuestInfoManager.Instance.DataChange.Invoke(ev);
+        }
+
+        /// <summary>
+        /// Updates local metadata from newVersionOnServer's metadata, incl. name, icons etc.
+        /// </summary>
+        /// <param name="newQuestInfo"></param>
+        private void updateMetadataFromNewVersion(QuestInfo newQuestInfo)
+        {
+            Name = newQuestInfo.Name;
+            FeaturedImagePath = newQuestInfo.FeaturedImagePath;
+            TypeID = newQuestInfo.TypeID;
+            IconPath = newQuestInfo.IconPath;
+            Hotspots = newQuestInfo.Hotspots;
+            Metadata = newQuestInfo.Metadata;
+            ServerTimeStamp = NewVersionOnServer.ServerTimeStamp;
         }
 
         private bool IsUpdateValid(QuestInfo newQuestInfo)
@@ -273,7 +301,7 @@ namespace GQClient.Model
             if (TimeStamp >= newQuestInfo.ServerTimeStamp)
             {
                 Log.SignalErrorToDeveloper(
-                    "QuestInfo Update to new server version failedfor Quest Id {0}: server version NOT NEWER: local timestamp: {1} vs server timestamp: {2}",
+                    "QuestInfo Update to new server version failed for Quest Id {0}: server version NOT NEWER: local timestamp: {1} vs server timestamp: {2}",
                     Id, TimeStamp, ServerTimeStamp);
                 return false;
             }
@@ -585,6 +613,26 @@ namespace GQClient.Model
 
         #region Runtime Functions
 
+        public QuestInfo()
+        {
+        }
+
+        public QuestInfo(QuestInfo original)
+        {
+            Name = original.Name;
+            Id = original.Id;
+            FeaturedImagePath = original.FeaturedImagePath;
+            TypeID = original.TypeID;
+            IconPath = original.IconPath;
+            Hotspots = original.Hotspots;
+            Metadata = original.Metadata;
+            TimeStamp = original.TimeStamp;
+            ServerTimeStamp = original.ServerTimeStamp;
+            NewVersionOnServer = original.NewVersionOnServer;
+            TimestampOfPredeployedVersion = original.TimestampOfPredeployedVersion;
+            PlayedTimes = original.PlayedTimes;
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -759,6 +807,7 @@ namespace GQClient.Model
         /// </summary>
         public Task Update()
         {
+            Debug.Log($"QuestInfo.Update() on {Name}");
             if (ActivitiesBlocking)
                 return null;
 
@@ -936,7 +985,7 @@ namespace GQClient.Model
             // Load quest data: game.xml
             var loadGameXML =
                 new LocalFileLoader(
-                    filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME, 
+                    filePath: QuestManager.GetLocalPath4Quest(Id) + QuestManager.QUEST_FILE_NAME,
                     new DownloadHandlerBuffer()
                 );
             var unused = Base.Instance.GetDownloadBehaviour(

@@ -1,6 +1,8 @@
-﻿using Code.GQClient.Conf;
+﻿using System.Text.RegularExpressions;
+using Code.GQClient.Conf;
 using Code.GQClient.UI;
 using Code.GQClient.UI.Foyer;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +11,7 @@ using UnityEngine.UI;
 public class TopicButtonCtrl : PrefabController
 {
     private const string PREFAB = "TopicButton";
-
+    
     public static TopicButtonCtrl Create (GameObject root, Topic topic)
     {
         // Create the view object for this controller:

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Code.GQClient.Util;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -20,14 +23,15 @@ namespace GQClient.Model
                 }
             }
             
-            // read new server info metadata:
-            if (qi.NewVersionOnServer?.Metadata != null)
-            {
-                foreach (var md in qi.NewVersionOnServer.Metadata)
-                {
-                    ReadMd(md, topics);
-                }
-            }
+            // BUGFIX: DO not take topics from new server metadata, before update, since it does not reflect current quest version
+            // // read new server info metadata:
+            // if (qi.NewVersionOnServer?.Metadata != null)
+            // {
+            //     foreach (var md in qi.NewVersionOnServer.Metadata)
+            //     {
+            //         ReadMd(md, topics);
+            //     }
+            // }
 
             return topics;
         }
@@ -37,9 +41,12 @@ namespace GQClient.Model
             switch (md.Key)
             {
                 case "topic":
-                    var netVal = md.Value.StripQuotes();
+                    var netVal = Regex.Unescape(md.Value.StripQuotes());
                     if (netVal != "" && !topics.Contains(netVal))
+                    {
                         topics.Add(netVal);
+                    }
+
                     break;
             }
         }

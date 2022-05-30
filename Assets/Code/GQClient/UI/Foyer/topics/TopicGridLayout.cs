@@ -24,8 +24,8 @@ public class TopicGridLayout : LayoutConfig
         _gridLayoutGroup.constraintCount = NumberOfColumns;
     }
 
-    private static int NumberOfColumns => Device.DisplaySize >= Device.Size.Medium ? 3 : 2;
+    public static int NumberOfColumns => Device.DisplaySize >= Device.Size.Medium ? 
+        Config.Current.topicColumnsOnLargeDevices : 
+        Config.Current.topicColumnsOnSmallDevices;
     
-
-
 }

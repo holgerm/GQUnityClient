@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Code.GQClient.Err;
 using Code.QM.Util;
 using GQClient.Model;
+using UnityEngine;
 
 namespace Code.GQClient.UI.Foyer
 {
@@ -11,6 +15,15 @@ namespace Code.GQClient.UI.Foyer
         {
             Null = new NullTopic();
             Root = new Topic("Alle Themen", Null);
+//            _topics = new Dictionary<string, Topic>();
+            try
+            {
+                _topics.Add(Root.FullName, Root);
+            }
+            catch (ArgumentException exc)
+            {
+                Log.SignalErrorToDeveloper($"Topic with name '{Root.FullName}' can not be added twice to _topics. Ignored.");
+            }
             CursorHome();
         }
 
@@ -18,6 +31,7 @@ namespace Code.GQClient.UI.Foyer
         {
             Roots.Clear();
             Root.Children.Clear();
+            _topics.Clear();
             CursorHome();
         }
 
@@ -152,7 +166,7 @@ namespace Code.GQClient.UI.Foyer
             }
         }
 
-        public static bool RemoveQuestInfo(QuestInfo questInfo, bool clean = false)
+        public static bool RemoveQuestFromAllTopics(QuestInfo questInfo, bool clean = false)
         {
             var tmp = Topic.Cursor;
             var success = false;
@@ -179,7 +193,7 @@ namespace Code.GQClient.UI.Foyer
             return success;
         }
 
-        public bool RemoveQuestFromTopic(QuestInfo questInfo)
+        public bool RemoveQuest(QuestInfo questInfo)
         {
             var qi = QuestInfos.Find(info => info.Id == questInfo.Id);
             if (qi != null)
@@ -204,16 +218,35 @@ namespace Code.GQClient.UI.Foyer
         protected Topic() : this("")
         {
             Name = "";
+            try
+            {
+                _topics.Add(FullName, this);
+            }
+            catch (ArgumentException exc)
+            {
+                Log.SignalErrorToDeveloper($"Topic with name '{FullName}' can not be added twice to _topics. Ignored.");
+            }
         }
 
         private Topic(string name, Topic parent = null)
         {
             Name = name;
             Parent = parent;
-            if (Cursor != null && Parent == Cursor)
-                QuestInfoManager.Instance.FilterChange.Invoke();
-                //OnCursorChanged?.Invoke();
+            try
+            {
+                _topics.Add(FullName, this);
+            }
+            catch (ArgumentException exc)
+            {
+                Log.SignalErrorToDeveloper($"Topic with name '{FullName}' can not be added twice to _topics. Ignored.");
+            }
+
+            Debug.Log($"Topic({name}) not calling FilterChanged() now ...");
+            // if (Cursor != null && Parent == Cursor)
+            //     QuestInfoManager.Instance.FilterChange.Invoke();
         }
+
+        private static Dictionary<string, Topic> _topics = new Dictionary<string, Topic>();
 
         /// <summary>
         /// Creates a solitaire topic, without any leaves (quest infos) contained.
@@ -222,6 +255,11 @@ namespace Code.GQClient.UI.Foyer
         /// <returns></returns>
         public static Topic Create(string topicPath)
         {
+            if (_topics.TryGetValue(topicPath, out Topic result))
+            {
+                return result;
+            }
+            
             if (string.IsNullOrEmpty(topicPath))
                 return Null;
 
@@ -237,7 +275,9 @@ namespace Code.GQClient.UI.Foyer
                     return Null;
             }
 
-            return CreateRecursive(Root, new List<string>(trimmedSegments));
+            result = CreateRecursive(Root, new List<string>(trimmedSegments));
+            QuestInfoManager.Instance.FilterChange.Invoke();
+            return result;
         }
 
         private static Topic CreateRecursive(Topic baseTopic, List<string> nameSegments)

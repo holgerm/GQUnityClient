@@ -337,13 +337,13 @@ namespace GQTests.UI
             Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 3));
 
             // removing the middle one:
-            Assert.IsTrue(Topic.RemoveQuestInfo(qi_2));
+            Assert.IsTrue(Topic.RemoveQuestFromAllTopics(qi_2));
             Assert.AreEqual(2, Topic.Cursor.NumberOfAllQuestInfos);
             Assert.IsFalse(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 2));
 
             // remove the other two:
-            Assert.IsTrue(Topic.Cursor.RemoveQuestFromTopic(new TestQuestInfo(1)));
-            Assert.IsTrue(Topic.Cursor.RemoveQuestFromTopic(new TestQuestInfo(3)));
+            Assert.IsTrue(Topic.Cursor.RemoveQuest(new TestQuestInfo(1)));
+            Assert.IsTrue(Topic.Cursor.RemoveQuest(new TestQuestInfo(3)));
             Assert.IsTrue(Topic.Cursor.IsEmpty);
         }
 
@@ -413,7 +413,7 @@ namespace GQTests.UI
             Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 4211));
 
             // remove quest info from leave topic KEEPS topic node itself:
-            Topic.RemoveQuestInfo(qi_4211);
+            Topic.RemoveQuestFromAllTopics(qi_4211);
             Assert.IsTrue(Topic.CursorSetTo("r4/s2/t1/u1"));
             Assert.IsFalse(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 4211));
             Assert.AreEqual(0, Topic.Cursor.NumberOfOwnQuestInfos);
@@ -425,7 +425,7 @@ namespace GQTests.UI
             Assert.AreEqual(1, Topic.Cursor.NumberOfOwnQuestInfos);
             Assert.IsTrue(Array.Exists(Topic.Cursor.GetQuestInfos(), info => info.Id == 3));
             // do
-            Topic.RemoveQuestInfo(qi_3);
+            Topic.RemoveQuestFromAllTopics(qi_3);
             // check
             Assert.That(Topic.CursorSetTo("r3"));
             Assert.AreEqual(0, Topic.Cursor.NumberOfOwnQuestInfos);
@@ -440,7 +440,7 @@ namespace GQTests.UI
             Topic.CursorSetTo("r4/s1/t1/u1");
             Assert.AreEqual(2, Topic.Cursor.NumberOfOwnQuestInfos);
             // do
-            Topic.RemoveQuestInfo(qi_4111);
+            Topic.RemoveQuestFromAllTopics(qi_4111);
             // check:
             Assert.That(Topic.CursorSetTo("r4/s1/t1/u1"));
             Assert.AreEqual(1, Topic.Cursor.NumberOfOwnQuestInfos);

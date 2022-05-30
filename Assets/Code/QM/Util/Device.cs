@@ -57,7 +57,7 @@ namespace Code.QM.Util
             get
             {
 #if UNITY_EDITOR
-                return Size.Large;
+                return Size.Medium;
 #else
                 return Screen.width / Screen.dpi < 4.13f ? Size.Small : Size.Large;
 #endif

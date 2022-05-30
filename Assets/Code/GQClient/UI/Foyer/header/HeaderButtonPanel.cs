@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 namespace Code.GQClient.UI.Foyer.header
 {
-
     public class HeaderButtonPanel : MonoBehaviour
     {
         public Button LeftButton;
         public Image LeftImage;
+        public Image TopLogo;
         public Button RightButton;
         public Image RightImage;
 
@@ -31,6 +31,16 @@ namespace Code.GQClient.UI.Foyer.header
             i = RightImage;
             c = i.color;
             i.color = new Color(c.r, c.g, c.b, interactable ? 1f : Config.Current.disabledAlpha);
+        }
+
+        public void SetGraphics(Sprite leftSprite, Sprite middleSprite, Sprite rightSprite)
+        {
+            if (LeftImage)
+                LeftImage.sprite = leftSprite;
+            if (TopLogo)
+                TopLogo.sprite = middleSprite;
+            if (RightImage)
+                RightImage.sprite = rightSprite;
         }
     }
 }
