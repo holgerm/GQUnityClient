@@ -22,8 +22,10 @@ namespace Code.GQClient.UI.Foyer
             }
             catch (ArgumentException exc)
             {
-                Log.SignalErrorToDeveloper($"Topic with name '{Root.FullName}' can not be added twice to _topics. Ignored.");
+                Log.SignalErrorToDeveloper(
+                    $"Topic with name '{Root.FullName}' can not be added twice to _topics. Ignored.");
             }
+
             CursorHome();
         }
 
@@ -168,27 +170,33 @@ namespace Code.GQClient.UI.Foyer
 
         public static bool RemoveQuestFromAllTopics(QuestInfo questInfo, bool clean = false)
         {
-            var tmp = Topic.Cursor;
-            var success = false;
-            foreach (var topicPath in questInfo.Topics)
-            {
-                if (CursorSetTo(topicPath))
-                {
-                    success |= Cursor.QuestInfos.Remove(questInfo);
+            object lockForSwitch = new object();
 
-                    if (clean)
+            var success = false;
+
+            lock (lockForSwitch)
+            {
+                var tmp = Cursor;
+                foreach (var topicPath in questInfo.Topics)
+                {
+                    if (CursorSetTo(topicPath))
                     {
-                        if (Cursor.QuestInfos.Count == 0 && Cursor.IsLeaf)
+                        success |= Cursor.QuestInfos.Remove(questInfo);
+
+                        if (clean)
                         {
-                            var tpToDelete = Cursor;
-                            CursorMoveUp();
-                            Cursor.Children.Remove(tpToDelete);
+                            if (Cursor.QuestInfos.Count == 0 && Cursor.IsLeaf)
+                            {
+                                var tpToDelete = Cursor;
+                                CursorMoveUp();
+                                Cursor.Children.Remove(tpToDelete);
+                            }
                         }
                     }
                 }
-            }
 
-            Cursor = tmp;
+                Cursor = tmp;
+            }
 
             return success;
         }
@@ -240,10 +248,6 @@ namespace Code.GQClient.UI.Foyer
             {
                 Log.SignalErrorToDeveloper($"Topic with name '{FullName}' can not be added twice to _topics. Ignored.");
             }
-
-            Debug.Log($"Topic({name}) not calling FilterChanged() now ...");
-            // if (Cursor != null && Parent == Cursor)
-            //     QuestInfoManager.Instance.FilterChange.Invoke();
         }
 
         private static Dictionary<string, Topic> _topics = new Dictionary<string, Topic>();
@@ -259,7 +263,7 @@ namespace Code.GQClient.UI.Foyer
             {
                 return result;
             }
-            
+
             if (string.IsNullOrEmpty(topicPath))
                 return Null;
 
@@ -276,7 +280,6 @@ namespace Code.GQClient.UI.Foyer
             }
 
             result = CreateRecursive(Root, new List<string>(trimmedSegments));
-            QuestInfoManager.Instance.FilterChange.Invoke();
             return result;
         }
 
@@ -335,6 +338,8 @@ namespace Code.GQClient.UI.Foyer
             }
         }
 
+        public static event Action CursorChangedEvent;
+
         //public static event VoidToVoid OnCursorChanged;
 
         public static bool CursorMoveDown(string childName)
@@ -346,6 +351,7 @@ namespace Code.GQClient.UI.Foyer
             }
 
             Cursor = child;
+            CursorChangedEvent?.Invoke();
             return true;
         }
 
@@ -355,12 +361,17 @@ namespace Code.GQClient.UI.Foyer
                 return false;
 
             Cursor = Cursor.Parent;
+            CursorChangedEvent?.Invoke();
             return true;
         }
 
         public static void CursorHome()
         {
-            Cursor = Root;
+            if (Cursor != Root)
+            {
+                Cursor = Root;
+                CursorChangedEvent?.Invoke();
+            }
         }
 
         public static bool CursorSetTo(string topicPath)
@@ -377,6 +388,7 @@ namespace Code.GQClient.UI.Foyer
                 }
             }
 
+            CursorChangedEvent?.Invoke();
             return true;
         }
     }

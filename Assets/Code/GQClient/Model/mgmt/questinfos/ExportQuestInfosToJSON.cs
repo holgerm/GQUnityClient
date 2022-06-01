@@ -24,7 +24,7 @@ namespace GQClient.Model
 					: JsonConvert.SerializeObject(questInfoList, Formatting.Indented);
 				Files.WriteAllText(QuestInfoManager.LocalQuestInfoJsonPath, questInfoJson);
 				
-				Debug.Log($"Exported local JSON: \n{questInfoJson}");
+				Debug.Log($"Exported local JSON: ...");
 			}
 			catch (Exception e) {
 				Log.SignalErrorToDeveloper ("Error while trying to export quest info json file: " + e.Message);

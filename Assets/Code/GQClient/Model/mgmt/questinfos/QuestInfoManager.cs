@@ -5,6 +5,7 @@ using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
+using Code.GQClient.UI.Foyer;
 using Code.GQClient.UI.Foyer.containers;
 using Code.GQClient.UI.menu.categories;
 using Code.GQClient.UI.menu.viewToggle;
@@ -371,6 +372,10 @@ namespace GQClient.Model
                 if (ChangeType.ListChanged == data.ChangeType)
                     InitFilters();
             });
+            
+            // register for changes in topic cursor (i.e. the currently shown topic)
+            // this should be done within the TopicView Controller etc. not here, or? TODO
+            Topic.CursorChangedEvent += FilterChange.Invoke;
         }
 
         void initViews()

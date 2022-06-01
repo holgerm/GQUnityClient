@@ -75,7 +75,6 @@ namespace Code.GQClient.UI.Foyer.containers
 
         public override void FilterChanged()
         {
-            Debug.Log("QuestTopicTreeController.FilterChanged()");
             UpdateView();
         }
 
@@ -103,8 +102,6 @@ namespace Code.GQClient.UI.Foyer.containers
         {
             // clean topic area:
             var rootT = topicContentRoot.transform;
-            
-            Debug.Log($"QuestTopicTreeController.ShowTopicArea() on UI: {rootT.name}(#{rootT.childCount}) curTopic: {Topic.Cursor.Name}");
             
             for (var i = 0; i < rootT.childCount; i++)
             {
