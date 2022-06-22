@@ -235,22 +235,6 @@
                     "symbol": {
                         "path": "update:1607081614:textures/readable/corona.png"
                     }
-                },
-                {
-                    "folderName": "Themen",
-                    "id": "wcc.organ",
-                    "name": "Orgel - Instrument 2021",
-                    "symbol": {
-                        "path": "update:1618512544:textures/readable/organ.png"
-                    }
-                },
-                {
-                    "folderName": "Themen",
-                    "id": "wcc.cribs",
-                    "name": "Krippen in Bonn",
-                    "symbol": {
-                        "path": "update:1638354897:textures/readable/crib.png"
-                    }
                 }
             ],
             "name": "Kategorien"
