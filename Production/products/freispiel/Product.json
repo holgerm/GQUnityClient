@@ -69,7 +69,7 @@
   "stopAudioWhenLeavingPage": true,
   "autoSyncQuestInfos": true,
   "autoLoadQuests": false,
-  "autoUpdateQuests": false,
+  "autoUpdateQuests": true,
   "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
   "mapStartPositionType": "PlayerPosition",

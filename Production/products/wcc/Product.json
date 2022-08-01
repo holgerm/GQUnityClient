@@ -254,7 +254,7 @@
     "b": 159,
     "a": 187
   },
-  "showEmptyMenuEntries": true,
+  "showEmptyMenuEntries": false,
   "menuEntryHeightUnits": 50.0,
   "menuEntryHeightMinMM": 7.0,
   "menuEntryHeightMaxMM": 0.0,

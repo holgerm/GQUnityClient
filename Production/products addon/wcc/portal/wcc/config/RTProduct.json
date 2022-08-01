@@ -133,11 +133,20 @@
                 {
                     "folderName": "Themen",
                     "id": "wcc.tour.beethoven",
-                    "name": "Beethoventour",
+                    "name": "Beethoven Historisch",
                     "symbol": {
                         "path": "textures/readable/beethoventour"
                     },
                     "catInfo": 14129
+                },
+                {
+                    "folderName": "Themen",
+                    "id": "wcc.beethoven.heute",
+                    "name": "Beethoven Heute",
+                    "symbol": {
+                        "path": "textures/readable/beethoventour"
+                    },
+                    "catInfo": 14225
                 },
                 {
                     "folderName": "Themen",
