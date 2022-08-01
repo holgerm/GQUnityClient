@@ -10,7 +10,11 @@ namespace Code.GQClient.Model.actions
     public class ActionSetVariable : ActionAbstractWithVar
     {
         #region Structure
-        public ActionSetVariable(XmlReader reader) : base(reader) { }
+
+        public ActionSetVariable(XmlReader reader) : base(reader)
+        {
+            
+        }
 
         protected IExpression valueExpression = null;
 

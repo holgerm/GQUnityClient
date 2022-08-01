@@ -16,7 +16,10 @@ namespace Code.GQClient.Model.actions
 		public I_GQML Parent { get; set; }
 
 		public Quest Quest {
-			get {
+			get
+			{
+				if (Parent == null) return null;
+				
 				return Parent.Quest;
 			}
 		}

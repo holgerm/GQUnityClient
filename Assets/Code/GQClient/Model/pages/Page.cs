@@ -66,7 +66,7 @@ namespace Code.GQClient.Model.pages
             {
 
                 if (reader.NodeType == XmlNodeType.Element)
-                    ReadContent(reader);
+                    ReadContent(reader, new XmlRootAttribute()); // RECENTLY ADDED tha second parameter to that call.
             }
 #if DEBUG_LOG
             Debug.Log("XML Page Content read.");
@@ -352,6 +352,8 @@ namespace Code.GQClient.Model.pages
                 Base.Instance.BlockInteractions(false);
                 InitOnSceneReused(scene);
             }
+            
+            StartTrigger.Initiate();
         }
 
         public virtual void End(Boolean leaveQuestIfEmpty = true)

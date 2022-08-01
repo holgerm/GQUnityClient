@@ -16,6 +16,7 @@ namespace Code.GQClient.Model.actions
         {
             get
             {
+                if (Parent == null) return null;
                 return Parent.Quest;
             }
         }
