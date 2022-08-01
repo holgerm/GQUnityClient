@@ -65,78 +65,53 @@ namespace Code.GQClient.Util
             // lookup the dictionary of currently prepared audiosources
             if (audioSources.TryGetValue(path, out var audioSource))
             {
-                Debug.Log("Audio: locally found: start playing ...");
                 _internalStartPlaying(audioSource, loop, stopOtherAudio);
                 return audioSource.clip.length;
             }
             else
             {
-                Debug.Log("Audio: NOT found: start loading ...");
-                // NEW:
                 AbstractDownloader loader;
                 string loadPath = null;
                 if (QuestManager.Instance.MediaStore.ContainsKey(path))
                 {
                     QuestManager.Instance.MediaStore.TryGetValue(path, out var mediaInfo);
-                    loadPath = mediaInfo.LocalPath;
-                    // loader = new LocalFileLoader(mediaInfo.LocalPath, new DownloadHandlerBuffer());
+                    loadPath = "file://" + mediaInfo.LocalPath;
                 }
                 else
                 {
                     loadPath = path;
                 }
 
-                CoroutineStarter.Instance.StartCoroutine(GetAudioClip(loadPath, audioSource, loop, stopOtherAudio));
-
-                // {
-                //     loader = new Downloader(
-                //         url: path,
-                //         new DownloadHandlerBuffer(),
-                //         timeout: Config.Current.timeoutMS,
-                //         maxIdleTime: Config.Current.maxIdleTimeMS
-                //     );
-                //     // TODO store the image locally ...
-                // }
-                // loader.OnSuccess += (AbstractDownloader d, DownloadEvent e) =>
-                // {
-                //     var go = new GameObject("AudioSource for " + path);
-                //     go.transform.SetParent(Base.Instance.transform);
-                //     audioSource = go.AddComponent<AudioSource>();
-                //     audioSources[path] = audioSource;
-                //
-                //     audioSource.clip = d.WebRequest.GetAudioClip(path, AudioType.UNKNOWN);
-                //     _internalStartPlaying(audioSource, loop, stopOtherAudio);
-                //     // Dispose www including it s Texture and take some logs f  or preformace surveillance:
-                //     d.WebRequest.Dispose();
-                // };
-                // loader.Start();
+                CoroutineStarter.Instance.StartCoroutine(GetAudioClip(loadPath, path, loop, stopOtherAudio));
 
                 return 0f;
             }
         }
 
-        static IEnumerator GetAudioClip(string path, AudioSource audioSource, bool loop, bool stopOtherAudio)
+        /// <summary>
+        /// Loads an Audio File from file or server and adds it to the cache of audio sources.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="url">Used as key in the audiosources cache within the scene.</param>
+        /// <param name="loop"></param>
+        /// <param name="stopOtherAudio"></param>
+        /// <returns></returns>
+        static IEnumerator GetAudioClip(string path, string url, bool loop, bool stopOtherAudio)
         {
-            Debug.Log($"Audio: GetAudioClip path: {path}");
             using UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.UNKNOWN);
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.ConnectionError)
             {
-                Debug.Log($"Audio: Problem loading from {path} message: {www.error}");
+                Log.SignalErrorToAuthor($"Audio: Problem loading from {path} message: {www.error}");
             }
             else
             {
-                Debug.Log($"Audio: going to load load clip from {path}");
-
-                audioSource.clip = DownloadHandlerAudioClip.GetContent(www);
                 var go = new GameObject("AudioSource for " + path);
                 go.transform.SetParent(Base.Instance.transform);
-                audioSource = go.AddComponent<AudioSource>();
-                audioSources[path] = audioSource;
-                
-                Debug.Log($"Audio: loaded clip {audioSource.clip.name} attached to go: {go.name}");
-
+                AudioSource audioSource = go.AddComponent<AudioSource>();
+                audioSources[url] = audioSource;
+                audioSource.clip = DownloadHandlerAudioClip.GetContent(www);
                 _internalStartPlaying(audioSource, loop, stopOtherAudio);
             }
         }
@@ -166,7 +141,6 @@ namespace Code.GQClient.Util
             }
 
             audioWWW.Dispose();
-            yield break;
         }
 
         static void _internalStartPlaying(AudioSource audioSource, bool loop, bool stopOtherAudio)

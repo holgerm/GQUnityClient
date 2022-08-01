@@ -229,8 +229,6 @@ namespace Code.GQClient.Model.mgmt.quests
                 var info = new MediaInfo(QuestInfoManager.QuestsRelativeBasePath, url);
                 MediaStore.Add(url, info);
             }
-
-            // QuestManager.Instance.AddMedia(url, contextDescription);
         }
 
         public static string GetMediaJsonPath(int questId) =>
@@ -335,7 +333,7 @@ namespace Code.GQClient.Model.mgmt.quests
                 );
             }
 
-            pageTypeName = string.Format("{0}.Page{1}", modelNamespace, pageTypeName);
+            pageTypeName = $"{modelNamespace}.Page{pageTypeName}";
             Type pageType = Type.GetType(pageTypeName);
 
             if (pageType == null)
