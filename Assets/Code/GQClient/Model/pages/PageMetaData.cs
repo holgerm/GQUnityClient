@@ -50,17 +50,17 @@ namespace Code.GQClient.Model.pages
 
 		public int Id {
 			get;
-			protected set;
+			set;
 		}
 
 		public string Key {
 			get;
-			protected set;
+			set;
 		}
 
 		public string Value {
 			get;
-			protected set;
+			set;
 		}
 		#endregion
 
