@@ -95,7 +95,7 @@ namespace Code.GQClient.Conf
             {
                 Debug.Log($"Reading RTConfig.json from server");
 
-                Current = doDeserialize(dl.WebRequest.downloadHandler.text);
+                Current = doDeserialize(dl.DownloadHandler.text);
             };
             d.Start();
         }
