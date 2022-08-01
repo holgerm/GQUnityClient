@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Code.GQClient.UI.Foyer;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -40,7 +41,7 @@ namespace GQClient.Model
                 return true;
             }
             
-            // TODO Check wether qi fits to current cursor topic
+            // TODO Check whether qi fits to current cursor topic
             foreach (var topicString in qi.Topics)
             {
                 if (topicString.StartsWith(Topic.Cursor.FullName))

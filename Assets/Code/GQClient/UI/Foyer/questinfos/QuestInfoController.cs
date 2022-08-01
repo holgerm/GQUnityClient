@@ -30,7 +30,7 @@ namespace Code.GQClient.UI.Foyer.questinfos
 		public void UpdateData(QuestInfo newInfo) {
             // some values will be kept (until we really do the quest update, this here is only the quest-info update!):
             data = newInfo;
- 
+            data.OnChanged += UpdateView;
             UpdateView (newInfo);
 		}
 

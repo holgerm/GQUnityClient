@@ -33,17 +33,20 @@ namespace Code.GQClient.UI.Foyer.containers
             }
         }
 
-        protected void Start()
+        protected void Awake()
         {
             Qim.DataChange.AddListener(OnQuestInfoChanged);
             Qim.FilterChange.AddListener(FilterChanged);
 
             ShowDeleteOption.DeleteOptionVisibilityChanged += UpdateElementViews;
             StartUpdateViewAlreadyDone = true;
+        }
 
+        protected void Start()
+        {
             // After registering we need to update our views now:
-            ListChanged();
-            //FilterChanged();
+            RecreateTopicTree();
+            //FilterChanged(); 
         }
 
         public virtual void OnQuestInfoChanged(QuestInfoChangedEvent e)
@@ -59,7 +62,7 @@ namespace Code.GQClient.UI.Foyer.containers
                         RemovedInfo(e);
                     break;
                 case ChangeType.ListChanged:
-                    ListChanged();
+                    RecreateTopicTree();
                     break;
                 case ChangeType.FilterChanged:
                     FilterChanged();
@@ -81,7 +84,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
         public abstract void FilterChanged();
 
-        protected abstract void ListChanged();
+        protected abstract void RecreateTopicTree();
 
         protected abstract void RemovedInfo(QuestInfoChangedEvent e);
 

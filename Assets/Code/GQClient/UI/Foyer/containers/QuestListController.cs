@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Code.GQClient.Conf;
 using Code.GQClient.Err;
 using GQClient.Model;
@@ -28,7 +30,7 @@ namespace Code.GQClient.UI.Foyer.containers
             if (StartUpdateViewAlreadyDone)
             {
                 // if we are already started earlier we refresh the list, since we might have switched from TopicTree
-                ListChanged();
+                RecreateTopicTree();
             }
             else
             {
@@ -36,12 +38,17 @@ namespace Code.GQClient.UI.Foyer.containers
                 RefreshOnStart = true;
             }
 
-            RTConfig.RTConfigChanged.AddListener(ListChanged);
+            RTConfig.RTConfigChanged.AddListener(RecreateTopicTree);
         }
 
         public void OnDisable()
         {
             StartUpdateViewAlreadyDone = false;
+        }
+
+        private void Awake()
+        {
+            base.Awake();
         }
 
         private void Start()
@@ -50,7 +57,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
             if (RefreshOnStart && !StartUpdateViewAlreadyDone)
             {
-                ListChanged();
+                RecreateTopicTree();
             }
 
             StartUpdateViewAlreadyDone = true;
@@ -155,7 +162,7 @@ namespace Code.GQClient.UI.Foyer.containers
         /// <summary>
         /// Updates the view.
         /// </summary>
-        protected override void ListChanged()
+        protected override void RecreateTopicTree()
         {
             Base.Instance.StartCoroutine(regenerateAllAsCoroutine());
         }
@@ -192,7 +199,9 @@ namespace Code.GQClient.UI.Foyer.containers
             QuestInfoControllers.Clear();
 
             //int steps = 0;
-            foreach (QuestInfo info in Qim.GetFilteredQuestInfos())
+
+            IEnumerable<QuestInfo> questInfos = Qim.GetFilteredQuestInfos();
+            foreach (QuestInfo info in questInfos)
             {
                 // create new list elements
                 var qiCtrl =

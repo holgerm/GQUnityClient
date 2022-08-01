@@ -1048,7 +1048,8 @@ namespace Code.GQClient.Conf
             return rt.GetCategory(catId);
         }
 
-        [ShowInProductEditor, JsonIgnore] public string defaultCategory => rt.defaultCategory;
+        [ShowInProductEditor, JsonIgnore] public string defaultCategory => rt.
+            defaultCategory;
 
         #endregion
 

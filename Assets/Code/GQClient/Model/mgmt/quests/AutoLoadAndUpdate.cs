@@ -13,8 +13,6 @@ namespace Code.GQClient.Model.mgmt.quests
     {
         protected override IEnumerator DoTheWork()
         {
-            Debug.Log($"Autoupdate started.");
-
             var questInfoList = QuestInfoManager.Instance.GetListOfQuestInfos();
             var downloadList = new List<QuestInfo>();
             var updateList = new List<QuestInfo>();

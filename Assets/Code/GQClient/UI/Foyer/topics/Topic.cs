@@ -15,25 +15,14 @@ namespace Code.GQClient.UI.Foyer
         {
             Null = new NullTopic();
             Root = new Topic("Alle Themen", Null);
-//            _topics = new Dictionary<string, Topic>();
-            try
-            {
-                _topics.Add(Root.FullName, Root);
-            }
-            catch (ArgumentException exc)
-            {
-                Log.SignalErrorToDeveloper(
-                    $"Topic with name '{Root.FullName}' can not be added twice to _topics. Ignored.");
-            }
-
             CursorHome();
+            CursorChangedEvent += QuestInfoManager.Instance.FilterChange.Invoke;
         }
 
         public static void ClearAll()
         {
-            Roots.Clear();
             Root.Children.Clear();
-            _topics.Clear();
+            Topics.Clear();
             CursorHome();
         }
 
@@ -41,13 +30,9 @@ namespace Code.GQClient.UI.Foyer
         {
             get
             {
-                if (Parent == null || Parent == Null)
-                    return "";
-
-                if (Parent == Root)
-                    return Name
-                        ;
-
+                if (Parent == null || Parent == Null || Parent == Root)
+                    return Name;
+                
                 return Parent.FullName + "/" + Name;
             }
         }
@@ -65,22 +50,8 @@ namespace Code.GQClient.UI.Foyer
             }
         }
 
-        private static List<Topic> _rootTopics;
 
-        protected static List<Topic> Roots
-        {
-            get
-            {
-                if (_rootTopics == null)
-                {
-                    _rootTopics = new List<Topic>();
-                }
-
-                return _rootTopics;
-            }
-        }
-
-        private List<Topic> _children;
+         private List<Topic> _children;
         private Topic _parent;
 
         public List<Topic> Children
@@ -222,27 +193,14 @@ namespace Code.GQClient.UI.Foyer
                 return result;
             }
         }
-
-        protected Topic() : this("")
-        {
-            Name = "";
-            try
-            {
-                _topics.Add(FullName, this);
-            }
-            catch (ArgumentException exc)
-            {
-                Log.SignalErrorToDeveloper($"Topic with name '{FullName}' can not be added twice to _topics. Ignored.");
-            }
-        }
-
-        private Topic(string name, Topic parent = null)
+        
+        private Topic(string name = "", Topic parent = null)
         {
             Name = name;
             Parent = parent;
             try
             {
-                _topics.Add(FullName, this);
+                Topics.Add(FullName, this);
             }
             catch (ArgumentException exc)
             {
@@ -250,7 +208,7 @@ namespace Code.GQClient.UI.Foyer
             }
         }
 
-        private static Dictionary<string, Topic> _topics = new Dictionary<string, Topic>();
+        private static readonly Dictionary<string, Topic> Topics = new();
 
         /// <summary>
         /// Creates a solitaire topic, without any leaves (quest infos) contained.
@@ -259,7 +217,7 @@ namespace Code.GQClient.UI.Foyer
         /// <returns></returns>
         public static Topic Create(string topicPath)
         {
-            if (_topics.TryGetValue(topicPath, out Topic result))
+            if (Topics.TryGetValue(topicPath, out Topic result))
             {
                 return result;
             }
@@ -332,7 +290,7 @@ namespace Code.GQClient.UI.Foyer
                 if (Cursor != value)
                 {
                     _cursor = value;
-                    QuestInfoManager.Instance.FilterChange.Invoke();
+                    //QuestInfoManager.Instance.FilterChange.Invoke();
                     //OnCursorChanged?.Invoke();
                 }
             }

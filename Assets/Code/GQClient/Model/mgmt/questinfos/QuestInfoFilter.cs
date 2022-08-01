@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Code.GQClient.Conf;
 using Code.GQClient.UI.author;
+using UnityEngine;
 
 // ReSharper disable All
 
@@ -11,31 +12,6 @@ namespace GQClient.Model
     public abstract partial class QuestInfoFilter
     {
         public delegate void OnFilterChanged();
-
-//        public event OnFilterChanged FilterChange;
-
-        // protected void RaiseFilterChangeEvent()
-        // {
-        //     if (NotificationPaused)
-        //         return;
-        //
-        //     FilterChange?.Invoke();
-        //
-        //     if (ParentFilter != null)
-        //         ParentFilter.RaiseFilterChangeEvent();
-        // }
-
-        // bool _notificationPaused = false;
-        //
-        // public bool NotificationPaused
-        // {
-        //     get { return _notificationPaused; }
-        //     set
-        //     {
-        //         _notificationPaused = value;
-        //         RaiseFilterChangeEvent();
-        //     }
-        // }
 
         protected QuestInfoFilter ParentFilter { get; set; }
 
@@ -104,10 +80,7 @@ namespace GQClient.Model
             {
                 IsActive = !Config.Current.ShowHiddenQuests;
                 Author.SettingsChanged +=
-                    (object sender, System.EventArgs e) =>
-                    {
-                        IsActive = !Config.Current.ShowHiddenQuests;
-                    };
+                    (object sender, System.EventArgs e) => { IsActive = !Config.Current.ShowHiddenQuests; };
             }
 
             public override bool Accept(QuestInfo qi)
@@ -267,7 +240,7 @@ namespace GQClient.Model
                 {
                     catIds[catDisjunctionName].Add(category.id);
                     //RaiseFilterChangeEvent();
-                    QuestInfoManager.Instance.FilterChange.Invoke();
+                    QuestInfoManager.Instance.FilterChange.Invoke(); // add bulk add method for initialization e.g.
                 }
             }
 
@@ -284,7 +257,6 @@ namespace GQClient.Model
                     catIds[catDisjunctionName].Remove(category.id);
                     //RaiseFilterChangeEvent();
                     QuestInfoManager.Instance.FilterChange.Invoke();
-
                 }
             }
 
@@ -354,7 +326,7 @@ namespace GQClient.Model
 
                 if (qiDoesNotContainAnyCatOfThisGroup)
                 {
-                   return Config.Current.showIfNoCatDefined;
+                    return Config.Current.showIfNoCatDefined;
                     // in this case the quest info DOES NOT CONTAIN ANY of the categories of this group and
                     // though should be shown if specified so in option 'showIfNoCatDefined'.
                 }
@@ -481,11 +453,12 @@ namespace GQClient.Model
                 // the qi is accepted, so we also accept any categories to represent it:
                 for (var j = 0; j < subfilters.Count; j++)
                 {
-                    for (var i = 0; i < subfilters[j].AcceptedCategories(qi).Count; i++)
+                    List<string> acceptedCatsOfSubfilter = subfilters[j].AcceptedCategories(qi);
+                    for (var i = 0; i < acceptedCatsOfSubfilter.Count; i++)
                     {
-                        if (!acceptedCategories.Contains(subfilters[j].AcceptedCategories(qi)[i]))
+                        if (!acceptedCategories.Contains(acceptedCatsOfSubfilter[i]))
                         {
-                            acceptedCategories.Add(subfilters[j].AcceptedCategories(qi)[i]);
+                            acceptedCategories.Add(acceptedCatsOfSubfilter[i]);
                         }
                     }
                 }

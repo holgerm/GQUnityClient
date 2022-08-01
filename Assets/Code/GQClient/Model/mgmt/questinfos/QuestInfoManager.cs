@@ -113,7 +113,7 @@ namespace GQClient.Model
                 ? $"QIM.AddInfo(): {newInfo.Name} topic: {newInfo.Topics[0]}"
                 : $"QIM.AddInfo(): {newInfo.Name} no topic.";
             Debug.Log(debugMsg);
-            
+
             QuestDict.Add(newInfo.Id, newInfo);
 
             QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
@@ -137,7 +137,7 @@ namespace GQClient.Model
             {
                 QuestDict.Add(qi.Id, qi);
             }
-            
+
             QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
                 $"Info for multiple quests in list added.",
                 type: ChangeType.ListChanged
@@ -148,7 +148,7 @@ namespace GQClient.Model
 
         public void AddInfosFromServer(IEnumerable<QuestInfo> quests)
         {
-                        // we make a separate list of ids of all old quest infos:
+            // we make a separate list of ids of all old quest infos:
             var oldIDsToBeRemoved = new List<int>(QuestDict.Keys);
 
             // we create new qi elements and keep those we can reuse. We remove those from our helper list.
@@ -169,7 +169,7 @@ namespace GQClient.Model
                     AddInfo(newInfo);
                 }
             }
-            
+
             // now in the helper list only the old elements that are not mentioned in the new list anymore are left. Hence we delete them:
             foreach (var oldId in oldIDsToBeRemoved)
             {
@@ -192,13 +192,13 @@ namespace GQClient.Model
                     }
                     else
                     {
-                         // if the quest has not been loaded yet, we remove the quest info:
+                        // if the quest has not been loaded yet, we remove the quest info:
                         QuestDict[oldId].Delete(); // introduced newly without exact knowledge (hm)
                         RemoveInfo(oldId);
                     }
                 }
             }
-            
+
             DataChange.Invoke(
                 new QuestInfoChangedEvent(
                     "QuestInfoManager updated",
@@ -207,30 +207,14 @@ namespace GQClient.Model
 
         private void UpdateInfo(QuestInfo changedInfo)
         {
-            Debug.Log($"QuestInfoManager.UpdateInfo({changedInfo.Name})");
-            
             if (!QuestDict.TryGetValue(changedInfo.Id, out QuestInfo curInfo))
             {
-                Log.SignalErrorToDeveloper("Quest Inf {0} could not be updated because it was not found locally.",
-                    changedInfo.Id);
+                Log.SignalErrorToDeveloper($"Quest Inf {changedInfo.Id} could not be updated because it was not found locally.");
                 return;
             }
 
-            curInfo.QuestInfoRecognizeServerUpdate(changedInfo);
-
-            // // React also as container to a change info event
-            // if (Filter.Accept(curInfo)) // TODO should we also do it, if the new qi does not pass the filter?
-            // {
-            //     // Run through filter and raise event if involved
-            //     DataChange.Invoke(
-            //         new QuestInfoChangedEvent(
-            //             message: $"Info for quest {curInfo.Name} changed.",
-            //             type: ChangeType.ChangedInfo,
-            //             newQuestInfo: curInfo,
-            //             oldQuestInfo: curInfo
-            //         )
-            //     );
-            // }
+            QuestDict.Remove(curInfo.Id);
+            QuestDict.Add(changedInfo.Id, changedInfo);
         }
 
         public void RemoveInfo(int oldInfoId)
@@ -238,9 +222,7 @@ namespace GQClient.Model
             if (!QuestDict.TryGetValue(oldInfoId, out QuestInfo oldInfo))
             {
                 Log.SignalErrorToDeveloper(
-                    "Trying to remove quest info with ID {0} but it does not exist in QuestInfoManager.",
-                    oldInfoId
-                );
+                    $"Trying to remove quest info with ID {oldInfoId} but it does not exist in QuestInfoManager.");
                 return;
             }
 
@@ -302,7 +284,7 @@ namespace GQClient.Model
 
             var autoLoader =
                 new AutoLoadAndUpdate();
-            
+
             var t =
                 new TaskSequence(
                     importLocal,
@@ -372,10 +354,6 @@ namespace GQClient.Model
                 if (ChangeType.ListChanged == data.ChangeType)
                     InitFilters();
             });
-            
-            // register for changes in topic cursor (i.e. the currently shown topic)
-            // this should be done within the TopicView Controller etc. not here, or? TODO
-            Topic.CursorChangedEvent += FilterChange.Invoke;
         }
 
         void initViews()

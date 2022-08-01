@@ -202,7 +202,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
             if (!Name)
             {
                 return;
-                // TODO deeper error needs to be fixed. Happens at first start of the app, when we first touch a list element to download it.
             }
 
             // Update Info-Icon:
@@ -252,8 +251,6 @@ namespace Code.GQClient.UI.Foyer.questinfos
                 DeleteButton.gameObject.SetActive(true);
                 DeleteButton.interactable = true;
             }
-
-            // TODO call the lists sorter ...
         }
 
         private void setCategorySymbol(QuestInfo qInfo)

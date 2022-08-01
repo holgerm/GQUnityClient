@@ -44,8 +44,6 @@ namespace Code.GQClient.UI.Foyer.containers
         /// </summary>
         private void UpdateView()
         {
-            Debug.Log($"QuestTopicTreeController.UpdateView() Cursor: {Topic.Cursor.Name}");
-
             bool enableBackButton = Topic.Cursor.Parent != Topic.Null;
             upwardButton.targetGraphic.enabled = enableBackButton;
             upwardButton.interactable = enableBackButton;
@@ -56,13 +54,15 @@ namespace Code.GQClient.UI.Foyer.containers
             topicName.text = Topic.Cursor.Name;
 
             if (Topic.Cursor.Children.Count > 0)
-                ShowTopicArea();
+                ShowTopicAreaUI();
             else
             {
                 topicArea.SetActive(false);
             }
 
             questInfoArea.SetActive(Topic.Cursor.NumberOfOwnQuestInfos > 0);
+            
+            Topic myRoot = Topic.Root;
 
             _dirtyTopicTree = false;
         }
@@ -78,10 +78,8 @@ namespace Code.GQClient.UI.Foyer.containers
             UpdateView();
         }
 
-        protected override void ListChanged()
+        protected override void RecreateTopicTree()
         {
-            Debug.Log("QuestTopicTreeController.ListChanged()");
-
             Topic.ClearAll();
 
             foreach (var info in Qim.GetFilteredQuestInfos())
@@ -98,7 +96,7 @@ namespace Code.GQClient.UI.Foyer.containers
         /// <summary>
         /// Regenerates the UI for the Topic Subtree starting at the current Cursor position.
         /// </summary>
-        private void ShowTopicArea()
+        private void ShowTopicAreaUI()
         {
             // clean topic area:
             var rootT = topicContentRoot.transform;
@@ -129,7 +127,7 @@ namespace Code.GQClient.UI.Foyer.containers
 
         protected override void ChangedInfo(QuestInfoChangedEvent e)
         {
-            Debug.Log($"QuestTopicTreeController.ChangedInfo(): {e.OldQuestInfo.Name}");
+            Debug.Log($"QuestTopicTreeController.ChangedInfo(): {e.OldQuestInfo.Name} -> {e.NewQuestInfo.Name}");
             Topic.RemoveQuestFromAllTopics(e.OldQuestInfo, true);
             Topic.InsertQuestInfo(e.NewQuestInfo);
             SetDirty();

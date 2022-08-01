@@ -170,7 +170,7 @@ namespace GQClient.Model
         internal void DeletedFromServer()
         {
             NewVersionOnServer = null;
-            InvokeOnChanged();
+            OnChanged?.Invoke(this);
         }
 
         [JsonProperty] private long? _timestampOfPredeployedVersion = null;
@@ -186,7 +186,7 @@ namespace GQClient.Model
                     return;
 
                 _timestampOfPredeployedVersion = value;
-                InvokeOnChanged();
+                OnChanged?.Invoke(this);
             }
         }
 
@@ -201,7 +201,7 @@ namespace GQClient.Model
                 if (_playedTimes == value)
                     return;
                 _playedTimes = value;
-                InvokeOnChanged();
+                OnChanged?.Invoke(this);
             }
         }
 
@@ -227,7 +227,7 @@ namespace GQClient.Model
             NewVersionOnServer = null;
             TimeStamp = ServerTimeStamp;
 
-            InvokeOnChanged();
+            OnChanged?.Invoke(this);
         }
 
         public void QuestInfoRecognizeServerUpdate(QuestInfo newQuestInfo)
@@ -254,8 +254,8 @@ namespace GQClient.Model
             }
 
             // local change just for listeners on this quest info
-            InvokeOnChanged();
-            
+            OnChanged?.Invoke(this);
+
             // global change for all listeners to quest info manager, such as quest container controllers:
             QuestInfoChangedEvent ev = new QuestInfoChangedEvent(
                 $"Info for quest {oldQuestInfo.Name} updated.",
@@ -276,8 +276,8 @@ namespace GQClient.Model
             FeaturedImagePath = newQuestInfo.FeaturedImagePath;
             TypeID = newQuestInfo.TypeID;
             IconPath = newQuestInfo.IconPath;
-            Hotspots = newQuestInfo.Hotspots;
-            Metadata = newQuestInfo.Metadata;
+            Hotspots = (HotspotInfo[]) newQuestInfo.Hotspots.Clone();
+            Metadata = (MetaDataInfo[]) newQuestInfo.Metadata.Clone();
             ServerTimeStamp = NewVersionOnServer.ServerTimeStamp;
         }
 
@@ -553,15 +553,7 @@ namespace GQClient.Model
 
         #region State & Events
 
-        public event QuestInfoToVoid OnChanged;
-
-        protected void InvokeOnChanged()
-        {
-            if (OnChanged != null)
-            {
-                OnChanged(this);
-            }
-        }
+        public event Action<QuestInfo> OnChanged;
 
         #endregion
 
@@ -624,8 +616,8 @@ namespace GQClient.Model
             FeaturedImagePath = original.FeaturedImagePath;
             TypeID = original.TypeID;
             IconPath = original.IconPath;
-            Hotspots = original.Hotspots;
-            Metadata = original.Metadata;
+            Hotspots = (HotspotInfo[])original.Hotspots.Clone();
+            Metadata = (MetaDataInfo[])original.Metadata.Clone();
             TimeStamp = original.TimeStamp;
             ServerTimeStamp = original.ServerTimeStamp;
             NewVersionOnServer = original.NewVersionOnServer;
@@ -697,7 +689,7 @@ namespace GQClient.Model
 
             // chain exporting local qi json again after dowload has successfully completed:
             download.OnTaskCompleted +=
-                (object sender, TaskEventArgs e) => { InvokeOnChanged(); };
+                (object sender, TaskEventArgs e) => { OnChanged?.Invoke(this); };
 
             // DO IT:
             ActivitiesBlocking = true;
@@ -880,7 +872,7 @@ namespace GQClient.Model
             }
             else
             {
-                InvokeOnChanged();
+                OnChanged?.Invoke(this);
             }
 
             var exportGlobalMediaJson =
@@ -968,7 +960,7 @@ namespace GQClient.Model
 
 
                     Task export = new ExportQuestInfosToJson();
-                    export.OnTaskCompleted += (o, args) => { InvokeOnChanged(); };
+                    export.OnTaskCompleted += (o, args) => { OnChanged?.Invoke(this); };
                     export.Start();
                 };
             var playTask = CreatePlayTask();
