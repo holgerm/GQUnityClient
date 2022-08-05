@@ -141,7 +141,6 @@ namespace Code.GQClient.UI.map
                     if (symbol == null)
                     {
                         // use default symbol:
-                        Debug.Log("## 1: Used Defaultsymbol QuestMarker.Texture_get".Red());
                         symbol = Resources.Load<Texture2D>(RTImagePath.DEFAULT_CAT_IMAGE_PATH);
                     }
 

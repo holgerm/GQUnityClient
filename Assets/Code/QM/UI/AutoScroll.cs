@@ -44,9 +44,10 @@ public class AutoScroll : MonoBehaviour
             if (this == null)
                 // if gameobject already disabled, e.g. page left:
                 yield break;
+            
         } while (newPos > 0.0001 && Input.touchCount == 0 && !Input.GetMouseButtonDown(0));
 
-        // when it was not touched scroll to the perfect button:
+        // when it was not touched scroll to the "leave" button:
         if (Input.touchCount == 0 && !Input.GetMouseButtonDown(0))
             GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
     }
