@@ -175,7 +175,6 @@ namespace Code.GQClient.Util.http
                         CurrentlyRunningDownloads--;
                     };
                     listOfFilesNotStartedYet.Remove(infoToLoad);
-                    Debug.Log($"Multidownloader added File-Download for {info.Url} to {info.LocalPath}");
                     d.Start();
                 }
             }

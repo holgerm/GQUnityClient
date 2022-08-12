@@ -245,9 +245,6 @@ namespace Code.GQClient.Model.pages
             {
                 if (sceneToUnload.isLoaded)
                 {
-#if DEBUG_LOG
-                    SceneManager.sceneUnloaded += DebugShowSceneUnloaded;
-#endif
                     SceneManager.UnloadSceneAsync(sceneToUnload);
                 }
             }

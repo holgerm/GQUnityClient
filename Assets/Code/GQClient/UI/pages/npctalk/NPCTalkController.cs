@@ -43,7 +43,8 @@ namespace Code.GQClient.UI.pages.npctalk
             }
             catch (InvalidCastException)
             {
-                Debug.Log(("InvalidCastException: NPCTalk Page found a page of type " + page.GetType()));
+                Log.SignalErrorToDeveloper(
+                    $"PAGE CAST PROBLEM: NPCTalkController found a page of type {page.GetType()}");
             }
 
             // show the content:

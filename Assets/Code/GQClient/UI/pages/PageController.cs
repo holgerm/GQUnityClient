@@ -227,8 +227,6 @@ namespace Code.GQClient.UI.pages
         {
             string rtImageUrl = imageUrl.MakeReplacements();
             
-            Debug.Log($"Page Ctrl: replaced {imageUrl} to {rtImageUrl}");
-
             if (rtImageUrl == "")
             {
                 if (panel) panel.SetActive(false);

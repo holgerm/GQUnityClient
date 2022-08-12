@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.GQClient.Conf;
+using Code.GQClient.Err;
 using Code.GQClient.Model.mgmt.quests;
 using Code.GQClient.Model.pages;
 using Code.GQClient.UI.pages.videoplayer;
@@ -46,7 +47,17 @@ namespace Code.GQClient.UI.pages.interactiveSphericalImage
         /// </summary>
         public override void InitPage_TypeSpecific()
         {
-            myPage = (PageInteractiveSphericalImage)page;
+
+            try
+            {
+                myPage = (PageInteractiveSphericalImage)page;
+            }
+            catch (InvalidCastException)
+            {
+                Log.SignalErrorToDeveloper(
+                    $"PAGE CAST PROBLEM: InteractiveSphericalImageController found a page of type {page.GetType()}");
+            }
+
             cameraMain = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
             forwardButtonText.text = "Ok";
 

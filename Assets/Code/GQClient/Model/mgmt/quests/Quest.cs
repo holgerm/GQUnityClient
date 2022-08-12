@@ -439,7 +439,6 @@ namespace Code.GQClient.Model.mgmt.quests
                 LastUpdate = 0;
                 XmlFormat = "0";
                 IndividualReturnDefinitions = false;
-                CurrentPage = Page.Null;
             }
 
             public override void Start()
