@@ -14,136 +14,170 @@
           "name": "Apps & Games",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typapps"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.ballspiel",
           "name": "Ballspiele",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typball"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.bauspiel",
           "name": "Bauen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typbauen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.bewegungsspiel",
           "name": "Bewegung",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typbewegung"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.kartenspiel",
           "name": "Karten & Brettspiele",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typkarten"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.erzaehlen",
           "name": "Erzählen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typerzaehlen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.geschicklichkeit",
           "name": "Geschick",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typgeschicklichkeit"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.kennenlernen",
           "name": "Kennenlernen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typkennenlernen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.kooperationsspiel",
           "name": "Kooperation",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typkooperation"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.musikspiel",
           "name": "Musik & Ton",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typmusik"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.naturspiel",
           "name": "Natur",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typnaturspiel"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.ratespiel",
           "name": "Raten",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typratespiel"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.schreiben_malen",
           "name": "Schreiben & Malen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typmalen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.suchspiel",
           "name": "Suchspiele",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typsuchen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.wahrnehmungsspiel",
           "name": "Sinne",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typwahrnehmung"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.einfach",
           "name": "Einfach",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typeinfach"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.sonstige_spielform",
           "name": "Sonstiges",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/typsonstige_spielform"
-          }
+          },
+          "catInfo": 0
         }
       ]
     },
@@ -155,24 +189,30 @@
           "name": "Alleine",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/spielereinzeln"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.kleinegruppe",
           "name": "Kleine Gruppe",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/spielerkleinegruppe"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.grossegruppe",
           "name": "Große Gruppe",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/spielergrossegruppe"
-          }
+          },
+          "catInfo": 0
         }
       ]
     },
@@ -184,24 +224,30 @@
           "name": "Kurz",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/dauerkurz"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.mittellang",
           "name": "Mittel",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/dauermittellang"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.lang",
           "name": "Lang",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/dauerlang"
-          }
+          },
+          "catInfo": 0
         }
       ]
     },
@@ -213,24 +259,30 @@
           "name": "Sonnig",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/wettersonne"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.regen",
           "name": "Regen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/wetterregen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.schnee",
           "name": "Schnee",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/wetterschnee"
-          }
+          },
+          "catInfo": 0
         }
       ]
     },
@@ -242,24 +294,30 @@
           "name": "Draussen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/ortdraussen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.drinnen",
           "name": "Drinnen",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/ortdrinnen"
-          }
+          },
+          "catInfo": 0
         },
         {
           "id": "slsspiele.spezielle_orte",
           "name": "Speziell",
           "folderName": "",
           "symbol": {
+            "RTImageChanged": {},
             "path": "textures/readable/ortspezielle_orte"
-          }
+          },
+          "catInfo": 0
         }
       ]
     }

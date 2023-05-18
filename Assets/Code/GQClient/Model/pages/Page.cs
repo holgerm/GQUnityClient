@@ -37,26 +37,13 @@ namespace Code.GQClient.Model.pages
         /// <param name="reader">Reader.</param>
         public Page(XmlReader reader)
         {
-#if DEBUG_LOG
-            Debug.Log("XML Page start type: " + GetType());
-#endif
             GQML.AssertReaderAtStart(reader, GQML.PAGE);
 
             ReadAttributes(reader);
-#if DEBUG_LOG
-            Debug.Log("XML Page Attribtes read. page id: " + Id);
-            if (Id == 17945)
-            {
-                Debug.Log("Last order.");
-            }
-#endif
 
             if (reader.IsEmptyElement)
             {
                 reader.Read();
-#if DEBUG_LOG
-                Debug.Log("XML Page was empty.");
-#endif
                 return;
             }
 
@@ -68,9 +55,6 @@ namespace Code.GQClient.Model.pages
                 if (reader.NodeType == XmlNodeType.Element)
                     ReadContent(reader, new XmlRootAttribute()); // RECENTLY ADDED tha second parameter to that call.
             }
-#if DEBUG_LOG
-            Debug.Log("XML Page Content read.");
-#endif
 
             // consume the closing tag (if not empty element)
             if (reader.NodeType == XmlNodeType.EndElement)

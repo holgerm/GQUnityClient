@@ -25,6 +25,9 @@ namespace Code.GQClient.Model.mgmt.quests
 
 		[JsonIgnore] private string _localDir;
 
+		/// <summary>
+		/// Relative dir (without persistent dir location) containing this media's file.
+		/// </summary>
 		public string LocalDir {
 			get => _localDir;
 			set {
@@ -48,7 +51,10 @@ namespace Code.GQClient.Model.mgmt.quests
 				}
 			}
 		}
-
+		
+		/// <summary>
+		/// Complete path (incl. persistent dir) to this media's local file.
+		/// </summary>
 		[JsonIgnore]
 		public string LocalPath {
 			get {
@@ -151,7 +157,7 @@ namespace Code.GQClient.Model.mgmt.quests
 		public MediaInfo (LocalMediaInfo localInfo)
 		{
 			this.Url = localInfo.url;
-			this.LocalDir = localInfo.absDir;
+			this.LocalDir = localInfo.dir;
 			this.LocalFileName = localInfo.filename;
 			this.LocalTimestamp = localInfo.time;
 			this.LocalSize = localInfo.size;

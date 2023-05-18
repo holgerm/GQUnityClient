@@ -1,4 +1,5 @@
 {
+  "preserveAspectOfSplashFG": true,
   "id": "slsspiele",
   "idExtension": "",
   "name": "SLS Spiele",
@@ -7,18 +8,22 @@
     "UniWebView"
   ],
   "androidMinSDKVersion": "AndroidApiLevel21",
+  "iOsDeviceTypes": "iPhoneAndiPad",
   "autoStartQuestID": 0,
   "autostartIsPredeployed": false,
   "keepAutoStarting": true,
-  "downloadStrategy": "UPFRONT",
   "timeoutMS": 60000,
   "maxIdleTimeMS": 9000,
   "maxParallelDownloads": 15,
+  "downloadStrategy": "UPFRONT",
   "nameForQuestSg": "Spiel",
   "nameForQuestsPl": "Spiele",
   "questInfoViews": [
     "List"
   ],
+  "topicButtonAspectRatio": 1.0,
+  "topicColumnsOnSmallDevices": 2,
+  "topicColumnsOnLargeDevices": 3,
   "cloudQuestsVisible": true,
   "showCloudQuestsImmediately": false,
   "downloadAllCloudQuestOnStart": true,
@@ -40,21 +45,15 @@
   ],
   "sceneExtensions": [],
   "stopAudioWhenLeavingPage": true,
-  "autoSynchQuestInfos": true,
+  "autoSyncQuestInfos": true,
+  "autoLoadQuests": false,
+  "autoUpdateQuests": false,
   "autoUpdateSubquests": false,
   "offerManualUpdate4QuestInfos": false,
-  "mapProvider": "OpenStreetMap",
-  "mapBaseUrl": "https://a.tile.openstreetmap.org",
-  "mapKey": "",
-  "mapID": "",
-  "mapTileImageExtension": ".png",
-  "useMapOffline": false,
-  "mapMinimalZoom": 7.0,
-  "mapDeltaZoom": 0.5,
   "mapStartPositionType": "CenterOfMarkers",
-  "mapStartAtLocation": false,
   "mapStartAtLongitude": 0.0,
   "mapStartAtLatitude": 0.0,
+  "mapStartZoom": 14.0,
   "hotspotMarker": {
     "path": "defaults/readable/defaultMarker"
   },
@@ -81,6 +80,8 @@
   "mapButtonHeightMinMM": 0.0,
   "mapButtonHeightMaxMM": 0.0,
   "disabledAlpha": 0.5,
+  "hideFooterIfPossible": false,
+  "taskUI": "ProgressAtBottom",
   "mainFgColor": {
     "r": 0,
     "g": 0,
@@ -93,8 +94,84 @@
     "b": 255,
     "a": 255
   },
+  "colorPaletteSize": 4,
+  "colorPalette": [
+    {
+      "r": 0,
+      "g": 0,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 0,
+      "g": 255,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 235,
+      "b": 4,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    {
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    }
+  ],
+  "paletteFGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "mainFontSize": 60,
-  "maxFontSize": 100,
+  "textAlignment": "Left",
+  "textLinkColor": {
+    "r": 0,
+    "g": 0,
+    "b": 255,
+    "a": 255
+  },
+  "lineSpacing": 10.0,
   "showShadows": false,
   "topLogo": {
     "path": "TopLogo"
@@ -118,12 +195,6 @@
     "b": 0,
     "a": 255
   },
-  "contentBackgroundColor": {
-    "r": 255,
-    "g": 255,
-    "b": 255,
-    "a": 255
-  },
   "headerHeightUnits": 75.0,
   "headerHeightMinMM": 0.0,
   "headerHeightMaxMM": 0.0,
@@ -131,9 +202,16 @@
   "contentTopMarginUnits": 0.0,
   "contentDividerUnits": 0.0,
   "contentBottomMarginUnits": 0.0,
+  "contentBackgroundColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
   "imageAreaHeightMinUnits": 150.0,
   "imageAreaHeightMaxUnits": 350.0,
   "fitExceedingImagesIntoArea": false,
+  "autoScrollNewText": true,
   "footerHeightUnits": 75.0,
   "footerHeightMinMM": 0.0,
   "footerHeightMaxMM": 0.0,
@@ -202,14 +280,39 @@
     "b": 0,
     "a": 255
   },
+  "categoryFolderBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "categoryEntryBGColor": {
+    "r": 255,
+    "g": 255,
+    "b": 255,
+    "a": 255
+  },
+  "catInfoIcon": null,
   "menuInhibitsInteraction": true,
   "menu2ShownInQuests": true,
   "offerLeaveQuestOnEachPage": true,
-  "offerFeedback": true,
-  "offerAuthorLogin": true,
+  "warnWhenLeavingQuest": true,
+  "warnDialogTitleWhenLeavingQuest": "Aktuelles Quest verlassen?",
+  "warnDialogMessageWhenLeavingQuest": "Sie müssten es dann evtl. wieder ganz von vorne beginnen. Wollen Sie das Quest ...",
+  "warnDialogOKWhenLeavingQuest": "Verlassen",
+  "warnDialogCancelWhenLeavingQuest": "Fortsetzen",
+  "warnWhenLeavingApp": true,
+  "warnDialogTitleWhenLeavingApp": "App verlassen?",
+  "warnDialogMessageWhenLeavingApp": "Ganz oben links klicken um zurückzukommen.",
+  "warnDialogOKWhenLeavingApp": "Verlassen",
+  "warnDialogCancelWhenLeavingApp": "In App bleiben",
   "defineAuthorBackDoor": true,
   "acceptedAuthorEmail": "author@email.com",
   "acceptedAuthorPassword": "secret",
+  "offerFeedback": true,
+  "offerAuthorLogin": true,
+  "offerPartnersInfo": false,
+  "showPartnersInfoAtStart": false,
   "listEntryHeightUnits": 85.0,
   "listEntryHeightMinMM": 0.0,
   "listEntryHeightMaxMM": 0.0,
@@ -221,7 +324,6 @@
     "b": 233,
     "a": 255
   },
-  "listStartLineWidth": 5,
   "dividingLineWidth": 5,
   "listEndLineWidth": 5,
   "listEntryFgColor": {

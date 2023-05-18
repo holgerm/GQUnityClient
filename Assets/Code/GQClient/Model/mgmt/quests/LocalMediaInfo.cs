@@ -1,3 +1,4 @@
+using Code.GQClient.FileIO;
 using Code.QM.Util;
 using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@ namespace Code.GQClient.Model.mgmt.quests
 		/// <summary>
 		/// Only the relative part of the absolute dir path is persisted, since on iOS the application data folder changes between different app versions.
 		/// </summary>
-		private string dir;
+		public string dir;
 
 		[JsonIgnore]
 		public string absDir {
@@ -22,7 +23,7 @@ namespace Code.GQClient.Model.mgmt.quests
 					return null;
 				}
 
-				return Device.GetPersistentDatapath () + dir;
+				return Files.CombinePath(Device.GetPersistentDatapath (), dir);
 			}
 			set {
 				if (value == null) {

@@ -149,17 +149,8 @@ namespace Code.GQClient.FileIO
             {
                 relPath = CombinePath(Device.GetPersistentDatapath(), relPath);
             }
-
-            if (Application.isEditor)
-                return "file://" + relPath;
-            else if (Application.platform == RuntimePlatform.Android)
-                return "file://" + relPath;
-            else if (Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                return "file://" + relPath;
-            }
-            else
-                return "file://" + relPath;
+            
+            return "file://" + relPath;
         }
 
         public static string FileName(string filePath)

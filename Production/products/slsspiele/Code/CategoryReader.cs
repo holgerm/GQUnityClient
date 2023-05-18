@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Code.GQClient.Conf;
 using Code.GQClient.Util;
+using UnityEngine;
 
 namespace GQClient.Model
 {
@@ -17,15 +18,17 @@ namespace GQClient.Model
             {
                 switch (md.Key)
                 {
-                    case "category1":
+                    case "Spieltyp1":
                         netVal = md.Value.StripQuotes();
                         if (netVal != "")
                             categories.Insert(0, netVal);
                         break;
-                    case "category":
-                    case "category2":
-                    case "category3":
-                    case "category4":
+                    case "Spieltyp2":
+                    case "Spieltyp3":
+                    case "Spieleranzahl":
+                    case "Dauer":
+                    case "Wetter":
+                    case "Orte":
                         netVal = md.Value.StripQuotes();
                         if (netVal != "")
                             categories.Add(netVal);

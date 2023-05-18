@@ -72,7 +72,8 @@
                     "name": "Beethoven Shoppen",
                     "symbol": {
                         "path": "update:1605258256:textures/readable/beethoven.png"
-                    }
+                    },
+                    "catInfo": 14279
                 },
                 {
                     "folderName": "KulturShoppen",
@@ -80,7 +81,8 @@
                     "name": "Leselust",
                     "symbol": {
                         "path": "textures/readable/antiquariat"
-                    }
+                    },
+                    "catInfo": 14277
                 },
                 {
                     "folderName": "KulturShoppen",
@@ -88,7 +90,8 @@
                     "name": "Galerie / Atelier",
                     "symbol": {
                         "path": "textures/readable/gallery"
-                    }
+                    },
+                    "catInfo": 14280
                 },
                 {
                     "folderName": "KulturShoppen",
@@ -156,6 +159,15 @@
                         "path": "textures/readable/bonnhoeren"
                     },
                     "catInfo": 14139
+                },
+                {
+                    "folderName": "Themen",
+                    "id": "wcc.lenne",
+                    "name": "Lenné, die Gartenbauer",
+                    "symbol": {
+                        "path": "textures/readable/lenne"
+                    },
+                    "catInfo": 14286
                 },
                 {
                     "folderName": "Gastronomie",
